@@ -1,29 +1,17 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import i18n from 'i18n-js';
-import {
-  Body,
-  Button,
-  Icon,
-  Label,
-  Left,
-  List,
-  ListItem,
-  Picker,
-  Right,
-  Text,
-  Thumbnail,
-} from 'native-base';
+import { Avatar, Button, Divider, FormControl, List, Select, Stack, Text, View } from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useCallback, useState } from 'react';
-import { View } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
 import { getProfileDetail } from '../../api/IdentityAPI';
 import AppActions from '../../store/actions/AppActions';
 import {
   createLanguageSelector,
-  createLanguagesSelector,
+  createLanguagesSelector
 } from '../../store/selectors/AppSelectors';
-import { connectToRedux } from '../../utils/ReduxConnect';
 import { createTenantSelector } from '../../store/selectors/PersistentStorageSelectors';
+import { connectToRedux } from '../../utils/ReduxConnect';
 
 function SettingsScreen({
   navigation,
@@ -49,74 +37,72 @@ function SettingsScreen({
 
   return (
     <View>
-      <List>
-        <ListItem itemDivider />
-        <ListItem
-          noIndent
+      <List px="0" py="0" borderWidth="0">
+        <List.Item
           style={{ backgroundColor: '#fff' }}
           onPress={() => navigation.navigate('ManageProfile')}>
-          <Left style={{ alignItems: 'center' }}>
-            <Thumbnail source={require('../../../assets/avatar.png')} />
-            <Body>
-              <Text>
-                {tenant.name ? `${tenant.name} / ` : ''}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+            }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Avatar ml="2" source={require('../../../assets/avatar.png')} />
+              <Text ml="2">
+                {tenant.name ? `${tenant.name}/` : ''}
                 {user.userName ? `${user.userName}` : ''}
               </Text>
-              <Text note>{user.email}</Text>
-            </Body>
-          </Left>
+            </View>
 
-          <Right>
-            <Icon active name="arrow-forward" />
-          </Right>
-        </ListItem>
-        <ListItem itemDivider />
-        <ListItem
-          noIndent
-          icon
+            <List.Icon as={Ionicons} name="arrow-forward" size="5" />
+          </View>
+        </List.Item>
+        <Divider thickness={5} />
+        <List.Item
           style={{ backgroundColor: '#fff' }}
           onPress={() => navigation.navigate('ChangePassword')}>
-          <Body>
-            <Text>{i18n.t('AbpUi::ChangePassword')}</Text>
-          </Body>
-          <Right>
-            <Icon active name="arrow-forward" />
-          </Right>
-        </ListItem>
-        <ListItem itemDivider />
-        <ListItem itemDivider>
-          <Label abpLabel style={{ marginBottom: 0 }}>
-            {i18n.t('AbpUi::Language')}
-          </Label>
-        </ListItem>
-        <ListItem noIndent icon style={{ backgroundColor: '#fff' }}>
-          <Body>
-            <Picker
-              mode="dropdown"
-              iosHeader={i18n.t('AbpUi::Language')}
-              iosIcon={<Icon active name="arrow-down" />}
-              onValueChange={value => setLanguageAsync(value)}
-              selectedValue={language.cultureName}
-              textStyle={{ paddingLeft: 0 }}>
-              {languages.map(lang => (
-                <Picker.Item
-                  label={lang.displayName}
-                  value={lang.cultureName}
-                  key={lang.cultureName}
-                />
-              ))}
-            </Picker>
-          </Body>
-        </ListItem>
-        <ListItem itemDivider />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+            }}>
+            <Text ml="2">{i18n.t('AbpUi::ChangePassword')}</Text>
+
+            <List.Icon as={Ionicons} name="arrow-forward" size="5" />
+          </View>
+        </List.Item>
+        <Divider thickness={5} />
+        <List.Item style={{ backgroundColor: '#fff' }}>
+          <FormControl my="2">
+            <Stack mx="2">
+              <FormControl.Label>{i18n.t('AbpUi::Language')}</FormControl.Label>
+              <Select
+                mode="dropdown"
+                onValueChange={setLanguageAsync}
+                selectedValue={language.cultureName}>
+                {languages.map(lang => (
+                  <Select.Item
+                    label={lang.displayName}
+                    value={lang.cultureName}
+                    key={lang.cultureName}
+                  />
+                ))}
+              </Select>
+            </Stack>
+          </FormControl>
+        </List.Item>
+        <Divider thickness={10} />
         <Button
-          abpButton
-          danger
+          bg="danger.500"
           style={{ borderRadius: 0 }}
           onPress={() => {
             logoutAsync();
           }}>
-          <Text>{i18n.t('AbpAccount::Logout')}</Text>
+          {i18n.t('AbpAccount::Logout')}
         </Button>
       </List>
     </View>

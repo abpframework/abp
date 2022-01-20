@@ -1,17 +1,16 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import i18n from 'i18n-js';
-import { connectStyle, Icon, Input, InputGroup, Item, List, Spinner, Text } from 'native-base';
+import { Box, Center, FlatList, Icon, Input, Spinner, Text } from 'native-base';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
-import { RefreshControl, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import LoadingActions from '../../store/actions/LoadingActions';
-import { activeTheme } from '../../theme/variables';
 import { debounce } from '../../utils/Debounce';
 import { connectToRedux } from '../../utils/ReduxConnect';
 import LoadingButton from '../LoadingButton/LoadingButton';
 
 function DataList({
-  style,
   navigation,
   fetchFn,
   render,
@@ -44,56 +43,67 @@ function DataList({
     if (loading || records.length === totalCount) return;
 
     setButtonLoading(true);
-    fetch(skipCount + maxResultCount, false).finally(() => setButtonLoading(false));
+    fetch(skipCount + maxResultCount, false).finally(() =>
+      setButtonLoading(false)
+    );
   };
 
   useFocusEffect(
     useCallback(() => {
       setSkipCount(0);
       fetch(0, false);
-    }, []),
+    }, [])
   );
 
   useEffect(() => {
     function searchFetch() {
       setSearchLoading(true);
-      return fetch(0, false).finally(() => setTimeout(() => setSearchLoading(false), 150));
+      return fetch(0, false).finally(() =>
+        setTimeout(() => setSearchLoading(false), 150)
+      );
     }
     debounce(searchFetch, debounceTime)();
   }, [filter]);
 
   return (
-    <>
-      <Item placeholderLabel style={{ backgroundColor: '#fff' }}>
-        <InputGroup style={{ marginLeft: 10 }}>
-          <Input
-            placeholder={i18n.t('AbpUi::PagerSearch')}
-            style={{ padding: 0, margin: 0 }}
-            returnKeyType="done"
-            value={filter}
-            onChangeText={setFilter}
-          />
-          {searchLoading ? (
-            <View>
-              <Spinner style={style.spinner} color={style.spinner.color} />
-            </View>
-          ) : (
-            <Icon style={{ fontSize: 20, marginRight: 15 }} name="ios-search" />
-          )}
-        </InputGroup>
-      </Item>
-      <View style={style.container}>
-        <List
-          showsVerticalScrollIndicator
-          scrollEnabled
-          refreshControl={<RefreshControl refreshing={loading} onRefresh={fetch} />}
-          dataArray={records}
-          renderRow={(data, sectionID, rowId, ...args) => (
+    <Center>
+      <Box
+        w={{
+          base: '95%',
+        }}
+        mt="2"
+      >
+        <Input
+          placeholder={i18n.t('AbpUi::PagerSearch')}
+          style={{ padding: 0, margin: 0 }}
+          returnKeyType="done"
+          value={filter}
+          onChangeText={setFilter}
+          InputRightElement={
+            searchLoading ? (
+              <Spinner color="coolGray.500" marginRight={2} size="sm"/>
+            ) : (
+              <Icon as={Ionicons} name={'ios-search'} size="4" marginRight={2} color="coolGray.500" />
+            )
+          }
+        />
+        <FlatList
+          mt="2"
+          borderTopWidth="1"
+          borderTopColor="#e5e7eb"
+          data={records}
+          renderItem={(...args) => (
             <>
-              {render(data, sectionID, rowId, ...args)}
-              {rowId + 1 === skipCount + maxResultCount && totalCount > records.length ? (
-                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                  <LoadingButton loading={buttonLoading} onPress={() => fetchPartial()}>
+              {render(...args)}
+              {args.index + 1 === skipCount + maxResultCount &&
+              totalCount > records.length ? (
+                <View
+                  style={{ justifyContent: 'center', alignItems: 'center' }}
+                >
+                  <LoadingButton
+                    loading={buttonLoading}
+                    onPress={() => fetchPartial()}
+                  >
                     <Text>{i18n.t('AbpUi::LoadMore')}</Text>
                   </LoadingButton>
                 </View>
@@ -102,14 +112,13 @@ function DataList({
           )}
           {...props}
         />
-      </View>
-    </>
+      </Box>
+    </Center>
   );
 }
 
 DataList.propTypes = {
-  ...List.propTypes,
-  style: PropTypes.any.isRequired,
+  ...FlatList.propTypes,
   fetchFn: PropTypes.func.isRequired,
   render: PropTypes.func.isRequired,
   maxResultCount: PropTypes.number,
@@ -119,19 +128,14 @@ DataList.propTypes = {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   list: {},
-  spinner: {
-    transform: [{ scale: 0.5 }],
-    position: 'absolute',
-    right: 8,
-    top: -40,
-    color: activeTheme.brandInfo,
-  },
 });
 
-const Forwarded = forwardRef((props, ref) => <DataList {...props} forwardedRef={ref} />);
+const Forwarded = forwardRef((props, ref) => (
+  <DataList {...props} forwardedRef={ref} />
+));
 
 export default connectToRedux({
-  component: connectStyle('ABP.DataList', styles)(Forwarded),
+  component: Forwarded,
   dispatchProps: {
     startLoading: LoadingActions.start,
     stopLoading: LoadingActions.stop,
