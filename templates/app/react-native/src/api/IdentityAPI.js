@@ -1,6 +1,5 @@
 import api from './API';
 
-export const getProfileDetail = () => api.get('/api/identity/my-profile').then(({ data }) => data);
 
 export const getAllRoles = () => api.get('/api/identity/roles/all').then(({ data }) => data.items);
 
@@ -19,8 +18,10 @@ export const updateUser = (body, id) =>
 
 export const removeUser = id => api.delete(`/api/identity/users/${id}`);
 
+export const getProfileDetail = () => api.get('/api/account/my-profile').then(({ data }) => data);
+
 export const updateProfileDetail = body =>
-  api.put('/api/identity/my-profile', body).then(({ data }) => data);
+  api.put('/api/account/my-profile', body).then(({ data }) => data);
 
 export const changePassword = body =>
-  api.post('/api/identity/my-profile/change-password', body).then(({ data }) => data);
+  api.post('/api/account/my-profile/change-password', body).then(({ data }) => data);

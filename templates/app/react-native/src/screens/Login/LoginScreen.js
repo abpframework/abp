@@ -1,21 +1,17 @@
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
 import i18n from 'i18n-js';
 import {
+  Box,
   Button,
-  Container,
-  Content,
-  Form,
-  Input,
-  InputGroup,
-  Item,
-  Label,
-  Text,
-  Icon,
+  Center,
+  FormControl, Image, Input,
+  Stack,
+  WarningOutlineIcon
 } from 'native-base';
 import PropTypes from 'prop-types';
-import React, { useState, useRef  } from 'react';
+import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
-import * as Yup from 'yup';
+import { object, string } from 'yup';
 import { login } from '../../api/AccountAPI';
 import TenantBox from '../../components/TenantBox/TenantBox';
 import ValidationMessage from '../../components/ValidationMessage/ValidationMessage';
@@ -24,15 +20,14 @@ import LoadingActions from '../../store/actions/LoadingActions';
 import PersistentStorageActions from '../../store/actions/PersistentStorageActions';
 import { connectToRedux } from '../../utils/ReduxConnect';
 
-const ValidationSchema = Yup.object().shape({
-  username: Yup.string().required('AbpAccount::ThisFieldIsRequired.'),
-  password: Yup.string().required('AbpAccount::ThisFieldIsRequired.'),
+const ValidationSchema = object().shape({
+  username: string().required('AbpAccount::ThisFieldIsRequired.'),
+  password: string().required('AbpAccount::ThisFieldIsRequired.'),
 });
 
 function LoginScreen({ startLoading, stopLoading, setToken, fetchAppConfig }) {
   const [showTenantSelection, setShowTenantSelection] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const passwordRef = useRef(null)
+  const passwordRef = useRef(null);
 
   const toggleTenantSelection = () => {
     setShowTenantSelection(!showTenantSelection);
@@ -41,78 +36,103 @@ function LoginScreen({ startLoading, stopLoading, setToken, fetchAppConfig }) {
   const submit = ({ username, password }) => {
     startLoading({ key: 'login' });
     login({ username, password })
-      .then(data =>
+      .then((data) =>
         setToken({
           ...data,
           expire_time: new Date().valueOf() + data.expires_in,
           scope: undefined,
-        }),
+        })
       )
       .then(
         () =>
-          new Promise(resolve =>
-            fetchAppConfig({ showLoading: false, callback: () => resolve(true) }),
-          ),
+          new Promise((resolve) =>
+            fetchAppConfig({
+              showLoading: false,
+              callback: () => resolve(true),
+            })
+          )
       )
       .finally(() => stopLoading({ key: 'login' }));
   };
 
+  const formik = useFormik({
+    validationSchema: ValidationSchema,
+    initialValues: { username: '', password: '' },
+    onSubmit: submit,
+  });
+
   return (
-    <Container>
+    <Center flex={0.6} px="3">
+      <Box
+        w={{
+          base: '100%',
+        }}
+        mb="50"
+        alignItems="center"
+      >
+        <Image
+          alt="Image"
+          source={require('../../../assets/logo.png')}
+        />
+      </Box>
+
       <TenantBox
         showTenantSelection={showTenantSelection}
         toggleTenantSelection={toggleTenantSelection}
       />
-      {!showTenantSelection ? (
-        <Content px20 style={{ flex: 1 }}>
-          <Formik
-            validationSchema={ValidationSchema}
-            initialValues={{ username: '', password: '' }}
-            onSubmit={submit}>
-            {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-              <Form>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpAccount::UserNameOrEmailAddress')}</Label>
-                  <Input
-                    abpInput
-                    onChangeText={handleChange('username')}
-                    onBlur={handleBlur('username')}
-                    value={values.username}
-                    onSubmitEditing={() => passwordRef.current._root.focus()}
-                    returnKeyType="next"
-                    autoCapitalize = 'none'
-                  />
-                </InputGroup>
-                <ValidationMessage>{errors.username}</ValidationMessage>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpAccount::Password')}</Label>
-                  <Item abpInput>
-                    <Input
-                      secureTextEntry={!showPassword}
-                      onChangeText={handleChange('password')}
-                      onBlur={handleBlur('password')}
-                      value={values.password}
-                      ref={passwordRef}
-                      autoCapitalize = 'none'
-                    />
-                    <Icon
-                      name={showPassword ? 'eye-off' : 'eye'}
-                      onPress={() => setShowPassword(!showPassword)}
-                    />
-                  </Item>
-                </InputGroup>
-                <ValidationMessage>{errors.password}</ValidationMessage>
-                <View style={{ marginTop: 20, alignItems: 'center' }}>
-                  <Button abpButton onPress={handleSubmit}>
-                    <Text>{i18n.t('AbpAccount::Login')}</Text>
-                  </Button>
-                </View>
-              </Form>
-            )}
-          </Formik>
-        </Content>
-      ) : null}
-    </Container>
+      <Box
+        w={{
+          base: '100%',
+        }}
+        display={showTenantSelection ? 'none' : 'flex'}
+      >
+        <FormControl isRequired my="2">
+          <Stack mx="4">
+            <FormControl.Label>
+              {i18n.t('AbpAccount::UserNameOrEmailAddress')}
+            </FormControl.Label>
+            <Input
+              onChangeText={formik.handleChange('username')}
+              onBlur={formik.handleBlur('username')}
+              value={formik.values.username}
+              returnKeyType="next"
+              autoCapitalize="none"
+              onSubmitEditing={() => passwordRef?.current?.focus()}
+              size="lg"
+            />
+            <ValidationMessage>{formik.errors.username}</ValidationMessage>
+          </Stack>
+        </FormControl>
+
+        <FormControl isRequired my="2">
+          <Stack mx="4">
+            <FormControl.Label>
+              {i18n.t('AbpAccount::Password')}
+            </FormControl.Label>
+            <Input
+              type="password"
+              onChangeText={formik.handleChange('password')}
+              onBlur={formik.handleBlur('password')}
+              value={formik.values.password}
+              ref={passwordRef}
+              autoCapitalize="none"
+              size="lg"
+            />
+            <FormControl.ErrorMessage
+              leftIcon={<WarningOutlineIcon size="xs" />}
+            >
+              {formik.errors.password}
+            </FormControl.ErrorMessage>
+          </Stack>
+        </FormControl>
+
+        <View style={{ marginTop: 20, alignItems: 'center' }}>
+          <Button onPress={formik.handleSubmit} width="30%" size="lg">
+            {i18n.t('AbpAccount::Login')}
+          </Button>
+        </View>
+      </Box>
+    </Center>
   );
 }
 
