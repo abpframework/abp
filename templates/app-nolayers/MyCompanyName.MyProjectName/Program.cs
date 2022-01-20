@@ -1,5 +1,7 @@
+using MyCompanyName.MyProjectName.Data;
 using Serilog;
 using Serilog.Events;
+
 
 namespace MyCompanyName.MyProjectName;
 
@@ -7,20 +9,27 @@ public class Program
 {
     public async static Task<int> Main(string[] args)
     {
-        Log.Logger = new LoggerConfiguration()
+        var loggerConfiguration = new LoggerConfiguration()
 #if DEBUG
-        .MinimumLevel.Debug()
+            .MinimumLevel.Debug()
 #else
-        .MinimumLevel.Information()
+            .MinimumLevel.Information()
 #endif
-        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-        .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-        .Enrich.FromLogContext()
-        .WriteTo.Async(c => c.File("Logs/logs.txt"))
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+            .Enrich.FromLogContext()
+            .WriteTo.Async(c => c.File("Logs/logs.txt"))
 #if DEBUG
-        .WriteTo.Async(c => c.Console())
+            .WriteTo.Async(c => c.Console());
 #endif
-        .CreateLogger();
+        if (IsMigrateDatabase(args))
+        {
+            loggerConfiguration.MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning);
+            loggerConfiguration.MinimumLevel.Override("Microsoft", LogEventLevel.Warning);
+            loggerConfiguration.MinimumLevel.Override("IdentityServer4.Startup", LogEventLevel.Warning);
+        }
+
+        Log.Logger = loggerConfiguration.CreateLogger();
 
         try
         {
@@ -31,6 +40,12 @@ public class Program
             await builder.AddApplicationAsync<MyProjectNameModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
+
+            if (IsMigrateDatabase(args))
+            {
+                await app.Services.GetRequiredService<MyProjectNameDbMigrationService>().MigrateAsync();
+                return 0;
+            }
 
             Log.Information("Starting MyCompanyName.MyProjectName.");
             await app.RunAsync();
@@ -50,5 +65,10 @@ public class Program
         {
             Log.CloseAndFlush();
         }
+    }
+
+    private static bool IsMigrateDatabase(string[] args)
+    {
+        return args.Any(x => x.Contains("--migrate-database", StringComparison.OrdinalIgnoreCase));
     }
 }
