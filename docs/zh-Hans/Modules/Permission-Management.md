@@ -69,7 +69,7 @@ public class MyService : ITransientDependency
 * `UserPermissionManagementProvider`: 管理用户基础权限.
 * `RolePermissionManagementProvider`: 管理角色基础权限.
 
-`IPermissionManager` 使用这些提供程序获取或设置权限. 你可以通过实现 `IPermissionManagementProvider` 或从 `PermissionManagementProvider` 注入基类定义你自己的提供程序.
+`IPermissionManager` 使用这些提供程序获取或设置权限. 你可以通过实现 `IPermissionManagementProvider` 或从 `PermissionManagementProvider` 基类继承定义你自己的提供程序.
 
 **示例:**
 
