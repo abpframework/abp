@@ -1,25 +1,21 @@
-import { Formik } from 'formik';
+import { Ionicons } from '@expo/vector-icons';
+import { useFormik } from 'formik';
 import i18n from 'i18n-js';
 import {
-  Body,
+  Box,
   Button,
-  CheckBox,
-  Container,
-  Content,
-  Input,
-  InputGroup,
-  Item,
+  Checkbox,
+  FormControl,
   Icon,
-  Label,
-  ListItem,
-  Segment,
-  Text,
+  Input,
+  KeyboardAvoidingView,
+  Stack
 } from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useRef, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Platform } from 'react-native';
 import * as Yup from 'yup';
-import FormButtons from '../../components/FormButtons/FormButtons';
+import { FormButtons } from '../../components/FormButtons';
 import ValidationMessage from '../../components/ValidationMessage/ValidationMessage';
 import { usePermission } from '../../hooks/UsePermission';
 import UserRoles from './UserRoles';
@@ -50,7 +46,7 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
 
   const hasRemovePermission = usePermission('AbpIdentity.Users.Delete');
 
-  const onSubmit = values => {
+  const onSubmit = (values) => {
     submit({
       ...editingUser,
       ...values,
@@ -65,157 +61,219 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
     return Yup.string().required('AbpAccount::ThisFieldIsRequired.');
   });
 
+  const formik = useFormik({
+    enableReinitialize: true,
+    validationSchema: Yup.object().shape({
+      ...validations,
+      password: passwordValidation,
+    }),
+    initialValues: {
+      isActive: true,
+      lockoutEnabled: false,
+      ...editingUser,
+    },
+    onSubmit,
+  });
+
   return (
-    <Formik
-      enableReinitialize
-      validationSchema={Yup.object().shape({
-        ...validations,
-        password: passwordValidation,
-      })}
-      initialValues={{
-        lockoutEnabled: false,
-        ...editingUser,
-      }}
-      onSubmit={values => onSubmit(values)}>
-      {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, setFieldValue }) => (
-        <>
-          <Segment>
-            <Button first primary={selectedTab === 0} onPress={() => setSelectedTab(0)}>
-              <Text dark light={selectedTab === 0}>
-                {i18n.t('AbpIdentity::UserInformations')}
-              </Text>
+    <>
+      <KeyboardAvoidingView
+        h={{
+          base: '400px',
+          lg: 'auto',
+        }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <Box w={{ base: '100%' }} px="4">
+          <Button.Group
+            colorScheme="blue"
+            mx={{
+              base: 'auto',
+              md: 0,
+            }}
+            size="sm"
+            m="2"
+          >
+            <Button
+              size="sm"
+              variant={selectedTab === 0 ? 'solid' : 'outline'}
+              onPress={() => setSelectedTab(0)}
+            >
+              {i18n.t('AbpIdentity::UserInformations')}
             </Button>
-            <Button last primary={selectedTab === 1} onPress={() => setSelectedTab(1)}>
-              <Text dark light={selectedTab === 1}>
-                {i18n.t('AbpIdentity::Roles')}
-              </Text>
+            <Button
+              size="sm"
+              variant={selectedTab === 1 ? 'solid' : 'outline'}
+              onPress={() => setSelectedTab(1)}
+            >
+              {i18n.t('AbpIdentity::Roles')}
             </Button>
-          </Segment>
-          <Container style={styles.container}>
-            <Content px20>
-              <View style={{ display: selectedTab === 0 ? 'flex' : 'none' }}>
-                <View style={{ alignItems: 'center', margin: 10, zIndex: 1 }} />
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::UserName')}*</Label>
+          </Button.Group>
+
+          {selectedTab === 0 ? (
+            <>
+              <FormControl isRequired my="2">
+                <Stack mx="4">
+                  <FormControl.Label>
+                    {i18n.t('AbpIdentity::UserName')}
+                  </FormControl.Label>
                   <Input
-                    abpInput
                     ref={usernameRef}
-                    onSubmitEditing={() => nameRef.current._root.focus()}
+                    onSubmitEditing={() => nameRef.current.focus()}
                     returnKeyType="next"
-                    onChangeText={handleChange('userName')}
-                    onBlur={handleBlur('userName')}
-                    value={values.userName}
-                    autoCapitalize = 'none'
+                    onChangeText={formik.handleChange('userName')}
+                    onBlur={formik.handleBlur('userName')}
+                    value={formik.values.userName}
+                    autoCapitalize="none"
                   />
-                </InputGroup>
-                <ValidationMessage>{errors.userName}</ValidationMessage>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::DisplayName:Name')}</Label>
+                  <ValidationMessage>
+                    {formik.errors.userName}
+                  </ValidationMessage>
+                </Stack>
+              </FormControl>
+
+              <FormControl my="2">
+                <Stack mx="4">
+                  <FormControl.Label>
+                    {i18n.t('AbpIdentity::DisplayName:Name')}
+                  </FormControl.Label>
                   <Input
-                    abpInput
                     ref={nameRef}
-                    onSubmitEditing={() => surnameRef.current._root.focus()}
+                    onSubmitEditing={() => surnameRef.current.focus()}
                     returnKeyType="next"
-                    onChangeText={handleChange('name')}
-                    onBlur={handleBlur('name')}
-                    value={values.name}
+                    onChangeText={formik.handleChange('name')}
+                    onBlur={formik.handleBlur('name')}
+                    value={formik.values.name}
                   />
-                </InputGroup>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::DisplayName:Surname')}</Label>
+                </Stack>
+              </FormControl>
+
+              <FormControl my="2">
+                <Stack mx="4">
+                  <FormControl.Label>
+                    {i18n.t('AbpIdentity::DisplayName:Surname')}
+                  </FormControl.Label>
                   <Input
-                    abpInput
                     ref={surnameRef}
-                    onSubmitEditing={() => emailRef.current._root.focus()}
+                    onSubmitEditing={() => emailRef.current.focus()}
                     returnKeyType="next"
-                    onChangeText={handleChange('surname')}
-                    onBlur={handleBlur('surname')}
-                    value={values.surname}
+                    onChangeText={formik.handleChange('surname')}
+                    onBlur={formik.handleBlur('surname')}
+                    value={formik.values.surname}
                   />
-                </InputGroup>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::EmailAddress')}*</Label>
+                </Stack>
+              </FormControl>
+
+              <FormControl isRequired my="2">
+                <Stack mx="4">
+                  <FormControl.Label>
+                    {i18n.t('AbpIdentity::EmailAddress')}
+                  </FormControl.Label>
                   <Input
-                    abpInput
                     ref={emailRef}
-                    onSubmitEditing={() => phoneNumberRef.current._root.focus()}
+                    onSubmitEditing={() => phoneNumberRef.current.focus()}
                     returnKeyType="next"
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                    autoCapitalize = 'none'
+                    onChangeText={formik.handleChange('email')}
+                    onBlur={formik.handleBlur('email')}
+                    value={formik.values.email}
+                    autoCapitalize="none"
                   />
-                </InputGroup>
-                <ValidationMessage>{errors.email}</ValidationMessage>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::PhoneNumber')}</Label>
+                  <ValidationMessage>{formik.errors.email}</ValidationMessage>
+                </Stack>
+              </FormControl>
+
+              <FormControl my="2">
+                <Stack mx="4">
+                  <FormControl.Label>
+                    {i18n.t('AbpIdentity::PhoneNumber')}
+                  </FormControl.Label>
                   <Input
-                    abpInput
                     ref={phoneNumberRef}
-                    onSubmitEditing={() => passwordRef.current._root.focus()}
+                    onSubmitEditing={() => passwordRef?.current?.focus()}
                     returnKeyType={!editingUser.id ? 'next' : 'default'}
-                    onChangeText={handleChange('phoneNumber')}
-                    onBlur={handleBlur('phoneNumber')}
-                    value={values.phoneNumber}
-                    autoCapitalize = 'none'
+                    onChangeText={formik.handleChange('phoneNumber')}
+                    onBlur={formik.handleBlur('phoneNumber')}
+                    value={formik.values.phoneNumber}
                   />
-                </InputGroup>
-                {!editingUser.id ? (
-                  <>
-                    <InputGroup abpInputGroup>
-                      <Label abpLabel>{i18n.t('AbpIdentity::Password')}*</Label>
-                      <Item abpInput>
-                        <Input
-                          ref={passwordRef}
-                          secureTextEntry={!showPassword}
-                          onChangeText={handleChange('password')}
-                          onBlur={handleBlur('password')}
-                          value={values.password}
-                          autoCapitalize = 'none'
-                        />
+                </Stack>
+              </FormControl>
+
+              {!editingUser.id ? (
+                <FormControl isRequired my="2">
+                  <Stack mx="4">
+                    <FormControl.Label>
+                      {i18n.t('AbpIdentity::Password')}
+                    </FormControl.Label>
+                    <Input
+                      ref={passwordRef}
+                      secureTextEntry={!showPassword}
+                      onChangeText={formik.handleChange('password')}
+                      onBlur={formik.handleBlur('password')}
+                      value={formik.values.password}
+                      autoCapitalize="none"
+                      InputRightElement={
                         <Icon
-                          name={showPassword ? 'eye-off' : 'eye'}
+                          as={Ionicons}
+                          size="5"
+                          mr="2"
+                          name={
+                            showPassword ? 'eye-off-outline' : 'eye-outline'
+                          }
                           onPress={() => setShowPassword(!showPassword)}
                         />
-                      </Item>
-                    </InputGroup>
-                    <ValidationMessage>{errors.password}</ValidationMessage>
-                  </>
-                ) : null}
-                <ListItem>
-                  <CheckBox
-                    checked={values.lockoutEnabled}
-                    onPress={() => setFieldValue('lockoutEnabled', !values.lockoutEnabled)}
-                  />
-                  <Body>
-                    <TouchableOpacity
-                      onPress={() => setFieldValue('lockoutEnabled', !values.lockoutEnabled)}>
-                      <Text>{i18n.t('AbpIdentity::DisplayName:LockoutEnabled')}</Text>
-                    </TouchableOpacity>
-                  </Body>
-                </ListItem>
-              </View>
-              <View
-                style={{
-                  display: selectedTab === 1 ? 'flex' : 'none',
-                  flex: 1,
-                }}>
-                <UserRoles {...{ editingUser, onChangeRoles }} />
-              </View>
-            </Content>
-          </Container>
-          <FormButtons
-            submit={handleSubmit}
-            remove={remove}
-            removeMessage={i18n.t('AbpIdentity::UserDeletionConfirmationMessage', {
-              0: editingUser.userName,
-            })}
-            isSubmitDisabled={!isValid}
-            isShowRemove={!!editingUser.id && hasRemovePermission}
-          />
-        </>
-      )}
-    </Formik>
+                      }
+                    />
+                    <ValidationMessage>
+                      {formik.errors.password}
+                    </ValidationMessage>
+                  </Stack>
+                </FormControl>
+              ) : null}
+
+              <FormControl my="2">
+                <Stack mx="4">
+                  <Checkbox
+                    isChecked={formik.values.isActive}
+                    onPress={() =>
+                      formik.setFieldValue('isActive', !formik.values.isActive)
+                    }
+                  >
+                    {i18n.t('AbpIdentity::DisplayName:IsActive')}
+                  </Checkbox>
+                </Stack>
+              </FormControl>
+
+              <FormControl my="2">
+                <Stack mx="4">
+                  <Checkbox
+                    isChecked={formik.values.lockoutEnabled}
+                    onPress={() =>
+                      formik.setFieldValue(
+                        'lockoutEnabled',
+                        !formik.values.lockoutEnabled
+                      )
+                    }
+                  >
+                    {i18n.t('AbpIdentity::DisplayName:LockoutEnabled')}
+                  </Checkbox>
+                </Stack>
+              </FormControl>
+            </>
+          ) : (
+            <UserRoles {...{ editingUser, onChangeRoles }} />
+          )}
+        </Box>
+      </KeyboardAvoidingView>
+      <FormButtons
+        submit={formik.handleSubmit}
+        remove={remove}
+        removeMessage={i18n.t('AbpIdentity::UserDeletionConfirmationMessage', {
+          0: editingUser.userName,
+        })}
+        isSubmitDisabled={!formik.isValid}
+        isShowRemove={!!editingUser.id && hasRemovePermission}
+      />
+    </>
   );
 }
 
@@ -224,11 +282,5 @@ CreateUpdateUserForm.propTypes = {
   submit: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 50,
-  },
-});
 
 export default CreateUpdateUserForm;

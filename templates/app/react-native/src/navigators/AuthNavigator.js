@@ -1,15 +1,15 @@
-import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useContext } from 'react';
 import { LocalizationContext } from '../contexts/LocalizationContext';
 import LoginScreen from '../screens/Login/LoginScreen';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
-export default function AuthStackNavigator() {
-  const { t } = React.useContext(LocalizationContext);
+export default function AuthNavigator() {
+  const {t} = useContext(LocalizationContext);
 
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator>
       <Stack.Screen
         name="Login"
         component={LoginScreen}

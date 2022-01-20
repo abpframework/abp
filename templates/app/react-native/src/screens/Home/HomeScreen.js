@@ -1,33 +1,29 @@
 import i18n from 'i18n-js';
-import { Text } from 'native-base';
+import { Box, Center, Heading, Text } from 'native-base';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}> {i18n.t('::Welcome')}</Text>
-      <Text style={styles.centeredText}> {i18n.t('::LongWelcomeMessage')}</Text>
-    </View>
+    <Center flex={0.9} px="8">
+      <Box
+        w={{
+          base: '100%',
+        }}
+      >
+        <Heading style={styles.centeredText}> {i18n.t('::Welcome')}</Heading>
+        <Text style={styles.centeredText}>
+          {i18n.t('::LongWelcomeMessage')}
+        </Text>
+      </Box>
+    </Center>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: '#fff',
-  },
   centeredText: {
     textAlign: 'center',
-  },
-  title: {
-    marginBottom: 30,
-    fontSize: 32,
-    fontWeight: '300',
-    textAlign: 'center',
+    marginBottom: 5
   },
 });
 
