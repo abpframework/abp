@@ -30,6 +30,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
+using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.Web;
@@ -60,6 +61,7 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAccountWebIdentityServerModule),
 
     // Identity module packages
+    typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
