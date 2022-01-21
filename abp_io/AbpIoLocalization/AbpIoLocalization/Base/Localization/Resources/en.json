@@ -95,6 +95,7 @@
     "EmailAddress": "E-mail Address",
     "Subscribe": "Subscribe",
     "WelcomeToABP": "Welcome to the ABP",
-    "EULA": "EULA"
+    "EULA": "EULA",
+    "ABPCommercialIntroductionMessage": "Pre-built application modules, advanced startup templates, rapid application development tooling, professional UI themes and premium support.",
   }
 }
