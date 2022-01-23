@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.BloggingTestApp.EntityFrameworkCore;
@@ -12,9 +13,10 @@ using Volo.BloggingTestApp.EntityFrameworkCore;
 namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(BloggingTestAppDbContext))]
-    partial class BloggingTestAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220123012444_IsActive-on-modules")]
+    partial class IsActiveonmodules
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
