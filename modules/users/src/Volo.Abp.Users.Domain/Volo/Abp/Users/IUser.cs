@@ -18,6 +18,8 @@ public interface IUser : IAggregateRoot<Guid>, IMultiTenant
     [CanBeNull]
     string Surname { get; }
 
+    bool IsActive { get; }
+
     bool EmailConfirmed { get; }
 
     [CanBeNull]

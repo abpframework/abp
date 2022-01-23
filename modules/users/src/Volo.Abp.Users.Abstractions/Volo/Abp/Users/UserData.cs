@@ -15,6 +15,8 @@ public class UserData : IUserData
 
     public string Surname { get; set; }
 
+    public bool IsActive { get; set; }
+
     public string Email { get; set; }
 
     public bool EmailConfirmed { get; set; }
@@ -35,6 +37,7 @@ public class UserData : IUserData
         Email = userData.Email;
         Name = userData.Name;
         Surname = userData.Surname;
+        IsActive = userData.IsActive;
         EmailConfirmed = userData.EmailConfirmed;
         PhoneNumber = userData.PhoneNumber;
         PhoneNumberConfirmed = userData.PhoneNumberConfirmed;
@@ -50,13 +53,15 @@ public class UserData : IUserData
         bool emailConfirmed = false,
         [CanBeNull] string phoneNumber = null,
         bool phoneNumberConfirmed = false,
-        Guid? tenantId = null)
+        Guid? tenantId = null,
+        bool isActive = false)
     {
         Id = id;
         UserName = userName;
         Email = email;
         Name = name;
         Surname = surname;
+        IsActive = isActive;
         EmailConfirmed = emailConfirmed;
         PhoneNumber = phoneNumber;
         PhoneNumberConfirmed = phoneNumberConfirmed;

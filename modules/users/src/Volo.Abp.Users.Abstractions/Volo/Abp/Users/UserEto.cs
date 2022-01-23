@@ -16,6 +16,8 @@ public class UserEto : IUserData
 
     public string Surname { get; set; }
 
+    public bool IsActive { get; set; }
+
     public string Email { get; set; }
 
     public bool EmailConfirmed { get; set; }

@@ -15,6 +15,8 @@ public interface IUserData
 
     string Surname { get; }
 
+    bool IsActive { get; }
+
     [CanBeNull]
     string Email { get; }
 
