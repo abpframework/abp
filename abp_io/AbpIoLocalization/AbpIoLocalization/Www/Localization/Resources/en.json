@@ -305,7 +305,6 @@
     "FrameworkNewsletterConfirmationMessage": "I agree to the <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
     "GetYourFreeEBook": "Get Your <span class=\"gradient-framework d-block\">Free DDD E-book </span>",
     "EverythingYouNeedToKnow": "Everything you need to know.",
-    "MasteringTheABPFrameworkExplanation": "Written by the creator of ABP Framework, this book will help you gain a complete understanding of the framework and modern web application development techniques.",
     "PreOrderNow": "Pre-Order Now",
     "UITheming": "UI Theming",
     "UIThemingExplanation": "Create reusable UI themes and layouts or use one of the pre-built UI themes.",
