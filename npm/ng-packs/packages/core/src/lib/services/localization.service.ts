@@ -25,9 +25,12 @@ export class LocalizationService {
 
   /**
    * Returns currently selected language
+   * Even though this looks like it's redundant to return the same value as `getLanguage()`,
+   * it's actually not. This could be invoked any time, and the latestLang could be different from the
+   * sessionState.getLanguage() value.
    */
   get currentLang(): string {
-    return this.latestLang;
+    return this.latestLang || this.sessionState.getLanguage();
   }
 
   get currentLang$(): Observable<string> {
