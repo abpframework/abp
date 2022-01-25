@@ -104,6 +104,8 @@ Here are some other notable changes that come with this release:
 
 * Support markdown in [CMS-Kit comments ](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments)feature ([#10792](https://github.com/abpframework/abp/pull/10792))
 * Used file scoped namespaces for all the ABP Framework source code :) ([#10552](https://github.com/abpframework/abp/pull/10696))
+* Developers should control `EnableLegacyTimestampBehavior` when using PostgreSQL. [#11371](https://github.com/abpframework/abp/pull/11371) [#65](https://github.com/abpframework/eShopOnAbp/pull/65)
+
 
 All issues & PRs in [5.1 milesone](https://github.com/abpframework/abp/milestone/60?closed=1).
 
