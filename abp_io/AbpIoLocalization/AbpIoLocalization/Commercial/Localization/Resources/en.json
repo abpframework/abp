@@ -482,6 +482,7 @@
     "BackOfficeApplication": "Back Office Application",
     "BackOfficeApplicationExplanation": "The actual web application of your system, with multiple UI framework options. You can create any kind of business application.",
     "LandingWebsite": "Landing Website",
-    "LandingWebsiteExplanation": "A generic landing/public website that can be used for several purposes, like introducing your company, selling your products, etc."
+    "LandingWebsiteExplanation": "A generic landing/public website that can be used for several purposes, like introducing your company, selling your products, etc.",
+    "ABPFrameworkEBook": "ABP Framework e-book"
   }
 }
