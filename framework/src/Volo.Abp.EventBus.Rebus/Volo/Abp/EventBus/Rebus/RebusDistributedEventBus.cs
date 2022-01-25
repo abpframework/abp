@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Rebus.Bus;
 using Rebus.Pipeline;
+using Rebus.Transport;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
@@ -227,9 +228,14 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     {
         var outgoingEventArray = outgoingEvents.ToArray();
 
-        foreach (var outgoingEvent in outgoingEventArray)
+        using (var scope = new RebusTransactionScope())
         {
-            await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
+            foreach (var outgoingEvent in outgoingEventArray)
+            {
+                await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
+            }
+
+            await scope.CompleteAsync();
         }
 
         return new MultipleOutgoingEventPublishResult(outgoingEventArray);
