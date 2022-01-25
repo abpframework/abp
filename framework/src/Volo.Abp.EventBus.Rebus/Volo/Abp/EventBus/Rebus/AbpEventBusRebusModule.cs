@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Rebus.Handlers;
+using Rebus.Pipeline;
+using Rebus.Pipeline.Receive;
 using Rebus.ServiceProvider;
 using Volo.Abp.Modularity;
 
@@ -21,6 +23,17 @@ public class AbpEventBusRebusModule : AbpModule
 
         context.Services.AddRebus(configure =>
         {
+            configure.Options(options =>
+            {
+                options.Decorate<IPipeline>(d =>
+                {
+                    var step = new AbpRebusEventHandlerStep();
+                    var pipeline = d.Get<IPipeline>();
+
+                    return new PipelineStepInjector(pipeline).OnReceive(step, PipelineRelativePosition.After, typeof(ActivateHandlersStep));
+                });
+            });
+
             preActions.Configure().Configurer?.Invoke(configure);
             return configure;
         });
