@@ -176,14 +176,6 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
         }
         catch (Exception ex)
         {
-            if (ex is OperationInterruptedException operationInterruptedException &&
-                operationInterruptedException.ShutdownReason.ReplyCode == 406 &&
-                operationInterruptedException.Message.Contains("arg 'x-dead-letter-exchange'"))
-            {
-                Logger.LogException(ex, LogLevel.Warning);
-                await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
-            }
-
             Logger.LogException(ex, LogLevel.Warning);
             await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
         }
