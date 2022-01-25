@@ -26,13 +26,13 @@
                 {
                     @foreach (var menuItem in Menu.Items)
                     {
-                        <a class="dropdown-item" href="@menuItem.Url?.TrimStart('~')" target="@menuItem.Target">@menuItem.DisplayName</a>
+                        <a class="dropdown-item" href="@menuItem.Url?.TrimStart('/', '~')" target="@menuItem.Target">@menuItem.DisplayName</a>
                     }
                 }
             </DropdownMenu>
         </Dropdown>
     </Authorized>
     <NotAuthorized>
-        <a class="nav-link" href="/Account/Login">@L["Login"]</a>
+        <a class="nav-link" href="Account/Login">@L["Login"]</a>
     </NotAuthorized>
 </AuthorizeView>
