@@ -1,0 +1,29 @@
+{
+  "name": "Volo.Docs.Admin.Application",
+  "hash": "a4fd7ea711b7f38af3235eabde130328",
+  "contents": [
+    {
+      "namespace": "Volo.Docs.Admin",
+      "contentType": "abpModule",
+      "name": "DocsAdminApplicationModule"
+    },
+    {
+      "namespace": "Volo.Docs.Admin.Projects",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Docs.Admin.Projects.IProjectAdminAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "ProjectAdminAppService"
+    },
+    {
+      "namespace": "Volo.Docs.Admin.Documents",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "DocumentAdminAppService"
+    }
+  ]
+}

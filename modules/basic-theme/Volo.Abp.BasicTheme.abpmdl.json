@@ -33,6 +33,10 @@
     "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests": {
       "path": "test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests.abppkg.json",
       "folder": "test"
+    },
+    "Volo.Abp.BasicTheme.Installer": {
+      "path": "src/Volo.Abp.BasicTheme.Installer/Volo.Abp.BasicTheme.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }

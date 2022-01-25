@@ -1,49 +1,46 @@
-using Volo.Abp.Ldap.Localization;
-using Volo.Abp.Localization;
+﻿using System;
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;
 
 namespace Volo.Abp.Ldap;
 
-public class LdapSettingProvider : SettingDefinitionProvider
+public class LdapSettingProvider : ILdapSettingProvider, ITransientDependency
 {
-    public override void Define(ISettingDefinitionContext context)
+    protected ISettingProvider SettingProvider { get; }
+
+    public LdapSettingProvider(ISettingProvider settingProvider)
     {
-        context.Add(
-            new SettingDefinition(
-                LdapSettingNames.ServerHost,
-                "",
-                L("DisplayName:Abp.Ldap.ServerHost"),
-                L("Description:Abp.Ldap.ServerHost")),
-
-            new SettingDefinition(
-                LdapSettingNames.ServerPort,
-                "389",
-                L("DisplayName:Abp.Ldap.ServerPort"),
-                L("Description:Abp.Ldap.ServerPort")),
-
-            new SettingDefinition(
-                LdapSettingNames.BaseDc,
-                "",
-                L("DisplayName:Abp.Ldap.BaseDc"),
-                L("Description:Abp.Ldap.BaseDc")),
-
-            new SettingDefinition(
-                LdapSettingNames.UserName,
-                "",
-                L("DisplayName:Abp.Ldap.UserName"),
-                L("Description:Abp.Ldap.UserName")),
-
-            new SettingDefinition(
-                LdapSettingNames.Password,
-                "",
-                L("DisplayName:Abp.Ldap.Password"),
-                L("Description:Abp.Ldap.Password"),
-                isEncrypted: true)
-        );
+        SettingProvider = settingProvider;
     }
 
-    private static LocalizableString L(string name)
+    public async Task<string> GetServerHostAsync()
     {
-        return LocalizableString.Create<LdapResource>(name);
+        return await SettingProvider.GetOrNullAsync(LdapSettingNames.ServerHost);
+    }
+
+    public async Task<int> GetServerPortAsync()
+    {
+        return (await SettingProvider.GetOrNullAsync(LdapSettingNames.ServerPort))?.To<int>() ?? default;
+    }
+
+    public async Task<string> GetBaseDcAsync()
+    {
+        return await SettingProvider.GetOrNullAsync(LdapSettingNames.BaseDc);
+    }
+
+    public async Task<string> GetDomainAsync()
+    {
+        return await SettingProvider.GetOrNullAsync(LdapSettingNames.Domain);
+    }
+
+    public async Task<string> GetUserNameAsync()
+    {
+        return await SettingProvider.GetOrNullAsync(LdapSettingNames.UserName);
+    }
+
+    public async Task<string> GetPasswordAsync()
+    {
+        return await SettingProvider.GetOrNullAsync(LdapSettingNames.Password);
     }
 }

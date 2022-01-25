@@ -683,16 +683,8 @@
           "path": "Modules/Background-Jobs.md"
         },
         {
-          "text": "博客",
-          "path": "Modules/Blogging.md"
-        },
-        {
-          "text": "客户端模拟",
-          "path": "Modules/Client-Simulation.md"
-        },
-        {
           "text": "CMS Kit",
-          "path": "Modules/Cms-Kit.md"
+          "path": "Modules/Cms-Kit/Index.md"
         },
         {
           "text": "文档",
@@ -721,10 +713,6 @@
         {
           "text": "租户管理",
           "path": "Modules/Tenant-Management.md"
-        },
-        {
-          "text": "用户",
-          "path": "Modules/Users.md"
         },
         {
           "text": "虚拟文件浏览器",

@@ -12,4 +12,11 @@ public class PreConfigureActionList<TOptions> : List<Action<TOptions>>
             action(options);
         }
     }
+
+    public TOptions Configure()
+    {
+        var options = Activator.CreateInstance<TOptions>();
+        Configure(options);
+        return options;
+    }
 }

@@ -1,0 +1,17 @@
+{
+  "name": "Volo.Abp.SettingManagement.Application.Contracts",
+  "hash": "24dd7c23d21cea495b5958069e3f3643",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.SettingManagement",
+      "contentType": "abpModule",
+      "name": "AbpSettingManagementApplicationContractsModule"
+    },
+    {
+      "displayName": "Emailing",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "SettingManagement.Emailing"
+    }
+  ]
+}

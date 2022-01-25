@@ -3,7 +3,7 @@
   "name": "my-app",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^5.0.1",
-    "@abp/cms-kit": "5.0.1"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^5.1.2",
+    "@abp/cms-kit": "5.1.2"
   }
 }

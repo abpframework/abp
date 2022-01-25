@@ -1,0 +1,39 @@
+{
+  "name": "Volo.Abp.AuditLogging.EntityFrameworkCore",
+  "hash": "0495e8cfba68a55319b3774882939845",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AuditLogging.EntityFrameworkCore",
+      "contentType": "abpModule",
+      "name": "AbpAuditLoggingEntityFrameworkCoreModule"
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging.EntityFrameworkCore",
+      "connectionStringName": "AbpAuditLogging",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.AuditLogging.AuditLog",
+          "contentType": "databaseTable",
+          "name": "AbpAuditLogs"
+        },
+        {
+          "entityFullName": "Volo.Abp.AuditLogging.AuditLogAction",
+          "contentType": "databaseTable",
+          "name": "AbpAuditLogActions"
+        },
+        {
+          "entityFullName": "Volo.Abp.AuditLogging.EntityChange",
+          "contentType": "databaseTable",
+          "name": "AbpEntityChanges"
+        },
+        {
+          "entityFullName": "Volo.Abp.AuditLogging.EntityPropertyChange",
+          "contentType": "databaseTable",
+          "name": "AbpEntityPropertyChanges"
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "AbpAuditLoggingDbContext"
+    }
+  ]
+}

@@ -4,16 +4,15 @@ This document provides a road map, release schedule and planned features for the
 
 ## Next Versions
 
-### v5.1
+### v5.2
 
-In [5.1 milestone](https://github.com/abpframework/abp/milestone/60), we will be mostly working on the following topics:
+In [5.2 milestone](https://github.com/abpframework/abp/milestone/62), we will be mostly working on the following topics:
 
 * Maturing and documenting the [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) project.
 * Working on the [LeptonX](https://blog.abp.io/abp/LeptonX-Theme-for-ABP-Framework-Alpha-Release) theme and making it as the default theme for the ABP Framework UI options.
-* Flexing the UI-backend dependency for the Angular UI, so we can easily create UI-only modules (like UI themes) with its own localization and settings.
 * Working on more examples and guides.
 
-The planned release data for v5.1 is **February, 2022**. See the [5.1 milestone](https://github.com/abpframework/abp/milestone/60) on GitHub for all the issues we are working on.
+The planned release date for v5.2 is **March, 2022**.
 
 ## Backlog Items
 

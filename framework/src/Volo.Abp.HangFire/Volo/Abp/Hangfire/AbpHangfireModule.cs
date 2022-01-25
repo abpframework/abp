@@ -13,9 +13,10 @@ public class AbpHangfireModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        var preActions = context.Services.GetPreConfigureActions<IGlobalConfiguration>();
         context.Services.AddHangfire(configuration =>
         {
-            context.Services.ExecutePreConfiguredActions(configuration);
+            preActions.Configure(configuration);
         });
     }
 

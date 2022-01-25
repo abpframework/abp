@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.Domain",
-  "hash": "7736ef4a79faf05ed7e6097700d560ce",
+  "hash": "ecd9006876d38113d0967e866c30d6ac",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity",
@@ -81,13 +81,13 @@
       "namespace": "Volo.Abp.Identity",
       "summary": null,
       "contentType": "domainService",
-      "name": "IdentityRoleManager"
+      "name": "IdentityLinkUserManager"
     },
     {
       "namespace": "Volo.Abp.Identity",
       "summary": null,
       "contentType": "domainService",
-      "name": "IdentityLinkUserManager"
+      "name": "IdentityRoleManager"
     },
     {
       "namespace": "Volo.Abp.Identity",
@@ -200,6 +200,156 @@
       },
       "contentType": "repositoryInterface",
       "name": "IOrganizationUnitRepository"
+    },
+    {
+      "defaultValue": "6",
+      "displayName": "Required length",
+      "description": "The minimum length a password must be.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequiredLength"
+    },
+    {
+      "defaultValue": "1",
+      "displayName": "Required unique characters number",
+      "description": "The minimum number of unique characters which a password must contain.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequiredUniqueChars"
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Required non-alphanumeric character",
+      "description": "If passwords must contain a non-alphanumeric character.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequireNonAlphanumeric"
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Required lower case character",
+      "description": "If passwords must contain a lower case ASCII character.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequireLowercase"
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Required upper case character",
+      "description": "If passwords must contain a upper case ASCII character.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequireUppercase"
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Required digit",
+      "description": "If passwords must contain a digit.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequireDigit"
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Enabled for new users",
+      "description": "Whether a new user can be locked out.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Lockout.AllowedForNewUsers"
+    },
+    {
+      "defaultValue": "300",
+      "displayName": "Lockout duration(seconds)",
+      "description": "The duration a user is locked out for when a lockout occurs.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Lockout.LockoutDuration"
+    },
+    {
+      "defaultValue": "5",
+      "displayName": "Max failed access attempts",
+      "description": "The number of failed access attempts allowed before a user is locked out, assuming lock out is enabled.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Lockout.MaxFailedAccessAttempts"
+    },
+    {
+      "defaultValue": "False",
+      "displayName": "Require confirmed email",
+      "description": "Whether a confirmed email address is required to sign in.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.SignIn.RequireConfirmedEmail"
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Allow users to confirm their phone number",
+      "description": "Whether the phoneNumber can be confirmed by the user.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.SignIn.EnablePhoneNumberConfirmation"
+    },
+    {
+      "defaultValue": "False",
+      "displayName": "Require confirmed phone number",
+      "description": "Whether a confirmed telephone number is required to sign in.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.SignIn.RequireConfirmedPhoneNumber"
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Allow users to change their usernames",
+      "description": "Whether the username can be updated by the user.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.User.IsUserNameUpdateEnabled"
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Allow users to change their email addresses",
+      "description": "Whether the email can be updated by the user.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.User.IsEmailUpdateEnabled"
+    },
+    {
+      "defaultValue": "2147483647",
+      "displayName": "Maximum allowed organization unit membership count for a user",
+      "description": "Maximum allowed organization unit membership count for a user",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.OrganizationUnit.MaxUserMembershipCount"
     }
   ]
 }

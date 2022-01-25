@@ -1,0 +1,29 @@
+{
+  "folders": {
+    "items": {
+      "src": {}
+    }
+  },
+  "packages": {
+    "Volo.Abp.Studio.Analyzing.Abstractions": {
+      "path": "src/Volo.Abp.Studio.Analyzing.Abstractions/Volo.Abp.Studio.Analyzing.Abstractions.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Studio.Domain.CommonServices": {
+      "path": "src/Volo.Abp.Studio.Domain.CommonServices/Volo.Abp.Studio.Domain.CommonServices.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Studio.Domain.Shared": {
+      "path": "src/Volo.Abp.Studio.Domain.Shared/Volo.Abp.Studio.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Studio.ModuleInstaller": {
+      "path": "src/Volo.Abp.Studio.ModuleInstaller/Volo.Abp.Studio.ModuleInstaller.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Studio.ModuleInstaller.Abstractions": {
+      "path": "src/Volo.Abp.Studio.ModuleInstaller.Abstractions/Volo.Abp.Studio.ModuleInstaller.Abstractions.abppkg.json",
+      "folder": "src"
+    }
+  }
+}
