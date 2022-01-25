@@ -77,11 +77,6 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
 
         var tenantNamePlaceHolder = TenantNamePlaceHolder;
 
-        if (url.Contains(TenantNamePlaceHolder + '.'))
-        {
-            tenantNamePlaceHolder = TenantNamePlaceHolder + '.';
-        }
-
         if (url.Contains(tenantNamePlaceHolder))
         {
             if (CurrentTenant.Id.HasValue)
@@ -90,6 +85,10 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
             }
             else
             {
+                if (url.Contains(TenantNamePlaceHolder + '.'))
+                {
+                    tenantNamePlaceHolder = TenantNamePlaceHolder + '.';
+                }
                 url = url.Replace(tenantNamePlaceHolder, "");
             }
         }
