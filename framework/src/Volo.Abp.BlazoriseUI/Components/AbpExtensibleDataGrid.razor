@@ -44,7 +44,8 @@
                                                       Clicked="async () => await action.Clicked(context)"
                                                       ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
                                                       Visible="@(action.Visible != null ? action.Visible(context) : true)"
-                                                      Text="@action.Text">
+                                                      Text="@action.Text"
+                                                      Disabled="@action.Disabled">
                                         </EntityAction>
                                     }
                                     else
@@ -54,7 +55,8 @@
                                                       Color="@(action.Color != null ? (Blazorise.Color) action.Color : Blazorise.Color.None)"
                                                       Icon="@action.Icon"
                                                       Visible="@(action.Visible != null ? action.Visible(context) : true)"
-                                                      Text="@action.Text">
+                                                      Text="@action.Text"
+                                                      Disabled="@action.Disabled">
                                         </EntityAction>
                                     }
                                 }
@@ -78,18 +80,18 @@
                         {
                             @if (column.ValueConverter == null)
                             {
-                                <DataGridColumn TItem="TItem" 
-                                                Field="@column.Data" 
-                                                Caption="@column.Title" 
-                                                Sortable="@column.Sortable" 
-                                                DisplayFormat="@column.DisplayFormat" 
+                                <DataGridColumn TItem="TItem"
+                                                Field="@column.Data"
+                                                Caption="@column.Title"
+                                                Sortable="@column.Sortable"
+                                                DisplayFormat="@column.DisplayFormat"
                                                 DisplayFormatProvider="@column.DisplayFormatProvider"/>
                             }
                             else
                             {
-                                <DataGridColumn TItem="TItem" 
-                                                Field="@column.Data" 
-                                                Caption="@column.Title" 
+                                <DataGridColumn TItem="TItem"
+                                                Field="@column.Data"
+                                                Caption="@column.Title"
                                                 Sortable="@column.Sortable">
                                     <DisplayTemplate>
                                         @(GetConvertedFieldValue(context, column))
