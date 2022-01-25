@@ -5,7 +5,7 @@
     "access": "public"
   },
   "dependencies": {
-    "slugify": "^1.4.7"
+    "slugify": "^1.6.5"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
