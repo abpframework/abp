@@ -86,7 +86,7 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         {
             if (CurrentTenant.Id.HasValue)
             {
-                url = url.Replace(tenantNamePlaceHolder, await GetCurrentTenantNameAsync());
+                url = url.Replace(tenantNamePlaceHolder, await GetCurrentTenantNameAsync() + ".");
             }
             else
             {
