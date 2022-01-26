@@ -75,7 +75,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
     protected virtual bool ShouldBeRemove(ApplicationModel application, ControllerModel controllerModel)
     {
         return application.Controllers
-            .Where(x => x.ControllerType != controllerModel.ControllerType).ToList()
+            .Where(x => x.ControllerType != controllerModel.ControllerType)
             .Any(x => FindAppServiceInterfaceType(x) == FindAppServiceInterfaceType(controllerModel));
     }
 
