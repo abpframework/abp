@@ -102,6 +102,11 @@ public static class FileEntryExtensions
                     ++i;
                 }
 
+                if (lines[i+1].Contains("<TEMPLATE-REMOVE"))
+                {
+                    continue;
+                }
+                
                 ++i;
             }
 
