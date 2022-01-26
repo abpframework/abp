@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.Client\Volo.Abp.AspNetCore.Mvc.Client.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Authentication.OpenIdConnect\Volo.Abp.AspNetCore.Authentication.OpenIdConnect.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client.IdentityModel.Web\Volo.Abp.Http.Client.IdentityModel.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client.Web\Volo.Abp.Http.Client.Web.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Swashbuckle\Volo.Abp.Swashbuckle.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client.Web\Volo.Abp.Http.Client.Web.csproj" />
