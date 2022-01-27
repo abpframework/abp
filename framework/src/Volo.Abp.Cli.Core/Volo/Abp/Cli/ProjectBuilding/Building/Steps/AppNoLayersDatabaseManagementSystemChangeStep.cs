@@ -61,12 +61,12 @@ public class AppNoLayersDatabaseManagementSystemChangeStep : ProjectBuildPipelin
 
     private void ChangeEntityFrameworkCoreDependency(ProjectBuildContext context, string newPackageName, string newModuleNamespace, string newModuleClass)
     {
-        var efCoreProjectFile = context.Files.First(f => f.Name.EndsWith("MyCompanyName.MyProjectName.csproj", StringComparison.OrdinalIgnoreCase));
-        efCoreProjectFile.ReplaceText("Volo.Abp.EntityFrameworkCore.SqlServer", newPackageName);
+        var projectFile = context.Files.FirstOrDefault(f => f.Name.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase));
+        projectFile?.ReplaceText("Volo.Abp.EntityFrameworkCore.SqlServer", newPackageName);
 
-        var efCoreModuleClass = context.Files.First(f => f.Name.EndsWith("MyProjectNameModule.cs", StringComparison.OrdinalIgnoreCase));
-        efCoreModuleClass.ReplaceText("Volo.Abp.EntityFrameworkCore.SqlServer", newModuleNamespace);
-        efCoreModuleClass.ReplaceText("AbpEntityFrameworkCoreSqlServerModule", newModuleClass);
+        var moduleClass = context.Files.FirstOrDefault(f => f.Name.EndsWith("Module.cs", StringComparison.OrdinalIgnoreCase));
+        moduleClass?.ReplaceText("Volo.Abp.EntityFrameworkCore.SqlServer", newModuleNamespace);
+        moduleClass?.ReplaceText("AbpEntityFrameworkCoreSqlServerModule", newModuleClass);
     }
 
     private void ChangeUseSqlServer(ProjectBuildContext context, string newUseMethodForEfModule, string newUseMethodForDbContext = null)
@@ -78,8 +78,8 @@ public class AppNoLayersDatabaseManagementSystemChangeStep : ProjectBuildPipelin
 
         var oldUseMethod = "UseSqlServer";
 
-        var efCoreModuleClass = context.Files.First(f => f.Name.EndsWith("MyProjectNameModule.cs", StringComparison.OrdinalIgnoreCase));
-        efCoreModuleClass.ReplaceText(oldUseMethod, newUseMethodForEfModule);
+        var moduleClass = context.Files.FirstOrDefault(f => f.Name.EndsWith("Module.cs", StringComparison.OrdinalIgnoreCase));
+        moduleClass?.ReplaceText(oldUseMethod, newUseMethodForEfModule);
 
         var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith("DbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
         dbContextFactoryFile?.ReplaceText(oldUseMethod, newUseMethodForDbContext);
