@@ -19,9 +19,9 @@ public class ProjectRenameStep : ProjectBuildPipelineStep
         var csprojFiles = context.Files.Where(f => f.Name.EndsWith(".csproj"));
         foreach (var file in csprojFiles)
         {
-            if (file.Name == _oldName)
+            if (file.Name.Contains(_oldName))
             {
-                file.SetName(_newName);
+                file.SetName(file.Name.Replace(_oldName, _newName));
             }
         }
 
@@ -41,13 +41,10 @@ public class ProjectRenameStep : ProjectBuildPipelineStep
             file.SetLines(lines);
         }
 
-        var directoryFiles = context.Files.Where(f => f.IsDirectory && f.Name == _oldName);
+        var directoryFiles = context.Files.Where(f => f.Name.Contains(_oldName));
         foreach (var file in directoryFiles)
         {
-            if (file.Name == _oldName)
-            {
-                file.SetName(_newName);
-            }
+            file.SetName(file.Name.Replace(_oldName, _newName));
         }
     }
 
