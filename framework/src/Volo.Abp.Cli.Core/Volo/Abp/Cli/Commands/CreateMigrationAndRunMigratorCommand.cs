@@ -13,7 +13,7 @@ namespace Volo.Abp.Cli.Commands;
 public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientDependency
 {
     public const string Name = "create-migration-and-run-migrator";
-    
+
     public ICmdHelper CmdHelper { get; }
     public ILogger<CreateMigrationAndRunMigratorCommand> Logger { get; set; }
 
@@ -32,8 +32,9 @@ public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientD
 
         var dbMigrationsFolder = commandLineArgs.Target;
 
+        var nolayers = commandLineArgs.Options.ContainsKey("nolayers");
         var dbMigratorProjectPath = GetDbMigratorProjectPath(dbMigrationsFolder);
-        if (dbMigratorProjectPath == null)
+        if (!nolayers && dbMigratorProjectPath == null)
         {
             throw new Exception("DbMigrator is not found!");
         }
@@ -55,8 +56,16 @@ public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientD
 
         if (CheckMigrationOutput(migrationOutput) && CheckMigrationOutput(tenantMigrationOutput))
         {
-            // Migration added successfully
-            CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProjectPath) + "\" && dotnet run");
+            if (nolayers)
+            {
+                // Migration added successfully
+                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(Path.Combine(dbMigrationsFolder, "MyCompanyName.MyProjectName")) + "\" && dotnet run --migrate-database");
+            }
+            else
+            {
+                // Migration added successfully
+                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProjectPath) + "\" && dotnet run");
+            }
             await Task.CompletedTask;
         }
         else

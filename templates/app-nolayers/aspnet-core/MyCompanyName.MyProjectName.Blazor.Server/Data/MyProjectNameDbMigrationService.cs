@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging.Abstractions;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
@@ -32,6 +34,13 @@ public class MyProjectNameDbMigrationService : ITransientDependency
 
     public async Task MigrateAsync()
     {
+        var initialMigrationAdded = AddInitialMigrationIfNotExist();
+
+        if (initialMigrationAdded)
+        {
+            return;
+        }
+
         Logger.LogInformation("Started database migrations...");
 
         await MigrateDatabaseSchemaAsync();
@@ -84,5 +93,111 @@ public class MyProjectNameDbMigrationService : ITransientDependency
             .WithProperty(IdentityDataSeedContributor.AdminEmailPropertyName, IdentityDataSeedContributor.AdminEmailDefaultValue)
             .WithProperty(IdentityDataSeedContributor.AdminPasswordPropertyName, IdentityDataSeedContributor.AdminPasswordDefaultValue)
         );
+    }
+
+    private bool AddInitialMigrationIfNotExist()
+    {
+        try
+        {
+            if (!DbMigrationsProjectExists())
+            {
+                return false;
+            }
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        try
+        {
+            if (!MigrationsFolderExists())
+            {
+                AddInitialMigration();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.LogWarning("Couldn't determinate if any migrations exist : " + e.Message);
+            return false;
+        }
+    }
+
+    private bool DbMigrationsProjectExists()
+    {
+        return Directory.Exists(GetEntityFrameworkCoreProjectFolderPath());
+    }
+
+    private bool MigrationsFolderExists()
+    {
+        var dbMigrationsProjectFolder = GetEntityFrameworkCoreProjectFolderPath();
+
+        return Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "Migrations"));
+    }
+
+    private void AddInitialMigration()
+    {
+        Logger.LogInformation("Creating initial migration...");
+
+        string argumentPrefix;
+        string fileName;
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            argumentPrefix = "-c";
+            fileName = "/bin/bash";
+        }
+        else
+        {
+            argumentPrefix = "/C";
+            fileName = "cmd.exe";
+        }
+
+        var procStartInfo = new ProcessStartInfo(fileName,
+            $"{argumentPrefix} \"abp create-migration-and-run-migrator \"{GetEntityFrameworkCoreProjectFolderPath()}\" --nolayers\""
+        );
+
+        try
+        {
+            Process.Start(procStartInfo);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Couldn't run ABP CLI...");
+        }
+    }
+
+    private string GetEntityFrameworkCoreProjectFolderPath()
+    {
+        var slnDirectoryPath = GetSolutionDirectoryPath();
+
+        if (slnDirectoryPath == null)
+        {
+            throw new Exception("Solution folder not found!");
+        }
+
+        return Path.Combine(slnDirectoryPath, "MyCompanyName.MyProjectName");
+    }
+
+    private string GetSolutionDirectoryPath()
+    {
+        var currentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+
+        while (Directory.GetParent(currentDirectory.FullName) != null)
+        {
+            currentDirectory = Directory.GetParent(currentDirectory.FullName);
+
+            if (Directory.GetFiles(currentDirectory.FullName).FirstOrDefault(f => f.EndsWith(".sln")) != null)
+            {
+                return currentDirectory.FullName;
+            }
+        }
+
+        return null;
     }
 }
