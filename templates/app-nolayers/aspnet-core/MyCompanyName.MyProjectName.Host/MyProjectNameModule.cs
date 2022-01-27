@@ -1,6 +1,9 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
+using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -13,6 +16,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement;
@@ -44,6 +48,7 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAutofacModule),
     typeof(AbpAutoMapperModule),
+    typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpEntityFrameworkCoreSqlServerModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
@@ -111,6 +116,8 @@ public class MyProjectNameModule : AbpModule
         ConfigureAutoApiControllers();
         ConfigureLocalization();
         ConfigureAuthentication(context.Services, configuration);
+        ConfigureCors(context, configuration);
+        ConfigureDataProtection(context, configuration, hostingEnvironment);
         ConfigureEfCore(context);
     }
 
@@ -209,6 +216,41 @@ public class MyProjectNameModule : AbpModule
              */
             options.AddMaps<MyProjectNameModule>(/* validate: true */);
         });
+    }
+
+    private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
+    {
+        context.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder
+                    .WithOrigins(
+                        configuration["App:CorsOrigins"]
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.RemovePostFix("/"))
+                            .ToArray()
+                    )
+                    .WithAbpExposedHeaders()
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
+    }
+
+    private void ConfigureDataProtection(
+        ServiceConfigurationContext context,
+        IConfiguration configuration,
+        IWebHostEnvironment hostingEnvironment)
+    {
+        var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
+        if (!hostingEnvironment.IsDevelopment())
+        {
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+        }
     }
 
     private void ConfigureEfCore(ServiceConfigurationContext context)

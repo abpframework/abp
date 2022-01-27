@@ -89,7 +89,12 @@ public class AppNoLayersTemplate : AppTemplateBase
         RandomizeStringEncryption(context, steps);
         UpdateNuGetConfig(context, steps);
         ChangeConnectionString(context, steps);
-        CleanupFolderHierarchy(context, steps);
+        //CleanupFolderHierarchy(context, steps);
+
+        if (context.BuildArgs.UiFramework != UiFramework.Angular)
+        {
+            steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
+        }
 
         return steps;
     }
