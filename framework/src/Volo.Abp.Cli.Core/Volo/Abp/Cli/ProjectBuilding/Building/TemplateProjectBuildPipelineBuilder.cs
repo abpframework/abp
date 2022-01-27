@@ -40,6 +40,11 @@ public static class TemplateProjectBuildPipelineBuilder
             pipeline.Steps.Add(new DatabaseManagementSystemChangeStep(context.Template.As<AppTemplateBase>().HasDbMigrations)); // todo: move to custom steps?
         }
 
+        if (context.Template.Name == AppNoLayersTemplate.TemplateName)
+        {
+            pipeline.Steps.Add(new AppNoLayersDatabaseManagementSystemChangeStep()); // todo: move to custom steps?
+        }
+
         if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor || context.BuildArgs.UiFramework == UiFramework.BlazorServer)
             && context.BuildArgs.MobileApp == MobileApp.None && context.Template.Name != MicroserviceProTemplate.TemplateName
             && context.Template.Name != MicroserviceServiceProTemplate.TemplateName)
