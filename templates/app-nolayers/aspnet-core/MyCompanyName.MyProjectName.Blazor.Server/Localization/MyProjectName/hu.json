@@ -1,0 +1,7 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Welcome_Title": "Üdvözlöm",
+    "Welcome_Text": "Ez egy minimalista, egyrétegű alkalmazásindítási sablon az ABP-keretrendszerhez."
+  }
+}

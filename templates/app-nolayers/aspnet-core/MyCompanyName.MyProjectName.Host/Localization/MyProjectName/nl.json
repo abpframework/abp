@@ -1,0 +1,7 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Welcome_Title": "Welkom",
+    "Welcome_Text": "Dit is een minimalistische, enkellaagse applicatie-opstartsjabloon voor het ABP Framework."
+  }
+}
