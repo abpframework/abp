@@ -11,6 +11,9 @@ using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
@@ -50,6 +53,7 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAutoMapperModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpEntityFrameworkCoreSqlServerModule),
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -109,6 +113,7 @@ public class MyProjectNameModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureBundles();
         ConfigureMultiTenancy();
         ConfigureUrls(configuration);
         ConfigureAutoMapper();
@@ -119,6 +124,17 @@ public class MyProjectNameModule : AbpModule
         ConfigureCors(context, configuration);
         ConfigureDataProtection(context, configuration, hostingEnvironment);
         ConfigureEfCore(context);
+    }
+
+    private void ConfigureBundles()
+    {
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.StyleBundles.Configure(
+                BasicThemeBundles.Styles.Global,
+                bundle => { bundle.AddFiles("/global-styles.css"); }
+            );
+        });
     }
 
     private void ConfigureMultiTenancy()
@@ -293,6 +309,7 @@ public class MyProjectNameModule : AbpModule
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseCors();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
 

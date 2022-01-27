@@ -80,7 +80,7 @@ public class AppNoLayersTemplate : AppTemplateBase
         //ConfigureTenantSchema(context, steps);
         //SwitchDatabaseProvider(context, steps);
         //DeleteUnrelatedProjects(context, steps);
-        steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName/Migrations"));
+        steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName/Migrations"));
         //RemoveMigrations(context, steps);
         //ConfigureTieredArchitecture(context, steps);
         //ConfigurePublicWebSite(context, steps);

@@ -129,29 +129,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
 
         var configurationSection = _configuration.GetSection("IdentityServer:Clients");
 
-        //<TEMPLATE-REMOVE IF-NOT='ui:mvc&&tiered'>
-
-        //Web Client
-        var webClientId = configurationSection["MyProjectName_Web:ClientId"];
-        if (!webClientId.IsNullOrWhiteSpace())
-        {
-            var webClientRootUrl = configurationSection["MyProjectName_Web:RootUrl"].EnsureEndsWith('/');
-
-            await CreateClientAsync(
-                name: webClientId,
-                scopes: commonScopes,
-                grantTypes: new[] { "hybrid" },
-                secret: (configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
-                redirectUri: $"{webClientRootUrl}signin-oidc",
-                postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
-                frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout",
-                corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
-            );
-        }
-
-        //</TEMPLATE-REMOVE>
-
-        //Console Test / Angular Client
+        // Angular Client
         var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
         if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
         {
@@ -168,53 +146,6 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
                 corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
             );
         }
-
-        //<TEMPLATE-REMOVE IF-NOT='ui:blazor'>
-
-        // Blazor Client
-        var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
-        if (!blazorClientId.IsNullOrWhiteSpace())
-        {
-            var blazorRootUrl = configurationSection["MyProjectName_Blazor:RootUrl"].TrimEnd('/');
-
-            await CreateClientAsync(
-                name: blazorClientId,
-                scopes: commonScopes,
-                grantTypes: new[] { "authorization_code" },
-                secret: configurationSection["MyProjectName_Blazor:ClientSecret"]?.Sha256(),
-                requireClientSecret: false,
-                redirectUri: $"{blazorRootUrl}/authentication/login-callback",
-                postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback",
-                corsOrigins: new[] { blazorRootUrl.RemovePostFix("/") }
-            );
-        }
-
-        //</TEMPLATE-REMOVE>
-
-        //<TEMPLATE-REMOVE IF-NOT='ui:blazor-server&&tiered'>
-
-        //Blazor Server Tiered Client
-        var blazorServerTieredClientId = configurationSection["MyProjectName_BlazorServerTiered:ClientId"];
-        if (!blazorServerTieredClientId.IsNullOrWhiteSpace())
-        {
-            var blazorServerTieredClientRootUrl = configurationSection["MyProjectName_BlazorServerTiered:RootUrl"].EnsureEndsWith('/');
-
-            /* MyProjectName_BlazorServerTiered client is only needed if you created a tiered blazor server
-             * solution. Otherwise, you can delete this client. */
-
-            await CreateClientAsync(
-                name: blazorServerTieredClientId,
-                scopes: commonScopes,
-                grantTypes: new[] { "hybrid" },
-                secret: (configurationSection["MyProjectName_BlazorServerTiered:ClientSecret"] ?? "1q2w3e*").Sha256(),
-                redirectUri: $"{blazorServerTieredClientRootUrl}signin-oidc",
-                postLogoutRedirectUri: $"{blazorServerTieredClientRootUrl}signout-callback-oidc",
-                frontChannelLogoutUri: $"{blazorServerTieredClientRootUrl}Account/FrontChannelLogout",
-                corsOrigins: new[] { blazorServerTieredClientRootUrl.RemovePostFix("/") }
-            );
-        }
-
-        //</TEMPLATE-REMOVE>
 
         // Swagger Client
         var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
