@@ -3,6 +3,7 @@ using Blazorise.Icons.FontAwesome;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
+using MyCompanyName.MyProjectName.Menus;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -42,6 +43,7 @@ using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Blazor.Server;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
@@ -102,7 +104,7 @@ namespace MyCompanyName.MyProjectName;
 public class MyProjectNameModule : AbpModule
 {
     /* Single point to enable/disable multi-tenancy */
-    private const bool IsMultiTenant = true;
+    public const bool IsMultiTenant = true;
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -126,6 +128,7 @@ public class MyProjectNameModule : AbpModule
         ConfigureVirtualFiles(hostingEnvironment);
         ConfigureLocalizationServices();
         ConfigureSwaggerServices(context.Services);
+        ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureBlazorise(context);
         ConfigureRouter(context);
@@ -254,6 +257,14 @@ public class MyProjectNameModule : AbpModule
         Configure<AbpRouterOptions>(options =>
         {
             options.AppAssembly = typeof(MyProjectNameModule).Assembly;
+        });
+    }
+
+    private void ConfigureNavigationServices()
+    {
+        Configure<AbpNavigationOptions>(options =>
+        {
+            options.MenuContributors.Add(new MyProjectNameMenuContributor());
         });
     }
 

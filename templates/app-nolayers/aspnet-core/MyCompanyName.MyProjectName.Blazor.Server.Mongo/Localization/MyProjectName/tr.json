@@ -2,6 +2,7 @@
   "culture": "tr",
   "texts": {
     "Welcome_Title": "Hoşgeldiniz",
-    "Welcome_Text": "Bu proje tek katmanlı ABP uygulamaları yapmak için bir başlangıç şablonudur."
+    "Welcome_Text": "Bu proje tek katmanlı ABP uygulamaları yapmak için bir başlangıç şablonudur.",
+    "Menu:Home": "Ana sayfa"
   }
 }
