@@ -22,9 +22,12 @@ export function interpolate(text: string, params: string[]) {
     .replace(/\s+/g, ' ');
 }
 
-export function escapeHtmlChars(value: string) {
-  return (
-    value &&
-    value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-  );
+export function escapeHtmlChars(value: any) {
+  return value && typeof value === 'string'
+    ? value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+    : value;
 }
