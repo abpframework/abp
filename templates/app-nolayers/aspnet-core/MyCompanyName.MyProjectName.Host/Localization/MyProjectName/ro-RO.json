@@ -2,6 +2,7 @@
   "culture": "ro-RO",
   "texts": {
     "Welcome_Title": "Bun venit",
-    "Welcome_Text": "Acesta este un șablon de pornire a aplicației minimaliste, cu un singur strat, pentru Cadrul ABP."
+    "Welcome_Text": "Acesta este un șablon de pornire a aplicației minimaliste, cu un singur strat, pentru Cadrul ABP.",
+    "Menu:Home": "Acasă"
   }
 }

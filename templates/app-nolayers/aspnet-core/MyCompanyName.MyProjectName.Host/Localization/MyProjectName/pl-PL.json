@@ -2,6 +2,7 @@
   "culture": "pl-PL",
   "texts": {
     "Welcome_Title": "Witaj",
-    "Welcome_Text": "Jest to minimalistyczny, jednowarstwowy szablon uruchamiania aplikacji dla ABP Framework."
+    "Welcome_Text": "Jest to minimalistyczny, jednowarstwowy szablon uruchamiania aplikacji dla ABP Framework.",
+    "Menu:Home": "Home"
   }
 }
