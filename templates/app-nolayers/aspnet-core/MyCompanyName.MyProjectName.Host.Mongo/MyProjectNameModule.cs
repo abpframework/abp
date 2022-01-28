@@ -41,6 +41,7 @@ using Volo.Abp.TenantManagement.MongoDB;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation.Localization;
+using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName;
 
@@ -117,6 +118,7 @@ public class MyProjectNameModule : AbpModule
         ConfigureAutoMapper();
         ConfigureSwagger(context.Services);
         ConfigureAutoApiControllers();
+        ConfigureVirtualFiles(hostingEnvironment);
         ConfigureLocalization();
         ConfigureAuthentication(context.Services, configuration);
         ConfigureCors(context, configuration);
@@ -201,6 +203,19 @@ public class MyProjectNameModule : AbpModule
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
+        });
+    }
+
+    private void ConfigureVirtualFiles(IWebHostEnvironment hostingEnvironment)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<MyProjectNameModule>();
+            if (hostingEnvironment.IsDevelopment())
+            {
+                /* Using physical files in development, so we don't need to recompile on changes */
+                options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameModule>(hostingEnvironment.ContentRootPath);
+            }
         });
     }
 

@@ -2,6 +2,7 @@
   "culture": "cs",
   "texts": {
     "Welcome_Title": "Vítejte",
-    "Welcome_Text": "Toto je minimalistická šablona pro spuštění aplikace s jednou vrstvou pro ABP Framework."
+    "Welcome_Text": "Toto je minimalistická šablona pro spuštění aplikace s jednou vrstvou pro ABP Framework.",
+    "Menu:Home": "Úvod"
   }
 }

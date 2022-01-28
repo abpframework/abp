@@ -1,7 +1,8 @@
 {
   "culture": "zh-Hans",
-    "texts": {
+  "texts": {
     "Welcome_Title": "欢迎",
-    "Welcome_Text": "这是ABP框架的极简单层应用程序启动模板."
-    }
+    "Welcome_Text": "这是ABP框架的极简单层应用程序启动模板.",
+    "Menu:Home": "首页"
   }
+}

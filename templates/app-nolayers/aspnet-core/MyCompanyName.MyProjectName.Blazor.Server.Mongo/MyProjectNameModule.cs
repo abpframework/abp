@@ -3,6 +3,7 @@ using Blazorise.Icons.FontAwesome;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
+using MyCompanyName.MyProjectName.Menus;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -28,6 +29,7 @@ using Volo.Abp.Identity.Blazor.Server;
 using Volo.Abp.Identity.MongoDB;
 using Volo.Abp.IdentityServer.MongoDB;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.MongoDB;
@@ -40,9 +42,11 @@ using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Blazor.Server;
 using Volo.Abp.TenantManagement.MongoDB;
+using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation.Localization;
+using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName;
 
@@ -99,7 +103,7 @@ namespace MyCompanyName.MyProjectName;
 public class MyProjectNameModule : AbpModule
 {
     /* Single point to enable/disable multi-tenancy */
-    private const bool IsMultiTenant = true;
+    public const bool IsMultiTenant = true;
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -120,8 +124,10 @@ public class MyProjectNameModule : AbpModule
         ConfigureUrls(configuration);
         ConfigureBundles();
         ConfigureAutoMapper();
+        ConfigureVirtualFiles(hostingEnvironment);
         ConfigureLocalizationServices();
         ConfigureSwaggerServices(context.Services);
+        ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureBlazorise(context);
         ConfigureRouter(context);
@@ -158,7 +164,7 @@ public class MyProjectNameModule : AbpModule
                 {
                     bundle.AddFiles("/blazor-global-styles.css");
                     //You can remove the following line if you don't use Blazor CSS isolation for components
-                    bundle.AddFiles("/MyCompanyName.MyProjectName.styles.css");
+                    bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.styles.css");
                 }
             );
         });
@@ -206,6 +212,24 @@ public class MyProjectNameModule : AbpModule
             options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
             options.Languages.Add(new LanguageInfo("es", "es", "Español"));
         });
+
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
+        });
+    }
+
+    private void ConfigureVirtualFiles(IWebHostEnvironment hostingEnvironment)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<MyProjectNameModule>();
+            if (hostingEnvironment.IsDevelopment())
+            {
+                /* Using physical files in development, so we don't need to recompile on changes */
+                options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameModule>(hostingEnvironment.ContentRootPath);
+            }
+        });
     }
 
     private void ConfigureSwaggerServices(IServiceCollection services)
@@ -232,6 +256,14 @@ public class MyProjectNameModule : AbpModule
         Configure<AbpRouterOptions>(options =>
         {
             options.AppAssembly = typeof(MyProjectNameModule).Assembly;
+        });
+    }
+
+    private void ConfigureNavigationServices()
+    {
+        Configure<AbpNavigationOptions>(options =>
+        {
+            options.MenuContributors.Add(new MyProjectNameMenuContributor());
         });
     }
 

@@ -2,6 +2,7 @@
   "culture": "it",
   "texts": {
     "Welcome_Title": "Benvenuto",
-    "Welcome_Text": "Questo è un modello di avvio dell'applicazione minimalista a livello singolo per ABP Framework."
+    "Welcome_Text": "Questo è un modello di avvio dell'applicazione minimalista a livello singolo per ABP Framework.",
+    "Menu:Home": "Home"
   }
 }
