@@ -181,7 +181,7 @@ public class MyProjectNameDbMigrationService : ITransientDependency
             throw new Exception("Solution folder not found!");
         }
 
-        return Path.Combine(slnDirectoryPath, "MyCompanyName.MyProjectName");
+        return Path.Combine(slnDirectoryPath, "MyCompanyName.MyProjectName.Host");
     }
 
     private string GetSolutionDirectoryPath()
