@@ -10,10 +10,10 @@
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Value}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider.
 * **{{UI_Value}}** as the UI Framework.
 
-This tutorial is organized as the following parts;
+This tutorial is organized as the following parts:
 
 - [Part 1: Creating the server side](Part-1.md)
 - **Part 2: The book list page (this part)**
@@ -53,7 +53,7 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 It's common to call the HTTP API endpoints via AJAX from the **JavaScript** side. You can use `$.ajax` or another tool to call the endpoints. However, ABP offers a better way.
 
-ABP **dynamically** creates **[JavaScript Proxies](../UI/AspNetCore/Dynamic-JavaScript-Proxies.md)** for all API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
+ABP **dynamically** creates **[JavaScript Proxies](../UI/AspNetCore/Dynamic-JavaScript-Proxies.md)** for all the API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
 
 ### Testing in the Developer Console
 
@@ -66,8 +66,8 @@ acme.bookStore.books.book.getList({}).done(function (result) { console.log(resul
 * `acme.bookStore.books` is the namespace of the `BookAppService` converted to [camelCase](https://en.wikipedia.org/wiki/Camel_case).
 * `book` is the conventional name for the `BookAppService` (removed `AppService` postfix and converted to camelCase).
 * `getList` is the conventional name for the `GetListAsync` method defined in the `CrudAppService` base class (removed `Async` postfix and converted to camelCase).
-* `{}` argument is used to send an empty object to the `GetListAsync` method which normally expects an object of type `PagedAndSortedResultRequestDto` that is used to send paging and sorting options to the server (all properties are optional with default values, so you can send an empty object).
-* `getList` function returns a `promise`. You can pass a callback to the `then` (or `done`) function to get the result returned from the server.
+* The `{}` argument is used to send an empty object to the `GetListAsync` method which normally expects an object of type `PagedAndSortedResultRequestDto` that is used to send paging and sorting options to the server (all properties are optional with default values, so you can send an empty object).
+* The `getList` function returns a `promise`. You can pass a callback to the `then` (or `done`) function to get the result returned from the server.
 
 Running this code produces the following output:
 
@@ -80,19 +80,19 @@ You can see the **book list** returned from the server. You can also check the *
 Let's **create a new book** using the `create` function:
 
 ````js
-acme.bookStore.books.book.create({ 
-        name: 'Foundation', 
-        type: 7, 
-        publishDate: '1951-05-24', 
-        price: 21.5 
-    }).then(function (result) { 
-        console.log('successfully created the book with id: ' + result.id); 
+acme.bookStore.books.book.create({
+        name: 'Foundation',
+        type: 7,
+        publishDate: '1951-05-24',
+        price: 21.5
+    }).then(function (result) {
+        console.log('successfully created the book with id: ' + result.id);
     });
 ````
 
-> If you downloaded the source code of the tutorial and following the steps from the sample, you should also pass the `authorId` parameter to the create method for **creating a new book**.
+> If you downloaded the source code of the tutorial and are following the steps from the sample, you should also pass the `authorId` parameter to the create method for **creating a new book**.
 
-You should see a message in the console something like that:
+You should see a message in the console that looks something like this:
 
 ````text
 successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
@@ -100,19 +100,19 @@ successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
 
 Check the `Books` table in the database to see the new book row. You can try `get`, `update` and `delete` functions yourself.
 
-We will use these dynamic proxy functions in the next sections to communicate to the server.
+We will use these dynamic proxy functions in the next sections to communicate with the server.
 
 {{end}}
 
 ## Localization
 
-Before starting to the UI development, we first want to prepare the localization texts (you normally do this when needed while developing your application).
+Before starting the UI development, we first want to prepare the localization texts (you normally do this when needed while developing your application).
 
 Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project:
 
 ![bookstore-localization-files](images/bookstore-localization-files-v2.png)
 
-Open the `en.json` (*the English translations*) file and change the content as below:
+Open the `en.json` (*the English translations*) file and change the content as shown below:
 
 ````json
 {
@@ -152,17 +152,17 @@ Open the `en.json` (*the English translations*) file and change the content as b
   * Add `Menu:` prefix for menu items.
   * Use `Enum:<enum-type>:<enum-value>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums in some proper cases.
 
-If a text is not defined in the localization file, it **fallbacks** to the localization key (as ASP.NET Core's standard behavior).
+If a text is not defined in the localization file, it **falls back** to the localization key (as ASP.NET Core's standard behavior).
 
-> ABP's localization system is built on [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. See the [localization document](../Localization.md) for details.
+> ABP's localization system is built on the [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. Check the [localization document](../Localization.md) for details.
 
 {{if UI == "MVC"}}
 
 ## Create a Books Page
 
-It's time to create something visible and usable! Instead of classic MVC, we will use the [Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start) approach which is recommended by Microsoft.
+It's time to create something visible and usable! Instead of the classic MVC, we will use the [Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start) approach which is recommended by Microsoft.
 
-Create `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project. Add a new Razor Page by right clicking the Books folder then selecting **Add > Razor Page** menu item. Name it as `Index`:
+Create a `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project. Add a new Razor Page by right clicking the Books folder then selecting **Add > Razor Page** menu item. Name it as `Index`:
 
 ![bookstore-add-index-page](images/bookstore-add-index-page-v2.png)
 
@@ -187,7 +187,7 @@ namespace Acme.BookStore.Web.Pages.Books
     {
         public void OnGet()
         {
-            
+
         }
     }
 }
@@ -213,21 +213,21 @@ context.Menu.AddItem(
 );
 ````
 
-Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see the new menu item has been added to the main menu:
+Run the project, login to the application with the username `admin` and the password `1q2w3E*` and you can see that the new menu item has been added to the main menu:
 
 ![bookstore-menu-items](images/bookstore-new-menu-item.png)
 
-When you click to the Books menu item under the Book Store parent, you are being redirected to the new empty Books Page.
+When you click on the Books menu item under the Book Store parent, you will be redirected to the new empty Books Page.
 
 ### Book List
 
-We will use the [Datatables.net](https://datatables.net/) jQuery library to show the book list. Datatables library completely work via AJAX, it is fast, popular and provides a good user experience.
+We will use the [Datatables.net](https://datatables.net/) jQuery library to show the book list. Datatables library completely works via AJAX, it is fast, popular and provides a good user experience.
 
-> Datatables library is configured in the startup template, so you can directly use it in any page without including any style or script file to your page.
+> Datatables library is configured in the startup template, so you can directly use it in any page without including any style or script file for your page.
 
 #### Index.cshtml
 
-Change the `Pages/Books/Index.cshtml` as following:
+Change the `Pages/Books/Index.cshtml` as the following:
 
 ````html
 @page
@@ -250,8 +250,8 @@ Change the `Pages/Books/Index.cshtml` as following:
 </abp-card>
 ````
 
-* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to standard `script` tag. It handles **minification** and **versioning**. See the [bundling & minification document](../UI/AspNetCore/Bundling-Minification.md) for details.
-* `abp-card` is a tag helper for Twitter Bootstrap's [card component](https://getbootstrap.com/docs/4.5/components/card/). There are other useful tag helpers provided by the ABP Framework to easily use most of the [bootstrap](https://getbootstrap.com/) components. You could use the regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by help the of IntelliSense and compile time type checking. Further information, see the [tag helpers](../UI/AspNetCore/Tag-Helpers/Index.md) document.
+* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to the standard `script` tag. It handles **minification** and **versioning**. Check the [bundling & minification document](../UI/AspNetCore/Bundling-Minification.md) for details.
+* `abp-card` is a tag helper for Twitter Bootstrap's [card component](https://getbootstrap.com/docs/4.5/components/card/). There are other useful tag helpers provided by the ABP Framework to easily use most of  [bootstrap](https://getbootstrap.com/)'s components. You could use the regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by the help of the IntelliSense and compiles time type checking. For further information, check the [tag helpers](../UI/AspNetCore/Tag-Helpers/Index.md) document.
 
 #### Index.js
 
@@ -316,9 +316,9 @@ $(function () {
 });
 ````
 
-* `abp.localization.getResource` gets a function that is used to localize text using the same JSON file defined in the server side. In this way, you can share the localization values with the client side.
+* `abp.localization.getResource` gets a function that is used to localize text using the same JSON file defined on the server side. In this way, you can share the localization values with the client side.
 * `abp.libs.datatables.normalizeConfiguration` is a helper function defined by the ABP Framework. There's no requirement to use it, but it simplifies the [Datatables](https://datatables.net/) configuration by providing conventional default values for missing options.
-* `abp.libs.datatables.createAjax` is another helper function to adapt ABP's dynamic JavaScript API proxies to [Datatable](https://datatables.net/)'s expected parameter format
+* `abp.libs.datatables.createAjax` is another helper function to adapt the ABP's dynamic JavaScript API proxies to the [Datatable](https://datatables.net/)'s expected parameter format
 * `acme.bookStore.books.book.getList` is the dynamic JavaScript proxy function introduced before.
 * [luxon](https://moment.github.io/luxon/) library is also a standard library that is pre-configured in the solution, so you can use to perform date/time operations easily.
 
@@ -336,9 +336,9 @@ This is a fully working, server side paged, sorted and localized table of books.
 
 ## Install NPM packages
 
-> Notice: This tutorial is based on the ABP Framework v3.1.0+ If your project version is older, then please upgrade your solution. See the [migration guide](../UI/Angular/Migration-Guide-v3.md) if you are upgrading an existing project with v2.x.
+> Notice: This tutorial is based on the ABP Framework v3.1.0+ If your project version is older, then please upgrade your solution. Check the [migration guide](../UI/Angular/Migration-Guide-v3.md) if you are upgrading an existing project with v2.x.
 
-If you haven't done it before, open a new command line interface (terminal window) and go to your `angular` folder and then run `yarn` command to install the NPM packages:
+If you haven't done it before, open a new command line interface (terminal window) and go to your `angular` folder and then run the `yarn` command to install the NPM packages:
 
 ```bash
 yarn
@@ -400,7 +400,7 @@ export class BookModule { }
 
 ### Routing
 
-Generated code places the new route definition to the `src/app/app-routing.module.ts` file as shown below:
+The generated code places the new route definition to the `src/app/app-routing.module.ts` file as shown below:
 
 ````js
 const routes: Routes = [
@@ -409,7 +409,7 @@ const routes: Routes = [
 ];
 ````
 
-Now, open the `src/app/route.provider.ts` file replace the `configureRoutes` function declaration as shown below:
+Now, open the `src/app/route.provider.ts` file and replace the `configureRoutes` function declaration as shown below:
 
 ```js
 function configureRoutes(routes: RoutesService) {
@@ -443,25 +443,25 @@ function configureRoutes(routes: RoutesService) {
 `RoutesService` is a service provided by the ABP Framework to configure the main menu and the routes.
 
 * `path` is the URL of the route.
-* `name` is the localized menu item name (see the [localization document](../UI/Angular/Localization.md) for details).
+* `name` is the localized menu item name (check the [localization document](../UI/Angular/Localization.md) for details).
 * `iconClass` is the icon of the menu item (you can use [Font Awesome](https://fontawesome.com/) icons by default).
 * `order` is the order of the menu item.
 * `layout` is the layout of the BooksModule's routes (there are three types of pre-defined layouts: `eLayoutType.application`, `eLayoutType.account` or `eLayoutType.empty`).
 
-For more information, see the [RoutesService document](../UI/Angular/Modifying-the-Menu.md#via-routesservice).
+For more information, check the [RoutesService document](../UI/Angular/Modifying-the-Menu.md#via-routesservice).
 
 ### Service Proxy Generation
 
-[ABP CLI](../CLI.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
+[ABP CLI](../CLI.md) provides a `generate-proxy` command that generates client proxies for your HTTP APIs to make your HTTP APIs easy to consume by the client side. Before running the `generate-proxy` command, your host must be up and running.
 
-> **Warning**: There is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `Acme.BookStore.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
+> **Warning**: There is a problem with IIS Express; it doesn't allow connecting to the application from another process. If you are using Visual Studio, select the `Acme.BookStore.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
 
 ![vs-run-without-iisexpress](images/vs-run-without-iisexpress.png)
 
 Once the host application is running, execute the following command in the `angular` folder:
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 
 This command will create the following files under the `/src/app/proxy/books` folder:
@@ -499,9 +499,9 @@ export class BookComponent implements OnInit {
 ```
 
 * We imported and injected the generated `BookService`.
-* We are using the [ListService](../UI/Angular/List-Service.md), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
+* We are using the [ListService](../UI/Angular/List-Service.md), a utility service from the ABP Framework which provides easy pagination, sorting and searching.
 
-Open the `/src/app/book/book.component.html` and replace the content as below:
+Open the `/src/app/book/book.component.html` and replace the content as shown below:
 
 ```html
 <div class="card">
@@ -546,7 +546,7 @@ Now you can see the final result on your browser:
 
 ## Create a Books Page
 
-It's time to create something visible and usable! Right click to the `Pages` folder under the `Acme.BookStore.Blazor` project and add a new **razor component**, named `Books.razor`:
+It's time to create something visible and usable! Right click on the `Pages` folder under the `Acme.BookStore.Blazor` project and add a new **razor component**, named `Books.razor`:
 
 ![blazor-add-books-component](images/blazor-add-books-component.png)
 
@@ -562,7 +562,7 @@ Replace the contents of this component as shown below:
 }
 ````
 
-### Add Books Page to the Main Menu
+### Add the Books Page to the Main Menu
 
 Open the `BookStoreMenuContributor` class in the `Blazor` project add the following code to the end of the `ConfigureMainMenuAsync` method:
 
@@ -582,17 +582,17 @@ context.Menu.AddItem(
 );
 ````
 
-Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see the new menu item has been added to the main menu:
+Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see that the new menu item has been added to the main menu:
 
 ![blazor-menu-bookstore](images/blazor-menu-bookstore.png)
 
-When you click to the Books menu item under the Book Store parent, you are being redirected to the new empty Books Page.
+When you click on the Books menu item under the Book Store parent, you will be redirected to the new empty Books Page.
 
 ### Book List
 
-We will use the [Blazorise library](https://blazorise.com/) as the UI component kit. It is a very powerful library that supports major HTML/CSS frameworks, including the Bootstrap.
+We will use the [Blazorise library](https://blazorise.com/) as the UI component kit. It is a very powerful library that supports major HTML/CSS frameworks, including Bootstrap.
 
-ABP Framework provides a generic base class, `AbpCrudPageBase<...>`, to create CRUD style pages. This base class is compatible to the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `AbpCrudPageBase` to automate the code behind for the standard CRUD stuff.
+ABP Framework provides a generic base class - `AbpCrudPageBase<...>`, to create CRUD style pages. This base class is compatible with the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `AbpCrudPageBase` to automate the code behind for the standard CRUD stuff.
 
 Open the `Books.razor` and replace the content as the following:
 
@@ -651,17 +651,17 @@ Open the `Books.razor` and replace the content as the following:
 </Card>
 ````
 
-> If you see some syntax errors, you can ignore them if your application properly built and run. Visual Studio still has some bugs with Blazor.
+> If you see some syntax errors, you can ignore them if your application is properly built and running. Visual Studio still has some bugs with Blazor.
 
-* Inherited from the `AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
-* `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base blass.
+* Inherited from  `AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
+* `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base class.
 * Injected `IStringLocalizer<BookStoreResource>` (as `L` object) and used for localization.
 
-While the code above pretty easy to understand, you can check the Blazorise [Card](https://blazorise.com/docs/components/card/) and [DataGrid](https://blazorise.com/docs/extensions/datagrid/) documents to understand them better.
+While the code above is pretty easy to understand, you can check the Blazorise [Card](https://blazorise.com/docs/components/card/) and [DataGrid](https://blazorise.com/docs/extensions/datagrid/) documents to understand them better.
 
 #### About the AbpCrudPageBase
 
-We will continue to benefit from the `AbpCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../API/Dynamic-CSharp-API-Clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call server side HTTP APIs in your Blazor applications.
+We will continue benefitting from  `AbpCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../API/Dynamic-CSharp-API-Clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call the server side HTTP APIs in your Blazor applications.
 
 ## Run the Final Application
 
@@ -675,4 +675,4 @@ This is a fully working, server side paged, sorted and localized table of books.
 
 ## The Next Part
 
-See the [next part](Part-3.md) of this tutorial.
+Check the [next part](Part-3.md) of this tutorial.

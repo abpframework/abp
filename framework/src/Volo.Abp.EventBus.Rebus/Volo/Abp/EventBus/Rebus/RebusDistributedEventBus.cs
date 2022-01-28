@@ -38,14 +38,16 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
         IRebusSerializer serializer,
         IGuidGenerator guidGenerator,
-        IClock clock) :
+        IClock clock,
+        IEventHandlerInvoker eventHandlerInvoker) :
         base(
             serviceScopeFactory,
             currentTenant,
             unitOfWorkManager,
             abpDistributedEventBusOptions,
             guidGenerator,
-            clock)
+            clock,
+            eventHandlerInvoker)
     {
         Rebus = rebus;
         Serializer = serializer;
@@ -146,9 +148,15 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await TriggerHandlersAsync(eventType, eventData);
     }
 
-    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
+        if (AbpRebusEventBusOptions.Publish != null)
+        {
+            await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
+            return;
+        }
+
+        await Rebus.Publish(eventData);
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)

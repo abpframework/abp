@@ -38,6 +38,24 @@ function Seperator
 	Write-Host ("_" * 100)  -ForegroundColor gray 
 }
 
+
+function Read-File {
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $filePath
+    )
+		
+	$pathExists = Test-Path -Path $filePath -PathType Leaf
+	if ($pathExists)
+	{
+		return Get-Content $filePath		
+	}
+	else{
+		Write-Error  "$filePath path does not exist!"
+	}
+}
+
 # List of solutions
 $solutions = (
     "framework",
@@ -136,7 +154,7 @@ $projects = (
     "framework/src/Volo.Abp.EntityFrameworkCore",
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
     "framework/src/Volo.Abp.EntityFrameworkCore.Oracle",
-    # "framework/src/Volo.Abp.EntityFrameworkCore.Oracle.Devart",
+    "framework/src/Volo.Abp.EntityFrameworkCore.Oracle.Devart",
     "framework/src/Volo.Abp.EntityFrameworkCore.PostgreSql",
     "framework/src/Volo.Abp.EntityFrameworkCore.Sqlite",
     "framework/src/Volo.Abp.EntityFrameworkCore.SqlServer",
@@ -266,7 +284,7 @@ $projects = (
     "modules/docs/src/Volo.Docs.HttpApi.Client",
     "modules/docs/src/Volo.Docs.HttpApi",
     "modules/docs/src/Volo.Docs.MongoDB",
-    "modules/docs/src/Volo.Docs.Web",,
+    "modules/docs/src/Volo.Docs.Web",
     "studio/source-codes/Volo.Docs.SourceCode",
 
     # modules/feature-management

@@ -9,7 +9,7 @@ public class SystemTextJsonStringValueJsonConverter_Tests : StringValueJsonConve
     {
         services.PreConfigure<AbpJsonOptions>(options =>
         {
-            options.UseHybridSerializer = false;
+            options.UseHybridSerializer = true;
         });
     }
 }

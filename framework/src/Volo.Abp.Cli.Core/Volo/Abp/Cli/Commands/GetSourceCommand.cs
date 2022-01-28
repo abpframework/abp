@@ -13,6 +13,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class GetSourceCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "get-source";
+    
     private readonly SourceCodeDownloadService _sourceCodeDownloadService;
     public ModuleProjectBuilder ModuleProjectBuilder { get; }
 

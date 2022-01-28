@@ -7,6 +7,8 @@
     "Description:Abp.Ldap.ServerPort": "सर्वर पोर्ट",
     "DisplayName:Abp.Ldap.BaseDc": "बेस डोमेन घटक",
     "Description:Abp.Ldap.BaseDc": "बेस डोमेन घटक",
+    "DisplayName:Abp.Ldap.Domain": "कार्यक्षेत्र",
+    "Description:Abp.Ldap.Domain": "कार्यक्षेत्र",
     "DisplayName:Abp.Ldap.UserName": "उपयोगकर्ता नाम",
     "Description:Abp.Ldap.UserName": "उपयोगकर्ता नाम",
     "DisplayName:Abp.Ldap.Password": "कुंजिका",

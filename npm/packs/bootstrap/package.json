@@ -1,5 +1,5 @@
 {
-  "version": "5.0.0",
+  "version": "5.1.2",
   "name": "@abp/bootstrap",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~5.0.0",
+    "@abp/core": "~5.1.2",
     "bootstrap": "^5.1.0",
     "bootstrap-v4-rtl": "4.6.0-1"
   },

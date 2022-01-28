@@ -321,3 +321,4 @@ appsettings.secrets.json
 deploy/nuget-api-key.txt
 deploy/npm-auth-token.txt
 deploy/ssh-password.txt
+deploy/github-api-key.txt

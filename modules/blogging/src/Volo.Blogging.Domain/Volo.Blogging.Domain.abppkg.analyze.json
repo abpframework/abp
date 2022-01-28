@@ -1,0 +1,135 @@
+{
+  "name": "Volo.Blogging.Domain",
+  "hash": "a04c90c3913af092e8990a27cb72e208",
+  "contents": [
+    {
+      "namespace": "Volo.Blogging",
+      "contentType": "abpModule",
+      "name": "BloggingDomainModule"
+    },
+    {
+      "namespace": "Volo.Blogging.Users",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "BlogUser"
+    },
+    {
+      "namespace": "Volo.Blogging.Tagging",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Tag"
+    },
+    {
+      "namespace": "Volo.Blogging.Posts",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [
+        "Volo.Blogging.Posts.PostTag"
+      ],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Post"
+    },
+    {
+      "namespace": "Volo.Blogging.Comments",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Comment"
+    },
+    {
+      "namespace": "Volo.Blogging.Blogs",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Blog"
+    },
+    {
+      "namespace": "Volo.Blogging.Users",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Blogging.Users",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "BlogUser"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IBlogUserRepository"
+    },
+    {
+      "namespace": "Volo.Blogging.Tagging",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Blogging.Tagging",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Tag"
+      },
+      "contentType": "repositoryInterface",
+      "name": "ITagRepository"
+    },
+    {
+      "namespace": "Volo.Blogging.Posts",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Blogging.Posts",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [
+          "Volo.Blogging.Posts.PostTag"
+        ],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Post"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IPostRepository"
+    },
+    {
+      "namespace": "Volo.Blogging.Comments",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Blogging.Comments",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Comment"
+      },
+      "contentType": "repositoryInterface",
+      "name": "ICommentRepository"
+    },
+    {
+      "namespace": "Volo.Blogging.Blogs",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Blogging.Blogs",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Blog"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IBlogRepository"
+    }
+  ]
+}

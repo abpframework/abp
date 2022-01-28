@@ -66,6 +66,33 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
 
 > You can directly implement the `IHangfireBackgroundWorker`, but `HangfireBackgroundWorkerBase` provides some useful properties like Logger.
 
+### UnitOfWork
+
+For use with `UnitOfWorkAttribute`, you need to define an interface for worker:
+
+```csharp
+public interface IMyLogWorker : IHangfireBackgroundWorker
+{
+}
+
+[ExposeServices(typeof(IMyLogWorker))]
+public class MyLogWorker : HangfireBackgroundWorkerBase, IMyLogWorker
+{
+    public MyLogWorker()
+    {
+        RecurringJobId = nameof(MyLogWorker);
+        CronExpression = Cron.Daily();
+    }
+
+    [UnitOfWork]
+    public override Task DoWorkAsync()
+    {
+        Logger.LogInformation("Executed MyLogWorker..!");
+        return Task.CompletedTask;
+    }
+}
+```
+
 ## Register BackgroundWorkerManager
 
 After creating a background worker class, you should add it to the `IBackgroundWorkerManager`. The most common place is the `OnApplicationInitialization` method of your module class:
@@ -78,6 +105,9 @@ public class MyModule : AbpModule
         ApplicationInitializationContext context)
     {
         context.AddBackgroundWorker<MyLogWorker>();
+
+        //If the interface is defined
+        //context.AddBackgroundWorker<IMyLogWorker>(); 
     }
 }
 ````

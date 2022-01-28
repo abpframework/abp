@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -114,22 +113,34 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
     }
 
-    protected virtual async Task<string> GetTokenEndpoint(IdentityClientConfiguration configuration)
+    protected virtual async Task<IdentityModelDiscoveryDocumentCacheItem> GetDiscoveryResponse(IdentityClientConfiguration configuration)
     {
-        //TODO: Can use (configuration.Authority + /connect/token) directly?
-
         var tokenEndpointUrlCacheKey = CalculateDiscoveryDocumentCacheKey(configuration);
         var discoveryDocumentCacheItem = await DiscoveryDocumentCache.GetAsync(tokenEndpointUrlCacheKey);
         if (discoveryDocumentCacheItem == null)
         {
-            var discoveryResponse = await GetDiscoveryResponse(configuration);
+            DiscoveryDocumentResponse discoveryResponse;
+            using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
+            {
+                var request = new DiscoveryDocumentRequest
+                {
+                    Address = configuration.Authority,
+                    Policy =
+                    {
+                        RequireHttps = configuration.RequireHttps
+                    }
+                };
+                IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage?.Invoke(request);
+                discoveryResponse = await httpClient.GetDiscoveryDocumentAsync(request);
+            }
+
             if (discoveryResponse.IsError)
             {
                 throw new AbpException($"Could not retrieve the OpenId Connect discovery document! " +
                                        $"ErrorType: {discoveryResponse.ErrorType}. Error: {discoveryResponse.Error}");
             }
 
-            discoveryDocumentCacheItem = new IdentityModelDiscoveryDocumentCacheItem(discoveryResponse.TokenEndpoint);
+            discoveryDocumentCacheItem = new IdentityModelDiscoveryDocumentCacheItem(discoveryResponse.TokenEndpoint, discoveryResponse.DeviceAuthorizationEndpoint);
             await DiscoveryDocumentCache.SetAsync(tokenEndpointUrlCacheKey, discoveryDocumentCacheItem,
                 new DistributedCacheEntryOptions
                 {
@@ -137,30 +148,11 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
                 });
         }
 
-        return discoveryDocumentCacheItem.TokenEndpoint;
-    }
-
-    protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(IdentityClientConfiguration configuration)
-    {
-        using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
-        {
-            var request = new DiscoveryDocumentRequest
-            {
-                Address = configuration.Authority,
-                Policy =
-                    {
-                        RequireHttps = configuration.RequireHttps
-                    }
-            };
-            IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage?.Invoke(request);
-            return await httpClient.GetDiscoveryDocumentAsync(request);
-        }
+        return discoveryDocumentCacheItem;
     }
 
     protected virtual async Task<TokenResponse> GetTokenResponse(IdentityClientConfiguration configuration)
     {
-        var tokenEndpoint = await GetTokenEndpoint(configuration);
-
         using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
         {
             AddHeaders(httpClient);
@@ -169,25 +161,30 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
             {
                 case OidcConstants.GrantTypes.ClientCredentials:
                     return await httpClient.RequestClientCredentialsTokenAsync(
-                        await CreateClientCredentialsTokenRequestAsync(tokenEndpoint, configuration),
+                        await CreateClientCredentialsTokenRequestAsync(configuration),
                         CancellationTokenProvider.Token
                     );
                 case OidcConstants.GrantTypes.Password:
                     return await httpClient.RequestPasswordTokenAsync(
-                        await CreatePasswordTokenRequestAsync(tokenEndpoint, configuration),
+                        await CreatePasswordTokenRequestAsync(configuration),
                         CancellationTokenProvider.Token
                     );
+
+                case OidcConstants.GrantTypes.DeviceCode:
+                    return await RequestDeviceAuthorizationAsync(httpClient, configuration);
+
                 default:
                     throw new AbpException("Grant type was not implemented: " + configuration.GrantType);
             }
         }
     }
 
-    protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(string tokenEndpoint, IdentityClientConfiguration configuration)
+    protected virtual async Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(IdentityClientConfiguration configuration)
     {
+        var discoveryResponse = await GetDiscoveryResponse(configuration);
         var request = new PasswordTokenRequest
         {
-            Address = tokenEndpoint,
+            Address = discoveryResponse.TokenEndpoint,
             Scope = configuration.Scope,
             ClientId = configuration.ClientId,
             ClientSecret = configuration.ClientSecret,
@@ -197,26 +194,89 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
 
         IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage?.Invoke(request);
 
-        AddParametersToRequestAsync(configuration, request);
+        await AddParametersToRequestAsync(configuration, request);
 
-        return Task.FromResult(request);
+        return request;
     }
 
-    protected virtual Task<ClientCredentialsTokenRequest> CreateClientCredentialsTokenRequestAsync(string tokenEndpoint, IdentityClientConfiguration configuration)
+    protected virtual async Task<ClientCredentialsTokenRequest> CreateClientCredentialsTokenRequestAsync(IdentityClientConfiguration configuration)
     {
+        var discoveryResponse = await GetDiscoveryResponse(configuration);
         var request = new ClientCredentialsTokenRequest
         {
-            Address = tokenEndpoint,
+            Address = discoveryResponse.TokenEndpoint,
             Scope = configuration.Scope,
             ClientId = configuration.ClientId,
             ClientSecret = configuration.ClientSecret
         };
         IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage?.Invoke(request);
 
-        AddParametersToRequestAsync(configuration, request);
+        await AddParametersToRequestAsync(configuration, request);
 
-        return Task.FromResult(request);
+        return request;
     }
+
+    protected virtual async Task<TokenResponse> RequestDeviceAuthorizationAsync(HttpClient httpClient, IdentityClientConfiguration configuration)
+    {
+        var discoveryResponse = await GetDiscoveryResponse(configuration);
+        var request = new DeviceAuthorizationRequest()
+        {
+            Address = discoveryResponse.DeviceAuthorizationEndpoint,
+            Scope = configuration.Scope,
+            ClientId = configuration.ClientId,
+            ClientSecret = configuration.ClientSecret,
+        };
+
+        IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage?.Invoke(request);
+
+        await AddParametersToRequestAsync(configuration, request);
+
+        var response = await httpClient.RequestDeviceAuthorizationAsync(request);
+        if (response.IsError)
+        {
+            throw new AbpException(response.ErrorDescription);
+        }
+
+        Logger.LogInformation($"First copy your one-time code: {response.UserCode}");
+        Logger.LogInformation($"Open {response.VerificationUri} in your browser...");
+
+        for (var i = 0; i < ((response.ExpiresIn ?? 300) / response.Interval + 1); i++)
+        {
+            await Task.Delay(response.Interval * 1000);
+
+            var tokenResponse = await httpClient.RequestDeviceTokenAsync(new DeviceTokenRequest
+            {
+                Address = discoveryResponse.TokenEndpoint,
+                ClientId = configuration.ClientId,
+                ClientSecret = configuration.ClientSecret,
+                DeviceCode = response.DeviceCode
+            });
+
+            if (tokenResponse.IsError)
+            {
+                switch (tokenResponse.Error)
+                {
+                    case "slow_down":
+                    case "authorization_pending":
+                        break;
+
+                    case "expired_token":
+                        throw new AbpException("This 'device_code' has expired. (expired_token)");
+
+                    case "access_denied":
+                        throw new AbpException("User denies the request(access_denied)");
+                }
+            }
+
+            if (!tokenResponse.IsError)
+            {
+                return tokenResponse;
+            }
+        }
+
+        throw new AbpException("Timeout!");
+    }
+
 
     protected virtual Task AddParametersToRequestAsync(IdentityClientConfiguration configuration, ProtocolRequest request)
     {

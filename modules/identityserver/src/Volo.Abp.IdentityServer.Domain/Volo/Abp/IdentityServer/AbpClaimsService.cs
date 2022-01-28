@@ -5,6 +5,7 @@ using IdentityModel;
 using IdentityServer4.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.IdentityServer;
@@ -20,6 +21,7 @@ public class AbpClaimsService : DefaultClaimsService
             AbpClaimTypes.ImpersonatorUserId,
             AbpClaimTypes.Name,
             AbpClaimTypes.SurName,
+            JwtRegisteredClaimNames.UniqueName,
             JwtClaimTypes.PreferredUserName,
             JwtClaimTypes.GivenName,
             JwtClaimTypes.FamilyName,

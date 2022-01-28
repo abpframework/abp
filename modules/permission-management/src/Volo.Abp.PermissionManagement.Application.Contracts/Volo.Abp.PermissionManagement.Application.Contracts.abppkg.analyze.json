@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.PermissionManagement.Application.Contracts",
+  "hash": "c71030d581b91d275b3dd93009c2185f",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.PermissionManagement",
+      "contentType": "abpModule",
+      "name": "AbpPermissionManagementApplicationContractsModule"
+    }
+  ]
+}

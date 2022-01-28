@@ -1,0 +1,27 @@
+{
+  "name": "Volo.Abp.TenantManagement.Application",
+  "hash": "f22443bf5a086ca029a9ed79168d496b",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.TenantManagement",
+      "contentType": "abpModule",
+      "name": "AbpTenantManagementApplicationModule"
+    },
+    {
+      "namespace": "Volo.Abp.TenantManagement",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Abp.TenantManagement.ITenantAppService",
+        "Volo.Abp.Application.Services.ICrudAppService`5[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.TenantManagement.GetTenantsInput, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantCreateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantUpdateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.TenantManagement.GetTenantsInput, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantCreateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantUpdateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.TenantManagement.GetTenantsInput, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.TenantManagement.TenantCreateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantUpdateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantCreateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.TenantManagement.TenantUpdateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      ],
+      "contentType": "applicationService",
+      "name": "TenantAppService"
+    }
+  ]
+}

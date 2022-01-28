@@ -2,27 +2,10 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## 关于本教程
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
@@ -34,7 +17,7 @@ end
 
 - [Part 1: 创建服务端](Part-1.md)
 - [Part 2: 图书列表页面](Part-2.md)
-- **Part 3: 创建,更新和删除图书**(本章)
+- **Part 3: 创建,更新和删除图书 (本章)**
 - [Part 4: 集成测试](Part-4.md)
 - [Part 5: 授权](Part-5.md)
 - [Part 6: 作者: 领域层](Part-6.md)
@@ -45,16 +28,30 @@ end
 
 ## 下载源码
 
-本教程根据你的**UI** 和 **Database**偏好有多个版,我们准备了两种可供下载的源码组合:
+本教程根据你的**UI** 和 **数据库**偏好有多个版本,我们准备了几种可供下载的源码组合:
 
 * [MVC (Razor Pages) UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI 与 MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> 如果你在Windows中遇到 "文件名太长" or "解压错误", 很可能与Windows最大文件路径限制有关. Windows文件路径的最大长度为250字符. 为了解决这个问题,参阅 [在Windows 10中启用长路径](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> 如果你遇到与Git相关的长路径错误, 尝试使用下面的命令在Windows中启用长路径. 参阅 https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
+
+{{if UI == "MVC" && DB == "EF"}}
+
+### 视频教程
+
+本章也被录制为视频教程 **<a href="https://www.youtube.com/watch?v=TLShZO8u2VE&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=3" target="_blank">发布在YouTube</a>**.
+
+{{end}}
 
 {{if UI == "MVC"}}
 
 ## 创建新书籍
 
-通过本节, 你将会了解如何创建一个 modal form 来实现新增书籍的功能. 最终成果如下图所示:
+通过本节, 你将会了解如何创建一个 modal form 实现新增书籍的功能. model dialog将如下图所示:
 
 ![bookstore-create-dialog](./images/bookstore-create-dialog-2.png)
 
@@ -66,7 +63,7 @@ end
 
 #### CreateModal.cshtml.cs
 
-打开 `CreateModal.cshtml.cs` 代码文件,用如下代码替换 `CreateModalModel` 类的实现:
+打开 `CreateModal.cshtml.cs` 代码文件(`CreateModalModel` 类),替换成以下代码:
 
 ````C#
 using System.Threading.Tasks;
@@ -101,10 +98,10 @@ namespace Acme.BookStore.Web.Pages.Books
 }
 ````
 
-* 该类派生于 `BookStorePageModel` 而非默认的 `PageModel`. `BookStorePageModel` 继承了 `PageModel` 并且添加了一些可以被你的page model类使用的通用属性和方法.
+* 该类派生于 `BookStorePageModel` 而非默认的 `PageModel`. `BookStorePageModel` 间接继承了 `PageModel` 并且添加了一些可以被你的page model类使用的通用属性和方法.
 * `Book` 属性上的 `[BindProperty]` 特性将post请求提交上来的数据绑定到该属性上.
 * 该类通过构造函数注入了 `IBookAppService` 应用服务,并且在 `OnPostAsync` 处理程序中调用了服务的 `CreateAsync` 方法.
-* 它在 `OnGet` 方法中创建一个新的 `CreateUpdateBookDto` 对象。 ASP.NET Core不需要像这样创建一个新实例就可以正常工作. 但是它不会为你创建实例,并且如果你的类在类构造函数中具有一些默认值分配或代码执行,它们将无法工作. 对于这种情况,我们为某些 `CreateUpdateBookDto` 属性设置了默认值.
+* 它在 `OnGet` 方法中创建一个新的 `CreateUpdateBookDto` 对象。 ASP.NET Core不需要像这样创建一个新实例就可以正常工作. 但是它不会为你创建实例,并且如果你的类在类构造函数中赋值一些默认值或执行一些代码,它们将无法工作. 对于这种情况,我们为某些 `CreateUpdateBookDto` 属性设置了默认值.
 
 #### CreateModal.cshtml
 
@@ -134,10 +131,9 @@ namespace Acme.BookStore.Web.Pages.Books
 
 * 这个 modal 使用 `abp-dynamic-form` [tag Helper](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) 根据 `CreateBookViewModel` 类自动构建了表单.
 * `abp-model` 指定了 `Book` 属性为模型对象.
-* `data-ajaxForm` 设置了表单通过AJAX提交,而不是经典的页面回发.
 * `abp-form-content` tag helper 作为表单控件渲染位置的占位符 (这是可选的,只有你在 `abp-dynamic-form` 中像本示例这样添加了其他内容才需要).
 
-> 提示: 就像在本示例中一样,`Layout` 应该为 `null`,因为当通过AJAX加载模态时,我们不希望包括所有布局.
+> 提示: 就像在本示例中一样,`Layout` 应该为 `null`,因为当通过AJAX加载模态窗口时,我们不希望包括所有布局.
 
 ### 添加 "New book" 按钮
 
@@ -195,9 +191,9 @@ namespace Acme.BookStore.Web.Pages.Books
 
 如下图所示,只是在表格 **右上方** 添加了 **New book** 按钮:
 
-![bookstore-new-book-button](./images/bookstore-new-book-button-2.png)
+![bookstore-new-book-button](images/bookstore-new-book-button-2.png)
 
-打开 `Pages/book/index.js` 在 `datatable` 配置代码后面添加如下代码:
+打开 `Pages/Book/Index.js` 在 `datatable` 配置代码后面添加如下代码:
 
 ````js
 var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
@@ -212,9 +208,9 @@ $('#NewBookButton').click(function (e) {
 });
 ````
 
-* `abp.ModalManager` 是一个在客户端打开和管理modal的辅助类.它基于Twitter Bootstrap的标准modal组件通过简化的API抽象隐藏了许多细节.
+* `abp.ModalManager` 是一个在客户端管理modal的辅助类.它内部使用了Twitter Bootstrap的标准modal组件,但通过简化的API抽象了许多细节.
 * `createModal.onResult(...)` 用于在创建书籍后刷新数据表格.
-* `createModal.open();` 用于打开模态创建新书籍.
+* `createModal.open();` 用于打开modal创建新书籍.
 
 `Index.js` 的内容最终如下所示:
 
@@ -335,8 +331,8 @@ namespace Acme.BookStore.Web.Pages.Books
 }
 ````
 
-* `[HiddenInput]` 和 `[BindProperty]` 是标准的 ASP.NET Core MVC 特性.这里启用 `SupportsGet` 从Http请求的查询字符串中获取Id的值.
-* 在 `OnGetAsync` 方法中,将 `BookAppService.GetAsync` 方法返回的 `BookDto` 映射成 `CreateUpdateBookDto` 并赋值给Book属性.
+* `[HiddenInput]` 和 `[BindProperty]` 是标准的 ASP.NET Core MVC 特性.这里启用 `SupportsGet` 从Http请求的查询字符串参数中获取Id的值.
+* 在 `OnGetAsync` 方法中, 我们从 `BookAppService` 获得 `BookDto` ,并将它映射成DTO对象 `CreateUpdateBookDto`.
 * `OnPostAsync` 方法直接使用 `BookAppService.UpdateAsync` 来更新实体.
 
 ### BookDto 到 CreateUpdateBookDto 对象映射
@@ -391,10 +387,10 @@ namespace Acme.BookStore.Web
 
 这个页面内容和 `CreateModal.cshtml` 非常相似,除了以下几点:
 
-* 它包含`id`属性的`abp-input`, 用于存储编辑书的 `id` (它是隐藏的Input)
+* 它包含`id`属性的`abp-input`, 用于存储被编辑书籍的 `id` (它是隐藏的Input)
 * 此页面指定的post地址是`Books/EditModal`.
 
-### 为表格添加 "操作（Actions）" 下拉菜单
+### 为表格添加 "操作(Actions)" 下拉菜单
 
 我们将为表格每行添加下拉按钮 ("Actions"):
 
@@ -516,9 +512,9 @@ $(function () {
 }
 ````
 
-* `confirmMessage` 用来在实际执行 `action` 之前向用户进行确认.
-* 通过javascript代理方法 `acme.bookStore.books.book.delete(...)` 执行一个AJAX请求来删除一个book实体.
-* `abp.notify.info` 用来在执行删除操作后显示一个toastr通知信息.
+* `confirmMessage` 执行 `action` 前向用户进行确认.
+* `acme.bookStore.books.book.delete(...)` 执行一个AJAX请求删除一个book.
+* `abp.notify.info` 执行删除操作后显示一个通知信息.
 
 由于我们使用了两个新的本地化文本(`BookDeletionConfirmationMessage`和`SuccesslyDeleted`),因此你需要将它们添加到本地化文件(`Acme.BookStore.Domain.Shared`项目的`Localization/BookStore`文件夹下的`en.json`):
 
@@ -640,7 +636,7 @@ $(function () {
 
 ## 创建新书籍
 
-下面的章节中,你将学习到如何创建一个新的模态对话框来新增书籍.
+下面的章节中,你将学习到如何创建一个新的模态窗口新增书籍.
 
 ### BookComponent
 
@@ -649,8 +645,7 @@ $(function () {
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto } from './models';
-import { BookService } from './services';
+import { BookService, BookDto } from '@proxy/books';
 
 @Component({
   selector: 'app-book',
@@ -666,7 +661,7 @@ export class BookComponent implements OnInit {
   constructor(public readonly list: ListService, private bookService: BookService) {}
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
+    const bookStreamCreator = (query) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
       this.book = response;
@@ -680,7 +675,8 @@ export class BookComponent implements OnInit {
 }
 ```
 
-* 我们定义了一个名为 `isModalOpen` 的变量和 `createBook` 方法.
+* 我们定义了一个名为 `isModalOpen` 的属性和 `createBook` 方法.
+
 
 打开 `/src/app/book/book.component.html` 做以下更改:
 
@@ -690,9 +686,9 @@ export class BookComponent implements OnInit {
     <div class="row">
       <div class="col col-md-6">
         <h5 class="card-title">{%{{{ '::Menu:Books' | abpLocalization }}}%}</h5>
-      </div>        
+      </div>
       <div class="text-right col col-md-6">
-          
+
         <!-- Add the "new book" button here -->
         <div class="text-lg-right pt-2">
           <button id="create" class="btn btn-primary" type="button" (click)="createBook()">
@@ -700,7 +696,7 @@ export class BookComponent implements OnInit {
             <span>{%{{{ "::NewBook" | abpLocalization }}}%}</span>
           </button>
         </div>
-          
+
       </div>
     </div>
   </div>
@@ -726,11 +722,11 @@ export class BookComponent implements OnInit {
 ```
 
 * 添加了 `New book` 按钮到卡片头部.
-* 添加了 `abp-modal` 渲染模态框,允许用户创建新书. `abp-modal` 是显示模态框的预构建组件. 你也可以使用其它方法显示模态框,但 `abp-modal` 提供了一些附加的好处.
+* 添加了 `abp-modal` 渲染模态框,允许用户创建新书. `abp-modal` 是显示模态框的预构建组件. 你也可以使用其它方法显示模态框,但 `abp-modal` 提供了一些额外的好处.
 
 你可以打开浏览器,点击**New book**按钮看到模态框.
 
-![Empty modal for new book](./images/bookstore-empty-new-book-modal.png)
+![Empty modal for new book](images/bookstore-empty-new-book-modal.png)
 
 ### 添加响应式表单
 
@@ -741,8 +737,7 @@ export class BookComponent implements OnInit {
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from './models'; // add BookType
-import { BookService } from './services';
+import { BookService, BookDto, bookTypeOptions } from '@proxy/books'; // add bookTypeOptions
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
 @Component({
@@ -756,12 +751,8 @@ export class BookComponent implements OnInit {
 
   form: FormGroup; // add this line
 
-  bookType = BookType; // add this line
-
   // add bookTypes as a list of BookType enum members
-  bookTypes = Object.keys(this.bookType).filter(
-    (key) => typeof this.bookType[key] === 'number'
-  );
+  bookTypes = bookTypeOptions;
 
   isModalOpen = false;
 
@@ -772,7 +763,7 @@ export class BookComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
+    const bookStreamCreator = (query) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
       this.book = response;
@@ -800,7 +791,7 @@ export class BookComponent implements OnInit {
       return;
     }
 
-    this.bookService.createByInput(this.form.value).subscribe(() => {
+    this.bookService.create(this.form.value).subscribe(() => {
       this.isModalOpen = false;
       this.form.reset();
       this.list.get();
@@ -809,12 +800,11 @@ export class BookComponent implements OnInit {
 }
 ```
 
-* 导入了 `FormGroup, FormBuilder and Validators`.
+* 从` @angular/forms `导入了 `FormGroup, FormBuilder and Validators`.
 * 添加了 `form: FormGroup` 变量.
-* 添加了 `bookType` 属性,你可以从模板中获取 `BookType` 枚举成员.
 * 添加了 `bookTypes` 属性作为 `BookType` 枚举成员列表. 将在表单选项中使用.
-* 我们注入了 `fb: FormBuilder` 服务到构造函数. [FormBuilder](https://angular.io/api/forms/FormBuilder) 服务为生成控件提供了方便的方法. 它减少了构建复杂表单所需的样板文件的数量.
-* 我们添加了 `buildForm` 方法到文件末尾, 在 `createBook` 方法调用 `buildForm()` 方法. 该方法创建一个响应式表单去创建新书.
+* 我们注入了 `FormBuilder` 到构造函数. [FormBuilder](https://angular.io/api/forms/FormBuilder) 提供了简便的方法生成表单控件. 它减少了构建复杂表单所需的样板文件的数量.
+* 我们添加了 `buildForm` 方法到文件末尾, 在 `createBook` 方法调用 `buildForm()` 方法.
 * 添加了`save` 方法.
 
 打开 `/src/app/book/book.component.html`,使用以下内容替换 `<ng-template #abpBody> </ng-template>`:
@@ -836,7 +826,7 @@ export class BookComponent implements OnInit {
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="bookType[type]" *ngFor="let type of bookTypes"> {%{{{ type }}}%}</option>
+        <option [ngValue]="type.value" *ngFor="let type of bookTypes"> {%{{{ type.key }}}%}</option>
       </select>
     </div>
 
@@ -897,13 +887,12 @@ export class BookModule { }
 
 * 我们导入了 `NgbDatepickerModule`  来使用日期选择器.
 
-打开  `/src/app/book/book.component.ts` 使用以内内容替换:
+打开  `/src/app/book/book.component.ts` 使用以下内容替换:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from './models';
-import { BookService } from './services';
+import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 // added this line
@@ -923,11 +912,7 @@ export class BookComponent implements OnInit {
 
   form: FormGroup;
 
-  bookType = BookType;
-
-  bookTypes = Object.keys(this.bookType).filter(
-    (key) => typeof this.bookType[key] === 'number'
-  );
+  bookTypes = bookTypeOptions;
 
   isModalOpen = false;
 
@@ -938,7 +923,7 @@ export class BookComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
+    const bookStreamCreator = (query) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
       this.book = response;
@@ -964,7 +949,7 @@ export class BookComponent implements OnInit {
       return;
     }
 
-    this.bookService.createByInput(this.form.value).subscribe(() => {
+    this.bookService.create(this.form.value).subscribe(() => {
       this.isModalOpen = false;
       this.form.reset();
       this.list.get();
@@ -974,11 +959,11 @@ export class BookComponent implements OnInit {
 ```
 
 * 导入了 `NgbDateNativeAdapter` 和 `NgbDateAdapter`.
-* 我们添加了一个新的 `NgbDateAdapter` 提供程序,它将Datepicker值转换为 `Date` 类型. 有关更多详细信息,请参见[datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview).
+* 我们添加了一个新的 `NgbDateAdapter` 提供程序,它将Datepicker值转换为 `Date` 类型. 更多详细信息,请参见[datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview).
 
 现在你可以打开浏览器看到以下变化:
 
-![Save button to the modal](./images/bookstore-new-book-form-v2.png)
+![Save button to the modal](images/bookstore-new-book-form-v2.png)
 
 ## 更新书籍
 
@@ -987,8 +972,7 @@ export class BookComponent implements OnInit {
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType, CreateUpdateBookDto } from './models';
-import { BookService } from './services';
+import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
@@ -1001,15 +985,11 @@ import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  selectedBook = new BookDto(); // declare selectedBook
+  selectedBook = {} as BookDto; // declare selectedBook
 
   form: FormGroup;
 
-  bookType = BookType;
-
-  bookTypes = Object.keys(this.bookType).filter(
-    (key) => typeof this.bookType[key] === 'number'
-  );
+  bookTypes = bookTypeOptions;
 
   isModalOpen = false;
 
@@ -1020,7 +1000,7 @@ export class BookComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
+    const bookStreamCreator = (query) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
       this.book = response;
@@ -1028,14 +1008,14 @@ export class BookComponent implements OnInit {
   }
 
   createBook() {
-    this.selectedBook = new BookDto(); // reset the selected book
+    this.selectedBook = {} as BookDto; // reset the selected book
     this.buildForm();
     this.isModalOpen = true;
   }
 
   // Add editBook method
   editBook(id: string) {
-    this.bookService.getById(id).subscribe((book) => {
+    this.bookService.get(id).subscribe((book) => {
       this.selectedBook = book;
       this.buildForm();
       this.isModalOpen = true;
@@ -1061,8 +1041,8 @@ export class BookComponent implements OnInit {
     }
 
     const request = this.selectedBook.id
-      ? this.bookService.updateByIdAndInput(this.form.value, this.selectedBook.id)
-      : this.bookService.createByInput(this.form.value);
+      ? this.bookService.update(this.selectedBook.id, this.form.value)
+      : this.bookService.create(this.form.value);
 
     request.subscribe(() => {
       this.isModalOpen = false;
@@ -1074,10 +1054,10 @@ export class BookComponent implements OnInit {
 ```
 
 * 我们声明了类型为 `BookDto` 的 `selectedBook` 变量.
-* 我们添加了 `editBook`  方法, 根据给定图书 `Id` 设置 `selectedBook` 对象.
+* 我们添加了 `editBook`  方法, 根据给定书籍 `Id` 设置 `selectedBook` 对象.
 * 我们替换了 `buildForm` 方法使用 `selectedBook` 数据创建表单.
 * 我们替换了 `createBook` 方法,设置 `selectedBook` 为空对象.
-* 我们替换了 `save` 方法.
+* 我们修改了 `save` 方法,同时处理新建和更新操作.
 
 ### 添加 "Actions" 下拉框到表格
 
@@ -1111,7 +1091,7 @@ export class BookComponent implements OnInit {
 
 在表格的第一列添加了一个 "Actions" 下拉菜单,如下图所示:
 
-![Action buttons](./images/bookstore-actions-buttons.png)
+![Action buttons](images/bookstore-actions-buttons.png)
 
 同时如下所示更改 `ng-template #abpHeader` 部分:
 
@@ -1147,19 +1127,20 @@ constructor(
 delete(id: string) {
   this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
     if (status === Confirmation.Status.confirm) {
-      this.bookService.deleteById(id).subscribe(() => this.list.get());
+      this.bookService.delete(id).subscribe(() => this.list.get());
     }
   });
 }
 ```
 
-* 我们注入了 `ConfirmationService`.
+* 我们引入了 `ConfirmationService`.
 * 我们注入了 `ConfirmationService` 到构造函数.
 * 添加了 `delete` 方法.
 
 > 参阅[确认弹层文档](../UI/Angular/Confirmation-Service)了解该服务的更多信息.
 
 ### 添加删除按钮:
+
 
 打开 `/src/app/book/book.component.html` 修改 `ngbDropdownMenu` 添加删除按钮:
 
@@ -1174,11 +1155,442 @@ delete(id: string) {
 
 最终操作下拉框UI看起来如下:
 
-![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown.png)
+![bookstore-final-actions-dropdown](images/bookstore-final-actions-dropdown.png)
 
-点击 `delete` 动作调用 `delete` 方法,然后无法显示一个确认弹层如下图所示.
+点击 `delete` 操作调用 `delete` 方法,然后显示一个确认弹层如下图所示.
 
-![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
+![bookstore-confirmation-popup](images/bookstore-confirmation-popup.png)
+
+{{end}}
+
+{{if UI == "Blazor" || UI == "BlazorServer"}}
+
+## 创建新书籍
+
+通过本节, 你将会了解如何创建一个模态窗口实现新增书籍的功能. 因为我们已经从 `AbpCrudPageBase` 继承, 所以只需要开发视图部分.
+
+### 添加 "New Button" 按钮
+
+打开 `Books.razor` 替换 `<CardHeader>` 部分为以下代码:
+
+````xml
+<CardHeader>
+    <Row Class="justify-content-between">
+        <Column ColumnSize="ColumnSize.IsAuto">
+            <h2>@L["Books"]</h2>
+        </Column>
+        <Column ColumnSize="ColumnSize.IsAuto">
+            <Button Color="Color.Primary"
+                    Clicked="OpenCreateModalAsync">@L["NewBook"]</Button>
+        </Column>
+    </Row>
+</CardHeader>
+````
+
+如下图所示,卡片头 **右侧** 添加了 **New book** 按钮:
+
+![blazor-add-book-button](images/blazor-add-book-button.png)
+
+现在, 我们可以添加点击按钮后打开的模态窗口了.
+
+### 书籍创建模态窗口
+
+打开 `Books.razor`, 添加以下代码到页面底部:
+
+````xml
+<Modal @ref="@CreateModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["NewBook"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["Type"]</FieldLabel>
+                        <Select TValue="BookType" @bind-SelectedValue="@NewEntity.Type">
+                            @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                            {
+                                <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
+                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["PublishDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="NewEntity.PublishDate"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["Price"]</FieldLabel>
+                        <NumericEdit TValue="float" @bind-Value="NewEntity.Price"/>
+                    </Field>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+````
+
+这段代码需要一个服务; 在文件顶部, `@inherits...` 行前, 注入 `AbpBlazorMessageLocalizerHelper<T>`:
+
+````csharp
+@inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
+````
+
+* 表单实现了验证功能, `AbpBlazorMessageLocalizerHelper` 用于本地化验证消息.
+* `CreateModal` 对象, `CloseCreateModalAsync` 和 `CreateEntityAsync` 方法定义在基类中. 参阅 [Blazorise文档](https://blazorise.com/docs/) 以深入理解 `Modal` 和其它组件.
+
+这就是全部了. 运行应用程序, 尝试添加一本新书.
+
+![blazor-new-book-modal](images/blazor-new-book-modal.png)
+
+## 更新书籍
+
+编辑书籍与新建书籍很类似.
+
+### 操作下拉菜单
+
+打开 `Books.razor` , 在 `DataGridColumns` 中添加以下 `DataGridEntityActionsColumn` 作为第一项:
+
+````xml
+<DataGridEntityActionsColumn TItem="BookDto" @ref="@EntityActionsColumn">
+    <DisplayTemplate>
+        <EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
+            <EntityAction TItem="BookDto"
+                          Text="@L["Edit"]"
+                          Clicked="() => OpenEditModalAsync(context)" />
+        </EntityActions>
+    </DisplayTemplate>
+</DataGridEntityActionsColumn>
+````
+
+* `OpenEditModalAsync` 定义在基类中, 它接收实体(书籍)参数, 编辑这个实体.
+
+`DataGridEntityActionsColumn` 组件用于显示 `DataGrid` 每一行中的"操作" 下拉菜单. 如果其中只有唯一的操作, `DataGridEntityActionsColumn` 显示 **唯一按钮**, 而不是下拉菜单.
+
+![blazor-edit-book-action](images/blazor-edit-book-action-2.png)
+
+### 编辑模态窗口
+
+我们现在可以定义一个模态窗口编辑书籍. 加入下面的代码到 `Books.razor` 页面的底部:
+
+````xml
+<Modal @ref="@EditModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@EditingEntity.Name</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingEntity.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["Type"]</FieldLabel>
+                        <Select TValue="BookType" @bind-SelectedValue="@EditingEntity.Type">
+                            @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                            {
+                                <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
+                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["PublishDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="EditingEntity.PublishDate"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["Price"]</FieldLabel>
+                        <NumericEdit TValue="float" @bind-Value="EditingEntity.Price"/>
+                    </Field>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="UpdateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+````
+
+### AutoMapper 配置
+
+基类 `AbpCrudPageBase` 使用 [对象到对象映射](../Object-To-Object-Mapping.md) 系统将 `BookDto` 对象转化为`CreateUpdateBookDto` 对象. 因此, 我们需要定义映射.
+
+打开 `Acme.BookStore.Blazor` 项目中的 `BookStoreBlazorAutoMapperProfile `, 替换成以下内容:
+
+````csharp
+using Acme.BookStore.Books;
+using AutoMapper;
+
+namespace Acme.BookStore.Blazor
+{
+    public class BookStoreBlazorAutoMapperProfile : Profile
+    {
+        public BookStoreBlazorAutoMapperProfile()
+        {
+            CreateMap<BookDto, CreateUpdateBookDto>();
+        }
+    }
+}
+````
+
+* `CreateMap<BookDto, CreateUpdateBookDto>();` 行用于定义映射.
+
+### 测试编辑模态窗口
+
+你可以运行程序并尝试编辑一本书.
+
+![blazor-edit-book-modal](images/blazor-edit-book-modal.png)
+
+> 提示: 尝试保留 *Name* 字段为空并提交表单, 将显示验证错误消息.
+
+## 删除书籍
+
+打开 `Books.razor` 页面, 在 `EntityActions` 中的"编辑" 操作下面加入以下的  `EntityAction`:
+
+````xml
+<EntityAction TItem="BookDto"
+              Text="@L["Delete"]"
+              Clicked="() => DeleteEntityAsync(context)"
+              ConfirmationMessage="() => GetDeleteConfirmationMessage(context)" />
+````
+
+* `DeleteEntityAsync` 定义在基类中. 通过向服务器发起请求删除实体.
+* `ConfirmationMessage` 执行操作前显示确认消息的回调函数.
+* `GetDeleteConfirmationMessage` 定义在基类中. 你可以覆写这个方法 (或传递其它值给 `ConfirmationMessage` 参数) 以定制本地化消息.
+
+因为"操作" 按钮现在有了两个操作, 变成了下拉菜单:
+
+![blazor-edit-book-action](images/blazor-delete-book-action.png)
+
+运行程序并尝试删除一本书.
+
+## 完整的 CRUD UI 代码
+
+下面是完整的创建图书管理CRUD页面的代码, 这些代码在上面是分成两部分开发的:
+
+````xml
+@page "/books"
+@using Volo.Abp.Application.Dtos
+@using Acme.BookStore.Books
+@using Acme.BookStore.Localization
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Components.Web
+@inject IStringLocalizer<BookStoreResource> L
+@inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
+@inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
+
+<Card>
+    <CardHeader>
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <h2>@L["Books"]</h2>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <Button Color="Color.Primary"
+                        Clicked="OpenCreateModalAsync">@L["NewBook"]</Button>
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="BookDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  CurrentPage="CurrentPage"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="BookDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="BookDto"
+                                          Text="@L["Edit"]"
+                                          Clicked="() => OpenEditModalAsync(context)" />
+                            <EntityAction TItem="BookDto"
+                                          Text="@L["Delete"]"
+                                          Clicked="() => DeleteEntityAsync(context)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Name)"
+                                Caption="@L["Name"]"></DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Type)"
+                                Caption="@L["Type"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:BookType:{(int) context.Type}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.PublishDate)"
+                                Caption="@L["PublishDate"]">
+                    <DisplayTemplate>
+                        @context.PublishDate.ToShortDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Price)"
+                                Caption="@L["Price"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.CreationTime)"
+                                Caption="@L["CreationTime"]">
+                    <DisplayTemplate>
+                        @context.CreationTime.ToLongDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+<Modal @ref="@CreateModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["NewBook"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["Type"]</FieldLabel>
+                        <Select TValue="BookType" @bind-SelectedValue="@NewEntity.Type">
+                            @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                            {
+                                <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
+                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["PublishDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="NewEntity.PublishDate"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["Price"]</FieldLabel>
+                        <NumericEdit TValue="float" @bind-Value="NewEntity.Price"/>
+                    </Field>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="@EditModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@EditingEntity.Name</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingEntity.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["Type"]</FieldLabel>
+                        <Select TValue="BookType" @bind-SelectedValue="@EditingEntity.Type">
+                            @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                            {
+                                <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
+                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["PublishDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="EditingEntity.PublishDate"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["Price"]</FieldLabel>
+                        <NumericEdit TValue="float" @bind-Value="EditingEntity.Price"/>
+                    </Field>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="UpdateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+````
 
 {{end}}
 

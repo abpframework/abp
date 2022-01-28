@@ -5,18 +5,18 @@ namespace MyCompanyName.MyProjectName.Blazor;
 
 public class Program
 {
-    public static async Task Main(string[] args)
+    public async static Task Main(string[] args)
     {
         var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-        var application = builder.AddApplication<MyProjectNameBlazorModule>(options =>
+        var application = await builder.AddApplicationAsync<MyProjectNameBlazorModule>(options =>
         {
             options.UseAutofac();
         });
 
         var host = builder.Build();
 
-        await application.InitializeAsync(host.Services);
+        await application.InitializeApplicationAsync(host.Services);
 
         await host.RunAsync();
     }

@@ -1,0 +1,11 @@
+{
+  "name": "Volo.CmsKit.Public.Application.Contracts",
+  "hash": "308c90693f153360adbe46dcecaab560",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit.Public",
+      "contentType": "abpModule",
+      "name": "CmsKitPublicApplicationContractsModule"
+    }
+  ]
+}

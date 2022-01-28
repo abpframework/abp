@@ -19,6 +19,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransientDependency
 {
+    public const string Name = "new";
+    
     public ILogger<NewCommand> Logger { get; set; }
 
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }

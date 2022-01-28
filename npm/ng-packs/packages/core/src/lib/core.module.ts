@@ -23,6 +23,7 @@ import { LocalizationModule } from './localization.module';
 import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
 import { SortPipe } from './pipes/sort.pipe';
+import { ToInjectorPipe } from './pipes/to-injector.pipe';
 import { CookieLanguageProvider } from './providers/cookie-language.provider';
 import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
@@ -45,57 +46,54 @@ export function storageFactory(): OAuthStorage {
  * This module will be imported and exported by all others.
  */
 @NgModule({
-  exports: [
-    CommonModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-    LocalizationModule,
-    AbstractNgModelComponent,
-    AutofocusDirective,
-    DynamicLayoutComponent,
-    ForDirective,
-    FormSubmitDirective,
-    InitDirective,
-    InputEventDebounceDirective,
-    PermissionDirective,
-    ReplaceableRouteContainerComponent,
-    ReplaceableTemplateDirective,
-    RouterOutletComponent,
-    SortPipe,
-    StopPropagationDirective,
-  ],
-  imports: [
-    OAuthModule,
-    CommonModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-    LocalizationModule,
-  ],
-  declarations: [
-    AbstractNgModelComponent,
-    AutofocusDirective,
-    DynamicLayoutComponent,
-    ForDirective,
-    FormSubmitDirective,
-    InitDirective,
-    InputEventDebounceDirective,
-    PermissionDirective,
-    ReplaceableRouteContainerComponent,
-    ReplaceableTemplateDirective,
-    RouterOutletComponent,
-    SortPipe,
-    StopPropagationDirective,
-  ],
-  providers: [LocalizationPipe],
-  entryComponents: [
-    RouterOutletComponent,
-    DynamicLayoutComponent,
-    ReplaceableRouteContainerComponent,
-  ],
+    exports: [
+        CommonModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        LocalizationModule,
+        AbstractNgModelComponent,
+        AutofocusDirective,
+        DynamicLayoutComponent,
+        ForDirective,
+        FormSubmitDirective,
+        InitDirective,
+        InputEventDebounceDirective,
+        PermissionDirective,
+        ReplaceableRouteContainerComponent,
+        ReplaceableTemplateDirective,
+        RouterOutletComponent,
+        SortPipe,
+        StopPropagationDirective,
+        ToInjectorPipe,
+    ],
+    imports: [
+        OAuthModule,
+        CommonModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        LocalizationModule,
+    ],
+    declarations: [
+        AbstractNgModelComponent,
+        AutofocusDirective,
+        DynamicLayoutComponent,
+        ForDirective,
+        FormSubmitDirective,
+        InitDirective,
+        InputEventDebounceDirective,
+        PermissionDirective,
+        ReplaceableRouteContainerComponent,
+        ReplaceableTemplateDirective,
+        RouterOutletComponent,
+        SortPipe,
+        StopPropagationDirective,
+        ToInjectorPipe,
+    ],
+    providers: [LocalizationPipe]
 })
 export class BaseCoreModule {}
 
