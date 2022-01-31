@@ -13,8 +13,11 @@ public partial class PageHeader : ComponentBase
 
     public IPageToolbarManager PageToolbarManager { get; set; }
 
-    [Parameter]
-    public string Title { get; set; }
+    [Inject]
+    public PageLayout PageLayout { get; private set; }
+
+    [Parameter] // TODO: Consider removing this property in future and use only PageLayout.
+    public string Title { get => PageLayout.Title; set => PageLayout.Title = value; }
 
     [Parameter]
     public bool BreadcrumbShowHome { get; set; } = true;
@@ -25,15 +28,17 @@ public partial class PageHeader : ComponentBase
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 
-    [Parameter]
-    public List<BreadcrumbItem> BreadcrumbItems { get; set; }
+    [Parameter] // TODO: Consider removing this property in future and use only PageLayout.
+    public List<BreadcrumbItem> BreadcrumbItems {
+        get => PageLayout.BreadcrumbItems;
+        set => PageLayout.BreadcrumbItems = value;
+    }
 
     [Parameter]
     public PageToolbar Toolbar { get; set; }
 
     public PageHeader()
     {
-        BreadcrumbItems = new List<BreadcrumbItem>();
         ToolbarItemRenders = new List<RenderFragment>();
     }
 
@@ -44,6 +49,13 @@ public partial class PageHeader : ComponentBase
         {
             var toolbarItems = await PageToolbarManager.GetItemsAsync(Toolbar);
             ToolbarItemRenders.Clear();
+
+            if (!Options.Value.RenderToolbar)
+            {
+                PageLayout.ToolbarItems.Clear();
+                PageLayout.ToolbarItems.AddRange(toolbarItems);
+                return;
+            }
 
             foreach (var item in toolbarItems)
             {

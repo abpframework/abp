@@ -433,8 +433,10 @@
     "LeptonXSemiDark": "LeptonX Semi-Dark",
     "BuiltOnBs5Library": "Built on Bootstrap 5 library",
     "FullyCompatibleWithBs5": "100% compatible with Bootstrap 5 HTML structure and CSS classes",
-    "ResponsiveAndMobileCompatible": "Responsive & mobile-compatible",
+    "ResponsiveAndMobileCompatible": "Responsive, mobile-compatible, RTL support",
     "ProvidesStylesForDatatables": "Provides styles for Datatables",
+    "MultipleLayoutOptions": "Multiple layout options",
+    "EasilyInstallAndUpgrade": "Easily install and upgrade",
     "SupportForum": "Support Forum",
     "TrustedBy": "Trusted By",
     "OurPricing": "Our <span class=\"gradient-commercial\">Pricing</span",
@@ -486,6 +488,7 @@
     "LandingWebsite": "Landing Website",
     "LandingWebsiteExplanation": "A generic landing/public website that can be used for several purposes, like introducing your company, selling your products, etc.",
     "ABPFrameworkEBook": "E-Book: Mastering ABP Framework",
-    "MasteringAbpFrameworkEBookDescription": "Included within your ABP Commercial license"
+    "MasteringAbpFrameworkEBookDescription": "Included within your ABP Commercial license",
+    "Volo.AbpIo.Domain:070000": "Organization name cannot contain spaces!"
   }
 }
