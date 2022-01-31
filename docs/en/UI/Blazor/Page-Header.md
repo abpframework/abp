@@ -102,4 +102,4 @@ Rendering can be enabled or disabled for each section of PageHeader via using `P
     });
 ```
 
-*All values are **true** by default. If the PageHeaderOptions isn's configured, each section will be rendered.*
+*All values are **true** by default. If the PageHeaderOptions isn't configured, each section will be rendered.*
