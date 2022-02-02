@@ -118,8 +118,8 @@ public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPe
 
     public async Task<Person> FindByNameAsync(string name)
     {
-        var dbcontext = await GetDbContextAsync();
-        return await dbcontext.Set<Person>()
+        var dbContext = await GetDbContextAsync();
+        return await dbContext.Set<Person>()
             .Where(p => p.Name == name)
             .FirstOrDefaultAsync();
     }
