@@ -36,6 +36,7 @@ if ($full -eq "-f")
 		"../templates/app/aspnet-core",
 		"../templates/console",
 		"../templates/wpf",
+		"../templates/app-nolayers/aspnet-core",
 		"../abp_io/AbpIoLocalization"
 	) 
 }else{ 
