@@ -316,7 +316,7 @@
     "TrialLicenseStatusFilter": "Status",
     "TrialLicenseStartDateFilter": "Start date",
     "TrialLicenseEndDateFilter": "End date",
-    "FirsName": "First name",
+    "FirstName": "First name",
     "LastName": "Last name",
     "StartDate": "Start date",
     "EndDate": "End date",
