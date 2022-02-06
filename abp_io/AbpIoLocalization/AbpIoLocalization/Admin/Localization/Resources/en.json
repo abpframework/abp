@@ -356,6 +356,7 @@
     "SendWelcomeEmailSuccessMessage": "Welcome email sent successfully!",
     "PaymentRequestId": "Payment Request Id",
     "AdditionalDeveloperCount": "Additional developer count",
-    "LicensePrice": "License price"
+    "LicensePrice": "License price",
+    "PurchaseDate": "Purchase date"
   }
 }
