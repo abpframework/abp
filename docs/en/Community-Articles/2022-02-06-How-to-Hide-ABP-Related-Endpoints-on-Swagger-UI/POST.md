@@ -1,12 +1,12 @@
-# How to Hide ABP Related Endpoints on the Swagger UI
+# How to Hide ABP Related Endpoints on Swagger UI
 
-In this article, we will see how to show/hide ABP related endpoints on Swagger UI by enabling/disabling them on the Setting Management page. 
+In this article, we will show how to show/hide ABP related endpoints on Swagger UI by enabling/disabling them on the Setting Management page. 
 
-I wanted to write an article about this topic because there was a Github issue and when I saw that issue, it seems so many people need to hide ABP related endpoints because they don't need to see them when they are developing an application, they only need to see their own endpoints most of the time.
+I wanted to write an article about this topic because there was a Github issue and when I saw it, it seemed that so many people needed to hide the ABP related endpoints since they didn't need to see them as they were developing an application, they only need to see their own endpoints most of the time.
 
-In the issue, there are helpful comments about how to hide the ABP related endpoints such as creating a **Document Filter** or removing **Application Parts** from the application etc.
+In the issue, there are helpful comments about hiding the ABP related endpoints such as creating a **Document Filter** or removing **Application Parts** from the application etc.
 
-I thought it would be be better to enable/disable showing endpoints on runtime by simply selecting a checkbox on the Setting Management page and in this article I wanted to show you, so let's dive in.
+I thought it would be be better to enable/disable showing endpoints on runtime by simply selecting a checkbox on the Setting Management page and in this article I wanted to show you how, so let's dive in.
 
 ## Source Code
 
@@ -24,13 +24,13 @@ We can create a new startup template by using the [ABP CLI](https://docs.abp.io/
 abp new <your-project-name> -t app -csf
 ```
 
-Our project boilerplate will be ready after the download is finished. Open the solution and run the `*.DbMigrator` project to seed the initial data. Then, we can run the `*.Web` project to see our application is working.
+Our project boilerplate will be ready after the download is finished. Open the solution and run the `*.DbMigrator` project to seed the initial data. Then, we can run the `*.Web` project to see our application working.
 
 > Default credentials -> Username: admin and Password: 1q2w3E*
 
 ## Starting the Development
 
-After we've runned the application and signed in, we can navigate to **/swagger** to see our application's endpoints.
+After we've run the application and signed in, we can navigate to **/swagger** to see our application's endpoints.
 
 ![](./swagger.png)
 
@@ -51,7 +51,7 @@ public class SwaggerSettingConsts
 
 We've created a class with a constant variable to avoid using the magic strings. This variable will be our setting name.
 
-ABP provides us a [Settings System](https://docs.abp.io/en/abp/latest/Setting) to easily define settings for our applications. We only need to create a class that derives from `SettingDefinitionProvider` class, but we don't even need to do this because ABP startup templates come with a pre-defined setting provider class.
+ABP provides us a [Settings System](https://docs.abp.io/en/abp/latest/Setting) to easily define settings for our applications. We only need to create a class that derives from the `SettingDefinitionProvider` class, but we don't even need to do this because the ABP startup templates come with a pre-defined setting provider class.
 
 * So open the setting definition provider class (`SwaggerSettingsDemoSettingDefinitionProvider` in our case, it's under the /Settings folder of your domain layer) and update the class:
 
@@ -87,7 +87,7 @@ Here we've defined a setting to use in our application.
 
 > ABP automatically discovers this class and registers the setting definitions.
 
-After defining a setting, now we can create an application service interface and add two methods to simply get our setting value or update the value of our setting.
+After defining a setting, now we can create an application service interface and add two methods to simply get or update the value of our setting.
 
 * Create an application service interface named `ISwaggerSettingAppService` (or any name you want):
 
@@ -139,9 +139,9 @@ public class SwaggerSettingAppService : SwaggerSettingsDemoAppService, ISwaggerS
 
 We've injected two interfaces for the application service implementation: `ISettingProvider` and `ISettingManager`
 
-> **ISettingProvider**: Uses for getting the value of a setting or getting the values of all settings. It's recommended to use it to read the setting values because it implements caching.
+> **ISettingProvider**: Used for getting the value of a setting or getting the values of all settings. It's recommended to use it to read the setting values because it implements caching.
 
-> **ISettingManager**: Uses for getting and setting the values for the settings.
+> **ISettingManager**: Used for getting and setting the values of the settings.
 
 After implementing our application service, now we can add a new group to our "Setting Management UI".
 
@@ -180,7 +180,7 @@ public class SwaggerHideEndpointsViewComponent : AbpViewComponent
 }
 ```
 
-Here we've created a simple view component that gets the current value of our setting by using the `ISwaggerSettingAppService.GetSettingByNameAsync` method and pass it to our page model.
+Here we've created a simple view component that gets the current value of our setting by using the `ISwaggerSettingAppService.GetSettingByNameAsync` method and passing it to our page model.
 
 As you can see we've passed a modal to our page named `SwaggerHideEndpointViewModel`, but we haven't created it yet, so let's create it.
 
@@ -239,9 +239,9 @@ public class SwaggerHideEndpointViewModel
 
 After we've selected the select box which enables/disables to showing endpoints on Swagger UI, it should update the setting value by our choice (enable or disable).
 
-Here when the user selects the checkbox it will submit the form and update the setting value by our choice.
+Here, when the user selects the checkbox, it will submit the form and update the setting value by our choice.
 
-Until now, we've defined a view component that we want to render on the Setting Management page, but we didn't add it to UI yet. To do that, we need to add a settings group to UI, so we need to create a class and that class should be inherited from the `ISettingPageContributor` interface and implement its' `ConfigureAsync` method.
+Until now, we've defined a view component that we want to render on the Setting Management page, but we didn't add it to the UI yet. To do that, we need to add a settings group to the UI, so we need to create a class and that class should be inherited from the `ISettingPageContributor` interface and implement its' `ConfigureAsync` method.
 
 * Create a class named `SwaggerSettingPageContributor` (/Settings/SwaggerSettingPageContributor.cs) in the `*.Web` layer:
 
@@ -346,11 +346,11 @@ public class CustomSwaggerFilter : IDocumentFilter
 }
 ```
 
-We've created a simple class that implements `IDocumentFilter.Apply` method. And in that method, we simply need to get our setting value and to see should we enable hiding ABP related endpoints or not. To do this, we've used the `ISwaggerSettingAppService.GetSettingByNameAsync` method to get the setting value, but as you can see we've wrapped it with the `AsyncHelper.RunSync` method because `IDocumentFilter.Apply` is not an async method so we need to run this method as synchronously.
+We've created a simple class that implements `IDocumentFilter.Apply` method. And in that method, we simply need to get our setting value to see whether should we enable hiding ABP related endpoints or not. To do this, we've used the `ISwaggerSettingAppService.GetSettingByNameAsync` method to get the setting value, but as you can see we've wrapped it with the `AsyncHelper.RunSync` method because `IDocumentFilter.Apply` is not an async method so we need to run this method synchronously.
 
-After getting the setting value, we need to ensure it's a valid setting value and also its value is true, because otherwise we don't need to filter the endpoints and show all of them.
+After getting the setting value, we need to ensure that it's both a valid and true setting value, otherwise we don't need to filter the endpoints and show all of them.
 
-If the setting value is true, we can simply remove the paths those start with "/api/abp" prefix.
+If the setting value is true, we can simply remove the paths that start with "/api/abp" prefix.
 
 > ABP provides us a class named AsyncHelper and this class provides some helper methods to work with async methods. E.g. RunSync method in here runs the async method synchronously.
 
