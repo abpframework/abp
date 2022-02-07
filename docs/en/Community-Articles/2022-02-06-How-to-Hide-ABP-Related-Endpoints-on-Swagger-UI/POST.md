@@ -2,11 +2,11 @@
 
 In this article, we will show how to show/hide ABP related endpoints on Swagger UI by enabling/disabling them on the Setting Management page. 
 
-I wanted to write an article about this topic because there was a Github issue and when I saw it, it seemed that so many people needed to hide the ABP related endpoints since they didn't need to see them as they were developing an application, they only need to see their own endpoints most of the time.
+I wanted to write an article about this topic because there was a [Github issue]https://github.com/abpframework/abp/issues/3758() and when I saw it, it seemed that so many people needed to hide the ABP related endpoints since they didn't need to see them as they were developing an application, they only need to see their own endpoints most of the time.
 
 In the issue, there are helpful comments about hiding the ABP related endpoints such as creating a **Document Filter** or removing **Application Parts** from the application etc.
 
-I thought it would be be better to enable/disable showing endpoints on runtime by simply selecting a checkbox on the Setting Management page and in this article I wanted to show you how, so let's dive in.
+I thought it would be better to enable/disable showing endpoints on runtime by simply selecting a checkbox on the Setting Management page and in this article I wanted to show you how, so let's dive in.
 
 ## Source Code
 
