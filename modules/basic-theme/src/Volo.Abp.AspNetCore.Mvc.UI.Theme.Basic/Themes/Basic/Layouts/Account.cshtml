@@ -48,7 +48,7 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
 </head>
-<body class="abp-account-layout bg-light @rtl">
+<body class="abp-account-layout @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Account)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
