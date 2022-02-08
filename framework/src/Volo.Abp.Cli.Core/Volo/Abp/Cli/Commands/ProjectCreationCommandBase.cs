@@ -12,6 +12,7 @@ using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
 using Volo.Abp.Cli.Utils;
 
 namespace Volo.Abp.Cli.Commands;
@@ -284,7 +285,7 @@ public abstract class ProjectCreationCommandBase
         {
             return DatabaseProvider.NotSpecified;
         }
-        
+
         if (optionValue.Equals("ef", StringComparison.InvariantCultureIgnoreCase) || optionValue.Equals("entityframeworkcore", StringComparison.InvariantCultureIgnoreCase))
         {
             return DatabaseProvider.EntityFrameworkCore;
@@ -305,7 +306,18 @@ public abstract class ProjectCreationCommandBase
             CmdHelper.RunCmd("dotnet build /graphbuild", projectArgs.OutputFolder);
         }
     }
-    
+
+    protected virtual void RunInstallLibsForWebTemplate(ProjectBuildArgs projectArgs)
+    {
+        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) ||
+            ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) ||
+            AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName) ||
+            MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
+        {
+            CmdHelper.RunCmd("abp install-libs", projectArgs.OutputFolder);
+        }
+    }
+
     protected virtual DatabaseManagementSystem GetDatabaseManagementSystem(CommandLineArgs commandLineArgs)
     {
         var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseManagementSystem.Short, Options.DatabaseManagementSystem.Long);
@@ -358,7 +370,7 @@ public abstract class ProjectCreationCommandBase
         }
 
         var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
-        
+
         switch (optionValue)
         {
             case null:
