@@ -79,7 +79,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
         RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
-        RunInstallLibsForAppTemplate(projectArgs);
+        RunInstallLibsForWebTemplate(projectArgs);
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }
 

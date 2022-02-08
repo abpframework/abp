@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module;
 
@@ -10,6 +11,12 @@ public abstract class ModuleTemplateBase : TemplateInfo
     protected ModuleTemplateBase([NotNull] string name)
         : base(name)
     {
+    }
+
+    public static bool IsModuleTemplate(string templateName)
+    {
+        return templateName == ModuleTemplate.TemplateName ||
+               templateName == ModuleProTemplate.TemplateName;
     }
 
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)

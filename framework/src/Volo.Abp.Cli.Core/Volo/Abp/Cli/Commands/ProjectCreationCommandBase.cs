@@ -12,6 +12,7 @@ using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
 using Volo.Abp.Cli.Utils;
 
 namespace Volo.Abp.Cli.Commands;
@@ -306,10 +307,12 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected virtual void RunInstallLibsForAppTemplate(ProjectBuildArgs projectArgs)
+    protected virtual void RunInstallLibsForWebTemplate(ProjectBuildArgs projectArgs)
     {
         if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) ||
-            AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
+            ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) ||
+            AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName) ||
+            MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
         {
             CmdHelper.RunCmd("abp install-libs", projectArgs.OutputFolder);
         }
