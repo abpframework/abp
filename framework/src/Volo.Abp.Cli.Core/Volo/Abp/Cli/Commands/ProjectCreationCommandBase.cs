@@ -312,7 +312,7 @@ public abstract class ProjectCreationCommandBase
         if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) ||
             ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) ||
             AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName) ||
-            MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
+            MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
         {
             CmdHelper.RunCmd("abp install-libs", projectArgs.OutputFolder);
         }

@@ -54,9 +54,10 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             return;
         }
 
+        Logger.LogInformation($"Found {projectPaths.Count} projects.");
         foreach (var projectPath in projectPaths)
         {
-            Logger.LogInformation($"Found {projectPath}");
+            Logger.LogInformation($"{Path.GetDirectoryName(projectPath)}");
         }
 
         foreach (var projectPath in projectPaths)
@@ -109,6 +110,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                 }
                 return true;
             })
+            .OrderBy(x => x)
             .ToList();
     }
 
