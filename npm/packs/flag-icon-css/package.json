@@ -5,7 +5,7 @@
     "access": "public"
   },
   "dependencies": {
-    "flag-icon-css": "^3.5.0"
+    "flag-icon-css": "^4.1.7"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
