@@ -14,6 +14,11 @@ public abstract class MicroserviceServiceTemplateBase : TemplateInfo
     {
     }
 
+    public static bool IsMicroserviceTemplate(string templateName)
+    {
+        return templateName == MicroserviceProTemplate.TemplateName;
+    }
+
     public static bool IsMicroserviceServiceTemplate(string templateName)
     {
         return templateName == MicroserviceServiceProTemplate.TemplateName;

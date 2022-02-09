@@ -61,7 +61,7 @@ public class Book : AggregateRoot<Guid>
 * `Book` entity has a `MaxNameLength` that defines the maximum length of the `Name` property. 
 * `Book` constructor and `ChangeName` method to ensure that the `Name` is always a valid value. Notice that `Name`'s  setter is not `public`.
 
-> ABP does not force you to design your entities like that. It just can have public get/set for all properties. It's your decision to full implement DDD practices.
+> ABP does not force you to design your entities like that. It just can have public get/set for all properties. It's your decision to fully implement DDD practices.
 
 ### IBookAppService Interface
 
@@ -124,13 +124,13 @@ public class BookAppService : ApplicationService, IBookAppService
 
 ## Data Transfer Objects
 
-Application services gets and returns DTOs instead of entities. ABP does not force this rule. However, exposing entities to presentation layer (or to remote clients) have significant problems and not suggested. 
+Application services get and return DTOs instead of entities. ABP does not force this rule. However, exposing entities to the presentation layer (or to remote clients) has significant problems and is not suggested. 
 
 See the [DTO documentation](Data-Transfer-Objects.md) for more.
 
 ## Object to Object Mapping
 
-The `CreateAsync` method above manually creates a `Book` entity from given `CreateBookDto` object. Because the `Book` entity enforces it (we designed it like that).
+The `CreateAsync` method above manually creates a `Book` entity from given `CreateBookDto` object, because the `Book` entity enforces it (we designed it like that).
 
 However, in many cases, it's very practical to use **auto object mapping** to set properties of an object from a similar object. ABP provides an [object to object mapping](Object-To-Object-Mapping.md) infrastructure to make this even easier.
 
@@ -239,7 +239,7 @@ public interface IBookAppService :
 
 `ICrudAppService` has generic arguments to get the primary key type of the entity and the DTO types for the CRUD operations (it does not get the entity type since the entity type is not exposed to the clients use this interface).
 
-> Creating interface for an application service is a good practice, but not required by the ABP Framework. You can skip the interface part.
+> Creating an interface for an application service is good practice, but not required by the ABP Framework. You can skip the interface part.
 
 `ICrudAppService` declares the following methods:
 
@@ -359,7 +359,7 @@ public class DistrictAppService
 }
 ````
 
-This implementation requires you to create a class represents your composite key:
+This implementation requires you to create a class that represents your composite key:
 
 ````csharp
 public class DistrictKey

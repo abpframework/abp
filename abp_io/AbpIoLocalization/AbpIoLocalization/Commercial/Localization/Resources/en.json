@@ -19,6 +19,8 @@
     "Developers": "Developers",
     "LicenseType": "License type",
     "Manage": "Manage",
+    "SetDefault": "Set as default",
+    "DefaultOrganization": "Default",
     "StartDate": "Start date",
     "EndDate": "End date",
     "Modules": "Modules",
@@ -431,8 +433,10 @@
     "LeptonXSemiDark": "LeptonX Semi-Dark",
     "BuiltOnBs5Library": "Built on Bootstrap 5 library",
     "FullyCompatibleWithBs5": "100% compatible with Bootstrap 5 HTML structure and CSS classes",
-    "ResponsiveAndMobileCompatible": "Responsive & mobile-compatible",
+    "ResponsiveAndMobileCompatible": "Responsive, mobile-compatible, RTL support",
     "ProvidesStylesForDatatables": "Provides styles for Datatables",
+    "MultipleLayoutOptions": "Multiple layout options",
+    "EasilyInstallAndUpgrade": "Easily install and upgrade",
     "SupportForum": "Support Forum",
     "TrustedBy": "Trusted By",
     "OurPricing": "Our <span class=\"gradient-commercial\">Pricing</span",
@@ -482,6 +486,10 @@
     "BackOfficeApplication": "Back Office Application",
     "BackOfficeApplicationExplanation": "The actual web application of your system, with multiple UI framework options. You can create any kind of business application.",
     "LandingWebsite": "Landing Website",
-    "LandingWebsiteExplanation": "A generic landing/public website that can be used for several purposes, like introducing your company, selling your products, etc."
+    "LandingWebsiteExplanation": "A generic landing/public website that can be used for several purposes, like introducing your company, selling your products, etc.",
+    "ABPFrameworkEBook": "E-Book: Mastering ABP Framework",
+    "MasteringAbpFrameworkEBookDescription": "Included within your ABP Commercial license",
+    "Volo.AbpIo.Domain:070000": "The organization name can only contain latin letters, numbers, dots and hyphens!",
+    "Volo.AbpIo.Domain:070001": "The company name can only contain latin letters, numbers, dots, space and hyphens!"
   }
 }

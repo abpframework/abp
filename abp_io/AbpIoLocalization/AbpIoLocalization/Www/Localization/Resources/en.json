@@ -40,11 +40,11 @@
     "Theming": "Theming",
     "ThemingExplanationShort": "Use and customize the bootstrap-based standard UI theme or create your own.",
     "BootstrapTagHelpersDynamicForms": "Bootstrap Tag Helpers & Dynamic Forms",
-    "BootstrapTagHelpersDynamicFormsExplanation": "Instead of manually writing the repeating details of bootstrap components, Use ABP's tag helpers to simplify them and take advantage of the IntelliSense. Quickly build UI forms based on a C# model using the dynamic form tag helper.",
+    "BootstrapTagHelpersDynamicFormsExplanation": "Instead of manually writing the repeating details of bootstrap components, use ABP's tag helpers to simplify them and take advantage of the IntelliSense. Quickly build UI forms based on a C# model using the dynamic form tag helper.",
     "HTTPAPIsDynamicProxies": "HTTP APIs & Dynamic Proxies",
     "HTTPAPIsDynamicProxiesExplanation": "Automatically expose application services as REST style HTTP APIs, and consume them with dynamic JavaScript and C# proxies.",
     "CompleteArchitectureInfo": "Modern architecture to create maintainable software solutions.",
-    "DomainDrivenDesignBasedLayeringModelExplanation": "Helps implement a DDD based layered architecture and builds a maintainable code base.",
+    "DomainDrivenDesignBasedLayeringModelExplanation": "Helps implement a DDD based layered architecture and build a maintainable code base.",
     "DomainDrivenDesignBasedLayeringModelExplanationCont": "Provides startup templates, abstractions, base classes, services, documentation and guides to help you develop your application based on DDD patterns & principles.",
     "MicroserviceCompatibleModelExplanation": "The core framework & pre-built modules are designed with microservice architecture in mind.",
     "MicroserviceCompatibleModelExplanationCont": "Provides infrastructure, integrations, samples and documentation to implement microservice solutions easier, while it doesn\u2019t bring additional complexity if you want a monolithic application.",
@@ -82,7 +82,7 @@
     "CLI_CommandLineInterface": "CLI (Command Line Interface)",
     "CLI_CommandLineInterfaceExplanation": "Includes a CLI to help you automate the creation of new projects and the addition of new modules.",
     "StartupTemplates": "Startup Templates",
-    "StartupTemplatesExplanation": "Various startup templates provide a fully configured solution to jump start your development.",
+    "StartupTemplatesExplanation": "ABP’s application startup template provides a fully configured solution to jump start your development.",
     "BasedOnFamiliarTools": "Based on Familiar Tools",
     "BasedOnFamiliarToolsExplanation": "Built on and integrated with popular tools you already know. Low learning curve, easy adaptation, comfortable development.",
     "ORMIndependent": "ORM Independent",
@@ -114,7 +114,7 @@
     "AspectOrientedProgramming": "Aspect Oriented Programming",
     "DependencyInjection": "Dependency Injection",
     "DependencyInjectionByConventions": "Dependency Injection by Conventions",
-    "ABPCLIExplanation": "ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions.",
+    "ABPCLIExplanation": "ABP CLI (Command Line Interface) is a command line tool to automate some common operations for ABP based solutions.",
     "ModularityExplanation": "ABP provides a complete infrastructure to build your own application modules that may have entities, services, database integration, APIs, UI components and so on..", //TODO: strong "your own application modules",-
     "MultiTenancyExplanation": "ABP framework doesn't only support developing multi-tenant applications, but also makes your code mostly unaware of the multi-tenancy.",
     "MultiTenancyExplanation2": "Can automatically determine the current tenant, isolate data of different tenants from each other.",
@@ -305,7 +305,6 @@
     "FrameworkNewsletterConfirmationMessage": "I agree to the <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
     "GetYourFreeEBook": "Get Your <span class=\"gradient-framework d-block\">Free DDD E-book </span>",
     "EverythingYouNeedToKnow": "Everything you need to know.",
-    "MasteringTheABPFrameworkExplanation": "Written by the creator of ABP Framework, this book will help you gain a complete understanding of the framework and modern web application development techniques.",
     "PreOrderNow": "Pre-Order Now",
     "UITheming": "UI Theming",
     "UIThemingExplanation": "Create reusable UI themes and layouts or use one of the pre-built UI themes.",
@@ -316,6 +315,9 @@
     "SelectUIFramework": "Select UI Framework",
     "SelectDatabaseProvider": "Select Database Provider",
     "SelectDatabaseManagementSystem": "Select Database Management System",
-    "InstallingTheABPCLI": "Installing the ABP CLI"
+    "InstallingTheABPCLI": "Installing the ABP CLI",
+    "CreateYourProjectNow": "Create Your Project Now",
+    "OrderOn": "Order on {0}",
+    "DownloadFreeDDDBook": "Download Free DDD Book"
   }
 }

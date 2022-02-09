@@ -10,7 +10,7 @@
 @inject IStringLocalizer<AbpUiResource> UiLocalizer
 <AuthorizeView>
     <Authorized>
-        <Dropdown>
+        <Dropdown RightAligned="true">
             <DropdownToggle Color="Color.None">
                 @if (CurrentTenant.Name != null)
                 {
