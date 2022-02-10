@@ -49,9 +49,10 @@ public class ModuleApiDescriptionModel
         return Controllers[controller.Type] = controller;
     }
 
-    public ControllerApiDescriptionModel GetOrAddController(string name, string groupName, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
+    public ControllerApiDescriptionModel GetOrAddController(string name, string groupName, Type type, [CanBeNull]string apiVersion, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
     {
-        return Controllers.GetOrAdd(type.FullName, () => ControllerApiDescriptionModel.Create(name, groupName, type, ignoredInterfaces));
+        var key = apiVersion.IsNullOrWhiteSpace() ? type.FullName : $"{apiVersion + "."}{type.FullName}";
+        return Controllers.GetOrAdd(key, () => ControllerApiDescriptionModel.Create(name, groupName, type, ignoredInterfaces));
     }
 
     public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)

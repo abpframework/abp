@@ -88,6 +88,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             _options.ControllerNameGenerator(controllerType, setting),
             FindGroupName(controllerType) ?? apiDescription.GroupName,
             controllerType,
+            apiDescription.GroupName,
             _modelOptions.IgnoredInterfaces
         );
 

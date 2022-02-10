@@ -6,17 +6,17 @@ namespace Volo.Abp.Http.Client.ClientProxying;
 
 public class CurrentApiVersionInfo : ICurrentApiVersionInfo, ITransientDependency
 {
-    public ApiVersionInfo ApiVersionInfo => _currentPrincipal.Value;
+    public ApiVersionInfo ApiVersionInfo => _currentApiVersionInfo.Value;
 
-    private readonly AsyncLocal<ApiVersionInfo> _currentPrincipal = new AsyncLocal<ApiVersionInfo>();
+    private readonly AsyncLocal<ApiVersionInfo> _currentApiVersionInfo = new AsyncLocal<ApiVersionInfo>();
 
     public virtual IDisposable Change(ApiVersionInfo apiVersionInfo)
     {
         var parent = ApiVersionInfo;
-        _currentPrincipal.Value = apiVersionInfo;
+        _currentApiVersionInfo.Value = apiVersionInfo;
         return new DisposeAction(() =>
         {
-            _currentPrincipal.Value = parent;
+            _currentApiVersionInfo.Value = parent;
         });
     }
 }
