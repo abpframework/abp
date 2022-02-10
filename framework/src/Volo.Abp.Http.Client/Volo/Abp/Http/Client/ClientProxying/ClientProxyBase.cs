@@ -38,6 +38,7 @@ public class ClientProxyBase<TService> : ITransientDependency
     protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator => LazyServiceProvider.LazyGetRequiredService<IRemoteServiceHttpClientAuthenticator>();
     protected ClientProxyRequestPayloadBuilder ClientProxyRequestPayloadBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyRequestPayloadBuilder>();
     protected ClientProxyUrlBuilder ClientProxyUrlBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyUrlBuilder>();
+    protected ICurrentApiVersionInfo CurrentApiVersionInfo => LazyServiceProvider.LazyGetRequiredService<ICurrentApiVersionInfo>();
 
     protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue arguments = null)
     {
@@ -156,6 +157,11 @@ public class ClientProxyBase<TService> : ITransientDependency
 
     protected virtual async Task<ApiVersionInfo> GetApiVersionInfoAsync(ClientProxyRequestContext requestContext)
     {
+        if (CurrentApiVersionInfo.ApiVersionInfo != null)
+        {
+            return CurrentApiVersionInfo.ApiVersionInfo;
+        }
+
         var apiVersion = await FindBestApiVersionAsync(requestContext);
 
         //TODO: Make names configurable?
