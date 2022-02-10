@@ -67,7 +67,7 @@ public class ClientProxyBase<TService> : ITransientDependency
             action,
             action.Parameters
                 .GroupBy(x => x.NameOnMethod)
-                //TODO: make namen configurable
+                //TODO: make names configurable
                 .Where(x=> x.Key != "api-version" && x.Key !="apiVersion")
                 .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments.Values[i].Value))
                 .ToDictionary(x => x.Key, x => x.Value),
