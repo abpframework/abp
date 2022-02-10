@@ -69,7 +69,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             var controllers = module.Controllers.GroupBy(x => x.Value.Type).ToList();
             foreach (var controller in controllers.Where(x => x.Count() > 1))
             {
-                module.Controllers.RemoveAll(x => controller.OrderBy(c => c.Value.Type).Skip(1).Contains(x));
+                module.Controllers.RemoveAll(x => controller.OrderBy(c => c.Value.ControllerGroupName).Skip(1).Contains(x));
             }
         }
 
