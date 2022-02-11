@@ -49,10 +49,10 @@ public class ModuleApiDescriptionModel
         return Controllers[controller.Type] = controller;
     }
 
-    public ControllerApiDescriptionModel GetOrAddController(string name, string groupName, Type type, [CanBeNull]string apiVersion, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
+    public ControllerApiDescriptionModel GetOrAddController(string name, string groupName, bool isRemoteService, string apiVersion, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
     {
         var key = apiVersion.IsNullOrWhiteSpace() ? type.FullName : $"{apiVersion + "."}{type.FullName}";
-        return Controllers.GetOrAdd(key, () => ControllerApiDescriptionModel.Create(name, groupName, type, ignoredInterfaces));
+        return Controllers.GetOrAdd(key, () => ControllerApiDescriptionModel.Create(name, groupName, isRemoteService, apiVersion, type, ignoredInterfaces));
     }
 
     public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)

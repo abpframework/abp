@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Logging;
@@ -65,12 +66,16 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             }
         }
 
-        foreach (var (moduleName, module) in model.Modules)
+        foreach (var (_, module) in model.Modules)
         {
             var controllers = module.Controllers.GroupBy(x => x.Value.Type).ToList();
             foreach (var controller in controllers.Where(x => x.Count() > 1))
             {
-                module.Controllers.RemoveAll(x => controller.OrderBy(c => c.Value.ControllerGroupName).Skip(1).Contains(x));
+                var removedController = module.Controllers.RemoveAll(x => x.Value.IsRemoteService && controller.OrderBy(c => c.Value.ControllerGroupName).Skip(1).Contains(x));
+                foreach (var removed in removedController)
+                {
+                    Logger.LogInformation($"The controller named '{removed.Value.Type}' was removed from ApplicationApiDescriptionModel because it same with other controller.");
+                }
             }
         }
 
@@ -97,8 +102,9 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         var controllerModel = moduleModel.GetOrAddController(
             _options.ControllerNameGenerator(controllerType, setting),
             FindGroupName(controllerType) ?? apiDescription.GroupName,
-            controllerType,
+            apiDescription.IsRemoteService(),
             apiDescription.GetProperty<ApiVersion>()?.ToString(),
+            controllerType,
             _modelOptions.IgnoredInterfaces
         );
 
