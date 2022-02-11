@@ -82,6 +82,9 @@
                 var filterParamName = $(this).data("autocompleteFilterParamName");
                 var selectedText = $(this).data("autocompleteSelectedItemName");
                 var parentSelector = $(this).data("autocompleteParentSelector");
+                if(!parentSelector && $select.parents(".modal.fade").length === 1){
+                    parentSelector = ".modal.fade";
+                }
                 var name = $(this).attr("name");
                 var selectedTextInputName = name.substring(0, name.length - 1) + "_Text]";
                 var selectedTextInput = $('<input>', {
