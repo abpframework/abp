@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -97,7 +98,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             _options.ControllerNameGenerator(controllerType, setting),
             FindGroupName(controllerType) ?? apiDescription.GroupName,
             controllerType,
-            apiDescription.GroupName,
+            apiDescription.GetProperty<ApiVersion>()?.ToString(),
             _modelOptions.IgnoredInterfaces
         );
 
