@@ -4,7 +4,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Http.Client.ClientProxying;
 
-public class CurrentApiVersionInfo : ICurrentApiVersionInfo, ITransientDependency
+public class CurrentApiVersionInfo : ICurrentApiVersionInfo, ISingletonDependency
 {
     public ApiVersionInfo ApiVersionInfo => _currentApiVersionInfo.Value;
 
