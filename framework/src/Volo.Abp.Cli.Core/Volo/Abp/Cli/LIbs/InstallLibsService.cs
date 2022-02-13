@@ -16,6 +16,15 @@ namespace Volo.Abp.Cli.LIbs;
 
 public class InstallLibsService : IInstallLibsService, ITransientDependency
 {
+    private readonly static List<string> ExcludeDirectory = new List<string>()
+    {
+        "node_modules",
+        ".git",
+        ".idea",
+        Path.Combine("bin", "debug"),
+        Path.Combine("obj", "debug")
+    };
+
     public ICmdHelper CmdHelper { get; }
     public const string LibsDirectory = "./wwwroot/libs";
 
@@ -32,17 +41,10 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
     public async Task InstallLibsAsync(string directory)
     {
-        var projectFiles = Directory.GetFiles(directory, "*.csproj");
-        if (!projectFiles.Any())
+        var projectPaths = FindAllProjects(directory);
+        if (!projectPaths.Any())
         {
-            Logger.LogError("No project file found in the directory.");
-            return;
-        }
-
-        if (!await CanInstallLibs(directory))
-        {
-            Logger.LogWarning(
-                "abp install-libs command is available for MVC, Razor Page, and Blazor-Server UI types");
+            Logger.LogError("No project found in the directory.");
             return;
         }
 
@@ -52,16 +54,64 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             return;
         }
 
-        if (IsYarnAvailable())
+        Logger.LogInformation($"Found {projectPaths.Count} projects.");
+        foreach (var projectPath in projectPaths)
         {
-            RunYarn(directory);
-        }
-        else
-        {
-            RunNpmInstall(directory);
+            Logger.LogInformation($"{Path.GetDirectoryName(projectPath)}");
         }
 
-        await CleanAndCopyResources(directory);
+        foreach (var projectPath in projectPaths)
+        {
+            var projectDirectory = Path.GetDirectoryName(projectPath);
+
+            // angular
+            if (projectPath.EndsWith("angular.json"))
+            {
+                if (IsYarnAvailable())
+                {
+                    RunYarn(projectDirectory);
+                }
+                else
+                {
+                    RunNpmInstall(projectDirectory);
+                }
+            }
+
+            // MVC or BLAZOR SERVER
+            if (projectPath.EndsWith("csproj"))
+            {
+                if (IsYarnAvailable())
+                {
+                    RunYarn(projectDirectory);
+                }
+                else
+                {
+                    RunNpmInstall(projectDirectory);
+                }
+
+                await CleanAndCopyResources(projectDirectory);
+            }
+        }
+    }
+
+    private List<string> FindAllProjects(string directory)
+    {
+        return Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories)
+            .Union(Directory.GetFiles(directory, "angular.json", SearchOption.AllDirectories))
+            .Where(file => ExcludeDirectory.All(x => file.IndexOf(x, StringComparison.OrdinalIgnoreCase) == -1))
+            .Where(file =>
+            {
+                if (file.EndsWith("csproj"))
+                {
+                    using (var reader = File.OpenText(file))
+                    {
+                        return reader.ReadToEnd().Contains("Microsoft.NET.Sdk.Web");
+                    }
+                }
+                return true;
+            })
+            .OrderBy(x => x)
+            .ToList();
     }
 
     private async Task CleanAndCopyResources(string fileDirectory)
@@ -126,18 +176,6 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                 File.Copy(file.Path, destFilePath);
 
             }
-        }
-    }
-
-    private async Task<bool> CanInstallLibs(string fileDirectory)
-    {
-        var projectFiles = Directory.GetFiles(fileDirectory, "*.csproj");
-
-        using (var reader = File.OpenText(projectFiles[0]))
-        {
-            var projectFileContent = await reader.ReadToEndAsync();
-
-            return projectFileContent.Contains("Microsoft.NET.Sdk.Web");
         }
     }
 

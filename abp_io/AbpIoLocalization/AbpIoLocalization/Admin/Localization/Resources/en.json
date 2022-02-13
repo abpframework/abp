@@ -316,7 +316,7 @@
     "TrialLicenseStatusFilter": "Status",
     "TrialLicenseStartDateFilter": "Start date",
     "TrialLicenseEndDateFilter": "End date",
-    "FirsName": "First name",
+    "FirstName": "First name",
     "LastName": "Last name",
     "StartDate": "Start date",
     "EndDate": "End date",
@@ -355,6 +355,9 @@
     "SendWelcomeEmailSuccessMessage": "Welcome email sent successfully!",
     "PaymentRequestId": "Payment Request Id",
     "AdditionalDeveloperCount": "Additional developer count",
-    "LicensePrice": "License price"
+    "LicensePrice": "License price",
+    "PurchaseDate": "Purchase date",
+    "IsAbpBookDownloaded": "ABP book downloaded",
+    "IsMasteringAbpBookDownloadEnabled": "Abp book download enable"
   }
 }

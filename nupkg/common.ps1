@@ -38,6 +38,16 @@ function Seperator
 	Write-Host ("_" * 100)  -ForegroundColor gray 
 }
 
+function Get-Current-Version { 
+	$commonPropsFilePath = resolve-path "../common.props"
+	$commonPropsXmlCurrent = [xml](Get-Content $commonPropsFilePath ) 
+	$currentVersion = $commonPropsXmlCurrent.Project.PropertyGroup.Version.Trim()
+	return $currentVersion
+}
+
+function Get-Current-Branch {
+	return git branch --show-current
+}	   
 
 function Read-File {
 	param(
