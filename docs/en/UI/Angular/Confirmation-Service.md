@@ -75,7 +75,9 @@ const options: Partial<Confirmation.Options> = {
   yesText: 'Confirm',
   messageLocalizationParams: ['Demo'],
   titleLocalizationParams: [],
-};
+  icon: 'fa fa-info-circle',
+  iconTemplate : '<img src="custom-image-path.jpg" alt=""/>'
+} 
 
 this.confirmation.warn(
   'AbpIdentity::RoleDeletionConfirmationMessage',
@@ -91,6 +93,8 @@ this.confirmation.warn(
 - `yesText` is the text of the confirmation button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`.
 - `messageLocalizationParams` is the interpolation parameters for the localization of the message.
 - `titleLocalizationParams` is the interpolation parameters for the localization of the title.
+- `icon` is the custom class of the icon. Default value is `undefined`.
+- `iconTemplate` is the template for icon. Default value is `undefined`.
 
 With the options above, the confirmation popup looks like this:
 

@@ -1,4 +1,5 @@
 import { LocalizationParam } from '@abp/ng.core';
+import {TemplateRef} from "@angular/core";
 
 export namespace Confirmation {
   export interface Options {
@@ -10,6 +11,8 @@ export namespace Confirmation {
     hideYesBtn?: boolean;
     cancelText?: LocalizationParam;
     yesText?: LocalizationParam;
+    icon?: string;
+    iconTemplate?:string | TemplateRef<any>
   }
 
   export interface DialogData {

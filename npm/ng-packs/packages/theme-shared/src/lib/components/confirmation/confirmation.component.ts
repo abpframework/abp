@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
-import { Confirmation } from '../../models/confirmation';
+import {Component} from '@angular/core';
+import {ReplaySubject} from 'rxjs';
+import {Confirmation} from '../../models/confirmation';
 
 @Component({
   selector: 'abp-confirmation',
@@ -20,18 +20,30 @@ export class ConfirmationComponent {
     this.clear(status);
   }
 
-  getIconClass({ severity }: Confirmation.DialogData): string {
+  getIconClass({severity, options}: Confirmation.DialogData): string {
+    if (options && options.icon) {
+      return options.icon
+    }
     switch (severity) {
       case 'info':
-        return 'fa-info-circle';
+        return 'fa fa-info-circle';
       case 'success':
-        return 'fa-check-circle';
+        return 'fa fa-check-circle';
       case 'warning':
-        return 'fa-exclamation-triangle';
+        return 'fa fa-exclamation-triangle';
       case 'error':
-        return 'fa-times-circle';
+        return 'fa fa-times-circle';
       default:
-        return 'fa-question-circle';
+        return 'fa fa-question-circle';
     }
   }
+
+  isCustomIconExists({options}: Confirmation.DialogData): boolean {
+    return !!(options && (options.iconTemplate || options.icon))
+  }
+
+  isIconTemplateExits({options}: Confirmation.DialogData): boolean {
+    return !!(options && options.iconTemplate)
+  }
+
 }
