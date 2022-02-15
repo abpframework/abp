@@ -170,7 +170,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
     {
         if (ControllerWithAttributeRoute.Contains(controller))
         {
-            if (controller.ApiExplorer.GroupName.IsNullOrEmpty())
+            if (Options.ChangeControllerModelApiExplorerGroupName && controller.ApiExplorer.GroupName.IsNullOrEmpty())
             {
                 controller.ApiExplorer.GroupName = controller.ControllerName;
             }
