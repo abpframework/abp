@@ -1,5 +1,4 @@
 import { LocalizationParam } from '@abp/ng.core';
-import {TemplateRef} from "@angular/core";
 
 export namespace Confirmation {
   export interface Options {

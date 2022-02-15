@@ -2,8 +2,8 @@ import { ContentProjectionService, LocalizationParam, PROJECTION_STRATEGY } from
 import { ComponentRef, Injectable } from '@angular/core';
 import { fromEvent, Observable, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
-import { ConfirmationComponent } from '../components/confirmation/confirmation.component';
-import { Confirmation } from '../models/confirmation';
+import { ConfirmationComponent } from '../components';
+import { Confirmation } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
@@ -93,7 +93,7 @@ export class ConfirmationService {
         debounceTime(150),
         filter((key: KeyboardEvent) => key && key.key === 'Escape'),
       )
-      .subscribe(_ => {
+      .subscribe(() => {
         this.clear();
       });
   }
