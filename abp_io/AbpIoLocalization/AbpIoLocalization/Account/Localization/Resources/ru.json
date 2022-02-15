@@ -10,6 +10,7 @@
     "CommercialHomePage": "Главная страница коммерческой версии",
     "CommercialSupportWebSite": "Сайт коммерческой поддержки",
     "CommunityWebSite": "Веб-сайт сообщества ABP",
-    "ManageAccount": "Моя учетная запись | ABP.IO"
+    "ManageAccount": "Моя учетная запись | ABP.IO",
+    "ManageYourAccount": "Управление вашей учетной записью"
   }
 }

@@ -590,6 +590,10 @@
         {
           "text": "Swagger Integration",
           "path": "API/Swagger-Integration.md"
+        },
+        {
+          "text": "API Versioning",
+          "path": "API/API-Versioning.md"
         }
       ]
     },
