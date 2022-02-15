@@ -36,7 +36,64 @@ After we've run the application and signed in, we can navigate to **/swagger** t
 
 In our scenario, we will hide endpoints that start with "/api/abp". So let's start to do this.
 
-> In this sample project, we only hide our endpoints that start with the "/api/abp" prefix by definining it in our [CustomSwaggerFilter](https://github.com/EngincanV/ABP-Hide-Swagger-Endpoint-Demo/blob/main/src/SwaggerSettingsDemo.Web/Filters/CustomSwaggerFilter.cs#L29). If you want to hide some other endpoints, you can update the class.
+### Creating a Document Filter To Hide ABP Related Endpoints
+
+> In this sample project, we'll only hide our endpoints that start with the "/api/abp" prefix by defining it in our [CustomSwaggerFilter](https://github.com/EngincanV/ABP-Hide-Swagger-Endpoint-Demo/blob/main/src/SwaggerSettingsDemo.Web/Filters/CustomSwaggerFilter.cs#L28) class. If you want to hide some other endpoints, you can update the class.
+
+To hide/show ABP related endpoints on Swagger UI, we can create a [`DocumentFilter`](https://github.com/domaindrivendev/Swashbuckle.AspNetCore#document-filters). By creating a document filter, we can have full control over the endpoints that need to be shown.
+
+* Create a document filter class named `CustomSwaggerFilter`(/Filters/CustomSwaggerFilter.cs) in the `.Web` layer:
+
+> For now, we'll implement this class as hard-coded without checking any settings. Then we'll define a setting for this purpose, and add a new setting management section to manage it on runtime (Enable/Disable).
+
+```csharp
+using System.Linq;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace SwaggerSettingsDemo.Web.Filters;
+
+public class CustomSwaggerFilter : IDocumentFilter
+{
+    public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+    {
+        //remove paths those start with /api/abp prefix
+        swaggerDoc.Paths
+            .Where(x => x.Key.ToLowerInvariant().StartsWith("/api/abp"))
+            .ToList()
+            .ForEach(x => swaggerDoc.Paths.Remove(x.Key));
+    }
+}
+```
+
+We've created a simple class that implements `IDocumentFilter.Apply` method. In that method, we simply remove paths those start with "/api/abp" prefix. You can customize this expression for your needs, I just wanted to hide endpoints those start with "/api/abp" prefix as a sample.
+
+* Then, we need to add this document filter as a swagger document filter. To do this we need to open the `ConfigureSwaggerServices` method in the `*WebModule.cs` class and update the content as below:
+
+```csharp
+private void ConfigureSwaggerServices(IServiceCollection services)
+    {
+        services.AddAbpSwaggerGen(
+            options =>
+            {
+                //...
+
+                //add a new document filter
+                options.DocumentFilter<CustomSwaggerFilter>(); 
+            }
+        );
+    }
+```
+
+Now we can run the application again and navigate to **/swagger** endpoint to see endpoints.
+
+![](./swagger-document-filter.png)
+
+As you can see in the above image, two endpoints are hidden now (**AbpApiDefinition** and **AbpApplicationConfiguration**).
+
+Let's make it more dynamic and add a setting management section to our **/Settings** page. By doing that, we can dynamically show/hide ABP-related endpoints by checking setting values and applying filtering to Swagger UI on runtime.
+
+### Defining Settings 
 
 * Firstly, create a class named `SwaggerSettingConsts` (under `*.Domain.Shared` project):
 
@@ -83,9 +140,11 @@ public class SwaggerSettingsDemoSettingDefinitionProvider : SettingDefinitionPro
 }
 ```
 
-Here we've defined a setting to use in our application.
+Here we've defined a setting to use it in our application.
 
 > ABP automatically discovers this class and registers the setting definitions.
+
+### Creating Application Service Methods for Swagger Setting Management
 
 After defining a setting, now we can create an application service interface and add two methods to simply get or update the value of our setting.
 
@@ -137,11 +196,15 @@ public class SwaggerSettingAppService : SwaggerSettingsDemoAppService, ISwaggerS
 }
 ```
 
+> Here, I didn't make any permission check to keep the article as short as possible. So, if you want to use it on your system, you should define permissions and make permission checks, in these application service methods.
+
 We've injected two interfaces for the application service implementation: `ISettingProvider` and `ISettingManager`
 
 > **ISettingProvider**: Used for getting the value of a setting or getting the values of all settings. It's recommended to use it to read the setting values because it implements caching.
 
 > **ISettingManager**: Used for getting and setting the values of the settings.
+
+### Creating a New Setting Management Section
 
 After implementing our application service, now we can add a new group to our "Setting Management UI".
 
@@ -307,9 +370,13 @@ After all these steps, if we run our application and navigate to **/SettingManag
 
 ![](./swagger-settings.png)
 
-To hide/show ABP related endpoints on Swagger UI, we can create a [`DocumentFilter`](https://github.com/domaindrivendev/Swashbuckle.AspNetCore#document-filters). By creating a document filter, we can have full control over the endpoints that need to be shown.
+### Update the Document Filter 
 
-* Create a document filter class named `CustomSwaggerFilter`(/Filters/CustomSwaggerFilter.cs) in the `.Web` layer:
+We've already defined a document filter but it is hard-coded, in other words, it hides ABP-related endpoints in every case without checking the setting value.
+
+So, we need to update the `CustomSwaggerFilter` class and apply filtering only if the setting value is true. 
+
+* To do that, update the `CustomSwaggerFilter` method as below:
 
 ```csharp
 using System.Linq;
@@ -346,32 +413,15 @@ public class CustomSwaggerFilter : IDocumentFilter
 }
 ```
 
-We've created a simple class that implements `IDocumentFilter.Apply` method. And in that method, we simply need to get our setting value to see whether should we enable hiding ABP related endpoints or not. To do this, we've used the `ISwaggerSettingAppService.GetSettingByNameAsync` method to get the setting value, but as you can see we've wrapped it with the `AsyncHelper.RunSync` method because `IDocumentFilter.Apply` is not an async method so we need to run this method synchronously.
+Here we simply need to get our setting value to see whether should we enable hiding ABP related endpoints or not. We've used the `ISwaggerSettingAppService.GetSettingByNameAsync` method to get the setting value, but as you can see we've wrapped it with the `AsyncHelper.RunSync` method because `IDocumentFilter.Apply` is not an async method so we need to run this method synchronously.
 
 After getting the setting value, we need to ensure that it's both a valid and true setting value, otherwise we don't need to filter the endpoints and show all of them.
 
-If the setting value is true, we can simply remove the paths that start with "/api/abp" prefix.
+If the setting value is true, we can simply remove the paths that start with the "/api/abp" prefix as before.
 
 > ABP provides us a class named AsyncHelper and this class provides some helper methods to work with async methods. E.g. RunSync method in here runs the async method synchronously.
 
-
-* Finally, we can add this document filter as a swagger document filter. To do this we need to open the `ConfigureSwaggerServices` method in the `*WebModule.cs` class and update the content as below:
-
-```csharp
-private void ConfigureSwaggerServices(IServiceCollection services)
-    {
-        services.AddAbpSwaggerGen(
-            options =>
-            {
-                //...
-
-                options.DocumentFilter<CustomSwaggerFilter>(); //add a new document filter
-            }
-        );
-    }
-```
-
-That's it. Now we can open the Setting Management page and enable/disable the swagger option and see its effect.
+That's it. Now we can open the Setting Management page and enable/disable the swagger option by selecting the checkbox and show/hide ABP-related endpoints on runtime.
 
 ![](./swagger-hide-endpoints.gif)
 
