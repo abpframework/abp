@@ -12,7 +12,7 @@ export namespace Confirmation {
     cancelText?: LocalizationParam;
     yesText?: LocalizationParam;
     icon?: string;
-    iconTemplate?:string | TemplateRef<any>
+    iconTemplate?:string
   }
 
   export interface DialogData {

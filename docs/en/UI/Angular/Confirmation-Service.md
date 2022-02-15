@@ -75,8 +75,9 @@ const options: Partial<Confirmation.Options> = {
   yesText: 'Confirm',
   messageLocalizationParams: ['Demo'],
   titleLocalizationParams: [],
-  icon: 'fa fa-info-circle',
-  iconTemplate : '<img src="custom-image-path.jpg" alt=""/>'
+  // You can customize icon 
+  // icon: 'fa fa-exclamation-triangle', // or
+  // iconTemplate : '<img src="custom-image-path.jpg" alt=""/>'
 } 
 
 this.confirmation.warn(
