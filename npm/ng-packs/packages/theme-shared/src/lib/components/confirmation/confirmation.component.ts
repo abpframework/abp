@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Confirmation } from '../../models/confirmation';
-//
+
 @Component({
   selector: 'abp-confirmation',
   templateUrl: './confirmation.component.html',
