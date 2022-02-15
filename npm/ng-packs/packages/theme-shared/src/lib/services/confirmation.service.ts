@@ -1,9 +1,10 @@
 import { ContentProjectionService, LocalizationParam, PROJECTION_STRATEGY } from '@abp/ng.core';
-import { ComponentRef, Injectable } from '@angular/core';
+import { ComponentRef, Inject, Injectable } from '@angular/core';
 import { fromEvent, Observable, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationComponent } from '../components/confirmation/confirmation.component';
 import { Confirmation } from '../models/confirmation';
+import { CONFIRMATION_ICONS, ConfirmationIcons } from '../tokens/confirmation-icons.token';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
@@ -17,13 +18,17 @@ export class ConfirmationService {
     this.status$.next(status);
   };
 
-  constructor(private contentProjectionService: ContentProjectionService) {}
+  constructor(
+    private contentProjectionService: ContentProjectionService,
+    @Inject(CONFIRMATION_ICONS) private confirmationIcons: ConfirmationIcons,
+  ) {}
 
   private setContainer() {
     this.containerComponentRef = this.contentProjectionService.projectContent(
       PROJECTION_STRATEGY.AppendComponentToBody(ConfirmationComponent, {
         confirmation$: this.confirmation$,
         clear: this.clear,
+        icons: this.confirmationIcons,
       }),
     );
 
