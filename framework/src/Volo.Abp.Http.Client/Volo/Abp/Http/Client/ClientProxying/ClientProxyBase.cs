@@ -67,7 +67,7 @@ public class ClientProxyBase<TService> : ITransientDependency
         var actionArguments = action.Parameters.GroupBy(x => x.NameOnMethod).ToList();
         if (action.SupportedVersions.Any())
         {   //TODO: make names configurable
-            actionArguments.RemoveAll(x => x.Key != "api-version" && x.Key != "apiVersion");
+            actionArguments.RemoveAll(x => x.Key == "api-version" || x.Key == "apiVersion");
         }
 
         return new ClientProxyRequestContext(
