@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { ConfirmationIcons } from '../tokens/confirmation-icons.token';
 
 export interface RootParams {
-  httpErrorConfig: HttpErrorConfig;
+  httpErrorConfig?: HttpErrorConfig;
   validation?: Partial<Validation.Config>;
   confirmationIcons?: Partial<ConfirmationIcons>;
 }

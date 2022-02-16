@@ -131,6 +131,25 @@ The open confirmation popup can be removed manually via the `clear` method:
 this.confirmation.clear();
 ```
 
+### How to Change Icons of The Confirmation Popup
+
+You can change icons with the token of "confirmationIcons" in ThemeSharedModule in the app.module.ts. The changes will affect  all confirmation popup in the project.
+
+```js
+...
+ThemeSharedModule.forRoot({
+  confirmationIcons: {
+    info: 'fa fa-info-circle',
+    success: 'fa fa-check-circle',
+    warning: 'fa fa-exclamation-triangle',
+    error: 'fa fa-times-circle',
+    default: 'fa fa-question-circle',
+  },
+}),
+...
+```
+
+
 ## API
 
 ### success

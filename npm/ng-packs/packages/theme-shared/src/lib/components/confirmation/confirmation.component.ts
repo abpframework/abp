@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Confirmation } from '../../models/confirmation';
-import { ConfirmationIcons } from '../../tokens/confirmation-icons.token';
+import { CONFIRMATION_ICONS, ConfirmationIcons } from '../../tokens/confirmation-icons.token';
 
 @Component({
   selector: 'abp-confirmation',
@@ -9,12 +9,13 @@ import { ConfirmationIcons } from '../../tokens/confirmation-icons.token';
   styleUrls: ['./confirmation.component.scss'],
 })
 export class ConfirmationComponent {
+  constructor(@Inject(CONFIRMATION_ICONS) private icons: ConfirmationIcons) {}
+
   confirm = Confirmation.Status.confirm;
   reject = Confirmation.Status.reject;
   dismiss = Confirmation.Status.dismiss;
 
   confirmation$!: ReplaySubject<Confirmation.DialogData>;
-  icons: ConfirmationIcons;
 
   clear!: (status: Confirmation.Status) => void;
 

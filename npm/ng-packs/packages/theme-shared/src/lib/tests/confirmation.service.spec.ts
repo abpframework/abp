@@ -13,6 +13,7 @@ import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from '../tokens/confir
   entryComponents: [ConfirmationComponent],
   declarations: [ConfirmationComponent],
   imports: [CoreTestingModule.withConfig()],
+  providers: [{ provide: CONFIRMATION_ICONS, useValue: DEFAULT_CONFIRMATION_ICONS }],
 })
 export class MockModule {}
 
@@ -22,7 +23,6 @@ describe('ConfirmationService', () => {
   const createService = createServiceFactory({
     service: ConfirmationService,
     imports: [CoreTestingModule.withConfig(), MockModule],
-    providers: [{ provide: CONFIRMATION_ICONS, useValue: DEFAULT_CONFIRMATION_ICONS }],
   });
 
   beforeEach(() => {
