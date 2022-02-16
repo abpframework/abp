@@ -365,6 +365,23 @@
     "Amount": "Amount",
     "GenerateCustomPaymentLink": "Generate Custom Payment Link",
     "GeneratedPaymentLink": "Generated Payment Link",
-    "CopyText": "Copy Text"
+    "CopyText": "Copy Text",
+    "Permission:CommunityEvents": "Events",
+    "Menu:Events": "Events",
+    "Events": "Events",
+    "EventType": "Event Type",
+    "Number": "Number",
+    "RegistrationURL": "Registration URL",
+    "URL": "URL",
+    "EventDeletionConfirmationMessage": "Are you sure you want to delete this event?",
+    "Enum:EventType:0": "Community Talks",
+    "CreateAnEvent": "Create an event",
+    "Permission:CommunitySpeakers": "Speakers",
+    "CreateASpeaker": "Create a speaker",
+    "Speakers": "Speakers",
+    "Image": "Image",
+    "GithubURL": "Github URL",
+    "SpeakerDeletionConfirmationMessage": "Are you sure you want to delete this speaker?",
+    "Menu:Speakers": "Speakers"
   }
 }
