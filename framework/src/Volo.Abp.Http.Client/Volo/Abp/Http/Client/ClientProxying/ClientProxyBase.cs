@@ -64,13 +64,15 @@ public class ClientProxyBase<TService> : ITransientDependency
             throw new AbpException($"The API description of the {typeof(TService).FullName}.{methodName} method was not found!");
         }
 
+        var actionArguments = action.Parameters.GroupBy(x => x.NameOnMethod).ToList();
+        if (action.SupportedVersions.Any())
+        {   //TODO: make names configurable
+            actionArguments.RemoveAll(x => x.Key != "api-version" && x.Key != "apiVersion");
+        }
 
         return new ClientProxyRequestContext(
             action,
-            action.Parameters
-                .GroupBy(x => x.NameOnMethod)
-                //TODO: make names configurable
-                .Where(x => action.SupportedVersions.Any() && x.Key != "api-version" && x.Key !="apiVersion")
+                actionArguments
                 .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments.Values[i].Value))
                 .ToDictionary(x => x.Key, x => x.Value),
             typeof(TService));
