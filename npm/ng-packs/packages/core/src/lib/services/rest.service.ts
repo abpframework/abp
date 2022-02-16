@@ -51,14 +51,15 @@ export class RestService {
   }
 
   private getParams(params: Rest.Params, encoder?: HttpParameterCodec): HttpParams {
-    const httpParams = encoder ? new HttpParams({ encoder }) : new HttpParams();
-    return Object.keys(params).reduce((acc, key) => {
+    const filteredParams = Object.keys(params).reduce((acc, key) => {
       const value = params[key];
-
       if (isUndefinedOrEmptyString(value)) return acc;
       if (value === null && !this.options.sendNullsAsQueryParam) return acc;
-      acc = acc.set(key, value);
+      acc[key] = value;
       return acc;
-    }, httpParams);
+    }, {});
+    return encoder
+      ? new HttpParams({ encoder, fromObject: filteredParams })
+      : new HttpParams({ fromObject: filteredParams });
   }
 }
