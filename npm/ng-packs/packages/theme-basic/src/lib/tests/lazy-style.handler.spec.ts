@@ -4,7 +4,7 @@ import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { of } from 'rxjs';
 import { BOOTSTRAP, createLazyStyleHref, LazyStyleHandler } from '../handlers';
 
-const languageChange$ = of({ payload: 'en' });
+const currentLang$ = of({ payload: 'en' });
 
 describe('LazyStyleHandler', () => {
   let spectator: SpectatorService<LazyStyleHandler>;
@@ -17,7 +17,7 @@ describe('LazyStyleHandler', () => {
       DocumentDirHandlerService,
       {
         provide: LocalizationService,
-        useValue: { currentLang: 'en', languageChange$ },
+        useValue: { currentLang: 'en', currentLang$ },
       },
     ],
   });
