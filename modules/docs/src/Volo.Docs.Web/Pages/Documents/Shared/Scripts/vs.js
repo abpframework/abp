@@ -124,18 +124,15 @@
     });
 
     function handleCustomScrolls() {
-        var wWidth = $(window).width();
-        if (wWidth > 766) {
-            $('#sidebar-scroll').mCustomScrollbar({
-                theme: 'minimal',
-                alwaysShowScrollbar: 0,
-            });
+        $('#sidebar-scroll').mCustomScrollbar({
+            theme: 'minimal',
+            alwaysShowScrollbar: 0,
+        });
 
-            $('#scroll-index').mCustomScrollbar({
-                theme: 'minimal-dark',
-                alwaysShowScrollbar: 0,
-            });
-        }
+        $('#scroll-index').mCustomScrollbar({
+            theme: 'minimal-dark',
+            alwaysShowScrollbar: 0,
+        });
     }
 
     window.Toc.helpers.createNavList = function () {
