@@ -490,6 +490,13 @@
     "ABPFrameworkEBook": "E-Book: Mastering ABP Framework",
     "MasteringAbpFrameworkEBookDescription": "Included within your ABP Commercial license",
     "Volo.AbpIo.Domain:070000": "The organization name can only contain latin letters, numbers, dots and hyphens!",
-    "Volo.AbpIo.Domain:070001": "The company name can only contain latin letters, numbers, dots, space and hyphens!"
+    "Volo.AbpIo.Domain:070001": "The company name can only contain latin letters, numbers, dots, space and hyphens!",
+    "SelectTheTraining": "Select the training",
+    "ChoseTrainingPlaceholder": "Chose the training...",
+    "ContactUsToGetQuote": "Contact us to get a quote",
+    "ForMoreInformationClickHere": "For more information, click <a href='{0}'>here.</a>",
+    "IsGetOnboardingTraining": "Do you want to take onboarding & web application development training?",
+    "OnboardingWebApplicationDevelopmentTrainingMessage": "To schedule your training calendar, please contact {0} after creating the organization",
+    "Volo.AbpIo.Domain:080000": "There is already a purchase item named \"{Name}\""
   }
 }

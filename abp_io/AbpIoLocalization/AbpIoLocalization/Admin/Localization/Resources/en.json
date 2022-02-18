@@ -365,6 +365,12 @@
     "Amount": "Amount",
     "GenerateCustomPaymentLink": "Generate Custom Payment Link",
     "GeneratedPaymentLink": "Generated Payment Link",
-    "CopyText": "Copy Text"
+    "CopyText": "Copy Text",
+    "ShowPurchaseItemsOfOrganizations": "Purchase Items",
+    "Enum:OrganizationPurchaseState:0": "Not delivered",
+    "Enum:OrganizationPurchaseState:1": "Delivered",
+    "PurchaseItems": "Purchase Items",
+    "SuccessfullyUpdated": "Successfully updated",
+    "SuccessfullyAdded": "Successfully added"
   }
 }
