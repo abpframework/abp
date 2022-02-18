@@ -55,7 +55,10 @@ public partial class PageHeader : ComponentBase
             if (!Options.Value.RenderToolbar)
             {
                 PageLayout.ToolbarItems.Clear();
-                PageLayout.ToolbarItems.AddRange(toolbarItems);
+                foreach (var item in toolbarItems)
+                {
+                    PageLayout.ToolbarItems.Add(item);
+                }
                 return;
             }
 
