@@ -285,7 +285,7 @@ namespace Acme.BookStore
 using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Books
 {
     public class BookDto : AuditedEntityDto<Guid>
     {
