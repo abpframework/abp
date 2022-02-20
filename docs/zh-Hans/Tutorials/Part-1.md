@@ -197,7 +197,7 @@ dotnet ef migrations add Created_Book_Entity
 
 ![bookstore-efcore-migration](./images/bookstore-efcore-migration.png)
 
-> 如果你使用Visual Studio, 你也许想要在*包管理控制台(PMC)*中使用 `Add-Migration Created_Book_Entity -c BookStoreMigrationsDbContext` 和 `Update-Database -c BookStoreMigrationsDbContext` 命令. 确保 {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} 是启动项目并且 `Acme.BookStore.EntityFrameworkCore.DbMigrations` 是 PMC 的*默认项目*.
+> 如果你使用Visual Studio, 你也许想要在*包管理控制台(PMC)*中使用 `Add-Migration Created_Book_Entity -c BookStoreDbContext` 和 `Update-Database -Context BookStoreDbContext` 命令. 确保 {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} 是启动项目并且 `Acme.BookStore.EntityFrameworkCore.DbMigrations` 是 PMC 的*默认项目*.
 
 {{end}}
 
