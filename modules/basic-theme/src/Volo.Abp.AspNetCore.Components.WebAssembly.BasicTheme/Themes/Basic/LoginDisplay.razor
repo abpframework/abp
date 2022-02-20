@@ -11,7 +11,7 @@
 <AuthorizeView>
     <Authorized>
         <Dropdown RightAligned="true">
-            <DropdownToggle Color="Color.None">
+            <DropdownToggle Color="Color.Default">
                 @if (CurrentTenant.Name != null)
                 {
                     <span><i>@CurrentTenant.Name</i>\@CurrentUser.UserName</span>

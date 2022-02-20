@@ -11,7 +11,7 @@
 
 <Card>
     <CardBody>
-        <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Left" Pills="true">
+        <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Start" Pills="true">
             <Items>
                 @foreach (var group in SettingComponentCreationContext.Groups)
                 {
