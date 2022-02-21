@@ -34,6 +34,8 @@ public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
 
     [Parameter] public int CurrentPage { get; set; } = 1;
 
+    [Parameter] public string Class { get; set; }
+
     [Inject]
     public IStringLocalizerFactory StringLocalizerFactory { get; set; }
 
