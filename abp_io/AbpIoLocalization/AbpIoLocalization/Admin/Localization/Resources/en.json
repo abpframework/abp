@@ -359,7 +359,7 @@
     "PurchaseDate": "Purchase date",
     "IsAbpBookDownloaded": "ABP book downloaded",
     "IsMasteringAbpBookDownloadEnabled": "ABP Book download enabled",
-    "Permission:Accounting:CustomPaymentLinkGenerator": "Generate Custom Payment Link",
+    "Permission:Accounting:CustomPaymentLinkGenerator": "Custom Payment Link",
     "CustomPaymentLink": "Custom Payment Link",
     "Menu:CustomPaymentLink": "Custom Payment Link",
     "Amount": "Amount",
