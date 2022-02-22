@@ -596,5 +596,5 @@ In this step we have to store access token & refresh token for future requests.
 
 The purpose of this arcitle is connecting to ABP backend with access token and it's working properly.
 
-I'm planning to integrate HttpApi.Client library of backend project instead of making requests manually. I'll get inspired by [hikalkan/maui-abp-playing](https://github.com/hikalkan/maui-abp-playing) repo to achive that.
+I'm planning to integrate HttpApi.Client library of backend project instead of making requests manually as a second part of this article. I'll get inspired by [hikalkan/maui-abp-playing](https://github.com/hikalkan/maui-abp-playing) repo to achive that.
 
