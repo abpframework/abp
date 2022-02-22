@@ -115,6 +115,7 @@ successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
 ![bookstore-localization-files](./images/bookstore-localization-files-v2.png)
 
 打开 `en.json` (*英文翻译*)文件并更改内容,如下所示:
+(ps:简体中文翻译请打开`zh-Hans.json`,并将"Texts"对象中对应的值替换为中文)
 
 ````json
 {
