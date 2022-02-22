@@ -132,7 +132,7 @@ namespace Acme.BookStore.Web.Pages.Books
 </abp-dynamic-form>
 ````
 
-* 这个 modal 使用 `abp-dynamic-form` [tag Helper](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) 根据 `CreateBookViewModel` 类自动构建了表单.
+* 这个 modal 使用 `abp-dynamic-form` [tag Helper](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) 根据 `CreateUpdateBookDto` 类自动构建了表单.
 * `abp-model` 指定了 `Book` 属性为模型对象.
 * `data-ajaxForm` 设置了表单通过AJAX提交,而不是经典的页面回发.
 * `abp-form-content` tag helper 作为表单控件渲染位置的占位符 (这是可选的,只有你在 `abp-dynamic-form` 中像本示例这样添加了其他内容才需要).
