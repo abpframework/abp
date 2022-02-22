@@ -8,7 +8,8 @@ public class LocalizationResourceContributorList : List<ILocalizationResourceCon
 {
     public LocalizedString GetOrNull(string cultureName, string name)
     {
-        foreach (var contributor in this.AsQueryable().Reverse())
+        this.Reverse();
+        foreach (var contributor in this)
         {
             var localString = contributor.GetOrNull(cultureName, name);
             if (localString != null)
