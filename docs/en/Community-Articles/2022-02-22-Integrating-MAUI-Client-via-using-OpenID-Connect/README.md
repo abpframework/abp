@@ -331,7 +331,7 @@ Each platform (UWP, OSX, iOS and Android) requires some configuration to use aut
 - Run the Application and perform a login operation.
 AccessToken will be retrieved.
 
-    <img src="art/android-login-demo.gif" height="640">
+    ![abp-maui-android-openid-connect](art/android-login-demo.gif)
 
 ---
 
@@ -382,10 +382,11 @@ AccessToken will be retrieved.
  > You'll find it at the top of the editor.
  > ![abp-maui-example-compiler-select](art/compiler-select.png)
 
-<img src="art/ios-login-demo.gif" height="640">
 
+![abp-maui-ios-openid-connect](art/ios-login-demo.gif)
 
-<img src="art/macos-login-demo.gif" width="100%">
+![abp-maui-MacCatalyst-openid-connect](art/macos-login-demo.gif)
+
 
 ---
 
