@@ -102,6 +102,7 @@
     "Speakers": "Speakers",
     "PreviousEvents": "Previous Events",
     "WatchTheEvent": "Watch the Event",
-    "RegisterNow": "Register Now"
+    "RegisterNow": "Register Now",
+    "ThereIsNoEvent": "There is no event."
   }
 }
