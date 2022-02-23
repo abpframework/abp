@@ -81,6 +81,46 @@
             {
               "text": "第三章: 集成测试",
               "path": "Tutorials/Part-3.md"
+            },
+            {
+              "text": "1: 创建服务端",
+              "path": "Tutorials/Part-1.md"
+            },
+            {
+              "text": "2: 图书列表页面",
+              "path": "Tutorials/Part-2.md"
+            },
+            {
+              "text": "3:创建,更新和删除书籍",
+              "path": "Tutorials/Part-3.md"
+            },
+            {
+              "text": "4: 集成测试",
+              "path": "Tutorials/Part-4.md"
+            },
+            {
+              "text": "5: 授权",
+              "path": "Tutorials/Part-5.md"
+            },
+            {
+              "text": "6: 作者:领域层",
+              "path": "Tutorials/Part-6.md"
+            },
+            {
+              "text": "7: 作者:数据库集成",
+              "path": "Tutorials/Part-7.md"
+            },
+            {
+              "text": "8: 作者:应用服务层",
+              "path": "Tutorials/Part-8.md"
+            },
+            {
+              "text": "9: 作者:用户界面",
+              "path": "Tutorials/Part-9.md"
+            },
+            {
+              "text": "10: 图书-作者关系",
+              "path": "Tutorials/Part-10.md"
             }
           ]
         },
