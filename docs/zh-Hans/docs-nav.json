@@ -71,19 +71,7 @@
           "text": "应用开发",
           "items": [
             {
-              "text": "第一章: 创建新解决方案和列表页",
-              "path": "Tutorials/Part-1.md"
-            },
-            {
-              "text": "第二章: 增删改查操作",
-              "path": "Tutorials/Part-2.md"
-            },
-            {
-              "text": "第三章: 集成测试",
-              "path": "Tutorials/Part-3.md"
-            },
-            {
-              "text": "1: 创建服务端",
+              "text": "1: 创建应用服务端",
               "path": "Tutorials/Part-1.md"
             },
             {
