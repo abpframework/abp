@@ -3,7 +3,7 @@ using Volo.Abp.Swashbuckle;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-public static class SwaggerGenOptionsExtensions
+public static class AbpSwaggerGenOptionsExtensions
 {
     public static void HideAbpEndpoints(this SwaggerGenOptions swaggerGenOptions)
     {
