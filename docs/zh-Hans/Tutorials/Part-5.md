@@ -122,7 +122,7 @@ namespace Acme.BookStore.Permissions
 "Permission:Books.Delete": "Deleting the books"
 ````
 
-> 本地化键名可以是任意的, 并没有强制的规则. 但我们推荐上面使用的约定.
+> 本地化键名可以是任意的, 并没有强制的规则. 但我们推荐上面使用的约定. 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
 
 ### 权限管理界面
 
