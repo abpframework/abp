@@ -381,6 +381,8 @@ authorsPermission.AddChild(
 "Permission:Authors.Delete": "Deleting the authors"
 ````
 
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
+
 ## 对象到对象映射
 
 `AuthorAppService` 使用 `ObjectMapper` 将 `Author` 对象 转换为 `AuthorDto` 对象. 所以, 我们需要在 AutoMapper 配置中定义映射.
