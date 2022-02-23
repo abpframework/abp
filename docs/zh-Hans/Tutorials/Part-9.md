@@ -219,6 +219,8 @@ $(function () {
 "NewAuthor": "New author"
 ````
 
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
+
 注意我们加入了额外的键. 它们会在下面的小节中被使用.
 
 ### 加入主菜单
@@ -821,6 +823,8 @@ export class AuthorComponent implements OnInit {
 "NewAuthor": "New author"
 ````
 
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
+
 ### 运行应用程序
 
 运行并登录应用程序. **因为你还没有权限, 所以不能看见菜单项**. 转到 `Identity/Roles` 页面, 点击 *操作* 按钮并选择**管理员角色**的*权限*操作:
@@ -1227,6 +1231,8 @@ if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
 "BirthDate": "Birth date",
 "NewAuthor": "New author"
 ````
+
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
 
 ### 运行应用程序
 

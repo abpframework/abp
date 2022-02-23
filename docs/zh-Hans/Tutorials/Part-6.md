@@ -231,6 +231,8 @@ namespace Acme.BookStore
 "BookStore:00001": "There is already an author with the same name: {name}"
 ````
 
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
+
 当 `AuthorAlreadyExistsException` 被抛出, 终端用户将会在UI上看到组织好的错误消息.
 
 ## IAuthorRepository
