@@ -37,21 +37,32 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
+        //Role to which the user belongs
         var query = from userRole in dbContext.Set<IdentityUserRole>()
                     join role in dbContext.Roles on userRole.RoleId equals role.Id
                     where userRole.UserId == id
-                    select role.Name;
+                    select role.Id;
+
+        IQueryable<Guid> resultRoleIds;
+        //List of organizations to which the user belongs
         var organizationUnitIds = dbContext.Set<IdentityUserOrganizationUnit>().Where(q => q.UserId == id).Select(q => q.OrganizationUnitId).ToArray();
+        if (organizationUnitIds.Any())
+        {
+            //Specify roles under the organization list
+            var organizationRoleIds = await (
+                from ouRole in dbContext.Set<OrganizationUnitRole>()
+                join ou in dbContext.Set<OrganizationUnit>() on ouRole.OrganizationUnitId equals ou.Id
+                where organizationUnitIds.Contains(ouRole.OrganizationUnitId)
+                select ouRole.RoleId
+            ).ToListAsync(GetCancellationToken(cancellationToken));
 
-        var organizationRoleIds = await (
-            from ouRole in dbContext.Set<OrganizationUnitRole>()
-            join ou in dbContext.Set<OrganizationUnit>() on ouRole.OrganizationUnitId equals ou.Id
-            where organizationUnitIds.Contains(ouRole.OrganizationUnitId)
-            select ouRole.RoleId
-        ).ToListAsync(GetCancellationToken(cancellationToken));
-
-        var orgUnitRoleNameQuery = dbContext.Roles.Where(r => organizationRoleIds.Contains(r.Id)).Select(n => n.Name);
-        var resultQuery = query.Union(orgUnitRoleNameQuery);
+            resultRoleIds = query.Where(a => organizationRoleIds.Contains(a));//The role belongs to the user and belongs to the organization
+        }
+        else
+        {
+            resultRoleIds = query;
+        }
+        var resultQuery = dbContext.Roles.Where(r => resultRoleIds.Contains(r.Id)).Select(n => n.Name);
         return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -175,27 +186,33 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
     {
         var dbContext = await GetDbContextAsync();
 
+        //Role to which the user belongs
         var query = from userRole in dbContext.Set<IdentityUserRole>()
                     join role in dbContext.Roles.IncludeDetails(includeDetails) on userRole.RoleId equals role.Id
                     where userRole.UserId == id
                     select role;
 
-        //TODO: Needs improvement
+        //List of organizations to which the user belongs
         var userOrganizationsQuery = from userOrg in dbContext.Set<IdentityUserOrganizationUnit>()
                                      join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOrg.OrganizationUnitId equals ou.Id
                                      where userOrg.UserId == id
                                      select ou;
-
-        var orgUserRoleQuery = dbContext.Set<OrganizationUnitRole>()
-            .Where(q => userOrganizationsQuery
-            .Select(t => t.Id)
-            .Contains(q.OrganizationUnitId))
-            .Select(t => t.RoleId)
-            .ToArray();
-
-        var orgRoles = dbContext.Roles.Where(q => orgUserRoleQuery.Contains(q.Id));
-        var resultQuery = query.Union(orgRoles);
-
+        IQueryable<IdentityRole> resultQuery;
+        if (userOrganizationsQuery.Any())
+        {
+            //Specify roles under the organization list
+            var orgUserRoleQuery = dbContext.Set<OrganizationUnitRole>()
+                .Where(q => userOrganizationsQuery
+                .Select(t => t.Id)
+                .Contains(q.OrganizationUnitId))
+                .Select(t => t.RoleId)
+                .ToArray();
+            resultQuery = query.Where(a => orgUserRoleQuery.Contains(a.Id));//The role belongs to the user and belongs to the organization
+        }
+        else
+        {
+            resultQuery = query;
+        }
         return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
     }
 

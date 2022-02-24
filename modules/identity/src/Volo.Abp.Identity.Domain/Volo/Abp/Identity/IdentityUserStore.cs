@@ -368,14 +368,15 @@ public class IdentityUserStore :
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
-
+        //Returns the roles owned by the current user
         var userRoles = await UserRepository
             .GetRoleNamesAsync(user.Id, cancellationToken: cancellationToken);
+        return userRoles;
 
-        var userOrganizationUnitRoles = await UserRepository
+        /*var userOrganizationUnitRoles = await UserRepository
             .GetRoleNamesInOrganizationUnitAsync(user.Id, cancellationToken: cancellationToken);
 
-        return userRoles.Union(userOrganizationUnitRoles).ToList();
+        return userRoles.Union(userOrganizationUnitRoles).ToList();*/
     }
 
     /// <summary>
