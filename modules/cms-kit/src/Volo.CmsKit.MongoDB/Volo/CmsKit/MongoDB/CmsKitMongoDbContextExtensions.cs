@@ -2,6 +2,7 @@
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -77,6 +78,11 @@ public static class CmsKitMongoDbContextExtensions
         builder.Entity<MenuItem>(x =>
         {
             x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MenuItems";
+        });
+
+        builder.Entity<GlobalResource>(x =>
+        {
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "GlobalResources";
         });
     }
 }
