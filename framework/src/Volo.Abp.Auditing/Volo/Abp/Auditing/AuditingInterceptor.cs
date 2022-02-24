@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Auditing;
@@ -41,7 +42,8 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             else
             {
                 var currentUser = serviceScope.ServiceProvider.GetRequiredService<ICurrentUser>();
-                await ProcessWithNewAuditingScopeAsync(invocation, auditingOptions, currentUser, auditingManager, auditingHelper);
+                var unitOfWorkManager = serviceScope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+                await ProcessWithNewAuditingScopeAsync(invocation, auditingOptions, currentUser, auditingManager, auditingHelper, unitOfWorkManager);
             }
         }
     }
@@ -105,7 +107,8 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         AbpAuditingOptions options,
         ICurrentUser currentUser,
         IAuditingManager auditingManager,
-        IAuditingHelper auditingHelper)
+        IAuditingHelper auditingHelper,
+        IUnitOfWorkManager unitOfWorkManager)
     {
         var hasError = false;
         using (var saveHandle = auditingManager.BeginScope())
@@ -129,6 +132,21 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             {
                 if (ShouldWriteAuditLog(invocation, options, currentUser, hasError))
                 {
+                    if (unitOfWorkManager.Current != null)
+                    {
+                        try
+                        {
+                            await unitOfWorkManager.Current.SaveChangesAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            if (!auditingManager.Current.Log.Exceptions.Contains(ex))
+                            {
+                                auditingManager.Current.Log.Exceptions.Add(ex);
+                            }
+                        }
+                    }
+
                     await saveHandle.SaveAsync();
                 }
             }
