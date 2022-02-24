@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
 using Volo.Abp.BlazoriseUI;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout;
 
@@ -30,8 +32,8 @@ public partial class PageHeader : ComponentBase
 
     [Parameter] // TODO: Consider removing this property in future and use only PageLayout.
     public List<BreadcrumbItem> BreadcrumbItems {
-        get => PageLayout.BreadcrumbItems;
-        set => PageLayout.BreadcrumbItems = value;
+        get => PageLayout.BreadcrumbItems.ToList();
+        set => PageLayout.BreadcrumbItems = new ObservableCollection<BreadcrumbItem>(value);
     }
 
     [Parameter]
@@ -53,7 +55,10 @@ public partial class PageHeader : ComponentBase
             if (!Options.Value.RenderToolbar)
             {
                 PageLayout.ToolbarItems.Clear();
-                PageLayout.ToolbarItems.AddRange(toolbarItems);
+                foreach (var item in toolbarItems)
+                {
+                    PageLayout.ToolbarItems.Add(item);
+                }
                 return;
             }
 

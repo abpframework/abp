@@ -148,6 +148,8 @@ successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
 }
 ````
 
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
+
 * 本地化关键字名称是任意的. 你可以设置任何名称. 对于特定的文本类型,我们更喜欢遵循一些约定:
   * 为按钮项添加 `Menu:` 前缀.
   * 使用 `Enum:<enum-type>:<enum-value>` 命名约定来本地化枚举成员. 当您这样做时ABP可以在某些适当的情况下自动将枚举本地化.
