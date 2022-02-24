@@ -47,7 +47,7 @@
     "ExportCSV": "Export CSV",
     "Features": "Features",
     "GenericDeletionConfirmationMessage": "Are you sure to delete '{0}'?",
-    "IsActive" : "Active",
+    "IsActive": "Active",
     "LastModification": "Last Modification",
     "LastModificationTime": "Last Modification Time",
     "LoginToAddComment": "Login to add comment",
@@ -159,6 +159,10 @@
     "YourFullName": "Your full name",
     "YourMessage": "Your Message",
     "YourReply": "Your reply",
-    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> supported."
+    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> supported.",
+    "GlobalResources": "Global Resources",
+    "Script": "Script",
+    "Style": "Style",
+    "SavedSuccessfully": "Saved successfully"
   }
 }

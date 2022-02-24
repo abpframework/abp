@@ -22,16 +22,21 @@ public class GlobalResourceAdminController: CmsKitAdminController, IGlobalResour
         _globalResourceAdminAppService = globalResourceAdminAppService;
     }
     
+    [HttpGet]
     public Task<GlobalResourcesDto> GetAsync()
     {
         return _globalResourceAdminAppService.GetAsync();
     }
 
+    [HttpPost]
+    [Route("style")]
     public Task SetGlobalStyleAsync(GlobalResourceUpdateDto input)
     {
         return _globalResourceAdminAppService.SetGlobalStyleAsync(input);
     }
 
+    [HttpPost]
+    [Route("script")]
     public Task SetGlobalScriptAsync(GlobalResourceUpdateDto input)
     {
         return _globalResourceAdminAppService.SetGlobalScriptAsync(input);

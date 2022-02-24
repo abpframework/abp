@@ -43,7 +43,9 @@ public class GlobalResourceManager : DomainService
 
         resource.SetValue(value);
 
-        return await _globalResourceRepository.UpdateAsync(resource);
+        await _globalResourceRepository.UpdateAsync(resource);
+
+        return resource;
     }
 
     protected virtual async Task<GlobalResource> GetOrCreateResourceAsync(string name)

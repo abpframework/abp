@@ -1115,6 +1115,107 @@
             }
           }
         },
+        "Volo.CmsKit.Admin.GlobalResources.GlobalResourceAdminController": {
+          "controllerName": "GlobalResourceAdmin",
+          "controllerGroupName": "GlobalResourceAdmin",
+          "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceAdminController",
+          "interfaces": [
+            {
+              "type": "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService"
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit-admin/global-resources",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesDto",
+                "typeSimple": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService"
+            },
+            "SetGlobalStyleAsyncByInput": {
+              "uniqueName": "SetGlobalStyleAsyncByInput",
+              "name": "SetGlobalStyleAsync",
+              "httpMethod": "POST",
+              "url": "api/cms-kit-admin/global-resources/style",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceUpdateDto, Volo.CmsKit.Admin.Application.Contracts",
+                  "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceUpdateDto",
+                  "typeSimple": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceUpdateDto",
+                  "typeSimple": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService"
+            },
+            "SetGlobalScriptAsyncByInput": {
+              "uniqueName": "SetGlobalScriptAsyncByInput",
+              "name": "SetGlobalScriptAsync",
+              "httpMethod": "POST",
+              "url": "api/cms-kit-admin/global-resources/script",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceUpdateDto, Volo.CmsKit.Admin.Application.Contracts",
+                  "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceUpdateDto",
+                  "typeSimple": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceUpdateDto",
+                  "typeSimple": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService"
+            }
+          }
+        },
         "Volo.CmsKit.Admin.Comments.CommentAdminController": {
           "controllerName": "CommentAdmin",
           "controllerGroupName": "CommentAdmin",

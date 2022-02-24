@@ -4,7 +4,7 @@ public class GlobalResourceConsts
 {
     public const string GlobalStyleName = "GlobalStyle";
     
-    public const string GlobalScriptName = "GlobalScripit";
+    public const string GlobalScriptName = "GlobalScript";
     
     public static int MaxNameLength { get; set; } = 128;
     

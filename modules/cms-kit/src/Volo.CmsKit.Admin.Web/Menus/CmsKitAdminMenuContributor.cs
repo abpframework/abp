@@ -83,7 +83,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 CmsKitAdminMenus.GlobalResources.GlobalResourcesMenu,
                 l["GlobalResources"],
                 "/Cms/GlobalResources",
-                "fa fa-memo")
+                "fa fa-newspaper")
             .RequireGlobalFeatures(typeof(GlobalResourcesFeature))
             .RequirePermissions(CmsKitAdminPermissions.GlobalResources.Default));
 
