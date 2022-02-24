@@ -22,12 +22,12 @@ public class GlobalResourceManager : DomainService
         return await SetGlobalResourceAsync(GlobalResourceConsts.GlobalScriptName, value);
     }
 
-    public virtual async Task<GlobalResource> GetGlobalStyleAsync(string value)
+    public virtual async Task<GlobalResource> GetGlobalStyleAsync()
     {
         return await GetOrCreateResourceAsync(GlobalResourceConsts.GlobalStyleName);
     }
 
-    public virtual async Task<GlobalResource> GetGlobalScriptAsync(string value)
+    public virtual async Task<GlobalResource> GetGlobalScriptAsync()
     {
         return await GetOrCreateResourceAsync(GlobalResourceConsts.GlobalScriptName);
     }
