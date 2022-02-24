@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Domain.Services;
 
 namespace Volo.CmsKit.GlobalResources;
@@ -23,19 +22,46 @@ public class GlobalResourceManager : DomainService
         return await SetGlobalResourceAsync(GlobalResourceConsts.GlobalScriptName, value);
     }
 
+    public virtual async Task<GlobalResource> GetGlobalStyleAsync(string value)
+    {
+        return await GetOrCreateResourceAsync(GlobalResourceConsts.GlobalStyleName);
+    }
+
+    public virtual async Task<GlobalResource> GetGlobalScriptAsync(string value)
+    {
+        return await GetOrCreateResourceAsync(GlobalResourceConsts.GlobalScriptName);
+    }
+
     protected virtual async Task<GlobalResource> SetGlobalResourceAsync(string name, string value)
     {
         var resource = await _globalResourceRepository.FindByName(name);
 
         if (resource == null)
         {
-            return await _globalResourceRepository.InsertAsync(
-                new GlobalResource(GuidGenerator.Create(), name, value, CurrentTenant.Id)
-            );
+            return await CreateResourceAsync(name, value);
         }
 
         resource.SetValue(value);
 
         return await _globalResourceRepository.UpdateAsync(resource);
+    }
+
+    protected virtual async Task<GlobalResource> GetOrCreateResourceAsync(string name)
+    {
+        var resource = await _globalResourceRepository.FindByName(name);
+        
+        if (resource == null)
+        {
+            return await CreateResourceAsync(name, string.Empty);
+        }
+
+        return resource;
+    }
+
+    protected virtual  async Task<GlobalResource> CreateResourceAsync(string name, string value)
+    {
+        return await _globalResourceRepository.InsertAsync(
+            new GlobalResource(GuidGenerator.Create(), name, value, CurrentTenant.Id)
+        );
     }
 }
