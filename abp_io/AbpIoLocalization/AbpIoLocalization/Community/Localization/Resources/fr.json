@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "Pour créer un post efficace, ajoutez une photo de couverture. Téléchargez des images au format 16: 9 pour une meilleure vue. Taille maximale du fichier: 1 Mo.",
     "ThankYouForContribution": "Merci de contribuer à la communauté ABP.",
     "GithubPost": "Post Github",
-    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\"> 1.</span> Rédigez un post sur n'importe quel référentiel GitHub public au format Markdown. Exemple de <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Posts/2020-12-04-Event-Organizer/Post.md\"></a>",
+    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\"> 1.</span> Rédigez un post sur n'importe quel référentiel GitHub public au format Markdown. Exemple de <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\"></a>",
     "GithubPostSubmitStepTwo": "<span class=\"font-weight-bold\"> 2.</span> Envoyez l'URL de votre post à l'aide du formulaire.",
     "GithubPostSubmitStepThree": "<span class=\"font-weight-bold\"> 3.</span> Votre post sera rendu sur ce site Web.",
     "YoutubeVideo": "Vidéo Youtube",
