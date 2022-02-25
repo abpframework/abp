@@ -98,7 +98,7 @@ public class CmsKitPublicWebModule : AbpModule
                     typeof(GlobalStyleViewComponent) 
                 );
                 options.Add(
-                    LayoutHooks.Head.Last, 
+                    LayoutHooks.Body.Last, 
                     typeof(GlobalScriptViewComponent) 
                 );
             });
