@@ -13,8 +13,8 @@ using Volo.CmsKit.EntityFrameworkCore;
 namespace Volo.CmsKit.Migrations
 {
     [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20220224094624_Added_GlobalResources")]
-    partial class Added_GlobalResources
+    [Migration("20220225084616_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
