@@ -18,6 +18,7 @@ import {
       #button
       [id]="buttonId"
       [attr.type]="buttonType"
+      [attr.form]="formName"
       [ngClass]="buttonClass"
       [disabled]="loading || disabled"
       (click.stop)="click.next($event); abpClick.next($event)"
@@ -37,6 +38,9 @@ export class ButtonComponent implements OnInit {
 
   @Input()
   buttonType = 'button';
+
+  @Input()
+  formName?: string = undefined;
 
   @Input()
   iconClass?: string;
