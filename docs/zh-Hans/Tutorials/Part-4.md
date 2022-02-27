@@ -78,7 +78,7 @@ end
 
 ## 测试 BookAppService
 
-在 `Acme.BookStore.Application.Tests` 项目中创建一个名叫 `BookAppService_Tests` 的测试类:
+在 `Acme.BookStore.Application.Tests` 项目中创建 `Books`文件夹并添加 一个名叫 `BookAppService_Tests` 的测试类:
 
 ````csharp
 using System.Threading.Tasks;
