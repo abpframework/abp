@@ -242,7 +242,7 @@ $(function () {
                 change: function (_val) {
                     $editorInput.val(editor.getMarkdown());
                     $editorInput.trigger("change");
-                    reflectContentChanges(editor.getHtml());
+                    reflectContentChanges(editor.getHTML());
                 }
             }
         });
