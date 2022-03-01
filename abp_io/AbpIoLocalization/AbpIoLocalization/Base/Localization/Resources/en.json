@@ -103,6 +103,7 @@
     "PreviousEvents": "Previous Events",
     "WatchTheEvent": "Watch the Event",
     "RegisterNow": "Register Now",
-    "ThereIsNoEvent": "There is no event."
+    "ThereIsNoEvent": "There is no event.",
+    "Events": "Events"
   }
 }
