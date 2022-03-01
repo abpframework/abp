@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "Hatékony bejegyzés létrehozásához adj hozzá egy borítóképet. Tölts fel 16:9-es képarányú képeket a legjobb nézet érdekében. Maximális fájlméret: 1 MB.",
     "ThankYouForContribution": "Köszönjük, hogy hozzájárult az ABP közösséghez.",
     "GithubPost": "Github cikk",
-    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Írjon cikket bármely nyilvános GitHub-tárhelyről Markdown formátumban. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Posts/2020-12-04-Event-Organizer/Post.md\">példa </a>",
+    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Írjon cikket bármely nyilvános GitHub-tárhelyről Markdown formátumban. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\">példa </a>",
     "GithubPostSubmitStepTwo": "<span class=\"font-weight-bold\">2.</span> Az űrlap segítségével küldje el cikkének URL-jét.",
     "GithubPostSubmitStepThree": "<span class=\"font-weight-bold\">3.</span> A cikk ezen a webhelyen jelenik meg.",
     "YoutubeVideo": "Youtube videó",

@@ -73,7 +73,17 @@ public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
                 {
                     if (UnitOfWorkManager.Current != null)
                     {
-                        await UnitOfWorkManager.Current.SaveChangesAsync();
+                        try
+                        {
+                            await UnitOfWorkManager.Current.SaveChangesAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            if (!_auditingManager.Current.Log.Exceptions.Contains(ex))
+                            {
+                                _auditingManager.Current.Log.Exceptions.Add(ex);
+                            }
+                        }
                     }
 
                     await saveHandle.SaveAsync();

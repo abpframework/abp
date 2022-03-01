@@ -55,7 +55,17 @@ public class AbpAuditHubFilter : IHubFilter
                     var unitOfWorkManager = invocationContext.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
                     if (unitOfWorkManager.Current != null)
                     {
-                        await unitOfWorkManager.Current.SaveChangesAsync();
+                        try
+                        {
+                            await unitOfWorkManager.Current.SaveChangesAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            if (!auditingManager.Current.Log.Exceptions.Contains(ex))
+                            {
+                                auditingManager.Current.Log.Exceptions.Add(ex);
+                            }
+                        }
                     }
 
                     await saveHandle.SaveAsync();
