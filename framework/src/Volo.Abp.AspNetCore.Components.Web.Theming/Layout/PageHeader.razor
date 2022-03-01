@@ -1,9 +1,17 @@
 ﻿@using Blazorise
+@using Microsoft.Extensions.Options
+
+@inject IOptions<PageHeaderOptions> Options
+
 <Row Class="entry-row">
-    <Column ColumnSize="ColumnSize.IsAuto">
-        <h1 class="content-header-title">@Title</h1>
-    </Column>
-    @if (BreadcrumbItems.Any())
+    @if(Options.Value.RenderPageTitle)
+    {   
+        <Column ColumnSize="ColumnSize.IsAuto">
+            <h1 class="content-header-title">@PageLayout.Title</h1>
+        </Column>
+    }
+
+    @if (Options.Value.RenderBreadcrumbs &&  PageLayout.BreadcrumbItems.Any())
     {
         <Column ColumnSize="ColumnSize.IsAuto.OnWidescreen" Padding="Padding.Is0.FromLeft.OnWidescreen">
             <Breadcrumb Mode="@(BreadcrumbShowCurrent ? BreadcrumbMode.Auto : BreadcrumbMode.None)">
@@ -15,7 +23,7 @@
                         </BreadcrumbLink>
                     </BreadcrumbItem>
                 }
-                @foreach (var item in BreadcrumbItems)
+                @foreach (var item in  PageLayout.BreadcrumbItems)
                 {
                     <BreadcrumbItem>
                         <BreadcrumbLink To="@item.Url">
@@ -30,19 +38,23 @@
             </Breadcrumb>
         </Column>
     }
-    <Column>
-        <Row Class="justify-content-end mx-n1">
-            @if (Toolbar == null)
-            {
-                @ChildContent
-            }
+
+    @if(Options.Value.RenderToolbar)
+    {
+        <Column>
+            <Row Class="justify-content-end mx-n1">
+                @if (Toolbar == null)
+                {
+                    @ChildContent
+                }
             
-            @foreach (var toolbarItemRender in ToolbarItemRenders)
-            {
-                <Column ColumnSize="ColumnSize.IsAuto" Class="px-1 pt-2">
-                    @toolbarItemRender
-                </Column>
-            }
-        </Row>
-    </Column>
+                @foreach (var toolbarItemRender in ToolbarItemRenders)
+                {
+                    <Column ColumnSize="ColumnSize.IsAuto" Class="px-1 pt-2">
+                        @toolbarItemRender
+                    </Column>
+                }
+            </Row>
+        </Column>
+    }
 </Row>

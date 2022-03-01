@@ -12,6 +12,7 @@ using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
 using Volo.Abp.Cli.Utils;
 
 namespace Volo.Abp.Cli.Commands;
@@ -279,15 +280,23 @@ public abstract class ProjectCreationCommandBase
     protected virtual DatabaseProvider GetDatabaseProvider(CommandLineArgs commandLineArgs)
     {
         var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseProvider.Short, Options.DatabaseProvider.Long);
-        switch (optionValue)
+
+        if (optionValue == null)
         {
-            case "ef":
-                return DatabaseProvider.EntityFrameworkCore;
-            case "mongodb":
-                return DatabaseProvider.MongoDb;
-            default:
-                return DatabaseProvider.NotSpecified;
+            return DatabaseProvider.NotSpecified;
         }
+
+        if (optionValue.Equals("ef", StringComparison.InvariantCultureIgnoreCase) || optionValue.Equals("entityframeworkcore", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return DatabaseProvider.EntityFrameworkCore;
+        }
+
+        if (optionValue.Equals("mongo", StringComparison.InvariantCultureIgnoreCase) || optionValue.Equals("mongodb", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return DatabaseProvider.MongoDb;
+        }
+
+        throw new CliUsageException("The option you provided for Database Provider is invalid!");
     }
 
     protected virtual void RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
@@ -297,7 +306,18 @@ public abstract class ProjectCreationCommandBase
             CmdHelper.RunCmd("dotnet build /graphbuild", projectArgs.OutputFolder);
         }
     }
-    
+
+    protected virtual void RunInstallLibsForWebTemplate(ProjectBuildArgs projectArgs)
+    {
+        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) ||
+            ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) ||
+            AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName) ||
+            MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
+        {
+            CmdHelper.RunCmd("abp install-libs", projectArgs.OutputFolder);
+        }
+    }
+
     protected virtual DatabaseManagementSystem GetDatabaseManagementSystem(CommandLineArgs commandLineArgs)
     {
         var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseManagementSystem.Short, Options.DatabaseManagementSystem.Long);
@@ -322,7 +342,7 @@ public abstract class ProjectCreationCommandBase
             case "oracle":
                 return DatabaseManagementSystem.Oracle;
             default:
-                return DatabaseManagementSystem.NotSpecified;
+                throw new CliUsageException("The option you provided for Database Management System is invalid!");
         }
     }
 
@@ -332,12 +352,13 @@ public abstract class ProjectCreationCommandBase
 
         switch (optionValue)
         {
+            case null:
             case "none":
                 return MobileApp.None;
             case "react-native":
                 return MobileApp.ReactNative;
             default:
-                return MobileApp.None;
+                throw new CliUsageException("The option you provided for Mobile App is invalid!");
         }
     }
 
@@ -349,8 +370,11 @@ public abstract class ProjectCreationCommandBase
         }
 
         var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
+
         switch (optionValue)
         {
+            case null:
+                return UiFramework.NotSpecified;
             case "none":
                 return UiFramework.None;
             case "mvc":
@@ -362,7 +386,7 @@ public abstract class ProjectCreationCommandBase
             case "blazor-server":
                 return UiFramework.BlazorServer;
             default:
-                return UiFramework.NotSpecified;
+                throw new CliUsageException("The option you provided for UI Framework is invalid!");
         }
     }
 

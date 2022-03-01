@@ -12,6 +12,12 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
 
     }
 
+    public static bool IsAppNoLayersTemplate(string templateName)
+    {
+        return templateName == AppNoLayersTemplate.TemplateName ||
+               templateName == AppNoLayersProTemplate.TemplateName;
+    }
+
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
         var steps = new List<ProjectBuildPipelineStep>();

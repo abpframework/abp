@@ -5,7 +5,7 @@
     var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";
     var cssClass = string.IsNullOrEmpty(menuItem.CssClass) ? string.Empty : menuItem.CssClass;
     var disabled = menuItem.IsDisabled ? "disabled" : string.Empty;
-    var url = string.IsNullOrEmpty(menuItem.Url) ? "#" : Url.Content(menuItem.Url);
+    var url = string.IsNullOrEmpty(menuItem.Url) ? "#" : Url.IsLocalUrl(menuItem.Url) ? Url.Content(menuItem.Url.EnsureStartsWith('~')) : menuItem.Url;
     if (menuItem.IsLeaf)
     {
         if (menuItem.Url != null)
