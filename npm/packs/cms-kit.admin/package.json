@@ -1,14 +1,14 @@
 {
-  "version": "5.1.3",
+  "version": "5.1.4",
   "name": "@abp/cms-kit.admin",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jstree": "~5.1.3",
-    "@abp/slugify": "~5.1.3",
-    "@abp/tui-editor": "~5.1.3",
-    "@abp/uppy": "~5.1.3"
+    "@abp/jstree": "~5.1.4",
+    "@abp/slugify": "~5.1.4",
+    "@abp/tui-editor": "~5.1.4",
+    "@abp/uppy": "~5.1.4"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

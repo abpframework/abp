@@ -1,5 +1,5 @@
 {
-  "version": "5.1.3",
+  "version": "5.1.4",
   "name": "@abp/lodash",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~5.1.3",
+    "@abp/core": "~5.1.4",
     "lodash": "^4.17.15"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
