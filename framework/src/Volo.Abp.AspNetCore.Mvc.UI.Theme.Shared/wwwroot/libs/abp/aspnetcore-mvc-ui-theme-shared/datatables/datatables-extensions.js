@@ -366,7 +366,7 @@ var abp = abp || {};
                 }
 
                 //Text filter
-                if(settings.oInit.searching || settings.oInit.searching === undefined){
+                if(settings.oInit.searching !== false){
                     if (requestData.search && requestData.search.value !== "") {
                         input.filter = requestData.search.value;
                     } else {
