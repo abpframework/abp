@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -24,25 +22,16 @@ namespace Volo.Docs.Projects
 
         [HttpGet]
         [Route("")]
-        public virtual async Task<ListResultDto<ProjectDto>> GetListAsync()
+        public virtual Task<ListResultDto<ProjectDto>> GetListAsync()
         {
-            var projects = await ProjectAppService.GetListAsync();
-            projects.Items = projects.Items.Select(project =>
-            {
-                project.ExtraProperties = new Dictionary<string, object>();
-                return project;
-            }).ToList();
-            
-            return projects;
+            return ProjectAppService.GetListAsync();
         }
 
         [HttpGet]
         [Route("{shortName}")]
-        public virtual async Task<ProjectDto> GetAsync(string shortName)
+        public virtual Task<ProjectDto> GetAsync(string shortName)
         {
-            var project = await ProjectAppService.GetAsync(shortName);
-            project.ExtraProperties = new Dictionary<string, object>();
-            return project;
+            return ProjectAppService.GetAsync(shortName);
         }
 
         [HttpGet]
