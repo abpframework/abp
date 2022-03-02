@@ -20,7 +20,7 @@
 - [Part 3: 创建,更新和删除图书](Part-2.md)
 - [Part 4: 集成测试](Part-4.md)
 - [Part 5: 授权](Part-5.md)
-- **Part 6: 作者: 领域层**(本章)
+- **Part 6: 作者: 领域层 (本章)**
 - [Part 7: 作者: 数据库集成](Part-7.md)
 - [Part 8: 作者: 应用服务层](Part-8.md)
 - [Part 9: 作者: 用户页面](Part-9.md)

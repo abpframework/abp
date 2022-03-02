@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@abp/jquery-validation": "~5.1.4",
-    "jquery-validation-unobtrusive": "^3.2.11"
+    "jquery-validation-unobtrusive": "^3.2.12"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
