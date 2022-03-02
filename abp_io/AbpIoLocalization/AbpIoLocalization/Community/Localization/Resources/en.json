@@ -104,7 +104,7 @@
     "VideoPost": "Video Post",
     "Post": "Post",
     "Read": "Read",
-    "CreateGithubPostUrlInfo": "Full URL of the Markdown file on GitHub (https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md).",
+    "CreateGithubPostUrlInfo": "Full URL of the Markdown file on GitHub (<a href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\" target=\"blank\">example</a>).",
     "CreateVideoContentUrlInfo": "Original Youtube URL of the post.",
     "CreateExternalPostUrlInfo": "Original External Url of the post.",
     "VideoContentForm": "Submit Video on YouTube",
