@@ -490,6 +490,7 @@
     "ABPFrameworkEBook": "E-Book: Mastering ABP Framework",
     "MasteringAbpFrameworkEBookDescription": "Included within your ABP Commercial license",
     "Volo.AbpIo.Domain:070000": "The organization name can only contain latin letters, numbers, dots and hyphens!",
-    "Volo.AbpIo.Domain:070001": "The company name can only contain latin letters, numbers, dots, space and hyphens!"
+    "Volo.AbpIo.Domain:070001": "The company name can only contain latin letters, numbers, dots, space and hyphens!",
+    "FullName": "Full Name"
   }
 }
