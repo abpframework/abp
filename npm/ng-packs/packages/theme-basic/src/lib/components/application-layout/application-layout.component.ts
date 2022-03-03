@@ -1,8 +1,8 @@
-import {eLayoutType, RouterEvents, SubscriptionService} from '@abp/ng.core';
+import {eLayoutType, SubscriptionService} from '@abp/ng.core';
 import { collapseWithMargin, slideFromBottom } from '@abp/ng.theme.shared';
-import {AfterViewInit, Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import { LayoutService } from '../../services/layout.service';
-import {Subscription} from "rxjs";
+
 
 @Component({
   selector: 'abp-layout-application',
@@ -10,23 +10,13 @@ import {Subscription} from "rxjs";
   animations: [slideFromBottom, collapseWithMargin],
   providers: [LayoutService, SubscriptionService],
 })
-export class ApplicationLayoutComponent implements AfterViewInit , OnDestroy{
+export class ApplicationLayoutComponent implements AfterViewInit {
   // required for dynamic component
   static type = eLayoutType.application;
-  navigationEndSubscription:Subscription
-  constructor(public service: LayoutService,
-              routerEvents:RouterEvents,
-              ) {
-    this.navigationEndSubscription = routerEvents.getNavigationEvents('End').subscribe(() => {
-      service.isCollapsed = true;
-    })
-  }
+
+  constructor(public service: LayoutService) {}
 
   ngAfterViewInit() {
     this.service.subscribeWindowSize();
-  }
-
-  ngOnDestroy(): void {
-    this.navigationEndSubscription.unsubscribe()
   }
 }
