@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
@@ -12,8 +11,7 @@ namespace Volo.Abp.FeatureManagement;
 
 [DependsOn(
     typeof(AbpFeatureManagementApplicationContractsModule),
-    typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-    typeof(AbpAutoMapperModule)
+    typeof(AbpAspNetCoreMvcUiThemeSharedModule)
     )]
 public class AbpFeatureManagementWebModule : AbpModule
 {
@@ -37,16 +35,10 @@ public class AbpFeatureManagementWebModule : AbpModule
             options.FileSets.AddEmbedded<AbpFeatureManagementWebModule>();
         });
 
-        context.Services.AddAutoMapperObjectMapper<AbpFeatureManagementWebModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<FeatureManagementWebAutoMapperProfile>(validate: true);
-        });
-
         Configure<RazorPagesOptions>(options =>
         {
                 //Configure authorization.
-            });
+        });
 
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {

@@ -21,7 +21,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
     private const string MethodPlaceholder = "<method placeholder>";
     private const string ClassName = "<className>";
     private const string ServiceInterface = "<serviceInterface>";
-    private static string[] ServicePostfixes = { "AppService", "ApplicationService" };
+    private readonly static string[] ServicePostfixes = { "AppService", "ApplicationService" , "Service"};
     private const string DefaultNamespace = "ClientProxies";
     private const string Namespace = "<namespace>";
     private const string AppServicePrefix = "Volo.Abp.Application.Services";

@@ -121,6 +121,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             [DynamicStringLength(typeof(ProjectConsts), nameof(ProjectConsts.MaxLatestVersionBranchNameLength))]
             public string LatestVersionBranchName { get; set; }
 
+            [HiddenInput]
             public string ConcurrencyStamp { get; set; }
         }
 
