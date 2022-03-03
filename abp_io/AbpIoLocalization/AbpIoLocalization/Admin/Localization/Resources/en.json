@@ -306,10 +306,10 @@
     "PaymentTimeCannotBeFutureTime": "Payment time cannot be a future time!",
     "SaveAndDownload": "Save and Download",
     "BillingInfo": "Billing Info",
-    "DeleteInvoice" : "Delete Invoice",
-    "PaymentStateSetTo" : "Payment state set to {0}",
+    "DeleteInvoice": "Delete Invoice",
+    "PaymentStateSetTo": "Payment state set to {0}",
     "ChangeState": "Change State",
-    "Permission:TrialLicense" : "Trial License",
+    "Permission:TrialLicense": "Trial License",
     "Menu:TrialLicenses": "Trial Licenses",
     "TrialLicenses": "Trial Licenses",
     "UserNameFilter": "Username",
@@ -384,6 +384,13 @@
     "SpeakerDeletionConfirmationMessage": "Are you sure you want to delete this speaker?",
     "Menu:Speakers": "Speakers",
     "ChooseSpeakerImage": "Choose a speaker image...",
-    "SpeakerImage": "Speaker image"
+    "SpeakerImage": "Speaker image",
+    "ShowPurchaseItemsOfOrganizations": "Purchase Items",
+    "Enum:OrganizationPurchaseState:0": "Not delivered",
+    "Enum:OrganizationPurchaseState:1": "Delivered",
+    "PurchaseItems": "Purchase Items",
+    "SuccessfullyUpdated": "Successfully updated",
+    "SuccessfullyAdded": "Successfully added",
+    "PurchaseState": "Purchase State"
   }
 }
