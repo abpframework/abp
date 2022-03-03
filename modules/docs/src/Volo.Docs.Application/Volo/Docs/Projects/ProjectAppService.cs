@@ -35,16 +35,22 @@ namespace Volo.Docs.Projects
         {
             var projects = await _projectRepository.GetListAsync();
 
-            return new ListResultDto<ProjectDto>(
+            var projectDtos = new List<ProjectDto>(
                 ObjectMapper.Map<List<Project>, List<ProjectDto>>(projects)
             );
+
+            return new ListResultDto<ProjectDto>(
+                projectDtos.Select(p => HidePrivateProperties(p)).ToList()
+            ); 
         }
 
         public async Task<ProjectDto> GetAsync(string shortName)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);
 
-            return ObjectMapper.Map<Project, ProjectDto>(project);
+            var projectDto = ObjectMapper.Map<Project, ProjectDto>(project);
+
+            return HidePrivateProperties(projectDto);
         }
 
         public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
@@ -139,6 +145,22 @@ namespace Volo.Docs.Projects
             return project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
                 ? (GithubVersionProviderSource) (long) project.ExtraProperties["GithubVersionProviderSource"]
                 : GithubVersionProviderSource.Releases;
+        }
+
+        private ProjectDto HidePrivateProperties(ProjectDto project)
+        {
+            if (project.ExtraProperties.ContainsKey("GitHubAccessToken"))
+            {
+                project.ExtraProperties["GitHubAccessToken"] = null;
+            }
+
+            if (project.ExtraProperties.ContainsKey("GitHubUserAgent"))
+            {
+                project.ExtraProperties["GitHubUserAgent"] = null;
+            }
+
+
+            return project;
         }
     }
 }
