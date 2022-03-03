@@ -10,7 +10,7 @@ using Volo.CmsKit.Public.GlobalResources;
 
 namespace Volo.CmsKit.Public.Web.Controllers;
 
-[Route("global-resources")]
+[Route("cms-kit/global-resources")]
 public class CmsKitPublicGlobalResourcesController: AbpController
 {
     private readonly IGlobalResourcePublicAppService _globalResourcePublicAppService;

@@ -236,18 +236,9 @@
       }, ajaxParams));
     };
 
-    volo.cmsKit.admin.globalResources.globalResourceAdmin.setGlobalStyle = function(input, ajaxParams) {
+    volo.cmsKit.admin.globalResources.globalResourceAdmin.setGlobalResources = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/global-resources/style',
-        type: 'POST',
-        dataType: null,
-        data: JSON.stringify(input)
-      }, ajaxParams));
-    };
-
-    volo.cmsKit.admin.globalResources.globalResourceAdmin.setGlobalScript = function(input, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/global-resources/script',
+        url: abp.appPath + 'api/cms-kit-admin/global-resources',
         type: 'POST',
         dataType: null,
         data: JSON.stringify(input)

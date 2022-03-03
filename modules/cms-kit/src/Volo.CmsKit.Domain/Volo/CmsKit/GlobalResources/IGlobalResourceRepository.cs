@@ -8,5 +8,5 @@ namespace Volo.CmsKit.GlobalResources;
 
 public interface IGlobalResourceRepository: IBasicRepository<GlobalResource, Guid>
 {
-    Task<GlobalResource> FindByName([NotNull] string name, CancellationToken cancellationToken = default);
+    Task<GlobalResource> FindByNameAsync([NotNull] string name, CancellationToken cancellationToken = default);
 }

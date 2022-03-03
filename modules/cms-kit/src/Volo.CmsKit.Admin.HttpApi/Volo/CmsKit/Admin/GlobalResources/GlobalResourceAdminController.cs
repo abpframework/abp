@@ -29,16 +29,8 @@ public class GlobalResourceAdminController: CmsKitAdminController, IGlobalResour
     }
 
     [HttpPost]
-    [Route("style")]
-    public Task SetGlobalStyleAsync(GlobalResourceUpdateDto input)
+    public Task SetGlobalResourcesAsync(GlobalResourcesUpdateDto input)
     {
-        return _globalResourceAdminAppService.SetGlobalStyleAsync(input);
-    }
-
-    [HttpPost]
-    [Route("script")]
-    public Task SetGlobalScriptAsync(GlobalResourceUpdateDto input)
-    {
-        return _globalResourceAdminAppService.SetGlobalScriptAsync(input);
+        return _globalResourceAdminAppService.SetGlobalResourcesAsync(input);
     }
 }

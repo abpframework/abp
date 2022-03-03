@@ -20,19 +20,11 @@ public partial class GlobalResourceAdminClientProxy : ClientProxyBase<IGlobalRes
         return await RequestAsync<GlobalResourcesDto>(nameof(GetAsync));
     }
 
-    public virtual async Task SetGlobalStyleAsync(GlobalResourceUpdateDto input)
+    public virtual async Task SetGlobalResourcesAsync(GlobalResourcesUpdateDto input)
     {
-        await RequestAsync(nameof(SetGlobalStyleAsync), new ClientProxyRequestTypeValue
+        await RequestAsync(nameof(SetGlobalResourcesAsync), new ClientProxyRequestTypeValue
         {
-            { typeof(GlobalResourceUpdateDto), input }
-        });
-    }
-
-    public virtual async Task SetGlobalScriptAsync(GlobalResourceUpdateDto input)
-    {
-        await RequestAsync(nameof(SetGlobalScriptAsync), new ClientProxyRequestTypeValue
-        {
-            { typeof(GlobalResourceUpdateDto), input }
+            { typeof(GlobalResourcesUpdateDto), input }
         });
     }
 }

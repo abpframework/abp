@@ -7,7 +7,5 @@ public interface IGlobalResourceAdminAppService : IApplicationService
 {
     Task<GlobalResourcesDto> GetAsync();
 
-    Task SetGlobalStyleAsync(GlobalResourceUpdateDto input);
-    
-    Task SetGlobalScriptAsync(GlobalResourceUpdateDto input);
+    Task SetGlobalResourcesAsync(GlobalResourcesUpdateDto input);
 }

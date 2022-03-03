@@ -27,13 +27,9 @@ public class GlobalResourceAdminAppService : ApplicationService, IGlobalResource
         };
     }
 
-    public async Task SetGlobalStyleAsync(GlobalResourceUpdateDto input)
+    public async Task SetGlobalResourcesAsync(GlobalResourcesUpdateDto input)
     {
-        await GlobalResourceManager.SetGlobalStyleAsync(input.Value);
-    }
-
-    public async Task SetGlobalScriptAsync(GlobalResourceUpdateDto input)
-    {
-        await GlobalResourceManager.SetGlobalScriptAsync(input.Value);
+        await GlobalResourceManager.SetGlobalStyleAsync(input.Style);
+        await GlobalResourceManager.SetGlobalScriptAsync(input.Script);
     }
 }

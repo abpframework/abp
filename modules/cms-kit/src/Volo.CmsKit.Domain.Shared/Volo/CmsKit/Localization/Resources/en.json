@@ -115,6 +115,7 @@
     "Permission:TagManagement.Create": "Create",
     "Permission:TagManagement.Delete": "Delete",
     "Permission:TagManagement.Update": "Update",
+    "Permission:GlobalResources": "Global Resources",
     "PickYourReaction": "Pick your reaction",
     "Rating": "Rating",
     "RatingUndoMessage": "Your rating will be undo.",

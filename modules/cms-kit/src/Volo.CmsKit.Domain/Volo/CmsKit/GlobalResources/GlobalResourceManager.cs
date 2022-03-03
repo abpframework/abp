@@ -34,7 +34,7 @@ public class GlobalResourceManager : DomainService
 
     protected virtual async Task<GlobalResource> SetGlobalResourceAsync(string name, string value)
     {
-        var resource = await _globalResourceRepository.FindByName(name);
+        var resource = await _globalResourceRepository.FindByNameAsync(name);
 
         if (resource == null)
         {
@@ -50,7 +50,7 @@ public class GlobalResourceManager : DomainService
 
     protected virtual async Task<GlobalResource> GetOrCreateResourceAsync(string name)
     {
-        var resource = await _globalResourceRepository.FindByName(name);
+        var resource = await _globalResourceRepository.FindByNameAsync(name);
         
         if (resource == null)
         {

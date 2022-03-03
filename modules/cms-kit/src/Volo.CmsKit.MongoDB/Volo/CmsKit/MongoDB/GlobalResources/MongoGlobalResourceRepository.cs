@@ -16,7 +16,7 @@ public class MongoGlobalResourceRepository: MongoDbRepository<ICmsKitMongoDbCont
     {
     }
 
-    public Task<GlobalResource> FindByName(string name,
+    public Task<GlobalResource> FindByNameAsync(string name,
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrEmpty(name, nameof(name));

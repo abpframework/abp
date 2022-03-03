@@ -15,7 +15,7 @@ public class EfCoreGlobalResourceRepository: EfCoreRepository<ICmsKitDbContext, 
         
     }
 
-    public Task<GlobalResource> FindByName(string name,
+    public Task<GlobalResource> FindByNameAsync(string name,
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrEmpty(name, nameof(name));

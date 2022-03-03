@@ -63,6 +63,6 @@ public class CmsKitAdminPermissions
 
     public static class GlobalResources
     {
-        public const string Default = GroupName + ".Menus";
+        public const string Default = GroupName + ".GlobalResources";
     }
 }
