@@ -83,7 +83,7 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
 
 ### Hide ABP Endpoints on Swagger UI
 
-To hide ABP-related endpoints, we can use the `HideAbpEndpoints` method when configuring Swagger options. If you want to hide ABP endpoints, add the following line into your Swagger Configuration:
+If you want to hide ABP's default endpoints, call the `HideAbpEndpoints` method in your Swagger configuration as shown in the following example:
 
 ```csharp
 services.AddAbpSwaggerGen(
