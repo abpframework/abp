@@ -48,9 +48,9 @@ First, we need to use `AddAbpSwaggerGen` extension to configure Swagger in `Conf
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    var services = contex.Services;
+    var services = context.Services;
 
-    //... other configarations.
+    //... other configurations.
 
     services.AddAbpSwaggerGen(
         options =>
@@ -79,6 +79,22 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
     
     //... other configarations.
 }
+```
+
+### Hide ABP Endpoints on Swagger UI
+
+If you want to hide ABP's default endpoints, call the `HideAbpEndpoints` method in your Swagger configuration as shown in the following example:
+
+```csharp
+services.AddAbpSwaggerGen(
+    options => 
+    {
+        //... other options
+        
+        //Hides ABP Related endpoints on Swagger UI
+        options.HideAbpEndpoints();
+    }
+)
 ```
 
 ## Using Swagger with OAUTH
