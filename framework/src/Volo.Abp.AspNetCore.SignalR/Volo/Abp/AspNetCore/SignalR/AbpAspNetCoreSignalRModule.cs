@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.SignalR.Auditing;
 using Volo.Abp.AspNetCore.SignalR.Authentication;
+using Volo.Abp.AspNetCore.SignalR.Uow;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
@@ -39,6 +40,7 @@ public class AbpAspNetCoreSignalRModule : AbpModule
         {
             options.AddFilter<AbpHubContextAccessorHubFilter>();
             options.AddFilter<AbpAuthenticationHubFilter>();
+            options.AddFilter<AbpUowHubFilter>();
             options.AddFilter<AbpAuditHubFilter>();
         });
 
