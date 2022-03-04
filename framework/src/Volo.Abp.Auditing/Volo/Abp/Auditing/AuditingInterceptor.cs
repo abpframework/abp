@@ -130,7 +130,7 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             }
             finally
             {
-                if (ShouldWriteAuditLog(invocation, options, currentUser, hasError))
+                if (await ShouldWriteAuditLogAsync(invocation, auditingManager.Current.Log, options, currentUser, hasError))
                 {
                     if (unitOfWorkManager.Current != null)
                     {
@@ -153,8 +153,9 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         }
     }
 
-    private bool ShouldWriteAuditLog(
+    private async Task<bool> ShouldWriteAuditLogAsync(
         IAbpMethodInvocation invocation,
+        AuditLogInfo auditLogInfo,
         AbpAuditingOptions options,
         ICurrentUser currentUser,
         bool hasError)
@@ -162,6 +163,14 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         if (options.AlwaysLogOnException && hasError)
         {
             return true;
+        }
+
+        foreach (var selector in options.AlwaysLogSelectors)
+        {
+            if (await selector(auditLogInfo))
+            {
+                return true;
+            }
         }
 
         if (!options.IsEnabledForAnonymousUsers && !currentUser.IsAuthenticated)
