@@ -108,6 +108,7 @@
     "ExtendNow": "Extend Now",
     "ContinueWithNewOrganization": "Continue with a new organization",
     "RenewLicenseEarly": "If I renew my license early, will I get the full year?",
-    "RenewLicenseEarylExplanation": "When you renew your license before your license expiry date, 1 year will be added to your license expiry date. For example, if your license expires on {0}-06-06 and you renew it on {0}-01-01, your new license expiry date will be {1}-06-06."
+    "RenewLicenseEarylExplanation": "When you renew your license before your license expiry date, 1 year will be added to your license expiry date. For example, if your license expires on {0}-06-06 and you renew it on {0}-01-01, your new license expiry date will be {1}-06-06.",
+    "LicenseTypeNotCorrect": "The license type is not correct!"
   }
 }

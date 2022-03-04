@@ -168,12 +168,11 @@ var abp = abp || {};
 
             if ($dropdownItemsContainer.find('li').length > 0) {
                 $dropdownItemsContainer.appendTo($container);
-                $dropdownButton.prependTo($container);
+            } else {
+                $dropdownButton.attr('disabled', 'disabled');
             }
 
-            if ($dropdownItemsContainer.children().length === 0) {
-                return "";
-            }
+            $dropdownButton.prependTo($container);
 
             return $container;
         };
