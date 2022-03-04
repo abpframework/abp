@@ -57,6 +57,8 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             output.Attributes.AddClass(isCheckBox ? "mb-2" : "mb-3");
             if (isCheckBox)
             {
+                output.Attributes.AddClass("custom-checkbox");
+                output.Attributes.AddClass("custom-control");
                 output.Attributes.AddClass("form-check");
             }
             output.Content.AppendHtml(innerHtml);
@@ -104,7 +106,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
     {
-        return "<div class=\"" + (isCheckbox ? "mb-2 form-check" : "mb-3") + "\">" +
+        return "<div class=\"" + (isCheckbox ? "custom-checkbox custom-control mb-2 form-check" : "mb-3") + "\">" +
                 Environment.NewLine + innerHtml + Environment.NewLine +
                 "</div>";
     }
