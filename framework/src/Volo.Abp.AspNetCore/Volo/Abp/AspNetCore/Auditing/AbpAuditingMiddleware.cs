@@ -100,17 +100,17 @@ public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
 
     private async Task<bool> ShouldWriteAuditLogAsync(AuditLogInfo auditLogInfo, HttpContext httpContext, bool hasError)
     {
-        if (AuditingOptions.AlwaysLogOnException && hasError)
-        {
-            return true;
-        }
-
         foreach (var selector in AuditingOptions.AlwaysLogSelectors)
         {
             if (await selector(auditLogInfo))
             {
                 return true;
             }
+        }
+
+        if (AuditingOptions.AlwaysLogOnException && hasError)
+        {
+            return true;
         }
 
         if (!AuditingOptions.IsEnabledForAnonymousUsers && !CurrentUser.IsAuthenticated)

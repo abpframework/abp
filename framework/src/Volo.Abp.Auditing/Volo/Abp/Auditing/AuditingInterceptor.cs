@@ -160,17 +160,17 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         ICurrentUser currentUser,
         bool hasError)
     {
-        if (options.AlwaysLogOnException && hasError)
-        {
-            return true;
-        }
-
         foreach (var selector in options.AlwaysLogSelectors)
         {
             if (await selector(auditLogInfo))
             {
                 return true;
             }
+        }
+
+        if (options.AlwaysLogOnException && hasError)
+        {
+            return true;
         }
 
         if (!options.IsEnabledForAnonymousUsers && !currentUser.IsAuthenticated)

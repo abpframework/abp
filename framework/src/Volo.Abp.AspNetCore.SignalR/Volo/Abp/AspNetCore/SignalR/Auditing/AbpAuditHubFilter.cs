@@ -79,10 +79,6 @@ public class AbpAuditHubFilter : IHubFilter
     private async Task<bool> ShouldWriteAuditLogAsync(AuditLogInfo auditLogInfo, IServiceProvider serviceProvider, bool hasError)
     {
         var options = serviceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
-        if (options.AlwaysLogOnException && hasError)
-        {
-            return true;
-        }
 
         foreach (var selector in options.AlwaysLogSelectors)
         {
@@ -90,6 +86,11 @@ public class AbpAuditHubFilter : IHubFilter
             {
                 return true;
             }
+        }
+
+        if (options.AlwaysLogOnException && hasError)
+        {
+            return true;
         }
 
         if (!options.IsEnabledForAnonymousUsers && !serviceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
