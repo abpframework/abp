@@ -10,6 +10,8 @@ export namespace Confirmation {
     hideYesBtn?: boolean;
     cancelText?: LocalizationParam;
     yesText?: LocalizationParam;
+    icon?: string;
+    iconTemplate?:string
   }
 
   export interface DialogData {

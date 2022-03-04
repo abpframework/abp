@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@abp/datatables.net": "~5.1.4",
-    "datatables.net-bs5": "^1.10.25"
+    "datatables.net-bs5": "^1.11.4"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

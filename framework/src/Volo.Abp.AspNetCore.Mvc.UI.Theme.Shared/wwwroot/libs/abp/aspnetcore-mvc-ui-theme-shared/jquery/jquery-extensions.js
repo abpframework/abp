@@ -126,19 +126,28 @@
             });
         }
 
-        data.map(function (x) {
-            //TODO: improve mapping. it only supports one level deep object.
-            var names = x.name.split(".");
-            if (names.length === 1 && !obj[names[0]]) {
-                obj[names[0]] = x.value;
+        var getNames = function (index, variable) {
+            var name = '';
+            for (var i = 0; i <= index; i++) {
+                if (i == 0) {
+                    name = variable + '[' + i + ']'
+                } else {
+                    name += '][' + variable + '[' + i + ']'
+                }
             }
-            else if (names.length === 2) {
-                if (!obj[names[0]]) {
-                    obj[names[0]] = {};
+            return name;
+        }
+
+        data.map(function (x) {
+            var names = x.name.split(".");
+            for (var i = 0; i < names.length; i++) {
+                if (eval('!obj[' + getNames(i, 'names') + ']')) {
+                    eval('obj[' + getNames(i, 'names') + '] = {}');
                 }
-                if (!obj[names[0]][names[1]]) {
-                    obj[names[0]][names[1]] = x.value;
-                }
+            }
+
+            if ($.isEmptyObject(eval('obj[' + getNames(names.length - 1, 'names') + ']'))) {
+                eval('obj[' + getNames(names.length - 1, 'names') + '] = x.value');
             }
         });
 

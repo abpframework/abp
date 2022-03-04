@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@abp/core": "~5.1.4",
-    "@fortawesome/fontawesome-free": "^5.13.0"
+    "@fortawesome/fontawesome-free": "^5.15.4"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

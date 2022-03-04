@@ -7,7 +7,7 @@
   "dependencies": {
     "@abp/clipboard": "~5.1.4",
     "@abp/core": "~5.1.4",
-    "prismjs": "^1.20.0"
+    "prismjs": "^1.26.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

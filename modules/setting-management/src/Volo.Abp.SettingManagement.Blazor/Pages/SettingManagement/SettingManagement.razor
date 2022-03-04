@@ -11,8 +11,8 @@
 
 <Card>
     <CardBody>
-        <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Left" Pills="true" VerticalItemsColumnSize="ColumnSize.Is3">
-            <Items >
+        <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Left" Pills="true" Mode="TabsMode.LazyReload" VerticalItemsColumnSize="ColumnSize.Is3">
+            <Items>
                 @foreach (var group in SettingComponentCreationContext.Groups)
                 {
                     <Tab Name="@GetNormalizedString(group.Id)">
