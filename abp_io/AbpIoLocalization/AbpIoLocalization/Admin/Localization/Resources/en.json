@@ -384,6 +384,7 @@
     "SpeakerDeletionConfirmationMessage": "Are you sure you want to delete this speaker?",
     "Menu:Speakers": "Speakers",
     "ChooseSpeakerImage": "Choose a speaker image...",
-    "SpeakerImage": "Speaker image"
+    "SpeakerImage": "Speaker image",
+    "AddSpeaker": "Add Speaker"
   }
 }
