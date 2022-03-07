@@ -35,7 +35,7 @@
                 //change text
                 if ($buttonInnerSpan.length && $button.attr('data-busy-text')) {
                     $button.data('buttonOriginalText', $buttonInnerSpan.html());
-                    
+
                     if ($button.data('busy-text-is-html')) {
                         $buttonInnerSpan.html($button.attr('data-busy-text'));
                     } else {
@@ -118,12 +118,9 @@
             });
 
         //map to object
-        var obj = {};
 
-        if (camelCase !== undefined ? camelCase : true) {
-            data.forEach(function (d) {
-                d.name = toCamelCase(d.name);
-            });
+        var getVarName = function (v) {
+            return v.toString().replace(/\(\)\s?=\>\s?/, '');
         }
 
         var getNames = function (index, variable) {
@@ -138,16 +135,29 @@
             return name;
         }
 
+        var obj = {};
+        var objName = getVarName(() => obj);
+
+        if (camelCase !== undefined ? camelCase : true) {
+            data.forEach(function (d) {
+                d.name = toCamelCase(d.name);
+            });
+        }
+
         data.map(function (x) {
             var names = x.name.split(".");
-            for (var i = 0; i < names.length; i++) {
-                if (eval('!obj[' + getNames(i, 'names') + ']')) {
-                    eval('obj[' + getNames(i, 'names') + '] = {}');
+            var xName = getVarName(() => x);
+            var namesName = getVarName(() => names);
+
+            var i = obj ? 0 : 1;
+            for (i = 0; i < names.length; i++) {
+                if (eval('!' + objName + '[' + getNames(i, '' + namesName + '') + ']')) {
+                    eval('' + objName + '[' + getNames(i, '' + namesName + '') + '] = {}');
                 }
             }
 
-            if ($.isEmptyObject(eval('obj[' + getNames(names.length - 1, 'names') + ']'))) {
-                eval('obj[' + getNames(names.length - 1, 'names') + '] = x.value');
+            if ($.isEmptyObject(eval('' + objName + '[' + getNames(names.length - 1, '' + namesName + '') + ']'))) {
+                eval('' + objName + '[' + getNames(names.length - 1, '' + namesName + '') + '] = ' + xName + '.value');
             }
         });
 
