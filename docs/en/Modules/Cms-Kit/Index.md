@@ -13,6 +13,7 @@ The following features are currently available:
 * Provides a [**reaction**](Reactions.md) system to add reactions (smileys) feature to any kind of resource, like a blog post or a comment.
 * Provides a [**rating**](Ratings.md) system to add rating feature to any kind of resource.
 * Provides a [**menu**](Menus.md) system to manage public menus dynamically.
+* Provides a [**global resources**](Global-Resources.md) system to add global styles and scripts dynamically.
 
 Click to a feature to understand and learn how to use it.
 
