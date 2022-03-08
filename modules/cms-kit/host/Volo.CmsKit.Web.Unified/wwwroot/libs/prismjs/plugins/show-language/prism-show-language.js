@@ -239,6 +239,7 @@
 		"tsconfig": "TSConfig",
 		"uscript": "UnrealScript",
 		"uc": "UnrealScript",
+		"uorazor": "UO Razor Script",
 		"uri": "URI",
 		"url": "URL",
 		"vbnet": "VB.Net",

@@ -3,7 +3,7 @@
 
 	var velocity = {
 		'variable': {
-			pattern: /(^|[^\\](?:\\\\)*)\$!?(?:[a-z][\w-]*(?:\([^)]*\))?(?:\.[a-z][\w-]*(?:\([^)]*\))?|\[[^\]]+])*|{[^}]+})/i,
+			pattern: /(^|[^\\](?:\\\\)*)\$!?(?:[a-z][\w-]*(?:\([^)]*\))?(?:\.[a-z][\w-]*(?:\([^)]*\))?|\[[^\]]+\])*|\{[^}]+\})/i,
 			lookbehind: true,
 			inside: {} // See below
 		},
@@ -12,7 +12,7 @@
 			greedy: true
 		},
 		'number': /\b\d+\b/,
-		'boolean': /\b(?:true|false)\b/,
+		'boolean': /\b(?:false|true)\b/,
 		'operator': /[=!<>]=?|[+*/%-]|&&|\|\||\.\.|\b(?:eq|g[et]|l[et]|n(?:e|ot))\b/,
 		'punctuation': /[(){}[\]:,.]/
 	};
@@ -30,11 +30,11 @@
 
 	Prism.languages.insertBefore('velocity', 'comment', {
 		'unparsed': {
-			pattern: /(^|[^\\])#\[\[[\s\S]*?]]#/,
+			pattern: /(^|[^\\])#\[\[[\s\S]*?\]\]#/,
 			lookbehind: true,
 			greedy: true,
 			inside: {
-				'punctuation': /^#\[\[|]]#$/
+				'punctuation': /^#\[\[|\]\]#$/
 			}
 		},
 		'velocity-comment': [
@@ -52,11 +52,11 @@
 			}
 		],
 		'directive': {
-			pattern: /(^|[^\\](?:\\\\)*)#@?(?:[a-z][\w-]*|{[a-z][\w-]*})(?:\s*\((?:[^()]|\([^()]*\))*\))?/i,
+			pattern: /(^|[^\\](?:\\\\)*)#@?(?:[a-z][\w-]*|\{[a-z][\w-]*\})(?:\s*\((?:[^()]|\([^()]*\))*\))?/i,
 			lookbehind: true,
 			inside: {
 				'keyword': {
-					pattern: /^#@?(?:[a-z][\w-]*|{[a-z][\w-]*})|\bin\b/,
+					pattern: /^#@?(?:[a-z][\w-]*|\{[a-z][\w-]*\})|\bin\b/,
 					inside: {
 						'punctuation': /[{}]/
 					}

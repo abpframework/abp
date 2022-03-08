@@ -1,12 +1,12 @@
 {
-  "version": "5.1.4",
+  "version": "5.2.0-rc.1",
   "name": "@abp/tui-editor",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "~5.1.4",
-    "@abp/prismjs": "~5.1.4"
+    "@abp/jquery": "~5.2.0-rc.1",
+    "@abp/prismjs": "~5.2.0-rc.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
