@@ -458,7 +458,7 @@ export class BookRoutingModule {}
 </button>
 ````
 
-* 加入 `*abpPermission="'BookStore.Books.Create'"`, 当用户没有编辑权限时隐藏按钮.
+* 加入 `*abpPermission="'BookStore.Books.Edit'"`, 当用户没有编辑权限时隐藏按钮.
 * 加入 `*abpPermission="'BookStore.Books.Delete'"`, 当用户没有删除权限时隐藏按钮.
 
 {{else if UI == "Blazor"}}
