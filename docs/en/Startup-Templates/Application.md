@@ -410,7 +410,7 @@ Actions, reducers, sagas, selectors are created in the `src/store` folder. Store
 
 #### Theming
 
-[Native Base](https://nativebase.io/) is used as UI components library. Native Base components can customize easily. See the [Native Base customize](https://docs.nativebase.io/Customize.html#Customize) documentation. We followed the same way.
+[Native Base](https://nativebase.io/) is used as UI components library. Native Base components can customize easily. See the [Native Base customize](https://docs.nativebase.io/3.1.x/customizing-components) documentation. We followed the same way.
 
 * Native Base theme variables are in the `src/theme/variables` folder.
 * Native Base component styles are in the `src/theme/components` folder. These files have been generated with Native Base's `ejectTheme` script.
