@@ -147,7 +147,8 @@ public partial class UserManagement
                         Clicked = async (data) =>
                         {
                             await PermissionManagementModal.OpenAsync(PermissionProviderName,
-                                data.As<IdentityUserDto>().Id.ToString());
+                                data.As<IdentityUserDto>().Id.ToString(),
+                                data.As<IdentityUserDto>().UserName);
                         }
                     },
                     new EntityAction

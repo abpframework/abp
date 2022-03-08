@@ -159,6 +159,10 @@
     "YourFullName": "Tam adınız",
     "YourMessage": "Mesajınız",
     "YourReply": "Cevabınız",
-    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> destekler."
+    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> destekler.",
+    "GlobalResources": "Global Kaynaklar",
+    "Script": "Script",
+    "Style": "Style",
+    "SavedSuccessfully": "Başarıyla kaydedildi"
   }
 }

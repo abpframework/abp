@@ -14,10 +14,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise" Version="0.9.5.4" />
-        <PackageReference Include="Blazorise.DataGrid" Version="0.9.5.4" />
-        <PackageReference Include="Blazorise.Snackbar" Version="0.9.5.4" />
-        <PackageReference Include="Blazorise.Components" Version="0.9.5.4" />
+        <PackageReference Include="Blazorise" Version="1.0.0" />
+        <PackageReference Include="Blazorise.DataGrid" Version="1.0.0" />
+        <PackageReference Include="Blazorise.Snackbar" Version="1.0.0" />
+        <PackageReference Include="Blazorise.Components" Version="1.0.0" />
     </ItemGroup>
 
 </Project>

@@ -45,6 +45,8 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Web;
+using Volo.Abp.SettingManagement;
+using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
@@ -70,6 +72,8 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpTenantManagementWebModule),
     typeof(AbpTenantManagementHttpApiClientModule),
     typeof(AbpPermissionManagementHttpApiClientModule),
+    typeof(AbpSettingManagementHttpApiClientModule),
+    typeof(AbpSettingManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
     )]

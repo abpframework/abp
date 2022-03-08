@@ -10,7 +10,7 @@
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-* **{{DB_Text}}** 做为ORM提供程序.
+* **{{DB_Value}}** 做为ORM提供程序.
 * **{{UI_Value}}** 做为UI框架.
 
 本教程分为以下部分:
@@ -34,7 +34,7 @@
 * [Blazor UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI 与 MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> 如果你在Windows中遇到 "文件名太长" or "解压错误", 很可能与Windows最大文件路径限制有关. Windows文件路径的最大长度为250字符. 为了解决这个问题,参阅 [在Windows 10中启用长路径](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+> 如果你在Windows中遇到 "文件名太长" 或 "解压错误", 很可能与Windows最大文件路径限制有关. Windows文件路径的最大长度为250字符. 为了解决这个问题,参阅 [在Windows 10中启用长路径](https://docs.microsoft.com/zh-cn/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
 
 > 如果你遇到与Git相关的长路径错误, 尝试使用下面的命令在Windows中启用长路径. 参阅 https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
 > `git config --system core.longpaths true`
@@ -49,7 +49,7 @@
 
 ## 权限
 
-ABP框架提供了一个基于ASP.NET Core[授权基础架构](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction)的[授权系统](../Authorization.md). 基于标准授权基础架构的一个主要功能是添加了 **权限系统**, 这个系统允许定义权限并且根据角色, 用户或客户端启用/禁用权限.
+ABP框架提供了一个基于ASP.NET Core[授权基础架构](https://docs.microsoft.com/zh-cn/aspnet/core/security/authorization/introduction)的[授权系统](../Authorization.md). 基于标准授权基础架构的一个主要功能是添加了 **权限系统**, 这个系统允许定义权限并且根据角色, 用户或客户端启用/禁用权限.
 
 ### 权限名称
 
@@ -204,7 +204,7 @@ Configure<RazorPagesOptions>(options =>
 
 ![bookstore-new-book-button-small](images/bookstore-new-book-button-small.png)
 
-打开 the `Pages/Books/Index.cshtml` 文件, 替换内容为以下代码:
+打开 `Pages/Books/Index.cshtml` 文件, 替换内容为以下代码:
 
 ````html
 @page
@@ -458,7 +458,7 @@ export class BookRoutingModule {}
 </button>
 ````
 
-* 加入 `*abpPermission="'BookStore.Books.Create'"`, 当用户没有编辑权限时隐藏按钮.
+* 加入 `*abpPermission="'BookStore.Books.Edit'"`, 当用户没有编辑权限时隐藏按钮.
 * 加入 `*abpPermission="'BookStore.Books.Delete'"`, 当用户没有删除权限时隐藏按钮.
 
 {{else if UI == "Blazor"}}

@@ -50,7 +50,7 @@ public class AbpAuditHubFilter : IHubFilter
             }
             finally
             {
-                if (ShouldWriteAuditLog(invocationContext.ServiceProvider, hasError))
+                if (await ShouldWriteAuditLogAsync(auditingManager.Current.Log, invocationContext.ServiceProvider, hasError))
                 {
                     var unitOfWorkManager = invocationContext.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
                     if (unitOfWorkManager.Current != null)
@@ -76,9 +76,18 @@ public class AbpAuditHubFilter : IHubFilter
         }
     }
 
-    private bool ShouldWriteAuditLog(IServiceProvider serviceProvider, bool hasError)
+    private async Task<bool> ShouldWriteAuditLogAsync(AuditLogInfo auditLogInfo, IServiceProvider serviceProvider, bool hasError)
     {
         var options = serviceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
+
+        foreach (var selector in options.AlwaysLogSelectors)
+        {
+            if (await selector(auditLogInfo))
+            {
+                return true;
+            }
+        }
+
         if (options.AlwaysLogOnException && hasError)
         {
             return true;
