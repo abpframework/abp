@@ -58,10 +58,13 @@
 		createTemplate('svg', /\bsvg/.source),
 
 		// md`# h1`, markdown`## h2`
-		createTemplate('markdown', /\b(?:md|markdown)/.source),
+		createTemplate('markdown', /\b(?:markdown|md)/.source),
 
 		// gql`...`, graphql`...`, graphql.experimental`...`
 		createTemplate('graphql', /\b(?:gql|graphql(?:\s*\.\s*experimental)?)/.source),
+
+		// sql`...`
+		createTemplate('sql', /\bsql/.source),
 
 		// vanilla template string
 		templateString
@@ -170,7 +173,7 @@
 				var interpolationExpression = token.content;
 
 				var placeholder;
-				while (code.indexOf(placeholder = getPlaceholder(placeholderCounter++, language)) !== -1) { }
+				while (code.indexOf(placeholder = getPlaceholder(placeholderCounter++, language)) !== -1) { /* noop */ }
 				placeholderMap[placeholder] = interpolationExpression;
 				return placeholder;
 			}

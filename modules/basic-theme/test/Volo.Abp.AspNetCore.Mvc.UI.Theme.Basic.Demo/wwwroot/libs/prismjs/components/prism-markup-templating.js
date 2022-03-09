@@ -39,8 +39,9 @@
 					var placeholder;
 
 					// Check for existing strings
-					while (env.code.indexOf(placeholder = getPlaceholder(language, i)) !== -1)
+					while (env.code.indexOf(placeholder = getPlaceholder(language, i)) !== -1) {
 						++i;
+					}
 
 					// Create a sparse array
 					tokenStack[i] = match;

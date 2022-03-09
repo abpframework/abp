@@ -1,5 +1,6 @@
 (function () {
-	if (typeof self === 'undefined' || !self.Prism || !self.document) {
+
+	if (typeof Prism === 'undefined' || typeof document === 'undefined') {
 		return;
 	}
 
@@ -28,7 +29,7 @@
 	 */
 	function registerAdapter(adapter, name) {
 		name = name || adapter.name;
-		if (typeof adapter === "function" && !getAdapter(adapter) && !getAdapter(name)) {
+		if (typeof adapter === 'function' && !getAdapter(adapter) && !getAdapter(name)) {
 			adapters.push({ adapter: adapter, name: name });
 		}
 	}
@@ -41,15 +42,15 @@
 	 * @returns {Adapter} A registered adapter or `null`.
 	 */
 	function getAdapter(adapter) {
-		if (typeof adapter === "function") {
-			for (var i = 0, item; item = adapters[i++];) {
+		if (typeof adapter === 'function') {
+			for (var i = 0, item; (item = adapters[i++]);) {
 				if (item.adapter.valueOf() === adapter.valueOf()) {
 					return item.adapter;
 				}
 			}
-		}
-		else if (typeof adapter === "string") {
-			for (var i = 0, item; item = adapters[i++];) {
+		} else if (typeof adapter === 'string') {
+			// eslint-disable-next-line no-redeclare
+			for (var i = 0, item; (item = adapters[i++]);) {
 				if (item.name === adapter) {
 					return item.adapter;
 				}
@@ -64,10 +65,10 @@
 	 * @param {string|Function} adapter The adapter itself or the name of an adapter.
 	 */
 	function removeAdapter(adapter) {
-		if (typeof adapter === "string") {
+		if (typeof adapter === 'string') {
 			adapter = getAdapter(adapter);
 		}
-		if (typeof adapter === "function") {
+		if (typeof adapter === 'function') {
 			var index = adapters.findIndex(function (item) {
 				return item.adapter === adapter;
 			});
@@ -77,15 +78,14 @@
 		}
 	}
 
-	registerAdapter(function github(rsp, el) {
+	registerAdapter(function github(rsp) {
 		if (rsp && rsp.meta && rsp.data) {
 			if (rsp.meta.status && rsp.meta.status >= 400) {
-				return "Error: " + (rsp.data.message || rsp.meta.status);
-			}
-			else if (typeof (rsp.data.content) === "string") {
-				return typeof (atob) === "function"
-					? atob(rsp.data.content.replace(/\s/g, ""))
-					: "Your browser cannot decode base64";
+				return 'Error: ' + (rsp.data.message || rsp.meta.status);
+			} else if (typeof (rsp.data.content) === 'string') {
+				return typeof (atob) === 'function'
+					? atob(rsp.data.content.replace(/\s/g, ''))
+					: 'Your browser cannot decode base64';
 			}
 		}
 		return null;
@@ -93,11 +93,11 @@
 	registerAdapter(function gist(rsp, el) {
 		if (rsp && rsp.meta && rsp.data && rsp.data.files) {
 			if (rsp.meta.status && rsp.meta.status >= 400) {
-				return "Error: " + (rsp.data.message || rsp.meta.status);
+				return 'Error: ' + (rsp.data.message || rsp.meta.status);
 			}
 
 			var files = rsp.data.files;
-			var filename = el.getAttribute("data-filename");
+			var filename = el.getAttribute('data-filename');
 			if (filename == null) {
 				// Maybe in the future we can somehow render all files
 				// But the standard <script> include for gists does that nicely already,
@@ -113,12 +113,12 @@
 			if (files[filename] !== undefined) {
 				return files[filename].content;
 			}
-			return "Error: unknown or missing gist file " + filename;
+			return 'Error: unknown or missing gist file ' + filename;
 		}
 		return null;
 	}, 'gist');
-	registerAdapter(function bitbucket(rsp, el) {
-		if (rsp && rsp.node && typeof (rsp.data) === "string") {
+	registerAdapter(function bitbucket(rsp) {
+		if (rsp && rsp.node && typeof (rsp.data) === 'string') {
 			return rsp.data;
 		}
 		return null;
@@ -126,6 +126,49 @@
 
 
 	var jsonpCallbackCounter = 0;
+	/**
+	 * Makes a JSONP request.
+	 *
+	 * @param {string} src The URL of the resource to request.
+	 * @param {string | undefined | null} callbackParameter The name of the callback parameter. If falsy, `"callback"`
+	 * will be used.
+	 * @param {(data: unknown) => void} onSuccess
+	 * @param {(reason: "timeout" | "network") => void} onError
+	 * @returns {void}
+	 */
+	function jsonp(src, callbackParameter, onSuccess, onError) {
+		var callbackName = 'prismjsonp' + jsonpCallbackCounter++;
+
+		var uri = document.createElement('a');
+		uri.href = src;
+		uri.href += (uri.search ? '&' : '?') + (callbackParameter || 'callback') + '=' + callbackName;
+
+		var script = document.createElement('script');
+		script.src = uri.href;
+		script.onerror = function () {
+			cleanup();
+			onError('network');
+		};
+
+		var timeoutId = setTimeout(function () {
+			cleanup();
+			onError('timeout');
+		}, Prism.plugins.jsonphighlight.timeout);
+
+		function cleanup() {
+			clearTimeout(timeoutId);
+			document.head.removeChild(script);
+			delete window[callbackName];
+		}
+
+		// the JSONP callback function
+		window[callbackName] = function (response) {
+			cleanup();
+			onSuccess(response);
+		};
+
+		document.head.appendChild(script);
+	}
 
 	var LOADING_MESSAGE = 'Loading…';
 	var MISSING_ADAPTER_MESSAGE = function (name) {
@@ -185,61 +228,45 @@
 				}
 			}
 
-			var callbackName = 'prismjsonp' + jsonpCallbackCounter++;
+			var src = pre.getAttribute('data-jsonp');
 
-			var uri = document.createElement('a');
-			var src = uri.href = pre.getAttribute('data-jsonp');
-			uri.href += (uri.search ? '&' : '?') + (pre.getAttribute('data-callback') || 'callback') + '=' + callbackName;
-
-
-			var timeout = setTimeout(function () {
-				// we could clean up window[cb], but if the request finally succeeds, keeping it around is a good thing
-
-				// mark as failed
-				pre.setAttribute(STATUS_ATTR, STATUS_FAILED);
-
-				code.textContent = TIMEOUT_MESSAGE(src);
-			}, Prism.plugins.jsonphighlight.timeout);
-
-
-			var script = document.createElement('script');
-			script.src = uri.href;
-
-			// the JSONP callback function
-			window[callbackName] = function (response) {
-				// clean up
-				document.head.removeChild(script);
-				clearTimeout(timeout);
-				delete window[callbackName];
-
-				// interpret the received data using the adapter(s)
-				var data = null;
-				if (adapter) {
-					data = adapter(response, pre);
-				} else {
-					for (var i = 0, l = adapters.length; i < l; i++) {
-						data = adapters[i].adapter(response, pre);
-						if (data !== null) {
-							break;
+			jsonp(
+				src,
+				pre.getAttribute('data-callback'),
+				function (response) {
+					// interpret the received data using the adapter(s)
+					var data = null;
+					if (adapter) {
+						data = adapter(response, pre);
+					} else {
+						for (var i = 0, l = adapters.length; i < l; i++) {
+							data = adapters[i].adapter(response, pre);
+							if (data !== null) {
+								break;
+							}
 						}
 					}
-				}
 
-				if (data === null) {
+					if (data === null) {
+						// mark as failed
+						pre.setAttribute(STATUS_ATTR, STATUS_FAILED);
+
+						code.textContent = UNKNOWN_FAILURE_MESSAGE;
+					} else {
+						// mark as loaded
+						pre.setAttribute(STATUS_ATTR, STATUS_LOADED);
+
+						code.textContent = data;
+						Prism.highlightElement(code);
+					}
+				},
+				function () {
 					// mark as failed
 					pre.setAttribute(STATUS_ATTR, STATUS_FAILED);
 
-					code.textContent = UNKNOWN_FAILURE_MESSAGE;
-				} else {
-					// mark as loaded
-					pre.setAttribute(STATUS_ATTR, STATUS_LOADED);
-
-					code.textContent = data;
-					Prism.highlightElement(code);
+					code.textContent = TIMEOUT_MESSAGE(src);
 				}
-			};
-
-			document.head.appendChild(script);
+			);
 		}
 	});
 
@@ -267,10 +294,10 @@
 		highlight: function (container) {
 			var elements = (container || document).querySelectorAll(SELECTOR);
 
-			for (var i = 0, element; element = elements[i++];) {
+			for (var i = 0, element; (element = elements[i++]);) {
 				Prism.highlightElement(element);
 			}
 		}
 	};
 
-})();
+}());

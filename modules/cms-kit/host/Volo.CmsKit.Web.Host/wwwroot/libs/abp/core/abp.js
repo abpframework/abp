@@ -73,7 +73,7 @@ var abp = abp || {};
 
     abp.localization = abp.localization || {};
 
-    abp.localization.values = {};
+    abp.localization.values =  abp.localization.values || {};
 
     abp.localization.localize = function (key, sourceName) {
         if (sourceName === '_') { //A convention to suppress the localization
