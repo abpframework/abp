@@ -153,27 +153,33 @@ If you want to see more details, you can check [the release on GitHub](https://g
 
 ## What's new with ABP Commercial 5.2?
 
-TODO
+We've also made many enhancements for the [ABP Commercial](https://commercial.abp.io/), and also made the necessary changes and improvements to align with the ABP Framework v5.2 release. For example, the **single-layer solution template** is also available for the ABP Commercial as explained above.
 
 ### Many to many relations on code generation
 
-TODO
+One exciting new feature with ABP Commercial v5.2 is supporting many-to-many entity relations while generation CRUD code with the [ABP Suite](https://commercial.abp.io/tools/suite).
 
-### Single-layer solution template
+When you open ABP Suite v5.2, you will see an "Add navigation collection" button in the Navigation tab. Here, you can click that button, select the target entity and other options:
 
-TODO
+![suite-many-to-many-entity-relation](suite-many-to-many-entity-relation.png)
+
+With this new feature, you can automatically generate advanced user interfaces without touching the code, then customize the generated code to implement your business logic.
 
 ## Community News
 
 We've organized the 3rd live [ABP Community Talks](https://community.abp.io/talks) event at February 23. ABP community has a good interest in these events and we will continue to organize such a live event in every month. March's event will be announced in a few days. [Follow us on twitter](https://twitter.com/abpframework).
 
-ABP Community website is being a huge resource of articles and video tutorials on the ABP Framework and .NET. There are 93 article/tutorial have been submitted so far. Here, a list of a few contents posted in the last weeks:
+[ABP Community](https://community.abp.io/) website is being a huge resource of articles and video tutorials on the ABP Framework and .NET. There are 93 article/tutorial have been submitted so far. Here, a list of a few contents posted in the last weeks:
 
 * [Ahmet Urel](https://twitter.com/YellowDraqon) submitted a series of articles to demonstrate usage of [MudBlazor](https://www.mudblazor.com/) library with the ABP Framework Blazor UI: [Part 1](https://community.abp.io/posts/mudblazor-theme-in-abp-blazor-webassembly-ae23zz17), [Part 2](https://community.abp.io/posts/mudblazor-theme-in-abp-blazor-webassembly-part-2-tkvrvyvm) and [Part 3](https://community.abp.io/posts/mudblazor-theme-in-abp-blazor-webassembly-part-3-c8hwx00l).
-* TODO
+* [Enis Necipoğlu](https://twitter.com/EnisNecipoglu) has created two articles for ABP & **.NET MAUI** integration: See the [Part 1](https://community.abp.io/posts/integrating-maui-client-via-using-openid-connect-aqjjwsdf) and the [Part 2](https://community.abp.io/posts/using-abp-client-proxies-in-maui-with-openid-connect-em7x1s8k). [Bart Van Hoey](https://twitter.com/bartvanhoey) also created [an article](https://community.abp.io/posts/abp-framework-consumed-by-a-.net-maui-app-e74fmblw) for .NET MAUI and the ABP Framework.
+* [Enis Necipoğlu](https://twitter.com/EnisNecipoglu) has also created [an article](https://community.abp.io/posts/using-autofilterer-with-abp-framework-uuqv81jm) to demonstrate how to use his own open source [AutoFilterer](https://github.com/enisn/AutoFilterer) library with the ABP Framework.
+* [Jonathan Potts](https://github.com/jonathanpotts) has created his first ABP Community article that shows how to use Bootswatch themes with the ABP Framework. [See it here](https://community.abp.io/posts/customizing-the-abp-basic-theme-with-bootswatch-4luoqzr0).
 
-It is appreciated if you want to submit your post and share your knowledge with the ABP community: https://community.abp.io/posts/submit
+Thanks to all contributors. It is appreciated if you want to submit your post and share your knowledge with the ABP community: https://community.abp.io/posts/submit
 
 ## Conclusion
 
-TODO
+This version was mostly about minor features and enhancements for existing features, and getting the framework, architecture and solution structure more mature. Currently, we are working on middle and long term features, changes and goals. You can find most of them on the [road map here](https://docs.abp.io/en/abp/5.2/Road-Map).
+
+The planned release date for the [5.2.0 Stable](https://github.com/abpframework/abp/milestone/66) version is April 05, 2022. Please try the ABP v5.2 RC and provide feedback to have a more stable release.
