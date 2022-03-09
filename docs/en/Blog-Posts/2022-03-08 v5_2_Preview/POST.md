@@ -180,6 +180,6 @@ Thanks to all the contributors. It is appreciated if you want to submit your pos
 
 ## Conclusion
 
-This version was mostly about minor features and enhancements for existing features, and getting the framework, architecture and solution structure more stable. Currently, we are working on middle and long term features, changes and goals. You can find most of them on the [road map here](https://docs.abp.io/en/abp/5.2/Road-Map).
+This version was mostly about minor features and enhancements for existing features, and getting the framework, architecture and solution structure more mature. Currently, we are working on middle and long term features, changes and goals. You can find most of them on the [road map here](https://docs.abp.io/en/abp/5.2/Road-Map).
 
 The planned release date for the [5.2.0 Stable](https://github.com/abpframework/abp/milestone/66) version is April 05, 2022. Please try the ABP v5.2 RC and provide feedback to have a more stable release.
