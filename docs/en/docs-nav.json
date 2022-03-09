@@ -301,6 +301,10 @@
           "path": "Data-Seeding.md"
         },
         {
+          "text": "Distributed Lock",
+          "path": "Distributed-Lock.md"
+        },
+        {
           "text": "Email Sending",
           "items": [
             {
