@@ -19,7 +19,6 @@ public class AppNoLayersDatabaseManagementSystemChangeStep : ProjectBuildPipelin
                 break;
 
             case DatabaseManagementSystem.PostgreSQL:
-                context.Symbols.Add("dbms:PostgreSQL");
                 ChangeEntityFrameworkCoreDependency(context, "Volo.Abp.EntityFrameworkCore.PostgreSql",
                     "Volo.Abp.EntityFrameworkCore.PostgreSql",
                     "AbpEntityFrameworkCorePostgreSqlModule");

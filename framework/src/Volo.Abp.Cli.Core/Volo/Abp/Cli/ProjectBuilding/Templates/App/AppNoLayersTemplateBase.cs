@@ -41,6 +41,11 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 break;
         }
 
+        if (context.BuildArgs.DatabaseManagementSystem == DatabaseManagementSystem.PostgreSQL)
+        {
+            context.Symbols.Add("dbms:PostgreSQL");
+        }
+
         switch (context.BuildArgs.UiFramework)
         {
             case UiFramework.Angular:
