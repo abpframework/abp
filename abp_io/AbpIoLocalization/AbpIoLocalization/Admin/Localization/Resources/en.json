@@ -385,6 +385,7 @@
     "Menu:Speakers": "Speakers",
     "ChooseSpeakerImage": "Choose a speaker image...",
     "SpeakerImage": "Speaker image",
+    "AddSpeaker": "Add Speaker",
     "ShowPurchaseItemsOfOrganizations": "Purchase Items",
     "Enum:OrganizationPurchaseState:0": "Not delivered",
     "Enum:OrganizationPurchaseState:1": "Delivered",

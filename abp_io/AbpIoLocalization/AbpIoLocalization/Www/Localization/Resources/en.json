@@ -318,6 +318,7 @@
     "InstallingTheABPCLI": "Installing the ABP CLI",
     "CreateYourProjectNow": "Create Your Project Now",
     "OrderOn": "Order on {0}",
-    "DownloadFreeDDDBook": "Download Free DDD Book"
+    "DownloadFreeDDDBook": "Download Free DDD Book",
+    "WhatIsABPFramework": "What is the ABP Framework?"
   }
 }

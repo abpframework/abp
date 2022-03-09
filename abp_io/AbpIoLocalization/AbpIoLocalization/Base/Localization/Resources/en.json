@@ -104,6 +104,7 @@
     "WatchTheEvent": "Watch the Event",
     "RegisterNow": "Register Now",
     "ThereIsNoEvent": "There is no event.",
+    "Events": "Events",
     "Volo.AbpIo.Domain:080000": "There is already a purchase item named \"{Name}\"",
     "MasteringAbpFrameworkBook": "Book: Mastering ABP Framework"
   }
