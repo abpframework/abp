@@ -9,6 +9,10 @@ public class Program
 {
     public async static Task<int> Main(string[] args)
     {
+//<TEMPLATE-REMOVE IF-NOT='dbms:PostgreSQL'>
+        // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+//</TEMPLATE-REMOVE>
         var loggerConfiguration = new LoggerConfiguration()
 #if DEBUG
             .MinimumLevel.Debug()
