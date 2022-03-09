@@ -36,31 +36,120 @@ You can use any IDE that supports .NET 6.x, like **[Visual Studio 2022](https://
 
 ## What's new with ABP Framework 5.2?
 
-In this section, I will introduce some major features released with this version.
+In this section, I will introduce some major features released with this version. Here, a brief list of titles explained in the next sections:
 
-### Single-Layer solution template
+* Single-layer solution template
+* API versioning
+* libs folder has been removed from source control
+* Hiding the default ABP endpoints from the Swagger UI
+* Custom Global CSS and JavaScript for the CMS Kit module
+* Other news
 
-TODO
+Let's begin with the first.
+
+### Single-layer solution template
+
+ABP's [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application) is well-organized and layered solution to create maintainable business applications. However, some developers find it a little bit complex for simple and short-term applications. For such applications, we've created a new startup template that has no layering and built as simple as possible. It has the same functionality, features and modules on runtime, but the development model is minimalist and all in the single project (`csproj`), as shown in the following figure:
+
+![single-layer-ABP-Dotnet-solution](single-layer-solution.png)
+
+Use the `app-nolayers` as the template name while creating your solution:
+
+````bash
+abp new BookStore -t app-nolayers --preview
+````
+
+[ABP Commercial](https://commercial.abp.io/) developers can use the `app-nolayers-pro` as the startup template:
+
+````csharp
+abp new BookStore -t app-nolayers-pro --preview
+````
+
+#### Database migrations for EF Core
+
+After creating your solution, you need to create the database before running the application. We've added a parameter to the application that can be specified to migrate the database and seed the initial data. Open the project's directory (that contains the `csproj` file) in a command-line terminal and type the following command:
+
+````bash
+dotnet run --migrate-database
+````
+
+It will run, migrate the database and exit. You can then run the application as normal.
+
+You could use the standard `dotnet ef database update` command (or `Update-Database` command in Visual Studio's Package Manager Console). It can successfully creates the database tables. However, it doesn't seed the initial data that is necessary to run the application.
+
+To keep the solution simple, we haven't added an external application (like the `DbMigrator` in the layered application startup template) to migrate the database.
+
+Using the same application to migrate the database is simple and useful for development environment, and it can also be used in production environment. However, there are other ways of migrating a database. Please read more on [Microsoft's documentation](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations).
+
+#### Other UI and database options
+
+The new single-layer solution template also supports Angular and Blazor UI, and MongoDB for the database side. You can use `mvc` (default), `angular` or `blazor-server` for the `-u` (or `--ui`) parameter, `ef` (default) or `mongodb` for the `-d` (or `--database-provider`) parameter. Example:
+
+````bash
+abp new BookStore -t app-nolayers -u angular -d mongodb --preview
+````
+
+This will create a single layer template with Angular as the UI framework and MongoDB as the database provider.
+
+#### Single-Layer tutorial
+
+[Hamza Albreem](https://twitter.com/st_braim) has created a video tutorial to explain how to develop a simple application with this startup template.
+
+![video-single-layer-tutorial](video-single-layer-tutorial.png)
+
+You can [watch it here](https://community.abp.io/posts/developing-a-minimalist-application-with-the-abp-framework-mvad01ca).
 
 ### API Versioning
 
-TODO
+API versioning was always possible with the ABP Framework, but we haven't had a documentation for it. With the version 5.2, we've created a document to explain how to implement API versioning for your applications and add versioning support to your standard application service classes. See the [documentation here](https://docs.abp.io/en/abp/5.2/API/API-Versioning).
 
-### MVC UI: `libs` folder has been removed from source control
+### libs folder has been removed from source control
 
-TODO
+> **NOTICE: This can be a breaking change for your development environment and CI/CD pipelines. So, please read it carefully and take the necessary actions.**
+
+When you create solutions with MVC (Razor Pages) or Blazor Server UI, your application has a `wwwroot/libs` folder in the UI project as shown below:
+
+![libs-folder](libs-folder.png)
+
+The `libs` folder contains all the client-side (mostly JavaScript and CSS) library dependencies. For example, in the figure above, the `bootstap` folder contains the necessary files for the Bootstrap library. The folder's content is copied from the `node_modules` folder (it only copies the minimum files to make the library working, not the whole folder) with ABP CLI's `abp install-libs` command.
+
+Before the version 5.2, the `libs` folder was coming with the startup template and committed into your source control system (e.g. Git). With the version 5.2, this folder is excluded from the source control by default, so every developer getting the solution must run `abp install-libs` in the UI project's root directory to install these libraries. This approach saves a huge amount of size of the solution. For example, the initial size of an MVC UI application reduces from `9.83MB`  to `0.23MB` (you read it right!).
+
+When you create a new solution with ABP CLI, `abp install-libs` command is automatically executed, so your application directly works. However, if your teammates (or CI/CD system) get the solution from the source control, they should run the `abp install-libs` before running the solution. If you don't want that, you can simply remove the `**/wwwroot/libs/*` line from the `.gitignore` file in the root folder of your solution, then the `libs` folder is added to your source control again (if you are using a source control system other than Git, you should apply your system's rules to include/exclude that folder).
 
 ### Hiding the default ABP endpoints from the Swagger UI
 
-TODO
+[Engincan Veske](https://twitter.com/EngincanVeske) had written [an article](https://community.abp.io/posts/how-to-hide-abp-related-endpoints-on-swagger-ui-mb2w01fe) to explain how to hide ABP's default endpoints from the Swagger UI. Then We thought that can be a good built-in option in the ABP Framework and added a `HideAbpEndpoints` method to the `AddAbpSwaggerGen` method, which can be used like in the following code example:
+
+````csharp
+services.AddAbpSwaggerGen(
+    options => 
+    {
+        //... other options
+        
+        //Hides ABP Related endpoints on Swagger UI
+        options.HideAbpEndpoints();
+    }
+)
+````
+
+After that, ABP's default endpoints will still be functional, but will be hidden in the Swagger UI.
 
 ### Custom Global CSS and JavaScript for the CMS Kit module
 
-TODO
+We are improving the [CMS Kit module](https://docs.abp.io/en/abp/5.2/Modules/Cms-Kit/Index) and adding new features constantly. A new feature with the version 5.2 is a global resources system, where you can write custom JavaScript or CSS code on the application's UI (added a new page for it), which will be immediately available in all your application pages:
+
+![cms-kit-global-resources](cms-kit-global-resources.png)
+
+In this way, you can customize your application's look and behavior on runtime. See [the documentation](https://docs.abp.io/en/abp/5.2/Modules/Cms-Kit/Global-Resources) for more information.
+
+> Note that the [pages](https://docs.abp.io/en/abp/5.2/Modules/Cms-Kit/Pages) feature have already page-basis script/style editor. But this new feature allows you to write script/style that is applied to all pages of your application.
 
 ### Other news
 
-* Upgraded to [Blazorise](https://blazorise.com/) library to v1.0 for the Blazor UI.
+* Upgraded to [Blazorise](https://blazorise.com/) library to v1.0 for the Blazor UI. After upgrade, ensure that all Blazorise-related packages are using the v1.0 in your application.
+
+If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.2.0-rc.1) that contains a list of all issues and pull requests closed with this version.
 
 ## What's new with ABP Commercial 5.2?
 
