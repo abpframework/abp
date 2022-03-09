@@ -11,7 +11,7 @@ ABP Framework offers a prebuilt module for full Swagger integration with small c
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
-If installation is needed, it is suggested to use the [ABP CLI](CLI.md) to install this package.
+If installation is needed, it is suggested to use the [ABP CLI](../CLI.md) to install this package.
 
 ### Using the ABP CLI
 
@@ -101,7 +101,7 @@ services.AddAbpSwaggerGen(
 
 For non MVC/Tiered applications, we need to configure Swagger with OAUTH to handle authorization.  
 
-> ABP Framework uses IdentityServer by default. To get more information about IDS, check this [documentation](Modules/IdentityServer.md). 
+> ABP Framework uses IdentityServer by default. To get more information about IDS, check this [documentation](../Modules/IdentityServer.md). 
 
 
 
