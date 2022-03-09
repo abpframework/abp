@@ -65,6 +65,10 @@ abp new BookStore -t app-nolayers --preview
 abp new BookStore -t app-nolayers-pro --preview
 ````
 
+> There is a bug for the `app-nolayers-pro` related to the licensing system, which will be fixed with 5.2.0-rc.2: `appsettings.secrets.json` is missing in the project folder (should be near to `appsettings.json` and contains the license code normally). As a workaround, create a new solution with the layered startup template, find and copy that file to the single-layer solution.
+
+One note about the single-layer project is it doesn't have Blazor WebAssembly UI, because it requires 3 projects at least (one server-side, one UI and one shared library project between these two). We will consider to add Blazor UI support based on your feedback. You can continue to develop Blazor WASM projects using the standard layered solution template.
+
 #### Database Migrations for EF Core
 
 After creating your solution, you need to create the database before running the application. We've added a parameter to the application that can be specified to migrate the database and seed the initial data. Open the project's directory (that contains the `csproj` file) in a command-line terminal and type the following command:
