@@ -11,10 +11,10 @@ Distributed locks system provides an abstraction that can be implemented by any 
  * `MedallionAbpDistributedLock`
 ABP depends on [DistributedLock.Core](https://www.nuget.org/packages/DistributedLock.Core) library which provides a distributed locking system for concurrency control in a distributed environment. There are [many distributed lock providers](https://github.com/madelson/DistributedLock#implementations) including Redis, SqlServer and ZooKeeper. You may use the one you want. Here, I will show the Redis provider.
 
-This provider contains a method named TryAcquireAsync and this method returns null if the lock could not be handled.
-> Name is a mandatory field. It keeps the locked provider name.
-> Timeout is set as default. If it fells deadlock and doesn't work properly you can use define the time to kill it.
-> CancellationToken is set as default. It enables cooperative cancellation between threads, thread pool work items, or Task objects
+This provider contains a method named `TryAcquireAsync` and this method returns null if the lock could not be handled.
+> `Name` is a mandatory field. It keeps the locked provider name.
+> `Timeout` is set as default. If it fells deadlock and doesn't work properly you can use define the time to kill it.
+> `CancellationToken` is set as default. It enables cooperative cancellation between threads, thread pool work items, or Task objects
 
 
 Also, you should add [DistributedLock.Redis](https://www.nuget.org/packages/DistributedLock.Redis) NuGet package to your project, then add the following code into the ConfigureService method of your ABP module class.
