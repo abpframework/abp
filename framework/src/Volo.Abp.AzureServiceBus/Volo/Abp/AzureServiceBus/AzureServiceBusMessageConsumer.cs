@@ -86,7 +86,12 @@ public class AzureServiceBusMessageConsumer : IAzureServiceBusMessageConsumer, I
         }
         catch (Exception exception)
         {
-            await args.AbandonMessageAsync(args.Message);
+            var serviceBusProcessor = await _processorPool.GetAsync(_subscriptionName, _topicName, _connectionName);
+            if(serviceBusProcessor.ReceiveMode == ServiceBusReceiveMode.PeekLock)
+            {
+                await args.AbandonMessageAsync(args.Message);
+            }
+
             await HandleError(exception);
         }
     }
