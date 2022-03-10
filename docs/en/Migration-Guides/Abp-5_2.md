@@ -3,6 +3,10 @@
 This document is a guide for upgrading ABP 5.1 solutions to ABP 5.2. Please read them all since 5.2 has some important breaking changes.
 
 
+## MongoDB
+
+- `IMongoDbRepositoryFilterer.AddGlobalFilters()` method is replaced with async one `IMongoDbRepositoryFilterer.AddGlobalFiltersAsync()` 
+
 ## Blazor UI
 If you use Blazor WASM or Blazor Server UI, you should follow this section.
 
