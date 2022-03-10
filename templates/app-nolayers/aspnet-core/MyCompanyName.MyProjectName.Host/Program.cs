@@ -1,3 +1,4 @@
+using System;
 using MyCompanyName.MyProjectName.Data;
 using Serilog;
 using Serilog.Events;
