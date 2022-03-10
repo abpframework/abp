@@ -23,6 +23,28 @@ public class FeatureManagementTestDataBuilder : ITransientDependency
 
     public async Task BuildAsync()
     {
+        // Tenant EmailSupport
+        await _featureValueRepository.InsertAsync(
+            new FeatureValue(
+                _guidGenerator.Create(),
+                TestFeatureDefinitionProvider.EmailSupport,
+                false.ToString().ToLowerInvariant(),
+                TenantFeatureValueProvider.ProviderName,
+                TestEditionIds.TenantId.ToString()
+            )
+        );
+
+        // NextTenant EmailSupport
+        await _featureValueRepository.InsertAsync(
+            new FeatureValue(
+                _guidGenerator.Create(),
+                TestFeatureDefinitionProvider.EmailSupport,
+                true.ToString().ToLowerInvariant(),
+                NextTenantFeatureManagementProvider.ProviderName,
+                TestEditionIds.TenantId.ToString()
+            )
+        );
+
         #region "Regular" edition features
 
         //SocialLogins
