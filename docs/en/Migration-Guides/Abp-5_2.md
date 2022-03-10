@@ -1,6 +1,6 @@
 # ABP Version 5.2 Migration Guide
 
-This document is a guide for upgrading ABP 5.1 solutions to ABP 5.2. Please read them all since 5.2 has some important breaking changes.
+This document is a guide for upgrading ABP v5.x solutions to ABP v5.2. Please read them all since v5.2 has some changes you should take care.
 
 
 ## MongoDB
@@ -35,8 +35,6 @@ Also You can review that pull request [#11649 - Blazorise 1.0 Migration](https:/
 
 > _Check out [Blazorise Release Notes](https://preview.blazorise.com/news/release-notes/100) for more information._
 
----
-
 ## MVC - Razor Pages UI
 
 If you use MVC Razor Pages UI, you should follow this section.
@@ -47,4 +45,8 @@ The `libs` folder no longer exists in templates after v5.2. That change greatly 
 You can use `abp install-libs` command for installing or updating client libraries. You should run this command after updating v5.2.
 
 > If you're creating a new project, you don't have to be concerned about it, ABP CLI installs client libraries after automatically.
+
+## See Also
+
+* [Official blog post for the 5.2 release](https://blog.abp.io/abp/ABP.IO-Platform-5-2-RC-Has-Been-Published)
 
