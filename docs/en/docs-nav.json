@@ -302,7 +302,7 @@
         },
         {
           "text": "Distributed Lock",
-          "path": "Distributed-Lock.md"
+          "path": "Distributed-Locking.md"
         },
         {
           "text": "Email Sending",
