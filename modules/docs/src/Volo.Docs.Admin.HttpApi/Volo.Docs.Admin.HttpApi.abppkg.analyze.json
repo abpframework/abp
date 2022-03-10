@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Docs.Admin.HttpApi",
+  "hash": "55c63d7060a78c41b6731fc57bac2791",
+  "contents": [
+    {
+      "namespace": "Volo.Docs.Admin",
+      "contentType": "abpModule",
+      "name": "DocsAdminHttpApiModule"
+    }
+  ]
+}

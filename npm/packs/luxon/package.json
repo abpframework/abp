@@ -1,5 +1,5 @@
 {
-  "version": "5.0.1",
+  "version": "5.2.0-rc.1",
   "name": "@abp/luxon",
   "repository": {
     "type": "git",
@@ -10,8 +10,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~5.0.1",
-    "luxon": "^1.24.1"
+    "@abp/core": "~5.2.0-rc.1",
+    "luxon": "^2.3.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

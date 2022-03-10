@@ -21,7 +21,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
     private const string MethodPlaceholder = "<method placeholder>";
     private const string ClassName = "<className>";
     private const string ServiceInterface = "<serviceInterface>";
-    private static string[] ServicePostfixes = { "AppService", "ApplicationService" };
+    private readonly static string[] ServicePostfixes = { "AppService", "ApplicationService" , "Service"};
     private const string DefaultNamespace = "ClientProxies";
     private const string Namespace = "<namespace>";
     private const string AppServicePrefix = "Volo.Abp.Application.Services";
@@ -64,7 +64,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
     {
     }
 
-    public override async Task GenerateProxyAsync(GenerateProxyArgs args)
+    public async override Task GenerateProxyAsync(GenerateProxyArgs args)
     {
         CheckWorkDirectory(args.WorkDirectory);
         CheckFolder(args.Folder);
@@ -186,7 +186,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         }
 
         clientProxyBuilder.Replace($"{Environment.NewLine}{UsingPlaceholder}", string.Empty);
-        clientProxyBuilder.Replace($"{Environment.NewLine}{Environment.NewLine}        {MethodPlaceholder}", string.Empty);
+        clientProxyBuilder.Replace($"{Environment.NewLine}{Environment.NewLine}    {MethodPlaceholder}", string.Empty);
 
         var filePath = Path.Combine(args.WorkDirectory, folder, $"{clientProxyName}.Generated.cs");
 
@@ -209,12 +209,12 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         if (!action.Name.EndsWith("Async"))
         {
             GenerateSynchronizationMethod(action, returnTypeName, methodBuilder, usingNamespaceList);
-            clientProxyBuilder.Replace(MethodPlaceholder, $"{methodBuilder}{Environment.NewLine}        {MethodPlaceholder}");
+            clientProxyBuilder.Replace(MethodPlaceholder, $"{methodBuilder}{Environment.NewLine}    {MethodPlaceholder}");
             return;
         }
 
         GenerateAsynchronousMethod(action, returnTypeName, methodBuilder, usingNamespaceList);
-        clientProxyBuilder.Replace(MethodPlaceholder, $"{methodBuilder}{Environment.NewLine}        {MethodPlaceholder}");
+        clientProxyBuilder.Replace(MethodPlaceholder, $"{methodBuilder}{Environment.NewLine}    {MethodPlaceholder}");
     }
 
     private void GenerateSynchronizationMethod(ActionApiDescriptionModel action, string returnTypeName, StringBuilder methodBuilder, List<string> usingNamespaceList)
@@ -229,10 +229,10 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         methodBuilder.Replace("<args>", string.Empty);
         methodBuilder.Replace(", )", ")");
 
-        methodBuilder.AppendLine("        {");
-        methodBuilder.AppendLine("            //Client Proxy does not support the synchronization method, you should always use asynchronous methods as a best practice");
-        methodBuilder.AppendLine("            throw new System.NotImplementedException(); ");
-        methodBuilder.AppendLine("        }");
+        methodBuilder.AppendLine("    {");
+        methodBuilder.AppendLine("        //Client Proxy does not support the synchronization method, you should always use asynchronous methods as a best practice");
+        methodBuilder.AppendLine("        throw new System.NotImplementedException(); ");
+        methodBuilder.AppendLine("    }");
     }
 
     private void GenerateAsynchronousMethod(
@@ -253,31 +253,31 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         methodBuilder.Replace("<args>", string.Empty);
         methodBuilder.Replace(", )", ")");
 
-        methodBuilder.AppendLine("        {");
+        methodBuilder.AppendLine("    {");
 
         var argsTemplate = "new ClientProxyRequestTypeValue" +
-                   $"{Environment.NewLine}            {{<args>" +
-                   $"{Environment.NewLine}            }}";
+                   $"{Environment.NewLine}        {{<args>" +
+                   $"{Environment.NewLine}        }}";
 
         var args = action.ParametersOnMethod.Any() ? argsTemplate : string.Empty;
 
         if (returnTypeName == "void")
         {
-            methodBuilder.AppendLine($"            await RequestAsync(nameof({action.Name}), {args});");
+            methodBuilder.AppendLine($"        await RequestAsync(nameof({action.Name}), {args});");
         }
         else
         {
-            methodBuilder.AppendLine($"            return await RequestAsync<{returnTypeName}>(nameof({action.Name}), {args});");
+            methodBuilder.AppendLine($"        return await RequestAsync<{returnTypeName}>(nameof({action.Name}), {args});");
         }
 
         foreach (var parameter in action.ParametersOnMethod)
         {
-            methodBuilder.Replace("<args>", $"{Environment.NewLine}                {{ typeof({GetRealTypeName(parameter.Type)}), {parameter.Name} }},<args>");
+            methodBuilder.Replace("<args>", $"{Environment.NewLine}            {{ typeof({GetRealTypeName(parameter.Type)}), {parameter.Name} }},<args>");
         }
 
         methodBuilder.Replace(",<args>", string.Empty);
         methodBuilder.Replace(", )", ")");
-        methodBuilder.AppendLine("        }");
+        methodBuilder.AppendLine("    }");
     }
 
     private bool ShouldGenerateProxy(ControllerApiDescriptionModel controllerApiDescription)

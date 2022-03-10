@@ -32,9 +32,10 @@ public class AbpFeatureManagementHttpApiModule : AbpModule
                 .AddBaseTypes(typeof(AbpUiResource));
         });
 
+        var contractsOptions = context.Services.ExecutePreConfiguredActions<AbpFeatureManagementApplicationContractsOptions>();
         Configure<JsonOptions>(options =>
         {
-            options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter());
+            options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter(contractsOptions));
         });
     }
 }

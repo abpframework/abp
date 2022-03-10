@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Admin.Application",
-  "hash": "881e15230c730c90b8f1524a53549298",
+  "hash": "26aaaf7203b92c171ba27f811f10b409",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Admin",
@@ -21,12 +21,12 @@
       "summary": null,
       "implementingInterfaces": [
         "Volo.CmsKit.Admin.Tags.ITagAdminAppService",
-        "Volo.Abp.Application.Services.ICrudAppService`5[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICrudAppService`5[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
         "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
       ],
       "contentType": "applicationService",
@@ -37,11 +37,11 @@
       "summary": null,
       "implementingInterfaces": [
         "Volo.CmsKit.Admin.Pages.IPageAdminAppService",
-        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.GetPagesInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.CreatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.UpdatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.GetPagesInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.CreatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.UpdatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.CreatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.UpdatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.GetPagesInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.CreatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.UpdatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.GetPagesInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.CreatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.UpdatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.CreatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.UpdatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
         "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
       ],
       "contentType": "applicationService",
@@ -79,12 +79,12 @@
       "summary": null,
       "implementingInterfaces": [
         "Volo.CmsKit.Admin.Blogs.IBlogAdminAppService",
-        "Volo.Abp.Application.Services.ICrudAppService`5[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICrudAppService`5[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
         "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
       ],
       "contentType": "applicationService",
@@ -104,153 +104,15 @@
       "summary": null,
       "implementingInterfaces": [
         "Volo.CmsKit.Admin.Blogs.IBlogPostAdminAppService",
-        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogPostListDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogPostGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogPostListDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogPostGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogPostListDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogPostGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogPostListDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogPostGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
         "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
       ],
       "contentType": "applicationService",
       "name": "BlogPostAdminAppService"
-    },
-    {
-      "displayName": "Comment Management",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Comments"
-    },
-    {
-      "displayName": "Delete",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Comments.Delete"
-    },
-    {
-      "displayName": "Tag Management",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Tags"
-    },
-    {
-      "displayName": "Create",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Tags.Create"
-    },
-    {
-      "displayName": "Update",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Tags.Update"
-    },
-    {
-      "displayName": "Delete",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Tags.Delete"
-    },
-    {
-      "displayName": "Page Management",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Pages"
-    },
-    {
-      "displayName": "Create",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Pages.Create"
-    },
-    {
-      "displayName": "Update",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Pages.Update"
-    },
-    {
-      "displayName": "Delete",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Pages.Delete"
-    },
-    {
-      "displayName": "Blog Management",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Blogs"
-    },
-    {
-      "displayName": "Create",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Blogs.Create"
-    },
-    {
-      "displayName": "Update",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Blogs.Update"
-    },
-    {
-      "displayName": "Delete",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Blogs.Delete"
-    },
-    {
-      "displayName": "Features",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Blogs.Features"
-    },
-    {
-      "displayName": "Blog Post Management",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.BlogPosts"
-    },
-    {
-      "displayName": "Create",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.BlogPosts.Create"
-    },
-    {
-      "displayName": "Update",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.BlogPosts.Update"
-    },
-    {
-      "displayName": "Delete",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.BlogPosts.Delete"
-    },
-    {
-      "displayName": "Menu Management",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Menus"
-    },
-    {
-      "displayName": "Create",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Menus.Create"
-    },
-    {
-      "displayName": "Update",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Menus.Update"
-    },
-    {
-      "displayName": "Delete",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKit.Menus.Delete"
     }
   ]
 }

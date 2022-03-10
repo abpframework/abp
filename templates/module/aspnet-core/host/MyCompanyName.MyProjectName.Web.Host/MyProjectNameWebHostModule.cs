@@ -36,6 +36,7 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
+using Volo.Abp.Http.Client.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
@@ -44,6 +45,8 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Web;
+using Volo.Abp.SettingManagement;
+using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
@@ -57,6 +60,7 @@ namespace MyCompanyName.MyProjectName;
     typeof(MyProjectNameHttpApiModule),
     typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
     typeof(AbpAspNetCoreMvcClientModule),
+    typeof(AbpHttpClientWebModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
@@ -68,6 +72,8 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpTenantManagementWebModule),
     typeof(AbpTenantManagementHttpApiClientModule),
     typeof(AbpPermissionManagementHttpApiClientModule),
+    typeof(AbpSettingManagementHttpApiClientModule),
+    typeof(AbpSettingManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
     )]

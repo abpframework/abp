@@ -10,14 +10,14 @@
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-* **{{DB_Text}}** 做为ORM提供程序.
+* **{{DB_Value}}** 做为ORM提供程序.
 * **{{UI_Value}}** 做为UI框架.
 
 本教程分为以下部分:
 
 - [Part 1: 创建服务端](Part-1.md)
 - [Part 2: 图书列表页面](Part-2.md)
-- **Part 3: 创建,更新和删除图书**(本章)
+- **Part 3: 创建,更新和删除图书 (本章)**
 - [Part 4: 集成测试](Part-4.md)
 - [Part 5: 授权](Part-5.md)
 - [Part 6: 作者: 领域层](Part-6.md)
@@ -129,7 +129,7 @@ namespace Acme.BookStore.Web.Pages.Books
 </abp-dynamic-form>
 ````
 
-* 这个 modal 使用 `abp-dynamic-form` [tag Helper](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) 根据 `CreateBookViewModel` 类自动构建了表单.
+* 这个 modal 使用 `abp-dynamic-form` [tag Helper](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) 根据 `CreateUpdateBookDto` 类自动构建了表单.
 * `abp-model` 指定了 `Book` 属性为模型对象.
 * `abp-form-content` tag helper 作为表单控件渲染位置的占位符 (这是可选的,只有你在 `abp-dynamic-form` 中像本示例这样添加了其他内容才需要).
 
@@ -522,6 +522,8 @@ $(function () {
 "BookDeletionConfirmationMessage": "Are you sure to delete the book '{0}'?",
 "SuccessfullyDeleted": "Successfully deleted!"
 ````
+
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
 
 `Index.js` 的内容最终如下所示:
 

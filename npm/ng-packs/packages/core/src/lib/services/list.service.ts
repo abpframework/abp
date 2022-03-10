@@ -103,7 +103,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     this.get();
   }
 
-  hookToQuery<T extends any>(
+  hookToQuery<T>(
     streamCreatorCallback: QueryStreamCreatorCallback<T, QueryParamsType>,
   ): Observable<PagedResultDto<T>> {
     this._isLoading$.next(true);

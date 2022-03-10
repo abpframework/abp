@@ -71,7 +71,7 @@ public partial class PermissionManagementModal
         LocalizationResource = typeof(AbpPermissionManagementResource);
     }
 
-    public async Task OpenAsync(string providerName, string providerKey, string entityDisplayName = null)
+    public virtual async Task OpenAsync(string providerName, string providerKey, string entityDisplayName = null)
     {
         try
         {

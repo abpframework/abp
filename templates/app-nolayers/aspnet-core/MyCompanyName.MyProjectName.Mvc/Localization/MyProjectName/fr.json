@@ -1,0 +1,8 @@
+{
+ "culture": "fr",
+ "texts": {
+  "Welcome_Title": "Bienvenue",
+  "Welcome_Text": "Il s'agit d'un modèle de démarrage d'application minimaliste à une seule couche pour le cadre ABP.",
+  "Menu:Home": "Accueil"
+ }
+}

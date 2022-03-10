@@ -11,16 +11,16 @@ namespace Volo.Blogging.Blogs
 {
     public class BlogAppService : BloggingAppServiceBase, IBlogAppService
     {
-        private readonly IBlogRepository _blogRepository;
+        protected IBlogRepository BlogRepository { get; }
 
         public BlogAppService(IBlogRepository blogRepository)
         {
-            _blogRepository = blogRepository;
+            BlogRepository = blogRepository;
         }
 
         public async Task<ListResultDto<BlogDto>> GetListAsync()
         {
-            var blogs = await _blogRepository.GetListAsync();
+            var blogs = await BlogRepository.GetListAsync();
 
             return new ListResultDto<BlogDto>(
                 ObjectMapper.Map<List<Blog>, List<BlogDto>>(blogs)
@@ -31,7 +31,7 @@ namespace Volo.Blogging.Blogs
         {
             Check.NotNullOrWhiteSpace(shortName, nameof(shortName));
 
-            var blog = await _blogRepository.FindByShortNameAsync(shortName);
+            var blog = await BlogRepository.FindByShortNameAsync(shortName);
 
             if (blog == null)
             {
@@ -43,7 +43,7 @@ namespace Volo.Blogging.Blogs
 
         public async Task<BlogDto> GetAsync(Guid id)
         {
-            var blog = await _blogRepository.GetAsync(id);
+            var blog = await BlogRepository.GetAsync(id);
 
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }

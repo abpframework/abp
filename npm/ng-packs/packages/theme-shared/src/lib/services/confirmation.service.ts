@@ -93,7 +93,7 @@ export class ConfirmationService {
         debounceTime(150),
         filter((key: KeyboardEvent) => key && key.key === 'Escape'),
       )
-      .subscribe(_ => {
+      .subscribe(() => {
         this.clear();
       });
   }

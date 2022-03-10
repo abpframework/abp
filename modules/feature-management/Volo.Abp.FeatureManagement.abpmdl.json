@@ -73,6 +73,10 @@
     "Volo.Abp.FeatureManagement.Blazor.WebAssembly": {
       "path": "src/Volo.Abp.FeatureManagement.Blazor.WebAssembly/Volo.Abp.FeatureManagement.Blazor.WebAssembly.abppkg.json",
       "folder": "src"
+    },
+    "Volo.Abp.FeatureManagement.Installer": {
+      "path": "src/Volo.Abp.FeatureManagement.Installer/Volo.Abp.FeatureManagement.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }
