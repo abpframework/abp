@@ -34,6 +34,13 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 You can use any IDE that supports .NET 6.x, like **[Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)**.
 
+## Migration Guides
+
+Please see the migration guides if you are upgrading from 5.x versions:
+
+* [ABP Framework 5.x to 5.2 migration guide](https://docs.abp.io/en/abp/5.2/Migration-Guides/Abp-5_2)
+* [ABP Commercial 5.x to 5.2 migration guide](https://docs.abp.io/en/commercial/5.2/migration-guides/index)
+
 ## What's New with ABP Framework 5.2?
 
 In this section, I will introduce some major features released with this version. Here, a brief list of titles explained in the next sections:
@@ -45,7 +52,7 @@ In this section, I will introduce some major features released with this version
 * Custom Global CSS and JavaScript for the CMS Kit module
 * Other news
 
-Let's begin with the first section:
+Let's begin with the first section.
 
 ### Single-layer Solution Template
 
@@ -171,7 +178,7 @@ With this new feature, you can automatically generate advanced user interfaces w
 
 ## Community News
 
-We organized the 3rd live [ABP Community Talks](https://community.abp.io/talks) event on February 23rd. ABP community has a good interest in these events and we will continue to organize such a live event in every month. March's event will be announced in a few days. [Follow us on twitter](https://twitter.com/abpframework).
+We organized the 3rd live [ABP Community Talks](https://community.abp.io/events) event on February 23rd. ABP community has a good interest in these events and we will continue to organize such a live event in every month. March's event will be announced in a few days. [Follow us on twitter](https://twitter.com/abpframework).
 
 [ABP Community](https://community.abp.io/) website is being a huge resource of articles and video tutorials on the ABP Framework and .NET. There have been 93 articles/tutorials submitted so far. Here's a list of a few contents posted in the last weeks:
 
