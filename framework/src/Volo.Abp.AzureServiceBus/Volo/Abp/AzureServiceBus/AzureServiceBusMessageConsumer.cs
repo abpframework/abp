@@ -86,6 +86,7 @@ public class AzureServiceBusMessageConsumer : IAzureServiceBusMessageConsumer, I
         }
         catch (Exception exception)
         {
+            await args.AbandonMessageAsync(args.Message);
             await HandleError(exception);
         }
     }
