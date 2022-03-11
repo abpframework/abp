@@ -1,7 +1,8 @@
 # Distributed Locking
-Distributed locking is very useful to manage many processes that request the same object. 
-In a normal case, accessing the same object from different applications can corrupt the value of resources. 
-In terms of accuracy, we may need to protect the value that's why a lock will be necessary. 
+Distributed locking is very useful to manage many applications that trying to access the same resource.
+The main purpose is to allow only one of many applications to access the same resource at the same time.
+Otherwise accessing the same object from various applications may corrupt the value of resources. 
+On this occasion, distributed locking protects the correct value throughout the applications.
 
 > To use in ABP, you should download the below NuGet package or can open any command apps and run the below command.
 ````powershell
@@ -35,7 +36,7 @@ namespace AbpDemo
 ````
 
 This provider contains a method named `TryAcquireAsync` and this method returns null if the lock could not be handled.
-`name` is mandatory. It keeps the locked provider name. This name should be unique, otherwise it will be seen as a different lock.
+`name` is mandatory. It keeps the locked provider name. This name should be unique, otherwise, it will be seen as a different lock.
 `timeout` is set as default. If it fells deadlock and doesn't work properly you can use define the time to kill it.
 `cancellationToken` is set as default. It enables cooperative cancellation between threads, thread pool work items, or Task objects
 
@@ -73,4 +74,4 @@ You may change the structure of the JSON file but it must match with the above c
 }
 ````
 
-As mentioned the above, this implemantition is for Redis and for more detail you can visit [the official site](https://github.com/madelson/DistributedLock#implementations).
+As mentioned above, this implementation is for Redis and for more detail you can visit [the GitHub site](https://github.com/madelson/DistributedLock#implementations).
