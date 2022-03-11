@@ -1,16 +1,71 @@
 # Distributed Locking
-Distributed locking is very useful to manage many applications that trying to access the same resource.
+Distributed locking is technique to manage many applications that trying to access the same resource.
 The main purpose is to allow only one of many applications to access the same resource at the same time.
 Otherwise accessing the same object from various applications may corrupt the value of resources. 
-On this occasion, distributed locking protects the correct value throughout the applications.
 
-> To use in ABP, you should download the below NuGet package or can open any command apps and run the below command.
+> ABP's current distributed locking implementation is based on the [DistributedLock](https://github.com/madelson/DistributedLock) library.
+
+## Installation
+
+You can open a command-line terminal and type the following command to install the [Volo.Abp.DistributedLocking](https://www.nuget.org/packages/Volo.Abp.DistributedLocking) package it into your project:
+
 ````powershell
 abp add-package Volo.Abp.DistributedLocking
 ````
 
+This package provides the necessary API to use the distributed locking system, however, you should configure a provider before using it.
+
+### Configuring a provider
+
+The [DistributedLock](https://github.com/madelson/DistributedLock) library provides [various of implementations](https://github.com/madelson/DistributedLock#implementations) for the locking, like [Redis](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.Redis.md) and and [ZooKeeper](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.ZooKeeper.md).
+
+For example, if you want to use the [Redis provider](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.Redis.md), you should add [DistributedLock.Redis](https://www.nuget.org/packages/DistributedLock.Redis) NuGet package to your project, then add the following code into the `ConfigureServices` method of your ABP [module](Module-Development-Basics.md) class:
+
+````csharp
+using Medallion.Threading;
+using Medallion.Threading.Redis;
+
+namespace AbpDemo
+{
+	public class MyModule : AbpModule
+	{
+		public override void ConfigureServices(ServiceConfigurationContext context)
+		{
+			var configuration = context.Services.GetConfiguration();
+			
+			context.Services.AddSingleton<IDistributedLockProvider>(sp =>
+			{
+				var connection = ConnectionMultiplexer
+                    .Connect(configuration["Redis:Configuration"]);
+				return new 
+                    RedisDistributedSynchronizationProvider(connection.GetDatabase());
+			});
+		}
+	}
+}
+````
+
+This code gets the Redis connection string from the [configuration](Configuration.md), so you can add the following lines to your `appsettings.json` file:
+
+````json
+"Redis": {
+    "Configuration": "127.0.0.1"
+}
+````
+
+## Usage
+
+There are two ways to use the distributed locking API: ABP's `IAbpDistributedLock` abstraction and [DistributedLock](https://github.com/madelson/DistributedLock) library's API.
+
+### Using the IAbpDistributedLock service
+
+`IAbpDistributedLock` is a simple service provided by the ABP framework for simple usage of distributed locking.
+
+**Example: Using `IAbpDistributedLock.TryAcquireAsync` method**
+
 ````csharp
 using Volo.Abp.DistributedLocking; 
+
 namespace AbpDemo
 {
     public class MyService : ITransientDependency
@@ -23,11 +78,12 @@ namespace AbpDemo
         
         public async Task MyMethodAsync()
         {
-            await using (var handle = await _distributedLock.TryAcquireAsync("NameOfLock"))
+            await using (var handle = 
+                         await _distributedLock.TryAcquireAsync("MyLockName"))
             {
                 if (handle != null)
                 {
-                    //your code
+                    // your code that access the shared resource
                 }
             }   
         }
@@ -35,43 +91,14 @@ namespace AbpDemo
 }
 ````
 
-This provider contains a method named `TryAcquireAsync` and this method returns null if the lock could not be handled.
-`name` is mandatory. It keeps the locked provider name. This name should be unique, otherwise, it will be seen as a different lock.
-`timeout` is set as default. If it fells deadlock and doesn't work properly you can use define the time to kill it.
-`cancellationToken` is set as default. It enables cooperative cancellation between threads, thread pool work items, or Task objects
+`TryAcquireAsync` may not acquire the lock. It returns `null` if the lock could not be acquired. In this case, you shouldn't access the resource. If the handle is not `null`, it means that you've obtained the lock and can safely access the resource.
 
-ABP depends on [DistributedLock.Core](https://www.nuget.org/packages/DistributedLock.Core) library which provides a distributed locking system for concurrency control in a distributed environment. There are [many distributed lock providers](https://github.com/madelson/DistributedLock#implementations) including Redis, SqlServer and ZooKeeper. You may use the one you want. ABP implements the Redis provider for you and you may customize the others yourselves.
+`TryAcquireAsync` method gets the following parameters:
 
-Firstly, you should add [DistributedLock.Redis](https://www.nuget.org/packages/DistributedLock.Redis) NuGet package to your project, then add the following code into the ConfigureService method of your ABP module class.
+* `name` (`string`, required): Unique name of your lock. Different named locks are used to access different resources.
+* `timeout` (`TimeSpan`): A timeout value to wait to obtain the lock. Default value is `TimeSpan.Zero`, which means it doesn't wait if the lock is already owned by another application.
+* `cancellationToken`: A cancellation token that can be triggered later to cancel the operation.
 
-````csharp
-using Medallion.Threading;
-using Medallion.Threading.Redis;
-namespace AbpDemo
-{
-	public class MyModule : AbpModule
-	{
-		public override void ConfigureServices(ServiceConfigurationContext context)
-		{
-			//the other configurations
-			var configuration = context.Services.GetConfiguration();
-			
-			context.Services.AddSingleton<IDistributedLockProvider>(sp =>
-			{
-				var connection = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-				return new RedisDistributedSynchronizationProvider(connection.GetDatabase());
-			});
-		}
-	}
-}
-````
+### Using DistributedLock library's API
 
-Also, you should add your Redis configuration in appsetting.json.
-You may change the structure of the JSON file but it must match with the above configuration code.
-````json
-"Redis": {
-    "Configuration": "127.0.0.1"
-}
-````
-
-As mentioned above, this implementation is for Redis and for more detail you can visit [the GitHub site](https://github.com/madelson/DistributedLock#implementations).
+ABP's `IAbpDistributedLock` service is very limited and mainly designed to be internally used by the ABP Framework. For your own applications, you can use DistributedLock library's own API. See its [own documentation](https://github.com/madelson/DistributedLock) for details.
