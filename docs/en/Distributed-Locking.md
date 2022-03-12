@@ -9,7 +9,7 @@ Otherwise accessing the same object from various applications may corrupt the va
 
 You can open a command-line terminal and type the following command to install the [Volo.Abp.DistributedLocking](https://www.nuget.org/packages/Volo.Abp.DistributedLocking) package it into your project:
 
-````powershell
+````bash
 abp add-package Volo.Abp.DistributedLocking
 ````
 
@@ -17,7 +17,7 @@ This package provides the necessary API to use the distributed locking system, h
 
 ### Configuring a provider
 
-The [DistributedLock](https://github.com/madelson/DistributedLock) library provides [various of implementations](https://github.com/madelson/DistributedLock#implementations) for the locking, like [Redis](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.Redis.md) and and [ZooKeeper](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.ZooKeeper.md).
+The [DistributedLock](https://github.com/madelson/DistributedLock) library provides [various of implementations](https://github.com/madelson/DistributedLock#implementations) for the locking, like [Redis](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.Redis.md) and [ZooKeeper](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.ZooKeeper.md).
 
 For example, if you want to use the [Redis provider](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.Redis.md), you should add [DistributedLock.Redis](https://www.nuget.org/packages/DistributedLock.Redis) NuGet package to your project, then add the following code into the `ConfigureServices` method of your ABP [module](Module-Development-Basics.md) class:
 
