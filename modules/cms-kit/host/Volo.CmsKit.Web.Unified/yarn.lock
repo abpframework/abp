@@ -90,6 +90,14 @@
     "@abp/cms-kit.admin" "~5.2.0-rc.1"
     "@abp/cms-kit.public" "~5.2.0-rc.1"
 
+"@abp/codemirror@~5.2.0-rc.1":
+  version "5.2.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@abp/codemirror/-/codemirror-5.2.0-rc.1.tgz#0f06b4396056d1f3c854e67127d84781690d554f"
+  integrity sha512-iYl9LnHJTZFGUF/WJdGwXwTDUtfrodqr4RAEG+OBETe55yjGLmEW9cRjqgyZdX8UZvYGv9kSD3ScVUrv3woa/A==
+  dependencies:
+    "@abp/core" "~5.2.0-rc.1"
+    codemirror "^5.65.1"
+
 "@abp/core@~5.2.0-rc.1":
   version "5.2.0-rc.1"
   resolved "https://registry.yarnpkg.com/@abp/core/-/core-5.2.0-rc.1.tgz#28dd4949d6b45a2a75f4b76fe0b78b9fa809755d"
@@ -986,6 +994,11 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
+
+codemirror@^5.65.1:
+  version "5.65.2"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.65.2.tgz#5799a70cb3d706e10f60e267245e3a75205d3dd9"
+  integrity sha512-SZM4Zq7XEC8Fhroqe3LxbEEX1zUPWH1wMr5zxiBuiUF64iYOUH/JI88v4tBag8MiBS8B8gRv8O1pPXGYXQ4ErA==
 
 collection-map@^1.0.0:
   version "1.0.0"
