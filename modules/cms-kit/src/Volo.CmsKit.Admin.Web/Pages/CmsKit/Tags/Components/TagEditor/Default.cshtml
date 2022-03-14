@@ -6,17 +6,23 @@
 
 @inject IStringLocalizer<CmsKitResource> L
 
-    <form class="tag-editor-form" data-entity-id="@Model.EntityId" data-entity-type="@Model.EntityType">
+<form class="tag-editor-form" data-entity-id="@Model.EntityId" data-entity-type="@Model.EntityType">
 
-        <div class="mb-3">
-            <label class="form-label">@L["Tags"]</label>
-            <input name="tags" value="@string.Join(',', Model.Tags.Select(s => s.Name))" class="form-control"/>
-        </div>
+	<div class="mb-3">
+		<label class="form-label">@L["Tags"]</label>
+		<select multiple="multiple" name="@Html.NameFor(m => m.Tags)" id="tags">
+			@foreach (var item in Model.Tags)
+			{
+				<option value="@item.Id">@item.Name</option>
+			}
+		</select>
+		@*<input name="tags" value="@string.Join(',', Model.Tags.Select(s => s.Name))" class="form-control" />*@
+	</div>
 
-        @if (Model.DisplaySubmitButton)
-        {
-            <abp-row>
-                <abp-button type="submit" text="@L["Submit"]" />
-            </abp-row>
-        }
-    </form>
+	@if (Model.DisplaySubmitButton)
+	{
+		<abp-row>
+			<abp-button type="submit" text="@L["Submit"]" />
+		</abp-row>
+	}
+</form>

@@ -1,5 +1,20 @@
 $(function () {
 
+    var $selectTags = $("#tags");
+
+    function initSelectTagEditor() {
+        $selectTags.data('autocompleteApiUrl', '/api/cms-kit-admin/tags');
+        $selectTags.data('autocompleteDisplayProperty', 'name');
+        $selectTags.data('autocompleteValueProperty', 'id');
+        $selectTags.data('autocompleteItemsProperty', 'items');
+        $selectTags.data('autocompleteFilterParamName', 'filter');
+
+        abp.dom.initializers.initializeAutocompleteSelects($selectTags);
+    }
+
+    initSelectTagEditor();
+
+
     var $tagEditorForms = $('.tag-editor-form');
 
     $tagEditorForms.on('submit', function (e) {
