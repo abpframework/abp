@@ -10,6 +10,9 @@ export interface Environment {
   oAuthConfig: AuthConfig;
   production: boolean;
   remoteEnv?: RemoteEnv;
+  customSettings?:{ 
+    [key:string]: any;
+  }
 }
 
 export interface ApplicationInfo {
