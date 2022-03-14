@@ -1,13 +1,13 @@
 # Distributed Locking
-Distributed locking is technique to manage many applications that trying to access the same resource.
+Distributed locking is a technique to manage many applications that try to access the same resource.
 The main purpose is to allow only one of many applications to access the same resource at the same time.
-Otherwise accessing the same object from various applications may corrupt the value of resources. 
+Otherwise, accessing the same object from various applications may corrupt the value of resources. 
 
 > ABP's current distributed locking implementation is based on the [DistributedLock](https://github.com/madelson/DistributedLock) library.
 
 ## Installation
 
-You can open a command-line terminal and type the following command to install the [Volo.Abp.DistributedLocking](https://www.nuget.org/packages/Volo.Abp.DistributedLocking) package it into your project:
+You can open a command-line terminal and type the following command to install the [Volo.Abp.DistributedLocking](https://www.nuget.org/packages/Volo.Abp.DistributedLocking) package into your project:
 
 ````bash
 abp add-package Volo.Abp.DistributedLocking
@@ -61,7 +61,7 @@ There are two ways to use the distributed locking API: ABP's `IAbpDistributedLoc
 
 `IAbpDistributedLock` is a simple service provided by the ABP framework for simple usage of distributed locking.
 
-**Example: Using `IAbpDistributedLock.TryAcquireAsync` method**
+**Example: Using the `IAbpDistributedLock.TryAcquireAsync` method**
 
 ````csharp
 using Volo.Abp.DistributedLocking; 
@@ -101,4 +101,4 @@ namespace AbpDemo
 
 ### Using DistributedLock library's API
 
-ABP's `IAbpDistributedLock` service is very limited and mainly designed to be internally used by the ABP Framework. For your own applications, you can use DistributedLock library's own API. See its [own documentation](https://github.com/madelson/DistributedLock) for details.
+ABP's `IAbpDistributedLock` service is very limited and mainly designed to be internally used by the ABP Framework. For your own applications, you can use the DistributedLock library's own API. See its [own documentation](https://github.com/madelson/DistributedLock) for details.
