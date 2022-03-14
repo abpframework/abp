@@ -31,6 +31,8 @@ A simple is usage is presented below. The select must have `auto-complete-select
         data-autocomplete-value-property="id"
         data-autocomplete-items-property="items"
         data-autocomplete-filter-param-name="filter">
+
+        <option value="">
     </select>
     ```
 
