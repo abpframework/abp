@@ -46,6 +46,7 @@ AutoComplete Select supports multiple choices. If select tag has `multiple` attr
 ```html
 <select asp-for="Book.TagIds" 
     class="auto-complete-select"
+    multiple="multiple"
     data-autocomplete-api-url="/api/app/tags"
     data-autocomplete-display-property="name"
     data-autocomplete-value-property="id"
