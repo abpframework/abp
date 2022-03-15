@@ -32,10 +32,36 @@ A simple is usage is presented below. The select must have `auto-complete-select
         data-autocomplete-items-property="items"
         data-autocomplete-filter-param-name="filter">
 
-        <option value="">
+        <!-- You can define selected option(s) here  -->
+        <option value="@SelectedAuthor.Id">@SelectedAuthor.Name</option>
     </select>
     ```
 
+You can define selected option(s) inside select tags. AutoComplete select may can't find selected item if pagination is applied.
+
+
+### Multiple Choices
+AutoComplete Select supports multiple choices. If select tag has `multiple` attribute, it'll allow to choose multiple options.
+
+```html
+<select asp-for="Book.TagIds" 
+    class="auto-complete-select"
+    data-autocomplete-api-url="/api/app/tags"
+    data-autocomplete-display-property="name"
+    data-autocomplete-value-property="id"
+    data-autocomplete-items-property="items"
+    data-autocomplete-filter-param-name="filter">
+    @foreach(var tag in SelectedTags)
+    {
+        <option value="@tag.Id">@tag.Name</option>
+    }
+</select>
+```
+
+It'll be automatically binded to an collection of defined value type.
+```csharp
+    public List<Guid> TagIds { get; set; }
+```
 
 ## Possible Issues
 
