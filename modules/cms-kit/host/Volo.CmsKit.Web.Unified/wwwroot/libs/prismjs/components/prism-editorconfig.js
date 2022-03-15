@@ -4,7 +4,7 @@ Prism.languages.editorconfig = {
 	'section': {
 		pattern: /(^[ \t]*)\[.+\]/m,
 		lookbehind: true,
-		alias: 'keyword',
+		alias: 'selector',
 		inside: {
 			'regex': /\\\\[\[\]{},!?.*]/, // Escape special characters with '\\'
 			'operator': /[!?]|\.\.|\*{1,2}/,

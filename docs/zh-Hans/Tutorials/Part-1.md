@@ -10,7 +10,7 @@
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-* **{{DB_Text}}** 做为数据库提供程序.
+* **{{DB_Value}}** 做为数据库提供程序.
 * **{{UI_Value}}** 做为UI框架.
 
 本教程分为以下部分:
@@ -202,7 +202,7 @@ dotnet ef migrations add Created_Book_Entity
 
 ![bookstore-efcore-migration](./images/bookstore-efcore-migration.png)
 
-> 如果你使用Visual Studio, 你也许想要在*包管理控制台(PMC)*中使用 `Add-Migration Created_Book_Entity -c BookStoreMigrationsDbContext` 和 `Update-Database -c BookStoreMigrationsDbContext` 命令. 确保 {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} 是启动项目并且 `Acme.BookStore.EntityFrameworkCore.DbMigrations` 是 PMC 的*默认项目*.
+> 如果你使用Visual Studio, 你也许想要在*包管理控制台(PMC)*中使用 `Add-Migration Created_Book_Entity -c BookStoreDbContext` 和 `Update-Database -Context BookStoreDbContext` 命令. 确保 {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} 是启动项目并且 `Acme.BookStore.EntityFrameworkCore.DbMigrations` 是 PMC 的*默认项目*.
 
 {{end}}
 
@@ -290,7 +290,7 @@ namespace Acme.BookStore
 using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Books
 {
     public class BookDto : AuditedEntityDto<Guid>
     {

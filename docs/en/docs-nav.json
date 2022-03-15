@@ -301,6 +301,10 @@
           "path": "Data-Seeding.md"
         },
         {
+          "text": "Distributed Locking",
+          "path": "Distributed-Locking.md"
+        },
+        {
           "text": "Email Sending",
           "items": [
             {
@@ -590,6 +594,10 @@
         {
           "text": "Swagger Integration",
           "path": "API/Swagger-Integration.md"
+        },
+        {
+          "text": "API Versioning",
+          "path": "API/API-Versioning.md"
         }
       ]
     },

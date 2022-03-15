@@ -1,6 +1,6 @@
 # Preview Releases
 
-The preview versions are released **~2 weeks before** releasing a major or feature version of the ABP Framework. They are released for developers to try and provide feedback to have more stable versions.
+The preview versions are released **~4 weeks before** releasing a major or feature version of the ABP Framework. They are released for developers to try and provide feedback to have more stable versions.
 
 Versioning of a preview release is like that:
 

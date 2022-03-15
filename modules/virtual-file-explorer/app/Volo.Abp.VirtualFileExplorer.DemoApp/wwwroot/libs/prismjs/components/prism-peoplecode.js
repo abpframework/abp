@@ -8,7 +8,7 @@ Prism.languages.peoplecode = {
 		/<\*(?:[^<*]|\*(?!>)|<(?!\*)|<\*(?:(?!\*>)[\s\S])*\*>)*\*>/.source,
 		// /+ +/ comments
 		/\/\+[\s\S]*?\+\//.source,
-	].join("|")),
+	].join('|')),
 	'string': {
 		pattern: /'(?:''|[^'\r\n])*'(?!')|"(?:""|[^"\r\n])*"(?!")/,
 		greedy: true
@@ -26,7 +26,7 @@ Prism.languages.peoplecode = {
 			'punctuation': /:/
 		}
 	},
-	'keyword': /\b(?:abstract|alias|as|catch|class|component|constant|create|declare|else|end-(?:class|evaluate|for|function|get|if|method|set|try|while)|evaluate|extends|for|function|get|global|implements|import|instance|if|library|local|method|null|of|out|peopleCode|private|program|property|protected|readonly|ref|repeat|returns?|set|step|then|throw|to|try|until|value|when(?:-other)?|while)\b/i,
+	'keyword': /\b(?:abstract|alias|as|catch|class|component|constant|create|declare|else|end-(?:class|evaluate|for|function|get|if|method|set|try|while)|evaluate|extends|for|function|get|global|if|implements|import|instance|library|local|method|null|of|out|peopleCode|private|program|property|protected|readonly|ref|repeat|returns?|set|step|then|throw|to|try|until|value|when(?:-other)?|while)\b/i,
 	'operator-keyword': {
 		pattern: /\b(?:and|not|or)\b/i,
 		alias: 'operator'

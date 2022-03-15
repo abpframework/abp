@@ -1,14 +1,14 @@
 {
   "name": "@abp/ng.account.core",
-  "version": "5.1.2",
+  "version": "5.2.0-rc.1",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "peerDependencies": {
-    "@abp/ng.core": "~5.1.2",
-    "@abp/ng.theme.shared": "~5.1.2",
+    "@abp/ng.core": "~5.2.0-rc.1",
+    "@abp/ng.theme.shared": "~5.2.0-rc.1",
     "@angular/common": ">=12.0.0",
     "@angular/core": ">=12.0.0"
   },

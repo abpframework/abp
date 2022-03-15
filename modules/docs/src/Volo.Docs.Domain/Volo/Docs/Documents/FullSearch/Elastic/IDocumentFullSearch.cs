@@ -11,6 +11,8 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
         Task AddOrUpdateAsync(Document document, CancellationToken cancellationToken = default);
 
+        Task AddOrUpdateManyAsync(IEnumerable<Document> documents, CancellationToken cancellationToken = default);
+
         Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
         Task DeleteAllAsync(CancellationToken cancellationToken = default);

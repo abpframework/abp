@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "Til að búa til áhrifaríka færslu skaltu bæta við forsíðumynd. Hladdu upp 16: 9 myndhlutföllum fyrir besta útsýnið. Hámarks skráarstærð: 1MB.",
     "ThankYouForContribution": "Þakka þér fyrir að leggja þitt af mörkum til ABP samfélagsins.",
     "GithubPost": "Github Greinar",
-    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold \"> 1. </span> Skrifaðu grein á hvaða opinbera GitHub geymslu sem er með markdown sniðinu. <a target=\"_ blank \" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Posts 2020-12-04-Event-Organizer/Post.md \"> dæmi </a>",
+    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold \"> 1. </span> Skrifaðu grein á hvaða opinbera GitHub geymslu sem er með markdown sniðinu. <a target=\"_ blank \" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles 2020-12-04-Event-Organizer/Post.md \"> dæmi </a>",
     "GithubPostSubmitStepTwo": "<span class=\"font-weight-bold\">2.</span> Sendu vefslóð greinarinnar með því að nota formið.",
     "GithubPostSubmitStepThree": "<span class=\"font-weight-bold\">3.</span> Grein þín verður birt á þessari vefsíðu.",
     "YoutubeVideo": "Youtube Videó",

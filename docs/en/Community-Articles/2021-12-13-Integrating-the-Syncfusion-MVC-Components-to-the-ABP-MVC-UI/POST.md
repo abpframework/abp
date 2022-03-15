@@ -178,7 +178,7 @@ module.exports = {
 };
 ```
 
-> ABP copies related packages from **node_modules** folder to the **libs** folder by examining this file. You can read this [document](docs.abp.io/en/abp/latest/UI/AspNetCore/Client-Side-Package-Management#mapping-the-library-resources) for more info.
+> ABP copies related packages from **node_modules** folder to the **libs** folder by examining this file. You can read this [document](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Client-Side-Package-Management#mapping-the-library-resources) for more info.
 
 * Then run the `abp install-libs` to install the dependencies and copy them into the libs folder by your mappings configuration. After running this command, in your **libs** folder it should be a folder named **syncfusion** folder.
 

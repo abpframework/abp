@@ -25,6 +25,8 @@ public class GlobalCmsKitFeatures : GlobalModuleFeatures
 
     public MenuFeature Menu => GetFeature<MenuFeature>();
 
+    public GlobalResourcesFeature GlobalResources => GetFeature<GlobalResourcesFeature>();
+
     public GlobalCmsKitFeatures([NotNull] GlobalFeatureManager featureManager)
         : base(featureManager)
     {
@@ -37,5 +39,6 @@ public class GlobalCmsKitFeatures : GlobalModuleFeatures
         AddFeature(new BlogsFeature(this));
         AddFeature(new CmsUserFeature(this));
         AddFeature(new MenuFeature(this));
+        AddFeature(new GlobalResourcesFeature(this));
     }
 }

@@ -27,16 +27,16 @@ export class DateTimeAdapter {
   toModel(value: NgbDateTimeStruct | null): string {
     if (!value) return '';
 
-    //const now = new Date();
+    const now = new Date();
 
     value = {
-      // TODO
-      /*   year: now.getUTCFullYear(),
+      // TODO look for strict mode errors
+      year: now.getUTCFullYear(),
       month: now.getMonth() + 1,
       day: now.getDate(),
       hour: 0,
       minute: 0,
-      second: 0, */
+      second: 0,
       ...this.value,
       ...value,
     };

@@ -75,7 +75,10 @@ const options: Partial<Confirmation.Options> = {
   yesText: 'Confirm',
   messageLocalizationParams: ['Demo'],
   titleLocalizationParams: [],
-};
+  // You can customize icon 
+  // icon: 'fa fa-exclamation-triangle', // or
+  // iconTemplate : '<img src="custom-image-path.jpg" alt=""/>'
+} 
 
 this.confirmation.warn(
   'AbpIdentity::RoleDeletionConfirmationMessage',
@@ -91,6 +94,8 @@ this.confirmation.warn(
 - `yesText` is the text of the confirmation button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`.
 - `messageLocalizationParams` is the interpolation parameters for the localization of the message.
 - `titleLocalizationParams` is the interpolation parameters for the localization of the title.
+- `icon` is the custom class of the icon. Default value is `undefined`.
+- `iconTemplate` is the template for icon. Default value is `undefined`.
 
 With the options above, the confirmation popup looks like this:
 
@@ -125,6 +130,25 @@ The open confirmation popup can be removed manually via the `clear` method:
 ```js
 this.confirmation.clear();
 ```
+
+### How to Change Icons of The Confirmation Popup
+
+You can change icons with the token of "confirmationIcons" in ThemeSharedModule in the app.module.ts. The changes will affect  all confirmation popup in the project.
+
+```js
+...
+ThemeSharedModule.forRoot({
+  confirmationIcons: {
+    info: 'fa fa-info-circle',
+    success: 'fa fa-check-circle',
+    warning: 'fa fa-exclamation-triangle',
+    error: 'fa fa-times-circle',
+    default: 'fa fa-question-circle',
+  },
+}),
+...
+```
+
 
 ## API
 

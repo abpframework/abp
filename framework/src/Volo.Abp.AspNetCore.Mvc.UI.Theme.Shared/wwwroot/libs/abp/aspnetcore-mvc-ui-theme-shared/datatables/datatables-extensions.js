@@ -168,12 +168,11 @@ var abp = abp || {};
 
             if ($dropdownItemsContainer.find('li').length > 0) {
                 $dropdownItemsContainer.appendTo($container);
-                $dropdownButton.prependTo($container);
+            } else {
+                $dropdownButton.attr('disabled', 'disabled');
             }
 
-            if ($dropdownItemsContainer.children().length === 0) {
-                return "";
-            }
+            $dropdownButton.prependTo($container);
 
             return $container;
         };
@@ -366,7 +365,7 @@ var abp = abp || {};
                 }
 
                 //Text filter
-                if(settings.oInit.searching){
+                if(settings.oInit.searching !== false){
                     if (requestData.search && requestData.search.value !== "") {
                         input.filter = requestData.search.value;
                     } else {

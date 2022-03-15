@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
@@ -12,6 +13,8 @@ using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Public.Web.Menus;
+using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.GlobalResources.Script;
+using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.GlobalResources.Style;
 using Volo.CmsKit.Web;
 
 namespace Volo.CmsKit.Public.Web;
@@ -85,5 +88,21 @@ public class CmsKitPublicWebModule : AbpModule
                 options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/BlogPost", @"/blogs/{blogSlug}/{blogPostSlug:minlength(1)}");
             });
         }
+        
+        if (GlobalFeatureManager.Instance.IsEnabled<GlobalResourcesFeature>())
+        {
+            Configure<AbpLayoutHookOptions>(options =>
+            {
+                options.Add(
+                    LayoutHooks.Head.Last, 
+                    typeof(GlobalStyleViewComponent) 
+                );
+                options.Add(
+                    LayoutHooks.Body.Last, 
+                    typeof(GlobalScriptViewComponent) 
+                );
+            });
+        }
+
     }
 }

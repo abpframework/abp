@@ -10,7 +10,7 @@
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-* **{{DB_Text}}** 做为ORM提供程序.
+* **{{DB_Value}}** 做为ORM提供程序.
 * **{{UI_Value}}** 做为UI框架.
 
 本教程分为以下部分:
@@ -93,7 +93,7 @@ dotnet ef migrations add Added_Authors
 dotnet ef database update
 ````
 
-> 如果你使用 Visual Studio, 可能希望在 *Package Manager Console (PMC)* 使用 `Add-Migration Added_Authors -c BookStoreMigrationsDbContext` 和 `Update-Database -c BookStoreMigrationsDbContext` 命令. 如果这样, 保证 {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} 是启动项目并且在PMC中 `Acme.BookStore.EntityFrameworkCore` 是 *默认项目* .
+> 如果你使用 Visual Studio, 可能希望在 *Package Manager Console (PMC)* 使用 `Add-Migration Added_Authors -c BookStoreDbContext` 和 `Update-Database -Context BookStoreDbContext` 命令. 如果这样, 保证 {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} 是启动项目并且在PMC中 `Acme.BookStore.EntityFrameworkCore` 是 *默认项目* .
 
 {{else if DB=="Mongo"}}
 

@@ -10,7 +10,7 @@
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-* **{{DB_Text}}** 做为ORM提供程序.
+* **{{DB_Value}}** 做为ORM提供程序.
 * **{{UI_Value}}** 做为UI框架.
 
 本教程分为以下部分:
@@ -218,6 +218,8 @@ $(function () {
 "BirthDate": "Birth date",
 "NewAuthor": "New author"
 ````
+
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
 
 注意我们加入了额外的键. 它们会在下面的小节中被使用.
 
@@ -821,6 +823,8 @@ export class AuthorComponent implements OnInit {
 "NewAuthor": "New author"
 ````
 
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
+
 ### 运行应用程序
 
 运行并登录应用程序. **因为你还没有权限, 所以不能看见菜单项**. 转到 `Identity/Roles` 页面, 点击 *操作* 按钮并选择**管理员角色**的*权限*操作:
@@ -1227,6 +1231,8 @@ if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
 "BirthDate": "Birth date",
 "NewAuthor": "New author"
 ````
+
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
 
 ### 运行应用程序
 

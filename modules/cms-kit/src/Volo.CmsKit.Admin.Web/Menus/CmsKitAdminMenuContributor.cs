@@ -79,6 +79,14 @@ public class CmsKitAdminMenuContributor : IMenuContributor
             .RequireGlobalFeatures(typeof(MenuFeature))
             .RequirePermissions(CmsKitAdminPermissions.Menus.Default));
 
+        cmsMenus.Add(new ApplicationMenuItem(
+                CmsKitAdminMenus.GlobalResources.GlobalResourcesMenu,
+                l["GlobalResources"],
+                "/Cms/GlobalResources",
+                "fa fa-newspaper")
+            .RequireGlobalFeatures(typeof(GlobalResourcesFeature))
+            .RequirePermissions(CmsKitAdminPermissions.GlobalResources.Default));
+
         if (cmsMenus.Any())
         {
             var cmsMenu = context.Menu.FindMenuItem(CmsKitAdminMenus.GroupName);

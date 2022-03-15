@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -18,6 +20,8 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
     protected ICurrentTenant CurrentTenant { get; }
     protected ITenantStore TenantStore { get; }
 
+    public ILogger<AppUrlProvider> Logger { get; set; }
+
     public AppUrlProvider(
         IOptions<AppUrlOptions> options,
         ICurrentTenant currentTenant,
@@ -26,6 +30,7 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         CurrentTenant = currentTenant;
         TenantStore = tenantStore;
         Options = options.Value;
+        Logger = NullLogger<AppUrlProvider>.Instance;
     }
 
     public virtual async Task<string> GetUrlAsync(string appName, string urlName = null)
@@ -40,7 +45,12 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
 
     public bool IsRedirectAllowedUrl(string url)
     {
-        return Options.RedirectAllowedUrls.Any(url.StartsWith);
+        var allow = Options.RedirectAllowedUrls.Any(url.StartsWith);
+        if (!allow)
+        {
+            Logger.LogError($"Invalid RedirectUrl: {url}, Use {nameof(AppUrlProvider)} to configure it!");
+        }
+        return allow;
     }
 
     protected virtual async Task<string> GetConfiguredUrl(string appName, string urlName)
@@ -86,7 +96,7 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         {
             if (CurrentTenant.Id.HasValue)
             {
-                url = url.Replace(tenantNamePlaceHolder, await GetCurrentTenantNameAsync());
+                url = url.Replace(tenantNamePlaceHolder, await GetCurrentTenantNameAsync() + ".");
             }
             else
             {

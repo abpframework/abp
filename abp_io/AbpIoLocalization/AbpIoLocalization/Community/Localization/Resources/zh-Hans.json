@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "要创建一个有效的帖子,需要添加封面图片. 上传16:9的图片获取最佳视觉效果. 文件最大支持: 1MB",
     "ThankYouForContribution": "感谢你对ABP社区的贡献",
     "GithubPost": "Github文章",
-    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> 用Markdown格式在GitHub的任何公共存储库上写一篇文章. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Posts/2020-12-04-Event-Organizer/Post.md\">示例</a>",
+    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> 用Markdown格式在GitHub的任何公共存储库上写一篇文章. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\">示例</a>",
     "GithubPostSubmitStepTwo": "<span class=\"font-weight-bold\">2.</span> 使用表单提交你的文章URL.",
     "GithubPostSubmitStepThree": "<span class=\"font-weight-bold\">3.</span> 你的文章将在这个网站中呈现.",
     "YoutubeVideo": "Youtube视频",

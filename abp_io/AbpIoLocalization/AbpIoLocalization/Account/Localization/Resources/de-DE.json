@@ -10,6 +10,7 @@
     "CommercialHomePage": "Commercial Website",
     "CommercialSupportWebSite": "Commercial Support-Website",
     "CommunityWebSite": "ABP Community-Website",
-    "ManageAccount": "Mein Konto | ABP.IO"
+    "ManageAccount": "Mein Konto | ABP.IO",
+    "ManageYourAccount": "Verwalten Sie Ihr Konto"
   }
 }

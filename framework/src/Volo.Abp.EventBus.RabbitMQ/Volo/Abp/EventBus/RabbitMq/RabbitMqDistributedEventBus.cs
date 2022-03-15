@@ -275,7 +275,10 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         return Serializer.Serialize(eventData);
     }
 
-    public virtual Task PublishAsync(Type eventType, object eventData, IBasicProperties properties,
+    public Task PublishAsync(
+        Type eventType,
+        object eventData, 
+        IBasicProperties properties,
         Dictionary<string, object> headersArguments = null)
     {
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);

@@ -33,4 +33,9 @@ public class CmsKitAdminMenus
     {
         public const string MenusMenu = GroupName + ".Menus";
     }
+
+    public static class GlobalResources
+    {
+        public const string GlobalResourcesMenu = GroupName + ".GlobalResources";
+    }
 }

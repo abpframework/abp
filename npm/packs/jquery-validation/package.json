@@ -1,5 +1,5 @@
 {
-  "version": "5.1.2",
+  "version": "5.2.0-rc.1",
   "name": "@abp/jquery-validation",
   "repository": {
     "type": "git",
@@ -10,8 +10,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "~5.1.2",
-    "jquery-validation": "^1.19.2"
+    "@abp/jquery": "~5.2.0-rc.1",
+    "jquery-validation": "^1.19.3"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
