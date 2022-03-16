@@ -1,5 +1,5 @@
 # ASP.NET Core MVC / Razor Pages: Auto-Complete Select
-A simple select component sometimes isn't useful with huge a amount of data. ABP Provides a select implementation that works with pagination and server-side search via using [Select2](https://select2.org/). It works with single or multiple choices well.
+A simple select component sometimes isn't useful with a huge amount of data. ABP Provides a select implementation that works with pagination and server-side search via using [Select2](https://select2.org/). It works with single or multiple choices well.
 
 A screenshot can be shown below.
 
