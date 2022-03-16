@@ -37,7 +37,7 @@ Most of the **Entity Classes** provided by ABP Framework, inherit from the `IHas
 
 ### Getting Started 
 
-This is a core feature and it's used by the ABP Framework. There are not any additional packages required. **Optimistic Locking** is applied for ABP modules by default.
+This is a core feature and it's used by the ABP Framework. There are no additional packages required. **Optimistic Locking** is applied for ABP modules by default.
 
 #### Usage
 
@@ -50,7 +50,7 @@ public class Book : FullAuditedAggregateRoot<Guid>
 }
 ```
 
-or `IHasConcurrencyStamp` interface directly:
+or inherit directly from the `IHasConcurrencyStamp` interface:
 
 ```csharp
 public class Book : Entity<Guid>, IHasConcurrencyStamp
@@ -79,7 +79,7 @@ public class UpdateBookDto : IHasConcurrencyStamp
 }
 ```
 
-Also, you need to set the **ConcurrencyStamp** to the entity in your **UpdateAsync** method of your application service, for that purpose you can use the `SetConcurrencyStampIfNotNull` method like as below:
+Also, you need to set the **ConcurrencyStamp** to the entity in the **UpdateAsync** method of your application service, for that purpose you can use the `SetConcurrencyStampIfNotNull` method like as below:
 
 ```csharp
 public class BookAppService : ApplicationService, IBookAppService 
@@ -89,6 +89,7 @@ public class BookAppService : ApplicationService, IBookAppService
     public virtual async Task<BookDto> UpdateAsync(Guid id, UpdateBookDto input) 
     {
         var book = await BookRepository.GetAsync(id);
+
         book.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
         //set other input values to entity ...
@@ -98,6 +99,8 @@ public class BookAppService : ApplicationService, IBookAppService
 }
 ```
 
-After that, when multiple users try to change the same record at the same time, concurrency stamp mismatch occurs and `AbpDbConcurrencyException` will be thrown. You can either handle the exception manually or let the ABP Framework handle for you and show a error modal like in the screenshot below.
+After that, when multiple users try to change the same record at the same time, concurrency stamp mismatch occurs and `AbpDbConcurrencyException` will be thrown. You can either handle the exception manually or let the ABP Framework handle it for you. 
+
+ABP Framework shows a user-friendly error message like in the image below, if you don't handle the exception manually.
 
 ![Optimistic Concurrency](./images/optimistic-concurrency.png)
