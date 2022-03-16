@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus;
 
 namespace Volo.Abp.Auditing;
 
 [EventName("abp.audit_log.create")]
 [Serializable]
-public class AuditLogInfoEto
+public class AuditLogInfoEto : EtoBase, IHasExtraProperties
 {
     public string ApplicationName { get; set; }
 
@@ -53,10 +55,11 @@ public class AuditLogInfoEto
     public List<EntityChangeInfoEto> EntityChanges { get; set; } = new();
 
     public List<string> Comments { get; set; }
+    public ExtraPropertyDictionary ExtraProperties { get; set; }
 }
 
 [Serializable]
-public class AuditLogActionInfoEto
+public class AuditLogActionInfoEto : IHasExtraProperties
 {
     public string ServiceName { get; set; }
 
@@ -67,10 +70,11 @@ public class AuditLogActionInfoEto
     public DateTime ExecutionTime { get; set; }
 
     public int ExecutionDuration { get; set; }
+    public ExtraPropertyDictionary ExtraProperties { get; set; }
 }
 
 [Serializable]
-public class EntityChangeInfoEto
+public class EntityChangeInfoEto : IHasExtraProperties
 {
     public DateTime ChangeTime { get; set; }
 
@@ -82,6 +86,7 @@ public class EntityChangeInfoEto
     public string EntityTypeFullName { get; set; }
 
     public List<EntityPropertyChangeInfoEto> PropertyChanges { get; set; }
+    public ExtraPropertyDictionary ExtraProperties { get; set; }
 }
 
 [Serializable]
