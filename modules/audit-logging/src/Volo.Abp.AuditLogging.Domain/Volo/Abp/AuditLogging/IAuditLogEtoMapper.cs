@@ -5,6 +5,6 @@ namespace Volo.Abp.AuditLogging;
 
 public interface IAuditLogEtoMapper
 {
-    Task<AuditLogInfoEto> CovertToAuditLogInfoEtoAsync(AuditLogInfo auditLogInfo);
-    Task<AuditLogInfo> CovertToAuditLogInfoAsync(AuditLogInfoEto auditLogInfoEto);
+    Task<AuditLogInfoEto> MapToAuditLogInfoEtoAsync(AuditLogInfo auditLogInfo);
+    Task<AuditLogInfo> MapToAuditLogInfoAsync(AuditLogInfoEto auditLogInfoEto);
 }

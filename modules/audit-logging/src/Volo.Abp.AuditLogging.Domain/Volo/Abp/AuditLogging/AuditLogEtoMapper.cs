@@ -8,7 +8,7 @@ namespace Volo.Abp.AuditLogging;
 
 public class AuditLogEtoMapper : IAuditLogEtoMapper, ITransientDependency
 {
-    public Task<AuditLogInfoEto> CovertToAuditLogInfoEtoAsync(AuditLogInfo auditLogInfo)
+    public Task<AuditLogInfoEto> MapToAuditLogInfoEtoAsync(AuditLogInfo auditLogInfo)
     {
         return Task.FromResult(new AuditLogInfoEto {
             Actions = MapActionsToEtoList(auditLogInfo.Actions),
@@ -37,36 +37,85 @@ public class AuditLogEtoMapper : IAuditLogEtoMapper, ITransientDependency
         });
     }
 
-    public Task<AuditLogInfo> CovertToAuditLogInfoAsync(AuditLogInfoEto auditLogInfoEto)
+    public Task<AuditLogInfo> MapToAuditLogInfoAsync(AuditLogInfoEto auditLogInfoEto)
     {
-        return Task.FromResult(new AuditLogInfo()
-        {
+        return Task.FromResult(new AuditLogInfo {
             Actions = MapActionEtosToEntities(auditLogInfoEto.Actions),
-            // Exceptions = {  },
-            // EntityChanges = {  },
-            Comments = new List<string>(eventData.Comments),
-            Url = eventData.Url,
-            ApplicationName = eventData.ApplicationName,
-            BrowserInfo = eventData.BrowserInfo,
-            ClientId = eventData.ClientId,
-            ClientName = eventData.ClientName,
-            CorrelationId = eventData.CorrelationId,
-            ExecutionDuration = eventData.ExecutionDuration,
-            ExecutionTime = eventData.ExecutionTime,
-            HttpMethod = eventData.HttpMethod,
-            TenantId = eventData.TenantId,
-            TenantName = eventData.TenantName,
-            UserId = eventData.UserId,
-            UserName = eventData.UserName,
-            ClientIpAddress = eventData.ClientIpAddress,
-            HttpStatusCode = eventData.HttpStatusCode,
-            ImpersonatorTenantId = eventData.ImpersonatorTenantId,
-            ImpersonatorTenantName = eventData.ImpersonatorTenantName,
-            ImpersonatorUserId = eventData.ImpersonatorUserId,
-            ImpersonatorUserName = eventData.ImpersonatorUserName
-        };)
+            EntityChanges = MapEntityChangeEtosToEntities(auditLogInfoEto.EntityChanges),
+            Exceptions = auditLogInfoEto.Exceptions,
+            ExtraProperties = auditLogInfoEto.ExtraProperties,
+            Comments = new List<string>(auditLogInfoEto.Comments),
+            Url = auditLogInfoEto.Url,
+            ApplicationName = auditLogInfoEto.ApplicationName,
+            BrowserInfo = auditLogInfoEto.BrowserInfo,
+            ClientId = auditLogInfoEto.ClientId,
+            ClientName = auditLogInfoEto.ClientName,
+            CorrelationId = auditLogInfoEto.CorrelationId,
+            ExecutionDuration = auditLogInfoEto.ExecutionDuration,
+            ExecutionTime = auditLogInfoEto.ExecutionTime,
+            HttpMethod = auditLogInfoEto.HttpMethod,
+            TenantId = auditLogInfoEto.TenantId,
+            TenantName = auditLogInfoEto.TenantName,
+            UserId = auditLogInfoEto.UserId,
+            UserName = auditLogInfoEto.UserName,
+            ClientIpAddress = auditLogInfoEto.ClientIpAddress,
+            HttpStatusCode = auditLogInfoEto.HttpStatusCode,
+            ImpersonatorTenantId = auditLogInfoEto.ImpersonatorTenantId,
+            ImpersonatorTenantName = auditLogInfoEto.ImpersonatorTenantName,
+            ImpersonatorUserId = auditLogInfoEto.ImpersonatorUserId,
+            ImpersonatorUserName = auditLogInfoEto.ImpersonatorUserName
+        });
     }
 
+    private List<EntityChangeInfo> MapEntityChangeEtosToEntities(IEnumerable<EntityChangeInfoEto> entityChanges)
+    {
+        return entityChanges.Select(entityChange => MapEntityChangeEtoToEntity(entityChange)).ToList();
+    }
+
+    private EntityChangeInfo MapEntityChangeEtoToEntity(EntityChangeInfoEto entityChange)
+    {
+        return new EntityChangeInfo() {
+            ChangeTime = entityChange.ChangeTime,
+            ChangeType = entityChange.ChangeType,
+            EntityId = entityChange.EntityId,
+            EntityTenantId = entityChange.EntityTenantId,
+            EntityTypeFullName = entityChange.EntityTypeFullName,
+            ExtraProperties = entityChange.ExtraProperties,
+            PropertyChanges = MapPropertyChangeEtosToEntities(entityChange.PropertyChanges)
+        };
+    }
+
+    private List<EntityPropertyChangeInfo> MapPropertyChangeEtosToEntities(IEnumerable<EntityPropertyChangeInfoEto> propertyChanges)
+    {
+        return propertyChanges.Select(propertyChange => MapPropertyChangeEtoToEntity(propertyChange)).ToList();
+    }
+
+    private EntityPropertyChangeInfo MapPropertyChangeEtoToEntity(EntityPropertyChangeInfoEto propertyChange)
+    {
+        return new EntityPropertyChangeInfo {
+            NewValue = propertyChange.NewValue,
+            OriginalValue = propertyChange.OriginalValue,
+            PropertyName = propertyChange.PropertyName,
+            PropertyTypeFullName = propertyChange.PropertyTypeFullName
+        };
+    }
+
+    private List<AuditLogActionInfo> MapActionEtosToEntities(IEnumerable<AuditLogActionInfoEto> actions)
+    {
+        return actions.Select(action => MapActionEtoToEntity(action)).ToList();
+    }
+
+    private AuditLogActionInfo MapActionEtoToEntity(AuditLogActionInfoEto actionEto)
+    {
+        return new AuditLogActionInfo {
+            Parameters = actionEto.Parameters,
+            ExecutionDuration = actionEto.ExecutionDuration,
+            ExecutionTime = actionEto.ExecutionTime,
+            MethodName = actionEto.MethodName,
+            ServiceName = actionEto.ServiceName,
+            ExtraProperties = actionEto.ExtraProperties
+        };
+    }
 
     private List<AuditLogActionInfoEto> MapActionsToEtoList(IEnumerable<AuditLogActionInfo> auditInfoActions)
     {
@@ -80,7 +129,8 @@ public class AuditLogEtoMapper : IAuditLogEtoMapper, ITransientDependency
             ExecutionDuration = action.ExecutionDuration,
             ExecutionTime = action.ExecutionTime,
             MethodName = action.MethodName,
-            ServiceName = action.ServiceName
+            ServiceName = action.ServiceName,
+            ExtraProperties = action.ExtraProperties
         };
     }
 
@@ -97,12 +147,12 @@ public class AuditLogEtoMapper : IAuditLogEtoMapper, ITransientDependency
             EntityId = entityChange.EntityId,
             EntityTenantId = entityChange.EntityTenantId,
             EntityTypeFullName = entityChange.EntityTypeFullName,
+            ExtraProperties = entityChange.ExtraProperties,
             PropertyChanges = MapPropertyChangesToEtoList(entityChange.PropertyChanges)
         };
     }
 
-    private List<EntityPropertyChangeInfoEto> MapPropertyChangesToEtoList(
-        IEnumerable<EntityPropertyChangeInfo> entityChangePropertyChanges)
+    private List<EntityPropertyChangeInfoEto> MapPropertyChangesToEtoList(IEnumerable<EntityPropertyChangeInfo> entityChangePropertyChanges)
     {
         return entityChangePropertyChanges.Select(propertyChange => MapPropertyChangesToEto(propertyChange)).ToList();
     }

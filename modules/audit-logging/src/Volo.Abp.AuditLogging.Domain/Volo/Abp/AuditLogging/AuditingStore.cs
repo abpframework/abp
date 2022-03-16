@@ -50,7 +50,7 @@ public class AuditingStore : IAuditingStore, ITransientDependency
         {
             if (Options.PublishEvent)
             {
-                await DistributedEventBus.PublishAsync(await Mapper.CovertToAuditLogInfoEtoAsync(auditInfo));
+                await DistributedEventBus.PublishAsync(await Mapper.MapToAuditLogInfoEtoAsync(auditInfo));
             }
 
             await SaveLogAsync(auditInfo);
