@@ -25,7 +25,7 @@ A simple is usage is presented below.
     data-autocomplete-filter-param-name="filter">
 
     <!-- You can define selected option(s) here  -->
-    <option value="@SelectedAuthor.Id">@SelectedAuthor.Name</option>
+    <option selected value="@SelectedAuthor.Id">@SelectedAuthor.Name</option>
 </select>
 ```
 
@@ -56,7 +56,7 @@ AutoComplete Select supports multiple choices. If select tag has `multiple` attr
     data-autocomplete-filter-param-name="filter">
     @foreach(var tag in SelectedTags)
     {
-        <option value="@tag.Id">@tag.Name</option>
+        <option selected value="@tag.Id">@tag.Name</option>
     }
 </select>
 ```
