@@ -628,6 +628,10 @@
               "path": "UI/AspNetCore/Data-Tables.md"
             },
             {
+              "text": "Auto-Complete Select",
+              "path": "UI/AspNetCore/AutoComplete-Select.md"
+            },
+            {
               "text": "Page Alerts",
               "path": "UI/AspNetCore/Page-Alerts.md"
             },
