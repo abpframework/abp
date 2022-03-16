@@ -68,4 +68,4 @@ It'll be automatically binded to an collection of defined value type.
 
 ## Notices
 If the authenticated user doesn't have permission on the given URL, the user will get an authorization error. Be careful while designing this kind of UIs.
-You may expose a lookup endpoint, so your page can retrieve lookup data of dependent entity without giving entire read permission to users.
+You can create a specific, [unauthorized](../../Authorization.md) endpoint/method to get the list of items, so the page can retrieve lookup data of dependent entity without giving entire read permission to users.
