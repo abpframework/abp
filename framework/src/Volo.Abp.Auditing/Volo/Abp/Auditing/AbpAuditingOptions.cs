@@ -37,6 +37,12 @@ public class AbpAuditingOptions
     /// Default: true.
     /// </summary>
     public bool AlwaysLogOnException { get; set; }
+    
+    /// <summary>
+    /// Published <code>AuditLogInfoEto</code> integration event before saving the audit log.
+    /// Default: true.
+    /// </summary>
+    public bool PublishEvent { get; set; }
 
     public List<Func<AuditLogInfo, Task<bool>>> AlwaysLogSelectors { get; }
 
@@ -58,6 +64,7 @@ public class AbpAuditingOptions
         IsEnabledForAnonymousUsers = true;
         HideErrors = true;
         AlwaysLogOnException = true;
+        PublishEvent = true;
         AlwaysLogSelectors = new List<Func<AuditLogInfo, Task<bool>>>();
 
         Contributors = new List<AuditLogContributor>();
