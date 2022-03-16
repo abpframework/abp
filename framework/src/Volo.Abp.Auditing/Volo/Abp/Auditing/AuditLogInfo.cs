@@ -49,11 +49,11 @@ public class AuditLogInfo : IHasExtraProperties
 
     public List<AuditLogActionInfo> Actions { get; set; }
 
-    public List<Exception> Exceptions { get; }
+    public List<Exception> Exceptions { get; set; }
 
-    public ExtraPropertyDictionary ExtraProperties { get; }
+    public ExtraPropertyDictionary ExtraProperties { get; set; }
 
-    public List<EntityChangeInfo> EntityChanges { get; }
+    public List<EntityChangeInfo> EntityChanges { get; set; }
 
     public List<string> Comments { get; set; }
 

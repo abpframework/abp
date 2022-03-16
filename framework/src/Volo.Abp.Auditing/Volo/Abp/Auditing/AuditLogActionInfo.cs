@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Volo.Abp.Data;
 
 namespace Volo.Abp.Auditing;
@@ -17,7 +16,7 @@ public class AuditLogActionInfo : IHasExtraProperties
 
     public int ExecutionDuration { get; set; }
 
-    public ExtraPropertyDictionary ExtraProperties { get; }
+    public ExtraPropertyDictionary ExtraProperties { get; set; }
 
     public AuditLogActionInfo()
     {

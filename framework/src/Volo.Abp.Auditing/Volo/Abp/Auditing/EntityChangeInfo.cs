@@ -25,7 +25,7 @@ public class EntityChangeInfo : IHasExtraProperties
 
     public List<EntityPropertyChangeInfo> PropertyChanges { get; set; }
 
-    public ExtraPropertyDictionary ExtraProperties { get; }
+    public ExtraPropertyDictionary ExtraProperties { get; set; }
 
     public virtual object EntityEntry { get; set; } //TODO: Try to remove since it breaks serializability
 
