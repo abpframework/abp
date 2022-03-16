@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AuditLogging;
@@ -16,15 +17,22 @@ public class AuditingStore : IAuditingStore, ITransientDependency
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected AbpAuditingOptions Options { get; }
     protected IAuditLogInfoToAuditLogConverter Converter { get; }
+    protected IDistributedEventBus DistributedEventBus { get; }
+    protected IAuditLogEtoMapper Mapper { get; }
+
     public AuditingStore(
         IAuditLogRepository auditLogRepository,
         IUnitOfWorkManager unitOfWorkManager,
         IOptions<AbpAuditingOptions> options,
-        IAuditLogInfoToAuditLogConverter converter)
+        IAuditLogInfoToAuditLogConverter converter,
+        IDistributedEventBus distributedEventBus,
+        IAuditLogEtoMapper mapper)
     {
         AuditLogRepository = auditLogRepository;
         UnitOfWorkManager = unitOfWorkManager;
         Converter = converter;
+        DistributedEventBus = distributedEventBus;
+        Mapper = mapper;
         Options = options.Value;
 
         Logger = NullLogger<AuditingStore>.Instance;
@@ -40,6 +48,11 @@ public class AuditingStore : IAuditingStore, ITransientDependency
 
         try
         {
+            if (Options.PublishEvent)
+            {
+                await DistributedEventBus.PublishAsync(await Mapper.CovertToAuditLogInfoEtoAsync(auditInfo));
+            }
+
             await SaveLogAsync(auditInfo);
         }
         catch (Exception ex)
