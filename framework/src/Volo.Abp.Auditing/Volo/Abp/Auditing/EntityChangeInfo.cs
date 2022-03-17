@@ -23,7 +23,7 @@ public class EntityChangeInfo : IHasExtraProperties
 
     public string EntityTypeFullName { get; set; }
 
-    public List<EntityPropertyChangeInfo> PropertyChanges { get; set; }
+    public List<EntityPropertyChangeInfo> PropertyChanges { get; set; } = new();
 
     public ExtraPropertyDictionary ExtraProperties { get; set; }
 
