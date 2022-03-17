@@ -285,8 +285,16 @@
           ]
         },
         {
+          "text": "Cancellation Token Provider",
+          "path": "Cancellation-Token-Provider.md"
+        },
+        {
           "text": "CSRF/XSRF & Anti Forgery",
           "path": "CSRF-Anti-Forgery.md"
+        },
+        {
+          "text": "Concurrency Check",
+          "path": "Concurrency-Check.md"
         },
         {
           "text": "Current User",
@@ -377,6 +385,10 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "Simple State Checker",
+          "path": "SimpleStateChecker.md"
+        },
+        {
           "text": "String Encryption",
           "path": "String-Encryption.md"
         },
@@ -401,14 +413,6 @@
         {
           "text": "Virtual File System",
           "path": "Virtual-File-System.md"
-        },
-        {
-          "text": "Cancellation Token Provider",
-          "path": "Cancellation-Token-Provider.md"
-        },
-        {
-          "text": "Simple State Checker",
-          "path": "SimpleStateChecker.md"
         }
       ]
     },
