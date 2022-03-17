@@ -301,6 +301,10 @@
           "path": "Data-Seeding.md"
         },
         {
+          "text": "Distributed Locking",
+          "path": "Distributed-Locking.md"
+        },
+        {
           "text": "Email Sending",
           "items": [
             {
@@ -622,6 +626,10 @@
             {
               "text": "Data Tables",
               "path": "UI/AspNetCore/Data-Tables.md"
+            },
+            {
+              "text": "Auto-Complete Select",
+              "path": "UI/AspNetCore/AutoComplete-Select.md"
             },
             {
               "text": "Page Alerts",
