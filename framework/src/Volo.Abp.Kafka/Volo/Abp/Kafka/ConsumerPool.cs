@@ -76,6 +76,7 @@ public class ConsumerPool : IConsumerPool, ISingletonDependency
 
             try
             {
+                consumer.Value.Unsubscribe();
                 consumer.Value.Close();
                 consumer.Value.Dispose();
             }

@@ -162,7 +162,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             return;
         }
 
-        await Rebus.Advanced.Routing.Send(AbpRebusEventBusOptions.InputQueueName, eventData);
+        await Rebus.Publish(eventData);
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -224,7 +224,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return PublishToEventBusAsync(eventType, eventData);
     }
 
-    public async override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
     {
         var outgoingEventArray = outgoingEvents.ToArray();
 
@@ -234,11 +234,9 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             {
                 await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
             }
-
+            
             await scope.CompleteAsync();
         }
-
-        return new MultipleOutgoingEventPublishResult(outgoingEventArray);
     }
 
     public async override Task ProcessFromInboxAsync(

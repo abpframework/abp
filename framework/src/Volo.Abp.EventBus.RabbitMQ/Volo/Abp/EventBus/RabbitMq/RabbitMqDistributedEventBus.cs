@@ -34,6 +34,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
     protected IRabbitMqMessageConsumerFactory MessageConsumerFactory { get; }
     protected IRabbitMqMessageConsumer Consumer { get; private set; }
 
+    private bool _exchangeCreated;
+
     public RabbitMqDistributedEventBus(
         IOptions<AbpRabbitMqEventBusOptions> options,
         IConnectionPool connectionPool,
@@ -84,6 +86,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         Consumer.OnMessageReceived(ProcessEventAsync);
 
         SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
+
+        
     }
 
     private async Task ProcessEventAsync(IModel channel, BasicDeliverEventArgs ea)
@@ -197,7 +201,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         return PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, null, eventId: outgoingEvent.Id);
     }
 
-    public async override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(
+    public async override Task PublishManyFromOutboxAsync(
         IEnumerable<OutgoingEventInfo> outgoingEvents,
         OutboxConfig outboxConfig)
     {
@@ -206,48 +210,17 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
             var outgoingEventArray = outgoingEvents.ToArray();
             channel.ConfirmSelect();
 
-            var pendingConfirms = new ConcurrentDictionary<ulong, Guid>();
-            var failures = new ConcurrentBag<Guid>();
-
-            void CleanPendingConfirms(ulong sequenceNumber, bool multiple, bool ack)
-            {
-                if (multiple)
-                {
-                    var confirmed = pendingConfirms.Where(x => x.Key <= sequenceNumber);
-                    foreach (var entry in confirmed)
-                    {
-                        pendingConfirms.TryRemove(entry.Key, out var eventId);
-
-                        if (!ack)
-                        {
-                            failures.Add(eventId);
-                        }
-                    }
-                }
-                else
-                {
-                    pendingConfirms.TryRemove(sequenceNumber, out var eventId);
-
-                    if (!ack)
-                    {
-                        failures.Add(eventId);
-                    }
-                }
-            }
-
             foreach (var outgoingEvent in outgoingEventArray)
             {
-                pendingConfirms.TryAdd(channel.NextPublishSeqNo, outgoingEvent.Id);
-                await PublishAsync(channel, outgoingEvent.EventName, outgoingEvent.EventData, null,
+                await PublishAsync(
+                    channel,
+                    outgoingEvent.EventName, 
+                    outgoingEvent.EventData,  
+                    properties: null,
                     eventId: outgoingEvent.Id);
             }
 
-            channel.BasicAcks += (_, ea) => CleanPendingConfirms(ea.DeliveryTag, ea.Multiple, true);
-            channel.BasicNacks += (_, ea) => CleanPendingConfirms(ea.DeliveryTag, ea.Multiple, false);
-
-            channel.WaitForConfirms();
-
-            return new MultipleOutgoingEventPublishResult(outgoingEventArray.Where(x => !failures.Contains(x.Id)).ToList());
+            channel.WaitForConfirmsOrDie();
         }
     }
 
@@ -308,11 +281,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         Dictionary<string, object> headersArguments = null,
         Guid? eventId = null)
     {
-        channel.ExchangeDeclare(
-            AbpRabbitMqEventBusOptions.ExchangeName,
-            "direct",
-            durable: true
-        );
+        EnsureExchangeExists(channel);
 
         if (properties == null)
         {
@@ -336,6 +305,20 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         );
 
         return Task.CompletedTask;
+    }
+
+    private void EnsureExchangeExists(IModel channel)
+    {
+        if (_exchangeCreated)
+        {
+            return;
+        }
+        
+        channel.ExchangeDeclare(
+            AbpRabbitMqEventBusOptions.ExchangeName,
+            "direct",
+            durable: true
+        );
     }
 
     private void SetEventMessageHeaders(IBasicProperties properties, Dictionary<string, object> headersArguments)

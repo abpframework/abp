@@ -92,10 +92,9 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id);
     }
 
-    public async override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
     {
         var outgoingEventArray =  outgoingEvents.ToArray();
-        var failures = new List<Guid>();
 
         var publisher = await _publisherPool.GetAsync(
             _options.TopicName,
@@ -103,25 +102,15 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         using var messageBatch = await publisher.CreateMessageBatchAsync();
 
-        var failed = false;
         foreach (var outgoingEvent in outgoingEventArray)
         {
-            if (failed)
-            {
-                failures.Add(outgoingEvent.Id);
-                continue;
-            }
-
             if (!messageBatch.TryAddMessage(new ServiceBusMessage(outgoingEvent.EventData) { Subject = outgoingEvent.EventName }))
             {
-                failed = true;
-                failures.Add(outgoingEvent.Id);
+                throw new AbpException("The message is too large to fit in the batch. Set AbpEventBusBoxesOptions.OutboxWaitingEventMaxCount to reduce the number");
             }
         }
 
         await publisher.SendMessagesAsync(messageBatch);
-
-        return new MultipleOutgoingEventPublishResult(outgoingEventArray.Where(x => !failures.Contains(x.Id)).ToList());
     }
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)

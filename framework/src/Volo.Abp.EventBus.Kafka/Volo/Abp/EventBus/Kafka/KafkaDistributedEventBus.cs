@@ -193,38 +193,40 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         );
     }
 
-    public async override Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    public override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
     {
-        var pendingConfirms = new ConcurrentDictionary<string, Guid>();
+        var producer = ProducerPool.Get();
         var outgoingEventArray = outgoingEvents.ToArray();
-
-        var tasks = new List<Task>();
-        foreach (var outgoingEvent in outgoingEventArray)
+        producer.BeginTransaction();
+        try
         {
-            var messageId = outgoingEvent.Id.ToString("N");
-            pendingConfirms.TryAdd(messageId, outgoingEvent.Id);
+            foreach (var outgoingEvent in outgoingEventArray)
+            {
+                var messageId = outgoingEvent.Id.ToString("N");
+                var headers = new Headers 
+                {
+                    { "messageId", System.Text.Encoding.UTF8.GetBytes(messageId)}
+                };
 
-            var task = PublishAsync(
-                AbpKafkaEventBusOptions.TopicName,
-                outgoingEvent.EventName,
-                outgoingEvent.EventData,
-                new Headers { { "messageId", System.Text.Encoding.UTF8.GetBytes(messageId)} },
-                null
-            );
-
-            tasks.Add(task.ContinueWith(t =>
-           {
-               if (!t.IsFaulted)
-               {
-                   var message = t.Result.Message;
-                   pendingConfirms.TryRemove(message.GetMessageId(), out _);
-               }
-           }));
+                 producer.Produce(
+                    AbpKafkaEventBusOptions.TopicName,
+                    new Message<string, byte[]>
+                    {
+                        Key = outgoingEvent.EventName,
+                        Value = outgoingEvent.EventData,
+                        Headers = headers
+                    });
+            }
+            
+            producer.CommitTransaction();
         }
-
-        await Task.WhenAll(tasks);
-
-        return new MultipleOutgoingEventPublishResult(outgoingEventArray.Where(x => !pendingConfirms.Select(p => p.Value).Contains(x.Id)).ToList());
+        catch (Exception e)
+        {
+            producer.AbortTransaction();
+            throw;
+        }
+        
+        return Task.CompletedTask;
     }
 
     public async override Task ProcessFromInboxAsync(
@@ -270,10 +272,26 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return PublishAsync(topicName, eventName, body, headers, headersArguments);
     }
 
-    private Task<DeliveryResult<string, byte[]>> PublishAsync(string topicName, string eventName, byte[] body, Headers headers, Dictionary<string, object> headersArguments)
+    private Task<DeliveryResult<string, byte[]>> PublishAsync(
+        string topicName, 
+        string eventName,
+        byte[] body, 
+        Headers headers,
+        Dictionary<string, object> headersArguments)
     {
         var producer = ProducerPool.Get(AbpKafkaEventBusOptions.ConnectionName);
 
+        return PublishAsync(producer, topicName, eventName, body, headers, headersArguments);
+    }
+
+    private Task<DeliveryResult<string, byte[]>> PublishAsync(
+        IProducer<string, byte[]> producer,
+        string topicName,
+        string eventName,
+        byte[] body,
+        Headers headers,
+        Dictionary<string, object> headersArguments)
+    {
         SetEventMessageHeaders(headers, headersArguments);
 
         return producer.ProduceAsync(

@@ -85,7 +85,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         OutboxConfig outboxConfig
     );
 
-    public abstract Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(
+    public abstract Task PublishManyFromOutboxAsync(
         IEnumerable<OutgoingEventInfo> outgoingEvents,
         OutboxConfig outboxConfig
     );

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -84,14 +85,15 @@ public class OutboxSender : IOutboxSender, ITransientDependency
                     }
 
                     Logger.LogInformation($"Found {waitingEvents.Count} events in the outbox.");
-
-                    var result = await DistributedEventBus
-                        .AsSupportsEventBoxes()
-                        .PublishManyFromOutboxAsync(waitingEvents, OutboxConfig);
-
-                    await Outbox.DeleteManyAsync(result.PublishedOutgoingEvents.Select(x => x.Id).ToArray());
-
-                    Logger.LogInformation($"Sent {result.PublishedOutgoingEvents.Count} events to message broker");
+                    
+                    if (EventBusBoxesOptions.OutboxPublishInBatch)
+                    {
+                        await PublishOutgoingMessagesInBatchAsync(waitingEvents);
+                    }
+                    else
+                    {
+                        await PublishOutgoingMessagesAsync(waitingEvents);
+                    }
                 }
             }
             else
@@ -104,5 +106,33 @@ public class OutboxSender : IOutboxSender, ITransientDependency
                 catch (TaskCanceledException) { }
             }
         }
+    }
+
+    protected virtual async Task PublishOutgoingMessagesAsync(List<OutgoingEventInfo> waitingEvents)
+    {
+        foreach (var waitingEvent in waitingEvents)
+        {
+            await DistributedEventBus
+                .AsSupportsEventBoxes()
+                .PublishFromOutboxAsync(
+                    waitingEvent,
+                    OutboxConfig
+                );
+
+            await Outbox.DeleteAsync(waitingEvent.Id);
+            
+            Logger.LogInformation($"Sent the event to the message broker with id = {waitingEvent.Id:N}");
+        }
+    }
+
+    protected virtual async Task PublishOutgoingMessagesInBatchAsync(List<OutgoingEventInfo> waitingEvents)
+    {
+        await DistributedEventBus
+            .AsSupportsEventBoxes()
+            .PublishManyFromOutboxAsync(waitingEvents, OutboxConfig);
+                    
+        await Outbox.DeleteManyAsync(waitingEvents.Select(x => x.Id).ToArray());
+        
+        Logger.LogInformation($"Sent {waitingEvents.Count} events to message broker");
     }
 }

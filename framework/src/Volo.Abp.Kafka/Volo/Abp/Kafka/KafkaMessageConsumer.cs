@@ -80,9 +80,11 @@ public class KafkaMessageConsumer : IKafkaMessageConsumer, ITransientDependency,
 
     protected virtual async Task Timer_Elapsed(AbpAsyncTimer timer)
     {
-        await CreateTopicAsync();
-        Consume();
-        Timer.Stop();
+        if (Consumer == null)
+        {
+            await CreateTopicAsync();
+            Consume();
+        }
     }
 
     protected virtual async Task CreateTopicAsync()
@@ -164,12 +166,21 @@ public class KafkaMessageConsumer : IKafkaMessageConsumer, ITransientDependency,
 
     public virtual void Dispose()
     {
+        Timer.Stop();
         if (Consumer == null)
         {
             return;
         }
 
-        Consumer.Close();
-        Consumer.Dispose();
+        try
+        {
+            Consumer.Unsubscribe();
+            Consumer.Close();
+            Consumer.Dispose();
+            Consumer = null;
+        }
+        catch (ObjectDisposedException)
+        {
+        }
     }
 }

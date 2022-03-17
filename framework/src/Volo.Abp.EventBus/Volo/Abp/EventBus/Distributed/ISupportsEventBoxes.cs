@@ -10,7 +10,7 @@ public interface ISupportsEventBoxes
         OutboxConfig outboxConfig
     );
 
-    Task<MultipleOutgoingEventPublishResult> PublishManyFromOutboxAsync(
+    Task PublishManyFromOutboxAsync(
         IEnumerable<OutgoingEventInfo> outgoingEvents,
         OutboxConfig outboxConfig
     );
