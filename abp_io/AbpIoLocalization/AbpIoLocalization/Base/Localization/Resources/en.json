@@ -14,6 +14,18 @@
     "Volo.AbpIo.Domain:020002": "Could not delete this NPM Package because \"{Modules}\" Modules are using this package.",
     "Volo.AbpIo.Domain:020003": "Could not delete this NPM Package because \"{Modules}\" Modules are using this package and \"{NugetPackages}\" Nuget Packages are dependent to this package.",
     "Volo.AbpIo.Domain:020004": "Could not delete this Nuget Package because \"{Modules}\" Modules are using this package.",
+    "Volo.AbpIo.Domain:030000": "You have already completed your trial period.",
+    "Volo.AbpIo.Domain:030001": "This organization name already exists.",
+    "Volo.AbpIo.Domain:030002": "Once activated, you cannot switch the trial license to -requested- status!",
+    "Volo.AbpIo.Domain:030003": "There is no such status!",
+    "Volo.AbpIo.Domain:030004": "Status could not be changed due to an unexpected error!",
+    "Volo.AbpIo.Domain:030005": "Start and end date can be updated when the trial license is in the -activated- status!",
+    "Volo.AbpIo.Domain:030006": "The end date must be greater than the start date!",
+    "Volo.AbpIo.Domain:030007": "This trial license has already been activated!",
+    "Volo.AbpIo.Domain:030008": "The purchase date can be set only when the status is -purchased-!",
+    "Volo.AbpIo.Domain:030009": "User not found!",
+    "Volo.AbpIo.Domain:030010": "To purchase the trial license, you first need to activate your trial license!",
+    "Volo.AbpIo.Domain:030011": "You cannot delete a trial license when it is purchased!",
     "WantToLearn?": "Want to learn?",
     "ReadyToGetStarted?": "Ready to get started?",
     "JoinOurCommunity": "Join our community",
@@ -72,7 +84,7 @@
     "WouldLikeToReceiveMarketingMaterials": "I would like to receive marketing materials like product deals & special offers.",
     "JoinOurMarketingNewsletter": "Join our marketing newsletter",
     "CommunityPrivacyPolicyConfirmation": "I agree to the Terms & Conditions and <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
-    "ABPIO-Common": "ABPIO-Common",
+    "WouldLikeToReceiveNotification": "I would like to receive the latest news from abp.io websites.",
     "CommercialNewsletterConfirmationMessage": "I agree to the <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
     "FreeDDDEBook": "Free DDD E-Book",
     "AdditionalServices": "Additional Services",
@@ -104,7 +116,9 @@
     "WatchTheEvent": "Watch the Event",
     "RegisterNow": "Register Now",
     "ThereIsNoEvent": "There is no event.",
+    "Events": "Events",
     "Volo.AbpIo.Domain:080000": "There is already a purchase item named \"{Name}\"",
-    "MasteringAbpFrameworkBook": "Book: Mastering ABP Framework"
+    "MasteringAbpFrameworkBook": "Book: Mastering ABP Framework",
+    "ABPIO-CommonPreferenceDefinition": "Get latest news about ABP Platform like new posts, events and more."
   }
 }

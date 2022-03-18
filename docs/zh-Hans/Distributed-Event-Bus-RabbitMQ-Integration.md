@@ -1,10 +1,10 @@
 # 分布式事件总线RabbitMQ集成
 
-> 本文解释了**如何配置[RabbitMQ](https://www.rabbitmq.com/)**做为分布式总线提供程序. 参阅[分布式事件总线文档](Distributed-Event-Bus.md)了解如何使用分布式事件总线系统.
+> 本文解释了 **如何配置[RabbitMQ](https://www.rabbitmq.com/)** 做为分布式总线提供程序. 参阅[分布式事件总线文档](Distributed-Event-Bus.md)了解如何使用分布式事件总线系统.
 
 ## 安装
 
-使用ABP CLI添加[Volo.Abp.EventBus.RabbitMQ[Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ)NuGet包到你的项目:
+使用ABP CLI添加[Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ)NuGet包到你的项目:
 
 * 安装[ABP CLI](https://docs.abp.io/en/abp/latest/CLI),如果你还没有安装.
 * 在你想要安装 `Volo.Abp.EventBus.RabbitMQ` 包的 `.csproj` 文件目录打开命令行(终端).
@@ -18,7 +18,7 @@
 
 ### `appsettings.json` 文件配置
 
-这是配置RabbitMQ设置最简单的方法. 它也非常强大,因为你可以使用[由AspNet Core支持的](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/)的任何其他配置源(如环境变量).
+这是配置RabbitMQ设置最简单的方法. 它也非常强大,因为你可以使用[由AspNet Core支持](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/)的任何其他配置源(如环境变量).
 
 **示例：最小化配置与默认配置连接到本地的RabbitMQ服务器**
 
