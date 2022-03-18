@@ -132,7 +132,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
         var feature = FeatureDefinitionManager.Get(name);
 
-        if (feature?.ValueType?.Validator.IsValid(value) == false)
+        if (feature.ValueType?.Validator.IsValid(value) == false)
         {
             throw new FeatureValueInvalidException(feature.DisplayName.Localize(StringLocalizerFactory));
         }
@@ -149,11 +149,14 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
         if (providers.Count > 1 && !forceToSet && value != null)
         {
-            var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null);
-            if (fallbackValue.Value == value)
+            await using (await providers[0].HandleContextAsync(providerName, providerKey))
             {
-                //Clear the value if it's same as it's fallback value
-                value = null;
+                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null);
+                if (fallbackValue.Value == value)
+                {
+                    //Clear the value if it's same as it's fallback value
+                    value = null;
+                }
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Features;
 
@@ -10,6 +11,9 @@ public interface IFeatureManagementProvider
 
     //TODO: Other better method name.
     bool Compatible(string providerName);
+
+    //TODO: Other better method name.
+    Task<IAsyncDisposable> HandleContextAsync(string providerName, string providerKey);
 
     Task<string> GetOrNullAsync([NotNull] FeatureDefinition feature, [CanBeNull] string providerKey);
 
