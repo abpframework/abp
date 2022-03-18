@@ -35,8 +35,6 @@ namespace Volo.Docs.Admin
             {
                 mvcBuilder.AddApplicationPartIfNotExists(typeof(DocsAdminWebModule).Assembly);
             });
-
-            context.Services.AddSignalR();
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
