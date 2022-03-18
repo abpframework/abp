@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@abp/core": "~5.2.0-rc.1",
-    "uppy": "^2.4.1"
+    "uppy": "^1.16.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
