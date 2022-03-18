@@ -10,15 +10,12 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs.Admin.Navigation;
 using Volo.Docs.Localization;
-using Volo.Abp.AspNetCore.SignalR;
-using Volo.Docs.Admin.Pages.Docs.Admin.SignalR;
 
 namespace Volo.Docs.Admin
 {
     [DependsOn(
         typeof(DocsAdminHttpApiModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule),
-        typeof(AbpAspNetCoreSignalRModule),
         typeof(DocsAdminApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule)
         )]
@@ -53,26 +50,6 @@ namespace Volo.Docs.Admin
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsAdminWebAutoMapperProfile>(validate: true);
-            });
-
-            Configure<AbpBundlingOptions>(options =>
-            {
-                options
-                    .ScriptBundles
-                    .Get(StandardBundles.Scripts.Global)
-                    .AddFiles("/libs/signalr/signalr.js")
-                    .AddFiles("/Pages/Docs/Admin/docs-notification-hub.js");
-            });
-
-            Configure<AbpSignalROptions>(options =>
-            {
-                options.Hubs.AddOrUpdate(
-                    typeof(UiNotificationHub),
-                    config =>
-                    {
-                        config.RoutePattern = "/document-notification-hub";
-                    }
-                );
             });
 
             Configure<DynamicJavaScriptProxyOptions>(options =>
