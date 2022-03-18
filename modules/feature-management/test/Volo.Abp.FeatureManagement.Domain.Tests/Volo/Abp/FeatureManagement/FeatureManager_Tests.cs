@@ -12,12 +12,14 @@ public class FeatureManager_Tests : FeatureManagementDomainTestBase
     private readonly IFeatureManager _featureManager;
     private readonly ICurrentTenant _currentTenant;
     private readonly IFeatureChecker _featureChecker;
+    private readonly IFeatureValueRepository _featureValueRepository;
 
     public FeatureManager_Tests()
     {
         _featureManager = GetRequiredService<IFeatureManager>();
         _featureChecker = GetRequiredService<IFeatureChecker>();
         _currentTenant = GetRequiredService<ICurrentTenant>();
+        _featureValueRepository = GetRequiredService<IFeatureValueRepository>();
     }
 
     [Fact]
@@ -153,4 +155,44 @@ public class FeatureManager_Tests : FeatureManagementDomainTestBase
             x.Provider.Name == EditionFeatureValueProvider.ProviderName);
     }
 
+    [Fact]
+    public async Task Test_HandleContextAsync()
+    {
+        var featureValue = await _featureValueRepository.FindAsync(
+            TestFeatureDefinitionProvider.EmailSupport,
+            TenantFeatureValueProvider.ProviderName,
+            TestEditionIds.TenantId.ToString()
+        );
+
+        featureValue.ShouldNotBeNull();
+        featureValue.Value.ShouldBe(false.ToString().ToLower());
+
+
+        featureValue = await _featureValueRepository.FindAsync(
+            TestFeatureDefinitionProvider.EmailSupport,
+            NextTenantFeatureManagementProvider.ProviderName,
+            TestEditionIds.TenantId.ToString()
+        );
+
+        featureValue.ShouldNotBeNull();
+        featureValue.Value.ShouldBe(true.ToString().ToLower());
+
+        await _featureManager.SetAsync(TestFeatureDefinitionProvider.EmailSupport, true.ToString().ToLower(),
+            TenantFeatureValueProvider.ProviderName, TestEditionIds.TenantId.ToString());
+
+        featureValue = await _featureValueRepository.FindAsync(
+            TestFeatureDefinitionProvider.EmailSupport,
+            TenantFeatureValueProvider.ProviderName,
+            TestEditionIds.TenantId.ToString()
+        );
+        featureValue.ShouldBeNull();
+
+        featureValue = await _featureValueRepository.FindAsync(
+            TestFeatureDefinitionProvider.EmailSupport,
+            NextTenantFeatureManagementProvider.ProviderName,
+            TestEditionIds.TenantId.ToString()
+        );
+        featureValue.ShouldNotBeNull();
+        featureValue.Value.ShouldBe(true.ToString().ToLower());
+    }
 }

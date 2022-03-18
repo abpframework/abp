@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 
@@ -11,6 +12,11 @@ public class DefaultValueFeatureManagementProvider : IFeatureManagementProvider,
     public bool Compatible(string providerName)
     {
         return providerName == Name;
+    }
+
+    public Task<IAsyncDisposable> HandleContextAsync(string providerName, string providerKey)
+    {
+        return Task.FromResult<IAsyncDisposable>(NullAsyncDisposable.Instance);
     }
 
     public virtual Task<string> GetOrNullAsync(FeatureDefinition feature, string providerKey)
