@@ -1,5 +1,5 @@
 {
-  "version": "5.2.0-rc.1",
+  "version": "5.2.0-rc.2",
   "name": "@abp/aspnetcore.mvc.ui",
   "repository": {
     "type": "git",
