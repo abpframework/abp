@@ -12,7 +12,7 @@ namespace Volo.Docs.Admin
         typeof(DocsAdminApplicationContractsModule),
         typeof(AbpCachingModule),
         typeof(AbpAutoMapperModule),
-        typeof(AbpDddApplicationModule) 
+        typeof(AbpBackgroundJobsAbstractionsModule)
     )]
     public class DocsAdminApplicationModule : AbpModule
     {
