@@ -86,8 +86,6 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         Consumer.OnMessageReceived(ProcessEventAsync);
 
         SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
-
-        
     }
 
     private async Task ProcessEventAsync(IModel channel, BasicDeliverEventArgs ea)
@@ -313,12 +311,20 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         {
             return;
         }
-        
-        channel.ExchangeDeclare(
-            AbpRabbitMqEventBusOptions.ExchangeName,
-            "direct",
-            durable: true
-        );
+
+        try
+        {
+            channel.ExchangeDeclarePassive(AbpRabbitMqEventBusOptions.ExchangeName);
+        }
+        catch (Exception)
+        {
+            channel.ExchangeDeclare(
+                AbpRabbitMqEventBusOptions.ExchangeName,
+                "direct",
+                durable: true
+            );
+        }
+        _exchangeCreated = true;
     }
 
     private void SetEventMessageHeaders(IBasicProperties properties, Dictionary<string, object> headersArguments)
