@@ -9,6 +9,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Data;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Guids;
+using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Localization;
 using Volo.Docs.Projects;
@@ -22,12 +23,14 @@ namespace Volo.Docs.Admin.Projects
         private readonly IDocumentFullSearch _elasticSearchService;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IBackgroundJobManager _backgroundJobManager;
+        private readonly IDocumentRepository _documentRepository;
 
         public ProjectAdminAppService(
             IProjectRepository projectRepository,
             IDocumentFullSearch elasticSearchService,
             IGuidGenerator guidGenerator,
-            IBackgroundJobManager backgroundJobManager)
+            IBackgroundJobManager backgroundJobManager,
+            IDocumentRepository documentRepository)
         {
             ObjectMapperContext = typeof(DocsAdminApplicationModule);
             LocalizationResource = typeof(DocsResource);
@@ -36,6 +39,7 @@ namespace Volo.Docs.Admin.Projects
             _elasticSearchService = elasticSearchService;
             _guidGenerator = guidGenerator;
             _backgroundJobManager = backgroundJobManager;
+            _documentRepository = documentRepository;
         }
 
         public async Task<PagedResultDto<ProjectDto>> GetListAsync(PagedAndSortedResultRequestDto input)
@@ -132,21 +136,23 @@ namespace Volo.Docs.Admin.Projects
             await _backgroundJobManager.EnqueueAsync(new ProjectIndexingBackgroundJob.ProjectIndexBackgroundWorkerArgs(input.ProjectId));
         }
 
-        //private async Task ReindexProjectAsync(Guid projectId)
-        //{
-        //    var project = await _projectRepository.FindAsync(projectId);
-        //    if (project == null)
-        //    {
-        //        throw new Exception("Cannot find the project with the Id " + projectId);
-        //    }
+        //TODO: remove
+        private async Task ReindexProjectAsync(Guid projectId)
+        {
+            var project = await _projectRepository.FindAsync(projectId);
+            if (project == null)
+            {
+                throw new Exception("Cannot find the project with the Id " + projectId);
+            }
+
             var docs = (await _documentRepository.GetListByProjectId(project.Id))
                 .Where(doc => doc.FileName != project.NavigationDocumentName && doc.FileName != project.ParametersDocumentName)
                 .ToList();
             await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
 
-            if(docs.Any())
+            if (docs.Any())
             {
-                await _elasticSearchService.AddOrUpdateManyAsync(docs);    
+                await _elasticSearchService.AddOrUpdateManyAsync(docs);
             }
         }
 
@@ -162,7 +168,6 @@ namespace Volo.Docs.Admin.Projects
             foreach (var project in projects)
             {
                 await _backgroundJobManager.EnqueueAsync(new ProjectIndexingBackgroundJob.ProjectIndexBackgroundWorkerArgs(project.Id));
-
                 //await ReindexProjectAsync(project.Id);
             }
         }
