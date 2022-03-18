@@ -1,0 +1,16 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "Account": "Cont ABP - Autentificare & Înregistrare | ABP.IO",
+    "Welcome": "Bun venit",
+    "UseOneOfTheFollowingLinksToContinue": "Folosiţi unul din următoarele linkuri pentru a continua",
+    "FrameworkHomePage": "Pagina principală a frameworkului",
+    "FrameworkDocumentation": "Documentaţia frameworkului",
+    "OfficialBlog": "Blogul oficial",
+    "CommercialHomePage": "Pagina principală comercială",
+    "CommercialSupportWebSite": "Site-ul web al suportului comercial",
+    "CommunityWebSite": "Site-ul web al comunităţii ABP",
+    "ManageAccount": "Contul meu | ABP.IO",
+    "ManageYourAccount": "Gestionaţi contul dvs."
+  }
+}

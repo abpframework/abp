@@ -63,8 +63,6 @@ You can then use the same extra properties system defined in the previous sectio
 
 Another approach can be **creating your own entity** mapped to **the same database table** (or collection for a MongoDB database).
 
-`AppUser` entity in the [application startup template](Startup-Templates/Application.md) already implements this approach. [EF Core Migrations document](Entity-Framework-Core-Migrations.md) describes how to implement it and manage **EF Core database migrations** in such a case. It is also possible for MongoDB, while this time you won't deal with the database migration problems.
-
 ## Creating a New Entity with Its Own Database Table/Collection
 
 Mapping your entity to an **existing table** of a depended module has a few disadvantages;
@@ -152,14 +150,14 @@ public class MyDistributedIdentityUserChangeEventHandler :
 * It implements multiple `IDistributedEventHandler` interfaces: **Created**, **Updated** and **Deleted**. Because, the distributed event bus system publishes events individually. There is no "Changed" event like the local event bus.
 * It subscribes to `EntityEto`, which is a generic event class that is **automatically published** for all type of entities by the ABP framework. This is why it checks the **entity type** (checking the entity type as string since we assume that there is no type safe reference to the `IdentityUser` entity).
 
-Pre-built application modules do not define specialized event types yet (like `IdentityUserEto` - "ETO" means "Event Transfer Object"). This feature is on the road map and will be available in a short term ([follow this issue](https://github.com/abpframework/abp/issues/3033)). Once it is implemented, you will be able to subscribe to individual entity types. Example:
+Pre-built application modules do not define specialized event types yet (like `UserEto` - "ETO" means "Event Transfer Object"). This feature is on the road map and will be available in a short term ([follow this issue](https://github.com/abpframework/abp/issues/3033)). Once it is implemented, you will be able to subscribe to individual entity types. Example:
 
 ````csharp
 public class MyDistributedIdentityUserCreatedEventHandler :
-    IDistributedEventHandler<EntityCreatedEto<IdentityUserEto>>,
+    IDistributedEventHandler<EntityCreatedEto<UserEto>>,
     ITransientDependency
 {
-    public async Task HandleEventAsync(EntityCreatedEto<IdentityUserEto> eventData)
+    public async Task HandleEventAsync(EntityCreatedEto<UserEto> eventData)
     {
         var userId = eventData.Entity.Id;
         var userName = eventData.Entity.UserName;

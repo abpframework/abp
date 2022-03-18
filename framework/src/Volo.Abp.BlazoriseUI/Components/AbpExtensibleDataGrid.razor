@@ -9,7 +9,23 @@
           TotalItems="@TotalItems"
           ShowPager="@ShowPager"
           CurrentPage="@CurrentPage"
-          PageSize="@PageSize">
+          PageSize="@PageSize"
+          Responsive="@Responsive"
+          Class="@Class">
+    <LoadingTemplate>
+        <Row Class="w-100 align-items-center" Style="height: 150px;">
+            <Column>
+               <RadarSpinner />
+            </Column>
+        </Row>
+    </LoadingTemplate>
+    <EmptyTemplate>
+        <Row Class="w-100 align-items-center" Style="height: 150px;">
+            <Column>
+                <Heading Size="HeadingSize.Is4" Alignment="TextAlignment.Center">No data available</Heading>
+            </Column>
+        </Row>
+    </EmptyTemplate>
     <DataGridColumns>
         @if (Columns != null)
         {
@@ -30,17 +46,19 @@
                                                       Clicked="async () => await action.Clicked(context)"
                                                       ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
                                                       Visible="@(action.Visible != null ? action.Visible(context) : true)"
-                                                      Text="@action.Text">
+                                                      Text="@action.Text"
+                                                      Disabled="@action.Disabled">
                                         </EntityAction>
                                     }
                                     else
                                     {
                                         <EntityAction TItem="TItem"
                                                       Clicked="async () => await action.Clicked(context)"
-                                                      Color="@(action.Color != null ? (Blazorise.Color) action.Color : Blazorise.Color.None)"
+                                                      Color="@(action.Color != null ? (Blazorise.Color) action.Color : Blazorise.Color.Default)"
                                                       Icon="@action.Icon"
                                                       Visible="@(action.Visible != null ? action.Visible(context) : true)"
-                                                      Text="@action.Text">
+                                                      Text="@action.Text"
+                                                      Disabled="@action.Disabled">
                                         </EntityAction>
                                     }
                                 }
@@ -64,18 +82,18 @@
                         {
                             @if (column.ValueConverter == null)
                             {
-                                <DataGridColumn TItem="TItem" 
-                                                Field="@column.Data" 
-                                                Caption="@column.Title" 
-                                                Sortable="@column.Sortable" 
-                                                DisplayFormat="@column.DisplayFormat" 
+                                <DataGridColumn TItem="TItem"
+                                                Field="@column.Data"
+                                                Caption="@column.Title"
+                                                Sortable="@column.Sortable"
+                                                DisplayFormat="@column.DisplayFormat"
                                                 DisplayFormatProvider="@column.DisplayFormatProvider"/>
                             }
                             else
                             {
-                                <DataGridColumn TItem="TItem" 
-                                                Field="@column.Data" 
-                                                Caption="@column.Title" 
+                                <DataGridColumn TItem="TItem"
+                                                Field="@column.Data"
+                                                Caption="@column.Title"
                                                 Sortable="@column.Sortable">
                                     <DisplayTemplate>
                                         @(GetConvertedFieldValue(context, column))

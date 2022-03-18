@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Volo.Docs.Admin.Web</AssemblyName>
     <PackageId>Volo.Docs.Admin.Web</PackageId>
     <OutputType>Library</OutputType>
@@ -26,6 +26,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.SignalR\Volo.Abp.AspNetCore.SignalR.csproj" />
     <ProjectReference Include="..\Volo.Docs.Admin.HttpApi\Volo.Docs.Admin.HttpApi.csproj" />
+    <ProjectReference Include="..\Volo.Docs.Admin.Application.Contracts\Volo.Docs.Admin.Application.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +45,10 @@
     <EmbeddedResource Include="Components\**\*.css" />
     <Content Remove="Components\**\*.js" />
     <Content Remove="Components\**\*.css" />
+    <EmbeddedResource Include="wwwroot\**\*.js" />
+    <EmbeddedResource Include="wwwroot\**\*.css" />
+    <Content Remove="wwwroot\**\*.js" />
+    <Content Remove="wwwroot\**\*.css" />
   </ItemGroup>
 
 </Project>

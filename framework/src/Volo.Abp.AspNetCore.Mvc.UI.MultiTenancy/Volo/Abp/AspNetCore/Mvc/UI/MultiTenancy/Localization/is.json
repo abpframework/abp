@@ -1,0 +1,13 @@
+{
+  "culture": "is",
+  "texts": {
+    "GivenTenantIsNotExist": "Eftirfarandi tentnat er ekki til: {0}",
+    "GivenTenantIsNotAvailable": "Eftirfarandi tenant er ekki í boði: {0}",
+    "Tenant": "Tenant",
+    "Switch": "skipta um",
+    "Name": "Nafn",
+    "SwitchTenantHint": "Skildu nafnið eftir autt til að skipta yfir í gestgjafahliðina.",
+    "SwitchTenant": "Skipta um tenant",
+    "NotSelected": "Ekki valið"
+  }
+}

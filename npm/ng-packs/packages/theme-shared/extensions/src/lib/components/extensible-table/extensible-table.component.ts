@@ -1,34 +1,42 @@
 import {
-  ListService,
+  ABP,
   ConfigStateService,
   getShortDateFormat,
   getShortDateShortTimeFormat,
   getShortTimeFormat,
+  ListService,
+  PermissionService,
 } from '@abp/ng.core';
 import { formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   Inject,
+  InjectFlags,
+  InjectionToken,
   Injector,
   Input,
   LOCALE_ID,
+  OnChanges,
+  SimpleChanges,
   TemplateRef,
   TrackByFunction,
   Type,
-  InjectionToken,
-  InjectFlags,
-  SimpleChanges,
-  OnChanges,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ePropType } from '../../enums/props.enum';
+import { EntityActionList } from '../../models/entity-actions';
 import { EntityProp, EntityPropList } from '../../models/entity-props';
 import { PropData } from '../../models/props';
 import { ExtensionsService } from '../../services/extensions.service';
-import { EXTENSIONS_IDENTIFIER } from '../../tokens/extensions.token';
-import { EntityActionList } from '../../models/entity-actions';
+import {
+  ENTITY_PROP_TYPE_CLASSES,
+  EntityPropTypeClass,
+  EXTENSIONS_IDENTIFIER,
+  PROP_DATA_STREAM,
+} from '../../tokens/extensions.token';
+
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
 @Component({
@@ -57,6 +65,10 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   getInjected: <T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags) => T;
 
+  hasAtLeastOnePermittedAction: boolean;
+
+  entityPropTypeClasses: EntityPropTypeClass;
+
   readonly columnWidths: number[];
 
   readonly propList: EntityPropList<R>;
@@ -68,15 +80,21 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   constructor(
     @Inject(LOCALE_ID) private locale: string,
     private config: ConfigStateService,
-    injector: Injector,
+    private injector: Injector,
   ) {
-    // tslint:disable-next-line
+    this.entityPropTypeClasses = injector.get(ENTITY_PROP_TYPE_CLASSES);
     this.getInjected = injector.get.bind(injector);
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);
     this.propList = extensions.entityProps.get(name).props;
-    this.actionList = (extensions['entityActions'].get(name)
-      .actions as unknown) as EntityActionList<R>;
+    this.actionList = extensions['entityActions'].get(name)
+      .actions as unknown as EntityActionList<R>;
+
+    const permissionService = injector.get(PermissionService);
+    this.hasAtLeastOnePermittedAction =
+      permissionService.filterItemsByPolicy(
+        this.actionList.toArray().map(action => ({ requiredPolicy: action.permission })),
+      ).length > 0;
     this.setColumnWidths(DEFAULT_ACTIONS_COLUMN_WIDTH);
   }
 
@@ -94,8 +112,14 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   private getIcon(value: boolean) {
     return value
-      ? '<div class="text-center text-success"><i class="fa fa-check"></i></div>'
-      : '<div class="text-center text-danger"><i class="fa fa-times"></i></div>';
+      ? '<div class="text-success"><i class="fa fa-check"></i></div>'
+      : '<div class="text-danger"><i class="fa fa-times"></i></div>';
+  }
+
+  private getEnum(rowValue: any, list: Array<ABP.Option<any>>) {
+    if (!list) return rowValue;
+    const { key } = list.find(({ value }) => value === rowValue);
+    return key;
   }
 
   getContent(prop: EntityProp<R>, data: PropData): Observable<string> {
@@ -110,6 +134,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
             return this.getDate(value, getShortTimeFormat(this.config));
           case ePropType.DateTime:
             return this.getDate(value, getShortDateShortTimeFormat(this.config));
+          case ePropType.Enum:
+            return this.getEnum(value, prop.enumList);
           default:
             return value;
           // More types can be handled in the future
@@ -124,10 +150,26 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     this.data = data.currentValue.map((record, index) => {
       this.propList.forEach(prop => {
         const propData = { getInjected: this.getInjected, record, index } as any;
-        record[`_${prop.value.name}`] = {
+        const value = this.getContent(prop.value, propData);
+
+        const propKey = `_${prop.value.name}`;
+        record[propKey] = {
           visible: prop.value.visible(propData),
-          value: this.getContent(prop.value, propData),
+          value,
         };
+        if (prop.value.component) {
+          const injector = Injector.create(
+            [
+              {
+                provide: PROP_DATA_STREAM,
+                useValue: value,
+              },
+            ],
+            this.injector,
+          );
+          record[propKey].injector = injector;
+          record[propKey].component = prop.value.component;
+        }
       });
 
       return record;

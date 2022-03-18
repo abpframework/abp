@@ -36,8 +36,9 @@
 }
 @section scripts {
     <abp-script-bundle name="@typeof(DetailModel).FullName">
-        <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
-        <abp-script src="/Pages/Blogs/Posts/detail.js" />
+        <abp-script src="/client-proxies/blogging-proxy.js" />
+        <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
+        <abp-script src="/Pages/Blogs/Posts/detail.js"/>
     </abp-script-bundle>
 }
 @section styles {
@@ -63,13 +64,13 @@
                                 <div class="article-infos">
                                     <div class="user-card mt-3 mb-4">
                                         <div class="row">
-                                            <div class="col-auto pr-1">
+                                            <div class="col-auto pe-1">
                                                 @if (Model.Post.Writer != null)
                                                 {
                                                     <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" />
                                                 }
                                             </div>
-                                            <div class="col pl-1">
+                                            <div class="col ps-1">
                                                 @if (Model.Post.Writer != null)
                                                 {
                                                     <h5 class="mt-2 mb-1">@(Model.Post.Writer.UserName) <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(Model.Post.CreationTime)</span></h5>
@@ -124,13 +125,13 @@
                 <hr />
                 <div class="mb-2 mt-1">
                     @(L["ShareOn"].Value + " :")
-                    <a href="#" target="_blank" class="mr-2" id="TwitterShareLink" title="Twitter">
+                    <a href="#" target="_blank" class="me-2" id="TwitterShareLink" title="Twitter">
                         Twitter <i class="fa fa-twitter"></i>
                     </a>
-                    <a href="#" target="_blank" class="mr-2" id="LinkedinShareLink" title="LinkedIn">
+                    <a href="#" target="_blank" class="me-2" id="LinkedinShareLink" title="LinkedIn">
                         Linkedin <i class="fa fa-linkedin"></i>
                     </a>
-                    <a href="#" target="_blank" class="mr-2" id="EmailShareLink" title="E-mail">
+                    <a href="#" target="_blank" class="me-2" id="EmailShareLink" title="E-mail">
                         E-mail <i class="fa fa-envelope-square"></i>
                     </a>
                 </div>
@@ -149,14 +150,14 @@
                 {
                     <abp-row v-align="Start">
                         <abp-column size-sm="_12">
-                            <p class="float-left"><i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]</p>
+                            <p class="float-start"><i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]</p>
                             @if (hasCommentingPermission)
                             {
-                                <a abp-button="Primary" class="btn-rounded float-right active" href="#LeaveComment">@L["LeaveComment"]</a>
+                                <a abp-button="Primary" class="btn-rounded float-end active" href="#LeaveComment">@L["LeaveComment"]</a>
                             }
                             else
                             {
-                                <a abp-button="Primary" class="btn-rounded float-right active" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
+                                <a abp-button="Primary" class="btn-rounded float-end active" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
                             }
                         </abp-column>
                     </abp-row>
@@ -165,7 +166,7 @@
                         @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
                         {
                             <div class="media">
-                                <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar" />
+                                <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex me-3 rounded-circle comment-avatar" />
                                 <div class="media-body">
                                     <h5 class="comment-owner">
                                         @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
@@ -210,14 +211,14 @@
                                                 </h3>
                                                 <div>
                                                     <form method="post">
-                                                        <input name="postId" value="@Model.Post.Id" hidden />
+                                                        <input name="postId" value="@Model.Post.Id" type="hidden" />
                                                         <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
 
-                                                        <div class="form-group">
+                                                        <div class="mb-3">
                                                             <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                                         </div>
-                                                        <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Comment"].Value" />
-                                                        <abp-button button-type="Danger" class="btn-rounded float-right replyCancelButton" text="@L["Cancel"].Value" />
+                                                        <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Comment"].Value" />
+                                                        <abp-button button-type="Danger" class="btn-rounded float-end replyCancelButton" text="@L["Cancel"].Value" />
                                                     </form>
                                                 </div>
                                             </div>
@@ -230,11 +231,12 @@
                                                 <div>
                                                     <form class="editFormClass">
                                                         <input name="commentId" value="@commentWithRepliesDto.Comment.Id" hidden />
-                                                        <div class="form-group">
+                                                        <input name="concurrencyStamp" value="@commentWithRepliesDto.Comment.ConcurrencyStamp" hidden />
+                                                        <div class="mb-3">
                                                             <textarea class="form-control" name="text" id="textBoxId" rows="4">@commentWithRepliesDto.Comment.Text</textarea>
                                                         </div>
-                                                        <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                        <abp-button button-type="Danger" class="btn-rounded float-right editCancelButton" text="@L["Cancel"].Value" />
+                                                        <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
+                                                        <abp-button button-type="Danger" class="btn-rounded float-end editCancelButton" text="@L["Cancel"].Value" />
                                                     </form>
                                                 </div>
                                             </div>
@@ -244,7 +246,7 @@
                                     @foreach (var reply in commentWithRepliesDto.Replies)
                                     {
                                         <div class="media">
-                                            <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar" />
+                                            <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex me-3 rounded-circle comment-avatar" />
                                             <div class="media-body">
                                                 <h5 class="comment-owner">
                                                     @(reply.Writer == null ? "" : reply.Writer.UserName)
@@ -289,11 +291,11 @@
                                                                 <form method="post">
                                                                     <input name="postId" value="@Model.Post.Id" hidden />
                                                                     <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
-                                                                    <div class="form-group">
+                                                                    <div class="mb-3">
                                                                         <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                                                     </div>
-                                                                    <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                                    <abp-button button-type="Danger" class="btn-rounded float-right replyCancelButton" text="@L["Cancel"].Value" />
+                                                                    <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
+                                                                    <abp-button button-type="Danger" class="btn-rounded float-end replyCancelButton" text="@L["Cancel"].Value" />
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -306,11 +308,11 @@
                                                             <div>
                                                                 <form class="editFormClass">
                                                                     <input name="commentId" value="@reply.Id" hidden />
-                                                                    <div class="form-group">
+                                                                    <div class="mb-3">
                                                                         <textarea class="form-control" name="text" id="textBoxId" rows="4">@reply.Text</textarea>
                                                                     </div>
-                                                                    <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                                    <abp-button button-type="Danger" class="btn-rounded float-right editCancelButton" text="@L["Cancel"].Value" />
+                                                                    <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
+                                                                    <abp-button button-type="Danger" class="btn-rounded float-end editCancelButton" text="@L["Cancel"].Value" />
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -336,10 +338,10 @@
                                 <form method="post">
                                     <input name="postId" value="@Model.Post.Id" hidden />
                                     <input name="repliedCommentId" id="repliedCommentId" hidden />
-                                    <div class="form-group">
+                                    <div class="mb-3">
                                         <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                     </div>
-                                    <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                                    <abp-button button-type="Primary" class="btn-rounded float-end" type="submit" text="@L["Submit"].Value" />
                                 </form>
                             </div>
                         </div>
@@ -347,7 +349,7 @@
                 }
                 else
                 {
-                    <a abp-button="Primary" class="btn-rounded float-right active mt-3" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
+                    <a abp-button="Primary" class="btn-rounded float-end active mt-3" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
                 }
             </div>
         </div>

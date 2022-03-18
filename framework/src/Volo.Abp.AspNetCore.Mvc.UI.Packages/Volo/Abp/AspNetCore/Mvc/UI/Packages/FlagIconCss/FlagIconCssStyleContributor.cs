@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.FlagIconCss
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.FlagIconCss;
+
+public class FlagIconCssStyleContributor : BundleContributor
 {
-    public class FlagIconCssStyleContributor : BundleContributor
+    public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        public override void ConfigureBundle(BundleConfigurationContext context)
-        {
-            context.Files.AddIfNotContains("/libs/flag-icon-css/css/flag-icon.min.css");
-        }
+        context.Files.AddIfNotContains("/libs/flag-icon-css/css/flag-icons.min.css");
     }
 }

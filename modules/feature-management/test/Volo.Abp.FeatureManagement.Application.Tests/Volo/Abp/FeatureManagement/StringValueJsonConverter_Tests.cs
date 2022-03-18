@@ -1,28 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.FeatureManagement.JsonConverters;
 using Volo.Abp.Json;
 using Volo.Abp.Validation.StringValues;
 using Xunit;
 
-namespace Volo.Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement;
+
+public abstract class StringValueJsonConverter_Tests : FeatureManagementApplicationTestBase
 {
-    public class StringValueJsonConverter_Tests : FeatureManagementApplicationTestBase
+    private readonly IJsonSerializer _jsonSerializer;
+
+    public StringValueJsonConverter_Tests()
     {
-        private readonly IJsonSerializer _jsonSerializer;
+        _jsonSerializer = GetRequiredService<IJsonSerializer>();
+    }
 
-        public StringValueJsonConverter_Tests()
+    protected override void BeforeAddApplication(IServiceCollection services)
+    {
+        services.PreConfigure<AbpFeatureManagementApplicationContractsOptions>(options =>
         {
-            _jsonSerializer = GetRequiredService<IJsonSerializer>();
-        }
+            options.ValueValidatorFactory.Add(new ValueValidatorFactory<UrlValueValidator>("URL"));
+        });
+        
+        base.BeforeAddApplication(services);
+    }
 
-        [Fact]
-        public void Should_Serialize_And_Deserialize()
+    [Fact]
+    public void Should_Serialize_And_Deserialize()
+    {
+        var featureListDto = new GetFeatureListResultDto
         {
-            var featureListDto = new GetFeatureListResultDto
-            {
-                Groups = new List<FeatureGroupDto>
+            Groups = new List<FeatureGroupDto>
                 {
                     new FeatureGroupDto
                     {
@@ -68,34 +79,44 @@ namespace Volo.Abp.FeatureManagement
                                     Name = "FeatureName",
                                     Key = "FeatureKey"
                                 }
+                            },
+                            new FeatureDto
+                            {
+                                ValueType = new FreeTextStringValueType
+                                {
+                                    Validator = new UrlValueValidator("https")
+                                }
                             }
                         }
                     }
                 }
-            };
+        };
 
-            var serialized = _jsonSerializer.Serialize(featureListDto, indented: true);
+        var serialized = _jsonSerializer.Serialize(featureListDto, indented: true);
 
-            var featureListDto2 = _jsonSerializer.Deserialize<GetFeatureListResultDto>(serialized);
+        var featureListDto2 = _jsonSerializer.Deserialize<GetFeatureListResultDto>(serialized);
 
-            featureListDto2.ShouldNotBeNull();
-            featureListDto2.Groups[0].Features[0].ValueType.ShouldBeOfType<FreeTextStringValueType>();
-            featureListDto2.Groups[0].Features[0].ValueType.Validator.ShouldBeOfType<BooleanValueValidator>();
+        featureListDto2.ShouldNotBeNull();
+        featureListDto2.Groups[0].Features[0].ValueType.ShouldBeOfType<FreeTextStringValueType>();
+        featureListDto2.Groups[0].Features[0].ValueType.Validator.ShouldBeOfType<BooleanValueValidator>();
 
-            featureListDto2.Groups[0].Features[1].ValueType.ShouldBeOfType<SelectionStringValueType>();
-            featureListDto2.Groups[0].Features[1].ValueType.Validator.ShouldBeOfType<AlwaysValidValueValidator>();
-            featureListDto2.Groups[0].Features[1].ValueType.As<SelectionStringValueType>().ItemSource.Items.ShouldBeOfType<LocalizableSelectionStringValueItem[]>();
-            featureListDto2.Groups[0].Features[1].ValueType.As<SelectionStringValueType>().ItemSource.Items.ShouldContain(x =>
-                x.Value == "TestValue" && x.DisplayText.ResourceName == "TestResourceName" &&
-                x.DisplayText.Name == "TestName");
+        featureListDto2.Groups[0].Features[1].ValueType.ShouldBeOfType<SelectionStringValueType>();
+        featureListDto2.Groups[0].Features[1].ValueType.Validator.ShouldBeOfType<AlwaysValidValueValidator>();
+        featureListDto2.Groups[0].Features[1].ValueType.As<SelectionStringValueType>().ItemSource.Items.ShouldBeOfType<LocalizableSelectionStringValueItem[]>();
+        featureListDto2.Groups[0].Features[1].ValueType.As<SelectionStringValueType>().ItemSource.Items.ShouldContain(x =>
+            x.Value == "TestValue" && x.DisplayText.ResourceName == "TestResourceName" &&
+            x.DisplayText.Name == "TestName");
 
-            featureListDto2.Groups[0].Features[2].ValueType.ShouldBeOfType<ToggleStringValueType>();
-            featureListDto2.Groups[0].Features[2].ValueType.Validator.ShouldBeOfType<NumericValueValidator>();
-            featureListDto2.Groups[0].Features[2].ValueType.Validator.As<NumericValueValidator>().MaxValue.ShouldBe(1000);
-            featureListDto2.Groups[0].Features[2].ValueType.Validator.As<NumericValueValidator>().MinValue.ShouldBe(10);
+        featureListDto2.Groups[0].Features[2].ValueType.ShouldBeOfType<ToggleStringValueType>();
+        featureListDto2.Groups[0].Features[2].ValueType.Validator.ShouldBeOfType<NumericValueValidator>();
+        featureListDto2.Groups[0].Features[2].ValueType.Validator.As<NumericValueValidator>().MaxValue.ShouldBe(1000);
+        featureListDto2.Groups[0].Features[2].ValueType.Validator.As<NumericValueValidator>().MinValue.ShouldBe(10);
 
-            featureListDto2.Groups[0].Features[3].Provider.Name.ShouldBe("FeatureName");
-            featureListDto2.Groups[0].Features[3].Provider.Key.ShouldBe("FeatureKey");
-        }
+        featureListDto2.Groups[0].Features[3].Provider.Name.ShouldBe("FeatureName");
+        featureListDto2.Groups[0].Features[3].Provider.Key.ShouldBe("FeatureKey");
+        
+        featureListDto2.Groups[0].Features[4].ValueType.ShouldBeOfType<FreeTextStringValueType>();
+        featureListDto2.Groups[0].Features[4].ValueType.Validator.ShouldBeOfType<UrlValueValidator>();
+        featureListDto2.Groups[0].Features[4].ValueType.Validator.As<UrlValueValidator>().Scheme.ShouldBe("https");
     }
 }

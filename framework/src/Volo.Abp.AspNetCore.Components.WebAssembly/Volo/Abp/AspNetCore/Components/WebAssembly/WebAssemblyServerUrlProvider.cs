@@ -1,27 +1,28 @@
 ﻿using System;
-using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly
-{
-    [Dependency(ReplaceServices = true)]
-    public class WebAssemblyServerUrlProvider : IServerUrlProvider, ITransientDependency
-    {
-        public AbpRemoteServiceOptions Options { get; }
+namespace Volo.Abp.AspNetCore.Components.WebAssembly;
 
-        public WebAssemblyServerUrlProvider(
-            IOptions<AbpRemoteServiceOptions> options)
-        {
-            Options = options.Value;
-        }
-        
-        public string GetBaseUrl(string remoteServiceName = null)
-        {
-            return Options.RemoteServices.GetConfigurationOrDefault(
-                remoteServiceName ?? RemoteServiceConfigurationDictionary.DefaultName
-            ).BaseUrl.EnsureEndsWith('/');
-        }
+[Dependency(ReplaceServices = true)]
+public class WebAssemblyServerUrlProvider : IServerUrlProvider, ITransientDependency
+{
+    protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
+
+    public WebAssemblyServerUrlProvider(
+        IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
+    {
+        RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
+    }
+
+    public async Task<string> GetBaseUrlAsync(string remoteServiceName = null)
+    {
+        var remoteServiceConfiguration = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(
+            remoteServiceName ?? RemoteServiceConfigurationDictionary.DefaultName
+        );
+
+        return remoteServiceConfiguration.BaseUrl.EnsureEndsWith('/');
     }
 }

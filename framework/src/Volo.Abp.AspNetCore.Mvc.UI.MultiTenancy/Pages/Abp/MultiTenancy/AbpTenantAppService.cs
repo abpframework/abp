@@ -4,51 +4,50 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.MultiTenancy;
 
-namespace Pages.Abp.MultiTenancy
+namespace Pages.Abp.MultiTenancy;
+
+public class AbpTenantAppService : ApplicationService, IAbpTenantAppService
 {
-    public class AbpTenantAppService : ApplicationService, IAbpTenantAppService
+    protected ITenantStore TenantStore { get; }
+
+    public AbpTenantAppService(ITenantStore tenantStore)
     {
-        protected ITenantStore TenantStore { get; }
+        TenantStore = tenantStore;
+    }
 
-        public AbpTenantAppService(ITenantStore tenantStore)
+    public virtual async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
+    {
+        var tenant = await TenantStore.FindAsync(name);
+
+        if (tenant == null)
         {
-            TenantStore = tenantStore;
+            return new FindTenantResultDto { Success = false };
         }
 
-        public async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
+        return new FindTenantResultDto
         {
-            var tenant = await TenantStore.FindAsync(name);
+            Success = true,
+            TenantId = tenant.Id,
+            Name = tenant.Name,
+            IsActive = tenant.IsActive
+        };
+    }
 
-            if (tenant == null)
-            {
-                return new FindTenantResultDto { Success = false };
-            }
+    public virtual async Task<FindTenantResultDto> FindTenantByIdAsync(Guid id)
+    {
+        var tenant = await TenantStore.FindAsync(id);
 
-            return new FindTenantResultDto
-            {
-                Success = true,
-                TenantId = tenant.Id,
-                Name = tenant.Name,
-                IsActive = tenant.IsActive
-            };
+        if (tenant == null)
+        {
+            return new FindTenantResultDto { Success = false };
         }
 
-        public async Task<FindTenantResultDto> FindTenantByIdAsync(Guid id)
+        return new FindTenantResultDto
         {
-            var tenant = await TenantStore.FindAsync(id);
-
-            if (tenant == null)
-            {
-                return new FindTenantResultDto { Success = false };
-            }
-
-            return new FindTenantResultDto
-            {
-                Success = true,
-                TenantId = tenant.Id,
-                Name = tenant.Name,
-                IsActive = tenant.IsActive
-            };
-        }
+            Success = true,
+            TenantId = tenant.Id,
+            Name = tenant.Name,
+            IsActive = tenant.IsActive
+        };
     }
 }

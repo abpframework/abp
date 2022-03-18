@@ -1,6 +1,6 @@
-# ABP CLI Create Solution Sample Commands 
+# ABP CLI - New Solution Sample Commands 
 
-The `abp new` command creates an ABP solution or other artifacts based on an ABP template. ABP CLI has several parameters to create a new ABP solution. In this document we will show you some sample commands to create a new solution. All the project names are `Acme.BookStore`. Currently, the only available mobile project is a `React Native` mobile app. Available database providers are `Entity Framework Core` and `MongoDB`. All the commands starts with `abp new`.
+The `abp new` command creates an ABP solution or other artifacts based on an ABP template. [ABP CLI](CLI.md) has several parameters to create a new ABP solution. In this document we will show you some sample commands to create a new solution. All the project names are `Acme.BookStore`. Currently, the only available mobile project is a `React Native` mobile app. Available database providers are `Entity Framework Core` and `MongoDB`. All the commands starts with `abp new`.
 
 ## Angular
 
@@ -87,6 +87,28 @@ The following commands are for creating Blazor projects:
   abp new Acme.BookStore -u blazor --database-provider mongodb --mobile none -csf
   ```
 
+## Blazor Server
+
+The following commands are for creating Blazor projects:
+
+* **Entity Framework Core**, no mobile app:
+
+  ```bash
+  abp new Acme.BookStore -t app -u blazor-server --mobile none
+  ```
+
+* **Entity Framework Core**, **separate Identity Server**, **separate API Host**, mobile app included:
+  
+  ```bash
+  abp new Acme.BookStore -u blazor-server --tiered
+  ```
+
+* **MongoDB**, no mobile app, creates the project in a new folder:
+
+  ```bash
+  abp new Acme.BookStore -u blazor --database-provider mongodb --mobile none -csf
+  ```
+  
 ## No UI 
 
 In the default app template, there is always a frontend project. In this option there is no frontend project. It has a `HttpApi.Host` project to serve your HTTP WebAPIs. It's appropriate if you want to create a WebAPI service.
@@ -101,6 +123,8 @@ In the default app template, there is always a frontend project. In this option 
     ```bash
     abp new Acme.BookStore -u none --mobile none --database-provider mongodb
     ```
+    
+
 
 ## Console application
 
@@ -217,6 +241,10 @@ As seen below, ABP Framework libraries are local project references.
 	<ProjectReference Include="C:\source\abp\framework\src\Volo.Abp.AspNetCore.Authentication.JwtBearer\Volo.Abp.AspNetCore.Authentication.JwtBearer.csproj" />
 	<ProjectReference Include="..\Acme.BookStore.Application\Acme.BookStore.Application.csproj" />
 	<ProjectReference Include="..\Acme.BookStore.HttpApi\Acme.BookStore.HttpApi.csproj" />
-	<ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore.DbMigrations\Acme.BookStore.EntityFrameworkCore.DbMigrations.csproj" />
+	<ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore\Acme.BookStore.EntityFrameworkCore.csproj" />
 </ItemGroup>    
 ```
+
+## See Also
+
+* [ABP CLI documentation](CLI.md)

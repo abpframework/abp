@@ -1,0 +1,16 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Account": "ABP fiók - Bejelentkezés és regisztráció | ABP.IO",
+    "Welcome": "Üdvözöljük",
+    "UseOneOfTheFollowingLinksToContinue": "A folytatáshoz használja az alábbi hivatkozások egyikét",
+    "FrameworkHomePage": "Keretrendszer honlapja",
+    "FrameworkDocumentation": "Keretdokumentáció",
+    "OfficialBlog": "Hivatalos blog",
+    "CommercialHomePage": "Kereskedelmi honlap",
+    "CommercialSupportWebSite": "Kereskedelmi támogatási webhely",
+    "CommunityWebSite": "ABP közösségi webhely",
+    "ManageAccount": "Saját fiók | ABP.IO",
+    "ManageYourAccount": "Fiók kezelése"
+  }
+}

@@ -1,6 +1,7 @@
 {
   "culture": "sl",
   "texts": {
+    "Menu:Account": "Račun",
     "UserName": "Uporabniško ime",
     "EmailAddress": "E-poštni naslov",
     "UserNameOrEmailAddress": "Uporabniško ime ali e-poštni naslov",
@@ -9,7 +10,7 @@
     "UseAnotherServiceToLogin": "Uporabi drugo storitev za prijavo",
     "UserLockedOutMessage": "Uporabniški račun je bil zaklenjen zaradi neveljavnih poskusov prijave. Počakajte nekaj časa in poskusite znova.",
     "InvalidUserNameOrPassword": "Napačno uporabniško ime ali geslo!",
-    "LoginIsNotAllowed": "Nimate dovoljenja za prijavo! Potrditi morate e-poštni naslov/telefonsko številko.",
+    "LoginIsNotAllowed": "Ne smete se prijaviti! Vaš račun je neaktiven ali mora potrditi vaš e -poštni naslov/telefonsko številko.",
     "SelfRegistrationDisabledMessage": "Možnost lastne registracije uporabnika je onemogočena za to aplikacijo. Kontaktirajte skrbnika aplikacije, da registrirate novega uporabnika.",
     "LocalLoginDisabledMessage": "Lokalna prijava za to aplikacijo je onemogočena.",
     "Login": "Prijava",
@@ -36,11 +37,15 @@
     "PasswordChanged": "Geslo je spremenjeno",
     "NewPasswordConfirmFailed": "Prosimo potrdite novo geslo.",
     "Manage": "Upravljaj",
-    "ManageYourProfile": "Upravljaj svoj profil",
+    "MyAccount": "Moj račun",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Je lastna registracija uporabnika omogočena",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Ali lahko uporabnik sam registrira račun.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Avtenticirajte se z lokalnim računom",
     "Description:Abp.Account.EnableLocalLogin": "Označuje, ali bo strežnik uporabnikom omogočil avtentikacijo z lokalnim računom.",
+    "LoggedOutTitle": "Odjavljen",
+    "LoggedOutText": "Odjavljeni ste in kmalu boste preusmerjeni.",
+    "ReturnToText": "Kliknite tukaj, da se vrnete v aplikacijo",
+    "OrLoginWith": "Ali pa se prijavite z:",
     "ForgotPassword": "Ste pozabili geslo?",
     "SendPasswordResetLink_Information": "Na vaš e-poštni naslov bo poslana povezava za ponastavitev gesla za ponastavitev gesla. Če v nekaj minutah ne dobite e-poštnega sporočila, poskusite znova.",
     "PasswordResetMailSentMessage": "E-poštno sporočilo za obnovitev računa je bilo poslano na vaš e-poštni naslov. Če v 15 minutah tega e-poštnega sporočila ne vidite v mapi »Prejeto«, ga poiščite v mapi z neželeno pošto. Če ga najdete tam, ga prosimo označite kot -Ni neželeno-. ",
@@ -48,10 +53,16 @@
     "ConfirmPassword": "Potrditev (ponovitev) gesla",
     "ResetPassword_Information": "Prosimo vnesite vaše novo geslo.",
     "YourPasswordIsSuccessfullyReset": "Vaše geslo je uspešno ponastavljeno.",
+    "GoToTheApplication": "Pojdite na aplikacijo",
     "BackToLogin": "Nazaj na prijavo",
+    "ProfileTab:Password": "Spremeni geslo",
+    "ProfileTab:PersonalInfo": "Osebni podatki",
+    "ReturnToApplication": "Nazaj na aplikacijo",
     "Volo.Account:InvalidEmailAddress": "Navedenega e-poštnega naslova ni mogoče najti: {0}",
     "PasswordReset": "Ponastavitev gesla",
     "PasswordResetInfoInEmail": "Prejeta je bila zahteva za obnovitev računa! V kolikor ste vi sprožili zahtevo, kliknite na sledečo povezavo, da ponastavite geslo.",
-    "ResetMyPassword": "Ponastavi geslo"
+    "ResetMyPassword": "Ponastavi geslo",
+    "AccessDenied": "Dostop zavrnjen!",
+    "AccessDeniedMessage": "Nimate dostopa do tega vira."
   }
 }

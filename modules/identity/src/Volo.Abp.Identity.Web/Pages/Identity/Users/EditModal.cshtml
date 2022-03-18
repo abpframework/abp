@@ -19,51 +19,59 @@
         <abp-modal-body>
             <abp-tabs name="create-user-modal-tabs">
                 <abp-tab title="@L["UserInformations"].Value">
-                    <input asp-for="UserInfo.Id" />
-                    <input asp-for="UserInfo.ConcurrencyStamp" />
-                    <abp-input asp-for="UserInfo.UserName" />
-                    <abp-input asp-for="UserInfo.Name" />
-                    <abp-input asp-for="UserInfo.Surname" />
-                    <abp-input asp-for="UserInfo.Password" />
-                    <abp-input asp-for="UserInfo.Email" />
-                    <abp-input asp-for="UserInfo.PhoneNumber" />
-                    <abp-input asp-for="UserInfo.LockoutEnabled" />
+                    <div class="mt-3" >
+                        <input asp-for="UserInfo.Id" />
+                        <input asp-for="UserInfo.ConcurrencyStamp" />
+                        <abp-input asp-for="UserInfo.UserName" />
+                        <abp-input asp-for="UserInfo.Name" />
+                        <abp-input asp-for="UserInfo.Surname" />
+                        <abp-input asp-for="UserInfo.Password" />
+                        <abp-input asp-for="UserInfo.Email" />
+                        <abp-input asp-for="UserInfo.PhoneNumber" />
+                        <abp-input asp-for="UserInfo.IsActive" />
+                        <abp-input asp-for="UserInfo.LockoutEnabled" />
 
-                    @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<EditModalModel.UserInfoViewModel>())
-                    {
-                        if (!propertyInfo.Name.EndsWith("_Text"))
+                        @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<EditModalModel.UserInfoViewModel>())
                         {
-                            if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                            if (!propertyInfo.Name.EndsWith("_Text"))
                             {
-                                <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
+                                if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                                {
+                                    if (propertyInfo.Type.IsEnum)
+                                    {
+                                        Model.UserInfo.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
+                                    }
+                                    <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
+                                                label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                                autocomplete-api-url="@propertyInfo.Lookup.Url"
+                                                autocomplete-selected-item-name="@Model.UserInfo.GetProperty(propertyInfo.Name+"_Text")"
+                                                autocomplete-selected-item-value="@Model.UserInfo.GetProperty(propertyInfo.Name)"
+                                                autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
+                                                autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                                                autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                                                autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName"></abp-select>
+                                }
+                                else
+                                {
+                                    <abp-input type="@propertyInfo.GetInputType()"
+                                            asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
                                             label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
-                                            autocomplete-api-url="@propertyInfo.Lookup.Url"
-                                            autocomplete-selected-item-name="@Model.UserInfo.GetProperty(propertyInfo.Name+"_Text")"
-                                            autocomplete-selected-item-value="@Model.UserInfo.GetProperty(propertyInfo.Name)"
-                                            autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
-                                            autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
-                                            autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
-                                            autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName"></abp-select>
-                            }
-                            else
-                            {
-                                <abp-input type="@propertyInfo.GetInputType()"
-                                           asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
-                                           label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
-                                           asp-format="@propertyInfo.GetInputFormatOrNull()"
-                                           value="@propertyInfo.GetInputValueOrNull(Model.UserInfo.GetProperty(propertyInfo.Name))" />
+                                            asp-format="@propertyInfo.GetInputFormatOrNull()"
+                                            value="@propertyInfo.GetInputValueOrNull(Model.UserInfo.GetProperty(propertyInfo.Name))" />
+                                }
                             }
                         }
-                    }
-
+                    </div>
                 </abp-tab>
                 <abp-tab title="@L["Roles"].Value">
-                    @for (var i = 0; i < Model.Roles.Length; i++)
-                    {
-                        var role = Model.Roles[i];
-                        <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" />
-                        <input abp-id-name="@Model.Roles[i].Name" asp-for="@role.Name" />
-                    }
+                    <div class="mt-3" >
+                        @for (var i = 0; i < Model.Roles.Length; i++)
+                        {
+                            var role = Model.Roles[i];
+                            <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" />
+                            <input abp-id-name="@Model.Roles[i].Name" asp-for="@role.Name" />
+                        }
+                    </div>
                 </abp-tab>
             </abp-tabs>
         </abp-modal-body>

@@ -11,129 +11,129 @@ using Volo.Abp.Identity.Localization;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.PermissionManagement.Blazor.Components;
 
-namespace Volo.Abp.Identity.Blazor.Pages.Identity
+namespace Volo.Abp.Identity.Blazor.Pages.Identity;
+
+public partial class UserManagement
 {
-    public partial class UserManagement
+    protected const string PermissionProviderName = "U";
+
+    protected const string DefaultSelectedTab = "UserInformations";
+
+    protected PermissionManagementModal PermissionManagementModal;
+
+    protected IReadOnlyList<IdentityRoleDto> Roles;
+
+    protected AssignedRoleViewModel[] NewUserRoles;
+
+    protected AssignedRoleViewModel[] EditUserRoles;
+
+    protected string ManagePermissionsPolicyName;
+
+    protected bool HasManagePermissionsPermission { get; set; }
+
+    protected string CreateModalSelectedTab = DefaultSelectedTab;
+
+    protected string EditModalSelectedTab = DefaultSelectedTab;
+
+    protected PageToolbar Toolbar { get; } = new();
+
+    private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
+
+    public UserManagement()
     {
-        protected const string PermissionProviderName = "U";
+        ObjectMapperContext = typeof(AbpIdentityBlazorModule);
+        LocalizationResource = typeof(IdentityResource);
 
-        protected const string DefaultSelectedTab = "UserInformations";
+        CreatePolicyName = IdentityPermissions.Users.Create;
+        UpdatePolicyName = IdentityPermissions.Users.Update;
+        DeletePolicyName = IdentityPermissions.Users.Delete;
+        ManagePermissionsPolicyName = IdentityPermissions.Users.ManagePermissions;
+    }
 
-        protected PermissionManagementModal PermissionManagementModal;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
 
-        protected IReadOnlyList<IdentityRoleDto> Roles;
-
-        protected AssignedRoleViewModel[] NewUserRoles;
-
-        protected AssignedRoleViewModel[] EditUserRoles;
-
-        protected string ManagePermissionsPolicyName;
-
-        protected bool HasManagePermissionsPermission { get; set; }
-
-        protected string CreateModalSelectedTab = DefaultSelectedTab;
-
-        protected string EditModalSelectedTab = DefaultSelectedTab;
-
-        protected PageToolbar Toolbar { get; } = new();
-
-        private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
-
-        public UserManagement()
+        try
         {
-            ObjectMapperContext = typeof(AbpIdentityBlazorModule);
-            LocalizationResource = typeof(IdentityResource);
-
-            CreatePolicyName = IdentityPermissions.Users.Create;
-            UpdatePolicyName = IdentityPermissions.Users.Update;
-            DeletePolicyName = IdentityPermissions.Users.Delete;
-            ManagePermissionsPolicyName = IdentityPermissions.Users.ManagePermissions;
+            Roles = (await AppService.GetAssignableRolesAsync()).Items;
         }
-
-        protected override async Task OnInitializedAsync()
+        catch (Exception ex)
         {
-            await base.OnInitializedAsync();
-
-            try
-            {
-                Roles = (await AppService.GetAssignableRolesAsync()).Items;
-            }
-            catch (Exception ex)
-            {
-                await HandleErrorAsync(ex);
-            }
+            await HandleErrorAsync(ex);
         }
+    }
 
-        protected override async Task SetPermissionsAsync()
+    protected override async Task SetPermissionsAsync()
+    {
+        await base.SetPermissionsAsync();
+
+        HasManagePermissionsPermission =
+            await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.ManagePermissions);
+    }
+
+    protected override Task OpenCreateModalAsync()
+    {
+        CreateModalSelectedTab = DefaultSelectedTab;
+
+        NewUserRoles = Roles.Select(x => new AssignedRoleViewModel
         {
-            await base.SetPermissionsAsync();
+            Name = x.Name,
+            IsAssigned = x.IsDefault
+        }).ToArray();
 
-            HasManagePermissionsPermission =
-                await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.ManagePermissions);
-        }
+        return base.OpenCreateModalAsync();
+    }
 
-        protected override Task OpenCreateModalAsync()
+    protected override Task OnCreatingEntityAsync()
+    {
+        // apply roles before saving
+        NewEntity.RoleNames = NewUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
+
+        return base.OnCreatingEntityAsync();
+    }
+
+    protected override async Task OpenEditModalAsync(IdentityUserDto entity)
+    {
+        try
         {
-            CreateModalSelectedTab = DefaultSelectedTab;
+            EditModalSelectedTab = DefaultSelectedTab;
 
-            NewUserRoles = Roles.Select(x => new AssignedRoleViewModel
+            var userRoleNames = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Name).ToList();
+
+            EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
             {
                 Name = x.Name,
-                IsAssigned = x.IsDefault
+                IsAssigned = userRoleNames.Contains(x.Name)
             }).ToArray();
 
-            return base.OpenCreateModalAsync();
+            await base.OpenEditModalAsync(entity);
         }
-
-        protected override Task OnCreatingEntityAsync()
+        catch (Exception ex)
         {
-            // apply roles before saving
-            NewEntity.RoleNames = NewUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
-
-            return base.OnCreatingEntityAsync();
+            await HandleErrorAsync(ex);
         }
+    }
 
-        protected override async Task OpenEditModalAsync(IdentityUserDto entity)
-        {
-            try
+    protected override Task OnUpdatingEntityAsync()
+    {
+        // apply roles before saving
+        EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
+
+        return base.OnUpdatingEntityAsync();
+    }
+
+    protected override string GetDeleteConfirmationMessage(IdentityUserDto entity)
+    {
+        return string.Format(L["UserDeletionConfirmationMessage"], entity.UserName);
+    }
+
+    protected override ValueTask SetEntityActionsAsync()
+    {
+        EntityActions
+            .Get<UserManagement>()
+            .AddRange(new EntityAction[]
             {
-                EditModalSelectedTab = DefaultSelectedTab;
-
-                var userRoleNames = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Name).ToList();
-
-                EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
-                {
-                    Name = x.Name,
-                    IsAssigned = userRoleNames.Contains(x.Name)
-                }).ToArray();
-
-                await base.OpenEditModalAsync(entity);
-            }
-            catch (Exception ex)
-            {
-                await HandleErrorAsync(ex);
-            }
-        }
-
-        protected override Task OnUpdatingEntityAsync()
-        {
-            // apply roles before saving
-            EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
-
-            return base.OnUpdatingEntityAsync();
-        }
-
-        protected override string GetDeleteConfirmationMessage(IdentityUserDto entity)
-        {
-            return string.Format(L["UserDeletionConfirmationMessage"], entity.UserName);
-        }
-
-        protected override ValueTask SetEntityActionsAsync()
-        {
-            EntityActions
-                .Get<UserManagement>()
-                .AddRange(new EntityAction[]
-                {
                     new EntityAction
                     {
                         Text = L["Edit"],
@@ -147,7 +147,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                         Clicked = async (data) =>
                         {
                             await PermissionManagementModal.OpenAsync(PermissionProviderName,
-                                data.As<IdentityUserDto>().Id.ToString());
+                                data.As<IdentityUserDto>().Id.ToString(),
+                                data.As<IdentityUserDto>().UserName);
                         }
                     },
                     new EntityAction
@@ -157,16 +158,16 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                         Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityUserDto>()),
                         ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityUserDto>())
                     }
-                });
+            });
 
-            return base.SetEntityActionsAsync();
-        }
+        return base.SetEntityActionsAsync();
+    }
 
-        protected override ValueTask SetTableColumnsAsync()
-        {
-            UserManagementTableColumns
-                .AddRange(new TableColumn[]
-                {
+    protected override ValueTask SetTableColumnsAsync()
+    {
+        UserManagementTableColumns
+            .AddRange(new TableColumn[]
+            {
                     new TableColumn
                     {
                         Title = L["Actions"],
@@ -187,27 +188,26 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                         Title = L["PhoneNumber"],
                         Data = nameof(IdentityUserDto.PhoneNumber),
                     }
-                });
+            });
 
-            UserManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
-                IdentityModuleExtensionConsts.EntityNames.User));
-            return base.SetEntityActionsAsync();
-        }
-
-        protected override ValueTask SetToolbarItemsAsync()
-        {
-            Toolbar.AddButton(L["NewUser"], OpenCreateModalAsync,
-                IconName.Add,
-                requiredPolicyName: CreatePolicyName);
-
-            return base.SetToolbarItemsAsync();
-        }
+        UserManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
+            IdentityModuleExtensionConsts.EntityNames.User));
+        return base.SetEntityActionsAsync();
     }
 
-    public class AssignedRoleViewModel
+    protected override ValueTask SetToolbarItemsAsync()
     {
-        public string Name { get; set; }
+        Toolbar.AddButton(L["NewUser"], OpenCreateModalAsync,
+            IconName.Add,
+            requiredPolicyName: CreatePolicyName);
 
-        public bool IsAssigned { get; set; }
+        return base.SetToolbarItemsAsync();
     }
+}
+
+public class AssignedRoleViewModel
+{
+    public string Name { get; set; }
+
+    public bool IsAssigned { get; set; }
 }

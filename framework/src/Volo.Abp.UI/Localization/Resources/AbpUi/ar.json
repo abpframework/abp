@@ -13,6 +13,7 @@
     "SavingWithThreeDot": "حفظ...",
     "Actions": "أجراءات",
     "Delete": "حذف",
+    "SuccessfullyDeleted": "تم الحذف بنجاح",
     "Edit": "تعديل",
     "Refresh": "تحديث",
     "Language": "لغة",
@@ -44,6 +45,9 @@
     "AreYouSureYouWantToCancelEditingWarningMessage": "لم تحفظ التغييرات.",
     "GoHomePage": "اذهب الى الصفحة الرئيسية",
     "GoBack": "عد",
-    "Search": "بحث"
+    "Search": "بحث",
+    "ItemWillBeDeletedMessageWithFormat": "سيتم حذف {0}!",
+    "ItemWillBeDeletedMessage": "سوف يتم حذف هذا البند!",
+    "ManageYourAccount": "إدارة حسابك"
   }
 }

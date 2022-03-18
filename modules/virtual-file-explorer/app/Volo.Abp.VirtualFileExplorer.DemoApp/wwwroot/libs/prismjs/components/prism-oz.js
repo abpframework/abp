@@ -1,5 +1,8 @@
 Prism.languages.oz = {
-	'comment': /\/\*[\s\S]*?\*\/|%.*/,
+	'comment': {
+		pattern: /\/\*[\s\S]*?\*\/|%.*/,
+		greedy: true
+	},
 	'string': {
 		pattern: /"(?:[^"\\]|\\[\s\S])*"/,
 		greedy: true
@@ -17,9 +20,9 @@ Prism.languages.oz = {
 			lookbehind: true
 		}
 	],
-	'number': /\b(?:0[bx][\da-f]+|\d+\.?\d*(?:e~?\d+)?)\b|&(?:[^\\]|\\(?:\d{3}|.))/i,
-	'variable': /\b[A-Z][A-Za-z\d]*|`(?:[^`\\]|\\.)+`/,
-	'attr-name': /\w+(?=:)/,
+	'number': /\b(?:0[bx][\da-f]+|\d+(?:\.\d*)?(?:e~?\d+)?)\b|&(?:[^\\]|\\(?:\d{3}|.))/i,
+	'variable': /`(?:[^`\\]|\\.)+`/,
+	'attr-name': /\b\w+(?=[ \t]*:(?![:=]))/,
 	'operator': /:(?:=|::?)|<[-:=]?|=(?:=|<?:?)|>=?:?|\\=:?|!!?|[|#+\-*\/,~^@]|\b(?:andthen|div|mod|orelse)\b/,
 	'punctuation': /[\[\](){}.:;?]/
 };

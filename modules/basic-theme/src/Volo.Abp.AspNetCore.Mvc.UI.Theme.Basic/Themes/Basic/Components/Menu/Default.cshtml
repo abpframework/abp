@@ -1,0 +1,50 @@
+﻿@using Volo.Abp.UI.Navigation
+@model ApplicationMenu
+@foreach (var menuItem in Model.Items)
+{
+    var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";
+    var cssClass = string.IsNullOrEmpty(menuItem.CssClass) ? string.Empty : menuItem.CssClass;
+    var disabled = menuItem.IsDisabled ? "disabled" : string.Empty;
+    var url = string.IsNullOrEmpty(menuItem.Url) ? "#" : Url.IsLocalUrl(menuItem.Url) ? Url.Content(menuItem.Url.EnsureStartsWith('~')) : menuItem.Url;
+    if (menuItem.IsLeaf)
+    {
+        if (menuItem.Url != null)
+        {
+            <li class="nav-item @cssClass @disabled" @elementId>
+                <a class="nav-link" href="@url" target="@menuItem.Target">
+                    @if (menuItem.Icon != null)
+                    {
+                        if (menuItem.Icon.StartsWith("fa"))
+                        {
+                            <i class="@menuItem.Icon"></i>
+                        }
+                    }
+                    @menuItem.DisplayName
+                </a>
+            </li>
+        }
+    }
+    else
+    {
+        <li class="nav-item">
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="Menu_@(menuItem.Name)" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @if (menuItem.Icon != null)
+                    {
+                        if (menuItem.Icon.StartsWith("fa"))
+                        {
+                            <i class="@menuItem.Icon"></i>
+                        }
+                    }
+                    @menuItem.DisplayName
+                </a>
+                <div class="dropdown-menu border-0 shadow-sm" aria-labelledby="Menu_@(menuItem.Name)">
+                    @foreach (var childMenuItem in menuItem.Items)
+                    {
+                        @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)
+                    }
+                </div>
+            </div>
+        </li>
+    }
+}

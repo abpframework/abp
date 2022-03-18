@@ -6,28 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
+namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending;
+
+public static class EnumHelper
 {
-    public static class EnumHelper
+    public static string GetLocalizedMemberName(Type enumType, object value, IStringLocalizerFactory stringLocalizerFactory)
     {
-        public static string GetLocalizedMemberName(Type enumType, object value, IStringLocalizerFactory stringLocalizerFactory)
-        {
-            var memberName = enumType.GetEnumName(value);
-            var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
-                new[]
-                {
+        var memberName = enumType.GetEnumName(value);
+        var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
+            new[]
+            {
                         stringLocalizerFactory.CreateDefaultOrNull()
-                },
-                new[]
-                {
+            },
+            new[]
+            {
                         $"Enum:{enumType.Name}.{memberName}",
                         $"{enumType.Name}.{memberName}",
                         memberName
-                },
-                memberName
-            );
+            },
+            memberName
+        );
 
-            return localizedMemberName;
-        }
+        return localizedMemberName;
     }
 }

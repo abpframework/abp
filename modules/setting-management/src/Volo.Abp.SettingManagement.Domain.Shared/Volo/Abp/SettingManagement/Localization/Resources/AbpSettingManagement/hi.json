@@ -1,0 +1,24 @@
+{
+  "culture": "hi",
+  "texts": {
+    "Settings": "समायोजन",
+    "SuccessfullySaved": "सफलतापूर्वक संचित कर लिया गया है",
+    "Permission:SettingManagement": "प्रबंधन की स्थापना",
+    "Permission:Emailing": "ईमेल से भेजना",
+    "Menu:Emailing": "ईमेल से भेजना",
+    "SmtpHost": "मेज़बान",
+    "SmtpPort": "बंदरगाह",
+    "SmtpUserName": "उपयोगकर्ता नाम",
+    "SmtpPassword": "कुंजिका",
+    "SmtpDomain": "डोमेन",
+    "SmtpEnableSsl": "Ssl सक्षम करें",
+    "SmtpUseDefaultCredentials": "डिफ़ॉल्ट क्रेडेंशियल्स का उपयोग करें",
+    "DefaultFromAddress": "पते से डिफ़ॉल्ट",
+    "DefaultFromDisplayName": "प्रदर्शन नाम से डिफ़ॉल्ट",
+    "Feature:SettingManagementGroup": "सेटिंग प्रबंधन",
+    "Feature:SettingManagementEnable": "सेटिंग प्रबंधन सक्षम करें",
+    "Feature:SettingManagementEnableDescription": "एप्लिकेशन में सेटिंग प्रबंधन प्रणाली सक्षम करें।",
+    "Feature:AllowTenantsToChangeEmailSettings": "किरायेदारों को ईमेल सेटिंग बदलने की अनुमति दें।",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "किरायेदारों को ईमेल सेटिंग बदलने की अनुमति दें।"
+  }
+}

@@ -1,6 +1,7 @@
 body {
     position: relative;
 }
+a { text-decoration: none;}
 
 .docs-page {
     background: rgb(245, 247, 249);
@@ -33,7 +34,7 @@ body {
         }
 
         .docs-sidebar-wrapper {
-            width: 270px;
+            width: 300px;
             float: right;
 
             input.form-control {
@@ -53,20 +54,21 @@ body {
                     border-radius: 3px;
 
                     .input-group-text {
-                        padding: 0 10px;
+                        padding: 0 12px;
                         font-size: .9rem;
-                        width: 26px;
+                        width: 30px;
                         height: 34px;
                         line-height: 1;
                         border-radius: 0px;
                         border: 0;
+                        background: #000;
 
                         i {
                             color: #666;
                         }
                     }
 
-                    select.form-control, input.form-control {
+                    select.form-select, input.form-control {
                         padding: 0 10px 2px 10px;
                         border: 0;
                         min-height: 34px;
@@ -79,8 +81,12 @@ body {
                         }
                     }
 
-                    select.form-control {
+                    select.form-select {
                         padding: 0 10px 2px 6px;
+                        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+                        background-repeat: no-repeat !important;
+                        background-position: right 0.75rem center !important;
+                        background-size: 16px 12px !important;
                     }
                 }
             }
@@ -110,9 +116,9 @@ body {
                 }
 
                 ul {
-                    font-size: .9em;
+                    font-size: 14px;
                     list-style: none;
-                    padding: 0 1rem;
+                    padding: 0 1rem 1rem;
                     margin: 0;
 
                     li {
@@ -230,7 +236,9 @@ body {
         }
 
 
-        .docs-top {
+        .docs-top { 
+             padding: 0 1em; 
+
             .navbar-logo {
                 .navbar-brand {
                     font-size: 1.35rem;
@@ -590,7 +598,7 @@ body {
             .docs-version {
                 .version-select {
 
-                    select.form-control, input.form-control {
+                    select.form-select, input.form-control {
                         background: #000000;
                         color: white;
                     }
@@ -941,6 +949,10 @@ div.code-toolbar > .toolbar span {
 
 div.code-toolbar > .toolbar a {
     cursor: copy;
+}
+
+.logo-nav ul {
+    width: 300px !important;
 }
 
 @media (max-width: 767px) {

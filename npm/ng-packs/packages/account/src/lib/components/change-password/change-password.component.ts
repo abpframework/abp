@@ -1,10 +1,9 @@
-import { Profile, ProfileService } from '@abp/ng.core';
+import { ProfileService } from '@abp/ng.account.core/proxy';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
-import { Component, Injector, Input, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { comparePasswords, Validation } from '@ngx-validate/core';
 import { finalize } from 'rxjs/operators';
-import snq from 'snq';
 import { Account } from '../../models/account';
 import { ManageProfileStateService } from '../../services/manage-profile.state.service';
 
@@ -18,7 +17,8 @@ const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
   exportAs: 'abpChangePasswordForm',
 })
 export class ChangePasswordComponent
-  implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs {
+  implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs
+{
   form: FormGroup;
 
   inProgress: boolean;
@@ -90,9 +90,7 @@ export class ChangePasswordComponent
           }
         },
         error: err => {
-          this.toasterService.error(
-            snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
-          );
+          this.toasterService.error(err.error?.error?.message || 'AbpAccount::DefaultErrorMessage');
         },
       });
   }

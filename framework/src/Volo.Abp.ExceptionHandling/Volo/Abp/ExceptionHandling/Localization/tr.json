@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "InternalServerErrorMessage": "Sayfa işlenirken sunucu tarafında beklenmedik bir hata oluştu!",
@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Kaynak bulunamadı!",
     "DefaultErrorMessage404Detail": "İstenilen kaynak sunucuda bulunamadı.",
     "EntityNotFoundErrorMessage": "Id değeri {1} olan {0} türünden bir nesne bulunamadı!",
+    "AbpDbConcurrencyErrorMessage": "Gönderdiğiniz veri başka bir kullanıcı/istemci tarafından değiştirilmiş. Lütfen işlemi iptal edip baştan deneyin.",
     "Error": "Hata",
     "UnhandledException": "Yakalanmamış hata!",
     "401Message": "Yetkisiz İşlem",

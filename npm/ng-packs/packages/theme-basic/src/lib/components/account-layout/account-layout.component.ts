@@ -1,14 +1,21 @@
-import { Component } from '@angular/core';
-import { eLayoutType } from '@abp/ng.core';
+import { AfterViewInit, Component } from '@angular/core';
+import { eLayoutType, SubscriptionService } from '@abp/ng.core';
+import { LayoutService } from '../../services/layout.service';
 
 @Component({
   selector: 'abp-layout-account',
-  template: `
-    <router-outlet></router-outlet>
-    <abp-confirmation></abp-confirmation>
-  `,
+  templateUrl: './account-layout.component.html',
+  providers: [LayoutService, SubscriptionService],
 })
-export class AccountLayoutComponent {
+export class AccountLayoutComponent implements AfterViewInit {
   // required for dynamic component
   static type = eLayoutType.account;
+
+  authWrapperKey = 'Account.AuthWrapperComponent';
+
+  constructor(public service: LayoutService) {}
+
+  ngAfterViewInit() {
+    this.service.subscribeWindowSize();
+  }
 }

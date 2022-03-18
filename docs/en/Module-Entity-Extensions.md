@@ -491,3 +491,6 @@ Here, a few things you can do:
 * You can override a domain or application service to perform custom logics with your new property.
 * You can low level control how to add/render a field in the data table on the UI.
 
+## See Also
+
+* [Angular UI Extensions](UI/Angular/Extensions-Overall.md)

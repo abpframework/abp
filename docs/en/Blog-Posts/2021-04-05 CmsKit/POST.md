@@ -28,13 +28,13 @@ If you're using the open-source version or adding the module to an existing proj
 You can run the following command to add the module to an open-source solution. 
 
 ```bash
-abp add-module Volo.CmsKit
+abp add-module Volo.CmsKit --skip-db-migrations true
 ```
 
 If you're a commercial user, run the following command to install the pro version of the module. 
 
 ```bash
-abp add-module Volo.CmsKit.Pro
+abp add-module Volo.CmsKit.Pro --skip-db-migrations true
 ```
 
 After adding the module to the solution, you need to configure features. The CMS Kit module uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all features. To enable the features in the CMS Kit module, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure` method to enable all features in the CMS kit module.
@@ -79,7 +79,7 @@ For example,
 
 
 
-We've covered the initial features, installation and configuration steps in this post. You can read the [open-source](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit) and [commercial](https://docs.abp.io/en/commercial/latest/modules/CMS-Kit) documentation to get further information about features and the CMS Kit module. CMS Kit's initial version contains lots of features that you can easily integrate and use in your applications. We're planning to improve the existing features, fixing bugs and adding new features in upcoming releases. If you want to give some feedback or have a feature request, please reach out to us from [GitHub](https://github.com/abpframework/abp) or [support.abp.io](https://support.abp.io). We will be happy to plan the CMS Kit module's future together.
+We've covered the initial features, installation and configuration steps in this post. You can read the [open-source](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Index) and [commercial](https://docs.abp.io/en/commercial/latest/modules/CMS-Kit) documentation to get further information about features and the CMS Kit module. CMS Kit's initial version contains lots of features that you can easily integrate and use in your applications. We're planning to improve the existing features, fixing bugs and adding new features in upcoming releases. If you want to give some feedback or have a feature request, please reach out to us from [GitHub](https://github.com/abpframework/abp) or [support.abp.io](https://support.abp.io). We will be happy to plan the CMS Kit module's future together.
 
 Thank you!
 

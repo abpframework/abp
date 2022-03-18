@@ -1,4 +1,4 @@
-import { Config, LocalizationParam } from '@abp/ng.core';
+import { LocalizationParam } from '@abp/ng.core';
 
 export namespace Confirmation {
   export interface Options {
@@ -10,11 +10,13 @@ export namespace Confirmation {
     hideYesBtn?: boolean;
     cancelText?: LocalizationParam;
     yesText?: LocalizationParam;
+    icon?: string;
+    iconTemplate?:string
   }
 
   export interface DialogData {
-    message: Config.LocalizationParam;
-    title?: Config.LocalizationParam;
+    message: LocalizationParam;
+    title?: LocalizationParam;
     severity?: Severity;
     options?: Partial<Options>;
   }

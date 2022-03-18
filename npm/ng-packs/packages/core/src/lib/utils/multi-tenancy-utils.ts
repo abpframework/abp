@@ -1,10 +1,10 @@
 import { Injector } from '@angular/core';
 import clone from 'just-clone';
-import { of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+
+import { tap } from 'rxjs/operators';
 import { Environment } from '../models/environment';
-import { AbpTenantService } from '../proxy/pages/abp/multi-tenancy/abp-tenant.service';
-import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
+
+import { FindTenantResultDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
 import { EnvironmentService } from '../services/environment.service';
 import { MultiTenancyService } from '../services/multi-tenancy.service';
 import { createTokenParser } from './string-utils';
@@ -19,39 +19,66 @@ function getCurrentTenancyName(appBaseUrl: string): string {
   return parseTokens(window.location.href)[token]?.[0];
 }
 
+function getCurrentTenancyNameFromUrl(tenantKey: string) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(tenantKey);
+}
+
 export async function parseTenantFromUrl(injector: Injector) {
   const environmentService = injector.get(EnvironmentService);
   const multiTenancyService = injector.get(MultiTenancyService);
-  const abpTenantService = injector.get(AbpTenantService);
 
   const baseUrl = environmentService.getEnvironment()?.application?.baseUrl || '';
   const tenancyName = getCurrentTenancyName(baseUrl);
 
-  if (tenancyName) {
+  const hideTenantBox = () => {
     multiTenancyService.isTenantBoxVisible = false;
-    setEnvironment(injector, tenancyName);
+  };
 
-    return of(null)
-      .pipe(
-        switchMap(() => abpTenantService.findTenantByName(tenancyName, { __tenant: '' })),
-        tap(res => {
-          multiTenancyService.domainTenant = res.success
-            ? ({ id: res.tenantId, name: res.name } as CurrentTenantDto)
-            : null;
-        }),
-      )
+  const setDomainTenant = (tenant: FindTenantResultDto) => {
+    multiTenancyService.domainTenant = {
+      id: tenant.tenantId,
+      name: tenant.name,
+      isAvailable: true,
+    };
+  };
+
+  const setEnvironmentWithDomainTenant = (tenant: FindTenantResultDto) => {
+    hideTenantBox();
+    setDomainTenant(tenant);
+  };
+
+  if (tenancyName) {
+    /**
+     * We have to replace tenant name within the urls from environment,
+     * because the code below will make a http request to find information about the domain tenant.
+     * Before this request takes place, we need to replace placeholders aka "{0}".
+     */
+    replaceTenantNameWithinEnvironment(injector, tenancyName);
+    return multiTenancyService
+      .setTenantByName(tenancyName)
+      .pipe(tap(setEnvironmentWithDomainTenant))
       .toPromise();
   } else {
     /**
      * If there is no tenant, we still have to clean up {0}. from baseUrl to avoid incorrect http requests.
      */
-    setEnvironment(injector, '', tenancyPlaceholder + '.');
+    replaceTenantNameWithinEnvironment(injector, '', tenancyPlaceholder + '.');
+
+    const tenantIdFromQueryParams = getCurrentTenancyNameFromUrl(multiTenancyService.tenantKey);
+    if (tenantIdFromQueryParams) {
+      return multiTenancyService.setTenantById(tenantIdFromQueryParams).toPromise();
+    }
   }
 
   return Promise.resolve();
 }
 
-function setEnvironment(injector: Injector, tenancyName: string, placeholder = tenancyPlaceholder) {
+function replaceTenantNameWithinEnvironment(
+  injector: Injector,
+  tenancyName: string,
+  placeholder = tenancyPlaceholder,
+) {
   const environmentService = injector.get(EnvironmentService);
 
   const environment = clone(environmentService.getEnvironment()) as Environment;

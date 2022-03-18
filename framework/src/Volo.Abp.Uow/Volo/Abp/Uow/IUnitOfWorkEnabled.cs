@@ -1,6 +1,5 @@
-﻿namespace Volo.Abp.Uow
+﻿namespace Volo.Abp.Uow;
+
+public interface IUnitOfWorkEnabled
 {
-    public interface IUnitOfWorkEnabled
-    {
-    }
 }

@@ -1,0 +1,24 @@
+{
+  "culture": "is",
+  "texts": {
+    "Settings": "Stillingar",
+    "SuccessfullySaved": "Tókst að vista",
+    "Permission:SettingManagement": "Stillingar",
+    "Permission:Emailing": "Senda tölvupóst",
+    "Menu:Emailing": "Senda tölvupóst",
+    "SmtpHost": "Smtp Host",
+    "SmtpPort": "Port",
+    "SmtpUserName": "Notanda nafn",
+    "SmtpPassword": "Lykiloðr",
+    "SmtpDomain": "Domain",
+    "SmtpEnableSsl": "Virkja ssl",
+    "SmtpUseDefaultCredentials": "Notað sjálfgefin auðkenni",
+    "DefaultFromAddress": "Sjálfgefið frá heimilisfang",
+    "DefaultFromDisplayName": "Sjálfgefið frá birtinga nafn",
+    "Feature:SettingManagementGroup": "Stillingar",
+    "Feature:SettingManagementEnable": "Virkja stillingar",
+    "Feature:SettingManagementEnableDescription": "Virkja stillingar í forritinu.",
+    "Feature:AllowTenantsToChangeEmailSettings": "Leyfa tenentum að breyta tölvupóststillingum.",
+    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Leyfa tenentum að breyta tölvupóststillingum."
+  }
+}

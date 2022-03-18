@@ -1,0 +1,24 @@
+{
+  "name": "Volo.Abp.SettingManagement.EntityFrameworkCore",
+  "hash": "5e5a522b88d7e38c08d7b2d24177c044",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.SettingManagement.EntityFrameworkCore",
+      "contentType": "abpModule",
+      "name": "AbpSettingManagementEntityFrameworkCoreModule"
+    },
+    {
+      "namespace": "Volo.Abp.SettingManagement.EntityFrameworkCore",
+      "connectionStringName": "AbpSettingManagement",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.SettingManagement.Setting",
+          "contentType": "databaseTable",
+          "name": "AbpSettings"
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "SettingManagementDbContext"
+    }
+  ]
+}

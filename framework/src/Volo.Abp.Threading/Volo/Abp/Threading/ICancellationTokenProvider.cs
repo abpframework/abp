@@ -1,9 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
-namespace Volo.Abp.Threading
+namespace Volo.Abp.Threading;
+
+public interface ICancellationTokenProvider
 {
-    public interface ICancellationTokenProvider
-    {
-        CancellationToken Token { get; }
-    }
+    CancellationToken Token { get; }
+
+    IDisposable Use(CancellationToken cancellationToken);
 }

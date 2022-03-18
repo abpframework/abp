@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 export class BaseTreeNode<T extends object> {
   children: TreeNode<T>[] = [];
   isLeaf = true;
@@ -12,7 +13,7 @@ export class BaseTreeNode<T extends object> {
   }
 }
 
-export function createTreeFromList<T extends object, R extends unknown>(
+export function createTreeFromList<T extends object, R>(
   list: T[],
   keySelector: (item: T) => NodeKey,
   parentKeySelector: typeof keySelector,
@@ -42,7 +43,7 @@ export function createTreeFromList<T extends object, R extends unknown>(
   return tree;
 }
 
-export function createMapFromList<T extends object, R extends unknown>(
+export function createMapFromList<T extends object, R>(
   list: T[],
   keySelector: (item: T) => NodeKey,
   valueMapper: (item: T) => R,

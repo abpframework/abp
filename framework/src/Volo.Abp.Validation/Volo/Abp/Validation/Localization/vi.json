@@ -7,6 +7,7 @@
     "The {0} field is not a valid e-mail address.": "Trường {0} không phải là một địa chỉ email hợp lệ.",
     "The {0} field only accepts files with the following extensions: {1}": "Trường {0} chỉ chấp nhận các tập tin có phần mở rộng như sau: {1}",
     "The field {0} must be a string or array type with a maximum length of '{1}'.": "Trường {0} phải là một chuỗi hoặc một mảng với độ dài tối đa là '{1}'.",
+    "The field {0} must be a string or array type with a minimum length of '{1}'.": "Trường {0} phải là một kiểu chuỗi hoặc mảng có độ dài tối thiểu là '{1}'.",
     "The {0} field is not a valid phone number.": "Trường {0} không phải là một số điện thoại hợp lệ",
     "The field {0} must be between {1} and {2}.": "Trường {0} phải ở giữa {1} and {2}.",
     "The field {0} must match the regular expression '{1}'.": "Trường {0} không khớp với định dạng được yêu cầu.",
@@ -14,6 +15,20 @@
     "The field {0} must be a string with a maximum length of {1}.": "Trường {0} phải là một chuỗi với độ dài tối đa là {1}.",
     "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "Trường {0} phải là một chuỗi với độ dài tối thiểu {2} và tối đa là {1}.",
     "The {0} field is not a valid fully-qualified http, https, or ftp URL.": "Trường {0} không phải là một http, https, hoặc ftp URL đủ điều kiện hợp lệ.",
-    "The field {0} is invalid.": "Trường {0} không có hiệu lực"
+    "The field {0} is invalid.": "Trường {0} không có hiệu lực",
+    "ThisFieldIsNotAValidCreditCardNumber.": "Trường này không phải là số thẻ tín dụng hợp lệ.",
+    "ThisFieldIsNotValid.": "Trường này không hợp lệ.",
+    "ThisFieldIsNotAValidEmailAddress.": "Trường này không phải là địa chỉ e-mail hợp lệ.",
+    "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "Trường này chỉ chấp nhận các tệp có các phần mở rộng sau: {0}",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "Trường này phải là một kiểu chuỗi hoặc mảng có độ dài tối đa là '{0}'.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Trường này phải là một kiểu chuỗi hoặc mảng có độ dài tối thiểu là '{0}'.",
+    "ThisFieldIsNotAValidPhoneNumber.": "Trường này không phải là số điện thoại hợp lệ.",
+    "ThisFieldMustBeBetween{0}And{1}": "Trường này phải nằm trong khoảng từ {0} đến {1}.",
+    "ThisFieldMustMatchTheRegularExpression{0}": "Trường này phải khớp với biểu thức chính quy '{0}'.",
+    "ThisFieldIsRequired.": "Trường này là bắt buộc.",
+    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Trường này phải là một chuỗi có độ dài tối đa là {0}.",
+    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "Trường này phải là một chuỗi có độ dài tối thiểu là {1} và độ dài tối đa là {0}.",
+    "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "Trường này không phải là URL http, https hoặc ftp đủ điều kiện hợp lệ.",
+    "ThisFieldIsInvalid.": "Trường này không hợp lệ."
   }
 }

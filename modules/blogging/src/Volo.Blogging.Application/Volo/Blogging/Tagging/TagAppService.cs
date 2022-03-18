@@ -8,16 +8,16 @@ namespace Volo.Blogging.Tagging
 {
     public class TagAppService : BloggingAppServiceBase, ITagAppService
     {
-        private readonly ITagRepository _tagRepository;
+        protected ITagRepository TagRepository { get; }
 
         public TagAppService(ITagRepository tagRepository)
         {
-            _tagRepository = tagRepository;
+            TagRepository = tagRepository;
         }
 
-        public async Task<List<TagDto>> GetPopularTags(Guid blogId, GetPopularTagsInput input)
+        public async Task<List<TagDto>> GetPopularTagsAsync(Guid blogId, GetPopularTagsInput input)
         {
-            var postTags = (await _tagRepository.GetListAsync(blogId)).OrderByDescending(t=>t.UsageCount)
+            var postTags = (await TagRepository.GetListAsync(blogId)).OrderByDescending(t=>t.UsageCount)
                 .WhereIf(input.MinimumPostCount != null, t=>t.UsageCount >= input.MinimumPostCount)
                 .Take(input.ResultCount).ToList();
 

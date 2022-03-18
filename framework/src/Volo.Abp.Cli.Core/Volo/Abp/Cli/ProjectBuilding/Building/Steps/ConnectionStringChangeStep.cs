@@ -9,67 +9,66 @@ using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 using Volo.Abp.Text;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+
+public class ConnectionStringChangeStep : ProjectBuildPipelineStep
 {
-    public class ConnectionStringChangeStep : ProjectBuildPipelineStep
+    private const string DefaultConnectionStringKey = "Default";
+
+    public override void Execute(ProjectBuildContext context)
     {
-        private const string DefaultConnectionStringKey = "Default";
+        var appSettingsJsonFiles = context.Files.Where(f =>
+            f.Name.EndsWith("appsettings.json", StringComparison.OrdinalIgnoreCase))
+            .ToArray();
 
-        public override void Execute(ProjectBuildContext context)
+        if (!appSettingsJsonFiles.Any())
         {
-            var appSettingsJsonFiles = context.Files.Where(f =>
-                f.Name.EndsWith("appsettings.json", StringComparison.OrdinalIgnoreCase))
-                .ToArray();
+            return;
+        }
 
-            if (!appSettingsJsonFiles.Any())
+        var newConnectionString = $"\"{DefaultConnectionStringKey}\": \"{context.BuildArgs.ConnectionString.Replace(@"\\", @"\").Replace(@"\", @"\\")}\"";
+
+        foreach (var appSettingsJson in appSettingsJsonFiles)
+        {
+            try
             {
-                return;
-            }
+                var appSettingJsonContentWithoutBom = StringHelper.ConvertFromBytesWithoutBom(appSettingsJson.Bytes);
+                var jsonObject = JObject.Parse(appSettingJsonContentWithoutBom);
 
-            var newConnectionString = $"\"{DefaultConnectionStringKey}\": \"{context.BuildArgs.ConnectionString}\"";
-
-            foreach (var appSettingsJson in appSettingsJsonFiles)
-            {
-                try
+                var connectionStringContainer = (JContainer)jsonObject?["ConnectionStrings"];
+                if (connectionStringContainer == null)
                 {
-                    var appSettingJsonContentWithoutBom = StringHelper.ConvertFromBytesWithoutBom(appSettingsJson.Bytes);
-                    var jsonObject = JObject.Parse(appSettingJsonContentWithoutBom);
+                    continue;
+                }
 
-                    var connectionStringContainer = (JContainer)jsonObject?["ConnectionStrings"];
-                    if (connectionStringContainer == null)
+                if (!connectionStringContainer.Any())
+                {
+                    continue;
+                }
+
+                var connectionStrings = connectionStringContainer.ToList();
+
+                foreach (var connectionString in connectionStrings)
+                {
+                    var property = ((JProperty)connectionString);
+                    var connectionStringName = property.Name;
+
+                    if (connectionStringName == DefaultConnectionStringKey)
                     {
-                        continue;
-                    }
-
-                    if (!connectionStringContainer.Any())
-                    {
-                        continue;
-                    }
-
-                    var connectionStrings = connectionStringContainer.ToList();
-
-                    foreach (var connectionString in connectionStrings)
-                    {
-                        var property = ((JProperty)connectionString);
-                        var connectionStringName = property.Name;
-
-                        if (connectionStringName == DefaultConnectionStringKey)
+                        var defaultConnectionString = property.ToString();
+                        if (defaultConnectionString == null)
                         {
-                            var defaultConnectionString = property.ToString();
-                            if (defaultConnectionString == null)
-                            {
-                                continue;
-                            }
-
-                            appSettingsJson.ReplaceText(defaultConnectionString, newConnectionString);
-                            break;
+                            continue;
                         }
+
+                        appSettingsJson.ReplaceText(defaultConnectionString, newConnectionString);
+                        break;
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Cannot change the connection string in " + appSettingsJson.Name + ". Error: " + ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Cannot change the connection string in " + appSettingsJson.Name + ". Error: " + ex.Message);
             }
         }
     }

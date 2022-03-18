@@ -1,0 +1,26 @@
+{
+  "culture": "sk",
+  "texts": {
+    "InternalServerErrorMessage": "Počas vašej požiadavky došlo k internej chybe!",
+    "ValidationErrorMessage": "Vaša žiadosť nie je platná!",
+    "ValidationNarrativeErrorMessageTitle": "Počas overovania boli zistené tieto chyby.",
+    "DefaultErrorMessage": "Vyskytla sa chyba!",
+    "DefaultErrorMessageDetail": "Server neodoslal detail chyby.",
+    "DefaultErrorMessage401": "Nie ste autentifikovaný!",
+    "DefaultErrorMessage401Detail": "Ak chcete vykonať túto operáciu, mali by ste sa prihlásiť.",
+    "DefaultErrorMessage403": "Nie ste autorizovaný!",
+    "DefaultErrorMessage403Detail": "Nemáte povolenie vykonať túto operáciu!",
+    "DefaultErrorMessage404": "Zdroj nebol nájdený!",
+    "DefaultErrorMessage404Detail": "Požadovaný zdroj sa na serveri nenašiel!",
+    "EntityNotFoundErrorMessage": "Entita {0} s id = {1} neexistuje!",
+    "AbpDbConcurrencyErrorMessage": "Údaje, ktoré ste odoslali, už zmenil iný používateľ/klient. Zahoďte zmeny, ktoré ste vykonali, a skúste to od začiatku.",
+    "Error": "Error",
+    "UnhandledException": "Neošetrená výnimka!",
+    "401Message": "Neoprávnený",
+    "403Message": "Zakázané",
+    "404Message": "Stránka nebola nájdená",
+    "500Message": "Interná chyba servera",
+    "403MessageDetail": "Nie ste oprávnený vykonávať túto operáciu!",
+    "404MessageDetail": "Je nám ľúto, ale na tejto adrese sa nič nenachádza."
+  }
+}

@@ -70,9 +70,7 @@ namespace MultiTenancyDemo.Products
 }
 ````
 
-* `IMultiTenant` interface just defines a `TenantId` property.
-
-When you implement this interface, ABP Framework **automatically** [filters](Data-Filtering.md) entities for the current tenant when you query from database. So, you don't need to manually add `TenantId` condition while performing queries. A tenant can not access to data of another tenant by default.
+`IMultiTenant` interface just defines a `TenantId` property. When you implement this interface, ABP Framework **automatically** [filters](Data-Filtering.md) entities for the current tenant when you query from database. So, you don't need to manually add `TenantId` condition while performing queries. A tenant can not access to data of another tenant by default.
 
 #### Why the TenantId Property is Nullable?
 
@@ -84,76 +82,9 @@ For example, `IdentityUser` is an entity defined by the [Identity Module](Module
 
 #### When to set the TenantId?
 
-ABP Framework doesn't set the `TenantId` for you (because of the cross tenant operations, ABP can not know the proper `TenantId` in some cases). So, you need to set it yourself **when you create a new multi-tenant entity**.
+ABP automatically sets the `TenantId` for you when you create a new entity object. It is done in the constructor of the base `Entity` class (all other base entity and aggregate root classes are derived from the `Entity` class). The `TenantId` is set from the current value of the `ICurrentTenant.Id` property (see the next section).
 
-##### Best Practice
-
-We suggest to set the `TenantId` in the constructor and never allow to change it again. So, the `Product` class can be re-written as below:
-
-````csharp
-using System;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp.MultiTenancy;
-
-namespace MultiTenancyDemo.Products
-{
-    public class Product : AggregateRoot<Guid>, IMultiTenant
-    {
-        //Private setter prevents changing it later
-        public Guid? TenantId { get; private set; }
-
-        public string Name { get; set; }
-
-        public float Price { get; set; }
-
-        protected Product()
-        {
-            //This parameterless constructor is needed for ORMs
-        }
-        
-        public Product(string name, float price, Guid? tenantId)
-        {
-            Name = name;
-            Price = price;
-            TenantId = tenantId; //Set in the constructor
-        }
-    }
-}
-````
-
-> You can see the [entities document](Entities.md) for a more about entities and aggregate roots.
-
-You typically use the `ICurrentTenant` to set the `TenantId` while creating a new `Product`.
-
-**Example: Creating a new product in a [Domain Service](Domain-Services.md)** 
-
-````csharp
-using System;
-using System.Threading.Tasks;
-using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Domain.Services;
-
-namespace MultiTenancyDemo.Products
-{
-    public class ProductManager : DomainService
-    {
-        private readonly IRepository<Product, Guid> _productRepository;
-
-        public ProductManager(IRepository<Product, Guid> productRepository)
-        {
-            _productRepository = productRepository;
-        }
-
-        public async Task<Product> CreateAsync(string name, float price)
-        {
-            var product = new Product(name, price, CurrentTenant.Id);
-            return await _productRepository.InsertAsync(product);
-        }
-    }
-}
-````
-
-* `DomainService` base class (and some common base classes in the ABP Framework) provides the `CurrentTenant`, so you directly use it. Otherwise, you need to [inject](Dependency-Injection.md) the `ICurrentTenant` service.
+If you set the `TenantId` value for a specific entity object, it will override the value set by the base class. If you want to set the `TenantId` property yourself, we recommend to do it in the constructor of your entity class and do not change (update) it again (Actually, changing it means that you are moving the entity from a tenant to another tenant. If you want that, you need an extra care about the related entities in the database).
 
 ### ICurrentTenant
 
@@ -295,6 +226,32 @@ services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
     options.TenantKey = "MyTenantKey";
 });
 ````
+
+If you change the `TenantKey`, make sure to pass it to `CoreModule` in the Angular client as follows:
+
+```js
+@NgModule({
+  imports: [
+    CoreModule.forRoot({
+      // ...
+      tenantKey: 'MyTenantKey'
+    }),
+  ],
+  // ...
+})
+export class AppModule {}
+```
+
+If you need to access it, you can inject it as follows:
+
+```js
+import { Inject } from '@angular/core';
+import { TENANT_KEY } from '@abp/ng.core';
+
+class SomeComponent {
+    constructor(@Inject(TENANT_KEY) private tenantKey: string) {}
+} 
+```
 
 > However, we don't suggest to change this value since some clients may assume the the `__tenant` as the parameter name and they might need to manually configure then.
 

@@ -256,7 +256,7 @@ myGroup.AddPermission("Book_Creation")
 
 #### Depending on a Global Feature
 
-Use the `RequireFeatures` extension method on your permission definition to make the permission available only if a given feature is enabled:
+Use the `RequireGlobalFeatures` extension method on your permission definition to make the permission available only if a given feature is enabled:
 
 ````csharp
 myGroup.AddPermission("Book_Creation")
@@ -265,37 +265,7 @@ myGroup.AddPermission("Book_Creation")
 
 #### Creating a Custom Permission Dependency
 
-Any class implements the `IPermissionStateProvider` interface can disable a permission based on a custom condition.
-
-**Example:**
-
-````csharp
-public class MyCustomPermissionStateProvider : IPermissionStateProvider
-{
-    public Task<bool> IsEnabledAsync(PermissionStateContext context)
-    {
-        // You can implement your own logic here. 
-        return Task.FromResult(
-            context.Permission.Name.StartsWith("Acme.BookStore"));
-    }
-}
-````
-
-Then you can add `MyCustomPermissionStateProvider` to any permission definition, using the `AddStateProviders` extension method:
-
-````csharp
-myGroup.AddPermission("Book_Creation")
-    .AddStateProviders(new MyCustomPermissionStateProvider());
-````
-
-Or you can globally add your custom provider to make it working for all permissions:
-
-````csharp
-Configure<AbpPermissionOptions>(options =>
-{
-	options.GlobalStateProviders.Add<MyCustomPermissionStateProvider>();
-});
-````
+`PermissionDefinition` supports state check, Please refer to [Simple State Checker's documentation](SimpleStateChecker.md) 
 
 ## IAuthorizationService
 
@@ -458,7 +428,7 @@ This is already done for the startup template integration tests.
 
 Claims are important elements of authentication and authorization. ABP uses the `IAbpClaimsPrincipalFactory` service to create claims on authentication. This service was designed as extensible. If you need to add your custom claims to the authentication ticket, you can implement the `IAbpClaimsPrincipalContributor` in your application.
 
-**Example: Add a `SocialSecurityNumber` claim:**
+**Example: Add a `SocialSecurityNumber` claim and get it:**
 
 ```csharp
 public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
@@ -473,9 +443,18 @@ public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipa
             var socialSecurityNumber = await userService.GetSocialSecurityNumberAsync(userId.Value);
             if (socialSecurityNumber != null)
             {
-                identity.AddOrReplace(new Claim("SocialSecurityNumber", socialSecurityNumber));
+                identity.AddClaim(new Claim("SocialSecurityNumber", socialSecurityNumber));
             }
         }
+    }
+}
+
+
+public static class CurrentUserExtensions
+{
+    public static string GetSocialSecurityNumber(this ICurrentUser currentUser)
+    {
+        return currentUser.FindClaimValue("SocialSecurityNumber");
     }
 }
 ```

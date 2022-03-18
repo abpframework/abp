@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.Docs.Admin.Projects;
 using Volo.Docs.Projects;
@@ -33,7 +34,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
         public virtual async Task<ActionResult> OnGetAsync(Guid id)
         {
             var project = await _projectAppService.GetAsync(id);
-
+            
             if (project.DocumentStoreType == "GitHub")
             {
                 SetGithubProjectFromDto(project);
@@ -89,7 +90,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             }
         }
 
-        public abstract class EditProjectViewModelBase
+        public abstract class EditProjectViewModelBase : IHasConcurrencyStamp
         {
             [Required]
             [HiddenInput]
@@ -119,6 +120,9 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 
             [DynamicStringLength(typeof(ProjectConsts), nameof(ProjectConsts.MaxLatestVersionBranchNameLength))]
             public string LatestVersionBranchName { get; set; }
+
+            [HiddenInput]
+            public string ConcurrencyStamp { get; set; }
         }
 
         public class EditGithubProjectViewModel : EditProjectViewModelBase

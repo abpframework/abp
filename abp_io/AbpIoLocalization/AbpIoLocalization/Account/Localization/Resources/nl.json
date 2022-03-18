@@ -1,0 +1,16 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Account": "ABP Account - Inloggen & Registreren | ABP.IO",
+    "Welcome": "Welkom",
+    "UseOneOfTheFollowingLinksToContinue": "Gebruik een van de volgende links om verder te gaan",
+    "FrameworkHomePage": "Framework-startpagina",
+    "FrameworkDocumentation": "Kaderdocumentatie",
+    "OfficialBlog": "officiële blog",
+    "CommercialHomePage": "Commerciële startpagina",
+    "CommercialSupportWebSite": "Commerciële ondersteuningswebsite",
+    "CommunityWebSite": "ABP-communitywebsite",
+    "ManageAccount": "Mijn account | ABP.IO",
+    "ManageYourAccount": "Beheer uw account"
+  }
+}

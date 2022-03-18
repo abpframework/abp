@@ -1,0 +1,22 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "app": {}
+    }
+  },
+  "packages": {
+    "Volo.Abp.VirtualFileExplorer.Web": {
+      "path": "src/Volo.Abp.VirtualFileExplorer.Web/Volo.Abp.VirtualFileExplorer.Web.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.VirtualFileExplorer.DemoApp": {
+      "path": "app/Volo.Abp.VirtualFileExplorer.DemoApp/Volo.Abp.VirtualFileExplorer.DemoApp.abppkg.json",
+      "folder": "app"
+    },
+    "Volo.Abp.VirtualFileExplorer.Installer": {
+      "path": "src/Volo.Abp.VirtualFileExplorer.Installer/Volo.Abp.VirtualFileExplorer.Installer.abppkg.json",
+      "folder": "src"
+    }
+  }
+}

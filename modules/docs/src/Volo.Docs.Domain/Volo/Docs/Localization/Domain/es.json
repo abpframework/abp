@@ -3,7 +3,7 @@
   "texts": {
     "Documents": "Documentos",
     "BackToWebsite": "Volver al sitio web",
-    "Contributors": "Contribuidores",
+    "Contributors": "Colaboradores",
     "ShareOn": "Compartir en",
     "Version": "Versión",
     "Edit": "Editar",
@@ -34,6 +34,8 @@
     "NewExplanation": "Creado en las últimas dos semanas.",
     "UpdatedExplanation": "Actualizo en las dos últimas semanas",
     "Volo.Docs.Domain:010002": "ShortName {ShortName} ya existe.",
-    "Preview": "Previsualizar"
+    "Preview": "Previsualizar",
+    "Search": "Buscar",
+    "SearchResults": "Resultados de la búsqueda"
   }
 }

@@ -1,0 +1,52 @@
+{
+  "name": "Volo.Abp.Identity.Application",
+  "hash": "75bf6dcf1aede2e8a88a993d5d9e75ac",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Identity",
+      "contentType": "abpModule",
+      "name": "AbpIdentityApplicationModule"
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Abp.Identity.IIdentityRoleAppService",
+        "Volo.Abp.Application.Services.ICrudAppService`5[[Volo.Abp.Identity.IdentityRoleDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.Identity.GetIdentityRolesInput, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityRoleCreateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityRoleUpdateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.Abp.Identity.IdentityRoleDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityRoleDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.Identity.GetIdentityRolesInput, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityRoleCreateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityRoleUpdateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.Abp.Identity.IdentityRoleDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityRoleDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.Identity.GetIdentityRolesInput, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.Abp.Identity.IdentityRoleDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.Identity.IdentityRoleCreateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityRoleUpdateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.Abp.Identity.IdentityRoleDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityRoleCreateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.Abp.Identity.IdentityRoleDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.Identity.IdentityRoleUpdateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      ],
+      "contentType": "applicationService",
+      "name": "IdentityRoleAppService"
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Abp.Identity.IIdentityUserAppService",
+        "Volo.Abp.Application.Services.ICrudAppService`5[[Volo.Abp.Identity.IdentityUserDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.Identity.GetIdentityUsersInput, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityUserCreateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityUserUpdateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.Abp.Identity.IdentityUserDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityUserDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.Identity.GetIdentityUsersInput, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityUserCreateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityUserUpdateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.Abp.Identity.IdentityUserDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityUserDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.Identity.GetIdentityUsersInput, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.Abp.Identity.IdentityUserDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.Identity.IdentityUserCreateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityUserUpdateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.Abp.Identity.IdentityUserDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.Identity.IdentityUserCreateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.Abp.Identity.IdentityUserDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.Identity.IdentityUserUpdateDto, Volo.Abp.Identity.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      ],
+      "contentType": "applicationService",
+      "name": "IdentityUserAppService"
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Abp.Identity.IIdentityUserLookupAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "IdentityUserLookupAppService"
+    }
+  ]
+}

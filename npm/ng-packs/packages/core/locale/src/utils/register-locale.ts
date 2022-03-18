@@ -23,16 +23,22 @@ export function registerLocale(
 ) {
   return (locale: string): Promise<any> => {
     localeMap = { ...differentLocales, ...cultureNameLocaleFileMap };
-
+    const localePath = `/locales/${localeMap[locale] || locale}`;
     return new Promise((resolve, reject) => {
       return import(
         /* webpackMode: "lazy-once" */
         /* webpackChunkName: "locales"*/
-        /* webpackInclude: /[/\\](ar|cs|en|en-GB|es|de|fi|fr|pt|tr|ru|hu|sl|zh-Hans|zh-Hant).js/ */
+        /* webpackInclude: /[/\\](ar|cs|en|en-GB|es|de|fi|fr|hi|hu|is|it|pt|tr|ru|ro|sk|sl|zh-Hans|zh-Hant)\.(mjs|js)$/ */
         /* webpackExclude: /[/\\]global|extra/ */
-        `@angular/common/locales/${localeMap[locale] || locale}.js`
+        `@angular/common${localePath}`
       )
-        .then(resolve)
+        .then(val => {
+          let module = val;
+          while (module.default) {
+            module = module.default;
+          }
+          resolve({ default: module });
+        })
         .catch(error => {
           errorHandlerFn({
             resolve,

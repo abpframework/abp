@@ -26,6 +26,19 @@
     "ContributionGuide": "Katkı Rehberi",
     "Blog": "Blog",
     "Commercial": "Ticari",
-    "SeeDocuments": "Dokümanlara Göz Atın"
+    "MyAccount": "Hesabım",
+    "Permission:License": "Lisans",
+    "Permission:UserInfo": "kullanıcı bilgisi",
+    "SeeDocuments": "Dokümanlara Göz Atın",
+    "Samples": "örnekler",
+    "Framework": "Çerçeve",
+    "Support": "Destek",
+    "FreeDDDBook": "Ücretsiz DDD Kitabı",
+    "New": "Yeni",
+    "Volo.AbpIo.Domain:020005": "Lisans uzatma yılı {MinExtendLicenseYear} yıldan az {MaxExtendLicenseYear} yıldan fazla olamaz.",
+    "TrialLicensePeriodHasExpired": "Deneme lisansınızın süresi {0} gün önce sona erdi.",
+    "TrialLicensePeriodWillExpire": "Deneme lisansınızın süresi {0} gün içinde dolacak.",
+    "TrialLicensePeriodExpireToday": "Deneme lisans süreniz bugün sona erecek.",
+    "PurchaseNow": "Şimdi satın al!"
   }
 }

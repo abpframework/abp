@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import {
   Directive,
   Injector,
@@ -13,15 +14,15 @@ import { PropData, PropList } from '../models/props';
   exportAs: 'abpPropData',
   selector: '[abpPropData]',
 })
-export class PropDataDirective<L extends PropList<any>> extends PropData<InferredData<L>>
-  implements OnChanges, OnDestroy {
-  /* tslint:disable:no-input-rename */
-  @Input('abpPropDataFromList') readonly propList: L;
+export class PropDataDirective<L extends PropList<any>>
+  extends PropData<InferredData<L>>
+  implements OnChanges, OnDestroy
+{
+  @Input('abpPropDataFromList') propList?: L;
 
-  @Input('abpPropDataWithRecord') readonly record: InferredData<L>['record'];
+  @Input('abpPropDataWithRecord') record!: InferredData<L>['record'];
 
-  @Input('abpPropDataAtIndex') readonly index: number;
-  /* tslint:enable:no-input-rename */
+  @Input('abpPropDataAtIndex') index?: number;
 
   readonly getInjected: InferredData<L>['getInjected'];
 
@@ -32,7 +33,6 @@ export class PropDataDirective<L extends PropList<any>> extends PropData<Inferre
   ) {
     super();
 
-    // tslint:disable-next-line
     this.getInjected = injector.get.bind(injector);
   }
 

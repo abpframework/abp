@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Mvc", "MyCompanyName.MyProjectName.Mvc\MyCompanyName.MyProjectName.Mvc.csproj", "{64430A23-E2E0-471D-B9F9-31E4E4C834E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Host", "MyCompanyName.MyProjectName.Host\MyCompanyName.MyProjectName.Host.csproj", "{721ACE10-0AFE-4824-B6F0-99F00DCA8A23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.Server", "MyCompanyName.MyProjectName.Blazor.Server\MyCompanyName.MyProjectName.Blazor.Server.csproj", "{2E19BC05-F78C-4907-A059-C29A4859ADB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.Server.Mongo", "MyCompanyName.MyProjectName.Blazor.Server.Mongo\MyCompanyName.MyProjectName.Blazor.Server.Mongo.csproj", "{892F71FF-153C-41AB-A96C-F6B388CB8DEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Mvc.Mongo", "MyCompanyName.MyProjectName.Mvc.Mongo\MyCompanyName.MyProjectName.Mvc.Mongo.csproj", "{AA367C1C-FD0D-4CB2-A9C3-E2FE388D7ED6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Host.Mongo", "MyCompanyName.MyProjectName.Host.Mongo\MyCompanyName.MyProjectName.Host.Mongo.csproj", "{B5151AE0-6274-4C72-A26B-B09417463D2E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64430A23-E2E0-471D-B9F9-31E4E4C834E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64430A23-E2E0-471D-B9F9-31E4E4C834E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64430A23-E2E0-471D-B9F9-31E4E4C834E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64430A23-E2E0-471D-B9F9-31E4E4C834E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{721ACE10-0AFE-4824-B6F0-99F00DCA8A23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{721ACE10-0AFE-4824-B6F0-99F00DCA8A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{721ACE10-0AFE-4824-B6F0-99F00DCA8A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{721ACE10-0AFE-4824-B6F0-99F00DCA8A23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E19BC05-F78C-4907-A059-C29A4859ADB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E19BC05-F78C-4907-A059-C29A4859ADB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E19BC05-F78C-4907-A059-C29A4859ADB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E19BC05-F78C-4907-A059-C29A4859ADB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{892F71FF-153C-41AB-A96C-F6B388CB8DEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{892F71FF-153C-41AB-A96C-F6B388CB8DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{892F71FF-153C-41AB-A96C-F6B388CB8DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{892F71FF-153C-41AB-A96C-F6B388CB8DEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA367C1C-FD0D-4CB2-A9C3-E2FE388D7ED6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA367C1C-FD0D-4CB2-A9C3-E2FE388D7ED6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA367C1C-FD0D-4CB2-A9C3-E2FE388D7ED6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA367C1C-FD0D-4CB2-A9C3-E2FE388D7ED6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5151AE0-6274-4C72-A26B-B09417463D2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5151AE0-6274-4C72-A26B-B09417463D2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5151AE0-6274-4C72-A26B-B09417463D2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5151AE0-6274-4C72-A26B-B09417463D2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {63E2660C-C1D9-4768-90FD-289F36581842}
+	EndGlobalSection
+EndGlobal

@@ -1,56 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.FluentValidation
+namespace Volo.Abp.FluentValidation;
+
+public class AbpFluentValidationConventionalRegistrar : DefaultConventionalRegistrar
 {
-    public class AbpFluentValidationConventionalRegistrar : ConventionalRegistrarBase
+    protected override bool IsConventionalRegistrationDisabled(Type type)
     {
-        public override void AddType(IServiceCollection services, Type type)
+        return !type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IValidator<>)) ||
+               base.IsConventionalRegistrationDisabled(type);
+    }
+
+    protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+    {
+        return ServiceLifetime.Transient;
+    }
+
+    protected override List<Type> GetExposedServiceTypes(Type type)
+    {
+        return new List<Type>()
+            {
+                typeof(IValidator<>).MakeGenericType(GetFirstGenericArgumentOrNull(type, 1))
+            };
+    }
+
+    private static Type GetFirstGenericArgumentOrNull(Type type, int depth)
+    {
+        const int maxFindDepth = 8;
+
+        if (depth >= maxFindDepth)
         {
-            if (IsConventionalRegistrationDisabled(type))
-            {
-                return;
-            }
-
-            if (!typeof(IValidator).IsAssignableFrom(type))
-            {
-                return;
-            }
-
-            var validatingType = GetFirstGenericArgumentOrNull(type, 1);
-            if (validatingType == null)
-            {
-                return;
-            }
-
-            var serviceType = typeof(IValidator<>).MakeGenericType(validatingType);
-
-            TriggerServiceExposing(services, type, new List<Type>{ serviceType });
-
-            services.AddTransient(
-                serviceType,
-                type
-            );
+            return null;
         }
 
-        private static Type GetFirstGenericArgumentOrNull(Type type, int depth)
+        if (type.IsGenericType && type.GetGenericArguments().Length >= 1)
         {
-            const int maxFindDepth = 8;
-
-            if (depth >= maxFindDepth)
-            {
-                return null;
-            }
-
-            if (type.IsGenericType && type.GetGenericArguments().Length >= 1)
-            {
-                return type.GetGenericArguments()[0];
-            }
-
-            return GetFirstGenericArgumentOrNull(type.BaseType, depth + 1);
+            return type.GetGenericArguments()[0];
         }
+
+        return GetFirstGenericArgumentOrNull(type.BaseType, depth + 1);
     }
 }

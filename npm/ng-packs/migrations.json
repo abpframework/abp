@@ -1,0 +1,132 @@
+{
+  "migrations": [
+    {
+      "version": "13.2.0",
+      "description": "Set --parallel=1 for existing repos to preserve the existing behavior",
+      "cli": "nx",
+      "implementation": "./src/migrations/update-13-2-0/set-parallel-default",
+      "package": "@nrwl/workspace",
+      "name": "set-parallel-default"
+    },
+    {
+      "version": "13.3.0-beta.0",
+      "description": "@nrwl/workspace:tsc is now @nrwl/js:tsc",
+      "cli": "nx",
+      "implementation": "./src/migrations/update-13-3-0/update-tsc-executor-location",
+      "package": "@nrwl/workspace",
+      "name": "13-3-0-tsc-location"
+    },
+    {
+      "cli": "nx",
+      "version": "13.2.0-beta.1",
+      "description": "Remove deprecated options from webpack-server and webpack-browser.",
+      "factory": "./src/migrations/update-13-2-0/update-angular-config",
+      "package": "@nrwl/angular",
+      "name": "update-angular-config"
+    },
+    {
+      "cli": "nx",
+      "version": "13.2.0-beta.1",
+      "description": "Remove enableIvy and add compilationMode to library tsconfig and remove deprecated ng-packagr options.",
+      "factory": "./src/migrations/update-13-2-0/update-libraries",
+      "package": "@nrwl/angular",
+      "name": "update-libraries"
+    },
+    {
+      "cli": "nx",
+      "version": "13.2.0-beta.1",
+      "description": "Update jest config to support jest-preset-angular",
+      "factory": "./src/migrations/update-13-2-0/update-angular-jest-config",
+      "package": "@nrwl/angular",
+      "name": "update-angular-jest-config"
+    },
+    {
+      "cli": "nx",
+      "version": "13.2.0-beta.1",
+      "description": "Move some imports from @nrwl/angular/testing to jasmine-marbles",
+      "factory": "./src/migrations/update-13-2-0/update-testing-imports",
+      "package": "@nrwl/angular",
+      "name": "update-testing-imports"
+    },
+    {
+      "cli": "nx",
+      "version": "13.2.0",
+      "description": "In Angular version 13, the `teardown` flag in `TestBed` will be enabled by default. This migration automatically opts out existing apps from the new teardown behavior.",
+      "factory": "./src/migrations/update-13-2-0/opt-out-testbed-teardown",
+      "package": "@nrwl/angular",
+      "name": "opt-out-testbed-teardown"
+    },
+    {
+      "cli": "nx",
+      "version": "13.3.0-beta.0",
+      "description": "In Angular version 13, the ESM became a first class citizen. This means the webpack config generated must be modified to support modules.",
+      "factory": "./src/migrations/update-13-3-0/update-mfe-webpack-config",
+      "package": "@nrwl/angular",
+      "name": "update-mfe-config-to-module-syntax"
+    },
+    {
+      "version": "13.0.0",
+      "factory": "./update-13/schematic-options",
+      "description": "Remove no longer valid Angular schematic options from `angular.json`.",
+      "package": "@angular/cli",
+      "name": "schematic-options-13"
+    },
+    {
+      "version": "13.0.0",
+      "factory": "./update-13/update-angular-config",
+      "description": "Remove deprecated options from 'angular.json' that are no longer present in v13.",
+      "package": "@angular/cli",
+      "name": "update-angular-config-v13"
+    },
+    {
+      "version": "13.0.0",
+      "factory": "./update-13/update-libraries",
+      "description": "Update library projects to be published in partial mode and removed deprecated options from ng-packagr configuration.",
+      "package": "@angular/cli",
+      "name": "update-libraries-v13"
+    },
+    {
+      "version": "13.0.0",
+      "factory": "./update-13/drop-ie-polyfills",
+      "description": "Remove polyfills required only for Internet Explorer which is no longer supported.",
+      "package": "@angular/cli",
+      "name": "drop-ie-polyfills"
+    },
+    {
+      "version": "13.0.0",
+      "factory": "./update-13/update-gitignore",
+      "description": "Updating '.gitignore' to include '.angular/cache'.",
+      "package": "@angular/cli",
+      "name": "update-gitignore"
+    },
+    {
+      "version": "13.0.0-beta",
+      "description": "Migrates `[routerLink]=\"\"` in templates to `[routerLink]=\"[]\"` because these links are likely intended to route to the current page with updated fragment/query params.",
+      "factory": "./migrations/router-link-empty-expression/index",
+      "package": "@angular/core",
+      "name": "migration-v13-router-link-empty-expression"
+    },
+    {
+      "version": "13.0.0-beta",
+      "description": "In Angular version 13, the `teardown` flag in `TestBed` will be enabled by default. This migration automatically opts out existing apps from the new teardown behavior.",
+      "factory": "./migrations/testbed-teardown/index",
+      "package": "@angular/core",
+      "name": "migration-v13-testbed-teardown"
+    },
+    {
+      "version": "13.1.0-beta",
+      "description": "As of Angular version 13, `entryComponents` are no longer necessary.",
+      "factory": "./migrations/entry-components/index",
+      "package": "@angular/core",
+      "name": "migration-v13.1-entry-components"
+    },
+    {
+      "cli": "nx",
+      "version": "13.3.0-beta.0",
+      "description": "Update eslint-rules jest.config.js in order to support ESLint v8 exports mapping, remove category field",
+      "factory": "./src/migrations/update-13-3-0/eslint-8-updates",
+      "package": "@nrwl/linter",
+      "name": "eslint-8-updates"
+    }
+  ]
+}

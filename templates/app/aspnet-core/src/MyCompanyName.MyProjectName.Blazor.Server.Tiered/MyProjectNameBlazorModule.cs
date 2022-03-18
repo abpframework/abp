@@ -1,7 +1,7 @@
-﻿using System;
+﻿﻿using System;
 using System.IO;
 using System.Net.Http;
-using Blazorise.Bootstrap;
+using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -48,291 +48,284 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
+namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered;
+
+[DependsOn(
+    typeof(MyProjectNameHttpApiClientModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpAspNetCoreMvcClientModule),
+    typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    typeof(AbpAutofacModule),
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
+    typeof(AbpIdentityBlazorServerModule),
+    typeof(AbpTenantManagementBlazorServerModule),
+    typeof(AbpSettingManagementBlazorServerModule)
+   )]
+public class MyProjectNameBlazorModule : AbpModule
 {
-    [DependsOn(
-        typeof(MyProjectNameHttpApiClientModule),
-        typeof(MyProjectNameHttpApiModule),
-        typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpAspNetCoreMvcClientModule),
-        typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
-        typeof(AbpHttpClientIdentityModelWebModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpSwashbuckleModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
-        typeof(AbpIdentityBlazorServerModule),
-        typeof(AbpTenantManagementBlazorServerModule),
-        typeof(AbpSettingManagementBlazorServerModule)
-       )]
-    public class MyProjectNameBlazorModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
-            {
-                options.AddAssemblyResource(
-                    typeof(MyProjectNameResource),
-                    typeof(MyProjectNameDomainSharedModule).Assembly,
-                    typeof(MyProjectNameApplicationContractsModule).Assembly,
-                    typeof(MyProjectNameBlazorModule).Assembly
-                );
-            });
-        }
+            options.AddAssemblyResource(
+                typeof(MyProjectNameResource),
+                typeof(MyProjectNameDomainSharedModule).Assembly,
+                typeof(MyProjectNameApplicationContractsModule).Assembly,
+                typeof(MyProjectNameBlazorModule).Assembly
+            );
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.GetConfiguration();
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
 
-            ConfigureUrls(configuration);
-            ConfigureCache();
-            ConfigureBundles();
-            ConfigureMultiTenancy();
-            ConfigureAuthentication(context, configuration);
-            ConfigureAutoMapper();
-            ConfigureVirtualFileSystem(hostingEnvironment);
-            ConfigureLocalizationServices();
-            ConfigureHttpClient(context);
-            ConfigureBlazorise(context);
-            ConfigureRouter(context);
-            ConfigureMenu(configuration);
-            ConfigureRedis(context, configuration, hostingEnvironment);
-            ConfigureSwaggerServices(context.Services);
-        }
+        ConfigureUrls(configuration);
+        ConfigureCache();
+        ConfigureBundles();
+        ConfigureMultiTenancy();
+        ConfigureAuthentication(context, configuration);
+        ConfigureAutoMapper();
+        ConfigureVirtualFileSystem(hostingEnvironment);
+        ConfigureLocalizationServices();
+        ConfigureBlazorise(context);
+        ConfigureRouter(context);
+        ConfigureMenu(configuration);
+        ConfigureDataProtection(context, configuration, hostingEnvironment);
+        ConfigureSwaggerServices(context.Services);
+    }
 
-        private void ConfigureUrls(IConfiguration configuration)
+    private void ConfigureUrls(IConfiguration configuration)
+    {
+        Configure<AppUrlOptions>(options =>
         {
-            Configure<AppUrlOptions>(options =>
-            {
-                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            });
-        }
-        
-        private void ConfigureCache()
-        {
-            Configure<AbpDistributedCacheOptions>(options =>
-            {
-                options.KeyPrefix = "MyProjectName:";
-            });
-        }
+            options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+        });
+    }
 
-        private void ConfigureBundles()
+    private void ConfigureCache()
+    {
+        Configure<AbpDistributedCacheOptions>(options =>
         {
-            Configure<AbpBundlingOptions>(options =>
-            {
+            options.KeyPrefix = "MyProjectName:";
+        });
+    }
+
+    private void ConfigureBundles()
+    {
+        Configure<AbpBundlingOptions>(options =>
+        {
                 // MVC UI
                 options.StyleBundles.Configure(
-                    BasicThemeBundles.Styles.Global,
-                    bundle =>
-                    {
-                        bundle.AddFiles("/global-styles.css");
-                    }
-                );
+                BasicThemeBundles.Styles.Global,
+                bundle =>
+                {
+                    bundle.AddFiles("/global-styles.css");
+                }
+            );
 
                 //BLAZOR UI
                 options.StyleBundles.Configure(
-                    BlazorBasicThemeBundles.Styles.Global,
-                    bundle =>
-                    {
-                        bundle.AddFiles("/blazor-global-styles.css");
+                BlazorBasicThemeBundles.Styles.Global,
+                bundle =>
+                {
+                    bundle.AddFiles("/blazor-global-styles.css");
                         //You can remove the following line if you don't use Blazor CSS isolation for components
                         bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.Tiered.styles.css");
-                    }
-                );
-            });
-        }
-        
-        private void ConfigureMultiTenancy()
+                }
+            );
+        });
+    }
+
+    private void ConfigureMultiTenancy()
+    {
+        Configure<AbpMultiTenancyOptions>(options =>
         {
-            Configure<AbpMultiTenancyOptions>(options =>
+            options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
+    }
+
+    private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
+    {
+        context.Services.AddAuthentication(options =>
             {
-                options.IsEnabled = MultiTenancyConsts.IsEnabled;
-            });
-        }
-
-        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
-        {
-            context.Services.AddAuthentication(options =>
-                {
-                    options.DefaultScheme = "Cookies";
-                    options.DefaultChallengeScheme = "oidc";
-                })
-                .AddCookie("Cookies", options =>
-                {
-                    options.ExpireTimeSpan = TimeSpan.FromDays(365);
-                })
-                .AddAbpOpenIdConnect("oidc", options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-
-                    options.ClientId = configuration["AuthServer:ClientId"];
-                    options.ClientSecret = configuration["AuthServer:ClientSecret"];
-
-                    options.SaveTokens = true;
-                    options.GetClaimsFromUserInfoEndpoint = true;
-
-                    options.Scope.Add("role");
-                    options.Scope.Add("email");
-                    options.Scope.Add("phone");
-                    options.Scope.Add("MyProjectName");
-                });
-        }
-
-        private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
-        {
-            if (hostingEnvironment.IsDevelopment())
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie("Cookies", options =>
             {
-                Configure<AbpVirtualFileSystemOptions>(options =>
-                {
+                options.ExpireTimeSpan = TimeSpan.FromDays(365);
+            })
+            .AddAbpOpenIdConnect("oidc", options =>
+            {
+                options.Authority = configuration["AuthServer:Authority"];
+                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
+                options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+
+                options.ClientId = configuration["AuthServer:ClientId"];
+                options.ClientSecret = configuration["AuthServer:ClientSecret"];
+
+                options.SaveTokens = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
+
+                options.Scope.Add("role");
+                options.Scope.Add("email");
+                options.Scope.Add("phone");
+                options.Scope.Add("MyProjectName");
+            });
+    }
+
+    private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
+    {
+        if (hostingEnvironment.IsDevelopment())
+        {
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
                     //<TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiMultiTenancyModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}basic-theme{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiMultiTenancyModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy", Path.DirectorySeparatorChar)));
                     //options.FileSets.ReplaceEmbeddedByPhysical<AbpPermissionManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}permission-management{0}src{0}Volo.Abp.PermissionManagement.Web", Path.DirectorySeparatorChar)));
                     //options.FileSets.ReplaceEmbeddedByPhysical<AbpFeatureManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}feature-management{0}src{0}Volo.Abp.FeatureManagement.Web", Path.DirectorySeparatorChar)));
                     //options.FileSets.ReplaceEmbeddedByPhysical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}identity{0}src{0}Volo.Abp.Identity.Web", Path.DirectorySeparatorChar)));
                     //options.FileSets.ReplaceEmbeddedByPhysical<AbpTenantManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}tenant-management{0}src{0}Volo.Abp.TenantManagement.Web", Path.DirectorySeparatorChar)));
                     //</TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Domain.Shared"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Application.Contracts"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameBlazorModule>(hostingEnvironment.ContentRootPath);
-                });
+                options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Application.Contracts"));
+                options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameBlazorModule>(hostingEnvironment.ContentRootPath);
+            });
+        }
+    }
+
+    private void ConfigureLocalizationServices()
+    {
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
+            options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
+            options.Languages.Add(new LanguageInfo("en", "en", "English"));
+            options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
+            options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+            options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+            options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
+            options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+            options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+            options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
+            options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
+            options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
+            options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+            options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+            options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+            options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
+            options.Languages.Add(new LanguageInfo("es", "es", "Español"));
+        });
+    }
+
+    private void ConfigureBlazorise(ServiceConfigurationContext context)
+    {
+        context.Services
+            .AddBootstrap5Providers()
+            .AddFontAwesomeIcons();
+    }
+
+    private void ConfigureMenu(IConfiguration configuration)
+    {
+        Configure<AbpNavigationOptions>(options =>
+        {
+            options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
+        });
+
+        Configure<AbpToolbarOptions>(options =>
+        {
+            options.Contributors.Add(new MyProjectNameToolbarContributor());
+        });
+    }
+
+    private void ConfigureRouter(ServiceConfigurationContext context)
+    {
+        Configure<AbpRouterOptions>(options =>
+        {
+            options.AppAssembly = typeof(MyProjectNameBlazorModule).Assembly;
+        });
+    }
+
+    private void ConfigureAutoMapper()
+    {
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddMaps<MyProjectNameBlazorModule>();
+        });
+    }
+
+    private void ConfigureSwaggerServices(IServiceCollection services)
+    {
+        services.AddAbpSwaggerGen(
+            options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
+                options.DocInclusionPredicate((docName, description) => true);
+                options.CustomSchemaIds(type => type.FullName);
             }
-        }
+        );
+    }
 
-        private void ConfigureLocalizationServices()
+    private void ConfigureDataProtection(
+        ServiceConfigurationContext context,
+        IConfiguration configuration,
+        IWebHostEnvironment hostingEnvironment)
+    {
+        var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
+        if (!hostingEnvironment.IsDevelopment())
         {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
-                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
-                options.Languages.Add(new LanguageInfo("en", "en", "English"));
-                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
-                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
-                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
-                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
-                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
-                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-                options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
-                options.Languages.Add(new LanguageInfo("es", "es", "Español"));
-            });
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
         }
+    }
 
-        private static void ConfigureHttpClient(ServiceConfigurationContext context)
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var env = context.GetEnvironment();
+        var app = context.GetApplicationBuilder();
+
+        if (env.IsDevelopment())
         {
-            context.Services.AddTransient(sp => new HttpClient
-            {
-                BaseAddress = new Uri("/")
-            });
+            app.UseDeveloperExceptionPage();
         }
 
-        private void ConfigureBlazorise(ServiceConfigurationContext context)
+        app.UseAbpRequestLocalization();
+
+        if (!env.IsDevelopment())
         {
-            context.Services
-                .AddBootstrapProviders()
-                .AddFontAwesomeIcons();
+            app.UseErrorPage();
         }
 
-        private void ConfigureMenu(IConfiguration configuration)
+        app.UseCorrelationId();
+        app.UseStaticFiles();
+        app.UseRouting();
+        app.UseAuthentication();
+
+        if (MultiTenancyConsts.IsEnabled)
         {
-            Configure<AbpNavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
-            });
-            
-            Configure<AbpToolbarOptions>(options =>
-            {
-                options.Contributors.Add(new MyProjectNameToolbarContributor());
-            });
+            app.UseMultiTenancy();
         }
 
-        private void ConfigureRouter(ServiceConfigurationContext context)
+        app.UseAuthorization();
+        app.UseSwagger();
+        app.UseAbpSwaggerUI(options =>
         {
-            Configure<AbpRouterOptions>(options =>
-            {
-                options.AppAssembly = typeof(MyProjectNameBlazorModule).Assembly;
-            });
-        }
-
-        private void ConfigureAutoMapper()
-        {
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddMaps<MyProjectNameBlazorModule>();
-            });
-        }
-        
-        private void ConfigureSwaggerServices(IServiceCollection services)
-        {
-            services.AddSwaggerGen(
-                options =>
-                {
-                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
-                    options.DocInclusionPredicate((docName, description) => true);
-                    options.CustomSchemaIds(type => type.FullName);
-                }
-            );
-        }
-
-        private void ConfigureRedis(
-            ServiceConfigurationContext context,
-            IConfiguration configuration,
-            IWebHostEnvironment hostingEnvironment)
-        {
-            if (!hostingEnvironment.IsDevelopment())
-            {
-                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-                context.Services
-                    .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
-            }
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var env = context.GetEnvironment();
-            var app = context.GetApplicationBuilder();
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseAbpRequestLocalization();
-
-            if (!env.IsDevelopment())
-            {
-                app.UseErrorPage();
-            }
-
-            app.UseCorrelationId();
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseAuthentication();
-
-            if (MultiTenancyConsts.IsEnabled)
-            {
-                app.UseMultiTenancy();
-            }
-
-            app.UseAuthorization();
-            app.UseSwagger();
-            app.UseAbpSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
-            });
-            app.UseAbpSerilogEnrichers();
-            app.UseConfiguredEndpoints();
-        }
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+        });
+        app.UseAbpSerilogEnrichers();
+        app.UseConfiguredEndpoints();
     }
 }

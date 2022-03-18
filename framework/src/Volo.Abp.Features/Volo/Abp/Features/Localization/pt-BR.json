@@ -1,0 +1,8 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Volo.Feature:010001": "Recurso não habilitado: {FeatureName}",
+    "Volo.Feature:010002": "Os recursos necessários não estão habilitados. Todos esses recursos devem ser ativados: {FeatureNames}",
+    "Volo.Feature:010003": "Os recursos necessários não estão habilitados. Pelo menos um desses recursos deve ser ativado: {FeatureNames}"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "culture": "sk",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Názov zdroja identity už existuje: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Názov API zdroja už existuje: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Názov API rozsahu už existuje: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId už existuje: {ClientId}",
+    "UserLockedOut": "Používateľské konto bolo uzamknuté z dôvodu viacerých neplatných pokusov o prihlásenie. Chvíľu počkajte a skúste sa prihlásiť znova.",
+    "InvalidUserNameOrPassword": "Nesprávne používateľské meno alebo heslo!",
+    "LoginIsNotAllowed": "Nemáte povolenie sa prihlásiť! Váš účet je neaktívny alebo potrebuje potvrdiť váš e -mail/telefónne číslo.",
+    "InvalidUsername": "Nesprávne používateľské meno alebo heslo!",
+    "InvalidAuthenticatorCode": "Neplatný overovací kód!",
+    "TheTargetUserIsNotLinkedToYou": "Cieľový používateľ nie je s vami prepojený!"
+  }
+}

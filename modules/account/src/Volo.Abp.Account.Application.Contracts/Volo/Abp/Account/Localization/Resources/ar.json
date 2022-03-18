@@ -1,6 +1,7 @@
 {
   "culture": "ar",
   "texts": {
+    "Menu:Account": "حساب",
     "UserName": "اسم المستخدم",
     "EmailAddress": "البريد الإلكتروني",
     "UserNameOrEmailAddress": "اسم المستخدم أو البريد الإلكتروني",
@@ -9,7 +10,7 @@
     "UseAnotherServiceToLogin": "استخدم خدمة أخرى لتسجيل الدخول",
     "UserLockedOutMessage": "تم قفل حساب المستخدم بسبب محاولات تسجيل الدخول غير الصالحة. يرجى الانتظار بعض الوقت والمحاولة مرة أخرى.",
     "InvalidUserNameOrPassword": "اسم مستخدم أو كلمة مرور غير صالحة!",
-    "LoginIsNotAllowed": "غير مسموح لك بتسجيل الدخول! أنت بحاجة إلى تأكيد بريدك الإلكتروني / رقم هاتفك.",
+    "LoginIsNotAllowed": "لا يسمح لك بتسجيل الدخول! حسابك غير نشط أو يحتاج إلى تأكيد بريدك الإلكتروني/رقم هاتفك.",
     "SelfRegistrationDisabledMessage": "تم تعطيل التسجيل الذاتي لهذا التطبيق. يرجى الاتصال بمسؤول التطبيق لتسجيل مستخدم جديد.",
     "LocalLoginDisabledMessage": "تسجيل الدخول المحلي معطّل لهذا التطبيق.",
     "Login": "دخول",
@@ -36,14 +37,14 @@
     "PasswordChanged": "تم تغيير كلمة المرور",
     "NewPasswordConfirmFailed": "يرجى تأكيد كلمة المرور الجديدة.",
     "Manage": "إدارة",
-    "ManageYourProfile": "إدارة ملف التعريف الخاص بك",
+    "MyAccount": "حسابي",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "هل تم تمكين التسجيل الذاتي",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "ما إذا كان يمكن للمستخدم تسجيل الحساب بنفسه أم لا.",
     "DisplayName:Abp.Account.EnableLocalLogin": "المصادقة باستخدام حساب محلي",
     "Description:Abp.Account.EnableLocalLogin": "يشير إلى ما إذا كان الخادم سيسمح للمستخدمين بالمصادقة باستخدام حساب محلي.",
     "LoggedOutTitle": "تسجيل الخروج",
     "LoggedOutText": "لقد تم تسجيل خروجك وستتم إعادة توجيهك قريبًا.",
-    "ReturnToText": "انقر هنا لإعادة التوجيه إلى {0}",
+    "ReturnToText": "انقر هنا للعودة إلى التطبيق",
     "OrLoginWith": "أو الدخول بـ:",
     "ForgotPassword": "نسيت كلمة السر؟",
     "SendPasswordResetLink_Information": "سيتم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني لإعادة تعيين كلمة المرور الخاصة بك. إذا لم تتلق رسالة بريد إلكتروني في غضون بضع دقائق ، فيرجى إعادة المحاولة.",
@@ -53,6 +54,15 @@
     "ResetPassword_Information": "الرجاء إدخال كلمة المرور الجديدة الخاصة بك.",
     "YourPasswordIsSuccessfullyReset": "تم إعادة تعيين كلمة المرور الخاصة بك بنجاح.",
     "GoToTheApplication": "اذهب إلى التطبيق",
-    "BackToLogin": "العودة إلى تسجيل الدخول"
+    "BackToLogin": "العودة إلى تسجيل الدخول",
+    "ProfileTab:Password": "تغيير كلمة المرور",
+    "ProfileTab:PersonalInfo": "معلومات شخصية",
+    "ReturnToApplication": "العودة إلى التطبيق",
+    "Volo.Account:InvalidEmailAddress": "لا يمكن العثور على عنوان البريد الإلكتروني المحدد: {0}",
+    "PasswordReset": "إعادة تعيين كلمة المرور",
+    "PasswordResetInfoInEmail": "لقد تلقينا طلب استرداد الحساب! إذا بدأت هذا الطلب ، فانقر فوق الارتباط التالي لإعادة تعيين كلمة المرور الخاصة بك.",
+    "ResetMyPassword": "إعادة تعيين كلمة المرور الخاصة بي",
+    "AccessDenied": "تم الرفض!",
+    "AccessDeniedMessage": "ليس لديك حق الوصول إلى هذا المورد."
   }
 }

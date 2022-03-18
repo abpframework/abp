@@ -4,14 +4,17 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <IsPackable>true</IsPackable>
         <OutputType>Library</OutputType>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
         <RootNamespace />
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web\Volo.Abp.AspNetCore.Components.Web.csproj" />
+      <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Contracts\Volo.Abp.AspNetCore.Mvc.Contracts.csproj" />
+      <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
       <ProjectReference Include="..\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
       <ProjectReference Include="..\Volo.Abp.AspNetCore.SignalR\Volo.Abp.AspNetCore.SignalR.csproj" />
     </ItemGroup>

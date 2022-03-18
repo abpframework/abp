@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
     var l = abp.localization.getResource("CmsKit");
 
     var $createForm = $('#form-page-create');
@@ -6,14 +6,32 @@
     var $slug = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-page-create');
 
+    var scriptEditor = CodeMirror.fromTextArea(document.getElementById("ViewModel_Script"), {
+        mode: "javascript",
+        lineNumbers: true
+    });
+
+    var styleEditor = CodeMirror.fromTextArea(document.getElementById("ViewModel_Style"), {
+        mode: "css",
+        lineNumbers: true
+    });
+
+    $('.nav-tabs a').on('shown.bs.tab', function () {
+        scriptEditor.refresh();
+        styleEditor.refresh();
+    });
+
     $createForm.data('validator').settings.ignore = ":hidden, [contenteditable='true']:not([name]), .tui-popup-wrapper";
 
     $createForm.on('submit', function (e) {
         e.preventDefault();
-
+        
         if ($createForm.valid()) {
 
             abp.ui.setBusy();
+
+            $("#ViewModel_Style").val(styleEditor.getValue());
+            $("#ViewModel_Script").val(scriptEditor.getValue());
 
             $createForm.ajaxSubmit({
                 success: function (result) {
@@ -21,7 +39,7 @@
                     abp.ui.clearBusy();
                     location.href = "../Pages";
                 },
-                error: function(result){
+                error: function (result) {
                     abp.ui.clearBusy();
                     abp.notify.error(result.responseJSON.error.message);
                 }
@@ -89,6 +107,7 @@
             useCommandShortcut: true,
             initialValue: initialValue,
             previewStyle: 'tab',
+            plugins: [toastui.Editor.plugin.codeSyntaxHighlight],
             height: "100%",
             minHeight: "25em",
             initialEditType: 'markdown',

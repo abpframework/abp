@@ -4,7 +4,7 @@ This document explains how to integrate EF Core as an ORM provider to ABP based 
 
 ## Installation
 
-`Volo.Abp.EntityFrameworkCore` is the main nuget package for the EF Core integration. Install it to your project (for a layered application, to your data/infrastructure layer):
+`Volo.Abp.EntityFrameworkCore` is the main NuGet package for the EF Core integration. Install it to your project (for a layered application, to your data/infrastructure layer):
 
 ```` shell
 Install-Package Volo.Abp.EntityFrameworkCore
@@ -30,15 +30,13 @@ namespace MyCompany.MyProject
 
 ### Database Management System Selection
 
-Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP framework and this document doesn't depend on any specific DBMS.
+Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP framework and this document don't depend on any specific DBMS. If you are creating a [reusable application module](Modules/Index.md), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
 
-If you are creating a [reusable application module](Modules/Index.md), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
-
-See [Switch to Another DBMS for Entity Framework Core](Entity-Framework-Core-Other-DBMS.md) document to learn how to switch the DBMS.
+> See [Switch to Another DBMS for Entity Framework Core](Entity-Framework-Core-Other-DBMS.md) document to learn how to switch the DBMS.
 
 ## Creating DbContext
 
-You can create your DbContext as you normally do. It should be derived from `AbpDbContext<T>` as shown below:
+Your `DbContext` class should be derived from `AbpDbContext<T>` as shown below:
 
 ````C#
 using Microsoft.EntityFrameworkCore;
@@ -107,7 +105,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 
 ### Configure the Connection String Selection
 
-If you have multiple databases in your application, you can configure the connection string name for your DbContext using the `[ConnectionStringName]` attribute. Example:
+If you have multiple databases in your application, you can configure the connection string name for your `DbContext` using the `[ConnectionStringName]` attribute. Example:
 
 ```csharp
 [ConnectionStringName("MySecondConnString")]
@@ -119,9 +117,65 @@ public class MyDbContext : AbpDbContext<MyDbContext>
 
 If you don't configure, the `Default` connection string is used. If you configure a specific connection string name, but not define this connection string name in the application configuration then it fallbacks to the `Default` connection string (see [the connection strings document](Connection-Strings.md) for more information).
 
+### AbpDbContextOptions
+
+`AbpDbContextOptions` is used to configure the `DbContext` options. When you create a new solution with the ABP's application startup template, you will see a simple configuration (in the `EntityFrameworkCore` integration project's module class) as shown below:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    options.UseSqlServer();
+});
+````
+
+That configuration configures the default DBMS as SQL Server for all the `DbContext`s of the application. That configuration was a shorthand notation and it can be done with the following code block:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    options.Configure(opts =>
+    {
+        opts.UseSqlServer();
+    });
+});
+````
+
+`options.Configure(...)` method has more options to configure. For example, you can set `DbContextOptions` (EF Core's native options) as shown below:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    options.Configure(opts =>
+    {
+        opts.DbContextOptions.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    });
+});
+````
+
+If you have a single `DbContext` or you have multiple `DbContext`s but want to use the same DBMS and configuration for all, you can leave it as is. However, if you need to configure a different DBMS or customize the configuration for a specific `DbContext`, you can specify it as shown below:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    // Default configuration for all DbContexts
+    options.Configure(opts =>
+    {
+        opts.UseSqlServer();
+    });
+
+    // Customized configuration for a specific DbContext
+    options.Configure<MyOtherDbContext>(opts =>
+    {
+        opts.UseMySQL();
+    });
+});
+````
+
+> See [Switch to Another DBMS for Entity Framework Core](Entity-Framework-Core-Other-DBMS.md) document to learn how to configure the DBMS.
+
 ## Registering DbContext To Dependency Injection
 
-Use `AddAbpDbContext` method in your module to register your DbContext class for [dependency injection](Dependency-Injection.md) system.
+Use `AddAbpDbContext` method in your module to register your `DbContext` class for [dependency injection](Dependency-Injection.md) system.
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -371,10 +425,10 @@ namespace AbpDemo.Orders
         {
             //Get a IQueryable<T> by including sub collections
             var queryable = await _orderRepository.WithDetailsAsync(x => x.Lines);
-            
+
             //Apply additional LINQ extension methods
             var query = queryable.Where(x => x.Id == id);
-            
+
             //Execute the query and get the result
             var order = await AsyncExecuter.FirstOrDefaultAsync(query);
         }
@@ -522,7 +576,7 @@ Configure<AbpDbContextOptions>(options =>
     {
         opts.DbContextOptions.UseLazyLoadingProxies(); //Enable lazy loading
     });
-    
+
     options.UseSqlServer();
 });
 ````
@@ -604,27 +658,99 @@ ObjectExtensionManager.Instance
     );
 ````
 
-If the related module has implemented this feature (by using the `ConfigureEfCoreEntity` explained below), then the new property is added to the model. Then you need to run the standard `Add-Migration` and `Update-Database` commands to update your database to add the new field.
+### MapEfCoreEntity
 
->`MapEfCoreProperty` method must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEfCoreEntityExtensionMappings` class that is safe to use this method inside.
+`MapEfCoreEntity` is a shortcut extension method to configure the `Entity`.
 
-### ConfigureEfCoreEntity
-
-If you are building a reusable module and want to allow application developers to add properties to your entities, you can use the `ConfigureEfCoreEntity` extension method in your entity mapping. However, there is a shortcut extension method `ConfigureObjectExtensions` that can be used while configuring the entity mapping:
+**Example**: Set the max length of `Name` to the `IdentityRole` entity:
 
 ````csharp
-builder.Entity<YourEntity>(b =>
+ObjectExtensionManager.Instance
+    .MapEfCoreEntity<IdentityRole>(builder =>
+    {
+        builder.As<EntityTypeBuilder<IdentityRole>>().Property(x => x.Name).HasMaxLength(200);
+    });
+````
+
+### MapEfCoreDbContext
+
+`MapEfCoreDbContext` is a shortcut extension method to configure the `DbContext`.
+
+**Example**: Set the max length of `Name` to the `IdentityRole` entity of `IdentityDbContext`:
+
+````csharp
+ObjectExtensionManager.Instance.MapEfCoreDbContext<IdentityDbContext>(b =>
 {
-    b.ConfigureObjectExtensions();
-    //...
+    b.Entity<IdentityRole>().Property(x => x.Name).HasMaxLength(200);
 });
 ````
 
-> If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` method. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
+If the related module has implemented this feature(explained below), then the new property is added to the model or the DbContext/Entity configure changed. Then you need to run the standard `Add-Migration` and `Update-Database` commands to update your database to add the new field.
+
+> The `MapEfCoreProperty`, `MapEfCoreEntity` and `MapEfCoreDbContext` methods must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEfCoreEntityExtensionMappings` class that is safe to use this method inside.
+
+### ConfigureEfCoreEntity, ApplyObjectExtensionMappings and TryConfigureObjectExtensions
+
+If you are building a reusable module and want to allow application developers to add properties to your entities, you can use the `ConfigureEfCoreEntity`, `ApplyObjectExtensionMappings` and `TryConfigureObjectExtensions` extension methods in your entity mapping.
+
+**Example**:
+````csharp
+public static class QADbContextModelCreatingExtensions
+{
+    public static void ConfigureQA(
+        this ModelBuilder builder,
+        Action<QAModelBuilderConfigurationOptions> optionsAction = null)
+    {
+        Check.NotNull(builder, nameof(builder));
+
+        var options = new QAModelBuilderConfigurationOptions(
+            QADatabaseDbProperties.DbTablePrefix,
+            QADatabaseDbProperties.DbSchema
+        );
+
+        optionsAction?.Invoke(options);
+
+        builder.Entity<QA_Question>(b =>
+        {
+            b.ToTable(options.TablePrefix + "Questions", options.Schema);
+            b.ConfigureByConvention();
+            //...
+
+            //Call this in the end of buildAction.
+            b.ApplyObjectExtensionMappings();
+        });
+
+        //...
+
+        //Call this in the end of ConfigureQA.
+        builder.TryConfigureObjectExtensions<QADbContext>();
+    }
+}
+````
+
+> If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` and `ConfigureEfCoreEntity` methods. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
 
 See the "*ConfigureByConvention Method*" section above for more information.
 
 ## Advanced Topics
+
+### Controlling the Multi-Tenancy
+
+If your solution is [multi-tenant](Multi-Tenancy.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](Connection-Strings.md), even if you are in a tenant context.
+
+**Example:**
+
+````csharp
+[IgnoreMultiTenancy]
+public class MyDbContext : AbpDbContext<MyDbContext>
+{
+    ...
+}
+````
+
+Do not use the `[IgnoreMultiTenancy]` attribute if any one of your entities in your `DbContext` can be persisted in a tenant database.
+
+> When you use repositories, ABP already uses the host database for the entities don't implement the `IMultiTenant` interface. So, most of time you don't need to `[IgnoreMultiTenancy]` attribute if you are using the repositories to work with the database.
 
 ### Set Default Repository Classes
 
@@ -706,7 +832,19 @@ One advantage of using an interface for a DbContext is then it will be replaceab
 
 ### Replace Other DbContextes
 
-Once you properly define and use an interface for DbContext, then any other implementation can replace it using the `ReplaceDbContext` option:
+Once you properly define and use an interface for DbContext, then any other implementation can use the following ways to replace it:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreDbContext))]
+public class OtherDbContext : AbpDbContext<OtherDbContext>, IBookStoreDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ````csharp
 context.Services.AddAbpDbContext<OtherDbContext>(options =>
@@ -736,7 +874,7 @@ Configure<AbpDbContextOptions>(options =>
 
 ### Customize Bulk Operations
 
-If you have better logic or using an external library for bulk operations, you can override the logic via implementing`IEfCoreBulkOperationProvider`.
+If you have better logic or using an external library for bulk operations, you can override the logic via implementing `IEfCoreBulkOperationProvider`.
 
 - You may use example template below:
 

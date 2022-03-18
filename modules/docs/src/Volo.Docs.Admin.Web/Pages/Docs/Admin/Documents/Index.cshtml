@@ -19,6 +19,7 @@
 }
 
 @section scripts {
+    <abp-script src="/client-proxies/docs-admin-proxy.js" />
     <abp-script src="/Pages/Docs/Admin/Documents/index.js" />
 }
 
@@ -29,81 +30,69 @@
 <div id="DocumentsContainer">
     <abp-card>
         <abp-card-header>
-            <form class="form-inline" autocomplete="off" id="FilterForm">
+            <form autocomplete="off" id="FilterForm">
 
-                <div class="form-row">
+                <div class="row">
                     <div class="col-auto">
                         <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">@L["Name"].Value</div>
-                            </div>
+                            <div class="input-group-text">@L["Name"].Value</div>
 
                             <input type="text"
                                    id="Name"
                                    name="Name"
-                                   class="form-control mr-sm-2">
+                                   class="form-control me-sm-2">
                         </div>
                     </div>
 
                     <div class="col-auto">
                         <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">@L["Version"].Value</div>
-                            </div>
+                            <div class="input-group-text">@L["Version"].Value</div>
 
                             <input type="text"
                                    id="Version"
                                    name="Version"
-                                   class="form-control mr-sm-2">
+                                   class="form-control me-sm-2">
                         </div>
                     </div>
 
                     <div class="col-auto">
                         <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">@L["LanguageCode"].Value</div>
-                            </div>
+                            <div class="input-group-text">@L["LanguageCode"].Value</div>
 
                             <input type="text"
                                    id="LanguageCode"
                                    name="LanguageCode"
-                                   class="form-control mr-sm-2">
+                                   class="form-control me-sm-2">
                         </div>
                     </div>
 
 
                     <div class="col-auto">
                         <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">@L["FileName"].Value</div>
-                            </div>
+                            <div class="input-group-text">@L["FileName"].Value</div>
 
                             <input type="text"
                                    id="FileName"
                                    name="FileName"
-                                   class="form-control mr-sm-2">
+                                   class="form-control me-sm-2">
                         </div>
                     </div>
 
                     <div class="col-auto">
                         <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">@L["Format"].Value</div>
-                            </div>
+                            <div class="input-group-text">@L["Format"].Value</div>
 
                             <input type="text"
                                    id="Format"
                                    name="Format"
-                                   class="form-control mr-sm-2">
+                                   class="form-control me-sm-2">
                         </div>
                     </div>
 
 
                     <div class="col-auto">
                         <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">@L["CreationTime"].Value</div>
-                            </div>
+                            <div class="input-group-text">@L["CreationTime"].Value</div>
 
                             <span>
                                 <input type="date"
@@ -123,10 +112,7 @@
 
                     <div class="col-auto">
                         <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">@L["LastUpdateTime"].Value</div>
-                            </div>
-
+                            <div class="input-group-text">@L["LastUpdateTime"].Value</div>
                             <span>
                                 <input type="date"
                                        id="LastUpdatedTimeMin"
@@ -145,9 +131,7 @@
 
                     <div class="col-auto">
                         <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">@L["LastSignificantUpdateTime"].Value</div>
-                            </div>
+                            <div class="input-group-text">@L["LastSignificantUpdateTime"].Value</div>
 
                             <span>
                                 <input type="date"
@@ -167,9 +151,7 @@
 
                     <div class="col-auto">
                         <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">@L["LastCachedTime"].Value</div>
-                            </div>
+                            <div class="input-group-text">@L["LastCachedTime"].Value</div>
 
                             <span>
                                 <input type="date"

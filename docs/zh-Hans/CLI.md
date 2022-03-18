@@ -29,6 +29,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`help`**: 展示ABP CLI的用法帮助信息.
 * **`new`**：生成基于ABP的[启动模板](Startup-Templates/Index.md).
 * **`update`**：自动更新的ABP解决方案ABP相关的NuGet和NPM包.
+* **`clean`**: 删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
 * **`add-package`**: 添加ABP包到项目.
 * **`add-module`**: 添加[应用模块](https://docs.abp.io/en/abp/latest/Modules/Index)到解决方案.
 * **`generate-proxy`**: 生成客户端代理以使用HTTP API端点.
@@ -39,6 +40,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
 * **`logout`**: 在你的计算机注销认证.
+* **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
 
 ### help
 
@@ -98,6 +100,15 @@ abp new Acme.BookStore
   * `module`: [Module template](Startup-Templates/Module.md). 其他选项:
     * `--no-ui`: 不包含UI.仅创建服务模块(也称为微服务 - 没有UI).
   * **`console`**: [Console template](Startup-Templates/Console.md).
+  * **`app-nolayers`**: 应用程序单层模板
+  * `--ui` 或者 `-u`: 指定ui框架.默认`mvc`框架.其他选项:
+    * `mvc`: ASP.NET Core MVC.
+    * `angular`: Angular.
+    * `blazor-server`: Blazor Server.
+    * `none`: 不包含UI.
+  * `--database-provider` 或 `-d`: 或者 `-d`: 指定数据库提供程序.默认是 `ef`.其他选项:
+      * `ef`: Entity Framework Core.
+      * `mongodb`: MongoDB.
 * `--output-folder` 或者 `-o`: 指定输出文件夹,默认是当前目录.
 * `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定,则使用最新版本.大多数情况下,你会希望使用最新的版本.
 * `--preview`: 使用最新的预览版本.
@@ -127,6 +138,16 @@ abp update [options]
 * `--solution-name` 或 `-sn`: 指定解决方案名称. 默认在目录中搜索`*.sln`文件.
 * `--check-all`: 分别检查每个包的新版本. 默认是 `false`.
 * `--version` or `-v`: 指定用于升级的版本. 如果没有指定,则使用最新版本.
+
+### clean
+
+删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
+
+用法:
+
+````bash
+abp clean
+````
 
 ### add-package
 
@@ -187,43 +208,75 @@ abp add-module Volo.Blogging
 
 ### generate-proxy
 
-为您的HTTP API生成Angular服务代理,简化从客户端使用服务的成本. 在运行此命令之前,你的host必须启动正在运行.
+为你的HTTP API生成Angular, C# 或 JavaScript服务代理,简化从客户端使用服务的成本. 在运行此命令之前,你的host必须启动正在运行.
 
 用法:
 
 ````bash
-abp generate-proxy
+abp generate-proxy -t <client-type> [options]
+````
+
+示例:
+
+````bash
+abp generate-proxy -t ng
+abp generate-proxy -t js -url https://localhost:44302/
+abp generate-proxy -t csharp -url https://localhost:44302/
 ````
 
 #### Options
 
+* `--type` 或 `-t`: 客户端类型的名称. 可用的客户端有:
+  * `csharp`: C#, 工作在 `*.HttpApi.Client` 项目目录. 此客户端有一些可选选项:
+    * `--folder`: 放置生成的 CSharp 代码的文件夹名称. 默认值: `ClientProxies`.
+  * `ng`: Angular. 此客户端有一些可选选项:
+    * `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
+    * `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
+    * `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
+    * `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+  * `js`: JavaScript. 工作在 `*.Web` 项目目录. 此客户端有一些可选选项:
+    * `--output` or `-o`: 放置生成的 JavaScript 代码的文件夹名称.
 * `--module` 或 `-m`: 指定要为其生成代理的后端模块的名称. 默认值: `app`.
-* `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
-* `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
-* `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
-* `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+* `--working-directory` or `-wd`: 执行目录. 用于 `csharp` 和 `js` 客户端类型.
+* `--url` or `-u`: API定义的URL. 用于 `csharp` 和 `js` 客户端类型.
 
 > 参阅 [Angular服务代理文档](UI/Angular/Service-Proxies.md) 了解更多.
 
 ### remove-proxy
 
-从Angular应用程序中删除以前生成的代理代码. 在运行此命令之前,你的host必须启动正在运行.
+从Angular, CSharp 或 JavaScript应用程序中删除以前生成的代理代码. 在运行此命令之前,你的host必须启动正在运行.
 
-This can be especially useful when you generate proxies for multiple modules before and need to remove one of them later.
+这在你之前为多个模块生成代理并且需要删除其中一个模块时特别有用.
 
-Usage:
+用法:
 
 ````bash
-abp remove-proxy
+abp remove-proxy -t <client-type> [options]
+````
+
+示例:
+
+````bash
+abp remove-proxy -t ng
+abp remove-proxy -t js -m identity -o Pages/Identity/client-proxies.js
+abp remove-proxy -t csharp --folder MyProxies/InnerFolder
 ````
 
 #### Options
 
+* `--type` 或 `-t`: 客户端类型的名称. 可用的客户端有:
+  * `csharp`: C#, 工作在 `*.HttpApi.Client` 项目目录. 此客户端有一些可选选项:
+    * `--folder`: 放置生成的 CSharp 代码的文件夹名称. 默认值: `ClientProxies`.
+  * `ng`: Angular. 此客户端有一些可选选项:
+    * `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
+    * `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
+    * `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
+    * `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+  * `js`: JavaScript. 工作在 `*.Web` 项目目录. 此客户端有一些可选选项:
+    * `--output` or `-o`: 放置生成的 JavaScript 代码的文件夹名称.
 * `--module` 或 `-m`: 指定要为其生成代理的后端模块的名称. 默认值: `app`.
-* `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
-* `--source` 或 `-s`: 指定解析根名称空间和API定义URL的Angular项目名称. 默认值: `defaultProject`
-* `--target` 或 `-t`: 指定放置生成的代码的Angular项目名称. 默认值: `defaultProject`.
-* `--prompt` 或 `-p`: 在命令行提示符下询问选项(未指定的选项).
+* `--working-directory` or `-wd`: 执行目录. 用于 `csharp` 和 `js` 客户端类型.
+* `--url` or `-u`: API定义的URL. 用于 `csharp` 和 `js` 客户端类型.
 
 > 参阅 [Angular服务代理文档](UI/Angular/Service-Proxies.md) 了解更多.
 
@@ -339,3 +392,19 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 ```
 abp logout
 ```
+
+### install-libs
+
+为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包, 它的 **执行目录** 或者传递的 ```--working-directory``` 目录必须包含一个项目文件(*.csproj).
+
+`install-libs` 命令读取 `abp.resourcemapping.js` 来管理包. 参阅[客户端包管理](UI/AspNetCore/Client-Side-Package-Management.md)了解更多细节.
+
+用法:
+
+````bash
+abp install-libs [options]
+````
+
+#### Options
+
+* ```--working-directory``` 或 ```-wd```: 指定工作目录, 当执行目录不包含项目文件时会很有用.

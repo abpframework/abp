@@ -1,21 +1,23 @@
-<abp-modal [(visible)]="visible" (init)="initModal()" [busy]="modalBusy">
-  <ng-container *ngIf="{ entityName: entityName$ | async } as data">
+<abp-modal [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' }">
+  <ng-container *ngIf="data.entityDisplayName">
     <ng-template #abpHeader>
       <h4>
-        {{ 'AbpPermissionManagement::Permissions' | abpLocalization }} - {{ data.entityName }}
+        {{ 'AbpPermissionManagement::Permissions' | abpLocalization }} -
+        {{ data.entityDisplayName }}
       </h4>
     </ng-template>
     <ng-template #abpBody>
-      <div class="custom-checkbox custom-control mb-2">
+      <div class="form-check mb-2">
         <input
+          #selectAllInAllTabsRef
           type="checkbox"
           id="select-all-in-all-tabs"
           name="select-all-in-all-tabs"
-          class="custom-control-input"
+          class="form-check-input"
           [(ngModel)]="selectAllTab"
           (click)="onClickSelectAll()"
         />
-        <label class="custom-control-label" for="select-all-in-all-tabs">{{
+        <label class="form-check-label" for="select-all-in-all-tabs">{{
           'AbpPermissionManagement::SelectAllInAllTabs' | abpLocalization
         }}</label>
       </div>
@@ -24,16 +26,16 @@
       <div class="row">
         <div class="overflow-scroll col-md-4">
           <ul class="nav nav-pills flex-column">
-            <li *ngFor="let group of groups$ | async; trackBy: trackByFn" class="nav-item">
+            <li *ngFor="let group of data.groups; trackBy: trackByFn" class="nav-item">
               <a
-                *ngIf="{ assignedCount: getAssignedCount(group.name) } as data"
+                *ngIf="{ assignedCount: getAssignedCount(group.name) } as count"
                 class="nav-link pointer"
                 [class.active]="selectedGroup?.name === group?.name"
                 (click)="onChangeGroup(group)"
               >
-                <div [class.font-weight-bold]="data.assignedCount">
+                <div [class.font-weight-bold]="count.assignedCount">
                   {{ group?.displayName }}
-                  <span>({{ data.assignedCount }})</span>
+                  <span>({{ count.assignedCount }})</span>
                 </div>
               </a>
             </li>
@@ -42,29 +44,26 @@
         <div class="col-md-8 overflow-scroll">
           <h4>{{ selectedGroup?.displayName }}</h4>
           <hr class="mt-2 mb-3" />
-          <div class="pl-1 pt-1">
-            <div class="custom-checkbox custom-control mb-2">
+          <div class="ps-1 pt-1">
+            <div class="form-check mb-2">
               <input
+                #selectAllInThisTabsRef
                 type="checkbox"
                 id="select-all-in-this-tabs"
                 name="select-all-in-this-tabs"
-                class="custom-control-input"
+                class="form-check-input"
                 [(ngModel)]="selectThisTab"
                 (click)="onClickSelectThisTab()"
               />
-              <label class="custom-control-label" for="select-all-in-this-tabs">{{
+              <label class="form-check-label" for="select-all-in-this-tabs">{{
                 'AbpPermissionManagement::SelectAllInThisTab' | abpLocalization
               }}</label>
             </div>
             <hr class="mb-3" />
             <div
-              *ngFor="
-                let permission of selectedGroupPermissions$ | async;
-                let i = index;
-                trackBy: trackByFn
-              "
+              *ngFor="let permission of selectedGroupPermissions; let i = index; trackBy: trackByFn"
               [ngStyle]="permission.style"
-              class="custom-checkbox custom-control mb-2"
+              class="form-check mb-2"
             >
               <input
                 #permissionCheckbox
@@ -72,18 +71,16 @@
                 [checked]="getChecked(permission.name)"
                 [value]="getChecked(permission.name)"
                 [attr.id]="permission.name"
-                class="custom-control-input"
+                class="form-check-input"
                 [disabled]="isGrantedByOtherProviderName(permission.grantedProviders)"
-              />
-              <label
-                class="custom-control-label"
-                [attr.for]="permission.name"
                 (click)="onClickCheckbox(permission, permissionCheckbox.value)"
+              />
+              <label class="form-check-label" [attr.for]="permission.name"
                 >{{ permission.displayName }}
                 <ng-container *ngIf="!hideBadges">
                   <span
                     *ngFor="let provider of permission.grantedProviders"
-                    class="badge badge-light"
+                    class="badge bg-light text-dark"
                     >{{ provider.providerName }}: {{ provider.providerKey }}</span
                   >
                 </ng-container>

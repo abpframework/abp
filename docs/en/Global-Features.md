@@ -8,8 +8,6 @@ Global Features system is especially useful if you want to develop a reusable ap
 ## Installation
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
-### Using the ABP CLI
-
 Open a command line window in the folder of the project (.csproj file) and type the following command:
 
 ```bash

@@ -1,0 +1,17 @@
+{
+  "culture": "sl",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "Gostitelj strežnika",
+    "Description:Abp.Ldap.ServerHost": "Gostitelj strežnika",
+    "DisplayName:Abp.Ldap.ServerPort": "Vrata strežnika",
+    "Description:Abp.Ldap.ServerPort": "Vrata strežnika",
+    "DisplayName:Abp.Ldap.BaseDc": "Komponenta osnovne domene",
+    "Description:Abp.Ldap.BaseDc": "Komponenta osnovne domene",
+    "DisplayName:Abp.Ldap.Domain": "domena",
+    "Description:Abp.Ldap.Domain": "domena",
+    "DisplayName:Abp.Ldap.UserName": "Uporabniško ime",
+    "Description:Abp.Ldap.UserName": "Uporabniško ime",
+    "DisplayName:Abp.Ldap.Password": "Geslo",
+    "Description:Abp.Ldap.Password": "Geslo"
+  }
+}

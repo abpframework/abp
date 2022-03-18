@@ -1,12 +1,14 @@
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ConfigStateService, SessionStateService } from '../services';
 import { LocalizationService } from '../services/localization.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { CONFIG_STATE_DATA } from './config-state.service.spec';
+
+const appConfigData$ = new BehaviorSubject(CONFIG_STATE_DATA);
 
 describe('LocalizationService', () => {
   let spectator: SpectatorService<LocalizationService>;
@@ -25,7 +27,7 @@ describe('LocalizationService', () => {
       },
       {
         provide: AbpApplicationConfigurationService,
-        useValue: { get: () => of(CONFIG_STATE_DATA) },
+        useValue: { get: () => appConfigData$ },
       },
     ],
   });
@@ -36,8 +38,9 @@ describe('LocalizationService', () => {
     configState = spectator.inject(ConfigStateService);
     service = spectator.service;
 
-    configState.setState(CONFIG_STATE_DATA);
+    configState.refreshAppState();
     sessionState.setLanguage('tr');
+    appConfigData$.next(CONFIG_STATE_DATA);
   });
 
   describe('#currentLang', () => {
@@ -73,8 +76,7 @@ describe('LocalizationService', () => {
           sessionState,
           spectator.inject(Injector),
           null,
-          null,
-          {} as any,
+          configState,
         );
       } catch (error) {
         expect((error as Error).message).toBe('LocalizationService should have only one instance.');
@@ -109,12 +111,13 @@ describe('LocalizationService', () => {
     `(
       'should return observable $expected when resource name is $resource and key is $key',
       async ({ resource, key, defaultValue, expected }) => {
-        configState.setState({
+        appConfigData$.next({
           localization: {
             values: { foo: { bar: 'baz' }, x: { y: 'z' } },
             defaultResourceName: 'x',
           },
-        });
+        } as any);
+        configState.refreshAppState();
 
         service.localize(resource, key, defaultValue).subscribe(result => {
           expect(result).toBe(expected);
@@ -150,12 +153,13 @@ describe('LocalizationService', () => {
     `(
       'should return $expected when resource name is $resource and key is $key',
       ({ resource, key, defaultValue, expected }) => {
-        configState.setState({
+        appConfigData$.next({
           localization: {
             values: { foo: { bar: 'baz' }, x: { y: 'z' } },
             defaultResourceName: 'x',
           },
-        });
+        } as any);
+        configState.refreshAppState();
 
         const result = service.localizeSync(resource, key, defaultValue);
 
@@ -196,12 +200,13 @@ describe('LocalizationService', () => {
     `(
       'should return observable $expected when resource names are $resources and keys are $keys',
       async ({ resources, keys, defaultValue, expected }) => {
-        configState.setState({
+        appConfigData$.next({
           localization: {
             values: { foo: { bar: 'baz' }, x: { y: 'z' } },
             defaultResourceName: 'x',
           },
-        });
+        } as any);
+        configState.refreshAppState();
 
         service.localizeWithFallback(resources, keys, defaultValue).subscribe(result => {
           expect(result).toBe(expected);
@@ -242,12 +247,13 @@ describe('LocalizationService', () => {
     `(
       'should return $expected when resource names are $resources and keys are $keys',
       ({ resources, keys, defaultValue, expected }) => {
-        configState.setState({
+        appConfigData$.next({
           localization: {
             values: { foo: { bar: 'baz' }, x: { y: 'z' } },
             defaultResourceName: 'x',
           },
-        });
+        } as any);
+        configState.refreshAppState();
 
         const result = service.localizeWithFallbackSync(resources, keys, defaultValue);
 

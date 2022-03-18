@@ -9,75 +9,76 @@ using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
 using Volo.Abp.Minify.Scripts;
 
-namespace Volo.Abp.Http.ProxyScripting
+namespace Volo.Abp.Http.ProxyScripting;
+
+public class ProxyScriptManager : IProxyScriptManager, ITransientDependency
 {
-    public class ProxyScriptManager : IProxyScriptManager, ITransientDependency
+    private readonly IApiDescriptionModelProvider _modelProvider;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly IJsonSerializer _jsonSerializer;
+    private readonly IProxyScriptManagerCache _cache;
+    private readonly AbpApiProxyScriptingOptions _options;
+
+    public ProxyScriptManager(
+        IApiDescriptionModelProvider modelProvider,
+        IServiceProvider serviceProvider,
+        IJsonSerializer jsonSerializer,
+        IProxyScriptManagerCache cache,
+        IOptions<AbpApiProxyScriptingOptions> options)
     {
-        private readonly IApiDescriptionModelProvider _modelProvider;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IJsonSerializer _jsonSerializer;
-        private readonly IProxyScriptManagerCache _cache;
-        private readonly AbpApiProxyScriptingOptions _options;
+        _modelProvider = modelProvider;
+        _serviceProvider = serviceProvider;
+        _jsonSerializer = jsonSerializer;
+        _cache = cache;
+        _options = options.Value;
+    }
 
-        public ProxyScriptManager(
-            IApiDescriptionModelProvider modelProvider,
-            IServiceProvider serviceProvider,
-            IJsonSerializer jsonSerializer,
-            IProxyScriptManagerCache cache,
-            IOptions<AbpApiProxyScriptingOptions> options)
+    public string GetScript(ProxyScriptingModel scriptingModel)
+    {
+        var cacheKey = CreateCacheKey(scriptingModel);
+
+        if (scriptingModel.UseCache)
         {
-            _modelProvider = modelProvider;
-            _serviceProvider = serviceProvider;
-            _jsonSerializer = jsonSerializer;
-            _cache = cache;
-            _options = options.Value;
+            return _cache.GetOrAdd(cacheKey, () => CreateScript(scriptingModel));
         }
 
-        public string GetScript(ProxyScriptingModel scriptingModel)
+        var script = CreateScript(scriptingModel);
+        _cache.Set(cacheKey, script);
+        return script;
+    }
+
+    private string CreateScript(ProxyScriptingModel scriptingModel)
+    {
+        var apiModel = _modelProvider.CreateApiModel(new ApplicationApiDescriptionModelRequestDto { IncludeTypes = false });
+
+        if (scriptingModel.IsPartialRequest())
         {
-            var cacheKey = CreateCacheKey(scriptingModel);
-
-            if (scriptingModel.UseCache)
-            {
-                return _cache.GetOrAdd(cacheKey, () => CreateScript(scriptingModel));
-            }
-
-            var script = CreateScript(scriptingModel);
-            _cache.Set(cacheKey, script);
-            return script;
+            apiModel = apiModel.CreateSubModel(scriptingModel.Modules, scriptingModel.Controllers, scriptingModel.Actions);
         }
 
-        private string CreateScript(ProxyScriptingModel scriptingModel)
+        var generatorType = _options.Generators.GetOrDefault(scriptingModel.GeneratorType);
+        if (generatorType == null)
         {
-            var apiModel = _modelProvider.CreateApiModel(new ApplicationApiDescriptionModelRequestDto {IncludeTypes = false});
-
-            if (scriptingModel.IsPartialRequest())
-            {
-                apiModel = apiModel.CreateSubModel(scriptingModel.Modules, scriptingModel.Controllers, scriptingModel.Actions);
-            }
-
-            var generatorType = _options.Generators.GetOrDefault(scriptingModel.GeneratorType);
-            if (generatorType == null)
-            {
-                throw new AbpException($"Could not find a proxy script generator with given name: {scriptingModel.GeneratorType}");
-            }
-
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                return scope.ServiceProvider.GetRequiredService(generatorType).As<IProxyScriptGenerator>().CreateScript(apiModel);
-            }
+            throw new AbpException($"Could not find a proxy script generator with given name: {scriptingModel.GeneratorType}");
         }
 
-        private string CreateCacheKey(ProxyScriptingModel model)
+        using (var scope = _serviceProvider.CreateScope())
         {
-            return _jsonSerializer.Serialize(new
-            {
-                model.GeneratorType,
-                model.Modules,
-                model.Controllers,
-                model.Actions,
-                model.Properties
-            }).ToMd5();
+            return scope.ServiceProvider
+                .GetRequiredService(generatorType)
+                .As<IProxyScriptGenerator>()
+                .CreateScript(apiModel);
         }
+    }
+
+    private string CreateCacheKey(ProxyScriptingModel model)
+    {
+        return _jsonSerializer.Serialize(new {
+            model.GeneratorType,
+            model.Modules,
+            model.Controllers,
+            model.Actions,
+            model.Properties
+        }).ToMd5();
     }
 }

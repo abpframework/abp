@@ -2,19 +2,18 @@
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.AlertsDemo
-{
-    [Widget(
-        StyleTypes = new []{ typeof(PrismjsStyleBundleContributor) },
-        ScriptTypes = new[]{ typeof(PrismjsScriptBundleContributor) }
-    )]
-    public class AlertsDemoViewComponent : AbpViewComponent
-    {
-        public const string ViewPath = "/Views/Components/Themes/Shared/Demos/AlertsDemo/Default.cshtml";
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.AlertsDemo;
 
-        public IViewComponentResult Invoke()
-        {
-            return View(ViewPath);
-        }
+[Widget(
+    StyleTypes = new[] { typeof(PrismjsStyleBundleContributor) },
+    ScriptTypes = new[] { typeof(PrismjsScriptBundleContributor) }
+)]
+public class AlertsDemoViewComponent : AbpViewComponent
+{
+    public const string ViewPath = "/Views/Components/Themes/Shared/Demos/AlertsDemo/Default.cshtml";
+
+    public virtual IViewComponentResult Invoke()
+    {
+        return View(ViewPath);
     }
 }

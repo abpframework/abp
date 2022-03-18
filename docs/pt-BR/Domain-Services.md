@@ -1,3 +1,3 @@
-﻿# ABP Documentation
+# ABP Documentation
 
 Façam!

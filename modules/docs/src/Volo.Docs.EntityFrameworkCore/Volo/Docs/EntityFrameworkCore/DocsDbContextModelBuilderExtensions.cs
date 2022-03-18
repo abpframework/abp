@@ -1,5 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -11,8 +10,7 @@ namespace Volo.Docs.EntityFrameworkCore
     public static class DocsDbContextModelBuilderExtensions
     {
         public static void ConfigureDocs(
-            [NotNull] this ModelBuilder builder,
-            Action<DocsModelBuilderConfigurationOptions> optionsAction = null)
+            [NotNull] this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
@@ -21,16 +19,9 @@ namespace Volo.Docs.EntityFrameworkCore
                 return;
             }
 
-            var options = new DocsModelBuilderConfigurationOptions(
-                DocsDbProperties.DbTablePrefix,
-                DocsDbProperties.DbSchema
-            );
-
-            optionsAction?.Invoke(options);
-
             builder.Entity<Project>(b =>
             {
-                b.ToTable(options.TablePrefix + "Projects", options.Schema);
+                b.ToTable(DocsDbProperties.DbTablePrefix + "Projects", DocsDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -40,11 +31,13 @@ namespace Volo.Docs.EntityFrameworkCore
                 b.Property(x => x.NavigationDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxNavigationDocumentNameLength);
                 b.Property(x => x.ParametersDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxParametersDocumentNameLength);
                 b.Property(x => x.LatestVersionBranchName).HasMaxLength(ProjectConsts.MaxLatestVersionBranchNameLength);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<Document>(b =>
             {
-                b.ToTable(options.TablePrefix + "Documents", options.Schema);
+                b.ToTable(DocsDbProperties.DbTablePrefix + "Documents", DocsDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -62,16 +55,22 @@ namespace Volo.Docs.EntityFrameworkCore
                 b.HasMany(x => x.Contributors).WithOne()
                     .HasForeignKey(x => new { x.DocumentId })
                     .IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<DocumentContributor>(b =>
             {
-                b.ToTable(options.TablePrefix + "DocumentContributors", options.Schema);
+                b.ToTable(DocsDbProperties.DbTablePrefix + "DocumentContributors", DocsDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
                 b.HasKey(x => new { x.DocumentId, x.Username });
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<DocsDbContext>();
         }
     }
 }

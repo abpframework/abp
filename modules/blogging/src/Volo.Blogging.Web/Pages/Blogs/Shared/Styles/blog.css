@@ -1,4 +1,4 @@
-﻿div.vs-blog {
+div.vs-blog {
   position: relative;
   background: white;
   padding: 10px;
@@ -286,7 +286,7 @@
       padding: 30px;
       border-bottom: 1px solid #f1f1f1; }
       div.vs-blog .comment-area > .media .media {
-        padding: 20px 0px 0px; }
+        padding: 20px 0px 0px 20px; }
     div.vs-blog .comment-area .comment-buttons {
       padding: 4px 0;
       font-size: .96em; }

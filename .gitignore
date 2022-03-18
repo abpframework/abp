@@ -6,7 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.editorconfig
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -271,6 +271,7 @@ modules/blogging/app/Volo.BloggingTestApp/wwwroot/files/*.*
 modules/docs/app/VoloDocs.Web/Logs/*.*
 modules/setting-management/app/Volo.Abp.SettingManagement.DemoApp/Logs/*.*
 templates/module/app/MyCompanyName.MyProjectName.DemoApp/Logs/*.*
+templates/module/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Server.Host/Logs/logs.txt
 templates/mvc/src/MyCompanyName.MyProjectName.Web/Logs/*.*
 
 
@@ -313,4 +314,12 @@ abp-build-config.json
 tempkey.jwk
 
 # ABP Analyzing files
-*.abppkg.analyze.json
+# [Disabled for now] *.abppkg.analyze.json
+
+# appsettings.secrets.json
+appsettings.secrets.json
+deploy/nuget-api-key.txt
+deploy/npm-auth-token.txt
+deploy/ssh-password.txt
+deploy/github-api-key.txt
+deploy/_run_all_log.txt

@@ -1,0 +1,16 @@
+{
+  "culture": "hi",
+  "texts": {
+    "Account": "ABP खाता - लॉगिन और रजिस्टर | ABP.IO",
+    "Welcome": "स्वागत हे",
+    "UseOneOfTheFollowingLinksToContinue": "जारी रखने के लिए निम्न लिंक में से एक का उपयोग करें",
+    "FrameworkHomePage": "फ्रेमवर्क होम पेज",
+    "FrameworkDocumentation": "फ्रेमवर्क प्रलेखन",
+    "OfficialBlog": "आधिकारिक ब्लॉग",
+    "CommercialHomePage": "वाणिज्यिक मुख पृष्ठ",
+    "CommercialSupportWebSite": "वाणिज्यिक समर्थन वेब साइट",
+    "CommunityWebSite": "एबीपी सामुदायिक वेब साइट",
+    "ManageAccount": "मेरा खाता | एबीपी.आईओ",
+    "ManageYourAccount": "अपने खाते को प्रबंधित करें"
+  }
+}

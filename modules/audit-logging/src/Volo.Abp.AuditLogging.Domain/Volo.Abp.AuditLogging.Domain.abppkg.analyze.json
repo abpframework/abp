@@ -1,0 +1,41 @@
+{
+  "name": "Volo.Abp.AuditLogging.Domain",
+  "hash": "df19d27b7da103de2da1826c6ba8e161",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "contentType": "abpModule",
+      "name": "AbpAuditLoggingDomainModule"
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [
+        "Volo.Abp.AuditLogging.EntityChange",
+        "Volo.Abp.AuditLogging.AuditLogAction"
+      ],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "AuditLog"
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.AuditLogging",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [
+          "Volo.Abp.AuditLogging.EntityChange",
+          "Volo.Abp.AuditLogging.AuditLogAction"
+        ],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "AuditLog"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IAuditLogRepository"
+    }
+  ]
+}

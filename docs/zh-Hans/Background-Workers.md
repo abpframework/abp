@@ -2,7 +2,6 @@
 
 ## 介绍
 
-背景工人在应用简单独立的线程在后台运行.一般来说,他们定期运行,以执行一些任务.例子;
 后台工作者在应用程序后台运行的简单的独立线程,一般来说它们定期运行执行一些任务.例如;
 
 * 后台工作者可以定期**删除过时的日志**.
@@ -128,11 +127,13 @@ context.ServiceProvider
 * 使用上面提到的 `AbpBackgroundWorkerOptions` 禁用其他的后台工作者系统,只保留一个实例.
 * 所有的应用程序都禁用后台工作者系统,创建一个特殊的应用程序在一个服务上运行执行工作者.
 
-## Quartz 集成
+## 集成
 
-ABP框架的后台工作者系统可以很好的执行周期任务. 但是你可能需要使用更高级的任务调度,像[Quartz](https://www.quartz-scheduler.net/). 参阅社区贡献的[Quartz集成](Background-Workers-Quartz.md)
+后台工作者系统是可扩展的,你可以更改默认的后台工作者管理器为你自己的实现,或者使用以下预构建的集成:
+
+* [Quartz 后台工作者管理器](Background-Workers-Quartz.md) 
+* [Hangfire 后台工作者管理器](Background-Workers-Hangfire.md) 
 
 ## 另请参阅
 
-* [后台工作者的Quartz集成](Background-Workers-Quartz.md)
 * [后台作业](Background-Jobs.md)

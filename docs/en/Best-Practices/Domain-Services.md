@@ -1,3 +1,4 @@
-﻿## Domain Services Best Practices & Conventions
+## Domain Services Best Practices & Conventions
 
-TODO
+> **This document is not ready yet. Please see the [Domain Services](../Domain-Services.md) document.**
+

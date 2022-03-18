@@ -1,0 +1,84 @@
+{
+  "name": "Volo.Abp.Identity.EntityFrameworkCore",
+  "hash": "302d5996ef84002f4eadcb44cdaac3a5",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
+      "contentType": "abpModule",
+      "name": "AbpIdentityEntityFrameworkCoreModule"
+    },
+    {
+      "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
+      "connectionStringName": "AbpIdentity",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
+          "contentType": "databaseTable",
+          "name": "AbpClaimTypes"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
+          "contentType": "databaseTable",
+          "name": "AbpLinkUsers"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityRole",
+          "contentType": "databaseTable",
+          "name": "AbpRoles"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityRoleClaim",
+          "contentType": "databaseTable",
+          "name": "AbpRoleClaims"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
+          "contentType": "databaseTable",
+          "name": "AbpSecurityLogs"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUser",
+          "contentType": "databaseTable",
+          "name": "AbpUsers"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserClaim",
+          "contentType": "databaseTable",
+          "name": "AbpUserClaims"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserLogin",
+          "contentType": "databaseTable",
+          "name": "AbpUserLogins"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserOrganizationUnit",
+          "contentType": "databaseTable",
+          "name": "AbpUserOrganizationUnits"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserRole",
+          "contentType": "databaseTable",
+          "name": "AbpUserRoles"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserToken",
+          "contentType": "databaseTable",
+          "name": "AbpUserTokens"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
+          "contentType": "databaseTable",
+          "name": "AbpOrganizationUnits"
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnitRole",
+          "contentType": "databaseTable",
+          "name": "AbpOrganizationUnitRoles"
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "IdentityDbContext"
+    }
+  ]
+}

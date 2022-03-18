@@ -143,7 +143,7 @@ namespace AbpDemo
     {
         public async Task HandleEventAsync(StockCountChangedEvent eventData)
         {
-            //TODO: your code that does somthing on the event
+            //TODO: your code that does something on the event
         }
     }
 }
@@ -158,7 +158,7 @@ If you perform **database operations** and use the [repositories](Repositories.m
 
 > The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](Dependency-Injection.md) for more options.
 
-## Transaction & Exception Behavior
+### Transaction & Exception Behavior
 
 When an event published, subscribed event handlers are immediately executed. So;
 

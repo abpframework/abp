@@ -1,60 +1,41 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace Volo.Abp.SettingManagement.EntityFrameworkCore
+namespace Volo.Abp.SettingManagement.EntityFrameworkCore;
+
+public static class SettingManagementDbContextModelBuilderExtensions
 {
-    public class SettingManagementModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
+    //TODO: Instead of getting parameters, get a action of SettingManagementModelBuilderConfigurationOptions like other modules
+    public static void ConfigureSettingManagement(
+        [NotNull] this ModelBuilder builder)
     {
-        public SettingManagementModelBuilderConfigurationOptions(
-            [NotNull] string tablePrefix,
-            [CanBeNull] string schema)
-            : base(
-                tablePrefix,
-                schema)
+        Check.NotNull(builder, nameof(builder));
+
+        if (builder.IsTenantOnlyDatabase())
         {
-
+            return;
         }
-    }
 
-    public static class SettingManagementDbContextModelBuilderExtensions
-    {
-        //TODO: Instead of getting parameters, get a action of SettingManagementModelBuilderConfigurationOptions like other modules
-        public static void ConfigureSettingManagement(
-            [NotNull] this ModelBuilder builder,
-            [CanBeNull] Action<SettingManagementModelBuilderConfigurationOptions> optionsAction = null)
+        builder.Entity<Setting>(b =>
         {
-            Check.NotNull(builder, nameof(builder));
+            b.ToTable(AbpSettingManagementDbProperties.DbTablePrefix + "Settings", AbpSettingManagementDbProperties.DbSchema);
 
-            if (builder.IsTenantOnlyDatabase())
-            {
-                return;
-            }
+            b.ConfigureByConvention();
 
-            var options = new SettingManagementModelBuilderConfigurationOptions(
-                AbpSettingManagementDbProperties.DbTablePrefix,
-                AbpSettingManagementDbProperties.DbSchema
-            );
+            b.Property(x => x.Name).HasMaxLength(SettingConsts.MaxNameLength).IsRequired();
 
-            optionsAction?.Invoke(options);
+            if (builder.IsUsingOracle()) { SettingConsts.MaxValueLengthValue = 2000; }
+            b.Property(x => x.Value).HasMaxLength(SettingConsts.MaxValueLengthValue).IsRequired();
 
-            builder.Entity<Setting>(b =>
-            {
-                b.ToTable(options.TablePrefix + "Settings", options.Schema);
+            b.Property(x => x.ProviderName).HasMaxLength(SettingConsts.MaxProviderNameLength);
+            b.Property(x => x.ProviderKey).HasMaxLength(SettingConsts.MaxProviderKeyLength);
 
-                b.ConfigureByConvention();
+            b.HasIndex(x => new { x.Name, x.ProviderName, x.ProviderKey }).IsUnique(true);
 
-                b.Property(x => x.Name).HasMaxLength(SettingConsts.MaxNameLength).IsRequired();
+            b.ApplyObjectExtensionMappings();
+        });
 
-                if (builder.IsUsingOracle()) { SettingConsts.MaxValueLengthValue = 2000; }
-                b.Property(x => x.Value).HasMaxLength(SettingConsts.MaxValueLengthValue).IsRequired();
-
-                b.Property(x => x.ProviderName).HasMaxLength(SettingConsts.MaxProviderNameLength);
-                b.Property(x => x.ProviderKey).HasMaxLength(SettingConsts.MaxProviderKeyLength);
-
-                b.HasIndex(x => new {x.Name, x.ProviderName, x.ProviderKey});
-            });
-        }
+        builder.TryConfigureObjectExtensions<SettingManagementDbContext>();
     }
 }

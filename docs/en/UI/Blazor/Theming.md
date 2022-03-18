@@ -63,7 +63,7 @@ A theme is simply a Razor Class Library.
 
 ### The Easy Way
 
-The easiest way to create a new theme is to copy the [Basic Theme Source Code](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme) and customize it. Once you get a copy of the theme in your solution, remove the `Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme` NuGet package and reference to the local project.
+The easiest way to create a new theme is to copy the [Basic Theme Source Code](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme) and customize it. Once you get a copy of the theme in your solution, remove the `Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme` NuGet package and reference to the local project.
 
 ### Global Styles / Scripts
 

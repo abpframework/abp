@@ -1,4 +1,3 @@
-/* tslint:disable:variable-name */
 import { LinkedList } from '@abp/utils';
 import { InjectFlags, InjectionToken, Type } from '@angular/core';
 import { O } from 'ts-toolbelt';
@@ -39,7 +38,7 @@ export abstract class Prop<R = any> {
   }
 }
 
-export type PropCallback<T, R = any> = (data?: Omit<PropData<T>, 'data'>, auxData?: any) => R;
+export type PropCallback<T, R = any> = (data: Omit<PropData<T>, 'data'>, auxData?: any) => R;
 export type PropPredicate<T> = (data?: Omit<PropData<T>, 'data'>, auxData?: any) => boolean;
 
 export abstract class PropsFactory<C extends Props<any>> {

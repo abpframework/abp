@@ -1,0 +1,50 @@
+﻿@page
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Codemirror
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.GlobalResources
+@using Volo.CmsKit.Admin.Web.Menus
+@using Volo.CmsKit.Localization
+
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<CmsKitResource> L
+
+@model IndexModel
+
+@{
+    PageLayout.Content.Title = L["GlobalResources"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
+    PageLayout.Content.MenuItemName = CmsKitAdminMenus.GlobalResources.GlobalResourcesMenu;
+}
+
+@section styles{
+    <abp-style type="typeof(CodemirrorStyleContributor)" />
+}
+
+@section scripts {
+    <abp-script-bundle>
+        <abp-script type="typeof(CodemirrorScriptContributor )"/>
+        <abp-script src="/libs/codemirror/mode/css/css.js"/>
+        <abp-script src="/libs/codemirror/mode/javascript/javascript.js"/>
+        <abp-script src="/client-proxies/cms-kit-common-proxy.js"/>
+        <abp-script src="/client-proxies/cms-kit-admin-proxy.js"/>
+        <abp-script src="/Pages/CmsKit/GlobalResources/index.js"/>
+    </abp-script-bundle>
+}
+
+<abp-card>
+    <abp-card-body>
+        <abp-tabs>
+            <abp-tab title="@L["Script"].Value">
+                <abp-input asp-for="ScriptContent" suppress-label="true"></abp-input>
+            </abp-tab>
+            <abp-tab title="@L["Style"].Value">
+                <abp-input asp-for="StyleContent" suppress-label="true"></abp-input>
+            </abp-tab>
+        </abp-tabs>
+    </abp-card-body>
+    <abp-card-footer>
+        <abp-button button-type="Primary" id="SaveResourcesButton" class="float-end">@L["SaveChanges"]</abp-button>
+    </abp-card-footer>
+</abp-card>

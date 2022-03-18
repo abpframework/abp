@@ -8,6 +8,9 @@
     "FrameworkDocumentation": "Dokumentacija razvojnega okolja",
     "OfficialBlog": "Uradni blog",
     "CommercialHomePage": "Domača stran različice Commercial",
-    "CommercialSupportWebSite": "Spletna stran za komercialno podporo"
+    "CommercialSupportWebSite": "Spletna stran za komercialno podporo",
+    "CommunityWebSite": "Spletno mesto skupnosti ABP",
+    "ManageAccount": "Moj račun | ABP.IO",
+    "ManageYourAccount": "Upravljanje svojega računa"
   }
 }

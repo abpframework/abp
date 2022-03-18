@@ -1,43 +1,51 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Rebus.Config;
 using Rebus.Handlers;
-using Rebus.ServiceProvider;
+using Rebus.Pipeline;
+using Rebus.Pipeline.Receive;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.EventBus.Rebus
+namespace Volo.Abp.EventBus.Rebus;
+
+[DependsOn(
+    typeof(AbpEventBusModule))]
+public class AbpEventBusRebusModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpEventBusModule))]
-    public class AbpEventBusRebusModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddTransient(typeof(IHandleMessages<>), typeof(RebusDistributedEventHandlerAdapter<>));
+
+        var preActions = context.Services.GetPreConfigureActions<AbpRebusEventBusOptions>();
+        Configure<AbpRebusEventBusOptions>(rebusOptions =>
         {
-            var options = context.Services.ExecutePreConfiguredActions<AbpRebusEventBusOptions>();
+            preActions.Configure(rebusOptions);
+        });
 
-            context.Services.AddTransient(typeof(IHandleMessages<>), typeof(RebusDistributedEventHandlerAdapter<>));
-
-            Configure<AbpRebusEventBusOptions>(rebusOptions =>
+        context.Services.AddRebus(configure =>
+        {
+            configure.Options(options =>
             {
-                rebusOptions.Configurer = options.Configurer;
-                rebusOptions.Publish = options.Publish;
-                rebusOptions.InputQueueName = options.InputQueueName;
+                options.Decorate<IPipeline>(d =>
+                {
+                    var step = new AbpRebusEventHandlerStep();
+                    var pipeline = d.Get<IPipeline>();
+
+                    return new PipelineStepInjector(pipeline).OnReceive(step, PipelineRelativePosition.After, typeof(ActivateHandlersStep));
+                });
             });
 
-            context.Services.AddRebus(configurer =>
-            {
-                options.Configurer?.Invoke(configurer);
-                return configurer;
-            });
+            preActions.Configure().Configurer?.Invoke(configure);
+            return configure;
+        });
+    }
 
-        }
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        context.ServiceProvider.UseRebus();
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            context.ServiceProvider.UseRebus();
-
-            context
-                .ServiceProvider
-                .GetRequiredService<RebusDistributedEventBus>()
-                .Initialize();
-        }
+        context
+            .ServiceProvider
+            .GetRequiredService<RebusDistributedEventBus>()
+            .Initialize();
     }
 }

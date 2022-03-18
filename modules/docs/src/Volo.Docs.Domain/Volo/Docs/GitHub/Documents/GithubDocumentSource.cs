@@ -23,13 +23,11 @@ namespace Volo.Docs.GitHub.Documents
 
         private readonly IGithubRepositoryManager _githubRepositoryManager;
         private readonly IGithubPatchAnalyzer _githubPatchAnalyzer;
-        private readonly IVersionHelper _versionHelper;
 
-        public GithubDocumentSource(IGithubRepositoryManager githubRepositoryManager, IGithubPatchAnalyzer githubPatchAnalyzer, IVersionHelper versionHelper)
+        public GithubDocumentSource(IGithubRepositoryManager githubRepositoryManager, IGithubPatchAnalyzer githubPatchAnalyzer)
         {
             _githubRepositoryManager = githubRepositoryManager;
             _githubPatchAnalyzer = githubPatchAnalyzer;
-            _versionHelper = versionHelper;
         }
 
         public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version, DateTime? lastKnownSignificantUpdateTime = null)
@@ -277,7 +275,7 @@ namespace Volo.Docs.GitHub.Documents
                     }
                 }
 
-                versions = _versionHelper.OrderByDescending(versions);
+                versions = SemanticVersionHelper.OrderByDescending(versions);
             }
 
             if(githubVersionProviderSource == GithubVersionProviderSource.Releases)
@@ -288,7 +286,7 @@ namespace Volo.Docs.GitHub.Documents
                 }
                 else
                 {
-                    versions = _versionHelper.OrderByDescending(versions);
+                    versions = SemanticVersionHelper.OrderByDescending(versions);
                 }
             }
 
@@ -385,7 +383,7 @@ namespace Volo.Docs.GitHub.Documents
             catch (Exception ex)
             {
                 //TODO: Only handle when document is really not available
-                Logger.LogWarning(ex.Message, ex);
+                Logger.LogWarning($"{ex.Message}: {rawUrl}", ex);
                 throw new DocumentNotFoundException(rawUrl);
             }
         }

@@ -1,5 +1,7 @@
+import { escapeHtmlChars, LocalizationService } from '@abp/ng.core';
+import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { EntityProp, ePropType } from '@abp/ng.theme.shared/extensions';
-import { IdentityUserDto } from '../proxy/identity/models';
+import { of } from 'rxjs';
 
 export const DEFAULT_USERS_ENTITY_PROPS = EntityProp.createMany<IdentityUserDto>([
   {
@@ -8,6 +10,22 @@ export const DEFAULT_USERS_ENTITY_PROPS = EntityProp.createMany<IdentityUserDto>
     displayName: 'AbpIdentity::UserName',
     sortable: true,
     columnWidth: 250,
+    valueResolver: data => {
+      const l10n = data.getInjected(LocalizationService);
+      const t = l10n.instant.bind(l10n);
+
+      const inactiveIcon = `<i title="${t(
+        'AbpIdentity::ThisUserIsNotActiveMessage',
+      )}" class="fas fa-ban text-danger me-1"></i>`;
+
+      return of(
+        `
+        ${!data.record.isActive ? inactiveIcon : ''}
+        <span class="${!data.record.isActive ? 'text-muted' : ''}">${escapeHtmlChars(
+          data.record.userName,
+        )}</span>`,
+      );
+    },
   },
   {
     type: ePropType.String,

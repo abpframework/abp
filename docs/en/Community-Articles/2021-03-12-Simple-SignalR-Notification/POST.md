@@ -38,8 +38,19 @@ Open `YourProjectWebModule.cs` class and add the following line to the `PreConfi
 
 #### 2- Add Client Scripts
 
-2- In the `ConfigureServices` method of your web module add the following code to add the `signalr.js` and `notification-hub.js`. We'll add these packages in the next steps.
+2- In the `ConfigureServices` method of your web module add the following code to add the `signalr.js` and `notification-hub.js`. We'll add these packages in the next steps. If you are not using Lepton Theme you can add the files to `StandardBundles.Scripts.Global`.
 
+```csharp
+ Configure<AbpBundlingOptions>(options =>
+  {
+      options
+          .ScriptBundles
+          .Get(LeptonThemeBundles.Scripts.Global) //or -> Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling.StandardBundles.Scripts.Global
+          .AddFiles("/libs/signalr/signalr.js")
+          .AddFiles("/Pages/notification-hub.js");
+  });
+  ```
+ 
 ![Script Bundles](add-script-bundles.jpg)
 
 #### 3- Add Hub Endpoint
@@ -71,11 +82,16 @@ Add the following JavaScript class into your `Pages` folder in your Web project.
 
 Add [Microsoft.SignalR](https://www.npmjs.com/package/@microsoft/signalr) JavaScript package to the `package.json` which is located in your root folder of the Web project. After you add it, run `yarn` command in your Web directory to be able to install this package.
 
+You can install the latest version (3.1.13 will be old)
+```
+  "@microsoft/signalr": "^3.1.13"
+````
+
 ![Add SignalR package](signalr-package.jpg)
 
 #### 3- Add resource Mapping
 
-We added SignalR to the `package.json` but it comes into your `node_modules` folder. We need to copy the related files to `wwwroot/libs` folder. To do this copy the content of the following file to your `abp.resourcemappings.js` file. It's in your root directory of Web folder. After you do this, go to your web directory and run `gulp` command. By doing this, it'll copy the related files into your `wwwroot/libs` folder.
+We added SignalR to the `package.json` but it comes into your `node_modules` folder. We need to copy the related files to `wwwroot/libs` folder. To do this copy the content of the following file to your `abp.resourcemappings.js` file. It's in your root directory of Web folder. After you do this, go to your web directory and run `abp install-libs` command. By doing this, it'll copy the related files into your `wwwroot/libs` folder.
 
 [abp.resourcemappings.js](https://gist.github.com/ebicoglu/f7dc22cca2d353f8bf7f68a03e3395b8#file-abp-resourcemapping-js)
 
@@ -94,6 +110,8 @@ To do this replace the `Index.cshtml` and `Index.cshtml.cs` with the followings:
 
 #### 5- See it in action
 
-Run your web project and in the Index page you'll see a button named as "Get Notification". Click the button and see the notification that comes from SignalR. This is a basic usage of SignalR notification system. You can implement it according to your own requirements.
+Run your web project and in the Index page you'll Server Time will be updated every second. The time information comes from backend via SignalR.
+This is a very basic usage of SignalR notification system. 
+You can implement your own SignalR notification system based on your requirements.
 
 ![Result](result.jpg)

@@ -1,6 +1,7 @@
 {
   "culture": "sl",
   "texts": {
-    "ManageYourProfile":  "Upravljajte svojim profilom" 
+    "MyAccount": "Moj račun",
+    "SamplePageMessage": "Vzorčna stran za modul MyProjectName"
   }
 }

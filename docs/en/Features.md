@@ -146,9 +146,9 @@ A feature should be defined to be able to check it.
 
 ### FeatureDefinitionProvider
 
-Create a class inheriting the `FeatureDefinitionProvider` to define permissions.
+Create a class inheriting the `FeatureDefinitionProvider` to define features.
 
-**Example: Defining permissions**
+**Example: Defining features**
 
 ```csharp
 using Volo.Abp.Features;
@@ -308,7 +308,7 @@ The example above defines a *Reporting* feature with two children: *PDF Reportin
 
 ### Changing Features Definitions of a Depended Module
 
-A class deriving from the `FeatureDefinitionProvider` (just like the example above) can also get the existing permission definitions (defined by the depended [modules](Module-Development-Basics.md)) and change their definitions.
+A class deriving from the `FeatureDefinitionProvider` (just like the example above) can also get the existing feature definitions (defined by the depended [modules](Module-Development-Basics.md)) and change their definitions.
 
 **Example: Manipulate an existing feature definition**
 

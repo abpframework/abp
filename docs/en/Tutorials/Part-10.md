@@ -34,6 +34,11 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
+> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
+
 ## Introduction
 
 We have created `Book` and `Author` functionalities for the book store application. However, currently there is no relation between these entities.
@@ -70,7 +75,7 @@ We prefer to **delete the database** {{if DB=="EF"}}(you can run the `Drop-Datab
 
 ### Update the EF Core Mapping
 
-Open the `BookStoreDbContextModelCreatingExtensions` class under the `EntityFrameworkCore` folder of the `Acme.BookStore.EntityFrameworkCore` project and change the `builder.Entity<Book>` part as shown below:
+Locate to `OnModelCreating` method in the `BookStoreDbContext` class that under the `EntityFrameworkCore` folder of the `Acme.BookStore.EntityFrameworkCore` project and change the `builder.Entity<Book>` part as shown below:
 
 ````csharp
 builder.Entity<Book>(b =>
@@ -86,13 +91,13 @@ builder.Entity<Book>(b =>
 
 ### Add New EF Core Migration
 
-Run the following command in the Package Manager Console (of the Visual Studio) to add a new database migration:
+The startup solution is configured to use [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
+
+Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrameworkCore` project and type the following command:
 
 ````bash
-Add-Migration "Added_AuthorId_To_Book"
+dotnet ef migrations add Added_AuthorId_To_Book
 ````
-
-> Ensure that the `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the Default project and the `Acme.BookStore.DbMigrator` is the startup project, as always.
 
 This should create a new migration class with the following code in its `Up` method:
 
@@ -120,6 +125,8 @@ migrationBuilder.AddForeignKey(
 * Adds an `AuthorId` field to the `AppBooks` table.
 * Creates an index on the `AuthorId` field.
 * Declares the foreign key to the `AppAuthors` table.
+
+> If you are using Visual Studio, you may want to use `Add-Migration Added_AuthorId_To_Book -c BookStoreDbContext` and `Update-Database -Context BookStoreDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{end}}
 
@@ -318,7 +325,7 @@ This new method will be used from the UI to get a list of authors and fill a dro
 
 ### BookAppService
 
-Open the `BookAppService` interface in the `Books` folder of the `Acme.BookStore.Application` project and replace the file content with the following code:
+Open the `BookAppService` class in the `Books` folder of the `Acme.BookStore.Application` project and replace the file content with the following code:
 
 {{if DB=="EF"}}
 
@@ -370,7 +377,7 @@ namespace Acme.BookStore.Books
 
             //Prepare a query to join books and authors
             var query = from book in queryable
-                join author in _authorRepository on book.AuthorId equals author.Id
+                join author in await _authorRepository.GetQueryableAsync() on book.AuthorId equals author.Id
                 where book.Id == id
                 select new { book, author };
 
@@ -393,7 +400,7 @@ namespace Acme.BookStore.Books
 
             //Prepare a query to join books and authors
             var query = from book in queryable
-                join author in _authorRepository on book.AuthorId equals author.Id
+                join author in await _authorRepository.GetQueryableAsync() on book.AuthorId equals author.Id
                 select new {book, author};
 
             //Paging
@@ -442,7 +449,7 @@ namespace Acme.BookStore.Books
             {
                 return sorting.Replace(
                     "authorName",
-                    "author.Name", 
+                    "author.Name",
                     StringComparison.OrdinalIgnoreCase
                 );
             }
@@ -526,7 +533,7 @@ namespace Acme.BookStore.Books
             {
                 input.Sorting = nameof(Book.Name);
             }
-            
+
             //Get the IQueryable<Book> from the repository
             var queryable = await Repository.GetQueryableAsync();
 
@@ -575,7 +582,7 @@ namespace Acme.BookStore.Books
                 .ToArray();
 
             var queryable = await _authorRepository.GetQueryableAsync();
-            
+
             var authors = await AsyncExecuter.ToListAsync(
                 queryable.Where(a => authorIds.Contains(a.Id))
             );
@@ -941,7 +948,7 @@ Since the HTTP APIs have been changed, you need to update Angular client side [s
 Run the following command in the `angular` folder (you may need to stop the angular application):
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 This command will update the service proxy files under the `/src/app/proxy/` folder.
 

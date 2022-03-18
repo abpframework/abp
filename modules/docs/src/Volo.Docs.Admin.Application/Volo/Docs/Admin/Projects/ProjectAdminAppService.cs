@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Data;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Guids;
 using Volo.Docs.Documents.FullSearch.Elastic;
@@ -97,6 +99,7 @@ namespace Volo.Docs.Admin.Projects
             project.SetFormat(input.Format);
             project.SetNavigationDocumentName(input.NavigationDocumentName);
             project.SetDefaultDocumentName(input.DefaultDocumentName);
+            project.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
             project.MinimumVersion = input.MinimumVersion;
             project.MainWebsiteUrl = input.MainWebsiteUrl;
@@ -136,25 +139,16 @@ namespace Volo.Docs.Admin.Projects
         //    {
         //        throw new Exception("Cannot find the project with the Id " + projectId);
         //    }
+            var docs = (await _documentRepository.GetListByProjectId(project.Id))
+                .Where(doc => doc.FileName != project.NavigationDocumentName && doc.FileName != project.ParametersDocumentName)
+                .ToList();
+            await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
 
-        //    var docs = await _documentRepository.GetListByProjectId(project.Id);
-        //    await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
-
-        //    foreach (var doc in docs)
-        //    {
-        //        if (doc.FileName == project.NavigationDocumentName)
-        //        {
-        //            continue;
-        //        }
-
-        //        if (doc.FileName == project.ParametersDocumentName)
-        //        {
-        //            continue;
-        //        }
-
-        //        await _elasticSearchService.AddOrUpdateAsync(doc);
-        //    }
-        //}
+            if(docs.Any())
+            {
+                await _elasticSearchService.AddOrUpdateManyAsync(docs);    
+            }
+        }
 
         public async Task ReindexAllAsync()
         {

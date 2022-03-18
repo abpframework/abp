@@ -1,4 +1,4 @@
-﻿## Entity Framework Core 集成最佳实践
+## Entity Framework Core 集成最佳实践
 
 > 有关EF Core 集成的基础知识,请参阅[Entity Framework Core 集成文档](../Entity-Framework-Core.md).
 

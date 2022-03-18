@@ -1,4 +1,4 @@
-import { Profile, ProfileService } from '@abp/ng.core';
+import { ProfileService } from '@abp/ng.account.core/proxy';
 import { fadeIn } from '@abp/ng.theme.shared';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
