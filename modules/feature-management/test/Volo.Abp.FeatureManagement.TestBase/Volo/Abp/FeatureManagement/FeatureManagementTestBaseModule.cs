@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
 using Volo.Abp.Features;
@@ -29,8 +30,10 @@ public class FeatureManagementTestBaseModule : AbpModule
     {
         context.Services.Configure<FeatureManagementOptions>(options =>
         {
-                //TODO: Any value can pass. After completing the permission unit test, look at it again.
-                options.ProviderPolicies[EditionFeatureValueProvider.ProviderName] = EditionFeatureValueProvider.ProviderName;
+            options.Providers.InsertBefore(typeof(TenantFeatureManagementProvider), typeof(NextTenantFeatureManagementProvider));
+
+            //TODO: Any value can pass. After completing the permission unit test, look at it again.
+            options.ProviderPolicies[EditionFeatureValueProvider.ProviderName] = EditionFeatureValueProvider.ProviderName;
         });
     }
 
