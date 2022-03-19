@@ -69,7 +69,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         Consumer = MessageConsumerFactory.Create(
             new ExchangeDeclareConfiguration(
                 AbpRabbitMqEventBusOptions.ExchangeName,
-                type: "direct",
+                type: AbpRabbitMqEventBusOptions.ExchangeType,
                 durable: true
             ),
             new QueueDeclareConfiguration(
