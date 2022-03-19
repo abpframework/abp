@@ -14,11 +14,6 @@ public class AbpRabbitMqEventBusOptions
 
     public string ExchangeType { get; set; }
 
-    public AbpRabbitMqEventBusOptions()
-    {
-        ExchangeType = "direct";
-    }
-
     public string GetExchangeTypeOrDefault()
     {
         return string.IsNullOrEmpty(ExchangeType)
