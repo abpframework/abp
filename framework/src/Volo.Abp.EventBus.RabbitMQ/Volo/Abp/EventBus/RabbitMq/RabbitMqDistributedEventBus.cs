@@ -244,7 +244,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         {
             channel.ExchangeDeclare(
                 AbpRabbitMqEventBusOptions.ExchangeName,
-                "direct",
+                AbpRabbitMqEventBusOptions.ExchangeType,
                 durable: true
             );
 
