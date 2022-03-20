@@ -30,9 +30,8 @@ public class BlogPostPublicController : CmsKitPublicControllerBase, IBlogPostPub
     }
 
     [HttpGet]
-    [Route("{blogSlug}")]
-    public virtual Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
+    public virtual Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(BlogPostGetListInput input)
     {
-        return BlogPostPublicAppService.GetListAsync(blogSlug, input);
+        return BlogPostPublicAppService.GetListAsync(input);
     }
 }

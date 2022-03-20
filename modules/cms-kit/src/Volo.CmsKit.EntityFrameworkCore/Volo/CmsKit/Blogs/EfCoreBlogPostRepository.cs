@@ -54,6 +54,7 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
     public virtual async Task<List<BlogPost>> GetListAsync(
         string filter = null,
         Guid? blogId = null,
+        Guid? authorId = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string sorting = null,
@@ -66,7 +67,8 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
 
         var queryable = blogPostsDbSet
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
-            .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
+            .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
+            .WhereIf(authorId.HasValue, x => x.AuthorId == authorId);
 
         queryable = queryable.OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(BlogPost.CreationTime)} desc" : sorting);
 

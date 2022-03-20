@@ -32,11 +32,12 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
         return ObjectMapper.Map<BlogPost, BlogPostPublicDto>(blogPost);
     }
 
-    public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync([NotNull] string blogSlug, PagedAndSortedResultRequestDto input)
+    public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(BlogPostGetListInput input)
     {
-        var blog = await BlogRepository.GetBySlugAsync(blogSlug);
+        var blog = await BlogRepository.GetBySlugAsync(input.BlogSlug);
 
-        var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.MaxResultCount, input.SkipCount, input.Sorting);
+        var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.AuthorId, input.MaxResultCount,
+            input.SkipCount, input.Sorting);
 
         return new PagedResultDto<BlogPostPublicDto>(
             await BlogPostRepository.GetCountAsync(blogId: blog.Id),

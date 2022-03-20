@@ -34,8 +34,7 @@ public class IndexModel : CmsKitPublicPageModelBase
     public async Task OnGetAsync()
     {
         Blogs = await BlogPostPublicAppService.GetListAsync(
-            BlogSlug,
-            new PagedAndSortedResultRequestDto
+            new BlogPostGetListInput
             {
                 SkipCount = PageSize * (CurrentPage - 1),
                 MaxResultCount = PageSize

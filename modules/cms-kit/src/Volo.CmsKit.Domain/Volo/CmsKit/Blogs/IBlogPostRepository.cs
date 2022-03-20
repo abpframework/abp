@@ -16,6 +16,7 @@ public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
     Task<List<BlogPost>> GetListAsync(
         string filter = null,
         Guid? blogId = null,
+        Guid? authorId = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string sorting = null,
