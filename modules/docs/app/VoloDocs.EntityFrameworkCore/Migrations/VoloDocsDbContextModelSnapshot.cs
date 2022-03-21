@@ -9,7 +9,7 @@ using VoloDocs.EntityFrameworkCore;
 
 #nullable disable
 
-namespace VoloDocs.EntityFrameworkCore.Migrations
+namespace Migrations
 {
     [DbContext(typeof(VoloDocsDbContext))]
     partial class VoloDocsDbContextModelSnapshot : ModelSnapshot

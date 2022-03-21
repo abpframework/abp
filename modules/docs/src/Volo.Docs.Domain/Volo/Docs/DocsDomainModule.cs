@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.AutoMapper;
-//using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Localization;
@@ -24,8 +23,7 @@ namespace Volo.Docs
         typeof(DocsDomainSharedModule),
         typeof(AbpDddDomainModule),
         typeof(AbpAutoMapperModule)
-        //typeof(AbpBackgroundJobsModule)
-        )]
+    )]
     public class DocsDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
@@ -15,7 +13,6 @@ namespace Volo.Docs.Admin
 {
     [DependsOn(
         typeof(DocsAdminHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule),
         typeof(DocsAdminApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule)
         )]

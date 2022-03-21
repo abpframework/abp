@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
-using Volo.Docs.Admin.Notification;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Localization;
@@ -16,27 +16,23 @@ namespace Volo.Docs.Admin
         private readonly IDocumentRepository _documentRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly IDocumentFullSearch _elasticSearchService;
-        private readonly IUiNotificationClient _notificationClient;
         private readonly IStringLocalizer<DocsResource> _localizer;
 
         public ProjectIndexingBackgroundJob(
             IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
             IDocumentFullSearch elasticSearchService,
-            IUiNotificationClient notificationClient,
             IStringLocalizer<DocsResource> localizer)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
             _elasticSearchService = elasticSearchService;
-            _notificationClient = notificationClient;
             _localizer = localizer;
         }
 
-        public override async Task ExecuteAsync(ProjectIndexBackgroundWorkerArgs args)
+        public async override Task ExecuteAsync(ProjectIndexBackgroundWorkerArgs args)
         {
             var project = await ReindexProjectAsync(args.ProjectId);
-            await _notificationClient.SendNotification(_localizer.GetString("SuccessfullyReIndexProject", project.Name));
         }
 
         private async Task<Project> ReindexProjectAsync(Guid projectId)
@@ -47,35 +43,18 @@ namespace Volo.Docs.Admin
                 throw new Exception("Cannot find the project with the Id " + projectId);
             }
 
-            var docs = await _documentRepository.GetListByProjectId(project.Id);
+            var docs = (await _documentRepository.GetListByProjectId(project.Id))
+                .Where(doc => doc.FileName != project.NavigationDocumentName && doc.FileName != project.ParametersDocumentName)
+                .ToList();
+
             await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
 
-            foreach (var doc in docs)
+            if (docs.Any())
             {
-                if (ShouldIgnoreDocument(doc, project))
-                {
-                    continue;
-                }
-
-                await _elasticSearchService.AddOrUpdateAsync(doc);
+                await _elasticSearchService.AddOrUpdateManyAsync(docs);
             }
 
             return project;
-        }
-
-        private static bool ShouldIgnoreDocument(Document doc, Project project)
-        {
-            if (doc.FileName == project.NavigationDocumentName)
-            {
-                return true;
-            }
-
-            if (doc.FileName == project.ParametersDocumentName)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         public class ProjectIndexBackgroundWorkerArgs

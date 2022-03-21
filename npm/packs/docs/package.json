@@ -9,7 +9,6 @@
     "@abp/clipboard": "~5.2.0-rc.1",
     "@abp/malihu-custom-scrollbar-plugin": "~5.2.0-rc.1",
     "@abp/popper.js": "~5.2.0-rc.1",
-	"@abp/signalr": "~5.2.0-rc.1",
     "@abp/prismjs": "~5.2.0-rc.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"

@@ -10,11 +10,11 @@ using VoloDocs.EntityFrameworkCore;
 
 #nullable disable
 
-namespace VoloDocs.EntityFrameworkCore.Migrations
+namespace Migrations
 {
     [DbContext(typeof(VoloDocsDbContext))]
-    [Migration("20211201062931_Added_IsActive_To_AbpUsers")]
-    partial class Added_IsActive_To_AbpUsers
+    [Migration("20220321031840_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -154,9 +154,7 @@ $(function () {
                 if (accepted) {
                     volo.docs.admin.projectsAdmin.reindexAll()
                         .then(function () {
-                            abp.message.success(
-                                l('SuccessfullyReIndexAllProject')
-                            );
+                            abp.notify.info(l('ReindexStarted'));
                         });
                 }
             });

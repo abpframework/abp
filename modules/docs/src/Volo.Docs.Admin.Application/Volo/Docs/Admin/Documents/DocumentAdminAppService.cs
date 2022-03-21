@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
-using Volo.Abp;
-using Volo.Abp.Uow;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Caching;
 using Volo.Docs.Caching;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Localization;
 using Volo.Docs.Projects;
-using Volo.Extensions;
 
 namespace Volo.Docs.Admin.Documents
 {
@@ -23,27 +19,27 @@ namespace Volo.Docs.Admin.Documents
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IDocumentRepository _documentRepository;
-        private readonly IDocumentSourceFactory _documentStoreFactory;
         private readonly IDistributedCache<DocumentUpdateInfo> _documentUpdateCache;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDistributedCache<LanguageConfig> _languageCache;
-        private readonly IDocumentFullSearch _elasticSearchService;
+        private readonly IDocumentFullSearch _documentFullSearch;
+        private readonly IBackgroundJobManager _backgroundJobManager;
 
         public DocumentAdminAppService(IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
-            IDocumentSourceFactory documentStoreFactory,
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
             IDistributedCache<List<VersionInfo>> versionCache,
             IDistributedCache<LanguageConfig> languageCache,
-            IDocumentFullSearch elasticSearchService)
+            IDocumentFullSearch documentFullSearch,
+            IBackgroundJobManager backgroundJobManager)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
-            _documentStoreFactory = documentStoreFactory;
             _documentUpdateCache = documentUpdateCache;
             _versionCache = versionCache;
             _languageCache = languageCache;
-            _elasticSearchService = elasticSearchService;
+            _documentFullSearch = documentFullSearch;
+            _backgroundJobManager = backgroundJobManager;
 
             LocalizationResource = typeof(DocsResource);
         }
@@ -78,69 +74,12 @@ namespace Volo.Docs.Admin.Documents
 
         public async Task PullAllAsync(PullAllDocumentInput input)
         {
-            var project = await _projectRepository.GetAsync(input.ProjectId);
-
-            var navigationDocument = await GetDocumentAsync(
-                project,
-                project.NavigationDocumentName,
-                input.LanguageCode,
-                input.Version
-            );
-
-            if (!DocsJsonSerializerHelper.TryDeserialize<NavigationNode>(navigationDocument.Content, out var navigation))
-            {
-                throw new UserFriendlyException($"Cannot validate navigation file '{project.NavigationDocumentName}' for the project {project.Name}.");
-            }
-
-            var leafs = navigation.Items.GetAllNodes(x => x.Items)
-                .Where(x => x.IsLeaf && !x.Path.IsNullOrWhiteSpace())
-                .ToList();
-
-            var source = _documentStoreFactory.Create(project.DocumentStoreType);
-
-            var documents = new List<Document>();
-            foreach (var leaf in leafs)
-            {
-                if (leaf.Path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                    leaf.Path.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
-                    (leaf.Path.StartsWith("{{") && leaf.Path.EndsWith("}}")))
-                {
-                    continue;
-                }
-
-                try
-                {
-                    var sourceDocument = await source.GetDocumentAsync(project, leaf.Path, input.LanguageCode, input.Version);
-                    documents.Add(sourceDocument);
-                }
-                catch (Exception e)
-                {
-                    Logger.LogException(e);
-                }
-            }
-
-            foreach (var document in documents)
-            {
-                await _documentRepository.DeleteAsync(document.ProjectId, document.Name,
-                    document.LanguageCode,
-                    document.Version);
-
-                await _documentRepository.InsertAsync(document, true);
-                await UpdateDocumentUpdateInfoCache(document);
-            }
+            await _backgroundJobManager.EnqueueAsync(new PullAllBackgroundJob.PullBackgroundWorkerArgs(input.ProjectId, input.LanguageCode, input.Version));
         }
 
         public async Task PullAsync(PullDocumentInput input)
         {
-            var project = await _projectRepository.GetAsync(input.ProjectId);
-
-            var source = _documentStoreFactory.Create(project.DocumentStoreType);
-            var sourceDocument = await source.GetDocumentAsync(project, input.Name, input.LanguageCode, input.Version);
-
-            await _documentRepository.DeleteAsync(sourceDocument.ProjectId, sourceDocument.Name,
-                sourceDocument.LanguageCode, sourceDocument.Version);
-            await _documentRepository.InsertAsync(sourceDocument, true);
-            await UpdateDocumentUpdateInfoCache(sourceDocument);
+            await _backgroundJobManager.EnqueueAsync(new PullAllBackgroundJob.PullBackgroundWorkerArgs(input.ProjectId, input.LanguageCode, input.Version, input.Name));
         }
 
         public async Task<PagedResultDto<DocumentDto>> GetAllAsync(GetAllInput input)
@@ -210,34 +149,11 @@ namespace Volo.Docs.Admin.Documents
 
         public async Task ReindexAsync(Guid documentId)
         {
-            _elasticSearchService.ValidateElasticSearchEnabled();
+            _documentFullSearch.ValidateElasticSearchEnabled();
 
-            await _elasticSearchService.DeleteAsync(documentId);
+            await _documentFullSearch.DeleteAsync(documentId);
             var document = await _documentRepository.GetAsync(documentId);
-            await _elasticSearchService.AddOrUpdateAsync(document);
-        }
-
-        private async Task UpdateDocumentUpdateInfoCache(Document document)
-        {
-            var cacheKey = $"DocumentUpdateInfo{document.ProjectId}#{document.Name}#{document.LanguageCode}#{document.Version}";
-            await _documentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
-            {
-                Name = document.Name,
-                CreationTime = document.CreationTime,
-                LastUpdatedTime = document.LastUpdatedTime
-            });
-        }
-
-        private async Task<Document> GetDocumentAsync(
-            Project project,
-            string documentName,
-            string languageCode,
-            string version)
-        {
-            version = string.IsNullOrWhiteSpace(version) ? project.LatestVersionBranchName : version;
-            var source = _documentStoreFactory.Create(project.DocumentStoreType);
-            var document = await source.GetDocumentAsync(project, documentName, languageCode, version);
-            return document;
+            await _documentFullSearch.AddOrUpdateAsync(document);
         }
     }
 }
