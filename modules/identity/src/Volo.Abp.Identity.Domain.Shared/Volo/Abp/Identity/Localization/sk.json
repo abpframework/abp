@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Vaše heslo bolo úspešne zmenené.",
     "PersonalSettingsSavedMessage": "Vaše osobné nastavenia boli úspešne uložené.",
     "Volo.Abp.Identity:DefaultError": "Došlo k neznámej chybe.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Zlyhanie v dôsledku súbežných akcií, objekt už bol upravený.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Optimistická kontrola súbežnosti zlyhala. Entita, na ktorej pracujete, bola upravená iným používateľom. Zahoďte zmeny a skúste to znova.",
     "Volo.Abp.Identity:DuplicateEmail": "Email '{0}' sa už používa.",
     "Volo.Abp.Identity:DuplicateRoleName": "Názov roly '{0}' sa už používa.",
     "Volo.Abp.Identity:DuplicateUserName": "Užívateľské meno '{0}' sa už používa.",

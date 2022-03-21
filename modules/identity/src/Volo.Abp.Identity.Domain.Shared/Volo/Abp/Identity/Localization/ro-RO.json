@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Parola dumneavoastră a fost schimbată cu succes.",
     "PersonalSettingsSavedMessage": "Setările personale ale dumneavoastră au fost salvate cu succes.",
     "Volo.Abp.Identity:DefaultError": "A intervenit o eroare neaşteptată.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Eşec concurenţial optimist, obiectul a fost modificat.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Verificarea optimistă a concurenței a eșuat. Entitatea la care lucrați a fost modificată de un alt utilizator. Vă rugăm să renunțați la modificări și să încercați din nou.",
     "Volo.Abp.Identity:DuplicateEmail": "Emailul '{0}' este deja luat.",
     "Volo.Abp.Identity:DuplicateRoleName": "Numele de rol '{0}' este deja luat.",
     "Volo.Abp.Identity:DuplicateUserName": "Numele de utilizator '{0}' este deja luat.",

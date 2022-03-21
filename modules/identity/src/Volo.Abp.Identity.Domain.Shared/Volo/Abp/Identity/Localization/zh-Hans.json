@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "你已成功更改密码.",
     "PersonalSettingsSavedMessage": "你的个人设置保存成功.",
     "Volo.Abp.Identity:DefaultError": "发生了一个未知错误.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "对象已被修改,乐观并发失败.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "乐观并发检查失败。 您正在处理的实体已被其他用户修改。 请放弃您的更改，然后重试。",
     "Volo.Abp.Identity:DuplicateEmail": "邮箱 '{0}' 已存在.",
     "Volo.Abp.Identity:DuplicateRoleName": "角色名 '{0}' 已存在.",
     "Volo.Abp.Identity:DuplicateUserName": "用户名 '{0}' 已存在.",
