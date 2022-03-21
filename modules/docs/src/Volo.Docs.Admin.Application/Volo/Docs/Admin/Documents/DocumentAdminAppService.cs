@@ -74,12 +74,12 @@ namespace Volo.Docs.Admin.Documents
 
         public async Task PullAllAsync(PullAllDocumentInput input)
         {
-            await _backgroundJobManager.EnqueueAsync(new PullAllBackgroundJob.PullBackgroundWorkerArgs(input.ProjectId, input.LanguageCode, input.Version));
+            await _backgroundJobManager.EnqueueAsync(new PullAllBackgroundJob.PullAllBackgroundWorkerArgs(input.ProjectId, input.LanguageCode, input.Version));
         }
 
         public async Task PullAsync(PullDocumentInput input)
         {
-            await _backgroundJobManager.EnqueueAsync(new PullAllBackgroundJob.PullBackgroundWorkerArgs(input.ProjectId, input.LanguageCode, input.Version, input.Name));
+            await _backgroundJobManager.EnqueueAsync(new PullBackgroundJob.PullBackgroundWorkerArgs(input.ProjectId, input.LanguageCode, input.Version, input.Name));
         }
 
         public async Task<PagedResultDto<DocumentDto>> GetAllAsync(GetAllInput input)

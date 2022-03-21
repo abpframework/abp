@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Caching;
@@ -14,14 +15,16 @@ using Volo.Extensions;
 
 namespace Volo.Docs.Admin;
 
-public class PullAllBackgroundJob : AsyncBackgroundJob<PullAllBackgroundJob.PullBackgroundWorkerArgs>, ITransientDependency
+public abstract class PullBackgroundJobBase<TArgs> : AsyncBackgroundJob<TArgs>, ITransientDependency
 {
+    public ILogger<AsyncBackgroundJob<PullBackgroundJobBase<TArgs>>> Logger { get; set; }
+
     private readonly IProjectRepository _projectRepository;
     private readonly IDocumentRepository _documentRepository;
     private readonly IDocumentSourceFactory _documentStoreFactory;
     private readonly IDistributedCache<DocumentUpdateInfo> _documentUpdateCache;
 
-    public PullAllBackgroundJob(
+    public PullBackgroundJobBase(
         IProjectRepository projectRepository,
         IDocumentRepository documentRepository,
         IDocumentSourceFactory documentStoreFactory,
@@ -31,22 +34,11 @@ public class PullAllBackgroundJob : AsyncBackgroundJob<PullAllBackgroundJob.Pull
         _documentRepository = documentRepository;
         _documentStoreFactory = documentStoreFactory;
         _documentUpdateCache = documentUpdateCache;
+
+        Logger = NullLogger<AsyncBackgroundJob<PullBackgroundJobBase<TArgs>>>.Instance;
     }
 
-    public async override Task ExecuteAsync(PullBackgroundWorkerArgs args)
-    {
-        if (args.Name != null)
-        {
-            await PullAsync(args);
-
-        }
-        else
-        {
-            await PullAllAsync(args);
-        }
-    }
-
-    private async Task PullAsync(PullBackgroundWorkerArgs args)
+    protected async Task PullAsync(PullBackgroundJob.PullBackgroundWorkerArgs args)
     {
         var project = await _projectRepository.GetAsync(args.ProjectId);
 
@@ -58,7 +50,7 @@ public class PullAllBackgroundJob : AsyncBackgroundJob<PullAllBackgroundJob.Pull
         await UpdateDocumentUpdateInfoCache(sourceDocument);
     }
 
-    private async Task PullAllAsync(PullBackgroundWorkerArgs args)
+    protected async Task PullAllAsync(PullAllBackgroundJob.PullAllBackgroundWorkerArgs args)
     {
         var project = await _projectRepository.GetAsync(args.ProjectId);
 
@@ -133,6 +125,57 @@ public class PullAllBackgroundJob : AsyncBackgroundJob<PullAllBackgroundJob.Pull
         var source = _documentStoreFactory.Create(project.DocumentStoreType);
         var document = await source.GetDocumentAsync(project, documentName, languageCode, version);
         return document;
+    }
+
+}
+
+public class PullAllBackgroundJob : PullBackgroundJobBase<PullAllBackgroundJob.PullAllBackgroundWorkerArgs>
+{
+    public PullAllBackgroundJob(
+        IProjectRepository projectRepository,
+        IDocumentRepository documentRepository,
+        IDocumentSourceFactory documentStoreFactory,
+        IDistributedCache<DocumentUpdateInfo> documentUpdateCache)
+        : base(projectRepository, documentRepository, documentStoreFactory, documentUpdateCache)
+    {
+    }
+
+    public async override Task ExecuteAsync(PullAllBackgroundWorkerArgs args)
+    {
+        await PullAllAsync(args);
+    }
+
+    public class PullAllBackgroundWorkerArgs
+    {
+        public Guid ProjectId { get; set; }
+
+        public string LanguageCode { get; set; }
+
+        public string Version { get; set; }
+
+        public PullAllBackgroundWorkerArgs(Guid projectId, string languageCode, string version)
+        {
+            ProjectId = projectId;
+            LanguageCode = languageCode;
+            Version = version;
+        }
+    }
+}
+
+public class PullBackgroundJob : PullBackgroundJobBase<PullBackgroundJob.PullBackgroundWorkerArgs>
+{
+    public PullBackgroundJob(
+        IProjectRepository projectRepository,
+        IDocumentRepository documentRepository,
+        IDocumentSourceFactory documentStoreFactory,
+        IDistributedCache<DocumentUpdateInfo> documentUpdateCache)
+        : base(projectRepository, documentRepository, documentStoreFactory, documentUpdateCache)
+    {
+    }
+
+    public async override Task ExecuteAsync(PullBackgroundWorkerArgs args)
+    {
+        await PullAsync(args);
     }
 
     public class PullBackgroundWorkerArgs
