@@ -7,6 +7,5 @@ module.exports = {
         "@libs"
     ],
     mappings: {
-
     }
 }
