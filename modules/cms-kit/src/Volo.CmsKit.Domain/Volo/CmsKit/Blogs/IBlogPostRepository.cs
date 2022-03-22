@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs;
 
@@ -25,4 +26,6 @@ public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
     Task<bool> SlugExistsAsync(Guid blogId, string slug, CancellationToken cancellationToken = default);
 
     Task<BlogPost> GetBySlugAsync(Guid blogId, string slug, CancellationToken cancellationToken = default);
+
+    Task<List<CmsUser>> GetAuthorsHasBlogPosts(CancellationToken cancellationToken = default);
 }

@@ -8,12 +8,40 @@
 @model IndexModel
 
 @section styles{
-    <abp-style src="/Pages/Public/CmsKit/Blogs/index.css" />
+    <abp-style src="/Pages/Public/CmsKit/Blogs/index.css"/>
 }
+
+@section scripts {
+    <abp-script-bundle>
+        <abp-script src="/Pages/Public/CmsKit/Blogs/index.js"/>
+    </abp-script-bundle>
+}
+
 @{
     const string dummyImageSource = "https://dummyimage.com/320x180/a3a3a3/fff.png";
 }
 
+<abp-row id="blogs-filter-area">
+    <abp-column size="_4">
+        <div class="mb-3">
+            <label class="form-label" asp-for="@Model.Authors"></label>
+            <select id="AuthorSelect" class="form-control">
+                <option value="">@L["SelectAnAuthor"]</option>
+                @foreach (var author in Model.Authors)
+                {
+                    if (author.Id == Model.AuthorId)
+                    {
+                        <option value="@author.Id" selected>@author.Name @author.Surname</option>
+                    }
+                    else
+                    {
+                        <option value="@author.Id">@author.Name @author.Surname</option>
+                    }
+                }
+            </select>
+        </div>
+    </abp-column>
+</abp-row>
 <abp-row id="blogs-container">
     @foreach (var blog in Model.Blogs.Items)
     {
@@ -21,16 +49,16 @@
             <abp-card>
                 @if (blog.CoverImageMediaId != null)
                 {
-                    <img src="/api/cms-kit/media/@blog.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
+                    <img src="/api/cms-kit/media/@blog.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'"/>
                 }
                 else
                 {
-                    <img src="@(dummyImageSource)?text=@blog.Title" class="card-img-top" />
+                    <img src="@(dummyImageSource)?text=@blog.Title" class="card-img-top"/>
                 }
                 <abp-card-body class="p-4">
                     <h5>@blog.Title</h5>
                     <p class="mb-2">
-                        <span class="font-weight-bold">@@@blog.Author?.UserName</span>
+                        <span class="font-weight-bold author-name-span" data-author-id="@blog.Author.Id">@@@blog.Author?.UserName</span>
                         <small style="opacity:.65;">@blog.CreationTime</small>
                     </p>
                     <p style="min-height: 60px;">@blog.ShortDescription</p>
@@ -42,11 +70,10 @@
                 </abp-card-body>
             </abp-card>
         </abp-column>
-
     }
 </abp-row>
 <abp-row>
     <abp-column>
-        <abp-paginator model="Model.PagerModel" />
+        <abp-paginator model="Model.PagerModel"/>
     </abp-column>
 </abp-row>

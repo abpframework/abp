@@ -97,4 +97,10 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
         return await (await GetDbSetAsync()).AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug,
             GetCancellationToken(cancellationToken));
     }
+
+    public async Task<List<CmsUser>> GetAuthorsHasBlogPosts(CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbContextAsync()).BlogPosts.Select(x => x.Author).Distinct()
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
 }
