@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "你已成功更改密碼.",
     "PersonalSettingsSavedMessage": "你的個人設置保存成功.",
     "Volo.Abp.Identity:DefaultError": "發生了一個未知錯誤.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "樂觀並發檢查失敗。 您正在處理的實體已被其他用戶修改。 請放棄您的更改，然後重試。",
+    "Volo.Abp.Identity:ConcurrencyFailure": "樂觀並行控制檢查失敗. 你正在處理的對象已被其他用戶修改. 請放棄你的更改, 然後重試.",
     "Volo.Abp.Identity:DuplicateEmail": "電子信箱 '{0}' 已存在.",
     "Volo.Abp.Identity:DuplicateRoleName": "角色名 '{0}' 已存在.",
     "Volo.Abp.Identity:DuplicateUserName": "使用者名稱 '{0}' 已存在.",
