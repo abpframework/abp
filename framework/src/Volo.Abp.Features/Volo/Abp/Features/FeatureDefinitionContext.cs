@@ -18,7 +18,7 @@ public class FeatureDefinitionContext : IFeatureDefinitionContext
 
         if (Groups.ContainsKey(name))
         {
-            throw new AbpException($"There is already an existing permission group with name: {name}");
+            throw new AbpException($"There is already an existing feature group with name: {name}");
         }
 
         return Groups[name] = new FeatureGroupDefinition(name, displayName);

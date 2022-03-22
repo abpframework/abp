@@ -16,7 +16,7 @@ Docs module is an application module and does not offer any hosting solution. Yo
 
 When you use GitHub to store your docs, Docs Module supports versioning. If you have multiple versions for your docs, there will be a combo-box on the UI to switch between versions. If you choose file system to store your docs, it does not support multiple versions. 
 
-[The documents](docs.abp.io) for ABP framework is also using this module.
+[The documents](https://docs.abp.io/) for ABP framework is also using this module.
 
 > Docs module follows the [module architecture best practices](../Best-Practices/Module-Architecture.md) guide.
 
