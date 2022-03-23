@@ -24,9 +24,13 @@ public interface ITagRepository : IBasicRepository<Tag, Guid>
         [NotNull] string name,
         CancellationToken cancellationToken = default);
 
-    Task<List<Tag>> GetListAsync(string filter);
+    Task<List<Tag>> GetListAsync(
+        string filter,
+        CancellationToken cancellationToken = default);
 
-    Task<int> GetCountAsync(string filter);
+    Task<int> GetCountAsync(
+        string filter,
+        CancellationToken cancellationToken = default);
 
     Task<List<Tag>> GetAllRelatedTagsAsync(
         [NotNull] string entityType,

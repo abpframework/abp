@@ -74,7 +74,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ITenantManagementDbContex
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)
-            ).CountAsync(cancellationToken: cancellationToken);
+            ).CountAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 
     [Obsolete("Use WithDetailsAsync method.")]

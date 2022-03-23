@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -15,22 +16,22 @@ public class EfCoreBlogFeatureRepository : EfCoreRepository<CmsKitDbContext, Blo
     {
     }
 
-    public Task<BlogFeature> FindAsync(Guid blogId, string featureName)
+    public Task<BlogFeature> FindAsync(Guid blogId, string featureName, CancellationToken cancellationToken = default)
     {
-        return base.FindAsync(x => x.BlogId == blogId && x.FeatureName == featureName);
+        return base.FindAsync(x => x.BlogId == blogId && x.FeatureName == featureName, cancellationToken: cancellationToken);
     }
 
-    public async Task<List<BlogFeature>> GetListAsync(Guid blogId)
+    public async Task<List<BlogFeature>> GetListAsync(Guid blogId, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync())
                         .Where(x => x.BlogId == blogId)
-                        .ToListAsync();
+                        .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<BlogFeature>> GetListAsync(Guid blogId, List<string> featureNames)
+    public async Task<List<BlogFeature>> GetListAsync(Guid blogId, List<string> featureNames, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync())
                     .Where(x => x.BlogId == blogId && featureNames.Contains(x.FeatureName))
-                    .ToListAsync();
+                    .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }
