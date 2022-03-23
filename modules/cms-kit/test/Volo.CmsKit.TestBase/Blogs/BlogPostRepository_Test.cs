@@ -145,4 +145,14 @@ public abstract class BlogPostRepository_Test<TStartupModule> : CmsKitTestBase<T
         result.ShouldNotBeEmpty();
         result.Count.ShouldBe(2);
     }
+
+    [Fact]
+    public async Task GetAuthorsHasBlogPosts_ShouldWorkProperly()
+    {
+        var authors = await blogPostRepository.GetAuthorsHasBlogPosts();
+
+        authors.ShouldNotBeNull();
+        authors.ShouldNotBeEmpty();
+        authors.ShouldContain(x => x.Id == testData.User1Id);
+    }
 }
