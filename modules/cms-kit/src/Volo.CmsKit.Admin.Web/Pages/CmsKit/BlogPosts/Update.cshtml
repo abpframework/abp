@@ -48,13 +48,17 @@
     <abp-card-body>
 
         <div class="mb-3">
-            @if (Model.ViewModel.CoverImageMediaId != null)
-            {
-                <img height="120" src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId" />
-                <br />
-            }
-            <label class="form-label" >@L["CoverImage"]</label>
-            <input type="file" id="BlogPostCoverImage" class="form-control" />
+            <div id="CurrentCoverImageArea">
+                @if (Model.ViewModel.CoverImageMediaId != null)
+                {
+                    <img height="120" src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId"/>
+                    <br/>
+                    <abp-button button-type="Link" type="button" text="@L["RemoveCoverImage"].Value" id="button-remove-cover-image"/>
+                    <br/>
+                }
+            </div>
+            <label class="form-label">@L["CoverImage"]</label>
+            <input type="file" id="BlogPostCoverImage" class="form-control"/>
         </div>
 
         <abp-dynamic-form abp-model="ViewModel" asp-page="/CmsKit/BlogPosts/Update" id="form-blog-post-update">

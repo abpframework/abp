@@ -10,6 +10,7 @@ $(function () {
     var $blogPostIdInput = $('#Id');
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
+    var $buttonRemoveCoverImage = $('#button-remove-cover-image');
 
     var UPPY_FILE_ID = "uppy-upload-file";
 
@@ -152,7 +153,6 @@ $(function () {
         }
     }
 
-
     // -----------------------------------
     var fileUploadUri = "/api/cms-kit-admin/media/blogpost";
     var fileUriPrefix = "/api/cms-kit/media/";
@@ -225,4 +225,21 @@ $(function () {
             }
         });
     }
+
+    $buttonRemoveCoverImage.on('click', function () {
+        abp.message.confirm(
+            l('RemoveCoverImageConfirmationMessage'),
+            function (isConfirmed) {
+                if (isConfirmed) {
+                    debugger;
+                    volo.cmsKit.admin.blogs.blogPostAdmin
+                        .removeCoverImage($blogPostIdInput.val())
+                        .then(function () {
+                            $coverImage.val(null);
+                            $('#CurrentCoverImageArea').remove();
+                        });
+                }
+            }
+        );
+    });
 });

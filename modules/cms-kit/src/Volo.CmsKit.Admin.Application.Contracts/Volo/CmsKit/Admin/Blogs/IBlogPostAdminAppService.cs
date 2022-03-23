@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
 namespace Volo.CmsKit.Admin.Blogs;
@@ -12,4 +13,5 @@ public interface IBlogPostAdminAppService
         CreateBlogPostDto,
         UpdateBlogPostDto>
 {
+    Task RemoveCoverImageAsync(Guid id);
 }
