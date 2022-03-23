@@ -39,8 +39,8 @@ public class BlogPostPublicController : CmsKitPublicControllerBase, IBlogPostPub
     }
 
     [HttpGet]
-    public virtual Task<List<CmsUserDto>> GetAuthorsHasBlogPosts()
+    public virtual Task<List<CmsUserDto>> GetAuthorsHasBlogPostsAsync()
     {
-        return BlogPostPublicAppService.GetAuthorsHasBlogPosts();
+        return BlogPostPublicAppService.GetAuthorsHasBlogPostsAsync();
     }
 }

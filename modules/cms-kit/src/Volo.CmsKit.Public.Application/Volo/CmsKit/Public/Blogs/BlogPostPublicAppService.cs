@@ -46,7 +46,7 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
             ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
     }
 
-    public virtual async Task<List<CmsUserDto>> GetAuthorsHasBlogPosts()
+    public virtual async Task<List<CmsUserDto>> GetAuthorsHasBlogPostsAsync()
     {
         var authors = await BlogPostRepository.GetAuthorsHasBlogPosts();
         return ObjectMapper.Map<List<CmsUser>, List<CmsUserDto>>(authors);

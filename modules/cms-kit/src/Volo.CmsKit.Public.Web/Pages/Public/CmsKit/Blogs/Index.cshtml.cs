@@ -49,6 +49,6 @@ public class IndexModel : CmsKitPublicPageModelBase
                 AuthorId = AuthorId
             });
         
-        Authors = await BlogPostPublicAppService.GetAuthorsHasBlogPosts();
+        Authors = await BlogPostPublicAppService.GetAuthorsHasBlogPostsAsync();
     }
 }

@@ -13,5 +13,5 @@ public interface IBlogPostPublicAppService : IApplicationService
 
     Task<BlogPostPublicDto> GetAsync([NotNull] string blogSlug, [NotNull] string blogPostSlug);
     
-    Task<List<CmsUserDto>> GetAuthorsHasBlogPosts();
+    Task<List<CmsUserDto>> GetAuthorsHasBlogPostsAsync();
 }

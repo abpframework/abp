@@ -35,8 +35,8 @@ public partial class BlogPostPublicClientProxy : ClientProxyBase<IBlogPostPublic
         });
     }
 
-    public virtual async Task<List<CmsUserDto>> GetAuthorsHasBlogPosts()
+    public virtual async Task<List<CmsUserDto>> GetAuthorsHasBlogPostsAsync()
     {
-        return await RequestAsync<List<CmsUserDto>>(nameof(GetAuthorsHasBlogPosts));
+        return await RequestAsync<List<CmsUserDto>>(nameof(GetAuthorsHasBlogPostsAsync));
     }
 }
