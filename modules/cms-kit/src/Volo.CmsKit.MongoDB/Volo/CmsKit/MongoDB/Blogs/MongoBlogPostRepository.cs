@@ -104,7 +104,19 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
 
     public async Task<List<CmsUser>> GetAuthorsHasBlogPosts(CancellationToken cancellationToken = default)
     {
-        var queryable = (await GetQueryableAsync()).Select(x => x.Author).Distinct();
+        var blogPostQueryable = (await GetQueryableAsync());
+
+        var usersQueryable = (await GetDbContextAsync()).Collection<CmsUser>().AsQueryable();
+
+        var queryable = blogPostQueryable
+                        .Join(
+                            usersQueryable,
+                            o => o.AuthorId,
+                            i => i.Id,
+                            (blogPost, user) => new { blogPost, user })
+                        .Select(s => s.user)
+                        .Distinct();
+
         return await AsyncExecuter.ToListAsync(queryable, GetCancellationToken(cancellationToken));
     }
 }
