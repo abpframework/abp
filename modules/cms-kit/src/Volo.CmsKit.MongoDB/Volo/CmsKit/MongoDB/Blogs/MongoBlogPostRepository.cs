@@ -42,6 +42,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
     public virtual async Task<int> GetCountAsync(
         string filter = null,
         Guid? blogId = null,
+        Guid? authorId = null,
         CancellationToken cancellationToken = default)
     {
         var token = GetCancellationToken(cancellationToken);
@@ -49,6 +50,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         return await (await GetMongoQueryableAsync(token))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(blogId.HasValue, x => x.BlogId == blogId)
+            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(authorId.HasValue, x => x.AuthorId == authorId)
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 

@@ -12,6 +12,7 @@ public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
     Task<int> GetCountAsync(
         string filter = null,
         Guid? blogId = null,
+        Guid? authorId = null,
         CancellationToken cancellationToken = default);
 
     Task<List<BlogPost>> GetListAsync(

@@ -41,10 +41,12 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
     public virtual async Task<int> GetCountAsync(
         string filter = null,
         Guid? blogId = null,
+        Guid? authorId = null,
         CancellationToken cancellationToken = default)
     {
         var queryable = (await GetDbSetAsync())
            .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
+           .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
            .WhereIf(!string.IsNullOrEmpty(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
 
         var count = await queryable.CountAsync(GetCancellationToken(cancellationToken));

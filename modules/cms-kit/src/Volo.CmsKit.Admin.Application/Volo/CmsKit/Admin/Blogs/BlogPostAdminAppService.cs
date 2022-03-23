@@ -92,7 +92,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         var blogPosts = await BlogPostRepository.GetListAsync(input.Filter, input.BlogId, input.AuthorId,
             input.MaxResultCount, input.SkipCount, input.Sorting);
 
-        var count = await BlogPostRepository.GetCountAsync(input.Filter);
+        var count = await BlogPostRepository.GetCountAsync(input.Filter, input.BlogId, input.AuthorId);
 
         var dtoList = blogPosts.Select(x =>
         {
