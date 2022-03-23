@@ -39,6 +39,7 @@ public class BlogPostPublicController : CmsKitPublicControllerBase, IBlogPostPub
     }
 
     [HttpGet]
+    [Route("authors")
     public virtual Task<List<CmsUserDto>> GetAuthorsHasBlogPosts()
     {
         return BlogPostPublicAppService.GetAuthorsHasBlogPosts();
