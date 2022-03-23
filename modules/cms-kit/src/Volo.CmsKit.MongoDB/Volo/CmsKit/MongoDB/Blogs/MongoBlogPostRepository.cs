@@ -44,12 +44,12 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         Guid? blogId = null,
         CancellationToken cancellationToken = default)
     {
-        var token = GetCancellationToken(cancellationToken);
+        cancellationToken = GetCancellationToken(cancellationToken);
 
-        return await (await GetMongoQueryableAsync(token))
+        return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(blogId.HasValue, x => x.BlogId == blogId)
-            .CountAsync(GetCancellationToken(cancellationToken));
+            .CountAsync(cancellationToken);
     }
 
     public virtual async Task<List<BlogPost>> GetListAsync(
@@ -60,8 +60,8 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         string sorting = null,
         CancellationToken cancellationToken = default)
     {
-        var token = GetCancellationToken(cancellationToken);
-        var dbContext = await GetDbContextAsync(token);
+        cancellationToken = GetCancellationToken(cancellationToken);
+        var dbContext = await GetDbContextAsync(cancellationToken);
         var blogPostQueryable = await GetQueryableAsync();
 
         var usersQueryable = dbContext.Collection<CmsUser>().AsQueryable();
@@ -81,7 +81,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
                                 .Skip(skipCount)
                                 .Take(maxResultCount);
 
-        var combinedResult = await AsyncExecuter.ToListAsync(combinedQueryable, GetCancellationToken(cancellationToken));
+        var combinedResult = await AsyncExecuter.ToListAsync(combinedQueryable, cancellationToken);
 
         return combinedResult.Select(s =>
                                     {
@@ -95,8 +95,8 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
     {
         Check.NotNullOrEmpty(slug, nameof(slug));
 
-        var token = GetCancellationToken(cancellationToken);
-        var queryable = await GetMongoQueryableAsync(token);
-        return await queryable.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, token);
+        cancellationToken = GetCancellationToken(cancellationToken);
+        var queryable = await GetMongoQueryableAsync(cancellationToken);
+        return await queryable.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, cancellationToken);
     }
 }
