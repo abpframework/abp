@@ -26,7 +26,7 @@ public class BlogPostPublicAppService_Tests : CmsKitApplicationTestBase
     [Fact]
     public async Task GetListAsync_ShouldWorkProperly_WithExistingBlog()
     {
-        var blogPosts = await blogPostAppService.GetListAsync(cmsKitTestData.BlogSlug, new PagedAndSortedResultRequestDto { MaxResultCount = 2 });
+        var blogPosts = await blogPostAppService.GetListAsync(cmsKitTestData.BlogSlug, new BlogPostGetListInput { MaxResultCount = 2 });
 
         blogPosts.ShouldNotBeNull();
         blogPosts.TotalCount.ShouldBe(2);
