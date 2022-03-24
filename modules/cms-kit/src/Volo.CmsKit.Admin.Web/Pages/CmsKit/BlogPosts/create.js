@@ -2,13 +2,20 @@ $(function () {
 
     var l = abp.localization.getResource("CmsKit");
 
+    var blogPostStatus = {
+        Draft: 0,
+        Published: 1
+    };
+    
     var $selectBlog = $('#BlogSelectionSelect');
     var $formCreate = $('#form-blog-post-create');
     var $title = $('#ViewModel_Title');
     var $shortDescription = $('#ViewModel_ShortDescription');
     var $coverImage = $('#ViewModel_CoverImageMediaId');
     var $url = $('#ViewModel_Slug');
+    var $status = $('#ViewModel_Status');
     var $buttonSubmit = $('#button-blog-post-create');
+    var $buttonPublish = $('#button-blog-post-publish');
     var $pageContentInput = $('#ViewModel_Content');
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
@@ -59,7 +66,21 @@ $(function () {
 
     $buttonSubmit.click(function (e) {
         e.preventDefault();
+        $status.val(blogPostStatus.Draft);
         submitCoverImage();
+    });
+
+    $buttonPublish.click(function (e) {
+        abp.message.confirm(
+            l('BlogPostPublishConfirmationMessage', $title.val()),
+            function (isConfirmed) {
+                if (isConfirmed) {
+                    e.preventDefault();
+                    $status.val(blogPostStatus.Published);
+                    submitCoverImage();
+                }
+            }
+        );
     });
 
     function submitEntityTags(blogPostId) {

@@ -85,6 +85,7 @@
     "Permission:BlogPostManagement.Create": "Create",
     "Permission:BlogPostManagement.Delete": "Delete",
     "Permission:BlogPostManagement.Update": "Update",
+    "Permission:BlogPostManagement.Publish": "Publish",
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Comment Management",
     "Permission:Comments.Delete": "Delete",
@@ -164,6 +165,12 @@
     "GlobalResources": "Global Resources",
     "Script": "Script",
     "Style": "Style",
-    "SavedSuccessfully": "Saved successfully"
+    "SavedSuccessfully": "Saved successfully",
+    "CmsKit.BlogPost.Status.0": "Draft",
+    "CmsKit.BlogPost.Status.1": "Published",
+    "BlogPostPublishConfirmationMessage": "Are you sure to publish the blog post \"{0}\"?",
+    "SuccessfullyPublished": "Successfully published!",
+    "Draft": "Draft",
+    "Publish": "Publish",
   }
 }

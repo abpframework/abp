@@ -43,6 +43,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         string filter = null,
         Guid? blogId = null,
         Guid? authorId = null,
+        BlogPostStatus? statusFilter = null,
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
@@ -51,14 +52,15 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(blogId.HasValue, x => x.BlogId == blogId)
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(authorId.HasValue, x => x.AuthorId == authorId)
+            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(statusFilter.HasValue, x => x.Status == statusFilter)
             .CountAsync(cancellationToken);
-
     }
 
     public virtual async Task<List<BlogPost>> GetListAsync(
         string filter = null,
         Guid? blogId = null,
         Guid? authorId = null,
+        BlogPostStatus? statusFilter = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string sorting = null,
@@ -73,7 +75,8 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         var queryable = blogPostQueryable
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
             .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
-            .WhereIf(authorId.HasValue, x => x.AuthorId == authorId);
+            .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
+            .WhereIf(statusFilter.HasValue, x => x.Status == statusFilter);
 
         queryable = queryable.OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(BlogPost.CreationTime)} desc" : sorting);
 

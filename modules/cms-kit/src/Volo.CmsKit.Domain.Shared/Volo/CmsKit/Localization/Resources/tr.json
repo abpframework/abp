@@ -85,6 +85,7 @@
     "Permission:BlogPostManagement.Create": "Oluşturma",
     "Permission:BlogPostManagement.Delete": "Silme",
     "Permission:BlogPostManagement.Update": "Güncelleme",
+    "Permission:BlogPostManagement.Publish": "Yayınlama",
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Yorum Yönetimi",
     "Permission:Comments.Delete": "Silmek",
@@ -163,6 +164,12 @@
     "GlobalResources": "Global Kaynaklar",
     "Script": "Script",
     "Style": "Style",
-    "SavedSuccessfully": "Başarıyla kaydedildi"
+    "SavedSuccessfully": "Başarıyla kaydedildi",
+    "CmsKit.BlogPost.Status.0": "Taslak",
+    "CmsKit.BlogPost.Status.1": "Yayınlandı",
+    "BlogPostPublishConfirmationMessage": "\"{0}\" başlıklı gönderiyi yayınlamak istediğinize emin misiniz?",
+    "SuccessfullyPublished": "Başarıyla yayınlandı",
+    "Draft": "Taslak olarak kaydet",
+    "Publish": "Yayınla",
   }
 }
