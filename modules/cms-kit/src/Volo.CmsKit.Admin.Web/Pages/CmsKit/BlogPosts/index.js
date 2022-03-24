@@ -55,6 +55,23 @@ $(function () {
                             }
                         },
                         {
+                            text: l('Draft'),
+                            visible: function(data) {
+                                return data?.status !== blogPostStatus.Draft && abp.auth.isGranted('CmsKit.BlogPosts.Update');
+                            },
+                            confirmMessage: function (data) {
+                                return l("BlogPostDraftConfirmationMessage", data.record.title)
+                            },
+                            action: function (data) {
+                                blogsService
+                                    .draft(data.record.id)
+                                    .then(function () {
+                                        dataTable.ajax.reload();
+                                        abp.notify.success(l('SuccessfullySaved'));
+                                    });
+                            }
+                        },
+                        {
                             text: l('Delete'),
                             visible: abp.auth.isGranted('CmsKit.BlogPosts.Delete'),
                             confirmMessage: function (data) {

@@ -171,5 +171,6 @@
     "SuccessfullyPublished": "Başarıyla yayınlandı",
     "Draft": "Taslak olarak kaydet",
     "Publish": "Yayınla",
+    "BlogPostDraftConfirmationMessage": "\"{0}\" başlıklı gönderiyi taslak haline getirmek istediğinize emin misiniz?"
   }
 }

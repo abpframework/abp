@@ -172,5 +172,6 @@
     "SuccessfullyPublished": "Successfully published!",
     "Draft": "Draft",
     "Publish": "Publish",
+    "BlogPostDraftConfirmationMessage": "Are you sure to set the blog post \"{0}\" as draft?"
   }
 }

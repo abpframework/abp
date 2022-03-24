@@ -399,6 +399,14 @@
       }, ajaxParams));
     };
 
+    volo.cmsKit.admin.blogs.blogPostAdmin.draft = function(id, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/draft/' + id + '',
+        type: 'POST',
+        dataType: null
+      }, ajaxParams));
+    };
+
     volo.cmsKit.admin.blogs.blogPostAdmin.createAndPublish = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/createandpublish',

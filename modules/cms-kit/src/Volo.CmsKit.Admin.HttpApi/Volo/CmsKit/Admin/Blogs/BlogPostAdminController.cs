@@ -71,6 +71,14 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     }
     
     [HttpPost]
+    [Route("draft/{id}")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
+    public virtual Task DraftAsync(Guid id)
+    {
+        return BlogPostAdminAppService.DraftAsync(id);
+    }
+
+    [HttpPost]
     [Route("createandpublish")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
