@@ -42,13 +42,15 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         var blog = await BlogRepository.GetAsync(input.BlogId);
 
         var blogPost = await BlogPostManager.CreateAsync(
-                                                    author,
-                                                    blog,
-                                                    input.Title,
-                                                    input.Slug,
-                                                    input.ShortDescription,
-                                                    input.Content,
-                                                    input.CoverImageMediaId);
+            author,
+            blog,
+            input.Title,
+            input.Slug,
+            BlogPostStatus.Draft,
+            input.ShortDescription,
+            input.Content,
+            input.CoverImageMediaId
+        );
 
         await BlogPostRepository.InsertAsync(blogPost);
 
