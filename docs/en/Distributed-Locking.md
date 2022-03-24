@@ -27,6 +27,10 @@ using Medallion.Threading.Redis;
 
 namespace AbpDemo
 {
+    [DependsOn(
+            typeof(AbpDistributedLockingModule)
+            //If you have the other dependencies, you should do here
+    )]
 	public class MyModule : AbpModule
 	{
 		public override void ConfigureServices(ServiceConfigurationContext context)
@@ -63,7 +67,7 @@ There are two ways to use the distributed locking API: ABP's `IAbpDistributedLoc
 
 **Example: Using the `IAbpDistributedLock.TryAcquireAsync` method**
 
-````csharp
+    ````csharp
 using Volo.Abp.DistributedLocking; 
 
 namespace AbpDemo
