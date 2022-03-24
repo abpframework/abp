@@ -10,8 +10,8 @@ export interface Environment {
   oAuthConfig: AuthConfig;
   production: boolean;
   remoteEnv?: RemoteEnv;
+  [key:string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
-
 export interface ApplicationInfo {
   name: string;
   baseUrl?: string;
