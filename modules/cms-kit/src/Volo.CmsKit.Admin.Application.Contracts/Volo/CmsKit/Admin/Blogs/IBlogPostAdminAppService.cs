@@ -15,4 +15,6 @@ public interface IBlogPostAdminAppService
 {
     Task PublishAsync(Guid id);
     
+    
+    Task<BlogPostDto> CreateAndPublishAsync(CreateBlogPostDto input);
 }

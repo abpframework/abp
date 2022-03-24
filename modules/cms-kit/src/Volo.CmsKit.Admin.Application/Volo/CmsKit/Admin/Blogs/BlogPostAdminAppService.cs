@@ -121,4 +121,14 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         blogPost.SetPublished();
     }
 
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
+    public virtual async Task<BlogPostDto> CreateAndPublishAsync(CreateBlogPostDto input)
+    {
+        var blogPost = await CreateAsync(input);
+        await CurrentUnitOfWork.SaveChangesAsync();
+        
+        await PublishAsync(blogPost.Id);
+        return blogPost;
+    }
 }
