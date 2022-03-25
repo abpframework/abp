@@ -139,4 +139,22 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         blogPost.Status = BlogPostStatus.Published;
         return blogPost;
     }
+    
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    public virtual async Task SendToReviewAsync(Guid id)
+    {
+        var blogPost = await BlogPostRepository.GetAsync(id);
+        blogPost.SetWaitingForReview();
+    }
+    
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    public virtual async Task<BlogPostDto> CreateAndSendToReviewAsync(CreateBlogPostDto input)
+    {
+        var blogPost = await CreateAsync(input);
+        await CurrentUnitOfWork.SaveChangesAsync();
+        
+        await SendToReviewAsync(blogPost.Id);
+        blogPost.Status = BlogPostStatus.WaitingForReview;
+        return blogPost;
+    }
 }

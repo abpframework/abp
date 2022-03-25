@@ -91,4 +91,9 @@ public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         Status = BlogPostStatus.Published;
     }
+
+    public virtual void SetWaitingForReview()
+    {
+        Status = BlogPostStatus.WaitingForReview;
+    }
 }

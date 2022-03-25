@@ -415,6 +415,22 @@
       }, ajaxParams));
     };
 
+    volo.cmsKit.admin.blogs.blogPostAdmin.sendToReview = function(id, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/sendtoreview/' + id + '',
+        type: 'POST',
+        dataType: null
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.blogs.blogPostAdmin.createAndSendToReview = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/createandsendtoreview',
+        type: 'POST',
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
   })();
 
 })();

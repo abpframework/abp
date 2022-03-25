@@ -3,7 +3,8 @@ $(function () {
     var l = abp.localization.getResource("CmsKit");
     var blogPostStatus = {
         Draft: 0,
-        Published: 1
+        Published: 1,
+        SendToReview: 2
     };
     
     var blogsService = volo.cmsKit.admin.blogs.blogPostAdmin;
@@ -51,6 +52,24 @@ $(function () {
                                     .then(function () {
                                         dataTable.ajax.reload();
                                         abp.notify.success(l('SuccessfullyPublished'));
+                                    });
+                            }
+                        },
+                        {
+                            text: l('SendToReview'),
+                            visible: function(data) {
+                                return data?.status === blogPostStatus.Draft && 
+                                    !abp.auth.isGranted('CmsKit.BlogPosts.Publish');
+                            },
+                            confirmMessage: function (data) {
+                                return l("BlogPostPublishConfirmationMessage", data.record.title)
+                            },
+                            action: function (data) {
+                                blogsService
+                                    .sendToReview(data.record.id)
+                                    .then(function () {
+                                        dataTable.ajax.reload();
+                                        abp.notify.success(l('BlogPostSendToReviewSuccessMessage', data.record.title));
                                     });
                             }
                         },

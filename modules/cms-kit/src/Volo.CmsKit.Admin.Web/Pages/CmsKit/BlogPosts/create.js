@@ -4,7 +4,8 @@ $(function () {
 
     var blogPostStatus = {
         Draft: 0,
-        Published: 1
+        Published: 1,
+        SendToReview: 2
     };
     
     var $selectBlog = $('#BlogSelectionSelect');
@@ -16,6 +17,7 @@ $(function () {
     var $status = $('#ViewModel_Status');
     var $buttonSubmit = $('#button-blog-post-create');
     var $buttonPublish = $('#button-blog-post-publish');
+    var $buttonSendToReview = $('#button-blog-post-send-to-review');
     var $pageContentInput = $('#ViewModel_Content');
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
@@ -77,6 +79,19 @@ $(function () {
                 if (isConfirmed) {
                     e.preventDefault();
                     $status.val(blogPostStatus.Published);
+                    submitCoverImage();
+                }
+            }
+        );
+    });
+
+    $buttonSendToReview.click(function (e) {
+        abp.message.confirm(
+            l('BlogPostSendToReviewConfirmationMessage', $title.val()),
+            function (isConfirmed) {
+                if (isConfirmed) {
+                    e.preventDefault();
+                    $status.val(blogPostStatus.SendToReview);
                     submitCoverImage();
                 }
             }

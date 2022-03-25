@@ -86,4 +86,20 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     {
         return BlogPostAdminAppService.CreateAndPublishAsync(input);
     }
+    
+    [HttpPost]
+    [Route("sendtoreview/{id}")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    public virtual Task SendToReviewAsync(Guid id)
+    {
+        return BlogPostAdminAppService.SendToReviewAsync(id);
+    }
+    
+    [HttpPost]
+    [Route("createandsendtoreview")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    public virtual Task<BlogPostDto> CreateAndSendToReviewAsync(CreateBlogPostDto input)
+    {
+        return BlogPostAdminAppService.CreateAndSendToReviewAsync(input);
+    }
 }
