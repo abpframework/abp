@@ -164,6 +164,7 @@
     "Script": "Script",
     "Style": "Style",
     "SavedSuccessfully": "Başarıyla kaydedildi",
-    "RemoveCoverImageConfirmationMessage": "Kapak resmini kaldırmak istediğinize emin misiniz?"
+    "RemoveCoverImageConfirmationMessage": "Kapak resmini kaldırmak istediğinize emin misiniz?",
+    "RemoveCoverImage": "Kapak resmini kaldır"
   }
 }

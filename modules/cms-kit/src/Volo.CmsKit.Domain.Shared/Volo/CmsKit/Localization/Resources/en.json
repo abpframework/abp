@@ -165,6 +165,7 @@
     "Script": "Script",
     "Style": "Style",
     "SavedSuccessfully": "Saved successfully",
-    "RemoveCoverImageConfirmationMessage": "Are you sure to remove the cover image?"
+    "RemoveCoverImageConfirmationMessage": "Are you sure to remove the cover image?",
+    "RemoveCoverImage": "Remove the cover image"
   }
 }
