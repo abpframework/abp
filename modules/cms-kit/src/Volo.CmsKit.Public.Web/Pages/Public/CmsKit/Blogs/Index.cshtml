@@ -25,7 +25,7 @@
     <abp-column size="_4">
         <div class="mb-3">
             <label class="form-label" asp-for="@Model.Authors"></label>
-            <select id="AuthorSelect" class="form-control">
+            <select id="AuthorSelect" class="form-select">
                 <option value="">@L["SelectAnAuthor"]</option>
                 @foreach (var author in Model.Authors)
                 {
