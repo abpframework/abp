@@ -1,0 +1,7 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "MyAccount":  "Contul meu",
+    "SamplePageMessage": "Un exemplu de pagină pentru modululul OpenIddict"
+  }
+}

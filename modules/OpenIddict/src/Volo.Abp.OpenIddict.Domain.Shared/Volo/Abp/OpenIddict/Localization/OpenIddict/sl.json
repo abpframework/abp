@@ -1,0 +1,7 @@
+{
+  "culture": "sl",
+  "texts": {
+    "MyAccount": "Moj račun",
+    "SamplePageMessage": "Vzorčna stran za modul OpenIddict"
+  }
+}

@@ -340,6 +340,13 @@ $projects = (
     "modules/identityserver/src/Volo.Abp.IdentityServer.Installer",
     "studio/source-codes/Volo.Abp.IdentityServer.SourceCode",
 
+    # modules/OpenIddict
+    "modules/OpenIddict/src/Volo.Abp.OpenIddict.Domain",
+    "modules/OpenIddict/src/Volo.Abp.OpenIddict.Domain.Shared",
+    "modules/OpenIddict/src/Volo.Abp.OpenIddict.EntityFrameworkCore",
+    "modules/OpenIddict/src/Volo.Abp.OpenIddict.MongoDB",
+
+
     # modules/permission-management
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application.Contracts",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application",

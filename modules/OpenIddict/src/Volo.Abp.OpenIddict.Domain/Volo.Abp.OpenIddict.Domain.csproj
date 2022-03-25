@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\configureawait.props" />
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
+    <ProjectReference Include="..\Volo.Abp.OpenIddict.Domain.Shared\Volo.Abp.OpenIddict.Domain.Shared.csproj" />
+    <PackageReference Include="IdentityModel" Version="6.0.0" />
+    <PackageReference Include="OpenIddict.Core" Version="3.1.1" />
+    <PackageReference Include="OpenIddict.Server.DataProtection" Version="3.1.1" />
+    <PackageReference Include="OpenIddict.Validation.DataProtection" Version="3.1.1" />
+    <PackageReference Include="OpenIddict.Server.AspNetCore" Version="3.1.1" />
+    <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="3.1.1" />
+  </ItemGroup>
+
+</Project>

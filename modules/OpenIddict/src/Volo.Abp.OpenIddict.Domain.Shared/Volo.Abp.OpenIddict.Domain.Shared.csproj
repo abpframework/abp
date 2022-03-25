@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\configureawait.props" />
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\OpenIddict\*.json" />
+    <Content Remove="Localization\OpenIddict\*.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\ar.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\cs.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\de-DE.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\en-GB.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\en.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\es.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\fi.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\fr.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\hi.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\hu.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\is.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\it.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\nl.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\pl-PL.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\pt-BR.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\ro-RO.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\ru.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\sk.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\sl.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\tr.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\vi.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\zh-Hans.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\zh-Hant.json" />
+  </ItemGroup>
+
+</Project>
