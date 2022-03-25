@@ -409,7 +409,7 @@
 
     volo.cmsKit.admin.blogs.blogPostAdmin.createAndPublish = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/createandpublish',
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/create-and-publish',
         type: 'POST',
         data: JSON.stringify(input)
       }, ajaxParams));
