@@ -43,7 +43,7 @@
                                                       TextChanged="@(async(v) => await OnFeatureValueChangedAsync(v, feature))" />
                                             @if (feature.Description != null)
                                             {
-                                                <span>@feature.Description</span>
+                                                <div class="form-text">@feature.Description</div>
                                             }
                                         </Field>
                                     }
@@ -63,6 +63,10 @@
                                                     </SelectItem>
                                                 }
                                             </Select>
+                                            @if (feature.Description != null)
+                                            {
+                                                <div class="form-text">@feature.Description</div>
+                                            }
                                         </Field>
                                     }
 
@@ -72,6 +76,10 @@
                                             <Check
                                                 TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async(v) => await OnSelectedValueChangedAsync(v, feature))">@feature.DisplayName</Check>
                                         </Field>
+                                        @if (feature.Description != null)
+                                        {
+                                            <div class="form-text">@feature.Description</div>
+                                        }
                                     }
                                 }
 

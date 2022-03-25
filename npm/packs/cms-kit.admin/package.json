@@ -1,15 +1,15 @@
 {
-  "version": "5.2.0-rc.1",
+  "version": "5.2.0-rc.2",
   "name": "@abp/cms-kit.admin",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jstree": "~5.2.0-rc.1",
-    "@abp/slugify": "~5.2.0-rc.1",
-    "@abp/tui-editor": "~5.2.0-rc.1",
-    "@abp/uppy": "~5.2.0-rc.1",
-    "@abp/codemirror": "~5.2.0-rc.1"
+    "@abp/jstree": "~5.2.0-rc.2",
+    "@abp/slugify": "~5.2.0-rc.2",
+    "@abp/tui-editor": "~5.2.0-rc.2",
+    "@abp/uppy": "~5.2.0-rc.2",
+    "@abp/codemirror": "~5.2.0-rc.2"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
