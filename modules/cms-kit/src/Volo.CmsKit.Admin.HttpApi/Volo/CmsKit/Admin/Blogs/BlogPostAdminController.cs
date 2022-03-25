@@ -88,7 +88,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     }
     
     [HttpPost]
-    [Route("sendtoreview/{id}")]
+    [Route("{id}/send-to-review")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
     public virtual Task SendToReviewAsync(Guid id)
     {
@@ -96,7 +96,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     }
     
     [HttpPost]
-    [Route("createandsendtoreview")]
+    [Route("create-and-send-to-review")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
     public virtual Task<BlogPostDto> CreateAndSendToReviewAsync(CreateBlogPostDto input)
     {
@@ -104,7 +104,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     }
     
     [HttpGet]
-    [Route("hasblogpostwaitingforreview")]
+    [Route("has-blogpost-waiting-for-review")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
     public virtual Task<bool> HasBlogPostWaitingForReviewAsync()
     {
