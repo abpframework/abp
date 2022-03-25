@@ -63,7 +63,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     }
     
     [HttpPost]
-    [Route("publish/{id}")]
+    [Route("{id}/publish")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
     public virtual Task PublishAsync(Guid id)
     {
@@ -71,7 +71,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     }
     
     [HttpPost]
-    [Route("draft/{id}")]
+    [Route("{id}/draft")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
     public virtual Task DraftAsync(Guid id)
     {

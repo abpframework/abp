@@ -180,6 +180,7 @@
     "BlogPostSendToReviewSuccessMessage": "\"{0}\" başlıklı gönderiyi yayınlamak için admin incelemesine gönderildi.",
     "HasBlogPostWaitingForReviewMessage": "Yayınlanmak için onay bekleyen blog postlar var! Listelemek için tıklayın.",
     "SelectAStatus": "Durum seçin",
-    "Status": "Durum"
+    "Status": "Durum",
+    "SelectAnAuthor": "Bir yazar seçin"
   }
 }

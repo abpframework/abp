@@ -393,7 +393,7 @@
 
     volo.cmsKit.admin.blogs.blogPostAdmin.publish = function(id, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/publish/' + id + '',
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/' + id + '/publish',
         type: 'POST',
         dataType: null
       }, ajaxParams));
@@ -401,7 +401,7 @@
 
     volo.cmsKit.admin.blogs.blogPostAdmin.draft = function(id, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/draft/' + id + '',
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/' + id + '/draft',
         type: 'POST',
         dataType: null
       }, ajaxParams));
