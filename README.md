@@ -110,7 +110,7 @@ Love ABP Framework? **Please give a star** to this repository :star:
 
 ## Discord Channel
 
-You can use this link to join the ABP Community Discord Server: https://discord.gg/uVGt6hyhcm
+You can use this link to join the ABP Community Discord Server: https://discord.gg/abp
 
 ## ABP Commercial
 
