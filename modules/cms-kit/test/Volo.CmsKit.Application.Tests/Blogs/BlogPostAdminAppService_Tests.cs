@@ -156,4 +156,86 @@ public class BlogPostAdminAppService_Tests : CmsKitApplicationTestBase
         exception.EntityType.ShouldBe(typeof(BlogPost));
         exception.Id.ShouldBe(cmsKitTestData.Page_2_Id);
     }
+    
+    [Fact]
+    public async Task PublishAsync_ShouldWorkProperly()
+    {
+        var newPost = await CreateBlogPost();
+        newPost.Status.ShouldBe(BlogPostStatus.Draft);
+        
+        await blogPostAdminAppService.PublishAsync(newPost.Id);
+        var post = await blogPostAdminAppService.GetAsync(newPost.Id);
+        post.Status.ShouldBe(BlogPostStatus.Published);
+    }
+    
+    [Fact]
+    public async Task DraftAsync_ShouldWorkProperly()
+    {
+        var newPost = await CreateBlogPost();
+        newPost.Status.ShouldBe(BlogPostStatus.Draft);
+        
+        await blogPostAdminAppService.PublishAsync(newPost.Id);
+        var post = await blogPostAdminAppService.GetAsync(newPost.Id);
+        post.Status.ShouldBe(BlogPostStatus.Published);
+        
+        await blogPostAdminAppService.DraftAsync(newPost.Id);
+        post = await blogPostAdminAppService.GetAsync(newPost.Id);
+        post.Status.ShouldBe(BlogPostStatus.Draft);
+    }
+    
+    [Fact]
+    public async Task CreateAndPublishAsync_ShouldWorkProperly()
+    {
+        var title = "My awesome new Post";
+        var slug = "my-awesome-new-post";
+        var shortDescription = "This blog is all about awesomeness 🤗!";
+        var content = "Another blog post shared on internet";
+
+        var created = await blogPostAdminAppService.CreateAndPublishAsync(new CreateBlogPostDto
+        {
+            BlogId = cmsKitTestData.Blog_Id,
+            Title = title,
+            Slug = slug,
+            ShortDescription = shortDescription,
+            Content = content
+        });
+
+        created.Id.ShouldNotBe(Guid.Empty);
+        created.Status.ShouldBe(BlogPostStatus.Published);
+        
+        var blogPost = await blogPostRepository.GetAsync(created.Id);
+
+        blogPost.Title.ShouldBe(title);
+        blogPost.Slug.ShouldBe(slug);
+        blogPost.ShortDescription.ShouldBe(shortDescription);
+        blogPost.Content.ShouldBe(content);
+        blogPost.Status.ShouldBe(BlogPostStatus.Published);
+    }
+    
+    private async Task<BlogPostDto> CreateBlogPost()
+    {
+        var title = "My awesome new Post";
+        var slug = "my-awesome-new-post";
+        var shortDescription = "This blog is all about awesomeness 🤗!";
+        var content = "Another blog post shared on internet";
+
+        var created = await blogPostAdminAppService.CreateAsync(new CreateBlogPostDto
+        {
+            BlogId = cmsKitTestData.Blog_Id,
+            Title = title,
+            Slug = slug,
+            ShortDescription = shortDescription,
+            Content = content
+        });
+
+        created.Id.ShouldNotBe(Guid.Empty);
+
+        var blogPost = await blogPostRepository.GetAsync(created.Id);
+
+        blogPost.Title.ShouldBe(title);
+        blogPost.Slug.ShouldBe(slug);
+        blogPost.ShortDescription.ShouldBe(shortDescription);
+        blogPost.Content.ShouldBe(content);
+        return created;
+    }
 }
