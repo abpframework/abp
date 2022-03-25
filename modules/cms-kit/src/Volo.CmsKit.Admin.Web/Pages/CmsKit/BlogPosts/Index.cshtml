@@ -37,7 +37,7 @@
         <div id="CmsKitBlogPostsWrapper">
             <abp-row>
                 <abp-column size="_2">
-                    <select id="StatusSelect" class="form-control">
+                    <select id="StatusSelect" class="form-select">
                         <option value="">@L["SelectAStatus"]</option>
                         @foreach (var status in (BlogPostStatus[]) Enum.GetValues(typeof(BlogPostStatus)))
                         {
