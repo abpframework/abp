@@ -231,7 +231,6 @@ $(function () {
             l('RemoveCoverImageConfirmationMessage'),
             function (isConfirmed) {
                 if (isConfirmed) {
-                    debugger;
                     volo.cmsKit.admin.blogs.blogPostAdmin
                         .removeCoverImage($blogPostIdInput.val())
                         .then(function () {
