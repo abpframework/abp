@@ -31,4 +31,6 @@ public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
     Task<BlogPost> GetBySlugAsync(Guid blogId, string slug, CancellationToken cancellationToken = default);
 
     Task<List<CmsUser>> GetAuthorsHasBlogPosts(CancellationToken cancellationToken = default);
+
+    Task<bool> HasBlogPostWaitingForReviewAsync(CancellationToken cancellationToken = default);
 }

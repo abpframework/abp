@@ -177,6 +177,7 @@
     "SaveAsDraft": "Taslak olarak kaydet",
     "SendToReview": "İncelemeye gönder",
     "SendToReviewToPublish": "Yayınlamak için admin incelemesine gönder",
-    "BlogPostSendToReviewSuccessMessage": "\"{0}\" başlıklı gönderiyi yayınlamak için admin incelemesine gönderildi."
+    "BlogPostSendToReviewSuccessMessage": "\"{0}\" başlıklı gönderiyi yayınlamak için admin incelemesine gönderildi.",
+    "HasBlogPostWaitingForReviewMessage": "Yayınlanmak için onay bekleyen blog postlar var! Listelemek için tıklayın."
   }
 }

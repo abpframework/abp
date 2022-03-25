@@ -8,11 +8,18 @@ $(function () {
     };
     
     var blogsService = volo.cmsKit.admin.blogs.blogPostAdmin;
-
+    var _statusFilter;
     var getFilter = function () {
-        return {
+        var filter = {
             filter: $('#CmsKitBlogPostsWrapper input.page-search-filter-text').val()
         };
+
+        if (_statusFilter) {
+            filter.status = _statusFilter;
+            _statusFilter = null;
+        }
+
+        return filter;
     };
     
     var dataTable = $("#BlogPostsTable").DataTable(abp.libs.datatables.normalizeConfiguration({
@@ -52,6 +59,7 @@ $(function () {
                                     .then(function () {
                                         dataTable.ajax.reload();
                                         abp.notify.success(l('SuccessfullyPublished'));
+                                        checkHasBlogPostWaitingForReview();
                                     });
                             }
                         },
@@ -87,6 +95,7 @@ $(function () {
                                     .then(function () {
                                         dataTable.ajax.reload();
                                         abp.notify.success(l('SuccessfullySaved'));
+                                        checkHasBlogPostWaitingForReview();
                                     });
                             }
                         },
@@ -149,4 +158,25 @@ $(function () {
         e.preventDefault();
         window.location.href = "BlogPosts/Create"
     });
+    
+    $('#button-show-waiting-for-review').on('click', function (e) {
+        e.preventDefault();
+        _statusFilter = blogPostStatus.SendToReview;
+        dataTable.ajax.reload();
+    });
+    
+    function checkHasBlogPostWaitingForReview(){
+        if (!abp.auth.isGranted('CmsKit.BlogPosts.Publish')){
+            $('#alertHasBlogPostWaitingForReview').hide();
+        }
+        
+        blogsService.hasBlogPostWaitingForReview().then(function (result) {
+            if (result) {
+                $('#alertHasBlogPostWaitingForReview').show('fast');
+            } else {
+                $('#alertHasBlogPostWaitingForReview').hide('fast');
+            }
+        });
+    }
+    checkHasBlogPostWaitingForReview();
 });

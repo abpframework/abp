@@ -102,4 +102,12 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     {
         return BlogPostAdminAppService.CreateAndSendToReviewAsync(input);
     }
+    
+    [HttpGet]
+    [Route("hasblogpostwaitingforreview")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
+    public virtual Task<bool> HasBlogPostWaitingForReviewAsync()
+    {
+        return BlogPostAdminAppService.HasBlogPostWaitingForReviewAsync();
+    }
 }

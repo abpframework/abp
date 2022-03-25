@@ -109,4 +109,10 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
         return await (await GetDbContextAsync()).BlogPosts.Select(x => x.Author).Distinct()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
+    
+    public virtual async Task<bool> HasBlogPostWaitingForReviewAsync(CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .AnyAsync(x => x.Status == BlogPostStatus.WaitingForReview, GetCancellationToken(cancellationToken));
+    }
 }

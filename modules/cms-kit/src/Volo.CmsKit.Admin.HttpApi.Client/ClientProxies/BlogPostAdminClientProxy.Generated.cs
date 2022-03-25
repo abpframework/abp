@@ -95,4 +95,9 @@ public partial class BlogPostAdminClientProxy : ClientProxyBase<IBlogPostAdminAp
             { typeof(CreateBlogPostDto), input }
         });
     }
+    
+    public virtual async Task<bool> HasBlogPostWaitingForReviewAsync()
+    {
+        return await RequestAsync<bool>(nameof(HasBlogPostWaitingForReviewAsync));
+    }
 }

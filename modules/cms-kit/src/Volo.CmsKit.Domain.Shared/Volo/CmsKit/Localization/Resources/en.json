@@ -178,6 +178,7 @@
     "SaveAsDraft": "Save as draft",
     "SendToReview": "Send to review",
     "SendToReviewToPublish": "Send to review to publish",
-    "BlogPostSendToReviewSuccessMessage": "The blog post \"{0}\" has been sent to admin review for publishing."
+    "BlogPostSendToReviewSuccessMessage": "The blog post \"{0}\" has been sent to admin review for publishing.",
+    "HasBlogPostWaitingForReviewMessage": "You have a blog post waiting for review. Click to list."
   }
 }

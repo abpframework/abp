@@ -27,6 +27,11 @@
     @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new {pageName = typeof(IndexModel).FullName})
 }
 
+
+<div class="alert alert-warning" style="display: none" role="alert" id="alertHasBlogPostWaitingForReview">
+    <abp-button button-type="Link" type="button" text="@L["HasBlogPostWaitingForReviewMessage"].Value" id="button-show-waiting-for-review"/>
+</div>
+
 <abp-card class="mb-4">
     <abp-card-body>
         <div id="CmsKitBlogPostsWrapper">

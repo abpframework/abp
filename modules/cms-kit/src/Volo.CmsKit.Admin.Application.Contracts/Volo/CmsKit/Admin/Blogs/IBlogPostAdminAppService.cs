@@ -22,4 +22,6 @@ public interface IBlogPostAdminAppService
     Task SendToReviewAsync(Guid id);
 
     Task<BlogPostDto> CreateAndSendToReviewAsync(CreateBlogPostDto input);
+
+    Task<bool> HasBlogPostWaitingForReviewAsync();
 }

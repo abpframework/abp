@@ -431,6 +431,13 @@
       }, ajaxParams));
     };
 
+    volo.cmsKit.admin.blogs.blogPostAdmin.hasBlogPostWaitingForReview = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/hasblogpostwaitingforreview',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
   })();
 
 })();
