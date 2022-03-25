@@ -61,4 +61,12 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     {
         return BlogPostAdminAppService.UpdateAsync(id, input);
     }
+    
+    [HttpDelete]
+    [Route("removeCoverImage/{id}")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
+    public Task RemoveCoverImageAsync(Guid id)
+    {
+        return BlogPostAdminAppService.RemoveCoverImageAsync(id);
+    }
 }

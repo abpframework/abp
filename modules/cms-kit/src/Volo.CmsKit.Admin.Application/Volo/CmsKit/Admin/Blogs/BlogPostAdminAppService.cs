@@ -6,6 +6,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.CmsKit.Admin.MediaDescriptors;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
@@ -22,16 +23,20 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     protected IBlogRepository BlogRepository { get; }
     protected ICmsUserLookupService UserLookupService { get; }
 
+    protected IMediaDescriptorAdminAppService MediaDescriptorAdminAppService { get; }
+
     public BlogPostAdminAppService(
         BlogPostManager blogPostManager,
         IBlogPostRepository blogPostRepository,
         IBlogRepository blogRepository,
-        ICmsUserLookupService userLookupService)
+        ICmsUserLookupService userLookupService,
+        IMediaDescriptorAdminAppService mediaDescriptorAdminAppService)
     {
         BlogPostManager = blogPostManager;
         BlogPostRepository = blogPostRepository;
         BlogRepository = blogRepository;
         UserLookupService = userLookupService;
+        MediaDescriptorAdminAppService = mediaDescriptorAdminAppService;
     }
 
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
@@ -108,5 +113,19 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     public virtual async Task DeleteAsync(Guid id)
     {
         await BlogPostRepository.DeleteAsync(id);
+    }
+
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
+    public virtual async Task RemoveCoverImageAsync(Guid id)
+    {
+        var blogPost = await BlogPostRepository.GetAsync(id);
+        if (blogPost?.CoverImageMediaId == null)
+        {
+            return;
+        }
+
+        await MediaDescriptorAdminAppService.DeleteAsync(blogPost.CoverImageMediaId.Value);
+        
+        blogPost.CoverImageMediaId = null;
     }
 }
