@@ -147,6 +147,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     {
         var blogPost = await BlogPostRepository.GetAsync(id);
         blogPost.SetWaitingForReview();
+        await BlogPostRepository.UpdateAsync(blogPost);
     }
     
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
