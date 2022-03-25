@@ -79,7 +79,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     }
 
     [HttpPost]
-    [Route("createandpublish")]
+    [Route("create-and-publish")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
     public virtual Task<BlogPostDto> CreateAndPublishAsync(CreateBlogPostDto input)
