@@ -67,7 +67,7 @@ There are two ways to use the distributed locking API: ABP's `IAbpDistributedLoc
 
 **Example: Using the `IAbpDistributedLock.TryAcquireAsync` method**
 
-    ````csharp
+````csharp
 using Volo.Abp.DistributedLocking; 
 
 namespace AbpDemo
