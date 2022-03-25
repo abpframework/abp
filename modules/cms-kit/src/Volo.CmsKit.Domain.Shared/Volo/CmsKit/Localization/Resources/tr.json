@@ -178,6 +178,8 @@
     "SendToReview": "İncelemeye gönder",
     "SendToReviewToPublish": "Yayınlamak için admin incelemesine gönder",
     "BlogPostSendToReviewSuccessMessage": "\"{0}\" başlıklı gönderiyi yayınlamak için admin incelemesine gönderildi.",
-    "HasBlogPostWaitingForReviewMessage": "Yayınlanmak için onay bekleyen blog postlar var! Listelemek için tıklayın."
+    "HasBlogPostWaitingForReviewMessage": "Yayınlanmak için onay bekleyen blog postlar var! Listelemek için tıklayın.",
+    "SelectAStatus": "Durum seçin",
+    "Status": "Durum"
   }
 }

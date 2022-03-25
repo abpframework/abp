@@ -1,6 +1,8 @@
 
 $(function () {
     var l = abp.localization.getResource("CmsKit");
+    var $statusFilter = $("#StatusSelect");
+    
     var blogPostStatus = {
         Draft: 0,
         Published: 1,
@@ -8,15 +10,14 @@ $(function () {
     };
     
     var blogsService = volo.cmsKit.admin.blogs.blogPostAdmin;
-    var _statusFilter;
+    
     var getFilter = function () {
         var filter = {
             filter: $('#CmsKitBlogPostsWrapper input.page-search-filter-text').val()
         };
 
-        if (_statusFilter) {
-            filter.status = _statusFilter;
-            _statusFilter = null;
+        if ($statusFilter.val()) {
+            filter.status = $statusFilter.val();
         }
 
         return filter;
@@ -161,7 +162,7 @@ $(function () {
     
     $('#button-show-waiting-for-review').on('click', function (e) {
         e.preventDefault();
-        _statusFilter = blogPostStatus.SendToReview;
+        $statusFilter.val(blogPostStatus.SendToReview);
         dataTable.ajax.reload();
     });
     

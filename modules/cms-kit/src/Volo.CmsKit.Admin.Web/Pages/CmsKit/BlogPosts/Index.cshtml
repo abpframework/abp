@@ -5,6 +5,7 @@
 @using Volo.CmsKit.Admin.Web.Pages
 @using Volo.CmsKit.Admin.Web.Menus
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
+@using Volo.CmsKit.Blogs
 
 @inherits CmsKitAdminPageBase
 
@@ -27,7 +28,6 @@
     @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new {pageName = typeof(IndexModel).FullName})
 }
 
-
 <div class="alert alert-warning" style="display: none" role="alert" id="alertHasBlogPostWaitingForReview">
     <abp-button button-type="Link" type="button" text="@L["HasBlogPostWaitingForReviewMessage"].Value" id="button-show-waiting-for-review"/>
 </div>
@@ -36,7 +36,16 @@
     <abp-card-body>
         <div id="CmsKitBlogPostsWrapper">
             <abp-row>
-                <abp-column>
+                <abp-column size="_2">
+                    <select id="StatusSelect" class="form-control">
+                        <option value="">@L["SelectAStatus"]</option>
+                        @foreach (var status in (BlogPostStatus[]) Enum.GetValues(typeof(BlogPostStatus)))
+                        {
+                            <option value="@((int)status)">@L["CmsKit.BlogPost.Status." + (int)status]</option>
+                        }
+                    </select>
+                </abp-column>
+                <abp-column size="_10">
                     @await Component.InvokeAsync(typeof(AbpPageSearchBoxViewComponent))
                 </abp-column>
             </abp-row>

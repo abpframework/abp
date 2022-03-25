@@ -179,6 +179,8 @@
     "SendToReview": "Send to review",
     "SendToReviewToPublish": "Send to review to publish",
     "BlogPostSendToReviewSuccessMessage": "The blog post \"{0}\" has been sent to admin review for publishing.",
-    "HasBlogPostWaitingForReviewMessage": "You have a blog post waiting for review. Click to list."
+    "HasBlogPostWaitingForReviewMessage": "You have a blog post waiting for review. Click to list.",
+    "SelectAStatus": "Select a status",
+    "Status": "Status"
   }
 }
