@@ -136,6 +136,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         await CurrentUnitOfWork.SaveChangesAsync();
         
         await PublishAsync(blogPost.Id);
+        blogPost.Status = BlogPostStatus.Published;
         return blogPost;
     }
 }
