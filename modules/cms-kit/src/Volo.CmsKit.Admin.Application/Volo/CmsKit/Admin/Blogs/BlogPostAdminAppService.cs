@@ -119,6 +119,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     {
         var blogPost = await BlogPostRepository.GetAsync(id);
         blogPost.SetPublished();
+        await BlogPostRepository.UpdateAsync(blogPost);
     }
 
     [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
@@ -126,6 +127,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     {
         var blogPost = await BlogPostRepository.GetAsync(id);
         blogPost.SetDraft();
+        await BlogPostRepository.UpdateAsync(blogPost);
     }
 
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
