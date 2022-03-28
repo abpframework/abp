@@ -227,7 +227,7 @@ import { Router } from '@angular/router';
   template: `
     <a class="dropdown-item pointer" (click)="data.action()">
       <i *ngIf="data.textTemplate.icon" [class]="data.textTemplate.icon"></i>
-      {{ data.textTemplate.text | abpLocalization }}
+      {%{{{ data.textTemplate.text | abpLocalization }}}%}
     </a>
   `,
 })
