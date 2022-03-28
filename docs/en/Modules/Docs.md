@@ -88,6 +88,11 @@ Or you can also manually install nuget package to each project:
 
   `Install-Package Volo.Docs.Web`
 
+* If you use in your project MongoDb Database:
+* Install [Volo.Docs.MongoDB](https://www.nuget.org/packages/Volo.Docs.MongoDB/) nuget package to `Acme.MyProject.MongoDB` project.
+
+ `Install-Package Volo.Docs.MongoDB`
+
 ##### 3.2.1- Adding Module Dependencies
 
 An ABP module must declare `[DependsOn]` attribute if it has a dependency upon another module. Each module has to be added in`[DependsOn]` attribute to the relevant project.
@@ -164,6 +169,21 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
           typeof(AbpAspNetCoreMvcUiBasicThemeModule)
       )]
       public class MyProjectWebModule : AbpModule
+      {
+          //...
+      }
+  ```
+  * If you use in your project MongoDb Database:
+  * Open `MyProjecMongoDbModule.cs`and add `typeof(DocsMongoDbModule)` as shown below;
+
+  ```csharp
+     [DependsOn(
+          typeof(DocsMongoDbModule),
+          typeof(SaasMongoDbModule),
+          typeof(LanguageManagementMongoDbModule),
+          typeof(BlobStoringDatabaseMongoDbModule),
+      )]
+      public class MyProjectMongoDbModule : AbpModule
       {
           //...
       }
@@ -253,7 +273,7 @@ If you choose Entity Framework as your database provider, you need to configure 
   ```
 
   Finally, you can check your database to see the newly created tables. For example you can see `DocsProjects` table must be added to your database.
-
+  
 ### 5- Linking Docs Module
 
 The default route for Docs module is;
@@ -407,6 +427,40 @@ INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocume
 Add one of the sample projects above and run the application. In the menu you will see `Documents` link, click the menu link to open the documents page. 
 
 So far, we have created a new application from abp.io website and made it up and ready for Docs module. 
+
+#### Sample Project Record for "MongoDb"
+
+For `MongoDb` database, you can create a json file and update the `DocsProjects` collection:
+
+- ConcurrencyStamp: A random value that must change whenever a user is persisted to the store.
+
+- VersionBranchPrefix: The version of your Github branch.
+
+- ParametersDocumentName: This is a non-mandatory setting to be completed on Github. Check in https://github.com/abpframework/abp/blob/dev/docs/en/docs-params.json.
+
+Be aware that `GitHubAccessToken` is masked. It's a private token and you must get your own token and replace the `***` string.
+
+```json
+{
+	"_id": UUID("12f21123-e08e-4f15-bedb-ae0b2d939659"),
+	"ConcurrencyStamp": "a758wxf05f6079cc2455bec75ced62b2",
+	"DefaultDocumentName": "Index",
+	"DocumentStoreType": "GitHub",
+	"Format": "md",
+	"GitHubAccessToken": "***",
+	"GitHubRootUrl": "https://github.com/abpframework/abp/tree/{version}/docs",
+	"GitHubUserAgent": null,
+	"LatestVersionBranchName": null,
+	"MainWebsiteUrl": "/",
+	"MinimumVersion": null,
+	"Name": "Abp (GitHub)",
+	"NavigationDocumentName": "docs-nav.json",
+	"ParametersDocumentName": "docs-params.json",
+	"ShortName": "abp",
+	"VersionBranchPrefix": "{version}"
+}
+```
+For GUID converted to base 64: "_id": {"$binary": {"base64": "EvIRI+COTxW+2wAArgstkw==", "subType": "03"}}
 
 ### 7- Creating a New Document
 
