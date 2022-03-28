@@ -42,6 +42,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
     public virtual async Task<int> GetCountAsync(
         string filter = null,
         Guid? blogId = null,
+        Guid? authorId = null,
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
@@ -49,12 +50,15 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(blogId.HasValue, x => x.BlogId == blogId)
+            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(authorId.HasValue, x => x.AuthorId == authorId)
             .CountAsync(cancellationToken);
+
     }
 
     public virtual async Task<List<BlogPost>> GetListAsync(
         string filter = null,
         Guid? blogId = null,
+        Guid? authorId = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string sorting = null,
@@ -68,7 +72,8 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
 
         var queryable = blogPostQueryable
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
-            .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
+            .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
+            .WhereIf(authorId.HasValue, x => x.AuthorId == authorId);
 
         queryable = queryable.OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(BlogPost.CreationTime)} desc" : sorting);
 
@@ -98,5 +103,23 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         cancellationToken = GetCancellationToken(cancellationToken);
         var queryable = await GetMongoQueryableAsync(cancellationToken);
         return await queryable.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, cancellationToken);
+    }
+
+    public async Task<List<CmsUser>> GetAuthorsHasBlogPosts(CancellationToken cancellationToken = default)
+    {
+        var blogPostQueryable = (await GetQueryableAsync());
+
+        var usersQueryable = (await GetDbContextAsync()).Collection<CmsUser>().AsQueryable();
+
+        var queryable = blogPostQueryable
+                        .Join(
+                            usersQueryable,
+                            o => o.AuthorId,
+                            i => i.Id,
+                            (blogPost, user) => new { blogPost, user })
+                        .Select(s => s.user)
+                        .Distinct();
+
+        return await AsyncExecuter.ToListAsync(queryable, GetCancellationToken(cancellationToken));
     }
 }
