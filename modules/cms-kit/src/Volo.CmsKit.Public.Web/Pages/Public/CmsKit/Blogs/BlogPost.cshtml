@@ -41,7 +41,9 @@
             <div class="col-lg-8 col-md-10 mx-auto pb-4">
                 <h1 class="mt-lg-4 mt-md-3">@Model.BlogPost.Title</h1>
                 <p class="mb-lg-5 mb-md-3">
-                    <span class="font-weight-bold">@@@Model.BlogPost.Author?.UserName</span>
+                    <a href="/blogs/@Model.BlogSlug?authorId=@Model.BlogPost.Author.Id">
+                        <span class="font-weight-bold">@@@Model.BlogPost.Author?.UserName</span>
+                    </a>
                     <small style="opacity:.65;">@Model.BlogPost.CreationTime</small>
                 </p>
 
