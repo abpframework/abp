@@ -20,16 +20,15 @@ public class IndexModel : CmsKitPublicPageModelBase
 
     [BindProperty(SupportsGet = true)]
     public int CurrentPage { get; set; } = 1;
-    
+
     [BindProperty(SupportsGet = true)]
     public Guid? AuthorId { get; set; }
 
     public PagedResultDto<BlogPostPublicDto> Blogs { get; private set; }
 
     public PagerModel PagerModel => new PagerModel(Blogs.TotalCount, Blogs.Items.Count, CurrentPage, PageSize, Request.Path.ToString());
-    
-    [BindProperty(SupportsGet = true)]
-    public List<CmsUserDto> Authors { get; set; }
+
+    public CmsUserDto SelectedAuthor { get; set; }
 
     protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
 
@@ -48,7 +47,10 @@ public class IndexModel : CmsKitPublicPageModelBase
                 MaxResultCount = PageSize,
                 AuthorId = AuthorId
             });
-        
-        Authors = await BlogPostPublicAppService.GetAuthorsHasBlogPostsAsync();
+
+        if (AuthorId != null)
+        {
+            SelectedAuthor = await BlogPostPublicAppService.GetAuthorHasBlogPostAsync(AuthorId.Value);
+        }
     }
 }
