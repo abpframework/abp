@@ -503,6 +503,7 @@
     "AdditionalNote": "Additional Note",
     "OnboardingTrainingFaqTitle": "Do you have ABP onboarding training?",
     "OnboardingTrainingFaqExplanation": "Yes, we have ABP Training Services to help you get your ABP project started fast. You will learn about ABP from an ABP core team member and you will get the skills to begin your ABP project. In the onboarding training, we will explain how to set up your development environment, install the required tools, create a fully functional CRUD page. The training will be live and the Zoom application will be used, and we are open to using other online meeting platforms. The language of the training will be English. You can also ask your questions about ABP during the sessions. A convenient time and date will be planned for both parties. To get more information, contact us at <a href=\"mailto:info@abp.io\">info@abp.io</a>.",
-    "AddBasket": "Add to Basket"
+    "AddBasket": "Add to Basket",
+    "SendTrainingRequest": "Send Training Request"
   }
 }
