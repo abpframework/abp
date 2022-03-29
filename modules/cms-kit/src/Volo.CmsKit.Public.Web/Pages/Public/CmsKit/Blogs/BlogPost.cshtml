@@ -16,26 +16,38 @@
 
 @inject IMarkdownToHtmlRenderer MarkdownRenderer
 
+
+@{
+    string dummyImageSource = "https://dummyimage.com/1280x720/a3a3a3/fff.png?text=" + Model.BlogPost.Title;
+    var isScrollIndexEnabled = GlobalFeatureManager.Instance.IsEnabled<BlogPostScrollIndexFeature>();
+}
+
 @section styles{
+     @if (isScrollIndexEnabled)
+     {
+         <abp-abp-style-bundle>
+             <abp-style src="/Pages/Public/CmsKit/Blogs/bootstrap-toc.css"/>
+         </abp-abp-style-bundle>
+     }
     <abp-abp-style-bundle>
-        <abp-style src="/Pages/Public/CmsKit/Blogs/bootstrap-toc.css"/>
         <abp-style src="/Pages/Public/CmsKit/Blogs/blogPost.css"/>
         <abp-style type="typeof(HighlightJsStyleContributor)"/>
     </abp-abp-style-bundle>
 }
 
 @section scripts{
+    @if (isScrollIndexEnabled)
+    {
+        <abp-script-bundle>
+            <abp-style src="/Pages/Public/CmsKit/Blogs/bootstrap-toc.js"/>
+        </abp-script-bundle>
+    }
+
     <abp-script-bundle>
-        <abp-style src="/Pages/Public/CmsKit/Blogs/bootstrap-toc.js"/>
         <abp-script type="typeof(HighlightJsScriptContributor)"/>
         <abp-script src="/Pages/Public/CmsKit/highlightOnLoad.js"/>
         <abp-script src="/Pages/Public/CmsKit/Blogs/blogpost.js"/>
     </abp-script-bundle>
-}
-
-@{
-    string dummyImageSource = "https://dummyimage.com/1280x720/a3a3a3/fff.png?text=" + Model.BlogPost.Title;
-    var isScrollIndexEnabled = GlobalFeatureManager.Instance.IsEnabled<BlogPostScrollIndexFeature>();
 }
 
 
