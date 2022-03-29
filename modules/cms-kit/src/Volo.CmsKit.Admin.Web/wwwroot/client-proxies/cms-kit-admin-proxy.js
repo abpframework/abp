@@ -391,14 +391,6 @@
       }, ajaxParams));
     };
 
-    volo.cmsKit.admin.blogs.blogPostAdmin.removeCoverImage = function(id, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/' + id + '/cover-image',
-        type: 'DELETE',
-        dataType: null
-      }, ajaxParams));
-    };
-
   })();
 
 })();

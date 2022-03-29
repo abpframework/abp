@@ -64,7 +64,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     public virtual async Task<BlogPostDto> UpdateAsync(Guid id, UpdateBlogPostDto input)
     {
         var blogPost = await BlogPostRepository.GetAsync(id);
-
+        
         blogPost.SetTitle(input.Title);
         blogPost.SetShortDescription(input.ShortDescription);
         blogPost.SetContent(input.Content);
