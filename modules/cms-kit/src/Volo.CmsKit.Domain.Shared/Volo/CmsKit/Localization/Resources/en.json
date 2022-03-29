@@ -164,6 +164,8 @@
     "GlobalResources": "Global Resources",
     "Script": "Script",
     "Style": "Style",
-    "SavedSuccessfully": "Saved successfully"
+    "SavedSuccessfully": "Saved successfully",
+    "GoToTop": "Go to top",
+    "InThisDocument": "In this document"
   }
 }

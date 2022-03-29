@@ -163,6 +163,8 @@
     "GlobalResources": "Global Kaynaklar",
     "Script": "Script",
     "Style": "Style",
-    "SavedSuccessfully": "Başarıyla kaydedildi"
+    "SavedSuccessfully": "Başarıyla kaydedildi",
+    "GoToTop": "Yukarı Git",
+    "InThisDocument": "Bu belgede"
   }
 }
