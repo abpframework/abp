@@ -38,8 +38,9 @@
     var isScrollIndexEnabled = GlobalFeatureManager.Instance.IsEnabled<BlogPostScrollIndexFeature>();
 }
 
+
 <div class="row">
-    <div @Html.Raw(isScrollIndexEnabled?"class=\"col-md-10 col-sm-12\"":"class=\"col-md-12\"")>
+    <div @Html.Raw(isScrollIndexEnabled ? "class=\"col-md-10 col-sm-12\"" : "class=\"col-md-12\"")>
         <abp-card class="mb-4">
             <img src="/api/cms-kit/media/@Model.BlogPost.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'"/>
             <abp-card-body>
@@ -47,10 +48,11 @@
                     <div class="col-lg-8 col-md-10 mx-auto pb-4">
                         <h1 class="mt-lg-4 mt-md-3">@Model.BlogPost.Title</h1>
                         <p class="mb-lg-5 mb-md-3">
-                            <span class="font-weight-bold">@@@Model.BlogPost.Author?.UserName</span>
+                            <a href="/blogs/@Model.BlogSlug?authorId=@Model.BlogPost.Author.Id">
+                                <span class="font-weight-bold">@@@Model.BlogPost.Author?.UserName</span>
+                            </a>
                             <small style="opacity:.65;">@Model.BlogPost.CreationTime</small>
                         </p>
-
                         @if (!Model.BlogPost.Content.IsNullOrEmpty())
                         {
                             @Html.Raw(await MarkdownRenderer.RenderAsync(Model.BlogPost.Content))

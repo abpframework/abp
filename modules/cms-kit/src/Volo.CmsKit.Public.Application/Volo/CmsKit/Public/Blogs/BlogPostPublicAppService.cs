@@ -5,6 +5,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Blogs;
 
@@ -14,6 +15,7 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
     protected IBlogRepository BlogRepository { get; }
 
     protected IBlogPostRepository BlogPostRepository { get; }
+    
 
     public BlogPostPublicAppService(
         IBlogRepository blogRepository,
@@ -32,14 +34,21 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
         return ObjectMapper.Map<BlogPost, BlogPostPublicDto>(blogPost);
     }
 
-    public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync([NotNull] string blogSlug, PagedAndSortedResultRequestDto input)
+    public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync([NotNull] string blogSlug, BlogPostGetListInput input)
     {
         var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
-        var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.MaxResultCount, input.SkipCount, input.Sorting);
+        var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.AuthorId, input.MaxResultCount,
+            input.SkipCount, input.Sorting);
 
         return new PagedResultDto<BlogPostPublicDto>(
-            await BlogPostRepository.GetCountAsync(blogId: blog.Id),
+            await BlogPostRepository.GetCountAsync(blogId: blog.Id, authorId: input.AuthorId),
             ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
+    }
+
+    public virtual async Task<List<CmsUserDto>> GetAuthorsHasBlogPostsAsync()
+    {
+        var authors = await BlogPostRepository.GetAuthorsHasBlogPosts();
+        return ObjectMapper.Map<List<CmsUser>, List<CmsUserDto>>(authors);
     }
 }
