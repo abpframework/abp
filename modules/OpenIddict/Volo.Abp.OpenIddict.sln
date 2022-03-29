@@ -27,7 +27,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{2B5CD179-FF7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.Server", "app\OpenIddict.Demo.Server\OpenIddict.Demo.Server.csproj", "{88FD6C42-4134-4F35-A104-ED8520463847}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.Client", "app\OpenIddict.Demo.Client\OpenIddict.Demo.Client.csproj", "{FC1F7510-047E-4D4B-B024-82BB5269E584}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.Client.Mvc", "app\OpenIddict.Demo.Client.Mvc\OpenIddict.Demo.Client.Mvc.csproj", "{FC1F7510-047E-4D4B-B024-82BB5269E584}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.OpenIddict.AspNetCore", "src\Volo.Abp.OpenIddict.AspNetCore\Volo.Abp.OpenIddict.AspNetCore.csproj", "{2DCC3E87-4901-4980-ABB8-0A93F2C2F7B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.Client.Console", "app\OpenIddict.Demo.Client.Console\OpenIddict.Demo.Client.Console.csproj", "{1EF0F35E-65BE-4994-9BC4-9D3992A9B05C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.Client.API", "app\OpenIddict.Demo.Client.API\OpenIddict.Demo.Client.API.csproj", "{70FD6E90-BBE8-4DA1-AE07-55064803225B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +81,18 @@ Global
 		{FC1F7510-047E-4D4B-B024-82BB5269E584}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC1F7510-047E-4D4B-B024-82BB5269E584}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC1F7510-047E-4D4B-B024-82BB5269E584}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DCC3E87-4901-4980-ABB8-0A93F2C2F7B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DCC3E87-4901-4980-ABB8-0A93F2C2F7B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DCC3E87-4901-4980-ABB8-0A93F2C2F7B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DCC3E87-4901-4980-ABB8-0A93F2C2F7B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EF0F35E-65BE-4994-9BC4-9D3992A9B05C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EF0F35E-65BE-4994-9BC4-9D3992A9B05C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EF0F35E-65BE-4994-9BC4-9D3992A9B05C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EF0F35E-65BE-4994-9BC4-9D3992A9B05C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70FD6E90-BBE8-4DA1-AE07-55064803225B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70FD6E90-BBE8-4DA1-AE07-55064803225B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70FD6E90-BBE8-4DA1-AE07-55064803225B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70FD6E90-BBE8-4DA1-AE07-55064803225B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +108,9 @@ Global
 		{E60895E5-79C4-447D-88B7-85CB5BA336A4} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{88FD6C42-4134-4F35-A104-ED8520463847} = {2B5CD179-FF7B-428F-98F6-2ADBB9538D18}
 		{FC1F7510-047E-4D4B-B024-82BB5269E584} = {2B5CD179-FF7B-428F-98F6-2ADBB9538D18}
+		{2DCC3E87-4901-4980-ABB8-0A93F2C2F7B8} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{1EF0F35E-65BE-4994-9BC4-9D3992A9B05C} = {2B5CD179-FF7B-428F-98F6-2ADBB9538D18}
+		{70FD6E90-BBE8-4DA1-AE07-55064803225B} = {2B5CD179-FF7B-428F-98F6-2ADBB9538D18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C09128AF-C73F-ED7D-33F5-69BF7D934D50}

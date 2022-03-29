@@ -15,6 +15,11 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.OpenIddict.Authorizations;
 
+//https://github.com/abpframework/abp/pull/12094
+[ExposeServices(
+    typeof(IOpenIddictAuthorizationStore<OpenIddictAuthorization>),
+    typeof(OpenIddictAuthorizationStore)
+)]
 public class OpenIddictAuthorizationStore : OpenIddictStoreBase<IOpenIddictAuthorizationRepository>, IOpenIddictAuthorizationStore<OpenIddictAuthorization>, IScopedDependency
 {
     protected IOpenIddictApplicationRepository ApplicationRepository { get; }

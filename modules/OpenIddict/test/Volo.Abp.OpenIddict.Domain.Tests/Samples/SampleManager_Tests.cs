@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Volo.Abp.OpenIddict.Samples;
@@ -15,6 +16,6 @@ public class SampleManager_Tests : OpenIddictDomainTestBase
     [Fact]
     public async Task Method1Async()
     {
-
+        var q = new CultureInfo("zh").Parent.Name;
     }
 }

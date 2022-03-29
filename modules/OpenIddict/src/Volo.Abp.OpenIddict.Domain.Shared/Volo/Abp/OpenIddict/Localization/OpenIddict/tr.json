@@ -1,7 +1,11 @@
 {
   "culture": "tr",
   "texts": {
-    "MyAccount":  "Hesabım",
-    "SamplePageMessage": "OpenIddict modulünden örnek bir sayfa"
+    "UserLockedOut": "Kullanıcı hesabı hatalı giriş denemeleri nedeniyle kilitlenmiştir. Lütfen bir süre bekleyip tekrar deneyin.",
+    "InvalidUserNameOrPassword": "Kullanıcı adı ya da şifre geçersiz!",
+    "LoginIsNotAllowed": "Giriş yapmanıza izin verilmiyor! Hesabınız etkin değil veya e-postanızı/telefon numaranızı onaylamanız gerekiyor.",
+    "InvalidUsername": "Kullanıcı adı ya da şifre geçersiz!",
+    "InvalidAuthenticatorCode": "Geçersiz kimlik doğrulama kodu!",
+    "TheTargetUserIsNotLinkedToYou": "Hedef kullanıcı sizinle bağlantılı değil!"
   }
 }

@@ -15,6 +15,11 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.OpenIddict.Applications;
 
+//https://github.com/abpframework/abp/pull/12094
+[ExposeServices(
+    typeof(IOpenIddictApplicationStore<OpenIddictApplication>),
+    typeof(OpenIddictApplicationStore)
+)]
 public class OpenIddictApplicationStore : OpenIddictStoreBase<IOpenIddictApplicationRepository>, IOpenIddictApplicationStore<OpenIddictApplication>, IScopedDependency
 {
     public OpenIddictApplicationStore(

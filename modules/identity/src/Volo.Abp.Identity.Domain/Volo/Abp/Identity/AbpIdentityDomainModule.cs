@@ -58,6 +58,7 @@ public class AbpIdentityDomainModule : AbpModule
             options.ClaimsIdentity.UserIdClaimType = AbpClaimTypes.UserId;
             options.ClaimsIdentity.UserNameClaimType = AbpClaimTypes.UserName;
             options.ClaimsIdentity.RoleClaimType = AbpClaimTypes.Role;
+            options.ClaimsIdentity.EmailClaimType = AbpClaimTypes.Email;
         });
 
         context.Services.AddAbpDynamicOptions<IdentityOptions, AbpIdentityOptionsManager>();

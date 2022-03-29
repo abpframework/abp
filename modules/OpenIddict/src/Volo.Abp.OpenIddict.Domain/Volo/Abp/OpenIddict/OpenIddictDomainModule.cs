@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using Volo.Abp.Domain;
+using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Authorizations;
@@ -14,6 +15,7 @@ namespace Volo.Abp.OpenIddict;
 
 [DependsOn(
     typeof(AbpDddDomainModule),
+    typeof(AbpIdentityDomainModule),
     typeof(OpenIddictDomainSharedModule)
 )]
 public class OpenIddictDomainModule : AbpModule
@@ -38,19 +40,23 @@ public class OpenIddictDomainModule : AbpModule
         var openIddictBuilder = services.AddOpenIddict()
             .AddCore(builder =>
             {
-
                 builder.Configure(options => options.DisableAdditionalFiltering = false);
 
                 builder.SetDefaultApplicationEntity<OpenIddictApplication>()
                     .SetDefaultAuthorizationEntity<OpenIddictAuthorization>()
                     .SetDefaultScopeEntity<OpenIddictScope>()
                     .SetDefaultTokenEntity<OpenIddictToken>();
-            })
-            .AddServer(options =>
-            {
-                options.UseDataProtection();
 
-                options
+                services.ExecutePreConfiguredActions(builder);
+            })
+            .AddServer(builder =>
+            {
+                //builder.UseDataProtection();
+
+                // Can be enable by Configure OpenIddictServerOptions.DisableAccessTokenEncryption
+                builder.DisableAccessTokenEncryption();
+                    
+                builder
                     .SetAuthorizationEndpointUris("/connect/authorize")
                     // /.well-known/oauth-authorization-server
                     // /.well-known/openid-configuration
@@ -65,41 +71,50 @@ public class OpenIddictDomainModule : AbpModule
                     .SetUserinfoEndpointUris("/connect/userinfo")
                     .SetVerificationEndpointUris("/connect/verify");
 
-                options
+                builder
                     .AllowAuthorizationCodeFlow()
                     .AllowHybridFlow()
                     .AllowImplicitFlow()
                     .AllowPasswordFlow()
                     .AllowClientCredentialsFlow()
                     .AllowRefreshTokenFlow()
-                    //.AllowNoneFlow()
-                    .AllowDeviceCodeFlow();
+                    .AllowDeviceCodeFlow()
+                    .AllowNoneFlow();
 
-                options.RegisterScopes(OpenIddictConstants.Scopes.Email, OpenIddictConstants.Scopes.Profile,
-                    OpenIddictConstants.Scopes.Roles);
+                builder.RegisterScopes(new []
+                {
+                    OpenIddictConstants.Scopes.OpenId,
+                    OpenIddictConstants.Scopes.Email,
+                    OpenIddictConstants.Scopes.Profile,
+                    OpenIddictConstants.Scopes.Roles,
+                    OpenIddictConstants.Scopes.Address,
+                    OpenIddictConstants.Scopes.OfflineAccess
+                });
 
                 if (builderOptions.AddDevelopmentEncryptionAndSigningCertificate)
                 {
-                    options.AddDevelopmentEncryptionCertificate()
+                    builder.AddDevelopmentEncryptionCertificate()
                         .AddDevelopmentSigningCertificate();
                 }
 
-                // TODO:
-                options.UseAspNetCore()
+                //TODO:
+                builder.UseAspNetCore()
                     .EnableAuthorizationEndpointPassthrough()
-                    .EnableAuthorizationRequestCaching()
-                    .EnableLogoutEndpointPassthrough()
-                    .EnableLogoutRequestCaching()
                     .EnableTokenEndpointPassthrough()
                     .EnableUserinfoEndpointPassthrough()
-                    .EnableVerificationEndpointPassthrough()
-                    .EnableErrorPassthrough()
-                    .EnableStatusCodePagesIntegration();
+                    .EnableLogoutEndpointPassthrough()
+                    .EnableVerificationEndpointPassthrough();
+
+                services.ExecutePreConfiguredActions(builder);
+
             })
-            .AddValidation(options =>
+            .AddValidation(builder =>
             {
-                options.UseDataProtection();
-                options.UseAspNetCore();
+                builder.UseLocalServer();
+               // builder.UseDataProtection();
+                builder.UseAspNetCore();
+
+                services.ExecutePreConfiguredActions(builder);
             });
 
         services.Configure<OpenIddictCoreOptions>(options =>

@@ -23,14 +23,14 @@ public class OpenIddictDomainSharedModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Add<OpenIddictResource>("en")
+                .Add<AbpOpenIddictResource>("en")
                 .AddBaseTypes(typeof(AbpValidationResource))
                 .AddVirtualJson("/Localization/OpenIddict");
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
-            options.MapCodeNamespace("OpenIddict", typeof(OpenIddictResource));
+            options.MapCodeNamespace("OpenIddict", typeof(AbpOpenIddictResource));
         });
     }
 }

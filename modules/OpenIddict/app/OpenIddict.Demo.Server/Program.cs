@@ -1,9 +1,13 @@
-var builder = WebApplication.CreateBuilder(args);
+using OpenIddict.Demo.Server;
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Host.UseAutofac();
+await builder.AddApplicationAsync<OpenIddictServerModule>();
 
 var app = builder.Build();
+await app.InitializeApplicationAsync();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -18,8 +22,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.UseConfiguredEndpoints();
 
 app.Run();
