@@ -55,12 +55,4 @@ public partial class BlogPostAdminClientProxy : ClientProxyBase<IBlogPostAdminAp
             { typeof(UpdateBlogPostDto), input }
         });
     }
-
-    public async Task RemoveCoverImageAsync(Guid id)
-    {
-        await RequestAsync(nameof(RemoveCoverImageAsync), new ClientProxyRequestTypeValue
-        {
-            { typeof(Guid), id },
-        });
-    }
 }

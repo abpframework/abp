@@ -13,5 +13,4 @@ public interface IBlogPostAdminAppService
         CreateBlogPostDto,
         UpdateBlogPostDto>
 {
-    Task RemoveCoverImageAsync(Guid id);
 }

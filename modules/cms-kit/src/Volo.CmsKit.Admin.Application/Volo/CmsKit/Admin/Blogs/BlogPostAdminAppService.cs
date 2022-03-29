@@ -69,8 +69,13 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         blogPost.SetShortDescription(input.ShortDescription);
         blogPost.SetContent(input.Content);
         blogPost.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        
+        if (blogPost.CoverImageMediaId != null && input.CoverImageMediaId == null)
+        {
+            await MediaDescriptorAdminAppService.DeleteAsync(blogPost.CoverImageMediaId.Value);
+        }
         blogPost.CoverImageMediaId = input.CoverImageMediaId;
-
+        
         if (blogPost.Slug != input.Slug)
         {
             await BlogPostManager.SetSlugUrlAsync(blogPost, input.Slug);
@@ -114,19 +119,5 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     public virtual async Task DeleteAsync(Guid id)
     {
         await BlogPostRepository.DeleteAsync(id);
-    }
-
-    [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
-    public virtual async Task RemoveCoverImageAsync(Guid id)
-    {
-        var blogPost = await BlogPostRepository.GetAsync(id);
-        if (blogPost?.CoverImageMediaId == null)
-        {
-            return;
-        }
-
-        await MediaDescriptorAdminAppService.DeleteAsync(blogPost.CoverImageMediaId.Value);
-        
-        blogPost.CoverImageMediaId = null;
     }
 }

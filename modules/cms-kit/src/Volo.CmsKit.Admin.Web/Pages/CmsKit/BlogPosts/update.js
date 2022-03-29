@@ -231,12 +231,8 @@ $(function () {
             l('RemoveCoverImageConfirmationMessage'),
             function (isConfirmed) {
                 if (isConfirmed) {
-                    volo.cmsKit.admin.blogs.blogPostAdmin
-                        .removeCoverImage($blogPostIdInput.val())
-                        .then(function () {
-                            $coverImage.val(null);
-                            $('#CurrentCoverImageArea').remove();
-                        });
+                    $coverImage.val(null);
+                    $('#CurrentCoverImageArea').remove();
                 }
             }
         );
