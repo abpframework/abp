@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Your password has been changed successfully.",
     "PersonalSettingsSavedMessage": "Your personal settings has been saved successfully.",
     "Volo.Abp.Identity:DefaultError": "An unknown failure has occurred.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Optimistic concurrency failure, object has been modified.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Optimistic concurrency check has been failed. The entity you're working on has modified by another user. Please discard your changes and try again.",
     "Volo.Abp.Identity:DuplicateEmail": "Email '{0}' is already taken.",
     "Volo.Abp.Identity:DuplicateRoleName": "Role name '{0}' is already taken.",
     "Volo.Abp.Identity:DuplicateUserName": "Username '{0}' is already taken.",
