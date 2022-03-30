@@ -378,7 +378,7 @@
 
     volo.cmsKit.admin.blogs.blogPostAdmin.getList = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'blogId', value: input.blogId }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'blogId', value: input.blogId }, { name: 'authorId', value: input.authorId }, { name: 'status', value: input.status }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
         type: 'GET'
       }, ajaxParams));
     };
@@ -387,6 +387,30 @@
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/' + id + '',
         type: 'PUT',
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.blogs.blogPostAdmin.publish = function(id, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/' + id + '/publish',
+        type: 'POST',
+        dataType: null
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.blogs.blogPostAdmin.draft = function(id, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/' + id + '/draft',
+        type: 'POST',
+        dataType: null
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.blogs.blogPostAdmin.createAndPublish = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts/create-and-publish',
+        type: 'POST',
         data: JSON.stringify(input)
       }, ajaxParams));
     };

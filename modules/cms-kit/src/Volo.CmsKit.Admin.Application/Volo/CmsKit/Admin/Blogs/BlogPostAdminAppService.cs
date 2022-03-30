@@ -47,13 +47,15 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         var blog = await BlogRepository.GetAsync(input.BlogId);
 
         var blogPost = await BlogPostManager.CreateAsync(
-                                                    author,
-                                                    blog,
-                                                    input.Title,
-                                                    input.Slug,
-                                                    input.ShortDescription,
-                                                    input.Content,
-                                                    input.CoverImageMediaId);
+            author,
+            blog,
+            input.Title,
+            input.Slug,
+            BlogPostStatus.Draft,
+            input.ShortDescription,
+            input.Content,
+            input.CoverImageMediaId
+        );
 
         await BlogPostRepository.InsertAsync(blogPost);
 
@@ -100,6 +102,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         var blogs = (await BlogRepository.GetListAsync()).ToDictionary(x => x.Id);
 
         var blogPosts = await BlogPostRepository.GetListAsync(input.Filter, input.BlogId, input.AuthorId,
+            statusFilter: input.Status,
             input.MaxResultCount, input.SkipCount, input.Sorting);
 
         var count = await BlogPostRepository.GetCountAsync(input.Filter, input.BlogId, input.AuthorId);
@@ -119,5 +122,33 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     public virtual async Task DeleteAsync(Guid id)
     {
         await BlogPostRepository.DeleteAsync(id);
+    }
+
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
+    public virtual async Task PublishAsync(Guid id)
+    {
+        var blogPost = await BlogPostRepository.GetAsync(id);
+        blogPost.SetPublished();
+        await BlogPostRepository.UpdateAsync(blogPost);
+    }
+
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
+    public virtual async Task DraftAsync(Guid id)
+    {
+        var blogPost = await BlogPostRepository.GetAsync(id);
+        blogPost.SetDraft();
+        await BlogPostRepository.UpdateAsync(blogPost);
+    }
+
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
+    public virtual async Task<BlogPostDto> CreateAndPublishAsync(CreateBlogPostDto input)
+    {
+        var blogPost = await CreateAsync(input);
+        await CurrentUnitOfWork.SaveChangesAsync();
+        
+        await PublishAsync(blogPost.Id);
+        blogPost.Status = BlogPostStatus.Published;
+        return blogPost;
     }
 }

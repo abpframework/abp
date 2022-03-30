@@ -31,9 +31,17 @@ public class CreateModel : CmsKitAdminPageModel
     {
         var dto = ObjectMapper.Map<CreateBlogPostViewModel, CreateBlogPostDto>(ViewModel);
 
-        var created = await BlogPostAdminAppService.CreateAsync(dto);
+        BlogPostDto createResult;
+        if (ViewModel.Status == BlogPostStatus.Published)
+        {
+            createResult = await BlogPostAdminAppService.CreateAndPublishAsync(dto);
+        }
+        else
+        {
+            createResult = await BlogPostAdminAppService.CreateAsync(dto);
+        }
 
-        return new OkObjectResult(created);
+        return new OkObjectResult(createResult);
     }
 
     [AutoMap(typeof(CreateBlogPostDto), ReverseMap = true)]
@@ -65,5 +73,9 @@ public class CreateModel : CmsKitAdminPageModel
 
         [HiddenInput]
         public Guid? CoverImageMediaId { get; set; }
+        
+        [HiddenInput]
+        [DynamicFormIgnore]
+        public BlogPostStatus Status { get; set; }
     }
 }

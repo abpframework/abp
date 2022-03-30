@@ -13,12 +13,14 @@ public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
         string filter = null,
         Guid? blogId = null,
         Guid? authorId = null,
+        BlogPostStatus? statusFilter = null,
         CancellationToken cancellationToken = default);
 
     Task<List<BlogPost>> GetListAsync(
         string filter = null,
         Guid? blogId = null,
         Guid? authorId = null,
+        BlogPostStatus? statusFilter = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string sorting = null,

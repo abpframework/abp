@@ -55,4 +55,28 @@ public partial class BlogPostAdminClientProxy : ClientProxyBase<IBlogPostAdminAp
             { typeof(UpdateBlogPostDto), input }
         });
     }
+    
+    public virtual async Task PublishAsync(Guid id)
+    {
+        await RequestAsync(nameof(PublishAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id },
+        });
+    }
+    
+    public virtual async Task DraftAsync(Guid id)
+    {
+        await RequestAsync(nameof(DraftAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id },
+        });
+    }
+
+    public virtual async Task<BlogPostDto> CreateAndPublishAsync(CreateBlogPostDto input)
+    {
+        return await RequestAsync<BlogPostDto>(nameof(CreateAndPublishAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(CreateBlogPostDto), input }
+        });
+    }
 }

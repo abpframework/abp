@@ -38,11 +38,11 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
     {
         var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
-        var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.AuthorId, input.MaxResultCount,
+        var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.AuthorId, BlogPostStatus.Published, input.MaxResultCount,
             input.SkipCount, input.Sorting);
 
         return new PagedResultDto<BlogPostPublicDto>(
-            await BlogPostRepository.GetCountAsync(blogId: blog.Id, authorId: input.AuthorId),
+            await BlogPostRepository.GetCountAsync(blogId: blog.Id, statusFilter: BlogPostStatus.Published, authorId: input.AuthorId),
             ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
     }
 
