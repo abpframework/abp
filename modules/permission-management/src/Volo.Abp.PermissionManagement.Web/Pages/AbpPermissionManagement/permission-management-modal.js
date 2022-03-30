@@ -267,13 +267,14 @@ var abp = abp || {};
                     if(!$form.find("input:checked").length > 0) {
                         abp.message.confirm(l("RemoveAllPermissionsWarningMessage"))
                             .then(function (confirmed) {
-                                if(!confirmed) {
-                                    return false;
+                                if(confirmed) {
+                                    $form.submit();
                                 }
                             });
                     }
-
-                    $submitButton.submit();
+                    else {
+                        $form.submit();
+                    }
                 });
             }
             
