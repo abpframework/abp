@@ -162,10 +162,7 @@ public partial class UserManagement
                     new EntityAction
                     {
                         Text = L["Delete"],
-                        Visible = (data) =>
-                        {
-                            return HasDeletePermission && CurrentUser.GetId() != data.As<IdentityUserDto>().Id;
-                        },
+                        Visible = (data) => HasDeletePermission && CurrentUser.GetId() != data.As<IdentityUserDto>().Id,
                         Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityUserDto>()),
                         ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityUserDto>())
                     }
