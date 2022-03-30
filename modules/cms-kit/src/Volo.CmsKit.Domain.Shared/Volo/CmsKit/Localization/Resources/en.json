@@ -175,6 +175,8 @@
     "Publish": "Publish",
     "BlogPostDraftConfirmationMessage": "Are you sure to set the blog post \"{0}\" as draft?",
     "SelectAnAuthor": "Select an author",
+    "GoToTop": "Go to top",
+    "InThisDocument": "In this document",
     "RemoveCoverImageConfirmationMessage": "Are you sure to remove the cover image?",
     "RemoveCoverImage": "Remove the cover image"
   }
