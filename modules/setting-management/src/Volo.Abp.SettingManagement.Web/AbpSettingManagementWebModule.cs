@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Web.Navigation;
@@ -14,6 +15,7 @@ namespace Volo.Abp.SettingManagement.Web;
 
 [DependsOn(
     typeof(AbpSettingManagementApplicationContractsModule),
+    typeof(AbpAutoMapperModule),
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),
     typeof(AbpSettingManagementDomainSharedModule)
     )]
@@ -57,6 +59,12 @@ public class AbpSettingManagementWebModule : AbpModule
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {
             options.DisableModule(SettingManagementRemoteServiceConsts.ModuleName);
+        });
+        
+        context.Services.AddAutoMapperObjectMapper<AbpSettingManagementWebModule>();
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddProfile<SettingManagementWebAutoMapperProfile>(validate: true);
         });
     }
 }

@@ -1,14 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.SettingManagement.Localization
 @inject IHtmlLocalizer<AbpSettingManagementResource> L
-@model Volo.Abp.SettingManagement.EmailSettingsDto
+@model Volo.Abp.SettingManagement.UpdateEmailSettingsDto
 
-<form id="EmailSettingsForm">
+<form id="EmailSettingsForm" method="post">
     <abp-row>
         <abp-column size-md="_12">
             <div>
-                <abp-input asp-for="DefaultFromDisplayName" label="@L["DefaultFromDisplayName"].Value" />
-                <abp-input asp-for="DefaultFromAddress" label="@L["DefaultFromAddress"].Value" />
+                <abp-input asp-for="DefaultFromDisplayName" label="@(L["DefaultFromDisplayName"].Value + " * ")" />
+                <abp-input asp-for="DefaultFromAddress" label="@(L["DefaultFromAddress"].Value + " * ")" />
                 <abp-input asp-for="SmtpHost" label="@L["SmtpHost"].Value" />
                 <abp-input asp-for="SmtpPort" label="@L["SmtpPort"].Value" />
                 <abp-input asp-for="SmtpEnableSsl" label="@L["SmtpEnableSsl"].Value" />

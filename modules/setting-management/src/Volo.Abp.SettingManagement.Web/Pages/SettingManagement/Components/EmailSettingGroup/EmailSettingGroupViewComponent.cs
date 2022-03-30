@@ -16,8 +16,8 @@ public class EmailSettingGroupViewComponent : AbpViewComponent
 
     public virtual async Task<IViewComponentResult> InvokeAsync()
     {
-        var model = await EmailSettingsAppService.GetAsync();
-
+        var emailSettings = await EmailSettingsAppService.GetAsync();
+        var model = ObjectMapper.Map<EmailSettingsDto, UpdateEmailSettingsDto>(emailSettings);
         return View("~/Pages/SettingManagement/Components/EmailSettingGroup/Default.cshtml", model);
     }
 }
