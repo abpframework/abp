@@ -164,6 +164,8 @@
     "GlobalResources": "Global Kaynaklar",
     "Script": "Script",
     "Style": "Style",
-    "SavedSuccessfully": "Başarıyla kaydedildi"
+    "SavedSuccessfully": "Başarıyla kaydedildi",
+    "RemoveCoverImageConfirmationMessage": "Kapak resmini kaldırmak istediğinize emin misiniz?",
+    "RemoveCoverImage": "Kapak resmini kaldır"
   }
 }
