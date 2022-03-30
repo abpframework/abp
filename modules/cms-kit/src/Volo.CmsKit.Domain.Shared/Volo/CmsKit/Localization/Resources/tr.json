@@ -129,6 +129,7 @@
     "SelectAll": "Hepsini seç",
     "Send": "Gönder",
     "SendMessage": "Mesajı Gönder",
+    "SelectedAuthor": "Yazar",
     "ShortDescription": "Kısa açıklama",
     "Slug": "Etiket",
     "Source": "Kaynak",
@@ -165,6 +166,8 @@
     "Style": "Style",
     "SavedSuccessfully": "Başarıyla kaydedildi",
     "GoToTop": "Yukarı Git",
-    "InThisDocument": "Bu belgede"
+    "InThisDocument": "Bu belgede",
+    "RemoveCoverImageConfirmationMessage": "Kapak resmini kaldırmak istediğinize emin misiniz?",
+    "RemoveCoverImage": "Kapak resmini kaldır"
   }
 }

@@ -130,6 +130,7 @@
     "SelectAll": "Select All",
     "Send": "Send",
     "SendMessage": "Send Message",
+    "SelectedAuthor": "Author",
     "ShortDescription": "Short description",
     "Slug": "Slug",
     "Source": "Source",
@@ -166,6 +167,8 @@
     "Style": "Style",
     "SavedSuccessfully": "Saved successfully",
     "GoToTop": "Go to top",
-    "InThisDocument": "In this document"
+    "InThisDocument": "In this document",
+    "RemoveCoverImageConfirmationMessage": "Are you sure to remove the cover image?",
+    "RemoveCoverImage": "Remove the cover image"
   }
 }
