@@ -165,6 +165,8 @@
     "Script": "Script",
     "Style": "Style",
     "SavedSuccessfully": "Başarıyla kaydedildi",
+    "GoToTop": "Yukarı Git",
+    "InThisDocument": "Bu belgede",
     "RemoveCoverImageConfirmationMessage": "Kapak resmini kaldırmak istediğinize emin misiniz?",
     "RemoveCoverImage": "Kapak resmini kaldır"
   }
