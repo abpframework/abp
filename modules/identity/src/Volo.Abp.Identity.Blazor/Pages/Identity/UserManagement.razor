@@ -18,6 +18,12 @@
         </PageHeader>
     </CardHeader>
     <CardBody>
+        <Field Horizontal>
+            <FieldLabel ColumnSize="ColumnSize.Is1.Is9.WithOffset">@L["Search"]</FieldLabel>
+            <FieldBody ColumnSize="ColumnSize.Is2">
+                    <TextEdit Text="@GetListInput.Filter" TextChanged="@OnSearchTextChanged" />
+             </FieldBody>
+        </Field>
         @* ************************* DATA GRID ************************* *@
         <AbpExtensibleDataGrid TItem="IdentityUserDto"
                                Data="Entities"

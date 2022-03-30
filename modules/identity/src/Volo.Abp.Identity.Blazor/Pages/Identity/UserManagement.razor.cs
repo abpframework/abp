@@ -10,6 +10,7 @@ using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.PermissionManagement.Blazor.Components;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity;
 
@@ -62,6 +63,13 @@ public partial class UserManagement
         {
             await HandleErrorAsync(ex);
         }
+    }
+
+    protected virtual async Task OnSearchTextChanged(string value)
+    {
+        GetListInput.Filter = value;
+        CurrentPage = 1;
+        await GetEntitiesAsync();
     }
 
     protected override async Task SetPermissionsAsync()
@@ -154,7 +162,10 @@ public partial class UserManagement
                     new EntityAction
                     {
                         Text = L["Delete"],
-                        Visible = (data) => HasDeletePermission,
+                        Visible = (data) =>
+                        {
+                            return HasDeletePermission && CurrentUser.GetId() != data.As<IdentityUserDto>().Id;
+                        },
                         Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityUserDto>()),
                         ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityUserDto>())
                     }
@@ -180,7 +191,7 @@ public partial class UserManagement
                     },
                     new TableColumn
                     {
-                        Title = L["Email"],
+                        Title = L["EmailAddress"],
                         Data = nameof(IdentityUserDto.Email),
                     },
                     new TableColumn
