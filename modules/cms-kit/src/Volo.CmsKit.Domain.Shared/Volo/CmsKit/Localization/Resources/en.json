@@ -183,11 +183,6 @@
     "HasBlogPostWaitingForReviewMessage": "You have a blog post waiting for review. Click to list.",
     "SelectAStatus": "Select a status",
     "Status": "Status",
-    "SelectAnAuthor": "Select an author",
-    "SavedSuccessfully": "Saved successfully",
-    "GoToTop": "Go to top",
-    "InThisDocument": "In this document",
-    "RemoveCoverImageConfirmationMessage": "Are you sure to remove the cover image?",
-    "RemoveCoverImage": "Remove the cover image"
+    "CmsKit.BlogPost.ScrollIndex": "Quick navigation bar in blog posts"
   }
 }
