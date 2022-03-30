@@ -3,6 +3,8 @@ var abp = abp || {};
     abp.modals = abp.modals || {};
 
     abp.modals.PermissionManagement = function () {
+        var l = abp.localization.getResource("AbpPermissionManagement");
+        
         function checkParents($tab, $checkBox) {
             var parentName = $checkBox
                 .closest('.custom-checkbox')
@@ -255,6 +257,26 @@ var abp = abp || {};
 
             initSelectAllInThisTab();
             setSelectAllInAllTabs();
+
+            var $form = $("#PermissionManagementForm");
+            var $submitButton = $form.find("button[type='submit']");
+            if($submitButton) {
+                $submitButton.click(function (e) {
+                    e.preventDefault();
+                    
+                    if(!$form.find("input:checked").length > 0) {
+                        abp.message.confirm(l("RemoveAllPermissionsWarningMessage"))
+                            .then(function (confirmed) {
+                                if(!confirmed) {
+                                    return false;
+                                }
+                            });
+                    }
+
+                    $submitButton.submit();
+                });
+            }
+            
         };
     };
 })(jQuery);
