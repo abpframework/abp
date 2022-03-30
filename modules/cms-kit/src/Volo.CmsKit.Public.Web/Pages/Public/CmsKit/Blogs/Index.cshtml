@@ -24,19 +24,19 @@
 <abp-row id="blogs-filter-area">
     <abp-column size="_4">
         <div class="mb-3">
-            <label class="form-label" asp-for="@Model.Authors"></label>
-            <select id="AuthorSelect" class="form-control">
-                <option value="">@L["SelectAnAuthor"]</option>
-                @foreach (var author in Model.Authors)
-                {
-                    if (author.Id == Model.AuthorId)
-                    {
-                        <option value="@author.Id" selected>@author.Name @author.Surname</option>
-                    }
-                    else
-                    {
-                        <option value="@author.Id">@author.Name @author.Surname</option>
-                    }
+            <label class="form-label" asp-for="@Model.SelectedAuthor"></label>
+
+            <select id="AuthorSelect" asp-for="@Model.AuthorId"
+                class="auto-complete-select"
+                data-autocomplete-api-url="/api/cms-kit-public/blog-posts/authors"
+                data-autocomplete-display-property="userName"
+                data-autocomplete-value-property="id"
+                data-autocomplete-items-property="items"
+                data-autocomplete-filter-param-name="filter">
+
+                @if(Model.SelectedAuthor != null)
+                {   
+                    <option selected value="@Model.AuthorId" selected="selected">@Model.SelectedAuthor.UserName</option>
                 }
             </select>
         </div>

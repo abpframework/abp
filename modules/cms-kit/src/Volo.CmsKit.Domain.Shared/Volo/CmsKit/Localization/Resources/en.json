@@ -131,6 +131,7 @@
     "SelectAll": "Select All",
     "Send": "Send",
     "SendMessage": "Send Message",
+    "SelectedAuthor": "Author",
     "ShortDescription": "Short description",
     "Slug": "Slug",
     "Source": "Source",
@@ -173,6 +174,8 @@
     "Draft": "Draft",
     "Publish": "Publish",
     "BlogPostDraftConfirmationMessage": "Are you sure to set the blog post \"{0}\" as draft?",
-    "SelectAnAuthor": "Select an author"
+    "SelectAnAuthor": "Select an author",
+    "RemoveCoverImageConfirmationMessage": "Are you sure to remove the cover image?",
+    "RemoveCoverImage": "Remove the cover image"
   }
 }

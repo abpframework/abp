@@ -130,6 +130,7 @@
     "SelectAll": "Hepsini seç",
     "Send": "Gönder",
     "SendMessage": "Mesajı Gönder",
+    "SelectedAuthor": "Yazar",
     "ShortDescription": "Kısa açıklama",
     "Slug": "Etiket",
     "Source": "Kaynak",
@@ -172,6 +173,8 @@
     "Draft": "Taslak olarak kaydet",
     "Publish": "Yayınla",
     "BlogPostDraftConfirmationMessage": "\"{0}\" başlıklı gönderiyi taslak haline getirmek istediğinize emin misiniz?",
-    "SelectAnAuthor": "Bir yazar seçin"
+    "SelectAnAuthor": "Bir yazar seçin",
+    "RemoveCoverImageConfirmationMessage": "Kapak resmini kaldırmak istediğinize emin misiniz?",
+    "RemoveCoverImage": "Kapak resmini kaldır"
   }
 }
