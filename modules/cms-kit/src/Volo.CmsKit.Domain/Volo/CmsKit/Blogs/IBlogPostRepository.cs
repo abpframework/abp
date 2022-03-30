@@ -30,7 +30,16 @@ public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
 
     Task<BlogPost> GetBySlugAsync(Guid blogId, string slug, CancellationToken cancellationToken = default);
 
-    Task<List<CmsUser>> GetAuthorsHasBlogPosts(CancellationToken cancellationToken = default);
+    Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(
+        int skipCount,
+        int maxResultCount,
+        string sorting,
+        string filter,
+        CancellationToken cancellationToken = default);
+
+    Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default);
+
+    Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<bool> HasBlogPostWaitingForReviewAsync(CancellationToken cancellationToken = default);
 }

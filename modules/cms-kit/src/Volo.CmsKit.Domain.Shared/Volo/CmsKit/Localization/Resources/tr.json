@@ -130,6 +130,7 @@
     "SelectAll": "Hepsini seç",
     "Send": "Gönder",
     "SendMessage": "Mesajı Gönder",
+    "SelectedAuthor": "Yazar",
     "ShortDescription": "Kısa açıklama",
     "Slug": "Etiket",
     "Source": "Kaynak",
@@ -181,6 +182,11 @@
     "HasBlogPostWaitingForReviewMessage": "Yayınlanmak için onay bekleyen blog postlar var! Listelemek için tıklayın.",
     "SelectAStatus": "Durum seçin",
     "Status": "Durum",
-    "SelectAnAuthor": "Bir yazar seçin"
+    "SelectAnAuthor": "Bir yazar seçin",
+    "SavedSuccessfully": "Başarıyla kaydedildi",
+    "GoToTop": "Yukarı Git",
+    "InThisDocument": "Bu belgede",
+    "RemoveCoverImageConfirmationMessage": "Kapak resmini kaldırmak istediğinize emin misiniz?",
+    "RemoveCoverImage": "Kapak resmini kaldır"
   }
 }

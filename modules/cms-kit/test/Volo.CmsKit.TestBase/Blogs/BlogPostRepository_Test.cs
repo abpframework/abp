@@ -155,7 +155,7 @@ public abstract class BlogPostRepository_Test<TStartupModule> : CmsKitTestBase<T
     [Fact]
     public async Task GetAuthorsHasBlogPosts_ShouldWorkProperly()
     {
-        var authors = await blogPostRepository.GetAuthorsHasBlogPosts();
+        var authors = await blogPostRepository.GetAuthorsHasBlogPostsAsync(0, 100, null, null);
 
         authors.ShouldNotBeNull();
         authors.ShouldNotBeEmpty();
