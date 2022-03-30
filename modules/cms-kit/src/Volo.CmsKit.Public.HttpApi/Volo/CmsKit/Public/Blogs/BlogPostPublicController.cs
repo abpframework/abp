@@ -40,8 +40,15 @@ public class BlogPostPublicController : CmsKitPublicControllerBase, IBlogPostPub
 
     [HttpGet]
     [Route("authors")]
-    public virtual Task<List<CmsUserDto>> GetAuthorsHasBlogPostsAsync()
+    public Task<PagedResultDto<CmsUserDto>> GetAuthorsHasBlogPostsAsync(BlogPostFilteredPagedAndSortedResultRequestDto input)
     {
-        return BlogPostPublicAppService.GetAuthorsHasBlogPostsAsync();
+        return BlogPostPublicAppService.GetAuthorsHasBlogPostsAsync(input);
+    }
+
+    [HttpGet]
+    [Route("authors/{id}")]
+    public Task<CmsUserDto> GetAuthorHasBlogPostAsync(Guid id)
+    {
+        return BlogPostPublicAppService.GetAuthorHasBlogPostAsync(id);
     }
 }

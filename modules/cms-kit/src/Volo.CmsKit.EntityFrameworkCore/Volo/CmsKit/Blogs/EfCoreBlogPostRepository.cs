@@ -7,6 +7,7 @@ using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
@@ -100,9 +101,31 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
             GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<CmsUser>> GetAuthorsHasBlogPosts(CancellationToken cancellationToken = default)
+    public async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbContextAsync()).BlogPosts.Select(x => x.Author).Distinct()
+        return await (await CreateAuthorsQueryableAsync())
+            .Skip(skipCount)
+            .Take(maxResultCount)
+            .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()))
+            .OrderBy(sorting.IsNullOrEmpty() ? nameof(CmsUser.UserName) : sorting)
             .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default)
+    {
+        return await (await CreateAuthorsQueryableAsync())
+            .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()))
+            .CountAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await (await CreateAuthorsQueryableAsync()).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken))
+            ?? throw new EntityNotFoundException(typeof(CmsUser), id);
+    }
+
+    private async Task<IQueryable<CmsUser>> CreateAuthorsQueryableAsync()
+    {
+        return (await GetDbContextAsync()).BlogPosts.Select(x => x.Author).Distinct();
     }
 }

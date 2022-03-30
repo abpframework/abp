@@ -8,6 +8,7 @@ using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
@@ -105,13 +106,37 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         return await queryable.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, cancellationToken);
     }
 
-    public async Task<List<CmsUser>> GetAuthorsHasBlogPosts(CancellationToken cancellationToken = default)
+    public async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
+    {
+        var queryable = (await CreateAuthorsQueryableAsync())
+                        .Skip(skipCount)
+                        .Take(maxResultCount)
+                        .OrderBy(sorting.IsNullOrEmpty() ? nameof(CmsUser.UserName) : sorting)
+                        .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()));
+
+        return await AsyncExecuter.ToListAsync(queryable, GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default)
+    {
+        return await AsyncExecuter.CountAsync(
+            (await CreateAuthorsQueryableAsync())
+                .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower())));
+    }
+
+    public async Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await AsyncExecuter.FirstOrDefaultAsync(await CreateAuthorsQueryableAsync(), x => x.Id == id)
+            ?? throw new EntityNotFoundException(typeof(CmsUser), id);
+    }
+
+    private async Task<IQueryable<CmsUser>> CreateAuthorsQueryableAsync()
     {
         var blogPostQueryable = (await GetQueryableAsync());
 
         var usersQueryable = (await GetDbContextAsync()).Collection<CmsUser>().AsQueryable();
 
-        var queryable = blogPostQueryable
+        return blogPostQueryable
                         .Join(
                             usersQueryable,
                             o => o.AuthorId,
@@ -119,7 +144,5 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
                             (blogPost, user) => new { blogPost, user })
                         .Select(s => s.user)
                         .Distinct();
-
-        return await AsyncExecuter.ToListAsync(queryable, GetCancellationToken(cancellationToken));
     }
 }

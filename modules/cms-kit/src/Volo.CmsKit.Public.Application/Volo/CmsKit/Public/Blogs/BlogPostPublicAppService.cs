@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -15,7 +16,6 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
     protected IBlogRepository BlogRepository { get; }
 
     protected IBlogPostRepository BlogPostRepository { get; }
-    
 
     public BlogPostPublicAppService(
         IBlogRepository blogRepository,
@@ -46,9 +46,20 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
             ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
     }
 
-    public virtual async Task<List<CmsUserDto>> GetAuthorsHasBlogPostsAsync()
+    public virtual async Task<PagedResultDto<CmsUserDto>> GetAuthorsHasBlogPostsAsync(BlogPostFilteredPagedAndSortedResultRequestDto input)
     {
-        var authors = await BlogPostRepository.GetAuthorsHasBlogPosts();
-        return ObjectMapper.Map<List<CmsUser>, List<CmsUserDto>>(authors);
+        var authors = await BlogPostRepository.GetAuthorsHasBlogPostsAsync(input.SkipCount, input.MaxResultCount, input.Sorting, input.Filter);
+        var authorDtos = ObjectMapper.Map<List<CmsUser>, List<CmsUserDto>>(authors);
+
+        return new PagedResultDto<CmsUserDto>(
+            await BlogPostRepository.GetAuthorsHasBlogPostsCountAsync(input.Filter),
+            authorDtos);
+    }
+
+    public async Task<CmsUserDto> GetAuthorHasBlogPostAsync(Guid id)
+    {
+        var author = await BlogPostRepository.GetAuthorHasBlogPostAsync(id);
+
+        return ObjectMapper.Map<CmsUser, CmsUserDto>(author);
     }
 }
