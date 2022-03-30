@@ -19,7 +19,7 @@
 
 @{
     string dummyImageSource = "https://dummyimage.com/1280x720/a3a3a3/fff.png?text=" + Model.BlogPost.Title;
-    var isScrollIndexEnabled = GlobalFeatureManager.Instance.IsEnabled<BlogPostScrollIndexFeature>();
+    var isScrollIndexEnabled = GlobalFeatureManager.Instance.IsEnabled<BlogPostScrollIndexFeature>() && Model.BlogPostScrollIndexFeature?.IsEnabled == true;
 }
 
 @section styles{

@@ -168,6 +168,7 @@
     "GoToTop": "Yukarı Git",
     "InThisDocument": "Bu belgede",
     "RemoveCoverImageConfirmationMessage": "Kapak resmini kaldırmak istediğinize emin misiniz?",
-    "RemoveCoverImage": "Kapak resmini kaldır"
+    "RemoveCoverImage": "Kapak resmini kaldır",
+    "CmsKit.BlogPost.ScrollIndex": "Blog yazılarında hızlı gezinme çubuğu"
   }
 }
