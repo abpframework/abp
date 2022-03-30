@@ -9,10 +9,10 @@ using Volo.Abp.OpenIddict.Tokens;
 namespace Volo.Abp.OpenIddict.EntityFrameworkCore;
 
 [DependsOn(
-    typeof(OpenIddictDomainModule),
+    typeof(AbpOpenIddictDomainModule),
     typeof(AbpEntityFrameworkCoreModule)
 )]
-public class OpenIddictEntityFrameworkCoreModule : AbpModule
+public class AbpOpenIddictEntityFrameworkCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {

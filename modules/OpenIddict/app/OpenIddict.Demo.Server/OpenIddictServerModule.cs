@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
 using OpenIddict.Demo.Server.EntityFrameworkCore;
 using Volo.Abp;
@@ -17,7 +18,6 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
-using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -32,11 +32,12 @@ namespace OpenIddict.Demo.Server;
 [DependsOn(
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAutofacModule),
-    typeof(OpenIddictEntityFrameworkCoreModule),
-    typeof(OpenIddictAspNetCoreModule),
     typeof(AbpEntityFrameworkCoreSqlServerModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-
+    
+    typeof(AbpOpenIddictAspNetCoreModule),
+    typeof(AbpOpenIddictEntityFrameworkCoreModule),
+    
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
     typeof(AbpAccountWebModule),
@@ -63,14 +64,6 @@ namespace OpenIddict.Demo.Server;
 )]
 public class OpenIddictServerModule : AbpModule
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
-    {
-        PreConfigure<OpenIddictBuilder>(builder =>
-        {
-
-        });
-    }
-
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddAbpDbContext<ServerDbContext>(options =>
@@ -86,9 +79,6 @@ public class OpenIddictServerModule : AbpModule
 
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        var qq = context.ServiceProvider.GetService<IOpenIddictApplicationStore<OpenIddictApplication>>();
-
-
         var dbContext = context.ServiceProvider
             .GetRequiredService<ServerDbContext>();
 

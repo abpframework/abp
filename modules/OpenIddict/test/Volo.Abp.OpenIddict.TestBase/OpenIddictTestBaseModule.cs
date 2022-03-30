@@ -12,7 +12,7 @@ namespace Volo.Abp.OpenIddict;
     typeof(AbpAutofacModule),
     typeof(AbpTestBaseModule),
     typeof(AbpAuthorizationModule),
-    typeof(OpenIddictDomainModule)
+    typeof(AbpOpenIddictDomainModule)
     )]
 public class OpenIddictTestBaseModule : AbpModule
 {

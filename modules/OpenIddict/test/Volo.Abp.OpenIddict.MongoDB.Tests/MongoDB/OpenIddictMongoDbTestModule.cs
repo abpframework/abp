@@ -1,13 +1,14 @@
 ﻿using System;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
-using Volo.Abp.Uow;
+using Volo.Abp.Identity.MongoDB;
 
 namespace Volo.Abp.OpenIddict.MongoDB;
 
 [DependsOn(
     typeof(OpenIddictTestBaseModule),
-    typeof(OpenIddictMongoDbModule)
+    typeof(AbpIdentityMongoDbModule),
+    typeof(AbpOpenIddictMongoDbModule)
     )]
 public class OpenIddictMongoDbTestModule : AbpModule
 {

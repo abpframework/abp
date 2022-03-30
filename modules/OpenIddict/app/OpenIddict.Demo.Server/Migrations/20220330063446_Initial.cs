@@ -263,6 +263,7 @@ namespace OpenIddict.Demo.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -456,6 +457,7 @@ namespace OpenIddict.Demo.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AuthorizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),

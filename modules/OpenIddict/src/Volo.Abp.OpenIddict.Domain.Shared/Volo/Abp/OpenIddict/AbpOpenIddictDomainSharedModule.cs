@@ -11,13 +11,13 @@ namespace Volo.Abp.OpenIddict;
 [DependsOn(
     typeof(AbpValidationModule)
 )]
-public class OpenIddictDomainSharedModule : AbpModule
+public class AbpOpenIddictDomainSharedModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<OpenIddictDomainSharedModule>();
+            options.FileSets.AddEmbedded<AbpOpenIddictDomainSharedModule>();
         });
 
         Configure<AbpLocalizationOptions>(options =>

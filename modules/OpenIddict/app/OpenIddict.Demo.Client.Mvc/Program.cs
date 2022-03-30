@@ -21,14 +21,14 @@ builder.Services.AddAuthentication(options =>
     {
         options.Authority = "https://localhost:44301/";
 
-        options.ClientId = "MyClient";
-        options.ClientSecret = "901564A5-E7FE-42CB-B10D-61EF6A8F3654";
+        options.ClientId = "AbpApp";
+        options.ClientSecret = "1q2w3e*";
 
-        options.RequireHttpsMetadata = false;
+        options.RequireHttpsMetadata = true;
         options.GetClaimsFromUserInfoEndpoint = true;
         options.SaveTokens = true;
 
-        options.ResponseType = OidcConstants.ResponseTypes.Code;
+        options.ResponseType = OidcConstants.ResponseTypes.CodeIdToken;
 
         options.SignOutScheme = "Cookies";
 

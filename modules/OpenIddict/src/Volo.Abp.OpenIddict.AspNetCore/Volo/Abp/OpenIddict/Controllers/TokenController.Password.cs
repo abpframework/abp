@@ -213,12 +213,22 @@ public partial class TokenController
             OpenIddictConstants.Scopes.OpenId,
             OpenIddictConstants.Scopes.Email,
             OpenIddictConstants.Scopes.Profile,
-            OpenIddictConstants.Scopes.Roles
+            OpenIddictConstants.Scopes.Roles,
+            OpenIddictConstants.Scopes.OfflineAccess
         }.Intersect(request.GetScopes()));
 
         foreach (var claim in principal.Claims)
         {
             claim.SetDestinations(GetDestinations(claim, principal));
+        }
+        
+        if (request.GetScopes().Any())
+        {
+            var resources = await ScopeManager.ListResourcesAsync(request.GetScopes()).ToListAsync();
+            if (resources.Any())
+            {
+                principal.SetResources(resources);
+            }
         }
         
         await IdentitySecurityLogManager.SaveAsync(
@@ -239,16 +249,5 @@ public partial class TokenController
         return UserManager.SupportsUserTwoFactor &&
                await UserManager.GetTwoFactorEnabledAsync(user) &&
                (await UserManager.GetValidTwoFactorProvidersAsync(user)).Count > 0;
-    }
-
-    //TODO: Check the token claims
-    protected virtual Task AddCustomClaimsAsync(List<Claim> customClaims, IdentityUser user)
-    {
-        if (user.TenantId.HasValue)
-        {
-            customClaims.Add(new Claim(AbpClaimTypes.TenantId, user.TenantId.Value.ToString()));
-        }
-
-        return Task.CompletedTask;
     }
 }

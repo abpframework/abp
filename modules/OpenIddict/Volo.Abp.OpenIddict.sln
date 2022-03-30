@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.OpenIddict.AspNetC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.Client.Console", "app\OpenIddict.Demo.Client.Console\OpenIddict.Demo.Client.Console.csproj", "{1EF0F35E-65BE-4994-9BC4-9D3992A9B05C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.Client.API", "app\OpenIddict.Demo.Client.API\OpenIddict.Demo.Client.API.csproj", "{70FD6E90-BBE8-4DA1-AE07-55064803225B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.API", "app\OpenIddict.Demo.API\OpenIddict.Demo.API.csproj", "{70FD6E90-BBE8-4DA1-AE07-55064803225B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

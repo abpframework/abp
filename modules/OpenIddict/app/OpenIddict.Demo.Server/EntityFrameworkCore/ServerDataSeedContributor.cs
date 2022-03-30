@@ -24,32 +24,32 @@ public class ServerDataSeedContributor: IDataSeedContributor, ITransientDependen
 
     public async Task SeedAsync(DataSeedContext context)
     {
-        if (await _scopeManager.FindByNameAsync("OpenIddictDemoAPI") == null)
+        if (await _scopeManager.FindByNameAsync("AbpAPI") == null)
         {
             await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor() 
             {
-                DisplayName = "OpenIddict Demo API access",
+                DisplayName = "Abp API access",
                 DisplayNames = 
                 {
-                    [CultureInfo.GetCultureInfo("zh-Hans")] = "演示 OpenIddict API 访问",
-                    [CultureInfo.GetCultureInfo("tr")] = "OpenIddict Demo API erişimi"
+                    [CultureInfo.GetCultureInfo("zh-Hans")] = "演示 API 访问",
+                    [CultureInfo.GetCultureInfo("tr")] = "API erişimi"
                 },
-                Name = "OpenIddictDemoAPI",
+                Name = "AbpAPI",
                 Resources = 
                 {
-                    "OpenIddictDemoAPIResource"
+                    "AbpAPIResource"
                 }
             });
         }
         
-        if (await _applicationManager.FindByClientIdAsync("MyClient") == null)
+        if (await _applicationManager.FindByClientIdAsync("AbpApp") == null)
         {
             await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {
-                ClientId = "MyClient",
-                ClientSecret = "901564A5-E7FE-42CB-B10D-61EF6A8F3654",
+                ClientId = "AbpApp",
+                ClientSecret = "1q2w3e*",
                 ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
-                DisplayName = "My Client Application",
+                DisplayName = "Abp Application",
                 PostLogoutRedirectUris =
                 {
                     new Uri("https://localhost:44302/signout-callback-oidc")
@@ -89,7 +89,7 @@ public class ServerDataSeedContributor: IDataSeedContributor, ITransientDependen
                     OpenIddictConstants.Permissions.Scopes.Roles,
                     OpenIddictConstants.Permissions.Scopes.Address,
                     OpenIddictConstants.Permissions.Scopes.Phone,
-                    OpenIddictConstants.Permissions.Prefixes.Scope + "OpenIddictDemoAPI"
+                    OpenIddictConstants.Permissions.Prefixes.Scope + "AbpAPI"
                 }
             });
         }

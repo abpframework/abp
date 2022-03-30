@@ -1,13 +1,18 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Volo.Abp.Auditing;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Authorizations;
 
 namespace Volo.Abp.OpenIddict.Tokens;
 
-public class OpenIddictToken : FullAuditedEntity<Guid>
+public class OpenIddictToken : FullAuditedEntity<Guid>, IHasConcurrencyStamp
 {
+    [DisableAuditing]
+    public virtual string ConcurrencyStamp { get; set; }
+    
     /// <summary>
     /// Gets or sets the application associated with the current token.
     /// </summary>

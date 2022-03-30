@@ -16,9 +16,9 @@ namespace Volo.Abp.OpenIddict;
 [DependsOn(
     typeof(AbpDddDomainModule),
     typeof(AbpIdentityDomainModule),
-    typeof(OpenIddictDomainSharedModule)
+    typeof(AbpOpenIddictDomainSharedModule)
 )]
-public class OpenIddictDomainModule : AbpModule
+public class AbpOpenIddictDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
@@ -32,17 +32,20 @@ public class OpenIddictDomainModule : AbpModule
         if (builderOptions.UpdateAbpClaimTypes)
         {
             AbpClaimTypes.UserId = JwtClaimTypes.Subject;
-            AbpClaimTypes.UserName = JwtClaimTypes.Name;
             AbpClaimTypes.Role = JwtClaimTypes.Role;
+            AbpClaimTypes.UserName = JwtClaimTypes.Name;
+            AbpClaimTypes.Name = JwtClaimTypes.GivenName;
+            AbpClaimTypes.PhoneNumber = JwtClaimTypes.PhoneNumber;
+            AbpClaimTypes.PhoneNumberVerified = JwtClaimTypes.PhoneNumberVerified;
             AbpClaimTypes.Email = JwtClaimTypes.Email;
+            AbpClaimTypes.EmailVerified = JwtClaimTypes.EmailVerified;
         }
 
         var openIddictBuilder = services.AddOpenIddict()
             .AddCore(builder =>
             {
-                builder.Configure(options => options.DisableAdditionalFiltering = false);
-
-                builder.SetDefaultApplicationEntity<OpenIddictApplication>()
+                builder
+                    .SetDefaultApplicationEntity<OpenIddictApplication>()
                     .SetDefaultAuthorizationEntity<OpenIddictAuthorization>()
                     .SetDefaultScopeEntity<OpenIddictScope>()
                     .SetDefaultTokenEntity<OpenIddictToken>();
@@ -51,9 +54,7 @@ public class OpenIddictDomainModule : AbpModule
             })
             .AddServer(builder =>
             {
-                //builder.UseDataProtection();
-
-                // Can be enable by Configure OpenIddictServerOptions.DisableAccessTokenEncryption
+                // Can be enable by Configure OpenIddictServerOptions.DisableAccessTokenEncryption = false
                 builder.DisableAccessTokenEncryption();
                     
                 builder
@@ -90,20 +91,12 @@ public class OpenIddictDomainModule : AbpModule
                     OpenIddictConstants.Scopes.Address,
                     OpenIddictConstants.Scopes.OfflineAccess
                 });
-
+                
                 if (builderOptions.AddDevelopmentEncryptionAndSigningCertificate)
                 {
                     builder.AddDevelopmentEncryptionCertificate()
                         .AddDevelopmentSigningCertificate();
                 }
-
-                //TODO:
-                builder.UseAspNetCore()
-                    .EnableAuthorizationEndpointPassthrough()
-                    .EnableTokenEndpointPassthrough()
-                    .EnableUserinfoEndpointPassthrough()
-                    .EnableLogoutEndpointPassthrough()
-                    .EnableVerificationEndpointPassthrough();
 
                 services.ExecutePreConfiguredActions(builder);
 
@@ -111,8 +104,6 @@ public class OpenIddictDomainModule : AbpModule
             .AddValidation(builder =>
             {
                 builder.UseLocalServer();
-               // builder.UseDataProtection();
-                builder.UseAspNetCore();
 
                 services.ExecutePreConfiguredActions(builder);
             });

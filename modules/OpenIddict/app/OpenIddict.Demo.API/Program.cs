@@ -15,8 +15,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Authority = "https://localhost:44301";
-        
-        options.Audience = "OpenIddictDemoAPIResource";
+        options.Audience = "AbpAPIResource";
     });
 
 var app = builder.Build();

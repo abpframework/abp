@@ -9,10 +9,10 @@ using Volo.Abp.OpenIddict.Tokens;
 namespace Volo.Abp.OpenIddict.MongoDB;
 
 [DependsOn(
-    typeof(OpenIddictDomainModule),
+    typeof(AbpOpenIddictDomainModule),
     typeof(AbpMongoDbModule)
     )]
-public class OpenIddictMongoDbModule : AbpModule
+public class AbpOpenIddictMongoDbModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {

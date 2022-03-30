@@ -2,14 +2,12 @@
 @model AuthorizeViewModel
 <div class="jumbotron">
     <h1>Authorization</h1>
-
     <p class="lead text-left">Do you want to grant <strong>@Model.ApplicationName</strong> access to your data? (scopes requested: @Model.Scope)</p>
 
-    <form method="post" action="/connect/authorize">
+    <form method="post" action="~/connect/authorize" >
         @Html.AntiForgeryToken()
         @* Flow the request parameters so they can be received by the Accept/Reject actions: *@
-        @foreach (var parameter in Context.Request.HasFormContentType ?
-            (IEnumerable<KeyValuePair<string, StringValues>>) Context.Request.Form : Context.Request.Query)
+        @foreach (var parameter in Context.Request.HasFormContentType ? (IEnumerable<KeyValuePair<string, StringValues>>) Context.Request.Form : Context.Request.Query)
         {
             <input type="hidden" name="@parameter.Key" value="@parameter.Value"/>
         }

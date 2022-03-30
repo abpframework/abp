@@ -1,6 +1,6 @@
 ﻿{
   "profiles": {
-    "OpenIddict.Demo.Client.API": {
+    "OpenIddict.Demo.API": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

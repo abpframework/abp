@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.Abp.Auditing;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.OpenIddict.Tokens;
 
 namespace Volo.Abp.OpenIddict.Authorizations;
 
-public class OpenIddictAuthorization : FullAuditedEntity<Guid>
+public class OpenIddictAuthorization : FullAuditedEntity<Guid>, IHasConcurrencyStamp
 {
+    [DisableAuditing]
+    public virtual string ConcurrencyStamp { get; set; }
+    
     /// <summary>
     /// Gets or sets the application associated with the current authorization.
     /// </summary>
