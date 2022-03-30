@@ -111,7 +111,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
 
     public async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
     {
-        var queryable = (await CreateAuthorsQueryableAsync())
+        var queryable = (await CreateAuthorsQueryableAsync(cancellationToken))
                         .Skip(skipCount)
                         .Take(maxResultCount)
                         .OrderBy(sorting.IsNullOrEmpty() ? nameof(CmsUser.UserName) : sorting)
@@ -123,17 +123,17 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
     public async Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default)
     {
         return await AsyncExecuter.CountAsync(
-            (await CreateAuthorsQueryableAsync())
+            (await CreateAuthorsQueryableAsync(cancellationToken))
                 .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower())));
     }
 
     public async Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await AsyncExecuter.FirstOrDefaultAsync(await CreateAuthorsQueryableAsync(), x => x.Id == id)
+        return await AsyncExecuter.FirstOrDefaultAsync(await CreateAuthorsQueryableAsync(cancellationToken), x => x.Id == id)
             ?? throw new EntityNotFoundException(typeof(CmsUser), id);
     }
 
-    private async Task<IQueryable<CmsUser>> CreateAuthorsQueryableAsync()
+    private async Task<IQueryable<CmsUser>> CreateAuthorsQueryableAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
         
