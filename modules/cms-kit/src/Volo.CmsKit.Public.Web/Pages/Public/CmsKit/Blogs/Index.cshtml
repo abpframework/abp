@@ -28,6 +28,8 @@
 
             <select id="AuthorSelect" asp-for="@Model.AuthorId"
                 class="auto-complete-select"
+                data-placeholder="@L["SelectAnAuthor"]"
+                data-allow-clear="true"
                 data-autocomplete-api-url="/api/cms-kit-public/blog-posts/authors"
                 data-autocomplete-display-property="userName"
                 data-autocomplete-value-property="id"
