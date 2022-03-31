@@ -17,15 +17,20 @@ public class BlazorAppsettingsFilePortChangeForSeparatedIdentityServersStep : Pr
         appsettingsFile.NormalizeLineEndings();
         var lines = appsettingsFile.GetLines();
 
-        for (var i = 0; i < lines.Length; i++)
+        for (var i = 1; i < lines.Length; i++)
         {
             var line = lines[i];
+            var previousLine = lines[i-1];
 
             if (line.Contains("Authority") && line.Contains("localhost"))
             {
                 line = line.Replace("44305", "44301");
             }
-            else if (line.Contains("BaseUrl") && line.Contains("localhost"))
+            else if (previousLine.Contains("AbpAccountPublic") && line.Contains("BaseUrl") && line.Contains("localhost"))
+            {
+                line = line.Replace("44305", "44301");
+            }
+            else if (previousLine.Contains("Default") && line.Contains("BaseUrl") && line.Contains("localhost"))
             {
                 line = line.Replace("44305", "44300");
             }
