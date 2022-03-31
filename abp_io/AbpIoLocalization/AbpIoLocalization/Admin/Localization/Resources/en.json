@@ -381,6 +381,7 @@
     "SuccessfullyUpdated": "Successfully updated",
     "SuccessfullyAdded": "Successfully added",
     "PurchaseState": "Purchase State",
-    "ShowBetweenDayCount": "Show Between Days"
+    "ShowBetweenDayCount": "Show Between Days",
+    "PurchaseOrder": "Purchase Order"
   }
 }
