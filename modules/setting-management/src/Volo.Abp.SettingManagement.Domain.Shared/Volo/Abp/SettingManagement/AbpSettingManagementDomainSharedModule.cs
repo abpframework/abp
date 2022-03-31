@@ -3,6 +3,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Localization;
 using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.Validation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.SettingManagement;
@@ -23,7 +24,9 @@ public class AbpSettingManagementDomainSharedModule : AbpModule
         {
             options.Resources
                 .Add<AbpSettingManagementResource>("en")
-                .AddVirtualJson("/Volo/Abp/SettingManagement/Localization/Resources/AbpSettingManagement");
+                .AddBaseTypes(
+                    typeof(AbpValidationResource)
+                ).AddVirtualJson("/Volo/Abp/SettingManagement/Localization/Resources/AbpSettingManagement");
         });
     }
 }
