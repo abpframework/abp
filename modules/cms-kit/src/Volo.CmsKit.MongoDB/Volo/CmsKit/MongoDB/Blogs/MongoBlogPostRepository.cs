@@ -151,4 +151,12 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
                         .Select(s => s.user)
                         .Distinct();
     }
+
+    public virtual async Task<bool> HasBlogPostWaitingForReviewAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken = GetCancellationToken(cancellationToken);
+
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .AnyAsync(x => x.Status == BlogPostStatus.WaitingForReview, cancellationToken);
+    }
 }

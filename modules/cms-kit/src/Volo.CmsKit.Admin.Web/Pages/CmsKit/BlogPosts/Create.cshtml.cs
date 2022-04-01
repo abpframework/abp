@@ -36,6 +36,10 @@ public class CreateModel : CmsKitAdminPageModel
         {
             createResult = await BlogPostAdminAppService.CreateAndPublishAsync(dto);
         }
+        else if (ViewModel.Status == BlogPostStatus.WaitingForReview)
+        {
+            createResult = await BlogPostAdminAppService.CreateAndSendToReviewAsync(dto);
+        }
         else
         {
             createResult = await BlogPostAdminAppService.CreateAsync(dto);

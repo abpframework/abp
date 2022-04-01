@@ -40,4 +40,6 @@ public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
     Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default);
 
     Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<bool> HasBlogPostWaitingForReviewAsync(CancellationToken cancellationToken = default);
 }

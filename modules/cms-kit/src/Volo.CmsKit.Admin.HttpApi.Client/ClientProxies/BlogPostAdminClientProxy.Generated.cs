@@ -79,4 +79,25 @@ public partial class BlogPostAdminClientProxy : ClientProxyBase<IBlogPostAdminAp
             { typeof(CreateBlogPostDto), input }
         });
     }
+    
+    public virtual async Task SendToReviewAsync(Guid id)
+    {
+        await RequestAsync(nameof(SendToReviewAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id },
+        });
+    }
+    
+    public virtual async Task<BlogPostDto> CreateAndSendToReviewAsync(CreateBlogPostDto input)
+    {
+        return await RequestAsync<BlogPostDto>(nameof(CreateAndSendToReviewAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(CreateBlogPostDto), input }
+        });
+    }
+    
+    public virtual async Task<bool> HasBlogPostWaitingForReviewAsync()
+    {
+        return await RequestAsync<bool>(nameof(HasBlogPostWaitingForReviewAsync));
+    }
 }
