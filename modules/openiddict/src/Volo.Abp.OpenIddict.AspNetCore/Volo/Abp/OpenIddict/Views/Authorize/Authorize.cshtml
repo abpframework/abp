@@ -1,12 +1,13 @@
 ﻿@using Microsoft.Extensions.Primitives
-@using Microsoft.Extensions.Localization
 @using Volo.Abp.OpenIddict.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
 @model AuthorizeViewModel
-@inject IStringLocalizer<AbpOpenIddictResource> L
+@inject IHtmlLocalizer<AbpOpenIddictResource> L
 
 <div class="jumbotron">
-    <h1>Authorization</h1>
-    <p class="lead text-left">Do you want to grant <strong>@Model.ApplicationName</strong> access to your data? (scopes requested: @Model.Scope)</p>
+    <h1>@L["Authorization"]</h1>
+    <p class="lead text-left"><strong>@string.Format(L["DoYouWantToGrantAccessToYourData"].Value, Model.ApplicationName)</strong></p>
+    <p class="fw-light">@L["ScopesRequested"]: @Model.Scope</p>
 
     <form method="post" action="~/connect/authorize" >
         @Html.AntiForgeryToken()
@@ -16,7 +17,7 @@
             <input type="hidden" name="@parameter.Key" value="@parameter.Value"/>
         }
 
-        <input class="btn btn-lg btn-success" name="submit.Accept" type="submit" value="@L["Yes"]"/>
+        <input class="btn btn-lg btn-primary" name="submit.Accept" type="submit" value="@L["Yes"]"/>
         <input class="btn btn-lg btn-danger" name="submit.Deny" type="submit" value="@L["No"]"/>
     </form>
 </div>

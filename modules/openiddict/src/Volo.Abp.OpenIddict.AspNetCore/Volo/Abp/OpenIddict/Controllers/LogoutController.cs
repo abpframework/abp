@@ -6,7 +6,7 @@ using OpenIddict.Server.AspNetCore;
 namespace Volo.Abp.OpenIddict.Controllers;
 
 [Route("connect/logout")]
-public class LogoutController : OpenIdDictControllerBase
+public class LogoutController : AbpOpenIdDictControllerBase
 {
     [HttpGet]
     public virtual Task<IActionResult> GetAsync()
@@ -15,7 +15,7 @@ public class LogoutController : OpenIdDictControllerBase
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> PostAsync()
+    public virtual async Task<IActionResult> HandleAcceptAsync()
     {
         // Ask ASP.NET Core Identity to delete the local and external cookies created
         // when the user agent is redirected from the external identity provider

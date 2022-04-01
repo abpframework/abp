@@ -13,7 +13,7 @@ namespace Volo.Abp.OpenIddict.Controllers;
 
 [Route("connect/userinfo")]
 [Authorize(AuthenticationSchemes = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)]
-public class UserInfoController : OpenIdDictControllerBase
+public class UserInfoController : AbpOpenIdDictControllerBase
 {
     [HttpGet]
     [HttpPost]

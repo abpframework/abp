@@ -1,4 +1,5 @@
 using OpenIddict.Demo.Server;
+using Volo.Abp.Localization;
 using Volo.Abp.OpenIddict.Jwt;
 using Volo.Abp.Users;
 
@@ -19,6 +20,14 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Host.UseAutofac();
 
+builder.Services.Configure<AbpLocalizationOptions>(options =>
+{
+    options.Languages.Add(new LanguageInfo("en", "en", "English"));
+    options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+    options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+    options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+});
+
 builder.Services.AddAuthentication()
     .AddJwtBearer(options =>
     {
@@ -32,6 +41,8 @@ await builder.AddApplicationAsync<OpenIddictServerModule>();
 
 var app = builder.Build();
 await app.InitializeApplicationAsync();
+
+app.UseAbpRequestLocalization();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

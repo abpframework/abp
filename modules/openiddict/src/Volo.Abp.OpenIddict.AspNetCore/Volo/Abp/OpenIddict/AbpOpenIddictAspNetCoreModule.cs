@@ -41,6 +41,11 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             options.TenantResolvers.Insert(0, new AbpOpenIddictTenantResolveContributor());
         });
 
+        Configure<AbpOpenIddictClaimDestinationsOptions>(options =>
+        {
+            options.ClaimDestinationsProvider.Add<AbpDefaultOpenIddictClaimDestinationsProvider>();
+        });
+
         Configure<RazorViewEngineOptions>(options =>
         {
             options.ViewLocationFormats.Add("/Volo/Abp/OpenIddict/Views/{1}/{0}.cshtml");

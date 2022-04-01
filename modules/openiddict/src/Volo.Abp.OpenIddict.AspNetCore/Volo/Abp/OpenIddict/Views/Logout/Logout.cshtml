@@ -1,12 +1,12 @@
 ﻿@using Microsoft.Extensions.Primitives
-@using Microsoft.Extensions.Localization
 @using Volo.Abp.OpenIddict.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
 @model AuthorizeViewModel
-@inject IStringLocalizer<AbpOpenIddictResource> L
+@inject IHtmlLocalizer<AbpOpenIddictResource> L
 
 <div class="jumbotron">
-    <h1>Log out</h1>
-    <p class="lead text-left">Are you sure you want to sign out?</p>
+    <h1>@L["LogOut"]</h1>
+    <p class="lead text-left">@L["AreYouSureYouWantToSignOut"]</p>
 
     <form method="post" action="~/connect/logout">
         @Html.AntiForgeryToken()
@@ -16,6 +16,6 @@
             <input type="hidden" name="@parameter.Key" value="@parameter.Value"/>
         }
 
-        <input class="btn btn-lg btn-success" name="Confirm" type="submit" value="@L["Yes"]"/>
+        <input class="btn btn-lg btn-primary" name="submit.Accept" type="submit" value="@L["Yes"]"/>
     </form>
 </div>

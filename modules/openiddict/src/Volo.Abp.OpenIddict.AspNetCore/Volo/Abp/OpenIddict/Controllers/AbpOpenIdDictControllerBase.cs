@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
@@ -16,7 +18,7 @@ using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.OpenIddict.Controllers;
 
-public abstract class OpenIdDictControllerBase : AbpController
+public abstract class AbpOpenIdDictControllerBase : AbpController
 {
     protected SignInManager<IdentityUser> SignInManager => LazyServiceProvider.LazyGetRequiredService<SignInManager<IdentityUser>>();
     protected IdentityUserManager UserManager => LazyServiceProvider.LazyGetRequiredService<IdentityUserManager>();
@@ -24,12 +26,12 @@ public abstract class OpenIdDictControllerBase : AbpController
     protected IOpenIddictAuthorizationManager AuthorizationManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictAuthorizationManager>();
     protected IOpenIddictScopeManager ScopeManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictScopeManager>();
     protected IOpenIddictTokenManager TokenManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictTokenManager>();
+    protected IOptions<AbpOpenIddictClaimDestinationsOptions> OpenIddictClaimDestinationsOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpOpenIddictClaimDestinationsOptions>>();
 
-    protected OpenIdDictControllerBase()
+    protected AbpOpenIdDictControllerBase()
     {
         LocalizationResource = typeof(AbpOpenIddictResource);
     }
-
 
     protected virtual Task<OpenIddictRequest> GetOpenIddictServerRequest(HttpContext httpContext)
     {
@@ -54,56 +56,15 @@ public abstract class OpenIdDictControllerBase : AbpController
         return resources;
     }
 
-    protected virtual IEnumerable<string> GetDestinations(Claim claim, ClaimsPrincipal principal)
+    protected virtual async Task SetClaimsDestinationsAsync(ClaimsPrincipal principal)
     {
-        // Note: by default, claims are NOT automatically included in the access and identity tokens.
-        // To allow OpenIddict to serialize them, you must attach them a destination, that specifies
-        // whether they should be included in access tokens, in identity tokens or in both.
-
-        if (claim.Type == AbpClaimTypes.TenantId)
+        using (var scope = LazyServiceProvider.LazyGetRequiredService<IServiceProvider>().CreateScope())
         {
-            yield return OpenIddictConstants.Destinations.AccessToken;
-            yield return OpenIddictConstants.Destinations.IdentityToken;
-        }
-
-        switch (claim.Type)
-        {
-            case OpenIddictConstants.Claims.Name:
-                yield return OpenIddictConstants.Destinations.AccessToken;
-
-                if (principal.HasScope(OpenIddictConstants.Scopes.Profile))
-                {
-                    yield return OpenIddictConstants.Destinations.IdentityToken;
-                }
-
-                yield break;
-
-            case OpenIddictConstants.Claims.Email:
-                yield return OpenIddictConstants.Destinations.AccessToken;
-
-                if (principal.HasScope(OpenIddictConstants.Scopes.Email))
-                {
-                    yield return OpenIddictConstants.Destinations.IdentityToken;
-                }
-
-                yield break;
-
-            case OpenIddictConstants.Claims.Role:
-                yield return OpenIddictConstants.Destinations.AccessToken;
-
-                if (principal.HasScope(OpenIddictConstants.Scopes.Roles))
-                {
-                    yield return OpenIddictConstants.Destinations.IdentityToken;
-                }
-
-                yield break;
-
-            // Never include the security stamp in the access and identity tokens, as it's a secret value.
-            case "AspNet.Identity.SecurityStamp": yield break;
-
-            default:
-                yield return OpenIddictConstants.Destinations.AccessToken;
-                yield break;
+            foreach (var providerType in OpenIddictClaimDestinationsOptions.Value.ClaimDestinationsProvider)
+            {
+                var provider = (IAbpOpenIddictClaimDestinationsProvider)scope.ServiceProvider.GetRequiredService(providerType);
+                await provider.SetDestinationsAsync(new AbpOpenIddictClaimDestinationsProviderContext(scope.ServiceProvider, principal, principal.Claims.ToArray()));
+            }
         }
     }
 }

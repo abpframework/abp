@@ -17,6 +17,11 @@
     "TheTokenIsNoLongerValid": "The token is no longer valid.",
     "InteractiveUserConsentIsRequired": "Interactive user consent is required.",
     "TheUserIsNoLongerAllowedToSignIn": "The user is no longer allowed to sign in.",
-    "TheSpecifiedAccessTokenIsBoundToAnAccountThatNoLongerExists": "The specified access token is bound to an account that no longer exists."
+    "TheSpecifiedAccessTokenIsBoundToAnAccountThatNoLongerExists": "The specified access token is bound to an account that no longer exists.",
+    "Authorization": "Authorization",
+    "DoYouWantToGrantAccessToYourData": "Do you want to grant {0} access to your data?",
+    "ScopesRequested": "Scopes requested",
+    "LogOut": "Log out",
+    "AreYouSureYouWantToSignOut": "Are you sure you want to sign out?"
   }
 }

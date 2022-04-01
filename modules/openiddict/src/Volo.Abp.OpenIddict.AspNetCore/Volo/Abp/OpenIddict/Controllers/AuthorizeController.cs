@@ -16,7 +16,7 @@ using Volo.Abp.OpenIddict.ViewModels.Authorization;
 namespace Volo.Abp.OpenIddict.Controllers;
 
 [Route("connect/authorize")]
-public class AuthorizeController : OpenIdDictControllerBase
+public class AuthorizeController : AbpOpenIdDictControllerBase
 {
     [HttpGet, HttpPost]
     [IgnoreAntiforgeryToken]
@@ -132,10 +132,7 @@ public class AuthorizeController : OpenIdDictControllerBase
 
                 principal.SetAuthorizationId(await AuthorizationManager.GetIdAsync(authorization));
 
-                foreach (var claim in principal.Claims)
-                {
-                    claim.SetDestinations(GetDestinations(claim, principal));
-                }
+                await SetClaimsDestinationsAsync(principal);
 
                 return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
@@ -222,10 +219,7 @@ public class AuthorizeController : OpenIdDictControllerBase
         principal.SetScopes(request.GetScopes());
         principal.SetResources(await GetResourcesAsync(request.GetScopes()));
 
-        foreach (var claim in principal.Claims)
-        {
-            claim.SetDestinations(GetDestinations(claim, principal));
-        }
+        await SetClaimsDestinationsAsync(principal);
 
         // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);

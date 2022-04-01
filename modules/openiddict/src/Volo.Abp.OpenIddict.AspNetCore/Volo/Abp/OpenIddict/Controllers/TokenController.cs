@@ -7,7 +7,7 @@ using OpenIddict.Abstractions;
 namespace Volo.Abp.OpenIddict.Controllers;
 
 [Route("connect/token")]
-public partial class TokenController : OpenIdDictControllerBase
+public partial class TokenController : AbpOpenIdDictControllerBase
 {
     [HttpGet, HttpPost, Produces("application/json")]
     public virtual async Task<IActionResult> HandleAsync()
