@@ -14,7 +14,7 @@ $solutionPaths = @(
 		"../modules/feature-management",
 		"../modules/identity",
 		"../modules/identityserver",
-		"../modules/OpenIddict",
+		"../modules/openiddict",
 		"../modules/tenant-management",
 		"../modules/audit-logging",
 		"../modules/background-jobs",
