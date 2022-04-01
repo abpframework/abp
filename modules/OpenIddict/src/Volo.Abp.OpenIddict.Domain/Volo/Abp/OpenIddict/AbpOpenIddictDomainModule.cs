@@ -27,18 +27,19 @@ public class AbpOpenIddictDomainModule : AbpModule
 
     private static void AddOpenIddict(IServiceCollection services)
     {
-        var builderOptions = services.ExecutePreConfiguredActions<OpenIddictBuilderOptions>();
+        var builderOptions = services.ExecutePreConfiguredActions<AbpOpenIddictBuilderOptions>();
 
         if (builderOptions.UpdateAbpClaimTypes)
         {
-            AbpClaimTypes.UserId = JwtClaimTypes.Subject;
-            AbpClaimTypes.Role = JwtClaimTypes.Role;
-            AbpClaimTypes.UserName = JwtClaimTypes.Name;
-            AbpClaimTypes.Name = JwtClaimTypes.GivenName;
-            AbpClaimTypes.PhoneNumber = JwtClaimTypes.PhoneNumber;
-            AbpClaimTypes.PhoneNumberVerified = JwtClaimTypes.PhoneNumberVerified;
-            AbpClaimTypes.Email = JwtClaimTypes.Email;
-            AbpClaimTypes.EmailVerified = JwtClaimTypes.EmailVerified;
+            AbpClaimTypes.UserId = OpenIddictConstants.Claims.Subject;
+            AbpClaimTypes.Role = OpenIddictConstants.Claims.Role;
+            AbpClaimTypes.UserName = OpenIddictConstants.Claims.Name;
+            AbpClaimTypes.SurName = OpenIddictConstants.Claims.FamilyName;
+            AbpClaimTypes.Name = OpenIddictConstants.Claims.GivenName;
+            AbpClaimTypes.PhoneNumber = OpenIddictConstants.Claims.PhoneNumber;
+            AbpClaimTypes.PhoneNumberVerified = OpenIddictConstants.Claims.PhoneNumberVerified;
+            AbpClaimTypes.Email = OpenIddictConstants.Claims.Email;
+            AbpClaimTypes.EmailVerified = OpenIddictConstants.Claims.EmailVerified;
         }
 
         var openIddictBuilder = services.AddOpenIddict()
@@ -56,7 +57,7 @@ public class AbpOpenIddictDomainModule : AbpModule
             {
                 // Can be enable by Configure OpenIddictServerOptions.DisableAccessTokenEncryption = false
                 builder.DisableAccessTokenEncryption();
-                    
+
                 builder
                     .SetAuthorizationEndpointUris("/connect/authorize")
                     // /.well-known/oauth-authorization-server
@@ -87,11 +88,12 @@ public class AbpOpenIddictDomainModule : AbpModule
                     OpenIddictConstants.Scopes.OpenId,
                     OpenIddictConstants.Scopes.Email,
                     OpenIddictConstants.Scopes.Profile,
+                    OpenIddictConstants.Scopes.Phone,
                     OpenIddictConstants.Scopes.Roles,
                     OpenIddictConstants.Scopes.Address,
                     OpenIddictConstants.Scopes.OfflineAccess
                 });
-                
+
                 if (builderOptions.AddDevelopmentEncryptionAndSigningCertificate)
                 {
                     builder.AddDevelopmentEncryptionCertificate()

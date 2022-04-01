@@ -13,7 +13,7 @@ public class LogoutController : OpenIdDictControllerBase
     {
         return Task.FromResult<IActionResult>(View("Logout"));
     }
-    
+
     [HttpPost]
     public virtual async Task<IActionResult> PostAsync()
     {
@@ -27,7 +27,7 @@ public class LogoutController : OpenIdDictControllerBase
         // the RedirectUri specified in the authentication properties if none was set.
         return SignOut(
             authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-            properties: new AuthenticationProperties 
+            properties: new AuthenticationProperties
             {
                 RedirectUri = "/"
             });

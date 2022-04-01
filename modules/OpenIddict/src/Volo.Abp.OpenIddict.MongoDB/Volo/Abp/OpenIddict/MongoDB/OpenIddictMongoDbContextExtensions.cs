@@ -15,22 +15,22 @@ public static class OpenIddictMongoDbContextExtensions
         
         builder.Entity<OpenIddictApplication>(b =>
         {
-            b.CollectionName = OpenIddictDbProperties.DbTablePrefix + "Applications";
+            b.CollectionName = AbpOpenIddictDbProperties.DbTablePrefix + "Applications";
         });
         
         builder.Entity<OpenIddictAuthorization>(b =>
         {
-            b.CollectionName = OpenIddictDbProperties.DbTablePrefix + "Authorizations";
+            b.CollectionName = AbpOpenIddictDbProperties.DbTablePrefix + "Authorizations";
         });
         
         builder.Entity<OpenIddictScope>(b =>
         {
-            b.CollectionName = OpenIddictDbProperties.DbTablePrefix + "Scopes";
+            b.CollectionName = AbpOpenIddictDbProperties.DbTablePrefix + "Scopes";
         });
         
         builder.Entity<OpenIddictToken>(b =>
         {
-            b.CollectionName = OpenIddictDbProperties.DbTablePrefix + "Tokens";
+            b.CollectionName = AbpOpenIddictDbProperties.DbTablePrefix + "Tokens";
         });
     }
 }

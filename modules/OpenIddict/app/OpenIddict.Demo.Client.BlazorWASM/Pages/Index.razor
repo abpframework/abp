@@ -1,0 +1,50 @@
+﻿@page "/"
+
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<div class="alert alert-warning" role="alert">
+    Before authentication will function correctly, you must configure your provider details in <code>Program.cs</code>
+</div>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?"/>
+
+@if (_claims.Count() > 0)
+{
+    <ul>
+        @foreach (var claim in _claims)
+        {
+            <li>@claim.Type: @claim.Value</li>
+        }
+    </ul>
+}
+
+
+@code {
+
+        protected override async Task OnInitializedAsync()
+        {
+            await GetClaimsPrincipalData();
+            await base.OnInitializedAsync();
+        }
+
+        private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
+
+        private async Task GetClaimsPrincipalData()
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+
+                _claims = user.Claims;
+            }
+        }
+}

@@ -8,7 +8,7 @@ using Volo.Abp.OpenIddict.Tokens;
 
 namespace Volo.Abp.OpenIddict.MongoDB;
 
-[ConnectionStringName(OpenIddictDbProperties.ConnectionStringName)]
+[ConnectionStringName(AbpOpenIddictDbProperties.ConnectionStringName)]
 public interface IOpenIddictMongoDbContext : IAbpMongoDbContext
 {
     IMongoCollection<OpenIddictApplication> Applications { get; }

@@ -8,6 +8,7 @@ namespace OpenIddict.Demo.API.Controllers;
 [Route("api/claims")]
 public class ClaimsController : Controller
 {
+    [HttpGet]
     public JsonResult Get()
     {
         return Json(User.Claims.Select(x => new {Type = x.Type, Value = x.Value}));

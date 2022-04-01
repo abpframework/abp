@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using OpenIddict.Abstractions;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
 using Volo.Abp.OpenIddict.Localization;
+using Volo.Abp.Security.Claims;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.OpenIddict.Controllers;
@@ -24,11 +27,32 @@ public abstract class OpenIdDictControllerBase : AbpController
         LocalizationResource = typeof(AbpOpenIddictResource);
     }
 
+    protected virtual async Task<IEnumerable<string>> GetResourcesAsync(ImmutableArray<string> scopes)
+    {
+        var resources = new List<string>();
+        if (!scopes.Any())
+        {
+            return resources;
+        }
+
+        await foreach (var resource in ScopeManager.ListResourcesAsync(scopes))
+        {
+            resources.Add(resource);
+        }
+        return resources;
+    }
+
     protected virtual IEnumerable<string> GetDestinations(Claim claim, ClaimsPrincipal principal)
     {
         // Note: by default, claims are NOT automatically included in the access and identity tokens.
         // To allow OpenIddict to serialize them, you must attach them a destination, that specifies
         // whether they should be included in access tokens, in identity tokens or in both.
+
+        if (claim.Type == AbpClaimTypes.TenantId)
+        {
+            yield return OpenIddictConstants.Destinations.AccessToken;
+            yield return OpenIddictConstants.Destinations.IdentityToken;
+        }
 
         switch (claim.Type)
         {
@@ -69,19 +93,5 @@ public abstract class OpenIdDictControllerBase : AbpController
                 yield return OpenIddictConstants.Destinations.AccessToken;
                 yield break;
         }
-    }
-
-    protected virtual IEnumerable<string> GetDestinations(Claim claim)
-    {
-        // Note: by default, claims are NOT automatically included in the access and identity tokens.
-        // To allow OpenIddict to serialize them, you must attach them a destination, that specifies
-        // whether they should be included in access tokens, in identity tokens or in both.
-
-        return claim.Type switch {
-            OpenIddictConstants.Claims.Name or OpenIddictConstants.Claims.Subject
-                => ImmutableArray.Create(OpenIddictConstants.Destinations.AccessToken,
-                    OpenIddictConstants.Destinations.IdentityToken),
-            _ => ImmutableArray.Create(OpenIddictConstants.Destinations.AccessToken),
-        };
     }
 }

@@ -6,6 +6,7 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace OpenIddict.Demo.Server.EntityFrameworkCore;
 
@@ -26,7 +27,8 @@ public class ServerDbContext : AbpDbContext<ServerDbContext>
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();
         builder.ConfigureFeatureManagement();
-
+        builder.ConfigureTenantManagement();
+        
         builder.ConfigureOpenIddict();
     }
 }

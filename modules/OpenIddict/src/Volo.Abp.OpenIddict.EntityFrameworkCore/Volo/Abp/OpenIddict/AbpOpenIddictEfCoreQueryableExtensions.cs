@@ -14,7 +14,9 @@ public static class AbpOpenIddictEfCoreQueryableExtensions
             return queryable;
         }
 
-        return queryable.Include(x => x.Authorizations).Include(x => x.Tokens);
+        return queryable
+            .Include(x => x.Authorizations).ThenInclude(x => x.Tokens)
+            .Include(x => x.Tokens);
     }
 
     public static IQueryable<OpenIddictAuthorization> IncludeDetails(this IQueryable<OpenIddictAuthorization> queryable, bool include = true)

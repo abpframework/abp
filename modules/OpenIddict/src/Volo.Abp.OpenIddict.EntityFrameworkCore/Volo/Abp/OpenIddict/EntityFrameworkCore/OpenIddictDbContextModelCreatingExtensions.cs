@@ -22,7 +22,7 @@ public static class OpenIddictDbContextModelCreatingExtensions
 
         builder.Entity<OpenIddictApplication>(b =>
         {
-            b.ToTable(OpenIddictDbProperties.DbTablePrefix + "Applications", OpenIddictDbProperties.DbSchema);
+            b.ToTable(AbpOpenIddictDbProperties.DbTablePrefix + "Applications", AbpOpenIddictDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -53,7 +53,7 @@ public static class OpenIddictDbContextModelCreatingExtensions
 
         builder.Entity<OpenIddictAuthorization>(b =>
         {
-            b.ToTable(OpenIddictDbProperties.DbTablePrefix + "Authorizations", OpenIddictDbProperties.DbSchema);
+            b.ToTable(AbpOpenIddictDbProperties.DbTablePrefix + "Authorizations", AbpOpenIddictDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -84,7 +84,7 @@ public static class OpenIddictDbContextModelCreatingExtensions
 
         builder.Entity<OpenIddictScope>(b =>
         {
-            b.ToTable(OpenIddictDbProperties.DbTablePrefix + "Scopes", OpenIddictDbProperties.DbSchema);
+            b.ToTable(AbpOpenIddictDbProperties.DbTablePrefix + "Scopes", AbpOpenIddictDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -99,7 +99,7 @@ public static class OpenIddictDbContextModelCreatingExtensions
 
         builder.Entity<OpenIddictToken>(b =>
         {
-            b.ToTable(OpenIddictDbProperties.DbTablePrefix + "Tokens", OpenIddictDbProperties.DbSchema);
+            b.ToTable(AbpOpenIddictDbProperties.DbTablePrefix + "Tokens", AbpOpenIddictDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 

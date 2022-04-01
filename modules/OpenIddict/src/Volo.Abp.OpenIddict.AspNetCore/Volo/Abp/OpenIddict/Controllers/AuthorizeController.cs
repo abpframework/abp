@@ -163,9 +163,9 @@ public class AuthorizeController : OpenIdDictControllerBase
                 });
         }
     }
-    
+
     [HttpPost]
-    [Authorize, FormValueRequired("submit.Accept")]
+    [Authorize, AbpFormValueRequired("submit.Accept")]
     public virtual async Task<IActionResult> HandleAcceptConsentAsync()
     {
         var request = HttpContext.GetOpenIddictServerRequest() ??
@@ -224,6 +224,8 @@ public class AuthorizeController : OpenIdDictControllerBase
         }
 
         principal.SetAuthorizationId(await AuthorizationManager.GetIdAsync(authorization));
+        principal.SetScopes(request.GetScopes());
+        principal.SetResources(await GetResourcesAsync(request.GetScopes()));
 
         foreach (var claim in principal.Claims)
         {
@@ -234,7 +236,7 @@ public class AuthorizeController : OpenIdDictControllerBase
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
-    [Authorize, FormValueRequired("submit.Deny")]
+    [Authorize, AbpFormValueRequired("submit.Deny")]
     [HttpPost]
     public virtual Task<IActionResult> HandleDenyConsentAsync()
     {

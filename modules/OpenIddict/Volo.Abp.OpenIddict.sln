@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.Client.Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.API", "app\OpenIddict.Demo.API\OpenIddict.Demo.API.csproj", "{70FD6E90-BBE8-4DA1-AE07-55064803225B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.Client.BlazorWASM", "app\OpenIddict.Demo.Client.BlazorWASM\OpenIddict.Demo.Client.BlazorWASM.csproj", "{F3853F2B-72D4-496C-B59C-87E2759AD79B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{70FD6E90-BBE8-4DA1-AE07-55064803225B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70FD6E90-BBE8-4DA1-AE07-55064803225B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70FD6E90-BBE8-4DA1-AE07-55064803225B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3853F2B-72D4-496C-B59C-87E2759AD79B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3853F2B-72D4-496C-B59C-87E2759AD79B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3853F2B-72D4-496C-B59C-87E2759AD79B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3853F2B-72D4-496C-B59C-87E2759AD79B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +117,7 @@ Global
 		{2DCC3E87-4901-4980-ABB8-0A93F2C2F7B8} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 		{1EF0F35E-65BE-4994-9BC4-9D3992A9B05C} = {2B5CD179-FF7B-428F-98F6-2ADBB9538D18}
 		{70FD6E90-BBE8-4DA1-AE07-55064803225B} = {2B5CD179-FF7B-428F-98F6-2ADBB9538D18}
+		{F3853F2B-72D4-496C-B59C-87E2759AD79B} = {2B5CD179-FF7B-428F-98F6-2ADBB9538D18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C09128AF-C73F-ED7D-33F5-69BF7D934D50}

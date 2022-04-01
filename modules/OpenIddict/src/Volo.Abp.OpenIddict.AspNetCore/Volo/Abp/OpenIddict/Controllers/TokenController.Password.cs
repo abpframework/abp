@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +12,7 @@ using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
-using Volo.Abp.Security.Claims;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -24,6 +23,7 @@ namespace Volo.Abp.OpenIddict.Controllers;
 public partial class TokenController
 {
     protected IHybridServiceScopeFactory ServiceScopeFactory => LazyServiceProvider.LazyGetRequiredService<IHybridServiceScopeFactory>();
+    protected ITenantConfigurationProvider TenantConfigurationProvider=> LazyServiceProvider.LazyGetRequiredService<ITenantConfigurationProvider>();
     protected IOptions<AbpIdentityOptions> AbpIdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpIdentityOptions>>();
     protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
     protected IdentitySecurityLogManager IdentitySecurityLogManager => LazyServiceProvider.LazyGetRequiredService<IdentitySecurityLogManager>();
@@ -33,101 +33,106 @@ public partial class TokenController
     {
         using (var scope = ServiceScopeFactory.CreateScope())
         {
-            await ReplaceEmailToUsernameOfInputIfNeeds(request);
+            var tenant = await TenantConfigurationProvider.GetAsync(saveResolveResult: false);
 
-            IdentityUser user = null;
-
-            if (AbpIdentityOptions.Value.ExternalLoginProviders.Any())
+            using (CurrentTenant.Change(tenant?.Id))
             {
-                foreach (var externalLoginProviderInfo in AbpIdentityOptions.Value.ExternalLoginProviders.Values)
+                await ReplaceEmailToUsernameOfInputIfNeeds(request);
+
+                IdentityUser user = null;
+
+                if (AbpIdentityOptions.Value.ExternalLoginProviders.Any())
                 {
-                    var externalLoginProvider = (IExternalLoginProvider)scope.ServiceProvider
-                        .GetRequiredService(externalLoginProviderInfo.Type);
-
-                    if (await externalLoginProvider.TryAuthenticateAsync(request.Username, request.Password))
+                    foreach (var externalLoginProviderInfo in AbpIdentityOptions.Value.ExternalLoginProviders.Values)
                     {
-                        user = await UserManager.FindByNameAsync(request.Username);
-                        if (user == null)
-                        {
-                            user = await externalLoginProvider.CreateUserAsync(request.Username, externalLoginProviderInfo.Name);
-                        }
-                        else
-                        {
-                            await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
-                        }
+                        var externalLoginProvider = (IExternalLoginProvider)scope.ServiceProvider
+                            .GetRequiredService(externalLoginProviderInfo.Type);
 
-                        return await SetSuccessResultAsync(request, user);
+                        if (await externalLoginProvider.TryAuthenticateAsync(request.Username, request.Password))
+                        {
+                            user = await UserManager.FindByNameAsync(request.Username);
+                            if (user == null)
+                            {
+                                user = await externalLoginProvider.CreateUserAsync(request.Username, externalLoginProviderInfo.Name);
+                            }
+                            else
+                            {
+                                await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                            }
+
+                            return await SetSuccessResultAsync(request, user);
+                        }
                     }
                 }
-            }
-            
-            await IdentityOptions.SetAsync();
-            
-            user = await UserManager.FindByNameAsync(request.Username);
-            if (user == null)
-            {
-                Logger.LogInformation("No user found matching username: {username}", request.Username);
                 
-                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                await IdentityOptions.SetAsync();
+                
+                user = await UserManager.FindByNameAsync(request.Username);
+                if (user == null)
                 {
-                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["InvalidUsername"]
-                });
+                    Logger.LogInformation("No user found matching username: {username}", request.Username);
+                    
+                    var properties = new AuthenticationProperties(new Dictionary<string, string>
+                    {
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["InvalidUsername"]
+                    });
+                    
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                    {
+                        Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                        Action = OpenIddictSecurityLogActionConsts.LoginInvalidUserName,
+                        UserName = request.Username,
+                        ClientId = request.ClientId
+                    });
+
+                    return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                }
                 
-                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                var result = await SignInManager.CheckPasswordSignInAsync(user, request.Password, true);
+                if (!result.Succeeded)
+                {
+                    string errorDescription;
+                    if (result.IsLockedOut)
+                    {
+                        Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", request.Username);
+                        errorDescription = L["UserLockedOut"];
+                    }
+                    else if (result.IsNotAllowed)
+                    {
+                        Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
+                        errorDescription = L["LoginIsNotAllowed"];
+                    }
+                    else
+                    {
+                        Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", request.Username);
+                        errorDescription = L["InvalidUserNameOrPassword"];
+                    }
+                    
+                    var properties = new AuthenticationProperties(new Dictionary<string, string>
+                    {
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = errorDescription
+                    });
+
+                    return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                }
+                
+                if (await IsTfaEnabledAsync(user))
+                {
+                    return await HandleTwoFactorLoginAsync(request, user);
+                }
+
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
                 {
                     Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
-                    Action = OpenIddictSecurityLogActionConsts.LoginInvalidUserName,
+                    Action = result.ToIdentitySecurityLogAction(),
                     UserName = request.Username,
                     ClientId = request.ClientId
                 });
-
-                return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                    
+                return await SetSuccessResultAsync(request, user);
             }
-            
-            var result = await SignInManager.CheckPasswordSignInAsync(user, request.Password, true);
-            if (!result.Succeeded)
-            {
-                string errorDescription;
-                if (result.IsLockedOut)
-                {
-                    Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", request.Username);
-                    errorDescription = L["UserLockedOut"];
-                }
-                else if (result.IsNotAllowed)
-                {
-                    Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
-                    errorDescription = L["LoginIsNotAllowed"];
-                }
-                else
-                {
-                    Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", request.Username);
-                    errorDescription = L["InvalidUserNameOrPassword"];
-                }
-                
-                var properties = new AuthenticationProperties(new Dictionary<string, string>
-                {
-                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = errorDescription
-                });
-
-                return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-            }
-            
-            if (await IsTfaEnabledAsync(user))
-            {
-                return await HandleTwoFactorLoginAsync(request, user);
-            }
-
-            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
-            {
-                Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
-                Action = result.ToIdentitySecurityLogAction(),
-                UserName = request.Username,
-                ClientId = request.ClientId
-            });
-                
-            return await SetSuccessResultAsync(request, user);
         }
     }
     
@@ -206,29 +211,13 @@ public partial class TokenController
         // Create a new ClaimsPrincipal containing the claims that
         // will be used to create an id_token, a token or a code.
         var principal = await SignInManager.CreateUserPrincipalAsync(user);
-
-        // Set the list of scopes granted to the client application.
-        principal.SetScopes(new[]
-        {
-            OpenIddictConstants.Scopes.OpenId,
-            OpenIddictConstants.Scopes.Email,
-            OpenIddictConstants.Scopes.Profile,
-            OpenIddictConstants.Scopes.Roles,
-            OpenIddictConstants.Scopes.OfflineAccess
-        }.Intersect(request.GetScopes()));
+        
+        principal.SetScopes(request.GetScopes());
+        principal.SetResources(await GetResourcesAsync(request.GetScopes()));
 
         foreach (var claim in principal.Claims)
         {
             claim.SetDestinations(GetDestinations(claim, principal));
-        }
-        
-        if (request.GetScopes().Any())
-        {
-            var resources = await ScopeManager.ListResourcesAsync(request.GetScopes()).ToListAsync();
-            if (resources.Any())
-            {
-                principal.SetResources(resources);
-            }
         }
         
         await IdentitySecurityLogManager.SaveAsync(

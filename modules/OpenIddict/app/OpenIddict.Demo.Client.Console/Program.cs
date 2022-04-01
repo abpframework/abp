@@ -8,7 +8,7 @@ const string server = "https://localhost:44301/";
 const string api = "https://localhost:44303/api/claims";
 const string clientId = "AbpApp";
 const string clientSecret = "1q2w3e*";
-            
+
 var client = new HttpClient();
 
 var configuration = await client.GetDiscoveryDocumentAsync(server);
@@ -17,15 +17,17 @@ if (configuration.IsError)
     throw new Exception(configuration.Error);
 }
 
-var tokenResponse = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
+var passwordTokenRequest = new PasswordTokenRequest
 {
     Address = configuration.TokenEndpoint,
     ClientId = clientId,
     ClientSecret = clientSecret,
     UserName = email,
     Password = password,
-    Scope = "AbpAPI offline_access"
-});
+    Scope = "AbpAPI profile roles email phone offline_access",
+};
+passwordTokenRequest.Headers.Add("__tenant", "Default");
+var tokenResponse = await client.RequestPasswordTokenAsync(passwordTokenRequest);
 
 if (tokenResponse.IsError)
 {
@@ -55,8 +57,7 @@ Console.WriteLine();
 Console.WriteLine("New Refresh token: {0}", refreshTokenResponse.RefreshToken);
 Console.WriteLine();
 
-
-var userinfo = await client.GetUserInfoAsync(new UserInfoRequest() 
+var userinfo = await client.GetUserInfoAsync(new UserInfoRequest()
 {
     Address = configuration.UserInfoEndpoint,
     Token = tokenResponse.AccessToken
@@ -67,6 +68,26 @@ if (userinfo.IsError)
 }
 
 Console.WriteLine("UserInfo: {0}", JsonSerializer.Serialize(JsonDocument.Parse(userinfo.Raw), new JsonSerializerOptions
+{
+    WriteIndented = true
+}));
+Console.WriteLine();
+
+
+var introspectionResponse  = await client.IntrospectTokenAsync(new TokenIntrospectionRequest()
+{
+    Address = configuration.IntrospectionEndpoint,
+    ClientId = clientId,
+    ClientSecret = clientSecret,
+    Token = tokenResponse.AccessToken,
+    TokenTypeHint = "access_token"
+});
+if (introspectionResponse.IsError)
+{
+    throw new Exception(introspectionResponse.Error);
+}
+
+Console.WriteLine("Introspection : {0}", JsonSerializer.Serialize(JsonDocument.Parse(introspectionResponse.Raw), new JsonSerializerOptions
 {
     WriteIndented = true
 }));
@@ -84,4 +105,26 @@ Console.WriteLine("API response: {0}", JsonSerializer.Serialize(JsonDocument.Par
     WriteIndented = true
 }));
 
+Console.WriteLine();
+
+
+tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+{
+    Address = configuration.TokenEndpoint,
+
+    ClientId = clientId,
+    ClientSecret = clientSecret,
+
+    Scope = "AbpAPI profile roles email phone offline_access",
+});
+
+if (tokenResponse.IsError)
+{
+    Console.WriteLine(tokenResponse.Error);
+    return;
+}
+
+Console.WriteLine("Access token: {0}", tokenResponse.AccessToken);
+Console.WriteLine();
+Console.WriteLine("Refresh token: {0}", tokenResponse.RefreshToken);
 Console.WriteLine();

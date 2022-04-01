@@ -8,7 +8,7 @@ using Volo.Abp.OpenIddict.Tokens;
 
 namespace Volo.Abp.OpenIddict.EntityFrameworkCore;
 
-[ConnectionStringName(OpenIddictDbProperties.ConnectionStringName)]
+[ConnectionStringName(AbpOpenIddictDbProperties.ConnectionStringName)]
 public class OpenIddictDbContext : AbpDbContext<OpenIddictDbContext>, IOpenIddictDbContext
 {
     public DbSet<OpenIddictApplication> Applications { get; set; }

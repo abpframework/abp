@@ -1,5 +1,4 @@
 using IdentityModel;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
@@ -57,4 +56,3 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
-

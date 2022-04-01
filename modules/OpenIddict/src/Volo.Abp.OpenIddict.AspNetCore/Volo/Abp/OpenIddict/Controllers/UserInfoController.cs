@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
+using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.OpenIddict.Controllers;
 
@@ -35,6 +37,13 @@ public class UserInfoController : OpenIdDictControllerBase
             // Note: the "sub" claim is a mandatory claim and must be included in the JSON response.
             [OpenIddictConstants.Claims.Subject] = await UserManager.GetUserIdAsync(user)
         };
+
+        if (User.HasScope(OpenIddictConstants.Scopes.Profile))
+        {
+            claims[AbpClaimTypes.TenantId] = user.TenantId;
+            claims[OpenIddictConstants.Claims.Name] = user.UserName;
+            claims[OpenIddictConstants.Claims.FamilyName] = user.Surname;
+        }
 
         if (User.HasScope(OpenIddictConstants.Scopes.Email))
         {

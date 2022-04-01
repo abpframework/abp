@@ -7,7 +7,7 @@ namespace Volo.Abp.OpenIddict.Jwt;
 
 public static class JwtTokenMiddleware
 {
-    public static IApplicationBuilder UseJwtTokenMiddleware(this IApplicationBuilder app, string schema)
+    public static IApplicationBuilder UseJwtTokenMiddleware(this IApplicationBuilder app, string schema = "Bearer")
     {
         return app.Use(async (ctx, next) =>
         {
