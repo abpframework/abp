@@ -1,4 +1,8 @@
 ﻿@using Microsoft.Extensions.Primitives
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.OpenIddict.Localization
+@model AuthorizeViewModel
+@inject IStringLocalizer<AbpOpenIddictResource> L
 
 <div class="jumbotron">
     <h1>Log out</h1>
@@ -12,6 +16,6 @@
             <input type="hidden" name="@parameter.Key" value="@parameter.Value"/>
         }
 
-        <input class="btn btn-lg btn-success" name="Confirm" type="submit" value="Yes"/>
+        <input class="btn btn-lg btn-success" name="Confirm" type="submit" value="@L["Yes"]"/>
     </form>
 </div>

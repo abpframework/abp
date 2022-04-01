@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using OpenIddict.Abstractions;
 using Volo.Abp.AspNetCore.Mvc;
@@ -25,6 +28,15 @@ public abstract class OpenIdDictControllerBase : AbpController
     protected OpenIdDictControllerBase()
     {
         LocalizationResource = typeof(AbpOpenIddictResource);
+    }
+
+
+    protected virtual Task<OpenIddictRequest> GetOpenIddictServerRequest(HttpContext httpContext)
+    {
+        var request = HttpContext.GetOpenIddictServerRequest() ??
+                      throw new InvalidOperationException(L["TheOpenIDConnectRequestCannotBeRetrieved"]);
+
+        return Task.FromResult(request);
     }
 
     protected virtual async Task<IEnumerable<string>> GetResourcesAsync(ImmutableArray<string> scopes)

@@ -1,5 +1,9 @@
 ﻿@using Microsoft.Extensions.Primitives
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.OpenIddict.Localization
 @model AuthorizeViewModel
+@inject IStringLocalizer<AbpOpenIddictResource> L
+
 <div class="jumbotron">
     <h1>Authorization</h1>
     <p class="lead text-left">Do you want to grant <strong>@Model.ApplicationName</strong> access to your data? (scopes requested: @Model.Scope)</p>
@@ -12,7 +16,7 @@
             <input type="hidden" name="@parameter.Key" value="@parameter.Value"/>
         }
 
-        <input class="btn btn-lg btn-success" name="submit.Accept" type="submit" value="Yes"/>
-        <input class="btn btn-lg btn-danger" name="submit.Deny" type="submit" value="No"/>
+        <input class="btn btn-lg btn-success" name="submit.Accept" type="submit" value="@L["Yes"]"/>
+        <input class="btn btn-lg btn-danger" name="submit.Deny" type="submit" value="@L["No"]"/>
     </form>
 </div>

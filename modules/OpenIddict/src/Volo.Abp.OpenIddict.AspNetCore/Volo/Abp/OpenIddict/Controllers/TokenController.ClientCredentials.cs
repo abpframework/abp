@@ -19,7 +19,7 @@ public partial class TokenController
         var application = await ApplicationManager.FindByClientIdAsync(request.ClientId);
         if (application == null)
         {
-            throw new InvalidOperationException("The application details cannot be found in the database.");
+            throw new InvalidOperationException(L["TheApplicationDetailsCannotBeFound"]);
         }
 
         // Create a new ClaimsIdentity containing the claims that

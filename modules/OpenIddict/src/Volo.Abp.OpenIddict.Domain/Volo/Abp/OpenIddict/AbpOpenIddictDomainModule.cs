@@ -34,8 +34,8 @@ public class AbpOpenIddictDomainModule : AbpModule
             AbpClaimTypes.UserId = OpenIddictConstants.Claims.Subject;
             AbpClaimTypes.Role = OpenIddictConstants.Claims.Role;
             AbpClaimTypes.UserName = OpenIddictConstants.Claims.Name;
-            AbpClaimTypes.SurName = OpenIddictConstants.Claims.FamilyName;
             AbpClaimTypes.Name = OpenIddictConstants.Claims.GivenName;
+            AbpClaimTypes.SurName = OpenIddictConstants.Claims.FamilyName;
             AbpClaimTypes.PhoneNumber = OpenIddictConstants.Claims.PhoneNumber;
             AbpClaimTypes.PhoneNumberVerified = OpenIddictConstants.Claims.PhoneNumberVerified;
             AbpClaimTypes.Email = OpenIddictConstants.Claims.Email;

@@ -22,8 +22,7 @@ public class AuthorizeController : OpenIdDictControllerBase
     [IgnoreAntiforgeryToken]
     public virtual async Task<IActionResult> HandleAsync()
     {
-        var request = HttpContext.GetOpenIddictServerRequest() ??
-            throw new InvalidOperationException("The OpenID Connect request cannot be retrieved.");
+        var request = await GetOpenIddictServerRequest(HttpContext);
 
         // If prompt=login was specified by the client application,
         // immediately return the user agent to the login page.
@@ -63,7 +62,7 @@ public class AuthorizeController : OpenIdDictControllerBase
                     properties: new AuthenticationProperties(new Dictionary<string, string>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.LoginRequired,
-                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The user is not logged in."
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["TheUserIsNotLoggedIn"]
                     }));
             }
 
@@ -78,11 +77,11 @@ public class AuthorizeController : OpenIdDictControllerBase
 
         // Retrieve the profile of the logged in user.
         var user = await UserManager.GetUserAsync(result.Principal) ??
-            throw new InvalidOperationException("The user details cannot be retrieved.");
+            throw new InvalidOperationException(L["TheUserDetailsCannotBbeRetrieved"]);
 
         // Retrieve the application details from the database.
         var application = await ApplicationManager.FindByClientIdAsync(request.ClientId) ??
-            throw new InvalidOperationException("Details concerning the calling client application cannot be found.");
+            throw new InvalidOperationException(L["DetailsConcerningTheCallingClientApplicationCannotBeFound"]);
 
         // Retrieve the permanent authorizations associated with the user and the calling client application.
         var authorizations = await AuthorizationManager.FindAsync(
@@ -102,8 +101,7 @@ public class AuthorizeController : OpenIdDictControllerBase
                     properties: new AuthenticationProperties(new Dictionary<string, string>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.ConsentRequired,
-                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                            "The logged in user is not allowed to access this client application."
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["TheLoggedInUserIsNotAllowedToAccessThisClientApplication"]
                     }));
 
             // If the consent is implicit or if an authorization was found,
@@ -150,8 +148,7 @@ public class AuthorizeController : OpenIdDictControllerBase
                     properties: new AuthenticationProperties(new Dictionary<string, string>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.ConsentRequired,
-                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                            "Interactive user consent is required."
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["InteractiveUserConsentIsRequired"]
                     }));
 
             // In every other case, render the consent form.
@@ -168,16 +165,15 @@ public class AuthorizeController : OpenIdDictControllerBase
     [Authorize, AbpFormValueRequired("submit.Accept")]
     public virtual async Task<IActionResult> HandleAcceptConsentAsync()
     {
-        var request = HttpContext.GetOpenIddictServerRequest() ??
-            throw new InvalidOperationException("The OpenID Connect request cannot be retrieved.");
+        var request = await GetOpenIddictServerRequest(HttpContext);
 
         // Retrieve the profile of the logged in user.
         var user = await UserManager.GetUserAsync(User) ??
-            throw new InvalidOperationException("The user details cannot be retrieved.");
+                   throw new InvalidOperationException(L["TheUserDetailsCannotBbeRetrieved"]);
 
         // Retrieve the application details from the database.
         var application = await ApplicationManager.FindByClientIdAsync(request.ClientId) ??
-            throw new InvalidOperationException("Details concerning the calling client application cannot be found.");
+            throw new InvalidOperationException(L["DetailsConcerningTheCallingClientApplicationCannotBeFound"]);
 
         // Retrieve the permanent authorizations associated with the user and the calling client application.
         var authorizations = await AuthorizationManager.FindAsync(
@@ -197,8 +193,7 @@ public class AuthorizeController : OpenIdDictControllerBase
                 properties: new AuthenticationProperties(new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.ConsentRequired,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                        "The logged in user is not allowed to access this client application."
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["TheLoggedInUserIsNotAllowedToAccessThisClientApplication"]
                 }));
         }
 

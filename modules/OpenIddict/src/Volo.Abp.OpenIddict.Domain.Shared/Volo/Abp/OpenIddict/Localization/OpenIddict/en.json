@@ -6,6 +6,17 @@
     "LoginIsNotAllowed": "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.",
     "InvalidUsername": "Invalid username or password!",
     "InvalidAuthenticatorCode": "Invalid authenticator code!",
-    "TheTargetUserIsNotLinkedToYou": "The target user is not linked to you!"
+    "TheTargetUserIsNotLinkedToYou": "The target user is not linked to you!",
+    "TheOpenIDConnectRequestCannotBeRetrieved": "The OpenID Connect request cannot be retrieved.",
+    "TheUserDetailsCannotBbeRetrieved" : "The user details cannot be retrieved.",
+    "TheApplicationDetailsCannotBeFound": "The application details cannot be found.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Details concerning the calling client application cannot be found.",
+    "TheSpecifiedGrantTypeIsNotImplemented.": "The specified grant type {0} is not implemented.",
+    "TheUserIsNotLoggedIn": "The user is not logged in.",
+    "TheLoggedInUserIsNotAllowedToAccessThisClientApplication": "The logged in user is not allowed to access this client application.",
+    "TheTokenIsNoLongerValid": "The token is no longer valid.",
+    "InteractiveUserConsentIsRequired": "Interactive user consent is required.",
+    "TheUserIsNoLongerAllowedToSignIn": "The user is no longer allowed to sign in.",
+    "TheSpecifiedAccessTokenIsBoundToAnAccountThatNoLongerExists": "The specified access token is bound to an account that no longer exists."
   }
 }

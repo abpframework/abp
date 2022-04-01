@@ -12,9 +12,7 @@ public partial class TokenController : OpenIdDictControllerBase
     [HttpGet, HttpPost, Produces("application/json")]
     public virtual async Task<IActionResult> HandleAsync()
     {
-        var request = HttpContext.GetOpenIddictServerRequest() ??
-                      //TODO: L
-                      throw new InvalidOperationException("The OpenID Connect request cannot be retrieved.");
+        var request = await GetOpenIddictServerRequest(HttpContext);
 
         if (request.IsPasswordGrantType())
         {
@@ -25,23 +23,22 @@ public partial class TokenController : OpenIdDictControllerBase
         {
             return await HandleAuthorizationCodeAsync(request);
         }
-        
+
         if (request.IsRefreshTokenGrantType() )
         {
             return await HandleRefreshTokenAsync(request);
         }
-        
+
         if (request.IsDeviceCodeGrantType() )
         {
             return await HandleDeviceCodeAsync(request);
         }
-        
+
         if (request.IsClientCredentialsGrantType())
         {
             return await HandleClientCredentialsAsync(request);
         }
 
-        //TODO: L
-        throw new NotImplementedException("The specified grant type is not implemented.");
+        throw new AbpException(string.Format(L["TheSpecifiedGrantTypeIsNotImplemented"], request.GrantType));
     }
 }

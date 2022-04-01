@@ -18,11 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\OpenIddict\*.json" />
-    <Content Remove="Localization\OpenIddict\*.json" />
-    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\en.json" />
-    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\zh-Hans.json" />
-    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\zh-Hant.json" />
+    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\*.json" />
+    <Content Remove="Volo\Abp\OpenIddict\Localization\OpenIddict\*.json" />
   </ItemGroup>
 
 </Project>

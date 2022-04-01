@@ -6,6 +6,17 @@
     "LoginIsNotAllowed": "無法登入!你的賬號未激活或者需要驗證郵箱地址/手機號碼.",
     "InvalidUsername": "用戶名或密碼錯誤!",
     "InvalidAuthenticatorCode": "驗證碼無效！",
-    "TheTargetUserIsNotLinkedToYou": "目標用戶與您無關！"
+    "TheTargetUserIsNotLinkedToYou": "目標用戶與您無關！",
+    "TheOpenIDConnectRequestCannotBeRetrieved": "无法检索 OpenID Connect 请求.",
+    "TheUserDetailsCannotBbeRetrieved" : "无法检索用户详细信息.",
+    "TheApplicationDetailsCannotBeFound": "找不到应用详情.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "找不到有关调用客户端应用程序的详细信息.",
+    "TheSpecifiedGrantTypeIsNotImplemented.": "未实施指定的授权类型 {0}.",
+    "TheUserIsNotLoggedIn": "用户未登录.",
+    "TheLoggedInUserIsNotAllowedToAccessThisClientApplication": "登录的用户不允许访问此客户端应用程序.",
+    "TheTokenIsNoLongerValid": "令牌不再有效.",
+    "InteractiveUserConsentIsRequired": "需要交互式用户同意.",
+    "TheUserIsNoLongerAllowedToSignIn": "不再允许用户登录.",
+    "TheSpecifiedAccessTokenIsBoundToAnAccountThatNoLongerExists": "指定的访问令牌绑定到不再存在的帐户."
   }
 }
