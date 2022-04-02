@@ -97,9 +97,9 @@ public partial class UiMessageAlert : ComponentBase, IDisposable
         await ShowMessageAlert();
     }
 
-    protected virtual Task ShowMessageAlert()
+    protected virtual async Task ShowMessageAlert()
     {
-        return InvokeAsync(ModalRef.Show);
+        await InvokeAsync(ModalRef.Show);
     }
 
     public void Dispose()
