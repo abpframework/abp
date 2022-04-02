@@ -1,5 +1,6 @@
 ﻿using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +24,13 @@ public class AbpOpenIddictTenantResolveContributor : HttpTenantResolveContributo
             return null;
         }
 
-        var principal = (await httpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)).Principal;
-        return principal?.FindTenantId().ToString();
+        if (httpContext.GetOpenIddictServerRequest() != null)
+        {
+            context.Handled = true;
+            var principal = (await httpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)).Principal;
+            return principal?.FindTenantId().ToString();
+        }
+
+        return null;
     }
 }
