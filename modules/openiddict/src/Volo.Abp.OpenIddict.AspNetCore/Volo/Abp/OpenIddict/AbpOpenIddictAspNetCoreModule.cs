@@ -27,11 +27,6 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                 .EnableLogoutEndpointPassthrough()
                 .EnableVerificationEndpointPassthrough();
         });
-
-        PreConfigure<OpenIddictValidationBuilder>(builder =>
-        {
-            builder.UseAspNetCore();
-        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

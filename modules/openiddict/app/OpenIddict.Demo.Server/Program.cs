@@ -1,7 +1,6 @@
 using OpenIddict.Demo.Server;
 using Volo.Abp.Localization;
 using Volo.Abp.OpenIddict.Jwt;
-using Volo.Abp.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>

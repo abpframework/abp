@@ -1,5 +1,4 @@
-﻿using IdentityModel;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using Volo.Abp.Domain;
@@ -27,7 +26,7 @@ public class AbpOpenIddictDomainModule : AbpModule
 
     private static void AddOpenIddict(IServiceCollection services)
     {
-        var builderOptions = services.ExecutePreConfiguredActions<AbpOpenIddictBuilderOptions>();
+        var builderOptions = services.ExecutePreConfiguredActions<AbpOpenIddictOptions>();
 
         if (builderOptions.UpdateAbpClaimTypes)
         {
@@ -83,14 +82,11 @@ public class AbpOpenIddictDomainModule : AbpModule
                     .AllowDeviceCodeFlow()
                     .AllowNoneFlow();
 
-                builder.RegisterScopes(new []
+                builder.RegisterScopes(new[]
                 {
-                    OpenIddictConstants.Scopes.OpenId,
-                    OpenIddictConstants.Scopes.Email,
-                    OpenIddictConstants.Scopes.Profile,
-                    OpenIddictConstants.Scopes.Phone,
-                    OpenIddictConstants.Scopes.Roles,
-                    OpenIddictConstants.Scopes.Address,
+                    OpenIddictConstants.Scopes.OpenId, OpenIddictConstants.Scopes.Email,
+                    OpenIddictConstants.Scopes.Profile, OpenIddictConstants.Scopes.Phone,
+                    OpenIddictConstants.Scopes.Roles, OpenIddictConstants.Scopes.Address,
                     OpenIddictConstants.Scopes.OfflineAccess
                 });
 
@@ -102,12 +98,6 @@ public class AbpOpenIddictDomainModule : AbpModule
 
                 services.ExecutePreConfiguredActions(builder);
 
-            })
-            .AddValidation(builder =>
-            {
-                builder.UseLocalServer();
-
-                services.ExecutePreConfiguredActions(builder);
             });
 
         services.Configure<OpenIddictCoreOptions>(options =>

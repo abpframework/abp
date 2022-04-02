@@ -1265,6 +1265,10 @@
           "text": "IdentityServer",
           "path": "Modules/IdentityServer.md"
         },
+		{
+          "text": "OpenIddict",
+          "path": "Modules/OpenIddict.md"
+        },
         {
           "text": "Permission Management",
           "path": "Modules/Permission-Management.md"
