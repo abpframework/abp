@@ -60,17 +60,17 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
    {
        Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-       return await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), cancellationToken);
+       return await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), includeDetails: true, cancellationToken);
    }
 
     public virtual async ValueTask<OpenIddictScope> FindByNameAsync(string name, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(name, nameof(name));
 
-        return await Repository.FindByNameAsync(name, cancellationToken);
+        return await Repository.FindByNameAsync(name, includeDetails: true, cancellationToken);
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictScope> FindByNamesAsync(ImmutableArray<string> names, CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictScope> FindByNamesAsync(ImmutableArray<string> names, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(names, nameof(names));
         foreach (var name in names)
@@ -78,18 +78,18 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
             Check.NotNullOrEmpty(name, nameof(name));
         }
 
-        var scopes = await Repository.FindByNamesAsync(names.ToArray(), cancellationToken);
+        var scopes = await Repository.FindByNamesAsync(names.ToArray(), includeDetails: true, cancellationToken);
         foreach (var scope in scopes)
         {
             yield return scope;
         }
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictScope> FindByResourceAsync(string resource, CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictScope> FindByResourceAsync(string resource, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(resource, nameof(resource));
 
-        var scopes = await Repository.FindByResourceAsync(resource, cancellationToken);
+        var scopes = await Repository.FindByResourceAsync(resource, includeDetails: true, cancellationToken);
         foreach (var scope in scopes)
         {
             var resources = await GetResourcesAsync(scope, cancellationToken);
@@ -102,7 +102,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
 
     public virtual async ValueTask<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictScope>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
     {
-        return await Repository.GetAsync(query, state, cancellationToken);
+        return await Repository.GetAsync(query, state, includeDetails: true, cancellationToken);
     }
 
     public virtual  ValueTask<string> GetDescriptionAsync(OpenIddictScope scope, CancellationToken cancellationToken)
@@ -289,7 +289,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
 
     public virtual async IAsyncEnumerable<OpenIddictScope> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var scopes = await Repository.ListAsync(count, offset, cancellationToken);
+        var scopes = await Repository.ListAsync(count, offset, includeDetails: true, cancellationToken);
         foreach (var scope in scopes)
         {
             yield return scope;
@@ -300,7 +300,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
     {
         Check.NotNull(query, nameof(query));
 
-        var scopes = await Repository.ListAsync(query, state, cancellationToken);
+        var scopes = await Repository.ListAsync(query, state, includeDetails: true, cancellationToken);
         foreach (var scope in scopes)
         {
             yield return scope;
@@ -340,7 +340,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         return default;
     }
 
-    public virtual ValueTask SetDisplayNameAsync(OpenIddictScope scope, string? name, CancellationToken cancellationToken)
+    public virtual ValueTask SetDisplayNameAsync(OpenIddictScope scope, string name, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -373,7 +373,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         return default;
     }
 
-    public virtual ValueTask SetNameAsync(OpenIddictScope scope, string? name, CancellationToken cancellationToken)
+    public virtual ValueTask SetNameAsync(OpenIddictScope scope, string name, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 

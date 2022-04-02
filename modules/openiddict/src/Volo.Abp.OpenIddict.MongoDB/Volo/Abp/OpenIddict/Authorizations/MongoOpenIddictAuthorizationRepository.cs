@@ -18,53 +18,53 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
     {
     }
 
-    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictAuthorization>, IQueryable<TResult>> query, CancellationToken cancellationToken)
+    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictAuthorization>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
     {
         return await query(await GetMongoQueryableAsync(cancellationToken)).As<IMongoQueryable<OpenIddictAuthorization>>().LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .Where(x => x.Subject == subject && x.ApplicationId == client)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .Where(x => x.Subject == subject && x.Status == status && x.ApplicationId == client)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, string type, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, string type, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .Where(x => x.Subject == subject && x.Status == status && x.Type == type && x.ApplicationId == client)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> FindByApplicationIdAsync(Guid applicationId, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.ApplicationId == applicationId).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<OpenIddictAuthorization> FindByIdAsync(Guid id, CancellationToken cancellationToken)
+    public virtual async Task<OpenIddictAuthorization> FindByIdAsync(Guid id, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindBySubjectAsync(string subject, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> FindBySubjectAsync(string subject, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Subject == subject).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await query(await GetMongoQueryableAsync(cancellationToken), state).As<IMongoQueryable<TResult>>().FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> ListAsync(int? count, int? offset, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> ListAsync(int? count, int? offset, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .OrderBy(authorization => authorization.Id!)
@@ -73,12 +73,12 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
             .As<IMongoQueryable<OpenIddictAuthorization>>().ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await query(await GetMongoQueryableAsync(cancellationToken), state).As<IMongoQueryable<TResult>>().ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> GetPruneListAsync(DateTime date, int count, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .Where(x => x.CreationDate < date)

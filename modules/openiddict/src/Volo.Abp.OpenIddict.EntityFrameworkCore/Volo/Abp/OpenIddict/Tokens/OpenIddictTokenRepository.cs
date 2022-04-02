@@ -20,57 +20,57 @@ public class OpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbContext, 
 
     }
 
-    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictToken>, IQueryable<TResult>> query, CancellationToken cancellationToken)
+    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictToken>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync()).LongCountAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync()).Where(x => x.Subject == subject && x.ApplicationId == client).ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, string status, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, string status, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync()).Where(x => x.Subject == subject && x.ApplicationId == client && x.Status == status).ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, string status, string type, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, string status, string type, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync()).Where(x => x.Subject == subject && x.ApplicationId == client && x.Status == status && x.Type == type).ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictToken>> FindByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictToken>> FindByApplicationIdAsync(Guid applicationId, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync()).Where(x => x.ApplicationId == applicationId).ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictToken>> FindByAuthorizationIdAsync(Guid authorizationId, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictToken>> FindByAuthorizationIdAsync(Guid authorizationId, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync()).Where(x => x.AuthorizationId == authorizationId).ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<OpenIddictToken> FindByIdAsync(Guid id, CancellationToken cancellationToken)
+    public virtual async Task<OpenIddictToken> FindByIdAsync(Guid id, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public virtual async Task<OpenIddictToken> FindByReferenceIdAsync(string referenceId, CancellationToken cancellationToken)
+    public virtual async Task<OpenIddictToken> FindByReferenceIdAsync(string referenceId, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.ReferenceId == referenceId, cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictToken>> FindBySubjectAsync(string subject, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictToken>> FindBySubjectAsync(string subject, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync()).Where(x => x.Subject == subject).ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictToken>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictToken>, TState, IQueryable<TResult>> query, TState state, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await query(await GetQueryableAsync(), state).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictToken>> ListAsync(int? count, int? offset, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictToken>> ListAsync(int? count, int? offset, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync())
             .OrderBy(x => x.Id)
@@ -79,12 +79,12 @@ public class OpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbContext, 
             .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictToken>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictToken>, TState, IQueryable<TResult>> query, TState state, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await query(await GetQueryableAsync(), state).ToListAsync(cancellationToken);
     }
 
-    public async Task<List<OpenIddictToken>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken)
+    public async Task<List<OpenIddictToken>> GetPruneListAsync(DateTime date, int count, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         //TODO: Test & Improve?
         return await (from token in await GetQueryableAsync()

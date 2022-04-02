@@ -67,20 +67,20 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
         Check.NotNullOrEmpty(subject, nameof(subject));
         Check.NotNullOrEmpty(client, nameof(client));
 
-        var tokens = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), cancellationToken);
+        var tokens = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), includeDetails: true, cancellationToken);
         foreach (var token in tokens)
         {
             yield return token;
         }
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictToken> FindAsync(string subject, string client, string status, CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictToken> FindAsync(string subject, string client, string status, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
         Check.NotNullOrEmpty(client, nameof(client));
         Check.NotNullOrEmpty(status, nameof(status));
 
-        var tokens = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, cancellationToken);
+        var tokens = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, includeDetails: true, cancellationToken);
         foreach (var token in tokens)
         {
             yield return token;
@@ -94,7 +94,7 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
         Check.NotNullOrEmpty(status, nameof(status));
         Check.NotNullOrEmpty(type, nameof(type));
 
-        var tokens = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, cancellationToken);
+        var tokens = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, includeDetails: true, cancellationToken);
         foreach (var token in tokens)
         {
             yield return token;
@@ -105,18 +105,18 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-        var tokens = await Repository.FindByApplicationIdAsync(ConvertIdentifierFromString(identifier), cancellationToken);
+        var tokens = await Repository.FindByApplicationIdAsync(ConvertIdentifierFromString(identifier), includeDetails: true, cancellationToken);
         foreach (var token in tokens)
         {
             yield return token;
         }
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictToken> FindByAuthorizationIdAsync(string identifier, CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictToken> FindByAuthorizationIdAsync(string identifier, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-        var tokens = await Repository.FindByAuthorizationIdAsync(ConvertIdentifierFromString(identifier), cancellationToken);
+        var tokens = await Repository.FindByAuthorizationIdAsync(ConvertIdentifierFromString(identifier), includeDetails: true, cancellationToken);
         foreach (var token in tokens)
         {
             yield return token;
@@ -127,21 +127,21 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-        return await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), cancellationToken);
+        return await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), includeDetails: true, cancellationToken);
     }
 
     public virtual async ValueTask<OpenIddictToken> FindByReferenceIdAsync(string identifier, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-        return await Repository.FindByReferenceIdAsync(identifier, cancellationToken);
+        return await Repository.FindByReferenceIdAsync(identifier, includeDetails: true, cancellationToken);
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictToken> FindBySubjectAsync(string subject, CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictToken> FindBySubjectAsync(string subject, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
 
-        var tokens = await Repository.FindBySubjectAsync(subject, cancellationToken);
+        var tokens = await Repository.FindBySubjectAsync(subject, includeDetails: true, cancellationToken);
         foreach (var token in tokens)
         {
             yield return token;
@@ -161,7 +161,7 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
     {
         Check.NotNull(query, nameof(query));
 
-        return  await Repository.GetAsync(query, state, cancellationToken);
+        return  await Repository.GetAsync(query, state, includeDetails: true, cancellationToken);
     }
 
     public virtual ValueTask<string> GetAuthorizationIdAsync(OpenIddictToken token, CancellationToken cancellationToken)
@@ -296,18 +296,18 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
 
     public virtual async IAsyncEnumerable<OpenIddictToken> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var tokens = await Repository.ListAsync(count, offset, cancellationToken);
+        var tokens = await Repository.ListAsync(count, offset, includeDetails: true, cancellationToken);
         foreach (var token in tokens)
         {
             yield return token;
         }
     }
 
-    public virtual async IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictToken>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictToken>, TState, IQueryable<TResult>> query, TState state, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNull(query, nameof(query));
 
-        var tokens = await Repository.ListAsync(query, state, cancellationToken);
+        var tokens = await Repository.ListAsync(query, state, includeDetails: true, cancellationToken);
         foreach (var token in tokens)
         {
             yield return token;
@@ -324,7 +324,7 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
             {
                 var date = threshold.UtcDateTime;
 
-                var tokens = await Repository.GetPruneListAsync(date, 1_000, cancellationToken);
+                var tokens = await Repository.GetPruneListAsync(date, 1_000, includeDetails: true, cancellationToken);
                 if (!tokens.Any())
                 {
                     break;

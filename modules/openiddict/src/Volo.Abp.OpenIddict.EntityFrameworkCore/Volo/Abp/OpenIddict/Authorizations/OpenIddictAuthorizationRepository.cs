@@ -19,49 +19,69 @@ public class OpenIddictAuthorizationRepository : EfCoreRepository<IOpenIddictDbC
 
     }
 
-    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictAuthorization>, IQueryable<TResult>> query, CancellationToken cancellationToken)
+    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictAuthorization>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
     {
         return await query(await GetQueryableAsync()).LongCountAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).Where(x => x.Subject == subject && x.ApplicationId == client).ToListAsync(cancellationToken);
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(x => x.Subject == subject && x.ApplicationId == client)
+            .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).Where(x => x.Subject == subject && x.Status == status && x.ApplicationId == client).ToListAsync(cancellationToken);
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(x => x.Subject == subject && x.Status == status && x.ApplicationId == client)
+            .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, string type, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, string type, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).Where(x => x.Subject == subject && x.Status == status && x.Type == type && x.ApplicationId == client).ToListAsync(cancellationToken);
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(x => x.Subject == subject && x.Status == status && x.Type == type && x.ApplicationId == client)
+            .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> FindByApplicationIdAsync(Guid applicationId, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).Where(x => x.ApplicationId == applicationId).ToListAsync(cancellationToken);
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(x => x.ApplicationId == applicationId)
+            .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<OpenIddictAuthorization> FindByIdAsync(Guid id, CancellationToken cancellationToken)
+    public virtual async Task<OpenIddictAuthorization> FindByIdAsync(Guid id, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindBySubjectAsync(string subject, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> FindBySubjectAsync(string subject, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).Where(x => x.Subject == subject).ToListAsync(cancellationToken);
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(x => x.Subject == subject)
+            .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await query(await GetQueryableAsync(), state).FirstOrDefaultAsync(cancellationToken);
+        return await query((await GetDbSetAsync())
+            .IncludeDetails(includeDetails), state)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> ListAsync(int? count, int? offset, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> ListAsync(int? count, int? offset, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        var query = (await GetQueryableAsync())
+        var query = (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
             .OrderBy(authorization => authorization.Id!)
             .AsTracking();
 
@@ -78,14 +98,17 @@ public class OpenIddictAuthorizationRepository : EfCoreRepository<IOpenIddictDbC
         return await query.ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await query(await GetQueryableAsync(), state).ToListAsync(cancellationToken);
+        return await query((await GetDbSetAsync())
+            .IncludeDetails(includeDetails), state)
+            .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictAuthorization>> GetPruneListAsync(DateTime date, int count, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync())
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
             .Where(x => x.CreationDate < date)
             .Where(x => x.Status != OpenIddictConstants.Statuses.Valid || (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && !x.Tokens.Any()))
             .OrderBy(x => x.Id)

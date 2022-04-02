@@ -18,37 +18,37 @@ public class OpenIddictScopeRepository : EfCoreRepository<IOpenIddictDbContext, 
 
     }
 
-    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictScope>, IQueryable<TResult>> query, CancellationToken cancellationToken)
+    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictScope>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
     {
         return await query(await GetQueryableAsync()).LongCountAsync(cancellationToken);
     }
 
-    public virtual async Task<OpenIddictScope> FindByIdAsync(Guid id, CancellationToken cancellationToken)
+    public virtual async Task<OpenIddictScope> FindByIdAsync(Guid id, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        return await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public virtual async Task<OpenIddictScope> FindByNameAsync(string name, CancellationToken cancellationToken)
+    public virtual async Task<OpenIddictScope> FindByNameAsync(string name, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.Name == name, cancellationToken: cancellationToken);
+        return await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.Name == name, cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictScope>> FindByNamesAsync(string[] names, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictScope>> FindByNamesAsync(string[] names, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).Where(x => names.Contains(x.Name)).ToListAsync(cancellationToken: cancellationToken);
+        return await (await GetQueryableAsync()).Where(x => names.Contains(x.Name)).ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictScope>> FindByResourceAsync(string resource, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictScope>> FindByResourceAsync(string resource, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).Where(x => x.Resources.Contains(resource)).ToListAsync(cancellationToken: cancellationToken);
+        return await (await GetQueryableAsync()).Where(x => x.Resources.Contains(resource)).ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictScope>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictScope>, TState, IQueryable<TResult>> query, TState state, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await query(await GetQueryableAsync(), state).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public virtual async Task<List<OpenIddictScope>> ListAsync(int? count, int? offset, CancellationToken cancellationToken)
+    public virtual async Task<List<OpenIddictScope>> ListAsync(int? count, int? offset, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync())
             .OrderBy(x => x.Id)
@@ -57,7 +57,7 @@ public class OpenIddictScopeRepository : EfCoreRepository<IOpenIddictDbContext, 
             .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictScope>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictScope>, TState, IQueryable<TResult>> query, TState state, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await query(await GetQueryableAsync(), state).ToListAsync(cancellationToken);
     }

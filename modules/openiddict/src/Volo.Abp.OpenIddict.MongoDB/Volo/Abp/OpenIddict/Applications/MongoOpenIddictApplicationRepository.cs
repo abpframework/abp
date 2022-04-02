@@ -17,35 +17,35 @@ public class MongoOpenIddictApplicationRepository : MongoDbRepository<OpenIddict
     {
     }
 
-    public async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictApplication>, IQueryable<TResult>> query, CancellationToken cancellationToken)
+    public async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictApplication>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
     {
         return await query(await GetMongoQueryableAsync(cancellationToken))
             .As<IMongoQueryable<OpenIddictApplication>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<OpenIddictApplication> FindByClientIdAsync(string clientId, CancellationToken cancellationToken)
+    public async Task<OpenIddictApplication> FindByClientIdAsync(string clientId, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .FirstOrDefaultAsync(x => x.ClientId == clientId, cancellationToken: GetCancellationToken(cancellationToken));
+            .FirstOrDefaultAsync(x => x.ClientId == clientId, cancellationToken);
     }
 
-    public async Task<List<OpenIddictApplication>> FindByPostLogoutRedirectUriAsync(string address, CancellationToken cancellationToken)
+    public async Task<List<OpenIddictApplication>> FindByPostLogoutRedirectUriAsync(string address, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.PostLogoutRedirectUris.Contains(address)).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<OpenIddictApplication>> FindByRedirectUriAsync(string address, CancellationToken cancellationToken)
+    public async Task<List<OpenIddictApplication>> FindByRedirectUriAsync(string address, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.RedirectUris.Contains(address)).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictApplication>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictApplication>, TState, IQueryable<TResult>> query, TState state, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await query(await GetMongoQueryableAsync(cancellationToken), state).As<IMongoQueryable<TResult>>().FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<OpenIddictApplication>> ListAsync(int? count, int? offset, CancellationToken cancellationToken)
+    public async Task<List<OpenIddictApplication>> ListAsync(int? count, int? offset, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .OrderBy(x => x.Id)
@@ -55,7 +55,7 @@ public class MongoOpenIddictApplicationRepository : MongoDbRepository<OpenIddict
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictApplication>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictApplication>, TState, IQueryable<TResult>> query, TState state, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await query(await GetMongoQueryableAsync(cancellationToken), state).As<IMongoQueryable<TResult>>().ToListAsync(GetCancellationToken(cancellationToken));
     }

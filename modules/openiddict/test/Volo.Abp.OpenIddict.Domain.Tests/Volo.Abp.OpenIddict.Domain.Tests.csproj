@@ -5,12 +5,19 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Volo.Abp.OpenIddict</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <ProjectReference Include="..\Volo.Abp.OpenIddict.EntityFrameworkCore.Tests\Volo.Abp.OpenIddict.EntityFrameworkCore.Tests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Volo\Abp\OpenIddict\Applications" />
+    <Folder Include="Volo\Abp\OpenIddict\Authorizations" />
+    <Folder Include="Volo\Abp\OpenIddict\Scopes" />
+    <Folder Include="Volo\Abp\OpenIddict\Tokens" />
   </ItemGroup>
 
 </Project>

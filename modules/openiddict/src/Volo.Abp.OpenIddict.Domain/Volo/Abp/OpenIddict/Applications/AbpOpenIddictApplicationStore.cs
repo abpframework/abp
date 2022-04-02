@@ -24,11 +24,11 @@ namespace Volo.Abp.OpenIddict.Applications;
 public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictApplicationRepository>, IOpenIddictApplicationStore<OpenIddictApplication>, IScopedDependency
 {
     protected IOpenIddictTokenRepository TokenRepository { get; }
-    
+
     public AbpOpenIddictApplicationStore(
         IOpenIddictApplicationRepository repository,
         IUnitOfWorkManager unitOfWorkManager,
-        IMemoryCache cache, 
+        IMemoryCache cache,
         IOpenIddictTokenRepository tokenRepository)
         : base(repository, unitOfWorkManager, cache)
     {
@@ -51,7 +51,7 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
     {
         Check.NotNull(application, nameof(application));
 
-        await Repository.InsertAsync(application, cancellationToken: cancellationToken);
+        await Repository.InsertAsync(application, autoSave: true, cancellationToken: cancellationToken);
     }
 
     public async ValueTask DeleteAsync(OpenIddictApplication application, CancellationToken cancellationToken)
@@ -70,7 +70,7 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
             {
                 await TokenRepository.DeleteManyAsync(tokens, cancellationToken: cancellationToken);
             }
-        
+
             await Repository.DeleteAsync(application, cancellationToken: cancellationToken);
 
             await uow.CompleteAsync(cancellationToken);
@@ -81,21 +81,21 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-        return await Repository.FindAsync(ConvertIdentifierFromString(identifier), cancellationToken: cancellationToken);
+        return await Repository.FindAsync(ConvertIdentifierFromString(identifier), includeDetails: true, cancellationToken);
     }
 
     public async ValueTask<OpenIddictApplication> FindByClientIdAsync(string identifier, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-        return await Repository.FindByClientIdAsync(identifier, cancellationToken: cancellationToken);
+        return await Repository.FindByClientIdAsync(identifier, includeDetails: true, cancellationToken: cancellationToken);
     }
 
     public async IAsyncEnumerable<OpenIddictApplication> FindByPostLogoutRedirectUriAsync(string address, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(address, nameof(address));
 
-        var applications = await Repository.FindByPostLogoutRedirectUriAsync(address, cancellationToken);
+        var applications = await Repository.FindByPostLogoutRedirectUriAsync(address, includeDetails: true, cancellationToken);
 
         foreach (var application in applications)
         {
@@ -111,7 +111,7 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
     {
         Check.NotNullOrEmpty(address, nameof(address));
 
-        var applications = await Repository.FindByRedirectUriAsync(address, cancellationToken);
+        var applications = await Repository.FindByRedirectUriAsync(address, includeDetails: true, cancellationToken);
         foreach (var application in applications)
         {
             var addresses = await GetRedirectUrisAsync(application, cancellationToken);
@@ -126,7 +126,7 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
     {
         Check.NotNull(query, nameof(query));
 
-        return await Repository.GetAsync(query, state, cancellationToken);
+        return await Repository.GetAsync(query, state, includeDetails: true, cancellationToken);
     }
 
     public ValueTask<string> GetClientIdAsync(OpenIddictApplication application, CancellationToken cancellationToken)
@@ -400,7 +400,7 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
 
     public async IAsyncEnumerable<OpenIddictApplication> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var applications = await Repository.ListAsync(count, offset, cancellationToken);
+        var applications = await Repository.ListAsync(count, offset, includeDetails: true, cancellationToken);
         foreach (var application in applications)
         {
             yield return application;
@@ -411,7 +411,7 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
     {
         Check.NotNull(query, nameof(query));
 
-        var applications = await Repository.ListAsync(query, state, cancellationToken);
+        var applications = await Repository.ListAsync(query, state, includeDetails: true, cancellationToken);
         foreach (var application in applications)
         {
             yield return application;

@@ -5,7 +5,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Volo.Abp.OpenIddict</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>

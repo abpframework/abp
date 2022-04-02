@@ -30,7 +30,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         IOpenIddictAuthorizationRepository repository,
         IUnitOfWorkManager unitOfWorkManager,
         IMemoryCache cache,
-        IOpenIddictApplicationRepository applicationRepository, 
+        IOpenIddictApplicationRepository applicationRepository,
         IOpenIddictTokenRepository tokenRepository)
         : base(repository, unitOfWorkManager, cache)
     {
@@ -54,7 +54,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
     {
         Check.NotNull(authorization, nameof(authorization));
 
-        await Repository.InsertAsync(authorization, cancellationToken: cancellationToken);
+        await Repository.InsertAsync(authorization, autoSave: true, cancellationToken: cancellationToken);
     }
 
     public virtual async ValueTask DeleteAsync(OpenIddictAuthorization authorization, CancellationToken cancellationToken)
@@ -67,9 +67,9 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
             {
                 await TokenRepository.DeleteManyAsync(authorization.Tokens, cancellationToken: cancellationToken);
             }
-        
+
             await Repository.DeleteAsync(authorization, cancellationToken: cancellationToken);
-            
+
             await uow.CompleteAsync(cancellationToken);
         }
     }
@@ -79,7 +79,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         Check.NotNullOrEmpty(subject, nameof(subject));
         Check.NotNullOrEmpty(client, nameof(client));
 
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), cancellationToken);
+        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), includeDetails: true, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -92,35 +92,35 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         Check.NotNullOrEmpty(client, nameof(client));
         Check.NotNullOrEmpty(status, nameof(status));
 
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, cancellationToken);
+        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, includeDetails: true, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
         }
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictAuthorization> FindAsync(string subject, string client, string status, string type, CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictAuthorization> FindAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
         Check.NotNullOrEmpty(client, nameof(client));
         Check.NotNullOrEmpty(status, nameof(status));
         Check.NotNullOrEmpty(type, nameof(type));
 
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, cancellationToken);
+        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, includeDetails: true, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
         }
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictAuthorization> FindAsync(string subject, string client, string status, string type, ImmutableArray<string> scopes, CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictAuthorization> FindAsync(string subject, string client, string status, string type, ImmutableArray<string> scopes, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
         Check.NotNullOrEmpty(client, nameof(client));
         Check.NotNullOrEmpty(status, nameof(status));
         Check.NotNullOrEmpty(type, nameof(type));
 
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, cancellationToken);
+        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, includeDetails: true, cancellationToken);
 
         foreach (var authorization in authorizations)
         {
@@ -135,7 +135,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-        var authorizations = await Repository.FindByApplicationIdAsync(ConvertIdentifierFromString(identifier), cancellationToken);
+        var authorizations = await Repository.FindByApplicationIdAsync(ConvertIdentifierFromString(identifier), includeDetails: true, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -146,14 +146,14 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-        return await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), cancellationToken);
+        return await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), includeDetails: true, cancellationToken);
     }
 
     public virtual async IAsyncEnumerable<OpenIddictAuthorization> FindBySubjectAsync(string subject, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
 
-        var authorizations = await Repository.FindBySubjectAsync(subject, cancellationToken);
+        var authorizations = await Repository.FindBySubjectAsync(subject, includeDetails: true, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -173,7 +173,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
     {
         Check.NotNull(query, nameof(query));
 
-        return await Repository.GetAsync(query, state, cancellationToken);
+        return await Repository.GetAsync(query, state, includeDetails: true, cancellationToken);
     }
 
     public virtual ValueTask <DateTimeOffset?> GetCreationDateAsync(OpenIddictAuthorization authorization, CancellationToken cancellationToken)
@@ -295,7 +295,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
 
     public virtual async IAsyncEnumerable<OpenIddictAuthorization> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var authorizations = await Repository.ListAsync(count, offset, cancellationToken);
+        var authorizations = await Repository.ListAsync(count, offset, includeDetails: true, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -304,7 +304,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
 
     public virtual async IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var authorizations = await Repository.ListAsync(query, state, cancellationToken);
+        var authorizations = await Repository.ListAsync(query, state, includeDetails: true, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -321,7 +321,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
             {
                 var date = threshold.UtcDateTime;
 
-                var authorizations = await Repository.GetPruneListAsync(date, 1_000, cancellationToken);
+                var authorizations = await Repository.GetPruneListAsync(date, 1_000, includeDetails: false, cancellationToken);
                 if (!authorizations.Any())
                 {
                     break;
