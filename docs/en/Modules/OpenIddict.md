@@ -12,14 +12,6 @@ This module implements the domain logic and database integrations, but not provi
 
 This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) with the [Account Module](Account.md).
 
-## OpenIddict documentation
-
-For more details about OpenIddict, please refer to its official documentation and Github.
-
-https://documentation.openiddict.com
-
-https://github.com/openiddict/openiddict-core#resources
-
 ## The module
 
 ### Demo projects
@@ -96,6 +88,10 @@ PreConfigure<OpenIddictServerBuilder>(builder =>
 
 You can also change this options via `PreConfigure`.
 
+#### Automatically removing orphaned tokens/authorizations
+
+There is a background task in the `Domain` module (`enabled by default`) that automatically removes orphaned tokens/authorizations, you can configure `TokenCleanupOptions` to manage it.
+
 ### ASP NET Core module
 
 This module integrates ASP NET Core, with built-in MVC controllers for four protocols. It uses OpenIddict's [Pass-through mode](https://documentation.openiddict.com/guides/index.html#pass-through-mode).
@@ -135,7 +131,6 @@ The `AbpDefaultOpenIddictClaimDestinationsProvider` service will add `Name`, `Em
 
 You can create a service that inherits from `IAbpOpenIddictClaimDestinationsProvider` and add it to DI to fully control the destinations of claims
 
-
 ```cs
 public class MyClaimDestinationsProvider : IAbpOpenIddictClaimDestinationsProvider, ITransientDependency
 {
@@ -158,6 +153,7 @@ For detailed information, please refer to: [OpenIddict claim destinations](https
 
 The `OpenIddict.Validation.AspNetCore` and `OpenIddict.Validation` are not integrated in the module, we use the authentication component provided by Microsoft. If you are more familiar with it, you can use it in your project.
 
+
 ### EF Core module
 
 Implements the above four repository interfaces.
@@ -169,6 +165,13 @@ Implements the above four repository interfaces.
 
 ## OpenIddict
 
+### Documentation
+
+For more details about OpenIddict, please refer to its official documentation and Github.
+
+https://documentation.openiddict.com
+
+https://github.com/openiddict/openiddict-core#resources
 
 ### PKCE
 
