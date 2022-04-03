@@ -116,8 +116,7 @@ The default ABP OpenIddict project includes several authentication schemes.
 * `Identity.TwoFactorRememberMe`: Identity TwoFactor login uses
 * `Identity.TwoFactorUserId`: Identity TwoFactor login uses
 
-This can break the multi-tenancy feature. The multi-tenancy middleware is executed after the authentication middleware.
-Some OAuth requests may be authenticated by OpenIddict but not by `Identity.Application`.
+This can break the multi-tenancy feature, Some OAuth requests may be authenticated by OpenIddict but not by `Identity.Application`.
 
 We have added a top priority `AbpOpenIddictTenantResolveContributor` service. It will try to get tenant info from OpenIddict authentication scheme.
 
