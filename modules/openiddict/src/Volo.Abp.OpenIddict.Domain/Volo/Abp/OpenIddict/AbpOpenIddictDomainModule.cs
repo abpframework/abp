@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Domain;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
@@ -9,6 +12,7 @@ using Volo.Abp.OpenIddict.Authorizations;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.OpenIddict;
 
@@ -22,6 +26,22 @@ public class AbpOpenIddictDomainModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         AddOpenIddict(context.Services);
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
+    }
+
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        var options = context.ServiceProvider.GetRequiredService<IOptions<TokenCleanupOptions>>().Value;
+        if (options.IsCleanupEnabled)
+        {
+            await context.ServiceProvider
+                .GetRequiredService<IBackgroundWorkerManager>()
+                .AddAsync(context.ServiceProvider.GetRequiredService<TokenCleanupBackgroundWorker>());
+        }
     }
 
     private static void AddOpenIddict(IServiceCollection services)
