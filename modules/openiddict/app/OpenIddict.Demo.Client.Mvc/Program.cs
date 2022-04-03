@@ -27,7 +27,9 @@ builder.Services.AddAuthentication(options =>
         options.GetClaimsFromUserInfoEndpoint = true;
         options.SaveTokens = true;
 
-        options.ResponseType = OidcConstants.ResponseTypes.CodeIdToken;
+        options.UsePkce = true;
+
+        options.ResponseType = OidcConstants.ResponseTypes.Code;
 
         options.SignOutScheme = "Cookies";
 

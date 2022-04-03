@@ -91,7 +91,6 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                     OpenIddictConstants.Permissions.Scopes.Email,
                     OpenIddictConstants.Permissions.Scopes.Address,
                     OpenIddictConstants.Permissions.Scopes.Phone,
-
                     OpenIddictConstants.Permissions.Prefixes.Scope + "AbpAPI"
                 }
             });

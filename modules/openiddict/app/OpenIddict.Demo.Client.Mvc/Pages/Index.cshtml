@@ -1,4 +1,5 @@
 ﻿@page
+@using Microsoft.AspNetCore.Authentication
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -7,17 +8,22 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    
+
     <a class="btn btn-primary" href="/Login">Login</a>
     <a class="btn btn-warning" href="/Logout">Loout</a>
-    
+
     @if (HttpContext.User.Identity != null && HttpContext.User.Identity.IsAuthenticated)
     {
         <ul class="list-group mt-3 text-start">
-        @foreach (var claim in HttpContext.User.Claims)   
-        {
-           <li class="list-group-item">@claim.Type : @claim.Value</li>
-        }
+            @foreach (var claim in HttpContext.User.Claims)
+            {
+                <li class="list-group-item">@claim.Type : @claim.Value</li>
+            }
         </ul>
+
+        <p>HttpContext.GetTokenAsync("access_token")
+            <br/>
+            @await HttpContext.GetTokenAsync("access_token")
+        </p>
     }
 </div>

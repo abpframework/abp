@@ -25,7 +25,8 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                 .EnableTokenEndpointPassthrough()
                 .EnableUserinfoEndpointPassthrough()
                 .EnableLogoutEndpointPassthrough()
-                .EnableVerificationEndpointPassthrough();
+                .EnableVerificationEndpointPassthrough()
+                .EnableStatusCodePagesIntegration();
         });
     }
 

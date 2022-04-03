@@ -54,7 +54,7 @@ public class AbpOpenIddictDomainModule : AbpModule
             })
             .AddServer(builder =>
             {
-                // Can be enable by Configure OpenIddictServerOptions.DisableAccessTokenEncryption = false
+                // Access token encryption can only be disabled when using JWT tokens.
                 builder.DisableAccessTokenEncryption();
 
                 builder
@@ -84,20 +84,23 @@ public class AbpOpenIddictDomainModule : AbpModule
 
                 builder.RegisterScopes(new[]
                 {
-                    OpenIddictConstants.Scopes.OpenId, OpenIddictConstants.Scopes.Email,
-                    OpenIddictConstants.Scopes.Profile, OpenIddictConstants.Scopes.Phone,
-                    OpenIddictConstants.Scopes.Roles, OpenIddictConstants.Scopes.Address,
+                    OpenIddictConstants.Scopes.OpenId,
+                    OpenIddictConstants.Scopes.Email,
+                    OpenIddictConstants.Scopes.Profile,
+                    OpenIddictConstants.Scopes.Phone,
+                    OpenIddictConstants.Scopes.Roles,
+                    OpenIddictConstants.Scopes.Address,
                     OpenIddictConstants.Scopes.OfflineAccess
                 });
 
                 if (builderOptions.AddDevelopmentEncryptionAndSigningCertificate)
                 {
-                    builder.AddDevelopmentEncryptionCertificate()
+                    builder
+                        .AddDevelopmentEncryptionCertificate()
                         .AddDevelopmentSigningCertificate();
                 }
 
                 services.ExecutePreConfiguredActions(builder);
-
             });
 
         services.Configure<OpenIddictCoreOptions>(options =>

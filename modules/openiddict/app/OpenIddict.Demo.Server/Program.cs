@@ -1,4 +1,5 @@
 using OpenIddict.Demo.Server;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Localization;
 using Volo.Abp.OpenIddict.Jwt;
 
@@ -41,12 +42,17 @@ await builder.AddApplicationAsync<OpenIddictServerModule>();
 var app = builder.Build();
 await app.InitializeApplicationAsync();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
 app.UseAbpRequestLocalization();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
+    app.UseErrorPage();
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }

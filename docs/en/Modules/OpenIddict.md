@@ -12,6 +12,14 @@ This module implements the domain logic and database integrations, but not provi
 
 This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) with the [Account Module](Account.md).
 
+## OpenIddict documentation
+
+For more details about OpenIddict, please refer to its official documentation and Github.
+
+https://documentation.openiddict.com
+
+https://github.com/openiddict/openiddict-core#resources
+
 ## The module
 
 ### Demo projects
@@ -65,6 +73,11 @@ IOpenIddictTokenRepository
 We enabled most of OpenIddict's features in the `AddOpenIddict` method, You can change OpenIddict's related builder options via `PreConfigure`.
 
 ```cs
+PreConfigure<OpenIddictBuilder>(builder =>
+{
+    //builder
+});
+
 PreConfigure<OpenIddictCoreBuilder>(builder =>
 {
     //builder
@@ -154,7 +167,14 @@ Implements the above four repository interfaces.
 Implements the above four repository interfaces.
 
 
-### Principle of OpenIddict
+## OpenIddict
+
+
+### PKCE
+
+https://documentation.openiddict.com/configuration/proof-key-for-code-exchange.html
+
+### Request/Response process
 
 I will briefly introduce the principle of OpenIddict so that everyone can quickly understand it.
 
@@ -166,14 +186,16 @@ It will be executed first in `AuthenticationMiddleware` and can short-circuit th
 
 Example a token request: 
 
-```cs
-POST /connect/token
-    grant_type:password
-    client_id:AbpApp
-    client_secret:1q2w3e*
-    username:admin
-    password:1q2w3E*
-    scope:AbpAPI offline_access 
+```
+POST /connect/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+    grant_type=password&
+    client_id=AbpApp&
+    client_secret=1q2w3e*&
+    username=admin&
+    password=1q2w3E*&
+    scope=AbpAPI offline_access
 ```
 
 This request will be processed by various handlers. They will confirm the endpoint type of the request, check `http/https`, verify that the request parameters (`client. scope etc`) are valid and exist in the database, etc. Various protocol checks. And build a `OpenIddictRequest` object, If there are any errors, the response content may be set and directly short-circuit the current request.
@@ -190,8 +212,7 @@ If you need to customize OpenIddict, you need to replace/delete/add new handlers
 
 Please refer to:
 https://documentation.openiddict.com/guides/index.html#events-model
-https://kevinchalet.com/2018/07/02/implementing-advanced-scenarios-using-the-new-openiddict-rc3-events-model/
 
 ## Sponsor
 
-Please consider sponsoring this project if OpenIddict helped you: https://github.com/sponsors/kevinchalet
+Please consider sponsoring this project: https://github.com/sponsors/kevinchalet
