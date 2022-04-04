@@ -14,7 +14,6 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.OpenIddict.Scopes;
 
-//https://github.com/abpframework/abp/pull/12094
 [ExposeServices(
     typeof(IOpenIddictScopeStore<OpenIddictScope>),
     typeof(AbpOpenIddictScopeStore)

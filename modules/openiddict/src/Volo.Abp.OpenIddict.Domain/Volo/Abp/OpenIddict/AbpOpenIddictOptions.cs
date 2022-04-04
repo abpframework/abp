@@ -12,6 +12,7 @@ public class AbpOpenIddictOptions
 
     /// <summary>
     /// Set false to suppress AddDeveloperSigningCredential() call on the OpenIddictBuilder.
+    /// Default: true.
     /// </summary>
     public bool AddDevelopmentEncryptionAndSigningCertificate { get; set; } = true;
 }

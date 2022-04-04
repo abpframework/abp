@@ -75,7 +75,7 @@ public class AbpOpenIddictDomainModule : AbpModule
             .AddServer(builder =>
             {
                 // Access token encryption can only be disabled when using JWT tokens.
-                builder.DisableAccessTokenEncryption();
+                builder.DisableAccessTokenEncryption(); //TODO: Should we always disable this?
 
                 builder
                     .SetAuthorizationEndpointUris("/connect/authorize")

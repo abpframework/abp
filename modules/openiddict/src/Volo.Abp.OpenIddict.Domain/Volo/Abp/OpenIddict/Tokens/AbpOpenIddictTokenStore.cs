@@ -16,7 +16,6 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.OpenIddict.Tokens;
 
-//https://github.com/abpframework/abp/pull/12094
 [ExposeServices(
     typeof(IOpenIddictTokenStore<OpenIddictToken>),
     typeof(AbpOpenIddictTokenStore)

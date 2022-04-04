@@ -2,9 +2,9 @@
 
 public static class AbpOpenIddictDbProperties
 {
-    public static string DbTablePrefix { get; set; } = "AbpOpenIddict";
+    public static string DbTablePrefix { get; set; } = "AbpOpenIddict"; //TODO: Rename to "OpenIddict" 
 
     public static string DbSchema { get; set; } = null;
 
-    public const string ConnectionStringName = "AbpOpenIddict";
+    public const string ConnectionStringName = "AbpOpenIddict"; //TODO: Rename to "OpenIddict"
 }
