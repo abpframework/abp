@@ -89,11 +89,18 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                                            <TextEdit Role="TextRole.Password" @bind-Text="NewEntity.Password">
-                                                <Feedback>
-                                                    <ValidationError/>
-                                                </Feedback>
-                                            </TextEdit>
+                                            <Addons>
+                                                <Addon AddonType="AddonType.Body">
+                                                    <TextEdit Role="@_passwordTextRole" @bind-Text="NewEntity.Password">
+                                                        <Feedback>
+                                                            <ValidationError/>
+                                                        </Feedback>
+                                                    </TextEdit>
+                                                </Addon>
+                                                <Addon AddonType="AddonType.End">
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"><Icon Name="IconName.EyeSlash"/></Button>
+                                                </Addon>
+                                            </Addons>
                                         </Field>
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
@@ -203,11 +210,19 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                                            <TextEdit Role="TextRole.Password" @bind-Text="EditingEntity.Password">
-                                                <Feedback>
-                                                    <ValidationError/>
-                                                </Feedback>
-                                            </TextEdit>
+                                            <Addons>
+                                                <Addon AddonType="AddonType.Body">
+                                                    <TextEdit Role="@_passwordTextRole" @bind-Text="EditingEntity.Password">
+                                                        <Feedback>
+                                                            <ValidationError/>
+                                                        </Feedback>
+                                                    </TextEdit>
+                                                </Addon>
+                                                <Addon AddonType="AddonType.End">
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"><Icon Name="IconName.EyeSlash"/></Button>
+                                                </Addon>
+                                            </Addons>
+                                            
                                         </Field>
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
