@@ -113,7 +113,7 @@ Abra `Pages/Books/Index.cshtml`e altere a `abp-card-header`tag, como mostrado ab
         <abp-column size-md="_6">
             <h2>@L["Books"]</h2>
         </abp-column>
-        <abp-column size-md="_6" class="text-right">
+        <abp-column size-md="_6" class="text-end">
             <abp-button id="NewBookButton"
                         text="@L["NewBook"].Value"
                         icon="plus"
