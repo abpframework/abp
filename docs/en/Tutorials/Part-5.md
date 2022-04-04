@@ -227,7 +227,7 @@ Open the `Pages/Books/Index.cshtml` file and change the content as shown below:
             <abp-column size-md="_6">
                 <abp-card-title>@L["Books"]</abp-card-title>
             </abp-column>
-            <abp-column size-md="_6" class="text-right">
+            <abp-column size-md="_6" class="text-end">
                 @if (await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create))
                 {
                     <abp-button id="NewBookButton"

@@ -363,7 +363,7 @@ Another pre-defined section is the Content Toolbar section which can be used by 
 
 ````html
 <div id="AbpContentToolbar">
-    <div class="text-right mb-2">
+    <div class="text-end mb-2">
         @RenderSection("content_toolbar", false)
     </div>
 </div>

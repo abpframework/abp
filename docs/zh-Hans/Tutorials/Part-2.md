@@ -517,7 +517,7 @@ export class BookComponent implements OnInit {
           {%{{{ '::Menu:Books' | abpLocalization }}}%}
         </h5>
       </div>
-      <div class="text-right col col-md-6"></div>
+      <div class="text-end col col-md-6"></div>
     </div>
   </div>
   <div class="card-body">

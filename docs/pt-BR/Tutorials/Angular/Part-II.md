@@ -108,7 +108,7 @@ Adicione um botão rotulado `New book`para mostrar o modal:
       Books
     </h5>
   </div>
-  <div class="text-right col col-md-6">
+  <div class="text-end col col-md-6">
     <button id="create-role" class="btn btn-primary" type="button" (click)="createBook()">
       <i class="fa fa-plus mr-1"></i> <span>New book</span>
     </button>
