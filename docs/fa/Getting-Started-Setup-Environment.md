@@ -52,6 +52,6 @@ dotnet tool update -g Volo.Abp.Cli
 
 ## مرحله بعدی
 
-* [ایجاد پروسه جدید](Getting-Started-Create-Solution.md)
+* [ایجاد پروژه جدید](Getting-Started-Create-Solution.md)
 
 </div>
