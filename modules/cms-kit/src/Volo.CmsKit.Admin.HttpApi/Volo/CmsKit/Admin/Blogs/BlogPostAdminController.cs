@@ -61,4 +61,53 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     {
         return BlogPostAdminAppService.UpdateAsync(id, input);
     }
+    
+    [HttpPost]
+    [Route("{id}/publish")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
+    public virtual Task PublishAsync(Guid id)
+    {
+        return BlogPostAdminAppService.PublishAsync(id);
+    }
+    
+    [HttpPost]
+    [Route("{id}/draft")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
+    public virtual Task DraftAsync(Guid id)
+    {
+        return BlogPostAdminAppService.DraftAsync(id);
+    }
+
+    [HttpPost]
+    [Route("create-and-publish")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
+    public virtual Task<BlogPostDto> CreateAndPublishAsync(CreateBlogPostDto input)
+    {
+        return BlogPostAdminAppService.CreateAndPublishAsync(input);
+    }
+    
+    [HttpPost]
+    [Route("{id}/send-to-review")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    public virtual Task SendToReviewAsync(Guid id)
+    {
+        return BlogPostAdminAppService.SendToReviewAsync(id);
+    }
+    
+    [HttpPost]
+    [Route("create-and-send-to-review")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    public virtual Task<BlogPostDto> CreateAndSendToReviewAsync(CreateBlogPostDto input)
+    {
+        return BlogPostAdminAppService.CreateAndSendToReviewAsync(input);
+    }
+    
+    [HttpGet]
+    [Route("has-blogpost-waiting-for-review")]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
+    public virtual Task<bool> HasBlogPostWaitingForReviewAsync()
+    {
+        return BlogPostAdminAppService.HasBlogPostWaitingForReviewAsync();
+    }
 }

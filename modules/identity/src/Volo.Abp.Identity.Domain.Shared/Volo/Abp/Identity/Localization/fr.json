@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Votre mot de passe a été modifié avec succès.",
     "PersonalSettingsSavedMessage": "Vos paramètres personnels ont été enregistrés avec succès.",
     "Volo.Abp.Identity:DefaultError": "Une défaillance inconnue s’est produite.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Échec optimiste de la concurrence, l’objet a été modifié.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "La vérification de la simultanéité optimiste a échoué. L'entité sur laquelle vous travaillez a été modifiée par un autre utilisateur. Veuillez annuler vos modifications et réessayer.",
     "Volo.Abp.Identity:DuplicateEmail": "E-mail '{0}' est déjà prise.",
     "Volo.Abp.Identity:DuplicateRoleName": "Le nom de rôle '{0}' est déjà pris.",
     "Volo.Abp.Identity:DuplicateUserName": "Le nom d’utilisateur '{0}' est déjà pris.",

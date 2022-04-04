@@ -123,7 +123,7 @@ The **queries in Angular Testing Library follow practices for maintainable tests
 
 - [Queries](https://testing-library.com/docs/dom-testing-library/api-queries)
 - [User Event](https://testing-library.com/docs/ecosystem-user-event)
-- [Examples](https://github.com/testing-library/angular-testing-library/tree/master/apps/example-app/app/examples)
+- [Examples](https://github.com/testing-library/angular-testing-library/tree/main/apps/example-app/src/app/examples)
 
 ### Clearing DOM After Each Spec
 
@@ -377,4 +377,4 @@ npm test -- --prod
 
 ## See Also
 
-* [ABP Community Video - Unit Testing with the Angular UI](https://community.abp.io/articles/unit-testing-with-the-angular-ui-p4l550q3)
+- [ABP Community Video - Unit Testing with the Angular UI](https://community.abp.io/articles/unit-testing-with-the-angular-ui-p4l550q3)

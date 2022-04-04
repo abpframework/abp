@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Şifreniz başarıyla değiştirildi.",
     "PersonalSettingsSavedMessage": "Kişisel bilgileriniz başarıyla kaydedildi.",
     "Volo.Abp.Identity:DefaultError": "Bilinmeyen bir hata oluştu.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "İyimser eşzamanlılık hatası. Nesne değiştirilmiş.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "İyimser eşzamanlılık denetimi başarısız oldu. Üzerinde çalıştığınız varlık başka bir kullanıcı tarafından değiştirildi. Lütfen değişikliklerinizi geri alın ve tekrar deneyin.",
     "Volo.Abp.Identity:DuplicateEmail": "'{0}' email adresi zaten alınmış.",
     "Volo.Abp.Identity:DuplicateRoleName": "'{0}' rol ismi zaten alınmış.",
     "Volo.Abp.Identity:DuplicateUserName": "'{0}' kullanıcı adı zaten alınmış.",
