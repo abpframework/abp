@@ -30,7 +30,7 @@
             CultureInfo.CurrentCulture.Name,
             CultureInfo.CurrentUICulture.Name
             );
-        
+
         if (currentLanguage == null)
         {
             var localizationOptions = await RequestLocalizationOptionsProvider.GetLocalizationOptionsAsync();
@@ -56,10 +56,10 @@
 
     private void ChangeLanguage(LanguageInfo language)
     {
-        var relativeUrl = NavigationManager.Uri.RemovePreFix(NavigationManager.BaseUri).EnsureStartsWith('/');
-        
+        var relativeUrl = NavigationManager.Uri.RemovePreFix(NavigationManager.BaseUri).EnsureStartsWith('/').EnsureStartsWith('~');
+
         NavigationManager.NavigateTo(
-            $"/Abp/Languages/Switch?culture={language.CultureName}&uiCulture={language.UiCultureName}&returnUrl={relativeUrl}",
+            $"Abp/Languages/Switch?culture={language.CultureName}&uiCulture={language.UiCultureName}&returnUrl={relativeUrl}",
             forceLoad: true
         );
     }

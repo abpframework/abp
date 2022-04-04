@@ -2,30 +2,29 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
+
+public class AbpPageToolbarOptions
 {
-    public class AbpPageToolbarOptions
+    public PageToolbarDictionary Toolbars { get; }
+
+    public AbpPageToolbarOptions()
     {
-        public PageToolbarDictionary Toolbars { get; }
+        Toolbars = new PageToolbarDictionary();
+    }
 
-        public AbpPageToolbarOptions()
-        {
-            Toolbars = new PageToolbarDictionary();
-        }
+    public void Configure<TPage>([NotNull] Action<PageToolbar> configureAction)
+    {
+        // ReSharper disable once AssignNullToNotNullAttribute
+        Configure(typeof(TPage).FullName, configureAction);
+    }
 
-        public void Configure<TPage>([NotNull] Action<PageToolbar> configureAction)
-        {
-            // ReSharper disable once AssignNullToNotNullAttribute
-            Configure(typeof(TPage).FullName, configureAction);
-        }
+    public void Configure([NotNull] string pageName, [NotNull] Action<PageToolbar> configureAction)
+    {
+        Check.NotNullOrWhiteSpace(pageName, nameof(pageName));
+        Check.NotNull(configureAction, nameof(configureAction));
 
-        public void Configure([NotNull]string pageName, [NotNull]Action<PageToolbar> configureAction)
-        {
-            Check.NotNullOrWhiteSpace(pageName, nameof(pageName));
-            Check.NotNull(configureAction, nameof(configureAction));
-
-            var toolbar = Toolbars.GetOrAdd(pageName, () => new PageToolbar(pageName));
-            configureAction(toolbar);
-        }
+        var toolbar = Toolbars.GetOrAdd(pageName, () => new PageToolbar(pageName));
+        configureAction(toolbar);
     }
 }

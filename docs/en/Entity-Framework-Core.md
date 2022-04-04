@@ -4,7 +4,7 @@ This document explains how to integrate EF Core as an ORM provider to ABP based 
 
 ## Installation
 
-`Volo.Abp.EntityFrameworkCore` is the main nuget package for the EF Core integration. Install it to your project (for a layered application, to your data/infrastructure layer):
+`Volo.Abp.EntityFrameworkCore` is the main NuGet package for the EF Core integration. Install it to your project (for a layered application, to your data/infrastructure layer):
 
 ```` shell
 Install-Package Volo.Abp.EntityFrameworkCore
@@ -30,15 +30,13 @@ namespace MyCompany.MyProject
 
 ### Database Management System Selection
 
-Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP framework and this document doesn't depend on any specific DBMS.
+Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP framework and this document don't depend on any specific DBMS. If you are creating a [reusable application module](Modules/Index.md), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
 
-If you are creating a [reusable application module](Modules/Index.md), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
-
-See [Switch to Another DBMS for Entity Framework Core](Entity-Framework-Core-Other-DBMS.md) document to learn how to switch the DBMS.
+> See [Switch to Another DBMS for Entity Framework Core](Entity-Framework-Core-Other-DBMS.md) document to learn how to switch the DBMS.
 
 ## Creating DbContext
 
-You can create your DbContext as you normally do. It should be derived from `AbpDbContext<T>` as shown below:
+Your `DbContext` class should be derived from `AbpDbContext<T>` as shown below:
 
 ````C#
 using Microsoft.EntityFrameworkCore;
@@ -107,7 +105,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 
 ### Configure the Connection String Selection
 
-If you have multiple databases in your application, you can configure the connection string name for your DbContext using the `[ConnectionStringName]` attribute. Example:
+If you have multiple databases in your application, you can configure the connection string name for your `DbContext` using the `[ConnectionStringName]` attribute. Example:
 
 ```csharp
 [ConnectionStringName("MySecondConnString")]
@@ -119,9 +117,65 @@ public class MyDbContext : AbpDbContext<MyDbContext>
 
 If you don't configure, the `Default` connection string is used. If you configure a specific connection string name, but not define this connection string name in the application configuration then it fallbacks to the `Default` connection string (see [the connection strings document](Connection-Strings.md) for more information).
 
+### AbpDbContextOptions
+
+`AbpDbContextOptions` is used to configure the `DbContext` options. When you create a new solution with the ABP's application startup template, you will see a simple configuration (in the `EntityFrameworkCore` integration project's module class) as shown below:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    options.UseSqlServer();
+});
+````
+
+That configuration configures the default DBMS as SQL Server for all the `DbContext`s of the application. That configuration was a shorthand notation and it can be done with the following code block:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    options.Configure(opts =>
+    {
+        opts.UseSqlServer();
+    });
+});
+````
+
+`options.Configure(...)` method has more options to configure. For example, you can set `DbContextOptions` (EF Core's native options) as shown below:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    options.Configure(opts =>
+    {
+        opts.DbContextOptions.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    });
+});
+````
+
+If you have a single `DbContext` or you have multiple `DbContext`s but want to use the same DBMS and configuration for all, you can leave it as is. However, if you need to configure a different DBMS or customize the configuration for a specific `DbContext`, you can specify it as shown below:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    // Default configuration for all DbContexts
+    options.Configure(opts =>
+    {
+        opts.UseSqlServer();
+    });
+
+    // Customized configuration for a specific DbContext
+    options.Configure<MyOtherDbContext>(opts =>
+    {
+        opts.UseMySQL();
+    });
+});
+````
+
+> See [Switch to Another DBMS for Entity Framework Core](Entity-Framework-Core-Other-DBMS.md) document to learn how to configure the DBMS.
+
 ## Registering DbContext To Dependency Injection
 
-Use `AddAbpDbContext` method in your module to register your DbContext class for [dependency injection](Dependency-Injection.md) system.
+Use `AddAbpDbContext` method in your module to register your `DbContext` class for [dependency injection](Dependency-Injection.md) system.
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;

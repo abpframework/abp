@@ -29,6 +29,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`help`**: 展示ABP CLI的用法帮助信息.
 * **`new`**：生成基于ABP的[启动模板](Startup-Templates/Index.md).
 * **`update`**：自动更新的ABP解决方案ABP相关的NuGet和NPM包.
+* **`clean`**: 删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
 * **`add-package`**: 添加ABP包到项目.
 * **`add-module`**: 添加[应用模块](https://docs.abp.io/en/abp/latest/Modules/Index)到解决方案.
 * **`generate-proxy`**: 生成客户端代理以使用HTTP API端点.
@@ -99,6 +100,15 @@ abp new Acme.BookStore
   * `module`: [Module template](Startup-Templates/Module.md). 其他选项:
     * `--no-ui`: 不包含UI.仅创建服务模块(也称为微服务 - 没有UI).
   * **`console`**: [Console template](Startup-Templates/Console.md).
+  * **`app-nolayers`**: 应用程序单层模板
+  * `--ui` 或者 `-u`: 指定ui框架.默认`mvc`框架.其他选项:
+    * `mvc`: ASP.NET Core MVC.
+    * `angular`: Angular.
+    * `blazor-server`: Blazor Server.
+    * `none`: 不包含UI.
+  * `--database-provider` 或 `-d`: 或者 `-d`: 指定数据库提供程序.默认是 `ef`.其他选项:
+      * `ef`: Entity Framework Core.
+      * `mongodb`: MongoDB.
 * `--output-folder` 或者 `-o`: 指定输出文件夹,默认是当前目录.
 * `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定,则使用最新版本.大多数情况下,你会希望使用最新的版本.
 * `--preview`: 使用最新的预览版本.
@@ -128,6 +138,16 @@ abp update [options]
 * `--solution-name` 或 `-sn`: 指定解决方案名称. 默认在目录中搜索`*.sln`文件.
 * `--check-all`: 分别检查每个包的新版本. 默认是 `false`.
 * `--version` or `-v`: 指定用于升级的版本. 如果没有指定,则使用最新版本.
+
+### clean
+
+删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
+
+用法:
+
+````bash
+abp clean
+````
 
 ### add-package
 

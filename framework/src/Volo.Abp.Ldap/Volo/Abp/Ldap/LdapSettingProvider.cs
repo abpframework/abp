@@ -1,50 +1,46 @@
-using Volo.Abp.Ldap.Localization;
-using Volo.Abp.Localization;
+﻿using System;
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.Ldap
+namespace Volo.Abp.Ldap;
+
+public class LdapSettingProvider : ILdapSettingProvider, ITransientDependency
 {
-    public class LdapSettingProvider : SettingDefinitionProvider
+    protected ISettingProvider SettingProvider { get; }
+
+    public LdapSettingProvider(ISettingProvider settingProvider)
     {
-        public override void Define(ISettingDefinitionContext context)
-        {
-            context.Add(
-                new SettingDefinition(
-                    LdapSettingNames.ServerHost,
-                    "",
-                    L("DisplayName:Abp.Ldap.ServerHost"),
-                    L("Description:Abp.Ldap.ServerHost")),
+        SettingProvider = settingProvider;
+    }
 
-                new SettingDefinition(
-                    LdapSettingNames.ServerPort,
-                    "389",
-                    L("DisplayName:Abp.Ldap.ServerPort"),
-                    L("Description:Abp.Ldap.ServerPort")),
+    public async Task<string> GetServerHostAsync()
+    {
+        return await SettingProvider.GetOrNullAsync(LdapSettingNames.ServerHost);
+    }
 
-                new SettingDefinition(
-                    LdapSettingNames.BaseDc,
-                    "",
-                    L("DisplayName:Abp.Ldap.BaseDc"),
-                    L("Description:Abp.Ldap.BaseDc")),
+    public async Task<int> GetServerPortAsync()
+    {
+        return (await SettingProvider.GetOrNullAsync(LdapSettingNames.ServerPort))?.To<int>() ?? default;
+    }
 
-                new SettingDefinition(
-                    LdapSettingNames.UserName,
-                    "",
-                    L("DisplayName:Abp.Ldap.UserName"),
-                    L("Description:Abp.Ldap.UserName")),
+    public async Task<string> GetBaseDcAsync()
+    {
+        return await SettingProvider.GetOrNullAsync(LdapSettingNames.BaseDc);
+    }
 
-                new SettingDefinition(
-                    LdapSettingNames.Password,
-                    "",
-                    L("DisplayName:Abp.Ldap.Password"),
-                    L("Description:Abp.Ldap.Password"),
-                    isEncrypted: true)
-            );
-        }
+    public async Task<string> GetDomainAsync()
+    {
+        return await SettingProvider.GetOrNullAsync(LdapSettingNames.Domain);
+    }
 
-        private static LocalizableString L(string name)
-        {
-            return LocalizableString.Create<LdapResource>(name);
-        }
+    public async Task<string> GetUserNameAsync()
+    {
+        return await SettingProvider.GetOrNullAsync(LdapSettingNames.UserName);
+    }
+
+    public async Task<string> GetPasswordAsync()
+    {
+        return await SettingProvider.GetOrNullAsync(LdapSettingNames.Password);
     }
 }

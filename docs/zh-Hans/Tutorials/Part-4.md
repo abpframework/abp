@@ -1,33 +1,16 @@
-# Web应用程序开发教程 - 第三章: 集成测试
+# Web应用程序开发教程 - 第四章: 集成测试
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## 关于本教程
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-* **{{DB_Text}}** 做为ORM提供程序.
+* **{{DB_Value}}** 做为ORM提供程序.
 * **{{UI_Value}}** 做为UI框架.
 
 本教程分为以下部分:
@@ -45,16 +28,32 @@ end
 
 ## 下载源码
 
-本教程根据你的**UI** 和 **Database**偏好有多个版,我们准备了两种可供下载的源码组合:
+本教程根据你的**UI** 和 **数据库**偏好有多个版本,我们准备了几种可供下载的源码组合:
 
 * [MVC (Razor Pages) UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI 与 MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+> 如果你在Windows中遇到 "文件名太长" or "解压错误", 很可能与Windows最大文件路径限制有关. Windows文件路径的最大长度为250字符. 为了解决这个问题,参阅 [在Windows 10中启用长路径](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
+
+> 如果你遇到与Git相关的长路径错误, 尝试使用下面的命令在Windows中启用长路径. 参阅 https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
+> `git config --system core.longpaths true`
+
+{{if UI == "MVC" && DB == "EF"}}
+
+### 视频教程
+
+本章也被录制为视频教程 **<a href="https://www.youtube.com/watch?v=aidRB4YFDLM&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=4" target="_blank">发布在YouTube</a>**.
+
+{{end}}
 
 ## 解决方案中的测试项目
 
 这一部分涵盖了 **服务器端** 测试. 解决方案中有多个测试项目:
 
-![bookstore-test-projects-v2](./images/bookstore-test-projects-{{UI_Text}}.png)
+![bookstore-test-projects-v2](./images/bookstore-test-projects-mvc.png)
+
+> 根据你选择的UI和数据库, 测试项目略微有所不同. 例如, 如果选择MongoDB, 那么 `Acme.BookStore.EntityFrameworkCore.Tests` 会变为 `Acme.BookStore.MongoDB.Tests`.
 
 每个项目用于测试相关的应用程序项目.测试项目使用以下库进行测试:
 
@@ -64,11 +63,11 @@ end
 
 {{if DB=="EF"}}
 
-> 测试项目配置为使用 **SQLite内存** 作为数据库. 创建一个单独的数据库实例并使用数据种子系统进行初始化种子数据,为每个测试准备一个新的数据库.
+> 测试项目配置为使用 **SQLite内存** 作为数据库. 创建一个单独的数据库实例并使用[数据种子系统](../Data-Seeding.md)初始化种子数据,为每个测试准备一个新的数据库.
 
 {{else if DB=="Mongo"}}
 
-> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)**库用于模拟MongoDB数据库. 创建一个单独的数据库实例并使用数据种子系统进行初始化种子数据,为每个测试准备一个新的数据库.
+> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)**库用于模拟MongoDB数据库. 创建一个单独的数据库实例并使用[数据种子系统](../Data-Seeding.md)初始化种子数据,为每个测试准备一个新的数据库.
 
 {{end}}
 
@@ -78,12 +77,15 @@ end
 
 ## 测试 BookAppService
 
-在 `Acme.BookStore.Application.Tests` 项目中创建一个名叫 `BookAppService_Tests` 的测试类:
+在 `Acme.BookStore.Application.Tests` 项目的 `Books` 命名空间(文件夹)中创建一个名叫 `BookAppService_Tests` 的测试类:
 
 ````csharp
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books
@@ -129,7 +131,7 @@ public async Task Should_Create_A_Valid_Book()
         {
             Name = "New test book 42",
             Price = 10,
-            PublishDate = System.DateTime.Now,
+            PublishDate = DateTime.Now,
             Type = BookType.ScienceFiction
         }
     );
@@ -201,7 +203,7 @@ namespace Acme.BookStore.Books
             result.TotalCount.ShouldBeGreaterThan(0);
             result.Items.ShouldContain(b => b.Name == "1984");
         }
-        
+
         [Fact]
         public async Task Should_Create_A_Valid_Book()
         {
@@ -211,7 +213,7 @@ namespace Acme.BookStore.Books
                 {
                     Name = "New test book 42",
                     Price = 10,
-                    PublishDate = System.DateTime.Now,
+                    PublishDate = DateTime.Now,
                     Type = BookType.ScienceFiction
                 }
             );
@@ -220,7 +222,7 @@ namespace Acme.BookStore.Books
             result.Id.ShouldNotBe(Guid.Empty);
             result.Name.ShouldBe("New test book 42");
         }
-        
+
         [Fact]
         public async Task Should_Not_Create_A_Book_Without_Name()
         {
@@ -244,7 +246,7 @@ namespace Acme.BookStore.Books
 }
 ````
 
-打开**测试资源管理器**(测试 -> Windows -> 测试资源管理器)并**执行**所有测试:
+打开**测试资源管理器**(测试 -> Windows -> 测试资源管理器)并**执行所有**测试:
 
 ![bookstore-appservice-tests](./images/bookstore-appservice-tests.png)
 

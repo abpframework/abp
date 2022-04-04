@@ -10,6 +10,7 @@ namespace Volo.Blogging.Bundling
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
+            context.Files.ReplaceOne("/libs/prismjs/themes/prism.css","/libs/prismjs/themes/prism-okaidia.css");
             context.Files.AddIfNotContains("/libs/prismjs/plugins/line-highlight/prism-line-highlight.css");
             context.Files.AddIfNotContains("/libs/prismjs/plugins/toolbar/prism-toolbar.css");
         }

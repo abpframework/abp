@@ -1,9 +1,8 @@
 using MongoDB.Bson.Serialization;
 
-namespace Volo.Abp.MongoDB
+namespace Volo.Abp.MongoDB;
+
+public interface IHasBsonClassMap
 {
-    public interface IHasBsonClassMap
-    {
-        BsonClassMap GetMap();
-    }
+    BsonClassMap GetMap();
 }

@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Components.ExceptionHandling
+namespace Volo.Abp.AspNetCore.Components.ExceptionHandling;
+
+public interface IUserExceptionInformer
 {
-    public interface IUserExceptionInformer
-    {
-        void Inform(UserExceptionInformerContext context);
-        
-        Task InformAsync(UserExceptionInformerContext context);
-    }
+    void Inform(UserExceptionInformerContext context);
+
+    Task InformAsync(UserExceptionInformerContext context);
 }

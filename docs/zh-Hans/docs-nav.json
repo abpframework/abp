@@ -5,11 +5,25 @@
       "path": "Tutorials/Todo/Index.md"
     },
     {
-      "text": "入门",
+      "text": "入门教程",
       "items": [
         {
           "text": "Web应用程序",
-          "path": "Getting-Started.md"
+          "path": "Getting-Started.md",
+          "items": [
+            {
+              "text": "1: 设置你的开发环境",
+              "path": "Getting-Started-Setup-Environment.md"
+            },
+            {
+              "text": "2: 创建新的解决方案",
+              "path": "Getting-Started-Create-Solution.md"
+            },
+            {
+              "text": "3: 运行解决方案",
+              "path": "Getting-Started-Running-Solution.md"
+            }
+          ]
         },
         {
           "text": "控制台应用程序",
@@ -57,16 +71,44 @@
           "text": "应用开发",
           "items": [
             {
-              "text": "第一章: 创建新解决方案和列表页",
+              "text": "1: 创建应用服务端",
               "path": "Tutorials/Part-1.md"
             },
             {
-              "text": "第二章: 增删改查操作",
+              "text": "2: 图书列表页面",
               "path": "Tutorials/Part-2.md"
             },
             {
-              "text": "第三章: 集成测试",
+              "text": "3: 创建,更新和删除书籍",
               "path": "Tutorials/Part-3.md"
+            },
+            {
+              "text": "4: 集成测试",
+              "path": "Tutorials/Part-4.md"
+            },
+            {
+              "text": "5: 授权",
+              "path": "Tutorials/Part-5.md"
+            },
+            {
+              "text": "6: 作者:领域层",
+              "path": "Tutorials/Part-6.md"
+            },
+            {
+              "text": "7: 作者:数据库集成",
+              "path": "Tutorials/Part-7.md"
+            },
+            {
+              "text": "8: 作者:应用服务层",
+              "path": "Tutorials/Part-8.md"
+            },
+            {
+              "text": "9: 作者:用户界面",
+              "path": "Tutorials/Part-9.md"
+            },
+            {
+              "text": "10: 图书-作者关系",
+              "path": "Tutorials/Part-10.md"
             }
           ]
         },
@@ -678,7 +720,7 @@
         },
         {
           "text": "CMS Kit",
-          "path": "Modules/Cms-Kit.md"
+          "path": "Modules/Cms-Kit/Index.md"
         },
         {
           "text": "文档",

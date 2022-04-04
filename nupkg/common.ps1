@@ -47,7 +47,7 @@ function Get-Current-Version {
 
 function Get-Current-Branch {
 	return git branch --show-current
-}
+}	   
 
 function Read-File {
 	param(

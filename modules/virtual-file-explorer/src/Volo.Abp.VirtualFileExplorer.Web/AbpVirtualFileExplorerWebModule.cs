@@ -13,55 +13,54 @@ using Volo.Abp.VirtualFileExplorer.Web.Localization;
 using Volo.Abp.VirtualFileExplorer.Web.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.VirtualFileExplorer.Web
+namespace Volo.Abp.VirtualFileExplorer.Web;
+
+[DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
+[DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
+public class AbpVirtualFileExplorerWebModule : AbpModule
 {
-    [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
-    public class AbpVirtualFileExplorerWebModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpVirtualFileExplorerWebModule).Assembly);
+        });
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var virtualFileExplorerOptions = context.Services.ExecutePreConfiguredActions<AbpVirtualFileExplorerOptions>();
+
+        if (virtualFileExplorerOptions.IsEnabled)
+        {
+            Configure<AbpNavigationOptions>(options =>
             {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpVirtualFileExplorerWebModule).Assembly);
+                options.MenuContributors.Add(new VirtualFileExplorerMenuContributor());
             });
-        }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var virtualFileExplorerOptions = context.Services.ExecutePreConfiguredActions<AbpVirtualFileExplorerOptions>();
-
-            if (virtualFileExplorerOptions.IsEnabled)
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                Configure<AbpNavigationOptions>(options =>
-                {
-                    options.MenuContributors.Add(new VirtualFileExplorerMenuContributor());
-                });
+                options.FileSets.AddEmbedded<AbpVirtualFileExplorerWebModule>("Volo.Abp.VirtualFileExplorer.Web");
+            });
 
-                Configure<AbpVirtualFileSystemOptions>(options =>
-                {
-                    options.FileSets.AddEmbedded<AbpVirtualFileExplorerWebModule>("Volo.Abp.VirtualFileExplorer.Web");
-                });
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<VirtualFileExplorerResource>("en")
+                    .AddBaseTypes(typeof(AbpValidationResource))
+                    .AddVirtualJson("/Localization/Resources");
+            });
 
-                Configure<AbpLocalizationOptions>(options =>
-                {
-                    options.Resources
-                        .Add<VirtualFileExplorerResource>("en")
-                        .AddBaseTypes(typeof(AbpValidationResource))
-                        .AddVirtualJson("/Localization/Resources");
-                });
+            Configure<AbpBundleContributorOptions>(options =>
+            {
+                options
+                    .Extensions<PrismjsStyleBundleContributor>()
+                    .Add<PrismjsStyleBundleContributorDocsExtension>();
 
-                Configure<AbpBundleContributorOptions>(options =>
-                {
-                    options
-                        .Extensions<PrismjsStyleBundleContributor>()
-                        .Add<PrismjsStyleBundleContributorDocsExtension>();
-
-                    options
-                        .Extensions<PrismjsScriptBundleContributor>()
-                        .Add<PrismjsScriptBundleContributorDocsExtension>();
-                });
-            }
+                options
+                    .Extensions<PrismjsScriptBundleContributor>()
+                    .Add<PrismjsScriptBundleContributorDocsExtension>();
+            });
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +40,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.Blazor.Server;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -51,154 +53,155 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Host
+namespace MyCompanyName.MyProjectName.Blazor.Server.Host;
+
+[DependsOn(
+    typeof(MyProjectNameEntityFrameworkCoreModule),
+    typeof(MyProjectNameApplicationModule),
+    typeof(MyProjectNameHttpApiModule),
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    typeof(AbpAutofacModule),
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAccountWebIdentityServerModule),
+    typeof(AbpAccountApplicationModule),
+    typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
+    typeof(AbpIdentityApplicationModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
+    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+    typeof(AbpIdentityBlazorServerModule),
+    typeof(AbpFeatureManagementApplicationModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpTenantManagementBlazorServerModule),
+    typeof(AbpTenantManagementApplicationModule),
+    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementDomainIdentityModule),
+    typeof(AbpPermissionManagementApplicationModule),
+    typeof(AbpSettingManagementBlazorServerModule),
+    typeof(AbpSettingManagementApplicationModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(MyProjectNameBlazorServerModule)
+)]
+public class MyProjectNameBlazorHostModule : AbpModule
 {
-    [DependsOn(
-        typeof(MyProjectNameEntityFrameworkCoreModule),
-        typeof(MyProjectNameApplicationModule),
-        typeof(MyProjectNameHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpSwashbuckleModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAccountApplicationModule),
-        typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
-        typeof(AbpIdentityApplicationModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-        typeof(AbpIdentityBlazorServerModule),
-        typeof(AbpFeatureManagementApplicationModule),
-        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-        typeof(AbpTenantManagementBlazorServerModule),
-        typeof(AbpTenantManagementApplicationModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpSettingManagementBlazorServerModule),
-        typeof(AbpSettingManagementApplicationModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(MyProjectNameBlazorServerModule)
-    )]
-    public class MyProjectNameBlazorHostModule: AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
-            {
-                options.AddAssemblyResource(
-                    typeof(MyProjectNameResource),
-                    typeof(MyProjectNameDomainModule).Assembly,
-                    typeof(MyProjectNameDomainSharedModule).Assembly,
-                    typeof(MyProjectNameApplicationModule).Assembly,
-                    typeof(MyProjectNameApplicationContractsModule).Assembly,
-                    typeof(MyProjectNameBlazorHostModule).Assembly
-                );
-            });
-        }
+            options.AddAssemblyResource(
+                typeof(MyProjectNameResource),
+                typeof(MyProjectNameDomainModule).Assembly,
+                typeof(MyProjectNameDomainSharedModule).Assembly,
+                typeof(MyProjectNameApplicationModule).Assembly,
+                typeof(MyProjectNameApplicationContractsModule).Assembly,
+                typeof(MyProjectNameBlazorHostModule).Assembly
+            );
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
+        Configure<AbpDbContextOptions>(options =>
         {
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.GetConfiguration();
+            options.UseSqlServer();
+        });
 
-            Configure<AbpDbContextOptions>(options =>
-            {
-                options.UseSqlServer();
-            });
-
-            Configure<AbpBundlingOptions>(options =>
-            {
+        Configure<AbpBundlingOptions>(options =>
+        {
                 // MVC UI
                 options.StyleBundles.Configure(
-                    BasicThemeBundles.Styles.Global,
-                    bundle =>
-                    {
-                        bundle.AddFiles("/global-styles.css");
-                    }
-                );
+                BasicThemeBundles.Styles.Global,
+                bundle =>
+                {
+                    bundle.AddFiles("/global-styles.css");
+                }
+            );
 
                 //BLAZOR UI
                 options.StyleBundles.Configure(
-                    BlazorBasicThemeBundles.Styles.Global,
-                    bundle =>
-                    {
-                        bundle.AddFiles("/blazor-global-styles.css");
+                BlazorBasicThemeBundles.Styles.Global,
+                bundle =>
+                {
+                    bundle.AddFiles("/blazor-global-styles.css");
                         //You can remove the following line if you don't use Blazor CSS isolation for components
                         bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.Host.styles.css");
-                    }
-                );
+                }
+            );
+        });
+
+        context.Services.AddAuthentication()
+            .AddJwtBearer(options =>
+            {
+                options.Authority = configuration["AuthServer:Authority"];
+                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
+                options.Audience = "MyProjectName";
             });
 
-            context.Services.AddAuthentication()
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                    options.Audience = "MyProjectName";
-                });
-
-            if(hostingEnvironment.IsDevelopment())
+        if (hostingEnvironment.IsDevelopment())
+        {
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                Configure<AbpVirtualFileSystemOptions>(options =>
-                {
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}MyCompanyName.MyProjectName.Domain.Shared", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}MyCompanyName.MyProjectName.Domain", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}MyCompanyName.MyProjectName.Application.Contracts", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}MyCompanyName.MyProjectName.Application", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameBlazorHostModule>(hostingEnvironment.ContentRootPath);
-                });
-            }
+                options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}MyCompanyName.MyProjectName.Domain.Shared", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}MyCompanyName.MyProjectName.Domain", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}MyCompanyName.MyProjectName.Application.Contracts", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}MyCompanyName.MyProjectName.Application", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameBlazorHostModule>(hostingEnvironment.ContentRootPath);
+            });
+        }
 
-            context.Services.AddAbpSwaggerGen(
-                options =>
-                {
-                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
-                    options.DocInclusionPredicate((docName, description) => true);
-                    options.CustomSchemaIds(type => type.FullName);
-                });
-
-            Configure<AbpLocalizationOptions>(options =>
+        context.Services.AddAbpSwaggerGen(
+            options =>
             {
-                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
-                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
-                options.Languages.Add(new LanguageInfo("en", "en", "English"));
-                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
-                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
-                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-                options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
-                options.Languages.Add(new LanguageInfo("it", "it", "Italian", "it"));
-                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
-                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português (Brasil)"));
-                options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
-                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
-                options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
-                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-                options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch"));
-                options.Languages.Add(new LanguageInfo("es", "es", "Español"));
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
+                options.DocInclusionPredicate((docName, description) => true);
+                options.CustomSchemaIds(type => type.FullName);
             });
 
-            Configure<AbpMultiTenancyOptions>(options =>
-            {
-                options.IsEnabled = MultiTenancyConsts.IsEnabled;
-            });
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
+            options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
+            options.Languages.Add(new LanguageInfo("en", "en", "English"));
+            options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
+            options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+            options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
+            options.Languages.Add(new LanguageInfo("it", "it", "Italian", "it"));
+            options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+            options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português (Brasil)"));
+            options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
+            options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
+            options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
+            options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+            options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+            options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+            options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch"));
+            options.Languages.Add(new LanguageInfo("es", "es", "Español"));
+        });
 
-            context.Services
-                .AddBootstrap5Providers()
-                .AddFontAwesomeIcons();
+        Configure<AbpMultiTenancyOptions>(options =>
+        {
+            options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
 
-            Configure<AbpNavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor());
-            });
+        context.Services
+            .AddBootstrap5Providers()
+            .AddFontAwesomeIcons();
 
-            Configure<AbpRouterOptions>(options =>
-            {
-                options.AppAssembly = typeof(MyProjectNameBlazorHostModule).Assembly;
-            });
+        Configure<AbpNavigationOptions>(options =>
+        {
+            options.MenuContributors.Add(new MyProjectNameMenuContributor());
+        });
+
+        Configure<AbpRouterOptions>(options =>
+        {
+            options.AppAssembly = typeof(MyProjectNameBlazorHostModule).Assembly;
+        });
 
             Configure<AppUrlOptions>(options =>
             {
@@ -207,58 +210,54 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host
             });
 
 #if DEBUG
-            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+        context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif
+    }
+
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        var env = context.GetEnvironment();
+        var app = context.GetApplicationBuilder();
+
+        app.UseAbpRequestLocalization();
+
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        app.UseHttpsRedirection();
+        app.UseCorrelationId();
+        app.UseStaticFiles();
+        app.UseRouting();
+        app.UseAuthentication();
+        app.UseJwtTokenMiddleware();
+
+        if (MultiTenancyConsts.IsEnabled)
         {
-            var env = context.GetEnvironment();
-            var app = context.GetApplicationBuilder();
+            app.UseMultiTenancy();
+        }
 
-            app.UseAbpRequestLocalization();
+        app.UseUnitOfWork();
+        app.UseIdentityServer();
+        app.UseAuthorization();
+        app.UseSwagger();
+        app.UseAbpSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+        });
+        app.UseConfiguredEndpoints();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseCorrelationId();
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseJwtTokenMiddleware();
-
-            if (MultiTenancyConsts.IsEnabled)
-            {
-                app.UseMultiTenancy();
-            }
-
-            app.UseUnitOfWork();
-            app.UseIdentityServer();
-            app.UseAuthorization();
-            app.UseSwagger();
-            app.UseAbpSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
-            });
-            app.UseConfiguredEndpoints();
-
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                AsyncHelper.RunSync(async () =>
-                {
-                    await scope.ServiceProvider
-                        .GetRequiredService<IDataSeeder>()
-                        .SeedAsync();
-                });
-            }
+        using (var scope = context.ServiceProvider.CreateScope())
+        {
+            await scope.ServiceProvider
+                .GetRequiredService<IDataSeeder>()
+                .SeedAsync();
         }
     }
 }

@@ -1,17 +1,16 @@
 ﻿using System;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+public class IdentityLinkUserInfo
 {
-    public class IdentityLinkUserInfo
+    public virtual Guid UserId { get; set; }
+
+    public virtual Guid? TenantId { get; set; }
+
+    public IdentityLinkUserInfo(Guid userId, Guid? tenantId)
     {
-        public virtual Guid UserId { get; set; }
-
-        public virtual Guid? TenantId { get; set; }
-
-        public IdentityLinkUserInfo(Guid userId, Guid? tenantId)
-        {
-            UserId = userId;
-            TenantId = tenantId;
-        }
+        UserId = userId;
+        TenantId = tenantId;
     }
 }

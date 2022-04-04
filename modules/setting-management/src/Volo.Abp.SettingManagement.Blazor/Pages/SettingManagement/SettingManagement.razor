@@ -1,5 +1,7 @@
 ﻿@page "/setting-management"
+@using Microsoft.AspNetCore.Authorization
 @using Volo.Abp.Features
+@attribute [Authorize]
 @attribute [RequiresFeature(SettingManagementFeatures.Enable)]
 
 @* ************************* PAGE HEADER ************************* *@
@@ -9,8 +11,8 @@
 
 <Card>
     <CardBody>
-        <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Left" Pills="true">
-            <Items>
+        <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Left" Pills="true" VerticalItemsColumnSize="ColumnSize.Is3">
+            <Items >
                 @foreach (var group in SettingComponentCreationContext.Groups)
                 {
                     <Tab Name="@GetNormalizedString(group.Id)">

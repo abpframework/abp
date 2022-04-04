@@ -10,7 +10,7 @@
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Value}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider.
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -142,7 +142,7 @@ Now, you can use the permissions to authorize the book management.
 
 ### Application Layer & HTTP API
 
-Open the `BookAppService` class and add set the policy names as the permission names defined above:
+Open the `BookAppService` class and set the policy names as the permission names defined above:
 
 ````csharp
 using System;

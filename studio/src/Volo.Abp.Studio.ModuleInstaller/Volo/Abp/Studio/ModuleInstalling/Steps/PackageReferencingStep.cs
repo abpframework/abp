@@ -8,95 +8,103 @@ using Volo.Abp.Studio.Packages;
 using Volo.Abp.Studio.Packages.Modifying;
 using Volo.Abp.Studio.Analyzing.Models.Module;
 
-namespace Volo.Abp.Studio.ModuleInstalling.Steps
+namespace Volo.Abp.Studio.ModuleInstalling.Steps;
+
+public class PackageReferencingStep : ModuleInstallingPipelineStep
 {
-    public class PackageReferencingStep : ModuleInstallingPipelineStep
+    public override async Task ExecuteAsync(ModuleInstallingContext context)
     {
-        public override async Task ExecuteAsync(ModuleInstallingContext context)
+        var _abpModuleFileManager = context.ServiceProvider.GetRequiredService<IAbpModuleFileManager>();
+
+        foreach (var referencePackage in context.ReferenceModulePackages)
         {
-            var _abpModuleFileManager = context.ServiceProvider.GetRequiredService<IAbpModuleFileManager>();
+            var targetPackages = GetTargetPackages(context.TargetModulePackages, referencePackage);
 
-            foreach (var referencePackage in context.ReferenceModulePackages)
+            foreach (var targetPackage in targetPackages)
             {
-                var targetPackages = GetTargetPackages(context.TargetModulePackages, referencePackage);
+                await AddReferenceAsync(context, targetPackage, referencePackage);
 
-                foreach (var targetPackage in targetPackages)
+                var targetAbpModulePath = FindAbpModuleFile(targetPackage.Path);
+                var referencePackageAbpModuleName = FindAbpModuleName(referencePackage);
+
+                if (targetAbpModulePath != null && referencePackageAbpModuleName != null)
                 {
-                    await AddReferenceAsync(context, targetPackage, referencePackage);
-
-                    var targetAbpModulePath = FindAbpModuleFile(targetPackage.Path);
-
-                    await _abpModuleFileManager.AddDependency(targetAbpModulePath, FindAbpModuleName(referencePackage));
+                    await _abpModuleFileManager.AddDependency(targetAbpModulePath, referencePackageAbpModuleName);
                 }
             }
         }
+    }
 
-        private async Task AddReferenceAsync(
-            ModuleInstallingContext context,
-            PackageInfo targetPackage,
-            PackageInfoWithAnalyze referencePackage)
+    private async Task AddReferenceAsync(
+        ModuleInstallingContext context,
+        PackageInfo targetPackage,
+        PackageInfoWithAnalyze referencePackage)
+    {
+        var _csprojFileManager = context.ServiceProvider.GetRequiredService<ICsprojFileManager>();
+        var csprojFilePath = targetPackage.Path.RemovePostFix(PackageConsts.FileExtension) + ".csproj";
+
+        if (context.WithSourceCode)
         {
-            var _csprojFileManager = context.ServiceProvider.GetRequiredService<ICsprojFileManager>();
-            var csprojFilePath = targetPackage.Path.RemovePostFix(PackageConsts.FileExtension) + ".csproj";
+            var referenceProjectPath = Directory.GetFiles(context.GetTargetSourceCodeFolder(),
+                $"*{referencePackage.Name}.csproj",
+                SearchOption.AllDirectories).FirstOrDefault();
 
-            if (context.WithSourceCode)
+            if (referenceProjectPath == null)
             {
-                var referenceProjectPath = Directory.GetFiles(context.GetTargetSourceCodeFolder(),
-                    $"*{referencePackage.Name}.csproj",
-                    SearchOption.AllDirectories).FirstOrDefault();
-
-                if (referenceProjectPath == null)
-                {
-                    return;
-                }
-
-                await _csprojFileManager.AddProjectReferenceAsync(
-                    csprojFilePath,
-                    referenceProjectPath);
-            }
-            else
-            {
-                await _csprojFileManager.AddPackageReferenceAsync(
-                    csprojFilePath,
-                    referencePackage.Name,
-                    context.Version);
-            }
-        }
-
-        private string FindAbpModuleFile(string targetPackagePath)
-        {
-            return Directory.GetFiles(Path.GetDirectoryName(targetPackagePath), "*Module.cs",
-                    SearchOption.AllDirectories)
-                .FirstOrDefault();
-        }
-
-        private string FindAbpModuleName(PackageInfoWithAnalyze package)
-        {
-            var abpModuleModel = package.Analyze.Contents.Where(y =>
-                y.ContentType == AbpModuleModel.ContentTypeName
-            ).Cast<AbpModuleModel>().First();
-
-            return abpModuleModel.Namespace + "." + abpModuleModel.Name;
-        }
-
-        private List<PackageInfo> GetTargetPackages(List<PackageInfo> targetModulePackages,
-            PackageInfoWithAnalyze referencePackage)
-        {
-            if (PackageTypes.IsHostProject(referencePackage.Role))
-            {
-                return new List<PackageInfo>();
+                return;
             }
 
-            if (PackageTypes.IsUiProject(referencePackage.Role))
-            {
-                var useHostBlazorServerForMvcPackages = targetModulePackages.All(p => p.Role != PackageTypes.HostMvc);
-                var targetHostType =
-                    PackageTypes.GetHostTypeOfUi(referencePackage.Role, useHostBlazorServerForMvcPackages);
-
-                return targetModulePackages.Where(p => p.Role == targetHostType).ToList();
-            }
-
-            return targetModulePackages.Where(p => p.Role == referencePackage.Role).ToList();
+            await _csprojFileManager.AddProjectReferenceAsync(
+                csprojFilePath,
+                referenceProjectPath);
         }
+        else
+        {
+            await _csprojFileManager.AddPackageReferenceAsync(
+                csprojFilePath,
+                referencePackage.Name,
+                context.Version);
+        }
+    }
+
+    private string FindAbpModuleFile(string targetPackagePath)
+    {
+        return Directory.GetFiles(Path.GetDirectoryName(targetPackagePath), "*Module.cs",
+                SearchOption.AllDirectories)
+            .FirstOrDefault();
+    }
+
+    private string FindAbpModuleName(PackageInfoWithAnalyze package)
+    {
+        var abpModuleModel = package.Analyze?.Contents.Where(y =>
+            y.ContentType == AbpModuleModel.ContentTypeName
+        ).Cast<AbpModuleModel>().FirstOrDefault();
+
+        if (abpModuleModel == null)
+        {
+            return null;
+        }
+
+        return abpModuleModel.Namespace + "." + abpModuleModel.Name;
+    }
+
+    private List<PackageInfo> GetTargetPackages(List<PackageInfo> targetModulePackages,
+        PackageInfoWithAnalyze referencePackage)
+    {
+        if (PackageTypes.IsHostProject(referencePackage.Role))
+        {
+            return new List<PackageInfo>();
+        }
+
+        if (PackageTypes.IsUiProject(referencePackage.Role))
+        {
+            var useHostBlazorServerForMvcPackages = targetModulePackages.All(p => p.Role != PackageTypes.HostMvc);
+            var targetHostType =
+                PackageTypes.GetHostTypeOfUi(referencePackage.Role, useHostBlazorServerForMvcPackages);
+
+            return targetModulePackages.Where(p => p.Role == targetHostType).ToList();
+        }
+
+        return targetModulePackages.Where(p => p.Role == referencePackage.Role).ToList();
     }
 }

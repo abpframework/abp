@@ -1,0 +1,35 @@
+{
+  "name": "Volo.Abp.BackgroundJobs.Domain",
+  "hash": "1398bbe3f228b2bfd0baec6a64c03b43",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.BackgroundJobs",
+      "contentType": "abpModule",
+      "name": "AbpBackgroundJobsDomainModule"
+    },
+    {
+      "namespace": "Volo.Abp.BackgroundJobs",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "BackgroundJobRecord"
+    },
+    {
+      "namespace": "Volo.Abp.BackgroundJobs",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.BackgroundJobs",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "BackgroundJobRecord"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IBackgroundJobRepository"
+    }
+  ]
+}

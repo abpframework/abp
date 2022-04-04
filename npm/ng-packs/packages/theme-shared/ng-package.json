@@ -10,6 +10,7 @@
     "@ng-bootstrap/ng-bootstrap",
     "@ngx-validate/core",
     "@swimlane/ngx-datatable",
-    "bootstrap"
+    "bootstrap",
+    "@popperjs/core"
   ]
 }

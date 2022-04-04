@@ -230,6 +230,7 @@ $(function () {
             useCommandShortcut: true,
             initialValue: initialValue,
             previewStyle: 'tab',
+            plugins: [toastui.Editor.plugin.codeSyntaxHighlight],
             height: "100%",
             minHeight: "25em",
             initialEditType: 'markdown',
@@ -241,7 +242,7 @@ $(function () {
                 change: function (_val) {
                     $editorInput.val(editor.getMarkdown());
                     $editorInput.trigger("change");
-                    reflectContentChanges(editor.getHtml());
+                    reflectContentChanges(editor.getHTML());
                 }
             }
         });

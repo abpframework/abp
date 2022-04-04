@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.Client\Volo.Abp.AspNetCore.Mvc.Client.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Authentication.OpenIdConnect\Volo.Abp.AspNetCore.Authentication.OpenIdConnect.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client.IdentityModel.Web\Volo.Abp.Http.Client.IdentityModel.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client.Web\Volo.Abp.Http.Client.Web.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Swashbuckle\Volo.Abp.Swashbuckle.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client.Web\Volo.Abp.Http.Client.Web.csproj" />
@@ -29,6 +30,8 @@
     <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.Web\Volo.Abp.TenantManagement.Web.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.HttpApi.Client\Volo.Abp.TenantManagement.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.HttpApi.Client\Volo.Abp.PermissionManagement.HttpApi.Client.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.Web\Volo.Abp.SettingManagement.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.HttpApi.Client\Volo.Abp.SettingManagement.HttpApi.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>
