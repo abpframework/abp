@@ -29,4 +29,10 @@
     <ProjectReference Include="..\..\src\MyCompanyName.MyProjectName.HttpApi.Client\MyCompanyName.MyProjectName.HttpApi.Client.csproj" />
   </ItemGroup>
 
+  <!-- <TEMPLATE-REMOVE IF-NOT='PWA'> -->
+  <ItemGroup>
+    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+  </ItemGroup>
+  <!-- </TEMPLATE-REMOVE> -->
+
 </Project>

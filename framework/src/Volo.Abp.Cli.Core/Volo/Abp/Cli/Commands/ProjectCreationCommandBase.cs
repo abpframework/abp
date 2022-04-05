@@ -48,6 +48,12 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("Preview: yes");
         }
 
+        var pwa = commandLineArgs.Options.ContainsKey(Options.ProgressiveWebApp.Short);
+        if (pwa)
+        {
+            Logger.LogInformation("Progressive Web App: yes");
+        }
+
         var databaseProvider = GetDatabaseProvider(commandLineArgs);
         if (databaseProvider != DatabaseProvider.NotSpecified)
         {
@@ -475,6 +481,11 @@ public abstract class ProjectCreationCommandBase
         public static class Preview
         {
             public const string Long = "preview";
+        }
+
+        public static class ProgressiveWebApp
+        {
+            public const string Short = "pwa";
         }
     }
 }
