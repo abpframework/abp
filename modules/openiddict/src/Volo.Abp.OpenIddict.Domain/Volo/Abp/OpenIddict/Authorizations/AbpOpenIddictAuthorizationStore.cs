@@ -16,10 +16,6 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.OpenIddict.Authorizations;
 
-[ExposeServices(
-    typeof(IOpenIddictAuthorizationStore<OpenIddictAuthorization>),
-    typeof(AbpOpenIddictAuthorizationStore)
-)]
 public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddictAuthorizationRepository>, IOpenIddictAuthorizationStore<OpenIddictAuthorization>, IScopedDependency
 {
     protected IOpenIddictApplicationRepository ApplicationRepository { get; }
@@ -62,10 +58,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
 
         using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
         {
-            if (authorization.Tokens.Any())
-            {
-                await TokenRepository.DeleteManyAsync(authorization.Tokens, cancellationToken: cancellationToken);
-            }
+            await TokenRepository.DeleteManyByAuthorizationIdAsync(authorization.Id, cancellationToken: cancellationToken);
 
             await Repository.DeleteAsync(authorization, cancellationToken: cancellationToken);
 
@@ -78,7 +71,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         Check.NotNullOrEmpty(subject, nameof(subject));
         Check.NotNullOrEmpty(client, nameof(client));
 
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), includeDetails: true, cancellationToken);
+        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -91,7 +84,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         Check.NotNullOrEmpty(client, nameof(client));
         Check.NotNullOrEmpty(status, nameof(status));
 
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, includeDetails: true, cancellationToken);
+        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -105,7 +98,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         Check.NotNullOrEmpty(status, nameof(status));
         Check.NotNullOrEmpty(type, nameof(type));
 
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, includeDetails: true, cancellationToken);
+        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -119,7 +112,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         Check.NotNullOrEmpty(status, nameof(status));
         Check.NotNullOrEmpty(type, nameof(type));
 
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, includeDetails: true, cancellationToken);
+        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, cancellationToken);
 
         foreach (var authorization in authorizations)
         {
@@ -134,7 +127,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-        var authorizations = await Repository.FindByApplicationIdAsync(ConvertIdentifierFromString(identifier), includeDetails: true, cancellationToken);
+        var authorizations = await Repository.FindByApplicationIdAsync(ConvertIdentifierFromString(identifier), cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -145,14 +138,14 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-        return await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), includeDetails: true, cancellationToken);
+        return await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), cancellationToken);
     }
 
     public virtual async IAsyncEnumerable<OpenIddictAuthorization> FindBySubjectAsync(string subject, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
 
-        var authorizations = await Repository.FindBySubjectAsync(subject, includeDetails: true, cancellationToken);
+        var authorizations = await Repository.FindBySubjectAsync(subject, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -172,7 +165,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
     {
         Check.NotNull(query, nameof(query));
 
-        return await Repository.GetAsync(query, state, includeDetails: true, cancellationToken);
+        return await Repository.GetAsync(query, state, cancellationToken);
     }
 
     public virtual ValueTask <DateTimeOffset?> GetCreationDateAsync(OpenIddictAuthorization authorization, CancellationToken cancellationToken)
@@ -294,7 +287,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
 
     public virtual async IAsyncEnumerable<OpenIddictAuthorization> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var authorizations = await Repository.ListAsync(count, offset, includeDetails: true, cancellationToken);
+        var authorizations = await Repository.ListAsync(count, offset, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -303,7 +296,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
 
     public virtual async IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var authorizations = await Repository.ListAsync(query, state, includeDetails: true, cancellationToken);
+        var authorizations = await Repository.ListAsync(query, state, cancellationToken);
         foreach (var authorization in authorizations)
         {
             yield return authorization;
@@ -320,7 +313,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
             {
                 var date = threshold.UtcDateTime;
 
-                var authorizations = await Repository.GetPruneListAsync(date, 1_000, includeDetails: false, cancellationToken);
+                var authorizations = await Repository.GetPruneListAsync(date, 1_000, cancellationToken);
                 if (!authorizations.Any())
                 {
                     break;

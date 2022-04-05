@@ -60,64 +60,6 @@ namespace OpenIddict.Demo.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpOpenIddictApplications",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    ClientSecret = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConsentType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DisplayNames = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Permissions = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PostLogoutRedirectUris = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RedirectUris = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Requirements = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpOpenIddictApplications", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpOpenIddictScopes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Descriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DisplayNames = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Resources = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpOpenIddictScopes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AbpOrganizationUnits",
                 columns: table => new
                 {
@@ -280,18 +222,23 @@ namespace OpenIddict.Demo.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpOpenIddictAuthorizations",
+                name: "OpenIddictApplications",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ClientId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ClientSecret = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConsentType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DisplayNames = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Permissions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostLogoutRedirectUris = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Scopes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Subject = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    RedirectUris = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Requirements = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -302,12 +249,34 @@ namespace OpenIddict.Demo.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AbpOpenIddictAuthorizations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AbpOpenIddictAuthorizations_AbpOpenIddictApplications_ApplicationId",
-                        column: x => x.ApplicationId,
-                        principalTable: "AbpOpenIddictApplications",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_OpenIddictApplications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OpenIddictScopes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Descriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DisplayNames = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Resources = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OpenIddictScopes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -493,11 +462,42 @@ namespace OpenIddict.Demo.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpOpenIddictTokens",
+                name: "OpenIddictAuthorizations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Scopes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Subject = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OpenIddictAuthorizations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OpenIddictAuthorizations_OpenIddictApplications_ApplicationId",
+                        column: x => x.ApplicationId,
+                        principalTable: "OpenIddictApplications",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OpenIddictTokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AuthorizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -509,6 +509,8 @@ namespace OpenIddict.Demo.Server.Migrations
                     Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Subject = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
                     Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -519,16 +521,16 @@ namespace OpenIddict.Demo.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AbpOpenIddictTokens", x => x.Id);
+                    table.PrimaryKey("PK_OpenIddictTokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AbpOpenIddictTokens_AbpOpenIddictApplications_ApplicationId",
+                        name: "FK_OpenIddictTokens_OpenIddictApplications_ApplicationId",
                         column: x => x.ApplicationId,
-                        principalTable: "AbpOpenIddictApplications",
+                        principalTable: "OpenIddictApplications",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_AbpOpenIddictTokens_AbpOpenIddictAuthorizations_AuthorizationId",
+                        name: "FK_OpenIddictTokens_OpenIddictAuthorizations_AuthorizationId",
                         column: x => x.AuthorizationId,
-                        principalTable: "AbpOpenIddictAuthorizations",
+                        principalTable: "OpenIddictAuthorizations",
                         principalColumn: "Id");
                 });
 
@@ -545,42 +547,6 @@ namespace OpenIddict.Demo.Server.Migrations
                 columns: new[] { "SourceUserId", "SourceTenantId", "TargetUserId", "TargetTenantId" },
                 unique: true,
                 filter: "[SourceTenantId] IS NOT NULL AND [TargetTenantId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpOpenIddictApplications_ClientId",
-                table: "AbpOpenIddictApplications",
-                column: "ClientId",
-                unique: true,
-                filter: "[ClientId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpOpenIddictAuthorizations_ApplicationId_Status_Subject_Type",
-                table: "AbpOpenIddictAuthorizations",
-                columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpOpenIddictScopes_Name",
-                table: "AbpOpenIddictScopes",
-                column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpOpenIddictTokens_ApplicationId_Status_Subject_Type",
-                table: "AbpOpenIddictTokens",
-                columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpOpenIddictTokens_AuthorizationId",
-                table: "AbpOpenIddictTokens",
-                column: "AuthorizationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpOpenIddictTokens_ReferenceId",
-                table: "AbpOpenIddictTokens",
-                column: "ReferenceId",
-                unique: true,
-                filter: "[ReferenceId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpOrganizationUnitRoles_RoleId_OrganizationUnitId",
@@ -685,6 +651,42 @@ namespace OpenIddict.Demo.Server.Migrations
                 name: "IX_AbpUsers_UserName",
                 table: "AbpUsers",
                 column: "UserName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictApplications_ClientId",
+                table: "OpenIddictApplications",
+                column: "ClientId",
+                unique: true,
+                filter: "[ClientId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type",
+                table: "OpenIddictAuthorizations",
+                columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictScopes_Name",
+                table: "OpenIddictScopes",
+                column: "Name",
+                unique: true,
+                filter: "[Name] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictTokens_ApplicationId_Status_Subject_Type",
+                table: "OpenIddictTokens",
+                columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictTokens_AuthorizationId",
+                table: "OpenIddictTokens",
+                column: "AuthorizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictTokens_ReferenceId",
+                table: "OpenIddictTokens",
+                column: "ReferenceId",
+                unique: true,
+                filter: "[ReferenceId] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -697,12 +699,6 @@ namespace OpenIddict.Demo.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpLinkUsers");
-
-            migrationBuilder.DropTable(
-                name: "AbpOpenIddictScopes");
-
-            migrationBuilder.DropTable(
-                name: "AbpOpenIddictTokens");
 
             migrationBuilder.DropTable(
                 name: "AbpOrganizationUnitRoles");
@@ -738,7 +734,10 @@ namespace OpenIddict.Demo.Server.Migrations
                 name: "AbpUserTokens");
 
             migrationBuilder.DropTable(
-                name: "AbpOpenIddictAuthorizations");
+                name: "OpenIddictScopes");
+
+            migrationBuilder.DropTable(
+                name: "OpenIddictTokens");
 
             migrationBuilder.DropTable(
                 name: "AbpTenants");
@@ -753,7 +752,10 @@ namespace OpenIddict.Demo.Server.Migrations
                 name: "AbpUsers");
 
             migrationBuilder.DropTable(
-                name: "AbpOpenIddictApplications");
+                name: "OpenIddictAuthorizations");
+
+            migrationBuilder.DropTable(
+                name: "OpenIddictApplications");
         }
     }
 }

@@ -20,10 +20,10 @@ public class AbpOpenIddictEntityFrameworkCoreModule : AbpModule
         {
             options.AddDefaultRepositories<IOpenIddictDbContext>();
 
-            options.AddRepository<OpenIddictApplication, OpenIddictApplicationRepository>();
-            options.AddRepository<OpenIddictAuthorization, OpenIddictAuthorizationRepository>();
-            options.AddRepository<OpenIddictScope, OpenIddictScopeRepository>();
-            options.AddRepository<OpenIddictToken, OpenIddictTokenRepository>();
+            options.AddRepository<OpenIddictApplication, EfCoreOpenIddictApplicationRepository>();
+            options.AddRepository<OpenIddictAuthorization, EfCoreOpenIddictAuthorizationRepository>();
+            options.AddRepository<OpenIddictScope, EfCoreOpenIddictScopeRepository>();
+            options.AddRepository<OpenIddictToken, EfCoreOpenIddictTokenRepository>();
         });
     }
 }

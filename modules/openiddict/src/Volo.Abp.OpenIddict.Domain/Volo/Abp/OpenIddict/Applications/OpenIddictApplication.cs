@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Volo.Abp.Domain.Entities.Auditing;
-using Volo.Abp.OpenIddict.Authorizations;
-using Volo.Abp.OpenIddict.Tokens;
 
 namespace Volo.Abp.OpenIddict.Applications;
 
 public class OpenIddictApplication : FullAuditedAggregateRoot<Guid>
 {
-    /// <summary>
-    /// Gets the list of the authorizations associated with this application.
-    /// </summary>
-    public virtual ICollection<OpenIddictAuthorization> Authorizations { get; } = new HashSet<OpenIddictAuthorization>();
-
     /// <summary>
     /// Gets or sets the client identifier associated with the current application.
     /// </summary>
@@ -71,11 +63,6 @@ public class OpenIddictApplication : FullAuditedAggregateRoot<Guid>
     /// current application, serialized as a JSON array.
     /// </summary>
     public virtual string Requirements { get; set; }
-
-    /// <summary>
-    /// Gets the list of the tokens associated with this application.
-    /// </summary>
-    public virtual ICollection<OpenIddictToken> Tokens { get; } = new HashSet<OpenIddictToken>();
 
     /// <summary>
     /// Gets or sets the application type associated with the current application.

@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace OpenIddict.Demo.Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    [Migration("20220331065901_Initial")]
+    [Migration("20220405034203_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -757,7 +757,7 @@ namespace OpenIddict.Demo.Server.Migrations
                         .IsUnique()
                         .HasFilter("[ClientId] IS NOT NULL");
 
-                    b.ToTable("AbpOpenIddictApplications", (string)null);
+                    b.ToTable("OpenIddictApplications", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization", b =>
@@ -793,6 +793,10 @@ namespace OpenIddict.Demo.Server.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -830,7 +834,7 @@ namespace OpenIddict.Demo.Server.Migrations
 
                     b.HasIndex("ApplicationId", "Status", "Subject", "Type");
 
-                    b.ToTable("AbpOpenIddictAuthorizations", (string)null);
+                    b.ToTable("OpenIddictAuthorizations", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.OpenIddict.Scopes.OpenIddictScope", b =>
@@ -907,7 +911,7 @@ namespace OpenIddict.Demo.Server.Migrations
                         .IsUnique()
                         .HasFilter("[Name] IS NOT NULL");
 
-                    b.ToTable("AbpOpenIddictScopes", (string)null);
+                    b.ToTable("OpenIddictScopes", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.OpenIddict.Tokens.OpenIddictToken", b =>
@@ -949,6 +953,10 @@ namespace OpenIddict.Demo.Server.Migrations
 
                     b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -999,7 +1007,7 @@ namespace OpenIddict.Demo.Server.Migrations
 
                     b.HasIndex("ApplicationId", "Status", "Subject", "Type");
 
-                    b.ToTable("AbpOpenIddictTokens", (string)null);
+                    b.ToTable("OpenIddictTokens", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionGrant", b =>
@@ -1237,18 +1245,18 @@ namespace OpenIddict.Demo.Server.Migrations
             modelBuilder.Entity("Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization", b =>
                 {
                     b.HasOne("Volo.Abp.OpenIddict.Applications.OpenIddictApplication", null)
-                        .WithMany("Authorizations")
+                        .WithMany()
                         .HasForeignKey("ApplicationId");
                 });
 
             modelBuilder.Entity("Volo.Abp.OpenIddict.Tokens.OpenIddictToken", b =>
                 {
                     b.HasOne("Volo.Abp.OpenIddict.Applications.OpenIddictApplication", null)
-                        .WithMany("Tokens")
+                        .WithMany()
                         .HasForeignKey("ApplicationId");
 
                     b.HasOne("Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization", null)
-                        .WithMany("Tokens")
+                        .WithMany()
                         .HasForeignKey("AuthorizationId");
                 });
 
@@ -1282,18 +1290,6 @@ namespace OpenIddict.Demo.Server.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Navigation("Roles");
-                });
-
-            modelBuilder.Entity("Volo.Abp.OpenIddict.Applications.OpenIddictApplication", b =>
-                {
-                    b.Navigation("Authorizations");
-
-                    b.Navigation("Tokens");
-                });
-
-            modelBuilder.Entity("Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization", b =>
-                {
-                    b.Navigation("Tokens");
                 });
 
             modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>

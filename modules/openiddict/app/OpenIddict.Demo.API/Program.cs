@@ -1,4 +1,10 @@
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
@@ -16,6 +22,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.Authority = "https://localhost:44301";
         options.Audience = "AbpAPIResource";
+
+        // See OpenIddictServerModule`s PreConfigureServices method.
+        options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78"));
+        options.TokenValidationParameters.TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80"));
     });
 
 var app = builder.Build();

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using OpenIddict.Demo.Server.EntityFrameworkCore;
 using Volo.Abp;
@@ -75,8 +77,24 @@ namespace OpenIddict.Demo.Server;
 )]
 public class OpenIddictServerModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<OpenIddictServerBuilder>(builder =>
+        {
+            //https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
+            //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
+            builder.AddSigningKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78")));
+            builder.AddEncryptionKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80")));
+        });
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<AbpOpenIddictOptions>(options =>
+        {
+            options.AddDevelopmentEncryptionAndSigningCertificate = false;
+        });
+
         context.Services.AddAbpDbContext<ServerDbContext>(options =>
         {
             options.AddDefaultRepositories(includeAllEntities: true);

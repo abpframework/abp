@@ -70,13 +70,12 @@ public class AbpOpenIddictDomainModule : AbpModule
                     .SetDefaultScopeEntity<OpenIddictScope>()
                     .SetDefaultTokenEntity<OpenIddictToken>();
 
+                builder.DisableEntityCaching();
+
                 services.ExecutePreConfiguredActions(builder);
             })
             .AddServer(builder =>
             {
-                // Access token encryption can only be disabled when using JWT tokens.
-                builder.DisableAccessTokenEncryption(); //TODO: Should we always disable this?
-
                 builder
                     .SetAuthorizationEndpointUris("/connect/authorize")
                     // /.well-known/oauth-authorization-server

@@ -1,3 +1,5 @@
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Demo.Server;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Localization;
@@ -35,6 +37,10 @@ builder.Services.AddAuthentication()
         options.Audience = "AbpAPIResource";
 
         options.MapInboundClaims = false;
+
+        // See OpenIddictServerModule`s PreConfigureServices method.
+        options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78"));
+        options.TokenValidationParameters.TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80"));
     });
 
 await builder.AddApplicationAsync<OpenIddictServerModule>();

@@ -1,27 +1,10 @@
 ﻿using System;
-using JetBrains.Annotations;
-using Volo.Abp.Auditing;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
-using Volo.Abp.OpenIddict.Applications;
-using Volo.Abp.OpenIddict.Authorizations;
 
 namespace Volo.Abp.OpenIddict.Tokens;
 
-/* TODO: Reconsider the entity designs
- *
- * Entity structure seems incorrectly designed:
- *   `OpenIddictToken` is an entity (not aggregate root) but have its own repository.
- *   `OpenIddictAuthorization` is also same.
- *     If they have repositories, they should be aggregate roots and should not be used as navigation properties in other entities (e.g. `OpenIddictApplication`).
- *     I think this will be the correct way since they are independently queried from database.
- */
-
-public class OpenIddictToken : FullAuditedEntity<Guid>, IHasConcurrencyStamp
+public class OpenIddictToken : FullAuditedAggregateRoot<Guid>
 {
-    [DisableAuditing]
-    public virtual string ConcurrencyStamp { get; set; }
-    
     /// <summary>
     /// Gets or sets the application associated with the current token.
     /// </summary>

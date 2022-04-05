@@ -172,6 +172,43 @@ https://documentation.openiddict.com
 
 https://github.com/openiddict/openiddict-core#resources
 
+### Token encryption
+
+https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
+
+> By default, OpenIddict enforces encryption for all the token types it supports. While this enforcement cannot be disabled for authorization codes, refresh tokens and device codes for security reasons, it can be relaxed for access tokens when integration with third-party APIs/resource servers is desired. Access token encryption can also be disabled if the resource servers receiving the access tokens don't fully support JSON Web Encryption.
+
+```cs
+PreConfigure<OpenIddictServerBuilder>(builder =>
+{
+    builder.DisableAccessTokenEncryption();
+});
+```
+
+An example of using `SecurityKey`
+
+> In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
+
+```cs
+// In OpenIddict Server
+PreConfigure<OpenIddictServerBuilder>(builder =>
+{
+    builder.AddSigningKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78")));
+    builder.AddEncryptionKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80")));
+});
+
+//In Client AddJwtBearer
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        //Other configuration
+
+        options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78"));
+        options.TokenValidationParameters.TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80"));
+    });
+```
+
+
 ### PKCE
 
 https://documentation.openiddict.com/configuration/proof-key-for-code-exchange.html

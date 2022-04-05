@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.OpenIddict;
 
-internal static class AbpOpenIddictQueryableExtensions
+public static class AbpOpenIddictQueryableExtensions
 {
     public static TQueryable SkipIf<T, TQueryable>([NotNull] this TQueryable query, bool condition, int count)
         where TQueryable : IQueryable<T>
