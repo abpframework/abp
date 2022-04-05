@@ -44,4 +44,24 @@ public class BlogFeatureManager : DomainService
             await SetAsync(blogId, feature.FeatureName, isEnabled: true);
         }
     }
+
+    public async Task SetIfNotSetAsync(Guid blogId, string featureName, bool isEnabled)
+    {
+        var blogFeature = await BlogFeatureRepository.FindAsync(blogId, featureName);
+        if (blogFeature == null)
+        {
+            var newBlogFeature = new BlogFeature(blogId, featureName, isEnabled);
+            await BlogFeatureRepository.InsertAsync(newBlogFeature);
+        }
+    }
+
+    public async Task SetDefaultsIfNotSetAsync(Guid blogId)
+    {
+        var defaultFeatures = await DefaultBlogFeatureProvider.GetDefaultFeaturesAsync(blogId);
+
+        foreach (var feature in defaultFeatures)
+        {
+            await SetIfNotSetAsync(blogId, feature.FeatureName, isEnabled: true);
+        }
+    }
 }
