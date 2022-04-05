@@ -7,6 +7,7 @@
 @using Volo.Abp.Localization
 @using Volo.Abp.ObjectExtending
 @using Volo.Abp.Data
+@using Volo.Abp.Identity
 @model EditModalModel
 @inject IHtmlLocalizer<IdentityResource> L
 @inject IStringLocalizerFactory StringLocalizerFactory
@@ -25,7 +26,16 @@
                         <abp-input asp-for="UserInfo.UserName" />
                         <abp-input asp-for="UserInfo.Name" />
                         <abp-input asp-for="UserInfo.Surname" />
-                        <abp-input asp-for="UserInfo.Password" />
+                        <div class="mb-3">
+                            <label asp-for="UserInfo.Password" class="form-label">@L["Password"]</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="UserInfo.Password"/>
+                                <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton">
+                                    <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="UserInfo.Password"></span>
+                        </div>
                         <abp-input asp-for="UserInfo.Email" />
                         <abp-input asp-for="UserInfo.PhoneNumber" />
                         <abp-input asp-for="UserInfo.IsActive" />

@@ -57,8 +57,7 @@ public static class AbpOpenIdConnectExtensions
 
         if (receivedContext.Request.Cookies.ContainsKey(tenantKey))
         {
-            receivedContext.TokenEndpointRequest.SetParameter(tenantKey,
-                receivedContext.Request.Cookies[tenantKey]);
+            receivedContext.TokenEndpointRequest?.SetParameter(tenantKey, receivedContext.Request.Cookies[tenantKey]);
         }
     }
 }

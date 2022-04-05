@@ -8,7 +8,8 @@
     "@abp/jstree": "~5.2.0",
     "@abp/slugify": "~5.2.0",
     "@abp/tui-editor": "~5.2.0",
-    "@abp/uppy": "~5.2.0"
+    "@abp/uppy": "~5.2.0",
+    "@abp/codemirror": "~5.2.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

@@ -94,6 +94,11 @@ public partial class UiMessageAlert : ComponentBase, IDisposable
         Options = e.Options;
         Callback = e.Callback;
 
+        await ShowMessageAlert();
+    }
+
+    protected virtual async Task ShowMessageAlert()
+    {
         await InvokeAsync(ModalRef.Show);
     }
 

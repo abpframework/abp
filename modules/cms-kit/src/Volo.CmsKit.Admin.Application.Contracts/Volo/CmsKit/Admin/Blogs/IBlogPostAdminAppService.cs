@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
 namespace Volo.CmsKit.Admin.Blogs;
@@ -12,4 +13,15 @@ public interface IBlogPostAdminAppService
         CreateBlogPostDto,
         UpdateBlogPostDto>
 {
+    Task PublishAsync(Guid id);
+
+    Task DraftAsync(Guid id);
+
+    Task<BlogPostDto> CreateAndPublishAsync(CreateBlogPostDto input);
+
+    Task SendToReviewAsync(Guid id);
+
+    Task<BlogPostDto> CreateAndSendToReviewAsync(CreateBlogPostDto input);
+
+    Task<bool> HasBlogPostWaitingForReviewAsync();
 }

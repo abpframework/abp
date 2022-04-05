@@ -1,6 +1,7 @@
 ﻿@page
 
 @using System.Globalization
+@using Microsoft.AspNetCore.Authorization
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
 @using Volo.CmsKit.Admin.Web.Pages
@@ -10,9 +11,10 @@
 @using Volo.CmsKit.Blogs
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
+@using Volo.CmsKit.Permissions
 
 @inherits CmsKitAdminPageBase
-
+@inject IAuthorizationService AuthorizationService
 @model CreateModel
 
 @{
@@ -69,6 +71,7 @@
                  data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
                  data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">
             </div>
+            <input type="hidden" id="ViewModel_Status" name="ViewModel.Status" value="" class="form-control ">
         </abp-dynamic-form>
 
         <div id="blog-post-tags-wrapper">
@@ -84,6 +87,13 @@
 
     </abp-card-body>
     <abp-card-footer>
-        <abp-button button-type="Primary" type="submit" text="@L["Submit"].Value" id="button-blog-post-create" />
+        <abp-button button-type="Primary" type="button" text="@L["SaveAsDraft"].Value" id="button-blog-post-create" />
+        @if ((await AuthorizationService.AuthorizeAsync(CmsKitAdminPermissions.BlogPosts.Publish)).Succeeded)
+        {
+            <abp-button button-type="Primary" type="button" text="@L["Publish"].Value" id="button-blog-post-publish"/>
+        }else
+        {
+            <abp-button button-type="Primary" type="button" text="@L["SendToReviewToPublish"].Value" id="button-blog-post-send-to-review"/>
+        }
     </abp-card-footer>
 </abp-card>

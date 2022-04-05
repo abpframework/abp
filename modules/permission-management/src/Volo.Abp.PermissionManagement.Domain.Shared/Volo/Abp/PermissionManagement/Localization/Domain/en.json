@@ -5,6 +5,7 @@
     "OnlyProviderPermissons": "Only this provider",
     "All": "All",
     "SelectAllInAllTabs": "Grant all permissions",
-    "SelectAllInThisTab": "Select all"
+    "SelectAllInThisTab": "Select all",
+    "RemoveAllPermissionsWarningMessage": "Are you sure you want to remove all permissions?"
   }
 }
