@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using ICSharpCode.SharpZipLib.Zip;
+using System.IO.Compression;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
@@ -15,21 +15,16 @@ public class CreateProjectResultZipStep : ProjectBuildPipelineStep
     {
         using (var memoryStream = new MemoryStream())
         {
-            using (var zipOutputStream = new ZipOutputStream(memoryStream))
+            using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
             {
-                zipOutputStream.SetLevel(3); //0-9, 9 being the highest level of compression
-
                 foreach (var entry in entries)
                 {
-                    zipOutputStream.PutNextEntry(new ZipEntry(entry.Name)
+                    var zipEntry = zipArchive.CreateEntry(entry.Name, CompressionLevel.Fastest);
+                    using (var stream = zipEntry.Open())
                     {
-                        Size = entry.Bytes.Length
-                    });
-                    zipOutputStream.Write(entry.Bytes, 0, entry.Bytes.Length);
+                        stream.Write(entry.Bytes, 0, entry.Bytes.Length);
+                    }
                 }
-
-                zipOutputStream.CloseEntry();
-                zipOutputStream.IsStreamOwner = false;
             }
 
             memoryStream.Position = 0;

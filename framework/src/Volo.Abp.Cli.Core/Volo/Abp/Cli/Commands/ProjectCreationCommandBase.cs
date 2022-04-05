@@ -1,8 +1,7 @@
 using System;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.ProjectModification;
@@ -170,18 +169,16 @@ public abstract class ProjectCreationCommandBase
     {
         using (var templateFileStream = new MemoryStream(project.ZipContent))
         {
-            using (var zipInputStream = new ZipInputStream(templateFileStream))
+            using (var zipArchive = new ZipArchive(templateFileStream, ZipArchiveMode.Read))
             {
-                var zipEntry = zipInputStream.GetNextEntry();
-                while (zipEntry != null)
+                foreach (var zipEntry in zipArchive.Entries)
                 {
-                    if (string.IsNullOrWhiteSpace(zipEntry.Name))
+                    if (string.IsNullOrWhiteSpace(zipEntry.FullName))
                     {
-                        zipEntry = zipInputStream.GetNextEntry();
                         continue;
                     }
 
-                    var fullZipToPath = Path.Combine(outputFolder, zipEntry.Name);
+                    var fullZipToPath = Path.Combine(outputFolder, zipEntry.FullName);
                     var directoryName = Path.GetDirectoryName(fullZipToPath);
 
                     if (!string.IsNullOrEmpty(directoryName))
@@ -192,17 +189,14 @@ public abstract class ProjectCreationCommandBase
                     var fileName = Path.GetFileName(fullZipToPath);
                     if (fileName.Length == 0)
                     {
-                        zipEntry = zipInputStream.GetNextEntry();
                         continue;
                     }
 
-                    var buffer = new byte[4096]; // 4K is optimum
-                    using (var streamWriter = File.Create(fullZipToPath))
+                    using (var entryStream = zipEntry.Open())
+                    using (var fileStream = File.Create(fullZipToPath))
                     {
-                        StreamUtils.Copy(zipInputStream, streamWriter, buffer);
+                        entryStream.CopyTo(fileStream);
                     }
-
-                    zipEntry = zipInputStream.GetNextEntry();
                 }
             }
         }
