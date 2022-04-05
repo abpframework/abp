@@ -5,6 +5,9 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+    <!-- <TEMPLATE-REMOVE IF-NOT='PWA'> -->
+    <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+    <!-- </TEMPLATE-REMOVE> -->
   </PropertyGroup>
 
   <ItemGroup>
