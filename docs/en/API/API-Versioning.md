@@ -45,7 +45,7 @@ public interface IBookV2AppService : IApplicationService
 }
 ```
 
-**HttpApi Controillers:**
+**HttpApi Controllers:**
 ```cs
 [Area(BookStoreRemoteServiceConsts.ModuleName)]
 [RemoteService(Name = BookStoreRemoteServiceConsts.RemoteServiceName)]
