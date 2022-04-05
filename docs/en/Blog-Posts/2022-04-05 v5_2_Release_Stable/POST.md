@@ -47,3 +47,5 @@ Check [the migration guide](https://docs.abp.io/en/abp/5.2/Migration-Guides/Abp-
 ## About the Next Version
 
 The next feature version will be 5.3. It is planned to release the 5.3 RC (Release Candidate) on May 03 and the final version on May 31, 2022. You can follow the [release planning here](https://github.com/abpframework/abp/milestones).
+
+Please [submit an issue](https://github.com/abpframework/abp/issues/new) if you have any problem with this version.
