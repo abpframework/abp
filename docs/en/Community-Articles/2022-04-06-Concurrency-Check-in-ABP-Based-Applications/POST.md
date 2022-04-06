@@ -18,7 +18,7 @@ We can create a new startup template by using the [ABP CLI](https://docs.abp.io/
 abp new Acme.BookStore -t app -csf
 ```
 
-After running the above command, our project boilerplate will be downloaded. Then we can open the solution and start to the development.
+After running the above command, our project boilerplate will be downloaded. Then we can open the solution and start the development.
 
 ## Starting the Development
 
@@ -43,9 +43,9 @@ public class Book : AuditedAggregateRoot<Guid>
 
 * To enable **Concurrency Check** for our entities, our entities should implement the `IHasConcurrencyStamp` interface, directly or indirectly.
 
-* [Aggregate Root](https://docs.abp.io/en/abp/5.2/Entities#aggregateroot-class) entity classes already implement the `IHasConcurrencyStamp` interface, so if we inherit our entities from one of these entity classes we don't need to manually implement the `IHasConcurrencyStamp` interface.
+* [Aggregate Root](https://docs.abp.io/en/abp/5.2/Entities#aggregateroot-class) entity classes already implement the `IHasConcurrencyStamp` interface, so if we inherit our entities from one of these entity classes then we won't need to manually implement the `IHasConcurrencyStamp` interface.
 
-* And we've derived the `Book` entity from `AuditedAggregateRoot<TKey>` here, so we don't need to implement the `IHasConcurrencyStamp` interface because `AuditedAggregateRoot` class is already implemented the `IHasConcurrencyStamp` interface.
+* And we've derived the `Book` entity from `AuditedAggregateRoot<TKey>` here, so we don't need to implement the `IHasConcurrencyStamp` interface because `AuditedAggregateRoot` class already implemented the `IHasConcurrencyStamp` interface.
 
 > You can read more details from the [Concurrency Check](https://docs.abp.io/en/abp/5.2/Concurrency-Check) documentation.
 
@@ -119,7 +119,7 @@ To do this, open your command line terminal in the directory of the `EntityFrame
 dotnet ef migrations add Added_Books
 ```
 
-After this command, a new migration will be generated and then we can run the `*.DbMigrator` project to apply the last changes to the database such as creating a new table named `Books` according to the lastly created migration.
+After this command, a new migration will be generated and then we can run the `*.DbMigrator` project to apply the last changes to the database such as creating a new table named `Books` according to the last created migration.
 
 ### Defining DTOs and Application Service Interfaces
 
@@ -144,7 +144,7 @@ public class BookDto : AuditedEntityDto<Guid>, IHasConcurrencyStamp
 }
 ```
 
-* `AuditedEntityDto<TKey>` class is not implemented from the `IHasConcurrencyStamp` interface, so for the **BookDto** class we need to implement the `IHasConcurrencyStamp`.
+* The `AuditedEntityDto<TKey>` class is not implemented from the `IHasConcurrencyStamp` interface, so for the **BookDto** class we need to implement the `IHasConcurrencyStamp`.
 
 * This is important, because we need to return books with their **ConcurrencyStamp** value.
 
@@ -198,7 +198,7 @@ public class UpdateBookDto : IHasConcurrencyStamp
 
 * If values are mismatched, then it means the record that we're trying to update is already updated by another user and we need to get the latest changes to be able to make changes on it.
 
-* Also, in that case, `AbpDbConcurrencyException` will be thrown by the ABP Framework and we can either handle this exception manually or let the ABP Framework handle it on behalf of use and shows a user-friendly error message as in the image below.
+* Also, in that case, `AbpDbConcurrencyException` will be thrown by the ABP Framework and we can either handle this exception manually or let the ABP Framework handle it on behalf of us and show a user-friendly error message as in the image below.
 
 ![](./optimistic-concurrency.png)
 
@@ -210,7 +210,7 @@ public interface IBookAppService :
 {
 }
 ```
-* We've implemented the `ICrudAppService` here, because we just need to perform CRUD operations and this interface help us to define common CRUD operation methods.
+* We've implemented the `ICrudAppService` here, because we just need to perform CRUD operations and this interface helps us define common CRUD operation methods.
 
 ### Application Service Implementations
 
@@ -249,7 +249,7 @@ public class BookAppService :
 
 * We can look closer to the `UpdateAsync` method here, because as we've mentioned earlier we need to pass the provided **ConcurrencyStamp** value to be able to do **Concurrency Check/Control** to our entity while updating. We've used the `SetConcurrencyStampIfNotNull` extension method to set the **ConcurrencyStamp** value to our entity and update the record. 
 
-* At that point, if the given record is already updated by any other user, a **ConcurrencyStamp** mismatch will occur and `AbpDbConcurrencyException` will be thrown thanks to **Concurrency Check** system of ABP, data-consistency will be provided and the current record won't be overridden.
+* At that point, if the given record is already updated by any other user, a **ConcurrencyStamp** mismatch will occur and `AbpDbConcurrencyException` will be thrown thanks to the **Concurrency Check** system of ABP, data-consistency will be provided and the current record won't be overridden.
 
 * And if the values are matched, the record will be updated successfully.
 
@@ -268,7 +268,7 @@ public class BookStoreApplicationAutoMapperProfile : Profile
 
 ### User Interface
 
-So far, we've applied the all necessary steps for the **Concurrency Check** system, let's see it in the action.
+So far, we've applied the all necessary steps for the **Concurrency Check** system, let's see it in action.
 
 Create a razor page in the `.Web` layer named `Index` (**/Pages/Books/Index.cshtml**), open this file and replace the content with the following code block:
 
@@ -396,7 +396,7 @@ $(function () {
 
 * Also defined **create** and **update** modals by using [ABP Modal Manager](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Modals#modalmanager-reference), but we didn't create them yet, so let's create the modals.
 
-First, create **CreateModal** razor page and update the **CreateModal.cshtml** and **CreateModal.cshtml.cs** files as below:
+First, create a **CreateModal** razor page and update the **CreateModal.cshtml** and **CreateModal.cshtml.cs** files as below:
 
 **CreateModal.cshtml**
 
@@ -419,7 +419,7 @@ First, create **CreateModal** razor page and update the **CreateModal.cshtml** a
 </abp-dynamic-form>
 ```
 
-* We've used `abp-dynamic-form` tag-helper and pass it a `Book` model, this tag helper will simply create form contents (inputs, select boxes etc.) behalf of us.
+* We've used `abp-dynamic-form` tag-helper and passed it a `Book` model, this tag helper will simply create form contents (inputs, select boxes etc.) on behalf of us.
 
 * **CreateModal.cshtml.cs**
 
@@ -455,9 +455,9 @@ public class CreateModalModel : BookStorePageModel
 }
 ```
 
-* In this file, we simply define **CreateBookDto** as a bind property and we'll use this classes' properties in the form. Thanks to the `abp-dynamic-form` tag-helper we don't need to define all of these form elements one by one, it will generate behalf of us.
+* In this file, we simply define **CreateBookDto** as a bind property and we'll use this class's properties in the form. Thanks to the `abp-dynamic-form` tag-helper we don't need to define all of these form elements one by one, it will generate on behalf of us.
 
-We can create **EditModal** razor page and update the **EditModal.cshtml** and **EditModal.cshtml.cs** files as below:
+We can create an **EditModal** razor page and update the **EditModal.cshtml** and **EditModal.cshtml.cs** files as below:
 
 **EditModal.cshtml**
 
@@ -485,9 +485,9 @@ We can create **EditModal** razor page and update the **EditModal.cshtml** and *
 </form>
 ```
 
-* Here, we didn't use the `abp-dynamic-form` tag-helper and added all necessary form elements to our form one by one.
+* Here, we didn't use the `abp-dynamic-form` tag-helper and added all the necessary form elements to our form one by one.
 
-* As you may notice, we've set the input type as **hidden** for the **ConcurrencyStamp** input, because the end-user should not see this value.
+* As you may have noticed, we've set the input type as **hidden** for the **ConcurrencyStamp** input, because the end-user should not see this value.
 
 > Instead of doing it like that, we could create a view model class and use the `[HiddenInput]` data attribute for the **ConcurrencyStamp** property and use the `abp-dynamic-form` tag-helper. But to simplify the article I didn't want to do that, if you want you can create a view model and define the necessary data attributes for properties.
 
@@ -526,7 +526,7 @@ public class EditModalModel : BookStorePageModel
 
 Lastly, we can define the necessary mapping configurations and run the application to see the result.
 
-Open the `BookStoreWebAutoMapperProfile.cs` and update the content as below:
+Open the `BookStoreWebAutoMapperProfile.cs` class and update the content as below:
 
 ```csharp
 public class BookStoreWebAutoMapperProfile : Profile
@@ -538,7 +538,7 @@ public class BookStoreWebAutoMapperProfile : Profile
 }
 ```
 
-Then we can run the application, navigates to the **/Books** endpoint and see the result.
+Then we can run the application, navigate to the **/Books** endpoint and see the result.
 
 ![](concurrency-mismatch.gif)
 
@@ -546,4 +546,4 @@ Then we can run the application, navigates to the **/Books** endpoint and see th
 
 * After the first user updated the record, the second user tries to update the same record without getting the last state of the record. And therefore `AbpDbConcurrencyException` is thrown because **ConcurrencyStamp** values are different from each other.
 
-* The second user should close and re-open the model to get the last state of the record and then he/she can make changes to the current record.
+* The second user should close and re-open the model to get the last state of the record and then they can make changes to the current record.
