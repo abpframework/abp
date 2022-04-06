@@ -39,11 +39,6 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
         await DeleteManyAsync(tokens, autoSave, GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictToken>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
-    {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))).LongCountAsync(GetCancellationToken(cancellationToken));
-    }
-
     public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, CancellationToken cancellationToken = default)
     {
         return await Queryable.Where((await GetMongoQueryableAsync(cancellationToken)), x => x.Subject == subject && x.ApplicationId == client)
@@ -96,11 +91,6 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictToken>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)), state).As<IMongoQueryable<TResult>>().FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
-    }
-
     public virtual async Task<List<OpenIddictToken>> ListAsync(int? count, int? offset, CancellationToken cancellationToken = default)
     {
         return await Queryable.OrderBy((await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))), x => x.Id)
@@ -108,11 +98,6 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
             .TakeIf<OpenIddictToken, IQueryable<OpenIddictToken>>(count.HasValue, count.Value)
             .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictToken>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)), state).As<IMongoQueryable<TResult>>().ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public async Task<List<OpenIddictToken>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default)

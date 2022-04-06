@@ -17,13 +17,6 @@ public class MongoOpenIddictApplicationRepository : MongoDbRepository<OpenIddict
     {
     }
 
-    public async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictApplication>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetMongoQueryableAsync(cancellationToken))
-            .As<IMongoQueryable<OpenIddictApplication>>()
-            .LongCountAsync(GetCancellationToken(cancellationToken));
-    }
-
     public async Task<OpenIddictApplication> FindByClientIdAsync(string clientId, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
@@ -53,10 +46,5 @@ public class MongoOpenIddictApplicationRepository : MongoDbRepository<OpenIddict
             .TakeIf<OpenIddictApplication, IQueryable<OpenIddictApplication>>(count.HasValue, count.Value)
             .As<IMongoQueryable<OpenIddictApplication>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    public async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictApplication>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetMongoQueryableAsync(cancellationToken), state).As<IMongoQueryable<TResult>>().ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

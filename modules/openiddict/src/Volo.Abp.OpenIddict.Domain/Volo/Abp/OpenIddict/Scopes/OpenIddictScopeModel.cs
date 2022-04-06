@@ -1,18 +1,12 @@
 ﻿using System;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.OpenIddict.Scopes;
 
-public class OpenIddictScope : FullAuditedAggregateRoot<Guid>
+[Serializable, IgnoreMultiTenancy]
+public class OpenIddictScopeModel
 {
-    public OpenIddictScope()
-    {
-    }
-
-    public OpenIddictScope(Guid id)
-        : base(id)
-    {
-    }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Gets or sets the public description associated with the current scope.

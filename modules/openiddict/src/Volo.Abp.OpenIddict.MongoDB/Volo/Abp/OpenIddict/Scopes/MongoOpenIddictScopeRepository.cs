@@ -17,11 +17,6 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
     {
     }
 
-    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictScope>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetMongoQueryableAsync(cancellationToken)).As<IMongoQueryable<OpenIddictScope>>().LongCountAsync(GetCancellationToken(cancellationToken));
-    }
-
     public virtual async Task<OpenIddictScope> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
@@ -46,11 +41,6 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
             .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictScope>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)), state).As<IMongoQueryable<TResult>>().FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
-    }
-
     public virtual async Task<List<OpenIddictScope>> ListAsync(int? count, int? offset, CancellationToken cancellationToken = default)
     {
         return await Queryable.OrderBy((await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))), x => x.Id)
@@ -58,10 +48,5 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
             .TakeIf<OpenIddictScope, IQueryable<OpenIddictScope>>(count.HasValue, count.Value)
             .As<IMongoQueryable<OpenIddictScope>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictScope>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)), state).As<IMongoQueryable<TResult>>().ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

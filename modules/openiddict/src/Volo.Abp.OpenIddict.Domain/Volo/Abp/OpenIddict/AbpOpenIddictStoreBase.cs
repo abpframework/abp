@@ -4,10 +4,10 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Guids;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.OpenIddict;
@@ -19,13 +19,13 @@ public abstract class AbpOpenIddictStoreBase<TRepository>
 
     protected TRepository Repository { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
-    protected IMemoryCache Cache { get; }
+    protected IGuidGenerator GuidGenerator { get; }
 
-    protected AbpOpenIddictStoreBase(TRepository repository, IUnitOfWorkManager unitOfWorkManager, IMemoryCache cache)
+    protected AbpOpenIddictStoreBase(TRepository repository, IUnitOfWorkManager unitOfWorkManager, IGuidGenerator guidGenerator)
     {
         Repository = repository;
         UnitOfWorkManager = unitOfWorkManager;
-        Cache = cache;
+        GuidGenerator = guidGenerator;
 
         Logger = NullLogger<AbpOpenIddictStoreBase<TRepository>>.Instance;
     }
@@ -39,6 +39,8 @@ public abstract class AbpOpenIddictStoreBase<TRepository>
     {
         return identifier.ToString("D");
     }
+
+
 
     protected virtual string WriteStream(Action<Utf8JsonWriter> action)
     {

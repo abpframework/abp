@@ -1,8 +1,6 @@
 ﻿using System.Text;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OpenIddict.Abstractions;
 using OpenIddict.Demo.Server.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.Account;

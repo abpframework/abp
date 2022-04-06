@@ -38,11 +38,6 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
         await DeleteManyAsync(tokens, autoSave, GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictToken>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
-    {
-        return await (await GetQueryableAsync()).LongCountAsync(GetCancellationToken(cancellationToken));
-    }
-
     public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync()).Where(x => x.Subject == subject && x.ApplicationId == client).ToListAsync(GetCancellationToken(cancellationToken));
@@ -83,11 +78,6 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
         return await (await GetQueryableAsync()).Where(x => x.Subject == subject).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictToken>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetQueryableAsync(), state).FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
-    }
-
     public virtual async Task<List<OpenIddictToken>> ListAsync(int? count, int? offset, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync())
@@ -95,11 +85,6 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
             .SkipIf<OpenIddictToken, IQueryable<OpenIddictToken>>(offset.HasValue, offset.Value)
             .TakeIf<OpenIddictToken, IQueryable<OpenIddictToken>>(count.HasValue, count.Value)
             .ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictToken>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetQueryableAsync(), state).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public async Task<List<OpenIddictToken>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default)

@@ -19,11 +19,6 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
     {
     }
 
-    public virtual async Task<long> CountAsync<TResult>(Func<IQueryable<OpenIddictAuthorization>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetMongoQueryableAsync(cancellationToken)).As<IMongoQueryable<OpenIddictAuthorization>>().LongCountAsync(GetCancellationToken(cancellationToken));
-    }
-
     public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
@@ -60,11 +55,6 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
         return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))).Where(x => x.Subject == subject).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)), state).As<IMongoQueryable<TResult>>().FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
-    }
-
     public virtual async Task<List<OpenIddictAuthorization>> ListAsync(int? count, int? offset, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
@@ -72,11 +62,6 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
             .SkipIf<OpenIddictAuthorization, IQueryable<OpenIddictAuthorization>>(offset.HasValue, offset.Value)
             .TakeIf<OpenIddictAuthorization, IQueryable<OpenIddictAuthorization>>(count.HasValue, count.Value)
             .As<IMongoQueryable<OpenIddictAuthorization>>().ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    public virtual async Task<List<TResult>> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorization>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken = default)
-    {
-        return await query(await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)), state).As<IMongoQueryable<TResult>>().ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<OpenIddictAuthorization>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default)

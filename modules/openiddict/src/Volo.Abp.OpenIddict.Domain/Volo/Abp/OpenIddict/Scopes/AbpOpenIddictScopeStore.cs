@@ -7,20 +7,19 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using OpenIddict.Abstractions;
-using Volo.Abp.DependencyInjection;
+using Volo.Abp.Guids;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.OpenIddict.Scopes;
 
-public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRepository>, IOpenIddictScopeStore<OpenIddictScope>, IScopedDependency
+public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRepository>, IOpenIddictScopeStore<OpenIddictScopeModel>
 {
-   public AbpOpenIddictScopeStore(
+    public AbpOpenIddictScopeStore(
         IOpenIddictScopeRepository repository,
         IUnitOfWorkManager unitOfWorkManager,
-        IMemoryCache cache)
-        : base(repository, unitOfWorkManager, cache)
+        IGuidGenerator guidGenerator)
+        : base(repository, unitOfWorkManager, guidGenerator)
     {
 
     }
@@ -30,42 +29,40 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
        return await Repository.GetCountAsync(cancellationToken);
    }
 
-   public virtual async ValueTask<long> CountAsync<TResult>(Func<IQueryable<OpenIddictScope>, IQueryable<TResult>> query, CancellationToken cancellationToken)
+   public virtual ValueTask<long> CountAsync<TResult>(Func<IQueryable<OpenIddictScopeModel>, IQueryable<TResult>> query, CancellationToken cancellationToken)
    {
-       Check.NotNull(query, nameof(query));
-
-       return await Repository.CountAsync(query, cancellationToken);
+       throw new NotSupportedException();
    }
 
-   public virtual async ValueTask CreateAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+   public virtual async ValueTask CreateAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
    {
        Check.NotNull(scope, nameof(scope));
 
-       await Repository.InsertAsync(scope, autoSave: true, cancellationToken: cancellationToken);
+       await Repository.InsertAsync(scope.ToEntity(), autoSave: true, cancellationToken: cancellationToken);
    }
 
-   public virtual async ValueTask DeleteAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+   public virtual async ValueTask DeleteAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
    {
        Check.NotNull(scope, nameof(scope));
 
-       await Repository.DeleteAsync(scope, autoSave: true, cancellationToken: cancellationToken);
+       await Repository.DeleteAsync(scope.Id, autoSave: true, cancellationToken: cancellationToken);
    }
 
-   public virtual async ValueTask<OpenIddictScope> FindByIdAsync(string identifier, CancellationToken cancellationToken)
+   public virtual async ValueTask<OpenIddictScopeModel> FindByIdAsync(string identifier, CancellationToken cancellationToken)
    {
        Check.NotNullOrEmpty(identifier, nameof(identifier));
 
-       return await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), cancellationToken);
+       return (await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), cancellationToken)).ToModel();
    }
 
-    public virtual async ValueTask<OpenIddictScope> FindByNameAsync(string name, CancellationToken cancellationToken)
+    public virtual async ValueTask<OpenIddictScopeModel> FindByNameAsync(string name, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(name, nameof(name));
 
-        return await Repository.FindByNameAsync(name, cancellationToken);
+        return (await Repository.FindByNameAsync(name, cancellationToken)).ToModel();
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictScope> FindByNamesAsync(ImmutableArray<string> names, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictScopeModel> FindByNamesAsync(ImmutableArray<string> names, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(names, nameof(names));
         foreach (var name in names)
@@ -76,38 +73,38 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         var scopes = await Repository.FindByNamesAsync(names.ToArray(), cancellationToken);
         foreach (var scope in scopes)
         {
-            yield return scope;
+            yield return scope.ToModel();
         }
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictScope> FindByResourceAsync(string resource, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictScopeModel> FindByResourceAsync(string resource, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(resource, nameof(resource));
 
         var scopes = await Repository.FindByResourceAsync(resource, cancellationToken);
         foreach (var scope in scopes)
         {
-            var resources = await GetResourcesAsync(scope, cancellationToken);
+            var resources = await GetResourcesAsync(scope.ToModel(), cancellationToken);
             if (resources.Contains(resource, StringComparer.Ordinal))
             {
-                yield return scope;
+                yield return scope.ToModel();
             }
         }
     }
 
-    public virtual async ValueTask<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictScope>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
+    public virtual ValueTask<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictScopeModel>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
     {
-        return await Repository.GetAsync(query, state, cancellationToken);
+        throw new NotSupportedException();
     }
 
-    public virtual  ValueTask<string> GetDescriptionAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+    public virtual  ValueTask<string> GetDescriptionAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
         return new ValueTask<string>(scope.Description);
     }
 
-    public virtual ValueTask<ImmutableDictionary<CultureInfo, string>> GetDescriptionsAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+    public virtual ValueTask<ImmutableDictionary<CultureInfo, string>> GetDescriptionsAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -116,15 +113,8 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
             return new ValueTask<ImmutableDictionary<CultureInfo, string>>(ImmutableDictionary.Create<CultureInfo, string>());
         }
 
-        // Note: parsing the stringified descriptions is an expensive operation.
-        // To mitigate that, the resulting object is stored in the memory cache.
-        var key = string.Concat("42891062-8f69-43ba-9111-db7e8ded2553", "\x1e", scope.Descriptions);
-        var descriptions = Cache.GetOrCreate(key, entry =>
+        using (var document = JsonDocument.Parse(scope.Descriptions))
         {
-            entry.SetPriority(CacheItemPriority.High)
-                .SetSlidingExpiration(TimeSpan.FromMinutes(1));
-
-            using var document = JsonDocument.Parse(scope.Descriptions);
             var builder = ImmutableDictionary.CreateBuilder<CultureInfo, string>();
 
             foreach (var property in document.RootElement.EnumerateObject())
@@ -138,20 +128,18 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
                 builder[CultureInfo.GetCultureInfo(property.Name)] = value;
             }
 
-            return builder.ToImmutable();
-        });
-
-        return new ValueTask<ImmutableDictionary<CultureInfo, string>>(descriptions);
+            return new ValueTask<ImmutableDictionary<CultureInfo, string>>(builder.ToImmutable());
+        }
     }
 
-    public virtual ValueTask<string> GetDisplayNameAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+    public virtual ValueTask<string> GetDisplayNameAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
         return new ValueTask<string>(scope.DisplayName);
     }
 
-    public virtual ValueTask<ImmutableDictionary<CultureInfo, string>> GetDisplayNamesAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+    public virtual ValueTask<ImmutableDictionary<CultureInfo, string>> GetDisplayNamesAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -160,15 +148,8 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
             return new ValueTask<ImmutableDictionary<CultureInfo, string>>(ImmutableDictionary.Create<CultureInfo, string>());
         }
 
-        // Note: parsing the stringified display names is an expensive operation.
-        // To mitigate that, the resulting object is stored in the memory cache.
-        var key = string.Concat("e17d437b-bdd2-43f3-974e-46d524f4bae1", "\x1e", scope.DisplayNames);
-        var names = Cache.GetOrCreate(key, entry =>
+        using (var document = JsonDocument.Parse(scope.DisplayNames))
         {
-            entry.SetPriority(CacheItemPriority.High)
-                .SetSlidingExpiration(TimeSpan.FromMinutes(1));
-
-            using var document = JsonDocument.Parse(scope.DisplayNames);
             var builder = ImmutableDictionary.CreateBuilder<CultureInfo, string>();
 
             foreach (var property in document.RootElement.EnumerateObject())
@@ -182,27 +163,25 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
                 builder[CultureInfo.GetCultureInfo(property.Name)] = value;
             }
 
-            return builder.ToImmutable();
-        });
-
-        return new ValueTask<ImmutableDictionary<CultureInfo, string>>(names);
+            return new ValueTask<ImmutableDictionary<CultureInfo, string>>(builder.ToImmutable());
+        }
     }
 
-    public virtual ValueTask<string> GetIdAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+    public virtual ValueTask<string> GetIdAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
         return new ValueTask<string>(ConvertIdentifierToString(scope.Id));
     }
 
-    public virtual ValueTask<string> GetNameAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+    public virtual ValueTask<string> GetNameAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
         return new ValueTask<string>(scope.Name);
     }
 
-    public virtual ValueTask<ImmutableDictionary<string, JsonElement>> GetPropertiesAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+    public virtual ValueTask<ImmutableDictionary<string, JsonElement>> GetPropertiesAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -211,15 +190,8 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
             return new ValueTask<ImmutableDictionary<string, JsonElement>>(ImmutableDictionary.Create<string, JsonElement>());
         }
 
-        // Note: parsing the stringified properties is an expensive operation.
-        // To mitigate that, the resulting object is stored in the memory cache.
-        var key = string.Concat("78d8dfdd-3870-442e-b62e-dc9bf6eaeff7", "\x1e", scope.Properties);
-        var properties = Cache.GetOrCreate(key, entry =>
+        using (var document = JsonDocument.Parse(scope.Properties))
         {
-            entry.SetPriority(CacheItemPriority.High)
-                .SetSlidingExpiration(TimeSpan.FromMinutes(1));
-
-            using var document = JsonDocument.Parse(scope.Properties);
             var builder = ImmutableDictionary.CreateBuilder<string, JsonElement>();
 
             foreach (var property in document.RootElement.EnumerateObject())
@@ -227,13 +199,11 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
                 builder[property.Name] = property.Value.Clone();
             }
 
-            return builder.ToImmutable();
-        });
-
-        return new ValueTask<ImmutableDictionary<string, JsonElement>>(properties);
+            return new ValueTask<ImmutableDictionary<string, JsonElement>>(builder.ToImmutable());
+        }
     }
 
-    public virtual ValueTask<ImmutableArray<string>> GetResourcesAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+    public virtual ValueTask<ImmutableArray<string>> GetResourcesAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -242,15 +212,8 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
             return new ValueTask<ImmutableArray<string>>(ImmutableArray.Create<string>());
         }
 
-        // Note: parsing the stringified resources is an expensive operation.
-        // To mitigate that, the resulting array is stored in the memory cache.
-        var key = string.Concat("b6148250-aede-4fb9-a621-07c9bcf238c3", "\x1e", scope.Resources);
-        var resources = Cache.GetOrCreate(key, entry =>
+        using (var document = JsonDocument.Parse(scope.Resources))
         {
-            entry.SetPriority(CacheItemPriority.High)
-                .SetSlidingExpiration(TimeSpan.FromMinutes(1));
-
-            using var document = JsonDocument.Parse(scope.Resources);
             var builder = ImmutableArray.CreateBuilder<string>(document.RootElement.GetArrayLength());
 
             foreach (var element in document.RootElement.EnumerateArray())
@@ -264,45 +227,33 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
                 builder.Add(value);
             }
 
-            return builder.ToImmutable();
-        });
-
-        return new ValueTask<ImmutableArray<string>>(resources);
+            return new ValueTask<ImmutableArray<string>>(builder.ToImmutable());
+        }
     }
 
-    public virtual ValueTask<OpenIddictScope> InstantiateAsync(CancellationToken cancellationToken)
+    public virtual ValueTask<OpenIddictScopeModel> InstantiateAsync(CancellationToken cancellationToken)
     {
-        try
+        return new ValueTask<OpenIddictScopeModel>(new OpenIddictScopeModel
         {
-            return new ValueTask<OpenIddictScope>(Activator.CreateInstance<OpenIddictScope>());
-        }
-        catch (MemberAccessException exception)
-        {
-            return new ValueTask<OpenIddictScope>(Task.FromException<OpenIddictScope>(exception));
-        }
+            Id = GuidGenerator.Create()
+        });
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictScope> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictScopeModel> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var scopes = await Repository.ListAsync(count, offset, cancellationToken);
         foreach (var scope in scopes)
         {
-            yield return scope;
+            yield return scope.ToModel();
         }
     }
 
-    public async IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictScope>, TState, IQueryable<TResult>> query, TState state, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictScopeModel>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
     {
-        Check.NotNull(query, nameof(query));
-
-        var scopes = await Repository.ListAsync(query, state, cancellationToken);
-        foreach (var scope in scopes)
-        {
-            yield return scope;
-        }
+        throw new NotSupportedException();
     }
 
-    public virtual ValueTask SetDescriptionAsync(OpenIddictScope scope, string description, CancellationToken cancellationToken)
+    public virtual ValueTask SetDescriptionAsync(OpenIddictScopeModel scope, string description, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -311,7 +262,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         return default;
     }
 
-    public virtual ValueTask SetDescriptionsAsync(OpenIddictScope scope, ImmutableDictionary<CultureInfo, string> descriptions, CancellationToken cancellationToken)
+    public virtual ValueTask SetDescriptionsAsync(OpenIddictScopeModel scope, ImmutableDictionary<CultureInfo, string> descriptions, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -335,7 +286,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         return default;
     }
 
-    public virtual ValueTask SetDisplayNameAsync(OpenIddictScope scope, string name, CancellationToken cancellationToken)
+    public virtual ValueTask SetDisplayNameAsync(OpenIddictScopeModel scope, string name, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -344,7 +295,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         return default;
     }
 
-    public virtual ValueTask SetDisplayNamesAsync(OpenIddictScope scope, ImmutableDictionary<CultureInfo, string> names, CancellationToken cancellationToken)
+    public virtual ValueTask SetDisplayNamesAsync(OpenIddictScopeModel scope, ImmutableDictionary<CultureInfo, string> names, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -368,7 +319,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         return default;
     }
 
-    public virtual ValueTask SetNameAsync(OpenIddictScope scope, string name, CancellationToken cancellationToken)
+    public virtual ValueTask SetNameAsync(OpenIddictScopeModel scope, string name, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -377,7 +328,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         return default;
     }
 
-    public virtual ValueTask SetPropertiesAsync(OpenIddictScope scope, ImmutableDictionary<string, JsonElement> properties, CancellationToken cancellationToken)
+    public virtual ValueTask SetPropertiesAsync(OpenIddictScopeModel scope, ImmutableDictionary<string, JsonElement> properties, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -401,7 +352,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         return default;
     }
 
-    public virtual ValueTask SetResourcesAsync(OpenIddictScope scope, ImmutableArray<string> resources, CancellationToken cancellationToken)
+    public virtual ValueTask SetResourcesAsync(OpenIddictScopeModel scope, ImmutableArray<string> resources, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
@@ -424,10 +375,12 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         return default;
     }
 
-    public virtual async ValueTask UpdateAsync(OpenIddictScope scope, CancellationToken cancellationToken)
+    public virtual async ValueTask UpdateAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
-        await Repository.UpdateAsync(scope, autoSave: true, cancellationToken: cancellationToken);
+        var entity = await Repository.GetAsync(scope.Id, cancellationToken: cancellationToken);
+
+        await Repository.UpdateAsync(scope.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
     }
 }

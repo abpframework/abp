@@ -1,18 +1,12 @@
 ﻿using System;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.OpenIddict.Authorizations;
 
-public class OpenIddictAuthorization : FullAuditedAggregateRoot<Guid>
+[Serializable, IgnoreMultiTenancy]
+public class OpenIddictAuthorizationModel
 {
-    public OpenIddictAuthorization()
-    {
-    }
-
-    public OpenIddictAuthorization(Guid id)
-        : base(id)
-    {
-    }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Gets or sets the application associated with the current authorization.

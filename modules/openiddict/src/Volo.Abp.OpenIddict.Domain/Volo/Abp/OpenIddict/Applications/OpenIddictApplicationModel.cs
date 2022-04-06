@@ -1,18 +1,12 @@
 ﻿using System;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.OpenIddict.Applications;
 
-public class OpenIddictApplication : FullAuditedAggregateRoot<Guid>
+[Serializable, IgnoreMultiTenancy]
+public class OpenIddictApplicationModel
 {
-    public OpenIddictApplication()
-    {
-    }
-
-    public OpenIddictApplication(Guid id)
-        : base(id)
-    {
-    }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Gets or sets the client identifier associated with the current application.

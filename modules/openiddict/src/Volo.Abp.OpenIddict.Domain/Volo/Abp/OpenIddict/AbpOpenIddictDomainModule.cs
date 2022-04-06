@@ -2,9 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
-using OpenIddict.Core;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain;
+using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.Applications;
@@ -19,7 +20,9 @@ namespace Volo.Abp.OpenIddict;
 [DependsOn(
     typeof(AbpDddDomainModule),
     typeof(AbpIdentityDomainModule),
-    typeof(AbpOpenIddictDomainSharedModule)
+    typeof(AbpOpenIddictDomainSharedModule),
+    typeof(AbpCachingModule),
+    typeof(AbpGuidsModule)
 )]
 public class AbpOpenIddictDomainModule : AbpModule
 {
@@ -65,12 +68,16 @@ public class AbpOpenIddictDomainModule : AbpModule
             .AddCore(builder =>
             {
                 builder
-                    .SetDefaultApplicationEntity<OpenIddictApplication>()
-                    .SetDefaultAuthorizationEntity<OpenIddictAuthorization>()
-                    .SetDefaultScopeEntity<OpenIddictScope>()
-                    .SetDefaultTokenEntity<OpenIddictToken>();
+                    .SetDefaultApplicationEntity<OpenIddictApplicationModel>()
+                    .SetDefaultAuthorizationEntity<OpenIddictAuthorizationModel>()
+                    .SetDefaultScopeEntity<OpenIddictScopeModel>()
+                    .SetDefaultTokenEntity<OpenIddictTokenModel>();
 
-                builder.DisableEntityCaching();
+                builder
+                    .AddApplicationStore<AbpOpenIddictApplicationStore>()
+                    .AddAuthorizationStore<AbpOpenIddictAuthorizationStore>()
+                    .AddScopeStore<AbpOpenIddictScopeStore>()
+                    .AddTokenStore<AbpOpenIddictTokenStore>();
 
                 services.ExecutePreConfiguredActions(builder);
             })
@@ -121,14 +128,6 @@ public class AbpOpenIddictDomainModule : AbpModule
 
                 services.ExecutePreConfiguredActions(builder);
             });
-
-        services.Configure<OpenIddictCoreOptions>(options =>
-        {
-            options.DefaultApplicationType = typeof(OpenIddictApplication);
-            options.DefaultAuthorizationType = typeof(OpenIddictAuthorization);
-            options.DefaultScopeType = typeof(OpenIddictScope);
-            options.DefaultTokenType = typeof(OpenIddictToken);
-        });
 
         services.ExecutePreConfiguredActions(openIddictBuilder);
     }
