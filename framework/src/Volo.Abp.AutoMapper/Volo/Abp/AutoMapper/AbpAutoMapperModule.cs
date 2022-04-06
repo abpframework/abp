@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using AutoMapper.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
@@ -49,7 +50,7 @@ public class AbpAutoMapperModule : AbpModule
             {
                 foreach (var profileType in options.ValidatingProfiles)
                 {
-                    config.AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
+                    config.Internal().AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
                 }
             }
 
