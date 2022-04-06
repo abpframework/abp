@@ -1,5 +1,5 @@
 {
-  "version": "5.2.0-rc.2",
+  "version": "5.2.0",
   "name": "@abp/vue",
   "publishConfig": {
     "access": "public"
