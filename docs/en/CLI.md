@@ -18,13 +18,13 @@ dotnet tool update -g Volo.Abp.Cli
 
 ## Global Options
 
-While each command may have a set of options, there are some global options those can be used with any command;
+While each command may have a set of options, there are some global options that can be used with any command;
 
 * `--skip-cli-version-check`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
 
 ## Commands
 
-Here, the list of all available commands before explaining their details:
+Here, is the list of all available commands before explaining their details:
 
 * **`help`**: Shows help on the usage of the ABP CLI.
 * **`new`**: Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
