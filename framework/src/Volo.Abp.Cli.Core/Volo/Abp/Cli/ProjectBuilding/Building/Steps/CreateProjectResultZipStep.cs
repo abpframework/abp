@@ -27,7 +27,6 @@ public class CreateProjectResultZipStep : ProjectBuildPipelineStep
                 }
             }
 
-            memoryStream.Position = 0;
             return memoryStream.ToArray();
         }
     }
