@@ -12,11 +12,24 @@ public class SolutionFileModifier : ITransientDependency
 {
     public async Task RemoveProjectFromSolutionFileAsync(string solutionFile, string projectName)
     {
-        var solutionFileContent = File.ReadAllText(solutionFile);
-        solutionFileContent.NormalizeLineEndings();
-        var lines = solutionFileContent.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
-        File.WriteAllText(solutionFile,
-            RemoveProject(lines.ToList(), projectName).JoinAsString(Environment.NewLine));
+        using (var fs = File.Open(solutionFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+        using (var sr = new StreamReader(fs, Encoding.Default, true))
+        {
+            var solutionFileContent = await sr.ReadToEndAsync();
+            solutionFileContent.NormalizeLineEndings();
+
+            var lines = solutionFileContent.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
+            var updatedContent = RemoveProject(lines.ToList(), projectName).JoinAsString(Environment.NewLine);
+
+            fs.Seek(0, SeekOrigin.Begin);
+            fs.SetLength(0);
+
+            using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
+            {
+                sw.Write(updatedContent);
+                sw.Flush();
+            }
+        }
     }
 
     public async Task AddModuleToSolutionFileAsync(ModuleWithMastersInfo module, string solutionFile)
@@ -64,7 +77,7 @@ public class SolutionFileModifier : ITransientDependency
 
         lines.InsertAfter(l => l.Contains("GlobalSection") && l.Contains("NestedProjects"), newPreSolutionLine);
 
-        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines));
+        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines), Encoding.UTF8);
     }
 
     private List<string> RemoveProject(List<string> solutionFileLines, string projectName)
@@ -174,7 +187,7 @@ public class SolutionFileModifier : ITransientDependency
             lines.InsertAfter(l => l.Contains("GlobalSection") && l.Contains("NestedProjects"), newPreSolutionLine);
         }
 
-        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines));
+        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines), Encoding.UTF8);
 
         if (module.MasterModuleInfos != null)
         {
@@ -219,7 +232,7 @@ public class SolutionFileModifier : ITransientDependency
                 .Split(" ").Last();
         }
 
-        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines));
+        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines), Encoding.UTF8);
 
         return folderId;
     }
