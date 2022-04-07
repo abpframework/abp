@@ -46,7 +46,7 @@ namespace OpenIddict.Demo.Server;
 
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
-    typeof(AbpAccountWebModule),
+    typeof(AbpAccountWebOpenIddictModule),
 
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpTenantManagementHttpApiModule),

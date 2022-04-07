@@ -230,6 +230,7 @@ $projects = (
     "modules/account/src/Volo.Abp.Account.HttpApi",
     "modules/account/src/Volo.Abp.Account.Web",
     "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
+    "modules/account/src/Volo.Abp.Account.Web.OpenIddict",
     "modules/account/src/Volo.Abp.Account.Blazor",
     "modules/account/src/Volo.Abp.Account.Installer",
     "studio/source-codes/Volo.Abp.Account.SourceCode",

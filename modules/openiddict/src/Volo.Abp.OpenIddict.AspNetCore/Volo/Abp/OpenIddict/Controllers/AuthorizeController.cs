@@ -232,5 +232,4 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         // to redirect the user agent to the client application using the appropriate response_mode.
         return Task.FromResult<IActionResult>(Forbid(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme));
     }
-
 }
