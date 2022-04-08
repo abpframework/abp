@@ -83,15 +83,18 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         sb.AppendLine("Options:");
         sb.AppendLine("");
         sb.AppendLine("-m|--module <module-name>                         (default: 'app') The name of the backend module you wish to generate proxies for.");
-        sb.AppendLine("-t|--type <generate-type>                         The name of generate type (csharp, js, ng).");
         sb.AppendLine("-wd|--working-directory <directory-path>          Execution directory.");
         sb.AppendLine("-u|--url <url>                                    API definition URL from.");
-        sb.AppendLine("-a|--api-name <module-name>                       (default: 'default') The name of the API endpoint defined in the /src/environments/environment.ts.");
-        sb.AppendLine("-s|--source <source-name>                         (default: 'defaultProject') Angular project name to resolve the root namespace & API definition URL from.");
-        sb.AppendLine("-o|--output <output-name>                         JavaScript file path or folder to place generated code in.");
-        sb.AppendLine("-p|--prompt                                       Asks the options from the command line prompt (for the missing options)");
-        sb.AppendLine("--target <target-name>                            (default: 'defaultProject') Angular project name to place generated code in.");
-        sb.AppendLine("--folder <folder-name>                            (default: 'ClientProxies') Folder name to place generated CSharp code in.");
+        sb.AppendLine("-t|--type <generate-type>                         The name of generate type (csharp, js, ng).");
+        sb.AppendLine("  csharp");
+        sb.AppendLine("     --folder <folder-name>                            (default: 'ClientProxies') Folder name to place generated CSharp code in.");
+        sb.AppendLine("  js");
+        sb.AppendLine("     -o|--output <output-name>                         JavaScript file path or folder to place generated code in.");
+        sb.AppendLine("  ng");
+        sb.AppendLine("     -a|--api-name <module-name>                       (default: 'default') The name of the API endpoint defined in the /src/environments/environment.ts.");
+        sb.AppendLine("     -s|--source <source-name>                         (default: 'defaultProject') Angular project name to resolve the root namespace & API definition URL from.");
+        sb.AppendLine("     -p|--prompt                                       Asks the options from the command line prompt (for the missing options)");
+        sb.AppendLine("     --target <target-name>                            (default: 'defaultProject') Angular project name to place generated code in.");
         sb.AppendLine("");
         sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
