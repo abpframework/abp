@@ -1,4 +1,4 @@
-# Concurrency Check in ABP Projects
+# Handle Concurrency with EF Core in an ABP Framework Project with ASP.NET Core MVC 
 
 In this article, we'll create a basic application to demonstrate how "Concurrency Check/Control" can be implemented in an ABP project.
 
