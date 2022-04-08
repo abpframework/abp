@@ -19,10 +19,16 @@
     </CardHeader>
     <CardBody>
         <Field Horizontal>
-            <FieldLabel ColumnSize="ColumnSize.Is1.Is9.WithOffset">@L["Search"]</FieldLabel>
-            <FieldBody ColumnSize="ColumnSize.Is2">
-                    <TextEdit Text="@GetListInput.Filter" TextChanged="@OnSearchTextChanged" />
-             </FieldBody>
+            <FieldBody ColumnSize="ColumnSize.Is2.Is10.WithOffset">
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <Label>@L["Search"]</Label>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Style="margin-left: 0.5rem" Size="Size.Small" Text="@GetListInput.Filter" TextChanged="@OnSearchTextChanged"/>
+                    </Addon>
+                </Addons>
+            </FieldBody>
         </Field>
         @* ************************* DATA GRID ************************* *@
         <AbpExtensibleDataGrid TItem="IdentityUserDto"
@@ -89,11 +95,16 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                                            <TextEdit Role="TextRole.Password" @bind-Text="NewEntity.Password">
-                                                <Feedback>
-                                                    <ValidationError/>
-                                                </Feedback>
-                                            </TextEdit>
+                                            <Addons>
+                                                <Addon AddonType="AddonType.Body">
+                                                    <TextEdit Role="@_passwordTextRole" @bind-Text="NewEntity.Password">
+                                                    </TextEdit>
+                                                </Addon>
+                                                <Addon AddonType="AddonType.End">
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"><Icon Name="IconName.EyeSlash"/></Button>
+                                                </Addon>
+                                            </Addons>
+                                            <ValidationError Style="display: block"/>
                                         </Field>
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
@@ -203,11 +214,16 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                                            <TextEdit Role="TextRole.Password" @bind-Text="EditingEntity.Password">
-                                                <Feedback>
-                                                    <ValidationError/>
-                                                </Feedback>
-                                            </TextEdit>
+                                            <Addons>
+                                                <Addon AddonType="AddonType.Body">
+                                                    <TextEdit Role="@_passwordTextRole" @bind-Text="EditingEntity.Password">
+                                                    </TextEdit>
+                                                </Addon>
+                                                <Addon AddonType="AddonType.End">
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"><Icon Name="IconName.EyeSlash"/></Button>
+                                                </Addon>
+                                            </Addons>
+                                            <ValidationError Style="display: block"/>
                                         </Field>
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">

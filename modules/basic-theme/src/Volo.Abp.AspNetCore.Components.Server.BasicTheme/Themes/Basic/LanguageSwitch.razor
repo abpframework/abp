@@ -7,11 +7,11 @@
 @inject IAbpRequestLocalizationOptionsProvider RequestLocalizationOptionsProvider
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
-    <BarDropdown>
+    <BarDropdown RightAligned="true">
         <BarDropdownToggle>
             @_currentLanguage.DisplayName
         </BarDropdownToggle>
-        <BarDropdownMenu RightAligned="true">
+        <BarDropdownMenu>
             @foreach (var language in _otherLanguages)
             {
                 <BarDropdownItem Clicked="() => ChangeLanguage(language)">@language.DisplayName</BarDropdownItem>
