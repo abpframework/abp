@@ -8,7 +8,7 @@ namespace Volo.CmsKit.GlobalResources;
 
 public class GlobalResource : AuditedAggregateRoot<Guid>, IMultiTenant
 {
-    public virtual string Name { get; }
+    public virtual string Name { get; private set; }
     
     public virtual string Value { get; private set; }
 
