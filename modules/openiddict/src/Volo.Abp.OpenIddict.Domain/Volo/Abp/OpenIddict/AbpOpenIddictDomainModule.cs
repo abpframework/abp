@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
+using OpenIddict.Server;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain;
@@ -12,6 +15,7 @@ using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Authorizations;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.Tokens;
+using Volo.Abp.OpenIddict.WildcardDomains;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 
@@ -47,7 +51,7 @@ public class AbpOpenIddictDomainModule : AbpModule
         }
     }
 
-    private static void AddOpenIddict(IServiceCollection services)
+    private void AddOpenIddict(IServiceCollection services)
     {
         var builderOptions = services.ExecutePreConfiguredActions<AbpOpenIddictOptions>();
 
@@ -124,6 +128,29 @@ public class AbpOpenIddictDomainModule : AbpModule
                     builder
                         .AddDevelopmentEncryptionCertificate()
                         .AddDevelopmentSigningCertificate();
+                }
+
+                var wildcardDomainsOptions = services.ExecutePreConfiguredActions<AbpOpenIddictWildcardDomainOptions>();
+                if (wildcardDomainsOptions.EnableWildcardDomainSupport)
+                {
+                    var preActions = services.GetPreConfigureActions<AbpOpenIddictWildcardDomainOptions>();
+
+                    Configure<AbpOpenIddictWildcardDomainOptions>(options =>
+                    {
+                        preActions.Configure(options);
+                    });
+
+                    builder.RemoveEventHandler(OpenIddictServerHandlers.Authentication.ValidateClientRedirectUri.Descriptor);
+                    builder.AddEventHandler(AbpValidateClientRedirectUri.Descriptor);
+
+                    builder.RemoveEventHandler(OpenIddictServerHandlers.Authentication.ValidateRedirectUriParameter.Descriptor);
+                    builder.AddEventHandler(AbpValidateRedirectUriParameter.Descriptor);
+
+                    builder.RemoveEventHandler(OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri.Descriptor);
+                    builder.AddEventHandler(AbpValidateClientPostLogoutRedirectUri.Descriptor);
+
+                    builder.RemoveEventHandler(OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter.Descriptor);
+                    builder.AddEventHandler(AbpValidatePostLogoutRedirectUriParameter.Descriptor);
                 }
 
                 services.ExecutePreConfiguredActions(builder);

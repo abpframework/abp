@@ -21,6 +21,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.WildcardDomains;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
@@ -83,6 +84,12 @@ public class OpenIddictServerModule : AbpModule
             //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
             builder.AddSigningKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78")));
             builder.AddEncryptionKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80")));
+        });
+
+        PreConfigure<AbpOpenIddictWildcardDomainOptions>(options =>
+        {
+            options.EnableWildcardDomainSupport = true;
+            options.WildcardDomainFormat = "https://{0}.abp.io/signin-oidc";
         });
     }
 
