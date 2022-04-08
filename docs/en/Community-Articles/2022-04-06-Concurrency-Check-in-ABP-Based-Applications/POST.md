@@ -1,10 +1,10 @@
-# Concurrency Check in ABP Based Applications
+# Concurrency Check in ABP Projects
 
-In this article, we'll create a basic application to demonstrate how "Concurrency Check/Control" can be done in an ABP based application.
+In this article, we'll create a basic application to demonstrate how "Concurrency Check/Control" can be implemented in an ABP project.
 
 ## Creating the Solution
 
-For this article, we can create a simple BookStore application and perform CRUD operations. 
+For this article, we will create a simple BookStore application and add CRUD functionality to the pages. Hence we deal with the concurrency situation.
 
 > To keep the article simple and short, we'll only add the **Book** entity and ignore the **Author** part.
 
@@ -41,7 +41,7 @@ public class Book : AuditedAggregateRoot<Guid>
 }
 ```
 
-* To enable **Concurrency Check** for our entities, our entities should implement the `IHasConcurrencyStamp` interface, directly or indirectly.
+* To enable **Concurrency Check** for our entities, our entities should be implemented the `IHasConcurrencyStamp` interface, directly or indirectly.
 
 * [Aggregate Root](https://docs.abp.io/en/abp/5.2/Entities#aggregateroot-class) entity classes already implement the `IHasConcurrencyStamp` interface, so if we inherit our entities from one of these entity classes then we won't need to manually implement the `IHasConcurrencyStamp` interface.
 
