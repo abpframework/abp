@@ -9,5 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="IdentityModel" Version="6.0.0" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.Contracts\Volo.Abp.AspNetCore.Mvc.Contracts.csproj" />
     </ItemGroup>
+
 </Project>

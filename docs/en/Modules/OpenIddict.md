@@ -105,23 +105,6 @@ UserInfoController  -> connect/userinfo
 
 > We will implement the related functions of **device flow** in the PRO module..
 
-#### Identity authentication scheme
-
-The default ABP OpenIddict project includes several authentication schemes.
-
-* `Bearer`: Authenticate tokens issued by yourself(angular)
-* `OpenIddict.Server.AspNetCore`: OpenIddict uses
-* `Identity.Application`: Identity default authenticate scheme
-* `Identity.External`: Identity external login uses
-* `Identity.TwoFactorRememberMe`: Identity TwoFactor login uses
-* `Identity.TwoFactorUserId`: Identity TwoFactor login uses
-
-This can break the multi-tenancy feature, Some OAuth requests may be authenticated by OpenIddict but not by `Identity.Application`.
-
-We have added a top priority `AbpOpenIddictTenantResolveContributor` service. It will try to get tenant info from OpenIddict authentication scheme.
-
-Please note the difference and usage scenarios between `Identity.Application` and `OpenIddict.Server.AspNetCore`.
-
 #### How to control claims in access_token and id_token
 
 You can use the [Claims Principal Factory](https://docs.abp.io/en/abp/latest/Authorization#claims-principal-factory) to add/remove claims to the `ClaimsPrincipal`.

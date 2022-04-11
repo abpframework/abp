@@ -12,12 +12,17 @@ public class AbpDefaultOpenIddictClaimDestinationsProvider : IAbpOpenIddictClaim
 {
     public virtual Task SetDestinationsAsync(AbpOpenIddictClaimDestinationsProviderContext context)
     {
+        var securityStampClaimType = context
+            .ScopeServiceProvider
+            .GetRequiredService<IOptions<IdentityOptions>>().Value
+            .ClaimsIdentity.SecurityStampClaimType;
+
         foreach (var claim in context.Claims)
         {
             if (claim.Type == AbpClaimTypes.TenantId)
             {
                 claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
-                return Task.CompletedTask;
+                continue;
             }
 
             switch (claim.Type)
@@ -26,7 +31,7 @@ public class AbpDefaultOpenIddictClaimDestinationsProvider : IAbpOpenIddictClaim
                     claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);
                     if (context.Principal.HasScope(OpenIddictConstants.Scopes.Profile))
                     {
-                        claim.SetDestinations(OpenIddictConstants.Destinations.IdentityToken);
+                        claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
                     }
                     break;
 
@@ -34,7 +39,7 @@ public class AbpDefaultOpenIddictClaimDestinationsProvider : IAbpOpenIddictClaim
                     claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);
                     if (context.Principal.HasScope(OpenIddictConstants.Scopes.Email))
                     {
-                        claim.SetDestinations(OpenIddictConstants.Destinations.IdentityToken);
+                        claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
                     }
                     break;
 
@@ -42,17 +47,12 @@ public class AbpDefaultOpenIddictClaimDestinationsProvider : IAbpOpenIddictClaim
                     claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);
                     if (context.Principal.HasScope(OpenIddictConstants.Scopes.Roles))
                     {
-                        claim.SetDestinations(OpenIddictConstants.Destinations.IdentityToken);
+                        claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
                     }
                     break;
 
                 default:
                     // Never include the security stamp in the access and identity tokens, as it's a secret value.
-                    var securityStampClaimType = context
-                        .ScopeServiceProvider
-                        .GetRequiredService<IOptions<IdentityOptions>>().Value
-                        .ClaimsIdentity.SecurityStampClaimType;
-
                     if (claim.Type != securityStampClaimType)
                     {
                         claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);

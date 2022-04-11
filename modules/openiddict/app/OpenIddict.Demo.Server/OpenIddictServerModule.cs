@@ -1,7 +1,9 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Demo.Server.EntityFrameworkCore;
+using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -89,12 +91,33 @@ public class OpenIddictServerModule : AbpModule
         PreConfigure<AbpOpenIddictWildcardDomainOptions>(options =>
         {
             options.EnableWildcardDomainSupport = true;
-            options.WildcardDomainFormat = "https://{0}.abp.io/signin-oidc";
+            options.WildcardDomainsFormat.Add("https://{0}.abp.io/signin-oidc");
+        });
+
+        PreConfigure<OpenIddictBuilder>(builder =>
+        {
+            builder.AddValidation(options =>
+            {
+                options.AddAudiences("AbpAPIResource");
+
+                options.UseLocalServer();
+
+                options.UseAspNetCore();
+            });
         });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        // This is work for the OpenIddictServerBuilder.AddValidation()
+        context.Services.ConfigureApplicationCookie(options =>
+        {
+            options.ForwardDefaultSelector = ctx => ctx.Request.Path.StartsWithSegments("/api")
+                ? OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme
+                : null;
+        });
+
+
         Configure<AbpOpenIddictOptions>(options =>
         {
             options.AddDevelopmentEncryptionAndSigningCertificate = false;

@@ -65,6 +65,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="3.1.1" />
+        <PackageReference Include="OpenIddict.Validation.ServerIntegration" Version="3.1.1" />
+
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

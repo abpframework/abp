@@ -30,18 +30,19 @@ builder.Services.Configure<AbpLocalizationOptions>(options =>
     options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
 });
 
-builder.Services.AddAuthentication()
-    .AddJwtBearer(options =>
-    {
-        options.Authority = "https://localhost:44301";
-        options.Audience = "AbpAPIResource";
-
-        options.MapInboundClaims = false;
-
-        // See OpenIddictServerModule`s PreConfigureServices method.
-        options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78"));
-        options.TokenValidationParameters.TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80"));
-    });
+// Use Microsoft.AspNetCore.Authentication.JwtBearer instead of OpenIddict.Validation.AspNetCore
+// builder.Services.AddAuthentication()
+//     .AddJwtBearer(options =>
+//     {
+//         options.Authority = "https://localhost:44301";
+//         options.Audience = "AbpAPIResource";
+//
+//         options.MapInboundClaims = false;
+//
+//         // See OpenIddictServerModule`s PreConfigureServices method.
+//         options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78"));
+//         options.TokenValidationParameters.TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80"));
+//     });
 
 await builder.AddApplicationAsync<OpenIddictServerModule>();
 
@@ -68,7 +69,9 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseCors();
 
-app.UseJwtTokenMiddleware();
+// Use Microsoft.AspNetCore.Authentication.JwtBearer instead of OpenIddict.Validation.AspNetCore
+//app.UseJwtTokenMiddleware();
+
 app.UseAuthentication();
 app.UseMultiTenancy();
 app.UseAuthorization();

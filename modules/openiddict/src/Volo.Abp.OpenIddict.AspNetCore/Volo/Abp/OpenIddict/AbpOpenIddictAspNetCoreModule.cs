@@ -4,7 +4,6 @@ using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.OpenIddict;
 
@@ -32,11 +31,6 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpTenantResolveOptions>(options =>
-        {
-            options.TenantResolvers.Insert(0, new AbpOpenIddictTenantResolveContributor());
-        });
-
         Configure<AbpOpenIddictClaimDestinationsOptions>(options =>
         {
             options.ClaimDestinationsProvider.Add<AbpDefaultOpenIddictClaimDestinationsProvider>();

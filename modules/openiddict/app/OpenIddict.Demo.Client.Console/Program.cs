@@ -1,10 +1,12 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
 using IdentityModel.Client;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 const string email = "admin@abp.io";
 const string password = "1q2w3E*";
 const string server = "https://localhost:44301/";
+const string serverApi = "https://localhost:44301/api/abp/application-configuration";
 const string api = "https://localhost:44303/api/claims";
 const string clientId = "AbpApp";
 const string clientSecret = "1q2w3e*";
@@ -93,6 +95,22 @@ Console.WriteLine("Introspection : {0}", JsonSerializer.Serialize(JsonDocument.P
 }));
 Console.WriteLine();
 
+var serverRequest = new HttpRequestMessage(HttpMethod.Get, serverApi);
+serverRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+var serverResponse = await client.SendAsync(serverRequest);
+serverResponse.EnsureSuccessStatusCode();
+
+var dto = JsonSerializer.Deserialize<ApplicationConfigurationDto>(await serverResponse.Content.ReadAsStringAsync(), new JsonSerializerOptions()
+{
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+});
+Console.WriteLine("Server API response: {0}", JsonSerializer.Serialize(dto.CurrentUser, new JsonSerializerOptions
+{
+    WriteIndented = true
+}));
+
+Console.WriteLine();
 
 var request = new HttpRequestMessage(HttpMethod.Get, api);
 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
@@ -107,6 +125,7 @@ Console.WriteLine("API response: {0}", JsonSerializer.Serialize(JsonDocument.Par
 
 Console.WriteLine();
 
+client = new HttpClient();
 
 tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
 {

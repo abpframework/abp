@@ -26,15 +26,21 @@ public abstract class AbpOpenIddictWildcardDomainBase<THandler, TContext> : IOpe
 
     protected virtual Task<bool> CheckWildcardDomainAsync(string url)
     {
-        var extractResult = FormattedStringValueExtracter.Extract(url, WildcardDomainOptions.WildcardDomainFormat, ignoreCase: true);
-        if (extractResult.IsMatch)
+        foreach (var domainFormat in WildcardDomainOptions.WildcardDomainsFormat)
         {
-            return Task.FromResult(true);
+            var extractResult = FormattedStringValueExtracter.Extract(url, domainFormat, ignoreCase: true);
+            if (extractResult.IsMatch)
+            {
+                return Task.FromResult(true);
+            }
         }
 
-        if (WildcardDomainOptions.WildcardDomainFormat.Replace("{0}.", "").IndexOf(url, StringComparison.OrdinalIgnoreCase) > 1)
+        foreach (var domainFormat in WildcardDomainOptions.WildcardDomainsFormat)
         {
-            return Task.FromResult(true);
+            if (domainFormat.Replace("{0}.", "").Equals(url, StringComparison.OrdinalIgnoreCase))
+            {
+                return Task.FromResult(true);
+            }
         }
 
         return Task.FromResult(false);

@@ -55,20 +55,20 @@ public class OpenIddictSupportedLoginModel : LoginModel
         if (action == "Cancel")
         {
             var request = await GetOpenIddictRequestFromReturnUrlAsync(ReturnUrl);
-            if (request?.ClientId == null)
-            {
-                return Redirect("~/");
-            }
 
             var transaction = HttpContext.Features.Get<OpenIddictServerAspNetCoreFeature>()?.Transaction;
+            if (request?.ClientId != null && transaction != null)
+            {
+                transaction.EndpointType = OpenIddictServerEndpointType.Authorization;
+                transaction.Request = request;
 
-            transaction.EndpointType = OpenIddictServerEndpointType.Authorization;
-            transaction.Request = request;
+                var notification = new OpenIddictServerEvents.ValidateAuthorizationRequestContext(transaction);
+                transaction.SetProperty(typeof(OpenIddictServerEvents.ValidateAuthorizationRequestContext).FullName!, notification);
 
-            var notification = new OpenIddictServerEvents.ValidateAuthorizationRequestContext(transaction);
-            transaction.SetProperty(typeof(OpenIddictServerEvents.ValidateAuthorizationRequestContext).FullName!, notification);
+                return Forbid(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+            }
 
-            return Forbid(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+            return Redirect("~/");
         }
 
         return await base.OnPostAsync(action);
