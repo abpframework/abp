@@ -18,6 +18,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
     private readonly NuGetService _nuGetService;
     private readonly MyGetPackageListFinder _myGetPackageListFinder;
     public ILogger<VoloNugetPackagesVersionUpdater> Logger { get; set; }
+    public static Encoding DefaultEncoding = Encoding.UTF8;
 
     public VoloNugetPackagesVersionUpdater(NuGetService nuGetService, MyGetPackageListFinder myGetPackageListFinder)
     {
@@ -43,25 +44,27 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
             async Task UpdateAsync(string filePath)
             {
                 using (var fs = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-                using (var sr = new StreamReader(fs, Encoding.Default, true))
                 {
-                    var fileContent = await sr.ReadToEndAsync();
-
-                    var updatedContent = await UpdateVoloPackagesAsync(fileContent,
-                        includePreviews,
-                        includeReleaseCandidates,
-                        switchToStable,
-                        latestVersionFromNuget,
-                        latestReleaseCandidateVersionFromNuget,
-                        latestVersionFromMyGet,
-                        version);
-
-                    fs.Seek(0, SeekOrigin.Begin);
-                    fs.SetLength(0);
-                    using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
+                    using (var sr = new StreamReader(fs, Encoding.Default, true))
                     {
-                        sw.Write(updatedContent);
-                        sw.Flush();
+                        var fileContent = await sr.ReadToEndAsync();
+
+                        var updatedContent = await UpdateVoloPackagesAsync(fileContent,
+                            includePreviews,
+                            includeReleaseCandidates,
+                            switchToStable,
+                            latestVersionFromNuget,
+                            latestReleaseCandidateVersionFromNuget,
+                            latestVersionFromMyGet,
+                            version);
+
+                        fs.Seek(0, SeekOrigin.Begin);
+                        fs.SetLength(0);
+                        using (var sw = new StreamWriter(fs, DefaultEncoding))
+                        {
+                            await sw.WriteAsync(updatedContent);
+                            await sw.FlushAsync();
+                        }
                     }
                 }
             }
@@ -83,26 +86,28 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
             var latestVersionFromMyGet = await GetLatestVersionFromMyGet("Volo.Abp.Core");
 
             using (var fs = File.Open(projectPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-            using (var sr = new StreamReader(fs, Encoding.Default, true))
             {
-                var fileContent = await sr.ReadToEndAsync();
-
-                var updatedContent = await UpdateVoloPackagesAsync(fileContent,
-                    includeNightlyPreviews,
-                    includeReleaseCandidates,
-                    switchToStable,
-                    latestVersionFromNuget,
-                    latestReleaseCandidateVersionFromNuget,
-                    latestVersionFromMyGet,
-                    version);
-
-                fs.Seek(0, SeekOrigin.Begin);
-                fs.SetLength(0);
-
-                using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
+                using (var sr = new StreamReader(fs, Encoding.Default, true))
                 {
-                    sw.Write(updatedContent);
-                    sw.Flush();
+                    var fileContent = await sr.ReadToEndAsync();
+
+                    var updatedContent = await UpdateVoloPackagesAsync(fileContent,
+                        includeNightlyPreviews,
+                        includeReleaseCandidates,
+                        switchToStable,
+                        latestVersionFromNuget,
+                        latestReleaseCandidateVersionFromNuget,
+                        latestVersionFromMyGet,
+                        version);
+
+                    fs.Seek(0, SeekOrigin.Begin);
+                    fs.SetLength(0);
+
+                    using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
+                    {
+                        await sw.WriteAsync(updatedContent);
+                        await sw.FlushAsync();
+                    }
                 }
             }
         }
@@ -111,19 +116,21 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
     protected virtual async Task UpdateInternalAsync(string projectPath, bool includeNightlyPreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false)
     {
         using (var fs = File.Open(projectPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-        using (var sr = new StreamReader(fs, Encoding.Default, true))
         {
-            var fileContent = await sr.ReadToEndAsync();
-
-            var updatedContent = await UpdateVoloPackagesAsync(fileContent, includeNightlyPreviews, includeReleaseCandidates, switchToStable);
-
-            fs.Seek(0, SeekOrigin.Begin);
-            fs.SetLength(0);
-
-            using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
+            using (var sr = new StreamReader(fs, Encoding.Default, true))
             {
-                sw.Write(updatedContent);
-                sw.Flush();
+                var fileContent = await sr.ReadToEndAsync();
+
+                var updatedContent = await UpdateVoloPackagesAsync(fileContent, includeNightlyPreviews, includeReleaseCandidates, switchToStable);
+
+                fs.Seek(0, SeekOrigin.Begin);
+                fs.SetLength(0);
+
+                using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
+                {
+                    await sw.WriteAsync(updatedContent);
+                    await sw.FlushAsync();
+                }
             }
         }
     }
@@ -245,7 +252,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
         }
         catch (Exception ex)
         {
-            Logger.LogError("Cannot update Volo.* packages! An error occured while updating the package \"{0}\". Error: {1}", packageId, ex.Message);
+            Logger.LogError("Cannot update Volo.* packages! An error occurred while updating the package \"{0}\". Error: {1}", packageId, ex.Message);
             Logger.LogException(ex);
         }
 
