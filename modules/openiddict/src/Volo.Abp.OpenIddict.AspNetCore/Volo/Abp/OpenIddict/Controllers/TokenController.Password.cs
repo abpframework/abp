@@ -75,7 +75,7 @@ public partial class TokenController
                     var properties = new AuthenticationProperties(new Dictionary<string, string>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["InvalidUsername"]
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid username or password!"
                     });
 
                     await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
@@ -96,17 +96,17 @@ public partial class TokenController
                     if (result.IsLockedOut)
                     {
                         Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", request.Username);
-                        errorDescription = L["UserLockedOut"];
+                        errorDescription = "The user account has been locked out due to invalid login attempts. Please wait a while and try again.";
                     }
                     else if (result.IsNotAllowed)
                     {
                         Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
-                        errorDescription = L["LoginIsNotAllowed"];
+                        errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
                     }
                     else
                     {
                         Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", request.Username);
-                        errorDescription = L["InvalidUserNameOrPassword"];
+                        errorDescription = "Invalid username or password!";
                     }
 
                     var properties = new AuthenticationProperties(new Dictionary<string, string>
@@ -175,7 +175,7 @@ public partial class TokenController
             var properties = new AuthenticationProperties(new Dictionary<string, string>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["InvalidAuthenticatorCode"]
+                [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid authenticator code!"
             });
 
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);

@@ -1,11 +1,15 @@
 {
   "culture": "tr",
   "texts": {
-    "UserLockedOut": "Kullanıcı hesabı hatalı giriş denemeleri nedeniyle kilitlenmiştir. Lütfen bir süre bekleyip tekrar deneyin.",
-    "InvalidUserNameOrPassword": "Kullanıcı adı ya da şifre geçersiz!",
-    "LoginIsNotAllowed": "Giriş yapmanıza izin verilmiyor! Hesabınız etkin değil veya e-postanızı/telefon numaranızı onaylamanız gerekiyor.",
-    "InvalidUsername": "Kullanıcı adı ya da şifre geçersiz!",
-    "InvalidAuthenticatorCode": "Geçersiz kimlik doğrulama kodu!",
-    "TheTargetUserIsNotLinkedToYou": "Hedef kullanıcı sizinle bağlantılı değil!"
+    "TheOpenIDConnectRequestCannotBeRetrieved": "OpenID Connect isteği alınamıyor.",
+    "TheUserDetailsCannotBbeRetrieved" : "Kullanıcı ayrıntıları alınamıyor.",
+    "TheApplicationDetailsCannotBeFound": "Başvuru detayları bulunamadı.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Çağıran istemci uygulamasıyla ilgili ayrıntılar bulunamıyor.",
+    "TheSpecifiedGrantTypeIsNotImplemented.": "Belirtilen hibe türü {0} uygulanmadı.",
+    "Authorization": "Yetki",
+    "DoYouWantToGrantAccessToYourData": "Do you want to grant {0} access to your data?",
+    "ScopesRequested": "İstenen kapsamlar",
+    "LogOut": "Çıkış Yap",
+    "AreYouSureYouWantToSignOut": "Çıkış yapmak istediğinden emin misin?"
   }
 }

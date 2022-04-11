@@ -26,7 +26,7 @@ public partial class TokenController
                 properties: new AuthenticationProperties(new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["TheTokenIsNoLongerValid"]
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The token is no longer valid."
                 }));
         }
 
@@ -38,7 +38,7 @@ public partial class TokenController
                 properties: new AuthenticationProperties(new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["TheUserIsNoLongerAllowedToSignIn"]
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The user is no longer allowed to sign in."
                 }));
         }
 

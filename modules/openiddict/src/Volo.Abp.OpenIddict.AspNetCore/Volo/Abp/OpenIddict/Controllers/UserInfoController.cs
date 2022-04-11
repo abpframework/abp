@@ -27,7 +27,7 @@ public class UserInfoController : AbpOpenIdDictControllerBase
                 properties: new AuthenticationProperties(new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidToken,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["TheSpecifiedAccessTokenIsBoundToAnAccountThatNoLongerExists"]
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The specified access token is bound to an account that no longer exists."
                 }));
         }
 

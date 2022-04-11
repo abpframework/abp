@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
@@ -61,7 +62,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
                     properties: new AuthenticationProperties(new Dictionary<string, string>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.LoginRequired,
-                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["TheUserIsNotLoggedIn"]
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The user is not logged in."
                     }));
             }
 
@@ -100,7 +101,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
                     properties: new AuthenticationProperties(new Dictionary<string, string>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.ConsentRequired,
-                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["TheLoggedInUserIsNotAllowedToAccessThisClientApplication"]
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The logged in user is not allowed to access this client application."
                     }));
 
             // If the consent is implicit or if an authorization was found,
@@ -144,7 +145,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
                     properties: new AuthenticationProperties(new Dictionary<string, string>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.ConsentRequired,
-                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["InteractiveUserConsentIsRequired"]
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Interactive user consent is required."
                     }));
 
             // In every other case, render the consent form.
@@ -189,7 +190,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
                 properties: new AuthenticationProperties(new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.ConsentRequired,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = L["TheLoggedInUserIsNotAllowedToAccessThisClientApplication"]
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The logged in user is not allowed to access this client application."
                 }));
         }
 
