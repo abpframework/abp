@@ -6,8 +6,6 @@ In this article, we'll create a basic application to demonstrate how "Concurrenc
 
 For this article, we will create a simple BookStore application and add CRUD functionality to the pages. Hence we deal with the concurrency situation.
 
-> To keep the article simple and short, we'll only add the **Book** entity and ignore the **Author** part.
-
 We can create a new startup template with EF Core as a database provider and MVC for the UI Framework.
 
 > If you already have a project, you don't need to create a new startup template, you can directly implement the following steps to your project. So you can skip this section.
@@ -15,7 +13,7 @@ We can create a new startup template with EF Core as a database provider and MVC
 We can create a new startup template by using the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI).
 
 ```bash
-abp new Acme.BookStore -t app -csf
+abp new Acme.BookStore
 ```
 
 After running the above command, our project boilerplate will be downloaded. Then we can open the solution and start the development.
@@ -235,7 +233,8 @@ public class BookAppService :
         book.Type = input.Type;
         book.PublishDate = input.PublishDate;
         
-        book.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        //set Concurrency Stamp value to the entity
+        book.ConcurrencyStamp = input.ConcurrencyStamp;
 
         var updatedBook = await Repository.UpdateAsync(book);
         return ObjectMapper.Map<Book, BookDto>(updatedBook);
@@ -245,9 +244,9 @@ public class BookAppService :
 
 * We've used the `CrudAppService` base class. This class implements all common CRUD operations and if we want to change a method, we can simply override the method and change it to our needs.
 
-> Normally, you don't need to override the `UpdateAsync` method to do **Concurrency Check**. I wanted to override this method to show what we need to do for **Concurrency Check**.
+> Normally, you don't need to override the `UpdateAsync` method to do **Concurrency Check**. Because the `UpdateAsync` method of the `CrudAppService` class by default map input values to the entity. But I wanted to override this method to show what we need to do for **Concurrency Check**.
 
-* We can look closer to the `UpdateAsync` method here, because as we've mentioned earlier we need to pass the provided **ConcurrencyStamp** value to be able to do **Concurrency Check/Control** to our entity while updating. We've used the `SetConcurrencyStampIfNotNull` extension method to set the **ConcurrencyStamp** value to our entity and update the record. 
+* We can look closer to the `UpdateAsync` method here, because as we've mentioned earlier we need to pass the provided **ConcurrencyStamp** value to be able to do **Concurrency Check/Control** to our entity while updating.
 
 * At that point, if the given record is already updated by any other user, a **ConcurrencyStamp** mismatch will occur and `AbpDbConcurrencyException` will be thrown thanks to the **Concurrency Check** system of ABP, data-consistency will be provided and the current record won't be overridden.
 
