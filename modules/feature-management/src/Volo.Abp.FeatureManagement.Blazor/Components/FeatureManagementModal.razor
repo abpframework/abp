@@ -25,12 +25,13 @@
                         }
                     </Items>
                     <Content>
-                        @foreach (var group in Groups)
+                        @for (var i = 0; i < Groups.Count; i++)
                         {
-                            <TabPanel Name="@GetNormalizedGroupName(group.Name)">
-                                <h4>@group.DisplayName</h4>
+                            var index = i;
+                            <TabPanel Name="@GetNormalizedGroupName(Groups[index].Name)">
+                                <h4>@Groups[index].DisplayName</h4>
                                 <hr class="mt-2 mb-3"/>
-                                @foreach (var feature in group.Features)
+                                @foreach (var feature in Groups[index].Features)
                                 {
                                     var disabled = IsDisabled(feature.Provider.Name);
 
@@ -40,7 +41,7 @@
                                             <FieldLabel>@feature.DisplayName</FieldLabel>
                                             <TextEdit Disabled="@disabled"
                                                       Text="@feature.Value"
-                                                      TextChanged="@(async(v) => await OnFeatureValueChangedAsync(v, feature))" />
+                                                      TextChanged="@(async (v) => await OnFeatureValueChangedAsync(v, feature))"/>
                                             @if (feature.Description != null)
                                             {
                                                 <div class="form-text">@feature.Description</div>
@@ -50,7 +51,7 @@
 
                                     if (feature.ValueType is SelectionStringValueType)
                                     {
-                                        var items = ((SelectionStringValueType)feature.ValueType).ItemSource.Items;
+                                        var items = ((SelectionStringValueType) feature.ValueType).ItemSource.Items;
 
                                         <Field Style="@GetFeatureStyles(feature)">
                                             <FieldLabel>@feature.DisplayName</FieldLabel>
@@ -72,9 +73,9 @@
 
                                     if (feature.ValueType is ToggleStringValueType)
                                     {
-                                        <Field Style="@GetFeatureStyles(feature)" >
+                                        <Field Style="@GetFeatureStyles(feature)">
                                             <Check
-                                                TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async(v) => await OnSelectedValueChangedAsync(v, feature))">@feature.DisplayName</Check>
+                                                TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))">@feature.DisplayName</Check>
                                         </Field>
                                         @if (feature.Description != null)
                                         {
