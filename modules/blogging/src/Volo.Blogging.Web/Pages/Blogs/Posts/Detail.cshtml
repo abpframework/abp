@@ -79,7 +79,7 @@
 
                                                 <i class="fa fa-eye"></i> @L["WiewsWithCount", @Model.Post.ReadCount]
                                                 <span class="vs-seperator">|</span>
-                                                <i href="#comment-area-id" class="fa fa-comment"></i> <a href="#comment-area-id">@L["CommentWithCount", @Model.CommentCount]</a>
+                                                <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
 
 
                                                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
@@ -162,7 +162,7 @@
                         </abp-column>
                     </abp-row>
 
-                    <div class="comment-area" id="comment-area-id">
+                    <div class="comment-area">
                         @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
                         {
                             <div class="media">
