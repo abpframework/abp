@@ -420,7 +420,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         return CmdHelper.RunCmdAndGetProcess("abp-suite --no-browser");
     }
 
-    bool IsSuiteAlreadyRunning()
+    private bool IsSuiteAlreadyRunning()
     {
         var ipGP = IPGlobalProperties.GetIPGlobalProperties();
         var endpoints = ipGP.GetActiveTcpListeners();
