@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -25,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
             _options = options.Value;
         }
 
-        protected override bool ShouldValidate(AuthorizationFilterContext context)
+        protected override async Task<bool> ShouldValidate(AuthorizationFilterContext context)
         {
             if (!_options.AutoValidate)
             {
@@ -43,6 +45,14 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
                 {
                     return false;
                 }
+
+                foreach (var shouldValidatePredicate in _options.ShouldValidatePredicates)
+                {
+                    if (!await shouldValidatePredicate(context))
+                    {
+                        return false;
+                    }
+                }
             }
 
             if (IsIgnoredHttpMethod(context))
@@ -50,7 +60,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
                 return false;
             }
 
-            return base.ShouldValidate(context);
+            return await base.ShouldValidate(context);
         }
 
         protected virtual bool IsIgnoredHttpMethod(AuthorizationFilterContext context)
