@@ -36,6 +36,8 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
     private const string SuitePackageName = "Volo.Abp.Suite";
     public ILogger<SuiteCommand> Logger { get; set; }
 
+    private const string AbpSuiteHost = "http://localhost:3000";
+
     public SuiteCommand(
         AbpNuGetIndexUrlService nuGetIndexUrlService,
         NuGetService nuGetService,
@@ -68,9 +70,14 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
 
             case "generate":
                 await InstallSuiteIfNotInstalledAsync();
-                var suiteProcess = RunSuiteTemporary();
-                await GenerateCrudOnSuiteAsync(commandLineArgs);
-                suiteProcess?.Kill();
+                var suiteProcess = StartSuite();
+                System.Threading.Thread.Sleep(500); //wait for initialization of the app
+                await GenerateCrudPageAsync(commandLineArgs);
+                if (suiteProcess != null)
+                {
+                    KillSuite();
+                }
+
                 break;
 
             case "install":
@@ -88,7 +95,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         }
     }
 
-    private async Task GenerateCrudOnSuiteAsync(CommandLineArgs args)
+    private async Task GenerateCrudPageAsync(CommandLineArgs args)
     {
         var entityFile = args.Options.GetOrNull(Options.Crud.Entity.Short, Options.Crud.Entity.Long);
         var solutionFile = args.Options.GetOrNull(Options.Crud.Solution.Short, Options.Crud.Solution.Long);
@@ -98,7 +105,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         {
             throw new UserFriendlyException("Invalid Arguments!");
         }
-        
+
         Logger.LogInformation("Generating CRUD Page...");
 
         var client = _cliHttpClientFactory.CreateClient(false);
@@ -108,7 +115,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         {
             return;
         }
-        
+
         var entityContent = new StringContent(
             File.ReadAllText(entityFile),
             Encoding.UTF8,
@@ -116,7 +123,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         );
 
         var responseMessage = await client.PostAsync(
-            $"http://localhost:3000/api/abpSuite/crudPageGenerator/{solutionId.ToString()}/save-and-generate-entity",
+            $"{AbpSuiteHost}/api/abpSuite/crudPageGenerator/{solutionId.ToString()}/save-and-generate-entity",
             entityContent
         );
 
@@ -128,7 +135,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         }
         else
         {
-            Logger.LogInformation("CRUD page generated.");
+            Logger.LogInformation("CRUD page generation successfully completed.");
         }
     }
 
@@ -148,7 +155,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
 
         var response = await responseMessage.Content.ReadAsStringAsync();
         JArray solutions;
-        
+
         try
         {
             solutions = (JArray)(JObject.Parse(response)["solutions"]);
@@ -185,7 +192,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         );
 
         var response = await responseMessage.Content.ReadAsStringAsync();
-        
+
         try
         {
             return Guid.Parse(JObject.Parse(response)["id"].ToString());
@@ -396,14 +403,13 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         CmdHelper.RunCmd("abp-suite");
     }
 
-    private Process RunSuiteTemporary()
+    private Process StartSuite()
     {
         try
         {
             if (!GlobalToolHelper.IsGlobalToolInstalled("abp-suite"))
             {
-                Logger.LogWarning(
-                    "ABP Suite is not installed! To install it you can run the command: \"abp suite install\"");
+                Logger.LogWarning("ABP Suite is not installed! To install it you can run the command: \"abp suite install\"");
                 return null;
             }
         }
@@ -425,6 +431,26 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         var ipGP = IPGlobalProperties.GetIPGlobalProperties();
         var endpoints = ipGP.GetActiveTcpListeners();
         return endpoints.Any(e => e.Port == 3000);
+    }
+
+    private void KillSuite()
+    {
+        try
+        {
+            var suiteProcesses = (from p in Process.GetProcesses()
+                                  where p.ProcessName.ToLower().Contains("abp-suite")
+                                  select p);
+
+            foreach (var suiteProcess in suiteProcesses)
+            {
+                suiteProcess.Kill();
+                Logger.LogInformation("Suite closed.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogInformation("Cannot close Suite." + ex.Message);
+        }
     }
 
     public string GetUsageInfo()
