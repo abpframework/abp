@@ -58,6 +58,22 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         }
     }
 
+    public Process RunCmdAndGetProcess(string command, string workingDirectory = null)
+    {
+        var procStartInfo = new ProcessStartInfo(
+            GetFileName(),
+            GetArguments(command)
+        );
+
+        if (!string.IsNullOrEmpty(workingDirectory))
+        {
+            procStartInfo.WorkingDirectory = workingDirectory;
+            procStartInfo.CreateNoWindow = false;
+        }
+
+        return Process.Start(procStartInfo);
+    }
+
     public string RunCmdAndGetOutput(string command, string workingDirectory = null)
     {
         return RunCmdAndGetOutput(command, out int _, workingDirectory);

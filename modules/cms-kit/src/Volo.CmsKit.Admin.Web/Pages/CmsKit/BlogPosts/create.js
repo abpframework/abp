@@ -2,13 +2,22 @@ $(function () {
 
     var l = abp.localization.getResource("CmsKit");
 
+    var blogPostStatus = {
+        Draft: 0,
+        Published: 1,
+        SendToReview: 2
+    };
+    
     var $selectBlog = $('#BlogSelectionSelect');
     var $formCreate = $('#form-blog-post-create');
     var $title = $('#ViewModel_Title');
     var $shortDescription = $('#ViewModel_ShortDescription');
     var $coverImage = $('#ViewModel_CoverImageMediaId');
     var $url = $('#ViewModel_Slug');
+    var $status = $('#ViewModel_Status');
     var $buttonSubmit = $('#button-blog-post-create');
+    var $buttonPublish = $('#button-blog-post-publish');
+    var $buttonSendToReview = $('#button-blog-post-send-to-review');
     var $pageContentInput = $('#ViewModel_Content');
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
@@ -59,27 +68,57 @@ $(function () {
 
     $buttonSubmit.click(function (e) {
         e.preventDefault();
+        $status.val(blogPostStatus.Draft);
         submitCoverImage();
+    });
+
+    $buttonPublish.click(function (e) {
+        abp.message.confirm(
+            l('BlogPostPublishConfirmationMessage', $title.val()),
+            function (isConfirmed) {
+                if (isConfirmed) {
+                    e.preventDefault();
+                    $status.val(blogPostStatus.Published);
+                    submitCoverImage();
+                }
+            }
+        );
+    });
+
+    $buttonSendToReview.click(function (e) {
+        abp.message.confirm(
+            l('BlogPostSendToReviewConfirmationMessage', $title.val()),
+            function (isConfirmed) {
+                if (isConfirmed) {
+                    e.preventDefault();
+                    $status.val(blogPostStatus.SendToReview);
+                    submitCoverImage();
+                }
+            }
+        );
     });
 
     function submitEntityTags(blogPostId) {
 
-        var tags = $tagsInput.val().split(',').map(x => x.trim()).filter(x => x);
+        if ($tagsInput.val()) {
 
-        if (tags.length === 0) {
-            finishSaving();
-            return;
+            var tags = $tagsInput.val().split(',').map(x => x.trim()).filter(x => x);
+
+            if (tags.length > 0) {
+                volo.cmsKit.admin.tags.entityTagAdmin
+                    .setEntityTags({
+                        entityType: 'BlogPost',
+                        entityId: blogPostId,
+                        tags: tags
+                    })
+                    .then(function (result) {
+                        finishSaving(result);
+                    });
+                return;
+            }
         }
 
-        volo.cmsKit.admin.tags.entityTagAdmin
-            .setEntityTags({
-                entityType: 'BlogPost',
-                entityId: blogPostId,
-                tags: tags
-            })
-            .then(function (result) {
-                finishSaving(result);
-            });
+        finishSaving();
     }
 
     function getUppyHeaders() {

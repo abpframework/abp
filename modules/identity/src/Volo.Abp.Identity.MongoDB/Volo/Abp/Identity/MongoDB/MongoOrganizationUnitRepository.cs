@@ -95,7 +95,7 @@ public class MongoOrganizationUnitRepository
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
             .As<IMongoQueryable<IdentityRole>>()
             .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<int> GetRolesCountAsync(
@@ -104,7 +104,7 @@ public class MongoOrganizationUnitRepository
     {
         var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
 
-        return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken)).Where(r => roleIds.Contains(r.Id)).CountAsync(cancellationToken);
+        return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken)).Where(r => roleIds.Contains(r.Id)).CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<IdentityRole>> GetUnaddedRolesAsync(
@@ -124,7 +124,7 @@ public class MongoOrganizationUnitRepository
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
             .As<IMongoQueryable<IdentityRole>>()
             .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<int> GetUnaddedRolesCountAsync(
@@ -138,7 +138,7 @@ public class MongoOrganizationUnitRepository
             .Where(r => !roleIds.Contains(r.Id))
             .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
             .As<IMongoQueryable<IdentityRole>>()
-            .CountAsync(cancellationToken);
+            .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<IdentityUser>> GetMembersAsync(
@@ -218,12 +218,13 @@ public class MongoOrganizationUnitRepository
 
     public virtual async Task RemoveAllMembersAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
     {
+        cancellationToken = GetCancellationToken(cancellationToken);
         var userQueryable = await GetMongoQueryableAsync<IdentityUser>(cancellationToken);
         var dbContext = await GetDbContextAsync(cancellationToken);
         var users = await userQueryable
             .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
             .As<IMongoQueryable<IdentityUser>>()
-            .ToListAsync(GetCancellationToken(cancellationToken));
+            .ToListAsync(cancellationToken);
 
         foreach (var user in users)
         {

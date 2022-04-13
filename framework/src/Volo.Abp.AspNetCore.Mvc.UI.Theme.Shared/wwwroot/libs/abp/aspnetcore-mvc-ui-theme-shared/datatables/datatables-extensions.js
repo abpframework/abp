@@ -431,9 +431,7 @@ var abp = abp || {};
 
             configuration.language = datatables.defaultConfigurations.language();
 
-            if(configuration.dom){
-                configuration.dom += datatables.defaultConfigurations.dom;
-            }else{
+            if(!configuration.dom){
                 configuration.dom = datatables.defaultConfigurations.dom;
             }
 

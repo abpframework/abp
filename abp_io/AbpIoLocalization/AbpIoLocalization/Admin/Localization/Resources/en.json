@@ -380,6 +380,8 @@
     "PurchaseItems": "Purchase Items",
     "SuccessfullyUpdated": "Successfully updated",
     "SuccessfullyAdded": "Successfully added",
-    "PurchaseState": "Purchase State"
+    "PurchaseState": "Purchase State",
+    "ShowBetweenDayCount": "Show Between Days",
+    "PurchaseOrder": "Purchase Order"
   }
 }

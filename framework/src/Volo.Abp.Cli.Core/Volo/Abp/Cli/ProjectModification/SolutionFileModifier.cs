@@ -10,13 +10,30 @@ namespace Volo.Abp.Cli.ProjectModification;
 
 public class SolutionFileModifier : ITransientDependency
 {
+    public static Encoding DefaultEncoding = Encoding.UTF8;
+
     public async Task RemoveProjectFromSolutionFileAsync(string solutionFile, string projectName)
     {
-        var solutionFileContent = File.ReadAllText(solutionFile);
-        solutionFileContent.NormalizeLineEndings();
-        var lines = solutionFileContent.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
-        File.WriteAllText(solutionFile,
-            RemoveProject(lines.ToList(), projectName).JoinAsString(Environment.NewLine));
+        using (var fileStream = File.Open(solutionFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+        {
+            using (var sr = new StreamReader(fileStream, Encoding.Default, true))
+            {
+                var solutionFileContent = await sr.ReadToEndAsync();
+                solutionFileContent.NormalizeLineEndings();
+
+                var lines = solutionFileContent.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
+                var updatedContent = RemoveProject(lines.ToList(), projectName).JoinAsString(Environment.NewLine);
+
+                fileStream.Seek(0, SeekOrigin.Begin);
+                fileStream.SetLength(0);
+
+                using (var sw = new StreamWriter(fileStream, DefaultEncoding))
+                {
+                    await sw.WriteAsync(updatedContent);
+                    await sw.FlushAsync();
+                }
+            }
+        }
     }
 
     public async Task AddModuleToSolutionFileAsync(ModuleWithMastersInfo module, string solutionFile)
@@ -33,8 +50,8 @@ public class SolutionFileModifier : ITransientDependency
     {
         var srcFolderId = await AddNewFolderAndGetIdOrGetExistingIdAsync(solutionFile, "src");
 
-        var file = File.ReadAllText(solutionFile);
-        var lines = file.Split(Environment.NewLine).ToList();
+        var solutionFileContent = File.ReadAllText(solutionFile);
+        var lines = solutionFileContent.Split(Environment.NewLine).ToList();
 
         if (lines.Any(l => l.Contains($"\"{package.Name}\"")))
         {
@@ -64,7 +81,7 @@ public class SolutionFileModifier : ITransientDependency
 
         lines.InsertAfter(l => l.Contains("GlobalSection") && l.Contains("NestedProjects"), newPreSolutionLine);
 
-        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines));
+        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines), DefaultEncoding);
     }
 
     private List<string> RemoveProject(List<string> solutionFileLines, string projectName)
@@ -137,7 +154,7 @@ public class SolutionFileModifier : ITransientDependency
                 Path.Combine(Path.GetDirectoryName(solutionFile), "modules", module.Name, "test"),
                 "*.csproj",
                 SearchOption.AllDirectories).ToList();
-        } 
+        }
 
         foreach (var projectPath in projectsUnderModule)
         {
@@ -174,7 +191,7 @@ public class SolutionFileModifier : ITransientDependency
             lines.InsertAfter(l => l.Contains("GlobalSection") && l.Contains("NestedProjects"), newPreSolutionLine);
         }
 
-        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines));
+        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines), Encoding.UTF8);
 
         if (module.MasterModuleInfos != null)
         {
@@ -219,7 +236,7 @@ public class SolutionFileModifier : ITransientDependency
                 .Split(" ").Last();
         }
 
-        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines));
+        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines), Encoding.UTF8);
 
         return folderId;
     }

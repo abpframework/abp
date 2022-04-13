@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Encryption;
 
@@ -7,10 +9,12 @@ namespace Volo.Abp.Settings;
 public class SettingEncryptionService : ISettingEncryptionService, ITransientDependency
 {
     protected IStringEncryptionService StringEncryptionService { get; }
+    public ILogger<SettingEncryptionService> Logger { get; set; }
 
     public SettingEncryptionService(IStringEncryptionService stringEncryptionService)
     {
         StringEncryptionService = stringEncryptionService;
+        Logger = NullLogger<SettingEncryptionService>.Instance;
     }
 
     public virtual string Encrypt(SettingDefinition settingDefinition, string plainValue)
@@ -30,6 +34,14 @@ public class SettingEncryptionService : ISettingEncryptionService, ITransientDep
             return encryptedValue;
         }
 
-        return StringEncryptionService.Decrypt(encryptedValue);
+        try
+        {
+            return StringEncryptionService.Decrypt(encryptedValue);
+        }
+        catch (Exception e)
+        {
+            Logger.LogException(e);
+            return string.Empty;
+        }
     }
 }

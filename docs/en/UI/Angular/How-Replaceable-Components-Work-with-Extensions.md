@@ -171,7 +171,7 @@ Open the generated `src/app/my-role/my-role.component.html` file and replace its
       <div class="col col-md-6">
         <h5 class="card-title">My Roles</h5>
       </div>
-      <div class="text-right col col-md-6">
+      <div class="text-end col col-md-6">
         <abp-page-toolbar [record]="data.items"></abp-page-toolbar>
       </div>
     </div>

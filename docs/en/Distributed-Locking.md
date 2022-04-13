@@ -27,21 +27,25 @@ using Medallion.Threading.Redis;
 
 namespace AbpDemo
 {
-	public class MyModule : AbpModule
-	{
-		public override void ConfigureServices(ServiceConfigurationContext context)
-		{
-			var configuration = context.Services.GetConfiguration();
-			
-			context.Services.AddSingleton<IDistributedLockProvider>(sp =>
-			{
-				var connection = ConnectionMultiplexer
+    [DependsOn(
+            typeof(AbpDistributedLockingModule)
+            //If you have the other dependencies, you should do here
+    )]
+    public class MyModule : AbpModule
+    {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            var configuration = context.Services.GetConfiguration();
+        
+            context.Services.AddSingleton<IDistributedLockProvider>(sp =>
+            {
+                var connection = ConnectionMultiplexer
                     .Connect(configuration["Redis:Configuration"]);
-				return new 
+                return new 
                     RedisDistributedSynchronizationProvider(connection.GetDatabase());
-			});
-		}
-	}
+            });
+        }
+    }
 }
 ````
 
