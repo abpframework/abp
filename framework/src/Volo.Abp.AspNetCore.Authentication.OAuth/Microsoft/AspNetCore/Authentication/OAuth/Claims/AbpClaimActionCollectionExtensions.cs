@@ -13,6 +13,20 @@ public static class AbpClaimActionCollectionExtensions
             claimActions.DeleteClaim("name");
             claimActions.RemoveDuplicate(AbpClaimTypes.UserName);
         }
+        
+        if (AbpClaimTypes.Name != "given_name")
+        {
+            claimActions.MapJsonKey(AbpClaimTypes.Name, "given_name");
+            claimActions.DeleteClaim("given_name");
+            claimActions.RemoveDuplicate(AbpClaimTypes.Name);
+        }
+                
+        if (AbpClaimTypes.SurName != "family_name")
+        {
+            claimActions.MapJsonKey(AbpClaimTypes.SurName, "family_name");
+            claimActions.DeleteClaim("family_name");
+            claimActions.RemoveDuplicate(AbpClaimTypes.SurName);
+        }
 
         if (AbpClaimTypes.Email != "email")
         {

@@ -43,7 +43,7 @@ public abstract class AppTemplateBase : TemplateInfo
         return steps;
     }
 
-    private void ConfigureTenantSchema(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void ConfigureTenantSchema(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ExtraProperties.ContainsKey("separate-tenant-schema"))
         {
@@ -71,7 +71,7 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private void SwitchDatabaseProvider(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void SwitchDatabaseProvider(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.DatabaseProvider == DatabaseProvider.MongoDb)
         {
@@ -103,9 +103,14 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
         }
+
+        if (context.BuildArgs.DatabaseManagementSystem == DatabaseManagementSystem.PostgreSQL)
+        {
+            context.Symbols.Add("dbms:PostgreSQL");
+        }
     }
 
-    private static void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         switch (context.BuildArgs.UiFramework)
         {
@@ -170,7 +175,7 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private void ConfigurePublicWebSite(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void ConfigurePublicWebSite(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (!context.BuildArgs.PublicWebSite)
         {
@@ -204,9 +209,18 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             RemoveCmsKitDependenciesFromPackageJsonFiles(steps);
         }
+
+        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.ProgressiveWebApp.Short))
+        {
+            context.Symbols.Add("PWA");
+        }
+        else
+        {
+            RemovePwaFiles(steps);
+        }
     }
 
-    private static void RemoveCmsKitDependenciesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps)
+    protected static void RemoveCmsKitDependenciesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps)
     {
         var adminCmsPackageInstalledProjectsPackageJsonFiles = new List<string>
             {
@@ -233,7 +247,16 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private bool IsCmsKitSupportedForTargetVersion(ProjectBuildContext context)
+    protected static void RemovePwaFiles(List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/service-worker.js"));
+        steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/service-worker.published.js"));
+        steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/manifest.json"));
+        steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/icon-192.png"));
+        steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/icon-512.png"));
+    }
+
+    protected bool IsCmsKitSupportedForTargetVersion(ProjectBuildContext context)
     {
         if (string.IsNullOrWhiteSpace(context.BuildArgs.Version))
         {
@@ -243,7 +266,7 @@ public abstract class AppTemplateBase : TemplateInfo
         return SemanticVersion.Parse(context.BuildArgs.Version) > SemanticVersion.Parse("4.2.9");
     }
 
-    private static void ConfigureWithoutUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void ConfigureWithoutUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
@@ -263,7 +286,7 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private static void ConfigureWithBlazorUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void ConfigureWithBlazorUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         context.Symbols.Add("ui:blazor");
 
@@ -286,7 +309,7 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private static void ConfigureWithBlazorServerUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void ConfigureWithBlazorServerUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         context.Symbols.Add("ui:blazor-server");
 
@@ -312,7 +335,7 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private static void ConfigureWithMvcUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void ConfigureWithMvcUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         context.Symbols.Add("ui:mvc");
 
@@ -334,7 +357,7 @@ public abstract class AppTemplateBase : TemplateInfo
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
     }
 
-    private static void ConfigureWithAngularUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void ConfigureWithAngularUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         context.Symbols.Add("ui:angular");
 
@@ -362,12 +385,12 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private static void RemoveUnnecessaryPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void RemoveUnnecessaryPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveUnnecessaryPortsStep());
     }
 
-    private static void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ExtraProperties.ContainsKey("no-random-port"))
         {
@@ -388,7 +411,7 @@ public abstract class AppTemplateBase : TemplateInfo
         );
     }
 
-    private void ConfigureTieredArchitecture(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void ConfigureTieredArchitecture(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) ||
             context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
@@ -397,17 +420,17 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private static void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RandomizeStringEncryptionStep());
     }
 
-    private static void UpdateNuGetConfig(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void UpdateNuGetConfig(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
     }
 
-    private void RemoveMigrations(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void RemoveMigrations(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (string.IsNullOrWhiteSpace(context.BuildArgs.Version) ||
             SemanticVersion.Parse(context.BuildArgs.Version) > new SemanticVersion(4, 1, 99))
@@ -425,7 +448,7 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private static void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ConnectionString != null)
         {
@@ -433,7 +456,7 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private static void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if ((context.BuildArgs.UiFramework == UiFramework.Mvc
              || context.BuildArgs.UiFramework == UiFramework.Blazor

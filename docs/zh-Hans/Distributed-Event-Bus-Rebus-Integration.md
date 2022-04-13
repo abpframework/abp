@@ -1,10 +1,10 @@
 # 分布式事件总线Rebus集成
 
-> 本文解释了**如何配置[Rebus](http://mookid.dk/category/rebus/)**做为分布式总线提供程序. 参阅[分布式事件总线文档](Distributed-Event-Bus.md)了解如何使用分布式事件总线系统.
+> 本文解释了 **如何配置[Rebus](http://mookid.dk/category/rebus/)** 做为分布式总线提供程序. 参阅[分布式事件总线文档](Distributed-Event-Bus.md)了解如何使用分布式事件总线系统.
 
 ## 安装
 
-使用ABP CLI添加[Volo.Abp.EventBus.Rebus[Volo.Abp.EventBus.Rebus](https://www.nuget.org/packages/Volo.Abp.EventBus.Rebus)NuGet包到你的项目:
+使用ABP CLI添加[Volo.Abp.EventBus.Rebus](https://www.nuget.org/packages/Volo.Abp.EventBus.Rebus)NuGet包到你的项目:
 
 * 安装[ABP CLI](https://docs.abp.io/en/abp/latest/CLI),如果你还没有安装.
 * 在你想要安装 `Volo.Abp.EventBus.Rebus` 包的 `.csproj` 文件目录打开命令行(终端).

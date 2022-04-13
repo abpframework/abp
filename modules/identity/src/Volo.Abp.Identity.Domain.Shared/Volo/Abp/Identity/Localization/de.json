@@ -36,7 +36,7 @@
     "PasswordChangedMessage": "Ihr Passwort wurde erfolgreich geändert.",
     "PersonalSettingsSavedMessage": "Ihre persönlichen Einstellungen wurden erfolgreich gespeichert.",
     "Volo.Abp.Identity:DefaultError": "Ein unbekannter Fehler ist aufgetreten.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Optimistischer Nebenläufigkeitsfehler, Objekt wurde geändert.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Die optimistische Gleichzeitigkeitsprüfung ist fehlgeschlagen. Die Entität, an der Sie arbeiten, wurde von einem anderen Benutzer geändert. Bitte verwerfen Sie Ihre Änderungen und versuchen Sie es erneut.",
     "Volo.Abp.Identity:DuplicateEmail": "E-Mail '{0}' ist bereits vergeben.",
     "Volo.Abp.Identity:DuplicateRoleName": "Der Rollenname '{0}' ist bereits vergeben.",
     "Volo.Abp.Identity:DuplicateUserName": "Der Benutzername '{0}' ist bereits vergeben.",

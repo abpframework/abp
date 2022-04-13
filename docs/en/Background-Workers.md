@@ -86,20 +86,20 @@ After creating a background worker class, you should add it to the `IBackgroundW
 [DependsOn(typeof(AbpBackgroundWorkersModule))]
 public class MyModule : AbpModule
 {
-    public override void OnApplicationInitialization(
+    public override Task OnApplicationInitializationAsync(
         ApplicationInitializationContext context)
     {
-        context.AddBackgroundWorker<PassiveUserCheckerWorker>();
+        context.AddBackgroundWorkerAsync<PassiveUserCheckerWorker>();
     }
 }
 ````
 
-`context.AddBackgroundWorker(...)` is a shortcut extension method for the expression below:
+`context.AddBackgroundWorkerAsync(...)` is a shortcut extension method for the expression below:
 
 ````csharp
-context.ServiceProvider
+await context.ServiceProvider
     .GetRequiredService<IBackgroundWorkerManager>()
-    .Add(
+    .AddAsync(
         context
             .ServiceProvider
             .GetRequiredService<PassiveUserCheckerWorker>()

@@ -1,6 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import LoadingReducer from './LoadingReducer';
 import AppReducer from './AppReducer';
+import LoadingReducer from './LoadingReducer';
 import PersistentStorageReducer from './PersistentStorageReducer';
 
 const rootReducer = combineReducers({

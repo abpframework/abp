@@ -15,7 +15,7 @@ public class ExposeServicesAttribute : Attribute, IExposedServiceTypesProvider
 
     public ExposeServicesAttribute(params Type[] serviceTypes)
     {
-        ServiceTypes = serviceTypes ?? new Type[0];
+        ServiceTypes = serviceTypes ?? Type.EmptyTypes;
     }
 
     public Type[] GetExposedServiceTypes(Type targetType)
@@ -49,6 +49,10 @@ public class ExposeServicesAttribute : Attribute, IExposedServiceTypesProvider
         foreach (var interfaceType in type.GetTypeInfo().GetInterfaces())
         {
             var interfaceName = interfaceType.Name;
+            if (interfaceType.IsGenericType)
+            {
+                interfaceName = interfaceType.Name.Left(interfaceType.Name.IndexOf('`'));
+            }
 
             if (interfaceName.StartsWith("I"))
             {

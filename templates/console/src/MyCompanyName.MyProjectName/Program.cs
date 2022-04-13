@@ -32,6 +32,7 @@ public class Program
                 {
                     services.AddHostedService<MyProjectNameHostedService>();
                 })
+                .UseSerilog()
                 .RunConsoleAsync();
 
             return 0;

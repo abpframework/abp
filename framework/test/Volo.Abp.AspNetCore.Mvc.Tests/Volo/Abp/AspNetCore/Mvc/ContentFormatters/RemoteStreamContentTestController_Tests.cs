@@ -16,6 +16,7 @@ public class RemoteStreamContentTestController_Tests : AspNetCoreMvcTestBase
         var result = await GetResponseAsync("/api/remote-stream-content-test/download");
         result.Content.Headers.ContentType?.ToString().ShouldBe("application/rtf");
         result.Content.Headers.ContentDisposition?.FileName.ShouldBe("download.rtf");
+        result.Content.Headers.ContentLength.ShouldBe("DownloadAsync".Length);
         (await result.Content.ReadAsStringAsync()).ShouldBe("DownloadAsync");
     }
 

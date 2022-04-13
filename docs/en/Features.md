@@ -308,7 +308,7 @@ The example above defines a *Reporting* feature with two children: *PDF Reportin
 
 ### Changing Features Definitions of a Depended Module
 
-A class deriving from the `FeatureDefinitionProvider` (just like the example above) can also get the existing permission definitions (defined by the depended [modules](Module-Development-Basics.md)) and change their definitions.
+A class deriving from the `FeatureDefinitionProvider` (just like the example above) can also get the existing feature definitions (defined by the depended [modules](Module-Development-Basics.md)) and change their definitions.
 
 **Example: Manipulate an existing feature definition**
 

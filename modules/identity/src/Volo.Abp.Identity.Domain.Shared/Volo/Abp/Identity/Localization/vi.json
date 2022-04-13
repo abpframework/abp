@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Mật khẩu của bạn đã được thay đổi thành công.",
     "PersonalSettingsSavedMessage": "Thiết lập của bạn đã được lưu lại thành công.",
     "Volo.Abp.Identity:DefaultError": "Một thất bại chưa biết đã xảy ra.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Thất bại đồng thời lạc quan, đối tượng đã được sửa đổi.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Kiểm tra đồng thời lạc quan đã không thành công. Thực thể bạn đang làm việc đã bị người dùng khác sửa đổi. Vui lòng hủy các thay đổi của bạn và thử lại.",
     "Volo.Abp.Identity:DuplicateEmail": "Email '{0}' đã được sử dụng.",
     "Volo.Abp.Identity:DuplicateRoleName": "Tên vài trò '{0}' đã được sử dụng.",
     "Volo.Abp.Identity:DuplicateUserName": "User name '{0}' đã được sử dụng.",

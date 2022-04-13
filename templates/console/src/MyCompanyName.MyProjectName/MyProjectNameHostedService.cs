@@ -29,7 +29,7 @@ public class MyProjectNameHostedService : IHostedService
             options.Services.AddSingleton(_hostEnvironment);
 
             options.UseAutofac();
-            options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
+            options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
         });
 
         await _abpApplication.InitializeAsync();

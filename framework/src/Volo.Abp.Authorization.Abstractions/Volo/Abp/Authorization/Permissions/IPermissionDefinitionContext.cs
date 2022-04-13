@@ -25,17 +25,33 @@ public interface IPermissionDefinitionContext
     /// </summary>
     /// <param name="name">Name of the group</param>
     /// <returns></returns>
-    [NotNull]
+    [CanBeNull]
     PermissionGroupDefinition GetGroupOrNull(string name);
 
-    [CanBeNull]
+    /// <summary>
+    /// Tries to add a new permission group.
+    /// Throws <see cref="AbpException"/> if there is a group with the name.
+    /// <param name="name">Name of the group</param>
+    /// <param name="displayName">Localized display name of the group</param>
+    /// <param name="multiTenancySide">Select a multi-tenancy side</param>
+    /// </summary>
     PermissionGroupDefinition AddGroup(
         [NotNull] string name,
         ILocalizableString displayName = null,
         MultiTenancySides multiTenancySide = MultiTenancySides.Both);
 
+    /// <summary>
+    /// Tries to remove a permission group.
+    /// Throws <see cref="AbpException"/> if there is not any group with the name.
+    /// <param name="name">Name of the group</param>
+    /// </summary>
     void RemoveGroup(string name);
 
+    /// <summary>
+    /// Tries to get a pre-defined permission group.
+    /// Returns null if can not find the given group.
+    /// <param name="name">Name of the group</param>
+    /// </summary>
     [CanBeNull]
     PermissionDefinition GetPermissionOrNull([NotNull] string name);
 }

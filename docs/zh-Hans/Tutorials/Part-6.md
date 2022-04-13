@@ -10,7 +10,7 @@
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-* **{{DB_Text}}** 做为ORM提供程序.
+* **{{DB_Value}}** 做为ORM提供程序.
 * **{{UI_Value}}** 做为UI框架.
 
 本教程分为以下部分:
@@ -230,6 +230,8 @@ namespace Acme.BookStore
 ````json
 "BookStore:00001": "There is already an author with the same name: {name}"
 ````
+
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
 
 当 `AuthorAlreadyExistsException` 被抛出, 终端用户将会在UI上看到组织好的错误消息.
 

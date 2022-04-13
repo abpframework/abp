@@ -1,0 +1,24 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MyCompanyName.MyProjectName.Localization
+@inject IHtmlLocalizer<MyProjectNameResource> L
+@model MyCompanyName.MyProjectName.Pages.IndexModel
+
+@section styles {
+    <abp-style src="/Pages/Index.cshtml.css" />
+}
+@section scripts {
+    <abp-script src="/Pages/Index.cshtml.js" />
+}
+<div class="container">
+    <abp-card>
+        <abp-card-header>
+            <abp-card-title>
+                @L["Welcome_Title"]
+            </abp-card-title>
+        </abp-card-header>
+        <abp-card-body>            
+            @L["Welcome_Text"]
+        </abp-card-body>
+    </abp-card>
+</div>

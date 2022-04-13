@@ -18,6 +18,8 @@
     "Developers": "开发者",
     "LicenseType": "许可类型",
     "Manage": "管理",
+    "SetDefault": "设为默认",
+    "DefaultOrganization": "默认",
     "StartDate": "开始日期",
     "EndDate": "结束日期",
     "Modules": "模块",

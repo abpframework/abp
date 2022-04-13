@@ -117,7 +117,8 @@ public class RemoveProjectFromSolutionStep : ProjectBuildPipelineStep
         if (_projectFolderPath == null)
         {
             _projectFolderPath = context.FindFile("/aspnet-core/src/" + _projectName.EnsureEndsWith('/'))?.Name ??
-                                 context.FindFile("/src/" + _projectName.EnsureEndsWith('/'))?.Name;
+                                 context.FindFile("/src/" + _projectName.EnsureEndsWith('/'))?.Name ??
+                                 context.FindFile("/aspnet-core/" + _projectName.EnsureEndsWith('/'))?.Name;
         }
     }
 }

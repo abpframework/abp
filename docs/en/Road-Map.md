@@ -4,16 +4,15 @@ This document provides a road map, release schedule and planned features for the
 
 ## Next Versions
 
-### v5.1
+### v5.3
 
-In [5.1 milestone](https://github.com/abpframework/abp/milestone/60), we will be mostly working on the following topics:
+In [5.3 milestone](https://github.com/abpframework/abp/milestone/65), we will be mostly working on the following topics:
 
-* Maturing and documenting the [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) project.
+* Maturing and documenting the [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) project, writing a free e-book that explains the solution.
 * Working on the [LeptonX](https://blog.abp.io/abp/LeptonX-Theme-for-ABP-Framework-Alpha-Release) theme and making it as the default theme for the ABP Framework UI options.
-* Flexing the UI-backend dependency for the Angular UI, so we can easily create UI-only modules (like UI themes) with its own localization and settings.
 * Working on more examples and guides.
 
-The planned release data for v5.1 is **February, 2022**. See the [5.1 milestone](https://github.com/abpframework/abp/milestone/60) on GitHub for all the issues we are working on.
+The planned release date for v5.3 is **May, 2022**.
 
 ## Backlog Items
 
@@ -21,7 +20,6 @@ The *Next Versions* section above shows the main focus of the planned versions. 
 
 Here, a list of major items in the backlog we are considering to work on in the next versions.
 
-* [#497](https://github.com/abpframework/abp/issues/497) / API Versioning system: finalize & document
 * [#7221](https://github.com/abpframework/abp/issues/7221) / Alternative to IdentityServer4
 * [#2183](https://github.com/abpframework/abp/issues/2183) / Dapr integration
 * [#236](https://github.com/abpframework/abp/issues/236) / Resource based authorization system

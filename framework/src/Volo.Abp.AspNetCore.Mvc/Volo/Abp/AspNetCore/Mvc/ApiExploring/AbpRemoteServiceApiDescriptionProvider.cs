@@ -42,7 +42,7 @@ public class AbpRemoteServiceApiDescriptionProvider : IApiDescriptionProvider, I
     {
         foreach (var apiResponseType in GetApiResponseTypes())
         {
-            foreach (var result in context.Results.Where(IsRemoteService))
+            foreach (var result in context.Results.Where(x => x.IsRemoteService()))
             {
                 var actionProducesResponseTypeAttributes =
                     ReflectionHelper.GetAttributesOfMemberOrDeclaringType<ProducesResponseTypeAttribute>(
@@ -84,30 +84,5 @@ public class AbpRemoteServiceApiDescriptionProvider : IApiDescriptionProvider, I
         }
 
         return _options.SupportedResponseTypes;
-    }
-
-    protected virtual bool IsRemoteService(ApiDescription actionDescriptor)
-    {
-        if (actionDescriptor.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
-        {
-            var remoteServiceAttr = ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<RemoteServiceAttribute>(controllerActionDescriptor.MethodInfo);
-            if (remoteServiceAttr != null && remoteServiceAttr.IsEnabled)
-            {
-                return true;
-            }
-
-            remoteServiceAttr = ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<RemoteServiceAttribute>(controllerActionDescriptor.ControllerTypeInfo);
-            if (remoteServiceAttr != null && remoteServiceAttr.IsEnabled)
-            {
-                return true;
-            }
-
-            if (typeof(IRemoteService).IsAssignableFrom(controllerActionDescriptor.ControllerTypeInfo))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

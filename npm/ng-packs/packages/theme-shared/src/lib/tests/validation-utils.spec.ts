@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Injector } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { NgxValidateCoreModule, validatePassword } from '@ngx-validate/core';
+import { validatePassword } from '@ngx-validate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { getPasswordValidators } from '../utils';
@@ -15,7 +15,7 @@ describe('ValidationUtils', () => {
   let spectator: Spectator<DummyComponent>;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    imports: [CoreTestingModule.withConfig(), NgxValidateCoreModule.forRoot()],
+    imports: [CoreTestingModule.withConfig()],
     mocks: [HttpClient, OAuthService],
     providers: [
       {

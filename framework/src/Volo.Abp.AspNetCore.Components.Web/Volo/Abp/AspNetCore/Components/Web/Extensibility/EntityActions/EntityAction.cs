@@ -12,6 +12,7 @@ public class EntityAction : IEquatable<EntityAction>
     public object Color { get; set; }
     public string Icon { get; set; }
     public Func<object, bool> Visible { get; set; }
+    public bool Disabled { get; set; }
     public bool Equals(EntityAction other)
     {
         return string.Equals(Text, other?.Text, StringComparison.OrdinalIgnoreCase);

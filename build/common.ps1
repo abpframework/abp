@@ -7,7 +7,6 @@ $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 # List of solutions used only in development mode
 $solutionPaths = @(
 		"../framework",
-		"../studio",
 		"../modules/basic-theme",
 		"../modules/users",
 		"../modules/permission-management",
@@ -36,6 +35,7 @@ if ($full -eq "-f")
 		"../templates/app/aspnet-core",
 		"../templates/console",
 		"../templates/wpf",
+		"../templates/app-nolayers/aspnet-core",
 		"../abp_io/AbpIoLocalization"
 	) 
 }else{ 

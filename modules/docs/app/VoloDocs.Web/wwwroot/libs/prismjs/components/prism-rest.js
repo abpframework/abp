@@ -1,14 +1,14 @@
 Prism.languages.rest = {
 	'table': [
 		{
-			pattern: /(\s*)(?:\+[=-]+)+\+(?:\r?\n|\r)(?:\1(?:[+|].+)+[+|](?:\r?\n|\r))+\1(?:\+[=-]+)+\+/,
+			pattern: /(^[\t ]*)(?:\+[=-]+)+\+(?:\r?\n|\r)(?:\1[+|].+[+|](?:\r?\n|\r))+\1(?:\+[=-]+)+\+/m,
 			lookbehind: true,
 			inside: {
 				'punctuation': /\||(?:\+[=-]+)+\+/
 			}
 		},
 		{
-			pattern: /(\s*)(?:=+ +)+=+(?:(?:\r?\n|\r)\1.+)+(?:\r?\n|\r)\1(?:=+ +)+=+(?=(?:\r?\n|\r){2}|\s*$)/,
+			pattern: /(^[\t ]*)=+ [ =]*=(?:(?:\r?\n|\r)\1.+)+(?:\r?\n|\r)\1=+ [ =]*=(?=(?:\r?\n|\r){2}|\s*$)/m,
 			lookbehind: true,
 			inside: {
 				'punctuation': /[=-]+/
@@ -19,7 +19,7 @@ Prism.languages.rest = {
 	// Directive-like patterns
 
 	'substitution-def': {
-		pattern: /(^\s*\.\. )\|(?:[^|\s](?:[^|]*[^|\s])?)\| [^:]+::/m,
+		pattern: /(^[\t ]*\.\. )\|(?:[^|\s](?:[^|]*[^|\s])?)\| [^:]+::/m,
 		lookbehind: true,
 		inside: {
 			'substitution': {
@@ -30,7 +30,7 @@ Prism.languages.rest = {
 				}
 			},
 			'directive': {
-				pattern: /( +)[^:]+::/,
+				pattern: /( )(?! )[^:]+::/,
 				lookbehind: true,
 				alias: 'function',
 				inside: {
@@ -41,7 +41,7 @@ Prism.languages.rest = {
 	},
 	'link-target': [
 		{
-			pattern: /(^\s*\.\. )\[[^\]]+\]/m,
+			pattern: /(^[\t ]*\.\. )\[[^\]]+\]/m,
 			lookbehind: true,
 			alias: 'string',
 			inside: {
@@ -49,7 +49,7 @@ Prism.languages.rest = {
 			}
 		},
 		{
-			pattern: /(^\s*\.\. )_(?:`[^`]+`|(?:[^:\\]|\\.)+):/m,
+			pattern: /(^[\t ]*\.\. )_(?:`[^`]+`|(?:[^:\\]|\\.)+):/m,
 			lookbehind: true,
 			alias: 'string',
 			inside: {
@@ -58,7 +58,7 @@ Prism.languages.rest = {
 		}
 	],
 	'directive': {
-		pattern: /(^\s*\.\. )[^:]+::/m,
+		pattern: /(^[\t ]*\.\. )[^:]+::/m,
 		lookbehind: true,
 		alias: 'function',
 		inside: {
@@ -67,7 +67,7 @@ Prism.languages.rest = {
 	},
 	'comment': {
 		// The two alternatives try to prevent highlighting of blank comments
-		pattern: /(^\s*\.\.)(?:(?: .+)?(?:(?:\r?\n|\r).+)+| .+)(?=(?:\r?\n|\r){2}|$)/m,
+		pattern: /(^[\t ]*\.\.)(?:(?: .+)?(?:(?:\r?\n|\r).+)+| .+)(?=(?:\r?\n|\r){2}|$)/m,
 		lookbehind: true
 	},
 
@@ -97,17 +97,17 @@ Prism.languages.rest = {
 		alias: 'punctuation'
 	},
 	'field': {
-		pattern: /(^\s*):[^:\r\n]+:(?= )/m,
+		pattern: /(^[\t ]*):[^:\r\n]+:(?= )/m,
 		lookbehind: true,
 		alias: 'attr-name'
 	},
 	'command-line-option': {
-		pattern: /(^\s*)(?:[+-][a-z\d]|(?:--|\/)[a-z\d-]+)(?:[ =](?:[a-z][\w-]*|<[^<>]+>))?(?:, (?:[+-][a-z\d]|(?:--|\/)[a-z\d-]+)(?:[ =](?:[a-z][\w-]*|<[^<>]+>))?)*(?=(?:\r?\n|\r)? {2,}\S)/im,
+		pattern: /(^[\t ]*)(?:[+-][a-z\d]|(?:--|\/)[a-z\d-]+)(?:[ =](?:[a-z][\w-]*|<[^<>]+>))?(?:, (?:[+-][a-z\d]|(?:--|\/)[a-z\d-]+)(?:[ =](?:[a-z][\w-]*|<[^<>]+>))?)*(?=(?:\r?\n|\r)? {2,}\S)/im,
 		lookbehind: true,
 		alias: 'symbol'
 	},
 	'literal-block': {
-		pattern: /::(?:\r?\n|\r){2}([ \t]+).+(?:(?:\r?\n|\r)\1.+)*/,
+		pattern: /::(?:\r?\n|\r){2}([ \t]+)(?![ \t]).+(?:(?:\r?\n|\r)\1.+)*/,
 		inside: {
 			'literal-block-punctuation': {
 				pattern: /^::/,
@@ -125,12 +125,12 @@ Prism.languages.rest = {
 		}
 	},
 	'list-bullet': {
-		pattern: /(^\s*)(?:[*+\-•‣⁃]|\(?(?:\d+|[a-z]|[ivxdclm]+)\)|(?:\d+|[a-z]|[ivxdclm]+)\.)(?= )/im,
+		pattern: /(^[\t ]*)(?:[*+\-•‣⁃]|\(?(?:\d+|[a-z]|[ivxdclm]+)\)|(?:\d+|[a-z]|[ivxdclm]+)\.)(?= )/im,
 		lookbehind: true,
 		alias: 'punctuation'
 	},
 	'doctest-block': {
-		pattern: /(^\s*)>>> .+(?:(?:\r?\n|\r).+)*/m,
+		pattern: /(^[\t ]*)>>> .+(?:(?:\r?\n|\r).+)*/m,
 		lookbehind: true,
 		inside: {
 			'punctuation': /^>>>/
@@ -139,7 +139,7 @@ Prism.languages.rest = {
 
 	'inline': [
 		{
-			pattern: /(^|[\s\-:\/'"<(\[{])(?::[^:]+:`.*?`|`.*?`:[^:]+:|(\*\*?|``?|\|)(?!\s).*?[^\s]\2(?=[\s\-.,:;!?\\\/'")\]}]|$))/m,
+			pattern: /(^|[\s\-:\/'"<(\[{])(?::[^:]+:`.*?`|`.*?`:[^:]+:|(\*\*?|``?|\|)(?!\s)(?:(?!\2).)*\S\2(?=[\s\-.,:;!?\\\/'")\]}]|$))/m,
 			lookbehind: true,
 			inside: {
 				'bold': {
@@ -179,7 +179,7 @@ Prism.languages.rest = {
 
 	'link': [
 		{
-			pattern: /\[[^\]]+\]_(?=[\s\-.,:;!?\\\/'")\]}]|$)/,
+			pattern: /\[[^\[\]]+\]_(?=[\s\-.,:;!?\\\/'")\]}]|$)/,
 			alias: 'string',
 			inside: {
 				'punctuation': /^\[|\]_$/
@@ -199,7 +199,7 @@ Prism.languages.rest = {
 	// explicit markup start,
 	// and anonymous hyperlink target shortcut (__)
 	'punctuation': {
-		pattern: /(^\s*)(?:\|(?= |$)|(?:---?|—|\.\.|__)(?= )|\.\.$)/m,
+		pattern: /(^[\t ]*)(?:\|(?= |$)|(?:---?|—|\.\.|__)(?= )|\.\.$)/m,
 		lookbehind: true
 	}
 };
