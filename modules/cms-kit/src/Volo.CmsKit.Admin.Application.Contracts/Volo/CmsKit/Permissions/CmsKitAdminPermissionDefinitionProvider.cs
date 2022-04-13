@@ -55,6 +55,8 @@ public class CmsKitAdminPermissionDefinitionProvider : PermissionDefinitionProvi
             .RequireGlobalFeatures(typeof(BlogsFeature));
         blogPostManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Delete, L("Permission:BlogPostManagement.Delete"))
             .RequireGlobalFeatures(typeof(BlogsFeature));
+        blogPostManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Publish, L("Permission:BlogPostManagement.Publish"))
+            .RequireGlobalFeatures(typeof(BlogsFeature));
 
         var menuManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.Menus.Default, L("Permission:MenuManagement"))
             .RequireGlobalFeatures(typeof(MenuFeature));
@@ -65,6 +67,9 @@ public class CmsKitAdminPermissionDefinitionProvider : PermissionDefinitionProvi
             .RequireGlobalFeatures(typeof(MenuFeature));
         menuManagement.AddChild(CmsKitAdminPermissions.Menus.Delete, L("Permission:MenuManagement.Delete"))
             .RequireGlobalFeatures(typeof(MenuFeature));
+
+        cmsGroup.AddPermission(CmsKitAdminPermissions.GlobalResources.Default, L("Permission:GlobalResources"))
+            .RequireGlobalFeatures(typeof(GlobalResourcesFeature));
     }
 
     private static LocalizableString L(string name)

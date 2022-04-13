@@ -1,40 +1,55 @@
+import { Box, HStack, Pressable, Text } from 'native-base';
 import React from 'react';
-import { ListItem, Text, Icon, Left, Thumbnail, Body, Fab } from 'native-base';
-import { StyleSheet } from 'react-native';
 import { getUsers } from '../../api/IdentityAPI';
-import { activeTheme } from '../../theme/variables';
 import DataList from '../../components/DataList/DataList';
-import { withPermission } from '../../hocs/PermissionHOC';
-
-const CreateUserButtonWithPermission = withPermission(Fab, 'AbpIdentity.Users.Create');
+import { LocalizationContext } from '../../contexts/LocalizationContext';
 
 function UsersScreen({ navigation }) {
+  const { t } = React.useContext(LocalizationContext);
+
   return (
-    <>
       <DataList
         navigation={navigation}
         fetchFn={getUsers}
-        render={user => (
-          <ListItem avatar onPress={() => navigateToCreateUpdateUserScreen(navigation, user)}>
-            <Left style={styles.listItem}>
-              <Thumbnail source={require('../../../assets/avatar.png')} />
-              <Body>
-                <Text>{user.userName}</Text>
-                <Text note>{user.email}</Text>
-              </Body>
-            </Left>
-          </ListItem>
+        render={({item}) => (
+          <Pressable
+          onPress={() => navigateToCreateUpdateUserScreen(navigation, item)}
+        >
+          <Box
+            borderBottomWidth="1"
+            borderColor="coolGray.200"
+            pl="2"
+            pr="5"
+            py="2"
+          >
+            <HStack space={1}>
+              <Text color="coolGray.500">{t('AbpIdentity::UserName')}:</Text>
+              <Text color="coolGray.800" bold>
+                {item.userName}
+              </Text>
+            </HStack>
+            <HStack space={1}>
+              <Text color="coolGray.500">{t('AbpIdentity::EmailAddress')}:</Text>
+              <Text color="coolGray.800" bold>
+                {item.email}
+              </Text>
+            </HStack>
+            <HStack space={1}>
+              <Text color="coolGray.500">{t('AbpIdentity::DisplayName:Name')}:</Text>
+              <Text color="coolGray.800" bold>
+                {item.name}
+              </Text>
+            </HStack>
+            <HStack space={1}>
+              <Text color="coolGray.500">{t('AbpIdentity::DisplayName:Surname')}:</Text>
+              <Text color="coolGray.800" bold>
+                {item.surname}
+              </Text>
+            </HStack>
+          </Box>
+        </Pressable>
         )}
       />
-
-      <CreateUserButtonWithPermission
-        containerStyle={{}}
-        style={{ backgroundColor: activeTheme.brandPrimary }}
-        position="bottomRight"
-        onPress={() => navigation.navigate('CreateUpdateUser')}>
-        <Icon name="add" />
-      </CreateUserButtonWithPermission>
-    </>
   );
 }
 
@@ -43,19 +58,5 @@ const navigateToCreateUpdateUserScreen = (navigation, user = {}) => {
     userId: user.id,
   });
 };
-
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  listItem: {
-    alignItems: 'center',
-    marginVertical: 3,
-    marginLeft: -15,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 15,
-    backgroundColor: '#f9f9f9',
-    width: '110%',
-  },
-});
 
 export default UsersScreen;

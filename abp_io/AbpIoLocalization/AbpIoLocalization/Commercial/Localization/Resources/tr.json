@@ -18,6 +18,8 @@
     "Developers": "Yazılımcılar",
     "LicenseType": "lisans türü",
     "Manage": "Yönet",
+    "SetDefault": "Varsayılan olarak ayarla",
+    "DefaultOrganization": "Varsayılan",
     "StartDate": "Başlangıç tarihi",
     "EndDate": "bitiş tarihi",
     "Modules": "Modüller",

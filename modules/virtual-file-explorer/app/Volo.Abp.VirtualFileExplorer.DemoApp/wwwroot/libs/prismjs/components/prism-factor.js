@@ -1,7 +1,7 @@
 (function (Prism) {
 
 	var comment_inside = {
-		'function': /\b(?:TODOS?|FIX(?:MES?)?|NOTES?|BUGS?|XX+|HACKS?|WARN(?:ING)?|\?{2,}|!{2,})\b/
+		'function': /\b(?:BUGS?|FIX(?:MES?)?|NOTES?|TODOS?|XX+|HACKS?|WARN(?:ING)?|\?{2,}|!{2,})\b/
 	};
 	var string_inside = {
 		'number': /\\[^\s']|%\w/
@@ -84,7 +84,7 @@
 
 		// R/ regexp?\/\\/
 		'regexp': {
-			pattern: /(^|\s)R\/\s+(?:\\\S|[^\\/])*\/(?:[idmsr]*|[idmsr]+-[idmsr]+)(?=\s|$)/,
+			pattern: /(^|\s)R\/\s(?:\\\S|[^\\/])*\/(?:[idmsr]*|[idmsr]+-[idmsr]+)(?=\s|$)/,
 			lookbehind: true,
 			alias: 'number',
 			inside: {
@@ -124,7 +124,7 @@
 					'number': string_inside.number,
 					// trailing semicolon on its own line
 					'semicolon-or-setlocal': {
-						pattern: /((?:\n|\r\n)\s*);(?=\s|$)/,
+						pattern: /([\r\n][ \t]*);(?=\s|$)/,
 						lookbehind: true,
 						alias: 'function'
 					}
@@ -182,7 +182,7 @@
 		'stack-effect-delimiter': [
 			{
 				// opening parenthesis
-				pattern: /(^|\s)(?:call|execute|eval)?\((?=\s)/,
+				pattern: /(^|\s)(?:call|eval|execute)?\((?=\s)/,
 				lookbehind: true,
 				alias: 'operator'
 			},
@@ -265,7 +265,7 @@
 			see <https://docs.factorcode.org/content/article-conventions.html>
 		*/
 		'conventionally-named-word': {
-			pattern: /(^|\s)(?!")(?:(?:set|change|with|new)-\S+|\$\S+|>[^>\s]+|[^:>\s]+>|[^>\s]+>[^>\s]+|\+[^+\s]+\+|[^?\s]+\?|\?[^?\s]+|[^>\s]+>>|>>[^>\s]+|[^<\s]+<<|\([^()\s]+\)|[^!\s]+!|[^*\s]\S*\*|[^.\s]\S*\.)(?=\s|$)/,
+			pattern: /(^|\s)(?!")(?:(?:change|new|set|with)-\S+|\$\S+|>[^>\s]+|[^:>\s]+>|[^>\s]+>[^>\s]+|\+[^+\s]+\+|[^?\s]+\?|\?[^?\s]+|[^>\s]+>>|>>[^>\s]+|[^<\s]+<<|\([^()\s]+\)|[^!\s]+!|[^*\s]\S*\*|[^.\s]\S*\.)(?=\s|$)/,
 			lookbehind: true,
 			alias: 'keyword'
 		},
@@ -346,7 +346,7 @@
 	};
 
 	var escape = function (str) {
-		return (str+'').replace(/([.?*+\^$\[\]\\(){}|\-])/g, '\\$1');
+		return (str + '').replace(/([.?*+\^$\[\]\\(){}|\-])/g, '\\$1');
 	};
 
 	var arrToWordsRegExp = function (arr) {
@@ -375,7 +375,7 @@
 	};
 
 	Object.keys(builtins).forEach(function (k) {
-		factor[k].pattern = arrToWordsRegExp( builtins[k] );
+		factor[k].pattern = arrToWordsRegExp(builtins[k]);
 	});
 
 	var combinators = [
@@ -400,4 +400,4 @@
 
 	Prism.languages.factor = factor;
 
-})(Prism);
+}(Prism));

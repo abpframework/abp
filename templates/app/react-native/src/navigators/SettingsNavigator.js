@@ -1,13 +1,13 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import i18n from 'i18n-js';
-import SettingsScreen from '../screens/Settings/SettingsScreen';
+import React from 'react';
+import HamburgerIcon from '../components/HamburgerIcon/HamburgerIcon';
+import { LocalizationContext } from '../contexts/LocalizationContext';
 import ChangePasswordScreen from '../screens/ChangePassword/ChangePasswordScreen';
 import ManageProfileScreen from '../screens/ManageProfile/ManageProfileScreen';
-import MenuIcon from '../components/MenuIcon/MenuIcon';
-import { LocalizationContext } from '../contexts/LocalizationContext';
+import SettingsScreen from '../screens/Settings/SettingsScreen';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function SettingsStackNavigator() {
   const { t } = React.useContext(LocalizationContext);
@@ -18,7 +18,7 @@ export default function SettingsStackNavigator() {
         name="Settings"
         component={SettingsScreen}
         options={({ navigation }) => ({
-          headerLeft: () => <MenuIcon onPress={() => navigation.openDrawer()} />,
+          headerLeft: () => <HamburgerIcon navigation={navigation} marginLeft={-3} />,
           title: t('AbpSettingManagement::Settings'),
         })}
       />

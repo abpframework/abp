@@ -1,11 +1,13 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import TenantsScreen from '../screens/Tenants/TenantsScreen';
-import CreateUpdateTenantScreen from '../screens/CreateUpdateTenant/CreateUpdateTenantScreen';
-import MenuIcon from '../components/MenuIcon/MenuIcon';
-import { LocalizationContext } from '../contexts/LocalizationContext';
 
-const Stack = createStackNavigator();
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import AddIcon from '../components/AddIcon/AddIcon';
+import HamburgerIcon from '../components/HamburgerIcon/HamburgerIcon';
+import { LocalizationContext } from '../contexts/LocalizationContext';
+import CreateUpdateTenantScreen from '../screens/CreateUpdateTenant/CreateUpdateTenantScreen';
+import TenantsScreen from '../screens/Tenants/TenantsScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function TenantsStackNavigator() {
   const { t } = React.useContext(LocalizationContext);
@@ -16,17 +18,16 @@ export default function TenantsStackNavigator() {
         name="Tenants"
         component={TenantsScreen}
         options={({ navigation }) => ({
-          headerLeft: () => <MenuIcon onPress={() => navigation.openDrawer()} />,
           title: t('AbpTenantManagement::Tenants'),
+          headerLeft: () => <HamburgerIcon navigation={navigation} marginLeft={-3} />,
+          headerRight: () => <AddIcon onPress={() => navigation.navigate('CreateUpdateTenant')}/>,
         })}
       />
       <Stack.Screen
         name="CreateUpdateTenant"
         component={CreateUpdateTenantScreen}
         options={({ route }) => ({
-          title: t(
-            route.params?.tenantId ? 'AbpTenantManagement::Edit' : 'AbpTenantManagement::NewTenant',
-          ),
+          title: t(route.params?.tenantId ? 'AbpTenantManagement::Edit' : 'AbpTenantManagement::NewTenant'),
         })}
       />
     </Stack.Navigator>

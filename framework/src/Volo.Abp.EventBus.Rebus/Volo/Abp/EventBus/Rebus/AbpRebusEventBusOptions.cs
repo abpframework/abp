@@ -20,22 +20,11 @@ public class AbpRebusEventBusOptions
     }
     private Action<RebusConfigurer> _configurer;
 
-    [NotNull]
-    public Func<IBus, Type, object, Task> Publish {
-        get => _publish;
-        set => _publish = Check.NotNull(value, nameof(value));
-    }
-    private Func<IBus, Type, object, Task> _publish;
+    public Func<IBus, Type, object, Task> Publish { get; set; }
 
     public AbpRebusEventBusOptions()
     {
-        _publish = DefaultPublish;
         _configurer = DefaultConfigure;
-    }
-
-    private async Task DefaultPublish(IBus bus, Type eventType, object eventData)
-    {
-        await bus.Advanced.Routing.Send(InputQueueName, eventData);
     }
 
     private void DefaultConfigure(RebusConfigurer configure)

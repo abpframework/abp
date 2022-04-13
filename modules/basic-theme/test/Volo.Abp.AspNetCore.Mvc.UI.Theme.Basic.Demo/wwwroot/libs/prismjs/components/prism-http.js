@@ -1,28 +1,92 @@
 (function (Prism) {
+
+	/**
+	 * @param {string} name
+	 * @returns {RegExp}
+	 */
+	function headerValueOf(name) {
+		return RegExp('(^(?:' + name + '):[ \t]*(?![ \t]))[^]+', 'i');
+	}
+
 	Prism.languages.http = {
 		'request-line': {
-			pattern: /^(?:POST|GET|PUT|DELETE|OPTIONS|PATCH|TRACE|CONNECT)\s(?:https?:\/\/|\/)\S+\sHTTP\/[0-9.]+/m,
+			pattern: /^(?:CONNECT|DELETE|GET|HEAD|OPTIONS|PATCH|POST|PRI|PUT|SEARCH|TRACE)\s(?:https?:\/\/|\/)\S*\sHTTP\/[\d.]+/m,
 			inside: {
-				// HTTP Verb
-				'property': /^(?:POST|GET|PUT|DELETE|OPTIONS|PATCH|TRACE|CONNECT)\b/,
-				// Path or query argument
-				'attr-name': /:\w+/
+				// HTTP Method
+				'method': {
+					pattern: /^[A-Z]+\b/,
+					alias: 'property'
+				},
+				// Request Target e.g. http://example.com, /path/to/file
+				'request-target': {
+					pattern: /^(\s)(?:https?:\/\/|\/)\S*(?=\s)/,
+					lookbehind: true,
+					alias: 'url',
+					inside: Prism.languages.uri
+				},
+				// HTTP Version
+				'http-version': {
+					pattern: /^(\s)HTTP\/[\d.]+/,
+					lookbehind: true,
+					alias: 'property'
+				},
 			}
 		},
 		'response-status': {
-			pattern: /^HTTP\/1.[01] \d+.*/m,
+			pattern: /^HTTP\/[\d.]+ \d+ .+/m,
 			inside: {
-				// Status, e.g. 200 OK
-				'property': {
-					pattern: /(^HTTP\/1.[01] )\d+.*/i,
-					lookbehind: true
+				// HTTP Version
+				'http-version': {
+					pattern: /^HTTP\/[\d.]+/,
+					alias: 'property'
+				},
+				// Status Code
+				'status-code': {
+					pattern: /^(\s)\d+(?=\s)/,
+					lookbehind: true,
+					alias: 'number'
+				},
+				// Reason Phrase
+				'reason-phrase': {
+					pattern: /^(\s).+/,
+					lookbehind: true,
+					alias: 'string'
 				}
 			}
 		},
-		// HTTP header name
-		'header-name': {
-			pattern: /^[\w-]+:(?=.)/m,
-			alias: 'keyword'
+		'header': {
+			pattern: /^[\w-]+:.+(?:(?:\r\n?|\n)[ \t].+)*/m,
+			inside: {
+				'header-value': [
+					{
+						pattern: headerValueOf(/Content-Security-Policy/.source),
+						lookbehind: true,
+						alias: ['csp', 'languages-csp'],
+						inside: Prism.languages.csp
+					},
+					{
+						pattern: headerValueOf(/Public-Key-Pins(?:-Report-Only)?/.source),
+						lookbehind: true,
+						alias: ['hpkp', 'languages-hpkp'],
+						inside: Prism.languages.hpkp
+					},
+					{
+						pattern: headerValueOf(/Strict-Transport-Security/.source),
+						lookbehind: true,
+						alias: ['hsts', 'languages-hsts'],
+						inside: Prism.languages.hsts
+					},
+					{
+						pattern: headerValueOf(/[^:]+/.source),
+						lookbehind: true
+					}
+				],
+				'header-name': {
+					pattern: /^[^:]+/,
+					alias: 'keyword'
+				},
+				'punctuation': /^:/
+			}
 		}
 	};
 
@@ -34,7 +98,8 @@
 		'application/xml': langs.xml,
 		'text/xml': langs.xml,
 		'text/html': langs.html,
-		'text/css': langs.css
+		'text/css': langs.css,
+		'text/plain': langs.plain
 	};
 
 	// Declare which types can also be suffixes
@@ -64,14 +129,23 @@
 
 			var pattern = suffixTypes[contentType] ? getSuffixPattern(contentType) : contentType;
 			options[contentType.replace(/\//g, '-')] = {
-				pattern: RegExp('(content-type:\\s*' + pattern + '[\\s\\S]*?)(?:\\r?\\n|\\r){2}[\\s\\S]*', 'i'),
+				pattern: RegExp(
+					'(' + /content-type:\s*/.source + pattern + /(?:(?:\r\n?|\n)[\w-].*)*(?:\r(?:\n|(?!\n))|\n)/.source + ')' +
+					// This is a little interesting:
+					// The HTTP format spec required 1 empty line before the body to make everything unambiguous.
+					// However, when writing code by hand (e.g. to display on a website) people can forget about this,
+					// so we want to be liberal here. We will allow the empty line to be omitted if the first line of
+					// the body does not start with a [\w-] character (as headers do).
+					/[^ \t\w-][\s\S]*/.source,
+					'i'
+				),
 				lookbehind: true,
 				inside: httpLanguages[contentType]
 			};
 		}
 	}
 	if (options) {
-		Prism.languages.insertBefore('http', 'header-name', options);
+		Prism.languages.insertBefore('http', 'header', options);
 	}
 
 }(Prism));

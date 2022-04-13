@@ -40,6 +40,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.Blazor.Server;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -76,6 +77,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host;
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpTenantManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpSettingManagementBlazorServerModule),
     typeof(AbpSettingManagementApplicationModule),

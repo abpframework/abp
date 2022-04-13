@@ -22,14 +22,14 @@
                 <Button Color="Color.Danger" Padding="Padding.Is2.OnX" Clicked="@OnCancelClicked">
                     @if ( Options?.CancelButtonIcon != null )
                     {
-                        <Icon Name="@Options.CancelButtonIcon" Margin="Margin.Is2.FromRight" />
+                        <Icon Name="@Options.CancelButtonIcon" Margin="Margin.Is2.FromEnd" />
                     }
                     @CancelButtonText
                 </Button>
                 <Button Color="Color.Primary" Padding="Padding.Is2.OnX" Clicked="@OnConfirmClicked">
                     @if ( Options?.ConfirmButtonIcon != null )
                     {
-                        <Icon Name="@Options.ConfirmButtonIcon" Margin="Margin.Is2.FromRight" />
+                        <Icon Name="@Options.ConfirmButtonIcon" Margin="Margin.Is2.FromEnd" />
                     }
                     @ConfirmButtonText
                 </Button>
@@ -39,7 +39,7 @@
                 <Button Color="Color.Primary" Padding="Padding.Is2.OnX" Clicked="@OnOkClicked">
                     @if ( Options?.OkButtonIcon != null )
                     {
-                        <Icon Name="@Options.OkButtonIcon" Margin="Margin.Is2.FromRight" />
+                        <Icon Name="@Options.OkButtonIcon" Margin="Margin.Is2.FromEnd" />
                     }
                     @OkButtonText
                 </Button>

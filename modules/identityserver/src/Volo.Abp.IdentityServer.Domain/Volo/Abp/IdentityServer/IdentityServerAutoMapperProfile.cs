@@ -94,7 +94,8 @@ public class IdentityServerAutoMapperProfile : Profile
     private void CreateApiResourceMap()
     {
         CreateMap<ApiResource, IdentityServer4.Models.ApiResource>()
-            .ForMember(dest => dest.ApiSecrets, opt => opt.MapFrom(src => src.Secrets));
+            .ForMember(dest => dest.ApiSecrets, opt => opt.MapFrom(src => src.Secrets))
+            .ForMember(x => x.AllowedAccessTokenSigningAlgorithms, opts => opts.ConvertUsing(AllowedSigningAlgorithmsConverter.Converter, x => x.AllowedAccessTokenSigningAlgorithms));
 
         CreateMap<ApiResourceSecret, IdentityServer4.Models.Secret>();
 

@@ -2,11 +2,9 @@
 
 You can use the `ConfirmationService` in @abp/ng.theme.shared package to display a confirmation popup by placing at the root level in your project.
 
-
 ## Getting Started
 
 You do not have to provide the `ConfirmationService` at module or component level, because it is already **provided in root**. You can inject and start using it immediately in your components, directives, or services.
-
 
 ```js
 import { ConfirmationService } from '@abp/ng.theme.shared';
@@ -26,7 +24,7 @@ You can use the `success`, `warn`, `error`, and `info` methods of `ConfirmationS
 ### How to Display a Confirmation Popup
 
 ```js
-const confirmationStatus$ = this.confirmation.success('Message', 'Title');
+const confirmationStatus$ = this.confirmation.success("Message", "Title");
 ```
 
 - The `ConfirmationService` methods accept three parameters that are `message`, `title`, and `options`.
@@ -48,18 +46,16 @@ this.confirmation
   });
 ```
 
-
 - The `message` and `title` parameters accept a string, localization key or localization object. See the [localization document](./Localization.md)
 - `Confirmation.Status` is an enum and has three properties;
-    - `Confirmation.Status.confirm` is a closing event value that will be emitted when the popup is closed by the confirm button.
-    - `Confirmation.Status.reject` is a closing event value that will be emitted when the popup is closed by the cancel button.
-    - `Confirmation.Status.dismiss` is a closing event value that will be emitted when the popup is closed by pressing the escape or clicking the backdrop.
-
+  - `Confirmation.Status.confirm` is a closing event value that will be emitted when the popup is closed by the confirm button.
+  - `Confirmation.Status.reject` is a closing event value that will be emitted when the popup is closed by the cancel button.
+  - `Confirmation.Status.dismiss` is a closing event value that will be emitted when the popup is closed by pressing the escape or clicking the backdrop.
 
 If you are not interested in the confirmation status, you do not have to subscribe to the returned observable:
 
 ```js
-this.confirmation.error('You are not authorized.', 'Error');
+this.confirmation.error("You are not authorized.", "Error");
 ```
 
 ### How to Display a Confirmation Popup With Given Options
@@ -71,16 +67,19 @@ const options: Partial<Confirmation.Options> = {
   hideCancelBtn: false,
   hideYesBtn: false,
   dismissible: false,
-  cancelText: 'Close',
-  yesText: 'Confirm',
-  messageLocalizationParams: ['Demo'],
+  cancelText: "Close",
+  yesText: "Confirm",
+  messageLocalizationParams: ["Demo"],
   titleLocalizationParams: [],
-};
+  // You can customize icon 
+  // icon: 'fa fa-exclamation-triangle', // or
+  // iconTemplate : '<img src="custom-image-path.jpg" alt=""/>'
+} 
 
 this.confirmation.warn(
-  'AbpIdentity::RoleDeletionConfirmationMessage',
-  'Are you sure?',
-  options,
+  "AbpIdentity::RoleDeletionConfirmationMessage",
+  "Are you sure?",
+  options
 );
 ```
 
@@ -91,6 +90,8 @@ this.confirmation.warn(
 - `yesText` is the text of the confirmation button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`.
 - `messageLocalizationParams` is the interpolation parameters for the localization of the message.
 - `titleLocalizationParams` is the interpolation parameters for the localization of the title.
+- `icon` is the custom class of the icon. Default value is `undefined`.
+- `iconTemplate` is the template for icon. Default value is `undefined`.
 
 With the options above, the confirmation popup looks like this:
 
@@ -110,7 +111,7 @@ this.confirmation.warn(
     Do you confirm that?
   `,
   '<span class="my-custom-title">Are you sure?</span>',
-  options,
+  options
 );
 ```
 
@@ -126,6 +127,25 @@ The open confirmation popup can be removed manually via the `clear` method:
 this.confirmation.clear();
 ```
 
+### How to Change Icons of The Confirmation Popup
+
+You can change icons with the token of "confirmationIcons" in ThemeSharedModule in the app.module.ts. The changes will affect  all confirmation popup in the project.
+
+```js
+...
+ThemeSharedModule.forRoot({
+  confirmationIcons: {
+    info: 'fa fa-info-circle',
+    success: 'fa fa-check-circle',
+    warning: 'fa fa-exclamation-triangle',
+    error: 'fa fa-times-circle',
+    default: 'fa fa-question-circle',
+  },
+}),
+...
+```
+
+
 ## API
 
 ### success
@@ -138,8 +158,7 @@ success(
 ): Observable<Confirmation.Status>
 ```
 
-> See the [`Config.LocalizationParam` type](https://github.com/abpframework/abp/blob/master/npm/ng-packs/packages/core/src/lib/models/config.ts#L46) and [`Confirmation` namespace](https://github.com/abpframework/abp/blob/master/npm/ng-packs/packages/theme-shared/src/lib/models/confirmation.ts)
-
+> See the [`LocalizationParam` type](https://github.com/abpframework/abp/blob/master/npm/ng-packs/packages/core/src/lib/models/localization.ts#L6) and [`Confirmation` namespace](https://github.com/abpframework/abp/blob/master/npm/ng-packs/packages/theme-shared/src/lib/models/confirmation.ts)
 
 ### warn
 

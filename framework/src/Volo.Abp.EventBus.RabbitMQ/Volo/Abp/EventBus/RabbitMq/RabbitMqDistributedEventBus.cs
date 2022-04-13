@@ -69,7 +69,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         Consumer = MessageConsumerFactory.Create(
             new ExchangeDeclareConfiguration(
                 AbpRabbitMqEventBusOptions.ExchangeName,
-                type: "direct",
+                type: AbpRabbitMqEventBusOptions.GetExchangeTypeOrDefault(),
                 durable: true
             ),
             new QueueDeclareConfiguration(
@@ -221,7 +221,11 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         return Serializer.Serialize(eventData);
     }
 
-    public Task PublishAsync(Type eventType, object eventData, IBasicProperties properties, Dictionary<string, object> headersArguments = null)
+    public Task PublishAsync(
+        Type eventType,
+        object eventData, 
+        IBasicProperties properties,
+        Dictionary<string, object> headersArguments = null)
     {
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
         var body = Serializer.Serialize(eventData);
@@ -240,7 +244,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         {
             channel.ExchangeDeclare(
                 AbpRabbitMqEventBusOptions.ExchangeName,
-                "direct",
+                AbpRabbitMqEventBusOptions.GetExchangeTypeOrDefault(),
                 durable: true
             );
 

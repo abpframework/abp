@@ -3,17 +3,16 @@ import { getEnvVars } from '../../Environment';
 
 const { oAuthConfig } = getEnvVars();
 
-export const login = ({ username, password }) => {
-  return api({
+export const login = ({ username, password }) =>
+  api({
     method: 'POST',
     url: '/connect/token',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data: `grant_type=password&scope=${oAuthConfig.scope}&username=${username}&password=${password}&client_id=${oAuthConfig.clientId}&client_secret=${oAuthConfig.clientSecret}`,
     baseURL: oAuthConfig.issuer,
-  }).then(({ data }) => data)
-};
+  }).then(({ data }) => data);
 
-export const logout = () =>
+export const Logout = () =>
   api({
     method: 'GET',
     url: '/api/account/logout',

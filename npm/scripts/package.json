@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "remove-lock-files": "ts-node -r tsconfig-paths/register remove-lock-files.ts",
-    "validate-versions": "ts-node -r tsconfig-paths/register validate-versions.ts"
+    "remove-lock-files": "yarn && ts-node -r tsconfig-paths/register remove-lock-files.ts",
+    "validate-versions": "yarn && ts-node -r tsconfig-paths/register validate-versions.ts"
   },
   "dependencies": {
     "axios": "^0.24.0",

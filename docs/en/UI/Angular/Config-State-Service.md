@@ -110,7 +110,7 @@ this.config.getSetting$("Abp.Identity.TwoFactor.Behaviour").subscribe(twoFactorB
 
 #### State Properties
 
-Please refer to `ApplicationConfiguration.Response` type for all the properties you can get with `getOne` and `getDeep`. It can be found in the [application-configuration.ts file](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/application-configuration.ts#L4).
+Please refer to `ApplicationConfigurationDto` type for all the properties you can get with `getOne` and `getDeep`. It can be found in the [models.ts file](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/proxy/volo/abp/asp-net-core/mvc/application-configurations/models.ts#L11).
 
 
 ## Set State

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsAbpGenerateProxy",
+  "$id": "SchematicsAbpGenerateProxy",
   "title": "ABP Generate Proxy Schema",
   "type": "object",
   "properties": {

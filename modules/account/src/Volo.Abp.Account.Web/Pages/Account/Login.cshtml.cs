@@ -277,6 +277,18 @@ public class LoginModel : AccountPageModel
         CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
         CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
         CheckIdentityErrors(await UserManager.AddDefaultRolesAsync(user));
+        
+        user.Name = info.Principal.FindFirstValue(AbpClaimTypes.Name);
+        user.Surname = info.Principal.FindFirstValue(AbpClaimTypes.SurName);
+
+        var phoneNumber = info.Principal.FindFirstValue(AbpClaimTypes.PhoneNumber);
+        if (!phoneNumber.IsNullOrWhiteSpace())
+        {
+            var phoneNumberConfirmed = string.Equals(info.Principal.FindFirstValue(AbpClaimTypes.PhoneNumberVerified), "true", StringComparison.InvariantCultureIgnoreCase);
+            user.SetPhoneNumber(phoneNumber, phoneNumberConfirmed);
+        }
+
+        await UserManager.UpdateAsync(user);
 
         return user;
     }
