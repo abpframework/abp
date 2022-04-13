@@ -205,7 +205,8 @@ If you don't want to remove either controller, you can configure `AbpAspNetCoreM
 ```csharp
 Configure<AbpAspNetCoreMvcOptions>(options =>
 {
-    options.IgnoredControllersOnModelExclusion.AddIfNotContains(typeof(MyAccountController));
+    options.IgnoredControllersOnModelExclusion
+           .AddIfNotContains(typeof(MyAccountController));
 });
 ```
 
