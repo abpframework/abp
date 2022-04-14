@@ -25,7 +25,6 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
-    protected AngularPwaSupportAdder AngularPwaSupportAdder { get; }
 
     public NewCommand(TemplateProjectBuilder templateProjectBuilder
         , ITemplateInfoProvider templateInfoProvider,
@@ -34,11 +33,10 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         ICmdHelper cmdHelper,
         IInstallLibsService installLibsService,
         AngularPwaSupportAdder angularPwaSupportAdder)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
-        AngularPwaSupportAdder = angularPwaSupportAdder;
     }
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
@@ -82,15 +80,9 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await RunInstallLibsForWebTemplateAsync(projectArgs);
-        OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
+        ConfigurePwaSupportForAngular(projectArgs);
 
-        var pwa = commandLineArgs.Options.ContainsKey(Options.ProgressiveWebApp.Short);
-        var angular = projectArgs.UiFramework == UiFramework.Angular;
-        if (angular && pwa)
-        {
-            Logger.LogInformation("Adding PWA Support to Angular app.");
-            AngularPwaSupportAdder.AddPwaSupport(projectArgs.OutputFolder);
-        }
+        OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }
 
     public string GetUsageInfo()
