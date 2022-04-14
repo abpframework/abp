@@ -1,4 +1,4 @@
-# Dealing with Multiple Implementations of a Service in Dependency Injection
+# Dealing with Multiple Implementations of a Service in ASP.NET Core & ABP Dependency Injection
 
 ASP.NET Core provides a built-in [dependency injection system](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) to register your services to the dependency injection container and inject/resolve them whenever you need. ABP's [dependency injection infrastructure](https://docs.abp.io/en/abp/latest/Dependency-Injection) is built on ASP.NET Core's DI system, automates service registration by conventions and provides some additional features.
 
