@@ -22,7 +22,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
     [IgnoreAntiforgeryToken]
     public virtual async Task<IActionResult> HandleAsync()
     {
-        var request = await GetOpenIddictServerRequest(HttpContext);
+        var request = await GetOpenIddictServerRequestAsync(HttpContext);
 
         // If prompt=login was specified by the client application,
         // immediately return the user agent to the login page.
@@ -162,7 +162,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
     [Authorize, AbpFormValueRequired("submit.Accept")]
     public virtual async Task<IActionResult> HandleAcceptConsentAsync()
     {
-        var request = await GetOpenIddictServerRequest(HttpContext);
+        var request = await GetOpenIddictServerRequestAsync(HttpContext);
 
         // Retrieve the profile of the logged in user.
         var user = await UserManager.GetUserAsync(User) ??

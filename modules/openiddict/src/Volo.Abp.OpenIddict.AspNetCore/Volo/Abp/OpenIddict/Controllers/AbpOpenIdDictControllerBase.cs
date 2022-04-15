@@ -25,14 +25,14 @@ public abstract class AbpOpenIdDictControllerBase : AbpController
     protected IOpenIddictAuthorizationManager AuthorizationManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictAuthorizationManager>();
     protected IOpenIddictScopeManager ScopeManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictScopeManager>();
     protected IOpenIddictTokenManager TokenManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictTokenManager>();
-    protected IOptions<AbpOpenIddictClaimDestinationsOptions> OpenIddictClaimDestinationsOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpOpenIddictClaimDestinationsOptions>>();
+    protected AbpOpenIddictClaimDestinationsManager OpenIddictClaimDestinationsManager => LazyServiceProvider.LazyGetRequiredService<AbpOpenIddictClaimDestinationsManager>();
 
     protected AbpOpenIdDictControllerBase()
     {
         LocalizationResource = typeof(AbpOpenIddictResource);
     }
 
-    protected virtual Task<OpenIddictRequest> GetOpenIddictServerRequest(HttpContext httpContext)
+    protected virtual Task<OpenIddictRequest> GetOpenIddictServerRequestAsync(HttpContext httpContext)
     {
         var request = HttpContext.GetOpenIddictServerRequest() ??
                       throw new InvalidOperationException(L["TheOpenIDConnectRequestCannotBeRetrieved"]);
@@ -57,13 +57,6 @@ public abstract class AbpOpenIdDictControllerBase : AbpController
 
     protected virtual async Task SetClaimsDestinationsAsync(ClaimsPrincipal principal)
     {
-        using (var scope = LazyServiceProvider.LazyGetRequiredService<IServiceProvider>().CreateScope())
-        {
-            foreach (var providerType in OpenIddictClaimDestinationsOptions.Value.ClaimDestinationsProvider)
-            {
-                var provider = (IAbpOpenIddictClaimDestinationsProvider)scope.ServiceProvider.GetRequiredService(providerType);
-                await provider.SetDestinationsAsync(new AbpOpenIddictClaimDestinationsProviderContext(scope.ServiceProvider, principal, principal.Claims.ToArray()));
-            }
-        }
+        await OpenIddictClaimDestinationsManager.SetAsync(principal);
     }
 }

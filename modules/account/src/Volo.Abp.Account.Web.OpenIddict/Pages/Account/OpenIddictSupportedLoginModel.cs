@@ -1,37 +1,37 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenIddict.Abstractions;
 using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.OpenIddict;
 
 namespace Volo.Abp.Account.Web.Pages.Account;
 
 [ExposeServices(typeof(LoginModel))]
 public class OpenIddictSupportedLoginModel : LoginModel
 {
+    protected AbpOpenIddictRequestHelper OpenIddictRequestHelper { get; }
     public OpenIddictSupportedLoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions,
-        IOptions<IdentityOptions> identityOptions)
+        IOptions<IdentityOptions> identityOptions,
+        AbpOpenIddictRequestHelper openIddictRequestHelper)
         : base(schemeProvider, accountOptions, identityOptions)
     {
+        OpenIddictRequestHelper = openIddictRequestHelper;
     }
 
     public async override Task<IActionResult> OnGetAsync()
     {
         LoginInput = new LoginInputModel();
 
-        var request = await GetOpenIddictRequestFromReturnUrlAsync(ReturnUrl);
+        var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
         if (request?.ClientId != null)
         {
             ShowCancelButton = true;
@@ -54,9 +54,9 @@ public class OpenIddictSupportedLoginModel : LoginModel
     {
         if (action == "Cancel")
         {
-            var request = await GetOpenIddictRequestFromReturnUrlAsync(ReturnUrl);
+            var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
 
-            var transaction = HttpContext.Features.Get<OpenIddictServerAspNetCoreFeature>()?.Transaction;
+            var transaction = HttpContext.GetOpenIddictServerTransaction();
             if (request?.ClientId != null && transaction != null)
             {
                 transaction.EndpointType = OpenIddictServerEndpointType.Authorization;
@@ -72,26 +72,6 @@ public class OpenIddictSupportedLoginModel : LoginModel
         }
 
         return await base.OnPostAsync(action);
-    }
-
-    protected virtual Task<OpenIddictRequest> GetOpenIddictRequestFromReturnUrlAsync(string returnUrl)
-    {
-        if (!returnUrl.IsNullOrWhiteSpace())
-        {
-            var qm = returnUrl.IndexOf("?", StringComparison.Ordinal);
-            if (qm > 0)
-            {
-                return Task.FromResult(new OpenIddictRequest(returnUrl.Substring(qm + 1)
-                    .Split("&")
-                    .Select(x =>
-                        x.Split("=").Length == 2
-                            ? new KeyValuePair<string, string>(x.Split("=")[0], WebUtility.UrlDecode(x.Split("=")[1]))
-                            : new KeyValuePair<string, string>(null, null))
-                    .Where(x => x.Key != null)));
-            }
-        }
-
-        return Task.FromResult<OpenIddictRequest>(null);
     }
 
     public async override Task<IActionResult> OnPostExternalLogin(string provider)
