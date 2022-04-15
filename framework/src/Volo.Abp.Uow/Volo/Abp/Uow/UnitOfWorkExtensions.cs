@@ -34,7 +34,7 @@ public static class UnitOfWorkExtensions
     {
         Check.NotNull(unitOfWork, nameof(unitOfWork));
 
-        return unitOfWork.Items.FirstOrDefault(x => x.Key == key).As<TValue>();
+        return unitOfWork.Items.FirstOrDefault(x => x.Key == key).Value.As<TValue>();
     }
 
     public static TValue GetOrAddItem<TValue>([NotNull] this IUnitOfWork unitOfWork, string key, Func<string, TValue> factory)
