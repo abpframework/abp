@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
@@ -11,31 +13,41 @@ namespace Volo.Abp.BackgroundWorkers;
     )]
 public class AbpBackgroundWorkersModule : AbpModule
 {
-    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
+
+    public override Task OnPostApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
         if (options.IsEnabled)
         {
-            await context.ServiceProvider
-                .GetRequiredService<IBackgroundWorkerManager>()
-                .StartAsync();
+            var backgroundWorkerManager = context.ServiceProvider.GetRequiredService<IBackgroundWorkerManager>();
+
+            _cancellationToken.Token.Register(state =>
+            {
+                AsyncHelper.RunSync(() => backgroundWorkerManager.StopAsync());
+            }, backgroundWorkerManager);
+
+            Task.Factory.StartNew(async () => await backgroundWorkerManager.StartAsync(_cancellationToken.Token), TaskCreationOptions.LongRunning);
         }
+
+        return Task.CompletedTask;
     }
 
-    public async override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
         if (options.IsEnabled)
         {
-            await context.ServiceProvider
-                .GetRequiredService<IBackgroundWorkerManager>()
-                .StopAsync();
+            _cancellationToken.Cancel();
+            _cancellationToken.Dispose();
         }
+
+        return Task.CompletedTask;
     }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
     {
-        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
+        AsyncHelper.RunSync(() => OnPostApplicationInitializationAsync(context));
     }
 
     public override void OnApplicationShutdown(ApplicationShutdownContext context)
