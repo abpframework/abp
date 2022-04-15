@@ -587,6 +587,10 @@
           "path": "API/Dynamic-CSharp-API-Clients.md"
         },
         {
+          "text": "Static C# API Clients",
+          "path": "API/Static-CSharp-API-Clients.md"
+        },
+        {
           "text": "ABP Endpoints",
           "items": [
             {
