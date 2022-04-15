@@ -6,7 +6,7 @@ This template provides a layered application structure based on the [Domain Driv
 
 This document explains **the solution structure** and projects in details. If you want to start quickly, follow the guides below:
 
-* [The getting started document](../Getting-Started-With-Startup-Templates.md) explains how to create a new application in a few minutes.
+* [The getting started document](../Getting-Started.md) explains how to create a new application in a few minutes.
 * [The application development tutorial](../Tutorials/Part-1) explains step by step application development.
 
 ## How to Start With?
