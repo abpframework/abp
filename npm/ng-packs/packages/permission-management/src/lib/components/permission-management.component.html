@@ -2,8 +2,8 @@
   <ng-container *ngIf="data.entityDisplayName">
     <ng-template #abpHeader>
       <h4>
-        {{ 'AbpPermissionManagement::Permissions' | abpLocalization }} -
-        {{ data.entityDisplayName }}
+        {{ 'AbpPermissionManagement::Permissions' | abpLocalization }}
+        <ng-template [ngIf]="title"> - </ng-template> {{ title }}
       </h4>
     </ng-template>
     <ng-template #abpBody>

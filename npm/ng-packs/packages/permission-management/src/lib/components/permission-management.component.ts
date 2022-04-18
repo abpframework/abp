@@ -64,6 +64,9 @@ export class PermissionManagementComponent
     return this._visible;
   }
 
+  @Input()
+  title = '';
+
   set visible(value: boolean) {
     if (value === this._visible) return;
 
