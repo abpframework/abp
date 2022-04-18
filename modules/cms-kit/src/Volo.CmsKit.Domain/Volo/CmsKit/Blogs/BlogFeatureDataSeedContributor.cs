@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.GlobalFeatures;
 
 namespace Volo.CmsKit.Blogs;
 
@@ -19,6 +20,11 @@ public class BlogFeatureDataSeedContributor : IDataSeedContributor, ITransientDe
 
     public async Task SeedAsync(DataSeedContext context)
     {
+        if (!GlobalFeatureManager.Instance.IsEnabled<BlogFeature>())
+        {
+            return;
+        }
+
         var blogs = await _blogRepository.GetListAsync();
 
         foreach (var blog in blogs)
