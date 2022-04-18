@@ -19,10 +19,20 @@ public abstract class AbpDesignTimeDbContextBase<TModule, TContext> : IDesignTim
 
     protected virtual async Task<TContext> CreateDbContextAsync(string[] args)
     {
-        var application = await AbpApplicationFactory.CreateAsync<TModule>();
-        application.Services.ReplaceConfiguration(BuildConfiguration());
+        var application = await AbpApplicationFactory.CreateAsync<TModule>(options =>
+        {
+            options.Services.ReplaceConfiguration(BuildConfiguration());
+            ConfigureServices(options.Services);
+        });
+
         await application.InitializeAsync();
+
         return application.ServiceProvider.GetRequiredService<TContext>();
+    }
+
+    protected virtual void ConfigureServices(IServiceCollection services)
+    {
+
     }
 
     protected abstract IConfigurationRoot BuildConfiguration();
