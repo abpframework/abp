@@ -648,6 +648,10 @@
               "path": "UI/AspNetCore/Dynamic-JavaScript-Proxies.md"
             },
             {
+              "text": "Static JavaScript API Client Proxies",
+              "path": "UI/AspNetCore/Static-JavaScript-Proxies.md"
+            },
+            {
               "text": "Client Side Package Management",
               "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
