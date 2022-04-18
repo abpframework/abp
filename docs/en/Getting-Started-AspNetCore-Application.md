@@ -77,20 +77,17 @@ using BasicAspNetCoreApplication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ReplaceConfiguration(builder.Configuration);
-
-builder.Services.AddApplication<AppModule>();
+await builder.Services.AddApplicationAsync<AppModule>();
 
 var app = builder.Build();
 
-app.InitializeApplication();
-
-app.Run();
+await app.InitializeApplicationAsync();
+await app.RunAsync();
 ````
 
-``builder.Services.AddApplication<AppModule>();`` adds all services defined in all modules starting from the ``AppModule``.
+``builder.Services.AddApplicationAsync<AppModule>();`` adds all services defined in all modules starting from the ``AppModule``.
 
-``app.InitializeApplication()`` initializes and starts the application.
+``app.InitializeApplicationAsync()`` initializes and starts the application.
 
 ## Run the Application!
 
@@ -128,15 +125,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseAutofac();  //Add this line
 
-builder.Services.ReplaceConfiguration(builder.Configuration);
-
-builder.Services.AddApplication<AppModule>();
+await builder.Services.AddApplicationAsync<AppModule>();
 
 var app = builder.Build();
 
-app.InitializeApplication();
-
-app.Run();
+await app.InitializeApplicationAsync();
+await app.RunAsync();
 
 ````
 
