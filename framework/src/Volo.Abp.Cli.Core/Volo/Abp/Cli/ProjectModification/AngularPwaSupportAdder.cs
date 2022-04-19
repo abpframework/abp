@@ -21,12 +21,7 @@ public class AngularPwaSupportAdder : ITransientDependency
 
     public virtual void AddPwaSupport(string rootDirectory)
     {
-        var fileList = PackageJsonFileFinder.Find(rootDirectory).Where(x => x.Contains("angular")).ToList();
-
-        if (!fileList.Any())
-        {
-            return;
-        }
+        var fileList = PackageJsonFileFinder.Find(rootDirectory).Where(x => x.Contains("angular" + Path.DirectorySeparatorChar)).ToList();
 
         fileList.ForEach(AddPwaSupportToProject);
     }
@@ -35,6 +30,6 @@ public class AngularPwaSupportAdder : ITransientDependency
     {
         var directory = Path.GetDirectoryName(filePath).EnsureEndsWith(Path.DirectorySeparatorChar);
 
-        CmdHelper.RunCmd($"cd {directory} && ng add @angular/pwa --skip-confirmation");
+        CmdHelper.RunCmd("ng add @angular/pwa --skip-confirmation", workingDirectory: directory);
     }
 }
