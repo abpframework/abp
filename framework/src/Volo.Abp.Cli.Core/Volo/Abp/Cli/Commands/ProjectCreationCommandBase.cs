@@ -25,18 +25,21 @@ public abstract class ProjectCreationCommandBase
     public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
     public ICmdHelper CmdHelper { get; }
     public IInstallLibsService InstallLibsService { get; }
+    public AngularPwaSupportAdder AngularPwaSupportAdder { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
     public ProjectCreationCommandBase(
         ConnectionStringProvider connectionStringProvider, 
         SolutionPackageVersionFinder solutionPackageVersionFinder, 
         ICmdHelper cmdHelper, 
-        IInstallLibsService installLibsService)
+        IInstallLibsService installLibsService,
+        AngularPwaSupportAdder angularPwaSupportAdder)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
         InstallLibsService = installLibsService;
+        AngularPwaSupportAdder = angularPwaSupportAdder;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -176,7 +179,8 @@ public abstract class ProjectCreationCommandBase
             gitHubVoloLocalRepositoryPath,
             templateSource,
             commandLineArgs.Options,
-            connectionString
+            connectionString,
+            pwa
         );
     }
 
@@ -330,6 +334,18 @@ public abstract class ProjectCreationCommandBase
         {
             Logger.LogInformation("Installing client-side packages...");
             await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
+        }
+    }
+
+    protected void ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)
+    {
+        var isAngular = projectArgs.UiFramework == UiFramework.Angular;
+        var isPwa = projectArgs.Pwa;
+
+        if (isAngular && isPwa)
+        {
+            Logger.LogInformation("Adding PWA Support to Angular app.");
+            AngularPwaSupportAdder.AddPwaSupport(projectArgs.OutputFolder);
         }
     }
 
