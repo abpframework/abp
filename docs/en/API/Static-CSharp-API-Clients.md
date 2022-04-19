@@ -1,8 +1,8 @@
-# Dynamic C# API Client Proxies
+# Static C# API Client Proxies
 
-ABP can dynamically create C# API client proxies to call your remote HTTP services (REST APIs). In this way, you don't need to deal with `HttpClient` and other low level details to call remote services and get results.
+ABP can create C# API client proxy code to call your remote HTTP services (REST APIs). In this way, you don't need to deal with `HttpClient` and other low level details to call remote services and get results.
 
-Dynamic C# proxies automatically handle the following stuff for you;
+Static C# proxies automatically handle the following stuff for you;
 
 * Maps C# **method calls** to remote server **HTTP calls** by considering the HTTP method, route, query string parameters, request payload and other details.
 * **Authenticates** the HTTP Client by adding access token to the HTTP header.
@@ -15,7 +15,7 @@ This system can be used by any type of .NET client to consume your HTTP APIs.
 
 ## Static vs Dynamic Client Proxies
 
-ABP provides **two types** of client proxy generation system. This document explains the **dynamic client proxies**, which generates client-side proxies on runtime. You can also see the [Static C# API Client Proxies](Static-CSharp-API-Clients.md) documentation to learn how to generate proxies on development time.
+ABP provides **two types** of client proxy generation system. This document explains the **static client proxies**, which generates client-side code in your development time. You can also see the [Dynamic C# API Client Proxies](Dynamic-CSharp-API-Clients.md) documentation to learn how to use proxies generated on runtime.
 
 Development-time (static) client proxy generation has a **performance advantage** since it doesn't need to obtain the HTTP API definition on runtime. However, you should **re-generate** the client proxy code whenever you change your API endpoint definition. On the other hand, dynamic client proxies are generated on runtime and provides an **easier development experience**.
 
@@ -53,7 +53,7 @@ public class MyClientAppModule : AbpModule
 }
 ````
 
-Now, it's ready to create the client proxies. Example:
+Now, it's ready to configure the application for the  static client proxy generation. Example:
 
 ````csharp
 [DependsOn(
@@ -64,17 +64,17 @@ public class MyClientAppModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        //Create dynamic client proxies
-        context.Services.AddHttpClientProxies(
+        // Prepare for static client proxy generation
+        context.Services.AddStaticHttpClientProxies(
             typeof(BookStoreApplicationContractsModule).Assembly
         );
     }
 }
 ````
 
-`AddHttpClientProxies` method gets an assembly, finds all service interfaces in the given assembly, creates and registers proxy classes.
+`AddStaticHttpClientProxies` method gets an assembly, finds all service interfaces in the given assembly, and prepares for static client proxy generation.
 
-> The startup templates already comes pre-configured for the client proxy generation, in the `HttpApi.Client` project.
+> The [application startup template](../Startup-Templates/Application.md) comes pre-configured for the **dynamic** client proxy generation, in the `HttpApi.Client` project. If you want to switch to the **static** client proxies, change `context.Services.AddHttpClientProxies` to `context.Services.AddStaticHttpClientProxies` in the module class of your `HttpApi.Client` project.
 
 ### Endpoint Configuration
 
@@ -90,11 +90,31 @@ public class MyClientAppModule : AbpModule
 }
 ```
 
-See the "AbpRemoteServiceOptions" section below for more detailed configuration.
+See the *AbpRemoteServiceOptions* section below for more detailed configuration.
+
+### Code Generation
+
+Server side must be up and running while generating the client proxy code. So, run your application that serves the HTTP APIs on the `BaseUrl` that is configured like explained in the *Endpoint Configuration* section.
+
+Open a command-line terminal in the root folder of your client project (`.csproj`) and type the following command:
+
+````bash
+abp generate-proxy -t csharp -u http://localhost:53929/
+````
+
+> If you haven't installed yet, you should install the [ABP CLI](../CLI.md).
+
+This command should generate the following files under the `ClientProxies` folder:
+
+![generated-static-client-proxies](../images/generated-static-client-proxies.png)
+
+`BookClientProxy.Generated.cs` is the actual generated proxy class in this example. `BookClientProxy` is a `partial` class where you can write your custom code (ABP won't override it). `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests.
+
+> `generate-proxy` command generates proxies for only the APIs you've defined in your application. If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../CLI.md) documentation for other options.
 
 ## Usage
 
-It's straightforward to use. Just inject the service interface in the client application code:
+It's straightforward to use the client proxies. Just inject the service interface in the client application code:
 
 ````csharp
 public class MyService : ITransientDependency
@@ -106,7 +126,7 @@ public class MyService : ITransientDependency
         _bookService = bookService;
     }
 
-    public async Task DoIt()
+    public async Task DoItAsync()
     {
         var books = await _bookService.GetListAsync();
         foreach (var book in books)
@@ -117,11 +137,7 @@ public class MyService : ITransientDependency
 }
 ````
 
-This sample injects the `IBookAppService` service interface defined above. The dynamic client proxy implementation makes an HTTP call whenever a service method is called by the client.
-
-### IHttpClientProxy Interface
-
-While you can inject `IBookAppService` like above to use the client proxy, you could inject `IHttpClientProxy<IBookAppService>` for a more explicit usage. In this case you will use the `Service` property of the `IHttpClientProxy<T>` interface.
+This sample injects the `IBookAppService` service interface defined above. The static client proxy implementation makes an HTTP call whenever a service method is called by the client.
 
 ## Configuration
 
@@ -159,31 +175,16 @@ The examples above have configured the "Default" remote service endpoint. You ma
 }
 ````
 
-`AddHttpClientProxies` method can get an additional parameter for the remote service name. Example:
+`AddStaticHttpClientProxies` method can get an additional parameter for the remote service name. Example:
 
 ````csharp
-context.Services.AddHttpClientProxies(
+context.Services.AddStaticHttpClientProxies(
     typeof(BookStoreApplicationContractsModule).Assembly,
     remoteServiceConfigurationName: "BookStore"
 );
 ````
 
 `remoteServiceConfigurationName` parameter matches the service endpoint configured via `AbpRemoteServiceOptions`. If the `BookStore` endpoint is not defined then it fallbacks to the `Default` endpoint.
-
-### As Default Services
-
-When you create a service proxy for `IBookAppService`, you can directly inject the `IBookAppService` to use the proxy client (as shown in the usage section). You can pass `asDefaultServices: false` to the `AddHttpClientProxies` method to disable this feature.
-
-````csharp
-context.Services.AddHttpClientProxies(
-    typeof(BookStoreApplicationContractsModule).Assembly,
-    asDefaultServices: false
-);
-````
-
-Using `asDefaultServices: false` may only be needed if your application has already an implementation of the service and you do not want to override/replace the other implementation by your client proxy.
-
-> If you disable `asDefaultServices`, you can only use `IHttpClientProxy<T>` interface to use the client proxies. See the *IHttpClientProxy Interface* section above.
 
 ### Retry/Failure Logic & Polly Integration
 
@@ -213,4 +214,4 @@ This example uses the [Microsoft.Extensions.Http.Polly](https://www.nuget.org/pa
 
 ## See Also
 
-* [Static C# Client Proxies](Static-CSharp-API-Clients.md)
+* [Dynamic C# Client Proxies](Dynamic-CSharp-API-Clients.md)
