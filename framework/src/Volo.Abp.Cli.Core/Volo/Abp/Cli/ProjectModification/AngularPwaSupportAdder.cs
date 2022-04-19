@@ -21,7 +21,7 @@ public class AngularPwaSupportAdder : ITransientDependency
 
     public virtual void AddPwaSupport(string rootDirectory)
     {
-        var fileList = PackageJsonFileFinder.Find(rootDirectory).Where(x => x.Contains("angular.json")).ToList();
+        var fileList = PackageJsonFileFinder.Find(rootDirectory).Where(x => File.Exists(x.RemovePostFix("package.json") + "angular.json")).ToList();
 
         fileList.ForEach(AddPwaSupportToProject);
     }
