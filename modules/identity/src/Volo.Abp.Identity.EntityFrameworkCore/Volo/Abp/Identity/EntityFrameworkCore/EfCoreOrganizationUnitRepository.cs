@@ -137,7 +137,7 @@ public class EfCoreOrganizationUnitRepository
             .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<int> GetUnaddedRolesCountAsync(
@@ -151,7 +151,7 @@ public class EfCoreOrganizationUnitRepository
         return await dbContext.Roles
             .Where(r => !roleIds.Contains(r.Id))
             .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
-            .CountAsync(cancellationToken);
+            .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<IdentityUser>> GetMembersAsync(
@@ -211,7 +211,7 @@ public class EfCoreOrganizationUnitRepository
             .IncludeDetails(includeDetails)
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityUser.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<int> GetUnaddedUsersCountAsync(
@@ -231,7 +231,7 @@ public class EfCoreOrganizationUnitRepository
                 u.UserName.Contains(filter) ||
                 u.Email.Contains(filter) ||
                 (u.PhoneNumber != null && u.PhoneNumber.Contains(filter)))
-            .CountAsync(cancellationToken);
+            .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     [Obsolete("Use WithDetailsAsync method.")]

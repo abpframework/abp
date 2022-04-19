@@ -122,6 +122,7 @@ public partial class PermissionManagementModal
     {
         try
         {
+            
             var updateDto = new UpdatePermissionsDto
             {
                 Permissions = _groups
@@ -129,6 +130,14 @@ public partial class PermissionManagementModal
                     .Select(p => new UpdatePermissionDto { IsGranted = p.IsGranted, Name = p.Name })
                     .ToArray()
             };
+            
+            if (!updateDto.Permissions.Any(x => x.IsGranted))
+            {
+                if (!await Message.Confirm(L["RemoveAllPermissionsWarningMessage"].Value))
+                {
+                    return;
+                }
+            }
 
             await PermissionAppService.UpdateAsync(_providerName, _providerKey, updateDto);
 
