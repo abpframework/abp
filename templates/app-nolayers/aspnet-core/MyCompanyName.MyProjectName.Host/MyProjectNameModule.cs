@@ -119,7 +119,7 @@ public class MyProjectNameModule : AbpModule
         ConfigureBundles();
         ConfigureMultiTenancy();
         ConfigureUrls(configuration);
-        ConfigureAutoMapper();
+        ConfigureAutoMapper(context);
         ConfigureSwagger(context.Services);
         ConfigureAutoApiControllers();
         ConfigureVirtualFiles(hostingEnvironment);
@@ -243,8 +243,9 @@ public class MyProjectNameModule : AbpModule
         );
     }
 
-    private void ConfigureAutoMapper()
+    private void ConfigureAutoMapper(ServiceConfigurationContext context)
     {
+        context.Services.AddAutoMapperObjectMapper<MyProjectNameModule>();
         Configure<AbpAutoMapperOptions>(options =>
         {
             /* Uncomment `validate: true` if you want to enable the Configuration Validation feature.
