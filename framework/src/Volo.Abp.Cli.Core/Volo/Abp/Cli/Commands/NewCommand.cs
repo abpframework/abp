@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
+using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
@@ -21,22 +22,19 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 {
     public const string Name = "new";
 
-    public ILogger<NewCommand> Logger { get; set; }
-
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
-
+    
     public NewCommand(TemplateProjectBuilder templateProjectBuilder
         , ITemplateInfoProvider templateInfoProvider,
         ConnectionStringProvider connectionStringProvider,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
-        ICmdHelper cmdHelper)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper)
+        ICmdHelper cmdHelper,
+        IInstallLibsService installLibsService)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
-
-        Logger = NullLogger<NewCommand>.Instance;
     }
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
@@ -79,7 +77,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
         RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
-        RunInstallLibsForWebTemplate(projectArgs);
+        await RunInstallLibsForWebTemplateAsync(projectArgs);
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }
 

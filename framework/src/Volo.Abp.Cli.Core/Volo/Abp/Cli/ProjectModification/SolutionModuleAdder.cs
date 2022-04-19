@@ -679,7 +679,7 @@ public class SolutionModuleAdder : ITransientDependency
 
         if (!string.IsNullOrEmpty(dbMigratorProject))
         {
-            CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProject) + "\" && dotnet run", out int exitCode);
+            CmdHelper.RunCmd($"dotnet run", out int exitCode, workingDirectory: Path.GetDirectoryName(dbMigratorProject));
         }
     }
 

@@ -1,15 +1,32 @@
 # Switch to Another DBMS for Entity Framework Core
 
-**[The application startup template](Startup-Templates/Application.md)** comes with **SQL Server provider pre-configured** for the Entity Framework Core. However, EF Core supports [many other DBMSs](https://docs.microsoft.com/en-us/ef/core/providers/) and you can use any of them within your ABP based applications.
+[ABP CLI](CLI.md) provides a `-dbms` option to allow you to choose your Database Management System (DBMS) while creating a new solution. It accepts the following values:
 
-ABP framework provides **integration packages** for some common DBMSs to make the configuration a bit easier. You can use the following documents to learn how to **switch to your favorite DBMS**:
+- `SqlServer` (default)
+- `MySQL`
+- `SQLite`
+- `Oracle`
+- `Oracle-Devart`
+- `PostgreSQL`
+
+So, if you want to use MySQL for your solution, you can use the `-dbms MySQL` option while using the `abp new` command. Example:
+
+````bash
+abp new BookStore -dbms MySQL
+````
+
+Also, the [Get Started page](https://abp.io/get-started) on the ABP website allows you to select one of the providers.
+
+> **This document provides guidance for who wants to manually change their DBMS after creating the solution.**
+
+You can use the following documents to learn how to **switch to your favorite DBMS**:
 
 * [MySQL](Entity-Framework-Core-MySQL.md)
 * [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
 * [Oracle](Entity-Framework-Core-Oracle.md)
 * [SQLite](Entity-Framework-Core-SQLite.md)
 
-However, you can configure your DBMS provider **without** these integration packages. While using the integration package is always recommended (it also makes standard for the depended version across different modules), you can do it manually if there is no integration package for your DBMS provider.
+You can also configure your DBMS provider **without** these integration packages. While using the integration package is always recommended (it also makes standard for the depended version across different modules), you can do it yourself if there is no integration package for your DBMS provider.
 
 For an example, this document explains how to switch to MySQL without using [the MySQL integration package](Entity-Framework-Core-MySQL.md).
 
