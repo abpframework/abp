@@ -60,7 +60,7 @@ public class UpdateBookDto : IHasConcurrencyStamp
 }
 ```
 
-Set the **ConcurrencyStamp** input value to the entity in the **UpdateAsync** method of your application service, for that purpose you can use the `SetConcurrencyStampIfNotNull` method as below:
+Set the **ConcurrencyStamp** input value to the entity in the **UpdateAsync** method of your application service as below:
 
 ```csharp
 public class BookAppService : ApplicationService, IBookAppService 
@@ -71,7 +71,7 @@ public class BookAppService : ApplicationService, IBookAppService
     {
         var book = await BookRepository.GetAsync(id);
 
-        book.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        book.ConcurrencyStamp = input.ConcurrencyStamp;
 
         //set other input values to the entity ...
 
@@ -120,7 +120,7 @@ public class UpdateBookDto : IHasConcurrencyStamp
 }
 ```
 
-Set the **ConcurrencyStamp** input value to the entity in the **UpdateAsync** method of your application service, for that purpose you can use the `SetConcurrencyStampIfNotNull` method as below:
+Set the **ConcurrencyStamp** input value to the entity in the **UpdateAsync** method of your application service as below:
 
 ```csharp
 public class BookAppService : ApplicationService, IBookAppService 
@@ -131,7 +131,7 @@ public class BookAppService : ApplicationService, IBookAppService
     {
         var book = await BookRepository.GetAsync(id);
 
-        book.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        book.ConcurrencyStamp = input.ConcurrencyStamp;
 
         //set other input values to the entity ...
 

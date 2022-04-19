@@ -26,7 +26,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 ## C# and JavaScript Static Client Proxies
 
-This feature does not compatible with [URL Path Versioning](https://github.com/dotnet/aspnet-api-versioning/wiki/Versioning-via-the-URL-Path), I suggest you always use [Versioning-via-the-Query-String](https://github.com/dotnet/aspnet-api-versioning/wiki/Versioning-via-the-Query-String).
+This feature does not compatible with [URL Path Versioning](https://github.com/dotnet/aspnet-api-versioning/wiki/Versioning-via-the-URL-Path), we suggest to use [Versioning-via-the-Query-String](https://github.com/dotnet/aspnet-api-versioning/wiki/Versioning-via-the-Query-String).
 
 ### Example
 
@@ -45,7 +45,7 @@ public interface IBookV2AppService : IApplicationService
 }
 ```
 
-**HttpApi Controillers:**
+**HttpApi Controllers:**
 ```cs
 [Area(BookStoreRemoteServiceConsts.ModuleName)]
 [RemoteService(Name = BookStoreRemoteServiceConsts.RemoteServiceName)]
@@ -175,7 +175,7 @@ bookStore.books.bookV2.getAsyncByIsbn = function(isbn, api_version, ajaxParams) 
 ```
 
 
-## Manually change version
+## Changing version manually
 
 If an application service class supports multiple versions. You can inject `ICurrentApiVersionInfo` to switch versions in C#.
 
@@ -337,13 +337,15 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
 }
 ```
 
-## Custom multi-version API controller.
+## Custom multi-version API controller
 
-ABP Framework will not affect to your APIs, you can freely implement your APIs according to Microsoft's documentation.
+ABP Framework will not affect to your APIs, you can freely implement your APIs according to the Microsoft's documentation.
 
-Get more from https://github.com/dotnet/aspnet-api-versioning/wiki
+Further information, see https://github.com/dotnet/aspnet-api-versioning/wiki
 
 
 ## Sample source code
 
-You can get the complete sample source code in https://github.com/abpframework/abp-samples/tree/master/Api-Versioning
+Follow the link below to get the sample's complete source-code
+
+https://github.com/abpframework/abp-samples/tree/master/Api-Versioning

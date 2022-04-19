@@ -8,7 +8,11 @@ public class TemplateCodeDeleteStep : ProjectBuildPipelineStep
     {
         foreach (var file in context.Files)
         {
-            if (file.Name.EndsWith(".cs") || file.Name.EndsWith(".csproj") || file.Name.EndsWith(".cshtml") || file.Name.EndsWith(".json"))
+            if (file.Name.EndsWith(".cs") ||
+                file.Name.EndsWith(".csproj") ||
+                file.Name.EndsWith(".cshtml") ||
+                file.Name.EndsWith(".json") ||
+                file.Name.EndsWith(".html"))
             {
                 file.RemoveTemplateCode(context.Symbols);
                 file.RemoveTemplateCodeMarkers();

@@ -12,6 +12,12 @@
     <link href="main.css" rel="stylesheet"/>
     <!--/ABP:Styles-->
     <link href="MyCompanyName.MyProjectName.Blazor.styles.css" rel="stylesheet"/>
+    
+    <!-- <TEMPLATE-REMOVE IF-NOT='PWA'> -->
+    <link href="manifest.json" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+    <!-- </TEMPLATE-REMOVE> -->
 </head>
 
 <body class="abp-application-layout bg-light">
@@ -25,5 +31,9 @@
     <!--ABP:Scripts-->
     <script src="global.js?_v=637843235839470529"></script>
     <!--/ABP:Scripts-->
+
+    <!-- <TEMPLATE-REMOVE IF-NOT='PWA'> -->
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <!-- </TEMPLATE-REMOVE> -->
 </body>
 </html>
