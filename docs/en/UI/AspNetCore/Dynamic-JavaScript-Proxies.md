@@ -1,6 +1,12 @@
 # Dynamic JavaScript API Client Proxies
 
-It is typical to consume your HTTP APIs from your JavaScript code. To do that, you normally deal with low level AJAX calls, like $.ajax, or better [abp.ajax](JavaScript-API/Ajax.md). ABP Framework provides **a better way** to call your HTTP APIs from your JavaScript code: Dynamic JavaScript API Client Proxies!
+It is typical to consume your HTTP APIs from your JavaScript code. To do that, you normally deal with low level AJAX calls, like $.ajax, or better [abp.ajax](JavaScript-API/Ajax.md). ABP Framework provides **a better way** to call your HTTP APIs from your JavaScript code: JavaScript API Client Proxies!
+
+## Static vs Dynamic JavaScript Client Proxies
+
+ABP provides **two types** of client proxy generation system. This document explains the **dynamic client proxies**, which generates client-side proxies on runtime. You can also see the [Static JavaScript API Client Proxies](Static-JavaScript-Proxies.md) documentation to learn how to generate proxies on development time.
+
+Development-time (static) client proxy generation has a **slight performance advantage** since it doesn't need to obtain the HTTP API definition on runtime. However, you should **re-generate** the client proxy code whenever you change your API endpoint definition. On the other hand, dynamic client proxies are generated on runtime and provides an **easier development experience**.
 
 ## A Quick Example
 
@@ -55,7 +61,7 @@ acme.bookStore.authors.author
 
 ## AJAX Details
 
-Dynamic JavaScript client proxy functions use the [abp.ajax](JavaScript-API/Ajax.md) under the hood. So, you have the same benefits like **automatic error handling**. Also, you can fully control the AJAX call by providing the options.
+JavaScript client proxy functions use the [abp.ajax](JavaScript-API/Ajax.md) under the hood. So, you have the same benefits like **automatic error handling**. Also, you can fully control the AJAX call by providing the options.
 
 ### The Return Value
 
@@ -86,6 +92,6 @@ The magic is done by the `/Abp/ServiceProxyScript` endpoint defined by the ABP F
 
 ## See Also
 
-* [Web Application Development Tutorial](../../Tutorials/Part-1.md)
+* [Static JavaScript API Client Proxies](Static-JavaScript-Proxies.md)
 * [Auto API Controllers](../../API/Auto-API-Controllers.md)
-* [Dynamic C# API Client Proxies](../../API/Dynamic-CSharp-API-Clients.md)
+* [Web Application Development Tutorial](../../Tutorials/Part-1.md)

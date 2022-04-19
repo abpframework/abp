@@ -2,6 +2,7 @@
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Blogs;
 
@@ -20,7 +21,7 @@ public class BlogFeatureDataSeedContributor : IDataSeedContributor, ITransientDe
 
     public async Task SeedAsync(DataSeedContext context)
     {
-        if (!GlobalFeatureManager.Instance.IsEnabled<BlogFeature>())
+        if (!GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
         {
             return;
         }
