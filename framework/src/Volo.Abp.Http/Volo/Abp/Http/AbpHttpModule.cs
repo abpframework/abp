@@ -17,5 +17,10 @@ public class AbpHttpModule : AbpModule
         {
             options.Generators[JQueryProxyScriptGenerator.Name] = typeof(JQueryProxyScriptGenerator);
         });
+
+        Configure<DynamicJavaScriptProxyOptions>(options =>
+        {
+            options.DisableModule("abp");
+        });
     }
 }
