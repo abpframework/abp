@@ -29,6 +29,8 @@ public class BlogModule : AbpModule
 
 ``ConfigureServices`` is the main method to add your services to the dependency injection system and configure other modules. Example:
 
+> These methods have Async versions too, and if you want to make asynchronous calls inside these methods, override the asynchronous versions instead of the synchronous ones.
+
 ````C#
 public class BlogModule : AbpModule
 {
@@ -63,6 +65,8 @@ See the [Configuration](Configuration.md) document for more about the configurat
 
 ``AbpModule`` class also defines ``PreConfigureServices`` and ``PostConfigureServices`` methods to override and write your code just before and just after ``ConfigureServices``. Notice that the code you have written into these methods will be executed before/after the ``ConfigureServices`` methods of all other modules.
 
+> These methods have Async versions too, and if you want to make asynchronous calls inside these methods, override the asynchronous versions instead of the synchronous ones.
+
 ### Application Initialization
 
 Once all the services of all modules are configured, the application starts by initializing all modules. In this phase, you can resolve services from ``IServiceProvider`` since it's ready and available.
@@ -71,10 +75,18 @@ Once all the services of all modules are configured, the application starts by i
 
 You can override ``OnApplicationInitialization`` method to execute code while application is being started. Example:
 
+> These methods have Async versions too, and if you want to make asynchronous calls inside these methods, override the asynchronous versions instead of the synchronous ones.
+
 ````C#
 public class BlogModule : AbpModule
 {
-    //...
+    // Asynchronous methods call synchronous methods by default, You only need to implement one of them.
+
+    public override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        var myService = context.ServiceProvider.GetService<MyService>();
+        await myService.DoSomethingAsync();
+    }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
