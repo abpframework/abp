@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Cli.Utils;
+﻿using System.Diagnostics;
+
+namespace Volo.Abp.Cli.Utils;
 
 public interface ICmdHelper
 {
@@ -12,6 +14,8 @@ public interface ICmdHelper
 
     void RunCmd(string command, string workingDirectory = null);
 
+    Process RunCmdAndGetProcess(string command, string workingDirectory = null);
+    
     void RunCmd(string command, out int exitCode, string workingDirectory = null);
 
     string RunCmdAndGetOutput(string command, string workingDirectory = null);
