@@ -59,12 +59,13 @@ export class UsersComponent implements OnInit {
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
+  entityDisplayName: string;
+
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   onVisiblePermissionChange = event => {
     this.visiblePermissions = event;
   };
-  entityDisplayName: string;
 
   get roleGroups(): FormGroup[] {
     return ((this.form.get('roleNames') as FormArray)?.controls as FormGroup[]) || [];
