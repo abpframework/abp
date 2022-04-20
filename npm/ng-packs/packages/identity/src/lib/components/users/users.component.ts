@@ -64,7 +64,7 @@ export class UsersComponent implements OnInit {
   onVisiblePermissionChange = event => {
     this.visiblePermissions = event;
   };
-  userName: string;
+  entityDisplayName: string;
 
   get roleGroups(): FormGroup[] {
     return ((this.form.get('roleNames') as FormArray)?.controls as FormGroup[]) || [];
@@ -177,9 +177,9 @@ export class UsersComponent implements OnInit {
     this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => (this.data = res));
   }
 
-  openPermissionsModal(providerKey: string, userName:string) {
+  openPermissionsModal(providerKey: string, entityDisplayName?: string) {
     this.providerKey = providerKey;
-    this.userName = userName;
+    this.entityDisplayName = entityDisplayName;
     setTimeout(() => {
       this.visiblePermissions = true;
     }, 0);

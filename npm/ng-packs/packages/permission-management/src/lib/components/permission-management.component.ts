@@ -65,7 +65,7 @@ export class PermissionManagementComponent
   }
 
   @Input()
-  title = '';
+  entityDisplayName: string | undefined;
 
   set visible(value: boolean) {
     if (value === this._visible) return;
