@@ -12,6 +12,7 @@ public class TemplateCodeDeleteStep : ProjectBuildPipelineStep
                 file.Name.EndsWith(".csproj") ||
                 file.Name.EndsWith(".cshtml") ||
                 file.Name.EndsWith(".json") ||
+                file.Name.EndsWith(".gitignore") ||
                 file.Name.EndsWith(".html"))
             {
                 file.RemoveTemplateCode(context.Symbols);
