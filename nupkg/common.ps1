@@ -347,6 +347,7 @@ $projects = (
     "modules/openiddict/src/Volo.Abp.OpenIddict.Domain.Shared",
     "modules/openiddict/src/Volo.Abp.OpenIddict.EntityFrameworkCore",
     "modules/openiddict/src/Volo.Abp.OpenIddict.MongoDB",
+    "modules/openiddict/src/Volo.Abp.PermissionManagement.Domain.OpenIddict",
 
     # modules/permission-management
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application.Contracts",
