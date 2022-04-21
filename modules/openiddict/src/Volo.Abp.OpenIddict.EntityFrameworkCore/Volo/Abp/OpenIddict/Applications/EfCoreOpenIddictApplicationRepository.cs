@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Volo.Abp.OpenIddict.Applications;
 
@@ -16,6 +17,23 @@ public class EfCoreOpenIddictApplicationRepository : EfCoreRepository<IOpenIddic
         : base(dbContextProvider)
     {
 
+    }
+
+    public async Task<List<OpenIddictApplication>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictApplication.ClientId) : sorting)
+            .PageBy(skipCount, maxResultCount)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<OpenIddictApplication> FindByClientIdAsync(string clientId, CancellationToken cancellationToken = default)

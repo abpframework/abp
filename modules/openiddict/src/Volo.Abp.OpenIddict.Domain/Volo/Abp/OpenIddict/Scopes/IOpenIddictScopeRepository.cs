@@ -8,6 +8,10 @@ namespace Volo.Abp.OpenIddict.Scopes;
 
 public interface IOpenIddictScopeRepository : IBasicRepository<OpenIddictScope, Guid>
 {
+    Task<List<OpenIddictScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, CancellationToken cancellationToken = default);
+
+    Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default);
+    
     Task<OpenIddictScope> FindByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<OpenIddictScope> FindByNameAsync(string name, CancellationToken cancellationToken = default);

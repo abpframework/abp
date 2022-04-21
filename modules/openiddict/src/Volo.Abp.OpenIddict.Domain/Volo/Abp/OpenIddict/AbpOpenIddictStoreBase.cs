@@ -39,9 +39,7 @@ public abstract class AbpOpenIddictStoreBase<TRepository>
     {
         return identifier.ToString("D");
     }
-
-
-
+    
     protected virtual string WriteStream(Action<Utf8JsonWriter> action)
     {
         using (var stream = new MemoryStream())

@@ -8,6 +8,7 @@ using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.Abp.OpenIddict.MongoDB;
+using System.Linq.Dynamic.Core;
 
 namespace Volo.Abp.OpenIddict.Applications;
 
@@ -15,6 +16,25 @@ public class MongoOpenIddictApplicationRepository : MongoDbRepository<OpenIddict
 {
     public MongoOpenIddictApplicationRepository(IMongoDbContextProvider<OpenIddictMongoDbContext> dbContextProvider) : base(dbContextProvider)
     {
+    }
+    
+    public async Task<List<OpenIddictApplication>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await ((await GetMongoQueryableAsync(cancellationToken)))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictApplication.ClientId) : sorting)
+            .PageBy(skipCount, maxResultCount)
+            .As<IMongoQueryable<OpenIddictApplication>>()
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    {
+        return await ((await GetMongoQueryableAsync(cancellationToken)))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .As<IMongoQueryable<OpenIddictApplication>>()
+            .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async Task<OpenIddictApplication> FindByClientIdAsync(string clientId, CancellationToken cancellationToken = default)
