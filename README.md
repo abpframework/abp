@@ -1,11 +1,11 @@
 # ABP Framework
 
-[![build and test](https://img.shields.io/github/workflow/status/abpframework/abp/build%20and%20test/dev?style=flat-square)](https://github.com/abpframework/abp/actions/workflows/build-and-test.yml)
+[![build and test](https://img.shields.io/github/workflow/status/abpframework/abp/build%20and%20test/dev?logo=github&style=flat-square)](https://github.com/abpframework/abp/actions/workflows/build-and-test.yml)
 [![codecov](https://img.shields.io/codecov/c/github/abpframework/abp/dev?logo=codecov&style=flat-square&token=jUKLCxa6HF)](https://codecov.io/gh/abpframework/abp)
-[![NuGet](https://img.shields.io/nuget/v/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
-[![NuGet (with prereleases)](https://img.shields.io/nuget/vpre/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
+[![NuGet](https://img.shields.io/nuget/v/Volo.Abp.Core.svg?logo=nuget&style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
+[![NuGet (with prereleases)](https://img.shields.io/nuget/vpre/Volo.Abp.Core.svg?logo=nuget&style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
 [![MyGet (nightly builds)](https://img.shields.io/myget/abp-nightly/vpre/Volo.Abp.svg?style=flat-square)](https://docs.abp.io/en/abp/latest/Nightly-Builds)
-[![NuGet Download](https://img.shields.io/nuget/dt/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
+[![NuGet Download](https://img.shields.io/nuget/dt/Volo.Abp.Core.svg?logo=nuget&style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
 
 ABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to create **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**.
 
