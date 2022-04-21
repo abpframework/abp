@@ -10,6 +10,7 @@ using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.PermissionManagement.Blazor.Components;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity;
 
@@ -38,7 +39,8 @@ public partial class UserManagement
     protected PageToolbar Toolbar { get; } = new();
 
     private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
-
+    private TextRole _passwordTextRole = TextRole.Password;
+    
     public UserManagement()
     {
         ObjectMapperContext = typeof(AbpIdentityBlazorModule);
@@ -64,6 +66,13 @@ public partial class UserManagement
         }
     }
 
+    protected virtual async Task OnSearchTextChanged(string value)
+    {
+        GetListInput.Filter = value;
+        CurrentPage = 1;
+        await GetEntitiesAsync();
+    }
+
     protected override async Task SetPermissionsAsync()
     {
         await base.SetPermissionsAsync();
@@ -82,6 +91,7 @@ public partial class UserManagement
             IsAssigned = x.IsDefault
         }).ToArray();
 
+        ChangePasswordTextRole(TextRole.Password);
         return base.OpenCreateModalAsync();
     }
 
@@ -107,6 +117,7 @@ public partial class UserManagement
                 IsAssigned = userRoleNames.Contains(x.Name)
             }).ToArray();
 
+            ChangePasswordTextRole(TextRole.Password);
             await base.OpenEditModalAsync(entity);
         }
         catch (Exception ex)
@@ -154,7 +165,7 @@ public partial class UserManagement
                     new EntityAction
                     {
                         Text = L["Delete"],
-                        Visible = (data) => HasDeletePermission,
+                        Visible = (data) => HasDeletePermission && CurrentUser.GetId() != data.As<IdentityUserDto>().Id,
                         Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityUserDto>()),
                         ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityUserDto>())
                     }
@@ -180,7 +191,7 @@ public partial class UserManagement
                     },
                     new TableColumn
                     {
-                        Title = L["Email"],
+                        Title = L["EmailAddress"],
                         Data = nameof(IdentityUserDto.Email),
                     },
                     new TableColumn
@@ -202,6 +213,18 @@ public partial class UserManagement
             requiredPolicyName: CreatePolicyName);
 
         return base.SetToolbarItemsAsync();
+    }
+
+    protected virtual void ChangePasswordTextRole(TextRole? textRole)
+    {
+        if (textRole == null)
+        {
+            ChangePasswordTextRole(_passwordTextRole == TextRole.Password ? TextRole.Text: TextRole.Password);
+        }
+        else
+        {
+            _passwordTextRole = textRole.Value;
+        }
     }
 }
 

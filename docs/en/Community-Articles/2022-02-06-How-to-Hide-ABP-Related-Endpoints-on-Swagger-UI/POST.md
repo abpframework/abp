@@ -108,7 +108,7 @@ public class SwaggerSettingConsts
 
 We've created a class with a constant variable to avoid using the magic strings. This variable will be our setting name.
 
-ABP provides us a [Settings System](https://docs.abp.io/en/abp/latest/Setting) to easily define settings for our applications. We only need to create a class that derives from the `SettingDefinitionProvider` class, but we don't even need to do this because the ABP startup templates come with a pre-defined setting provider class.
+ABP provides us a [Settings System](https://docs.abp.io/en/abp/latest/Settings) to easily define settings for our applications. We only need to create a class that derives from the `SettingDefinitionProvider` class, but we don't even need to do this because the ABP startup templates come with a pre-defined setting provider class.
 
 * So open the setting definition provider class (`SwaggerSettingsDemoSettingDefinitionProvider` in our case, it's under the /Settings folder of your domain layer) and update the class:
 

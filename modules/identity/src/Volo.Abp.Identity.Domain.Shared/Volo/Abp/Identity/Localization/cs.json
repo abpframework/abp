@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Vaše heslo bylo úspěšně změněno.",
     "PersonalSettingsSavedMessage": "Vaše osobní nastavení bylo úspěšně uloženo.",
     "Volo.Abp.Identity:DefaultError": "Došlo k neznámé chybě.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Selhání optimistické souběžnosti, objekt byl změněn.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Optimistická kontrola souběžnosti se nezdařila. Entita, na které pracujete, byla změněna jiným uživatelem. Zahoďte změny a zkuste to znovu.",
     "Volo.Abp.Identity:DuplicateEmail": "Email '{0}' již existuje.",
     "Volo.Abp.Identity:DuplicateRoleName": "Role '{0}' již existuje.",
     "Volo.Abp.Identity:DuplicateUserName": "Uživatelské jméno '{0}' již existuje.",

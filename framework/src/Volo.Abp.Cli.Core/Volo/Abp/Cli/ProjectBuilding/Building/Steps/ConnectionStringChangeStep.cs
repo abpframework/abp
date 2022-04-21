@@ -26,7 +26,7 @@ public class ConnectionStringChangeStep : ProjectBuildPipelineStep
             return;
         }
 
-        var newConnectionString = $"\"{DefaultConnectionStringKey}\": \"{context.BuildArgs.ConnectionString}\"";
+        var newConnectionString = $"\"{DefaultConnectionStringKey}\": \"{context.BuildArgs.ConnectionString.Replace(@"\\", @"\").Replace(@"\", @"\\")}\"";
 
         foreach (var appSettingsJson in appSettingsJsonFiles)
         {

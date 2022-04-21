@@ -2,11 +2,9 @@
 
 You can use the `ToasterService` in @abp/ng.theme.shared package to display messages in an overlay by placing at the root level in your project.
 
-
 ## Getting Started
 
 You do not have to provide the `ToasterService` at module or component level, because it is already **provided in root**. You can inject and start using it immediately in your components, directives, or services.
-
 
 ```js
 import { ToasterService } from '@abp/ng.theme.shared';
@@ -26,7 +24,7 @@ You can use the `success`, `warn`, `error`, and `info` methods of `ToasterServic
 ### How to Display a Toast Overlay
 
 ```js
-this.toaster.success('Message', 'Title');
+this.toaster.success("Message", "Title");
 ```
 
 - The `ToasterService` methods accept three parameters that are `message`, `title`, and `options`.
@@ -72,11 +70,10 @@ With the options above, the toast overlay looks like this:
 The open toast overlay can be removed manually via the `remove` method by passing the `id` of toast:
 
 ```js
-const toastId = this.toaster.success('Message', 'Title')
+const toastId = this.toaster.success("Message", "Title");
 
 this.toaster.remove(toastId);
 ```
-
 
 ### How to Remove All Toasts
 
@@ -85,11 +82,13 @@ The all open toasts can be removed manually via the `clear` method:
 ```js
 this.toaster.clear();
 ```
+
 ## Replacing ToasterService with 3rd party toaster libraries
 
 If you want the ABP Framework to utilize 3rd party libraries for the toasters instead of the built-in one, you can provide a service that implements `Toaster.Service` interface, and provide it as follows (ngx-toastr library used in example):
 
-> You can use *LocalizationService* for toaster messages translations. 
+> You can use _LocalizationService_ for toaster messages translations.
+
 ```js
 // your-custom-toaster.service.ts
 import { Injectable } from '@angular/core';
@@ -167,6 +166,7 @@ export class CustomToasterService implements Toaster.Service {
   }
 }
 ```
+
 ```js
 // app.module.ts
 
@@ -178,10 +178,11 @@ import { ToasterService } from '@abp/ng.theme.shared';
       {
         provide: ToasterService,
         useClass: CustomToasterService,
-      },  
+      },
   ]
 })
 ```
+
 ## API
 
 ### success
@@ -197,8 +198,7 @@ success(
 - `Config` namespace can be imported from `@abp/ng.core`.
 - `Toaster` namespace can be imported from `@abp/ng.theme.shared`.
 
-> See the [`Config.LocalizationParam` type](https://github.com/abpframework/abp/blob/master/npm/ng-packs/packages/core/src/lib/models/config.ts#L46) and [`Toaster` namespace](https://github.com/abpframework/abp/blob/master/npm/ng-packs/packages/theme-shared/src/lib/models/toaster.ts)
-
+> See the [`LocalizationParam` type](https://github.com/abpframework/abp/blob/master/npm/ng-packs/packages/core/src/lib/models/localization.ts#L6) and [`Toaster` namespace](https://github.com/abpframework/abp/blob/master/npm/ng-packs/packages/theme-shared/src/lib/models/toaster.ts)
 
 ### warn
 

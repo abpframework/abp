@@ -145,7 +145,7 @@ namespace Acme.BookStore.Web.Pages.Books
         <abp-column size-md="_6">
             <abp-card-title>@L["Books"]</abp-card-title>
         </abp-column>
-        <abp-column size-md="_6" class="text-right">
+        <abp-column size-md="_6" class="text-end">
             <abp-button id="NewBookButton"
                         text="@L["NewBook"].Value"
                         icon="plus"
@@ -175,7 +175,7 @@ namespace Acme.BookStore.Web.Pages.Books
             <abp-column size-md="_6">
                 <abp-card-title>@L["Books"]</abp-card-title>
             </abp-column>
-            <abp-column size-md="_6" class="text-right">
+            <abp-column size-md="_6" class="text-end">
                 <abp-button id="NewBookButton"
                             text="@L["NewBook"].Value"
                             icon="plus"
@@ -688,11 +688,10 @@ export class BookComponent implements OnInit {
     <div class="row">
       <div class="col col-md-6">
         <h5 class="card-title">{%{{{ '::Menu:Books' | abpLocalization }}}%}</h5>
-      </div>
-      <div class="text-right col col-md-6">
-
+      </div>        
+      <div class="text-end col col-md-6">
         <!-- Add the "new book" button here -->
-        <div class="text-lg-right pt-2">
+        <div class="text-lg-end pt-2">
           <button id="create" class="btn btn-primary" type="button" (click)="createBook()">
             <i class="fa fa-plus mr-1"></i>
             <span>{%{{{ "::NewBook" | abpLocalization }}}%}</span>
