@@ -94,8 +94,8 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
     public virtual async Task<List<OpenIddictToken>> ListAsync(int? count, int? offset, CancellationToken cancellationToken = default)
     {
         return await Queryable.OrderBy((await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))), x => x.Id)
-            .SkipIf<OpenIddictToken, IQueryable<OpenIddictToken>>(offset.HasValue, offset.Value)
-            .TakeIf<OpenIddictToken, IQueryable<OpenIddictToken>>(count.HasValue, count.Value)
+            .SkipIf<OpenIddictToken, IQueryable<OpenIddictToken>>(offset.HasValue, offset)
+            .TakeIf<OpenIddictToken, IQueryable<OpenIddictToken>>(count.HasValue, count)
             .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

@@ -59,8 +59,8 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
     {
         return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
             .OrderBy(authorization => authorization.Id!)
-            .SkipIf<OpenIddictAuthorization, IQueryable<OpenIddictAuthorization>>(offset.HasValue, offset.Value)
-            .TakeIf<OpenIddictAuthorization, IQueryable<OpenIddictAuthorization>>(count.HasValue, count.Value)
+            .SkipIf<OpenIddictAuthorization, IQueryable<OpenIddictAuthorization>>(offset.HasValue, offset)
+            .TakeIf<OpenIddictAuthorization, IQueryable<OpenIddictAuthorization>>(count.HasValue, count)
             .As<IMongoQueryable<OpenIddictAuthorization>>().ToListAsync(GetCancellationToken(cancellationToken));
     }
 

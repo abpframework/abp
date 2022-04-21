@@ -62,8 +62,8 @@ public class MongoOpenIddictApplicationRepository : MongoDbRepository<OpenIddict
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .OrderBy(x => x.Id)
-            .SkipIf<OpenIddictApplication, IQueryable<OpenIddictApplication>>(offset.HasValue, offset.Value)
-            .TakeIf<OpenIddictApplication, IQueryable<OpenIddictApplication>>(count.HasValue, count.Value)
+            .SkipIf<OpenIddictApplication, IQueryable<OpenIddictApplication>>(offset.HasValue, offset)
+            .TakeIf<OpenIddictApplication, IQueryable<OpenIddictApplication>>(count.HasValue, count)
             .As<IMongoQueryable<OpenIddictApplication>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

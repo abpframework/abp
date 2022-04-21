@@ -82,8 +82,8 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
     {
         return await (await GetQueryableAsync())
             .OrderBy(x => x.Id)
-            .SkipIf<OpenIddictToken, IQueryable<OpenIddictToken>>(offset.HasValue, offset.Value)
-            .TakeIf<OpenIddictToken, IQueryable<OpenIddictToken>>(count.HasValue, count.Value)
+            .SkipIf<OpenIddictToken, IQueryable<OpenIddictToken>>(offset.HasValue, offset)
+            .TakeIf<OpenIddictToken, IQueryable<OpenIddictToken>>(count.HasValue, count)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
