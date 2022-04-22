@@ -76,11 +76,7 @@ public class SourceCodeDownloadService : ITransientDependency
                         continue;
                     }
 
-                    using (var entryStream = zipEntry.Open())
-                    using (var fileStream = File.Create(fullZipToPath))
-                    {
-                        await entryStream.CopyToAsync(fileStream);
-                    }
+                    zipEntry.ExtractToFile(fullZipToPath, true);
                 }
             }
         }
@@ -123,11 +119,7 @@ public class SourceCodeDownloadService : ITransientDependency
                         continue;
                     }
 
-                    using (var entryStream = zipEntry.Open())
-                    using (var fileStream = File.Create(fullZipToPath))
-                    {
-                        await entryStream.CopyToAsync(fileStream);
-                    }
+                    zipEntry.ExtractToFile(fullZipToPath, true);
                 }
             }
         }
@@ -170,11 +162,7 @@ public class SourceCodeDownloadService : ITransientDependency
                         continue;
                     }
 
-                    using (var entryStream = zipEntry.Open())
-                    using (var fileStream = File.Create(fullZipToPath))
-                    {
-                        await entryStream.CopyToAsync(fileStream);
-                    }
+                    zipEntry.ExtractToFile(fullZipToPath, true);
                 }
             }
         }
