@@ -47,11 +47,12 @@ export class Body {
     const { bindingSourceId, descriptorName, jsonName, name, nameOnMethod } = param;
     const camelName = camel(name);
     const paramName = jsonName || camelName;
-    const value = descriptorName
-      ? shouldQuote(paramName)
+    let value = camelizeHyphen(nameOnMethod);
+    if (descriptorName) {
+      value = shouldQuote(paramName)
         ? `${descriptorName}['${paramName}']`
-        : `${descriptorName}.${paramName}`
-      : camelizeHyphen(nameOnMethod);
+        : `${descriptorName}.${paramName}`;
+    }
 
     switch (bindingSourceId) {
       case eBindingSourceId.Model:

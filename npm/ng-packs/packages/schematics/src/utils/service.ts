@@ -99,7 +99,7 @@ export function createActionToSignatureMapper() {
 }
 
 function getMethodNameFromAction(action: Action): string {
-  return action.uniqueName.replace('Async', '');
+  return action.uniqueName.split('Async')[0];
 }
 
 function getVersionParameter(action: Action) {
