@@ -82,7 +82,6 @@ public partial class RoleManagement
                     {
                         Title = L["Actions"],
                         Actions = EntityActions.Get<RoleManagement>(),
-                        Sortable = true,
                     },
                     new TableColumn
                     {
