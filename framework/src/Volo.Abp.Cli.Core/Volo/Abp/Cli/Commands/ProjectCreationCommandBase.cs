@@ -192,7 +192,7 @@ public abstract class ProjectCreationCommandBase
                         continue;
                     }
 
-                    var fullZipToPath = Path.Combine(outputFolder, zipEntry.FullName);
+                    var fullZipToPath = Path.Combine(outputFolder, zipEntry.FullName.RemovePreFix("/"));
                     var directoryName = Path.GetDirectoryName(fullZipToPath);
 
                     if (!string.IsNullOrEmpty(directoryName))
