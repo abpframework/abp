@@ -47,6 +47,8 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
         Check.NotNull(token, nameof(token));
 
         await Repository.InsertAsync(token.ToEntity(), autoSave: true, cancellationToken: cancellationToken);
+        
+        token = (await Repository.FindAsync(token.Id, cancellationToken: cancellationToken)).ToModel();
     }
 
     public virtual async ValueTask DeleteAsync(OpenIddictTokenModel token, CancellationToken cancellationToken)
@@ -442,5 +444,7 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
         var entity = await Repository.GetAsync(token.Id, cancellationToken: cancellationToken);
 
         await Repository.UpdateAsync(token.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
+        
+        token = (await Repository.FindAsync(entity.Id, cancellationToken: cancellationToken)).ToModel();
     }
 }
