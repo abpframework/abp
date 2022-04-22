@@ -206,11 +206,7 @@ public abstract class ProjectCreationCommandBase
                         continue;
                     }
 
-                    using (var entryStream = zipEntry.Open())
-                    using (var fileStream = File.Create(fullZipToPath))
-                    {
-                        entryStream.CopyTo(fileStream);
-                    }
+                    zipEntry.ExtractToFile(fullZipToPath, true);
                 }
             }
         }
