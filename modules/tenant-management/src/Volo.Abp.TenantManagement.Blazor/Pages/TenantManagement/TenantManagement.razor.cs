@@ -109,7 +109,7 @@ public partial class TenantManagement
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = EntityActions.Get<TenantManagement>()
+                        Actions = EntityActions.Get<TenantManagement>(),
                         Sortable = true,
                     },
                     new TableColumn
