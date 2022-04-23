@@ -12,6 +12,7 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
+using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -24,14 +25,15 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
-    
+
     public NewCommand(TemplateProjectBuilder templateProjectBuilder
         , ITemplateInfoProvider templateInfoProvider,
         ConnectionStringProvider connectionStringProvider,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
-        IInstallLibsService installLibsService)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService)
+        IInstallLibsService installLibsService,
+        AngularPwaSupportAdder angularPwaSupportAdder)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
@@ -78,6 +80,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await RunInstallLibsForWebTemplateAsync(projectArgs);
+        ConfigurePwaSupportForAngular(projectArgs);
+
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }
 

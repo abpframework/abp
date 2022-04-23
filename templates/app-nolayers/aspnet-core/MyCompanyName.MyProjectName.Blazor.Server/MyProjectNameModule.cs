@@ -36,6 +36,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.Blazor.Server;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -69,6 +70,7 @@ namespace MyCompanyName.MyProjectName;
 
     // Identity module packages
     typeof(AbpPermissionManagementDomainIdentityModule),
+    typeof(AbpPermissionManagementDomainIdentityServerModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
@@ -124,7 +126,7 @@ public class MyProjectNameModule : AbpModule
 
         ConfigureUrls(configuration);
         ConfigureBundles();
-        ConfigureAutoMapper();
+        ConfigureAutoMapper(context);
         ConfigureVirtualFiles(hostingEnvironment);
         ConfigureLocalizationServices();
         ConfigureSwaggerServices(context.Services);
@@ -276,8 +278,9 @@ public class MyProjectNameModule : AbpModule
         });
     }
 
-    private void ConfigureAutoMapper()
+    private void ConfigureAutoMapper(ServiceConfigurationContext context)
     {
+        context.Services.AddAutoMapperObjectMapper<MyProjectNameModule>();
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<MyProjectNameModule>();

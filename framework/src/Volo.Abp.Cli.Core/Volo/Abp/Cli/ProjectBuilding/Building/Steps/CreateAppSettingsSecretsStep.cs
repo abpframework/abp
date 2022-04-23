@@ -40,7 +40,21 @@ public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
 
     private static byte[] GetAppSettingsSecretJsonContent(ProjectBuildContext context)
     {
-        return context.Template.IsPro()
+        bool condition;
+        if (context.Template != null)
+        {
+            condition = context.Template.IsPro();
+        }
+        else if (context.Module != null)
+        {
+            condition = context.Module.IsPro;
+        }
+        else
+        {
+            condition = false;
+        }
+        
+        return condition
             ? $"{{{Environment.NewLine}  \"AbpLicenseCode\": \"{CliConsts.LicenseCodePlaceHolder}\" {Environment.NewLine}}}".GetBytes()
             : $"{{{Environment.NewLine}}}".GetBytes();
     }

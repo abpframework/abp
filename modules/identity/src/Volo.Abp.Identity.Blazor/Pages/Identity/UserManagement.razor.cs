@@ -182,22 +182,25 @@ public partial class UserManagement
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = EntityActions.Get<UserManagement>()
+                        Actions = EntityActions.Get<UserManagement>(),
                     },
                     new TableColumn
                     {
                         Title = L["UserName"],
                         Data = nameof(IdentityUserDto.UserName),
+                        Sortable = true,
                     },
                     new TableColumn
                     {
                         Title = L["EmailAddress"],
                         Data = nameof(IdentityUserDto.Email),
+                        Sortable = true,
                     },
                     new TableColumn
                     {
                         Title = L["PhoneNumber"],
                         Data = nameof(IdentityUserDto.PhoneNumber),
+                        Sortable = true,
                     }
             });
 
