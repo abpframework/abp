@@ -98,33 +98,33 @@ F5 (یا Ctrl+F5) را بزنید تا برنامه اجرا شود. خروجی 
 
 {{ if Tiered == "Yes" }}
 
-> Tiered solutions use **Redis** as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
+> راه حل های لایه ای از **Redis** به عنوان حافظه پنهان توزیع شده استفاده می کنند. مطمئن شوید که در رایانه محلی شما نصب و اجرا شده است. اگر از یک سرور Redis راه دور استفاده می‌کنید، پیکربندی را در فایل‌های `appsettings.json` پروژه‌های زیر تنظیم کنید.
 
-1. Ensure that the `.IdentityServer` project is the startup project. Run this application that will open a **login** page in your browser.
+1. مطمئن شوید که پروژه `.IdentityServer` پروژه Startup است. این برنامه را اجرا کنید که یک صفحه **ورود** را در مرورگر شما باز می کند.
 
-> Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
+> برای اجرای برنامه بدون Debugger از Ctrl+F5 در ویژوال استودیو (به جای F5) استفاده کنید. اگر نمیخواهید Debug کنید، این سریعتر خواهد بود.
 
-You can login, but you cannot enter to the main application here. This is **just the authentication server**.
+شما می توانید وارد شوید، اما نمی توانید در اینجا وارد برنامه اصلی شوید. این **فقط سرور احراز هویت** است.
 
-2. Ensure that the `.HttpApi.Host` project is the startup project and run the application which will open a **Swagger UI** in your browser.
+2. مطمئن شوید که پروژه `HttpApi.Host` پروژه راه اندازی است و برنامه ای را اجرا کنید که **Swagger UI** را در مرورگر شما باز می کند.
 
 ![swagger-ui](images/swagger-ui.png)
 
-This is the HTTP API that is used by the web application.
+این API HTTP است که توسط برنامه وب استفاده می شود.
 
-3. Lastly, ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the startup project and run the application which will open a **welcome** page in your browser
+3. Lastly {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} باشد در این صورت صفحه **خوش آمدید** را مشاهده مینمایید
 
 ![mvc-tiered-app-home](images/bookstore-home.png)
 
-Click to the **login** button which will redirect you to the *authentication server* to login to the application:
+روی دکمه **ورود** کلیک کنید که شما را به *سرور احراز هویت* جهت ورود به برنامه هدایت می کند:
 
 ![bookstore-login](images/bookstore-login.png)
 
 {{ else # Tiered != "Yes" }}
 
-Ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the startup project. Run the application which will open the **login** page in your browser:
+Ensure {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} باشد در این صورت صفحه **ورود** را مشاهده مینمایید
 
-> Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
+> برای اجرای برنامه بدون Debugger از Ctrl+F5 در ویژوال استودیو (به جای F5) استفاده کنید. اگر نمیخواهید Debug کنید، این سریعتر خواهد بود.
 
 ![bookstore-login](images/bookstore-login.png)
 
@@ -132,72 +132,72 @@ Ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the st
 
 {{ else # UI != MVC || BlazorServer }}
 
-### Running the HTTP API Host (Server Side)
+### اجرای میزبان API HTTP (سمت سرور)
 
 {{ if Tiered == "Yes" }}
 
-> Tiered solutions use Redis as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
+> راه حل های لایه ای از Redis به عنوان کش توزیع شده استفاده می کنند. مطمئن شوید که در رایانه محلی شما نصب و اجرا شده است. اگر از یک سرور Redis راه دور استفاده می‌کنید، پیکربندی را در فایل‌های `appsettings.json` پروژه‌های زیر تنظیم کنید.
 
-Ensure that the `.IdentityServer` project is the startup project. Run the application which will open a **login** page in your browser.
+مطمئن شوید که پروژه `.IdentityServer` پروژه راه اندازی است. برنامه ای را اجرا کنید که یک صفحه **ورود** را در مرورگر شما باز می کند.
 
-> Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
+> برای اجرای برنامه بدون Debugger از Ctrl+F5 در ویژوال استودیو (به جای F5) استفاده کنید. اگر نمیخواهید Debug کنید، این سریعتر خواهد بود.
 
-You can login, but you cannot enter to the main application here. This is **just the authentication server**.
+شما می توانید وارد شوید، اما نمی توانید در اینجا وارد برنامه اصلی شوید. این **فقط سرور احراز هویت** است.
 
-Ensure that the `.HttpApi.Host` project is the startup project and run the application which will open a Swagger UI:
+مطمئن شوید که پروژه `.HttpApi.Host` پروژه راه اندازی است و برنامه ای را اجرا کنید که یک Swagger UI را باز می کند:
 
 {{ else # Tiered == "No" }}
 
-Ensure that the `.HttpApi.Host` project is the startup project and run the application which will open a Swagger UI:
+مطمئن شوید که پروژه `.HttpApi.Host` پروژه راه اندازی است و برنامه ای را اجرا کنید که یک Swagger UI را باز می کند:
 
-> Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
+> برای اجرای برنامه بدون Debugger از Ctrl+F5 در ویژوال استودیو (به جای F5) استفاده کنید. اگر نمیخواهید Debug کنید، این سریعتر خواهد بود.
 
 {{ end # Tiered }}
 
 ![swagger-ui](images/swagger-ui.png)
 
-You can see the application APIs and test them here. Get [more info](https://swagger.io/tools/swagger-ui/) about the Swagger UI.
+می توانید API های برنامه را ببینید و آنها را در اینجا آزمایش کنید.  [اطلاعات بیشتر](https://swagger.io/tools/swagger-ui/).
 
 {{ end # UI }}
 
 {{ if UI == "Blazor" }}
 
-### Running the Blazor Application (Client Side)
+### اجرای برنامه Blazor (سمت مشتری)
 
-Ensure that the `.Blazor` project is the startup project and run the application.
+مطمئن شوید که پروژه `Blazor` پروژه راه اندازی است و برنامه را اجرا کنید.
 
-> Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
+> برای اجرای برنامه بدون Debugger از Ctrl+F5 در ویژوال استودیو (به جای F5) استفاده کنید. اگر نمیخواهید Debug کنید، این سریعتر خواهد بود.
 
-Once the application starts, click to the **Login** link on to header, which redirects you to the authentication server to enter a username and password:
+پس از شروع برنامه، روی لینک **ورود** در بالای صفحه کلیک کنید، که شما را به سرور احراز هویت هدایت می کند تا نام کاربری و رمز عبور را وارد کنید:
 
 ![bookstore-login](images/bookstore-login.png)
 
 {{ else if UI == "NG" }}
 
-### Running the Angular Application (Client Side)
+### اجرای Angular Application (سمت کلاینت)
 
-Go to the `angular` folder, open a command line terminal, type the `yarn` command (we suggest to the [yarn](https://yarnpkg.com/) package manager while `npm install` will also work)
+به پوشه `angular` رفته, کامنت لاین را باز کرده, دستور `yarn` را اجرا نمایید (پیشنهاد ما استفاده از [yarn](https://yarnpkg.com/) جهت مدیریت پکیج میباشد اما در نظر داشته باشید که `npm install` نیز کار میکند)
 
 ```bash
 yarn
 ```
 
-Once all node modules are loaded, execute `yarn start` (or `npm start`) command:
+وقتی تمامی ماژول ها بارگذاری شد دستور `yarn start` (یا `npm start`) اجرا نمایید:
 
 ```bash
 yarn start
 ```
 
-It may take a longer time for the first build. Once it finishes, it opens the Angular UI in your default browser with the [localhost:4200](http://localhost:4200/) address.
+ممکن است برای ساخت اول زمان بیشتری طول بکشد. پس از اتمام، رابط کاربری Angular را در مرورگر پیش‌فرض شما با [localhost:4200](http://localhost:4200/) آدرس.
 
 ![bookstore-login](images/bookstore-login.png)
 
 {{ end }}
 
-Enter **admin** as the username and **1q2w3E*** as the password to login to the application. The application is up and running. You can start developing your application based on this startup template.
+به یاد داشته باشید **admin** را به عنوان نام کاربری و **1q2w3E*** را به عنوان رمز عبور برای ورود به برنامه وارد کنید. برنامه در حال اجرا است. شما می توانید توسعه برنامه خود را بر اساس این قالب راه اندازی شروع کنید.
 
 ## See Also
 
-* [Web Application Development Tutorial](Tutorials/Part-1.md)
-* [Application Startup Template](Startup-Templates/Application.md)
+* [آموزش ساخت اپلیکیشن وب](Tutorials/Part-1.md)
+* [الگوی راه اندازی برنامه](Startup-Templates/Application.md)
 </div>
