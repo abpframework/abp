@@ -9,4 +9,5 @@ public class AbpAzureEventBusOptions
     public string TopicName { get; set; }
 
     public bool IsServiceBusDisabled { get; set; }
+    public bool TopicPerEvent { get; set; }
 }

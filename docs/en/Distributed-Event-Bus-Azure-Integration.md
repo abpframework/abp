@@ -35,7 +35,8 @@ This is the simplest way to configure the Azure Service Bus settings. It is also
     "EventBus": {
       "ConnectionName": "Default",
       "SubscriberName": "MySubscriberName",
-      "TopicName": "MyTopicName"
+      "TopicName": "MyTopicName",
+      "TopicPerEvent", False
     }
   }
 }
@@ -115,7 +116,10 @@ You can use any of the [ServiceBusAdministrationClientOptions](https://docs.micr
 
 ### The Options Classes
 
+* TopicPerEvent enable to use a Azure Event Bus **Topic** per **Event** (see AzureTopicAttribute bellow)
+
 `AbpAzureServiceBusOptions` and `AbpAzureEventBusOptions` classes can be used to configure the connection strings and event bus options for Azure Service Bus.
+
 
 You can configure this options inside the `ConfigureServices` of your [module](Module-Development-Basics.md).
 
@@ -131,3 +135,15 @@ Configure<AbpAzureServiceBusOptions>(options =>
 ````
 
 Using these options classes can be combined with the `appsettings.json` way. Configuring an option property in the code overrides the value in the configuration file.
+
+### Azure eventbus Topic
+opics are automatically created for each event if the **TopicPerEvent** option is specified
+
+### Azure Topic Name
+`AzureTopicName` attribute is optional. If you don't declare it, and `TopicPerEvent` is **false** only one Topic is used for all events.
+If an event declares `AzureTopicName`, only one topic with the declared name is used for this event only
+
+If you enable `TopicPerEvent=True` a topic per event is created.
+The default topic name es MyTopicName_EventName or `AzureTopicName` if it is declared for event.
+
+Using `AzureTopicName` it is possible to use one **topic** for multiple events.

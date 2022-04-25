@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
@@ -23,14 +24,16 @@ public class AzureServiceBusMessageConsumer : IAzureServiceBusMessageConsumer, I
     private string _connectionName;
     private string _subscriptionName;
     private string _topicName;
+    private ServiceBusProcessor _serviceBusProcessor;
 
     public AzureServiceBusMessageConsumer(
         IExceptionNotifier exceptionNotifier,
-        IProcessorPool processorPool)
+        IProcessorPool processorPool,
+        ILogger<AzureServiceBusMessageConsumer> logger)
     {
         _exceptionNotifier = exceptionNotifier;
         _processorPool = processorPool;
-        Logger = NullLogger<AzureServiceBusMessageConsumer>.Instance;
+        Logger = logger;
         _callbacks = new ConcurrentBag<Func<ServiceBusReceivedMessage, Task>>();
     }
 
@@ -42,10 +45,12 @@ public class AzureServiceBusMessageConsumer : IAzureServiceBusMessageConsumer, I
         Check.NotNull(topicName, nameof(topicName));
         Check.NotNull(subscriptionName, nameof(subscriptionName));
 
+        Logger.LogDebug($"Initialize AzureServiceBusMessageConsumer Topic {_topicName} subscription {_subscriptionName}");
+
         _topicName = topicName;
         _connectionName = connectionName ?? AzureServiceBusConnections.DefaultConnectionName;
         _subscriptionName = subscriptionName;
-        StartProcessing();
+        AsyncHelper.RunSync(()=> StartProcessingAsync());
     }
 
     public void OnMessageReceived(Func<ServiceBusReceivedMessage, Task> callback)
@@ -53,26 +58,34 @@ public class AzureServiceBusMessageConsumer : IAzureServiceBusMessageConsumer, I
         _callbacks.Add(callback);
     }
 
-    protected virtual void StartProcessing()
+    protected virtual async Task StartProcessingAsync()
     {
-        Task.Factory.StartNew(function: async () =>
+        Logger.LogInformation($"Start processing Azure Topic: {_topicName} subscription: {_subscriptionName}");
+        _serviceBusProcessor = await _processorPool.GetAsync(_subscriptionName, _topicName, _connectionName);
+
+        if (!_serviceBusProcessor.IsProcessing)
         {
-            var serviceBusProcessor = await _processorPool.GetAsync(_subscriptionName, _topicName, _connectionName);
-            serviceBusProcessor.ProcessErrorAsync += HandleIncomingError;
-            serviceBusProcessor.ProcessMessageAsync += HandleIncomingMessage;
+            _serviceBusProcessor.ProcessErrorAsync += HandleIncomingError;
+            _serviceBusProcessor.ProcessMessageAsync += HandleIncomingMessage;
 
-            if (!serviceBusProcessor.IsProcessing)
-            {
-                await serviceBusProcessor.StartProcessingAsync();
-            }
-
-            while (true)
-            {
-                Thread.Sleep(1000);
-            }
-        }, TaskCreationOptions.LongRunning);
+            await _serviceBusProcessor.StartProcessingAsync();
+        }
+        else
+        {
+            Logger.LogDebug($"ServiceBusProcessor for Azure Topic {_topicName} subscription {_subscriptionName} is already processing");
+        }
     }
 
+    public virtual async Task StopProcessingAsync()
+    {
+        Logger.LogDebug($"Stop processing Azure Topic {_topicName} subscription {_subscriptionName}");
+        if (_serviceBusProcessor.IsProcessing)
+            await _serviceBusProcessor.StartProcessingAsync();
+
+            _serviceBusProcessor.ProcessErrorAsync -= HandleIncomingError;
+            _serviceBusProcessor.ProcessMessageAsync -= HandleIncomingMessage;
+
+    }
     protected virtual async Task HandleIncomingMessage(ProcessMessageEventArgs args)
     {
         try
