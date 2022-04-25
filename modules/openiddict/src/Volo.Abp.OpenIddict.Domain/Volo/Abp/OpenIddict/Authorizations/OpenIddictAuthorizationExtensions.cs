@@ -6,7 +6,7 @@ public static class OpenIddictAuthorizationExtensions
     {
         Check.NotNull(model, nameof(model));
 
-        return new OpenIddictAuthorization(model.Id)
+        var entity = new OpenIddictAuthorization(model.Id)
         {
             ApplicationId = model.ApplicationId,
             CreationDate = model.CreationDate,
@@ -16,6 +16,13 @@ public static class OpenIddictAuthorizationExtensions
             Subject = model.Subject,
             Type = model.Type
         };
+
+        foreach (var extraProperty in model.ExtraProperties)
+        {
+            entity.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+        }
+
+        return entity;
     }
 
     public static OpenIddictAuthorization ToEntity(this OpenIddictAuthorizationModel model, OpenIddictAuthorization entity)
@@ -31,26 +38,39 @@ public static class OpenIddictAuthorizationExtensions
         entity.Subject = model.Subject;
         entity.Type = model.Type;
 
+        foreach (var extraProperty in model.ExtraProperties)
+        {
+            entity.ExtraProperties.Remove(extraProperty.Key);
+            entity.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+        }
+
         return entity;
     }
 
-    public static OpenIddictAuthorizationModel ToModel(this OpenIddictAuthorization model)
+    public static OpenIddictAuthorizationModel ToModel(this OpenIddictAuthorization entity)
     {
-        if(model == null)
+        if(entity == null)
         {
             return null;
         }
 
-        return new OpenIddictAuthorizationModel
+        var model = new OpenIddictAuthorizationModel
         {
-            Id = model.Id,
-            ApplicationId = model.ApplicationId,
-            CreationDate = model.CreationDate,
-            Properties = model.Properties,
-            Scopes = model.Scopes,
-            Status = model.Status,
-            Subject = model.Subject,
-            Type = model.Type
+            Id = entity.Id,
+            ApplicationId = entity.ApplicationId,
+            CreationDate = entity.CreationDate,
+            Properties = entity.Properties,
+            Scopes = entity.Scopes,
+            Status = entity.Status,
+            Subject = entity.Subject,
+            Type = entity.Type
         };
+
+        foreach (var extraProperty in entity.ExtraProperties)
+        {
+            model.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+        }
+
+        return model;
     }
 }

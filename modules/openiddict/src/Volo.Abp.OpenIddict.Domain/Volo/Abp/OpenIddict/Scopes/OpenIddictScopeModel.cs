@@ -1,10 +1,11 @@
 ﻿using System;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.OpenIddict.Scopes;
 
 [Serializable, IgnoreMultiTenancy]
-public class OpenIddictScopeModel
+public class OpenIddictScopeModel : ExtensibleObject
 {
     public Guid Id { get; set; }
 

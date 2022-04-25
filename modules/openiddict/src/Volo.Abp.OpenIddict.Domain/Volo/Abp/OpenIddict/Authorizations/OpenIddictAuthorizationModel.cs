@@ -1,10 +1,11 @@
 ﻿using System;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.OpenIddict.Authorizations;
 
 [Serializable, IgnoreMultiTenancy]
-public class OpenIddictAuthorizationModel
+public class OpenIddictAuthorizationModel : ExtensibleObject
 {
     public Guid Id { get; set; }
 

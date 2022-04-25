@@ -6,7 +6,7 @@ public static class OpenIddictScopeExtensions
     {
         Check.NotNull(model, nameof(model));
 
-        return new OpenIddictScope(model.Id)
+        var entity = new OpenIddictScope(model.Id)
         {
             Description = model.Description,
             Descriptions = model.Descriptions,
@@ -16,6 +16,13 @@ public static class OpenIddictScopeExtensions
             Properties = model.Properties,
             Resources = model.Resources
         };
+
+        foreach (var extraProperty in model.ExtraProperties)
+        {
+            entity.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+        }
+
+        return entity;
     }
 
     public static OpenIddictScope ToEntity(this OpenIddictScopeModel model, OpenIddictScope entity)
@@ -31,26 +38,40 @@ public static class OpenIddictScopeExtensions
         entity.Properties = model.Properties;
         entity.Resources = model.Resources;
 
+        foreach (var extraProperty in model.ExtraProperties)
+        {
+            entity.ExtraProperties.Remove(extraProperty.Key);
+            entity.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+        }
+
         return entity;
     }
 
-    public static OpenIddictScopeModel ToModel(this OpenIddictScope model)
+    public static OpenIddictScopeModel ToModel(this OpenIddictScope entity)
     {
-        if(model == null)
+        if(entity == null)
         {
             return null;
         }
 
-        return new OpenIddictScopeModel
+        var model = new OpenIddictScopeModel
         {
-            Id = model.Id,
-            Description = model.Description,
-            Descriptions = model.Descriptions,
-            DisplayName = model.DisplayName,
-            DisplayNames = model.DisplayNames,
-            Name = model.Name,
-            Properties = model.Properties,
-            Resources = model.Resources
+            Id = entity.Id,
+            Description = entity.Description,
+            Descriptions = entity.Descriptions,
+            DisplayName = entity.DisplayName,
+            DisplayNames = entity.DisplayNames,
+            Name = entity.Name,
+            Properties = entity.Properties,
+            Resources = entity.Resources
         };
+
+
+        foreach (var extraProperty in entity.ExtraProperties)
+        {
+            model.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+        }
+
+        return model;
     }
 }

@@ -6,7 +6,7 @@ public static class OpenIddictTokenExtensions
     {
         Check.NotNull(model, nameof(model));
 
-        return new OpenIddictToken(model.Id)
+        var entity = new OpenIddictToken(model.Id)
         {
             ApplicationId = model.ApplicationId,
             AuthorizationId = model.AuthorizationId,
@@ -20,6 +20,14 @@ public static class OpenIddictTokenExtensions
             Subject = model.Subject,
             Type = model.Type
         };
+
+
+        foreach (var extraProperty in model.ExtraProperties)
+        {
+            entity.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+        }
+
+        return entity;
     }
 
     public static OpenIddictToken ToEntity(this OpenIddictTokenModel model, OpenIddictToken entity)
@@ -39,30 +47,43 @@ public static class OpenIddictTokenExtensions
         entity.Subject = model.Subject;
         entity.Type = model.Type;
 
+        foreach (var extraProperty in model.ExtraProperties)
+        {
+            entity.ExtraProperties.Remove(extraProperty.Key);
+            entity.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+        }
+
         return entity;
     }
 
-    public static OpenIddictTokenModel ToModel(this OpenIddictToken model)
+    public static OpenIddictTokenModel ToModel(this OpenIddictToken entity)
     {
-        if(model == null)
+        if(entity == null)
         {
             return null;
         }
 
-        return new OpenIddictTokenModel
+        var model = new OpenIddictTokenModel
         {
-            Id = model.Id,
-            ApplicationId = model.ApplicationId,
-            AuthorizationId = model.AuthorizationId,
-            CreationDate = model.CreationDate,
-            ExpirationDate = model.ExpirationDate,
-            Payload = model.Payload,
-            Properties = model.Properties,
-            RedemptionDate = model.RedemptionDate,
-            ReferenceId = model.ReferenceId,
-            Status = model.Status,
-            Subject = model.Subject,
-            Type = model.Type
+            Id = entity.Id,
+            ApplicationId = entity.ApplicationId,
+            AuthorizationId = entity.AuthorizationId,
+            CreationDate = entity.CreationDate,
+            ExpirationDate = entity.ExpirationDate,
+            Payload = entity.Payload,
+            Properties = entity.Properties,
+            RedemptionDate = entity.RedemptionDate,
+            ReferenceId = entity.ReferenceId,
+            Status = entity.Status,
+            Subject = entity.Subject,
+            Type = entity.Type
         };
+
+        foreach (var extraProperty in entity.ExtraProperties)
+        {
+            model.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+        }
+
+        return model;
     }
 }
