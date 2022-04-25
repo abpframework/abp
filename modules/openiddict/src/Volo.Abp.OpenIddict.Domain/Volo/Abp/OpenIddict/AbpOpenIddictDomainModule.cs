@@ -11,6 +11,8 @@ using Volo.Abp.Domain;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Authorizations;
 using Volo.Abp.OpenIddict.Scopes;
@@ -30,6 +32,8 @@ namespace Volo.Abp.OpenIddict;
 )]
 public class AbpOpenIddictDomainModule : AbpModule
 {
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         AddOpenIddict(context.Services);
@@ -157,5 +161,35 @@ public class AbpOpenIddictDomainModule : AbpModule
             });
 
         services.ExecutePreConfiguredActions(openIddictBuilder);
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        OneTimeRunner.Run(() =>
+        {
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                OpenIddictModuleExtensionConsts.ModuleName,
+                OpenIddictModuleExtensionConsts.EntityNames.Application,
+                typeof(OpenIddictApplication)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                OpenIddictModuleExtensionConsts.ModuleName,
+                OpenIddictModuleExtensionConsts.EntityNames.Authorization,
+                typeof(OpenIddictAuthorization)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                OpenIddictModuleExtensionConsts.ModuleName,
+                OpenIddictModuleExtensionConsts.EntityNames.Scope,
+                typeof(OpenIddictScope)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                OpenIddictModuleExtensionConsts.ModuleName,
+                OpenIddictModuleExtensionConsts.EntityNames.Token,
+                typeof(OpenIddictToken)
+            );
+        });
     }
 }
