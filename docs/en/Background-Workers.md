@@ -80,16 +80,16 @@ public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 
 ## Register Background Worker
 
-After creating a background worker class, you should add it to the `IBackgroundWorkerManager`. The most common place is the `OnApplicationInitialization` method of your module class:
+After creating a background worker class, you should add it to the `IBackgroundWorkerManager`. The most common place is the `OnApplicationInitializationAsync` method of your module class:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundWorkersModule))]
 public class MyModule : AbpModule
 {
-    public override Task OnApplicationInitializationAsync(
+    public override async Task OnApplicationInitializationAsync(
         ApplicationInitializationContext context)
     {
-        context.AddBackgroundWorkerAsync<PassiveUserCheckerWorker>();
+        await context.AddBackgroundWorkerAsync<PassiveUserCheckerWorker>();
     }
 }
 ````
@@ -108,7 +108,7 @@ await context.ServiceProvider
 
 So, it resolves the given background worker and adds to the `IBackgroundWorkerManager`.
 
-While we generally add workers in `OnApplicationInitialization`, there are no restrictions on that. You can inject `IBackgroundWorkerManager` anywhere and add workers at runtime. Background worker manager will stop and release all the registered workers when your application is being shut down.
+While we generally add workers in `OnApplicationInitializationAsync`, there are no restrictions on that. You can inject `IBackgroundWorkerManager` anywhere and add workers at runtime. Background worker manager will stop and release all the registered workers when your application is being shut down.
 
 ## Options
 
