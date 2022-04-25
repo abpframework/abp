@@ -25,8 +25,8 @@ public static class OpenIddictDbContextModelCreatingExtensions
 
             b.ConfigureByConvention();
 
-            b.HasIndex(x => x.ClientId)
-                .IsUnique();
+            b.HasIndex(x => x.ClientId);
+                //.IsUnique();
 
             b.Property(x => x.ClientId)
                 .HasMaxLength(OpenIddictApplicationConsts.ClientIdMaxLength);
@@ -74,8 +74,8 @@ public static class OpenIddictDbContextModelCreatingExtensions
 
             b.ConfigureByConvention();
 
-            b.HasIndex(x => x.Name)
-                .IsUnique();
+            b.HasIndex(x => x.Name);
+                //.IsUnique();
 
             b.Property(x => x.Name)
                 .HasMaxLength(OpenIddictScopeConsts.NameMaxLength);
@@ -89,8 +89,8 @@ public static class OpenIddictDbContextModelCreatingExtensions
 
             b.ConfigureByConvention();
 
-            b.HasIndex(x => x.ReferenceId)
-                .IsUnique();
+            b.HasIndex(x => x.ReferenceId);
+                //.IsUnique();
 
             b.HasIndex(x => new
             {

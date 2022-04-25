@@ -751,9 +751,7 @@ namespace OpenIddict.Demo.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId")
-                        .IsUnique()
-                        .HasFilter("[ClientId] IS NOT NULL");
+                    b.HasIndex("ClientId");
 
                     b.ToTable("OpenIddictApplications", (string)null);
                 });
@@ -905,9 +903,7 @@ namespace OpenIddict.Demo.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
+                    b.HasIndex("Name");
 
                     b.ToTable("OpenIddictScopes", (string)null);
                 });
@@ -999,9 +995,7 @@ namespace OpenIddict.Demo.Server.Migrations
 
                     b.HasIndex("AuthorizationId");
 
-                    b.HasIndex("ReferenceId")
-                        .IsUnique()
-                        .HasFilter("[ReferenceId] IS NOT NULL");
+                    b.HasIndex("ReferenceId");
 
                     b.HasIndex("ApplicationId", "Status", "Subject", "Type");
 

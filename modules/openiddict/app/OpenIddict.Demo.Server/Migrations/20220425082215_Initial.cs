@@ -655,9 +655,7 @@ namespace OpenIddict.Demo.Server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",
                 table: "OpenIddictApplications",
-                column: "ClientId",
-                unique: true,
-                filter: "[ClientId] IS NOT NULL");
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type",
@@ -667,9 +665,7 @@ namespace OpenIddict.Demo.Server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictScopes_Name",
                 table: "OpenIddictScopes",
-                column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
+                column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictTokens_ApplicationId_Status_Subject_Type",
@@ -684,9 +680,7 @@ namespace OpenIddict.Demo.Server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictTokens_ReferenceId",
                 table: "OpenIddictTokens",
-                column: "ReferenceId",
-                unique: true,
-                filter: "[ReferenceId] IS NOT NULL");
+                column: "ReferenceId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
