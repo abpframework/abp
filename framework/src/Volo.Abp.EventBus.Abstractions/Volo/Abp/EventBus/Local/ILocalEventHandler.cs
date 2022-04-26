@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 
+// ReSharper disable once CheckNamespace (Keeping for backward compability)
 namespace Volo.Abp.EventBus;
 
-//TODO: Move to the right namespace in v3.0
 public interface ILocalEventHandler<in TEvent> : IEventHandler
 {
     /// <summary>
