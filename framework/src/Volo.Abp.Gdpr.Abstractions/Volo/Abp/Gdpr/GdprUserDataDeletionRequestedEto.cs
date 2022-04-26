@@ -3,7 +3,7 @@
 namespace Volo.Abp.Gdpr;
 
 [Serializable]
-public class GdprUserDataDeleteRequestedEto
+public class GdprUserDataDeletionRequestedEto
 {
     public Guid UserId { get; set; }
 }
