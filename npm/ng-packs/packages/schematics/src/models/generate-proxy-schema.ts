@@ -18,4 +18,9 @@ export interface GenerateProxySchema {
    * Target Angular project to place the generated code
    */
   target?: string;
+
+  /**
+   * Url to API definition
+   */
+  url?: string;
 }
