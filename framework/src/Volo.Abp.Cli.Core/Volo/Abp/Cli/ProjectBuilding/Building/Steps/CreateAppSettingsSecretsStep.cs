@@ -30,7 +30,9 @@ public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
             );
         }
 
-        var projectFiles = context.Files.Where(x => x.Content.Contains(AppSettingsPlaceholder)).ToList();
+        var projectFiles = context.Files.Where(x => 
+            x.Name.EndsWith(CliConsts.AppSettingsJsonFileName) &&
+            x.Content.Contains(AppSettingsPlaceholder)).ToList();
 
         foreach (var projectFile in projectFiles)
         {
@@ -66,11 +68,30 @@ public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
 
     private static string ReplaceAppSettingsSecretsPlaceholder(string content)
     {
-        var replaceContent = $"<None Remove=\"{CliConsts.AppSettingsSecretJsonFileName}\" />{Environment.NewLine}" +
-                $"    <Content Include=\"{CliConsts.AppSettingsSecretJsonFileName}\">{Environment.NewLine}" +
+        var path = string.Empty;
+        
+        var appSettingsRemoveLine = content.SplitToLines().FirstOrDefault(l=>
+            l.Contains("None") &&
+            l.Contains("Remove") &&
+            l.Contains(CliConsts.AppSettingsJsonFileName));
+
+        if (appSettingsRemoveLine != null)
+        {
+             var prefix = appSettingsRemoveLine.Split("\"")
+                .Select(s => s.Trim())
+                .First(s => s.Contains(CliConsts.AppSettingsJsonFileName))
+                .Replace(CliConsts.AppSettingsJsonFileName, "");
+
+             path = string.IsNullOrWhiteSpace(prefix) ? string.Empty : prefix;
+        }
+        
+        
+        var replaceContent = $"<None Remove=\"{ path + CliConsts.AppSettingsSecretJsonFileName}\" />{Environment.NewLine}" +
+                $"    <Content Include=\"{path + CliConsts.AppSettingsSecretJsonFileName}\">{Environment.NewLine}" +
                 $"      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>{Environment.NewLine}" +
                 $"      <CopyToOutputDirectory>Always</CopyToOutputDirectory>{Environment.NewLine}" +
                 "    </Content>";
+        
         return content.Replace(AppSettingsPlaceholder, replaceContent);
     }
 }
