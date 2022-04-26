@@ -383,6 +383,7 @@
     "PurchaseState": "Purchase State",
     "ShowBetweenDayCount": "Show Between Days",
     "PurchaseOrder": "Purchase Order",
-    "ShowCreateInvoiceOfOrganization": "Create Invoice"
+    "ShowCreateInvoiceOfOrganization": "Create Invoice",
+    "ShowCreateQuotationOfOrganization": "Create Quotation"
   }
 }
