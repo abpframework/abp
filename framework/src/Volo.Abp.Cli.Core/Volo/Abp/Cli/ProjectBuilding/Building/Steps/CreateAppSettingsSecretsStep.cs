@@ -31,7 +31,7 @@ public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
         }
 
         var projectFiles = context.Files.Where(x => 
-            x.Name.EndsWith(CliConsts.AppSettingsJsonFileName) &&
+            x.Name.EndsWith(".csproj") &&
             x.Content.Contains(AppSettingsPlaceholder)).ToList();
 
         foreach (var projectFile in projectFiles)
