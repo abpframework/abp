@@ -18,4 +18,6 @@ public class RemoteFeatureChecker : FeatureCheckerBase
         var configuration = await ConfigurationClient.GetAsync();
         return configuration.Features.Values.GetOrDefault(name);
     }
+    
+    var word = "hello";
 }
