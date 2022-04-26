@@ -23,7 +23,7 @@ public class AbpRequestSizeLimitMiddleware : IMiddleware, ITransientDependency
         var endpoint = context.GetEndpoint();
         if (endpoint != null)
         {
-            if (!endpoint.Metadata.Any(x => x is RequestSizeLimitAttribute || x is DisableRequestSizeLimitAttribute))
+            if (!HasDisableRequestSizeLimitAttribute(endpoint))
             {
                 var attribute = endpoint.Metadata.GetMetadata<AbpRequestSizeLimitAttribute>();
                 if (attribute != null)
@@ -50,7 +50,7 @@ public class AbpRequestSizeLimitMiddleware : IMiddleware, ITransientDependency
             }
             else
             {
-                _logger.LogInformation($"Endpoint already exists IRequestSizePolicy, Skipping.");
+                _logger.LogInformation($"Endpoint has DisableRequestSizeLimitAttribute, Skipping.");
             }
         }
         else
@@ -59,5 +59,23 @@ public class AbpRequestSizeLimitMiddleware : IMiddleware, ITransientDependency
         }
 
         await next(context);
+    }
+
+    protected virtual bool HasDisableRequestSizeLimitAttribute(Endpoint endpoint)
+    {
+        foreach (var metadata in endpoint.Metadata.Reverse())
+        {
+            if (metadata is AbpRequestSizeLimitAttribute)
+            {
+                return false;
+            }
+
+            if (metadata is DisableRequestSizeLimitAttribute)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
