@@ -110,3 +110,4 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ````
 
+> You should install the [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) nuget package to the project that you want to use the Autofac API.
