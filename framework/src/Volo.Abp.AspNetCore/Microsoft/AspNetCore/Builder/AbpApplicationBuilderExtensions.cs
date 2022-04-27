@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.AspNetCore.RequestSizeLimit;
 using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.Tracing;
@@ -110,5 +111,12 @@ public static class AbpApplicationBuilderExtensions
     public static IApplicationBuilder UseAbpSecurityHeaders(this IApplicationBuilder app)
     {
         return app.UseMiddleware<AbpSecurityHeadersMiddleware>();
+    }
+
+    public static IApplicationBuilder UseAbpRequestSizeLimit(this IApplicationBuilder app)
+    {
+        return app
+            .UseAbpExceptionHandling()
+            .UseMiddleware<AbpRequestSizeLimitMiddleware>();
     }
 }
