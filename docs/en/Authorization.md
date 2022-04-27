@@ -303,7 +303,7 @@ public async Task CreateAsync(CreateAuthorDto input)
 }
 ```
 
-`CheckAsync` extension method throws `AbpAuthorizationException` if the current user/client is not granted for the given permission. There is also `IsGrantedAsync` extension method that returns `true` or `false`.
+`CheckAsync` extension method throws `AbpAuthorizationException` if the current user/client is not granted for the given permission. There is also `IsGrantedAsync` extension method that returns `true` or `false`..
 
 `IAuthorizationService` has some overloads for the `AuthorizeAsync` method. These are explained in the [ASP.NET Core authorization documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction).
 
