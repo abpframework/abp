@@ -71,6 +71,10 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     private async Task ProcessEventAsync(ServiceBusReceivedMessage message)
     {
         var eventName = message.Subject;
+        if (eventName == null)
+        {
+            return;
+        }
         var eventType = _eventTypes.GetOrDefault(eventName);
         if (eventType == null)
         {
