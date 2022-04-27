@@ -427,10 +427,6 @@
               "path": "Module-Development-Basics.md"
             },
             {
-              "text": "Bootstrap",
-              "path": "Bootstrap-Modules.md"
-            },
-            {
               "text": "Plug-In Modules",
               "path": "PlugIn-Modules.md"
             },
