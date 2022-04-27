@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
@@ -11,14 +12,20 @@ namespace Volo.Abp.EventBus;
 public class UnitOfWorkEventPublisher : IUnitOfWorkEventPublisher, ITransientDependency
 {
     private readonly ILocalEventBus _localEventBus;
+    private readonly IUnitOfWorkManager _unitOfWorkManager;
     private readonly IDistributedEventBus _distributedEventBus;
+    private readonly AbpDistributedEventBusOptions _abpDistributedEventBusOptions;
 
     public UnitOfWorkEventPublisher(
         ILocalEventBus localEventBus,
-        IDistributedEventBus distributedEventBus)
+        IUnitOfWorkManager unitOfWorkManager,
+        IDistributedEventBus distributedEventBus,
+        IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions)
     {
         _localEventBus = localEventBus;
+        _unitOfWorkManager = unitOfWorkManager;
         _distributedEventBus = distributedEventBus;
+        _abpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
     }
 
     public async Task PublishLocalEventsAsync(IEnumerable<UnitOfWorkEventRecord> localEvents)
@@ -37,12 +44,44 @@ public class UnitOfWorkEventPublisher : IUnitOfWorkEventPublisher, ITransientDep
     {
         foreach (var distributedEvent in distributedEvents)
         {
-            await _distributedEventBus.PublishAsync(
-                distributedEvent.EventType,
-                distributedEvent.EventData,
-                onUnitOfWorkComplete: false,
-                useOutbox: distributedEvent.UseOutbox
-            );
+            if (distributedEvent.UseOutbox)
+            {
+                var eventType = distributedEvent.EventType;
+                var eventData = distributedEvent.EventData;
+
+                if (_abpDistributedEventBusOptions.OutboxExist(distributedEvent.EventType))
+                {
+                    await _distributedEventBus.PublishAsync(
+                        eventType,
+                        eventData,
+                        onUnitOfWorkComplete: false,
+                        useOutbox: true
+                    );
+                }
+                else
+                {
+                    // Fall back to publish after the UOW is completed if the outbox is unavailable.
+                    if (_unitOfWorkManager.Current != null)
+                    {
+                        _unitOfWorkManager.Current.OnCompleted(async() => {
+                            await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete: false);
+                        });
+                    }
+                    else
+                    {
+                        await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete: false);
+                    }
+                }
+            }
+            else
+            {
+                await _distributedEventBus.PublishAsync(
+                    distributedEvent.EventType,
+                    distributedEvent.EventData,
+                    onUnitOfWorkComplete: false,
+                    useOutbox: false
+                );
+            }
         }
     }
 }

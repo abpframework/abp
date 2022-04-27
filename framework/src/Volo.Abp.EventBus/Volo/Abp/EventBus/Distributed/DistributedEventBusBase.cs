@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -97,25 +97,25 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             return false;
         }
 
-        foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes.Values)
+        var outboxConfig = AbpDistributedEventBusOptions.GetOutbox(eventType);
+
+        if (outboxConfig is null)
         {
-            if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
-            {
-                var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
-                var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-                await eventOutbox.EnqueueAsync(
-                    new OutgoingEventInfo(
-                        GuidGenerator.Create(),
-                        eventName,
-                        Serialize(eventData),
-                        Clock.Now
-                    )
-                );
-                return true;
-            }
+            return false;
         }
 
-        return false;
+        var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        await eventOutbox.EnqueueAsync(
+            new OutgoingEventInfo(
+                GuidGenerator.Create(),
+                eventName,
+                Serialize(eventData),
+                Clock.Now
+            )
+        );
+
+        return true;
     }
 
     protected async Task<bool> AddToInboxAsync(
