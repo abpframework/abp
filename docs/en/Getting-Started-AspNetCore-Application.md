@@ -95,9 +95,9 @@ That's all! Run the application, it will just work as expected.
 
 ## Using Autofac as the Dependency Injection Framework
 
-While AspNet Core's Dependency Injection (DI) system is fine for basic requirements, [Autofac](https://autofac.org/) provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
+While ASP.NET Core's Dependency Injection (DI) system is fine for basic requirements, [Autofac](https://autofac.org/) provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
 
-Replacing AspNet Core's DI system by Autofac and integrating to ABP is pretty easy.
+Replacing ASP.NET Core's DI system by Autofac and integrating to ABP is pretty easy.
 
 1. Install [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) package
 
@@ -131,10 +131,8 @@ var app = builder.Build();
 
 await app.InitializeApplicationAsync();
 await app.RunAsync();
-
 ````
 
 ## Source Code
 
 Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication).
-
