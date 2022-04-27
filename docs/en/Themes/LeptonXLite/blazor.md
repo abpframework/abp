@@ -1,4 +1,4 @@
-# LeptonX Lite MVC UI
+# LeptonX Lite Blazor UI
 
 ````json
 //[doc-params]
@@ -11,10 +11,8 @@ LeptonX Lite has implementation for ABP Framework Blazor WebAssembly & Blazor Se
 
 ## Installation
 
-
-## Installation
-
 {{if UI == "Blazor"}}
+- Complete [MVC Razor Pages Installation](mvc.md#installation) for the **HttpApi.Host** application first. _If the solution is tiered/micro-service, complete MVC steps for all MVC applications such as **HttpApi.Host** and if identity server is separated, install to the **IdentityServer**_.
 
 - Add **Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXTheme** package to your **Blazor wasm** application.
   ```bash
@@ -35,7 +33,6 @@ LeptonX Lite has implementation for ABP Framework Blazor WebAssembly & Blazor Se
 ```csharp
 // Make sure the 'App' comes from 'Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite' namespace.
 builder.RootComponents.Add<App>("#ApplicationContainer");
-
 ```
 
 - Run `abp bundle` command in your **Blazor** application folder.
@@ -45,7 +42,7 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
 
 {{if UI == "BlazorServer"}}
 
-- Complete [MVC Razor Pages Installation](mvc.md#installation) first. 
+- Complete [MVC Razor Pages Installation](mvc.md#installation) first. _If the solution is tiered/micro-service, complete MVC steps for all MVC applications such as **HttpApi.Host** and **IdentityServer**_.
 
 - Add **Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme** package to your **Blazor server** application.
   ```bash
@@ -106,19 +103,24 @@ LeptonX Lite includes separeted toolbars for desktop & mobile. You can manage to
 - `LeptonXLiteToolbars.MainMobile`
 
 ```csharp
-public class MyProjectNameMainToolbarContributor : IToolbarContributor
+public async Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
 {
-    public async Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
+    if (context.Toolbar.Name == LeptonXLiteToolbars.Main)
     {
-        if (context.Toolbar.Name == LeptonXLiteToolbars.Main)
-        {
-            context.Toolbar.Items.Add(new ToolbarItem(typeof(MyDesktopComponent)));
-        }
-
-        if (context.Toolbar.Name == LeptonXLiteToolbars.MainMobile)
-        {
-            context.Toolbar.Items.Add(new ToolbarItem(typeof(MyMobileComponent)));
-        }
+        context.Toolbar.Items.Add(new ToolbarItem(typeof(MyDesktopComponent)));
     }
+
+    if (context.Toolbar.Name == LeptonXLiteToolbars.MainMobile)
+    {
+        context.Toolbar.Items.Add(new ToolbarItem(typeof(MyMobileComponent)));
+    }
+
+    return Task.CompletedTask;
 }
 ```
+
+{{if UI == "BlazorServer"}}
+
+> _You can visit the [Toolbars Documentation](https://docs.abp.io/en/abp/latest/UI/Blazor/Toolbars) for better understanding._
+
+{{end}}
