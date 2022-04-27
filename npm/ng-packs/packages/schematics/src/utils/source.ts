@@ -16,10 +16,13 @@ import { readEnvironment, resolveProject } from './workspace';
 
 export function createApiDefinitionGetter(params: GenerateProxySchema) {
   const apiName = params.apiName || 'default';
+  let sourceUrl = params.url;
 
   return async (host: Tree) => {
     const source = await resolveProject(host, params.source!);
-    const sourceUrl = getSourceUrl(host, source, apiName);
+    if (!sourceUrl) {
+      sourceUrl = getSourceUrl(host, source, apiName);
+    }
     return await getApiDefinition(sourceUrl);
   };
 }

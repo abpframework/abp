@@ -81,11 +81,12 @@ public partial class RoleManagement
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = EntityActions.Get<RoleManagement>()
+                        Actions = EntityActions.Get<RoleManagement>(),
                     },
                     new TableColumn
                     {
                         Title = L["RoleName"],
+                        Sortable = true,
                         Data = nameof(IdentityRoleDto.Name),
                         Component = typeof(RoleNameComponent)
                     },
