@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
-using Volo.Abp.AspNetCore.Mvc.RequestSizeLimit;
 using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Authorization;
@@ -32,7 +29,6 @@ namespace Volo.Abp.AspNetCore.Mvc;
     typeof(AbpAspNetCoreTestBaseModule),
     typeof(AbpMemoryDbTestModule),
     typeof(AbpAspNetCoreMvcModule),
-    typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAutofacModule)
     )]
 public class AbpAspNetCoreMvcTestModule : AbpModule
@@ -147,22 +143,6 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         app.UseAuthorization();
         app.UseAuditing();
         app.UseUnitOfWork();
-
-        app.Use((httpContext, next) =>
-        {
-            var testHttpMaxRequestBodySizeFeature = new TestHttpMaxRequestBodySizeFeature();
-            httpContext.Features.Set<IHttpMaxRequestBodySizeFeature>(
-                testHttpMaxRequestBodySizeFeature);
-
-            httpContext.Request.Body = new RequestBodySizeCheckingStream(
-                httpContext.Request.Body,
-                testHttpMaxRequestBodySizeFeature);
-
-            return next(httpContext);
-        });
-        app.UseAbpRequestSizeLimit();
-        app.UseMultiTenancy();
-
         app.UseConfiguredEndpoints();
     }
 }
