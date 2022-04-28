@@ -1,4 +1,11 @@
-# Client Side
+# LeptonX Lite Angular UI
+LeptonX Lite has implementation for ABP Framework Angular Client. It's a simplified variation of [LeptonX Theme](https://x.leptontheme.com/).
+
+>   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of the [ABP Commercial](https://commercial.abp.io/).
+
+> See the [Theming document](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Theming) to learn about themes.
+
+## Installation
 
 To add `LeptonX-lite` into your project,
 
@@ -70,6 +77,6 @@ To change the logos and brand color of the `LeptonX`, simply add the following C
 - `--lpx-logo-icon` is a square icon used when the menu is collapsed. 
 - `--lpx-brand` is a color used throughout the application, especially on active elements. 
 
-# Server Side
+### Server Side
 
 In order to migrate to LeptonX on your server side projects (Host and/or IdentityServer projects), please follow [Server Side Migration](mvc.md) document.
