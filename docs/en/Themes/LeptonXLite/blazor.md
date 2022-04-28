@@ -19,7 +19,7 @@ LeptonX Lite has implementation for ABP Framework Blazor WebAssembly & Blazor Se
   dotnet add package Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme
   ```
 
-- Remove old theme from **DependsOn** attribute in your module class and add **AbpAspNetCoreComponentsWebAssemblyLeptonXThemeModule** type to **DependsOn** attribute.
+- Remove old theme from **DependsOn** attribute in your module class and add **AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule** type to **DependsOn** attribute.
 
 ```diff
 [DependsOn(
@@ -49,7 +49,7 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
   dotnet add package Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme
   ```
 
-- Remove old theme from **DependsOn** attribute in your module class and add **AbpAspNetCoreComponentsWebAssemblyLeptonXThemeModule** type to **DependsOn** attribute.
+- Remove old theme from **DependsOn** attribute in your module class and add **AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule** type to **DependsOn** attribute.
 
   ```diff
   [DependsOn(
