@@ -54,7 +54,7 @@ public class UserData : IUserData
         [CanBeNull] string phoneNumber = null,
         bool phoneNumberConfirmed = false,
         Guid? tenantId = null,
-        bool isActive = false)
+        bool isActive = true)
     {
         Id = id;
         UserName = userName;
