@@ -1,7 +1,7 @@
 # LeptonX Lite Angular UI
-LeptonX Lite has implementation for ABP Framework Angular Client. It's a simplified variation of [LeptonX Theme](https://x.leptontheme.com/).
+LeptonX Lite has implementation for the ABP Framework Angular Client. It's a simplified variation of [LeptonX Theme](https://x.leptontheme.com/).
 
->   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of the [ABP Commercial](https://commercial.abp.io/).
+>   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP Commercial](https://commercial.abp.io/).
 
 > See the [Theming document](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Theming) to learn about themes.
 
@@ -63,7 +63,7 @@ import { AccountLayoutModule } from '@abp/ng.theme.lepton-x/account';
 export class AppModule {}
 ```
 
-To change the logos and brand color of the `LeptonX`, simply add the following CSS to the `styles.scss`
+To change the logos and brand color of `LeptonX`, simply add the following CSS to the `styles.scss`
 
 ```css
 :root {
@@ -79,4 +79,4 @@ To change the logos and brand color of the `LeptonX`, simply add the following C
 
 ### Server Side
 
-In order to migrate to LeptonX on your server side projects (Host and/or IdentityServer projects), please follow [Server Side Migration](mvc.md) document.
+In order to migrate to LeptonX on your server side projects (Host and/or IdentityServer projects), please follow the [Server Side Migration](mvc.md) document.
