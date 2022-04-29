@@ -101,7 +101,7 @@ export class RolesComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.toasterService.success('AbpSettingManagement::SuccessfullySaved');
+          this.toasterService.success('AbpUi::SuccessfullySaved');
           this.service.delete(id).subscribe(() => this.list.get());
         }
       });

@@ -165,7 +165,7 @@ export class UsersComponent implements OnInit {
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
           this.service.delete(id).subscribe(() => {
-            this.toasterService.success('AbpSettingManagement::SuccessfullySaved');
+            this.toasterService.success('AbpUi::SuccessfullySaved');
             this.list.get()});
         }
       });
