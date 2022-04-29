@@ -86,7 +86,7 @@ public class OutboxSender : IOutboxSender, ITransientDependency
 
                     Logger.LogInformation($"Found {waitingEvents.Count} events in the outbox.");
                     
-                    if (EventBusBoxesOptions.OutboxPublishInBatch)
+                    if (EventBusBoxesOptions.BatchPublishOutboxEvents)
                     {
                         await PublishOutgoingMessagesInBatchAsync(waitingEvents);
                     }
