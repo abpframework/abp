@@ -6,4 +6,4 @@ However, there are some topics you should care when you are deploying your appli
 
 ## Guides
 
-* [Deploying in a clustered environment](Clustered-Environment.md): Explains how to configure your application when you want to run multiple instances of your application concurrently.
+* [Deploying to a clustered environment](Clustered-Environment.md): Explains how to configure your application when you want to run multiple instances of your application concurrently.
