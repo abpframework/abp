@@ -121,6 +121,10 @@
     "MasteringAbpFrameworkBook": "Book: Mastering ABP Framework",
     "ABPIO-CommonPreferenceDefinition": "Get the latest news about ABP Platform like new posts, events and more.",
     "BuiltOn": "Built-on",
-    "AbpFramework": "ABP Framework"
+    "AbpFramework": "ABP Framework",
+    "Volo.AbpIo.Domain:080001": "Start Time can not be greater than End Time",
+    "Enum:BookType:0": "Mastering ABP Framework",
+    "Enum:PurchasePlatform:0": "Amazon",
+    "Enum:PurchasePlatform:1": "Packt"
   }
 }
