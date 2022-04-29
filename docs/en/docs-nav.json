@@ -1226,19 +1226,6 @@
       "path": "Testing.md"
     },
     {
-      "text": "Samples",
-      "items": [
-        {
-          "text": "All Samples",
-          "path": "Samples/Index.md"
-        },
-        {
-          "text": "Microservice Demo",
-          "path": "Samples/Microservice-Demo.md"
-        }
-      ]
-    },
-    {
       "text": "Application Modules",
       "items": [
         {
@@ -1292,6 +1279,19 @@
         {
           "text": "Virtual File Explorer",
           "path": "Modules/Virtual-File-Explorer.md"
+        }
+      ]
+    },
+    {
+      "text": "Samples",
+      "items": [
+        {
+          "text": "All Samples",
+          "path": "Samples/Index.md"
+        },
+        {
+          "text": "Microservice Demo",
+          "path": "Samples/Microservice-Demo.md"
         }
       ]
     },
