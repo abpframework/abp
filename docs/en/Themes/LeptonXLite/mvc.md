@@ -1,7 +1,7 @@
 # LeptonX Lite MVC UI
-LeptonX Lite has implementation for ABP Framework Razor Pages. It's a simplified variation of [LeptonX Theme](https://x.leptontheme.com/).
+LeptonX Lite has implementation for the ABP Framework Razor Pages. It's a simplified variation of the [LeptonX Theme](https://x.leptontheme.com/).
 
->   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of the [ABP Commercial](https://commercial.abp.io/).
+>   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP Commercial](https://commercial.abp.io/).
 
 > See the [Theming document](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Theming) to learn about themes.
 
@@ -13,7 +13,7 @@ LeptonX Lite has implementation for ABP Framework Razor Pages. It's a simplified
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite
 ```
 
-- Make sure old theme is removed and LeptonX is added in your Module class.
+- Make sure the old theme is removed and LeptonX is added in your Module class.
 
 ```diff
 [DependsOn(
@@ -43,7 +43,7 @@ Configure<AbpBundlingOptions>(options =>
 ## Customization
 
 ### Toolbars
-LeptonX Lite includes separeted toolbars for desktop & mobile. You can manage toolbars independently. Toolbar names can be accessible in **LeptonXLiteToolbars** class.
+LeptonX Lite includes separeted toolbars for desktop & mobile. You can manage toolbars independently. Toolbar names can be accessible in the **LeptonXLiteToolbars** class.
 
 - `LeptonXLiteToolbars.Main`
 - `LeptonXLiteToolbars.MainMobile`
