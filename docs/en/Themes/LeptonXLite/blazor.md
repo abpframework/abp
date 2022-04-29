@@ -7,23 +7,23 @@
 }
 ````
 
-LeptonX Lite has implementation for ABP Framework Blazor WebAssembly & Blazor Server. It's a simplified variation of [LeptonX Theme](https://x.leptontheme.com/).
+LeptonX Lite has implementation for the ABP Framework Blazor WebAssembly & Blazor Server. It's a simplified variation of the [LeptonX Theme](https://x.leptontheme.com/).
 
->   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of the [ABP Commercial](https://commercial.abp.io/).
+>   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP Commercial](https://commercial.abp.io/).
 
 > See the [Theming document](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Theming) to learn about themes.
 
 ## Installation
 
 {{if UI == "Blazor"}}
-- Complete [MVC Razor Pages Installation](mvc.md#installation) for the **HttpApi.Host** application first. _If the solution is tiered/micro-service, complete MVC steps for all MVC applications such as **HttpApi.Host** and if identity server is separated, install to the **IdentityServer**_.
+- Complete the [MVC Razor Pages Installation](mvc.md#installation) for the **HttpApi.Host** application first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and if identity server is separated, install to the **IdentityServer**_.
 
 - Add **Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme** package to your **Blazor WebAssembly** application.
   ```bash
   dotnet add package Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme
   ```
 
-- Remove old theme from **DependsOn** attribute in your module class and add **AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule** type to **DependsOn** attribute.
+- Remove the old theme from the **DependsOn** attribute in your module class and add the **AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule** type to the **DependsOn** attribute.
 
 ```diff
 [DependsOn(
@@ -32,28 +32,28 @@ LeptonX Lite has implementation for ABP Framework Blazor WebAssembly & Blazor Se
 )]
 ```
 
-- Change startup App component with LeptonX one.
+- Change startup App component with the LeptonX one.
 
 ```csharp
 // Make sure the 'App' comes from 'Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite' namespace.
 builder.RootComponents.Add<App>("#ApplicationContainer");
 ```
 
-- Run `abp bundle` command in your **Blazor** application folder.
+- Run the `abp bundle` command in your **Blazor** application folder.
 
 {{end}}
 
 
 {{if UI == "BlazorServer"}}
 
-- Complete [MVC Razor Pages Installation](mvc.md#installation) first. _If the solution is tiered/micro-service, complete MVC steps for all MVC applications such as **HttpApi.Host** and **IdentityServer**_.
+- Complete the [MVC Razor Pages Installation](mvc.md#installation) first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and **IdentityServer**_.
 
 - Add **Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme** package to your **Blazor server** application.
   ```bash
   dotnet add package Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme
   ```
 
-- Remove old theme from **DependsOn** attribute in your module class and add **AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule** type to **DependsOn** attribute.
+- Remove old theme from the **DependsOn** attribute in your module class and add the **AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule** type to the **DependsOn** attribute.
 
   ```diff
   [DependsOn(
@@ -82,7 +82,7 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
     @using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite
     @using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling
     ```
-  - Then replace script & style bunles as following
+  - Then replace script & style bundles as following:
     ```diff
     - <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global" />
     + <abp-style-bundle name="@BlazorLeptonXLiteThemeBundles.Styles.Global" />
@@ -101,7 +101,7 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
 ## Customization
 
 ### Toolbars
-LeptonX Lite includes separeted toolbars for desktop & mobile. You can manage toolbars independently. Toolbar names can be accessible in **LeptonXLiteToolbars** class.
+LeptonX Lite includes separeted toolbars for desktop & mobile. You can manage toolbars independently. Toolbar names can be accessible in the **LeptonXLiteToolbars** class.
 
 - `LeptonXLiteToolbars.Main`
 - `LeptonXLiteToolbars.MainMobile`
