@@ -71,14 +71,29 @@ ABP's [background job system](../Background-Jobs.md) is used to queue tasks to b
 
 ABP's default background job manager is compatible with clustered environments. It uses a [distributed lock](../Distributed-Locking.md) to ensure that the jobs are executed only in a single application instance in a time. See the *Configuring a Distributed Lock Provider* section below to learn how to configure a distributed lock provider for your application, so the default background job manager properly works in a clustered environment.
 
+If you don't want to use a distributed lock provider, you may go with the following options:
+
+* Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false`) in all application instances except one of them, so only the single instance executes the jobs (while other application instances can still queue jobs).
+* Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false`)  in all application instances and create a dedicated application (maybe a console application running in its own container or a Windows Service running in background) to execute all the background jobs. This can be a good option if your background jobs consume high system resource (CPU, RAM or Disk), so you can deploy that background application to a dedicated server and your background jobs doesn't affect your application's performance.
+
 > If you are using an external background job integration (e.g. [Hangfire](../Background-Workers-Hangfire.md) or [Quartz](../Background-Workers-Quartz.md)) instead of the default background job manager, then please refer your provider's documentation to learn how it should be configured for a clustered environment.
-
-## Implementing Background Workers
-
-TODO
 
 ## Configuring a Distributed Lock Provider
 
 ABP provides a distributed locking abstraction with an implementation made with the [DistributedLock](https://github.com/madelson/DistributedLock) library. A distributed lock is used to control concurrent access to a shared resource by multiple applications to prevent corruption of the resource because of concurrent writes. ABP Framework and some pre-built [application modules](../Modules/Index.md) are using the distributed locking for several reasons.
 
 However, the distributed lock system works in-process by default. That means it is not distributed actually, unless you configure a distributed lock provider. So, please follow the [distributed lock](../Distributed-Locking.md) document to configure a provider for your application, if it is not already configured.
+
+## Implementing Background Workers
+
+ASP.NET Core provides [hosted services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services) and ABP provides [background workers](../Background-Workers.md) to perform tasks in background threads in your application.
+
+If your application has tasks running in background, you should care on how they will behave in a clustered environment, especially if your background tasks are using the same resources. You should design your background tasks so they continue to work properly in the clustered environment.
+
+Assume that your background worker in your SaaS application checks user subscriptions and sends emails if their subscription renewal date approaches. If the background task run in multiple application instances, it is probable to send the same email many times to some users, which will disturb them.
+
+We suggest to you to use one of the following approaches to overcome the problem:
+
+* Implement your background workers so that they works in a clustered environment without any problem. Using the [distributed lock](../Distributed-Locking.md) to ensure concurrency control is a way of doing that. A background worker in an application instance may handle a distributed lock, so the workers in other application instances will wait the lock. In this way, only one worker does the actual work, while others wait in idle. If you implement this, your workers run safely without caring how the application is deployed.
+* Stop background workers (set `AbpBackgroundWorkerOptions.IsEnabled` to `false`) in all application instances except one of them, so only the single instance runs the workers.
+* Stop background workers (set `AbpBackgroundWorkerOptions.IsEnabled` to `false`) in all application instances and create a dedicated application (maybe a console application running in its own container or a Windows Service running in background) to execute all the background tasks. This can be a good option if your background workers consume high system resource (CPU, RAM or Disk), so you can deploy that background application to a dedicated server and your background tasks doesn't affect your application's performance.
