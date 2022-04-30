@@ -41,7 +41,17 @@ You may have more problems with clustered deployment, but these are the most com
 
 ## Switching to a Distributed Cache
 
-TODO
+ASP.NET Core provides different kind of caching features. [In-memory cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/memory) stores your objects in the memory of the local server and only available to the application that stored the object. Non-sticky sessions in a clustered environment should use the [distributed caching](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) except some specific scenarios (for example, you can cache a local CSS file into memory. It is a read-only data and it is the same in all application instances. You can cache it in memory for performance reasons without any problem).
+
+[ABP's Distributed Cache](Caching.md) extends [ASP.NET Core's distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) infrastructure. It works in-memory by default. You should configure an actual distributed cache provider when you want to deploy your application to a clustered environment.
+
+> You should configure the cache provider for a clustered deployment, even if your application doesn't directly use `IDistributedCache`. Because ABP Framework and pre-built [application modules](../Modules/Index.md) are using the distributed cache.
+
+ASP.NET Core's provides multiple integrations to use as your distributed cache provider, like [Redis](https://redis.io/) and [NCache](https://www.alachisoft.com/ncache/). You can follow [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) to learn how to use them in your applications.
+
+If you decided to use Redis as your distributed cache provider, **follow [ABP's Redis Cache Integration document](../Redis-Cache.md)** for the steps you need to follow to install it into your application and setup your Redis configuration.
+
+> Based on your preferences while creating a new ABP solution, Redis cache might be pre-installed in your solution. For example, if you have selected the *Tiered* option with the MVC UI, Redis cache comes as pre-installed. Because, in this case, you have two applications in your solution and they should use the same cache source to be consistent.
 
 ## Using a Proper BLOB Storage Provider
 
