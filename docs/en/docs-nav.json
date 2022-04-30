@@ -1238,6 +1238,16 @@
       "path": "Testing.md"
     },
     {
+      "text": "Deployment",
+      "path": "Deployment/Index.md",
+      "items": [
+        {
+          "text": "Deploying to a Clustered Environment",
+          "path": "Deployment/Clustered-Environment.md"
+        }
+      ]
+    },
+    {
       "text": "Application Modules",
       "items": [
         {
