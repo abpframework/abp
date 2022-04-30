@@ -1,7 +1,5 @@
 # Distributed Locking
-Distributed locking is a technique to manage many applications that try to access the same resource.
-The main purpose is to allow only one of many applications to access the same resource at the same time.
-Otherwise, accessing the same object from various applications may corrupt the value of resources. 
+Distributed locking is a technique to manage many applications that try to access the same resource. The main purpose is to allow only one of many applications to access the same resource at the same time. Otherwise, accessing the same object from various applications may corrupt the value of resources. 
 
 > ABP's current distributed locking implementation is based on the [DistributedLock](https://github.com/madelson/DistributedLock) library.
 

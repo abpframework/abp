@@ -65,7 +65,11 @@ Check the [BLOB Storing](../Blob-Storing.md) document to see all available BLOG 
 
 ## Configuring Background Jobs
 
-TODO
+ABP's [background job system](../Background-Jobs.md) is used to queue tasks to be executed in background. Background job queue is persistent and a queued task is guaranteed to be executed (it is re-tried if it fails).
+
+ABP's default background job manager is compatible with clustered environments. It uses a [distributed lock](../Distributed-Locking.md) to ensure that the jobs are executed only in a single application instance in a time. See the *Configuring a Distributed Lock Provider* section below to learn how to configure a distributed lock provider for your application, so the default background job manager properly works in a clustered environment.
+
+> If you are using an external background job integration (e.g. [Hangfire](../Background-Workers-Hangfire.md) or [Quartz](../Background-Workers-Quartz.md)) instead of the default background job manager, then please refer your provider's documentation to learn how it should be configured for a clustered environment.
 
 ## Implementing Background Workers
 
@@ -73,4 +77,6 @@ TODO
 
 ## Configuring a Distributed Lock Provider
 
-TODO
+ABP provides a distributed locking abstraction with an implementation made with the [DistributedLock](https://github.com/madelson/DistributedLock) library. A distributed lock is used to control concurrent access to a shared resource by multiple applications to prevent corruption of the resource because of concurrent writes. ABP Framework and some pre-built [application modules](../Modules/Index.md) are using the distributed locking for several reasons.
+
+However, the distributed lock system works in-process by default. That means it is not distributed actually, unless you configure a distributed lock provider. So, please follow the [distributed lock](../Distributed-Locking.md) document to configure a provider for your application, if it is not already configured.

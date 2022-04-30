@@ -189,11 +189,17 @@ public class MyModule : AbpModule
 
 ### Data Store
 
-The default background job manager needs a data store to save and read jobs. It defines `IBackgroundJobStore` as an abstraction. So, you can replace the implementation if you want.
+The default background job manager needs a data store to save and read jobs. It defines `IBackgroundJobStore` as an abstraction to store the jobs.
 
-Background Jobs module implements `IBackgroundJobStore` using various data access providers. See its own [documentation](Modules/Background-Jobs.md).
+Background Jobs module implements `IBackgroundJobStore` using various data access providers. See its own [documentation](Modules/Background-Jobs.md). If you don't want to use this module, you should implement the `IBackgroundJobStore` interface yourself.
 
 > Background Jobs module is already installed to the startup templates by default and it works based on your ORM/data access choice.
+
+### Clustered Deployment
+
+The default background job manager is compatible with [clustered environments](Deployment/Clustered-Environment.md) (where multiple instances of your application run concurrently). It uses a [distributed lock](Distributed-Locking.md) to ensure that the jobs are executed only in a single application instance in a time.
+
+However, the distributed lock system works in-process by default. That means it is not distributed actually, unless you configure a distributed lock provider. So, please follow the [distributed lock](Distributed-Locking.md) document to configure a provider for your application, if it is not already configured.
 
 ## Integrations
 
