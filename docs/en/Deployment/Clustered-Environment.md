@@ -55,7 +55,13 @@ If you decided to use Redis as your distributed cache provider, **follow [ABP's 
 
 ## Using a Proper BLOB Storage Provider
 
-TODO
+If you have used ABP's [BLOB Storing](../Blob-Storing.md) feature with the [File System provider](../Blob-Storing-File-System.md), you should use another provider in your clustered environment since the File System provider uses application's local file system.
+
+The [Database BLOB provider](../Blob-Storing-Database) is the easiest way since it uses your application's main database (or another database if you configure) to store BLOBs. However, you should remember that BLOBs are large objects and may quickly increase your database's size.
+
+> [ABP Commercial](https://commercial.abp.io/) startup solution templates come with the database BLOB provider as pre-installed, and stores BLOBs in the application's database.
+
+Check the [BLOB Storing](../Blob-Storing.md) document to see all available BLOG storage providers.
 
 ## Configuring Background Jobs
 
