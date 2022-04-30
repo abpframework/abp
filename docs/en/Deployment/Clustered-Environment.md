@@ -3,6 +3,8 @@
 This document introduces the topics that you should care when you are deploying your application to a clustered environment where **multiple instances of your application runs concurrently**, and explains how you can deal with these topics in your ABP based application.
 
 > This document is valid regardless you have a monolith application or a microservice solution. The Application term is used for a process. An application can be a monolith web application, a service in a microservice solution, a console application, or another kind of executable process.
+>
+> For example, if you are deploying your application to Kubernetes and configure so that your application or service runs in multiple pods, then your application or service runs in a clustered environment.
 
 ## Understanding the Clustered Environment
 
