@@ -18,7 +18,7 @@ Browsers and other client applications can directly make HTTP requests to your a
 
 ### Clustered Deployment
 
-**Clustered deployment** is the way of running **multiple instances** of your application **concurrently** in a single or multiple servers. In this way, different instances can serve to different users or requests and you can scale by adding new servers to the system. The following figure shows a typical implementation of clustering using a **load balancer** service:
+**Clustered deployment** is the way of running **multiple instances** of your application **concurrently** in a single or multiple servers. In this way, different instances can serve to different requests and you can scale by adding new servers to the system. The following figure shows a typical implementation of clustering using a **load balancer**:
 
 ![deployment-clustered](../images/deployment-clustered.png)
 
@@ -35,7 +35,7 @@ Once multiple instances of your application runs in parallel, you should careful
 * Any **state (data) stored in memory** of your application will become a problem when you have multiple instances. A state stored in memory of an application instance may not be available in the next request since the next request will be handled by a different application instance. While there are some solutions (like sticky sessions) to overcome this problem user-basis, it is a **best practice to design your application as stateless** if you want to run it in a cluster, container or/and cloud.
 * **In-memory caching** is a kind of in-memory state and should not be used in a clustered application. You should use **distributed caching** instead.
 * You shouldn't store data in the **local file system** that should be available to all instances of your application. Difference application instance may run in different containers or servers and they may not be able to access to the same file system. You can use a **cloud or external storage provider** as a solution.
-* If you have **background workers** or **job queue managers**, you should be careful since multiple instances may try to execute the same job or perform the same work. As a result, you may have the same work done multiple times or you may get a lot of errors while trying to access and change the same resource concurrently.
+* If you have **background workers** or **job queue managers**, you should be careful since multiple instances may try to execute the same job or perform the same work concurrently. As a result, you may have the same work done multiple times or you may get a lot of errors while trying to access and change the same resources.
 
 You may have more problems with clustered deployment, but these are the most common ones. ABP has been designed to be compatible with clustered deployment scenario. The following sections explains what you should do when you are deploying your ABP based application to a clustered environment.
 
