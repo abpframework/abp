@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using Volo.Abp.Cli.ProjectBuilding.Building;
+﻿namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
-
-public class AppNoLayersTemplate : AppTemplateBase
+public class AppNoLayersTemplate : AppNoLayersTemplateBase
 {
     /// <summary>
     /// "app-nolayers".
@@ -14,16 +11,6 @@ public class AppNoLayersTemplate : AppTemplateBase
         : base(TemplateName)
     {
         //TODO: Change URL
-        DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/Application";
-    }
-
-    public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
-    {
-        var steps = new List<ProjectBuildPipelineStep>();
-
-        RandomizeSslPorts(context, steps);
-        RandomizeStringEncryption(context, steps);
-
-        return steps;
+        //DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/Application";
     }
 }

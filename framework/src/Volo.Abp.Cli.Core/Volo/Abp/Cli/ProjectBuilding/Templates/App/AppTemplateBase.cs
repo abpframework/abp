@@ -103,6 +103,11 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
         }
+
+        if (context.BuildArgs.DatabaseManagementSystem == DatabaseManagementSystem.PostgreSQL)
+        {
+            context.Symbols.Add("dbms:PostgreSQL");
+        }
     }
 
     protected void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
@@ -284,6 +289,19 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
+
+        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.ProgressiveWebApp.Short))
+        {
+            context.Symbols.Add("PWA");
+        }
+        else
+        {
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/service-worker.js"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/service-worker.published.js"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/manifest.json"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/icon-192.png"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/icon-512.png"));
+        }
     }
 
     protected void ConfigureWithBlazorServerUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
@@ -359,6 +377,11 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
+        }
+
+        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.ProgressiveWebApp.Short))
+        {
+            context.Symbols.Add("PWA");
         }
     }
 

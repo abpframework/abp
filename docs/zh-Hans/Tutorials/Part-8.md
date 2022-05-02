@@ -10,7 +10,7 @@
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-* **{{DB_Text}}** 做为ORM提供程序.
+* **{{DB_Value}}** 做为ORM提供程序.
 * **{{UI_Value}}** 做为UI框架.
 
 本教程分为以下部分:
@@ -22,7 +22,7 @@
 - [Part 5: 授权](Part-5.md)
 - [Part 6: 作者: 领域层](Part-6.md)
 - [Part 7: 作者: 数据库集成](Part-7.md)
-- [Part 8: 作者: 应用服务层](本章)
+- **Part 8: 作者: 应用服务层 (本章)**
 - [Part 9: 作者: 用户页面](Part-9.md)
 - [Part 10: 图书到作者的关系](Part-10.md)
 
@@ -381,6 +381,8 @@ authorsPermission.AddChild(
 "Permission:Authors.Delete": "Deleting the authors"
 ````
 
+> 简体中文翻译请打开`zh-Hans.json`文件 ,并将"Texts"对象中对应的值替换为中文.
+
 ## 对象到对象映射
 
 `AuthorAppService` 使用 `ObjectMapper` 将 `Author` 对象 转换为 `AuthorDto` 对象. 所以, 我们需要在 AutoMapper 配置中定义映射.
@@ -391,7 +393,7 @@ authorsPermission.AddChild(
 CreateMap<Author, AuthorDto>();
 ````
 
-## 种子数据
+## 数据种子
 
 如同图书管理部分所做的, 在数据库中生成一些初始作者实体. 不仅当第一次运行应用程序时是有用的, 对自动化测试也是很有用的.
 

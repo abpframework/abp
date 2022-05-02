@@ -82,6 +82,7 @@ public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
             httpContext.Response.StatusCode = (int)statusCodeFinder.GetStatusCode(httpContext, exception);
             httpContext.Response.OnStarting(_clearCacheHeadersDelegate, httpContext.Response);
             httpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
+            httpContext.Response.Headers.Add("Content-Type", "application/json");
 
             await httpContext.Response.WriteAsync(
                 jsonSerializer.Serialize(

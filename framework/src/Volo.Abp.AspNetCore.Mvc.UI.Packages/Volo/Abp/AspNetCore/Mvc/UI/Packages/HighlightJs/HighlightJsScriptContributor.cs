@@ -10,6 +10,6 @@ public class HighlightJsScriptContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddIfNotContains("/libs/highlight.js/highlight.pack.js");
+        context.Files.AddIfNotContains("/libs/highlight.js/highlight.min.js");
     }
 }

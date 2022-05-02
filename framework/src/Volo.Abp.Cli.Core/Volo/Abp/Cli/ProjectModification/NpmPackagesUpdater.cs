@@ -14,6 +14,7 @@ using NuGet.Versioning;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
@@ -25,7 +26,7 @@ public class NpmPackagesUpdater : ITransientDependency
 {
     public ILogger<NpmPackagesUpdater> Logger { get; set; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
-    public InstallLibsCommand InstallLibsCommand { get; }
+    public IInstallLibsService InstallLibsService { get; }
     public ICmdHelper CmdHelper { get; }
 
     private readonly PackageJsonFileFinder _packageJsonFileFinder;
@@ -38,13 +39,13 @@ public class NpmPackagesUpdater : ITransientDependency
         NpmGlobalPackagesChecker npmGlobalPackagesChecker,
         ICancellationTokenProvider cancellationTokenProvider,
         CliHttpClientFactory cliHttpClientFactory,
-        InstallLibsCommand ınstallLibsCommand,
+        IInstallLibsService installLibsService,
         ICmdHelper cmdHelper)
     {
         _packageJsonFileFinder = packageJsonFileFinder;
         _npmGlobalPackagesChecker = npmGlobalPackagesChecker;
         CancellationTokenProvider = cancellationTokenProvider;
-        InstallLibsCommand = ınstallLibsCommand;
+        InstallLibsService = installLibsService;
         CmdHelper = cmdHelper;
         _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<NpmPackagesUpdater>.Instance;
@@ -306,10 +307,8 @@ public class NpmPackagesUpdater : ITransientDependency
 
     protected virtual async Task RunInstallLibsAsync(string fileDirectory)
     {
-        var args = new CommandLineArgs("install-libs");
-        args.Options.Add(InstallLibsCommand.Options.WorkingDirectory.Short, fileDirectory);
-
-        await InstallLibsCommand.ExecuteAsync(args);
+        Logger.LogInformation("Installing client-side packages...");
+        await InstallLibsService.InstallLibsAsync(fileDirectory);
     }
 
     protected virtual void RunYarn(string fileDirectory)

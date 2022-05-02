@@ -1,7 +1,0 @@
-{
-  "culture": "zh-Hant",
-    "texts": {
-    "Welcome_Title": "歡迎",
-    "Welcome_Text": "這是 ABP 框架的極簡單層應用程序啟動模板."
-    }
-  }

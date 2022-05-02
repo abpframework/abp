@@ -1,0 +1,8 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Welcome_Title": "Seja bem-vindo!",
+    "Welcome_Text": "Este é um modelo de inicialização de aplicativo de camada única minimalista para o ABP Framework.",
+    "Menu:Home": "Principal"
+  }
+}

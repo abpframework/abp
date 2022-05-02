@@ -73,7 +73,7 @@ Create a new razor page, `Index.cshtml` under the `Pages/Authors` folder of the 
             <abp-column size-md="_6">
                 <abp-card-title>@L["Authors"]</abp-card-title>
             </abp-column>
-            <abp-column size-md="_6" class="text-right">
+            <abp-column size-md="_6" class="text-end">
                 @if (await AuthorizationService
                     .IsGrantedAsync(BookStorePermissions.Authors.Create))
                 {
@@ -722,8 +722,8 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
           {%{{{ '::Menu:Authors' | abpLocalization }}}%}
         </h5>
       </div>
-      <div class="text-right col col-md-6">
-        <div class="text-lg-right pt-2">
+      <div class="text-end col col-md-6">
+        <div class="text-lg-end pt-2">
           <button *abpPermission="'BookStore.Authors.Create'" id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
             <i class="fa fa-plus mr-1"></i>
             <span>{%{{{ '::NewAuthor' | abpLocalization }}}%}</span>

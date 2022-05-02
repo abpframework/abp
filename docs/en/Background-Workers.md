@@ -86,20 +86,20 @@ After creating a background worker class, you should add it to the `IBackgroundW
 [DependsOn(typeof(AbpBackgroundWorkersModule))]
 public class MyModule : AbpModule
 {
-    public override void OnApplicationInitialization(
+    public override Task OnApplicationInitializationAsync(
         ApplicationInitializationContext context)
     {
-        context.AddBackgroundWorker<PassiveUserCheckerWorker>();
+        context.AddBackgroundWorkerAsync<PassiveUserCheckerWorker>();
     }
 }
 ````
 
-`context.AddBackgroundWorker(...)` is a shortcut extension method for the expression below:
+`context.AddBackgroundWorkerAsync(...)` is a shortcut extension method for the expression below:
 
 ````csharp
-context.ServiceProvider
+await context.ServiceProvider
     .GetRequiredService<IBackgroundWorkerManager>()
-    .Add(
+    .AddAsync(
         context
             .ServiceProvider
             .GetRequiredService<PassiveUserCheckerWorker>()
@@ -126,10 +126,11 @@ Background workers only work if your application is running. If you host the bac
 
 Be careful if you run multiple instances of your application simultaneously in a clustered environment. In that case, every application runs the same worker which may create conflicts if your workers are running on the same resources (processing the same data, for example).
 
-If that's a problem for your workers, you have two options;
+If that's a problem for your workers, you have the following options:
 
-* Disable the background worker system using the `AbpBackgroundWorkerOptions` described above, for all the application instances, except one of them.
-* Disable the background worker system for all the application instances and create another special application that runs on a single server and execute the workers.
+* Implement your background workers so that they works in a clustered environment without any problem. Using the [distributed lock](../Distributed-Locking.md) to ensure concurrency control is a way of doing that. A background worker in an application instance may handle a distributed lock, so the workers in other application instances will wait the lock. In this way, only one worker does the actual work, while others wait in idle. If you implement this, your workers run safely without caring how the application is deployed.
+* Stop background workers (set `AbpBackgroundWorkerOptions.IsEnabled` to `false`) in all application instances except one of them, so only the single instance runs the workers.
+* Stop background workers (set `AbpBackgroundWorkerOptions.IsEnabled` to `false`) in all application instances and create a dedicated application (maybe a console application running in its own container or a Windows Service running in background) to execute all the background tasks. This can be a good option if your background workers consume high system resource (CPU, RAM or Disk), so you can deploy that background application to a dedicated server and your background tasks doesn't affect your application's performance.
 
 ## Integrations
 

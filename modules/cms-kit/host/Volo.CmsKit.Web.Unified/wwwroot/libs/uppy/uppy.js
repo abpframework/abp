@@ -180,12 +180,15 @@ var Emitter = /*#__PURE__*/function () {
 
   _createClass(Emitter, [{
     key: "addEventListener",
-    value: function addEventListener(type, callback) {
+    value: function addEventListener(type, callback, options) {
       if (!(type in this.listeners)) {
         this.listeners[type] = [];
       }
 
-      this.listeners[type].push(callback);
+      this.listeners[type].push({
+        callback: callback,
+        options: options
+      });
     }
   }, {
     key: "removeEventListener",
@@ -197,7 +200,7 @@ var Emitter = /*#__PURE__*/function () {
       var stack = this.listeners[type];
 
       for (var i = 0, l = stack.length; i < l; i++) {
-        if (stack[i] === callback) {
+        if (stack[i].callback === callback) {
           stack.splice(i, 1);
           return;
         }
@@ -206,22 +209,27 @@ var Emitter = /*#__PURE__*/function () {
   }, {
     key: "dispatchEvent",
     value: function dispatchEvent(event) {
-      var _this = this;
-
       if (!(event.type in this.listeners)) {
         return;
       }
 
-      var debounce = function debounce(callback) {
-        setTimeout(function () {
-          return callback.call(_this, event);
-        });
-      };
-
       var stack = this.listeners[event.type];
+      var stackToCall = stack.slice();
 
-      for (var i = 0, l = stack.length; i < l; i++) {
-        debounce(stack[i]);
+      for (var i = 0, l = stackToCall.length; i < l; i++) {
+        var listener = stackToCall[i];
+
+        try {
+          listener.callback.call(this, event);
+        } catch (e) {
+          Promise.resolve().then(function () {
+            throw e;
+          });
+        }
+
+        if (listener.options && listener.options.once) {
+          this.removeEventListener(event.type, listener.callback);
+        }
       }
 
       return !event.defaultPrevented;
@@ -237,34 +245,34 @@ var AbortSignal = /*#__PURE__*/function (_Emitter) {
   var _super = _createSuper(AbortSignal);
 
   function AbortSignal() {
-    var _this2;
+    var _this;
 
     _classCallCheck(this, AbortSignal);
 
-    _this2 = _super.call(this); // Some versions of babel does not transpile super() correctly for IE <= 10, if the parent
+    _this = _super.call(this); // Some versions of babel does not transpile super() correctly for IE <= 10, if the parent
     // constructor has failed to run, then "this.listeners" will still be undefined and then we call
     // the parent constructor directly instead as a workaround. For general details, see babel bug:
     // https://github.com/babel/babel/issues/3041
     // This hack was added as a fix for the issue described here:
     // https://github.com/Financial-Times/polyfill-library/pull/59#issuecomment-477558042
 
-    if (!_this2.listeners) {
-      Emitter.call(_assertThisInitialized(_this2));
+    if (!_this.listeners) {
+      Emitter.call(_assertThisInitialized(_this));
     } // Compared to assignment, Object.defineProperty makes properties non-enumerable by default and
     // we want Object.keys(new AbortController().signal) to be [] for compat with the native impl
 
 
-    Object.defineProperty(_assertThisInitialized(_this2), 'aborted', {
+    Object.defineProperty(_assertThisInitialized(_this), 'aborted', {
       value: false,
       writable: true,
       configurable: true
     });
-    Object.defineProperty(_assertThisInitialized(_this2), 'onabort', {
+    Object.defineProperty(_assertThisInitialized(_this), 'onabort', {
       value: null,
       writable: true,
       configurable: true
     });
-    return _this2;
+    return _this;
   }
 
   _createClass(AbortSignal, [{
@@ -698,9 +706,7 @@ function fromByteArray (uint8) {
 
   // go through the array every three bytes, we'll deal with trailing stuff later
   for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-    parts.push(encodeChunk(
-      uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)
-    ))
+    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)))
   }
 
   // pad the end with zeros, but make sure to not forget the extra bytes
@@ -2610,9 +2616,9 @@ function numberIsNaN (obj) {
 
 }).call(this)}).call(this,require("buffer").Buffer)
 
-},{"base64-js":7,"buffer":10,"ieee754":26}],11:[function(require,module,exports){
+},{"base64-js":7,"buffer":10,"ieee754":29}],11:[function(require,module,exports){
 /*!
-  Copyright (c) 2017 Jed Watson.
+  Copyright (c) 2018 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/classnames
 */
@@ -2623,7 +2629,7 @@ function numberIsNaN (obj) {
 
 	var hasOwn = {}.hasOwnProperty;
 
-	function classNames () {
+	function classNames() {
 		var classes = [];
 
 		for (var i = 0; i < arguments.length; i++) {
@@ -2634,16 +2640,22 @@ function numberIsNaN (obj) {
 
 			if (argType === 'string' || argType === 'number') {
 				classes.push(arg);
-			} else if (Array.isArray(arg) && arg.length) {
-				var inner = classNames.apply(null, arg);
-				if (inner) {
-					classes.push(inner);
+			} else if (Array.isArray(arg)) {
+				if (arg.length) {
+					var inner = classNames.apply(null, arg);
+					if (inner) {
+						classes.push(inner);
+					}
 				}
 			} else if (argType === 'object') {
-				for (var key in arg) {
-					if (hasOwn.call(arg, key) && arg[key]) {
-						classes.push(key);
+				if (arg.toString === Object.prototype.toString) {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
 					}
+				} else {
+					classes.push(arg.toString());
 				}
 			}
 		}
@@ -2691,190 +2703,13 @@ module.exports = function(obj, fn){
 
 },{}],13:[function(require,module,exports){
 
-/**
- * Expose `Emitter`.
- */
-
-if (typeof module !== 'undefined') {
-  module.exports = Emitter;
-}
-
-/**
- * Initialize a new `Emitter`.
- *
- * @api public
- */
-
-function Emitter(obj) {
-  if (obj) return mixin(obj);
-};
-
-/**
- * Mixin the emitter properties.
- *
- * @param {Object} obj
- * @return {Object}
- * @api private
- */
-
-function mixin(obj) {
-  for (var key in Emitter.prototype) {
-    obj[key] = Emitter.prototype[key];
-  }
-  return obj;
-}
-
-/**
- * Listen on the given `event` with `fn`.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.on =
-Emitter.prototype.addEventListener = function(event, fn){
-  this._callbacks = this._callbacks || {};
-  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
-    .push(fn);
-  return this;
-};
-
-/**
- * Adds an `event` listener that will be invoked a single
- * time then automatically removed.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.once = function(event, fn){
-  function on() {
-    this.off(event, on);
-    fn.apply(this, arguments);
-  }
-
-  on.fn = fn;
-  this.on(event, on);
-  return this;
-};
-
-/**
- * Remove the given callback for `event` or all
- * registered callbacks.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.off =
-Emitter.prototype.removeListener =
-Emitter.prototype.removeAllListeners =
-Emitter.prototype.removeEventListener = function(event, fn){
-  this._callbacks = this._callbacks || {};
-
-  // all
-  if (0 == arguments.length) {
-    this._callbacks = {};
-    return this;
-  }
-
-  // specific event
-  var callbacks = this._callbacks['$' + event];
-  if (!callbacks) return this;
-
-  // remove all handlers
-  if (1 == arguments.length) {
-    delete this._callbacks['$' + event];
-    return this;
-  }
-
-  // remove specific handler
-  var cb;
-  for (var i = 0; i < callbacks.length; i++) {
-    cb = callbacks[i];
-    if (cb === fn || cb.fn === fn) {
-      callbacks.splice(i, 1);
-      break;
-    }
-  }
-
-  // Remove event specific arrays for event types that no
-  // one is subscribed for to avoid memory leak.
-  if (callbacks.length === 0) {
-    delete this._callbacks['$' + event];
-  }
-
-  return this;
-};
-
-/**
- * Emit `event` with the given args.
- *
- * @param {String} event
- * @param {Mixed} ...
- * @return {Emitter}
- */
-
-Emitter.prototype.emit = function(event){
-  this._callbacks = this._callbacks || {};
-
-  var args = new Array(arguments.length - 1)
-    , callbacks = this._callbacks['$' + event];
-
-  for (var i = 1; i < arguments.length; i++) {
-    args[i - 1] = arguments[i];
-  }
-
-  if (callbacks) {
-    callbacks = callbacks.slice(0);
-    for (var i = 0, len = callbacks.length; i < len; ++i) {
-      callbacks[i].apply(this, args);
-    }
-  }
-
-  return this;
-};
-
-/**
- * Return array of callbacks for `event`.
- *
- * @param {String} event
- * @return {Array}
- * @api public
- */
-
-Emitter.prototype.listeners = function(event){
-  this._callbacks = this._callbacks || {};
-  return this._callbacks['$' + event] || [];
-};
-
-/**
- * Check if this emitter has `event` handlers.
- *
- * @param {String} event
- * @return {Boolean}
- * @api public
- */
-
-Emitter.prototype.hasListeners = function(event){
-  return !! this.listeners(event).length;
-};
-
-},{}],14:[function(require,module,exports){
-
 module.exports = function(a, b){
   var fn = function(){};
   fn.prototype = b.prototype;
   a.prototype = new fn;
   a.prototype.constructor = a;
 };
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /*!
  * Cropper.js v1.5.7
  * https://fengyuanchen.github.io/cropperjs
@@ -6492,7 +6327,7 @@ module.exports = function(a, b){
 
 })));
 
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /**
  * cuid.js
  * Collision-resistant UID generator for browsers and node.
@@ -6578,7 +6413,7 @@ cuid.fingerprint = fingerprint;
 
 module.exports = cuid;
 
-},{"./lib/fingerprint.js":17,"./lib/getRandomValue.js":18,"./lib/pad.js":19}],17:[function(require,module,exports){
+},{"./lib/fingerprint.js":16,"./lib/getRandomValue.js":17,"./lib/pad.js":18}],16:[function(require,module,exports){
 var pad = require('./pad.js');
 
 var env = typeof window === 'object' ? window : self;
@@ -6592,7 +6427,7 @@ module.exports = function fingerprint () {
   return clientId;
 };
 
-},{"./pad.js":19}],18:[function(require,module,exports){
+},{"./pad.js":18}],17:[function(require,module,exports){
 
 var getRandomValue;
 
@@ -6612,19 +6447,859 @@ if (crypto) {
 
 module.exports = getRandomValue;
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = function pad (num, size) {
   var s = '000000000' + num;
   return s.substr(s.length - size);
 };
 
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
+/**
+ * Module dependencies.
+ */
+
+var keys = require('./keys');
+var hasBinary = require('has-binary2');
+var sliceBuffer = require('arraybuffer.slice');
+var after = require('after');
+var utf8 = require('./utf8');
+
+var base64encoder;
+if (typeof ArrayBuffer !== 'undefined') {
+  base64encoder = require('base64-arraybuffer');
+}
+
+/**
+ * Check if we are running an android browser. That requires us to use
+ * ArrayBuffer with polling transports...
+ *
+ * http://ghinda.net/jpeg-blob-ajax-android/
+ */
+
+var isAndroid = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
+
+/**
+ * Check if we are running in PhantomJS.
+ * Uploading a Blob with PhantomJS does not work correctly, as reported here:
+ * https://github.com/ariya/phantomjs/issues/11395
+ * @type boolean
+ */
+var isPhantomJS = typeof navigator !== 'undefined' && /PhantomJS/i.test(navigator.userAgent);
+
+/**
+ * When true, avoids using Blobs to encode payloads.
+ * @type boolean
+ */
+var dontSendBlobs = isAndroid || isPhantomJS;
+
+/**
+ * Current protocol version.
+ */
+
+exports.protocol = 3;
+
+/**
+ * Packet types.
+ */
+
+var packets = exports.packets = {
+    open:     0    // non-ws
+  , close:    1    // non-ws
+  , ping:     2
+  , pong:     3
+  , message:  4
+  , upgrade:  5
+  , noop:     6
+};
+
+var packetslist = keys(packets);
+
+/**
+ * Premade error packet.
+ */
+
+var err = { type: 'error', data: 'parser error' };
+
+/**
+ * Create a blob api even for blob builder when vendor prefixes exist
+ */
+
+var Blob = require('blob');
+
+/**
+ * Encodes a packet.
+ *
+ *     <packet type id> [ <data> ]
+ *
+ * Example:
+ *
+ *     5hello world
+ *     3
+ *     4
+ *
+ * Binary is encoded in an identical principle
+ *
+ * @api private
+ */
+
+exports.encodePacket = function (packet, supportsBinary, utf8encode, callback) {
+  if (typeof supportsBinary === 'function') {
+    callback = supportsBinary;
+    supportsBinary = false;
+  }
+
+  if (typeof utf8encode === 'function') {
+    callback = utf8encode;
+    utf8encode = null;
+  }
+
+  var data = (packet.data === undefined)
+    ? undefined
+    : packet.data.buffer || packet.data;
+
+  if (typeof ArrayBuffer !== 'undefined' && data instanceof ArrayBuffer) {
+    return encodeArrayBuffer(packet, supportsBinary, callback);
+  } else if (typeof Blob !== 'undefined' && data instanceof Blob) {
+    return encodeBlob(packet, supportsBinary, callback);
+  }
+
+  // might be an object with { base64: true, data: dataAsBase64String }
+  if (data && data.base64) {
+    return encodeBase64Object(packet, callback);
+  }
+
+  // Sending data as a utf-8 string
+  var encoded = packets[packet.type];
+
+  // data fragment is optional
+  if (undefined !== packet.data) {
+    encoded += utf8encode ? utf8.encode(String(packet.data), { strict: false }) : String(packet.data);
+  }
+
+  return callback('' + encoded);
+
+};
+
+function encodeBase64Object(packet, callback) {
+  // packet data is an object { base64: true, data: dataAsBase64String }
+  var message = 'b' + exports.packets[packet.type] + packet.data.data;
+  return callback(message);
+}
+
+/**
+ * Encode packet helpers for binary types
+ */
+
+function encodeArrayBuffer(packet, supportsBinary, callback) {
+  if (!supportsBinary) {
+    return exports.encodeBase64Packet(packet, callback);
+  }
+
+  var data = packet.data;
+  var contentArray = new Uint8Array(data);
+  var resultBuffer = new Uint8Array(1 + data.byteLength);
+
+  resultBuffer[0] = packets[packet.type];
+  for (var i = 0; i < contentArray.length; i++) {
+    resultBuffer[i+1] = contentArray[i];
+  }
+
+  return callback(resultBuffer.buffer);
+}
+
+function encodeBlobAsArrayBuffer(packet, supportsBinary, callback) {
+  if (!supportsBinary) {
+    return exports.encodeBase64Packet(packet, callback);
+  }
+
+  var fr = new FileReader();
+  fr.onload = function() {
+    exports.encodePacket({ type: packet.type, data: fr.result }, supportsBinary, true, callback);
+  };
+  return fr.readAsArrayBuffer(packet.data);
+}
+
+function encodeBlob(packet, supportsBinary, callback) {
+  if (!supportsBinary) {
+    return exports.encodeBase64Packet(packet, callback);
+  }
+
+  if (dontSendBlobs) {
+    return encodeBlobAsArrayBuffer(packet, supportsBinary, callback);
+  }
+
+  var length = new Uint8Array(1);
+  length[0] = packets[packet.type];
+  var blob = new Blob([length.buffer, packet.data]);
+
+  return callback(blob);
+}
+
+/**
+ * Encodes a packet with binary data in a base64 string
+ *
+ * @param {Object} packet, has `type` and `data`
+ * @return {String} base64 encoded message
+ */
+
+exports.encodeBase64Packet = function(packet, callback) {
+  var message = 'b' + exports.packets[packet.type];
+  if (typeof Blob !== 'undefined' && packet.data instanceof Blob) {
+    var fr = new FileReader();
+    fr.onload = function() {
+      var b64 = fr.result.split(',')[1];
+      callback(message + b64);
+    };
+    return fr.readAsDataURL(packet.data);
+  }
+
+  var b64data;
+  try {
+    b64data = String.fromCharCode.apply(null, new Uint8Array(packet.data));
+  } catch (e) {
+    // iPhone Safari doesn't let you apply with typed arrays
+    var typed = new Uint8Array(packet.data);
+    var basic = new Array(typed.length);
+    for (var i = 0; i < typed.length; i++) {
+      basic[i] = typed[i];
+    }
+    b64data = String.fromCharCode.apply(null, basic);
+  }
+  message += btoa(b64data);
+  return callback(message);
+};
+
+/**
+ * Decodes a packet. Changes format to Blob if requested.
+ *
+ * @return {Object} with `type` and `data` (if any)
+ * @api private
+ */
+
+exports.decodePacket = function (data, binaryType, utf8decode) {
+  if (data === undefined) {
+    return err;
+  }
+  // String data
+  if (typeof data === 'string') {
+    if (data.charAt(0) === 'b') {
+      return exports.decodeBase64Packet(data.substr(1), binaryType);
+    }
+
+    if (utf8decode) {
+      data = tryDecode(data);
+      if (data === false) {
+        return err;
+      }
+    }
+    var type = data.charAt(0);
+
+    if (Number(type) != type || !packetslist[type]) {
+      return err;
+    }
+
+    if (data.length > 1) {
+      return { type: packetslist[type], data: data.substring(1) };
+    } else {
+      return { type: packetslist[type] };
+    }
+  }
+
+  var asArray = new Uint8Array(data);
+  var type = asArray[0];
+  var rest = sliceBuffer(data, 1);
+  if (Blob && binaryType === 'blob') {
+    rest = new Blob([rest]);
+  }
+  return { type: packetslist[type], data: rest };
+};
+
+function tryDecode(data) {
+  try {
+    data = utf8.decode(data, { strict: false });
+  } catch (e) {
+    return false;
+  }
+  return data;
+}
+
+/**
+ * Decodes a packet encoded in a base64 string
+ *
+ * @param {String} base64 encoded message
+ * @return {Object} with `type` and `data` (if any)
+ */
+
+exports.decodeBase64Packet = function(msg, binaryType) {
+  var type = packetslist[msg.charAt(0)];
+  if (!base64encoder) {
+    return { type: type, data: { base64: true, data: msg.substr(1) } };
+  }
+
+  var data = base64encoder.decode(msg.substr(1));
+
+  if (binaryType === 'blob' && Blob) {
+    data = new Blob([data]);
+  }
+
+  return { type: type, data: data };
+};
+
+/**
+ * Encodes multiple messages (payload).
+ *
+ *     <length>:data
+ *
+ * Example:
+ *
+ *     11:hello world2:hi
+ *
+ * If any contents are binary, they will be encoded as base64 strings. Base64
+ * encoded strings are marked with a b before the length specifier
+ *
+ * @param {Array} packets
+ * @api private
+ */
+
+exports.encodePayload = function (packets, supportsBinary, callback) {
+  if (typeof supportsBinary === 'function') {
+    callback = supportsBinary;
+    supportsBinary = null;
+  }
+
+  var isBinary = hasBinary(packets);
+
+  if (supportsBinary && isBinary) {
+    if (Blob && !dontSendBlobs) {
+      return exports.encodePayloadAsBlob(packets, callback);
+    }
+
+    return exports.encodePayloadAsArrayBuffer(packets, callback);
+  }
+
+  if (!packets.length) {
+    return callback('0:');
+  }
+
+  function setLengthHeader(message) {
+    return message.length + ':' + message;
+  }
+
+  function encodeOne(packet, doneCallback) {
+    exports.encodePacket(packet, !isBinary ? false : supportsBinary, false, function(message) {
+      doneCallback(null, setLengthHeader(message));
+    });
+  }
+
+  map(packets, encodeOne, function(err, results) {
+    return callback(results.join(''));
+  });
+};
+
+/**
+ * Async array map using after
+ */
+
+function map(ary, each, done) {
+  var result = new Array(ary.length);
+  var next = after(ary.length, done);
+
+  var eachWithIndex = function(i, el, cb) {
+    each(el, function(error, msg) {
+      result[i] = msg;
+      cb(error, result);
+    });
+  };
+
+  for (var i = 0; i < ary.length; i++) {
+    eachWithIndex(i, ary[i], next);
+  }
+}
+
+/*
+ * Decodes data when a payload is maybe expected. Possible binary contents are
+ * decoded from their base64 representation
+ *
+ * @param {String} data, callback method
+ * @api public
+ */
+
+exports.decodePayload = function (data, binaryType, callback) {
+  if (typeof data !== 'string') {
+    return exports.decodePayloadAsBinary(data, binaryType, callback);
+  }
+
+  if (typeof binaryType === 'function') {
+    callback = binaryType;
+    binaryType = null;
+  }
+
+  var packet;
+  if (data === '') {
+    // parser error - ignoring payload
+    return callback(err, 0, 1);
+  }
+
+  var length = '', n, msg;
+
+  for (var i = 0, l = data.length; i < l; i++) {
+    var chr = data.charAt(i);
+
+    if (chr !== ':') {
+      length += chr;
+      continue;
+    }
+
+    if (length === '' || (length != (n = Number(length)))) {
+      // parser error - ignoring payload
+      return callback(err, 0, 1);
+    }
+
+    msg = data.substr(i + 1, n);
+
+    if (length != msg.length) {
+      // parser error - ignoring payload
+      return callback(err, 0, 1);
+    }
+
+    if (msg.length) {
+      packet = exports.decodePacket(msg, binaryType, false);
+
+      if (err.type === packet.type && err.data === packet.data) {
+        // parser error in individual packet - ignoring payload
+        return callback(err, 0, 1);
+      }
+
+      var ret = callback(packet, i + n, l);
+      if (false === ret) return;
+    }
+
+    // advance cursor
+    i += n;
+    length = '';
+  }
+
+  if (length !== '') {
+    // parser error - ignoring payload
+    return callback(err, 0, 1);
+  }
+
+};
+
+/**
+ * Encodes multiple messages (payload) as binary.
+ *
+ * <1 = binary, 0 = string><number from 0-9><number from 0-9>[...]<number
+ * 255><data>
+ *
+ * Example:
+ * 1 3 255 1 2 3, if the binary contents are interpreted as 8 bit integers
+ *
+ * @param {Array} packets
+ * @return {ArrayBuffer} encoded payload
+ * @api private
+ */
+
+exports.encodePayloadAsArrayBuffer = function(packets, callback) {
+  if (!packets.length) {
+    return callback(new ArrayBuffer(0));
+  }
+
+  function encodeOne(packet, doneCallback) {
+    exports.encodePacket(packet, true, true, function(data) {
+      return doneCallback(null, data);
+    });
+  }
+
+  map(packets, encodeOne, function(err, encodedPackets) {
+    var totalLength = encodedPackets.reduce(function(acc, p) {
+      var len;
+      if (typeof p === 'string'){
+        len = p.length;
+      } else {
+        len = p.byteLength;
+      }
+      return acc + len.toString().length + len + 2; // string/binary identifier + separator = 2
+    }, 0);
+
+    var resultArray = new Uint8Array(totalLength);
+
+    var bufferIndex = 0;
+    encodedPackets.forEach(function(p) {
+      var isString = typeof p === 'string';
+      var ab = p;
+      if (isString) {
+        var view = new Uint8Array(p.length);
+        for (var i = 0; i < p.length; i++) {
+          view[i] = p.charCodeAt(i);
+        }
+        ab = view.buffer;
+      }
+
+      if (isString) { // not true binary
+        resultArray[bufferIndex++] = 0;
+      } else { // true binary
+        resultArray[bufferIndex++] = 1;
+      }
+
+      var lenStr = ab.byteLength.toString();
+      for (var i = 0; i < lenStr.length; i++) {
+        resultArray[bufferIndex++] = parseInt(lenStr[i]);
+      }
+      resultArray[bufferIndex++] = 255;
+
+      var view = new Uint8Array(ab);
+      for (var i = 0; i < view.length; i++) {
+        resultArray[bufferIndex++] = view[i];
+      }
+    });
+
+    return callback(resultArray.buffer);
+  });
+};
+
+/**
+ * Encode as Blob
+ */
+
+exports.encodePayloadAsBlob = function(packets, callback) {
+  function encodeOne(packet, doneCallback) {
+    exports.encodePacket(packet, true, true, function(encoded) {
+      var binaryIdentifier = new Uint8Array(1);
+      binaryIdentifier[0] = 1;
+      if (typeof encoded === 'string') {
+        var view = new Uint8Array(encoded.length);
+        for (var i = 0; i < encoded.length; i++) {
+          view[i] = encoded.charCodeAt(i);
+        }
+        encoded = view.buffer;
+        binaryIdentifier[0] = 0;
+      }
+
+      var len = (encoded instanceof ArrayBuffer)
+        ? encoded.byteLength
+        : encoded.size;
+
+      var lenStr = len.toString();
+      var lengthAry = new Uint8Array(lenStr.length + 1);
+      for (var i = 0; i < lenStr.length; i++) {
+        lengthAry[i] = parseInt(lenStr[i]);
+      }
+      lengthAry[lenStr.length] = 255;
+
+      if (Blob) {
+        var blob = new Blob([binaryIdentifier.buffer, lengthAry.buffer, encoded]);
+        doneCallback(null, blob);
+      }
+    });
+  }
+
+  map(packets, encodeOne, function(err, results) {
+    return callback(new Blob(results));
+  });
+};
+
+/*
+ * Decodes data when a payload is maybe expected. Strings are decoded by
+ * interpreting each byte as a key code for entries marked to start with 0. See
+ * description of encodePayloadAsBinary
+ *
+ * @param {ArrayBuffer} data, callback method
+ * @api public
+ */
+
+exports.decodePayloadAsBinary = function (data, binaryType, callback) {
+  if (typeof binaryType === 'function') {
+    callback = binaryType;
+    binaryType = null;
+  }
+
+  var bufferTail = data;
+  var buffers = [];
+
+  while (bufferTail.byteLength > 0) {
+    var tailArray = new Uint8Array(bufferTail);
+    var isString = tailArray[0] === 0;
+    var msgLength = '';
+
+    for (var i = 1; ; i++) {
+      if (tailArray[i] === 255) break;
+
+      // 310 = char length of Number.MAX_VALUE
+      if (msgLength.length > 310) {
+        return callback(err, 0, 1);
+      }
+
+      msgLength += tailArray[i];
+    }
+
+    bufferTail = sliceBuffer(bufferTail, 2 + msgLength.length);
+    msgLength = parseInt(msgLength);
+
+    var msg = sliceBuffer(bufferTail, 0, msgLength);
+    if (isString) {
+      try {
+        msg = String.fromCharCode.apply(null, new Uint8Array(msg));
+      } catch (e) {
+        // iPhone Safari doesn't let you apply to typed arrays
+        var typed = new Uint8Array(msg);
+        msg = '';
+        for (var i = 0; i < typed.length; i++) {
+          msg += String.fromCharCode(typed[i]);
+        }
+      }
+    }
+
+    buffers.push(msg);
+    bufferTail = sliceBuffer(bufferTail, msgLength);
+  }
+
+  var total = buffers.length;
+  buffers.forEach(function(buffer, i) {
+    callback(exports.decodePacket(buffer, binaryType, true), i, total);
+  });
+};
+
+},{"./keys":20,"./utf8":21,"after":3,"arraybuffer.slice":4,"base64-arraybuffer":6,"blob":8,"has-binary2":26}],20:[function(require,module,exports){
+
+/**
+ * Gets the keys for an object.
+ *
+ * @return {Array} keys
+ * @api private
+ */
+
+module.exports = Object.keys || function keys (obj){
+  var arr = [];
+  var has = Object.prototype.hasOwnProperty;
+
+  for (var i in obj) {
+    if (has.call(obj, i)) {
+      arr.push(i);
+    }
+  }
+  return arr;
+};
+
+},{}],21:[function(require,module,exports){
+/*! https://mths.be/utf8js v2.1.2 by @mathias */
+
+var stringFromCharCode = String.fromCharCode;
+
+// Taken from https://mths.be/punycode
+function ucs2decode(string) {
+	var output = [];
+	var counter = 0;
+	var length = string.length;
+	var value;
+	var extra;
+	while (counter < length) {
+		value = string.charCodeAt(counter++);
+		if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
+			// high surrogate, and there is a next character
+			extra = string.charCodeAt(counter++);
+			if ((extra & 0xFC00) == 0xDC00) { // low surrogate
+				output.push(((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
+			} else {
+				// unmatched surrogate; only append this code unit, in case the next
+				// code unit is the high surrogate of a surrogate pair
+				output.push(value);
+				counter--;
+			}
+		} else {
+			output.push(value);
+		}
+	}
+	return output;
+}
+
+// Taken from https://mths.be/punycode
+function ucs2encode(array) {
+	var length = array.length;
+	var index = -1;
+	var value;
+	var output = '';
+	while (++index < length) {
+		value = array[index];
+		if (value > 0xFFFF) {
+			value -= 0x10000;
+			output += stringFromCharCode(value >>> 10 & 0x3FF | 0xD800);
+			value = 0xDC00 | value & 0x3FF;
+		}
+		output += stringFromCharCode(value);
+	}
+	return output;
+}
+
+function checkScalarValue(codePoint, strict) {
+	if (codePoint >= 0xD800 && codePoint <= 0xDFFF) {
+		if (strict) {
+			throw Error(
+				'Lone surrogate U+' + codePoint.toString(16).toUpperCase() +
+				' is not a scalar value'
+			);
+		}
+		return false;
+	}
+	return true;
+}
+/*--------------------------------------------------------------------------*/
+
+function createByte(codePoint, shift) {
+	return stringFromCharCode(((codePoint >> shift) & 0x3F) | 0x80);
+}
+
+function encodeCodePoint(codePoint, strict) {
+	if ((codePoint & 0xFFFFFF80) == 0) { // 1-byte sequence
+		return stringFromCharCode(codePoint);
+	}
+	var symbol = '';
+	if ((codePoint & 0xFFFFF800) == 0) { // 2-byte sequence
+		symbol = stringFromCharCode(((codePoint >> 6) & 0x1F) | 0xC0);
+	}
+	else if ((codePoint & 0xFFFF0000) == 0) { // 3-byte sequence
+		if (!checkScalarValue(codePoint, strict)) {
+			codePoint = 0xFFFD;
+		}
+		symbol = stringFromCharCode(((codePoint >> 12) & 0x0F) | 0xE0);
+		symbol += createByte(codePoint, 6);
+	}
+	else if ((codePoint & 0xFFE00000) == 0) { // 4-byte sequence
+		symbol = stringFromCharCode(((codePoint >> 18) & 0x07) | 0xF0);
+		symbol += createByte(codePoint, 12);
+		symbol += createByte(codePoint, 6);
+	}
+	symbol += stringFromCharCode((codePoint & 0x3F) | 0x80);
+	return symbol;
+}
+
+function utf8encode(string, opts) {
+	opts = opts || {};
+	var strict = false !== opts.strict;
+
+	var codePoints = ucs2decode(string);
+	var length = codePoints.length;
+	var index = -1;
+	var codePoint;
+	var byteString = '';
+	while (++index < length) {
+		codePoint = codePoints[index];
+		byteString += encodeCodePoint(codePoint, strict);
+	}
+	return byteString;
+}
+
+/*--------------------------------------------------------------------------*/
+
+function readContinuationByte() {
+	if (byteIndex >= byteCount) {
+		throw Error('Invalid byte index');
+	}
+
+	var continuationByte = byteArray[byteIndex] & 0xFF;
+	byteIndex++;
+
+	if ((continuationByte & 0xC0) == 0x80) {
+		return continuationByte & 0x3F;
+	}
+
+	// If we end up here, it’s not a continuation byte
+	throw Error('Invalid continuation byte');
+}
+
+function decodeSymbol(strict) {
+	var byte1;
+	var byte2;
+	var byte3;
+	var byte4;
+	var codePoint;
+
+	if (byteIndex > byteCount) {
+		throw Error('Invalid byte index');
+	}
+
+	if (byteIndex == byteCount) {
+		return false;
+	}
+
+	// Read first byte
+	byte1 = byteArray[byteIndex] & 0xFF;
+	byteIndex++;
+
+	// 1-byte sequence (no continuation bytes)
+	if ((byte1 & 0x80) == 0) {
+		return byte1;
+	}
+
+	// 2-byte sequence
+	if ((byte1 & 0xE0) == 0xC0) {
+		byte2 = readContinuationByte();
+		codePoint = ((byte1 & 0x1F) << 6) | byte2;
+		if (codePoint >= 0x80) {
+			return codePoint;
+		} else {
+			throw Error('Invalid continuation byte');
+		}
+	}
+
+	// 3-byte sequence (may include unpaired surrogates)
+	if ((byte1 & 0xF0) == 0xE0) {
+		byte2 = readContinuationByte();
+		byte3 = readContinuationByte();
+		codePoint = ((byte1 & 0x0F) << 12) | (byte2 << 6) | byte3;
+		if (codePoint >= 0x0800) {
+			return checkScalarValue(codePoint, strict) ? codePoint : 0xFFFD;
+		} else {
+			throw Error('Invalid continuation byte');
+		}
+	}
+
+	// 4-byte sequence
+	if ((byte1 & 0xF8) == 0xF0) {
+		byte2 = readContinuationByte();
+		byte3 = readContinuationByte();
+		byte4 = readContinuationByte();
+		codePoint = ((byte1 & 0x07) << 0x12) | (byte2 << 0x0C) |
+			(byte3 << 0x06) | byte4;
+		if (codePoint >= 0x010000 && codePoint <= 0x10FFFF) {
+			return codePoint;
+		}
+	}
+
+	throw Error('Invalid UTF-8 detected');
+}
+
+var byteArray;
+var byteCount;
+var byteIndex;
+function utf8decode(byteString, opts) {
+	opts = opts || {};
+	var strict = false !== opts.strict;
+
+	byteArray = ucs2decode(byteString);
+	byteCount = byteArray.length;
+	byteIndex = 0;
+	var codePoints = [];
+	var tmp;
+	while ((tmp = decodeSymbol(strict)) !== false) {
+		codePoints.push(tmp);
+	}
+	return ucs2encode(codePoints);
+}
+
+module.exports = {
+	version: '2.1.2',
+	encode: utf8encode,
+	decode: utf8decode
+};
+
+},{}],22:[function(require,module,exports){
 // This file can be required in Browserify and Node.js for automatic polyfill
 // To use it:  require('es6-promise/auto');
 'use strict';
 module.exports = require('./').polyfill();
 
-},{"./":21}],21:[function(require,module,exports){
+},{"./":23}],23:[function(require,module,exports){
 (function (process,global){(function (){
 /*!
  * @overview es6-promise - a tiny implementation of Promises/A+.
@@ -7803,7 +8478,13 @@ return Promise$1;
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"_process":39}],22:[function(require,module,exports){
+},{"_process":39}],24:[function(require,module,exports){
+(function (process,global,Buffer){(function (){
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define("exifr",["exports"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self).exifr={})}(this,(function(e){"use strict";function t(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function n(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function r(e,t,r){return t&&n(e.prototype,t),r&&n(e,r),e}function i(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function a(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}});var n=["prototype","__proto__","caller","arguments","length","name"];Object.getOwnPropertyNames(t).forEach((function(r){-1===n.indexOf(r)&&e[r]!==t[r]&&(e[r]=t[r])})),t&&u(e,t)}function s(e){return(s=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function u(e,t){return(u=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function o(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}function f(e,t,n){return(f=o()?Reflect.construct:function(e,t,n){var r=[null];r.push.apply(r,t);var i=new(Function.bind.apply(e,r));return n&&u(i,n.prototype),i}).apply(null,arguments)}function c(e){var t="function"==typeof Map?new Map:void 0;return(c=function(e){if(null===e||(n=e,-1===Function.toString.call(n).indexOf("[native code]")))return e;var n;if("function"!=typeof e)throw new TypeError("Super expression must either be null or a function");if(void 0!==t){if(t.has(e))return t.get(e);t.set(e,r)}function r(){return f(e,arguments,s(this).constructor)}return r.prototype=Object.create(e.prototype,{constructor:{value:r,enumerable:!1,writable:!0,configurable:!0}}),u(r,e)})(e)}function h(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function l(e,t){return!t||"object"!=typeof t&&"function"!=typeof t?h(e):t}function d(e){var t=o();return function(){var n,r=s(e);if(t){var i=s(this).constructor;n=Reflect.construct(r,arguments,i)}else n=r.apply(this,arguments);return l(this,n)}}function v(e,t,n){return(v="undefined"!=typeof Reflect&&Reflect.get?Reflect.get:function(e,t,n){var r=function(e,t){for(;!Object.prototype.hasOwnProperty.call(e,t)&&null!==(e=s(e)););return e}(e,t);if(r){var i=Object.getOwnPropertyDescriptor(r,t);return i.get?i.get.call(n):i.value}})(e,t,n||e)}var p=Object.values||function(e){var t=[];for(var n in e)t.push(e[n]);return t},y=Object.entries||function(e){var t=[];for(var n in e)t.push([n,e[n]]);return t},g=Object.assign||function(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];return n.forEach((function(t){for(var n in t)e[n]=t[n]})),e},k=Object.fromEntries||function(e){var t={};return m(e).forEach((function(e){var n=e[0],r=e[1];t[n]=r})),t},m=Array.from||function(e){if(e instanceof P){var t=[];return e.forEach((function(e,n){return t.push([n,e])})),t}return Array.prototype.slice.call(e)};function b(e){return-1!==this.indexOf(e)}Array.prototype.includes||(Array.prototype.includes=b),String.prototype.includes||(String.prototype.includes=b),String.prototype.startsWith||(String.prototype.startsWith=function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0;return this.substring(t,t+e.length)===e}),String.prototype.endsWith||(String.prototype.endsWith=function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.length;return this.substring(t-e.length,t)===e});var A="undefined"!=typeof self?self:global,w=A.fetch||function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};return new Promise((function(n,r){var i=new XMLHttpRequest;if(i.open("get",e,!0),i.responseType="arraybuffer",i.onerror=r,t.headers)for(var a in t.headers)i.setRequestHeader(a,t.headers[a]);i.onload=function(){n({ok:i.status>=200&&i.status<300,status:i.status,arrayBuffer:function(){return Promise.resolve(i.response)}})},i.send(null)}))},O=function(e){var t=[];if(Object.defineProperties(t,{size:{get:function(){return this.length}},has:{value:function(e){return-1!==this.indexOf(e)}},add:{value:function(e){this.has(e)||this.push(e)}},delete:{value:function(e){if(this.has(e)){var t=this.indexOf(e);this.splice(t,1)}}}}),Array.isArray(e))for(var n=0;n<e.length;n++)t.add(e[n]);return t},S=function(e){return new P(e)},P=void 0!==A.Map&&void 0!==A.Map.prototype.keys?A.Map:function(){function e(n){if(t(this,e),this.clear(),n)for(var r=0;r<n.length;r++)this.set(n[r][0],n[r][1])}return r(e,[{key:"clear",value:function(){this._map={},this._keys=[]}},{key:"size",get:function(){return this._keys.length}},{key:"get",value:function(e){return this._map["map_"+e]}},{key:"set",value:function(e,t){return this._map["map_"+e]=t,this._keys.indexOf(e)<0&&this._keys.push(e),this}},{key:"has",value:function(e){return this._keys.indexOf(e)>=0}},{key:"delete",value:function(e){var t=this._keys.indexOf(e);return!(t<0)&&(delete this._map["map_"+e],this._keys.splice(t,1),!0)}},{key:"keys",value:function(){return this._keys.slice(0)}},{key:"values",value:function(){var e=this;return this._keys.map((function(t){return e.get(t)}))}},{key:"entries",value:function(){var e=this;return this._keys.map((function(t){return[t,e.get(t)]}))}},{key:"forEach",value:function(e,t){for(var n=0;n<this._keys.length;n++)e.call(t,this._map["map_"+this._keys[n]],this._keys[n],this)}}]),e}(),U="undefined"!=typeof self?self:global,x="undefined"!=typeof navigator,C=x&&"undefined"==typeof HTMLImageElement,B=!("undefined"==typeof global||"undefined"==typeof process||!process.versions||!process.versions.node),j=U.Buffer,_=!!j;var V=function(e){return void 0!==e};function I(e){return void 0===e||(e instanceof P?0===e.size:0===p(e).filter(V).length)}function L(e){var t=new Error(e);throw delete t.stack,t}function T(e){var t=function(e){var t=0;return e.ifd0.enabled&&(t+=1024),e.exif.enabled&&(t+=2048),e.makerNote&&(t+=2048),e.userComment&&(t+=1024),e.gps.enabled&&(t+=512),e.interop.enabled&&(t+=100),e.ifd1.enabled&&(t+=1024),t+2048}(e);return e.jfif.enabled&&(t+=50),e.xmp.enabled&&(t+=2e4),e.iptc.enabled&&(t+=14e3),e.icc.enabled&&(t+=6e3),t}var z=function(e){return String.fromCharCode.apply(null,e)},F="undefined"!=typeof TextDecoder?new TextDecoder("utf-8"):void 0;function E(e){return F?F.decode(e):_?Buffer.from(e).toString("utf8"):decodeURIComponent(escape(z(e)))}var D=function(){function e(n){var r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0,i=arguments.length>2?arguments[2]:void 0,a=arguments.length>3?arguments[3]:void 0;if(t(this,e),"boolean"==typeof a&&(this.le=a),Array.isArray(n)&&(n=new Uint8Array(n)),0===n)this.byteOffset=0,this.byteLength=0;else if(n instanceof ArrayBuffer){void 0===i&&(i=n.byteLength-r);var s=new DataView(n,r,i);this._swapDataView(s)}else if(n instanceof Uint8Array||n instanceof DataView||n instanceof e){void 0===i&&(i=n.byteLength-r),(r+=n.byteOffset)+i>n.byteOffset+n.byteLength&&L("Creating view outside of available memory in ArrayBuffer");var u=new DataView(n.buffer,r,i);this._swapDataView(u)}else if("number"==typeof n){var o=new DataView(new ArrayBuffer(n));this._swapDataView(o)}else L("Invalid input argument for BufferView: "+n)}return r(e,[{key:"_swapArrayBuffer",value:function(e){this._swapDataView(new DataView(e))}},{key:"_swapBuffer",value:function(e){this._swapDataView(new DataView(e.buffer,e.byteOffset,e.byteLength))}},{key:"_swapDataView",value:function(e){this.dataView=e,this.buffer=e.buffer,this.byteOffset=e.byteOffset,this.byteLength=e.byteLength}},{key:"_lengthToEnd",value:function(e){return this.byteLength-e}},{key:"set",value:function(t,n){var r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:e;t instanceof DataView||t instanceof e?t=new Uint8Array(t.buffer,t.byteOffset,t.byteLength):t instanceof ArrayBuffer&&(t=new Uint8Array(t)),t instanceof Uint8Array||L("BufferView.set(): Invalid data argument.");var i=this.toUint8();return i.set(t,n),new r(this,n,t.byteLength)}},{key:"subarray",value:function(t,n){return new e(this,t,n=n||this._lengthToEnd(t))}},{key:"toUint8",value:function(){return new Uint8Array(this.buffer,this.byteOffset,this.byteLength)}},{key:"getUint8Array",value:function(e,t){return new Uint8Array(this.buffer,this.byteOffset+e,t)}},{key:"getString",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.byteLength,n=this.getUint8Array(e,t);return E(n)}},{key:"getLatin1String",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.byteLength,n=this.getUint8Array(e,t);return z(n)}},{key:"getUnicodeString",value:function(){for(var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.byteLength,n=[],r=0;r<t&&e+r<this.byteLength;r+=2)n.push(this.getUint16(e+r));return z(n)}},{key:"getInt8",value:function(e){return this.dataView.getInt8(e)}},{key:"getUint8",value:function(e){return this.dataView.getUint8(e)}},{key:"getInt16",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getInt16(e,t)}},{key:"getInt32",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getInt32(e,t)}},{key:"getUint16",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getUint16(e,t)}},{key:"getUint32",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getUint32(e,t)}},{key:"getFloat32",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getFloat32(e,t)}},{key:"getFloat64",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getFloat64(e,t)}},{key:"getFloat",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getFloat32(e,t)}},{key:"getDouble",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getFloat64(e,t)}},{key:"getUintBytes",value:function(e,t,n){switch(t){case 1:return this.getUint8(e,n);case 2:return this.getUint16(e,n);case 4:return this.getUint32(e,n);case 8:return this.getUint64&&this.getUint64(e,n)}}},{key:"getUint",value:function(e,t,n){switch(t){case 8:return this.getUint8(e,n);case 16:return this.getUint16(e,n);case 32:return this.getUint32(e,n);case 64:return this.getUint64&&this.getUint64(e,n)}}},{key:"toString",value:function(e){return this.dataView.toString(e,this.constructor.name)}},{key:"ensureChunk",value:function(){}}],[{key:"from",value:function(t,n){return t instanceof this&&t.le===n?t:new e(t,void 0,void 0,n)}}]),e}();function R(e,t){L("".concat(e," '").concat(t,"' was not loaded, try using full build of exifr."))}var N=function(e){a(i,e);var n=d(i);function i(e){var r;return t(this,i),(r=n.call(this)).kind=e,r}return r(i,[{key:"get",value:function(e,t){return this.has(e)||R(this.kind,e),t&&(e in t||function(e,t){L("Unknown ".concat(e," '").concat(t,"'."))}(this.kind,e),t[e].enabled||R(this.kind,e)),v(s(i.prototype),"get",this).call(this,e)}},{key:"keyList",value:function(){return m(this.keys())}}]),i}(c(P)),M=new N("file parser"),W=new N("segment parser"),K=new N("file reader");function H(e){return function(){for(var t=[],n=0;n<arguments.length;n++)t[n]=arguments[n];try{return Promise.resolve(e.apply(this,t))}catch(e){return Promise.reject(e)}}}function X(e,t,n){return n?t?t(e):e:(e&&e.then||(e=Promise.resolve(e)),t?e.then(t):e)}var Y=H((function(e){return new Promise((function(t,n){var r=new FileReader;r.onloadend=function(){return t(r.result||new ArrayBuffer)},r.onerror=n,r.readAsArrayBuffer(e)}))})),G=H((function(e){return w(e).then((function(e){return e.arrayBuffer()}))})),J=H((function(e,t){return X(t(e),(function(e){return new D(e)}))})),q=H((function(e,t,n){var r=new(K.get(n))(e,t);return X(r.read(),(function(){return r}))})),Q=H((function(e,t,n,r){return K.has(n)?q(e,t,n):r?J(e,r):(L("Parser ".concat(n," is not loaded")),X())})),Z="Invalid input argument";function $(e,t){return(n=e).startsWith("data:")||n.length>1e4?q(e,t,"base64"):x?Q(e,t,"url",G):B?q(e,t,"fs"):void L(Z);var n}var ee=function(e){a(i,e);var n=d(i);function i(){return t(this,i),n.apply(this,arguments)}return r(i,[{key:"tagKeys",get:function(){return this.allKeys||(this.allKeys=m(this.keys())),this.allKeys}},{key:"tagValues",get:function(){return this.allValues||(this.allValues=m(this.values())),this.allValues}}]),i}(c(P));function te(e,t,n){var r=new ee,i=n;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=m(i));for(var a=0;a<i.length;a++){var s=i[a],u=s[0],o=s[1];r.set(u,o)}if(Array.isArray(t)){var f=t;Array.isArray(f)||("function"==typeof f.entries&&(f=f.entries()),f=m(f));for(var c=0;c<f.length;c++){var h=f[c];e.set(h,r)}}else e.set(t,r);return r}function ne(e,t,n){var r,i=e.get(t),a=n;Array.isArray(a)||("function"==typeof a.entries&&(a=a.entries()),a=m(a));for(var s=0;s<a.length;s++)r=a[s],i.set(r[0],r[1])}var re=S(),ie=S(),ae=S(),se=37500,ue=37510,oe=33723,fe=34675,ce=34665,he=34853,le=40965,de=["chunked","firstChunkSize","firstChunkSizeNode","firstChunkSizeBrowser","chunkSize","chunkLimit"],ve=["jfif","xmp","icc","iptc","ihdr"],pe=["tiff"].concat(ve),ye=["ifd0","ifd1","exif","gps","interop"],ge=[].concat(pe,ye),ke=["makerNote","userComment"],me=["translateKeys","translateValues","reviveValues","multiSegment"],be=[].concat(me,["sanitize","mergeOutput","silentErrors"]),Ae=function(){function e(){t(this,e)}return r(e,[{key:"translate",get:function(){return this.translateKeys||this.translateValues||this.reviveValues}}]),e}(),we=function(e){a(s,e);var n=d(s);function s(e,r,a,u){var o;if(t(this,s),i(h(o=n.call(this)),"enabled",!1),i(h(o),"skip",O()),i(h(o),"pick",O()),i(h(o),"deps",O()),i(h(o),"translateKeys",!1),i(h(o),"translateValues",!1),i(h(o),"reviveValues",!1),o.key=e,o.enabled=r,o.parse=o.enabled,o.applyInheritables(u),o.canBeFiltered=ye.includes(e),o.canBeFiltered&&(o.dict=re.get(e)),void 0!==a)if(Array.isArray(a))o.parse=o.enabled=!0,o.canBeFiltered&&a.length>0&&o.translateTagSet(a,o.pick);else if("object"==typeof a){if(o.enabled=!0,o.parse=!1!==a.parse,o.canBeFiltered){var f=a.pick,c=a.skip;f&&f.length>0&&o.translateTagSet(f,o.pick),c&&c.length>0&&o.translateTagSet(c,o.skip)}o.applyInheritables(a)}else!0===a||!1===a?o.parse=o.enabled=a:L("Invalid options argument: ".concat(a));return o}return r(s,[{key:"needed",get:function(){return this.enabled||this.deps.size>0}},{key:"applyInheritables",value:function(e){var t,n,r=me;Array.isArray(r)||("function"==typeof r.entries&&(r=r.entries()),r=m(r));for(var i=0;i<r.length;i++)void 0!==(n=e[t=r[i]])&&(this[t]=n)}},{key:"translateTagSet",value:function(e,t){if(this.dict){var n,r,i=this.dict,a=i.tagKeys,s=i.tagValues,u=e;Array.isArray(u)||("function"==typeof u.entries&&(u=u.entries()),u=m(u));for(var o=0;o<u.length;o++)"string"==typeof(n=u[o])?(-1===(r=s.indexOf(n))&&(r=a.indexOf(Number(n))),-1!==r&&t.add(Number(a[r]))):t.add(n)}else{var f=e;Array.isArray(f)||("function"==typeof f.entries&&(f=f.entries()),f=m(f));for(var c=0;c<f.length;c++){var h=f[c];t.add(h)}}}},{key:"finalizeFilters",value:function(){!this.enabled&&this.deps.size>0?(this.enabled=!0,Ce(this.pick,this.deps)):this.enabled&&this.pick.size>0&&Ce(this.pick,this.deps)}}]),s}(Ae),Oe={jfif:!1,tiff:!0,xmp:!1,icc:!1,iptc:!1,ifd0:!0,ifd1:!1,exif:!0,gps:!0,interop:!1,ihdr:void 0,makerNote:!1,userComment:!1,multiSegment:!1,skip:[],pick:[],translateKeys:!0,translateValues:!0,reviveValues:!0,sanitize:!0,mergeOutput:!0,silentErrors:!0,chunked:!0,firstChunkSize:void 0,firstChunkSizeNode:512,firstChunkSizeBrowser:65536,chunkSize:65536,chunkLimit:5},Se=S(),Pe=function(e){a(i,e);var n=d(i);function i(e){var r;return t(this,i),r=n.call(this),!0===e?r.setupFromTrue():void 0===e?r.setupFromUndefined():Array.isArray(e)?r.setupFromArray(e):"object"==typeof e?r.setupFromObject(e):L("Invalid options argument ".concat(e)),void 0===r.firstChunkSize&&(r.firstChunkSize=x?r.firstChunkSizeBrowser:r.firstChunkSizeNode),r.mergeOutput&&(r.ifd1.enabled=!1),r.filterNestedSegmentTags(),r.traverseTiffDependencyTree(),r.checkLoadedPlugins(),r}return r(i,[{key:"setupFromUndefined",value:function(){var e,t=de;Array.isArray(t)||("function"==typeof t.entries&&(t=t.entries()),t=m(t));for(var n=0;n<t.length;n++)this[e=t[n]]=Oe[e];var r=be;Array.isArray(r)||("function"==typeof r.entries&&(r=r.entries()),r=m(r));for(var i=0;i<r.length;i++)this[e=r[i]]=Oe[e];var a=ke;Array.isArray(a)||("function"==typeof a.entries&&(a=a.entries()),a=m(a));for(var s=0;s<a.length;s++)this[e=a[s]]=Oe[e];var u=ge;Array.isArray(u)||("function"==typeof u.entries&&(u=u.entries()),u=m(u));for(var o=0;o<u.length;o++)this[e=u[o]]=new we(e,Oe[e],void 0,this)}},{key:"setupFromTrue",value:function(){var e,t=de;Array.isArray(t)||("function"==typeof t.entries&&(t=t.entries()),t=m(t));for(var n=0;n<t.length;n++)this[e=t[n]]=Oe[e];var r=be;Array.isArray(r)||("function"==typeof r.entries&&(r=r.entries()),r=m(r));for(var i=0;i<r.length;i++)this[e=r[i]]=Oe[e];var a=ke;Array.isArray(a)||("function"==typeof a.entries&&(a=a.entries()),a=m(a));for(var s=0;s<a.length;s++)this[e=a[s]]=!0;var u=ge;Array.isArray(u)||("function"==typeof u.entries&&(u=u.entries()),u=m(u));for(var o=0;o<u.length;o++)this[e=u[o]]=new we(e,!0,void 0,this)}},{key:"setupFromArray",value:function(e){var t,n=de;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=m(n));for(var r=0;r<n.length;r++)this[t=n[r]]=Oe[t];var i=be;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=m(i));for(var a=0;a<i.length;a++)this[t=i[a]]=Oe[t];var s=ke;Array.isArray(s)||("function"==typeof s.entries&&(s=s.entries()),s=m(s));for(var u=0;u<s.length;u++)this[t=s[u]]=Oe[t];var o=ge;Array.isArray(o)||("function"==typeof o.entries&&(o=o.entries()),o=m(o));for(var f=0;f<o.length;f++)this[t=o[f]]=new we(t,!1,void 0,this);this.setupGlobalFilters(e,void 0,ye)}},{key:"setupFromObject",value:function(e){var t;ye.ifd0=ye.ifd0||ye.image,ye.ifd1=ye.ifd1||ye.thumbnail,g(this,e);var n=de;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=m(n));for(var r=0;r<n.length;r++)this[t=n[r]]=xe(e[t],Oe[t]);var i=be;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=m(i));for(var a=0;a<i.length;a++)this[t=i[a]]=xe(e[t],Oe[t]);var s=ke;Array.isArray(s)||("function"==typeof s.entries&&(s=s.entries()),s=m(s));for(var u=0;u<s.length;u++)this[t=s[u]]=xe(e[t],Oe[t]);var o=pe;Array.isArray(o)||("function"==typeof o.entries&&(o=o.entries()),o=m(o));for(var f=0;f<o.length;f++)this[t=o[f]]=new we(t,Oe[t],e[t],this);var c=ye;Array.isArray(c)||("function"==typeof c.entries&&(c=c.entries()),c=m(c));for(var h=0;h<c.length;h++)this[t=c[h]]=new we(t,Oe[t],e[t],this.tiff);this.setupGlobalFilters(e.pick,e.skip,ye,ge),!0===e.tiff?this.batchEnableWithBool(ye,!0):!1===e.tiff?this.batchEnableWithUserValue(ye,e):Array.isArray(e.tiff)?this.setupGlobalFilters(e.tiff,void 0,ye):"object"==typeof e.tiff&&this.setupGlobalFilters(e.tiff.pick,e.tiff.skip,ye)}},{key:"batchEnableWithBool",value:function(e,t){var n=e;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=m(n));for(var r=0;r<n.length;r++){this[n[r]].enabled=t}}},{key:"batchEnableWithUserValue",value:function(e,t){var n=e;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=m(n));for(var r=0;r<n.length;r++){var i=n[r],a=t[i];this[i].enabled=!1!==a&&void 0!==a}}},{key:"setupGlobalFilters",value:function(e,t,n){var r=arguments.length>3&&void 0!==arguments[3]?arguments[3]:n;if(e&&e.length){var i=r;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=m(i));for(var a=0;a<i.length;a++){var s=i[a];this[s].enabled=!1}var u=Ue(e,n),o=u;Array.isArray(o)||("function"==typeof o.entries&&(o=o.entries()),o=m(o));for(var f=0;f<o.length;f++){var c=o[f],h=c[0],l=c[1];Ce(this[h].pick,l),this[h].enabled=!0}}else if(t&&t.length){var d=Ue(t,n),v=d;Array.isArray(v)||("function"==typeof v.entries&&(v=v.entries()),v=m(v));for(var p=0;p<v.length;p++){var y=v[p],g=y[0],k=y[1];Ce(this[g].skip,k)}}}},{key:"filterNestedSegmentTags",value:function(){var e=this.ifd0,t=this.exif,n=this.xmp,r=this.iptc,i=this.icc;this.makerNote?t.deps.add(se):t.skip.add(se),this.userComment?t.deps.add(ue):t.skip.add(ue),n.enabled||e.skip.add(700),r.enabled||e.skip.add(oe),i.enabled||e.skip.add(fe)}},{key:"traverseTiffDependencyTree",value:function(){var e=this,t=this.ifd0,n=this.exif,r=this.gps;this.interop.needed&&(n.deps.add(le),t.deps.add(le)),n.needed&&t.deps.add(ce),r.needed&&t.deps.add(he),this.tiff.enabled=ye.some((function(t){return!0===e[t].enabled}))||this.makerNote||this.userComment;var i=ye;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=m(i));for(var a=0;a<i.length;a++){this[i[a]].finalizeFilters()}}},{key:"onlyTiff",get:function(){var e=this;return!ve.map((function(t){return e[t].enabled})).some((function(e){return!0===e}))&&this.tiff.enabled}},{key:"checkLoadedPlugins",value:function(){var e=pe;Array.isArray(e)||("function"==typeof e.entries&&(e=e.entries()),e=m(e));for(var t=0;t<e.length;t++){var n=e[t];this[n].enabled&&!W.has(n)&&R("segment parser",n)}}}],[{key:"useCached",value:function(e){var t=Se.get(e);return void 0!==t||(t=new this(e),Se.set(e,t)),t}}]),i}(Ae);function Ue(e,t){var n,r,i,a=[],s=t;Array.isArray(s)||("function"==typeof s.entries&&(s=s.entries()),s=m(s));for(var u=0;u<s.length;u++){r=s[u],n=[];var o=re.get(r);Array.isArray(o)||("function"==typeof o.entries&&(o=o.entries()),o=m(o));for(var f=0;f<o.length;f++)i=o[f],(e.includes(i[0])||e.includes(i[1]))&&n.push(i[0]);n.length&&a.push([r,n])}return a}function xe(e,t){return void 0!==e?e:void 0!==t?t:void 0}function Ce(e,t){var n=t;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=m(n));for(var r=0;r<n.length;r++){var i=n[r];e.add(i)}}function Be(e,t,n){return n?t?t(e):e:(e&&e.then||(e=Promise.resolve(e)),t?e.then(t):e)}function je(){}function _e(e,t){if(!t)return e&&e.then?e.then(je):Promise.resolve()}function Ve(e,t){var n=e();return n&&n.then?n.then(t):t(n)}i(Pe,"default",Oe);var Ie=function(){function e(n){t(this,e),i(this,"parsers",{}),this.options=Pe.useCached(n)}return r(e,[{key:"setup",value:function(){if(!this.fileParser){var e=this.file,t=e.getUint16(0),n=M;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=m(n));for(var r=0;r<n.length;r++){var i=n[r],a=i[0],s=i[1];if(s.canHandle(e,t))return this.fileParser=new s(this.options,this.file,this.parsers),e[a]=!0}L("Unknown file format")}}},{key:"read",value:function(e){try{var t=this;return Be(function(e,t){return"string"==typeof e?$(e,t):x&&!C&&e instanceof HTMLImageElement?$(e.src,t):e instanceof Uint8Array||e instanceof ArrayBuffer||e instanceof DataView?new D(e):x&&e instanceof Blob?Q(e,t,"blob",Y):void L(Z)}(e,t.options),(function(e){t.file=e}))}catch(e){return Promise.reject(e)}}},{key:"parse",value:function(){try{var e=this;e.setup();var t={},n=[];return Ve((function(){return e.options.silentErrors?Be(e.doParse(t,n).catch((function(e){return n.push(e)})),(function(){n.push.apply(n,e.fileParser.errors)})):_e(e.doParse(t,n))}),(function(){return e.file.close&&e.file.close(),e.options.silentErrors&&n.length>0&&(t.errors=n),I(r=t)?void 0:r;var r}))}catch(e){return Promise.reject(e)}}},{key:"doParse",value:function(e,t){try{var n=this;return Be(n.fileParser.parse(),(function(){var r,i=p(n.parsers).map((r=function(t){return Be(t.parse(),(function(n){t.assignToOutput(e,n)}))},function(){for(var e=[],t=0;t<arguments.length;t++)e[t]=arguments[t];try{return Promise.resolve(r.apply(this,e))}catch(e){return Promise.reject(e)}}));if(n.options.silentErrors){var a=function(e){return t.push(e)};i=i.map((function(e){return e.catch(a)}))}return _e(Promise.all(i))}))}catch(e){return Promise.reject(e)}}},{key:"extractThumbnail",value:function(){try{var e=this;e.setup();var t,n=e.options,r=e.file,i=W.get("tiff",n);return Ve((function(){if(!r.tiff)return function(e){var t=e();if(t&&t.then)return t.then(je)}((function(){if(r.jpeg)return Be(e.fileParser.getOrFindSegment("tiff"),(function(e){t=e}))}));t={start:0,type:"tiff"}}),(function(){if(void 0!==t)return Be(e.fileParser.ensureSegmentChunk(t),(function(t){return Be((e.parsers.tiff=new i(t,n,r)).extractThumbnail(),(function(e){return r.close&&r.close(),e}))}))}))}catch(e){return Promise.reject(e)}}}]),e}();var Le,Te=(Le=function(e,t){var n,r,i,a=new Ie(t);return n=a.read(e),r=function(){return a.parse()},i?r?r(n):n:(n&&n.then||(n=Promise.resolve(n)),r?n.then(r):n)},function(){for(var e=[],t=0;t<arguments.length;t++)e[t]=arguments[t];try{return Promise.resolve(Le.apply(this,e))}catch(e){return Promise.reject(e)}}),ze=Object.freeze({__proto__:null,parse:Te,Exifr:Ie,fileParsers:M,segmentParsers:W,fileReaders:K,tagKeys:re,tagValues:ie,tagRevivers:ae,createDictionary:te,extendDictionary:ne,fetchUrlAsArrayBuffer:G,readBlobAsArrayBuffer:Y,chunkedProps:de,otherSegments:ve,segments:pe,tiffBlocks:ye,segmentsAndBlocks:ge,tiffExtractables:ke,inheritables:me,allFormatters:be,Options:Pe});function Fe(){}var Ee=function(){function e(n,r,a){var s=this;t(this,e),i(this,"errors",[]),i(this,"ensureSegmentChunk",function(e){return function(){for(var t=[],n=0;n<arguments.length;n++)t[n]=arguments[n];try{return Promise.resolve(e.apply(this,t))}catch(e){return Promise.reject(e)}}}((function(e){var t,n,r,i=e.start,a=e.size||65536;return t=function(){if(s.file.chunked)return function(e){var t=e();if(t&&t.then)return t.then(Fe)}((function(){if(!s.file.available(i,a))return function(e){if(e&&e.then)return e.then(Fe)}(function(e,t){try{var n=e()}catch(e){return t(e)}return n&&n.then?n.then(void 0,t):n}((function(){return t=s.file.readChunk(i,a),n=function(t){e.chunk=t},r?n?n(t):t:(t&&t.then||(t=Promise.resolve(t)),n?t.then(n):t);var t,n,r}),(function(t){L("Couldn't read segment: ".concat(JSON.stringify(e),". ").concat(t.message))})));e.chunk=s.file.subarray(i,a)}));s.file.byteLength>i+a?e.chunk=s.file.subarray(i,a):void 0===e.size?e.chunk=s.file.subarray(i):L("Segment unreachable: "+JSON.stringify(e))},n=function(){return e.chunk},(r=t())&&r.then?r.then(n):n(r)}))),this.extendOptions&&this.extendOptions(n),this.options=n,this.file=r,this.parsers=a}return r(e,[{key:"injectSegment",value:function(e,t){this.options[e].enabled&&this.createParser(e,t)}},{key:"createParser",value:function(e,t){var n=new(W.get(e))(t,this.options,this.file);return this.parsers[e]=n}},{key:"createParsers",value:function(e){var t=e;Array.isArray(t)||("function"==typeof t.entries&&(t=t.entries()),t=m(t));for(var n=0;n<t.length;n++){var r=t[n],i=r.type,a=r.chunk,s=this.options[i];if(s&&s.enabled){var u=this.parsers[i];u&&u.append||u||this.createParser(i,a)}}}},{key:"readSegments",value:function(e){try{var t=e.map(this.ensureSegmentChunk);return function(e,t){if(!t)return e&&e.then?e.then(Fe):Promise.resolve()}(Promise.all(t))}catch(e){return Promise.reject(e)}}}]),e}(),De=function(){function e(n){var r=this,a=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},s=arguments.length>2?arguments[2]:void 0;t(this,e),i(this,"errors",[]),i(this,"raw",S()),i(this,"handleError",(function(e){if(!r.options.silentErrors)throw e;r.errors.push(e.message)})),this.chunk=this.normalizeInput(n),this.file=s,this.type=this.constructor.type,this.globalOptions=this.options=a,this.localOptions=a[this.type],this.canTranslate=this.localOptions&&this.localOptions.translate}return r(e,[{key:"normalizeInput",value:function(e){return e instanceof D?e:new D(e)}},{key:"translate",value:function(){this.canTranslate&&(this.translated=this.translateBlock(this.raw,this.type))}},{key:"output",get:function(){return this.translated?this.translated:this.raw?k(this.raw):void 0}},{key:"translateBlock",value:function(e,t){var n=ae.get(t),r=ie.get(t),i=re.get(t),a=this.options[t],s=a.reviveValues&&!!n,u=a.translateValues&&!!r,o=a.translateKeys&&!!i,f={},c=e;Array.isArray(c)||("function"==typeof c.entries&&(c=c.entries()),c=m(c));for(var h=0;h<c.length;h++){var l=c[h],d=l[0],v=l[1];s&&n.has(d)?v=n.get(d)(v):u&&r.has(d)&&(v=this.translateValue(v,r.get(d))),o&&i.has(d)&&(d=i.get(d)||d),f[d]=v}return f}},{key:"translateValue",value:function(e,t){return t[e]||t.DEFAULT||e}},{key:"assignToOutput",value:function(e,t){this.assignObjectToOutput(e,this.constructor.type,t)}},{key:"assignObjectToOutput",value:function(e,t,n){if(this.globalOptions.mergeOutput)return g(e,n);e[t]?g(e[t],n):e[t]=n}}],[{key:"findPosition",value:function(e,t){var n=e.getUint16(t+2)+2,r="function"==typeof this.headerLength?this.headerLength(e,t,n):this.headerLength,i=t+r,a=n-r;return{offset:t,length:n,headerLength:r,start:i,size:a,end:i+a}}},{key:"parse",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=new Pe(i({},this.type,t)),r=new this(e,n);return r.parse()}}]),e}();function Re(e,t,n){return n?t?t(e):e:(e&&e.then||(e=Promise.resolve(e)),t?e.then(t):e)}i(De,"headerLength",4),i(De,"type",void 0),i(De,"multiSegment",!1),i(De,"canHandle",(function(){return!1}));function Ne(){}function Me(e,t){if(!t)return e&&e.then?e.then(Ne):Promise.resolve()}function We(e){var t=e();if(t&&t.then)return t.then(Ne)}function Ke(e,t){var n=e();return n&&n.then?n.then(t):t(n)}function He(e,t,n){if(!e.s){if(n instanceof Xe){if(!n.s)return void(n.o=He.bind(null,e,t));1&t&&(t=n.s),n=n.v}if(n&&n.then)return void n.then(He.bind(null,e,t),He.bind(null,e,2));e.s=t,e.v=n;var r=e.o;r&&r(e)}}var Xe=function(){function e(){}return e.prototype.then=function(t,n){var r=new e,i=this.s;if(i){var a=1&i?t:n;if(a){try{He(r,1,a(this.v))}catch(e){He(r,2,e)}return r}return this}return this.o=function(e){try{var i=e.v;1&e.s?He(r,1,t?t(i):i):n?He(r,1,n(i)):He(r,2,i)}catch(e){He(r,2,e)}},r},e}();function Ye(e){return e instanceof Xe&&1&e.s}function Ge(e,t,n){for(var r;;){var i=e();if(Ye(i)&&(i=i.v),!i)return a;if(i.then){r=0;break}var a=n();if(a&&a.then){if(!Ye(a)){r=1;break}a=a.s}if(t){var s=t();if(s&&s.then&&!Ye(s)){r=2;break}}}var u=new Xe,o=He.bind(null,u,2);return(0===r?i.then(c):1===r?a.then(f):s.then(h)).then(void 0,o),u;function f(r){a=r;do{if(t&&(s=t())&&s.then&&!Ye(s))return void s.then(h).then(void 0,o);if(!(i=e())||Ye(i)&&!i.v)return void He(u,1,a);if(i.then)return void i.then(c).then(void 0,o);Ye(a=n())&&(a=a.v)}while(!a||!a.then);a.then(f).then(void 0,o)}function c(e){e?(a=n())&&a.then?a.then(f).then(void 0,o):f(a):He(u,1,a)}function h(){(i=e())?i.then?i.then(c).then(void 0,o):c(i):He(u,1,a)}}function Je(e){return 192===e||194===e||196===e||219===e||221===e||218===e||254===e}function qe(e){return e>=224&&e<=239}function Qe(e,t,n){var r=W;Array.isArray(r)||("function"==typeof r.entries&&(r=r.entries()),r=m(r));for(var i=0;i<r.length;i++){var a=r[i],s=a[0];if(a[1].canHandle(e,t,n))return s}}var Ze=function(e){a(s,e);var n=d(s);function s(){var e;t(this,s);for(var r=arguments.length,a=new Array(r),u=0;u<r;u++)a[u]=arguments[u];return i(h(e=n.call.apply(n,[this].concat(a))),"appSegments",[]),i(h(e),"jpegSegments",[]),i(h(e),"unknownSegments",[]),e}return r(s,[{key:"parse",value:function(){try{var e=this;return Re(e.findAppSegments(),(function(){return Re(e.readSegments(e.appSegments),(function(){e.mergeMultiSegments(),e.createParsers(e.mergedAppSegments||e.appSegments)}))}))}catch(e){return Promise.reject(e)}}},{key:"setupSegmentFinderArgs",value:function(e){var t=this;!0===e?(this.findAll=!0,this.wanted=O(W.keyList())):(e=void 0===e?W.keyList().filter((function(e){return t.options[e].enabled})):e.filter((function(e){return t.options[e].enabled&&W.has(e)})),this.findAll=!1,this.remaining=O(e),this.wanted=O(e)),this.unfinishedMultiSegment=!1}},{key:"findAppSegments",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,t=arguments.length>1?arguments[1]:void 0;try{var n=this;n.setupSegmentFinderArgs(t);var r=n.file,i=n.findAll,a=n.wanted,s=n.remaining;return Ke((function(){if(!i&&n.file.chunked)return i=m(a).some((function(e){var t=W.get(e),r=n.options[e];return t.multiSegment&&r.multiSegment})),We((function(){if(i)return Me(n.file.readWhole())}))}),(function(){var t=!1;if(e=n.findAppSegmentsInRange(e,r.byteLength),!n.options.onlyTiff)return function(){if(r.chunked){var i=!1;return Ge((function(){return!t&&s.size>0&&!i&&(!!r.canReadNextChunk||!!n.unfinishedMultiSegment)}),void 0,(function(){var a=r.nextChunkOffset,s=n.appSegments.some((function(e){return!n.file.available(e.offset||e.start,e.length||e.size)}));return Ke((function(){return e>a&&!s?Re(r.readNextChunk(e),(function(e){i=!e})):Re(r.readNextChunk(a),(function(e){i=!e}))}),(function(){void 0===(e=n.findAppSegmentsInRange(e,r.byteLength))&&(t=!0)}))}))}}()}))}catch(e){return Promise.reject(e)}}},{key:"findAppSegmentsInRange",value:function(e,t){t-=2;for(var n,r,i,a,s,u,o=this.file,f=this.findAll,c=this.wanted,h=this.remaining,l=this.options;e<t;e++)if(255===o.getUint8(e))if(qe(n=o.getUint8(e+1))){if(r=o.getUint16(e+2),(i=Qe(o,e,r))&&c.has(i)&&(s=(a=W.get(i)).findPosition(o,e),u=l[i],s.type=i,this.appSegments.push(s),!f&&(a.multiSegment&&u.multiSegment?(this.unfinishedMultiSegment=s.chunkNumber<s.chunkCount,this.unfinishedMultiSegment||h.delete(i)):h.delete(i),0===h.size)))break;l.recordUnknownSegments&&((s=De.findPosition(o,e)).marker=n,this.unknownSegments.push(s)),e+=r+1}else if(Je(n)){if(r=o.getUint16(e+2),218===n&&!1!==l.stopAfterSos)return;l.recordJpegSegments&&this.jpegSegments.push({offset:e,length:r,marker:n}),e+=r+1}return e}},{key:"mergeMultiSegments",value:function(){var e=this;if(this.appSegments.some((function(e){return e.multiSegment}))){var t=function(e,t){for(var n,r,i,a=S(),s=0;s<e.length;s++)r=(n=e[s])[t],a.has(r)?i=a.get(r):a.set(r,i=[]),i.push(n);return m(a)}(this.appSegments,"type");this.mergedAppSegments=t.map((function(t){var n=t[0],r=t[1],i=W.get(n,e.options);return i.handleMultiSegments?{type:n,chunk:i.handleMultiSegments(r)}:r[0]}))}}},{key:"getSegment",value:function(e){return this.appSegments.find((function(t){return t.type===e}))}},{key:"getOrFindSegment",value:function(e){try{var t=this,n=t.getSegment(e);return Ke((function(){if(void 0===n)return Re(t.findAppSegments(0,[e]),(function(){n=t.getSegment(e)}))}),(function(){return n}))}catch(e){return Promise.reject(e)}}}],[{key:"canHandle",value:function(e,t){return 65496===t}}]),s}(Ee);function $e(){}i(Ze,"type","jpeg"),M.set("jpeg",Ze);function et(e,t){if(!t)return e&&e.then?e.then($e):Promise.resolve()}function tt(e,t){var n=e();return n&&n.then?n.then(t):t(n)}var nt=[void 0,1,1,2,4,8,1,1,2,4,8,4,8,4];var rt=function(e){a(i,e);var n=d(i);function i(){return t(this,i),n.apply(this,arguments)}return r(i,[{key:"parse",value:function(){try{var e=this;e.parseHeader();var t=e.options;return tt((function(){if(t.ifd0.enabled)return et(e.parseIfd0Block())}),(function(){return tt((function(){if(t.exif.enabled)return et(e.safeParse("parseExifBlock"))}),(function(){return tt((function(){if(t.gps.enabled)return et(e.safeParse("parseGpsBlock"))}),(function(){return tt((function(){if(t.interop.enabled)return et(e.safeParse("parseInteropBlock"))}),(function(){return tt((function(){if(t.ifd1.enabled)return et(e.safeParse("parseThumbnailBlock"))}),(function(){return e.createOutput()}))}))}))}))}))}catch(e){return Promise.reject(e)}}},{key:"safeParse",value:function(e){var t=this[e]();return void 0!==t.catch&&(t=t.catch(this.handleError)),t}},{key:"findIfd0Offset",value:function(){void 0===this.ifd0Offset&&(this.ifd0Offset=this.chunk.getUint32(4))}},{key:"findIfd1Offset",value:function(){if(void 0===this.ifd1Offset){this.findIfd0Offset();var e=this.chunk.getUint16(this.ifd0Offset),t=this.ifd0Offset+2+12*e;this.ifd1Offset=this.chunk.getUint32(t)}}},{key:"parseBlock",value:function(e,t){var n=S();return this[t]=n,this.parseTags(e,t,n),n}},{key:"parseIfd0Block",value:function(){try{var e=this;if(e.ifd0)return;var t=e.file;return e.findIfd0Offset(),e.ifd0Offset<8&&L("Malformed EXIF data"),!t.chunked&&e.ifd0Offset>t.byteLength&&L("IFD0 offset points to outside of file.\nthis.ifd0Offset: ".concat(e.ifd0Offset,", file.byteLength: ").concat(t.byteLength)),tt((function(){if(t.tiff)return et(t.ensureChunk(e.ifd0Offset,T(e.options)))}),(function(){var t=e.parseBlock(e.ifd0Offset,"ifd0");if(0!==t.size)return e.exifOffset=t.get(ce),e.interopOffset=t.get(le),e.gpsOffset=t.get(he),e.xmp=t.get(700),e.iptc=t.get(oe),e.icc=t.get(fe),e.options.sanitize&&(t.delete(ce),t.delete(le),t.delete(he),t.delete(700),t.delete(oe),t.delete(fe)),t}))}catch(e){return Promise.reject(e)}}},{key:"parseExifBlock",value:function(){try{var e=this;if(e.exif)return;return tt((function(){if(!e.ifd0)return et(e.parseIfd0Block())}),(function(){if(void 0!==e.exifOffset)return tt((function(){if(e.file.tiff)return et(e.file.ensureChunk(e.exifOffset,T(e.options)))}),(function(){var t=e.parseBlock(e.exifOffset,"exif");return e.interopOffset||(e.interopOffset=t.get(le)),e.makerNote=t.get(se),e.userComment=t.get(ue),e.options.sanitize&&(t.delete(le),t.delete(se),t.delete(ue)),e.unpack(t,41728),e.unpack(t,41729),t}))}))}catch(e){return Promise.reject(e)}}},{key:"unpack",value:function(e,t){var n=e.get(t);n&&1===n.length&&e.set(t,n[0])}},{key:"parseGpsBlock",value:function(){try{var e=this;if(e.gps)return;return tt((function(){if(!e.ifd0)return et(e.parseIfd0Block())}),(function(){if(void 0!==e.gpsOffset){var t=e.parseBlock(e.gpsOffset,"gps");return t&&t.has(2)&&t.has(4)&&(t.set("latitude",it.apply(void 0,t.get(2).concat([t.get(1)]))),t.set("longitude",it.apply(void 0,t.get(4).concat([t.get(3)])))),t}}))}catch(e){return Promise.reject(e)}}},{key:"parseInteropBlock",value:function(){try{var e=this;if(e.interop)return;return tt((function(){if(!e.ifd0)return et(e.parseIfd0Block())}),(function(){return tt((function(){if(void 0===e.interopOffset&&!e.exif)return et(e.parseExifBlock())}),(function(){if(void 0!==e.interopOffset)return e.parseBlock(e.interopOffset,"interop")}))}))}catch(e){return Promise.reject(e)}}},{key:"parseThumbnailBlock",value:function(){var e=arguments.length>0&&void 0!==arguments[0]&&arguments[0];try{var t=this;if(t.ifd1||t.ifd1Parsed)return;if(t.options.mergeOutput&&!e)return;return t.findIfd1Offset(),t.ifd1Offset>0&&(t.parseBlock(t.ifd1Offset,"ifd1"),t.ifd1Parsed=!0),t.ifd1}catch(e){return Promise.reject(e)}}},{key:"extractThumbnail",value:function(){try{var e=this;return e.headerParsed||e.parseHeader(),tt((function(){if(!e.ifd1Parsed)return et(e.parseThumbnailBlock(!0))}),(function(){if(void 0!==e.ifd1){var t=e.ifd1.get(513),n=e.ifd1.get(514);return e.chunk.getUint8Array(t,n)}}))}catch(e){return Promise.reject(e)}}},{key:"image",get:function(){return this.ifd0}},{key:"thumbnail",get:function(){return this.ifd1}},{key:"createOutput",value:function(){var e,t,n,r={},i=ye;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=m(i));for(var a=0;a<i.length;a++)if(!I(e=this[t=i[a]]))if(n=this.canTranslate?this.translateBlock(e,t):k(e),this.options.mergeOutput){if("ifd1"===t)continue;g(r,n)}else r[t]=n;return this.makerNote&&(r.makerNote=this.makerNote),this.userComment&&(r.userComment=this.userComment),r}},{key:"assignToOutput",value:function(e,t){if(this.globalOptions.mergeOutput)g(e,t);else{var n=y(t);Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=m(n));for(var r=0;r<n.length;r++){var i=n[r],a=i[0],s=i[1];this.assignObjectToOutput(e,a,s)}}}}],[{key:"canHandle",value:function(e,t){return 225===e.getUint8(t+1)&&1165519206===e.getUint32(t+4)&&0===e.getUint16(t+8)}}]),i}(function(e){a(i,e);var n=d(i);function i(){return t(this,i),n.apply(this,arguments)}return r(i,[{key:"parseHeader",value:function(){var e=this.chunk.getUint16();18761===e?this.le=!0:19789===e&&(this.le=!1),this.chunk.le=this.le,this.headerParsed=!0}},{key:"parseTags",value:function(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:S(),r=this.options[t],i=r.pick,a=r.skip,s=(i=O(i)).size>0,u=0===a.size,o=this.chunk.getUint16(e);e+=2;for(var f=0;f<o;f++){var c=this.chunk.getUint16(e);if(s){if(i.has(c)&&(n.set(c,this.parseTag(e,c,t)),i.delete(c),0===i.size))break}else!u&&a.has(c)||n.set(c,this.parseTag(e,c,t));e+=12}return n}},{key:"parseTag",value:function(e,t,n){var r,i=this.chunk,a=i.getUint16(e+2),s=i.getUint32(e+4),u=nt[a];if(u*s<=4?e+=8:e=i.getUint32(e+8),(a<1||a>13)&&L("Invalid TIFF value type. block: ".concat(n.toUpperCase(),", tag: ").concat(t.toString(16),", type: ").concat(a,", offset ").concat(e)),e>i.byteLength&&L("Invalid TIFF value offset. block: ".concat(n.toUpperCase(),", tag: ").concat(t.toString(16),", type: ").concat(a,", offset ").concat(e," is outside of chunk size ").concat(i.byteLength)),1===a)return i.getUint8Array(e,s);if(2===a)return""===(r=function(e){for(;e.endsWith("\0");)e=e.slice(0,-1);return e}(r=i.getString(e,s)).trim())?void 0:r;if(7===a)return i.getUint8Array(e,s);if(1===s)return this.parseTagValue(a,e);for(var o=new(function(e){switch(e){case 1:return Uint8Array;case 3:return Uint16Array;case 4:return Uint32Array;case 5:return Array;case 6:return Int8Array;case 8:return Int16Array;case 9:return Int32Array;case 10:return Array;case 11:return Float32Array;case 12:return Float64Array;default:return Array}}(a))(s),f=u,c=0;c<s;c++)o[c]=this.parseTagValue(a,e),e+=f;return o}},{key:"parseTagValue",value:function(e,t){var n=this.chunk;switch(e){case 1:return n.getUint8(t);case 3:return n.getUint16(t);case 4:return n.getUint32(t);case 5:return n.getUint32(t)/n.getUint32(t+4);case 6:return n.getInt8(t);case 8:return n.getInt16(t);case 9:return n.getInt32(t);case 10:return n.getInt32(t)/n.getInt32(t+4);case 11:return n.getFloat(t);case 12:return n.getDouble(t);case 13:return n.getUint32(t);default:L("Invalid tiff type ".concat(e))}}}]),i}(De));function it(e,t,n,r){var i=e+t/60+n/3600;return"S"!==r&&"W"!==r||(i*=-1),i}i(rt,"type","tiff"),i(rt,"headerLength",10),W.set("tiff",rt);var at=Object.freeze({__proto__:null,default:ze,Exifr:Ie,fileParsers:M,segmentParsers:W,fileReaders:K,tagKeys:re,tagValues:ie,tagRevivers:ae,createDictionary:te,extendDictionary:ne,fetchUrlAsArrayBuffer:G,readBlobAsArrayBuffer:Y,chunkedProps:de,otherSegments:ve,segments:pe,tiffBlocks:ye,segmentsAndBlocks:ge,tiffExtractables:ke,inheritables:me,allFormatters:be,Options:Pe,parse:Te});function st(e,t,n){return n?t?t(e):e:(e&&e.then||(e=Promise.resolve(e)),t?e.then(t):e)}function ut(e){return function(){for(var t=[],n=0;n<arguments.length;n++)t[n]=arguments[n];try{return Promise.resolve(e.apply(this,t))}catch(e){return Promise.reject(e)}}}var ot=ut((function(e){var t=new Ie(vt);return st(t.read(e),(function(){return st(t.parse(),(function(e){if(e&&e.ifd0)return e.ifd0[274]}))}))})),ft=ut((function(e){var t=new Ie(dt);return st(t.read(e),(function(){return st(t.parse(),(function(e){if(e&&e.gps){var t=e.gps;return{latitude:t.latitude,longitude:t.longitude}}}))}))})),ct=ut((function(e){return st(this.thumbnail(e),(function(e){if(void 0!==e){var t=new Blob([e]);return URL.createObjectURL(t)}}))})),ht=ut((function(e){var t=new Ie(pt);return st(t.read(e),(function(){return st(t.extractThumbnail(),(function(e){return e&&_?j.from(e):e}))}))})),lt={ifd0:!1,ifd1:!1,exif:!1,gps:!1,interop:!1,sanitize:!1,reviveValues:!0,translateKeys:!1,translateValues:!1,mergeOutput:!1},dt=g({},lt,{firstChunkSize:4e4,gps:[1,2,3,4]}),vt=g({},lt,{firstChunkSize:4e4,ifd0:[274]}),pt=g({},lt,{tiff:!1,ifd1:!0,mergeOutput:!1}),yt=Object.freeze({1:{dimensionSwapped:!1,scaleX:1,scaleY:1,deg:0,rad:0},2:{dimensionSwapped:!1,scaleX:-1,scaleY:1,deg:0,rad:0},3:{dimensionSwapped:!1,scaleX:1,scaleY:1,deg:180,rad:180*Math.PI/180},4:{dimensionSwapped:!1,scaleX:-1,scaleY:1,deg:180,rad:180*Math.PI/180},5:{dimensionSwapped:!0,scaleX:1,scaleY:-1,deg:90,rad:90*Math.PI/180},6:{dimensionSwapped:!0,scaleX:1,scaleY:1,deg:90,rad:90*Math.PI/180},7:{dimensionSwapped:!0,scaleX:1,scaleY:-1,deg:270,rad:270*Math.PI/180},8:{dimensionSwapped:!0,scaleX:1,scaleY:1,deg:270,rad:270*Math.PI/180}});if(e.rotateCanvas=!0,e.rotateCss=!0,"object"==typeof navigator){var gt=navigator.userAgent;if(gt.includes("iPad")||gt.includes("iPhone")){var kt=gt.match(/OS (\d+)_(\d+)/);if(kt){var mt=kt[1],bt=kt[2],At=Number(mt)+.1*Number(bt);e.rotateCanvas=At<13.4,e.rotateCss=!1}}else if(gt.includes("OS X 10")){var wt=gt.match(/OS X 10[_.](\d+)/)[1];e.rotateCanvas=e.rotateCss=Number(wt)<15}if(gt.includes("Chrome/")){var Ot=gt.match(/Chrome\/(\d+)/)[1];e.rotateCanvas=e.rotateCss=Number(Ot)<81}else if(gt.includes("Firefox/")){var St=gt.match(/Firefox\/(\d+)/)[1];e.rotateCanvas=e.rotateCss=Number(St)<77}}function Pt(){}var Ut=function(e){a(u,e);var n=d(u);function u(){var e;t(this,u);for(var r=arguments.length,a=new Array(r),s=0;s<r;s++)a[s]=arguments[s];return i(h(e=n.call.apply(n,[this].concat(a))),"ranges",new xt),0!==e.byteLength&&e.ranges.add(0,e.byteLength),e}return r(u,[{key:"_tryExtend",value:function(e,t,n){if(0===e&&0===this.byteLength&&n){var r=new DataView(n.buffer||n,n.byteOffset,n.byteLength);this._swapDataView(r)}else{var i=e+t;if(i>this.byteLength){var a=this._extend(i).dataView;this._swapDataView(a)}}}},{key:"_extend",value:function(e){var t;t=_?j.allocUnsafe(e):new Uint8Array(e);var n=new DataView(t.buffer,t.byteOffset,t.byteLength);return t.set(new Uint8Array(this.buffer,this.byteOffset,this.byteLength),0),{uintView:t,dataView:n}}},{key:"subarray",value:function(e,t){var n=arguments.length>2&&void 0!==arguments[2]&&arguments[2];return t=t||this._lengthToEnd(e),n&&this._tryExtend(e,t),this.ranges.add(e,t),v(s(u.prototype),"subarray",this).call(this,e,t)}},{key:"set",value:function(e,t){var n=arguments.length>2&&void 0!==arguments[2]&&arguments[2];n&&this._tryExtend(t,e.byteLength,e);var r=v(s(u.prototype),"set",this).call(this,e,t);return this.ranges.add(t,r.byteLength),r}},{key:"ensureChunk",value:function(e,t){try{var n=this;if(!n.chunked)return;if(n.ranges.available(e,t))return;return function(e,t){if(!t)return e&&e.then?e.then(Pt):Promise.resolve()}(n.readChunk(e,t))}catch(e){return Promise.reject(e)}}},{key:"available",value:function(e,t){return this.ranges.available(e,t)}}]),u}(D),xt=function(){function e(){t(this,e),i(this,"list",[])}return r(e,[{key:"length",get:function(){return this.list.length}},{key:"add",value:function(e,t){var n=e+t,r=this.list.filter((function(t){return Ct(e,t.offset,n)||Ct(e,t.end,n)}));if(r.length>0){e=Math.min.apply(Math,[e].concat(r.map((function(e){return e.offset})))),t=(n=Math.max.apply(Math,[n].concat(r.map((function(e){return e.end})))))-e;var i=r.shift();i.offset=e,i.length=t,i.end=n,this.list=this.list.filter((function(e){return!r.includes(e)}))}else this.list.push({offset:e,length:t,end:n})}},{key:"available",value:function(e,t){var n=e+t;return this.list.some((function(t){return t.offset<=e&&n<=t.end}))}}]),e}();function Ct(e,t,n){return e<=t&&t<=n}function Bt(){}function jt(e,t){if(!t)return e&&e.then?e.then(Bt):Promise.resolve()}function _t(e,t,n){return n?t?t(e):e:(e&&e.then||(e=Promise.resolve(e)),t?e.then(t):e)}var Vt=function(e){a(i,e);var n=d(i);function i(){return t(this,i),n.apply(this,arguments)}return r(i,[{key:"readWhole",value:function(){try{var e=this;return e.chunked=!1,_t(Y(e.input),(function(t){e._swapArrayBuffer(t)}))}catch(e){return Promise.reject(e)}}},{key:"readChunked",value:function(){return this.chunked=!0,this.size=this.input.size,v(s(i.prototype),"readChunked",this).call(this)}},{key:"_readChunk",value:function(e,t){try{var n=this,r=t?e+t:void 0,i=n.input.slice(e,r);return _t(Y(i),(function(t){return n.set(t,e,!0)}))}catch(e){return Promise.reject(e)}}}]),i}(function(e){a(s,e);var n=d(s);function s(e,r){var a;return t(this,s),i(h(a=n.call(this,0)),"chunksRead",0),a.input=e,a.options=r,a}return r(s,[{key:"readWhole",value:function(){try{var e=this;return e.chunked=!1,jt(e.readChunk(e.nextChunkOffset))}catch(e){return Promise.reject(e)}}},{key:"readChunked",value:function(){try{var e=this;return e.chunked=!0,jt(e.readChunk(0,e.options.firstChunkSize))}catch(e){return Promise.reject(e)}}},{key:"readNextChunk",value:function(e){try{var t=this;if(void 0===e&&(e=t.nextChunkOffset),t.fullyRead)return t.chunksRead++,!1;var n=t.options.chunkSize;return r=t.readChunk(e,n),i=function(e){return!!e&&e.byteLength===n},a?i?i(r):r:(r&&r.then||(r=Promise.resolve(r)),i?r.then(i):r)}catch(e){return Promise.reject(e)}var r,i,a}},{key:"readChunk",value:function(e,t){try{var n=this;if(n.chunksRead++,0===(t=n.safeWrapAddress(e,t)))return;return n._readChunk(e,t)}catch(e){return Promise.reject(e)}}},{key:"safeWrapAddress",value:function(e,t){return void 0!==this.size&&e+t>this.size?Math.max(0,this.size-e):t}},{key:"nextChunkOffset",get:function(){if(0!==this.ranges.list.length)return this.ranges.list[0].length}},{key:"canReadNextChunk",get:function(){return this.chunksRead<this.options.chunkLimit}},{key:"fullyRead",get:function(){return void 0!==this.size&&this.nextChunkOffset===this.size}},{key:"read",value:function(){return this.options.chunked?this.readChunked():this.readWhole()}},{key:"close",value:function(){}}]),s}(Ut));K.set("blob",Vt),e.Exifr=Ie,e.Options=Pe,e.allFormatters=be,e.chunkedProps=de,e.createDictionary=te,e.default=at,e.disableAllOptions=lt,e.extendDictionary=ne,e.fetchUrlAsArrayBuffer=G,e.fileParsers=M,e.fileReaders=K,e.gps=ft,e.gpsOnlyOptions=dt,e.inheritables=me,e.orientation=ot,e.orientationOnlyOptions=vt,e.otherSegments=ve,e.parse=Te,e.readBlobAsArrayBuffer=Y,e.rotation=function(t){return st(ot(t),(function(t){return g({canvas:e.rotateCanvas,css:e.rotateCss},yt[t])}))},e.rotations=yt,e.segmentParsers=W,e.segments=pe,e.segmentsAndBlocks=ge,e.tagKeys=re,e.tagRevivers=ae,e.tagValues=ie,e.thumbnail=ht,e.thumbnailOnlyOptions=pt,e.thumbnailUrl=ct,e.tiffBlocks=ye,e.tiffExtractables=ke,Object.defineProperty(e,"__esModule",{value:!0})}));
+
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
+
+},{"_process":39,"buffer":10}],25:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -7987,7 +8668,7 @@ function getFormElementValue(element, trim) {
 
 // For UMD build access to getFieldData
 getFormData.getFieldData = getFieldData;
-},{}],23:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (Buffer){(function (){
 /* global Blob File */
 
@@ -8056,14 +8737,14 @@ function hasBinary (obj) {
 
 }).call(this)}).call(this,require("buffer").Buffer)
 
-},{"buffer":10,"isarray":24}],24:[function(require,module,exports){
+},{"buffer":10,"isarray":27}],27:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],25:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -8082,8 +8763,7 @@ try {
   module.exports = false;
 }
 
-},{}],26:[function(require,module,exports){
-/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+},{}],29:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -8169,7 +8849,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],27:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 
 var indexOf = [].indexOf;
 
@@ -8180,7 +8860,7 @@ module.exports = function(arr, obj){
   }
   return -1;
 };
-},{}],28:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 module.exports = function isShallowEqual (a, b) {
   if (a === b) return true
   for (var i in a) if (!(i in b)) return false
@@ -8188,7 +8868,7 @@ module.exports = function isShallowEqual (a, b) {
   return true
 }
 
-},{}],29:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 (function (global){(function (){
 /*
  *  base64.js
@@ -8423,7 +9103,7 @@ module.exports = function isShallowEqual (a, b) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 (function (global){(function (){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -8805,7 +9485,7 @@ module.exports = debounce;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],31:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 (function (global){(function (){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -9249,13 +9929,13 @@ module.exports = throttle;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],32:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 'use strict';
 module.exports = Math.log2 || function (x) {
 	return Math.log(x) * Math.LOG2E;
 };
 
-},{}],33:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 'use strict';
 
 function areInputsEqual(newInputs, lastInputs) {
@@ -9295,7 +9975,7 @@ function memoizeOne(resultFn, isEqual) {
 
 module.exports = memoizeOne;
 
-},{}],34:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 var wildcard = require('wildcard');
 var reMimePartSplit = /[\/\+\.]/;
 
@@ -9321,7 +10001,7 @@ module.exports = function(target, pattern) {
   return pattern ? test(pattern.split(';')[0]) : test;
 };
 
-},{"wildcard":68}],35:[function(require,module,exports){
+},{"wildcard":61}],38:[function(require,module,exports){
 /**
 * Create an event emitter with namespaces
 * @name createNamespaceEmitter
@@ -9458,495 +10138,6 @@ module.exports = function createNamespaceEmitter () {
 
   return emitter
 }
-
-},{}],36:[function(require,module,exports){
-/**
- * Compiles a querystring
- * Returns string representation of the object
- *
- * @param {Object}
- * @api private
- */
-
-exports.encode = function (obj) {
-  var str = '';
-
-  for (var i in obj) {
-    if (obj.hasOwnProperty(i)) {
-      if (str.length) str += '&';
-      str += encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]);
-    }
-  }
-
-  return str;
-};
-
-/**
- * Parses a simple querystring into an object
- *
- * @param {String} qs
- * @api private
- */
-
-exports.decode = function(qs){
-  var qry = {};
-  var pairs = qs.split('&');
-  for (var i = 0, l = pairs.length; i < l; i++) {
-    var pair = pairs[i].split('=');
-    qry[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
-  }
-  return qry;
-};
-
-},{}],37:[function(require,module,exports){
-/**
- * Parses an URI
- *
- * @author Steven Levithan <stevenlevithan.com> (MIT license)
- * @api private
- */
-
-var re = /^(?:(?![^:@]+:[^:@\/]*@)(http|https|ws|wss):\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?((?:[a-f0-9]{0,4}:){2,7}[a-f0-9]{0,4}|[^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
-
-var parts = [
-    'source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'anchor'
-];
-
-module.exports = function parseuri(str) {
-    var src = str,
-        b = str.indexOf('['),
-        e = str.indexOf(']');
-
-    if (b != -1 && e != -1) {
-        str = str.substring(0, b) + str.substring(b, e).replace(/:/g, ';') + str.substring(e, str.length);
-    }
-
-    var m = re.exec(str || ''),
-        uri = {},
-        i = 14;
-
-    while (i--) {
-        uri[parts[i]] = m[i] || '';
-    }
-
-    if (b != -1 && e != -1) {
-        uri.source = src;
-        uri.host = uri.host.substring(1, uri.host.length - 1).replace(/;/g, ':');
-        uri.authority = uri.authority.replace('[', '').replace(']', '').replace(/;/g, ':');
-        uri.ipv6uri = true;
-    }
-
-    return uri;
-};
-
-},{}],38:[function(require,module,exports){
-!function() {
-    'use strict';
-    function VNode() {}
-    function h(nodeName, attributes) {
-        var lastSimple, child, simple, i, children = EMPTY_CHILDREN;
-        for (i = arguments.length; i-- > 2; ) stack.push(arguments[i]);
-        if (attributes && null != attributes.children) {
-            if (!stack.length) stack.push(attributes.children);
-            delete attributes.children;
-        }
-        while (stack.length) if ((child = stack.pop()) && void 0 !== child.pop) for (i = child.length; i--; ) stack.push(child[i]); else {
-            if ('boolean' == typeof child) child = null;
-            if (simple = 'function' != typeof nodeName) if (null == child) child = ''; else if ('number' == typeof child) child = String(child); else if ('string' != typeof child) simple = !1;
-            if (simple && lastSimple) children[children.length - 1] += child; else if (children === EMPTY_CHILDREN) children = [ child ]; else children.push(child);
-            lastSimple = simple;
-        }
-        var p = new VNode();
-        p.nodeName = nodeName;
-        p.children = children;
-        p.attributes = null == attributes ? void 0 : attributes;
-        p.key = null == attributes ? void 0 : attributes.key;
-        if (void 0 !== options.vnode) options.vnode(p);
-        return p;
-    }
-    function extend(obj, props) {
-        for (var i in props) obj[i] = props[i];
-        return obj;
-    }
-    function cloneElement(vnode, props) {
-        return h(vnode.nodeName, extend(extend({}, vnode.attributes), props), arguments.length > 2 ? [].slice.call(arguments, 2) : vnode.children);
-    }
-    function enqueueRender(component) {
-        if (!component.__d && (component.__d = !0) && 1 == items.push(component)) (options.debounceRendering || defer)(rerender);
-    }
-    function rerender() {
-        var p, list = items;
-        items = [];
-        while (p = list.pop()) if (p.__d) renderComponent(p);
-    }
-    function isSameNodeType(node, vnode, hydrating) {
-        if ('string' == typeof vnode || 'number' == typeof vnode) return void 0 !== node.splitText;
-        if ('string' == typeof vnode.nodeName) return !node._componentConstructor && isNamedNode(node, vnode.nodeName); else return hydrating || node._componentConstructor === vnode.nodeName;
-    }
-    function isNamedNode(node, nodeName) {
-        return node.__n === nodeName || node.nodeName.toLowerCase() === nodeName.toLowerCase();
-    }
-    function getNodeProps(vnode) {
-        var props = extend({}, vnode.attributes);
-        props.children = vnode.children;
-        var defaultProps = vnode.nodeName.defaultProps;
-        if (void 0 !== defaultProps) for (var i in defaultProps) if (void 0 === props[i]) props[i] = defaultProps[i];
-        return props;
-    }
-    function createNode(nodeName, isSvg) {
-        var node = isSvg ? document.createElementNS('http://www.w3.org/2000/svg', nodeName) : document.createElement(nodeName);
-        node.__n = nodeName;
-        return node;
-    }
-    function removeNode(node) {
-        var parentNode = node.parentNode;
-        if (parentNode) parentNode.removeChild(node);
-    }
-    function setAccessor(node, name, old, value, isSvg) {
-        if ('className' === name) name = 'class';
-        if ('key' === name) ; else if ('ref' === name) {
-            if (old) old(null);
-            if (value) value(node);
-        } else if ('class' === name && !isSvg) node.className = value || ''; else if ('style' === name) {
-            if (!value || 'string' == typeof value || 'string' == typeof old) node.style.cssText = value || '';
-            if (value && 'object' == typeof value) {
-                if ('string' != typeof old) for (var i in old) if (!(i in value)) node.style[i] = '';
-                for (var i in value) node.style[i] = 'number' == typeof value[i] && !1 === IS_NON_DIMENSIONAL.test(i) ? value[i] + 'px' : value[i];
-            }
-        } else if ('dangerouslySetInnerHTML' === name) {
-            if (value) node.innerHTML = value.__html || '';
-        } else if ('o' == name[0] && 'n' == name[1]) {
-            var useCapture = name !== (name = name.replace(/Capture$/, ''));
-            name = name.toLowerCase().substring(2);
-            if (value) {
-                if (!old) node.addEventListener(name, eventProxy, useCapture);
-            } else node.removeEventListener(name, eventProxy, useCapture);
-            (node.__l || (node.__l = {}))[name] = value;
-        } else if ('list' !== name && 'type' !== name && !isSvg && name in node) {
-            setProperty(node, name, null == value ? '' : value);
-            if (null == value || !1 === value) node.removeAttribute(name);
-        } else {
-            var ns = isSvg && name !== (name = name.replace(/^xlink:?/, ''));
-            if (null == value || !1 === value) if (ns) node.removeAttributeNS('http://www.w3.org/1999/xlink', name.toLowerCase()); else node.removeAttribute(name); else if ('function' != typeof value) if (ns) node.setAttributeNS('http://www.w3.org/1999/xlink', name.toLowerCase(), value); else node.setAttribute(name, value);
-        }
-    }
-    function setProperty(node, name, value) {
-        try {
-            node[name] = value;
-        } catch (e) {}
-    }
-    function eventProxy(e) {
-        return this.__l[e.type](options.event && options.event(e) || e);
-    }
-    function flushMounts() {
-        var c;
-        while (c = mounts.pop()) {
-            if (options.afterMount) options.afterMount(c);
-            if (c.componentDidMount) c.componentDidMount();
-        }
-    }
-    function diff(dom, vnode, context, mountAll, parent, componentRoot) {
-        if (!diffLevel++) {
-            isSvgMode = null != parent && void 0 !== parent.ownerSVGElement;
-            hydrating = null != dom && !('__preactattr_' in dom);
-        }
-        var ret = idiff(dom, vnode, context, mountAll, componentRoot);
-        if (parent && ret.parentNode !== parent) parent.appendChild(ret);
-        if (!--diffLevel) {
-            hydrating = !1;
-            if (!componentRoot) flushMounts();
-        }
-        return ret;
-    }
-    function idiff(dom, vnode, context, mountAll, componentRoot) {
-        var out = dom, prevSvgMode = isSvgMode;
-        if (null == vnode || 'boolean' == typeof vnode) vnode = '';
-        if ('string' == typeof vnode || 'number' == typeof vnode) {
-            if (dom && void 0 !== dom.splitText && dom.parentNode && (!dom._component || componentRoot)) {
-                if (dom.nodeValue != vnode) dom.nodeValue = vnode;
-            } else {
-                out = document.createTextNode(vnode);
-                if (dom) {
-                    if (dom.parentNode) dom.parentNode.replaceChild(out, dom);
-                    recollectNodeTree(dom, !0);
-                }
-            }
-            out.__preactattr_ = !0;
-            return out;
-        }
-        var vnodeName = vnode.nodeName;
-        if ('function' == typeof vnodeName) return buildComponentFromVNode(dom, vnode, context, mountAll);
-        isSvgMode = 'svg' === vnodeName ? !0 : 'foreignObject' === vnodeName ? !1 : isSvgMode;
-        vnodeName = String(vnodeName);
-        if (!dom || !isNamedNode(dom, vnodeName)) {
-            out = createNode(vnodeName, isSvgMode);
-            if (dom) {
-                while (dom.firstChild) out.appendChild(dom.firstChild);
-                if (dom.parentNode) dom.parentNode.replaceChild(out, dom);
-                recollectNodeTree(dom, !0);
-            }
-        }
-        var fc = out.firstChild, props = out.__preactattr_, vchildren = vnode.children;
-        if (null == props) {
-            props = out.__preactattr_ = {};
-            for (var a = out.attributes, i = a.length; i--; ) props[a[i].name] = a[i].value;
-        }
-        if (!hydrating && vchildren && 1 === vchildren.length && 'string' == typeof vchildren[0] && null != fc && void 0 !== fc.splitText && null == fc.nextSibling) {
-            if (fc.nodeValue != vchildren[0]) fc.nodeValue = vchildren[0];
-        } else if (vchildren && vchildren.length || null != fc) innerDiffNode(out, vchildren, context, mountAll, hydrating || null != props.dangerouslySetInnerHTML);
-        diffAttributes(out, vnode.attributes, props);
-        isSvgMode = prevSvgMode;
-        return out;
-    }
-    function innerDiffNode(dom, vchildren, context, mountAll, isHydrating) {
-        var j, c, f, vchild, child, originalChildren = dom.childNodes, children = [], keyed = {}, keyedLen = 0, min = 0, len = originalChildren.length, childrenLen = 0, vlen = vchildren ? vchildren.length : 0;
-        if (0 !== len) for (var i = 0; i < len; i++) {
-            var _child = originalChildren[i], props = _child.__preactattr_, key = vlen && props ? _child._component ? _child._component.__k : props.key : null;
-            if (null != key) {
-                keyedLen++;
-                keyed[key] = _child;
-            } else if (props || (void 0 !== _child.splitText ? isHydrating ? _child.nodeValue.trim() : !0 : isHydrating)) children[childrenLen++] = _child;
-        }
-        if (0 !== vlen) for (var i = 0; i < vlen; i++) {
-            vchild = vchildren[i];
-            child = null;
-            var key = vchild.key;
-            if (null != key) {
-                if (keyedLen && void 0 !== keyed[key]) {
-                    child = keyed[key];
-                    keyed[key] = void 0;
-                    keyedLen--;
-                }
-            } else if (!child && min < childrenLen) for (j = min; j < childrenLen; j++) if (void 0 !== children[j] && isSameNodeType(c = children[j], vchild, isHydrating)) {
-                child = c;
-                children[j] = void 0;
-                if (j === childrenLen - 1) childrenLen--;
-                if (j === min) min++;
-                break;
-            }
-            child = idiff(child, vchild, context, mountAll);
-            f = originalChildren[i];
-            if (child && child !== dom && child !== f) if (null == f) dom.appendChild(child); else if (child === f.nextSibling) removeNode(f); else dom.insertBefore(child, f);
-        }
-        if (keyedLen) for (var i in keyed) if (void 0 !== keyed[i]) recollectNodeTree(keyed[i], !1);
-        while (min <= childrenLen) if (void 0 !== (child = children[childrenLen--])) recollectNodeTree(child, !1);
-    }
-    function recollectNodeTree(node, unmountOnly) {
-        var component = node._component;
-        if (component) unmountComponent(component); else {
-            if (null != node.__preactattr_ && node.__preactattr_.ref) node.__preactattr_.ref(null);
-            if (!1 === unmountOnly || null == node.__preactattr_) removeNode(node);
-            removeChildren(node);
-        }
-    }
-    function removeChildren(node) {
-        node = node.lastChild;
-        while (node) {
-            var next = node.previousSibling;
-            recollectNodeTree(node, !0);
-            node = next;
-        }
-    }
-    function diffAttributes(dom, attrs, old) {
-        var name;
-        for (name in old) if ((!attrs || null == attrs[name]) && null != old[name]) setAccessor(dom, name, old[name], old[name] = void 0, isSvgMode);
-        for (name in attrs) if (!('children' === name || 'innerHTML' === name || name in old && attrs[name] === ('value' === name || 'checked' === name ? dom[name] : old[name]))) setAccessor(dom, name, old[name], old[name] = attrs[name], isSvgMode);
-    }
-    function collectComponent(component) {
-        var name = component.constructor.name;
-        (components[name] || (components[name] = [])).push(component);
-    }
-    function createComponent(Ctor, props, context) {
-        var inst, list = components[Ctor.name];
-        if (Ctor.prototype && Ctor.prototype.render) {
-            inst = new Ctor(props, context);
-            Component.call(inst, props, context);
-        } else {
-            inst = new Component(props, context);
-            inst.constructor = Ctor;
-            inst.render = doRender;
-        }
-        if (list) for (var i = list.length; i--; ) if (list[i].constructor === Ctor) {
-            inst.__b = list[i].__b;
-            list.splice(i, 1);
-            break;
-        }
-        return inst;
-    }
-    function doRender(props, state, context) {
-        return this.constructor(props, context);
-    }
-    function setComponentProps(component, props, opts, context, mountAll) {
-        if (!component.__x) {
-            component.__x = !0;
-            if (component.__r = props.ref) delete props.ref;
-            if (component.__k = props.key) delete props.key;
-            if (!component.base || mountAll) {
-                if (component.componentWillMount) component.componentWillMount();
-            } else if (component.componentWillReceiveProps) component.componentWillReceiveProps(props, context);
-            if (context && context !== component.context) {
-                if (!component.__c) component.__c = component.context;
-                component.context = context;
-            }
-            if (!component.__p) component.__p = component.props;
-            component.props = props;
-            component.__x = !1;
-            if (0 !== opts) if (1 === opts || !1 !== options.syncComponentUpdates || !component.base) renderComponent(component, 1, mountAll); else enqueueRender(component);
-            if (component.__r) component.__r(component);
-        }
-    }
-    function renderComponent(component, opts, mountAll, isChild) {
-        if (!component.__x) {
-            var rendered, inst, cbase, props = component.props, state = component.state, context = component.context, previousProps = component.__p || props, previousState = component.__s || state, previousContext = component.__c || context, isUpdate = component.base, nextBase = component.__b, initialBase = isUpdate || nextBase, initialChildComponent = component._component, skip = !1;
-            if (isUpdate) {
-                component.props = previousProps;
-                component.state = previousState;
-                component.context = previousContext;
-                if (2 !== opts && component.shouldComponentUpdate && !1 === component.shouldComponentUpdate(props, state, context)) skip = !0; else if (component.componentWillUpdate) component.componentWillUpdate(props, state, context);
-                component.props = props;
-                component.state = state;
-                component.context = context;
-            }
-            component.__p = component.__s = component.__c = component.__b = null;
-            component.__d = !1;
-            if (!skip) {
-                rendered = component.render(props, state, context);
-                if (component.getChildContext) context = extend(extend({}, context), component.getChildContext());
-                var toUnmount, base, childComponent = rendered && rendered.nodeName;
-                if ('function' == typeof childComponent) {
-                    var childProps = getNodeProps(rendered);
-                    inst = initialChildComponent;
-                    if (inst && inst.constructor === childComponent && childProps.key == inst.__k) setComponentProps(inst, childProps, 1, context, !1); else {
-                        toUnmount = inst;
-                        component._component = inst = createComponent(childComponent, childProps, context);
-                        inst.__b = inst.__b || nextBase;
-                        inst.__u = component;
-                        setComponentProps(inst, childProps, 0, context, !1);
-                        renderComponent(inst, 1, mountAll, !0);
-                    }
-                    base = inst.base;
-                } else {
-                    cbase = initialBase;
-                    toUnmount = initialChildComponent;
-                    if (toUnmount) cbase = component._component = null;
-                    if (initialBase || 1 === opts) {
-                        if (cbase) cbase._component = null;
-                        base = diff(cbase, rendered, context, mountAll || !isUpdate, initialBase && initialBase.parentNode, !0);
-                    }
-                }
-                if (initialBase && base !== initialBase && inst !== initialChildComponent) {
-                    var baseParent = initialBase.parentNode;
-                    if (baseParent && base !== baseParent) {
-                        baseParent.replaceChild(base, initialBase);
-                        if (!toUnmount) {
-                            initialBase._component = null;
-                            recollectNodeTree(initialBase, !1);
-                        }
-                    }
-                }
-                if (toUnmount) unmountComponent(toUnmount);
-                component.base = base;
-                if (base && !isChild) {
-                    var componentRef = component, t = component;
-                    while (t = t.__u) (componentRef = t).base = base;
-                    base._component = componentRef;
-                    base._componentConstructor = componentRef.constructor;
-                }
-            }
-            if (!isUpdate || mountAll) mounts.unshift(component); else if (!skip) {
-                if (component.componentDidUpdate) component.componentDidUpdate(previousProps, previousState, previousContext);
-                if (options.afterUpdate) options.afterUpdate(component);
-            }
-            if (null != component.__h) while (component.__h.length) component.__h.pop().call(component);
-            if (!diffLevel && !isChild) flushMounts();
-        }
-    }
-    function buildComponentFromVNode(dom, vnode, context, mountAll) {
-        var c = dom && dom._component, originalComponent = c, oldDom = dom, isDirectOwner = c && dom._componentConstructor === vnode.nodeName, isOwner = isDirectOwner, props = getNodeProps(vnode);
-        while (c && !isOwner && (c = c.__u)) isOwner = c.constructor === vnode.nodeName;
-        if (c && isOwner && (!mountAll || c._component)) {
-            setComponentProps(c, props, 3, context, mountAll);
-            dom = c.base;
-        } else {
-            if (originalComponent && !isDirectOwner) {
-                unmountComponent(originalComponent);
-                dom = oldDom = null;
-            }
-            c = createComponent(vnode.nodeName, props, context);
-            if (dom && !c.__b) {
-                c.__b = dom;
-                oldDom = null;
-            }
-            setComponentProps(c, props, 1, context, mountAll);
-            dom = c.base;
-            if (oldDom && dom !== oldDom) {
-                oldDom._component = null;
-                recollectNodeTree(oldDom, !1);
-            }
-        }
-        return dom;
-    }
-    function unmountComponent(component) {
-        if (options.beforeUnmount) options.beforeUnmount(component);
-        var base = component.base;
-        component.__x = !0;
-        if (component.componentWillUnmount) component.componentWillUnmount();
-        component.base = null;
-        var inner = component._component;
-        if (inner) unmountComponent(inner); else if (base) {
-            if (base.__preactattr_ && base.__preactattr_.ref) base.__preactattr_.ref(null);
-            component.__b = base;
-            removeNode(base);
-            collectComponent(component);
-            removeChildren(base);
-        }
-        if (component.__r) component.__r(null);
-    }
-    function Component(props, context) {
-        this.__d = !0;
-        this.context = context;
-        this.props = props;
-        this.state = this.state || {};
-    }
-    function render(vnode, parent, merge) {
-        return diff(merge, vnode, {}, !1, parent, !1);
-    }
-    var options = {};
-    var stack = [];
-    var EMPTY_CHILDREN = [];
-    var defer = 'function' == typeof Promise ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout;
-    var IS_NON_DIMENSIONAL = /acit|ex(?:s|g|n|p|$)|rph|ows|mnc|ntw|ine[ch]|zoo|^ord/i;
-    var items = [];
-    var mounts = [];
-    var diffLevel = 0;
-    var isSvgMode = !1;
-    var hydrating = !1;
-    var components = {};
-    extend(Component.prototype, {
-        setState: function(state, callback) {
-            var s = this.state;
-            if (!this.__s) this.__s = extend({}, s);
-            extend(s, 'function' == typeof state ? state(s, this.props) : state);
-            if (callback) (this.__h = this.__h || []).push(callback);
-            enqueueRender(this);
-        },
-        forceUpdate: function(callback) {
-            if (callback) (this.__h = this.__h || []).push(callback);
-            renderComponent(this, 2);
-        },
-        render: function() {}
-    });
-    var preact = {
-        h: h,
-        createElement: h,
-        cloneElement: cloneElement,
-        Component: Component,
-        render: render,
-        rerender: rerender,
-        options: options
-    };
-    if ('undefined' != typeof module) module.exports = preact; else self.preact = preact;
-}();
 
 },{}],39:[function(require,module,exports){
 // shim for using process in browser
@@ -11268,1174 +11459,6 @@ module.exports = function required(port, protocol) {
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
 },{}],44:[function(require,module,exports){
-/*global Blob,File*/
-
-/**
- * Module requirements
- */
-
-var isArray = require('isarray');
-var isBuf = require('./is-buffer');
-var toString = Object.prototype.toString;
-var withNativeBlob = typeof Blob === 'function' || (typeof Blob !== 'undefined' && toString.call(Blob) === '[object BlobConstructor]');
-var withNativeFile = typeof File === 'function' || (typeof File !== 'undefined' && toString.call(File) === '[object FileConstructor]');
-
-/**
- * Replaces every Buffer | ArrayBuffer in packet with a numbered placeholder.
- * Anything with blobs or files should be fed through removeBlobs before coming
- * here.
- *
- * @param {Object} packet - socket.io event packet
- * @return {Object} with deconstructed packet and list of buffers
- * @api public
- */
-
-exports.deconstructPacket = function(packet) {
-  var buffers = [];
-  var packetData = packet.data;
-  var pack = packet;
-  pack.data = _deconstructPacket(packetData, buffers);
-  pack.attachments = buffers.length; // number of binary 'attachments'
-  return {packet: pack, buffers: buffers};
-};
-
-function _deconstructPacket(data, buffers) {
-  if (!data) return data;
-
-  if (isBuf(data)) {
-    var placeholder = { _placeholder: true, num: buffers.length };
-    buffers.push(data);
-    return placeholder;
-  } else if (isArray(data)) {
-    var newData = new Array(data.length);
-    for (var i = 0; i < data.length; i++) {
-      newData[i] = _deconstructPacket(data[i], buffers);
-    }
-    return newData;
-  } else if (typeof data === 'object' && !(data instanceof Date)) {
-    var newData = {};
-    for (var key in data) {
-      newData[key] = _deconstructPacket(data[key], buffers);
-    }
-    return newData;
-  }
-  return data;
-}
-
-/**
- * Reconstructs a binary packet from its placeholder packet and buffers
- *
- * @param {Object} packet - event packet with placeholders
- * @param {Array} buffers - binary buffers to put in placeholder positions
- * @return {Object} reconstructed packet
- * @api public
- */
-
-exports.reconstructPacket = function(packet, buffers) {
-  packet.data = _reconstructPacket(packet.data, buffers);
-  packet.attachments = undefined; // no longer useful
-  return packet;
-};
-
-function _reconstructPacket(data, buffers) {
-  if (!data) return data;
-
-  if (data && data._placeholder) {
-    return buffers[data.num]; // appropriate buffer (should be natural order anyway)
-  } else if (isArray(data)) {
-    for (var i = 0; i < data.length; i++) {
-      data[i] = _reconstructPacket(data[i], buffers);
-    }
-  } else if (typeof data === 'object') {
-    for (var key in data) {
-      data[key] = _reconstructPacket(data[key], buffers);
-    }
-  }
-
-  return data;
-}
-
-/**
- * Asynchronously removes Blobs or Files from data via
- * FileReader's readAsArrayBuffer method. Used before encoding
- * data as msgpack. Calls callback with the blobless data.
- *
- * @param {Object} data
- * @param {Function} callback
- * @api private
- */
-
-exports.removeBlobs = function(data, callback) {
-  function _removeBlobs(obj, curKey, containingObject) {
-    if (!obj) return obj;
-
-    // convert any blob
-    if ((withNativeBlob && obj instanceof Blob) ||
-        (withNativeFile && obj instanceof File)) {
-      pendingBlobs++;
-
-      // async filereader
-      var fileReader = new FileReader();
-      fileReader.onload = function() { // this.result == arraybuffer
-        if (containingObject) {
-          containingObject[curKey] = this.result;
-        }
-        else {
-          bloblessData = this.result;
-        }
-
-        // if nothing pending its callback time
-        if(! --pendingBlobs) {
-          callback(bloblessData);
-        }
-      };
-
-      fileReader.readAsArrayBuffer(obj); // blob -> arraybuffer
-    } else if (isArray(obj)) { // handle array
-      for (var i = 0; i < obj.length; i++) {
-        _removeBlobs(obj[i], i, obj);
-      }
-    } else if (typeof obj === 'object' && !isBuf(obj)) { // and object
-      for (var key in obj) {
-        _removeBlobs(obj[key], key, obj);
-      }
-    }
-  }
-
-  var pendingBlobs = 0;
-  var bloblessData = data;
-  _removeBlobs(bloblessData);
-  if (!pendingBlobs) {
-    callback(bloblessData);
-  }
-};
-
-},{"./is-buffer":46,"isarray":49}],45:[function(require,module,exports){
-
-/**
- * Module dependencies.
- */
-
-var debug = require('debug')('socket.io-parser');
-var Emitter = require('component-emitter');
-var binary = require('./binary');
-var isArray = require('isarray');
-var isBuf = require('./is-buffer');
-
-/**
- * Protocol version.
- *
- * @api public
- */
-
-exports.protocol = 4;
-
-/**
- * Packet types.
- *
- * @api public
- */
-
-exports.types = [
-  'CONNECT',
-  'DISCONNECT',
-  'EVENT',
-  'ACK',
-  'ERROR',
-  'BINARY_EVENT',
-  'BINARY_ACK'
-];
-
-/**
- * Packet type `connect`.
- *
- * @api public
- */
-
-exports.CONNECT = 0;
-
-/**
- * Packet type `disconnect`.
- *
- * @api public
- */
-
-exports.DISCONNECT = 1;
-
-/**
- * Packet type `event`.
- *
- * @api public
- */
-
-exports.EVENT = 2;
-
-/**
- * Packet type `ack`.
- *
- * @api public
- */
-
-exports.ACK = 3;
-
-/**
- * Packet type `error`.
- *
- * @api public
- */
-
-exports.ERROR = 4;
-
-/**
- * Packet type 'binary event'
- *
- * @api public
- */
-
-exports.BINARY_EVENT = 5;
-
-/**
- * Packet type `binary ack`. For acks with binary arguments.
- *
- * @api public
- */
-
-exports.BINARY_ACK = 6;
-
-/**
- * Encoder constructor.
- *
- * @api public
- */
-
-exports.Encoder = Encoder;
-
-/**
- * Decoder constructor.
- *
- * @api public
- */
-
-exports.Decoder = Decoder;
-
-/**
- * A socket.io Encoder instance
- *
- * @api public
- */
-
-function Encoder() {}
-
-var ERROR_PACKET = exports.ERROR + '"encode error"';
-
-/**
- * Encode a packet as a single string if non-binary, or as a
- * buffer sequence, depending on packet type.
- *
- * @param {Object} obj - packet object
- * @param {Function} callback - function to handle encodings (likely engine.write)
- * @return Calls callback with Array of encodings
- * @api public
- */
-
-Encoder.prototype.encode = function(obj, callback){
-  debug('encoding packet %j', obj);
-
-  if (exports.BINARY_EVENT === obj.type || exports.BINARY_ACK === obj.type) {
-    encodeAsBinary(obj, callback);
-  } else {
-    var encoding = encodeAsString(obj);
-    callback([encoding]);
-  }
-};
-
-/**
- * Encode packet as string.
- *
- * @param {Object} packet
- * @return {String} encoded
- * @api private
- */
-
-function encodeAsString(obj) {
-
-  // first is type
-  var str = '' + obj.type;
-
-  // attachments if we have them
-  if (exports.BINARY_EVENT === obj.type || exports.BINARY_ACK === obj.type) {
-    str += obj.attachments + '-';
-  }
-
-  // if we have a namespace other than `/`
-  // we append it followed by a comma `,`
-  if (obj.nsp && '/' !== obj.nsp) {
-    str += obj.nsp + ',';
-  }
-
-  // immediately followed by the id
-  if (null != obj.id) {
-    str += obj.id;
-  }
-
-  // json data
-  if (null != obj.data) {
-    var payload = tryStringify(obj.data);
-    if (payload !== false) {
-      str += payload;
-    } else {
-      return ERROR_PACKET;
-    }
-  }
-
-  debug('encoded %j as %s', obj, str);
-  return str;
-}
-
-function tryStringify(str) {
-  try {
-    return JSON.stringify(str);
-  } catch(e){
-    return false;
-  }
-}
-
-/**
- * Encode packet as 'buffer sequence' by removing blobs, and
- * deconstructing packet into object with placeholders and
- * a list of buffers.
- *
- * @param {Object} packet
- * @return {Buffer} encoded
- * @api private
- */
-
-function encodeAsBinary(obj, callback) {
-
-  function writeEncoding(bloblessData) {
-    var deconstruction = binary.deconstructPacket(bloblessData);
-    var pack = encodeAsString(deconstruction.packet);
-    var buffers = deconstruction.buffers;
-
-    buffers.unshift(pack); // add packet info to beginning of data list
-    callback(buffers); // write all the buffers
-  }
-
-  binary.removeBlobs(obj, writeEncoding);
-}
-
-/**
- * A socket.io Decoder instance
- *
- * @return {Object} decoder
- * @api public
- */
-
-function Decoder() {
-  this.reconstructor = null;
-}
-
-/**
- * Mix in `Emitter` with Decoder.
- */
-
-Emitter(Decoder.prototype);
-
-/**
- * Decodes an encoded packet string into packet JSON.
- *
- * @param {String} obj - encoded packet
- * @return {Object} packet
- * @api public
- */
-
-Decoder.prototype.add = function(obj) {
-  var packet;
-  if (typeof obj === 'string') {
-    packet = decodeString(obj);
-    if (exports.BINARY_EVENT === packet.type || exports.BINARY_ACK === packet.type) { // binary packet's json
-      this.reconstructor = new BinaryReconstructor(packet);
-
-      // no attachments, labeled binary but no binary data to follow
-      if (this.reconstructor.reconPack.attachments === 0) {
-        this.emit('decoded', packet);
-      }
-    } else { // non-binary full packet
-      this.emit('decoded', packet);
-    }
-  } else if (isBuf(obj) || obj.base64) { // raw binary data
-    if (!this.reconstructor) {
-      throw new Error('got binary data when not reconstructing a packet');
-    } else {
-      packet = this.reconstructor.takeBinaryData(obj);
-      if (packet) { // received final buffer
-        this.reconstructor = null;
-        this.emit('decoded', packet);
-      }
-    }
-  } else {
-    throw new Error('Unknown type: ' + obj);
-  }
-};
-
-/**
- * Decode a packet String (JSON data)
- *
- * @param {String} str
- * @return {Object} packet
- * @api private
- */
-
-function decodeString(str) {
-  var i = 0;
-  // look up type
-  var p = {
-    type: Number(str.charAt(0))
-  };
-
-  if (null == exports.types[p.type]) {
-    return error('unknown packet type ' + p.type);
-  }
-
-  // look up attachments if type binary
-  if (exports.BINARY_EVENT === p.type || exports.BINARY_ACK === p.type) {
-    var buf = '';
-    while (str.charAt(++i) !== '-') {
-      buf += str.charAt(i);
-      if (i == str.length) break;
-    }
-    if (buf != Number(buf) || str.charAt(i) !== '-') {
-      throw new Error('Illegal attachments');
-    }
-    p.attachments = Number(buf);
-  }
-
-  // look up namespace (if any)
-  if ('/' === str.charAt(i + 1)) {
-    p.nsp = '';
-    while (++i) {
-      var c = str.charAt(i);
-      if (',' === c) break;
-      p.nsp += c;
-      if (i === str.length) break;
-    }
-  } else {
-    p.nsp = '/';
-  }
-
-  // look up id
-  var next = str.charAt(i + 1);
-  if ('' !== next && Number(next) == next) {
-    p.id = '';
-    while (++i) {
-      var c = str.charAt(i);
-      if (null == c || Number(c) != c) {
-        --i;
-        break;
-      }
-      p.id += str.charAt(i);
-      if (i === str.length) break;
-    }
-    p.id = Number(p.id);
-  }
-
-  // look up json data
-  if (str.charAt(++i)) {
-    var payload = tryParse(str.substr(i));
-    var isPayloadValid = payload !== false && (p.type === exports.ERROR || isArray(payload));
-    if (isPayloadValid) {
-      p.data = payload;
-    } else {
-      return error('invalid payload');
-    }
-  }
-
-  debug('decoded %s as %j', str, p);
-  return p;
-}
-
-function tryParse(str) {
-  try {
-    return JSON.parse(str);
-  } catch(e){
-    return false;
-  }
-}
-
-/**
- * Deallocates a parser's resources
- *
- * @api public
- */
-
-Decoder.prototype.destroy = function() {
-  if (this.reconstructor) {
-    this.reconstructor.finishedReconstruction();
-  }
-};
-
-/**
- * A manager of a binary event's 'buffer sequence'. Should
- * be constructed whenever a packet of type BINARY_EVENT is
- * decoded.
- *
- * @param {Object} packet
- * @return {BinaryReconstructor} initialized reconstructor
- * @api private
- */
-
-function BinaryReconstructor(packet) {
-  this.reconPack = packet;
-  this.buffers = [];
-}
-
-/**
- * Method to be called when binary data received from connection
- * after a BINARY_EVENT packet.
- *
- * @param {Buffer | ArrayBuffer} binData - the raw binary data received
- * @return {null | Object} returns null if more binary data is expected or
- *   a reconstructed packet object if all buffers have been received.
- * @api private
- */
-
-BinaryReconstructor.prototype.takeBinaryData = function(binData) {
-  this.buffers.push(binData);
-  if (this.buffers.length === this.reconPack.attachments) { // done with buffer list
-    var packet = binary.reconstructPacket(this.reconPack, this.buffers);
-    this.finishedReconstruction();
-    return packet;
-  }
-  return null;
-};
-
-/**
- * Cleans up binary packet reconstruction variables.
- *
- * @api private
- */
-
-BinaryReconstructor.prototype.finishedReconstruction = function() {
-  this.reconPack = null;
-  this.buffers = [];
-};
-
-function error(msg) {
-  return {
-    type: exports.ERROR,
-    data: 'parser error: ' + msg
-  };
-}
-
-},{"./binary":44,"./is-buffer":46,"component-emitter":13,"debug":47,"isarray":49}],46:[function(require,module,exports){
-(function (Buffer){(function (){
-
-module.exports = isBuf;
-
-var withNativeBuffer = typeof Buffer === 'function' && typeof Buffer.isBuffer === 'function';
-var withNativeArrayBuffer = typeof ArrayBuffer === 'function';
-
-var isView = function (obj) {
-  return typeof ArrayBuffer.isView === 'function' ? ArrayBuffer.isView(obj) : (obj.buffer instanceof ArrayBuffer);
-};
-
-/**
- * Returns true if obj is a buffer or an arraybuffer.
- *
- * @api private
- */
-
-function isBuf(obj) {
-  return (withNativeBuffer && Buffer.isBuffer(obj)) ||
-          (withNativeArrayBuffer && (obj instanceof ArrayBuffer || isView(obj)));
-}
-
-}).call(this)}).call(this,require("buffer").Buffer)
-
-},{"buffer":10}],47:[function(require,module,exports){
-(function (process){(function (){
-/**
- * This is the web browser implementation of `debug()`.
- *
- * Expose `debug()` as the module.
- */
-
-exports = module.exports = require('./debug');
-exports.log = log;
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = 'undefined' != typeof chrome
-               && 'undefined' != typeof chrome.storage
-                  ? chrome.storage.local
-                  : localstorage();
-
-/**
- * Colors.
- */
-
-exports.colors = [
-  '#0000CC', '#0000FF', '#0033CC', '#0033FF', '#0066CC', '#0066FF', '#0099CC',
-  '#0099FF', '#00CC00', '#00CC33', '#00CC66', '#00CC99', '#00CCCC', '#00CCFF',
-  '#3300CC', '#3300FF', '#3333CC', '#3333FF', '#3366CC', '#3366FF', '#3399CC',
-  '#3399FF', '#33CC00', '#33CC33', '#33CC66', '#33CC99', '#33CCCC', '#33CCFF',
-  '#6600CC', '#6600FF', '#6633CC', '#6633FF', '#66CC00', '#66CC33', '#9900CC',
-  '#9900FF', '#9933CC', '#9933FF', '#99CC00', '#99CC33', '#CC0000', '#CC0033',
-  '#CC0066', '#CC0099', '#CC00CC', '#CC00FF', '#CC3300', '#CC3333', '#CC3366',
-  '#CC3399', '#CC33CC', '#CC33FF', '#CC6600', '#CC6633', '#CC9900', '#CC9933',
-  '#CCCC00', '#CCCC33', '#FF0000', '#FF0033', '#FF0066', '#FF0099', '#FF00CC',
-  '#FF00FF', '#FF3300', '#FF3333', '#FF3366', '#FF3399', '#FF33CC', '#FF33FF',
-  '#FF6600', '#FF6633', '#FF9900', '#FF9933', '#FFCC00', '#FFCC33'
-];
-
-/**
- * Currently only WebKit-based Web Inspectors, Firefox >= v31,
- * and the Firebug extension (any Firefox version) are known
- * to support "%c" CSS customizations.
- *
- * TODO: add a `localStorage` variable to explicitly enable/disable colors
- */
-
-function useColors() {
-  // NB: In an Electron preload script, document will be defined but not fully
-  // initialized. Since we know we're in Chrome, we'll just detect this case
-  // explicitly
-  if (typeof window !== 'undefined' && window.process && window.process.type === 'renderer') {
-    return true;
-  }
-
-  // Internet Explorer and Edge do not support colors.
-  if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
-    return false;
-  }
-
-  // is webkit? http://stackoverflow.com/a/16459606/376773
-  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-  return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
-    // is firebug? http://stackoverflow.com/a/398120/376773
-    (typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
-    // is firefox >= v31?
-    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
-    // double check webkit in userAgent just in case we are in a worker
-    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
-}
-
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-exports.formatters.j = function(v) {
-  try {
-    return JSON.stringify(v);
-  } catch (err) {
-    return '[UnexpectedJSONParseError]: ' + err.message;
-  }
-};
-
-
-/**
- * Colorize log arguments if enabled.
- *
- * @api public
- */
-
-function formatArgs(args) {
-  var useColors = this.useColors;
-
-  args[0] = (useColors ? '%c' : '')
-    + this.namespace
-    + (useColors ? ' %c' : ' ')
-    + args[0]
-    + (useColors ? '%c ' : ' ')
-    + '+' + exports.humanize(this.diff);
-
-  if (!useColors) return;
-
-  var c = 'color: ' + this.color;
-  args.splice(1, 0, c, 'color: inherit')
-
-  // the final "%c" is somewhat tricky, because there could be other
-  // arguments passed either before or after the %c, so we need to
-  // figure out the correct index to insert the CSS into
-  var index = 0;
-  var lastC = 0;
-  args[0].replace(/%[a-zA-Z%]/g, function(match) {
-    if ('%%' === match) return;
-    index++;
-    if ('%c' === match) {
-      // we only are interested in the *last* %c
-      // (the user may have provided their own)
-      lastC = index;
-    }
-  });
-
-  args.splice(lastC, 0, c);
-}
-
-/**
- * Invokes `console.log()` when available.
- * No-op when `console.log` is not a "function".
- *
- * @api public
- */
-
-function log() {
-  // this hackery is required for IE8/9, where
-  // the `console.log` function doesn't have 'apply'
-  return 'object' === typeof console
-    && console.log
-    && Function.prototype.apply.call(console.log, console, arguments);
-}
-
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
-
-function save(namespaces) {
-  try {
-    if (null == namespaces) {
-      exports.storage.removeItem('debug');
-    } else {
-      exports.storage.debug = namespaces;
-    }
-  } catch(e) {}
-}
-
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-
-function load() {
-  var r;
-  try {
-    r = exports.storage.debug;
-  } catch(e) {}
-
-  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
-  if (!r && typeof process !== 'undefined' && 'env' in process) {
-    r = process.env.DEBUG;
-  }
-
-  return r;
-}
-
-/**
- * Enable namespaces listed in `localStorage.debug` initially.
- */
-
-exports.enable(load());
-
-/**
- * Localstorage attempts to return the localstorage.
- *
- * This is necessary because safari throws
- * when a user disables cookies/localstorage
- * and you attempt to access it.
- *
- * @return {LocalStorage}
- * @api private
- */
-
-function localstorage() {
-  try {
-    return window.localStorage;
-  } catch (e) {}
-}
-
-}).call(this)}).call(this,require('_process'))
-
-},{"./debug":48,"_process":39}],48:[function(require,module,exports){
-
-/**
- * This is the common logic for both the Node.js and web browser
- * implementations of `debug()`.
- *
- * Expose `debug()` as the module.
- */
-
-exports = module.exports = createDebug.debug = createDebug['default'] = createDebug;
-exports.coerce = coerce;
-exports.disable = disable;
-exports.enable = enable;
-exports.enabled = enabled;
-exports.humanize = require('ms');
-
-/**
- * Active `debug` instances.
- */
-exports.instances = [];
-
-/**
- * The currently active debug mode names, and names to skip.
- */
-
-exports.names = [];
-exports.skips = [];
-
-/**
- * Map of special "%n" handling functions, for the debug "format" argument.
- *
- * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
- */
-
-exports.formatters = {};
-
-/**
- * Select a color.
- * @param {String} namespace
- * @return {Number}
- * @api private
- */
-
-function selectColor(namespace) {
-  var hash = 0, i;
-
-  for (i in namespace) {
-    hash  = ((hash << 5) - hash) + namespace.charCodeAt(i);
-    hash |= 0; // Convert to 32bit integer
-  }
-
-  return exports.colors[Math.abs(hash) % exports.colors.length];
-}
-
-/**
- * Create a debugger with the given `namespace`.
- *
- * @param {String} namespace
- * @return {Function}
- * @api public
- */
-
-function createDebug(namespace) {
-
-  var prevTime;
-
-  function debug() {
-    // disabled?
-    if (!debug.enabled) return;
-
-    var self = debug;
-
-    // set `diff` timestamp
-    var curr = +new Date();
-    var ms = curr - (prevTime || curr);
-    self.diff = ms;
-    self.prev = prevTime;
-    self.curr = curr;
-    prevTime = curr;
-
-    // turn the `arguments` into a proper Array
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-
-    args[0] = exports.coerce(args[0]);
-
-    if ('string' !== typeof args[0]) {
-      // anything else let's inspect with %O
-      args.unshift('%O');
-    }
-
-    // apply any `formatters` transformations
-    var index = 0;
-    args[0] = args[0].replace(/%([a-zA-Z%])/g, function(match, format) {
-      // if we encounter an escaped % then don't increase the array index
-      if (match === '%%') return match;
-      index++;
-      var formatter = exports.formatters[format];
-      if ('function' === typeof formatter) {
-        var val = args[index];
-        match = formatter.call(self, val);
-
-        // now we need to remove `args[index]` since it's inlined in the `format`
-        args.splice(index, 1);
-        index--;
-      }
-      return match;
-    });
-
-    // apply env-specific formatting (colors, etc.)
-    exports.formatArgs.call(self, args);
-
-    var logFn = debug.log || exports.log || console.log.bind(console);
-    logFn.apply(self, args);
-  }
-
-  debug.namespace = namespace;
-  debug.enabled = exports.enabled(namespace);
-  debug.useColors = exports.useColors();
-  debug.color = selectColor(namespace);
-  debug.destroy = destroy;
-
-  // env-specific initialization logic for debug instances
-  if ('function' === typeof exports.init) {
-    exports.init(debug);
-  }
-
-  exports.instances.push(debug);
-
-  return debug;
-}
-
-function destroy () {
-  var index = exports.instances.indexOf(this);
-  if (index !== -1) {
-    exports.instances.splice(index, 1);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-/**
- * Enables a debug mode by namespaces. This can include modes
- * separated by a colon and wildcards.
- *
- * @param {String} namespaces
- * @api public
- */
-
-function enable(namespaces) {
-  exports.save(namespaces);
-
-  exports.names = [];
-  exports.skips = [];
-
-  var i;
-  var split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
-  var len = split.length;
-
-  for (i = 0; i < len; i++) {
-    if (!split[i]) continue; // ignore empty strings
-    namespaces = split[i].replace(/\*/g, '.*?');
-    if (namespaces[0] === '-') {
-      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
-    } else {
-      exports.names.push(new RegExp('^' + namespaces + '$'));
-    }
-  }
-
-  for (i = 0; i < exports.instances.length; i++) {
-    var instance = exports.instances[i];
-    instance.enabled = exports.enabled(instance.namespace);
-  }
-}
-
-/**
- * Disable debug output.
- *
- * @api public
- */
-
-function disable() {
-  exports.enable('');
-}
-
-/**
- * Returns true if the given mode name is enabled, false otherwise.
- *
- * @param {String} name
- * @return {Boolean}
- * @api public
- */
-
-function enabled(name) {
-  if (name[name.length - 1] === '*') {
-    return true;
-  }
-  var i, len;
-  for (i = 0, len = exports.skips.length; i < len; i++) {
-    if (exports.skips[i].test(name)) {
-      return false;
-    }
-  }
-  for (i = 0, len = exports.names.length; i < len; i++) {
-    if (exports.names[i].test(name)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
- * Coerce `val`.
- *
- * @param {Mixed} val
- * @return {Mixed}
- * @api private
- */
-
-function coerce(val) {
-  if (val instanceof Error) return val.stack || val.message;
-  return val;
-}
-
-},{"ms":50}],49:[function(require,module,exports){
-arguments[4][24][0].apply(exports,arguments)
-},{"dup":24}],50:[function(require,module,exports){
-/**
- * Helpers.
- */
-
-var s = 1000;
-var m = s * 60;
-var h = m * 60;
-var d = h * 24;
-var y = d * 365.25;
-
-/**
- * Parse or format the given `val`.
- *
- * Options:
- *
- *  - `long` verbose formatting [false]
- *
- * @param {String|Number} val
- * @param {Object} [options]
- * @throws {Error} throw an error if val is not a non-empty string or a number
- * @return {String|Number}
- * @api public
- */
-
-module.exports = function(val, options) {
-  options = options || {};
-  var type = typeof val;
-  if (type === 'string' && val.length > 0) {
-    return parse(val);
-  } else if (type === 'number' && isNaN(val) === false) {
-    return options.long ? fmtLong(val) : fmtShort(val);
-  }
-  throw new Error(
-    'val is not a non-empty string or a valid number. val=' +
-      JSON.stringify(val)
-  );
-};
-
-/**
- * Parse the given `str` and return milliseconds.
- *
- * @param {String} str
- * @return {Number}
- * @api private
- */
-
-function parse(str) {
-  str = String(str);
-  if (str.length > 100) {
-    return;
-  }
-  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(
-    str
-  );
-  if (!match) {
-    return;
-  }
-  var n = parseFloat(match[1]);
-  var type = (match[2] || 'ms').toLowerCase();
-  switch (type) {
-    case 'years':
-    case 'year':
-    case 'yrs':
-    case 'yr':
-    case 'y':
-      return n * y;
-    case 'days':
-    case 'day':
-    case 'd':
-      return n * d;
-    case 'hours':
-    case 'hour':
-    case 'hrs':
-    case 'hr':
-    case 'h':
-      return n * h;
-    case 'minutes':
-    case 'minute':
-    case 'mins':
-    case 'min':
-    case 'm':
-      return n * m;
-    case 'seconds':
-    case 'second':
-    case 'secs':
-    case 'sec':
-    case 's':
-      return n * s;
-    case 'milliseconds':
-    case 'millisecond':
-    case 'msecs':
-    case 'msec':
-    case 'ms':
-      return n;
-    default:
-      return undefined;
-  }
-}
-
-/**
- * Short format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */
-
-function fmtShort(ms) {
-  if (ms >= d) {
-    return Math.round(ms / d) + 'd';
-  }
-  if (ms >= h) {
-    return Math.round(ms / h) + 'h';
-  }
-  if (ms >= m) {
-    return Math.round(ms / m) + 'm';
-  }
-  if (ms >= s) {
-    return Math.round(ms / s) + 's';
-  }
-  return ms + 'ms';
-}
-
-/**
- * Long format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */
-
-function fmtLong(ms) {
-  return plural(ms, d, 'day') ||
-    plural(ms, h, 'hour') ||
-    plural(ms, m, 'minute') ||
-    plural(ms, s, 'second') ||
-    ms + ' ms';
-}
-
-/**
- * Pluralization helper.
- */
-
-function plural(ms, n, name) {
-  if (ms < n) {
-    return;
-  }
-  if (ms < n * 1.5) {
-    return Math.floor(ms / n) + ' ' + name;
-  }
-  return Math.ceil(ms / n) + ' ' + name + 's';
-}
-
-},{}],51:[function(require,module,exports){
 module.exports = toArray
 
 function toArray(list, index) {
@@ -12450,7 +11473,7 @@ function toArray(list, index) {
     return array
 }
 
-},{}],52:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12690,7 +11713,7 @@ var FileReader = /*#__PURE__*/function () {
 }();
 
 exports.default = FileReader;
-},{"./isCordova":56,"./isReactNative":57,"./readAsByteArray":58,"./uriToBlob":59}],53:[function(require,module,exports){
+},{"./isCordova":49,"./isReactNative":50,"./readAsByteArray":51,"./uriToBlob":52}],46:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12741,7 +11764,7 @@ function hashCode(str) {
 
   return hash;
 }
-},{"./isReactNative":57}],54:[function(require,module,exports){
+},{"./isReactNative":50}],47:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12912,7 +11935,7 @@ var Response = /*#__PURE__*/function () {
 
   return Response;
 }();
-},{}],55:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12928,12 +11951,6 @@ Object.defineProperty(exports, "canStoreURLs", {
   enumerable: true,
   get: function () {
     return _urlStorage.canStoreURLs;
-  }
-});
-Object.defineProperty(exports, "HttpStack", {
-  enumerable: true,
-  get: function () {
-    return _httpStack.default;
   }
 });
 exports.isSupported = exports.defaultOptions = exports.Upload = void 0;
@@ -13161,7 +12178,7 @@ var _window = window,
     Blob = _window.Blob;
 var isSupported = XMLHttpRequest && Blob && typeof Blob.prototype.slice === "function";
 exports.isSupported = isSupported;
-},{"../logger":62,"../noopUrlStorage":63,"../upload":64,"./fileReader":52,"./fingerprint":53,"./httpStack":54,"./urlStorage":60}],56:[function(require,module,exports){
+},{"../logger":55,"../noopUrlStorage":56,"../upload":57,"./fileReader":45,"./fingerprint":46,"./httpStack":47,"./urlStorage":53}],49:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13175,7 +12192,7 @@ var isCordova = function isCordova() {
 
 var _default = isCordova;
 exports.default = _default;
-},{}],57:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13189,7 +12206,7 @@ var isReactNative = function isReactNative() {
 
 var _default = isReactNative;
 exports.default = _default;
-},{}],58:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13220,7 +12237,7 @@ function readAsByteArray(chunk) {
     reader.readAsArrayBuffer(chunk);
   });
 }
-},{}],59:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13251,7 +12268,7 @@ function uriToBlob(uri) {
     xhr.send();
   });
 }
-},{}],60:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13365,7 +12382,7 @@ var WebStorageUrlStorage = /*#__PURE__*/function () {
 }();
 
 exports.WebStorageUrlStorage = WebStorageUrlStorage;
-},{}],61:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13568,7 +12585,7 @@ var DetailedError = /*#__PURE__*/function (_Error) {
 
 var _default = DetailedError;
 exports.default = _default;
-},{}],62:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13588,7 +12605,7 @@ function log(msg) {
   if (!isEnabled) return;
   console.log(msg);
 }
-},{}],63:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13651,7 +12668,7 @@ var NoopUrlStorage = /*#__PURE__*/function () {
 }();
 
 exports.default = NoopUrlStorage;
-},{}],64:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13659,15 +12676,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _error = _interopRequireDefault(require("./error"));
+
+var _uuid = _interopRequireDefault(require("./uuid"));
+
 var _jsBase = require("js-base64");
 
 var _urlParse = _interopRequireDefault(require("url-parse"));
 
-var _error = _interopRequireDefault(require("./error"));
-
 var _logger = require("./logger");
-
-var _uuid = _interopRequireDefault(require("./uuid"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13760,7 +12777,6 @@ var defaultOptions = {
   addRequestId: false,
   onBeforeRequest: null,
   onAfterResponse: null,
-  onShouldRetry: null,
   chunkSize: Infinity,
   retryDelays: [0, 1000, 3000, 5000],
   parallelUploads: 1,
@@ -14601,7 +13617,8 @@ var BaseUpload = /*#__PURE__*/function () {
       });
     }
     /**
-     * Send a request with the provided body.
+     * Send a request with the provided body while invoking the onBeforeRequest
+     * and onAfterResponse callbacks.
      *
      * @api private
      */
@@ -14609,8 +13626,21 @@ var BaseUpload = /*#__PURE__*/function () {
   }, {
     key: "_sendRequest",
     value: function _sendRequest(req) {
+      var _this12 = this;
+
       var body = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      return sendRequest(req, body, this.options);
+
+      if (typeof this.options.onBeforeRequest === "function") {
+        this.options.onBeforeRequest(req);
+      }
+
+      return req.send(body).then(function (res) {
+        if (typeof _this12.options.onAfterResponse === "function") {
+          _this12.options.onAfterResponse(req, res);
+        }
+
+        return res;
+      });
     }
   }], [{
     key: "terminate",
@@ -14623,7 +13653,8 @@ var BaseUpload = /*#__PURE__*/function () {
       }
 
       var req = openRequest("DELETE", url, options);
-      return sendRequest(req, null, options).then(function (res) {
+      var promise = req.send();
+      return promise.then(function (res) {
         // A 204 response indicates a successfull request
         if (res.getStatus() === 204) {
           return;
@@ -14707,25 +13738,6 @@ function openRequest(method, url, options) {
   return req;
 }
 /**
- * Send a request with the provided body while invoking the onBeforeRequest
- * and onAfterResponse callbacks.
- *
- * @api private
- */
-
-
-function sendRequest(req, body, options) {
-  var onBeforeRequestPromise = typeof options.onBeforeRequest === "function" ? Promise.resolve(options.onBeforeRequest(req)) : Promise.resolve();
-  return onBeforeRequestPromise.then(function () {
-    return req.send(body).then(function (res) {
-      var onAfterResponsePromise = typeof options.onAfterResponse === "function" ? Promise.resolve(options.onAfterResponse(req, res)) : Promise.resolve();
-      return onAfterResponsePromise.then(function () {
-        return res;
-      });
-    });
-  });
-}
-/**
  * Checks whether the browser running this code has internet access.
  * This function will always return true in the node.js environment
  *
@@ -14757,19 +13769,11 @@ function shouldRetry(err, retryAttempt, options) {
   // - retryDelays option is set
   // - we didn't exceed the maxium number of retries, yet, and
   // - this error was caused by a request or it's response and
-  // - the error is server error (i.e. not a status 4xx except a 409 or 423) or
-  // a onShouldRetry is specified and returns true
+  // - the error is server error (i.e. no a status 4xx or a 409 or 423) and
   // - the browser does not indicate that we are offline
-  if (options.retryDelays == null || retryAttempt >= options.retryDelays.length || err.originalRequest == null) {
-    return false;
-  }
-
-  if (options && typeof options.onShouldRetry === "function") {
-    return options.onShouldRetry(err, retryAttempt, options);
-  }
-
   var status = err.originalResponse ? err.originalResponse.getStatus() : 0;
-  return (!inStatusCategory(status, 400) || status === 409 || status === 423) && isOnline();
+  var isServerError = !inStatusCategory(status, 400) || status === 409 || status === 423;
+  return options.retryDelays != null && retryAttempt < options.retryDelays.length && err.originalRequest != null && isServerError && isOnline();
 }
 /**
  * Resolve a relative link given the origin as source. For example,
@@ -14819,7 +13823,7 @@ function splitSizeIntoParts(totalSize, partCount, previousUrls) {
 BaseUpload.defaultOptions = defaultOptions;
 var _default = BaseUpload;
 exports.default = _default;
-},{"./error":61,"./logger":62,"./uuid":65,"js-base64":29,"url-parse":66}],65:[function(require,module,exports){
+},{"./error":54,"./logger":55,"./uuid":58,"js-base64":32,"url-parse":59}],58:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14846,14 +13850,14 @@ function uuid() {
     return v.toString(16);
   });
 }
-},{}],66:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
 var required = require('requires-port')
   , qs = require('querystringify')
-  , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//
-  , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i
+  , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:[\\/]+/
+  , protocolre = /^([a-z][a-z0-9.+-]*:)?([\\/]{1,})?([\S\s]*)/i
   , whitespace = '[\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\xA0\\u1680\\u180E\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200A\\u202F\\u205F\\u3000\\u2028\\u2029\\uFEFF]'
   , left = new RegExp('^'+ whitespace +'+');
 
@@ -14965,12 +13969,16 @@ function lolcation(loc) {
  */
 function extractProtocol(address) {
   address = trimLeft(address);
-  var match = protocolre.exec(address);
+
+  var match = protocolre.exec(address)
+    , protocol = match[1] ? match[1].toLowerCase() : ''
+    , slashes = !!(match[2] && match[2].length >= 2)
+    , rest =  match[2] && match[2].length === 1 ? '/' + match[3] : match[3];
 
   return {
-    protocol: match[1] ? match[1].toLowerCase() : '',
-    slashes: !!match[2],
-    rest: match[3]
+    protocol: protocol,
+    slashes: slashes,
+    rest: rest
   };
 }
 
@@ -15128,6 +14136,14 @@ function Url(address, location, parser) {
     && (url.pathname !== '' || location.pathname !== '')
   ) {
     url.pathname = resolve(url.pathname, location.pathname);
+  }
+
+  //
+  // Default to a / for pathname if none exists. This normalizes the URL
+  // to always have a /
+  //
+  if (url.pathname.charAt(0) !== '/' && url.hostname) {
+    url.pathname = '/' + url.pathname;
   }
 
   //
@@ -15301,19 +14317,24 @@ module.exports = Url;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"querystringify":41,"requires-port":42}],67:[function(require,module,exports){
+},{"querystringify":41,"requires-port":42}],60:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (factory((global.WHATWGFetch = {})));
 }(this, (function (exports) { 'use strict';
 
+  var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof self !== 'undefined' && self) ||
+    (typeof global !== 'undefined' && global);
+
   var support = {
-    searchParams: 'URLSearchParams' in self,
-    iterable: 'Symbol' in self && 'iterator' in Symbol,
+    searchParams: 'URLSearchParams' in global,
+    iterable: 'Symbol' in global && 'iterator' in Symbol,
     blob:
-      'FileReader' in self &&
-      'Blob' in self &&
+      'FileReader' in global &&
+      'Blob' in global &&
       (function() {
         try {
           new Blob();
@@ -15322,8 +14343,8 @@ module.exports = Url;
           return false
         }
       })(),
-    formData: 'FormData' in self,
-    arrayBuffer: 'ArrayBuffer' in self
+    formData: 'FormData' in global,
+    arrayBuffer: 'ArrayBuffer' in global
   };
 
   function isDataView(obj) {
@@ -15354,8 +14375,8 @@ module.exports = Url;
     if (typeof name !== 'string') {
       name = String(name);
     }
-    if (/[^a-z0-9\-#$%&'*+.^_`|~]/i.test(name)) {
-      throw new TypeError('Invalid character in header field name')
+    if (/[^a-z0-9\-#$%&'*+.^_`|~!]/i.test(name) || name === '') {
+      throw new TypeError('Invalid character in header field name: "' + name + '"')
     }
     return name.toLowerCase()
   }
@@ -15519,6 +14540,17 @@ module.exports = Url;
     this.bodyUsed = false;
 
     this._initBody = function(body) {
+      /*
+        fetch-mock wraps the Response object in an ES6 Proxy to
+        provide useful test harness features such as flush. However, on
+        ES5 browsers without fetch or Proxy support pollyfills must be used;
+        the proxy-pollyfill is unable to proxy an attribute unless it exists
+        on the object before the Proxy is created. This change ensures
+        Response.bodyUsed exists on the instance, while maintaining the
+        semantic of setting Request.bodyUsed in the constructor before
+        _initBody is called.
+      */
+      this.bodyUsed = this.bodyUsed;
       this._bodyInit = body;
       if (!body) {
         this._bodyText = '';
@@ -15571,7 +14603,20 @@ module.exports = Url;
 
       this.arrayBuffer = function() {
         if (this._bodyArrayBuffer) {
-          return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
+          var isConsumed = consumed(this);
+          if (isConsumed) {
+            return isConsumed
+          }
+          if (ArrayBuffer.isView(this._bodyArrayBuffer)) {
+            return Promise.resolve(
+              this._bodyArrayBuffer.buffer.slice(
+                this._bodyArrayBuffer.byteOffset,
+                this._bodyArrayBuffer.byteOffset + this._bodyArrayBuffer.byteLength
+              )
+            )
+          } else {
+            return Promise.resolve(this._bodyArrayBuffer)
+          }
         } else {
           return this.blob().then(readBlobAsArrayBuffer)
         }
@@ -15617,6 +14662,10 @@ module.exports = Url;
   }
 
   function Request(input, options) {
+    if (!(this instanceof Request)) {
+      throw new TypeError('Please use the "new" operator, this DOM object constructor cannot be called as a function.')
+    }
+
     options = options || {};
     var body = options.body;
 
@@ -15653,6 +14702,21 @@ module.exports = Url;
       throw new TypeError('Body not allowed for GET or HEAD requests')
     }
     this._initBody(body);
+
+    if (this.method === 'GET' || this.method === 'HEAD') {
+      if (options.cache === 'no-store' || options.cache === 'no-cache') {
+        // Search for a '_' parameter in the query string
+        var reParamSearch = /([?&])_=[^&]*/;
+        if (reParamSearch.test(this.url)) {
+          // If it already exists then set the value with the current time
+          this.url = this.url.replace(reParamSearch, '$1_=' + new Date().getTime());
+        } else {
+          // Otherwise add a new '_' parameter to the end with the current time
+          var reQueryString = /\?/;
+          this.url += (reQueryString.test(this.url) ? '&' : '?') + '_=' + new Date().getTime();
+        }
+      }
+    }
   }
 
   Request.prototype.clone = function() {
@@ -15680,20 +14744,31 @@ module.exports = Url;
     // Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
     // https://tools.ietf.org/html/rfc7230#section-3.2
     var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ');
-    preProcessedHeaders.split(/\r?\n/).forEach(function(line) {
-      var parts = line.split(':');
-      var key = parts.shift().trim();
-      if (key) {
-        var value = parts.join(':').trim();
-        headers.append(key, value);
-      }
-    });
+    // Avoiding split via regex to work around a common IE11 bug with the core-js 3.6.0 regex polyfill
+    // https://github.com/github/fetch/issues/748
+    // https://github.com/zloirock/core-js/issues/751
+    preProcessedHeaders
+      .split('\r')
+      .map(function(header) {
+        return header.indexOf('\n') === 0 ? header.substr(1, header.length) : header
+      })
+      .forEach(function(line) {
+        var parts = line.split(':');
+        var key = parts.shift().trim();
+        if (key) {
+          var value = parts.join(':').trim();
+          headers.append(key, value);
+        }
+      });
     return headers
   }
 
   Body.call(Request.prototype);
 
   function Response(bodyInit, options) {
+    if (!(this instanceof Response)) {
+      throw new TypeError('Please use the "new" operator, this DOM object constructor cannot be called as a function.')
+    }
     if (!options) {
       options = {};
     }
@@ -15701,7 +14776,7 @@ module.exports = Url;
     this.type = 'default';
     this.status = options.status === undefined ? 200 : options.status;
     this.ok = this.status >= 200 && this.status < 300;
-    this.statusText = 'statusText' in options ? options.statusText : 'OK';
+    this.statusText = options.statusText === undefined ? '' : '' + options.statusText;
     this.headers = new Headers(options.headers);
     this.url = options.url || '';
     this._initBody(bodyInit);
@@ -15734,7 +14809,7 @@ module.exports = Url;
     return new Response(null, {status: status, headers: {location: url}})
   };
 
-  exports.DOMException = self.DOMException;
+  exports.DOMException = global.DOMException;
   try {
     new exports.DOMException();
   } catch (err) {
@@ -15770,22 +14845,38 @@ module.exports = Url;
         };
         options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
         var body = 'response' in xhr ? xhr.response : xhr.responseText;
-        resolve(new Response(body, options));
+        setTimeout(function() {
+          resolve(new Response(body, options));
+        }, 0);
       };
 
       xhr.onerror = function() {
-        reject(new TypeError('Network request failed'));
+        setTimeout(function() {
+          reject(new TypeError('Network request failed'));
+        }, 0);
       };
 
       xhr.ontimeout = function() {
-        reject(new TypeError('Network request failed'));
+        setTimeout(function() {
+          reject(new TypeError('Network request failed'));
+        }, 0);
       };
 
       xhr.onabort = function() {
-        reject(new exports.DOMException('Aborted', 'AbortError'));
+        setTimeout(function() {
+          reject(new exports.DOMException('Aborted', 'AbortError'));
+        }, 0);
       };
 
-      xhr.open(request.method, request.url, true);
+      function fixUrl(url) {
+        try {
+          return url === '' && global.location.href ? global.location.href : url
+        } catch (e) {
+          return url
+        }
+      }
+
+      xhr.open(request.method, fixUrl(request.url), true);
 
       if (request.credentials === 'include') {
         xhr.withCredentials = true;
@@ -15793,13 +14884,27 @@ module.exports = Url;
         xhr.withCredentials = false;
       }
 
-      if ('responseType' in xhr && support.blob) {
-        xhr.responseType = 'blob';
+      if ('responseType' in xhr) {
+        if (support.blob) {
+          xhr.responseType = 'blob';
+        } else if (
+          support.arrayBuffer &&
+          request.headers.get('Content-Type') &&
+          request.headers.get('Content-Type').indexOf('application/octet-stream') !== -1
+        ) {
+          xhr.responseType = 'arraybuffer';
+        }
       }
 
-      request.headers.forEach(function(value, name) {
-        xhr.setRequestHeader(name, value);
-      });
+      if (init && typeof init.headers === 'object' && !(init.headers instanceof Headers)) {
+        Object.getOwnPropertyNames(init.headers).forEach(function(name) {
+          xhr.setRequestHeader(name, normalizeValue(init.headers[name]));
+        });
+      } else {
+        request.headers.forEach(function(value, name) {
+          xhr.setRequestHeader(name, value);
+        });
+      }
 
       if (request.signal) {
         request.signal.addEventListener('abort', abortXhr);
@@ -15818,11 +14923,11 @@ module.exports = Url;
 
   fetch.polyfill = true;
 
-  if (!self.fetch) {
-    self.fetch = fetch;
-    self.Headers = Headers;
-    self.Request = Request;
-    self.Response = Response;
+  if (!global.fetch) {
+    global.fetch = fetch;
+    global.Headers = Headers;
+    global.Request = Request;
+    global.Response = Response;
   }
 
   exports.Headers = Headers;
@@ -15834,7 +14939,7 @@ module.exports = Url;
 
 })));
 
-},{}],68:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 /* jshint node: true */
 'use strict';
 
@@ -15929,7 +15034,7 @@ module.exports = function(text, test, separator) {
   return matcher;
 };
 
-},{}],69:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')
@@ -15999,7 +15104,7 @@ yeast.encode = encode;
 yeast.decode = decode;
 module.exports = yeast;
 
-},{}],70:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var _require = require('@uppy/utils/lib/AbortController'),
@@ -16234,9 +15339,9 @@ var MultipartUploader = /*#__PURE__*/function () {
           }).then(function () {
             return doAttempt(retryAttempt + 1);
           });
-        } else {
-          throw err;
         }
+
+        throw err;
       });
     };
 
@@ -16376,7 +15481,7 @@ var MultipartUploader = /*#__PURE__*/function () {
       var etag = ev.target.getResponseHeader('ETag');
 
       if (etag === null) {
-        defer.reject(new Error('AwsS3/Multipart: Could not read the ETag header. This likely means CORS is not configured correctly on the S3 Bucket. Seee https://uppy.io/docs/aws-s3-multipart#S3-Bucket-Configuration for instructions.'));
+        defer.reject(new Error('AwsS3/Multipart: Could not read the ETag header. This likely means CORS is not configured correctly on the S3 Bucket. See https://uppy.io/docs/aws-s3-multipart#S3-Bucket-Configuration for instructions.'));
         return;
       }
 
@@ -16468,12 +15573,14 @@ var MultipartUploader = /*#__PURE__*/function () {
 }();
 
 module.exports = MultipartUploader;
-},{"@uppy/utils/lib/AbortController":198,"@uppy/utils/lib/delay":207}],71:[function(require,module,exports){
+},{"@uppy/utils/lib/AbortController":212,"@uppy/utils/lib/delay":221}],64:[function(require,module,exports){
 var _class, _temp;
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -16673,10 +15780,12 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
         _this2.resetUploaderReferences(file.id);
 
-        _this2.uppy.emit('upload-success', file, uploadResp);
+        var cFile = _this2.uppy.getFile(file.id);
+
+        _this2.uppy.emit('upload-success', cFile || file, uploadResp);
 
         if (result.location) {
-          _this2.uppy.log('Download ' + upload.file.name + ' from ' + result.location);
+          _this2.uppy.log("Download " + upload.file.name + " from " + result.location);
         }
 
         resolve(upload);
@@ -16774,10 +15883,11 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
           upload.start();
           return function () {};
         });
-      });
+      }); // Don't double-emit upload-started for Golden Retriever-restored files that were already started
 
-      if (!file.isRestored) {
-        _this2.uppy.emit('upload-started', file, upload);
+
+      if (!file.progress.uploadStarted || !file.isRestored) {
+        _this2.uppy.emit('upload-started', file);
       }
     });
   };
@@ -16785,8 +15895,11 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   _proto.uploadRemote = function uploadRemote(file) {
     var _this3 = this;
 
-    this.resetUploaderReferences(file.id);
-    this.uppy.emit('upload-started', file);
+    this.resetUploaderReferences(file.id); // Don't double-emit upload-started for Golden Retriever-restored files that were already started
+
+    if (!file.progress.uploadStarted || !file.isRestored) {
+      this.uppy.emit('upload-started', file);
+    }
 
     if (file.serverToken) {
       return this.connectToServerSocket(file);
@@ -17037,8 +16150,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return AwsS3Multipart;
-}(Plugin), _class.VERSION = "1.8.13", _temp);
-},{"./MultipartUploader":70,"@uppy/companion-client":81,"@uppy/core":84,"@uppy/utils/lib/EventTracker":199,"@uppy/utils/lib/RateLimitedQueue":203,"@uppy/utils/lib/emitSocketProgress":208,"@uppy/utils/lib/getSocketHost":222}],72:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.8.18", _temp);
+},{"./MultipartUploader":63,"@uppy/companion-client":75,"@uppy/core":78,"@uppy/utils/lib/EventTracker":213,"@uppy/utils/lib/RateLimitedQueue":217,"@uppy/utils/lib/emitSocketProgress":222,"@uppy/utils/lib/getSocketHost":237}],65:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var cuid = require('cuid');
@@ -17251,11 +16364,12 @@ module.exports = /*#__PURE__*/function () {
         }
 
         if (opts.validateStatus(ev.target.status, xhr.responseText, xhr)) {
-          var body = opts.getResponseData(xhr.responseText, xhr);
-          var uploadURL = body[opts.responseUrlFieldName];
+          var _body = opts.getResponseData(xhr.responseText, xhr);
+
+          var uploadURL = _body[opts.responseUrlFieldName];
           var uploadResp = {
             status: ev.target.status,
-            body: body,
+            body: _body,
             uploadURL: uploadURL
           };
 
@@ -17266,19 +16380,18 @@ module.exports = /*#__PURE__*/function () {
           }
 
           return resolve(file);
-        } else {
-          var _body = opts.getResponseData(xhr.responseText, xhr);
-
-          var error = buildResponseError(xhr, opts.getResponseError(xhr.responseText, xhr));
-          var response = {
-            status: ev.target.status,
-            body: _body
-          };
-
-          _this3.uppy.emit('upload-error', file, error, response);
-
-          return reject(error);
         }
+
+        var body = opts.getResponseData(xhr.responseText, xhr);
+        var error = buildResponseError(xhr, opts.getResponseError(xhr.responseText, xhr));
+        var response = {
+          status: ev.target.status,
+          body: body
+        };
+
+        _this3.uppy.emit('upload-error', file, error, response);
+
+        return reject(error);
       });
       xhr.addEventListener('error', function (ev) {
         _this3.uppy.log("[AwsS3/XHRUpload] " + id + " errored");
@@ -17397,7 +16510,8 @@ module.exports = /*#__PURE__*/function () {
           var uploadResp = {
             status: data.response.status,
             body: body,
-            uploadURL: uploadURL
+            uploadURL: uploadURL,
+            bytesUploaded: data.bytesUploaded
           };
 
           _this4.uppy.emit('upload-success', file, uploadResp);
@@ -17452,12 +16566,14 @@ module.exports = /*#__PURE__*/function () {
 
   return MiniXHRUpload;
 }();
-},{"@uppy/companion-client":81,"@uppy/utils/lib/EventTracker":199,"@uppy/utils/lib/NetworkError":201,"@uppy/utils/lib/ProgressTimeout":202,"@uppy/utils/lib/emitSocketProgress":208,"@uppy/utils/lib/getSocketHost":222,"@uppy/utils/lib/isNetworkError":229,"cuid":16}],73:[function(require,module,exports){
+},{"@uppy/companion-client":75,"@uppy/utils/lib/EventTracker":213,"@uppy/utils/lib/NetworkError":215,"@uppy/utils/lib/ProgressTimeout":216,"@uppy/utils/lib/emitSocketProgress":222,"@uppy/utils/lib/getSocketHost":237,"@uppy/utils/lib/isNetworkError":244,"cuid":15}],66:[function(require,module,exports){
 var _class, _temp;
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -17478,8 +16594,8 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
  * will expire before some files can be uploaded.
  *
  * The long-term solution to this problem is to change the upload pipeline so that files
- * can be sent to the next step individually. That requires a breakig change, so it is
- * planned for Uppy v2.
+ * can be sent to the next step individually. That requires a breaking change, so it is
+ * planned for some future Uppy version.
  *
  * In the mean time, this plugin is stuck with a hackier approach: the necessary parts
  * of the XHRUpload implementation were copied into this plugin, as the MiniXHRUpload
@@ -17782,12 +16898,12 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   _proto.uninstall = function uninstall() {
-    this.uppy.removePreProcessor(this.handleUpload);
+    this.uppy.removeUploader(this.handleUpload);
   };
 
   return AwsS3;
-}(Plugin), _class.VERSION = "1.7.7", _temp);
-},{"./MiniXHRUpload":72,"./isXml":74,"@uppy/companion-client":81,"@uppy/core":84,"@uppy/utils/lib/RateLimitedQueue":203,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/hasProperty":226,"@uppy/utils/lib/settle":236,"qs-stringify":40,"url-parse":66}],74:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.8.0", _temp);
+},{"./MiniXHRUpload":65,"./isXml":67,"@uppy/companion-client":75,"@uppy/core":78,"@uppy/utils/lib/RateLimitedQueue":217,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/hasProperty":241,"@uppy/utils/lib/settle":251,"qs-stringify":40,"url-parse":59}],67:[function(require,module,exports){
 /**
  * Remove parameters like `charset=utf-8` from the end of a mime type string.
  *
@@ -17827,12 +16943,14 @@ function isXml(content, xhr) {
 }
 
 module.exports = isXml;
-},{}],75:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 var _class, _temp;
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -17866,15 +16984,16 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         viewBox: "0 0 32 32"
       }, h("g", {
         fill: "none",
-        "fill-rule": "evenodd"
+        fillRule: "evenodd"
       }, h("rect", {
+        className: "uppy-ProviderIconBg",
         fill: "#0061D5",
         width: "32",
         height: "32",
         rx: "16"
       }), h("g", {
         fill: "#fff",
-        "fill-rule": "nonzero"
+        fillRule: "nonzero"
       }, h("path", {
         d: "m16.4 13.5c-1.6 0-3 0.9-3.7 2.2-0.7-1.3-2.1-2.2-3.7-2.2-1 0-1.8 0.3-2.5 0.8v-3.6c-0.1-0.3-0.5-0.7-1-0.7s-0.8 0.4-0.8 0.8v7c0 2.3 1.9 4.2 4.2 4.2 1.6 0 3-0.9 3.7-2.2 0.7 1.3 2.1 2.2 3.7 2.2 2.3 0 4.2-1.9 4.2-4.2 0.1-2.4-1.8-4.3-4.1-4.3m-7.5 6.8c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5 2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5m7.5 0c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5 2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5"
       }), h("path", {
@@ -17885,6 +17004,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     _this.provider = new Provider(uppy, {
       companionUrl: _this.opts.companionUrl,
       companionHeaders: _this.opts.companionHeaders || _this.opts.serverHeaders,
+      companionKeysParams: _this.opts.companionKeysParams,
+      companionCookiesRule: _this.opts.companionCookiesRule,
       provider: 'box',
       pluginId: _this.id
     });
@@ -17920,17 +17041,426 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Box;
-}(Plugin), _class.VERSION = "0.3.5", _temp);
-},{"@uppy/companion-client":81,"@uppy/core":84,"@uppy/provider-views":148,"preact":38}],76:[function(require,module,exports){
+}(Plugin), _class.VERSION = "0.3.12", _temp);
+},{"@uppy/companion-client":75,"@uppy/core":78,"@uppy/provider-views":155,"preact":69}],69:[function(require,module,exports){
+!function() {
+    'use strict';
+    function VNode() {}
+    function h(nodeName, attributes) {
+        var lastSimple, child, simple, i, children = EMPTY_CHILDREN;
+        for (i = arguments.length; i-- > 2; ) stack.push(arguments[i]);
+        if (attributes && null != attributes.children) {
+            if (!stack.length) stack.push(attributes.children);
+            delete attributes.children;
+        }
+        while (stack.length) if ((child = stack.pop()) && void 0 !== child.pop) for (i = child.length; i--; ) stack.push(child[i]); else {
+            if ('boolean' == typeof child) child = null;
+            if (simple = 'function' != typeof nodeName) if (null == child) child = ''; else if ('number' == typeof child) child = String(child); else if ('string' != typeof child) simple = !1;
+            if (simple && lastSimple) children[children.length - 1] += child; else if (children === EMPTY_CHILDREN) children = [ child ]; else children.push(child);
+            lastSimple = simple;
+        }
+        var p = new VNode();
+        p.nodeName = nodeName;
+        p.children = children;
+        p.attributes = null == attributes ? void 0 : attributes;
+        p.key = null == attributes ? void 0 : attributes.key;
+        if (void 0 !== options.vnode) options.vnode(p);
+        return p;
+    }
+    function extend(obj, props) {
+        for (var i in props) obj[i] = props[i];
+        return obj;
+    }
+    function cloneElement(vnode, props) {
+        return h(vnode.nodeName, extend(extend({}, vnode.attributes), props), arguments.length > 2 ? [].slice.call(arguments, 2) : vnode.children);
+    }
+    function enqueueRender(component) {
+        if (!component.__d && (component.__d = !0) && 1 == items.push(component)) (options.debounceRendering || defer)(rerender);
+    }
+    function rerender() {
+        var p, list = items;
+        items = [];
+        while (p = list.pop()) if (p.__d) renderComponent(p);
+    }
+    function isSameNodeType(node, vnode, hydrating) {
+        if ('string' == typeof vnode || 'number' == typeof vnode) return void 0 !== node.splitText;
+        if ('string' == typeof vnode.nodeName) return !node._componentConstructor && isNamedNode(node, vnode.nodeName); else return hydrating || node._componentConstructor === vnode.nodeName;
+    }
+    function isNamedNode(node, nodeName) {
+        return node.__n === nodeName || node.nodeName.toLowerCase() === nodeName.toLowerCase();
+    }
+    function getNodeProps(vnode) {
+        var props = extend({}, vnode.attributes);
+        props.children = vnode.children;
+        var defaultProps = vnode.nodeName.defaultProps;
+        if (void 0 !== defaultProps) for (var i in defaultProps) if (void 0 === props[i]) props[i] = defaultProps[i];
+        return props;
+    }
+    function createNode(nodeName, isSvg) {
+        var node = isSvg ? document.createElementNS('http://www.w3.org/2000/svg', nodeName) : document.createElement(nodeName);
+        node.__n = nodeName;
+        return node;
+    }
+    function removeNode(node) {
+        var parentNode = node.parentNode;
+        if (parentNode) parentNode.removeChild(node);
+    }
+    function setAccessor(node, name, old, value, isSvg) {
+        if ('className' === name) name = 'class';
+        if ('key' === name) ; else if ('ref' === name) {
+            if (old) old(null);
+            if (value) value(node);
+        } else if ('class' === name && !isSvg) node.className = value || ''; else if ('style' === name) {
+            if (!value || 'string' == typeof value || 'string' == typeof old) node.style.cssText = value || '';
+            if (value && 'object' == typeof value) {
+                if ('string' != typeof old) for (var i in old) if (!(i in value)) node.style[i] = '';
+                for (var i in value) node.style[i] = 'number' == typeof value[i] && !1 === IS_NON_DIMENSIONAL.test(i) ? value[i] + 'px' : value[i];
+            }
+        } else if ('dangerouslySetInnerHTML' === name) {
+            if (value) node.innerHTML = value.__html || '';
+        } else if ('o' == name[0] && 'n' == name[1]) {
+            var useCapture = name !== (name = name.replace(/Capture$/, ''));
+            name = name.toLowerCase().substring(2);
+            if (value) {
+                if (!old) node.addEventListener(name, eventProxy, useCapture);
+            } else node.removeEventListener(name, eventProxy, useCapture);
+            (node.__l || (node.__l = {}))[name] = value;
+        } else if ('list' !== name && 'type' !== name && !isSvg && name in node) {
+            setProperty(node, name, null == value ? '' : value);
+            if (null == value || !1 === value) node.removeAttribute(name);
+        } else {
+            var ns = isSvg && name !== (name = name.replace(/^xlink:?/, ''));
+            if (null == value || !1 === value) if (ns) node.removeAttributeNS('http://www.w3.org/1999/xlink', name.toLowerCase()); else node.removeAttribute(name); else if ('function' != typeof value) if (ns) node.setAttributeNS('http://www.w3.org/1999/xlink', name.toLowerCase(), value); else node.setAttribute(name, value);
+        }
+    }
+    function setProperty(node, name, value) {
+        try {
+            node[name] = value;
+        } catch (e) {}
+    }
+    function eventProxy(e) {
+        return this.__l[e.type](options.event && options.event(e) || e);
+    }
+    function flushMounts() {
+        var c;
+        while (c = mounts.pop()) {
+            if (options.afterMount) options.afterMount(c);
+            if (c.componentDidMount) c.componentDidMount();
+        }
+    }
+    function diff(dom, vnode, context, mountAll, parent, componentRoot) {
+        if (!diffLevel++) {
+            isSvgMode = null != parent && void 0 !== parent.ownerSVGElement;
+            hydrating = null != dom && !('__preactattr_' in dom);
+        }
+        var ret = idiff(dom, vnode, context, mountAll, componentRoot);
+        if (parent && ret.parentNode !== parent) parent.appendChild(ret);
+        if (!--diffLevel) {
+            hydrating = !1;
+            if (!componentRoot) flushMounts();
+        }
+        return ret;
+    }
+    function idiff(dom, vnode, context, mountAll, componentRoot) {
+        var out = dom, prevSvgMode = isSvgMode;
+        if (null == vnode || 'boolean' == typeof vnode) vnode = '';
+        if ('string' == typeof vnode || 'number' == typeof vnode) {
+            if (dom && void 0 !== dom.splitText && dom.parentNode && (!dom._component || componentRoot)) {
+                if (dom.nodeValue != vnode) dom.nodeValue = vnode;
+            } else {
+                out = document.createTextNode(vnode);
+                if (dom) {
+                    if (dom.parentNode) dom.parentNode.replaceChild(out, dom);
+                    recollectNodeTree(dom, !0);
+                }
+            }
+            out.__preactattr_ = !0;
+            return out;
+        }
+        var vnodeName = vnode.nodeName;
+        if ('function' == typeof vnodeName) return buildComponentFromVNode(dom, vnode, context, mountAll);
+        isSvgMode = 'svg' === vnodeName ? !0 : 'foreignObject' === vnodeName ? !1 : isSvgMode;
+        vnodeName = String(vnodeName);
+        if (!dom || !isNamedNode(dom, vnodeName)) {
+            out = createNode(vnodeName, isSvgMode);
+            if (dom) {
+                while (dom.firstChild) out.appendChild(dom.firstChild);
+                if (dom.parentNode) dom.parentNode.replaceChild(out, dom);
+                recollectNodeTree(dom, !0);
+            }
+        }
+        var fc = out.firstChild, props = out.__preactattr_, vchildren = vnode.children;
+        if (null == props) {
+            props = out.__preactattr_ = {};
+            for (var a = out.attributes, i = a.length; i--; ) props[a[i].name] = a[i].value;
+        }
+        if (!hydrating && vchildren && 1 === vchildren.length && 'string' == typeof vchildren[0] && null != fc && void 0 !== fc.splitText && null == fc.nextSibling) {
+            if (fc.nodeValue != vchildren[0]) fc.nodeValue = vchildren[0];
+        } else if (vchildren && vchildren.length || null != fc) innerDiffNode(out, vchildren, context, mountAll, hydrating || null != props.dangerouslySetInnerHTML);
+        diffAttributes(out, vnode.attributes, props);
+        isSvgMode = prevSvgMode;
+        return out;
+    }
+    function innerDiffNode(dom, vchildren, context, mountAll, isHydrating) {
+        var j, c, f, vchild, child, originalChildren = dom.childNodes, children = [], keyed = {}, keyedLen = 0, min = 0, len = originalChildren.length, childrenLen = 0, vlen = vchildren ? vchildren.length : 0;
+        if (0 !== len) for (var i = 0; i < len; i++) {
+            var _child = originalChildren[i], props = _child.__preactattr_, key = vlen && props ? _child._component ? _child._component.__k : props.key : null;
+            if (null != key) {
+                keyedLen++;
+                keyed[key] = _child;
+            } else if (props || (void 0 !== _child.splitText ? isHydrating ? _child.nodeValue.trim() : !0 : isHydrating)) children[childrenLen++] = _child;
+        }
+        if (0 !== vlen) for (var i = 0; i < vlen; i++) {
+            vchild = vchildren[i];
+            child = null;
+            var key = vchild.key;
+            if (null != key) {
+                if (keyedLen && void 0 !== keyed[key]) {
+                    child = keyed[key];
+                    keyed[key] = void 0;
+                    keyedLen--;
+                }
+            } else if (!child && min < childrenLen) for (j = min; j < childrenLen; j++) if (void 0 !== children[j] && isSameNodeType(c = children[j], vchild, isHydrating)) {
+                child = c;
+                children[j] = void 0;
+                if (j === childrenLen - 1) childrenLen--;
+                if (j === min) min++;
+                break;
+            }
+            child = idiff(child, vchild, context, mountAll);
+            f = originalChildren[i];
+            if (child && child !== dom && child !== f) if (null == f) dom.appendChild(child); else if (child === f.nextSibling) removeNode(f); else dom.insertBefore(child, f);
+        }
+        if (keyedLen) for (var i in keyed) if (void 0 !== keyed[i]) recollectNodeTree(keyed[i], !1);
+        while (min <= childrenLen) if (void 0 !== (child = children[childrenLen--])) recollectNodeTree(child, !1);
+    }
+    function recollectNodeTree(node, unmountOnly) {
+        var component = node._component;
+        if (component) unmountComponent(component); else {
+            if (null != node.__preactattr_ && node.__preactattr_.ref) node.__preactattr_.ref(null);
+            if (!1 === unmountOnly || null == node.__preactattr_) removeNode(node);
+            removeChildren(node);
+        }
+    }
+    function removeChildren(node) {
+        node = node.lastChild;
+        while (node) {
+            var next = node.previousSibling;
+            recollectNodeTree(node, !0);
+            node = next;
+        }
+    }
+    function diffAttributes(dom, attrs, old) {
+        var name;
+        for (name in old) if ((!attrs || null == attrs[name]) && null != old[name]) setAccessor(dom, name, old[name], old[name] = void 0, isSvgMode);
+        for (name in attrs) if (!('children' === name || 'innerHTML' === name || name in old && attrs[name] === ('value' === name || 'checked' === name ? dom[name] : old[name]))) setAccessor(dom, name, old[name], old[name] = attrs[name], isSvgMode);
+    }
+    function collectComponent(component) {
+        var name = component.constructor.name;
+        (components[name] || (components[name] = [])).push(component);
+    }
+    function createComponent(Ctor, props, context) {
+        var inst, list = components[Ctor.name];
+        if (Ctor.prototype && Ctor.prototype.render) {
+            inst = new Ctor(props, context);
+            Component.call(inst, props, context);
+        } else {
+            inst = new Component(props, context);
+            inst.constructor = Ctor;
+            inst.render = doRender;
+        }
+        if (list) for (var i = list.length; i--; ) if (list[i].constructor === Ctor) {
+            inst.__b = list[i].__b;
+            list.splice(i, 1);
+            break;
+        }
+        return inst;
+    }
+    function doRender(props, state, context) {
+        return this.constructor(props, context);
+    }
+    function setComponentProps(component, props, opts, context, mountAll) {
+        if (!component.__x) {
+            component.__x = !0;
+            if (component.__r = props.ref) delete props.ref;
+            if (component.__k = props.key) delete props.key;
+            if (!component.base || mountAll) {
+                if (component.componentWillMount) component.componentWillMount();
+            } else if (component.componentWillReceiveProps) component.componentWillReceiveProps(props, context);
+            if (context && context !== component.context) {
+                if (!component.__c) component.__c = component.context;
+                component.context = context;
+            }
+            if (!component.__p) component.__p = component.props;
+            component.props = props;
+            component.__x = !1;
+            if (0 !== opts) if (1 === opts || !1 !== options.syncComponentUpdates || !component.base) renderComponent(component, 1, mountAll); else enqueueRender(component);
+            if (component.__r) component.__r(component);
+        }
+    }
+    function renderComponent(component, opts, mountAll, isChild) {
+        if (!component.__x) {
+            var rendered, inst, cbase, props = component.props, state = component.state, context = component.context, previousProps = component.__p || props, previousState = component.__s || state, previousContext = component.__c || context, isUpdate = component.base, nextBase = component.__b, initialBase = isUpdate || nextBase, initialChildComponent = component._component, skip = !1;
+            if (isUpdate) {
+                component.props = previousProps;
+                component.state = previousState;
+                component.context = previousContext;
+                if (2 !== opts && component.shouldComponentUpdate && !1 === component.shouldComponentUpdate(props, state, context)) skip = !0; else if (component.componentWillUpdate) component.componentWillUpdate(props, state, context);
+                component.props = props;
+                component.state = state;
+                component.context = context;
+            }
+            component.__p = component.__s = component.__c = component.__b = null;
+            component.__d = !1;
+            if (!skip) {
+                rendered = component.render(props, state, context);
+                if (component.getChildContext) context = extend(extend({}, context), component.getChildContext());
+                var toUnmount, base, childComponent = rendered && rendered.nodeName;
+                if ('function' == typeof childComponent) {
+                    var childProps = getNodeProps(rendered);
+                    inst = initialChildComponent;
+                    if (inst && inst.constructor === childComponent && childProps.key == inst.__k) setComponentProps(inst, childProps, 1, context, !1); else {
+                        toUnmount = inst;
+                        component._component = inst = createComponent(childComponent, childProps, context);
+                        inst.__b = inst.__b || nextBase;
+                        inst.__u = component;
+                        setComponentProps(inst, childProps, 0, context, !1);
+                        renderComponent(inst, 1, mountAll, !0);
+                    }
+                    base = inst.base;
+                } else {
+                    cbase = initialBase;
+                    toUnmount = initialChildComponent;
+                    if (toUnmount) cbase = component._component = null;
+                    if (initialBase || 1 === opts) {
+                        if (cbase) cbase._component = null;
+                        base = diff(cbase, rendered, context, mountAll || !isUpdate, initialBase && initialBase.parentNode, !0);
+                    }
+                }
+                if (initialBase && base !== initialBase && inst !== initialChildComponent) {
+                    var baseParent = initialBase.parentNode;
+                    if (baseParent && base !== baseParent) {
+                        baseParent.replaceChild(base, initialBase);
+                        if (!toUnmount) {
+                            initialBase._component = null;
+                            recollectNodeTree(initialBase, !1);
+                        }
+                    }
+                }
+                if (toUnmount) unmountComponent(toUnmount);
+                component.base = base;
+                if (base && !isChild) {
+                    var componentRef = component, t = component;
+                    while (t = t.__u) (componentRef = t).base = base;
+                    base._component = componentRef;
+                    base._componentConstructor = componentRef.constructor;
+                }
+            }
+            if (!isUpdate || mountAll) mounts.unshift(component); else if (!skip) {
+                if (component.componentDidUpdate) component.componentDidUpdate(previousProps, previousState, previousContext);
+                if (options.afterUpdate) options.afterUpdate(component);
+            }
+            if (null != component.__h) while (component.__h.length) component.__h.pop().call(component);
+            if (!diffLevel && !isChild) flushMounts();
+        }
+    }
+    function buildComponentFromVNode(dom, vnode, context, mountAll) {
+        var c = dom && dom._component, originalComponent = c, oldDom = dom, isDirectOwner = c && dom._componentConstructor === vnode.nodeName, isOwner = isDirectOwner, props = getNodeProps(vnode);
+        while (c && !isOwner && (c = c.__u)) isOwner = c.constructor === vnode.nodeName;
+        if (c && isOwner && (!mountAll || c._component)) {
+            setComponentProps(c, props, 3, context, mountAll);
+            dom = c.base;
+        } else {
+            if (originalComponent && !isDirectOwner) {
+                unmountComponent(originalComponent);
+                dom = oldDom = null;
+            }
+            c = createComponent(vnode.nodeName, props, context);
+            if (dom && !c.__b) {
+                c.__b = dom;
+                oldDom = null;
+            }
+            setComponentProps(c, props, 1, context, mountAll);
+            dom = c.base;
+            if (oldDom && dom !== oldDom) {
+                oldDom._component = null;
+                recollectNodeTree(oldDom, !1);
+            }
+        }
+        return dom;
+    }
+    function unmountComponent(component) {
+        if (options.beforeUnmount) options.beforeUnmount(component);
+        var base = component.base;
+        component.__x = !0;
+        if (component.componentWillUnmount) component.componentWillUnmount();
+        component.base = null;
+        var inner = component._component;
+        if (inner) unmountComponent(inner); else if (base) {
+            if (base.__preactattr_ && base.__preactattr_.ref) base.__preactattr_.ref(null);
+            component.__b = base;
+            removeNode(base);
+            collectComponent(component);
+            removeChildren(base);
+        }
+        if (component.__r) component.__r(null);
+    }
+    function Component(props, context) {
+        this.__d = !0;
+        this.context = context;
+        this.props = props;
+        this.state = this.state || {};
+    }
+    function render(vnode, parent, merge) {
+        return diff(merge, vnode, {}, !1, parent, !1);
+    }
+    var options = {};
+    var stack = [];
+    var EMPTY_CHILDREN = [];
+    var defer = 'function' == typeof Promise ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout;
+    var IS_NON_DIMENSIONAL = /acit|ex(?:s|g|n|p|$)|rph|ows|mnc|ntw|ine[ch]|zoo|^ord/i;
+    var items = [];
+    var mounts = [];
+    var diffLevel = 0;
+    var isSvgMode = !1;
+    var hydrating = !1;
+    var components = {};
+    extend(Component.prototype, {
+        setState: function(state, callback) {
+            var s = this.state;
+            if (!this.__s) this.__s = extend({}, s);
+            extend(s, 'function' == typeof state ? state(s, this.props) : state);
+            if (callback) (this.__h = this.__h || []).push(callback);
+            enqueueRender(this);
+        },
+        forceUpdate: function(callback) {
+            if (callback) (this.__h = this.__h || []).push(callback);
+            renderComponent(this, 2);
+        },
+        render: function() {}
+    });
+    var preact = {
+        h: h,
+        createElement: h,
+        cloneElement: cloneElement,
+        Component: Component,
+        render: render,
+        rerender: rerender,
+        options: options
+    };
+    if ('undefined' != typeof module) module.exports = preact; else self.preact = preact;
+}();
+
+},{}],70:[function(require,module,exports){
 'use strict';
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
 
 function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
 
 function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
 
@@ -17954,14 +17484,18 @@ var AuthError = /*#__PURE__*/function (_Error) {
 }( /*#__PURE__*/_wrapNativeSuper(Error));
 
 module.exports = AuthError;
-},{}],77:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 'use strict';
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var qsStringify = require('qs-stringify');
+
+var URL = require('url-parse');
 
 var RequestClient = require('./RequestClient');
 
@@ -18108,7 +17642,7 @@ module.exports = /*#__PURE__*/function (_RequestClient) {
       if (/^(?!https?:\/\/).*$/i.test(opts.companionUrl)) {
         plugin.opts.companionAllowedHosts = "https://" + opts.companionUrl.replace(/^\/\//, '');
       } else {
-        plugin.opts.companionAllowedHosts = opts.companionUrl;
+        plugin.opts.companionAllowedHosts = new URL(opts.companionUrl).origin;
       }
     }
 
@@ -18117,7 +17651,7 @@ module.exports = /*#__PURE__*/function (_RequestClient) {
 
   return Provider;
 }(RequestClient);
-},{"./RequestClient":78,"./tokenStorage":82,"qs-stringify":40}],78:[function(require,module,exports){
+},{"./RequestClient":72,"./tokenStorage":76,"qs-stringify":40,"url-parse":59}],72:[function(require,module,exports){
 'use strict';
 
 var _class, _temp;
@@ -18265,7 +17799,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function () {
     }).then(this._getPostResponseFunc(skipPostResponse)).then(function (res) {
       return _this4._json(res);
     }).catch(function (err) {
-      err = err.isAuthError ? err : new Error("Could not get " + _this4._getUrl(path) + ". " + err);
+      if (!err.isAuthError) {
+        err.message = "Could not get " + _this4._getUrl(path) + ". " + err.message;
+      }
+
       return Promise.reject(err);
     });
   };
@@ -18283,7 +17820,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function () {
     }).then(this._getPostResponseFunc(skipPostResponse)).then(function (res) {
       return _this5._json(res);
     }).catch(function (err) {
-      err = err.isAuthError ? err : new Error("Could not post " + _this5._getUrl(path) + ". " + err);
+      if (!err.isAuthError) {
+        err.message = "Could not post " + _this5._getUrl(path) + ". " + err.message;
+      }
+
       return Promise.reject(err);
     });
   };
@@ -18301,7 +17841,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function () {
     }).then(this._getPostResponseFunc(skipPostResponse)).then(function (res) {
       return _this6._json(res);
     }).catch(function (err) {
-      err = err.isAuthError ? err : new Error("Could not delete " + _this6._getUrl(path) + ". " + err);
+      if (!err.isAuthError) {
+        err.message = "Could not delete " + _this6._getUrl(path) + ". " + err.message;
+      }
+
       return Promise.reject(err);
     });
   };
@@ -18327,11 +17870,13 @@ module.exports = (_temp = _class = /*#__PURE__*/function () {
   }]);
 
   return RequestClient;
-}(), _class.VERSION = "1.8.2", _temp);
-},{"./AuthError":76,"@uppy/utils/lib/fetchWithNetworkError":209}],79:[function(require,module,exports){
+}(), _class.VERSION = "1.10.2", _temp);
+},{"./AuthError":70,"@uppy/utils/lib/fetchWithNetworkError":223}],73:[function(require,module,exports){
 'use strict';
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var RequestClient = require('./RequestClient');
 
@@ -18368,7 +17913,7 @@ module.exports = /*#__PURE__*/function (_RequestClient) {
 
   return SearchProvider;
 }(RequestClient);
-},{"./RequestClient":78}],80:[function(require,module,exports){
+},{"./RequestClient":72}],74:[function(require,module,exports){
 var ee = require('namespace-emitter');
 
 module.exports = /*#__PURE__*/function () {
@@ -18461,7 +18006,7 @@ module.exports = /*#__PURE__*/function () {
 
   return UppySocket;
 }();
-},{"namespace-emitter":35}],81:[function(require,module,exports){
+},{"namespace-emitter":38}],75:[function(require,module,exports){
 'use strict';
 /**
  * Manages communications with Companion
@@ -18481,7 +18026,7 @@ module.exports = {
   SearchProvider: SearchProvider,
   Socket: Socket
 };
-},{"./Provider":77,"./RequestClient":78,"./SearchProvider":79,"./Socket":80}],82:[function(require,module,exports){
+},{"./Provider":71,"./RequestClient":72,"./SearchProvider":73,"./Socket":74}],76:[function(require,module,exports){
 'use strict';
 /**
  * This module serves as an Async wrapper for LocalStorage
@@ -18504,7 +18049,7 @@ module.exports.removeItem = function (key) {
     resolve();
   });
 };
-},{}],83:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var preact = require('preact');
@@ -18706,20 +18251,20 @@ module.exports = /*#__PURE__*/function () {
 
   return Plugin;
 }();
-},{"@uppy/utils/lib/findDOMElement":211,"preact":38}],84:[function(require,module,exports){
+},{"@uppy/utils/lib/findDOMElement":225,"preact":81}],78:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
 
 function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
 
 function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
 
@@ -18727,6 +18272,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+/* global AggregateError */
 var Translator = require('@uppy/utils/lib/Translator');
 
 var ee = require('namespace-emitter');
@@ -18746,6 +18292,8 @@ var getFileType = require('@uppy/utils/lib/getFileType');
 var getFileNameAndExtension = require('@uppy/utils/lib/getFileNameAndExtension');
 
 var generateFileID = require('@uppy/utils/lib/generateFileID');
+
+var findIndex = require('@uppy/utils/lib/findIndex');
 
 var supportsUploadProgress = require('./supportsUploadProgress');
 
@@ -18773,6 +18321,41 @@ var RestrictionError = /*#__PURE__*/function (_Error) {
 
   return RestrictionError;
 }( /*#__PURE__*/_wrapNativeSuper(Error));
+
+if (typeof AggregateError === 'undefined') {
+  // eslint-disable-next-line no-global-assign
+  AggregateError = /*#__PURE__*/function (_Error2) {
+    _inheritsLoose(AggregateError, _Error2);
+
+    function AggregateError(message, errors) {
+      var _this2;
+
+      _this2 = _Error2.call(this, message) || this;
+      _this2.errors = errors;
+      return _this2;
+    }
+
+    return AggregateError;
+  }( /*#__PURE__*/_wrapNativeSuper(Error));
+}
+
+var AggregateRestrictionError = /*#__PURE__*/function (_AggregateError) {
+  _inheritsLoose(AggregateRestrictionError, _AggregateError);
+
+  function AggregateRestrictionError() {
+    var _this3;
+
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+
+    _this3 = _AggregateError.call.apply(_AggregateError, [this].concat(args)) || this;
+    _this3.isRestriction = true;
+    return _this3;
+  }
+
+  return AggregateRestrictionError;
+}(AggregateError);
 /**
  * Uppy Core module.
  * Manages plugins, state updates, acts as an event bus,
@@ -18781,13 +18364,15 @@ var RestrictionError = /*#__PURE__*/function (_Error) {
 
 
 var Uppy = /*#__PURE__*/function () {
+  // eslint-disable-next-line global-require
+
   /**
    * Instantiate Uppy
    *
    * @param {object} opts — Uppy options
    */
   function Uppy(opts) {
-    var _this2 = this;
+    var _this4 = this;
 
     this.defaultLocale = {
       strings: {
@@ -18803,13 +18388,15 @@ var Uppy = /*#__PURE__*/function () {
           0: 'You have to select at least %{smart_count} file',
           1: 'You have to select at least %{smart_count} files'
         },
+        missingRequiredMetaField: 'Missing required meta fields',
+        missingRequiredMetaFieldOnFile: 'Missing required meta fields in %{fileName}',
         // The default `exceedsSize2` string only combines the `exceedsSize` string (%{backwardsCompat}) with the size.
         // Locales can override `exceedsSize2` to specify a different word order. This is for backwards compat with
         // Uppy 1.9.x and below which did a naive concatenation of `exceedsSize2 + size` instead of using a locale-specific
         // substitution.
         // TODO: In 2.0 `exceedsSize2` should be removed in and `exceedsSize` updated to use substitution.
         exceedsSize2: '%{backwardsCompat} %{size}',
-        exceedsSize: 'This file exceeds maximum allowed size of',
+        exceedsSize: '%{file} exceeds maximum allowed size of',
         inferiorSize: 'This file is smaller than the allowed size of %{size}',
         youCanOnlyUploadFileTypes: 'You can only upload: %{types}',
         noNewAlreadyUploading: 'Cannot add new files: already uploading',
@@ -18858,10 +18445,11 @@ var Uppy = /*#__PURE__*/function () {
         maxTotalFileSize: null,
         maxNumberOfFiles: null,
         minNumberOfFiles: null,
-        allowedFileTypes: null
+        allowedFileTypes: null,
+        requiredMetaFields: []
       },
       meta: {},
-      onBeforeFileAdded: function onBeforeFileAdded(currentFile, files) {
+      onBeforeFileAdded: function onBeforeFileAdded(currentFile) {
         return currentFile;
       },
       onBeforeUpload: function onBeforeUpload(files) {
@@ -18904,12 +18492,14 @@ var Uppy = /*#__PURE__*/function () {
     this.removeFile = this.removeFile.bind(this);
     this.pauseResume = this.pauseResume.bind(this);
     this.validateRestrictions = this.validateRestrictions.bind(this); // ___Why throttle at 500ms?
-    //    - We must throttle at >250ms for superfocus in Dashboard to work well (because animation takes 0.25s, and we want to wait for all animations to be over before refocusing).
-    //    [Practical Check]: if thottle is at 100ms, then if you are uploading a file, and click 'ADD MORE FILES', - focus won't activate in Firefox.
+    //    - We must throttle at >250ms for superfocus in Dashboard to work well
+    //    (because animation takes 0.25s, and we want to wait for all animations to be over before refocusing).
+    //    [Practical Check]: if thottle is at 100ms, then if you are uploading a file,
+    //    and click 'ADD MORE FILES', - focus won't activate in Firefox.
     //    - We must throttle at around >500ms to avoid performance lags.
     //    [Practical Check] Firefox, try to upload a big file for a prolonged period of time. Laptop will start to heat up.
 
-    this._calculateProgress = throttle(this._calculateProgress.bind(this), 500, {
+    this.calculateProgress = throttle(this.calculateProgress.bind(this), 500, {
       leading: true,
       trailing: true
     });
@@ -18946,21 +18536,21 @@ var Uppy = /*#__PURE__*/function () {
         isHidden: true,
         type: 'info',
         message: ''
-      }
+      },
+      recoveredState: null
     });
-    this._storeUnsubscribe = this.store.subscribe(function (prevState, nextState, patch) {
-      _this2.emit('state-update', prevState, nextState, patch);
+    this.storeUnsubscribe = this.store.subscribe(function (prevState, nextState, patch) {
+      _this4.emit('state-update', prevState, nextState, patch);
 
-      _this2.updateAll(nextState);
+      _this4.updateAll(nextState);
     }); // Exposing uppy object on window for debugging and testing
 
     if (this.opts.debug && typeof window !== 'undefined') {
       window[this.opts.id] = this;
     }
 
-    this._addListeners(); // Re-enable if we’ll need some capabilities on boot, like isMobileDevice
+    this.addListeners(); // Re-enable if we’ll need some capabilities on boot, like isMobileDevice
     // this._setCapabilities()
-
   } // _setCapabilities = () => {
   //   const capabilities = {
   //     isMobileDevice: isMobileDevice()
@@ -19017,6 +18607,7 @@ var Uppy = /*#__PURE__*/function () {
   }
   /**
    * Back compat for when uppy.state is used instead of uppy.getState().
+   * @deprecated
    */
   ;
 
@@ -19057,7 +18648,8 @@ var Uppy = /*#__PURE__*/function () {
       this.iteratePlugins(function (plugin) {
         plugin.setOptions();
       });
-    }
+    } // Note: this is not the preact `setState`, it's an internal function that has the same name.
+
 
     this.setState(); // so that UI re-renders with new options
   };
@@ -19192,8 +18784,7 @@ var Uppy = /*#__PURE__*/function () {
 
   _proto.validateRestrictions = function validateRestrictions(file, files) {
     try {
-      this._checkRestrictions(file, files);
-
+      this.checkRestrictions(file, files);
       return {
         result: true
       };
@@ -19214,7 +18805,7 @@ var Uppy = /*#__PURE__*/function () {
    */
   ;
 
-  _proto._checkRestrictions = function _checkRestrictions(file, files) {
+  _proto.checkRestrictions = function checkRestrictions(file, files) {
     if (files === void 0) {
       files = this.getFiles();
     }
@@ -19262,14 +18853,15 @@ var Uppy = /*#__PURE__*/function () {
     if (maxTotalFileSize && file.size != null) {
       var totalFilesSize = 0;
       totalFilesSize += file.size;
-      files.forEach(function (file) {
-        totalFilesSize += file.size;
+      files.forEach(function (f) {
+        totalFilesSize += f.size;
       });
 
       if (totalFilesSize > maxTotalFileSize) {
         throw new RestrictionError(this.i18n('exceedsSize2', {
           backwardsCompat: this.i18n('exceedsSize'),
-          size: prettierBytes(maxTotalFileSize)
+          size: prettierBytes(maxTotalFileSize),
+          file: file.name
         }));
       }
     } // We can't check maxFileSize if the size is unknown.
@@ -19279,7 +18871,8 @@ var Uppy = /*#__PURE__*/function () {
       if (file.size > maxFileSize) {
         throw new RestrictionError(this.i18n('exceedsSize2', {
           backwardsCompat: this.i18n('exceedsSize'),
-          size: prettierBytes(maxFileSize)
+          size: prettierBytes(maxFileSize),
+          file: file.name
         }));
       }
     } // We can't check minFileSize if the size is unknown.
@@ -19300,13 +18893,47 @@ var Uppy = /*#__PURE__*/function () {
    */
   ;
 
-  _proto._checkMinNumberOfFiles = function _checkMinNumberOfFiles(files) {
+  _proto.checkMinNumberOfFiles = function checkMinNumberOfFiles(files) {
     var minNumberOfFiles = this.opts.restrictions.minNumberOfFiles;
 
     if (Object.keys(files).length < minNumberOfFiles) {
       throw new RestrictionError("" + this.i18n('youHaveToAtLeastSelectX', {
         smart_count: minNumberOfFiles
       }));
+    }
+  }
+  /**
+   * Check if requiredMetaField restriction is met before uploading.
+   *
+   * @private
+   */
+  ;
+
+  _proto.checkRequiredMetaFields = function checkRequiredMetaFields(files) {
+    var requiredMetaFields = this.opts.restrictions.requiredMetaFields;
+    var hasOwnProperty = Object.prototype.hasOwnProperty;
+    var errors = [];
+    var fileIDs = Object.keys(files);
+
+    for (var i = 0; i < fileIDs.length; i++) {
+      var file = this.getFile(fileIDs[i]);
+
+      for (var _i = 0; _i < requiredMetaFields.length; _i++) {
+        if (!hasOwnProperty.call(file.meta, requiredMetaFields[_i]) || file.meta[requiredMetaFields[_i]] === '') {
+          var err = new RestrictionError("" + this.i18n('missingRequiredMetaFieldOnFile', {
+            fileName: file.name
+          }));
+          errors.push(err);
+          this.showOrLogErrorAndThrow(err, {
+            file: file,
+            throwErr: false
+          });
+        }
+      }
+    }
+
+    if (errors.length) {
+      throw new AggregateRestrictionError("" + this.i18n('missingRequiredMetaField'), errors);
     }
   }
   /**
@@ -19322,7 +18949,7 @@ var Uppy = /*#__PURE__*/function () {
    */
   ;
 
-  _proto._showOrLogErrorAndThrow = function _showOrLogErrorAndThrow(err, _temp) {
+  _proto.showOrLogErrorAndThrow = function showOrLogErrorAndThrow(err, _temp) {
     var _ref = _temp === void 0 ? {} : _temp,
         _ref$showInformer = _ref.showInformer,
         showInformer = _ref$showInformer === void 0 ? true : _ref$showInformer,
@@ -19338,7 +18965,7 @@ var Uppy = /*#__PURE__*/function () {
     var logMessageWithDetails = message;
 
     if (details) {
-      logMessageWithDetails += ' ' + details;
+      logMessageWithDetails += " " + details;
     }
 
     if (err.isRestriction) {
@@ -19362,12 +18989,12 @@ var Uppy = /*#__PURE__*/function () {
     }
   };
 
-  _proto._assertNewUploadAllowed = function _assertNewUploadAllowed(file) {
+  _proto.assertNewUploadAllowed = function assertNewUploadAllowed(file) {
     var _this$getState2 = this.getState(),
         allowNewUpload = _this$getState2.allowNewUpload;
 
     if (allowNewUpload === false) {
-      this._showOrLogErrorAndThrow(new RestrictionError(this.i18n('noNewAlreadyUploading')), {
+      this.showOrLogErrorAndThrow(new RestrictionError(this.i18n('noNewAlreadyUploading')), {
         file: file
       });
     }
@@ -19381,14 +19008,15 @@ var Uppy = /*#__PURE__*/function () {
    */
   ;
 
-  _proto._checkAndCreateFileStateObject = function _checkAndCreateFileStateObject(files, file) {
-    var fileType = getFileType(file);
+  _proto.checkAndCreateFileStateObject = function checkAndCreateFileStateObject(files, f) {
+    var fileType = getFileType(f);
+    var file = f;
     file.type = fileType;
     var onBeforeFileAddedResult = this.opts.onBeforeFileAdded(file, files);
 
     if (onBeforeFileAddedResult === false) {
       // Don’t show UI info for this error, as it should be done by the developer
-      this._showOrLogErrorAndThrow(new RestrictionError('Cannot add the file because onBeforeFileAdded returned false.'), {
+      this.showOrLogErrorAndThrow(new RestrictionError('Cannot add the file because onBeforeFileAdded returned false.'), {
         showInformer: false,
         file: file
       });
@@ -19403,7 +19031,7 @@ var Uppy = /*#__PURE__*/function () {
     if (file.name) {
       fileName = file.name;
     } else if (fileType.split('/')[0] === 'image') {
-      fileName = fileType.split('/')[0] + '.' + fileType.split('/')[1];
+      fileName = fileType.split('/')[0] + "." + fileType.split('/')[1];
     } else {
       fileName = 'noname';
     }
@@ -19412,8 +19040,8 @@ var Uppy = /*#__PURE__*/function () {
     var isRemote = file.isRemote || false;
     var fileID = generateFileID(file);
 
-    if (files[fileID]) {
-      this._showOrLogErrorAndThrow(new RestrictionError(this.i18n('noDuplicates', {
+    if (files[fileID] && !files[fileID].isGhost) {
+      this.showOrLogErrorAndThrow(new RestrictionError(this.i18n('noDuplicates', {
         fileName: fileName
       })), {
         file: file
@@ -19450,10 +19078,9 @@ var Uppy = /*#__PURE__*/function () {
       var filesArray = Object.keys(files).map(function (i) {
         return files[i];
       });
-
-      this._checkRestrictions(newFile, filesArray);
+      this.checkRestrictions(newFile, filesArray);
     } catch (err) {
-      this._showOrLogErrorAndThrow(err, {
+      this.showOrLogErrorAndThrow(err, {
         file: newFile
       });
     }
@@ -19462,16 +19089,16 @@ var Uppy = /*#__PURE__*/function () {
   } // Schedule an upload if `autoProceed` is enabled.
   ;
 
-  _proto._startIfAutoProceed = function _startIfAutoProceed() {
-    var _this3 = this;
+  _proto.startIfAutoProceed = function startIfAutoProceed() {
+    var _this5 = this;
 
     if (this.opts.autoProceed && !this.scheduledAutoProceed) {
       this.scheduledAutoProceed = setTimeout(function () {
-        _this3.scheduledAutoProceed = null;
+        _this5.scheduledAutoProceed = null;
 
-        _this3.upload().catch(function (err) {
+        _this5.upload().catch(function (err) {
           if (!err.isRestriction) {
-            _this3.log(err.stack || err.message || err);
+            _this5.log(err.stack || err.message || err);
           }
         });
       }, 4);
@@ -19490,12 +19117,21 @@ var Uppy = /*#__PURE__*/function () {
   _proto.addFile = function addFile(file) {
     var _extends3;
 
-    this._assertNewUploadAllowed(file);
+    this.assertNewUploadAllowed(file);
 
     var _this$getState3 = this.getState(),
         files = _this$getState3.files;
 
-    var newFile = this._checkAndCreateFileStateObject(files, file);
+    var newFile = this.checkAndCreateFileStateObject(files, file); // Users are asked to re-select recovered files without data,
+    // and to keep the progress, meta and everthing else, we only replace said data
+
+    if (files[newFile.id] && files[newFile.id].isGhost) {
+      newFile = _extends({}, files[newFile.id], {
+        data: file.data,
+        isGhost: false
+      });
+      this.log("Replaced the blob in the restored ghost file: " + newFile.name + ", " + newFile.id);
+    }
 
     this.setState({
       files: _extends({}, files, (_extends3 = {}, _extends3[newFile.id] = newFile, _extends3))
@@ -19503,25 +19139,22 @@ var Uppy = /*#__PURE__*/function () {
     this.emit('file-added', newFile);
     this.emit('files-added', [newFile]);
     this.log("Added file: " + newFile.name + ", " + newFile.id + ", mime type: " + newFile.type);
-
-    this._startIfAutoProceed();
-
+    this.startIfAutoProceed();
     return newFile.id;
   }
   /**
    * Add multiple files to `state.files`. See the `addFile()` documentation.
    *
-   * This cuts some corners for performance, so should typically only be used in cases where there may be a lot of files.
-   *
-   * If an error occurs while adding a file, it is logged and the user is notified. This is good for UI plugins, but not for programmatic use. Programmatic users should usually still use `addFile()` on individual files.
+   * If an error occurs while adding a file, it is logged and the user is notified.
+   * This is good for UI plugins, but not for programmatic use.
+   * Programmatic users should usually still use `addFile()` on individual files.
    */
   ;
 
   _proto.addFiles = function addFiles(fileDescriptors) {
-    var _this4 = this;
+    var _this6 = this;
 
-    this._assertNewUploadAllowed(); // create a copy of the files object only once
-
+    this.assertNewUploadAllowed(); // create a copy of the files object only once
 
     var files = _extends({}, this.getState().files);
 
@@ -19530,10 +19163,19 @@ var Uppy = /*#__PURE__*/function () {
 
     for (var i = 0; i < fileDescriptors.length; i++) {
       try {
-        var newFile = this._checkAndCreateFileStateObject(files, fileDescriptors[i]);
+        var newFile = this.checkAndCreateFileStateObject(files, fileDescriptors[i]); // Users are asked to re-select recovered files without data,
+        // and to keep the progress, meta and everthing else, we only replace said data
 
-        newFiles.push(newFile);
+        if (files[newFile.id] && files[newFile.id].isGhost) {
+          newFile = _extends({}, files[newFile.id], {
+            data: fileDescriptors[i].data,
+            isGhost: false
+          });
+          this.log("Replaced blob in a ghost file: " + newFile.name + ", " + newFile.id);
+        }
+
         files[newFile.id] = newFile;
+        newFiles.push(newFile);
       } catch (err) {
         if (!err.isRestriction) {
           errors.push(err);
@@ -19545,7 +19187,7 @@ var Uppy = /*#__PURE__*/function () {
       files: files
     });
     newFiles.forEach(function (newFile) {
-      _this4.emit('file-added', newFile);
+      _this6.emit('file-added', newFile);
     });
     this.emit('files-added', newFiles);
 
@@ -19553,12 +19195,12 @@ var Uppy = /*#__PURE__*/function () {
       this.log("Added batch of " + newFiles.length + " files");
     } else {
       Object.keys(newFiles).forEach(function (fileID) {
-        _this4.log("Added file: " + newFiles[fileID].name + "\n id: " + newFiles[fileID].id + "\n type: " + newFiles[fileID].type);
+        _this6.log("Added file: " + newFiles[fileID].name + "\n id: " + newFiles[fileID].id + "\n type: " + newFiles[fileID].type);
       });
     }
 
     if (newFiles.length > 0) {
-      this._startIfAutoProceed();
+      this.startIfAutoProceed();
     }
 
     if (errors.length > 0) {
@@ -19572,14 +19214,19 @@ var Uppy = /*#__PURE__*/function () {
         }),
         details: message
       }, 'error', this.opts.infoTimeout);
-      var err = new Error(message);
-      err.errors = errors;
-      throw err;
+
+      if (typeof AggregateError === 'function') {
+        throw new AggregateError(errors, message);
+      } else {
+        var err = new Error(message);
+        err.errors = errors;
+        throw err;
+      }
     }
   };
 
   _proto.removeFiles = function removeFiles(fileIDs, reason) {
-    var _this5 = this;
+    var _this7 = this;
 
     var _this$getState4 = this.getState(),
         files = _this$getState4.files,
@@ -19601,12 +19248,11 @@ var Uppy = /*#__PURE__*/function () {
       return removedFiles[uploadFileID] === undefined;
     }
 
-    var uploadsToRemove = [];
     Object.keys(updatedUploads).forEach(function (uploadID) {
       var newFileIDs = currentUploads[uploadID].fileIDs.filter(fileIsNotRemoved); // Remove the upload if no files are associated with it anymore.
 
       if (newFileIDs.length === 0) {
-        uploadsToRemove.push(uploadID);
+        delete updatedUploads[uploadID];
         return;
       }
 
@@ -19614,26 +19260,23 @@ var Uppy = /*#__PURE__*/function () {
         fileIDs: newFileIDs
       });
     });
-    uploadsToRemove.forEach(function (uploadID) {
-      delete updatedUploads[uploadID];
-    });
     var stateUpdate = {
       currentUploads: updatedUploads,
       files: updatedFiles
-    }; // If all files were removed - allow new uploads!
+    }; // If all files were removed - allow new uploads,
+    // and clear recoveredState
 
     if (Object.keys(updatedFiles).length === 0) {
       stateUpdate.allowNewUpload = true;
       stateUpdate.error = null;
+      stateUpdate.recoveredState = null;
     }
 
     this.setState(stateUpdate);
-
-    this._calculateTotalProgress();
-
+    this.calculateTotalProgress();
     var removedFileIDs = Object.keys(removedFiles);
     removedFileIDs.forEach(function (fileID) {
-      _this5.emit('file-removed', removedFiles[fileID], reason);
+      _this7.emit('file-removed', removedFiles[fileID], reason);
     });
 
     if (removedFileIDs.length > 5) {
@@ -19653,7 +19296,7 @@ var Uppy = /*#__PURE__*/function () {
 
   _proto.pauseResume = function pauseResume(fileID) {
     if (!this.getState().capabilities.resumableUploads || this.getFile(fileID).uploadComplete) {
-      return;
+      return undefined;
     }
 
     var wasPaused = this.getFile(fileID).isPaused || false;
@@ -19731,12 +19374,11 @@ var Uppy = /*#__PURE__*/function () {
       });
     }
 
-    var uploadID = this._createUpload(filesToRetry, {
+    var uploadID = this.createUpload(filesToRetry, {
       forceAllowNewUpload: true // create new upload even if allowNewUpload: false
 
     });
-
-    return this._runUpload(uploadID);
+    return this.runUpload(uploadID);
   };
 
   _proto.cancelAll = function cancelAll() {
@@ -19753,7 +19395,8 @@ var Uppy = /*#__PURE__*/function () {
 
     this.setState({
       totalProgress: 0,
-      error: null
+      error: null,
+      recoveredState: null
     });
   };
 
@@ -19763,20 +19406,26 @@ var Uppy = /*#__PURE__*/function () {
       isPaused: false
     });
     this.emit('upload-retry', fileID);
-
-    var uploadID = this._createUpload([fileID], {
+    var uploadID = this.createUpload([fileID], {
       forceAllowNewUpload: true // create new upload even if allowNewUpload: false
 
     });
-
-    return this._runUpload(uploadID);
+    return this.runUpload(uploadID);
   };
 
   _proto.reset = function reset() {
     this.cancelAll();
   };
 
-  _proto._calculateProgress = function _calculateProgress(file, data) {
+  _proto.logout = function logout() {
+    this.iteratePlugins(function (plugin) {
+      if (plugin.provider && plugin.provider.logout) {
+        plugin.provider.logout();
+      }
+    });
+  };
+
+  _proto.calculateProgress = function calculateProgress(file, data) {
     if (!this.getFile(file.id)) {
       this.log("Not setting progress for a file that has been removed: " + file.id);
       return;
@@ -19793,11 +19442,10 @@ var Uppy = /*#__PURE__*/function () {
         ? Math.round(data.bytesUploaded / data.bytesTotal * 100) : 0
       })
     });
-
-    this._calculateTotalProgress();
+    this.calculateTotalProgress();
   };
 
-  _proto._calculateTotalProgress = function _calculateTotalProgress() {
+  _proto.calculateTotalProgress = function calculateTotalProgress() {
     // calculate total progress, using the number of files currently uploading,
     // multiplied by 100 and the summ of individual progress of each file
     var files = this.getFiles();
@@ -19864,78 +19512,72 @@ var Uppy = /*#__PURE__*/function () {
    */
   ;
 
-  _proto._addListeners = function _addListeners() {
-    var _this6 = this;
+  _proto.addListeners = function addListeners() {
+    var _this8 = this;
 
-    this.on('error', function (error) {
-      var errorMsg = 'Unknown error';
-
-      if (error.message) {
-        errorMsg = error.message;
-      }
+    /**
+     * @param {Error} error
+     * @param {object} [file]
+     * @param {object} [response]
+     */
+    var errorHandler = function errorHandler(error, file, response) {
+      var errorMsg = error.message || 'Unknown error';
 
       if (error.details) {
-        errorMsg += ' ' + error.details;
+        errorMsg += " " + error.details;
       }
 
-      _this6.setState({
+      _this8.setState({
         error: errorMsg
-      });
-    });
+      }); // When a file is also given, we store the error on the file object.
+
+
+      if (file != null && typeof file.id === 'string') {
+        _this8.setFileState(file.id, {
+          error: errorMsg,
+          response: response
+        });
+      }
+    };
+
+    this.on('error', errorHandler);
     this.on('upload-error', function (file, error, response) {
-      var errorMsg = 'Unknown error';
-
-      if (error.message) {
-        errorMsg = error.message;
-      }
-
-      if (error.details) {
-        errorMsg += ' ' + error.details;
-      }
-
-      _this6.setFileState(file.id, {
-        error: errorMsg,
-        response: response
-      });
-
-      _this6.setState({
-        error: error.message
-      });
+      errorHandler(error, file, response);
 
       if (typeof error === 'object' && error.message) {
         var newError = new Error(error.message);
         newError.details = error.message;
 
         if (error.details) {
-          newError.details += ' ' + error.details;
+          newError.details += " " + error.details;
         }
 
-        newError.message = _this6.i18n('failedToUpload', {
+        newError.message = _this8.i18n('failedToUpload', {
           file: file.name
         });
 
-        _this6._showOrLogErrorAndThrow(newError, {
+        _this8.showOrLogErrorAndThrow(newError, {
           throwErr: false
         });
       } else {
-        _this6._showOrLogErrorAndThrow(error, {
+        _this8.showOrLogErrorAndThrow(error, {
           throwErr: false
         });
       }
     });
     this.on('upload', function () {
-      _this6.setState({
+      _this8.setState({
         error: null
       });
     });
-    this.on('upload-started', function (file, upload) {
-      if (!_this6.getFile(file.id)) {
-        _this6.log("Not setting progress for a file that has been removed: " + file.id);
+    this.on('upload-started', function (file) {
+      if (!_this8.getFile(file.id)) {
+        _this8.log("Not setting progress for a file that has been removed: " + file.id);
 
         return;
       }
 
-      _this6.setFileState(file.id, {
+      _this8.setFileState(file.id, {
         progress: {
           uploadStarted: Date.now(),
           uploadComplete: false,
@@ -19945,19 +19587,19 @@ var Uppy = /*#__PURE__*/function () {
         }
       });
     });
-    this.on('upload-progress', this._calculateProgress);
+    this.on('upload-progress', this.calculateProgress);
     this.on('upload-success', function (file, uploadResp) {
-      if (!_this6.getFile(file.id)) {
-        _this6.log("Not setting progress for a file that has been removed: " + file.id);
+      if (!_this8.getFile(file.id)) {
+        _this8.log("Not setting progress for a file that has been removed: " + file.id);
 
         return;
       }
 
-      var currentProgress = _this6.getFile(file.id).progress;
+      var currentProgress = _this8.getFile(file.id).progress;
 
-      _this6.setFileState(file.id, {
+      _this8.setFileState(file.id, {
         progress: _extends({}, currentProgress, {
-          postprocess: _this6.postProcessors.length > 0 ? {
+          postprocess: _this8.postProcessors.length > 0 ? {
             mode: 'indeterminate'
           } : null,
           uploadComplete: true,
@@ -19967,62 +19609,70 @@ var Uppy = /*#__PURE__*/function () {
         response: uploadResp,
         uploadURL: uploadResp.uploadURL,
         isPaused: false
-      });
+      }); // Remote providers sometimes don't tell us the file size,
+      // but we can know how many bytes we uploaded once the upload is complete.
 
-      _this6._calculateTotalProgress();
+
+      if (file.size == null) {
+        _this8.setFileState(file.id, {
+          size: uploadResp.bytesUploaded || currentProgress.bytesTotal
+        });
+      }
+
+      _this8.calculateTotalProgress();
     });
     this.on('preprocess-progress', function (file, progress) {
-      if (!_this6.getFile(file.id)) {
-        _this6.log("Not setting progress for a file that has been removed: " + file.id);
+      if (!_this8.getFile(file.id)) {
+        _this8.log("Not setting progress for a file that has been removed: " + file.id);
 
         return;
       }
 
-      _this6.setFileState(file.id, {
-        progress: _extends({}, _this6.getFile(file.id).progress, {
+      _this8.setFileState(file.id, {
+        progress: _extends({}, _this8.getFile(file.id).progress, {
           preprocess: progress
         })
       });
     });
     this.on('preprocess-complete', function (file) {
-      if (!_this6.getFile(file.id)) {
-        _this6.log("Not setting progress for a file that has been removed: " + file.id);
+      if (!_this8.getFile(file.id)) {
+        _this8.log("Not setting progress for a file that has been removed: " + file.id);
 
         return;
       }
 
-      var files = _extends({}, _this6.getState().files);
+      var files = _extends({}, _this8.getState().files);
 
       files[file.id] = _extends({}, files[file.id], {
         progress: _extends({}, files[file.id].progress)
       });
       delete files[file.id].progress.preprocess;
 
-      _this6.setState({
+      _this8.setState({
         files: files
       });
     });
     this.on('postprocess-progress', function (file, progress) {
-      if (!_this6.getFile(file.id)) {
-        _this6.log("Not setting progress for a file that has been removed: " + file.id);
+      if (!_this8.getFile(file.id)) {
+        _this8.log("Not setting progress for a file that has been removed: " + file.id);
 
         return;
       }
 
-      _this6.setFileState(file.id, {
-        progress: _extends({}, _this6.getState().files[file.id].progress, {
+      _this8.setFileState(file.id, {
+        progress: _extends({}, _this8.getState().files[file.id].progress, {
           postprocess: progress
         })
       });
     });
     this.on('postprocess-complete', function (file) {
-      if (!_this6.getFile(file.id)) {
-        _this6.log("Not setting progress for a file that has been removed: " + file.id);
+      if (!_this8.getFile(file.id)) {
+        _this8.log("Not setting progress for a file that has been removed: " + file.id);
 
         return;
       }
 
-      var files = _extends({}, _this6.getState().files);
+      var files = _extends({}, _this8.getState().files);
 
       files[file.id] = _extends({}, files[file.id], {
         progress: _extends({}, files[file.id].progress)
@@ -20031,24 +19681,24 @@ var Uppy = /*#__PURE__*/function () {
       // so it's easier to see that the file is upload…fully complete…rather than
       // what we have to do now (`uploadComplete && !postprocess`)
 
-      _this6.setState({
+      _this8.setState({
         files: files
       });
     });
     this.on('restored', function () {
       // Files may have changed--ensure progress is still accurate.
-      _this6._calculateTotalProgress();
+      _this8.calculateTotalProgress();
     }); // show informer if offline
 
     if (typeof window !== 'undefined' && window.addEventListener) {
       window.addEventListener('online', function () {
-        return _this6.updateOnlineStatus();
+        return _this8.updateOnlineStatus();
       });
       window.addEventListener('offline', function () {
-        return _this6.updateOnlineStatus();
+        return _this8.updateOnlineStatus();
       });
       setTimeout(function () {
-        return _this6.updateOnlineStatus();
+        return _this8.updateOnlineStatus();
       }, 3000);
     }
   };
@@ -20081,6 +19731,7 @@ var Uppy = /*#__PURE__*/function () {
    * @param {object} [opts] object with options to be passed to Plugin
    * @returns {object} self for chaining
    */
+  // eslint-disable-next-line no-shadow
   ;
 
   _proto.use = function use(Plugin, opts) {
@@ -20144,10 +19795,10 @@ var Uppy = /*#__PURE__*/function () {
   ;
 
   _proto.iteratePlugins = function iteratePlugins(method) {
-    var _this7 = this;
+    var _this9 = this;
 
     Object.keys(this.plugins).forEach(function (pluginType) {
-      _this7.plugins[pluginType].forEach(method);
+      _this9.plugins[pluginType].forEach(method);
     });
   }
   /**
@@ -20158,6 +19809,8 @@ var Uppy = /*#__PURE__*/function () {
   ;
 
   _proto.removePlugin = function removePlugin(instance) {
+    var _extends4;
+
     this.log("Removing plugin " + instance.id);
     this.emit('plugin-remove', instance);
 
@@ -20165,16 +19818,23 @@ var Uppy = /*#__PURE__*/function () {
       instance.uninstall();
     }
 
-    var list = this.plugins[instance.type].slice();
-    var index = list.indexOf(instance);
+    var list = this.plugins[instance.type].slice(); // list.indexOf failed here, because Vue3 converted the plugin instance
+    // to a Proxy object, which failed the strict comparison test:
+    // obj !== objProxy
+
+    var index = findIndex(list, function (item) {
+      return item.id === instance.id;
+    });
 
     if (index !== -1) {
       list.splice(index, 1);
       this.plugins[instance.type] = list;
     }
 
-    var updatedState = this.getState();
-    delete updatedState.plugins[instance.id];
+    var state = this.getState();
+    var updatedState = {
+      plugins: _extends({}, state.plugins, (_extends4 = {}, _extends4[instance.id] = undefined, _extends4))
+    };
     this.setState(updatedState);
   }
   /**
@@ -20183,15 +19843,13 @@ var Uppy = /*#__PURE__*/function () {
   ;
 
   _proto.close = function close() {
-    var _this8 = this;
+    var _this10 = this;
 
     this.log("Closing Uppy instance " + this.opts.id + ": removing all files and uninstalling plugins");
     this.reset();
-
-    this._storeUnsubscribe();
-
+    this.storeUnsubscribe();
     this.iteratePlugins(function (plugin) {
-      _this8.removePlugin(plugin);
+      _this10.removePlugin(plugin);
     });
   }
   /**
@@ -20288,12 +19946,11 @@ var Uppy = /*#__PURE__*/function () {
     this.log("Core: attempting to restore upload \"" + uploadID + "\"");
 
     if (!this.getState().currentUploads[uploadID]) {
-      this._removeUpload(uploadID);
-
+      this.removeUpload(uploadID);
       return Promise.reject(new Error('Nonexistent upload'));
     }
 
-    return this._runUpload(uploadID);
+    return this.runUpload(uploadID);
   }
   /**
    * Create an upload for a bunch of files.
@@ -20303,13 +19960,14 @@ var Uppy = /*#__PURE__*/function () {
    */
   ;
 
-  _proto._createUpload = function _createUpload(fileIDs, opts) {
-    var _extends4;
+  _proto.createUpload = function createUpload(fileIDs, opts) {
+    var _extends5;
 
     if (opts === void 0) {
       opts = {};
     }
 
+    // uppy.retryAll sets this to true — when retrying we want to ignore `allowNewUpload: false`
     var _opts = opts,
         _opts$forceAllowNewUp = _opts.forceAllowNewUpload,
         forceAllowNewUpload = _opts$forceAllowNewUp === void 0 ? false : _opts$forceAllowNewUp;
@@ -20329,16 +19987,16 @@ var Uppy = /*#__PURE__*/function () {
     });
     this.setState({
       allowNewUpload: this.opts.allowMultipleUploads !== false,
-      currentUploads: _extends({}, currentUploads, (_extends4 = {}, _extends4[uploadID] = {
+      currentUploads: _extends({}, currentUploads, (_extends5 = {}, _extends5[uploadID] = {
         fileIDs: fileIDs,
         step: 0,
         result: {}
-      }, _extends4))
+      }, _extends5))
     });
     return uploadID;
   };
 
-  _proto._getUpload = function _getUpload(uploadID) {
+  _proto.getUpload = function getUpload(uploadID) {
     var _this$getState7 = this.getState(),
         currentUploads = _this$getState7.currentUploads;
 
@@ -20353,21 +20011,22 @@ var Uppy = /*#__PURE__*/function () {
   ;
 
   _proto.addResultData = function addResultData(uploadID, data) {
-    var _extends5;
+    var _extends6;
 
-    if (!this._getUpload(uploadID)) {
+    if (!this.getUpload(uploadID)) {
       this.log("Not setting result for an upload that has been removed: " + uploadID);
       return;
     }
 
-    var currentUploads = this.getState().currentUploads;
+    var _this$getState8 = this.getState(),
+        currentUploads = _this$getState8.currentUploads;
 
     var currentUpload = _extends({}, currentUploads[uploadID], {
       result: _extends({}, currentUploads[uploadID].result, data)
     });
 
     this.setState({
-      currentUploads: _extends({}, currentUploads, (_extends5 = {}, _extends5[uploadID] = currentUpload, _extends5))
+      currentUploads: _extends({}, currentUploads, (_extends6 = {}, _extends6[uploadID] = currentUpload, _extends6))
     });
   }
   /**
@@ -20377,7 +20036,7 @@ var Uppy = /*#__PURE__*/function () {
    */
   ;
 
-  _proto._removeUpload = function _removeUpload(uploadID) {
+  _proto.removeUpload = function removeUpload(uploadID) {
     var currentUploads = _extends({}, this.getState().currentUploads);
 
     delete currentUploads[uploadID];
@@ -20392,8 +20051,8 @@ var Uppy = /*#__PURE__*/function () {
    */
   ;
 
-  _proto._runUpload = function _runUpload(uploadID) {
-    var _this9 = this;
+  _proto.runUpload = function runUpload(uploadID) {
+    var _this11 = this;
 
     var uploadData = this.getState().currentUploads[uploadID];
     var restoreStep = uploadData.step;
@@ -20406,10 +20065,10 @@ var Uppy = /*#__PURE__*/function () {
       }
 
       lastStep = lastStep.then(function () {
-        var _extends6;
+        var _extends7;
 
-        var _this9$getState = _this9.getState(),
-            currentUploads = _this9$getState.currentUploads;
+        var _this11$getState = _this11.getState(),
+            currentUploads = _this11$getState.currentUploads;
 
         var currentUpload = currentUploads[uploadID];
 
@@ -20421,28 +20080,29 @@ var Uppy = /*#__PURE__*/function () {
           step: step
         });
 
-        _this9.setState({
-          currentUploads: _extends({}, currentUploads, (_extends6 = {}, _extends6[uploadID] = updatedUpload, _extends6))
+        _this11.setState({
+          currentUploads: _extends({}, currentUploads, (_extends7 = {}, _extends7[uploadID] = updatedUpload, _extends7))
         }); // TODO give this the `updatedUpload` object as its only parameter maybe?
         // Otherwise when more metadata may be added to the upload this would keep getting more parameters
+        // eslint-disable-next-line consistent-return
 
 
         return fn(updatedUpload.fileIDs, uploadID);
-      }).then(function (result) {
+      }).then(function () {
         return null;
       });
     }); // Not returning the `catch`ed promise, because we still want to return a rejected
     // promise from this method if the upload failed.
 
     lastStep.catch(function (err) {
-      _this9.emit('error', err, uploadID);
+      _this11.emit('error', err);
 
-      _this9._removeUpload(uploadID);
+      _this11.removeUpload(uploadID);
     });
     return lastStep.then(function () {
       // Set result data.
-      var _this9$getState2 = _this9.getState(),
-          currentUploads = _this9$getState2.currentUploads;
+      var _this11$getState2 = _this11.getState(),
+          currentUploads = _this11$getState2.currentUploads;
 
       var currentUpload = currentUploads[uploadID];
 
@@ -20461,14 +20121,14 @@ var Uppy = /*#__PURE__*/function () {
 
 
       currentUpload.fileIDs.forEach(function (fileID) {
-        var file = _this9.getFile(fileID);
+        var file = _this11.getFile(fileID);
 
         if (file && file.progress.postprocess) {
-          _this9.emit('postprocess-complete', file);
+          _this11.emit('postprocess-complete', file);
         }
       });
       var files = currentUpload.fileIDs.map(function (fileID) {
-        return _this9.getFile(fileID);
+        return _this11.getFile(fileID);
       });
       var successful = files.filter(function (file) {
         return !file.error;
@@ -20477,7 +20137,7 @@ var Uppy = /*#__PURE__*/function () {
         return file.error;
       });
 
-      _this9.addResultData(uploadID, {
+      _this11.addResultData(uploadID, {
         successful: successful,
         failed: failed,
         uploadID: uploadID
@@ -20487,8 +20147,8 @@ var Uppy = /*#__PURE__*/function () {
       // This is in a separate function so that the `currentUploads` variable
       // always refers to the latest state. In the handler right above it refers
       // to an outdated object without the `.result` property.
-      var _this9$getState3 = _this9.getState(),
-          currentUploads = _this9$getState3.currentUploads;
+      var _this11$getState3 = _this11.getState(),
+          currentUploads = _this11$getState3.currentUploads;
 
       if (!currentUploads[uploadID]) {
         return;
@@ -20497,14 +20157,15 @@ var Uppy = /*#__PURE__*/function () {
       var currentUpload = currentUploads[uploadID];
       var result = currentUpload.result;
 
-      _this9.emit('complete', result);
+      _this11.emit('complete', result);
 
-      _this9._removeUpload(uploadID);
+      _this11.removeUpload(uploadID); // eslint-disable-next-line consistent-return
+
 
       return result;
     }).then(function (result) {
       if (result == null) {
-        _this9.log("Not setting result for an upload that has been removed: " + uploadID);
+        _this11.log("Not setting result for an upload that has been removed: " + uploadID);
       }
 
       return result;
@@ -20518,13 +20179,15 @@ var Uppy = /*#__PURE__*/function () {
   ;
 
   _proto.upload = function upload() {
-    var _this10 = this;
+    var _this12 = this;
 
     if (!this.plugins.uploader) {
       this.log('No uploader type plugins are used', 'warning');
     }
 
-    var files = this.getState().files;
+    var _this$getState9 = this.getState(),
+        files = _this$getState9.files;
+
     var onBeforeUploadResult = this.opts.onBeforeUpload(files);
 
     if (onBeforeUploadResult === false) {
@@ -20541,12 +20204,14 @@ var Uppy = /*#__PURE__*/function () {
     }
 
     return Promise.resolve().then(function () {
-      return _this10._checkMinNumberOfFiles(files);
+      _this12.checkMinNumberOfFiles(files);
+
+      _this12.checkRequiredMetaFields(files);
     }).catch(function (err) {
-      _this10._showOrLogErrorAndThrow(err);
+      _this12.showOrLogErrorAndThrow(err);
     }).then(function () {
-      var _this10$getState = _this10.getState(),
-          currentUploads = _this10$getState.currentUploads; // get a list of files that are currently assigned to uploads
+      var _this12$getState = _this12.getState(),
+          currentUploads = _this12$getState.currentUploads; // get a list of files that are currently assigned to uploads
 
 
       var currentlyUploadingFiles = Object.keys(currentUploads).reduce(function (prev, curr) {
@@ -20554,7 +20219,7 @@ var Uppy = /*#__PURE__*/function () {
       }, []);
       var waitingFileIDs = [];
       Object.keys(files).forEach(function (fileID) {
-        var file = _this10.getFile(fileID); // if the file hasn't started uploading and hasn't already been assigned to an upload..
+        var file = _this12.getFile(fileID); // if the file hasn't started uploading and hasn't already been assigned to an upload..
 
 
         if (!file.progress.uploadStarted && currentlyUploadingFiles.indexOf(fileID) === -1) {
@@ -20562,11 +20227,11 @@ var Uppy = /*#__PURE__*/function () {
         }
       });
 
-      var uploadID = _this10._createUpload(waitingFileIDs);
+      var uploadID = _this12.createUpload(waitingFileIDs);
 
-      return _this10._runUpload(uploadID);
+      return _this12.runUpload(uploadID);
     }).catch(function (err) {
-      _this10._showOrLogErrorAndThrow(err, {
+      _this12.showOrLogErrorAndThrow(err, {
         showInformer: false
       });
     });
@@ -20575,6 +20240,7 @@ var Uppy = /*#__PURE__*/function () {
   _createClass(Uppy, [{
     key: "state",
     get: function get() {
+      // Here, state is a non-enumerable property.
       return this.getState();
     }
   }]);
@@ -20582,9 +20248,9 @@ var Uppy = /*#__PURE__*/function () {
   return Uppy;
 }();
 
-Uppy.VERSION = "1.16.1";
+Uppy.VERSION = "1.20.1";
 
-module.exports = function (opts) {
+module.exports = function core(opts) {
   return new Uppy(opts);
 }; // Expose class constructor.
 
@@ -20592,7 +20258,7 @@ module.exports = function (opts) {
 module.exports.Uppy = Uppy;
 module.exports.Plugin = Plugin;
 module.exports.debugLogger = debugLogger;
-},{"./Plugin":83,"./loggers":85,"./supportsUploadProgress":86,"@transloadit/prettier-bytes":1,"@uppy/store-default":160,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/generateFileID":212,"@uppy/utils/lib/getFileNameAndExtension":219,"@uppy/utils/lib/getFileType":220,"cuid":16,"lodash.throttle":31,"mime-match":34,"namespace-emitter":35}],85:[function(require,module,exports){
+},{"./Plugin":77,"./loggers":79,"./supportsUploadProgress":80,"@transloadit/prettier-bytes":1,"@uppy/store-default":170,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/findIndex":226,"@uppy/utils/lib/generateFileID":227,"@uppy/utils/lib/getFileNameAndExtension":234,"@uppy/utils/lib/getFileType":235,"cuid":15,"lodash.throttle":34,"mime-match":37,"namespace-emitter":38}],79:[function(require,module,exports){
 var getTimeStamp = require('@uppy/utils/lib/getTimeStamp'); // Swallow all logs, except errors.
 // default if logger is not set or debug: false
 
@@ -20646,7 +20312,7 @@ module.exports = {
   justErrorsLogger: justErrorsLogger,
   debugLogger: debugLogger
 };
-},{"@uppy/utils/lib/getTimeStamp":225}],86:[function(require,module,exports){
+},{"@uppy/utils/lib/getTimeStamp":240}],80:[function(require,module,exports){
 // Edge 15.x does not fire 'progress' events on uploads.
 // See https://github.com/transloadit/uppy/issues/945
 // And https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/12224510/
@@ -20684,8 +20350,12 @@ module.exports = function supportsUploadProgress(userAgent) {
 
   return false;
 };
-},{}],87:[function(require,module,exports){
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+},{}],81:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],82:[function(require,module,exports){
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h,
@@ -20725,15 +20395,15 @@ var AddFiles = /*#__PURE__*/function (_Component) {
 
     _this.renderHiddenInput = function (isFolder, refCallback) {
       return h("input", {
-        class: "uppy-Dashboard-input",
+        className: "uppy-Dashboard-input",
         hidden: true,
         "aria-hidden": "true",
-        tabindex: -1,
+        tabIndex: -1,
         webkitdirectory: isFolder,
         type: "file",
         name: "files[]",
         multiple: _this.props.maxNumberOfFiles !== 1,
-        onchange: _this.onFileInputChange,
+        onChange: _this.onFileInputChange,
         accept: _this.props.allowedFileTypes,
         ref: refCallback
       });
@@ -20741,16 +20411,16 @@ var AddFiles = /*#__PURE__*/function (_Component) {
 
     _this.renderMyDeviceAcquirer = function () {
       return h("div", {
-        class: "uppy-DashboardTab",
+        className: "uppy-DashboardTab",
         role: "presentation",
         "data-uppy-acquirer-id": "MyDevice"
       }, h("button", {
         type: "button",
-        class: "uppy-DashboardTab-btn",
+        className: "uppy-u-reset uppy-c-btn uppy-DashboardTab-btn",
         role: "tab",
-        tabindex: 0,
+        tabIndex: 0,
         "data-uppy-super-focusable": true,
-        onclick: _this.triggerFileInputClick
+        onClick: _this.triggerFileInputClick
       }, h("svg", {
         "aria-hidden": "true",
         focusable: "false",
@@ -20759,8 +20429,9 @@ var AddFiles = /*#__PURE__*/function (_Component) {
         viewBox: "0 0 32 32"
       }, h("g", {
         fill: "none",
-        "fill-rule": "evenodd"
+        fillRule: "evenodd"
       }, h("rect", {
+        className: "uppy-ProviderIconBg",
         width: "32",
         height: "32",
         rx: "16",
@@ -20769,7 +20440,7 @@ var AddFiles = /*#__PURE__*/function (_Component) {
         d: "M21.973 21.152H9.863l-1.108-5.087h14.464l-1.246 5.087zM9.935 11.37h3.958l.886 1.444a.673.673 0 0 0 .585.316h6.506v1.37H9.935v-3.13zm14.898 3.44a.793.793 0 0 0-.616-.31h-.978v-2.126c0-.379-.275-.613-.653-.613H15.75l-.886-1.445a.673.673 0 0 0-.585-.316H9.232c-.378 0-.667.209-.667.587V14.5h-.782a.793.793 0 0 0-.61.303.795.795 0 0 0-.155.663l1.45 6.633c.078.36.396.618.764.618h13.354c.36 0 .674-.246.76-.595l1.631-6.636a.795.795 0 0 0-.144-.675z",
         fill: "#FFF"
       }))), h("div", {
-        class: "uppy-DashboardTab-name"
+        className: "uppy-DashboardTab-name"
       }, _this.props.i18n('myDevice'))));
     };
 
@@ -20777,8 +20448,8 @@ var AddFiles = /*#__PURE__*/function (_Component) {
       var numberOfAcquirers = _this.props.acquirers.length;
       return h("button", {
         type: "button",
-        class: "uppy-u-reset uppy-Dashboard-browse",
-        onclick: onClickFn,
+        className: "uppy-u-reset uppy-Dashboard-browse",
+        onClick: onClickFn,
         "data-uppy-super-focusable": numberOfAcquirers === 0
       }, text);
     };
@@ -20851,41 +20522,45 @@ var AddFiles = /*#__PURE__*/function (_Component) {
         }
       }
 
+      if (_this.props.disableLocalFiles) {
+        titleText = _this.props.i18n('importFiles');
+      }
+
       return h("div", {
-        class: "uppy-Dashboard-AddFiles-title"
+        className: "uppy-Dashboard-AddFiles-title"
       }, titleText);
     };
 
     _this.renderAcquirer = function (acquirer) {
       return h("div", {
-        class: "uppy-DashboardTab",
+        className: "uppy-DashboardTab",
         role: "presentation",
         "data-uppy-acquirer-id": acquirer.id
       }, h("button", {
         type: "button",
-        class: "uppy-DashboardTab-btn",
+        className: "uppy-u-reset uppy-c-btn uppy-DashboardTab-btn",
         role: "tab",
-        tabindex: 0,
+        tabIndex: 0,
         "aria-controls": "uppy-DashboardContent-panel--" + acquirer.id,
         "aria-selected": _this.props.activePickerPanel.id === acquirer.id,
         "data-uppy-super-focusable": true,
-        onclick: function onclick() {
+        onClick: function onClick() {
           return _this.props.showPanel(acquirer.id);
         }
       }, acquirer.icon(), h("div", {
-        class: "uppy-DashboardTab-name"
+        className: "uppy-DashboardTab-name"
       }, acquirer.name)));
     };
 
-    _this.renderAcquirers = function (acquirers) {
+    _this.renderAcquirers = function (acquirers, disableLocalFiles) {
       // Group last two buttons, so we don’t end up with
       // just one button on a new line
       var acquirersWithoutLastTwo = [].concat(acquirers);
       var lastTwoAcquirers = acquirersWithoutLastTwo.splice(acquirers.length - 2, acquirers.length);
       return h("div", {
-        class: "uppy-Dashboard-AddFiles-list",
+        className: "uppy-Dashboard-AddFiles-list",
         role: "tablist"
-      }, _this.renderMyDeviceAcquirer(), acquirersWithoutLastTwo.map(function (acquirer) {
+      }, !disableLocalFiles && _this.renderMyDeviceAcquirer(), acquirersWithoutLastTwo.map(function (acquirer) {
         return _this.renderAcquirer(acquirer);
       }), h("span", {
         role: "presentation",
@@ -20904,15 +20579,15 @@ var AddFiles = /*#__PURE__*/function (_Component) {
     var uppyBranding = h("span", null, h("svg", {
       "aria-hidden": "true",
       focusable: "false",
-      class: "uppy-c-icon uppy-Dashboard-poweredByIcon",
+      className: "uppy-c-icon uppy-Dashboard-poweredByIcon",
       width: "11",
       height: "11",
       viewBox: "0 0 11 11"
     }, h("path", {
       d: "M7.365 10.5l-.01-4.045h2.612L5.5.806l-4.467 5.65h2.604l.01 4.044h3.718z",
-      "fill-rule": "evenodd"
+      fillRule: "evenodd"
     })), h("span", {
-      class: "uppy-Dashboard-poweredByUppy"
+      className: "uppy-Dashboard-poweredByUppy"
     }, "Uppy")); // Support both the old word-order-insensitive string `poweredBy` and the new word-order-sensitive string `poweredBy2`
 
     var linkText = this.props.i18nArray('poweredBy2', {
@@ -20920,11 +20595,11 @@ var AddFiles = /*#__PURE__*/function (_Component) {
       uppy: uppyBranding
     });
     return h("a", {
-      tabindex: "-1",
+      tabIndex: "-1",
       href: "https://uppy.io",
       rel: "noreferrer noopener",
       target: "_blank",
-      class: "uppy-Dashboard-poweredBy"
+      className: "uppy-Dashboard-poweredBy"
     }, linkText);
   };
 
@@ -20932,15 +20607,15 @@ var AddFiles = /*#__PURE__*/function (_Component) {
     var _this2 = this;
 
     return h("div", {
-      class: "uppy-Dashboard-AddFiles"
+      className: "uppy-Dashboard-AddFiles"
     }, this.renderHiddenInput(false, function (ref) {
       _this2.fileInput = ref;
     }), this.renderHiddenInput(true, function (ref) {
       _this2.folderInput = ref;
-    }), this.renderDropPasteBrowseTagline(), this.props.acquirers.length > 0 && this.renderAcquirers(this.props.acquirers), h("div", {
-      class: "uppy-Dashboard-AddFiles-info"
+    }), this.renderDropPasteBrowseTagline(), this.props.acquirers.length > 0 && this.renderAcquirers(this.props.acquirers, this.props.disableLocalFiles), h("div", {
+      className: "uppy-Dashboard-AddFiles-info"
     }, this.props.note && h("div", {
-      class: "uppy-Dashboard-note"
+      className: "uppy-Dashboard-note"
     }, this.props.note), this.props.proudlyDisplayPoweredByUppy && this.renderPoweredByUppy(this.props)));
   };
 
@@ -20948,7 +20623,7 @@ var AddFiles = /*#__PURE__*/function (_Component) {
 }(Component);
 
 module.exports = AddFiles;
-},{"preact":38}],88:[function(require,module,exports){
+},{"preact":105}],83:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -20958,27 +20633,32 @@ var AddFiles = require('./AddFiles');
 
 var AddFilesPanel = function AddFilesPanel(props) {
   return h("div", {
-    class: classNames('uppy-Dashboard-AddFilesPanel', props.className),
+    className: classNames('uppy-Dashboard-AddFilesPanel', props.className),
     "data-uppy-panelType": "AddFiles",
     "aria-hidden": props.showAddFilesPanel
   }, h("div", {
-    class: "uppy-DashboardContent-bar"
+    className: "uppy-DashboardContent-bar"
   }, h("div", {
-    class: "uppy-DashboardContent-title",
+    className: "uppy-DashboardContent-title",
     role: "heading",
     "aria-level": "1"
   }, props.i18n('addingMoreFiles')), h("button", {
-    class: "uppy-DashboardContent-back",
+    className: "uppy-DashboardContent-back",
     type: "button",
-    onclick: function onclick(ev) {
+    onClick: function onClick(ev) {
       return props.toggleAddFilesPanel(false);
     }
   }, props.i18n('back'))), h(AddFiles, props));
 };
 
 module.exports = AddFilesPanel;
-},{"./AddFiles":87,"classnames":11,"preact":38}],89:[function(require,module,exports){
+},{"./AddFiles":82,"classnames":11,"preact":105}],84:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+var _require = require('preact'),
+    h = _require.h;
+
+var classNames = require('classnames');
 
 var FileList = require('./FileList');
 
@@ -20996,12 +20676,7 @@ var FileCard = require('./FileCard');
 
 var Slide = require('./Slide');
 
-var classNames = require('classnames');
-
-var isDragDropSupported = require('@uppy/utils/lib/isDragDropSupported');
-
-var _require = require('preact'),
-    h = _require.h; // http://dev.edenspiekermann.com/2016/02/11/introducing-accessible-modal-dialog
+var isDragDropSupported = require('@uppy/utils/lib/isDragDropSupported'); // http://dev.edenspiekermann.com/2016/02/11/introducing-accessible-modal-dialog
 // https://github.com/ghosh/micromodal
 
 
@@ -21018,6 +20693,7 @@ module.exports = function Dashboard(props) {
   });
   var dashboardClassName = classNames({
     'uppy-Dashboard': true,
+    'uppy-Dashboard--isDisabled': props.disabled,
     'uppy-Dashboard--animateOpenClose': props.animateOpenClose,
     'uppy-Dashboard--isClosing': props.isClosing,
     'uppy-Dashboard--isDraggingOver': props.isDraggingOver,
@@ -21041,23 +20717,39 @@ module.exports = function Dashboard(props) {
   }
 
   var showFileList = props.showSelectedFiles && !noFiles;
+  var numberOfFilesForRecovery = props.recoveredState ? Object.keys(props.recoveredState.files).length : null;
+  var numberOfGhosts = props.files ? Object.keys(props.files).filter(function (fileID) {
+    return props.files[fileID].isGhost;
+  }).length : null;
+
+  var renderRestoredText = function renderRestoredText() {
+    if (numberOfGhosts > 0) {
+      return props.i18n('recoveredXFiles', {
+        smart_count: numberOfGhosts
+      });
+    }
+
+    return props.i18n('recoveredAllFiles');
+  };
+
   var dashboard = h("div", {
-    class: dashboardClassName,
+    className: dashboardClassName,
     "data-uppy-theme": props.theme,
     "data-uppy-num-acquirers": props.acquirers.length,
-    "data-uppy-drag-drop-supported": isDragDropSupported(),
+    "data-uppy-drag-drop-supported": !props.disableLocalFiles && isDragDropSupported(),
     "aria-hidden": props.inline ? 'false' : props.isHidden,
+    "aria-disabled": props.disabled,
     "aria-label": !props.inline ? props.i18n('dashboardWindowTitle') : props.i18n('dashboardTitle'),
-    onpaste: props.handlePaste,
+    onPaste: props.handlePaste,
     onDragOver: props.handleDragOver,
     onDragLeave: props.handleDragLeave,
     onDrop: props.handleDrop
   }, h("div", {
-    class: "uppy-Dashboard-overlay",
-    tabindex: -1,
-    onclick: props.handleClickOutside
+    className: "uppy-Dashboard-overlay",
+    tabIndex: -1,
+    onClick: props.handleClickOutside
   }), h("div", {
-    class: "uppy-Dashboard-inner",
+    className: "uppy-Dashboard-inner",
     "aria-modal": !props.inline && 'true',
     role: !props.inline && 'dialog',
     style: {
@@ -21065,18 +20757,46 @@ module.exports = function Dashboard(props) {
       height: props.inline && props.height ? props.height : ''
     }
   }, !props.inline ? h("button", {
-    class: "uppy-u-reset uppy-Dashboard-close",
+    className: "uppy-u-reset uppy-Dashboard-close",
     type: "button",
     "aria-label": props.i18n('closeModal'),
     title: props.i18n('closeModal'),
-    onclick: props.closeModal
+    onClick: props.closeModal
   }, h("span", {
     "aria-hidden": "true"
   }, "\xD7")) : null, h("div", {
-    class: "uppy-Dashboard-innerWrap"
+    className: "uppy-Dashboard-innerWrap"
   }, h("div", {
-    class: "uppy-Dashboard-dropFilesHereHint"
-  }, props.i18n('dropHint')), showFileList && h(PanelTopBar, props), showFileList ? h(FileList, _extends({}, props, {
+    className: "uppy-Dashboard-dropFilesHereHint"
+  }, props.i18n('dropHint')), showFileList && h(PanelTopBar, props), numberOfFilesForRecovery && h("div", {
+    className: "uppy-Dashboard-serviceMsg"
+  }, h("svg", {
+    className: "uppy-Dashboard-serviceMsg-icon",
+    "aria-hidden": "true",
+    focusable: "false",
+    width: "21",
+    height: "16",
+    viewBox: "0 0 24 19"
+  }, h("g", {
+    transform: "translate(0 -1)",
+    fill: "none",
+    fillRule: "evenodd"
+  }, h("path", {
+    d: "M12.857 1.43l10.234 17.056A1 1 0 0122.234 20H1.766a1 1 0 01-.857-1.514L11.143 1.429a1 1 0 011.714 0z",
+    fill: "#FFD300"
+  }), h("path", {
+    fill: "#000",
+    d: "M11 6h2l-.3 8h-1.4z"
+  }), h("circle", {
+    fill: "#000",
+    cx: "12",
+    cy: "17",
+    r: "1"
+  }))), h("strong", {
+    className: "uppy-Dashboard-serviceMsg-title"
+  }, props.i18n('sessionRestored')), h("div", {
+    class: "uppy-Dashboard-serviceMsg-text"
+  }, renderRestoredText())), showFileList ? h(FileList, _extends({}, props, {
     itemsPerRow: itemsPerRow
   })) : h(AddFiles, _extends({}, props, {
     isSizeMD: isSizeMD
@@ -21091,18 +20811,18 @@ module.exports = function Dashboard(props) {
   }, props)) : null), h(Slide, null, props.showFileEditor ? h(EditorPanel, _extends({
     key: "Editor"
   }, props)) : null), h("div", {
-    class: "uppy-Dashboard-progressindicators"
+    className: "uppy-Dashboard-progressindicators"
   }, props.progressindicators.map(function (target) {
     return props.getPlugin(target.id).render(props.state);
   })))));
   return (// Wrap it for RTL language support
     h("div", {
-      class: wrapperClassName,
+      className: wrapperClassName,
       dir: props.direction
     }, dashboard)
   );
 };
-},{"./AddFiles":87,"./AddFilesPanel":88,"./EditorPanel":90,"./FileCard":91,"./FileList":97,"./PickerPanelContent":99,"./PickerPanelTopBar":100,"./Slide":101,"@uppy/utils/lib/isDragDropSupported":228,"classnames":11,"preact":38}],90:[function(require,module,exports){
+},{"./AddFiles":82,"./AddFilesPanel":83,"./EditorPanel":85,"./FileCard":86,"./FileList":92,"./PickerPanelContent":94,"./PickerPanelTopBar":95,"./Slide":96,"@uppy/utils/lib/isDragDropSupported":243,"classnames":11,"preact":105}],85:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -21111,36 +20831,42 @@ var classNames = require('classnames');
 function EditorPanel(props) {
   var file = this.props.files[this.props.fileCardFor];
   return h("div", {
-    class: classNames('uppy-DashboardContent-panel', props.className),
+    className: classNames('uppy-DashboardContent-panel', props.className),
     role: "tabpanel",
     "data-uppy-panelType": "FileEditor",
     id: "uppy-DashboardContent-panel--editor"
   }, h("div", {
-    class: "uppy-DashboardContent-bar"
+    className: "uppy-DashboardContent-bar"
   }, h("div", {
-    class: "uppy-DashboardContent-title",
+    className: "uppy-DashboardContent-title",
     role: "heading",
     "aria-level": "1"
   }, props.i18nArray('editing', {
     file: h("span", {
-      class: "uppy-DashboardContent-titleFile"
+      className: "uppy-DashboardContent-titleFile"
     }, file.meta ? file.meta.name : file.name)
   })), h("button", {
-    class: "uppy-DashboardContent-back",
+    className: "uppy-DashboardContent-back",
     type: "button",
-    onclick: props.hideAllPanels
-  }, props.i18n('done'))), h("div", {
-    class: "uppy-DashboardContent-panelBody"
+    onClick: props.hideAllPanels
+  }, props.i18n('cancel')), h("button", {
+    className: "uppy-DashboardContent-save",
+    type: "button",
+    onClick: props.saveFileEditor
+  }, props.i18n('save'))), h("div", {
+    className: "uppy-DashboardContent-panelBody"
   }, props.editors.map(function (target) {
     return props.getPlugin(target.id).render(props.state);
   })));
 }
 
 module.exports = EditorPanel;
-},{"classnames":11,"preact":38}],91:[function(require,module,exports){
+},{"classnames":11,"preact":105}],86:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h,
@@ -21162,6 +20888,25 @@ var FileCard = /*#__PURE__*/function (_Component) {
 
     _this = _Component.call(this, props) || this;
 
+    _this.updateMeta = function (newVal, name) {
+      var _extends2;
+
+      _this.setState({
+        formState: _extends({}, _this.state.formState, (_extends2 = {}, _extends2[name] = newVal, _extends2))
+      });
+    };
+
+    _this.handleSave = function (e) {
+      e.preventDefault();
+      var fileID = _this.props.fileCardFor;
+
+      _this.props.saveFileCard(_this.state.formState, fileID);
+    };
+
+    _this.handleCancel = function () {
+      _this.props.toggleFileCard(false);
+    };
+
     _this.saveOnEnter = function (ev) {
       if (ev.keyCode === 13) {
         ev.stopPropagation();
@@ -21172,53 +20917,40 @@ var FileCard = /*#__PURE__*/function (_Component) {
       }
     };
 
-    _this.updateMeta = function (newVal, name) {
-      var _extends2;
-
-      _this.setState({
-        formState: _extends({}, _this.state.formState, (_extends2 = {}, _extends2[name] = newVal, _extends2))
-      });
-    };
-
-    _this.handleSave = function () {
-      var fileID = _this.props.fileCardFor;
-
-      _this.props.saveFileCard(_this.state.formState, fileID);
-    };
-
-    _this.handleCancel = function () {
-      _this.props.toggleFileCard(false);
-    };
-
     _this.renderMetaFields = function () {
-      var metaFields = _this.props.metaFields || [];
+      var metaFields = _this.getMetaFields() || [];
       var fieldCSSClasses = {
         text: 'uppy-u-reset uppy-c-textInput uppy-Dashboard-FileCard-input'
       };
       return metaFields.map(function (field) {
         var id = "uppy-Dashboard-FileCard-input-" + field.id;
+
+        var required = _this.props.requiredMetaFields.includes(field.id);
+
         return h("fieldset", {
           key: field.id,
-          class: "uppy-Dashboard-FileCard-fieldset"
+          className: "uppy-Dashboard-FileCard-fieldset"
         }, h("label", {
-          class: "uppy-Dashboard-FileCard-label",
-          for: id
+          className: "uppy-Dashboard-FileCard-label",
+          htmlFor: id
         }, field.name), field.render !== undefined ? field.render({
           value: _this.state.formState[field.id],
           onChange: function onChange(newVal) {
             return _this.updateMeta(newVal, field.id);
           },
-          fieldCSSClasses: fieldCSSClasses
+          fieldCSSClasses: fieldCSSClasses,
+          required: required
         }, h) : h("input", {
-          class: fieldCSSClasses.text,
+          className: fieldCSSClasses.text,
           id: id,
           type: field.type || 'text',
+          required: required,
           value: _this.state.formState[field.id],
           placeholder: field.placeholder,
-          onkeyup: _this.saveOnEnter,
-          onkeydown: _this.saveOnEnter,
-          onkeypress: _this.saveOnEnter,
-          oninput: function oninput(ev) {
+          onKeyUp: _this.saveOnEnter,
+          onKeyDown: _this.saveOnEnter,
+          onKeyPress: _this.saveOnEnter,
+          onInput: function onInput(ev) {
             return _this.updateMeta(ev.target.value, field.id);
           },
           "data-uppy-super-focusable": true
@@ -21228,7 +20960,7 @@ var FileCard = /*#__PURE__*/function (_Component) {
 
     var _file = _this.props.files[_this.props.fileCardFor];
 
-    var _metaFields = _this.props.metaFields || [];
+    var _metaFields = _this.getMetaFields() || [];
 
     var storedMetaData = {};
 
@@ -21244,37 +20976,41 @@ var FileCard = /*#__PURE__*/function (_Component) {
 
   var _proto = FileCard.prototype;
 
+  _proto.getMetaFields = function getMetaFields() {
+    return typeof this.props.metaFields === 'function' ? this.props.metaFields(this.props.files[this.props.fileCardFor]) : this.props.metaFields;
+  };
+
   _proto.render = function render() {
     var _this2 = this;
 
     var file = this.props.files[this.props.fileCardFor];
     var showEditButton = this.props.canEditFile(file);
     return h("div", {
-      class: classNames('uppy-Dashboard-FileCard', this.props.className),
+      className: classNames('uppy-Dashboard-FileCard', this.props.className),
       "data-uppy-panelType": "FileCard",
       onDragOver: ignoreEvent,
       onDragLeave: ignoreEvent,
       onDrop: ignoreEvent,
       onPaste: ignoreEvent
     }, h("div", {
-      class: "uppy-DashboardContent-bar"
+      className: "uppy-DashboardContent-bar"
     }, h("div", {
-      class: "uppy-DashboardContent-title",
+      className: "uppy-DashboardContent-title",
       role: "heading",
       "aria-level": "1"
     }, this.props.i18nArray('editing', {
       file: h("span", {
-        class: "uppy-DashboardContent-titleFile"
+        className: "uppy-DashboardContent-titleFile"
       }, file.meta ? file.meta.name : file.name)
     })), h("button", {
-      class: "uppy-DashboardContent-back",
+      className: "uppy-DashboardContent-back",
       type: "button",
       title: this.props.i18n('finishEditingFile'),
-      onclick: this.handleSave
-    }, this.props.i18n('done'))), h("div", {
-      class: "uppy-Dashboard-FileCard-inner"
+      onClick: this.handleCancel
+    }, this.props.i18n('cancel'))), h("div", {
+      className: "uppy-Dashboard-FileCard-inner"
     }, h("div", {
-      class: "uppy-Dashboard-FileCard-preview",
+      className: "uppy-Dashboard-FileCard-preview",
       style: {
         backgroundColor: getFileTypeIcon(file.type).color
       }
@@ -21282,22 +21018,24 @@ var FileCard = /*#__PURE__*/function (_Component) {
       file: file
     }), showEditButton && h("button", {
       type: "button",
-      class: "uppy-u-reset uppy-c-btn uppy-Dashboard-FileCard-edit",
+      className: "uppy-u-reset uppy-c-btn uppy-Dashboard-FileCard-edit",
       onClick: function onClick() {
         return _this2.props.openFileEditor(file);
       }
     }, this.props.i18n('editFile'))), h("div", {
-      class: "uppy-Dashboard-FileCard-info"
+      className: "uppy-Dashboard-FileCard-info"
     }, this.renderMetaFields()), h("div", {
-      class: "uppy-Dashboard-FileCard-actions"
+      className: "uppy-Dashboard-FileCard-actions"
     }, h("button", {
-      class: "uppy-u-reset uppy-c-btn uppy-c-btn-primary uppy-Dashboard-FileCard-actionsBtn",
+      className: "uppy-u-reset uppy-c-btn uppy-c-btn-primary uppy-Dashboard-FileCard-actionsBtn" // If `form` attribute is not in Preact 8, we can’t trigger the form validation.
+      // We use a classic button with a onClick event handler.
+      ,
       type: "button",
-      onclick: this.handleSave
+      onClick: this.handleSave
     }, this.props.i18n('saveChanges')), h("button", {
-      class: "uppy-u-reset uppy-c-btn uppy-c-btn-link uppy-Dashboard-FileCard-actionsBtn",
+      className: "uppy-u-reset uppy-c-btn uppy-c-btn-link uppy-Dashboard-FileCard-actionsBtn",
       type: "button",
-      onclick: this.handleCancel
+      onClick: this.handleCancel
     }, this.props.i18n('cancel')))));
   };
 
@@ -21305,7 +21043,7 @@ var FileCard = /*#__PURE__*/function (_Component) {
 }(Component);
 
 module.exports = FileCard;
-},{"../../utils/getFileTypeIcon":107,"../../utils/ignoreEvent.js":108,"../FilePreview":98,"classnames":11,"preact":38}],92:[function(require,module,exports){
+},{"../../utils/getFileTypeIcon":102,"../../utils/ignoreEvent.js":103,"../FilePreview":93,"classnames":11,"preact":105}],87:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -21317,29 +21055,29 @@ function EditButton(_ref) {
       metaFields = _ref.metaFields,
       canEditFile = _ref.canEditFile,
       i18n = _ref.i18n,
-      onClick = _ref.onClick;
+      _onClick = _ref.onClick;
 
   if (!uploadInProgressOrComplete && metaFields && metaFields.length > 0 || !uploadInProgressOrComplete && canEditFile(file)) {
     return h("button", {
-      class: "uppy-u-reset uppy-Dashboard-Item-action uppy-Dashboard-Item-action--edit",
+      className: "uppy-u-reset uppy-Dashboard-Item-action uppy-Dashboard-Item-action--edit",
       type: "button",
-      "aria-label": i18n('editFile') + ' ' + file.meta.name,
+      "aria-label": i18n('editFile') + " " + file.meta.name,
       title: i18n('editFile'),
-      onclick: function onclick() {
-        return onClick();
+      onClick: function onClick() {
+        return _onClick();
       }
     }, h("svg", {
       "aria-hidden": "true",
       focusable: "false",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       width: "14",
       height: "14",
       viewBox: "0 0 14 14"
     }, h("g", {
-      "fill-rule": "evenodd"
+      fillRule: "evenodd"
     }, h("path", {
       d: "M1.5 10.793h2.793A1 1 0 0 0 5 10.5L11.5 4a1 1 0 0 0 0-1.414L9.707.793a1 1 0 0 0-1.414 0l-6.5 6.5A1 1 0 0 0 1.5 8v2.793zm1-1V8L9 1.5l1.793 1.793-6.5 6.5H2.5z",
-      "fill-rule": "nonzero"
+      fillRule: "nonzero"
     }), h("rect", {
       x: "1",
       y: "12.293",
@@ -21347,7 +21085,7 @@ function EditButton(_ref) {
       height: "1",
       rx: ".5"
     }), h("path", {
-      "fill-rule": "nonzero",
+      fillRule: "nonzero",
       d: "M6.793 2.5L9.5 5.207l.707-.707L7.5 1.793z"
     }))));
   }
@@ -21357,19 +21095,19 @@ function EditButton(_ref) {
 
 function RemoveButton(_ref2) {
   var i18n = _ref2.i18n,
-      onClick = _ref2.onClick;
+      _onClick2 = _ref2.onClick;
   return h("button", {
-    class: "uppy-u-reset uppy-Dashboard-Item-action uppy-Dashboard-Item-action--remove",
+    className: "uppy-u-reset uppy-Dashboard-Item-action uppy-Dashboard-Item-action--remove",
     type: "button",
     "aria-label": i18n('removeFile'),
     title: i18n('removeFile'),
-    onclick: function onclick() {
-      return onClick();
+    onClick: function onClick() {
+      return _onClick2();
     }
   }, h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "18",
     height: "18",
     viewBox: "0 0 18 18"
@@ -21395,17 +21133,17 @@ var copyLinkToClipboard = function copyLinkToClipboard(event, props) {
 
 function CopyLinkButton(props) {
   return h("button", {
-    class: "uppy-u-reset uppy-Dashboard-Item-action uppy-Dashboard-Item-action--copyLink",
+    className: "uppy-u-reset uppy-Dashboard-Item-action uppy-Dashboard-Item-action--copyLink",
     type: "button",
     "aria-label": props.i18n('copyLink'),
     title: props.i18n('copyLink'),
-    onclick: function onclick(event) {
+    onClick: function onClick(event) {
       return copyLinkToClipboard(event, props);
     }
   }, h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "14",
     height: "14",
     viewBox: "0 0 14 12"
@@ -21459,7 +21197,7 @@ module.exports = function Buttons(props) {
     }
   }) : null);
 };
-},{"../../../utils/copyToClipboard":104,"preact":38}],93:[function(require,module,exports){
+},{"../../../utils/copyToClipboard":99,"preact":105}],88:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -21475,16 +21213,6 @@ var renderAcquirerIcon = function renderAcquirerIcon(acquirer, props) {
   }, acquirer.icon());
 };
 
-var renderFileSource = function renderFileSource(props) {
-  return props.file.source && props.file.source !== props.id && h("div", {
-    class: "uppy-Dashboard-Item-sourceIcon"
-  }, props.acquirers.map(function (acquirer) {
-    if (acquirer.id === props.file.source) {
-      return renderAcquirerIcon(acquirer, props);
-    }
-  }));
-};
-
 var renderFileName = function renderFileName(props) {
   // Take up at most 2 lines on any screen
   var maxNameLength; // For very small mobile screens
@@ -21498,15 +21226,23 @@ var renderFileName = function renderFileName(props) {
   }
 
   return h("div", {
-    class: "uppy-Dashboard-Item-name",
+    className: "uppy-Dashboard-Item-name",
     title: props.file.meta.name
   }, truncateString(props.file.meta.name, maxNameLength));
 };
 
 var renderFileSize = function renderFileSize(props) {
-  return props.file.data.size && h("div", {
-    class: "uppy-Dashboard-Item-statusSize"
-  }, prettierBytes(props.file.data.size));
+  return props.file.size && h("div", {
+    className: "uppy-Dashboard-Item-statusSize"
+  }, prettierBytes(props.file.size));
+};
+
+var ReSelectButton = function ReSelectButton(props) {
+  return props.file.isGhost && h("span", null, " \u2022 ", h("button", {
+    className: "uppy-u-reset uppy-c-btn uppy-Dashboard-Item-reSelect",
+    type: "button",
+    onClick: props.toggleAddFilesPanel
+  }, props.i18n('reSelect')));
 };
 
 var ErrorButton = function ErrorButton(_ref) {
@@ -21515,12 +21251,12 @@ var ErrorButton = function ErrorButton(_ref) {
 
   if (file.error) {
     return h("span", {
-      class: "uppy-Dashboard-Item-errorDetails",
+      className: "uppy-Dashboard-Item-errorDetails",
       "aria-label": file.error,
       "data-microtip-position": "bottom",
       "data-microtip-size": "medium",
       role: "tooltip",
-      onclick: onClick
+      onClick: onClick
     }, "?");
   }
 
@@ -21529,18 +21265,18 @@ var ErrorButton = function ErrorButton(_ref) {
 
 module.exports = function FileInfo(props) {
   return h("div", {
-    class: "uppy-Dashboard-Item-fileInfo",
+    className: "uppy-Dashboard-Item-fileInfo",
     "data-uppy-file-source": props.file.source
   }, renderFileName(props), h("div", {
-    class: "uppy-Dashboard-Item-status"
-  }, renderFileSize(props), renderFileSource(props), h(ErrorButton, {
+    className: "uppy-Dashboard-Item-status"
+  }, renderFileSize(props), ReSelectButton(props), h(ErrorButton, {
     file: props.file,
     onClick: function onClick() {
       alert(props.file.error);
     }
   })));
 };
-},{"@transloadit/prettier-bytes":1,"@uppy/utils/lib/truncateString":238,"preact":38}],94:[function(require,module,exports){
+},{"@transloadit/prettier-bytes":1,"@uppy/utils/lib/truncateString":253,"preact":105}],89:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -21550,12 +21286,12 @@ var getFileTypeIcon = require('../../../utils/getFileTypeIcon');
 
 module.exports = function FilePreviewAndLink(props) {
   return h("div", {
-    class: "uppy-Dashboard-Item-previewInnerWrap",
+    className: "uppy-Dashboard-Item-previewInnerWrap",
     style: {
       backgroundColor: getFileTypeIcon(props.file.type).color
     }
   }, props.showLinkToFileUploadResult && props.file.uploadURL && h("a", {
-    class: "uppy-Dashboard-Item-previewLink",
+    className: "uppy-Dashboard-Item-previewLink",
     href: props.file.uploadURL,
     rel: "noreferrer noopener",
     target: "_blank",
@@ -21564,7 +21300,7 @@ module.exports = function FilePreviewAndLink(props) {
     file: props.file
   }));
 };
-},{"../../../utils/getFileTypeIcon":107,"../../FilePreview":98,"preact":38}],95:[function(require,module,exports){
+},{"../../../utils/getFileTypeIcon":102,"../../FilePreview":93,"preact":105}],90:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -21598,7 +21334,9 @@ function progressIndicatorTitle(props) {
     }
 
     return props.i18n('pauseUpload');
-  } else if (props.individualCancellation) {
+  }
+
+  if (props.individualCancellation) {
     return props.i18n('cancelUpload');
   }
 
@@ -21607,13 +21345,13 @@ function progressIndicatorTitle(props) {
 
 function ProgressIndicatorButton(props) {
   return h("div", {
-    class: "uppy-Dashboard-Item-progress"
+    className: "uppy-Dashboard-Item-progress"
   }, h("button", {
-    class: "uppy-u-reset uppy-Dashboard-Item-progressIndicator",
+    className: "uppy-u-reset uppy-Dashboard-Item-progressIndicator",
     type: "button",
     "aria-label": progressIndicatorTitle(props),
     title: progressIndicatorTitle(props),
-    onclick: function onclick() {
+    onClick: function onClick() {
       return onPauseResumeCancelRetry(props);
     }
   }, props.children));
@@ -21627,7 +21365,7 @@ function ProgressCircleContainer(_ref) {
     width: "70",
     height: "70",
     viewBox: "0 0 36 36",
-    class: "uppy-c-icon uppy-Dashboard-Item-progressIcon--circle"
+    className: "uppy-c-icon uppy-Dashboard-Item-progressIcon--circle"
   }, children);
 }
 
@@ -21636,20 +21374,20 @@ function ProgressCircle(_ref2) {
   // circle length equals 2 * PI * R
   var circleLength = 2 * Math.PI * 15;
   return h("g", null, h("circle", {
-    class: "uppy-Dashboard-Item-progressIcon--bg",
+    className: "uppy-Dashboard-Item-progressIcon--bg",
     r: "15",
     cx: "18",
     cy: "18",
     "stroke-width": "2",
     fill: "none"
   }), h("circle", {
-    class: "uppy-Dashboard-Item-progressIcon--progress",
+    className: "uppy-Dashboard-Item-progressIcon--progress",
     r: "15",
     cx: "18",
     cy: "18",
     transform: "rotate(-90, 18, 18)",
-    "stroke-width": "2",
     fill: "none",
+    "stroke-width": "2",
     "stroke-dasharray": circleLength,
     "stroke-dashoffset": circleLength - circleLength / 100 * progress
   }));
@@ -21664,19 +21402,23 @@ module.exports = function FileProgress(props) {
 
   if (props.isUploaded) {
     return h("div", {
-      class: "uppy-Dashboard-Item-progress"
+      className: "uppy-Dashboard-Item-progress"
     }, h("div", {
-      class: "uppy-Dashboard-Item-progressIndicator"
+      className: "uppy-Dashboard-Item-progressIndicator"
     }, h(ProgressCircleContainer, null, h("circle", {
       r: "15",
       cx: "18",
       cy: "18",
       fill: "#1bb240"
     }), h("polygon", {
-      class: "uppy-Dashboard-Item-progressIcon--check",
+      className: "uppy-Dashboard-Item-progressIcon--check",
       transform: "translate(2, 3)",
       points: "14 22.5 7 15.2457065 8.99985857 13.1732815 14 18.3547104 22.9729883 9 25 11.1005634"
     }))));
+  }
+
+  if (props.recoveredState) {
+    return;
   } // Retry button for error
 
 
@@ -21684,7 +21426,7 @@ module.exports = function FileProgress(props) {
     return h(ProgressIndicatorButton, props, h("svg", {
       "aria-hidden": "true",
       focusable: "false",
-      class: "uppy-c-icon uppy-Dashboard-Item-progressIcon--retry",
+      className: "uppy-c-icon uppy-Dashboard-Item-progressIcon--retry",
       width: "28",
       height: "31",
       viewBox: "0 0 16 19"
@@ -21704,11 +21446,11 @@ module.exports = function FileProgress(props) {
     return h(ProgressIndicatorButton, props, h(ProgressCircleContainer, null, h(ProgressCircle, {
       progress: props.file.progress.percentage
     }), props.file.isPaused ? h("polygon", {
-      class: "uppy-Dashboard-Item-progressIcon--play",
+      className: "uppy-Dashboard-Item-progressIcon--play",
       transform: "translate(3, 3)",
       points: "12 20 12 10 20 15"
     }) : h("g", {
-      class: "uppy-Dashboard-Item-progressIcon--pause",
+      className: "uppy-Dashboard-Item-progressIcon--pause",
       transform: "translate(14.5, 13)"
     }, h("rect", {
       x: "0",
@@ -21730,7 +21472,7 @@ module.exports = function FileProgress(props) {
     return h(ProgressIndicatorButton, props, h(ProgressCircleContainer, null, h(ProgressCircle, {
       progress: props.file.progress.percentage
     }), h("polygon", {
-      class: "cancel",
+      className: "cancel",
       transform: "translate(2, 2)",
       points: "19.8856516 11.0625 16 14.9481516 12.1019737 11.0625 11.0625 12.1143484 14.9481516 16 11.0625 19.8980263 12.1019737 20.9375 16 17.0518484 19.8856516 20.9375 20.9375 19.8980263 17.0518484 16 20.9375 12"
     })));
@@ -21738,15 +21480,17 @@ module.exports = function FileProgress(props) {
 
 
   return h("div", {
-    class: "uppy-Dashboard-Item-progress"
+    className: "uppy-Dashboard-Item-progress"
   }, h("div", {
-    class: "uppy-Dashboard-Item-progressIndicator"
+    className: "uppy-Dashboard-Item-progressIndicator"
   }, h(ProgressCircleContainer, null, h(ProgressCircle, {
     progress: props.file.progress.percentage
   }))));
 };
-},{"preact":38}],96:[function(require,module,exports){
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+},{"preact":105}],91:[function(require,module,exports){
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h,
@@ -21783,6 +21527,16 @@ module.exports = /*#__PURE__*/function (_Component) {
     if (!file.preview) {
       this.props.handleRequestThumbnail(file);
     }
+  } // VirtualList mounts FileItems again and they emit `thumbnail:request`
+  // Otherwise thumbnails are broken or missing after Golden Retriever restores files
+  ;
+
+  _proto.componentDidUpdate = function componentDidUpdate() {
+    var file = this.props.file;
+
+    if (!file.preview) {
+      this.props.handleRequestThumbnail(file);
+    }
   };
 
   _proto.componentWillUnmount = function componentWillUnmount() {
@@ -21799,7 +21553,10 @@ module.exports = /*#__PURE__*/function (_Component) {
     var isUploaded = file.progress.uploadComplete && !isProcessing && !file.error;
     var uploadInProgressOrComplete = file.progress.uploadStarted || isProcessing;
     var uploadInProgress = file.progress.uploadStarted && !file.progress.uploadComplete || isProcessing;
-    var error = file.error || false;
+    var error = file.error || false; // File that Golden Retriever was able to partly restore (only meta, not blob),
+    // users still need to re-add it, so it’s a ghost
+
+    var isGhost = file.isGhost;
     var showRemoveButton = this.props.individualCancellation ? !isUploaded : !uploadInProgress && !isUploaded;
 
     if (isUploaded && this.props.showRemoveButtonAfterComplete) {
@@ -21808,19 +21565,20 @@ module.exports = /*#__PURE__*/function (_Component) {
 
     var dashboardItemClass = classNames({
       'uppy-Dashboard-Item': true,
-      'is-inprogress': uploadInProgress,
+      'is-inprogress': uploadInProgress && !this.props.recoveredState,
       'is-processing': isProcessing,
       'is-complete': isUploaded,
       'is-error': !!error,
       'is-resumable': this.props.resumableUploads,
-      'is-noIndividualCancellation': !this.props.individualCancellation
+      'is-noIndividualCancellation': !this.props.individualCancellation,
+      'is-ghost': isGhost
     });
     return h("div", {
-      class: dashboardItemClass,
+      className: dashboardItemClass,
       id: "uppy_" + file.id,
       role: this.props.role
     }, h("div", {
-      class: "uppy-Dashboard-Item-preview"
+      className: "uppy-Dashboard-Item-preview"
     }, h(FilePreviewAndLink, {
       file: file,
       showLinkToFileUploadResult: this.props.showLinkToFileUploadResult
@@ -21831,6 +21589,7 @@ module.exports = /*#__PURE__*/function (_Component) {
       hideRetryButton: this.props.hideRetryButton,
       hideCancelButton: this.props.hideCancelButton,
       hidePauseResumeButton: this.props.hidePauseResumeButton,
+      recoveredState: this.props.recoveredState,
       showRemoveButtonAfterComplete: this.props.showRemoveButtonAfterComplete,
       resumableUploads: this.props.resumableUploads,
       individualCancellation: this.props.individualCancellation,
@@ -21839,13 +21598,14 @@ module.exports = /*#__PURE__*/function (_Component) {
       retryUpload: this.props.retryUpload,
       i18n: this.props.i18n
     })), h("div", {
-      class: "uppy-Dashboard-Item-fileInfoAndButtons"
+      className: "uppy-Dashboard-Item-fileInfoAndButtons"
     }, h(FileInfo, {
       file: file,
       id: this.props.id,
       acquirers: this.props.acquirers,
       containerWidth: this.props.containerWidth,
-      i18n: this.props.i18n
+      i18n: this.props.i18n,
+      toggleAddFilesPanel: this.props.toggleAddFilesPanel
     }), h(Buttons, {
       file: file,
       metaFields: this.props.metaFields,
@@ -21864,7 +21624,7 @@ module.exports = /*#__PURE__*/function (_Component) {
 
   return FileItem;
 }(Component);
-},{"./Buttons":92,"./FileInfo":93,"./FilePreviewAndLink":94,"./FileProgress":95,"classnames":11,"is-shallow-equal":28,"preact":38}],97:[function(require,module,exports){
+},{"./Buttons":87,"./FileInfo":88,"./FilePreviewAndLink":89,"./FileProgress":90,"classnames":11,"is-shallow-equal":31,"preact":105}],92:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var FileItem = require('./FileItem/index.js');
@@ -21921,6 +21681,7 @@ module.exports = function (props) {
     showRemoveButtonAfterComplete: props.showRemoveButtonAfterComplete,
     isWide: props.isWide,
     metaFields: props.metaFields,
+    recoveredState: props.recoveredState,
     // callbacks
     retryUpload: props.retryUpload,
     pauseUpload: props.pauseUpload,
@@ -21930,7 +21691,15 @@ module.exports = function (props) {
     handleRequestThumbnail: props.handleRequestThumbnail,
     handleCancelThumbnail: props.handleCancelThumbnail
   };
-  var rows = chunks(Object.keys(props.files), props.itemsPerRow);
+
+  var sortByGhostComesFirst = function sortByGhostComesFirst(file1, file2) {
+    return props.files[file2].isGhost - props.files[file1].isGhost;
+  }; // Sort files by file.isGhost, ghost files first, only if recoveredState is present
+
+
+  var files = Object.keys(props.files);
+  if (props.recoveredState) files.sort(sortByGhostComesFirst);
+  var rows = chunks(files, props.itemsPerRow);
 
   function renderRow(row) {
     return (// The `role="presentation` attribute ensures that the list items are properly associated with the `VirtualList` element
@@ -21945,6 +21714,7 @@ module.exports = function (props) {
           role: "listitem",
           openFileEditor: props.openFileEditor,
           canEditFile: props.canEditFile,
+          toggleAddFilesPanel: props.toggleAddFilesPanel,
           file: props.files[fileID]
         }));
       }))
@@ -21959,7 +21729,7 @@ module.exports = function (props) {
     rowHeight: rowHeight
   });
 };
-},{"./FileItem/index.js":96,"./VirtualList":102,"classnames":11,"preact":38}],98:[function(require,module,exports){
+},{"./FileItem/index.js":91,"./VirtualList":97,"classnames":11,"preact":105}],93:[function(require,module,exports){
 var getFileTypeIcon = require('../utils/getFileTypeIcon');
 
 var _require = require('preact'),
@@ -21970,7 +21740,7 @@ module.exports = function FilePreview(props) {
 
   if (file.preview) {
     return h("img", {
-      class: "uppy-Dashboard-Item-previewImg",
+      className: "uppy-Dashboard-Item-previewImg",
       alt: file.name,
       src: file.preview
     });
@@ -21981,16 +21751,16 @@ module.exports = function FilePreview(props) {
       icon = _getFileTypeIcon.icon;
 
   return h("div", {
-    class: "uppy-Dashboard-Item-previewIconWrap"
+    className: "uppy-Dashboard-Item-previewIconWrap"
   }, h("span", {
-    class: "uppy-Dashboard-Item-previewIcon",
+    className: "uppy-Dashboard-Item-previewIcon",
     style: {
       color: color
     }
   }, icon), h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-Dashboard-Item-previewIconBg",
+    className: "uppy-Dashboard-Item-previewIconBg",
     width: "58",
     height: "76",
     viewBox: "0 0 58 76"
@@ -21999,10 +21769,10 @@ module.exports = function FilePreview(props) {
     width: "58",
     height: "76",
     rx: "3",
-    "fill-rule": "evenodd"
+    fillRule: "evenodd"
   })));
 };
-},{"../utils/getFileTypeIcon":107,"preact":38}],99:[function(require,module,exports){
+},{"../utils/getFileTypeIcon":102,"preact":105}],94:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -22012,7 +21782,7 @@ var ignoreEvent = require('../utils/ignoreEvent.js');
 
 function PickerPanelContent(props) {
   return h("div", {
-    class: classNames('uppy-DashboardContent-panel', props.className),
+    className: classNames('uppy-DashboardContent-panel', props.className),
     role: "tabpanel",
     "data-uppy-panelType": "PickerPanel",
     id: "uppy-DashboardContent-panel--" + props.activePickerPanel.id,
@@ -22021,24 +21791,24 @@ function PickerPanelContent(props) {
     onDrop: ignoreEvent,
     onPaste: ignoreEvent
   }, h("div", {
-    class: "uppy-DashboardContent-bar"
+    className: "uppy-DashboardContent-bar"
   }, h("div", {
-    class: "uppy-DashboardContent-title",
+    className: "uppy-DashboardContent-title",
     role: "heading",
     "aria-level": "1"
   }, props.i18n('importFrom', {
     name: props.activePickerPanel.name
   })), h("button", {
-    class: "uppy-DashboardContent-back",
+    className: "uppy-DashboardContent-back",
     type: "button",
-    onclick: props.hideAllPanels
-  }, props.i18n('done'))), h("div", {
-    class: "uppy-DashboardContent-panelBody"
+    onClick: props.hideAllPanels
+  }, props.i18n('cancel'))), h("div", {
+    className: "uppy-DashboardContent-panelBody"
   }, props.getPlugin(props.activePickerPanel.id).render(props.state)));
 }
 
 module.exports = PickerPanelContent;
-},{"../utils/ignoreEvent.js":108,"classnames":11,"preact":38}],100:[function(require,module,exports){
+},{"../utils/ignoreEvent.js":103,"classnames":11,"preact":105}],95:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -22131,40 +21901,42 @@ function PanelTopBar(props) {
   }
 
   return h("div", {
-    class: "uppy-DashboardContent-bar"
+    className: "uppy-DashboardContent-bar"
   }, !props.isAllComplete && !props.hideCancelButton ? h("button", {
-    class: "uppy-DashboardContent-back",
+    className: "uppy-DashboardContent-back",
     type: "button",
-    onclick: props.cancelAll
+    onClick: props.cancelAll
   }, props.i18n('cancel')) : h("div", null), h("div", {
-    class: "uppy-DashboardContent-title",
+    className: "uppy-DashboardContent-title",
     role: "heading",
     "aria-level": "1"
   }, h(UploadStatus, props)), allowNewUpload ? h("button", {
-    class: "uppy-DashboardContent-addMore",
+    className: "uppy-DashboardContent-addMore",
     type: "button",
     "aria-label": props.i18n('addMoreFiles'),
     title: props.i18n('addMoreFiles'),
-    onclick: function onclick() {
+    onClick: function onClick() {
       return props.toggleAddFilesPanel(true);
     }
   }, h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "15",
     height: "15",
     viewBox: "0 0 15 15"
   }, h("path", {
     d: "M8 6.5h6a.5.5 0 0 1 .5.5v.5a.5.5 0 0 1-.5.5H8v6a.5.5 0 0 1-.5.5H7a.5.5 0 0 1-.5-.5V8h-6a.5.5 0 0 1-.5-.5V7a.5.5 0 0 1 .5-.5h6v-6A.5.5 0 0 1 7 0h.5a.5.5 0 0 1 .5.5v6z"
   })), h("span", {
-    class: "uppy-DashboardContent-addMoreCaption"
+    className: "uppy-DashboardContent-addMoreCaption"
   }, props.i18n('addMore'))) : h("div", null));
 }
 
 module.exports = PanelTopBar;
-},{"preact":38}],101:[function(require,module,exports){
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+},{"preact":105}],96:[function(require,module,exports){
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     cloneElement = _require.cloneElement,
@@ -22273,12 +22045,16 @@ var Slide = /*#__PURE__*/function (_Component) {
 }(Component);
 
 module.exports = Slide;
-},{"classnames":11,"preact":38}],102:[function(require,module,exports){
+},{"classnames":11,"preact":105}],97:[function(require,module,exports){
+var _excluded = ["data", "rowHeight", "renderRow", "overscanCount", "sync"];
+
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 /**
  * Adapted from preact-virtual-list: https://github.com/developit/preact-virtual-list
@@ -22406,7 +22182,7 @@ var VirtualList = /*#__PURE__*/function (_Component) {
         _ref$overscanCount = _ref.overscanCount,
         overscanCount = _ref$overscanCount === void 0 ? 10 : _ref$overscanCount,
         sync = _ref.sync,
-        props = _objectWithoutPropertiesLoose(_ref, ["data", "rowHeight", "renderRow", "overscanCount", "sync"]);
+        props = _objectWithoutPropertiesLoose(_ref, _excluded);
 
     var _this$state = this.state,
         offset = _this$state.offset,
@@ -22452,14 +22228,16 @@ var VirtualList = /*#__PURE__*/function (_Component) {
 }(Component);
 
 module.exports = VirtualList;
-},{"preact":38}],103:[function(require,module,exports){
+},{"preact":105}],98:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h;
@@ -22494,6 +22272,8 @@ var ResizeObserver = require('resize-observer-polyfill').default || require('res
 var createSuperFocus = require('./utils/createSuperFocus');
 
 var memoize = require('memoize-one').default || require('memoize-one');
+
+var FOCUSABLE_ELEMENTS = require('@uppy/utils/lib/FOCUSABLE_ELEMENTS');
 
 var TAB_KEY = 9;
 var ESC_KEY = 27;
@@ -22651,6 +22431,19 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       });
     };
 
+    _this.saveFileEditor = function () {
+      var _this$getPluginState4 = _this.getPluginState(),
+          targets = _this$getPluginState4.targets;
+
+      var editors = _this._getEditors(targets);
+
+      editors.forEach(function (editor) {
+        _this.uppy.getPlugin(editor.id).save();
+      });
+
+      _this.hideAllPanels();
+    };
+
     _this.openModal = function () {
       var _createPromise = createPromise(),
           promise = _createPromise.promise,
@@ -22706,9 +22499,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
           _opts2$manualClose = _opts2.manualClose,
           manualClose = _opts2$manualClose === void 0 ? true : _opts2$manualClose;
 
-      var _this$getPluginState4 = _this.getPluginState(),
-          isHidden = _this$getPluginState4.isHidden,
-          isClosing = _this$getPluginState4.isClosing;
+      var _this$getPluginState5 = _this.getPluginState(),
+          isHidden = _this$getPluginState5.isHidden,
+          isClosing = _this$getPluginState5.isClosing;
 
       if (isHidden || isClosing) {
         // short-circuit if animation is ongoing
@@ -22877,8 +22670,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         var isModalAndClosed = !_this.opts.inline && pluginState.isHidden;
 
         if ( // if ResizeObserver hasn't yet fired,
-        !pluginState.areInsidesReadyToBeVisible && // and it's not due to the modal being closed
-        !isModalAndClosed) {
+        !pluginState.areInsidesReadyToBeVisible // and it's not due to the modal being closed
+        && !isModalAndClosed) {
           _this.uppy.log("[Dashboard] resize event didn't fire on time: defaulted to mobile layout", 'debug');
 
           _this.setPluginState({
@@ -22904,6 +22697,33 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
         _this.superFocus.cancel();
       }
+    };
+
+    _this.disableAllFocusableElements = function (disable) {
+      var focusableNodes = toArray(_this.el.querySelectorAll(FOCUSABLE_ELEMENTS));
+
+      if (disable) {
+        focusableNodes.forEach(function (node) {
+          // save previous tabindex in a data-attribute, to restore when enabling
+          var currentTabIndex = node.getAttribute('tabindex');
+
+          if (currentTabIndex) {
+            node.dataset.inertTabindex = currentTabIndex;
+          }
+
+          node.setAttribute('tabindex', '-1');
+        });
+      } else {
+        focusableNodes.forEach(function (node) {
+          if ('inertTabindex' in node.dataset) {
+            node.setAttribute('tabindex', node.dataset.inertTabindex);
+          } else {
+            node.removeAttribute('tabindex');
+          }
+        });
+      }
+
+      _this.dashboardIsDisabled = disable;
     };
 
     _this.updateBrowserHistory = function () {
@@ -22970,8 +22790,13 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
     _this.handleDragOver = function (event) {
       event.preventDefault();
-      event.stopPropagation(); // 1. Add a small (+) icon on drop
+      event.stopPropagation();
+
+      if (_this.opts.disabled || _this.opts.disableLocalFiles) {
+        return;
+      } // 1. Add a small (+) icon on drop
       // (and prevent browsers from interpreting this as files being _moved_ into the browser, https://github.com/transloadit/uppy/issues/1978)
+
 
       event.dataTransfer.dropEffect = 'copy';
       clearTimeout(_this.removeDragOverClassTimeout);
@@ -22984,6 +22809,11 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     _this.handleDragLeave = function (event) {
       event.preventDefault();
       event.stopPropagation();
+
+      if (_this.opts.disabled || _this.opts.disableLocalFiles) {
+        return;
+      }
+
       clearTimeout(_this.removeDragOverClassTimeout); // Timeout against flickering, this solution is taken from drag-drop library. Solution with 'pointer-events: none' didn't work across browsers.
 
       _this.removeDragOverClassTimeout = setTimeout(function () {
@@ -22996,6 +22826,11 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     _this.handleDrop = function (event, dropCategory) {
       event.preventDefault();
       event.stopPropagation();
+
+      if (_this.opts.disabled || _this.opts.disableLocalFiles) {
+        return;
+      }
+
       clearTimeout(_this.removeDragOverClassTimeout); // 2. Remove dragover class
 
       _this.setPluginState({
@@ -23069,6 +22904,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       }
     };
 
+    _this.handleCancelRestore = function () {
+      _this.uppy.emit('restore-canceled');
+    };
+
     _this._openFileEditorWhenFilesAdded = function (files) {
       var firstFile = files[0];
 
@@ -23139,6 +22978,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
       _this.uppy.off('dashboard:modal-closed', _this.hideAllPanels);
 
+      _this.uppy.off('file-editor:complete', _this.hideAllPanels);
+
       _this.uppy.off('complete', _this.handleComplete);
 
       document.removeEventListener('focus', _this.recordIfFocusedOnUppyRecently);
@@ -23165,12 +23006,12 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
       if ( // If update is connected to showing the Informer - let the screen reader calmly read it.
       isInformerHidden && ( // If we are in a modal - always superfocus without concern for other elements on the page (user is unlikely to want to interact with the rest of the page)
-      isModal || // If we are already inside of Uppy, or
-      isFocusInUppy || // If we are not focused on anything BUT we have already, at least once, focused on uppy
+      isModal // If we are already inside of Uppy, or
+      || isFocusInUppy // If we are not focused on anything BUT we have already, at least once, focused on uppy
       //   1. We focus when isFocusNowhere, because when the element we were focused on disappears (e.g. an overlay), - focus gets lost. If user is typing something somewhere else on the page, - focus won't be 'nowhere'.
       //   2. We only focus when focus is nowhere AND this.ifFocusedOnUppyRecently, to avoid focus jumps if we do something else on the page.
       //   [Practical check] Without '&& this.ifFocusedOnUppyRecently', in Safari, in inline mode, when file is uploading, - navigate via tab to the checkbox, try to press space multiple times. Focus will jump to Uppy.
-      isFocusNowhere && _this.ifFocusedOnUppyRecently)) {
+      || isFocusNowhere && _this.ifFocusedOnUppyRecently)) {
         _this.superFocus(_this.el, _this.getPluginState().activeOverlayType);
       } else {
         _this.superFocus.cancel();
@@ -23178,6 +23019,16 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     };
 
     _this.afterUpdate = function () {
+      if (_this.opts.disabled && !_this.dashboardIsDisabled) {
+        _this.disableAllFocusableElements(true);
+
+        return;
+      }
+
+      if (!_this.opts.disabled && _this.dashboardIsDisabled) {
+        _this.disableAllFocusableElements(false);
+      }
+
       _this.superFocusOnEachUpdate();
     };
 
@@ -23303,9 +23154,13 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         allowNewUpload: allowNewUpload,
         acquirers: acquirers,
         theme: theme,
+        disabled: _this.opts.disabled,
+        disableLocalFiles: _this.opts.disableLocalFiles,
         direction: _this.opts.direction,
         activePickerPanel: pluginState.activePickerPanel,
         showFileEditor: pluginState.showFileEditor,
+        saveFileEditor: _this.saveFileEditor,
+        disableAllFocusableElements: _this.disableAllFocusableElements,
         animateOpenClose: _this.opts.animateOpenClose,
         isClosing: pluginState.isClosing,
         getPlugin: _this.uppy.getPlugin,
@@ -23327,6 +23182,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         uppy: _this.uppy,
         info: _this.uppy.info,
         note: _this.opts.note,
+        recoveredState: state.recoveredState,
         metaFields: pluginState.metaFields,
         resumableUploads: capabilities.resumableUploads || false,
         individualCancellation: capabilities.individualCancellation,
@@ -23358,7 +23214,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         parentElement: _this.el,
         allowedFileTypes: _this.uppy.opts.restrictions.allowedFileTypes,
         maxNumberOfFiles: _this.uppy.opts.restrictions.maxNumberOfFiles,
+        requiredMetaFields: _this.uppy.opts.restrictions.requiredMetaFields,
         showSelectedFiles: _this.opts.showSelectedFiles,
+        handleCancelRestore: _this.handleCancelRestore,
         handleRequestThumbnail: _this.handleRequestThumbnail,
         handleCancelThumbnail: _this.handleCancelThumbnail,
         // drag props
@@ -23525,22 +23383,23 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         copyLinkToClipboardFallback: 'Copy the URL below',
         copyLink: 'Copy link',
         fileSource: 'File source: %{name}',
-        done: 'Done',
         back: 'Back',
         addMore: 'Add more',
         removeFile: 'Remove file',
         editFile: 'Edit file',
         editing: 'Editing %{file}',
         finishEditingFile: 'Finish editing file',
+        save: 'Save',
         saveChanges: 'Save changes',
         cancel: 'Cancel',
         myDevice: 'My Device',
-        dropPasteFiles: 'Drop files here, paste or %{browseFiles}',
-        dropPasteFolders: 'Drop files here, paste or %{browseFolders}',
-        dropPasteBoth: 'Drop files here, paste, %{browseFiles} or %{browseFolders}',
-        dropPasteImportFiles: 'Drop files here, paste, %{browseFiles} or import from:',
-        dropPasteImportFolders: 'Drop files here, paste, %{browseFolders} or import from:',
-        dropPasteImportBoth: 'Drop files here, paste, %{browseFiles}, %{browseFolders} or import from:',
+        dropPasteFiles: 'Drop files here or %{browseFiles}',
+        dropPasteFolders: 'Drop files here or %{browseFolders}',
+        dropPasteBoth: 'Drop files here, %{browseFiles} or %{browseFolders}',
+        dropPasteImportFiles: 'Drop files here, %{browseFiles} or import from:',
+        dropPasteImportFolders: 'Drop files here, %{browseFolders} or import from:',
+        dropPasteImportBoth: 'Drop files here, %{browseFiles}, %{browseFolders} or import from:',
+        importFiles: 'Import files from:',
         dropHint: 'Drop your files here',
         browseFiles: 'browse files',
         browseFolders: 'browse folders',
@@ -23562,6 +23421,13 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
           0: 'Processing %{smart_count} file',
           1: 'Processing %{smart_count} files'
         },
+        recoveredXFiles: {
+          0: 'We could not fully recover 1 file. Please re-select it and resume the upload.',
+          1: 'We could not fully recover %{smart_count} files. Please re-select them and resume the upload.'
+        },
+        recoveredAllFiles: 'We restored all files. You can now resume the upload.',
+        sessionRestored: 'Session restored',
+        reSelect: 'Re-select',
         // The default `poweredBy2` string only combines the `poweredBy` string (%{backwardsCompat}) with the size.
         // Locales can override `poweredBy2` to specify a different word order. This is for backwards compat with
         // Uppy 1.9.x and below which did a naive concatenation of `poweredBy2 + size` instead of using a locale-specific
@@ -23612,7 +23478,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       showRemoveButtonAfterComplete: false,
       browserBackButtonClose: false,
       theme: 'light',
-      autoOpenFileEditor: false
+      autoOpenFileEditor: false,
+      disabled: false,
+      disableLocalFiles: false
     }; // merge default options with the ones set by user
 
     _this.opts = _extends({}, defaultOptions, _opts);
@@ -23640,8 +23508,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Dashboard;
-}(Plugin), _class.VERSION = "1.16.1", _temp);
-},{"./components/Dashboard":89,"./utils/createSuperFocus":105,"./utils/trapFocus":109,"@uppy/core":84,"@uppy/informer":123,"@uppy/status-bar":159,"@uppy/thumbnail-generator":162,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/findAllDOMElements":210,"@uppy/utils/lib/getDroppedFiles":214,"@uppy/utils/lib/getTextDirection":224,"@uppy/utils/lib/toArray":237,"cuid":16,"memoize-one":33,"preact":38,"resize-observer-polyfill":43}],104:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.21.1", _temp);
+},{"./components/Dashboard":84,"./utils/createSuperFocus":100,"./utils/trapFocus":104,"@uppy/core":78,"@uppy/informer":126,"@uppy/status-bar":168,"@uppy/thumbnail-generator":172,"@uppy/utils/lib/FOCUSABLE_ELEMENTS":214,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/findAllDOMElements":224,"@uppy/utils/lib/getDroppedFiles":229,"@uppy/utils/lib/getTextDirection":239,"@uppy/utils/lib/toArray":252,"cuid":15,"memoize-one":36,"preact":105,"resize-observer-polyfill":43}],99:[function(require,module,exports){
 /**
  * Copies text to clipboard by creating an almost invisible textarea,
  * adding text there, then running execCommand('copy').
@@ -23693,7 +23561,7 @@ module.exports = function copyToClipboard(textToCopy, fallbackString) {
     }
   });
 };
-},{}],105:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 var debounce = require('lodash.debounce');
 
 var FOCUSABLE_ELEMENTS = require('@uppy/utils/lib/FOCUSABLE_ELEMENTS');
@@ -23742,7 +23610,7 @@ module.exports = function createSuperFocus() {
 
   return debounce(superFocus, 260);
 };
-},{"./getActiveOverlayEl":106,"@uppy/utils/lib/FOCUSABLE_ELEMENTS":200,"lodash.debounce":30}],106:[function(require,module,exports){
+},{"./getActiveOverlayEl":101,"@uppy/utils/lib/FOCUSABLE_ELEMENTS":214,"lodash.debounce":33}],101:[function(require,module,exports){
 /**
  * @returns {HTMLElement} - either dashboard element, or the overlay that's most on top
  */
@@ -23755,7 +23623,7 @@ module.exports = function getActiveOverlayEl(dashboardEl, activeOverlayType) {
 
   return dashboardEl;
 };
-},{}],107:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -23768,13 +23636,13 @@ function iconImage() {
     viewBox: "0 0 25 25"
   }, h("g", {
     fill: "#686DE0",
-    "fill-rule": "evenodd"
+    fillRule: "evenodd"
   }, h("path", {
     d: "M5 7v10h15V7H5zm0-1h15a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z",
-    "fill-rule": "nonzero"
+    fillRule: "nonzero"
   }), h("path", {
     d: "M6.35 17.172l4.994-5.026a.5.5 0 0 1 .707 0l2.16 2.16 3.505-3.505a.5.5 0 0 1 .707 0l2.336 2.31-.707.72-1.983-1.97-3.505 3.505a.5.5 0 0 1-.707 0l-2.16-2.159-3.938 3.939-1.409.026z",
-    "fill-rule": "nonzero"
+    fillRule: "nonzero"
   }), h("circle", {
     cx: "7.5",
     cy: "9.5",
@@ -23786,14 +23654,14 @@ function iconAudio() {
   return h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "25",
     height: "25",
     viewBox: "0 0 25 25"
   }, h("path", {
     d: "M9.5 18.64c0 1.14-1.145 2-2.5 2s-2.5-.86-2.5-2c0-1.14 1.145-2 2.5-2 .557 0 1.079.145 1.5.396V7.25a.5.5 0 0 1 .379-.485l9-2.25A.5.5 0 0 1 18.5 5v11.64c0 1.14-1.145 2-2.5 2s-2.5-.86-2.5-2c0-1.14 1.145-2 2.5-2 .557 0 1.079.145 1.5.396V8.67l-8 2v7.97zm8-11v-2l-8 2v2l8-2zM7 19.64c.855 0 1.5-.484 1.5-1s-.645-1-1.5-1-1.5.484-1.5 1 .645 1 1.5 1zm9-2c.855 0 1.5-.484 1.5-1s-.645-1-1.5-1-1.5.484-1.5 1 .645 1 1.5 1z",
     fill: "#049BCF",
-    "fill-rule": "nonzero"
+    fillRule: "nonzero"
   }));
 }
 
@@ -23801,14 +23669,14 @@ function iconVideo() {
   return h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "25",
     height: "25",
     viewBox: "0 0 25 25"
   }, h("path", {
     d: "M16 11.834l4.486-2.691A1 1 0 0 1 22 10v6a1 1 0 0 1-1.514.857L16 14.167V17a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2.834zM15 9H5v8h10V9zm1 4l5 3v-6l-5 3z",
     fill: "#19AF67",
-    "fill-rule": "nonzero"
+    fillRule: "nonzero"
   }));
 }
 
@@ -23816,14 +23684,14 @@ function iconPDF() {
   return h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "25",
     height: "25",
     viewBox: "0 0 25 25"
   }, h("path", {
     d: "M9.766 8.295c-.691-1.843-.539-3.401.747-3.726 1.643-.414 2.505.938 2.39 3.299-.039.79-.194 1.662-.537 3.148.324.49.66.967 1.055 1.51.17.231.382.488.629.757 1.866-.128 3.653.114 4.918.655 1.487.635 2.192 1.685 1.614 2.84-.566 1.133-1.839 1.084-3.416.249-1.141-.604-2.457-1.634-3.51-2.707a13.467 13.467 0 0 0-2.238.426c-1.392 4.051-4.534 6.453-5.707 4.572-.986-1.58 1.38-4.206 4.914-5.375.097-.322.185-.656.264-1.001.08-.353.306-1.31.407-1.737-.678-1.059-1.2-2.031-1.53-2.91zm2.098 4.87c-.033.144-.068.287-.104.427l.033-.01-.012.038a14.065 14.065 0 0 1 1.02-.197l-.032-.033.052-.004a7.902 7.902 0 0 1-.208-.271c-.197-.27-.38-.526-.555-.775l-.006.028-.002-.003c-.076.323-.148.632-.186.8zm5.77 2.978c1.143.605 1.832.632 2.054.187.26-.519-.087-1.034-1.113-1.473-.911-.39-2.175-.608-3.55-.608.845.766 1.787 1.459 2.609 1.894zM6.559 18.789c.14.223.693.16 1.425-.413.827-.648 1.61-1.747 2.208-3.206-2.563 1.064-4.102 2.867-3.633 3.62zm5.345-10.97c.088-1.793-.351-2.48-1.146-2.28-.473.119-.564 1.05-.056 2.405.213.566.52 1.188.908 1.859.18-.858.268-1.453.294-1.984z",
     fill: "#E2514A",
-    "fill-rule": "nonzero"
+    fillRule: "nonzero"
   }));
 }
 
@@ -23837,7 +23705,7 @@ function iconArchive() {
   }, h("path", {
     d: "M10.45 2.05h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5V2.55a.5.5 0 0 1 .5-.5zm2.05 1.024h1.05a.5.5 0 0 1 .5.5V3.6a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5v-.001zM10.45 0h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5V.5a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-2.05 3.074h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-2.05 1.024h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm-2.05 1.025h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-1.656 3.074l-.82 5.946c.52.302 1.174.458 1.976.458.803 0 1.455-.156 1.975-.458l-.82-5.946h-2.311zm0-1.025h2.312c.512 0 .946.378 1.015.885l.82 5.946c.056.412-.142.817-.501 1.026-.686.398-1.515.597-2.49.597-.974 0-1.804-.199-2.49-.597a1.025 1.025 0 0 1-.5-1.026l.819-5.946c.07-.507.503-.885 1.015-.885zm.545 6.6a.5.5 0 0 1-.397-.561l.143-.999a.5.5 0 0 1 .495-.429h.74a.5.5 0 0 1 .495.43l.143.998a.5.5 0 0 1-.397.561c-.404.08-.819.08-1.222 0z",
     fill: "#00C469",
-    "fill-rule": "nonzero"
+    fillRule: "nonzero"
   }));
 }
 
@@ -23845,13 +23713,13 @@ function iconFile() {
   return h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "25",
     height: "25",
     viewBox: "0 0 25 25"
   }, h("g", {
     fill: "#A7AFB7",
-    "fill-rule": "nonzero"
+    fillRule: "nonzero"
   }, h("path", {
     d: "M5.5 22a.5.5 0 0 1-.5-.5v-18a.5.5 0 0 1 .5-.5h10.719a.5.5 0 0 1 .367.16l3.281 3.556a.5.5 0 0 1 .133.339V21.5a.5.5 0 0 1-.5.5h-14zm.5-1h13V7.25L16 4H6v17z"
   }), h("path", {
@@ -23863,14 +23731,14 @@ function iconText() {
   return h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "25",
     height: "25",
     viewBox: "0 0 25 25"
   }, h("path", {
     d: "M4.5 7h13a.5.5 0 1 1 0 1h-13a.5.5 0 0 1 0-1zm0 3h15a.5.5 0 1 1 0 1h-15a.5.5 0 1 1 0-1zm0 3h15a.5.5 0 1 1 0 1h-15a.5.5 0 1 1 0-1zm0 3h10a.5.5 0 1 1 0 1h-10a.5.5 0 1 1 0-1z",
     fill: "#5A5E69",
-    "fill-rule": "nonzero"
+    fillRule: "nonzero"
   }));
 }
 
@@ -23934,7 +23802,7 @@ module.exports = function getIconByMime(fileType) {
 
   return defaultChoice;
 };
-},{"preact":38}],108:[function(require,module,exports){
+},{"preact":105}],103:[function(require,module,exports){
 // ignore drop/paste events if they are not in input or textarea —
 // otherwise when Url plugin adds drop/paste listeners to this.el,
 // draging UI elements or pasting anything into any field triggers those events —
@@ -23952,12 +23820,12 @@ function ignoreEvent(ev) {
 }
 
 module.exports = ignoreEvent;
-},{}],109:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 var toArray = require('@uppy/utils/lib/toArray');
 
 var getActiveOverlayEl = require('./getActiveOverlayEl');
 
-var FOCUSABLE_ELEMENTS = require('@uppy/utils/lib//FOCUSABLE_ELEMENTS');
+var FOCUSABLE_ELEMENTS = require('@uppy/utils/lib/FOCUSABLE_ELEMENTS');
 
 function focusOnFirstNode(event, nodes) {
   var node = nodes[0];
@@ -24016,14 +23884,18 @@ module.exports = {
     }
   }
 };
-},{"./getActiveOverlayEl":106,"@uppy/utils/lib//FOCUSABLE_ELEMENTS":200,"@uppy/utils/lib/toArray":237}],110:[function(require,module,exports){
+},{"./getActiveOverlayEl":101,"@uppy/utils/lib/FOCUSABLE_ELEMENTS":214,"@uppy/utils/lib/toArray":252}],105:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],106:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -24047,6 +23919,7 @@ var _require2 = require('preact'),
 module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   _inheritsLoose(DragDrop, _Plugin);
 
+  // eslint-disable-next-line global-require
   function DragDrop(uppy, opts) {
     var _this;
 
@@ -24134,13 +24007,15 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     // ___Why not use value="" on <input/> instead?
     //    Because if we use that method of clearing the input,
     //    Chrome will not trigger change if we drop the same file twice (Issue #768).
+    // eslint-disable-next-line no-param-reassign
 
     event.target.value = null;
   };
 
-  _proto.handleDrop = function handleDrop(event, dropCategory) {
+  _proto.handleDrop = function handleDrop(event) {
     var _this3 = this;
 
+    if (this.opts.onDrop) this.opts.onDrop(event);
     event.preventDefault();
     event.stopPropagation();
     clearTimeout(this.removeDragOverClassTimeout); // 2. Remove dragover class
@@ -24163,9 +24038,13 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   _proto.handleDragOver = function handleDragOver(event) {
+    if (this.opts.onDragOver) this.opts.onDragOver(event);
     event.preventDefault();
     event.stopPropagation(); // 1. Add a small (+) icon on drop
-    // (and prevent browsers from interpreting this as files being _moved_ into the browser, https://github.com/transloadit/uppy/issues/1978)
+    // (and prevent browsers from interpreting this as files being _moved_ into the browser
+    // https://github.com/transloadit/uppy/issues/1978)
+    //
+    // eslint-disable-next-line no-param-reassign
 
     event.dataTransfer.dropEffect = 'copy';
     clearTimeout(this.removeDragOverClassTimeout);
@@ -24177,9 +24056,11 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   _proto.handleDragLeave = function handleDragLeave(event) {
     var _this4 = this;
 
+    if (this.opts.onDragLeave) this.opts.onDragLeave(event);
     event.preventDefault();
     event.stopPropagation();
-    clearTimeout(this.removeDragOverClassTimeout); // Timeout against flickering, this solution is taken from drag-drop library. Solution with 'pointer-events: none' didn't work across browsers.
+    clearTimeout(this.removeDragOverClassTimeout); // Timeout against flickering, this solution is taken from drag-drop library.
+    // Solution with 'pointer-events: none' didn't work across browsers.
 
     this.removeDragOverClassTimeout = setTimeout(function () {
       _this4.setPluginState({
@@ -24193,7 +24074,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
     var restrictions = this.uppy.opts.restrictions;
     return h("input", {
-      class: "uppy-DragDrop-input",
+      className: "uppy-DragDrop-input",
       type: "file",
       hidden: true,
       ref: function ref(_ref) {
@@ -24202,41 +24083,41 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       name: this.opts.inputName,
       multiple: restrictions.maxNumberOfFiles !== 1,
       accept: restrictions.allowedFileTypes,
-      onchange: this.onInputChange
+      onChange: this.onInputChange
     });
   };
 
-  _proto.renderArrowSvg = function renderArrowSvg() {
+  DragDrop.renderArrowSvg = function renderArrowSvg() {
     return h("svg", {
       "aria-hidden": "true",
       focusable: "false",
-      class: "uppy-c-icon uppy-DragDrop-arrow",
+      className: "uppy-c-icon uppy-DragDrop-arrow",
       width: "16",
       height: "16",
       viewBox: "0 0 16 16"
     }, h("path", {
       d: "M11 10V0H5v10H2l6 6 6-6h-3zm0 0",
-      "fill-rule": "evenodd"
+      fillRule: "evenodd"
     }));
   };
 
   _proto.renderLabel = function renderLabel() {
     return h("div", {
-      class: "uppy-DragDrop-label"
+      className: "uppy-DragDrop-label"
     }, this.i18nArray('dropHereOr', {
       browse: h("span", {
-        class: "uppy-DragDrop-browse"
+        className: "uppy-DragDrop-browse"
       }, this.i18n('browse'))
     }));
   };
 
   _proto.renderNote = function renderNote() {
     return h("span", {
-      class: "uppy-DragDrop-note"
+      className: "uppy-DragDrop-note"
     }, this.opts.note);
   };
 
-  _proto.render = function render(state) {
+  _proto.render = function render() {
     var _this6 = this;
 
     var dragDropClass = "uppy-Root\n      uppy-u-reset\n      uppy-DragDrop-container\n      " + (this.isDragDropSupported ? 'uppy-DragDrop--isDragDropSupported' : '') + "\n      " + (this.getPluginState().isDraggingOver ? 'uppy-DragDrop--isDraggingOver' : '') + "\n    ";
@@ -24246,7 +24127,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     };
     return h("button", {
       type: "button",
-      class: dragDropClass,
+      className: dragDropClass,
       style: dragDropStyle,
       onClick: function onClick() {
         return _this6.fileInputRef.click();
@@ -24255,15 +24136,15 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       onDragLeave: this.handleDragLeave,
       onDrop: this.handleDrop
     }, this.renderHiddenFileInput(), h("div", {
-      class: "uppy-DragDrop-inner"
-    }, this.renderArrowSvg(), this.renderLabel(), this.renderNote()));
+      className: "uppy-DragDrop-inner"
+    }, DragDrop.renderArrowSvg(), this.renderLabel(), this.renderNote()));
   };
 
   _proto.install = function install() {
+    var target = this.opts.target;
     this.setPluginState({
       isDraggingOver: false
     });
-    var target = this.opts.target;
 
     if (target) {
       this.mount(target, this);
@@ -24275,13 +24156,182 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return DragDrop;
-}(Plugin), _class.VERSION = "1.4.25", _temp);
-},{"@uppy/core":84,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/getDroppedFiles":214,"@uppy/utils/lib/isDragDropSupported":228,"@uppy/utils/lib/toArray":237,"preact":38}],111:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.4.31", _temp);
+},{"@uppy/core":78,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/getDroppedFiles":229,"@uppy/utils/lib/isDragDropSupported":243,"@uppy/utils/lib/toArray":252,"preact":107}],107:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],108:[function(require,module,exports){
+var _class, _temp;
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var _require = require('@uppy/core'),
+    Plugin = _require.Plugin;
+
+var getDroppedFiles = require('@uppy/utils/lib/getDroppedFiles');
+
+var toArray = require('@uppy/utils/lib/toArray');
+/**
+ * Drop Target plugin
+ *
+ */
+
+
+module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
+  _inheritsLoose(DropTarget, _Plugin);
+
+  function DropTarget(uppy, opts) {
+    var _this;
+
+    _this = _Plugin.call(this, uppy, opts) || this;
+
+    _this.addFiles = function (files) {
+      var descriptors = files.map(function (file) {
+        return {
+          source: _this.id,
+          name: file.name,
+          type: file.type,
+          data: file,
+          meta: {
+            // path of the file relative to the ancestor directory the user selected.
+            // e.g. 'docs/Old Prague/airbnb.pdf'
+            relativePath: file.relativePath || null
+          }
+        };
+      });
+
+      try {
+        _this.uppy.addFiles(descriptors);
+      } catch (err) {
+        _this.uppy.log(err);
+      }
+    };
+
+    _this.handleDrop = function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      clearTimeout(_this.removeDragOverClassTimeout); // 2. Remove dragover class
+
+      event.currentTarget.classList.remove('uppy-is-drag-over');
+
+      _this.setPluginState({
+        isDraggingOver: false
+      }); // 3. Add all dropped files
+
+
+      _this.uppy.log('[DropTarget] Files were dropped');
+
+      var logDropError = function logDropError(error) {
+        _this.uppy.log(error, 'error');
+      };
+
+      getDroppedFiles(event.dataTransfer, {
+        logDropError: logDropError
+      }).then(function (files) {
+        return _this.addFiles(files);
+      });
+    };
+
+    _this.handleDragOver = function (event) {
+      event.preventDefault();
+      event.stopPropagation(); // 1. Add a small (+) icon on drop
+      // (and prevent browsers from interpreting this as files being _moved_ into the browser,
+      // https://github.com/transloadit/uppy/issues/1978)
+
+      event.dataTransfer.dropEffect = 'copy';
+      clearTimeout(_this.removeDragOverClassTimeout);
+      event.currentTarget.classList.add('uppy-is-drag-over');
+
+      _this.setPluginState({
+        isDraggingOver: true
+      });
+    };
+
+    _this.handleDragLeave = function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      var currentTarget = event.currentTarget;
+      clearTimeout(_this.removeDragOverClassTimeout); // Timeout against flickering, this solution is taken from drag-drop library.
+      // Solution with 'pointer-events: none' didn't work across browsers.
+
+      _this.removeDragOverClassTimeout = setTimeout(function () {
+        currentTarget.classList.remove('uppy-is-drag-over');
+
+        _this.setPluginState({
+          isDraggingOver: false
+        });
+      }, 50);
+    };
+
+    _this.addListeners = function () {
+      var target = _this.opts.target;
+
+      if (target instanceof Element) {
+        _this.nodes = [target];
+      } else if (typeof target === 'string') {
+        _this.nodes = toArray(document.querySelectorAll(target));
+      }
+
+      if (!_this.nodes && !_this.nodes.length > 0) {
+        throw new Error("\"" + target + "\" does not match any HTML elements");
+      }
+
+      _this.nodes.forEach(function (node) {
+        node.addEventListener('dragover', _this.handleDragOver, false);
+        node.addEventListener('dragleave', _this.handleDragLeave, false);
+        node.addEventListener('drop', _this.handleDrop, false);
+      });
+    };
+
+    _this.removeListeners = function () {
+      if (_this.nodes) {
+        _this.nodes.forEach(function (node) {
+          node.removeEventListener('dragover', _this.handleDragOver, false);
+          node.removeEventListener('dragleave', _this.handleDragLeave, false);
+          node.removeEventListener('drop', _this.handleDrop, false);
+        });
+      }
+    };
+
+    _this.type = 'acquirer';
+    _this.id = _this.opts.id || 'DropTarget';
+    _this.title = 'Drop Target'; // Default options
+
+    var defaultOpts = {
+      target: null
+    }; // Merge default options with the ones set by user
+
+    _this.opts = _extends({}, defaultOpts, opts);
+    _this.removeDragOverClassTimeout = null;
+    return _this;
+  }
+
+  var _proto = DropTarget.prototype;
+
+  _proto.install = function install() {
+    this.setPluginState({
+      isDraggingOver: false
+    });
+    this.addListeners();
+  };
+
+  _proto.uninstall = function uninstall() {
+    this.removeListeners();
+  };
+
+  return DropTarget;
+}(Plugin), _class.VERSION = "0.2.4", _temp);
+},{"@uppy/core":78,"@uppy/utils/lib/getDroppedFiles":229,"@uppy/utils/lib/toArray":252}],109:[function(require,module,exports){
 var _class, _temp;
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -24315,8 +24365,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         viewBox: "0 0 32 32"
       }, h("g", {
         fill: "none",
-        "fill-rule": "evenodd"
+        fillRule: "evenodd"
       }, h("rect", {
+        className: "uppy-ProviderIconBg",
         fill: "#0D2481",
         width: "32",
         height: "32",
@@ -24324,7 +24375,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       }), h("path", {
         d: "M11 8l5 3.185-5 3.186-5-3.186L11 8zm10 0l5 3.185-5 3.186-5-3.186L21 8zM6 17.556l5-3.185 5 3.185-5 3.186-5-3.186zm15-3.185l5 3.185-5 3.186-5-3.186 5-3.185zm-10 7.432l5-3.185 5 3.185-5 3.186-5-3.186z",
         fill: "#FFF",
-        "fill-rule": "nonzero"
+        fillRule: "nonzero"
       })));
     };
 
@@ -24368,13 +24419,17 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Dropbox;
-}(Plugin), _class.VERSION = "1.4.23", _temp);
-},{"@uppy/companion-client":81,"@uppy/core":84,"@uppy/provider-views":148,"preact":38}],112:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.5.2", _temp);
+},{"@uppy/companion-client":75,"@uppy/core":78,"@uppy/provider-views":155,"preact":110}],110:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],111:[function(require,module,exports){
 var _class, _temp;
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -24408,8 +24463,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         viewBox: "0 0 32 32"
       }, h("g", {
         fill: "none",
-        "fill-rule": "evenodd"
+        fillRule: "evenodd"
       }, h("rect", {
+        className: "uppy-ProviderIconBg",
         width: "32",
         height: "32",
         rx: "16",
@@ -24417,7 +24473,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       }), h("path", {
         d: "M17.842 26v-8.667h2.653l.398-3.377h-3.051v-2.157c0-.978.248-1.644 1.527-1.644H21V7.132A19.914 19.914 0 0 0 18.623 7c-2.352 0-3.963 1.574-3.963 4.465v2.49H12v3.378h2.66V26h3.182z",
         fill: "#FFF",
-        "fill-rule": "nonzero"
+        fillRule: "nonzero"
       })));
     };
 
@@ -24469,15 +24525,19 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Facebook;
-}(Plugin), _class.VERSION = "1.1.23", _temp);
-},{"@uppy/companion-client":81,"@uppy/core":84,"@uppy/provider-views":148,"preact":38}],113:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.2.2", _temp);
+},{"@uppy/companion-client":75,"@uppy/core":78,"@uppy/provider-views":155,"preact":112}],112:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],113:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -24590,22 +24650,22 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     var restrictions = this.uppy.opts.restrictions;
     var accept = restrictions.allowedFileTypes ? restrictions.allowedFileTypes.join(',') : null;
     return h("div", {
-      class: "uppy-Root uppy-FileInput-container"
+      className: "uppy-Root uppy-FileInput-container"
     }, h("input", {
-      class: "uppy-FileInput-input",
+      className: "uppy-FileInput-input",
       style: this.opts.pretty && hiddenInputStyle,
       type: "file",
       name: this.opts.inputName,
-      onchange: this.handleInputChange,
+      onChange: this.handleInputChange,
       multiple: restrictions.maxNumberOfFiles !== 1,
       accept: accept,
       ref: function ref(input) {
         _this3.input = input;
       }
     }), this.opts.pretty && h("button", {
-      class: "uppy-FileInput-btn",
+      className: "uppy-FileInput-btn",
       type: "button",
-      onclick: this.handleClick
+      onClick: this.handleClick
     }, this.i18n('chooseFiles')));
   };
 
@@ -24622,15 +24682,19 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return FileInput;
-}(Plugin), _class.VERSION = "1.4.23", _temp);
-},{"@uppy/core":84,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/toArray":237,"preact":38}],114:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.5.2", _temp);
+},{"@uppy/core":78,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/toArray":252,"preact":114}],114:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],115:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -24801,8 +24865,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Form;
-}(Plugin), _class.VERSION = "1.3.26", _temp);
-},{"@uppy/core":84,"@uppy/utils/lib/findDOMElement":211,"@uppy/utils/lib/toArray":237,"get-form-data":22}],115:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.3.31", _temp);
+},{"@uppy/core":78,"@uppy/utils/lib/findDOMElement":225,"@uppy/utils/lib/toArray":252,"get-form-data":25}],116:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var prettierBytes = require('@transloadit/prettier-bytes');
@@ -24896,8 +24960,7 @@ var IndexedDBStore = /*#__PURE__*/function () {
       // 24 hours
       maxFileSize: 10 * 1024 * 1024,
       // 10 MB
-      maxTotalSize: 300 * 1024 * 1024 // 300 MB
-
+      maxTotalSize: 300 * 1024 * 1024
     }, opts);
     this.name = this.opts.storeName;
 
@@ -25074,7 +25137,7 @@ var IndexedDBStore = /*#__PURE__*/function () {
 
 IndexedDBStore.isSupported = isSupported;
 module.exports = IndexedDBStore;
-},{"@transloadit/prettier-bytes":1}],116:[function(require,module,exports){
+},{"@transloadit/prettier-bytes":1}],117:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
@@ -25111,8 +25174,7 @@ var cleanedUp = false;
 module.exports = /*#__PURE__*/function () {
   function MetaDataStore(opts) {
     this.opts = _extends({
-      expires: 24 * 60 * 60 * 1000 // 24 hours
-
+      expires: 24 * 60 * 60 * 1000
     }, opts);
     this.name = "uppyState:" + opts.storeName;
 
@@ -25156,7 +25218,12 @@ module.exports = /*#__PURE__*/function () {
    */
   ;
 
-  MetaDataStore.cleanup = function cleanup() {
+  MetaDataStore.cleanup = function cleanup(instanceID) {
+    if (instanceID) {
+      localStorage.removeItem("uppyState:" + instanceID);
+      return;
+    }
+
     var instanceIDs = findUppyInstances();
     var now = Date.now();
     instanceIDs.forEach(function (id) {
@@ -25173,7 +25240,7 @@ module.exports = /*#__PURE__*/function () {
 
   return MetaDataStore;
 }();
-},{}],117:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 /*eslint-disable */
 var isSupported = typeof navigator !== 'undefined' && 'serviceWorker' in navigator;
 
@@ -25262,14 +25329,18 @@ var ServiceWorkerStore = /*#__PURE__*/function () {
 
 ServiceWorkerStore.isSupported = isSupported;
 module.exports = ServiceWorkerStore;
-},{}],118:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var throttle = require('lodash.throttle');
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -25295,6 +25366,126 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     var _this;
 
     _this = _Plugin.call(this, uppy, opts) || this;
+
+    _this.addBlobToStores = function (file) {
+      if (file.isRemote) return;
+
+      if (_this.ServiceWorkerStore) {
+        _this.ServiceWorkerStore.put(file).catch(function (err) {
+          _this.uppy.log('[GoldenRetriever] Could not store file', 'warning');
+
+          _this.uppy.log(err);
+        });
+      }
+
+      _this.IndexedDBStore.put(file).catch(function (err) {
+        _this.uppy.log('[GoldenRetriever] Could not store file', 'warning');
+
+        _this.uppy.log(err);
+      });
+    };
+
+    _this.removeBlobFromStores = function (file) {
+      if (_this.ServiceWorkerStore) {
+        _this.ServiceWorkerStore.delete(file.id).catch(function (err) {
+          _this.uppy.log('[GoldenRetriever] Failed to remove file', 'warning');
+
+          _this.uppy.log(err);
+        });
+      }
+
+      _this.IndexedDBStore.delete(file.id).catch(function (err) {
+        _this.uppy.log('[GoldenRetriever] Failed to remove file', 'warning');
+
+        _this.uppy.log(err);
+      });
+    };
+
+    _this.replaceBlobInStores = function (file) {
+      _this.removeBlobFromStores(file);
+
+      _this.addBlobToStores(file);
+    };
+
+    _this.handleRestoreConfirmed = function () {
+      _this.uppy.log('[GoldenRetriever] Restore confirmed, proceeding...'); // start all uploads again when file blobs are restored
+
+
+      var _this$uppy$getState = _this.uppy.getState(),
+          currentUploads = _this$uppy$getState.currentUploads;
+
+      if (currentUploads) {
+        Object.keys(currentUploads).forEach(function (uploadId) {
+          _this.uppy.restore(uploadId, currentUploads[uploadId]);
+        });
+
+        _this.uppy.resumeAll();
+      }
+
+      _this.uppy.upload();
+
+      _this.uppy.setState({
+        recoveredState: null
+      });
+    };
+
+    _this.abortRestore = function () {
+      _this.uppy.log('[GoldenRetriever] Aborting restore...');
+
+      var fileIDs = Object.keys(_this.uppy.getState().files);
+
+      _this.deleteBlobs(fileIDs).then(function () {
+        _this.uppy.log("[GoldenRetriever] Removed " + fileIDs.length + " files");
+      }).catch(function (err) {
+        _this.uppy.log("[GoldenRetriever] Could not remove " + fileIDs.length + " files", 'warning');
+
+        _this.uppy.log(err);
+      });
+
+      _this.uppy.cancelAll();
+
+      _this.uppy.setState({
+        recoveredState: null
+      });
+
+      MetaDataStore.cleanup(_this.uppy.opts.id);
+    };
+
+    _this.handleComplete = function (_ref) {
+      var successful = _ref.successful;
+      var fileIDs = successful.map(function (file) {
+        return file.id;
+      });
+
+      _this.deleteBlobs(fileIDs).then(function () {
+        _this.uppy.log("[GoldenRetriever] Removed " + successful.length + " files that finished uploading");
+      }).catch(function (err) {
+        _this.uppy.log("[GoldenRetriever] Could not remove " + successful.length + " files that finished uploading", 'warning');
+
+        _this.uppy.log(err);
+      });
+
+      _this.uppy.setState({
+        recoveredState: null
+      });
+
+      MetaDataStore.cleanup(_this.uppy.opts.id);
+    };
+
+    _this.restoreBlobs = function () {
+      if (_this.uppy.getFiles().length > 0) {
+        Promise.all([_this.loadFileBlobsFromServiceWorker(), _this.loadFileBlobsFromIndexedDB()]).then(function (resultingArrayOfObjects) {
+          var blobs = _extends({}, resultingArrayOfObjects[0], resultingArrayOfObjects[1]);
+
+          _this.onBlobsLoaded(blobs);
+        });
+      } else {
+        _this.uppy.log('[GoldenRetriever] No files need to be loaded, only restoring processing state...');
+
+        _this.onBlobsLoaded([]);
+      }
+    };
+
     _this.type = 'debugger';
     _this.id = _this.opts.id || 'GoldenRetriever';
     _this.title = 'Golden Retriever';
@@ -25321,8 +25512,11 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     }, _this.opts.indexedDB || {}, {
       storeName: uppy.getID()
     }));
-    _this.saveFilesStateToLocalStorage = _this.saveFilesStateToLocalStorage.bind(_assertThisInitialized(_this));
-    _this.loadFilesStateFromLocalStorage = _this.loadFilesStateFromLocalStorage.bind(_assertThisInitialized(_this));
+    _this.saveFilesStateToLocalStorage = throttle(_this.saveFilesStateToLocalStorage.bind(_assertThisInitialized(_this)), 500, {
+      leading: true,
+      trailing: true
+    });
+    _this.restoreState = _this.restoreState.bind(_assertThisInitialized(_this));
     _this.loadFileBlobsFromServiceWorker = _this.loadFileBlobsFromServiceWorker.bind(_assertThisInitialized(_this));
     _this.loadFileBlobsFromIndexedDB = _this.loadFileBlobsFromIndexedDB.bind(_assertThisInitialized(_this));
     _this.onBlobsLoaded = _this.onBlobsLoaded.bind(_assertThisInitialized(_this));
@@ -25331,14 +25525,15 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
   var _proto = GoldenRetriever.prototype;
 
-  _proto.loadFilesStateFromLocalStorage = function loadFilesStateFromLocalStorage() {
+  _proto.restoreState = function restoreState() {
     var savedState = this.MetaDataStore.load();
 
     if (savedState) {
       this.uppy.log('[GoldenRetriever] Recovered some state from Local Storage');
       this.uppy.setState({
         currentUploads: savedState.currentUploads || {},
-        files: savedState.files || {}
+        files: savedState.files || {},
+        recoveredState: savedState
       });
       this.savedPluginData = savedState.pluginData;
     }
@@ -25370,8 +25565,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
     var uploadingFiles = {};
 
-    var _this$uppy$getState = this.uppy.getState(),
-        currentUploads = _this$uppy$getState.currentUploads;
+    var _this$uppy$getState2 = this.uppy.getState(),
+        currentUploads = _this$uppy$getState2.currentUploads;
 
     if (currentUploads) {
       var uploadIDs = Object.keys(currentUploads);
@@ -25387,8 +25582,34 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   _proto.saveFilesStateToLocalStorage = function saveFilesStateToLocalStorage() {
-    var filesToSave = _extends(this.getWaitingFiles(), this.getUploadingFiles());
+    var filesToSave = _extends({}, this.getWaitingFiles(), this.getUploadingFiles()); // If all files have been removed by the user, clear recovery state
 
+
+    if (Object.keys(filesToSave).length === 0) {
+      this.uppy.setState({
+        recoveredState: null
+      });
+      MetaDataStore.cleanup(this.uppy.opts.id);
+      return;
+    } // We dont’t need to store file.data on local files, because the actual blob will be restored later,
+    // and we want to avoid having weird properties in the serialized object.
+    // Also adding file.isRestored to all files, since they will be restored from local storage
+
+
+    var filesToSaveWithoutData = {};
+    Object.keys(filesToSave).forEach(function (file) {
+      if (filesToSave[file].isRemote) {
+        filesToSaveWithoutData[file] = _extends({}, filesToSave[file], {
+          isRestored: true
+        });
+      } else {
+        filesToSaveWithoutData[file] = _extends({}, filesToSave[file], {
+          isRestored: true,
+          data: null,
+          preview: null
+        });
+      }
+    });
     var pluginData = {}; // TODO Find a better way to do this?
     // Other plugins can attach a restore:get-data listener that receives this callback.
     // Plugins can then use this callback (sync) to provide data to be stored.
@@ -25397,12 +25618,12 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       _extends(pluginData, data);
     });
 
-    var _this$uppy$getState2 = this.uppy.getState(),
-        currentUploads = _this$uppy$getState2.currentUploads;
+    var _this$uppy$getState3 = this.uppy.getState(),
+        currentUploads = _this$uppy$getState3.currentUploads;
 
     this.MetaDataStore.save({
       currentUploads: currentUploads,
-      files: filesToSave,
+      files: filesToSaveWithoutData,
       pluginData: pluginData
     });
   };
@@ -25410,48 +25631,59 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   _proto.loadFileBlobsFromServiceWorker = function loadFileBlobsFromServiceWorker() {
     var _this3 = this;
 
-    this.ServiceWorkerStore.list().then(function (blobs) {
-      var numberOfFilesRecovered = Object.keys(blobs).length;
+    if (!this.ServiceWorkerStore) {
+      return Promise.resolve({});
+    }
 
-      var numberOfFilesTryingToRecover = _this3.uppy.getFiles().length;
+    return this.ServiceWorkerStore.list().then(function (blobs) {
+      var files = _this3.uppy.getFiles();
+
+      var localFilesOnly = files.filter(function (file) {
+        // maybe && !file.progress.uploadComplete
+        return !file.isRemote;
+      });
+      var numberOfFilesRecovered = Object.keys(blobs).length;
+      var numberOfFilesTryingToRecover = localFilesOnly.length;
 
       if (numberOfFilesRecovered === numberOfFilesTryingToRecover) {
         _this3.uppy.log("[GoldenRetriever] Successfully recovered " + numberOfFilesRecovered + " blobs from Service Worker!");
 
-        _this3.uppy.info("Successfully recovered " + numberOfFilesRecovered + " files", 'success', 3000);
-
-        return _this3.onBlobsLoaded(blobs);
+        return blobs;
       }
 
       _this3.uppy.log('[GoldenRetriever] No blobs found in Service Worker, trying IndexedDB now...');
 
-      return _this3.loadFileBlobsFromIndexedDB();
+      return {};
     }).catch(function (err) {
       _this3.uppy.log('[GoldenRetriever] Failed to recover blobs from Service Worker', 'warning');
 
       _this3.uppy.log(err);
+
+      return {};
     });
   };
 
   _proto.loadFileBlobsFromIndexedDB = function loadFileBlobsFromIndexedDB() {
     var _this4 = this;
 
-    this.IndexedDBStore.list().then(function (blobs) {
+    return this.IndexedDBStore.list().then(function (blobs) {
       var numberOfFilesRecovered = Object.keys(blobs).length;
 
       if (numberOfFilesRecovered > 0) {
         _this4.uppy.log("[GoldenRetriever] Successfully recovered " + numberOfFilesRecovered + " blobs from IndexedDB!");
 
-        _this4.uppy.info("Successfully recovered " + numberOfFilesRecovered + " files", 'success', 3000);
-
-        return _this4.onBlobsLoaded(blobs);
+        return blobs;
       }
 
       _this4.uppy.log('[GoldenRetriever] No blobs found in IndexedDB');
+
+      return {};
     }).catch(function (err) {
       _this4.uppy.log('[GoldenRetriever] Failed to recover blobs from IndexedDB', 'warning');
 
       _this4.uppy.log(err);
+
+      return {};
     });
   };
 
@@ -25460,7 +25692,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
     var obsoleteBlobs = [];
 
-    var updatedFiles = _extends({}, this.uppy.getState().files);
+    var updatedFiles = _extends({}, this.uppy.getState().files); // Loop through blobs that we can restore, add blobs to file objects
+
 
     Object.keys(blobs).forEach(function (fileID) {
       var originalFile = _this5.uppy.getFile(fileID);
@@ -25473,12 +25706,19 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       var cachedData = blobs[fileID];
       var updatedFileData = {
         data: cachedData,
-        isRestored: true
+        isRestored: true,
+        isGhost: false
       };
+      updatedFiles[fileID] = _extends({}, originalFile, updatedFileData);
+    }); // Loop through files that we can’t restore fully — we only have meta, not blobs,
+    // set .isGhost on them, also set isRestored to all files
 
-      var updatedFile = _extends({}, originalFile, updatedFileData);
-
-      updatedFiles[fileID] = updatedFile;
+    Object.keys(updatedFiles).forEach(function (fileID) {
+      if (updatedFiles[fileID].data === null) {
+        updatedFiles[fileID] = _extends({}, updatedFiles[fileID], {
+          isGhost: true
+        });
+      }
     });
     this.uppy.setState({
       files: updatedFiles
@@ -25513,87 +25753,33 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   _proto.install = function install() {
-    var _this7 = this;
-
-    this.loadFilesStateFromLocalStorage();
-
-    if (this.uppy.getFiles().length > 0) {
-      if (this.ServiceWorkerStore) {
-        this.uppy.log('[GoldenRetriever] Attempting to load files from Service Worker...');
-        this.loadFileBlobsFromServiceWorker();
-      } else {
-        this.uppy.log('[GoldenRetriever] Attempting to load files from Indexed DB...');
-        this.loadFileBlobsFromIndexedDB();
-      }
-    } else {
-      this.uppy.log('[GoldenRetriever] No files need to be loaded, only restoring processing state...');
-      this.onBlobsLoaded([]);
-    }
-
-    this.uppy.on('file-added', function (file) {
-      if (file.isRemote) return;
-
-      if (_this7.ServiceWorkerStore) {
-        _this7.ServiceWorkerStore.put(file).catch(function (err) {
-          _this7.uppy.log('[GoldenRetriever] Could not store file', 'warning');
-
-          _this7.uppy.log(err);
-        });
-      }
-
-      _this7.IndexedDBStore.put(file).catch(function (err) {
-        _this7.uppy.log('[GoldenRetriever] Could not store file', 'warning');
-
-        _this7.uppy.log(err);
-      });
-    });
-    this.uppy.on('file-removed', function (file) {
-      if (_this7.ServiceWorkerStore) {
-        _this7.ServiceWorkerStore.delete(file.id).catch(function (err) {
-          _this7.uppy.log('[GoldenRetriever] Failed to remove file', 'warning');
-
-          _this7.uppy.log(err);
-        });
-      }
-
-      _this7.IndexedDBStore.delete(file.id).catch(function (err) {
-        _this7.uppy.log('[GoldenRetriever] Failed to remove file', 'warning');
-
-        _this7.uppy.log(err);
-      });
-    });
-    this.uppy.on('complete', function (_ref) {
-      var successful = _ref.successful;
-      var fileIDs = successful.map(function (file) {
-        return file.id;
-      });
-
-      _this7.deleteBlobs(fileIDs).then(function () {
-        _this7.uppy.log("[GoldenRetriever] Removed " + successful.length + " files that finished uploading");
-      }).catch(function (err) {
-        _this7.uppy.log("[GoldenRetriever] Could not remove " + successful.length + " files that finished uploading", 'warning');
-
-        _this7.uppy.log(err);
-      });
-    });
+    this.restoreState();
+    this.restoreBlobs();
+    this.uppy.on('file-added', this.addBlobToStores);
+    this.uppy.on('file-editor:complete', this.replaceBlobInStores);
+    this.uppy.on('file-removed', this.removeBlobFromStores);
     this.uppy.on('state-update', this.saveFilesStateToLocalStorage);
-    this.uppy.on('restored', function () {
-      // start all uploads again when file blobs are restored
-      var _this7$uppy$getState = _this7.uppy.getState(),
-          currentUploads = _this7$uppy$getState.currentUploads;
+    this.uppy.on('restore-confirmed', this.handleRestoreConfirmed);
+    this.uppy.on('restore-canceled', this.abortRestore);
+    this.uppy.on('complete', this.handleComplete);
+  };
 
-      if (currentUploads) {
-        Object.keys(currentUploads).forEach(function (uploadId) {
-          _this7.uppy.restore(uploadId, currentUploads[uploadId]);
-        });
-      }
-    });
+  _proto.uninstall = function uninstall() {
+    this.uppy.off('file-added', this.addBlobToStores);
+    this.uppy.off('file-editor:complete', this.replaceBlobInStores);
+    this.uppy.off('file-removed', this.removeBlobFromStores);
+    this.uppy.off('state-update', this.saveFilesStateToLocalStorage);
+    this.uppy.off('restore-confirmed', this.handleRestoreConfirmed);
+    this.uppy.off('restore-canceled', this.abortRestore);
+    this.uppy.off('complete', this.handleComplete);
   };
 
   return GoldenRetriever;
-}(Plugin), _class.VERSION = "1.3.25", _temp);
-},{"./IndexedDBStore":115,"./MetaDataStore":116,"./ServiceWorkerStore":117,"@uppy/core":84}],119:[function(require,module,exports){
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+}(Plugin), _class.VERSION = "1.4.2", _temp);
+},{"./IndexedDBStore":116,"./MetaDataStore":117,"./ServiceWorkerStore":118,"@uppy/core":78,"lodash.throttle":34}],120:[function(require,module,exports){
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/provider-views'),
     ProviderViews = _require.ProviderViews;
@@ -25620,12 +25806,14 @@ module.exports = /*#__PURE__*/function (_ProviderViews) {
 
   return DriveProviderViews;
 }(ProviderViews);
-},{"@uppy/provider-views":148}],120:[function(require,module,exports){
+},{"@uppy/provider-views":155}],121:[function(require,module,exports){
 var _class, _temp;
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -25659,8 +25847,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         viewBox: "0 0 32 32"
       }, h("g", {
         fill: "none",
-        "fill-rule": "evenodd"
+        fillRule: "evenodd"
       }, h("rect", {
+        className: "uppy-ProviderIconBg",
         fill: "#4285F4",
         width: "32",
         height: "32",
@@ -25711,11 +25900,13 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return GoogleDrive;
-}(Plugin), _class.VERSION = "1.5.23", _temp);
-},{"./DriveProviderViews":119,"@uppy/companion-client":81,"@uppy/core":84,"preact":38}],121:[function(require,module,exports){
-var _temp;
+}(Plugin), _class.VERSION = "1.7.2", _temp);
+},{"./DriveProviderViews":120,"@uppy/companion-client":75,"@uppy/core":78,"preact":122}],122:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],123:[function(require,module,exports){
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var Cropper = require('cropperjs');
 
@@ -25723,31 +25914,58 @@ var _require = require('preact'),
     h = _require.h,
     Component = _require.Component;
 
-module.exports = (_temp = /*#__PURE__*/function (_Component) {
+module.exports = /*#__PURE__*/function (_Component) {
   _inheritsLoose(Editor, _Component);
 
-  function Editor() {
+  function Editor(props) {
     var _this;
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    _this = _Component.call(this, props) || this;
 
-    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+    _this.granularRotateOnChange = function (ev) {
+      var _this$state = _this.state,
+          rotationAngle = _this$state.rotationAngle,
+          rotationDelta = _this$state.rotationDelta;
+      var pendingRotationDelta = Number(ev.target.value) - rotationDelta;
+      cancelAnimationFrame(_this.granularRotateOnInputNextFrame);
 
-    _this.save = function () {
-      _this.cropper.getCroppedCanvas().toBlob(function (blob) {
-        return _this.props.save(blob);
-      }, _this.props.currentImage.type, _this.props.opts.quality);
+      if (pendingRotationDelta !== 0) {
+        var pendingRotationAngle = rotationAngle + pendingRotationDelta;
+        _this.granularRotateOnInputNextFrame = requestAnimationFrame(function () {
+          _this.cropper.rotateTo(pendingRotationAngle);
+        });
+      }
     };
 
+    _this.state = {
+      rotationAngle: 0,
+      rotationDelta: 0
+    };
     return _this;
   }
 
   var _proto = Editor.prototype;
 
   _proto.componentDidMount = function componentDidMount() {
-    this.cropper = new Cropper(this.imgElement, this.props.opts.cropperOptions);
+    var _this2 = this;
+
+    var _this$props = this.props,
+        opts = _this$props.opts,
+        storeCropperInstance = _this$props.storeCropperInstance;
+    this.cropper = new Cropper(this.imgElement, opts.cropperOptions);
+    storeCropperInstance(this.cropper);
+
+    if (opts.actions.granularRotate) {
+      this.imgElement.addEventListener('crop', function (ev) {
+        var rotationAngle = ev.detail.rotate;
+
+        _this2.setState({
+          rotationAngle: rotationAngle,
+          // 405 == 360 + 45
+          rotationDelta: (rotationAngle + 405) % 90 - 45
+        });
+      });
+    }
   };
 
   _proto.componentWillUnmount = function componentWillUnmount() {
@@ -25755,22 +25973,22 @@ module.exports = (_temp = /*#__PURE__*/function (_Component) {
   };
 
   _proto.renderRevert = function renderRevert() {
-    var _this2 = this;
+    var _this3 = this;
 
     return h("button", {
       type: "button",
-      class: "uppy-u-reset uppy-c-btn",
+      className: "uppy-u-reset uppy-c-btn",
       "aria-label": this.props.i18n('revert'),
       "data-microtip-position": "top",
       role: "tooltip",
       onClick: function onClick() {
-        _this2.cropper.reset();
+        _this3.cropper.reset();
 
-        _this2.cropper.setAspectRatio(0);
+        _this3.cropper.setAspectRatio(0);
       }
     }, h("svg", {
       "aria-hidden": "true",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       width: "24",
       height: "24",
       viewBox: "0 0 24 24"
@@ -25783,20 +26001,20 @@ module.exports = (_temp = /*#__PURE__*/function (_Component) {
   };
 
   _proto.renderRotate = function renderRotate() {
-    var _this3 = this;
+    var _this4 = this;
 
     return h("button", {
       type: "button",
-      class: "uppy-u-reset uppy-c-btn",
+      className: "uppy-u-reset uppy-c-btn",
       onClick: function onClick() {
-        return _this3.cropper.rotate(90);
+        return _this4.cropper.rotate(-90);
       },
       "aria-label": this.props.i18n('rotate'),
       "data-microtip-position": "top",
       role: "tooltip"
     }, h("svg", {
       "aria-hidden": "true",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       width: "24",
       height: "24",
       viewBox: "0 0 24 24"
@@ -25804,25 +26022,43 @@ module.exports = (_temp = /*#__PURE__*/function (_Component) {
       d: "M0 0h24v24H0V0zm0 0h24v24H0V0z",
       fill: "none"
     }), h("path", {
-      d: "M7.47 21.49C4.2 19.93 1.86 16.76 1.5 13H0c.51 6.16 5.66 11 11.95 11 .23 0 .44-.02.66-.03L8.8 20.15l-1.33 1.34zM12.05 0c-.23 0-.44.02-.66.04l3.81 3.81 1.33-1.33C19.8 4.07 22.14 7.24 22.5 11H24c-.51-6.16-5.66-11-11.95-11zM16 14h2V8c0-1.11-.9-2-2-2h-6v2h6v6zm-8 2V4H6v2H4v2h2v8c0 1.1.89 2 2 2h8v2h2v-2h2v-2H8z"
+      d: "M14 10a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7a2 2 0 012-2h8zm0 1.75H6a.25.25 0 00-.243.193L5.75 12v7a.25.25 0 00.193.243L6 19.25h8a.25.25 0 00.243-.193L14.25 19v-7a.25.25 0 00-.193-.243L14 11.75zM12 .76V4c2.3 0 4.61.88 6.36 2.64a8.95 8.95 0 012.634 6.025L21 13a1 1 0 01-1.993.117L19 13h-.003a6.979 6.979 0 00-2.047-4.95 6.97 6.97 0 00-4.652-2.044L12 6v3.24L7.76 5 12 .76z"
     })));
   };
 
+  _proto.renderGranularRotate = function renderGranularRotate() {
+    return h("label", {
+      "data-microtip-position": "top",
+      role: "tooltip",
+      "aria-label": this.state.rotationAngle + "\xBA",
+      className: "uppy-ImageCropper-rangeWrapper uppy-u-reset"
+    }, h("input", {
+      className: "uppy-ImageCropper-range uppy-u-reset",
+      type: "range",
+      onInput: this.granularRotateOnChange,
+      onChange: this.granularRotateOnChange,
+      value: this.state.rotationDelta,
+      min: "-45",
+      max: "44",
+      "aria-label": this.props.i18n('rotate')
+    }));
+  };
+
   _proto.renderFlip = function renderFlip() {
-    var _this4 = this;
+    var _this5 = this;
 
     return h("button", {
       type: "button",
-      class: "uppy-u-reset uppy-c-btn",
+      className: "uppy-u-reset uppy-c-btn",
       "aria-label": this.props.i18n('flipHorizontal'),
       "data-microtip-position": "top",
       role: "tooltip",
       onClick: function onClick() {
-        return _this4.cropper.scaleX(-_this4.cropper.getData().scaleX || -1);
+        return _this5.cropper.scaleX(-_this5.cropper.getData().scaleX || -1);
       }
     }, h("svg", {
       "aria-hidden": "true",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       width: "24",
       height: "24",
       viewBox: "0 0 24 24"
@@ -25835,20 +26071,20 @@ module.exports = (_temp = /*#__PURE__*/function (_Component) {
   };
 
   _proto.renderZoomIn = function renderZoomIn() {
-    var _this5 = this;
+    var _this6 = this;
 
     return h("button", {
       type: "button",
-      class: "uppy-u-reset uppy-c-btn",
+      className: "uppy-u-reset uppy-c-btn",
       "aria-label": this.props.i18n('zoomIn'),
       "data-microtip-position": "top",
       role: "tooltip",
       onClick: function onClick() {
-        return _this5.cropper.zoom(0.1);
+        return _this6.cropper.zoom(0.1);
       }
     }, h("svg", {
       "aria-hidden": "true",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       height: "24",
       viewBox: "0 0 24 24",
       width: "24"
@@ -25863,20 +26099,20 @@ module.exports = (_temp = /*#__PURE__*/function (_Component) {
   };
 
   _proto.renderZoomOut = function renderZoomOut() {
-    var _this6 = this;
+    var _this7 = this;
 
     return h("button", {
       type: "button",
-      class: "uppy-u-reset uppy-c-btn",
+      className: "uppy-u-reset uppy-c-btn",
       "aria-label": this.props.i18n('zoomOut'),
       "data-microtip-position": "top",
       role: "tooltip",
       onClick: function onClick() {
-        return _this6.cropper.zoom(-0.1);
+        return _this7.cropper.zoom(-0.1);
       }
     }, h("svg", {
       "aria-hidden": "true",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       width: "24",
       height: "24",
       viewBox: "0 0 24 24"
@@ -25889,20 +26125,20 @@ module.exports = (_temp = /*#__PURE__*/function (_Component) {
   };
 
   _proto.renderCropSquare = function renderCropSquare() {
-    var _this7 = this;
+    var _this8 = this;
 
     return h("button", {
       type: "button",
-      class: "uppy-u-reset uppy-c-btn",
+      className: "uppy-u-reset uppy-c-btn",
       "aria-label": this.props.i18n('aspectRatioSquare'),
       "data-microtip-position": "top",
       role: "tooltip",
       onClick: function onClick() {
-        return _this7.cropper.setAspectRatio(1);
+        return _this8.cropper.setAspectRatio(1);
       }
     }, h("svg", {
       "aria-hidden": "true",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       width: "24",
       height: "24",
       viewBox: "0 0 24 24"
@@ -25915,20 +26151,20 @@ module.exports = (_temp = /*#__PURE__*/function (_Component) {
   };
 
   _proto.renderCropWidescreen = function renderCropWidescreen() {
-    var _this8 = this;
+    var _this9 = this;
 
     return h("button", {
       type: "button",
-      class: "uppy-u-reset uppy-c-btn",
+      className: "uppy-u-reset uppy-c-btn",
       "aria-label": this.props.i18n('aspectRatioLandscape'),
       "data-microtip-position": "top",
       role: "tooltip",
       onClick: function onClick() {
-        return _this8.cropper.setAspectRatio(16 / 9);
+        return _this9.cropper.setAspectRatio(16 / 9);
       }
     }, h("svg", {
       "aria-hidden": "true",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       width: "24",
       height: "24",
       viewBox: "0 0 24 24"
@@ -25941,20 +26177,20 @@ module.exports = (_temp = /*#__PURE__*/function (_Component) {
   };
 
   _proto.renderCropWidescreenVertical = function renderCropWidescreenVertical() {
-    var _this9 = this;
+    var _this10 = this;
 
     return h("button", {
       type: "button",
-      class: "uppy-u-reset uppy-c-btn",
+      className: "uppy-u-reset uppy-c-btn",
       "aria-label": this.props.i18n('aspectRatioPortrait'),
       "data-microtip-position": "top",
       role: "tooltip",
       onClick: function onClick() {
-        return _this9.cropper.setAspectRatio(9 / 16);
+        return _this10.cropper.setAspectRatio(9 / 16);
       }
     }, h("svg", {
       "aria-hidden": "true",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       width: "24",
       height: "24",
       viewBox: "0 0 24 24"
@@ -25967,59 +26203,41 @@ module.exports = (_temp = /*#__PURE__*/function (_Component) {
   };
 
   _proto.render = function render() {
-    var _this10 = this;
+    var _this11 = this;
 
-    var _this$props = this.props,
-        currentImage = _this$props.currentImage,
-        i18n = _this$props.i18n,
-        opts = _this$props.opts;
+    var _this$props2 = this.props,
+        currentImage = _this$props2.currentImage,
+        i18n = _this$props2.i18n,
+        opts = _this$props2.opts;
     var actions = opts.actions; // eslint-disable-next-line compat/compat
 
     var imageURL = URL.createObjectURL(currentImage.data);
     return h("div", {
-      class: "uppy-ImageCropper"
+      className: "uppy-ImageCropper"
     }, h("div", {
-      class: "uppy-ImageCropper-container"
+      className: "uppy-ImageCropper-container"
     }, h("img", {
-      class: "uppy-ImageCropper-image",
+      className: "uppy-ImageCropper-image",
       alt: currentImage.name,
       src: imageURL,
       ref: function ref(_ref) {
-        _this10.imgElement = _ref;
+        _this11.imgElement = _ref;
       }
     })), h("div", {
-      class: "uppy-ImageCropper-controls"
-    }, h("button", {
-      type: "button",
-      class: "uppy-u-reset uppy-c-btn",
-      "aria-label": i18n('save'),
-      "data-microtip-position": "top",
-      role: "tooltip",
-      onClick: function onClick() {
-        return _this10.save();
-      }
-    }, h("svg", {
-      "aria-hidden": "true",
-      class: "uppy-c-icon",
-      width: "24",
-      height: "24",
-      viewBox: "0 0 24 24"
-    }, h("path", {
-      d: "M0 0h24v24H0z",
-      fill: "none"
-    }), h("path", {
-      d: "M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
-    }))), actions.revert && this.renderRevert(), actions.rotate && this.renderRotate(), actions.flip && this.renderFlip(), actions.zoomIn && this.renderZoomIn(), actions.zoomOut && this.renderZoomOut(), actions.cropSquare && this.renderCropSquare(), actions.cropWidescreen && this.renderCropWidescreen(), actions.cropWidescreenVertical && this.renderCropWidescreenVertical()));
+      className: "uppy-ImageCropper-controls"
+    }, actions.revert && this.renderRevert(), actions.rotate && this.renderRotate(), actions.granularRotate && this.renderGranularRotate(), actions.flip && this.renderFlip(), actions.zoomIn && this.renderZoomIn(), actions.zoomOut && this.renderZoomOut(), actions.cropSquare && this.renderCropSquare(), actions.cropWidescreen && this.renderCropWidescreen(), actions.cropWidescreenVertical && this.renderCropWidescreenVertical()));
   };
 
   return Editor;
-}(Component), _temp);
-},{"cropperjs":15,"preact":38}],122:[function(require,module,exports){
+}(Component);
+},{"cropperjs":14,"preact":125}],124:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -26039,25 +26257,36 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
     _this = _Plugin.call(this, uppy, opts) || this;
 
-    _this.save = function (blob) {
-      var _this$getPluginState = _this.getPluginState(),
-          currentImage = _this$getPluginState.currentImage;
+    _this.save = function () {
+      var saveBlobCallback = function saveBlobCallback(blob) {
+        var _this$getPluginState = _this.getPluginState(),
+            currentImage = _this$getPluginState.currentImage;
 
-      _this.uppy.setFileState(currentImage.id, {
-        data: blob,
-        size: blob.size,
-        preview: null
-      });
+        _this.uppy.setFileState(currentImage.id, {
+          data: blob,
+          size: blob.size,
+          preview: null
+        });
 
-      var updatedFile = _this.uppy.getFile(currentImage.id);
+        var updatedFile = _this.uppy.getFile(currentImage.id);
 
-      _this.uppy.emit('thumbnail:request', updatedFile);
+        _this.uppy.emit('thumbnail:request', updatedFile);
 
-      _this.setPluginState({
-        currentImage: updatedFile
-      });
+        _this.setPluginState({
+          currentImage: updatedFile
+        });
 
-      _this.uppy.emit('file-editor:complete', updatedFile);
+        _this.uppy.emit('file-editor:complete', updatedFile);
+      };
+
+      var _this$getPluginState2 = _this.getPluginState(),
+          currentImage = _this$getPluginState2.currentImage;
+
+      _this.cropper.getCroppedCanvas().toBlob(saveBlobCallback, currentImage.type, _this.opts.quality);
+    };
+
+    _this.storeCropperInstance = function (cropper) {
+      _this.cropper = cropper;
     };
 
     _this.selectFile = function (file) {
@@ -26073,12 +26302,11 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     _this.type = 'editor';
     _this.defaultLocale = {
       strings: {
-        save: 'Save',
         revert: 'Revert',
         rotate: 'Rotate',
         zoomIn: 'Zoom in',
         zoomOut: 'Zoom out',
-        flipHorizontal: 'Flip horizonal',
+        flipHorizontal: 'Flip horizontal',
         aspectRatioSquare: 'Crop square',
         aspectRatioLandscape: 'Crop landscape (16:9)',
         aspectRatioPortrait: 'Crop portrait (9:16)'
@@ -26093,6 +26321,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     var defaultActions = {
       revert: true,
       rotate: true,
+      granularRotate: true,
       flip: true,
       zoomIn: true,
       zoomOut: true,
@@ -26158,8 +26387,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   _proto.render = function render() {
-    var _this$getPluginState2 = this.getPluginState(),
-        currentImage = _this$getPluginState2.currentImage;
+    var _this$getPluginState3 = this.getPluginState(),
+        currentImage = _this$getPluginState3.currentImage;
 
     if (currentImage === null || currentImage.isRemote) {
       return;
@@ -26167,6 +26396,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
     return h(Editor, {
       currentImage: currentImage,
+      storeCropperInstance: this.storeCropperInstance,
       save: this.save,
       opts: this.opts,
       i18n: this.i18n
@@ -26174,13 +26404,17 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return ImageEditor;
-}(Plugin), _class.VERSION = "0.2.1", _temp);
-},{"./Editor":121,"@uppy/core":84,"@uppy/utils/lib/Translator":204,"preact":38}],123:[function(require,module,exports){
+}(Plugin), _class.VERSION = "0.4.0", _temp);
+},{"./Editor":123,"@uppy/core":78,"@uppy/utils/lib/Translator":218,"preact":125}],125:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],126:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -26224,7 +26458,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       };
 
       return h("div", {
-        class: "uppy uppy-Informer",
+        className: "uppy uppy-Informer",
         "aria-hidden": isHidden
       }, h("p", {
         role: "alert"
@@ -26233,7 +26467,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         "data-microtip-position": "top-left",
         "data-microtip-size": "medium",
         role: "tooltip",
-        onclick: displayErrorAlert,
+        onClick: displayErrorAlert,
         onMouseOver: handleMouseOver,
         onMouseLeave: handleMouseLeave
       }, "?")));
@@ -26260,13 +26494,17 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Informer;
-}(Plugin), _class.VERSION = "1.6.1", _temp);
-},{"@uppy/core":84,"preact":38}],124:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.6.6", _temp);
+},{"@uppy/core":78,"preact":127}],127:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],128:[function(require,module,exports){
 var _class, _temp;
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -26300,8 +26538,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         viewBox: "0 0 32 32"
       }, h("g", {
         fill: "none",
-        "fill-rule": "evenodd"
+        fillRule: "evenodd"
       }, h("rect", {
+        className: "uppy-ProviderIconBg",
         fill: "#E1306C",
         width: "32",
         height: "32",
@@ -26356,13 +26595,17 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Instagram;
-}(Plugin), _class.VERSION = "1.4.23", _temp);
-},{"@uppy/companion-client":81,"@uppy/core":84,"@uppy/provider-views":148,"preact":38}],125:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.5.2", _temp);
+},{"@uppy/companion-client":75,"@uppy/core":78,"@uppy/provider-views":155,"preact":129}],129:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],130:[function(require,module,exports){
 var _class, _temp;
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -26396,15 +26639,16 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         viewBox: "0 0 32 32"
       }, h("g", {
         fill: "none",
-        "fill-rule": "evenodd"
+        fillRule: "evenodd"
       }, h("rect", {
+        className: "uppy-ProviderIconBg",
         width: "32",
         height: "32",
         rx: "16",
         fill: "#0262C0"
       }), h("g", {
         fill: "#FFF",
-        "fill-rule": "nonzero"
+        fillRule: "nonzero"
       }, h("path", {
         d: "M24.157 22s1.492-.205 1.79-1.655a2.624 2.624 0 0 0 .03-.878c-.22-1.64-1.988-2.01-1.988-2.01s.307-1.765-1.312-2.69c-1.62-.925-3.1 0-3.1 0S18.711 13 16.366 13c-3.016 0-3.519 3.448-3.519 3.448S10 16.618 10 19.14c0 2.523 2.597 2.86 2.597 2.86h11.56z"
       }), h("path", {
@@ -26451,15 +26695,19 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return OneDrive;
-}(Plugin), _class.VERSION = "1.1.23", _temp);
-},{"@uppy/companion-client":81,"@uppy/core":84,"@uppy/provider-views":148,"preact":38}],126:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.2.2", _temp);
+},{"@uppy/companion-client":75,"@uppy/core":78,"@uppy/provider-views":155,"preact":131}],131:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],132:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -26502,18 +26750,18 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
     var isHidden = (progress === 0 || progress === 100) && this.opts.hideAfterFinish;
     return h("div", {
-      class: "uppy uppy-ProgressBar",
+      className: "uppy uppy-ProgressBar",
       style: {
         position: this.opts.fixed ? 'fixed' : 'initial'
       },
       "aria-hidden": isHidden
     }, h("div", {
-      class: "uppy-ProgressBar-inner",
+      className: "uppy-ProgressBar-inner",
       style: {
-        width: progress + '%'
+        width: progress + "%"
       }
     }), h("div", {
-      class: "uppy-ProgressBar-percentage"
+      className: "uppy-ProgressBar-percentage"
     }, progress));
   };
 
@@ -26530,8 +26778,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return ProgressBar;
-}(Plugin), _class.VERSION = "1.3.25", _temp);
-},{"@uppy/core":84,"preact":38}],127:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.3.30", _temp);
+},{"@uppy/core":78,"preact":133}],133:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],134:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h; // TODO use Fragment when upgrading to preact X
 
@@ -26539,16 +26789,16 @@ var _require = require('preact'),
 var Breadcrumb = function Breadcrumb(props) {
   return h("span", null, h("button", {
     type: "button",
-    class: "uppy-u-reset",
-    onclick: props.getFolder
+    className: "uppy-u-reset",
+    onClick: props.getFolder
   }, props.title), !props.isLast ? ' / ' : '');
 };
 
 module.exports = function (props) {
   return h("div", {
-    class: "uppy-Provider-breadcrumbs"
+    className: "uppy-Provider-breadcrumbs"
   }, h("div", {
-    class: "uppy-Provider-breadcrumbsIcon"
+    className: "uppy-Provider-breadcrumbsIcon"
   }, props.breadcrumbsIcon), props.directories.map(function (directory, i) {
     return h(Breadcrumb, {
       key: directory.id,
@@ -26560,7 +26810,7 @@ module.exports = function (props) {
     });
   }));
 };
-},{"preact":38}],128:[function(require,module,exports){
+},{"preact":156}],135:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var classNames = require('classnames');
@@ -26591,11 +26841,11 @@ var Browser = function Browser(props) {
 
   var selected = currentSelection.length;
   return h("div", {
-    class: classNames('uppy-ProviderBrowser', "uppy-ProviderBrowser-viewType--" + props.viewType)
+    className: classNames('uppy-ProviderBrowser', "uppy-ProviderBrowser-viewType--" + props.viewType)
   }, h("div", {
-    class: "uppy-ProviderBrowser-header"
+    className: "uppy-ProviderBrowser-header"
   }, h("div", {
-    class: classNames('uppy-ProviderBrowser-headerBar', !props.showBreadcrumbs && 'uppy-ProviderBrowser-headerBar--simple')
+    className: classNames('uppy-ProviderBrowser-headerBar', !props.showBreadcrumbs && 'uppy-ProviderBrowser-headerBar--simple')
   }, props.headerComponent)), props.showFilter && h(Filter, props), h(ItemList, {
     columns: [{
       name: 'Name',
@@ -26622,8 +26872,10 @@ var Browser = function Browser(props) {
 };
 
 module.exports = Browser;
-},{"./Filter":130,"./FooterActions":131,"./ItemList":136,"classnames":11,"preact":38}],129:[function(require,module,exports){
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+},{"./Filter":137,"./FooterActions":138,"./ItemList":143,"classnames":11,"preact":156}],136:[function(require,module,exports){
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     Component = _require.Component;
@@ -26647,10 +26899,12 @@ module.exports = /*#__PURE__*/function (_Component) {
 
   return CloseWrapper;
 }(Component);
-},{"preact":38}],130:[function(require,module,exports){
+},{"preact":156}],137:[function(require,module,exports){
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h,
@@ -26680,38 +26934,38 @@ module.exports = /*#__PURE__*/function (_Component) {
     var _this2 = this;
 
     return h("div", {
-      class: "uppy-ProviderBrowser-search"
+      className: "uppy-ProviderBrowser-search"
     }, h("input", {
-      class: "uppy-u-reset uppy-ProviderBrowser-searchInput",
+      className: "uppy-u-reset uppy-ProviderBrowser-searchInput",
       type: "text",
       placeholder: this.props.i18n('filter'),
       "aria-label": this.props.i18n('filter'),
-      onkeyup: this.preventEnterPress,
-      onkeydown: this.preventEnterPress,
-      onkeypress: this.preventEnterPress,
-      oninput: function oninput(e) {
+      onKeyUp: this.preventEnterPress,
+      onKeyDown: this.preventEnterPress,
+      onKeyPress: this.preventEnterPress,
+      onInput: function onInput(e) {
         return _this2.props.filterQuery(e);
       },
       value: this.props.filterInput
     }), h("svg", {
       "aria-hidden": "true",
       focusable: "false",
-      class: "uppy-c-icon uppy-ProviderBrowser-searchIcon",
+      className: "uppy-c-icon uppy-ProviderBrowser-searchIcon",
       width: "12",
       height: "12",
       viewBox: "0 0 12 12"
     }, h("path", {
       d: "M8.638 7.99l3.172 3.172a.492.492 0 1 1-.697.697L7.91 8.656a4.977 4.977 0 0 1-2.983.983C2.206 9.639 0 7.481 0 4.819 0 2.158 2.206 0 4.927 0c2.721 0 4.927 2.158 4.927 4.82a4.74 4.74 0 0 1-1.216 3.17zm-3.71.685c2.176 0 3.94-1.726 3.94-3.856 0-2.129-1.764-3.855-3.94-3.855C2.75.964.984 2.69.984 4.819c0 2.13 1.765 3.856 3.942 3.856z"
     })), this.props.filterInput && h("button", {
-      class: "uppy-u-reset uppy-ProviderBrowser-searchClose",
+      className: "uppy-u-reset uppy-ProviderBrowser-searchClose",
       type: "button",
       "aria-label": this.props.i18n('resetFilter'),
       title: this.props.i18n('resetFilter'),
-      onclick: this.props.filterQuery
+      onClick: this.props.filterQuery
     }, h("svg", {
       "aria-hidden": "true",
       focusable: "false",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       viewBox: "0 0 19 19"
     }, h("path", {
       d: "M17.318 17.232L9.94 9.854 9.586 9.5l-.354.354-7.378 7.378h.707l-.62-.62v.706L9.318 9.94l.354-.354-.354-.354L1.94 1.854v.707l.62-.62h-.706l7.378 7.378.354.354.354-.354 7.378-7.378h-.707l.622.62v-.706L9.854 9.232l-.354.354.354.354 7.378 7.378.708-.707-7.38-7.378v.708l7.38-7.38.353-.353-.353-.353-.622-.622-.353-.353-.354.352-7.378 7.38h.708L2.56 1.23 2.208.88l-.353.353-.622.62-.353.355.352.353 7.38 7.38v-.708l-7.38 7.38-.353.353.352.353.622.622.353.353.354-.353 7.38-7.38h-.708l7.38 7.38z"
@@ -26720,39 +26974,39 @@ module.exports = /*#__PURE__*/function (_Component) {
 
   return Filter;
 }(Component);
-},{"preact":38}],131:[function(require,module,exports){
+},{"preact":156}],138:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
 module.exports = function (props) {
   return h("div", {
-    class: "uppy-ProviderBrowser-footer"
+    className: "uppy-ProviderBrowser-footer"
   }, h("button", {
-    class: "uppy-u-reset uppy-c-btn uppy-c-btn-primary",
-    onclick: props.done
+    className: "uppy-u-reset uppy-c-btn uppy-c-btn-primary",
+    onClick: props.done
   }, props.i18n('selectX', {
     smart_count: props.selected
   })), h("button", {
-    class: "uppy-u-reset uppy-c-btn uppy-c-btn-link",
-    onclick: props.cancel
+    className: "uppy-u-reset uppy-c-btn uppy-c-btn-link",
+    onClick: props.cancel
   }, props.i18n('cancel')));
 };
-},{"preact":38}],132:[function(require,module,exports){
+},{"preact":156}],139:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h; // it could be a <li><button class="fake-checkbox"/> <button/></li>
 
 
 module.exports = function (props) {
   return h("li", {
-    class: props.className,
+    className: props.className,
     title: props.isDisabled ? props.restrictionReason : null
   }, h("div", {
     "aria-hidden": true,
-    class: "uppy-ProviderBrowserItem-fakeCheckbox " + (props.isChecked ? 'uppy-ProviderBrowserItem-fakeCheckbox--is-checked' : '')
+    className: "uppy-ProviderBrowserItem-fakeCheckbox " + (props.isChecked ? 'uppy-ProviderBrowserItem-fakeCheckbox--is-checked' : '')
   }), h("button", {
     type: "button",
-    class: "uppy-u-reset uppy-ProviderBrowserItem-inner",
-    onclick: props.toggleCheckbox,
+    className: "uppy-u-reset uppy-ProviderBrowserItem-inner",
+    onClick: props.toggleCheckbox,
     role: "option",
     "aria-label": props.isChecked ? props.i18n('unselectFileNamed', {
       name: props.title
@@ -26765,7 +27019,7 @@ module.exports = function (props) {
     "data-uppy-super-focusable": true
   }, props.itemIconEl, props.showTitles && props.title));
 };
-},{"preact":38}],133:[function(require,module,exports){
+},{"preact":156}],140:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -26773,7 +27027,7 @@ function FileIcon() {
   return h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: 11,
     height: 14.5,
     viewBox: "0 0 44 58"
@@ -26786,7 +27040,7 @@ function FolderIcon() {
   return h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     style: {
       minWidth: 16,
       marginRight: 3
@@ -26832,7 +27086,7 @@ module.exports = function (props) {
       });
   }
 };
-},{"preact":38}],134:[function(require,module,exports){
+},{"preact":156}],141:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -26842,22 +27096,22 @@ var getAriaLabelOfCheckbox = function getAriaLabelOfCheckbox(props) {
       return props.i18n('unselectAllFilesFromFolderNamed', {
         name: props.title
       });
-    } else {
-      return props.i18n('selectAllFilesFromFolderNamed', {
-        name: props.title
-      });
     }
-  } else {
-    if (props.isChecked) {
-      return props.i18n('unselectFileNamed', {
-        name: props.title
-      });
-    } else {
-      return props.i18n('selectFileNamed', {
-        name: props.title
-      });
-    }
+
+    return props.i18n('selectAllFilesFromFolderNamed', {
+      name: props.title
+    });
   }
+
+  if (props.isChecked) {
+    return props.i18n('unselectFileNamed', {
+      name: props.title
+    });
+  }
+
+  return props.i18n('selectFileNamed', {
+    name: props.title
+  });
 }; // if folder:
 //   + checkbox (selects all files from folder)
 //   + folder name (opens folder)
@@ -26868,11 +27122,11 @@ var getAriaLabelOfCheckbox = function getAriaLabelOfCheckbox(props) {
 
 module.exports = function (props) {
   return h("li", {
-    class: props.className,
+    className: props.className,
     title: props.isDisabled ? props.restrictionReason : null
-  }, h("button", {
+  }, !props.isCheckboxDisabled ? h("button", {
     type: "button",
-    class: "uppy-u-reset uppy-ProviderBrowserItem-fakeCheckbox " + (props.isChecked ? 'uppy-ProviderBrowserItem-fakeCheckbox--is-checked' : ''),
+    className: "uppy-u-reset uppy-ProviderBrowserItem-fakeCheckbox " + (props.isChecked ? 'uppy-ProviderBrowserItem-fakeCheckbox--is-checked' : ''),
     onClick: props.toggleCheckbox // for the <label/>
     ,
     id: props.id,
@@ -26882,25 +27136,25 @@ module.exports = function (props) {
     "aria-disabled": props.isDisabled,
     disabled: props.isDisabled,
     "data-uppy-super-focusable": true
-  }), props.type === 'file' ? // label for a checkbox
+  }) : null, props.type === 'file' ? // label for a checkbox
   h("label", {
-    for: props.id,
-    class: "uppy-u-reset uppy-ProviderBrowserItem-inner"
+    htmlFor: props.id,
+    className: "uppy-u-reset uppy-ProviderBrowserItem-inner"
   }, h("div", {
-    class: "uppy-ProviderBrowserItem-iconWrap"
+    className: "uppy-ProviderBrowserItem-iconWrap"
   }, props.itemIconEl), props.showTitles && props.title) : // button to open a folder
   h("button", {
     type: "button",
-    class: "uppy-u-reset uppy-ProviderBrowserItem-inner",
-    onclick: props.handleFolderClick,
+    className: "uppy-u-reset uppy-ProviderBrowserItem-inner",
+    onClick: props.handleFolderClick,
     "aria-label": props.i18n('openFolderNamed', {
       name: props.title
     })
   }, h("div", {
-    class: "uppy-ProviderBrowserItem-iconWrap"
+    className: "uppy-ProviderBrowserItem-iconWrap"
   }, props.itemIconEl), props.showTitles && h("span", null, props.title)));
 };
-},{"preact":38}],135:[function(require,module,exports){
+},{"preact":156}],142:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var _require = require('preact'),
@@ -26944,7 +27198,7 @@ module.exports = function (props) {
       throw new Error("There is no such type " + props.viewType);
   }
 };
-},{"./components/GridLi":132,"./components/ItemIcon":133,"./components/ListLi":134,"classnames":11,"preact":38}],136:[function(require,module,exports){
+},{"./components/GridLi":139,"./components/ItemIcon":140,"./components/ListLi":141,"classnames":11,"preact":156}],143:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var _require = require('preact'),
@@ -26952,7 +27206,10 @@ var _require = require('preact'),
 
 var remoteFileObjToLocal = require('@uppy/utils/lib/remoteFileObjToLocal');
 
-var Item = require('./Item/index');
+var Item = require('./Item/index'); // Hopefully this name will not be used by Google
+
+
+var VIRTUAL_SHARED_DIR = 'shared-with-me';
 
 var getSharedProps = function getSharedProps(fileOrFolder, props) {
   return {
@@ -26973,29 +27230,35 @@ var getSharedProps = function getSharedProps(fileOrFolder, props) {
 };
 
 module.exports = function (props) {
-  if (!props.folders.length && !props.files.length) {
+  var folders = props.folders,
+      files = props.files,
+      handleScroll = props.handleScroll,
+      isChecked = props.isChecked;
+
+  if (!folders.length && !files.length) {
     return h("div", {
-      class: "uppy-Provider-empty"
+      className: "uppy-Provider-empty"
     }, props.i18n('noFilesFound'));
   }
 
   return h("div", {
-    class: "uppy-ProviderBrowser-body"
+    className: "uppy-ProviderBrowser-body"
   }, h("ul", {
-    class: "uppy-ProviderBrowser-list",
-    onscroll: props.handleScroll,
+    className: "uppy-ProviderBrowser-list",
+    onScroll: handleScroll,
     role: "listbox" // making <ul> not focusable for firefox
     ,
-    tabindex: "-1"
-  }, props.folders.map(function (folder) {
+    tabIndex: "-1"
+  }, folders.map(function (folder) {
     return Item(_extends({}, getSharedProps(folder, props), {
       type: 'folder',
-      isDisabled: props.isChecked(folder) ? props.isChecked(folder).loading : false,
+      isDisabled: isChecked(folder) ? isChecked(folder).loading : false,
+      isCheckboxDisabled: folder.id === VIRTUAL_SHARED_DIR,
       handleFolderClick: function handleFolderClick() {
         return props.handleFolderClick(folder);
       }
     }));
-  }), props.files.map(function (file) {
+  }), files.map(function (file) {
     var validateRestrictions = props.validateRestrictions(remoteFileObjToLocal(file), [].concat(props.uppyFiles, props.currentSelection));
     var sharedProps = getSharedProps(file, props);
     var restrictionReason = validateRestrictions.reason;
@@ -27006,17 +27269,19 @@ module.exports = function (props) {
     }));
   })));
 };
-},{"./Item/index":135,"@uppy/utils/lib/remoteFileObjToLocal":234,"preact":38}],137:[function(require,module,exports){
+},{"./Item/index":142,"@uppy/utils/lib/remoteFileObjToLocal":249,"preact":156}],144:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
 module.exports = function (props) {
   return h("div", {
-    class: "uppy-Provider-loading"
+    className: "uppy-Provider-loading"
   }, h("span", null, props.i18n('loading')));
 };
-},{"preact":38}],138:[function(require,module,exports){
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+},{"preact":156}],145:[function(require,module,exports){
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h,
@@ -27033,20 +27298,20 @@ var AuthView = /*#__PURE__*/function (_Component) {
 
   _proto.render = function render() {
     var pluginNameComponent = h("span", {
-      class: "uppy-Provider-authTitleName"
+      className: "uppy-Provider-authTitleName"
     }, this.props.pluginName, h("br", null));
     return h("div", {
-      class: "uppy-Provider-auth"
+      className: "uppy-Provider-auth"
     }, h("div", {
-      class: "uppy-Provider-authIcon"
+      className: "uppy-Provider-authIcon"
     }, this.props.pluginIcon()), h("div", {
-      class: "uppy-Provider-authTitle"
+      className: "uppy-Provider-authTitle"
     }, this.props.i18nArray('authenticateWithTitle', {
       pluginName: pluginNameComponent
     })), h("button", {
       type: "button",
-      class: "uppy-u-reset uppy-c-btn uppy-c-btn-primary uppy-Provider-authBtn",
-      onclick: this.props.handleAuth,
+      className: "uppy-u-reset uppy-c-btn uppy-c-btn-primary uppy-Provider-authBtn",
+      onClick: this.props.handleAuth,
       "data-uppy-super-focusable": true
     }, this.props.i18nArray('authenticateWith', {
       pluginName: this.props.pluginName
@@ -27057,7 +27322,7 @@ var AuthView = /*#__PURE__*/function (_Component) {
 }(Component);
 
 module.exports = AuthView;
-},{"preact":38}],139:[function(require,module,exports){
+},{"preact":156}],146:[function(require,module,exports){
 var User = require('./User');
 
 var Breadcrumbs = require('../Breadcrumbs');
@@ -27081,7 +27346,7 @@ module.exports = function (props) {
   }));
   return components;
 };
-},{"../Breadcrumbs":127,"./User":141}],140:[function(require,module,exports){
+},{"../Breadcrumbs":134,"./User":148}],147:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -27101,23 +27366,13 @@ var generateFileID = require('@uppy/utils/lib/generateFileID');
 
 var getFileType = require('@uppy/utils/lib/getFileType');
 
+var findIndex = require('@uppy/utils/lib/findIndex');
+
 var isPreviewSupported = require('@uppy/utils/lib/isPreviewSupported');
 
 var SharedHandler = require('../SharedHandler');
 
-var CloseWrapper = require('../CloseWrapper');
-/**
- * Array.prototype.findIndex ponyfill for old browsers.
- */
-
-
-function findIndex(array, predicate) {
-  for (var i = 0; i < array.length; i++) {
-    if (predicate(array[i])) return i;
-  }
-
-  return -1;
-} // location.origin does not exist in IE
+var CloseWrapper = require('../CloseWrapper'); // location.origin does not exist in IE
 
 
 function getOrigin() {
@@ -27549,7 +27804,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function () {
     var getRegex = function getRegex(value) {
       if (typeof value === 'string') {
         return new RegExp("^" + value + "$");
-      } else if (value instanceof RegExp) {
+      }
+
+      if (value instanceof RegExp) {
         return value;
       }
     };
@@ -27624,9 +27881,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function () {
           }).catch(function (e) {
             return reject(e);
           });
-        } else {
-          return resolve(files);
         }
+
+        return resolve(files);
       }).catch(function (e) {
         return reject(e);
       });
@@ -27642,9 +27899,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function () {
     var promises = currentSelection.map(function (file) {
       if (file.isFolder) {
         return _this7.addFolder(file);
-      } else {
-        return _this7.addFile(file);
       }
+
+      return _this7.addFile(file);
     });
 
     this._sharedHandler.loaderWrapper(Promise.all(promises), function () {
@@ -27745,36 +28002,36 @@ module.exports = (_temp = _class = /*#__PURE__*/function () {
   };
 
   return ProviderView;
-}(), _class.VERSION = "1.11.1", _temp);
-},{"../Browser":128,"../CloseWrapper":129,"../Loader":137,"../SharedHandler":147,"./AuthView":138,"./Header":139,"@uppy/utils/lib/generateFileID":212,"@uppy/utils/lib/getFileType":220,"@uppy/utils/lib/isPreviewSupported":231,"preact":38}],141:[function(require,module,exports){
+}(), _class.VERSION = "1.12.3", _temp);
+},{"../Browser":135,"../CloseWrapper":136,"../Loader":144,"../SharedHandler":154,"./AuthView":145,"./Header":146,"@uppy/utils/lib/findIndex":226,"@uppy/utils/lib/generateFileID":227,"@uppy/utils/lib/getFileType":235,"@uppy/utils/lib/isPreviewSupported":246,"preact":156}],148:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
 module.exports = function (props) {
   return [h("span", {
-    class: "uppy-ProviderBrowser-user",
+    className: "uppy-ProviderBrowser-user",
     key: "username"
   }, props.username), h("button", {
     type: "button",
-    onclick: props.logout,
-    class: "uppy-u-reset uppy-ProviderBrowser-userLogout",
+    onClick: props.logout,
+    className: "uppy-u-reset uppy-ProviderBrowser-userLogout",
     key: "logout"
   }, props.i18n('logOut'))];
 };
-},{"preact":38}],142:[function(require,module,exports){
+},{"preact":156}],149:[function(require,module,exports){
 module.exports = require('./ProviderView');
-},{"./ProviderView":140}],143:[function(require,module,exports){
+},{"./ProviderView":147}],150:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
 module.exports = function (props) {
   return h("button", {
     type: "button",
-    onclick: props.triggerSearchInput,
-    class: "uppy-u-reset uppy-ProviderBrowser-userLogout"
+    onClick: props.triggerSearchInput,
+    className: "uppy-u-reset uppy-ProviderBrowser-userLogout"
   }, props.i18n('backToSearch'));
 };
-},{"preact":38}],144:[function(require,module,exports){
+},{"preact":156}],151:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -27794,24 +28051,24 @@ module.exports = function (props) {
   };
 
   return h("div", {
-    class: "uppy-SearchProvider"
+    className: "uppy-SearchProvider"
   }, h("input", {
-    class: "uppy-u-reset uppy-c-textInput uppy-SearchProvider-input",
+    className: "uppy-u-reset uppy-c-textInput uppy-SearchProvider-input",
     type: "text",
     "aria-label": props.i18n('enterTextToSearch'),
     placeholder: props.i18n('enterTextToSearch'),
-    onkeyup: handleKeyPress,
+    onKeyUp: handleKeyPress,
     ref: function ref(input_) {
       input = input_;
     },
     "data-uppy-super-focusable": true
   }), h("button", {
-    class: "uppy-u-reset uppy-c-btn uppy-c-btn-primary uppy-SearchProvider-searchButton",
+    className: "uppy-u-reset uppy-c-btn uppy-c-btn-primary uppy-SearchProvider-searchButton",
     type: "button",
-    onclick: validateAndSearch
+    onClick: validateAndSearch
   }, props.i18n('searchImages')));
 };
-},{"preact":38}],145:[function(require,module,exports){
+},{"preact":156}],152:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -28101,10 +28358,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function () {
   };
 
   return ProviderView;
-}(), _class.VERSION = "1.11.1", _temp);
-},{"../Browser":128,"../CloseWrapper":129,"../Loader":137,"../SharedHandler":147,"./Header":143,"./InputView":144,"@uppy/utils/lib/generateFileID":212,"@uppy/utils/lib/getFileType":220,"@uppy/utils/lib/isPreviewSupported":231,"preact":38}],146:[function(require,module,exports){
+}(), _class.VERSION = "1.12.3", _temp);
+},{"../Browser":135,"../CloseWrapper":136,"../Loader":144,"../SharedHandler":154,"./Header":150,"./InputView":151,"@uppy/utils/lib/generateFileID":227,"@uppy/utils/lib/getFileType":235,"@uppy/utils/lib/isPreviewSupported":246,"preact":156}],153:[function(require,module,exports){
 module.exports = require('./SearchProviderView');
-},{"./SearchProviderView":145}],147:[function(require,module,exports){
+},{"./SearchProviderView":152}],154:[function(require,module,exports){
 var remoteFileObjToLocal = require('@uppy/utils/lib/remoteFileObjToLocal');
 
 module.exports = /*#__PURE__*/function () {
@@ -28237,7 +28494,7 @@ module.exports = /*#__PURE__*/function () {
 
   return SharedHandler;
 }();
-},{"@uppy/utils/lib/remoteFileObjToLocal":234}],148:[function(require,module,exports){
+},{"@uppy/utils/lib/remoteFileObjToLocal":249}],155:[function(require,module,exports){
 var ProviderViews = require('./ProviderView');
 
 var SearchProviderViews = require('./SearchProviderView');
@@ -28246,14 +28503,18 @@ module.exports = {
   ProviderViews: ProviderViews,
   SearchProviderViews: SearchProviderViews
 };
-},{"./ProviderView":142,"./SearchProviderView":146}],149:[function(require,module,exports){
+},{"./ProviderView":149,"./SearchProviderView":153}],156:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],157:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -28341,11 +28602,13 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return ReduxDevTools;
-}(Plugin), _class.VERSION = "1.3.7", _temp);
-},{"@uppy/core":84}],150:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.3.9", _temp);
+},{"@uppy/core":78}],158:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h,
@@ -28401,16 +28664,16 @@ var RecorderScreen = /*#__PURE__*/function (_Component) {
     }
 
     return h("div", {
-      class: "uppy uppy-ScreenCapture-container"
+      className: "uppy uppy-ScreenCapture-container"
     }, h("div", {
-      class: "uppy-ScreenCapture-videoContainer"
+      className: "uppy-ScreenCapture-videoContainer"
     }, h(StreamStatus, this.props), h("video", _extends({
       ref: function ref(videoElement) {
         return _this.videoElement = videoElement;
       },
-      class: "uppy-ScreenCapture-video"
+      className: "uppy-ScreenCapture-video"
     }, videoProps)), h(StopWatch, this.props)), h("div", {
-      class: "uppy-ScreenCapture-buttonContainer"
+      className: "uppy-ScreenCapture-buttonContainer"
     }, h(RecordButton, this.props), h(SubmitButton, this.props)));
   };
 
@@ -28418,7 +28681,7 @@ var RecorderScreen = /*#__PURE__*/function (_Component) {
 }(Component);
 
 module.exports = RecorderScreen;
-},{"./RecordButton":151,"./StopWatch":153,"./StreamStatus":154,"./SubmitButton":155,"preact":38}],151:[function(require,module,exports){
+},{"./RecordButton":159,"./StopWatch":161,"./StreamStatus":162,"./SubmitButton":163,"preact":165}],159:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 /**
@@ -28434,16 +28697,16 @@ module.exports = function RecordButton(_ref) {
 
   if (recording) {
     return h("button", {
-      class: "uppy-u-reset uppy-c-btn uppy-ScreenCapture-button uppy-ScreenCapture-button--video uppy-ScreenCapture-button--stop-rec",
+      className: "uppy-u-reset uppy-c-btn uppy-ScreenCapture-button uppy-ScreenCapture-button--video uppy-ScreenCapture-button--stop-rec",
       type: "button",
       title: i18n('stopCapturing'),
       "aria-label": i18n('stopCapturing'),
-      onclick: onStopRecording,
+      onClick: onStopRecording,
       "data-uppy-super-focusable": true
     }, h("svg", {
       "aria-hidden": "true",
       focusable: "false",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       width: "100",
       height: "100",
       viewBox: "0 0 100 100"
@@ -28456,16 +28719,16 @@ module.exports = function RecordButton(_ref) {
   }
 
   return h("button", {
-    class: "uppy-u-reset uppy-c-btn uppy-ScreenCapture-button uppy-ScreenCapture-button--video",
+    className: "uppy-u-reset uppy-c-btn uppy-ScreenCapture-button uppy-ScreenCapture-button--video",
     type: "button",
     title: i18n('startCapturing'),
     "aria-label": i18n('startCapturing'),
-    onclick: onStartRecording,
+    onClick: onStartRecording,
     "data-uppy-super-focusable": true
   }, h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "100",
     height: "100",
     viewBox: "0 0 100 100"
@@ -28475,7 +28738,7 @@ module.exports = function RecordButton(_ref) {
     r: "40"
   })));
 };
-},{"preact":38}],152:[function(require,module,exports){
+},{"preact":165}],160:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -28488,8 +28751,9 @@ module.exports = function () {
     viewBox: "0 0 32 32"
   }, h("g", {
     fill: "none",
-    "fill-rule": "evenodd"
+    fillRule: "evenodd"
   }, h("rect", {
+    className: "uppy-ProviderIconBg",
     fill: "#2C3E50",
     width: "32",
     height: "32",
@@ -28497,7 +28761,7 @@ module.exports = function () {
   }), h("path", {
     d: "M24.182 9H7.818C6.81 9 6 9.742 6 10.667v10c0 .916.81 1.666 1.818 1.666h4.546V24h7.272v-1.667h4.546c1 0 1.809-.75 1.809-1.666l.009-10C26 9.742 25.182 9 24.182 9zM24 21H8V11h16v10z",
     fill: "#FFF",
-    "fill-rule": "nonzero"
+    fillRule: "nonzero"
   }), h("circle", {
     fill: "#FFF",
     cx: "16",
@@ -28505,10 +28769,12 @@ module.exports = function () {
     r: "2"
   })));
 };
-},{"preact":38}],153:[function(require,module,exports){
+},{"preact":165}],161:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h,
@@ -28620,16 +28886,16 @@ var Stopwatch = /*#__PURE__*/function (_Component) {
       }, i18n('recording')), h("div", {
         style: this.timeStyle
       }, minAndSec)));
-    } else {
-      return null;
     }
+
+    return null;
   };
 
   return Stopwatch;
 }(Component);
 
 module.exports = Stopwatch;
-},{"preact":38}],154:[function(require,module,exports){
+},{"preact":165}],162:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -28641,7 +28907,7 @@ module.exports = function (_ref) {
     return h("div", {
       title: i18n('streamActive'),
       "aria-label": i18n('streamActive'),
-      class: "uppy-ScreenCapture-icon--stream uppy-ScreenCapture-icon--streamActive"
+      className: "uppy-ScreenCapture-icon--stream uppy-ScreenCapture-icon--streamActive"
     }, h("svg", {
       "aria-hidden": "true",
       focusable: "false",
@@ -28658,30 +28924,30 @@ module.exports = function (_ref) {
     }), h("path", {
       d: "M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm18-7H5v1.63c3.96 1.28 7.09 4.41 8.37 8.37H19V7zM1 10v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
     })));
-  } else {
-    return h("div", {
-      title: i18n('streamPassive'),
-      "aria-label": i18n('streamPassive'),
-      class: "uppy-ScreenCapture-icon--stream"
-    }, h("svg", {
-      "aria-hidden": "true",
-      focusable: "false",
-      width: "24",
-      height: "24",
-      viewBox: "0 0 24 24"
-    }, h("path", {
-      d: "M0 0h24v24H0z",
-      opacity: ".1",
-      fill: "none"
-    }), h("path", {
-      d: "M0 0h24v24H0z",
-      fill: "none"
-    }), h("path", {
-      d: "M21 3H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11z"
-    })));
   }
+
+  return h("div", {
+    title: i18n('streamPassive'),
+    "aria-label": i18n('streamPassive'),
+    className: "uppy-ScreenCapture-icon--stream"
+  }, h("svg", {
+    "aria-hidden": "true",
+    focusable: "false",
+    width: "24",
+    height: "24",
+    viewBox: "0 0 24 24"
+  }, h("path", {
+    d: "M0 0h24v24H0z",
+    opacity: ".1",
+    fill: "none"
+  }), h("path", {
+    d: "M0 0h24v24H0z",
+    fill: "none"
+  }), h("path", {
+    d: "M21 3H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11z"
+  })));
 };
-},{"preact":38}],155:[function(require,module,exports){
+},{"preact":165}],163:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 /**
@@ -28697,37 +28963,39 @@ module.exports = function SubmitButton(_ref) {
 
   if (recordedVideo && !recording) {
     return h("button", {
-      class: "uppy-u-reset uppy-c-btn uppy-ScreenCapture-button uppy-ScreenCapture-button--submit",
+      className: "uppy-u-reset uppy-c-btn uppy-ScreenCapture-button uppy-ScreenCapture-button--submit",
       type: "button",
       title: i18n('submitRecordedFile'),
       "aria-label": i18n('submitRecordedFile'),
-      onclick: onSubmit,
+      onClick: onSubmit,
       "data-uppy-super-focusable": true
     }, h("svg", {
+      width: "12",
+      height: "9",
+      viewBox: "0 0 12 9",
+      xmlns: "http://www.w3.org/2000/svg",
       "aria-hidden": "true",
       focusable: "false",
-      class: "uppy-c-icon",
-      width: "48",
-      height: "48",
-      viewBox: "0 0 48 48"
+      className: "uppy-c-icon"
     }, h("path", {
-      d: "M0 0h48v48h-48z",
-      fill: "none"
-    }), h("path", {
-      d: "M38.71 20.07c-1.36-6.88-7.43-12.07-14.71-12.07-5.78 0-10.79 3.28-13.3 8.07-6.01.65-10.7 5.74-10.7 11.93 0 6.63 5.37 12 12 12h26c5.52 0 10-4.48 10-10 0-5.28-4.11-9.56-9.29-9.93zm-10.71 5.93v8h-8v-8h-6l10-10 10 10h-6z"
+      fill: "#fff",
+      fillRule: "nonzero",
+      d: "M10.66 0L12 1.31 4.136 9 0 4.956l1.34-1.31L4.136 6.38z"
     })));
-  } else {
-    return null;
   }
+
+  return null;
 };
-},{"preact":38}],156:[function(require,module,exports){
+},{"preact":165}],164:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h;
@@ -28778,7 +29046,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       strings: {
         startCapturing: 'Begin screen capturing',
         stopCapturing: 'Stop screen capturing',
-        submitRecordedFile: 'Submit captured video',
+        submitRecordedFile: 'Submit recorded file',
         streamActive: 'Stream active',
         streamPassive: 'Stream passive',
         micDisabled: 'Microphone access denied by user',
@@ -29150,8 +29418,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return ScreenCapture;
-}(Plugin), _class.VERSION = "1.0.14", _temp);
-},{"./CaptureScreen":150,"./ScreenRecIcon":152,"@uppy/core":84,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/getFileTypeExtension":221,"preact":38}],157:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.1.0", _temp);
+},{"./CaptureScreen":158,"./ScreenRecIcon":160,"@uppy/core":78,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/getFileTypeExtension":236,"preact":165}],165:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],166:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var throttle = require('lodash.throttle');
@@ -29215,6 +29485,22 @@ function togglePauseResume(props) {
   return props.pauseAll();
 }
 
+function RenderReSelectGhosts(_ref) {
+  var i18n = _ref.i18n;
+  return h("div", {
+    className: "uppy-StatusBar-serviceMsg"
+  }, i18n('reSelectGhosts'), h("svg", {
+    className: "uppy-c-icon uppy-StatusBar-serviceMsg-ghostsIcon",
+    "aria-hidden": "true",
+    width: "15",
+    height: "19",
+    viewBox: "0 0 35 39"
+  }, h("path", {
+    d: "M1.708 38.66c1.709 0 3.417-3.417 6.834-3.417 3.416 0 5.125 3.417 8.61 3.417 3.348 0 5.056-3.417 8.473-3.417 4.305 0 5.125 3.417 6.833 3.417.889 0 1.709-.889 1.709-1.709v-19.68C34.167-5.757 0-5.757 0 17.271v19.68c0 .82.888 1.709 1.708 1.709zm8.542-17.084a3.383 3.383 0 01-3.417-3.416 3.383 3.383 0 013.417-3.417 3.383 3.383 0 013.417 3.417 3.383 3.383 0 01-3.417 3.416zm13.667 0A3.383 3.383 0 0120.5 18.16a3.383 3.383 0 013.417-3.417 3.383 3.383 0 013.416 3.417 3.383 3.383 0 01-3.416 3.416z",
+    fillRule: "nonzero"
+  })));
+}
+
 module.exports = function (props) {
   props = props || {};
   var _props = props,
@@ -29227,7 +29513,8 @@ module.exports = function (props) {
       hideUploadButton = _props.hideUploadButton,
       hidePauseResumeButton = _props.hidePauseResumeButton,
       hideCancelButton = _props.hideCancelButton,
-      hideRetryButton = _props.hideRetryButton;
+      hideRetryButton = _props.hideRetryButton,
+      recoveredState = _props.recoveredState;
   var uploadState = props.uploadState;
   var progressValue = props.totalProgress;
   var progressMode;
@@ -29259,28 +29546,36 @@ module.exports = function (props) {
   var width = typeof progressValue === 'number' ? progressValue : 100;
   var isHidden = uploadState === statusBarStates.STATE_WAITING && props.hideUploadButton || uploadState === statusBarStates.STATE_WAITING && !props.newFiles > 0 || uploadState === statusBarStates.STATE_COMPLETE && props.hideAfterFinish;
   var showUploadBtn = !error && newFiles && !isUploadInProgress && !isAllPaused && allowNewUpload && !hideUploadButton;
+
+  if (recoveredState) {
+    isHidden = false;
+    showUploadBtn = true;
+  }
+
   var showCancelBtn = !hideCancelButton && uploadState !== statusBarStates.STATE_WAITING && uploadState !== statusBarStates.STATE_COMPLETE;
   var showPauseResumeBtn = resumableUploads && !hidePauseResumeButton && uploadState === statusBarStates.STATE_UPLOADING;
   var showRetryBtn = error && !hideRetryButton;
   var showDoneBtn = props.doneButtonHandler && uploadState === statusBarStates.STATE_COMPLETE;
-  var progressClassNames = "uppy-StatusBar-progress\n                           " + (progressMode ? 'is-' + progressMode : '');
+  var progressClassNames = "uppy-StatusBar-progress\n                           " + (progressMode ? "is-" + progressMode : '');
   var statusBarClassNames = classNames({
     'uppy-Root': props.isTargetDOMEl
-  }, 'uppy-StatusBar', "is-" + uploadState);
+  }, 'uppy-StatusBar', "is-" + uploadState, {
+    'has-ghosts': props.isSomeGhost
+  });
   return h("div", {
-    class: statusBarClassNames,
+    className: statusBarClassNames,
     "aria-hidden": isHidden
   }, h("div", {
-    class: progressClassNames,
+    className: progressClassNames,
     style: {
-      width: width + '%'
+      width: width + "%"
     },
     role: "progressbar",
     "aria-valuemin": "0",
     "aria-valuemax": "100",
     "aria-valuenow": progressValue
   }), progressBarContent, h("div", {
-    class: "uppy-StatusBar-actions"
+    className: "uppy-StatusBar-actions"
   }, showUploadBtn ? h(UploadBtn, _extends({}, props, {
     uploadState: uploadState
   })) : null, showRetryBtn ? h(RetryBtn, props) : null, showPauseResumeBtn ? h(PauseResumeButton, props) : null, showCancelBtn ? h(CancelBtn, props) : null, showDoneBtn ? h(DoneBtn, props) : null));
@@ -29289,33 +29584,37 @@ module.exports = function (props) {
 var UploadBtn = function UploadBtn(props) {
   var uploadBtnClassNames = classNames('uppy-u-reset', 'uppy-c-btn', 'uppy-StatusBar-actionBtn', 'uppy-StatusBar-actionBtn--upload', {
     'uppy-c-btn-primary': props.uploadState === statusBarStates.STATE_WAITING
+  }, {
+    'uppy-StatusBar-actionBtn--disabled': props.isSomeGhost
   });
-  return h("button", {
-    type: "button",
-    class: uploadBtnClassNames,
-    "aria-label": props.i18n('uploadXFiles', {
-      smart_count: props.newFiles
-    }),
-    onclick: props.startUpload,
-    "data-uppy-super-focusable": true
-  }, props.newFiles && props.isUploadStarted ? props.i18n('uploadXNewFiles', {
+  var uploadBtnText = props.newFiles && props.isUploadStarted && !props.recoveredState ? props.i18n('uploadXNewFiles', {
     smart_count: props.newFiles
   }) : props.i18n('uploadXFiles', {
     smart_count: props.newFiles
-  }));
+  });
+  return h("button", {
+    type: "button",
+    className: uploadBtnClassNames,
+    "aria-label": props.i18n('uploadXFiles', {
+      smart_count: props.newFiles
+    }),
+    onClick: props.startUpload,
+    disabled: props.isSomeGhost,
+    "data-uppy-super-focusable": true
+  }, uploadBtnText);
 };
 
 var RetryBtn = function RetryBtn(props) {
   return h("button", {
     type: "button",
-    class: "uppy-u-reset uppy-c-btn uppy-StatusBar-actionBtn uppy-StatusBar-actionBtn--retry",
+    className: "uppy-u-reset uppy-c-btn uppy-StatusBar-actionBtn uppy-StatusBar-actionBtn--retry",
     "aria-label": props.i18n('retryUpload'),
-    onclick: props.retryAll,
+    onClick: props.retryAll,
     "data-uppy-super-focusable": true
   }, h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "8",
     height: "10",
     viewBox: "0 0 8 10"
@@ -29327,21 +29626,21 @@ var RetryBtn = function RetryBtn(props) {
 var CancelBtn = function CancelBtn(props) {
   return h("button", {
     type: "button",
-    class: "uppy-u-reset uppy-StatusBar-actionCircleBtn",
+    className: "uppy-u-reset uppy-StatusBar-actionCircleBtn",
     title: props.i18n('cancel'),
     "aria-label": props.i18n('cancel'),
-    onclick: props.cancelAll,
+    onClick: props.cancelAll,
     "data-uppy-super-focusable": true
   }, h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "16",
     height: "16",
     viewBox: "0 0 16 16"
   }, h("g", {
     fill: "none",
-    "fill-rule": "evenodd"
+    fillRule: "evenodd"
   }, h("circle", {
     fill: "#888",
     cx: "8",
@@ -29360,22 +29659,22 @@ var PauseResumeButton = function PauseResumeButton(props) {
   return h("button", {
     title: title,
     "aria-label": title,
-    class: "uppy-u-reset uppy-StatusBar-actionCircleBtn",
+    className: "uppy-u-reset uppy-StatusBar-actionCircleBtn",
     type: "button",
-    onclick: function onclick() {
+    onClick: function onClick() {
       return togglePauseResume(props);
     },
     "data-uppy-super-focusable": true
   }, isAllPaused ? h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "16",
     height: "16",
     viewBox: "0 0 16 16"
   }, h("g", {
     fill: "none",
-    "fill-rule": "evenodd"
+    fillRule: "evenodd"
   }, h("circle", {
     fill: "#888",
     cx: "8",
@@ -29387,13 +29686,13 @@ var PauseResumeButton = function PauseResumeButton(props) {
   }))) : h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "16",
     height: "16",
     viewBox: "0 0 16 16"
   }, h("g", {
     fill: "none",
-    "fill-rule": "evenodd"
+    fillRule: "evenodd"
   }, h("circle", {
     fill: "#888",
     cx: "8",
@@ -29409,7 +29708,7 @@ var DoneBtn = function DoneBtn(props) {
   var i18n = props.i18n;
   return h("button", {
     type: "button",
-    class: "uppy-u-reset uppy-c-btn uppy-StatusBar-actionBtn uppy-StatusBar-actionBtn--done",
+    className: "uppy-u-reset uppy-c-btn uppy-StatusBar-actionBtn uppy-StatusBar-actionBtn--done",
     onClick: props.doneButtonHandler,
     "data-uppy-super-focusable": true
   }, i18n('done'));
@@ -29417,21 +29716,21 @@ var DoneBtn = function DoneBtn(props) {
 
 var LoadingSpinner = function LoadingSpinner() {
   return h("svg", {
-    class: "uppy-StatusBar-spinner",
+    className: "uppy-StatusBar-spinner",
     "aria-hidden": "true",
     focusable: "false",
     width: "14",
     height: "14"
   }, h("path", {
     d: "M13.983 6.547c-.12-2.509-1.64-4.893-3.939-5.936-2.48-1.127-5.488-.656-7.556 1.094C.524 3.367-.398 6.048.162 8.562c.556 2.495 2.46 4.52 4.94 5.183 2.932.784 5.61-.602 7.256-3.015-1.493 1.993-3.745 3.309-6.298 2.868-2.514-.434-4.578-2.349-5.153-4.84a6.226 6.226 0 0 1 2.98-6.778C6.34.586 9.74 1.1 11.373 3.493c.407.596.693 1.282.842 1.988.127.598.073 1.197.161 1.794.078.525.543 1.257 1.15.864.525-.341.49-1.05.456-1.592-.007-.15.02.3 0 0",
-    "fill-rule": "evenodd"
+    fillRule: "evenodd"
   }));
 };
 
 var ProgressBarProcessing = function ProgressBarProcessing(props) {
   var value = Math.round(props.value * 100);
   return h("div", {
-    class: "uppy-StatusBar-content"
+    className: "uppy-StatusBar-content"
   }, h(LoadingSpinner, null), props.mode === 'determinate' ? value + "% \xB7 " : '', props.message);
 };
 
@@ -29442,12 +29741,12 @@ var renderDot = function renderDot() {
 var ProgressDetails = function ProgressDetails(props) {
   var ifShowFilesUploadedOfTotal = props.numUploads > 1;
   return h("div", {
-    class: "uppy-StatusBar-statusSecondary"
+    className: "uppy-StatusBar-statusSecondary"
   }, ifShowFilesUploadedOfTotal && props.i18n('filesUploadedOfTotal', {
     complete: props.complete,
     smart_count: props.numUploads
   }), h("span", {
-    class: "uppy-StatusBar-additionalInfo"
+    className: "uppy-StatusBar-additionalInfo"
   }, ifShowFilesUploadedOfTotal && renderDot(), props.i18n('dataUploadedOfTotal', {
     complete: prettierBytes(props.totalUploadedSize),
     total: prettierBytes(props.totalSize)
@@ -29458,7 +29757,7 @@ var ProgressDetails = function ProgressDetails(props) {
 
 var UnknownProgressDetails = function UnknownProgressDetails(props) {
   return h("div", {
-    class: "uppy-StatusBar-statusSecondary"
+    className: "uppy-StatusBar-statusSecondary"
   }, props.i18n('filesUploadedOfTotal', {
     complete: props.complete,
     smart_count: props.numUploads
@@ -29468,18 +29767,18 @@ var UnknownProgressDetails = function UnknownProgressDetails(props) {
 var UploadNewlyAddedFiles = function UploadNewlyAddedFiles(props) {
   var uploadBtnClassNames = classNames('uppy-u-reset', 'uppy-c-btn', 'uppy-StatusBar-actionBtn', 'uppy-StatusBar-actionBtn--uploadNewlyAdded');
   return h("div", {
-    class: "uppy-StatusBar-statusSecondary"
+    className: "uppy-StatusBar-statusSecondary"
   }, h("div", {
-    class: "uppy-StatusBar-statusSecondaryHint"
+    className: "uppy-StatusBar-statusSecondaryHint"
   }, props.i18n('xMoreFilesAdded', {
     smart_count: props.newFiles
   })), h("button", {
     type: "button",
-    class: uploadBtnClassNames,
+    className: uploadBtnClassNames,
     "aria-label": props.i18n('uploadXFiles', {
       smart_count: props.newFiles
     }),
-    onclick: props.startUpload
+    onClick: props.startUpload
   }, props.i18n('upload')));
 };
 
@@ -29496,31 +29795,31 @@ var ProgressBarUploading = function ProgressBarUploading(props) {
   var title = props.isAllPaused ? props.i18n('paused') : props.i18n('uploading');
   var showUploadNewlyAddedFiles = props.newFiles && props.isUploadStarted;
   return h("div", {
-    class: "uppy-StatusBar-content",
+    className: "uppy-StatusBar-content",
     "aria-label": title,
     title: title
   }, !props.isAllPaused ? h(LoadingSpinner, null) : null, h("div", {
-    class: "uppy-StatusBar-status"
+    className: "uppy-StatusBar-status"
   }, h("div", {
-    class: "uppy-StatusBar-statusPrimary"
+    className: "uppy-StatusBar-statusPrimary"
   }, props.supportsUploadProgress ? title + ": " + props.totalProgress + "%" : title), !props.isAllPaused && !showUploadNewlyAddedFiles && props.showProgressDetails ? props.supportsUploadProgress ? h(ThrottledProgressDetails, props) : h(UnknownProgressDetails, props) : null, showUploadNewlyAddedFiles ? h(UploadNewlyAddedFiles, props) : null));
 };
 
-var ProgressBarComplete = function ProgressBarComplete(_ref) {
-  var totalProgress = _ref.totalProgress,
-      i18n = _ref.i18n;
+var ProgressBarComplete = function ProgressBarComplete(_ref2) {
+  var totalProgress = _ref2.totalProgress,
+      i18n = _ref2.i18n;
   return h("div", {
-    class: "uppy-StatusBar-content",
+    className: "uppy-StatusBar-content",
     role: "status",
     title: i18n('complete')
   }, h("div", {
-    class: "uppy-StatusBar-status"
+    className: "uppy-StatusBar-status"
   }, h("div", {
-    class: "uppy-StatusBar-statusPrimary"
+    className: "uppy-StatusBar-statusPrimary"
   }, h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-StatusBar-statusIndicator uppy-c-icon",
+    className: "uppy-StatusBar-statusIndicator uppy-c-icon",
     width: "15",
     height: "11",
     viewBox: "0 0 15 11"
@@ -29529,11 +29828,11 @@ var ProgressBarComplete = function ProgressBarComplete(_ref) {
   })), i18n('complete'))));
 };
 
-var ProgressBarError = function ProgressBarError(_ref2) {
-  var error = _ref2.error,
-      retryAll = _ref2.retryAll,
-      hideRetryButton = _ref2.hideRetryButton,
-      i18n = _ref2.i18n;
+var ProgressBarError = function ProgressBarError(_ref3) {
+  var error = _ref3.error,
+      retryAll = _ref3.retryAll,
+      hideRetryButton = _ref3.hideRetryButton,
+      i18n = _ref3.i18n;
 
   function displayErrorAlert() {
     var errorMessage = i18n('uploadFailed') + " \n\n " + error;
@@ -29541,32 +29840,32 @@ var ProgressBarError = function ProgressBarError(_ref2) {
   }
 
   return h("div", {
-    class: "uppy-StatusBar-content",
+    className: "uppy-StatusBar-content",
     role: "alert",
     title: i18n('uploadFailed')
   }, h("div", {
-    class: "uppy-StatusBar-status"
+    className: "uppy-StatusBar-status"
   }, h("div", {
-    class: "uppy-StatusBar-statusPrimary"
+    className: "uppy-StatusBar-statusPrimary"
   }, h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-StatusBar-statusIndicator uppy-c-icon",
+    className: "uppy-StatusBar-statusIndicator uppy-c-icon",
     width: "11",
     height: "11",
     viewBox: "0 0 11 11"
   }, h("path", {
     d: "M4.278 5.5L0 1.222 1.222 0 5.5 4.278 9.778 0 11 1.222 6.722 5.5 11 9.778 9.778 11 5.5 6.722 1.222 11 0 9.778z"
   })), i18n('uploadFailed'))), h("span", {
-    class: "uppy-StatusBar-details",
+    className: "uppy-StatusBar-details",
     "aria-label": error,
     "data-microtip-position": "top-right",
     "data-microtip-size": "medium",
     role: "tooltip",
-    onclick: displayErrorAlert
+    onClick: displayErrorAlert
   }, "?"));
 };
-},{"./StatusBarStates":158,"@transloadit/prettier-bytes":1,"@uppy/utils/lib/prettyETA":233,"classnames":11,"lodash.throttle":31,"preact":38}],158:[function(require,module,exports){
+},{"./StatusBarStates":167,"@transloadit/prettier-bytes":1,"@uppy/utils/lib/prettyETA":248,"classnames":11,"lodash.throttle":34,"preact":169}],167:[function(require,module,exports){
 module.exports = {
   STATE_ERROR: 'error',
   STATE_WAITING: 'waiting',
@@ -29575,14 +29874,16 @@ module.exports = {
   STATE_POSTPROCESSING: 'postprocessing',
   STATE_COMPLETE: 'complete'
 };
-},{}],159:[function(require,module,exports){
+},{}],168:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -29613,6 +29914,15 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     _this = _Plugin.call(this, uppy, opts) || this;
 
     _this.startUpload = function () {
+      var _this$uppy$getState = _this.uppy.getState(),
+          recoveredState = _this$uppy$getState.recoveredState;
+
+      if (recoveredState) {
+        _this.uppy.emit('restore-confirmed');
+
+        return;
+      }
+
       return _this.uppy.upload().catch(function () {// Error logged in Core
       });
     };
@@ -29690,7 +30000,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   _proto.getTotalSpeed = function getTotalSpeed(files) {
     var totalSpeed = 0;
     files.forEach(function (file) {
-      totalSpeed = totalSpeed + getSpeed(file.progress);
+      totalSpeed += getSpeed(file.progress);
     });
     return totalSpeed;
   };
@@ -29708,13 +30018,17 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     return Math.round(totalBytesRemaining / totalSpeed * 10) / 10;
   };
 
-  _proto.getUploadingState = function getUploadingState(isAllErrored, isAllComplete, files) {
+  _proto.getUploadingState = function getUploadingState(isAllErrored, isAllComplete, recoveredState, files) {
     if (isAllErrored) {
       return statusBarStates.STATE_ERROR;
     }
 
     if (isAllComplete) {
       return statusBarStates.STATE_COMPLETE;
+    }
+
+    if (recoveredState) {
+      return statusBarStates.STATE_WAITING;
     }
 
     var state = statusBarStates.STATE_WAITING;
@@ -29748,7 +30062,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         files = state.files,
         allowNewUpload = state.allowNewUpload,
         totalProgress = state.totalProgress,
-        error = state.error; // TODO: move this to Core, to share between Status Bar and Dashboard
+        error = state.error,
+        recoveredState = state.recoveredState; // TODO: move this to Core, to share between Status Bar and Dashboard
     // (and any other plugin that might need it, too)
 
     var filesArray = Object.keys(files).map(function (file) {
@@ -29756,7 +30071,14 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     });
     var newFiles = filesArray.filter(function (file) {
       return !file.progress.uploadStarted && !file.progress.preprocess && !file.progress.postprocess;
-    });
+    }); // If some state was recovered, we want to show Upload button/counter
+    // for all the files, because in this case it’s not an Upload button,
+    // but “Confirm Restore Button”
+
+    if (recoveredState) {
+      newFiles = filesArray;
+    }
+
     var uploadStartedFiles = filesArray.filter(function (file) {
       return file.progress.uploadStarted;
     });
@@ -29785,8 +30107,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     var totalSize = 0;
     var totalUploadedSize = 0;
     startedFiles.forEach(function (file) {
-      totalSize = totalSize + (file.progress.bytesTotal || 0);
-      totalUploadedSize = totalUploadedSize + (file.progress.bytesUploaded || 0);
+      totalSize += file.progress.bytesTotal || 0;
+      totalUploadedSize += file.progress.bytesUploaded || 0;
     });
     var isUploadStarted = startedFiles.length > 0;
     var isAllComplete = totalProgress === 100 && completeFiles.length === Object.keys(files).length && processingFiles.length === 0;
@@ -29795,9 +30117,12 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     var isUploadInProgress = inProgressFiles.length > 0;
     var resumableUploads = capabilities.resumableUploads || false;
     var supportsUploadProgress = capabilities.uploadProgress !== false;
+    var isSomeGhost = filesArray.some(function (file) {
+      return file.isGhost;
+    });
     return StatusBarUI({
       error: error,
-      uploadState: this.getUploadingState(isAllErrored, isAllComplete, state.files || {}),
+      uploadState: this.getUploadingState(isAllErrored, isAllComplete, recoveredState, state.files || {}),
       allowNewUpload: allowNewUpload,
       totalProgress: totalProgress,
       totalSize: totalSize,
@@ -29807,6 +30132,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       isAllErrored: isAllErrored,
       isUploadStarted: isUploadStarted,
       isUploadInProgress: isUploadInProgress,
+      isSomeGhost: isSomeGhost,
+      recoveredState: recoveredState,
       complete: completeFiles.length,
       newFiles: newFiles.length,
       numUploads: startedFiles.length,
@@ -29854,8 +30181,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return StatusBar;
-}(Plugin), _class.VERSION = "1.9.1", _temp);
-},{"./StatusBar":157,"./StatusBarStates":158,"@uppy/core":84,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/getBytesRemaining":213,"@uppy/utils/lib/getSpeed":223,"@uppy/utils/lib/getTextDirection":224}],160:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.9.6", _temp);
+},{"./StatusBar":166,"./StatusBarStates":167,"@uppy/core":78,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/getBytesRemaining":228,"@uppy/utils/lib/getSpeed":238,"@uppy/utils/lib/getTextDirection":239}],169:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],170:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
@@ -29906,12 +30235,12 @@ var DefaultStore = /*#__PURE__*/function () {
   return DefaultStore;
 }();
 
-DefaultStore.VERSION = "1.2.5";
+DefaultStore.VERSION = "1.2.7";
 
 module.exports = function defaultStore() {
   return new DefaultStore();
 };
-},{}],161:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var cuid = require('cuid'); // Redux action name.
@@ -29939,7 +30268,8 @@ var ReduxStore = /*#__PURE__*/function () {
   function ReduxStore(opts) {
     this._store = opts.store;
     this._id = opts.id || cuid();
-    this._selector = opts.selector || defaultSelector(this._id); // Initialise the `uppy[id]` state key.
+    this._selector = opts.selector || defaultSelector(this._id); // Calling `setState` to dispatch an action to the Redux store.
+    // The intent is to make sure that the reducer has run once.
 
     this.setState({});
   }
@@ -29976,7 +30306,7 @@ var ReduxStore = /*#__PURE__*/function () {
   return ReduxStore;
 }();
 
-ReduxStore.VERSION = "1.2.5";
+ReduxStore.VERSION = "1.2.8";
 
 function getPatch(prev, next) {
   var nextKeys = Object.keys(next);
@@ -30021,12 +30351,14 @@ module.exports = function createReduxStore(opts) {
 module.exports.STATE_UPDATE = STATE_UPDATE;
 module.exports.reducer = reducer;
 module.exports.middleware = middleware;
-},{"cuid":16}],162:[function(require,module,exports){
+},{"cuid":15}],172:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -30057,7 +30389,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     _this = _Plugin.call(this, uppy, opts) || this;
 
     _this.onFileAdded = function (file) {
-      if (!file.preview && isPreviewSupported(file.type) && !file.isRemote) {
+      if (!file.preview && file.data && isPreviewSupported(file.type) && !file.isRemote) {
         _this.addToQueue(file.id);
       }
     };
@@ -30084,15 +30416,12 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     };
 
     _this.onRestored = function () {
-      var _this$uppy$getState = _this.uppy.getState(),
-          files = _this$uppy$getState.files;
+      var restoredFiles = _this.uppy.getFiles().filter(function (file) {
+        return file.isRestored;
+      });
 
-      var fileIDs = Object.keys(files);
-      fileIDs.forEach(function (fileID) {
-        var file = _this.uppy.getFile(fileID);
-
-        if (!file.isRestored) return; // Only add blob URLs; they are likely invalid after being restored.
-
+      restoredFiles.forEach(function (file) {
+        // Only add blob URLs; they are likely invalid after being restored.
         if (!file.preview || isObjectURL(file.preview)) {
           _this.addToQueue(file.id);
         }
@@ -30426,11 +30755,11 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       .then(function () {
         return _this3.processQueue();
       });
-    } else {
-      this.queueProcessing = false;
-      this.uppy.log('[ThumbnailGenerator] Emptied thumbnail queue');
-      this.uppy.emit('thumbnail:all-generated');
     }
+
+    this.queueProcessing = false;
+    this.uppy.log('[ThumbnailGenerator] Emptied thumbnail queue');
+    this.uppy.emit('thumbnail:all-generated');
   };
 
   _proto.requestThumbnail = function requestThumbnail(file) {
@@ -30488,17 +30817,13 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return ThumbnailGenerator;
-}(Plugin), _class.VERSION = "1.7.6", _temp);
-},{"@uppy/core":84,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/dataURItoBlob":206,"@uppy/utils/lib/isObjectURL":230,"@uppy/utils/lib/isPreviewSupported":231,"exifr/dist/mini.legacy.umd.js":163,"math-log2":32}],163:[function(require,module,exports){
-(function (process,global,Buffer){(function (){
-!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define("exifr",["exports"],t):t((e=e||self).exifr={})}(this,(function(e){"use strict";function t(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function n(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function r(e,t,r){return t&&n(e.prototype,t),r&&n(e,r),e}function i(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function a(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}});var n=["prototype","__proto__","caller","arguments","length","name"];Object.getOwnPropertyNames(t).forEach((function(r){-1===n.indexOf(r)&&e[r]!==t[r]&&(e[r]=t[r])})),t&&u(e,t)}function s(e){return(s=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function u(e,t){return(u=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function o(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],(function(){}))),!0}catch(e){return!1}}function f(e,t,n){return(f=o()?Reflect.construct:function(e,t,n){var r=[null];r.push.apply(r,t);var i=new(Function.bind.apply(e,r));return n&&u(i,n.prototype),i}).apply(null,arguments)}function c(e){var t="function"==typeof Map?new Map:void 0;return(c=function(e){if(null===e||(n=e,-1===Function.toString.call(n).indexOf("[native code]")))return e;var n;if("function"!=typeof e)throw new TypeError("Super expression must either be null or a function");if(void 0!==t){if(t.has(e))return t.get(e);t.set(e,r)}function r(){return f(e,arguments,s(this).constructor)}return r.prototype=Object.create(e.prototype,{constructor:{value:r,enumerable:!1,writable:!0,configurable:!0}}),u(r,e)})(e)}function h(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function l(e,t){return!t||"object"!=typeof t&&"function"!=typeof t?h(e):t}function d(e,t,n){return(d="undefined"!=typeof Reflect&&Reflect.get?Reflect.get:function(e,t,n){var r=function(e,t){for(;!Object.prototype.hasOwnProperty.call(e,t)&&null!==(e=s(e)););return e}(e,t);if(r){var i=Object.getOwnPropertyDescriptor(r,t);return i.get?i.get.call(n):i.value}})(e,t,n||e)}var v=Object.values||function(e){var t=[];for(var n in e)t.push(e[n]);return t},p=Object.entries||function(e){var t=[];for(var n in e)t.push([n,e[n]]);return t},y=Object.assign||function(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];return n.forEach((function(t){for(var n in t)e[n]=t[n]})),e},g=Object.fromEntries||function(e){var t={};return k(e).forEach((function(e){var n=e[0],r=e[1];t[n]=r})),t},k=Array.from||function(e){if(e instanceof P){var t=[];return e.forEach((function(e,n){return t.push([n,e])})),t}return Array.prototype.slice.call(e)};function m(e){return-1!==this.indexOf(e)}Array.prototype.includes||(Array.prototype.includes=m),String.prototype.includes||(String.prototype.includes=m),String.prototype.startsWith||(String.prototype.startsWith=function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0;return this.substring(t,t+e.length)===e}),String.prototype.endsWith||(String.prototype.endsWith=function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.length;return this.substring(t-e.length,t)===e});var b="undefined"!=typeof self?self:global,A=b.fetch||function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};return new Promise((function(n,r){var i=new XMLHttpRequest;if(i.open("get",e,!0),i.responseType="arraybuffer",i.onerror=r,t.headers)for(var a in t.headers)i.setRequestHeader(a,t.headers[a]);i.onload=function(){n({ok:i.status>=200&&i.status<300,status:i.status,arrayBuffer:function(){return Promise.resolve(i.response)}})},i.send(null)}))},w=function(e){var t=[];if(Object.defineProperties(t,{size:{get:function(){return this.length}},has:{value:function(e){return-1!==this.indexOf(e)}},add:{value:function(e){this.has(e)||this.push(e)}},delete:{value:function(e){if(this.has(e)){var t=this.indexOf(e);this.splice(t,1)}}}}),Array.isArray(e))for(var n=0;n<e.length;n++)t.add(e[n]);return t},O=function(e){return new P(e)},P=void 0!==b.Map&&void 0!==b.Map.prototype.keys?b.Map:function(){function e(n){if(t(this,e),this.clear(),n)for(var r=0;r<n.length;r++)this.set(n[r][0],n[r][1])}return r(e,[{key:"clear",value:function(){this._map={},this._keys=[]}},{key:"get",value:function(e){return this._map["map_"+e]}},{key:"set",value:function(e,t){return this._map["map_"+e]=t,this._keys.indexOf(e)<0&&this._keys.push(e),this}},{key:"has",value:function(e){return this._keys.indexOf(e)>=0}},{key:"delete",value:function(e){var t=this._keys.indexOf(e);return!(t<0)&&(delete this._map["map_"+e],this._keys.splice(t,1),!0)}},{key:"keys",value:function(){return this._keys.slice(0)}},{key:"values",value:function(){var e=this;return this._keys.map((function(t){return e.get(t)}))}},{key:"entries",value:function(){var e=this;return this._keys.map((function(t){return[t,e.get(t)]}))}},{key:"forEach",value:function(e,t){for(var n=0;n<this._keys.length;n++)e.call(t,this._map["map_"+this._keys[n]],this._keys[n],this)}},{key:"size",get:function(){return this._keys.length}}]),e}(),S="undefined"!=typeof self?self:global,U="undefined"!=typeof navigator,x=U&&"undefined"==typeof HTMLImageElement,C=!("undefined"==typeof global||"undefined"==typeof process||!process.versions||!process.versions.node),j=S.Buffer,B=!!j;var _=function(e){return void 0!==e};function V(e){return void 0===e||(e instanceof P?0===e.size:0===v(e).filter(_).length)}function I(e){var t=new Error(e);throw delete t.stack,t}function L(e){var t=function(e){var t=0;return e.ifd0.enabled&&(t+=1024),e.exif.enabled&&(t+=2048),e.makerNote&&(t+=2048),e.userComment&&(t+=1024),e.gps.enabled&&(t+=512),e.interop.enabled&&(t+=100),e.ifd1.enabled&&(t+=1024),t+2048}(e);return e.jfif.enabled&&(t+=50),e.xmp.enabled&&(t+=2e4),e.iptc.enabled&&(t+=14e3),e.icc.enabled&&(t+=6e3),t}var T="undefined"!=typeof TextDecoder?new TextDecoder("utf-8"):void 0;function z(e){return T?T.decode(e):B?Buffer.from(e).toString("utf8"):decodeURIComponent(escape(String.fromCharCode.apply(null,e)))}var F=function(){function e(n){var r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0,i=arguments.length>2?arguments[2]:void 0,a=arguments.length>3?arguments[3]:void 0;if(t(this,e),"boolean"==typeof a&&(this.le=a),Array.isArray(n)&&(n=new Uint8Array(n)),0===n)this.byteOffset=0,this.byteLength=0;else if(n instanceof ArrayBuffer){void 0===i&&(i=n.byteLength-r);var s=new DataView(n,r,i);this._swapDataView(s)}else if(n instanceof Uint8Array||n instanceof DataView||n instanceof e){void 0===i&&(i=n.byteLength-r),(r+=n.byteOffset)+i>n.byteOffset+n.byteLength&&I("Creating view outside of available memory in ArrayBuffer");var u=new DataView(n.buffer,r,i);this._swapDataView(u)}else if("number"==typeof n){var o=new DataView(new ArrayBuffer(n));this._swapDataView(o)}else I("Invalid input argument for BufferView: "+n)}return r(e,null,[{key:"from",value:function(t,n){return t instanceof this&&t.le===n?t:new e(t,void 0,void 0,n)}}]),r(e,[{key:"_swapArrayBuffer",value:function(e){this._swapDataView(new DataView(e))}},{key:"_swapBuffer",value:function(e){this._swapDataView(new DataView(e.buffer,e.byteOffset,e.byteLength))}},{key:"_swapDataView",value:function(e){this.dataView=e,this.buffer=e.buffer,this.byteOffset=e.byteOffset,this.byteLength=e.byteLength}},{key:"_lengthToEnd",value:function(e){return this.byteLength-e}},{key:"set",value:function(t,n){var r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:e;t instanceof DataView||t instanceof e?t=new Uint8Array(t.buffer,t.byteOffset,t.byteLength):t instanceof ArrayBuffer&&(t=new Uint8Array(t)),t instanceof Uint8Array||I("BufferView.set(): Invalid data argument.");var i=this.toUint8();return i.set(t,n),new r(this,n,t.byteLength)}},{key:"subarray",value:function(t,n){return new e(this,t,n=n||this._lengthToEnd(t))}},{key:"toUint8",value:function(){return new Uint8Array(this.buffer,this.byteOffset,this.byteLength)}},{key:"getUint8Array",value:function(e,t){return new Uint8Array(this.buffer,this.byteOffset+e,t)}},{key:"getString",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.byteLength,n=this.getUint8Array(e,t);return z(n)}},{key:"getUnicodeString",value:function(){for(var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.byteLength,n=[],r=0;r<t&&e+r<this.byteLength;r+=2)n.push(this.getUint16(e+r));return n.map((function(e){return String.fromCharCode(e)})).join("")}},{key:"getInt8",value:function(e){return this.dataView.getInt8(e)}},{key:"getUint8",value:function(e){return this.dataView.getUint8(e)}},{key:"getInt16",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getInt16(e,t)}},{key:"getInt32",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getInt32(e,t)}},{key:"getUint16",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getUint16(e,t)}},{key:"getUint32",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getUint32(e,t)}},{key:"getFloat32",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getFloat32(e,t)}},{key:"getFloat64",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getFloat64(e,t)}},{key:"getFloat",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getFloat32(e,t)}},{key:"getDouble",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.le;return this.dataView.getFloat64(e,t)}},{key:"getUintBytes",value:function(e,t,n){switch(t){case 1:return this.getUint8(e,n);case 2:return this.getUint16(e,n);case 4:return this.getUint32(e,n);case 8:return this.getUint64&&this.getUint64(e,n)}}},{key:"getUint",value:function(e,t,n){switch(t){case 8:return this.getUint8(e,n);case 16:return this.getUint16(e,n);case 32:return this.getUint32(e,n);case 64:return this.getUint64&&this.getUint64(e,n)}}},{key:"toString",value:function(e){return this.dataView.toString(e,this.constructor.name)}},{key:"ensureChunk",value:function(){}}]),e}();function E(e,t){I("".concat(e," '").concat(t,"' was not loaded, try using full build of exifr."))}var D=function(e){function n(e){var r;return t(this,n),(r=l(this,s(n).call(this))).kind=e,r}return a(n,e),r(n,[{key:"get",value:function(e,t){return this.has(e)||E(this.kind,e),t&&(e in t||function(e,t){I("Unknown ".concat(e," '").concat(t,"'."))}(this.kind,e),t[e].enabled||E(this.kind,e)),d(s(n.prototype),"get",this).call(this,e)}},{key:"keyList",value:function(){return k(this.keys())}}]),n}(c(P)),R=new D("file parser"),M=new D("segment parser"),N=new D("file reader");function W(e){return function(){for(var t=[],n=0;n<arguments.length;n++)t[n]=arguments[n];try{return Promise.resolve(e.apply(this,t))}catch(e){return Promise.reject(e)}}}function K(e,t,n){return n?t?t(e):e:(e&&e.then||(e=Promise.resolve(e)),t?e.then(t):e)}var H=W((function(e){return new Promise((function(t,n){var r=new FileReader;r.onloadend=function(){return t(r.result||new ArrayBuffer)},r.onerror=n,r.readAsArrayBuffer(e)}))})),X=W((function(e){return A(e).then((function(e){return e.arrayBuffer()}))})),Y=W((function(e,t){return K(t(e),(function(e){return new F(e)}))})),G=W((function(e,t,n){var r=new(N.get(n))(e,t);return K(r.read(),(function(){return r}))})),J=W((function(e,t,n,r){return N.has(n)?G(e,t,n):r?Y(e,r):(I("Parser ".concat(n," is not loaded")),K())}));function q(e,t){return(n=e).startsWith("data:")||n.length>1e4?G(e,t,"base64"):U?J(e,t,"url",X):C?G(e,t,"fs"):void I("Invalid input argument");var n}var Q=function(e){function n(){return t(this,n),l(this,s(n).apply(this,arguments))}return a(n,e),r(n,[{key:"tagKeys",get:function(){return this.allKeys||(this.allKeys=k(this.keys())),this.allKeys}},{key:"tagValues",get:function(){return this.allValues||(this.allValues=k(this.values())),this.allValues}}]),n}(c(P));function Z(e,t,n){var r=new Q,i=n;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=k(i));for(var a=0;a<i.length;a++){var s=i[a],u=s[0],o=s[1];r.set(u,o)}if(Array.isArray(t)){var f=t;Array.isArray(f)||("function"==typeof f.entries&&(f=f.entries()),f=k(f));for(var c=0;c<f.length;c++){var h=f[c];e.set(h,r)}}else e.set(t,r);return r}function $(e,t,n){var r,i=e.get(t),a=n;Array.isArray(a)||("function"==typeof a.entries&&(a=a.entries()),a=k(a));for(var s=0;s<a.length;s++)r=a[s],i.set(r[0],r[1])}var ee=O(),te=O(),ne=O(),re=["chunked","firstChunkSize","firstChunkSizeNode","firstChunkSizeBrowser","chunkSize","chunkLimit"],ie=["jfif","xmp","icc","iptc","ihdr"],ae=["tiff"].concat(ie),se=["ifd0","ifd1","exif","gps","interop"],ue=[].concat(ae,se),oe=["makerNote","userComment"],fe=["translateKeys","translateValues","reviveValues","multiSegment"],ce=[].concat(fe,["sanitize","mergeOutput","silentErrors"]),he=function(){function e(){t(this,e)}return r(e,[{key:"translate",get:function(){return this.translateKeys||this.translateValues||this.reviveValues}}]),e}(),le=function(e){function n(e,r,a,u){var o;if(t(this,n),i(h(o=l(this,s(n).call(this))),"enabled",!1),i(h(o),"skip",w()),i(h(o),"pick",w()),i(h(o),"deps",w()),i(h(o),"translateKeys",!1),i(h(o),"translateValues",!1),i(h(o),"reviveValues",!1),o.key=e,o.enabled=r,o.parse=o.enabled,o.applyInheritables(u),o.canBeFiltered=se.includes(e),o.canBeFiltered&&(o.dict=ee.get(e)),void 0!==a)if(Array.isArray(a))o.parse=o.enabled=!0,o.canBeFiltered&&a.length>0&&o.translateTagSet(a,o.pick);else if("object"==typeof a){if(o.enabled=!0,o.parse=!1!==a.parse,o.canBeFiltered){var f=a.pick,c=a.skip;f&&f.length>0&&o.translateTagSet(f,o.pick),c&&c.length>0&&o.translateTagSet(c,o.skip)}o.applyInheritables(a)}else!0===a||!1===a?o.parse=o.enabled=a:I("Invalid options argument: ".concat(a));return o}return a(n,e),r(n,[{key:"needed",get:function(){return this.enabled||this.deps.size>0}}]),r(n,[{key:"applyInheritables",value:function(e){var t,n,r=fe;Array.isArray(r)||("function"==typeof r.entries&&(r=r.entries()),r=k(r));for(var i=0;i<r.length;i++)void 0!==(n=e[t=r[i]])&&(this[t]=n)}},{key:"translateTagSet",value:function(e,t){if(this.dict){var n,r,i=this.dict,a=i.tagKeys,s=i.tagValues,u=e;Array.isArray(u)||("function"==typeof u.entries&&(u=u.entries()),u=k(u));for(var o=0;o<u.length;o++)"string"==typeof(n=u[o])?(-1===(r=s.indexOf(n))&&(r=a.indexOf(Number(n))),-1!==r&&t.add(Number(a[r]))):t.add(n)}else{var f=e;Array.isArray(f)||("function"==typeof f.entries&&(f=f.entries()),f=k(f));for(var c=0;c<f.length;c++){var h=f[c];t.add(h)}}}},{key:"finalizeFilters",value:function(){!this.enabled&&this.deps.size>0?(this.enabled=!0,ke(this.pick,this.deps)):this.enabled&&this.pick.size>0&&ke(this.pick,this.deps)}}]),n}(he),de={jfif:!1,tiff:!0,xmp:!1,icc:!1,iptc:!1,ifd0:!0,ifd1:!1,exif:!0,gps:!0,interop:!1,ihdr:void 0,makerNote:!1,userComment:!1,multiSegment:!1,skip:[],pick:[],translateKeys:!0,translateValues:!0,reviveValues:!0,sanitize:!0,mergeOutput:!0,silentErrors:!0,chunked:!0,firstChunkSize:void 0,firstChunkSizeNode:512,firstChunkSizeBrowser:65536,chunkSize:65536,chunkLimit:5},ve=O(),pe=function(e){function n(e){var r;return t(this,n),r=l(this,s(n).call(this)),!0===e?r.setupFromTrue():void 0===e?r.setupFromUndefined():Array.isArray(e)?r.setupFromArray(e):"object"==typeof e?r.setupFromObject(e):I("Invalid options argument ".concat(e)),void 0===r.firstChunkSize&&(r.firstChunkSize=U?r.firstChunkSizeBrowser:r.firstChunkSizeNode),r.mergeOutput&&(r.ifd1.enabled=!1),r.filterNestedSegmentTags(),r.traverseTiffDependencyTree(),r.checkLoadedPlugins(),r}return a(n,e),r(n,null,[{key:"useCached",value:function(e){var t=ve.get(e);return void 0!==t?t:(t=new this(e),ve.set(e,t),t)}}]),r(n,[{key:"setupFromUndefined",value:function(){var e,t=re;Array.isArray(t)||("function"==typeof t.entries&&(t=t.entries()),t=k(t));for(var n=0;n<t.length;n++)this[e=t[n]]=de[e];var r=ce;Array.isArray(r)||("function"==typeof r.entries&&(r=r.entries()),r=k(r));for(var i=0;i<r.length;i++)this[e=r[i]]=de[e];var a=oe;Array.isArray(a)||("function"==typeof a.entries&&(a=a.entries()),a=k(a));for(var s=0;s<a.length;s++)this[e=a[s]]=de[e];var u=ue;Array.isArray(u)||("function"==typeof u.entries&&(u=u.entries()),u=k(u));for(var o=0;o<u.length;o++)this[e=u[o]]=new le(e,de[e],void 0,this)}},{key:"setupFromTrue",value:function(){var e,t=re;Array.isArray(t)||("function"==typeof t.entries&&(t=t.entries()),t=k(t));for(var n=0;n<t.length;n++)this[e=t[n]]=de[e];var r=ce;Array.isArray(r)||("function"==typeof r.entries&&(r=r.entries()),r=k(r));for(var i=0;i<r.length;i++)this[e=r[i]]=de[e];var a=oe;Array.isArray(a)||("function"==typeof a.entries&&(a=a.entries()),a=k(a));for(var s=0;s<a.length;s++)this[e=a[s]]=!0;var u=ue;Array.isArray(u)||("function"==typeof u.entries&&(u=u.entries()),u=k(u));for(var o=0;o<u.length;o++)this[e=u[o]]=new le(e,!0,void 0,this)}},{key:"setupFromArray",value:function(e){var t,n=re;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=k(n));for(var r=0;r<n.length;r++)this[t=n[r]]=de[t];var i=ce;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=k(i));for(var a=0;a<i.length;a++)this[t=i[a]]=de[t];var s=oe;Array.isArray(s)||("function"==typeof s.entries&&(s=s.entries()),s=k(s));for(var u=0;u<s.length;u++)this[t=s[u]]=de[t];var o=ue;Array.isArray(o)||("function"==typeof o.entries&&(o=o.entries()),o=k(o));for(var f=0;f<o.length;f++)this[t=o[f]]=new le(t,!1,void 0,this);this.setupGlobalFilters(e,void 0,se)}},{key:"setupFromObject",value:function(e){var t;se.ifd0=se.ifd0||se.image,se.ifd1=se.ifd1||se.thumbnail,y(this,e);var n=re;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=k(n));for(var r=0;r<n.length;r++)this[t=n[r]]=ge(e[t],de[t]);var i=ce;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=k(i));for(var a=0;a<i.length;a++)this[t=i[a]]=ge(e[t],de[t]);var s=oe;Array.isArray(s)||("function"==typeof s.entries&&(s=s.entries()),s=k(s));for(var u=0;u<s.length;u++)this[t=s[u]]=ge(e[t],de[t]);var o=ae;Array.isArray(o)||("function"==typeof o.entries&&(o=o.entries()),o=k(o));for(var f=0;f<o.length;f++)this[t=o[f]]=new le(t,de[t],e[t],this);var c=se;Array.isArray(c)||("function"==typeof c.entries&&(c=c.entries()),c=k(c));for(var h=0;h<c.length;h++)this[t=c[h]]=new le(t,de[t],e[t],this.tiff);this.setupGlobalFilters(e.pick,e.skip,se,ue),!0===e.tiff?this.batchEnableWithBool(se,!0):!1===e.tiff?this.batchEnableWithUserValue(se,e):Array.isArray(e.tiff)?this.setupGlobalFilters(e.tiff,void 0,se):"object"==typeof e.tiff&&this.setupGlobalFilters(e.tiff.pick,e.tiff.skip,se)}},{key:"batchEnableWithBool",value:function(e,t){var n=e;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=k(n));for(var r=0;r<n.length;r++){this[n[r]].enabled=t}}},{key:"batchEnableWithUserValue",value:function(e,t){var n=e;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=k(n));for(var r=0;r<n.length;r++){var i=n[r],a=t[i];this[i].enabled=!1!==a&&void 0!==a}}},{key:"setupGlobalFilters",value:function(e,t,n){var r=arguments.length>3&&void 0!==arguments[3]?arguments[3]:n;if(e&&e.length){var i=r;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=k(i));for(var a=0;a<i.length;a++){var s=i[a];this[s].enabled=!1}var u=ye(e,n),o=u;Array.isArray(o)||("function"==typeof o.entries&&(o=o.entries()),o=k(o));for(var f=0;f<o.length;f++){var c=o[f],h=c[0],l=c[1];ke(this[h].pick,l),this[h].enabled=!0}}else if(t&&t.length){var d=ye(t,n),v=d;Array.isArray(v)||("function"==typeof v.entries&&(v=v.entries()),v=k(v));for(var p=0;p<v.length;p++){var y=v[p],g=y[0],m=y[1];ke(this[g].skip,m)}}}},{key:"filterNestedSegmentTags",value:function(){var e=this.ifd0,t=this.exif,n=this.xmp,r=this.iptc,i=this.icc;this.makerNote?t.deps.add(37500):t.skip.add(37500),this.userComment?t.deps.add(37510):t.skip.add(37510),n.enabled||e.skip.add(700),r.enabled||e.skip.add(33723),i.enabled||e.skip.add(34675)}},{key:"traverseTiffDependencyTree",value:function(){var e=this,t=this.ifd0,n=this.exif,r=this.gps;this.interop.needed&&(n.deps.add(40965),t.deps.add(40965)),n.needed&&t.deps.add(34665),r.needed&&t.deps.add(34853),this.tiff.enabled=se.some((function(t){return!0===e[t].enabled}))||this.makerNote||this.userComment;var i=se;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=k(i));for(var a=0;a<i.length;a++){this[i[a]].finalizeFilters()}}},{key:"checkLoadedPlugins",value:function(){var e=ae;Array.isArray(e)||("function"==typeof e.entries&&(e=e.entries()),e=k(e));for(var t=0;t<e.length;t++){var n=e[t];this[n].enabled&&!M.has(n)&&E("segment parser",n)}}},{key:"onlyTiff",get:function(){var e=this;return!ie.map((function(t){return e[t].enabled})).some((function(e){return!0===e}))&&this.tiff.enabled}}]),n}(he);function ye(e,t){var n,r,i,a=[],s=t;Array.isArray(s)||("function"==typeof s.entries&&(s=s.entries()),s=k(s));for(var u=0;u<s.length;u++){r=s[u],n=[];var o=ee.get(r);Array.isArray(o)||("function"==typeof o.entries&&(o=o.entries()),o=k(o));for(var f=0;f<o.length;f++)i=o[f],(e.includes(i[0])||e.includes(i[1]))&&n.push(i[0]);n.length&&a.push([r,n])}return a}function ge(e,t){return void 0!==e?e:void 0!==t?t:void 0}function ke(e,t){var n=t;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=k(n));for(var r=0;r<n.length;r++){var i=n[r];e.add(i)}}function me(e,t,n){return n?t?t(e):e:(e&&e.then||(e=Promise.resolve(e)),t?e.then(t):e)}function be(){}function Ae(e,t){if(!t)return e&&e.then?e.then(be):Promise.resolve()}function we(e,t){var n=e();return n&&n.then?n.then(t):t(n)}i(pe,"default",de);var Oe=function(){function e(n){t(this,e),i(this,"parsers",{}),this.options=pe.useCached(n)}return r(e,[{key:"setup",value:function(){if(!this.fileParser){var e=this.file,t=e.getUint16(0),n=R;Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=k(n));for(var r=0;r<n.length;r++){var i=n[r],a=i[0],s=i[1];if(s.canHandle(e,t))return this.fileParser=new s(this.options,this.file,this.parsers),e[a]=!0}I("Unknown file format")}}},{key:"read",value:function(e){try{var t=this;return me(function(e,t){return"string"==typeof e?q(e,t):U&&!x&&e instanceof HTMLImageElement?q(e.src,t):e instanceof Uint8Array||e instanceof ArrayBuffer||e instanceof DataView?new F(e):U&&e instanceof Blob?J(e,t,"blob",H):void I("Invalid input argument")}(e,t.options),(function(e){t.file=e}))}catch(e){return Promise.reject(e)}}},{key:"parse",value:function(){try{var e=this;e.setup();var t={},n=[];return we((function(){return e.options.silentErrors?me(e.doParse(t,n).catch((function(e){return n.push(e)})),(function(){n.push.apply(n,e.fileParser.errors)})):Ae(e.doParse(t,n))}),(function(){return e.file.close&&e.file.close(),e.options.silentErrors&&n.length>0&&(t.errors=n),V(r=t)?void 0:r;var r}))}catch(e){return Promise.reject(e)}}},{key:"doParse",value:function(e,t){try{var n=this;return me(n.fileParser.parse(),(function(){var r,i=v(n.parsers).map((r=function(t){return me(t.parse(),(function(n){t.assignToOutput(e,n)}))},function(){for(var e=[],t=0;t<arguments.length;t++)e[t]=arguments[t];try{return Promise.resolve(r.apply(this,e))}catch(e){return Promise.reject(e)}}));if(n.options.silentErrors){var a=function(e){return t.push(e)};i=i.map((function(e){return e.catch(a)}))}return Ae(Promise.all(i))}))}catch(e){return Promise.reject(e)}}},{key:"extractThumbnail",value:function(){try{var e=this;e.setup();var t,n=e.options,r=e.file,i=M.get("tiff",n);return we((function(){if(!r.tiff)return function(e){var t=e();if(t&&t.then)return t.then(be)}((function(){if(r.jpeg)return me(e.fileParser.getOrFindSegment("tiff"),(function(e){t=e}))}));t={start:0,type:"tiff"}}),(function(){if(void 0!==t)return me(e.fileParser.ensureSegmentChunk(t),(function(t){return me((e.parsers.tiff=new i(t,n,r)).extractThumbnail(),(function(e){return r.close&&r.close(),e}))}))}))}catch(e){return Promise.reject(e)}}}]),e}();var Pe,Se=(Pe=function(e,t){var n,r,i,a=new Oe(t);return n=a.read(e),r=function(){return a.parse()},i?r?r(n):n:(n&&n.then||(n=Promise.resolve(n)),r?n.then(r):n)},function(){for(var e=[],t=0;t<arguments.length;t++)e[t]=arguments[t];try{return Promise.resolve(Pe.apply(this,e))}catch(e){return Promise.reject(e)}}),Ue=Object.freeze({__proto__:null,parse:Se,Exifr:Oe,fileParsers:R,segmentParsers:M,fileReaders:N,tagKeys:ee,tagValues:te,tagRevivers:ne,createDictionary:Z,extendDictionary:$,fetchUrlAsArrayBuffer:X,readBlobAsArrayBuffer:H,chunkedProps:re,otherSegments:ie,segments:ae,tiffBlocks:se,segmentsAndBlocks:ue,tiffExtractables:oe,inheritables:fe,allFormatters:ce,Options:pe});function xe(){}var Ce=function(){function e(n,r,a){var s=this;t(this,e),i(this,"errors",[]),i(this,"ensureSegmentChunk",function(e){return function(){for(var t=[],n=0;n<arguments.length;n++)t[n]=arguments[n];try{return Promise.resolve(e.apply(this,t))}catch(e){return Promise.reject(e)}}}((function(e){var t,n,r,i=e.start,a=e.size||65536;return t=function(){if(s.file.chunked)return function(e){var t=e();if(t&&t.then)return t.then(xe)}((function(){if(!s.file.available(i,a))return function(e){if(e&&e.then)return e.then(xe)}(function(e,t){try{var n=e()}catch(e){return t(e)}return n&&n.then?n.then(void 0,t):n}((function(){return t=s.file.readChunk(i,a),n=function(t){e.chunk=t},r?n?n(t):t:(t&&t.then||(t=Promise.resolve(t)),n?t.then(n):t);var t,n,r}),(function(t){I("Couldn't read segment: ".concat(JSON.stringify(e),". ").concat(t.message))})));e.chunk=s.file.subarray(i,a)}));s.file.byteLength>i+a?e.chunk=s.file.subarray(i,a):void 0===e.size?e.chunk=s.file.subarray(i):I("Segment unreachable: "+JSON.stringify(e))},n=function(){return e.chunk},(r=t())&&r.then?r.then(n):n(r)}))),this.extendOptions&&this.extendOptions(n),this.options=n,this.file=r,this.parsers=a}return r(e,[{key:"injectSegment",value:function(e,t){this.options[e].enabled&&this.createParser(e,t)}},{key:"createParser",value:function(e,t){var n=new(M.get(e))(t,this.options,this.file);return this.parsers[e]=n}},{key:"createParsers",value:function(e){var t=e;Array.isArray(t)||("function"==typeof t.entries&&(t=t.entries()),t=k(t));for(var n=0;n<t.length;n++){var r=t[n],i=r.type,a=r.chunk,s=this.options[i];if(s&&s.enabled){var u=this.parsers[i];u&&u.append||u||this.createParser(i,a)}}}},{key:"readSegments",value:function(e){try{var t=e.map(this.ensureSegmentChunk);return function(e,t){if(!t)return e&&e.then?e.then(xe):Promise.resolve()}(Promise.all(t))}catch(e){return Promise.reject(e)}}}]),e}(),je=function(){function e(n){var r=this,a=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},s=arguments.length>2?arguments[2]:void 0;t(this,e),i(this,"errors",[]),i(this,"raw",O()),i(this,"handleError",(function(e){if(!r.options.silentErrors)throw e;r.errors.push(e.message)})),this.chunk=this.normalizeInput(n),this.file=s,this.type=this.constructor.type,this.globalOptions=this.options=a,this.localOptions=a[this.type],this.canTranslate=this.localOptions&&this.localOptions.translate}return r(e,[{key:"normalizeInput",value:function(e){return e instanceof F?e:new F(e)}}],[{key:"findPosition",value:function(e,t){var n=e.getUint16(t+2)+2,r="function"==typeof this.headerLength?this.headerLength(e,t,n):this.headerLength,i=t+r,a=n-r;return{offset:t,length:n,headerLength:r,start:i,size:a,end:i+a}}},{key:"parse",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=new pe(i({},this.type,t)),r=new this(e,n);return r.parse()}}]),r(e,[{key:"translate",value:function(){this.canTranslate&&(this.translated=this.translateBlock(this.raw,this.type))}},{key:"translateBlock",value:function(e,t){var n=ne.get(t),r=te.get(t),i=ee.get(t),a=this.options[t],s=a.reviveValues&&!!n,u=a.translateValues&&!!r,o=a.translateKeys&&!!i,f={},c=e;Array.isArray(c)||("function"==typeof c.entries&&(c=c.entries()),c=k(c));for(var h=0;h<c.length;h++){var l=c[h],d=l[0],v=l[1];s&&n.has(d)?v=n.get(d)(v):u&&r.has(d)&&(v=this.translateValue(v,r.get(d))),o&&i.has(d)&&(d=i.get(d)||d),f[d]=v}return f}},{key:"translateValue",value:function(e,t){return t[e]||t.DEFAULT||e}},{key:"assignToOutput",value:function(e,t){this.assignObjectToOutput(e,this.constructor.type,t)}},{key:"assignObjectToOutput",value:function(e,t,n){if(this.globalOptions.mergeOutput)return y(e,n);e[t]?y(e[t],n):e[t]=n}},{key:"output",get:function(){return this.translated?this.translated:this.raw?g(this.raw):void 0}}]),e}();function Be(e,t,n){return n?t?t(e):e:(e&&e.then||(e=Promise.resolve(e)),t?e.then(t):e)}i(je,"headerLength",4),i(je,"type",void 0),i(je,"multiSegment",!1),i(je,"canHandle",(function(){return!1}));function _e(){}function Ve(e,t){if(!t)return e&&e.then?e.then(_e):Promise.resolve()}function Ie(e){var t=e();if(t&&t.then)return t.then(_e)}function Le(e,t){var n=e();return n&&n.then?n.then(t):t(n)}function Te(e,t,n){if(!e.s){if(n instanceof ze){if(!n.s)return void(n.o=Te.bind(null,e,t));1&t&&(t=n.s),n=n.v}if(n&&n.then)return void n.then(Te.bind(null,e,t),Te.bind(null,e,2));e.s=t,e.v=n;var r=e.o;r&&r(e)}}var ze=function(){function e(){}return e.prototype.then=function(t,n){var r=new e,i=this.s;if(i){var a=1&i?t:n;if(a){try{Te(r,1,a(this.v))}catch(e){Te(r,2,e)}return r}return this}return this.o=function(e){try{var i=e.v;1&e.s?Te(r,1,t?t(i):i):n?Te(r,1,n(i)):Te(r,2,i)}catch(e){Te(r,2,e)}},r},e}();function Fe(e){return e instanceof ze&&1&e.s}function Ee(e,t,n){for(var r;;){var i=e();if(Fe(i)&&(i=i.v),!i)return a;if(i.then){r=0;break}var a=n();if(a&&a.then){if(!Fe(a)){r=1;break}a=a.s}if(t){var s=t();if(s&&s.then&&!Fe(s)){r=2;break}}}var u=new ze,o=Te.bind(null,u,2);return(0===r?i.then(c):1===r?a.then(f):s.then(h)).then(void 0,o),u;function f(r){a=r;do{if(t&&(s=t())&&s.then&&!Fe(s))return void s.then(h).then(void 0,o);if(!(i=e())||Fe(i)&&!i.v)return void Te(u,1,a);if(i.then)return void i.then(c).then(void 0,o);Fe(a=n())&&(a=a.v)}while(!a||!a.then);a.then(f).then(void 0,o)}function c(e){e?(a=n())&&a.then?a.then(f).then(void 0,o):f(a):Te(u,1,a)}function h(){(i=e())?i.then?i.then(c).then(void 0,o):c(i):Te(u,1,a)}}function De(e){return 192===e||194===e||196===e||219===e||221===e||218===e||254===e}function Re(e){return e>=224&&e<=239}function Me(e,t,n){var r=M;Array.isArray(r)||("function"==typeof r.entries&&(r=r.entries()),r=k(r));for(var i=0;i<r.length;i++){var a=r[i],s=a[0];if(a[1].canHandle(e,t,n))return s}}var Ne=function(e){function n(){var e,r;t(this,n);for(var a=arguments.length,u=new Array(a),o=0;o<a;o++)u[o]=arguments[o];return i(h(r=l(this,(e=s(n)).call.apply(e,[this].concat(u)))),"appSegments",[]),i(h(r),"jpegSegments",[]),i(h(r),"unknownSegments",[]),r}return a(n,e),r(n,[{key:"parse",value:function(){try{var e=this;return Be(e.findAppSegments(),(function(){return Be(e.readSegments(e.appSegments),(function(){e.mergeMultiSegments(),e.createParsers(e.mergedAppSegments||e.appSegments)}))}))}catch(e){return Promise.reject(e)}}},{key:"setupSegmentFinderArgs",value:function(e){var t=this;!0===e?(this.findAll=!0,this.wanted=w(M.keyList())):(e=void 0===e?M.keyList().filter((function(e){return t.options[e].enabled})):e.filter((function(e){return t.options[e].enabled&&M.has(e)})),this.findAll=!1,this.remaining=w(e),this.wanted=w(e)),this.unfinishedMultiSegment=!1}},{key:"findAppSegments",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,t=arguments.length>1?arguments[1]:void 0;try{var n=this;n.setupSegmentFinderArgs(t);var r=n.file,i=n.findAll,a=n.wanted,s=n.remaining;return Le((function(){if(!i&&n.file.chunked)return i=k(a).some((function(e){var t=M.get(e),r=n.options[e];return t.multiSegment&&r.multiSegment})),Ie((function(){if(i)return Ve(n.file.readWhole())}))}),(function(){var t=!1;if(e=n.findAppSegmentsInRange(e,r.byteLength),!n.options.onlyTiff)return function(){if(r.chunked){var i=!1;return Ee((function(){return!t&&s.size>0&&!i&&(!!r.canReadNextChunk||!!n.unfinishedMultiSegment)}),void 0,(function(){var a=r.nextChunkOffset,s=n.appSegments.some((function(e){return!n.file.available(e.offset||e.start,e.length||e.size)}));return Le((function(){return e>a&&!s?Be(r.readNextChunk(e),(function(e){i=!e})):Be(r.readNextChunk(a),(function(e){i=!e}))}),(function(){void 0===(e=n.findAppSegmentsInRange(e,r.byteLength))&&(t=!0)}))}))}}()}))}catch(e){return Promise.reject(e)}}},{key:"findAppSegmentsInRange",value:function(e,t){t-=2;for(var n,r,i,a,s,u,o=this.file,f=this.findAll,c=this.wanted,h=this.remaining,l=this.options;e<t;e++)if(255===o.getUint8(e))if(Re(n=o.getUint8(e+1))){if(r=o.getUint16(e+2),(i=Me(o,e,r))&&c.has(i)&&(s=(a=M.get(i)).findPosition(o,e),u=l[i],s.type=i,this.appSegments.push(s),!f&&(a.multiSegment&&u.multiSegment?(this.unfinishedMultiSegment=s.chunkNumber<s.chunkCount,this.unfinishedMultiSegment||h.delete(i)):h.delete(i),0===h.size)))break;l.recordUnknownSegments&&((s=je.findPosition(o,e)).marker=n,this.unknownSegments.push(s)),e+=r+1}else if(De(n)){if(r=o.getUint16(e+2),218===n&&!1!==l.stopAfterSos)return;l.recordJpegSegments&&this.jpegSegments.push({offset:e,length:r,marker:n}),e+=r+1}return e}},{key:"mergeMultiSegments",value:function(){var e=this;if(this.appSegments.some((function(e){return e.multiSegment}))){var t=function(e,t){for(var n,r,i,a=O(),s=0;s<e.length;s++)n=e[s],r=n[t],a.has(r)?i=a.get(r):a.set(r,i=[]),i.push(n);return k(a)}(this.appSegments,"type");this.mergedAppSegments=t.map((function(t){var n=t[0],r=t[1],i=M.get(n,e.options);return i.handleMultiSegments?{type:n,chunk:i.handleMultiSegments(r)}:r[0]}))}}},{key:"getSegment",value:function(e){return this.appSegments.find((function(t){return t.type===e}))}},{key:"getOrFindSegment",value:function(e){try{var t=this,n=t.getSegment(e);return Le((function(){if(void 0===n)return Be(t.findAppSegments(0,[e]),(function(){n=t.getSegment(e)}))}),(function(){return n}))}catch(e){return Promise.reject(e)}}}],[{key:"canHandle",value:function(e,t){return 65496===t}}]),n}(Ce);function We(){}i(Ne,"type","jpeg"),R.set("jpeg",Ne);function Ke(e,t){if(!t)return e&&e.then?e.then(We):Promise.resolve()}function He(e,t){var n=e();return n&&n.then?n.then(t):t(n)}var Xe=[void 0,1,1,2,4,8,1,1,2,4,8,4,8,4];var Ye=function(e){function n(){return t(this,n),l(this,s(n).apply(this,arguments))}return a(n,e),r(n,[{key:"parse",value:function(){try{var e=this;e.parseHeader();var t=e.options;return He((function(){if(t.ifd0.enabled)return Ke(e.parseIfd0Block())}),(function(){return He((function(){if(t.exif.enabled)return Ke(e.safeParse("parseExifBlock"))}),(function(){return He((function(){if(t.gps.enabled)return Ke(e.safeParse("parseGpsBlock"))}),(function(){return He((function(){if(t.interop.enabled)return Ke(e.safeParse("parseInteropBlock"))}),(function(){return He((function(){if(t.ifd1.enabled)return Ke(e.safeParse("parseThumbnailBlock"))}),(function(){return e.createOutput()}))}))}))}))}))}catch(e){return Promise.reject(e)}}},{key:"safeParse",value:function(e){var t=this[e]();return void 0!==t.catch&&(t=t.catch(this.handleError)),t}},{key:"findIfd0Offset",value:function(){void 0===this.ifd0Offset&&(this.ifd0Offset=this.chunk.getUint32(4))}},{key:"findIfd1Offset",value:function(){if(void 0===this.ifd1Offset){this.findIfd0Offset();var e=this.chunk.getUint16(this.ifd0Offset),t=this.ifd0Offset+2+12*e;this.ifd1Offset=this.chunk.getUint32(t)}}},{key:"parseBlock",value:function(e,t){var n=O();return this[t]=n,this.parseTags(e,t,n),n}},{key:"parseIfd0Block",value:function(){try{var e=this;if(e.ifd0)return;var t=e.file;return e.findIfd0Offset(),e.ifd0Offset<8&&I("Malformed EXIF data"),!t.chunked&&e.ifd0Offset>t.byteLength&&I("IFD0 offset points to outside of file.\nthis.ifd0Offset: ".concat(e.ifd0Offset,", file.byteLength: ").concat(t.byteLength)),He((function(){if(t.tiff)return Ke(t.ensureChunk(e.ifd0Offset,L(e.options)))}),(function(){var t=e.parseBlock(e.ifd0Offset,"ifd0");if(0!==t.size)return e.exifOffset=t.get(34665),e.interopOffset=t.get(40965),e.gpsOffset=t.get(34853),e.xmp=t.get(700),e.iptc=t.get(33723),e.icc=t.get(34675),e.options.sanitize&&(t.delete(34665),t.delete(40965),t.delete(34853),t.delete(700),t.delete(33723),t.delete(34675)),t}))}catch(e){return Promise.reject(e)}}},{key:"parseExifBlock",value:function(){try{var e=this;if(e.exif)return;return He((function(){if(!e.ifd0)return Ke(e.parseIfd0Block())}),(function(){if(void 0!==e.exifOffset)return He((function(){if(e.file.tiff)return Ke(e.file.ensureChunk(e.exifOffset,L(e.options)))}),(function(){var t=e.parseBlock(e.exifOffset,"exif");return e.interopOffset||(e.interopOffset=t.get(40965)),e.makerNote=t.get(37500),e.userComment=t.get(37510),e.options.sanitize&&(t.delete(40965),t.delete(37500),t.delete(37510)),e.unpack(t,41728),e.unpack(t,41729),t}))}))}catch(e){return Promise.reject(e)}}},{key:"unpack",value:function(e,t){var n=e.get(t);n&&1===n.length&&e.set(t,n[0])}},{key:"parseGpsBlock",value:function(){try{var e=this;if(e.gps)return;return He((function(){if(!e.ifd0)return Ke(e.parseIfd0Block())}),(function(){if(void 0!==e.gpsOffset){var t=e.parseBlock(e.gpsOffset,"gps");return t&&t.has(2)&&t.has(4)&&(t.set("latitude",Ge.apply(void 0,t.get(2).concat([t.get(1)]))),t.set("longitude",Ge.apply(void 0,t.get(4).concat([t.get(3)])))),t}}))}catch(e){return Promise.reject(e)}}},{key:"parseInteropBlock",value:function(){try{var e=this;if(e.interop)return;return He((function(){if(!e.ifd0)return Ke(e.parseIfd0Block())}),(function(){return He((function(){if(void 0===e.interopOffset&&!e.exif)return Ke(e.parseExifBlock())}),(function(){if(void 0!==e.interopOffset)return e.parseBlock(e.interopOffset,"interop")}))}))}catch(e){return Promise.reject(e)}}},{key:"parseThumbnailBlock",value:function(){var e=arguments.length>0&&void 0!==arguments[0]&&arguments[0];try{var t=this;if(t.ifd1||t.ifd1Parsed)return;if(t.options.mergeOutput&&!e)return;return t.findIfd1Offset(),t.ifd1Offset>0&&(t.parseBlock(t.ifd1Offset,"ifd1"),t.ifd1Parsed=!0),t.ifd1}catch(e){return Promise.reject(e)}}},{key:"extractThumbnail",value:function(){try{var e=this;return e.headerParsed||e.parseHeader(),He((function(){if(!e.ifd1Parsed)return Ke(e.parseThumbnailBlock(!0))}),(function(){if(void 0!==e.ifd1){var t=e.ifd1.get(513),n=e.ifd1.get(514);return e.chunk.getUint8Array(t,n)}}))}catch(e){return Promise.reject(e)}}},{key:"createOutput",value:function(){var e,t,n,r={},i=se;Array.isArray(i)||("function"==typeof i.entries&&(i=i.entries()),i=k(i));for(var a=0;a<i.length;a++)if(!V(e=this[t=i[a]]))if(n=this.canTranslate?this.translateBlock(e,t):g(e),this.options.mergeOutput){if("ifd1"===t)continue;y(r,n)}else r[t]=n;return this.makerNote&&(r.makerNote=this.makerNote),this.userComment&&(r.userComment=this.userComment),r}},{key:"assignToOutput",value:function(e,t){if(this.globalOptions.mergeOutput)y(e,t);else{var n=p(t);Array.isArray(n)||("function"==typeof n.entries&&(n=n.entries()),n=k(n));for(var r=0;r<n.length;r++){var i=n[r],a=i[0],s=i[1];this.assignObjectToOutput(e,a,s)}}}},{key:"image",get:function(){return this.ifd0}},{key:"thumbnail",get:function(){return this.ifd1}}],[{key:"canHandle",value:function(e,t){return 225===e.getUint8(t+1)&&1165519206===e.getUint32(t+4)&&0===e.getUint16(t+8)}}]),n}(function(e){function n(){return t(this,n),l(this,s(n).apply(this,arguments))}return a(n,e),r(n,[{key:"parseHeader",value:function(){var e=this.chunk.getUint16();18761===e?this.le=!0:19789===e&&(this.le=!1),this.chunk.le=this.le,this.headerParsed=!0}},{key:"parseTags",value:function(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:O(),r=this.options[t],i=r.pick,a=r.skip,s=(i=w(i)).size>0,u=0===a.size,o=this.chunk.getUint16(e);e+=2;for(var f=0;f<o;f++){var c=this.chunk.getUint16(e);if(s){if(i.has(c)&&(n.set(c,this.parseTag(e,c,t)),i.delete(c),0===i.size))break}else!u&&a.has(c)||n.set(c,this.parseTag(e,c,t));e+=12}return n}},{key:"parseTag",value:function(e,t,n){var r,i=this.chunk,a=i.getUint16(e+2),s=i.getUint32(e+4),u=Xe[a];if(u*s<=4?e+=8:e=i.getUint32(e+8),(a<1||a>13)&&I("Invalid TIFF value type. block: ".concat(n.toUpperCase(),", tag: ").concat(t.toString(16),", type: ").concat(a,", offset ").concat(e)),e>i.byteLength&&I("Invalid TIFF value offset. block: ".concat(n.toUpperCase(),", tag: ").concat(t.toString(16),", type: ").concat(a,", offset ").concat(e," is outside of chunk size ").concat(i.byteLength)),1===a)return i.getUint8Array(e,s);if(2===a)return""===(r=function(e){for(;e.endsWith("\0");)e=e.slice(0,-1);return e}(r=i.getString(e,s)).trim())?void 0:r;if(7===a)return i.getUint8Array(e,s);if(1===s)return this.parseTagValue(a,e);for(var o=new(function(e){switch(e){case 1:return Uint8Array;case 3:return Uint16Array;case 4:return Uint32Array;case 5:return Array;case 6:return Int8Array;case 8:return Int16Array;case 9:return Int32Array;case 10:return Array;case 11:return Float32Array;case 12:return Float64Array;default:return Array}}(a))(s),f=u,c=0;c<s;c++)o[c]=this.parseTagValue(a,e),e+=f;return o}},{key:"parseTagValue",value:function(e,t){var n=this.chunk;switch(e){case 1:return n.getUint8(t);case 3:return n.getUint16(t);case 4:return n.getUint32(t);case 5:return n.getUint32(t)/n.getUint32(t+4);case 6:return n.getInt8(t);case 8:return n.getInt16(t);case 9:return n.getInt32(t);case 10:return n.getInt32(t)/n.getInt32(t+4);case 11:return n.getFloat(t);case 12:return n.getDouble(t);case 13:return n.getUint32(t);default:I("Invalid tiff type ".concat(e))}}}]),n}(je));function Ge(e,t,n,r){var i=e+t/60+n/3600;return"S"!==r&&"W"!==r||(i*=-1),i}i(Ye,"type","tiff"),i(Ye,"headerLength",10),M.set("tiff",Ye);var Je=Object.freeze({__proto__:null,default:Ue,parse:Se,Exifr:Oe,fileParsers:R,segmentParsers:M,fileReaders:N,tagKeys:ee,tagValues:te,tagRevivers:ne,createDictionary:Z,extendDictionary:$,fetchUrlAsArrayBuffer:X,readBlobAsArrayBuffer:H,chunkedProps:re,otherSegments:ie,segments:ae,tiffBlocks:se,segmentsAndBlocks:ue,tiffExtractables:oe,inheritables:fe,allFormatters:ce,Options:pe});function qe(e,t,n){return n?t?t(e):e:(e&&e.then||(e=Promise.resolve(e)),t?e.then(t):e)}function Qe(e){return function(){for(var t=[],n=0;n<arguments.length;n++)t[n]=arguments[n];try{return Promise.resolve(e.apply(this,t))}catch(e){return Promise.reject(e)}}}var Ze=Qe((function(e){var t=new Oe(it);return qe(t.read(e),(function(){return qe(t.parse(),(function(e){if(e&&e.ifd0)return e.ifd0[274]}))}))})),$e=Qe((function(e){var t=new Oe(rt);return qe(t.read(e),(function(){return qe(t.parse(),(function(e){if(e&&e.gps){var t=e.gps;return{latitude:t.latitude,longitude:t.longitude}}}))}))})),et=Qe((function(e){return qe(this.thumbnail(e),(function(e){if(void 0!==e){var t=new Blob([e]);return URL.createObjectURL(t)}}))})),tt=Qe((function(e){var t=new Oe(at);return qe(t.read(e),(function(){return qe(t.extractThumbnail(),(function(e){return e&&B?j.from(e):e}))}))})),nt={ifd0:!1,ifd1:!1,exif:!1,gps:!1,interop:!1,sanitize:!1,reviveValues:!0,translateKeys:!1,translateValues:!1,mergeOutput:!1},rt=y({},nt,{firstChunkSize:4e4,gps:[1,2,3,4]}),it=y({},nt,{firstChunkSize:4e4,ifd0:[274]}),at=y({},nt,{tiff:!1,ifd1:!0,mergeOutput:!1}),st={1:{dimensionSwapped:!1,scaleX:1,scaleY:1,deg:0,rad:0},2:{dimensionSwapped:!1,scaleX:-1,scaleY:1,deg:0,rad:0},3:{dimensionSwapped:!1,scaleX:1,scaleY:1,deg:180,rad:180*Math.PI/180},4:{dimensionSwapped:!1,scaleX:-1,scaleY:1,deg:180,rad:180*Math.PI/180},5:{dimensionSwapped:!0,scaleX:1,scaleY:-1,deg:90,rad:90*Math.PI/180},6:{dimensionSwapped:!0,scaleX:1,scaleY:1,deg:90,rad:90*Math.PI/180},7:{dimensionSwapped:!0,scaleX:1,scaleY:-1,deg:270,rad:270*Math.PI/180},8:{dimensionSwapped:!0,scaleX:1,scaleY:1,deg:270,rad:270*Math.PI/180}};if(e.rotateCanvas=!0,e.rotateCss=!0,"object"==typeof navigator){var ut=navigator.userAgent;if(ut.includes("iPad")||ut.includes("iPhone")){var ot=ut.match(/OS (\d+)_(\d+)/);if(ot){ot[0];var ft=ot[1],ct=ot[2],ht=Number(ft)+.1*Number(ct);e.rotateCanvas=ht<13.4,e.rotateCss=!1}}if(ut.includes("Chrome/")){var lt=ut.match(/Chrome\/(\d+)/),dt=(lt[0],lt[1]);Number(dt)>=81&&(e.rotateCanvas=e.rotateCss=!1)}else if(ut.includes("Firefox/")){var vt=ut.match(/Firefox\/(\d+)/),pt=(vt[0],vt[1]);Number(pt)>=77&&(e.rotateCanvas=e.rotateCss=!1)}}function yt(){}var gt=function(e){function n(){var e,r;t(this,n);for(var a=arguments.length,u=new Array(a),o=0;o<a;o++)u[o]=arguments[o];return i(h(r=l(this,(e=s(n)).call.apply(e,[this].concat(u)))),"ranges",new kt),0!==r.byteLength&&r.ranges.add(0,r.byteLength),r}return a(n,e),r(n,[{key:"_tryExtend",value:function(e,t,n){if(0===e&&0===this.byteLength&&n){var r=new DataView(n.buffer||n,n.byteOffset,n.byteLength);this._swapDataView(r)}else{var i=e+t;if(i>this.byteLength){var a=this._extend(i).dataView;this._swapDataView(a)}}}},{key:"_extend",value:function(e){var t;t=B?j.allocUnsafe(e):new Uint8Array(e);var n=new DataView(t.buffer,t.byteOffset,t.byteLength);return t.set(new Uint8Array(this.buffer,this.byteOffset,this.byteLength),0),{uintView:t,dataView:n}}},{key:"subarray",value:function(e,t){var r=arguments.length>2&&void 0!==arguments[2]&&arguments[2];return t=t||this._lengthToEnd(e),r&&this._tryExtend(e,t),this.ranges.add(e,t),d(s(n.prototype),"subarray",this).call(this,e,t)}},{key:"set",value:function(e,t){var r=arguments.length>2&&void 0!==arguments[2]&&arguments[2];r&&this._tryExtend(t,e.byteLength,e);var i=d(s(n.prototype),"set",this).call(this,e,t);return this.ranges.add(t,i.byteLength),i}},{key:"ensureChunk",value:function(e,t){try{if(!this.chunked)return;if(this.ranges.available(e,t))return;return function(e,t){if(!t)return e&&e.then?e.then(yt):Promise.resolve()}(this.readChunk(e,t))}catch(e){return Promise.reject(e)}}},{key:"available",value:function(e,t){return this.ranges.available(e,t)}}]),n}(F),kt=function(){function e(){t(this,e),i(this,"list",[])}return r(e,[{key:"add",value:function(e,t){var n=e+t,r=this.list.filter((function(t){return mt(e,t.offset,n)||mt(e,t.end,n)}));if(r.length>0){e=Math.min.apply(Math,[e].concat(r.map((function(e){return e.offset})))),t=(n=Math.max.apply(Math,[n].concat(r.map((function(e){return e.end})))))-e;var i=r.shift();i.offset=e,i.length=t,i.end=n,this.list=this.list.filter((function(e){return!r.includes(e)}))}else this.list.push({offset:e,length:t,end:n})}},{key:"available",value:function(e,t){var n=e+t;return this.list.some((function(t){return t.offset<=e&&n<=t.end}))}},{key:"length",get:function(){return this.list.length}}]),e}();function mt(e,t,n){return e<=t&&t<=n}function bt(){}function At(e,t){if(!t)return e&&e.then?e.then(bt):Promise.resolve()}function wt(e,t,n){return n?t?t(e):e:(e&&e.then||(e=Promise.resolve(e)),t?e.then(t):e)}var Ot=function(e){function n(){return t(this,n),l(this,s(n).apply(this,arguments))}return a(n,e),r(n,[{key:"readWhole",value:function(){try{var e=this;return e.chunked=!1,wt(H(e.input),(function(t){e._swapArrayBuffer(t)}))}catch(e){return Promise.reject(e)}}},{key:"readChunked",value:function(){return this.chunked=!0,this.size=this.input.size,d(s(n.prototype),"readChunked",this).call(this)}},{key:"_readChunk",value:function(e,t){try{var n=this,r=t?e+t:void 0,i=n.input.slice(e,r);return wt(H(i),(function(t){return n.set(t,e,!0)}))}catch(e){return Promise.reject(e)}}}]),n}(function(e){function n(e,r){var a;return t(this,n),i(h(a=l(this,s(n).call(this,0))),"chunksRead",0),a.input=e,a.options=r,a}return a(n,e),r(n,[{key:"readWhole",value:function(){try{return this.chunked=!1,At(this.readChunk(this.nextChunkOffset))}catch(e){return Promise.reject(e)}}},{key:"readChunked",value:function(){try{return this.chunked=!0,At(this.readChunk(0,this.options.firstChunkSize))}catch(e){return Promise.reject(e)}}},{key:"readNextChunk",value:function(e){try{if(void 0===e&&(e=this.nextChunkOffset),this.fullyRead)return this.chunksRead++,!1;var t=this.options.chunkSize;return n=this.readChunk(e,t),r=function(e){return!!e&&e.byteLength===t},i?r?r(n):n:(n&&n.then||(n=Promise.resolve(n)),r?n.then(r):n)}catch(e){return Promise.reject(e)}var n,r,i}},{key:"readChunk",value:function(e,t){try{if(this.chunksRead++,0===(t=this.safeWrapAddress(e,t)))return;return this._readChunk(e,t)}catch(e){return Promise.reject(e)}}},{key:"safeWrapAddress",value:function(e,t){return void 0!==this.size&&e+t>this.size?Math.max(0,this.size-e):t}},{key:"read",value:function(){return this.options.chunked?this.readChunked():this.readWhole()}},{key:"close",value:function(){}},{key:"nextChunkOffset",get:function(){if(0!==this.ranges.list.length)return this.ranges.list[0].length}},{key:"canReadNextChunk",get:function(){return this.chunksRead<this.options.chunkLimit}},{key:"fullyRead",get:function(){return void 0!==this.size&&this.nextChunkOffset===this.size}}]),n}(gt));N.set("blob",Ot),e.Exifr=Oe,e.Options=pe,e.allFormatters=ce,e.chunkedProps=re,e.createDictionary=Z,e.default=Je,e.disableAllOptions=nt,e.extendDictionary=$,e.fetchUrlAsArrayBuffer=X,e.fileParsers=R,e.fileReaders=N,e.gps=$e,e.gpsOnlyOptions=rt,e.inheritables=fe,e.orientation=Ze,e.orientationOnlyOptions=it,e.otherSegments=ie,e.parse=Se,e.readBlobAsArrayBuffer=H,e.rotation=function(t){return qe(Ze(t),(function(t){return y({canvas:e.rotateCanvas,css:e.rotateCss},st[t])}))},e.rotations=st,e.segmentParsers=M,e.segments=ae,e.segmentsAndBlocks=ue,e.tagKeys=ee,e.tagRevivers=ne,e.tagValues=te,e.thumbnail=tt,e.thumbnailOnlyOptions=at,e.thumbnailUrl=et,e.tiffBlocks=se,e.tiffExtractables=oe,Object.defineProperty(e,"__esModule",{value:!0})}));
-
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-
-},{"_process":39,"buffer":10}],164:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.7.11", _temp);
+},{"@uppy/core":78,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/dataURItoBlob":220,"@uppy/utils/lib/isObjectURL":245,"@uppy/utils/lib/isPreviewSupported":246,"exifr/dist/mini.legacy.umd.js":24,"math-log2":35}],173:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var io = requireSocketIo;
 
@@ -30797,7 +31122,7 @@ var TransloaditAssembly = /*#__PURE__*/function (_Emitter) {
 }(Emitter);
 
 module.exports = TransloaditAssembly;
-},{"./parseUrl":169,"@uppy/utils/lib/NetworkError":201,"@uppy/utils/lib/fetchWithNetworkError":209,"@uppy/utils/lib/hasProperty":226,"component-emitter":13,"socket.io-client":186}],165:[function(require,module,exports){
+},{"./parseUrl":178,"@uppy/utils/lib/NetworkError":215,"@uppy/utils/lib/fetchWithNetworkError":223,"@uppy/utils/lib/hasProperty":241,"component-emitter":179,"socket.io-client":195}],174:[function(require,module,exports){
 /**
  * Check that Assembly parameters are present and include all required fields.
  */
@@ -30811,7 +31136,7 @@ function validateParams(params) {
       params = JSON.parse(params);
     } catch (err) {
       // Tell the user that this is not an Uppy bug!
-      err.message = 'Transloadit: The `params` option is a malformed JSON string: ' + err.message;
+      err.message = "Transloadit: The `params` option is a malformed JSON string: " + err.message;
       throw err;
     }
   }
@@ -30947,10 +31272,12 @@ var AssemblyOptions = /*#__PURE__*/function () {
 
 module.exports = AssemblyOptions;
 module.exports.validateParams = validateParams;
-},{}],166:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var Emitter = require('component-emitter');
 /**
@@ -31079,8 +31406,10 @@ var TransloaditAssemblyWatcher = /*#__PURE__*/function (_Emitter) {
 }(Emitter);
 
 module.exports = TransloaditAssemblyWatcher;
-},{"component-emitter":13}],167:[function(require,module,exports){
+},{"component-emitter":179}],176:[function(require,module,exports){
 var fetchWithNetworkError = require('@uppy/utils/lib/fetchWithNetworkError');
+
+var URL = require('url-parse');
 /**
  * A Barebones HTTP API client for Transloadit.
  */
@@ -31129,7 +31458,7 @@ module.exports = /*#__PURE__*/function () {
       data.append(key, fields[key]);
     });
     data.append('num_expected_upload_files', expectedFiles);
-    var url = this.opts.service + "/assemblies";
+    var url = new URL('/assemblies', "" + this.opts.service).href;
     return fetchWithNetworkError(url, {
       method: 'post',
       headers: this._headers,
@@ -31309,14 +31638,16 @@ module.exports = /*#__PURE__*/function () {
 
   return Client;
 }();
-},{"@uppy/utils/lib/fetchWithNetworkError":209}],168:[function(require,module,exports){
+},{"@uppy/utils/lib/fetchWithNetworkError":223,"url-parse":59}],177:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var Translator = require('@uppy/utils/lib/Translator');
 
@@ -31636,8 +31967,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
    */
   ;
 
-  _proto._onFileUploadURLAvailable = function _onFileUploadURLAvailable(file) {
+  _proto._onFileUploadURLAvailable = function _onFileUploadURLAvailable(rawFile) {
     var _this6 = this;
+
+    var file = this.uppy.getFile(rawFile.id);
 
     if (!file || !file.transloadit || !file.transloadit.assembly) {
       return;
@@ -32256,11 +32589,11 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Transloadit;
-}(Plugin), _class.VERSION = "1.6.19", _temp);
+}(Plugin), _class.VERSION = "1.7.0", _temp);
 module.exports.COMPANION = COMPANION;
 module.exports.UPPY_SERVER = COMPANION;
 module.exports.COMPANION_PATTERN = ALLOWED_COMPANION_PATTERN;
-},{"./Assembly":164,"./AssemblyOptions":165,"./AssemblyWatcher":166,"./Client":167,"@uppy/core":84,"@uppy/tus":193,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/hasProperty":226}],169:[function(require,module,exports){
+},{"./Assembly":173,"./AssemblyOptions":174,"./AssemblyWatcher":175,"./Client":176,"@uppy/core":78,"@uppy/tus":205,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/hasProperty":241}],178:[function(require,module,exports){
 module.exports = function parseUrl(url) {
   var scheme = /^\w+:\/\//.exec(url);
   var i = 0;
@@ -32283,7 +32616,172 @@ module.exports = function parseUrl(url) {
     pathname: url.slice(slashIndex)
   };
 };
-},{}],170:[function(require,module,exports){
+},{}],179:[function(require,module,exports){
+
+/**
+ * Expose `Emitter`.
+ */
+
+if (typeof module !== 'undefined') {
+  module.exports = Emitter;
+}
+
+/**
+ * Initialize a new `Emitter`.
+ *
+ * @api public
+ */
+
+function Emitter(obj) {
+  if (obj) return mixin(obj);
+};
+
+/**
+ * Mixin the emitter properties.
+ *
+ * @param {Object} obj
+ * @return {Object}
+ * @api private
+ */
+
+function mixin(obj) {
+  for (var key in Emitter.prototype) {
+    obj[key] = Emitter.prototype[key];
+  }
+  return obj;
+}
+
+/**
+ * Listen on the given `event` with `fn`.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.on =
+Emitter.prototype.addEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+    .push(fn);
+  return this;
+};
+
+/**
+ * Adds an `event` listener that will be invoked a single
+ * time then automatically removed.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.once = function(event, fn){
+  function on() {
+    this.off(event, on);
+    fn.apply(this, arguments);
+  }
+
+  on.fn = fn;
+  this.on(event, on);
+  return this;
+};
+
+/**
+ * Remove the given callback for `event` or all
+ * registered callbacks.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.off =
+Emitter.prototype.removeListener =
+Emitter.prototype.removeAllListeners =
+Emitter.prototype.removeEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+
+  // all
+  if (0 == arguments.length) {
+    this._callbacks = {};
+    return this;
+  }
+
+  // specific event
+  var callbacks = this._callbacks['$' + event];
+  if (!callbacks) return this;
+
+  // remove all handlers
+  if (1 == arguments.length) {
+    delete this._callbacks['$' + event];
+    return this;
+  }
+
+  // remove specific handler
+  var cb;
+  for (var i = 0; i < callbacks.length; i++) {
+    cb = callbacks[i];
+    if (cb === fn || cb.fn === fn) {
+      callbacks.splice(i, 1);
+      break;
+    }
+  }
+  return this;
+};
+
+/**
+ * Emit `event` with the given args.
+ *
+ * @param {String} event
+ * @param {Mixed} ...
+ * @return {Emitter}
+ */
+
+Emitter.prototype.emit = function(event){
+  this._callbacks = this._callbacks || {};
+  var args = [].slice.call(arguments, 1)
+    , callbacks = this._callbacks['$' + event];
+
+  if (callbacks) {
+    callbacks = callbacks.slice(0);
+    for (var i = 0, len = callbacks.length; i < len; ++i) {
+      callbacks[i].apply(this, args);
+    }
+  }
+
+  return this;
+};
+
+/**
+ * Return array of callbacks for `event`.
+ *
+ * @param {String} event
+ * @return {Array}
+ * @api public
+ */
+
+Emitter.prototype.listeners = function(event){
+  this._callbacks = this._callbacks || {};
+  return this._callbacks['$' + event] || [];
+};
+
+/**
+ * Check if this emitter has `event` handlers.
+ *
+ * @param {String} event
+ * @return {Boolean}
+ * @api public
+ */
+
+Emitter.prototype.hasListeners = function(event){
+  return !! this.listeners(event).length;
+};
+
+},{}],180:[function(require,module,exports){
 (function (process){(function (){
 /**
  * This is the web browser implementation of `debug()`.
@@ -32483,9 +32981,234 @@ function localstorage() {
 
 }).call(this)}).call(this,require('_process'))
 
-},{"./debug":171,"_process":39}],171:[function(require,module,exports){
-arguments[4][48][0].apply(exports,arguments)
-},{"dup":48,"ms":185}],172:[function(require,module,exports){
+},{"./debug":181,"_process":39}],181:[function(require,module,exports){
+
+/**
+ * This is the common logic for both the Node.js and web browser
+ * implementations of `debug()`.
+ *
+ * Expose `debug()` as the module.
+ */
+
+exports = module.exports = createDebug.debug = createDebug['default'] = createDebug;
+exports.coerce = coerce;
+exports.disable = disable;
+exports.enable = enable;
+exports.enabled = enabled;
+exports.humanize = require('ms');
+
+/**
+ * Active `debug` instances.
+ */
+exports.instances = [];
+
+/**
+ * The currently active debug mode names, and names to skip.
+ */
+
+exports.names = [];
+exports.skips = [];
+
+/**
+ * Map of special "%n" handling functions, for the debug "format" argument.
+ *
+ * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
+ */
+
+exports.formatters = {};
+
+/**
+ * Select a color.
+ * @param {String} namespace
+ * @return {Number}
+ * @api private
+ */
+
+function selectColor(namespace) {
+  var hash = 0, i;
+
+  for (i in namespace) {
+    hash  = ((hash << 5) - hash) + namespace.charCodeAt(i);
+    hash |= 0; // Convert to 32bit integer
+  }
+
+  return exports.colors[Math.abs(hash) % exports.colors.length];
+}
+
+/**
+ * Create a debugger with the given `namespace`.
+ *
+ * @param {String} namespace
+ * @return {Function}
+ * @api public
+ */
+
+function createDebug(namespace) {
+
+  var prevTime;
+
+  function debug() {
+    // disabled?
+    if (!debug.enabled) return;
+
+    var self = debug;
+
+    // set `diff` timestamp
+    var curr = +new Date();
+    var ms = curr - (prevTime || curr);
+    self.diff = ms;
+    self.prev = prevTime;
+    self.curr = curr;
+    prevTime = curr;
+
+    // turn the `arguments` into a proper Array
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+
+    args[0] = exports.coerce(args[0]);
+
+    if ('string' !== typeof args[0]) {
+      // anything else let's inspect with %O
+      args.unshift('%O');
+    }
+
+    // apply any `formatters` transformations
+    var index = 0;
+    args[0] = args[0].replace(/%([a-zA-Z%])/g, function(match, format) {
+      // if we encounter an escaped % then don't increase the array index
+      if (match === '%%') return match;
+      index++;
+      var formatter = exports.formatters[format];
+      if ('function' === typeof formatter) {
+        var val = args[index];
+        match = formatter.call(self, val);
+
+        // now we need to remove `args[index]` since it's inlined in the `format`
+        args.splice(index, 1);
+        index--;
+      }
+      return match;
+    });
+
+    // apply env-specific formatting (colors, etc.)
+    exports.formatArgs.call(self, args);
+
+    var logFn = debug.log || exports.log || console.log.bind(console);
+    logFn.apply(self, args);
+  }
+
+  debug.namespace = namespace;
+  debug.enabled = exports.enabled(namespace);
+  debug.useColors = exports.useColors();
+  debug.color = selectColor(namespace);
+  debug.destroy = destroy;
+
+  // env-specific initialization logic for debug instances
+  if ('function' === typeof exports.init) {
+    exports.init(debug);
+  }
+
+  exports.instances.push(debug);
+
+  return debug;
+}
+
+function destroy () {
+  var index = exports.instances.indexOf(this);
+  if (index !== -1) {
+    exports.instances.splice(index, 1);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * Enables a debug mode by namespaces. This can include modes
+ * separated by a colon and wildcards.
+ *
+ * @param {String} namespaces
+ * @api public
+ */
+
+function enable(namespaces) {
+  exports.save(namespaces);
+
+  exports.names = [];
+  exports.skips = [];
+
+  var i;
+  var split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
+  var len = split.length;
+
+  for (i = 0; i < len; i++) {
+    if (!split[i]) continue; // ignore empty strings
+    namespaces = split[i].replace(/\*/g, '.*?');
+    if (namespaces[0] === '-') {
+      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+    } else {
+      exports.names.push(new RegExp('^' + namespaces + '$'));
+    }
+  }
+
+  for (i = 0; i < exports.instances.length; i++) {
+    var instance = exports.instances[i];
+    instance.enabled = exports.enabled(instance.namespace);
+  }
+}
+
+/**
+ * Disable debug output.
+ *
+ * @api public
+ */
+
+function disable() {
+  exports.enable('');
+}
+
+/**
+ * Returns true if the given mode name is enabled, false otherwise.
+ *
+ * @param {String} name
+ * @return {Boolean}
+ * @api public
+ */
+
+function enabled(name) {
+  if (name[name.length - 1] === '*') {
+    return true;
+  }
+  var i, len;
+  for (i = 0, len = exports.skips.length; i < len; i++) {
+    if (exports.skips[i].test(name)) {
+      return false;
+    }
+  }
+  for (i = 0, len = exports.names.length; i < len; i++) {
+    if (exports.names[i].test(name)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Coerce `val`.
+ *
+ * @param {Mixed} val
+ * @return {Mixed}
+ * @api private
+ */
+
+function coerce(val) {
+  if (val instanceof Error) return val.stack || val.message;
+  return val;
+}
+
+},{"ms":192}],182:[function(require,module,exports){
 
 module.exports = require('./socket');
 
@@ -32497,7 +33220,7 @@ module.exports = require('./socket');
  */
 module.exports.parser = require('engine.io-parser');
 
-},{"./socket":173,"engine.io-parser":182}],173:[function(require,module,exports){
+},{"./socket":183,"engine.io-parser":19}],183:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -33245,7 +33968,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
   return filteredUpgrades;
 };
 
-},{"./transport":174,"./transports/index":175,"component-emitter":181,"debug":170,"engine.io-parser":182,"indexof":27,"parseqs":36,"parseuri":37}],174:[function(require,module,exports){
+},{"./transport":184,"./transports/index":185,"component-emitter":179,"debug":180,"engine.io-parser":19,"indexof":30,"parseqs":193,"parseuri":194}],184:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -33407,7 +34130,7 @@ Transport.prototype.onClose = function () {
   this.emit('close');
 };
 
-},{"component-emitter":181,"engine.io-parser":182}],175:[function(require,module,exports){
+},{"component-emitter":179,"engine.io-parser":19}],185:[function(require,module,exports){
 /**
  * Module dependencies
  */
@@ -33462,7 +34185,7 @@ function polling (opts) {
   }
 }
 
-},{"./polling-jsonp":176,"./polling-xhr":177,"./websocket":179,"xmlhttprequest-ssl":180}],176:[function(require,module,exports){
+},{"./polling-jsonp":186,"./polling-xhr":187,"./websocket":189,"xmlhttprequest-ssl":190}],186:[function(require,module,exports){
 (function (global){(function (){
 /**
  * Module requirements.
@@ -33706,7 +34429,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./polling":178,"component-inherit":14}],177:[function(require,module,exports){
+},{"./polling":188,"component-inherit":13}],187:[function(require,module,exports){
 /* global attachEvent */
 
 /**
@@ -34123,7 +34846,7 @@ function unloadHandler () {
   }
 }
 
-},{"./polling":178,"component-emitter":181,"component-inherit":14,"debug":170,"xmlhttprequest-ssl":180}],178:[function(require,module,exports){
+},{"./polling":188,"component-emitter":179,"component-inherit":13,"debug":180,"xmlhttprequest-ssl":190}],188:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -34370,7 +35093,7 @@ Polling.prototype.uri = function () {
   return schema + '://' + (ipv6 ? '[' + this.hostname + ']' : this.hostname) + port + this.path + query;
 };
 
-},{"../transport":174,"component-inherit":14,"debug":170,"engine.io-parser":182,"parseqs":36,"xmlhttprequest-ssl":180,"yeast":69}],179:[function(require,module,exports){
+},{"../transport":184,"component-inherit":13,"debug":180,"engine.io-parser":19,"parseqs":193,"xmlhttprequest-ssl":190,"yeast":62}],189:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * Module dependencies.
@@ -34668,7 +35391,7 @@ WS.prototype.check = function () {
 
 }).call(this)}).call(this,require("buffer").Buffer)
 
-},{"../transport":174,"buffer":10,"component-inherit":14,"debug":170,"engine.io-parser":182,"parseqs":36,"ws":9,"yeast":69}],180:[function(require,module,exports){
+},{"../transport":184,"buffer":10,"component-inherit":13,"debug":180,"engine.io-parser":19,"parseqs":193,"ws":9,"yeast":62}],190:[function(require,module,exports){
 // browser shim for xmlhttprequest module
 
 var hasCORS = require('has-cors');
@@ -34707,1014 +35430,243 @@ module.exports = function (opts) {
   }
 };
 
-},{"has-cors":25}],181:[function(require,module,exports){
-
+},{"has-cors":28}],191:[function(require,module,exports){
+arguments[4][27][0].apply(exports,arguments)
+},{"dup":27}],192:[function(require,module,exports){
 /**
- * Expose `Emitter`.
+ * Helpers.
  */
 
-if (typeof module !== 'undefined') {
-  module.exports = Emitter;
-}
+var s = 1000;
+var m = s * 60;
+var h = m * 60;
+var d = h * 24;
+var y = d * 365.25;
 
 /**
- * Initialize a new `Emitter`.
+ * Parse or format the given `val`.
  *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
+ * @param {String|Number} val
+ * @param {Object} [options]
+ * @throws {Error} throw an error if val is not a non-empty string or a number
+ * @return {String|Number}
  * @api public
  */
 
-function Emitter(obj) {
-  if (obj) return mixin(obj);
+module.exports = function(val, options) {
+  options = options || {};
+  var type = typeof val;
+  if (type === 'string' && val.length > 0) {
+    return parse(val);
+  } else if (type === 'number' && isNaN(val) === false) {
+    return options.long ? fmtLong(val) : fmtShort(val);
+  }
+  throw new Error(
+    'val is not a non-empty string or a valid number. val=' +
+      JSON.stringify(val)
+  );
 };
 
 /**
- * Mixin the emitter properties.
+ * Parse the given `str` and return milliseconds.
  *
- * @param {Object} obj
- * @return {Object}
+ * @param {String} str
+ * @return {Number}
  * @api private
  */
 
-function mixin(obj) {
-  for (var key in Emitter.prototype) {
-    obj[key] = Emitter.prototype[key];
+function parse(str) {
+  str = String(str);
+  if (str.length > 100) {
+    return;
   }
-  return obj;
+  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(
+    str
+  );
+  if (!match) {
+    return;
+  }
+  var n = parseFloat(match[1]);
+  var type = (match[2] || 'ms').toLowerCase();
+  switch (type) {
+    case 'years':
+    case 'year':
+    case 'yrs':
+    case 'yr':
+    case 'y':
+      return n * y;
+    case 'days':
+    case 'day':
+    case 'd':
+      return n * d;
+    case 'hours':
+    case 'hour':
+    case 'hrs':
+    case 'hr':
+    case 'h':
+      return n * h;
+    case 'minutes':
+    case 'minute':
+    case 'mins':
+    case 'min':
+    case 'm':
+      return n * m;
+    case 'seconds':
+    case 'second':
+    case 'secs':
+    case 'sec':
+    case 's':
+      return n * s;
+    case 'milliseconds':
+    case 'millisecond':
+    case 'msecs':
+    case 'msec':
+    case 'ms':
+      return n;
+    default:
+      return undefined;
+  }
 }
 
 /**
- * Listen on the given `event` with `fn`.
+ * Short format for `ms`.
  *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.on =
-Emitter.prototype.addEventListener = function(event, fn){
-  this._callbacks = this._callbacks || {};
-  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
-    .push(fn);
-  return this;
-};
-
-/**
- * Adds an `event` listener that will be invoked a single
- * time then automatically removed.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.once = function(event, fn){
-  function on() {
-    this.off(event, on);
-    fn.apply(this, arguments);
-  }
-
-  on.fn = fn;
-  this.on(event, on);
-  return this;
-};
-
-/**
- * Remove the given callback for `event` or all
- * registered callbacks.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.off =
-Emitter.prototype.removeListener =
-Emitter.prototype.removeAllListeners =
-Emitter.prototype.removeEventListener = function(event, fn){
-  this._callbacks = this._callbacks || {};
-
-  // all
-  if (0 == arguments.length) {
-    this._callbacks = {};
-    return this;
-  }
-
-  // specific event
-  var callbacks = this._callbacks['$' + event];
-  if (!callbacks) return this;
-
-  // remove all handlers
-  if (1 == arguments.length) {
-    delete this._callbacks['$' + event];
-    return this;
-  }
-
-  // remove specific handler
-  var cb;
-  for (var i = 0; i < callbacks.length; i++) {
-    cb = callbacks[i];
-    if (cb === fn || cb.fn === fn) {
-      callbacks.splice(i, 1);
-      break;
-    }
-  }
-  return this;
-};
-
-/**
- * Emit `event` with the given args.
- *
- * @param {String} event
- * @param {Mixed} ...
- * @return {Emitter}
- */
-
-Emitter.prototype.emit = function(event){
-  this._callbacks = this._callbacks || {};
-  var args = [].slice.call(arguments, 1)
-    , callbacks = this._callbacks['$' + event];
-
-  if (callbacks) {
-    callbacks = callbacks.slice(0);
-    for (var i = 0, len = callbacks.length; i < len; ++i) {
-      callbacks[i].apply(this, args);
-    }
-  }
-
-  return this;
-};
-
-/**
- * Return array of callbacks for `event`.
- *
- * @param {String} event
- * @return {Array}
- * @api public
- */
-
-Emitter.prototype.listeners = function(event){
-  this._callbacks = this._callbacks || {};
-  return this._callbacks['$' + event] || [];
-};
-
-/**
- * Check if this emitter has `event` handlers.
- *
- * @param {String} event
- * @return {Boolean}
- * @api public
- */
-
-Emitter.prototype.hasListeners = function(event){
-  return !! this.listeners(event).length;
-};
-
-},{}],182:[function(require,module,exports){
-/**
- * Module dependencies.
- */
-
-var keys = require('./keys');
-var hasBinary = require('has-binary2');
-var sliceBuffer = require('arraybuffer.slice');
-var after = require('after');
-var utf8 = require('./utf8');
-
-var base64encoder;
-if (typeof ArrayBuffer !== 'undefined') {
-  base64encoder = require('base64-arraybuffer');
-}
-
-/**
- * Check if we are running an android browser. That requires us to use
- * ArrayBuffer with polling transports...
- *
- * http://ghinda.net/jpeg-blob-ajax-android/
- */
-
-var isAndroid = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
-
-/**
- * Check if we are running in PhantomJS.
- * Uploading a Blob with PhantomJS does not work correctly, as reported here:
- * https://github.com/ariya/phantomjs/issues/11395
- * @type boolean
- */
-var isPhantomJS = typeof navigator !== 'undefined' && /PhantomJS/i.test(navigator.userAgent);
-
-/**
- * When true, avoids using Blobs to encode payloads.
- * @type boolean
- */
-var dontSendBlobs = isAndroid || isPhantomJS;
-
-/**
- * Current protocol version.
- */
-
-exports.protocol = 3;
-
-/**
- * Packet types.
- */
-
-var packets = exports.packets = {
-    open:     0    // non-ws
-  , close:    1    // non-ws
-  , ping:     2
-  , pong:     3
-  , message:  4
-  , upgrade:  5
-  , noop:     6
-};
-
-var packetslist = keys(packets);
-
-/**
- * Premade error packet.
- */
-
-var err = { type: 'error', data: 'parser error' };
-
-/**
- * Create a blob api even for blob builder when vendor prefixes exist
- */
-
-var Blob = require('blob');
-
-/**
- * Encodes a packet.
- *
- *     <packet type id> [ <data> ]
- *
- * Example:
- *
- *     5hello world
- *     3
- *     4
- *
- * Binary is encoded in an identical principle
- *
+ * @param {Number} ms
+ * @return {String}
  * @api private
  */
 
-exports.encodePacket = function (packet, supportsBinary, utf8encode, callback) {
-  if (typeof supportsBinary === 'function') {
-    callback = supportsBinary;
-    supportsBinary = false;
+function fmtShort(ms) {
+  if (ms >= d) {
+    return Math.round(ms / d) + 'd';
   }
-
-  if (typeof utf8encode === 'function') {
-    callback = utf8encode;
-    utf8encode = null;
+  if (ms >= h) {
+    return Math.round(ms / h) + 'h';
   }
-
-  var data = (packet.data === undefined)
-    ? undefined
-    : packet.data.buffer || packet.data;
-
-  if (typeof ArrayBuffer !== 'undefined' && data instanceof ArrayBuffer) {
-    return encodeArrayBuffer(packet, supportsBinary, callback);
-  } else if (typeof Blob !== 'undefined' && data instanceof Blob) {
-    return encodeBlob(packet, supportsBinary, callback);
+  if (ms >= m) {
+    return Math.round(ms / m) + 'm';
   }
-
-  // might be an object with { base64: true, data: dataAsBase64String }
-  if (data && data.base64) {
-    return encodeBase64Object(packet, callback);
+  if (ms >= s) {
+    return Math.round(ms / s) + 's';
   }
-
-  // Sending data as a utf-8 string
-  var encoded = packets[packet.type];
-
-  // data fragment is optional
-  if (undefined !== packet.data) {
-    encoded += utf8encode ? utf8.encode(String(packet.data), { strict: false }) : String(packet.data);
-  }
-
-  return callback('' + encoded);
-
-};
-
-function encodeBase64Object(packet, callback) {
-  // packet data is an object { base64: true, data: dataAsBase64String }
-  var message = 'b' + exports.packets[packet.type] + packet.data.data;
-  return callback(message);
+  return ms + 'ms';
 }
 
 /**
- * Encode packet helpers for binary types
- */
-
-function encodeArrayBuffer(packet, supportsBinary, callback) {
-  if (!supportsBinary) {
-    return exports.encodeBase64Packet(packet, callback);
-  }
-
-  var data = packet.data;
-  var contentArray = new Uint8Array(data);
-  var resultBuffer = new Uint8Array(1 + data.byteLength);
-
-  resultBuffer[0] = packets[packet.type];
-  for (var i = 0; i < contentArray.length; i++) {
-    resultBuffer[i+1] = contentArray[i];
-  }
-
-  return callback(resultBuffer.buffer);
-}
-
-function encodeBlobAsArrayBuffer(packet, supportsBinary, callback) {
-  if (!supportsBinary) {
-    return exports.encodeBase64Packet(packet, callback);
-  }
-
-  var fr = new FileReader();
-  fr.onload = function() {
-    exports.encodePacket({ type: packet.type, data: fr.result }, supportsBinary, true, callback);
-  };
-  return fr.readAsArrayBuffer(packet.data);
-}
-
-function encodeBlob(packet, supportsBinary, callback) {
-  if (!supportsBinary) {
-    return exports.encodeBase64Packet(packet, callback);
-  }
-
-  if (dontSendBlobs) {
-    return encodeBlobAsArrayBuffer(packet, supportsBinary, callback);
-  }
-
-  var length = new Uint8Array(1);
-  length[0] = packets[packet.type];
-  var blob = new Blob([length.buffer, packet.data]);
-
-  return callback(blob);
-}
-
-/**
- * Encodes a packet with binary data in a base64 string
+ * Long format for `ms`.
  *
- * @param {Object} packet, has `type` and `data`
- * @return {String} base64 encoded message
- */
-
-exports.encodeBase64Packet = function(packet, callback) {
-  var message = 'b' + exports.packets[packet.type];
-  if (typeof Blob !== 'undefined' && packet.data instanceof Blob) {
-    var fr = new FileReader();
-    fr.onload = function() {
-      var b64 = fr.result.split(',')[1];
-      callback(message + b64);
-    };
-    return fr.readAsDataURL(packet.data);
-  }
-
-  var b64data;
-  try {
-    b64data = String.fromCharCode.apply(null, new Uint8Array(packet.data));
-  } catch (e) {
-    // iPhone Safari doesn't let you apply with typed arrays
-    var typed = new Uint8Array(packet.data);
-    var basic = new Array(typed.length);
-    for (var i = 0; i < typed.length; i++) {
-      basic[i] = typed[i];
-    }
-    b64data = String.fromCharCode.apply(null, basic);
-  }
-  message += btoa(b64data);
-  return callback(message);
-};
-
-/**
- * Decodes a packet. Changes format to Blob if requested.
- *
- * @return {Object} with `type` and `data` (if any)
+ * @param {Number} ms
+ * @return {String}
  * @api private
  */
 
-exports.decodePacket = function (data, binaryType, utf8decode) {
-  if (data === undefined) {
-    return err;
-  }
-  // String data
-  if (typeof data === 'string') {
-    if (data.charAt(0) === 'b') {
-      return exports.decodeBase64Packet(data.substr(1), binaryType);
-    }
-
-    if (utf8decode) {
-      data = tryDecode(data);
-      if (data === false) {
-        return err;
-      }
-    }
-    var type = data.charAt(0);
-
-    if (Number(type) != type || !packetslist[type]) {
-      return err;
-    }
-
-    if (data.length > 1) {
-      return { type: packetslist[type], data: data.substring(1) };
-    } else {
-      return { type: packetslist[type] };
-    }
-  }
-
-  var asArray = new Uint8Array(data);
-  var type = asArray[0];
-  var rest = sliceBuffer(data, 1);
-  if (Blob && binaryType === 'blob') {
-    rest = new Blob([rest]);
-  }
-  return { type: packetslist[type], data: rest };
-};
-
-function tryDecode(data) {
-  try {
-    data = utf8.decode(data, { strict: false });
-  } catch (e) {
-    return false;
-  }
-  return data;
+function fmtLong(ms) {
+  return plural(ms, d, 'day') ||
+    plural(ms, h, 'hour') ||
+    plural(ms, m, 'minute') ||
+    plural(ms, s, 'second') ||
+    ms + ' ms';
 }
 
 /**
- * Decodes a packet encoded in a base64 string
- *
- * @param {String} base64 encoded message
- * @return {Object} with `type` and `data` (if any)
+ * Pluralization helper.
  */
 
-exports.decodeBase64Packet = function(msg, binaryType) {
-  var type = packetslist[msg.charAt(0)];
-  if (!base64encoder) {
-    return { type: type, data: { base64: true, data: msg.substr(1) } };
+function plural(ms, n, name) {
+  if (ms < n) {
+    return;
   }
-
-  var data = base64encoder.decode(msg.substr(1));
-
-  if (binaryType === 'blob' && Blob) {
-    data = new Blob([data]);
+  if (ms < n * 1.5) {
+    return Math.floor(ms / n) + ' ' + name;
   }
-
-  return { type: type, data: data };
-};
-
-/**
- * Encodes multiple messages (payload).
- *
- *     <length>:data
- *
- * Example:
- *
- *     11:hello world2:hi
- *
- * If any contents are binary, they will be encoded as base64 strings. Base64
- * encoded strings are marked with a b before the length specifier
- *
- * @param {Array} packets
- * @api private
- */
-
-exports.encodePayload = function (packets, supportsBinary, callback) {
-  if (typeof supportsBinary === 'function') {
-    callback = supportsBinary;
-    supportsBinary = null;
-  }
-
-  var isBinary = hasBinary(packets);
-
-  if (supportsBinary && isBinary) {
-    if (Blob && !dontSendBlobs) {
-      return exports.encodePayloadAsBlob(packets, callback);
-    }
-
-    return exports.encodePayloadAsArrayBuffer(packets, callback);
-  }
-
-  if (!packets.length) {
-    return callback('0:');
-  }
-
-  function setLengthHeader(message) {
-    return message.length + ':' + message;
-  }
-
-  function encodeOne(packet, doneCallback) {
-    exports.encodePacket(packet, !isBinary ? false : supportsBinary, false, function(message) {
-      doneCallback(null, setLengthHeader(message));
-    });
-  }
-
-  map(packets, encodeOne, function(err, results) {
-    return callback(results.join(''));
-  });
-};
-
-/**
- * Async array map using after
- */
-
-function map(ary, each, done) {
-  var result = new Array(ary.length);
-  var next = after(ary.length, done);
-
-  var eachWithIndex = function(i, el, cb) {
-    each(el, function(error, msg) {
-      result[i] = msg;
-      cb(error, result);
-    });
-  };
-
-  for (var i = 0; i < ary.length; i++) {
-    eachWithIndex(i, ary[i], next);
-  }
+  return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-/*
- * Decodes data when a payload is maybe expected. Possible binary contents are
- * decoded from their base64 representation
- *
- * @param {String} data, callback method
- * @api public
- */
-
-exports.decodePayload = function (data, binaryType, callback) {
-  if (typeof data !== 'string') {
-    return exports.decodePayloadAsBinary(data, binaryType, callback);
-  }
-
-  if (typeof binaryType === 'function') {
-    callback = binaryType;
-    binaryType = null;
-  }
-
-  var packet;
-  if (data === '') {
-    // parser error - ignoring payload
-    return callback(err, 0, 1);
-  }
-
-  var length = '', n, msg;
-
-  for (var i = 0, l = data.length; i < l; i++) {
-    var chr = data.charAt(i);
-
-    if (chr !== ':') {
-      length += chr;
-      continue;
-    }
-
-    if (length === '' || (length != (n = Number(length)))) {
-      // parser error - ignoring payload
-      return callback(err, 0, 1);
-    }
-
-    msg = data.substr(i + 1, n);
-
-    if (length != msg.length) {
-      // parser error - ignoring payload
-      return callback(err, 0, 1);
-    }
-
-    if (msg.length) {
-      packet = exports.decodePacket(msg, binaryType, false);
-
-      if (err.type === packet.type && err.data === packet.data) {
-        // parser error in individual packet - ignoring payload
-        return callback(err, 0, 1);
-      }
-
-      var ret = callback(packet, i + n, l);
-      if (false === ret) return;
-    }
-
-    // advance cursor
-    i += n;
-    length = '';
-  }
-
-  if (length !== '') {
-    // parser error - ignoring payload
-    return callback(err, 0, 1);
-  }
-
-};
-
+},{}],193:[function(require,module,exports){
 /**
- * Encodes multiple messages (payload) as binary.
+ * Compiles a querystring
+ * Returns string representation of the object
  *
- * <1 = binary, 0 = string><number from 0-9><number from 0-9>[...]<number
- * 255><data>
- *
- * Example:
- * 1 3 255 1 2 3, if the binary contents are interpreted as 8 bit integers
- *
- * @param {Array} packets
- * @return {ArrayBuffer} encoded payload
+ * @param {Object}
  * @api private
  */
 
-exports.encodePayloadAsArrayBuffer = function(packets, callback) {
-  if (!packets.length) {
-    return callback(new ArrayBuffer(0));
-  }
-
-  function encodeOne(packet, doneCallback) {
-    exports.encodePacket(packet, true, true, function(data) {
-      return doneCallback(null, data);
-    });
-  }
-
-  map(packets, encodeOne, function(err, encodedPackets) {
-    var totalLength = encodedPackets.reduce(function(acc, p) {
-      var len;
-      if (typeof p === 'string'){
-        len = p.length;
-      } else {
-        len = p.byteLength;
-      }
-      return acc + len.toString().length + len + 2; // string/binary identifier + separator = 2
-    }, 0);
-
-    var resultArray = new Uint8Array(totalLength);
-
-    var bufferIndex = 0;
-    encodedPackets.forEach(function(p) {
-      var isString = typeof p === 'string';
-      var ab = p;
-      if (isString) {
-        var view = new Uint8Array(p.length);
-        for (var i = 0; i < p.length; i++) {
-          view[i] = p.charCodeAt(i);
-        }
-        ab = view.buffer;
-      }
-
-      if (isString) { // not true binary
-        resultArray[bufferIndex++] = 0;
-      } else { // true binary
-        resultArray[bufferIndex++] = 1;
-      }
-
-      var lenStr = ab.byteLength.toString();
-      for (var i = 0; i < lenStr.length; i++) {
-        resultArray[bufferIndex++] = parseInt(lenStr[i]);
-      }
-      resultArray[bufferIndex++] = 255;
-
-      var view = new Uint8Array(ab);
-      for (var i = 0; i < view.length; i++) {
-        resultArray[bufferIndex++] = view[i];
-      }
-    });
-
-    return callback(resultArray.buffer);
-  });
-};
-
-/**
- * Encode as Blob
- */
-
-exports.encodePayloadAsBlob = function(packets, callback) {
-  function encodeOne(packet, doneCallback) {
-    exports.encodePacket(packet, true, true, function(encoded) {
-      var binaryIdentifier = new Uint8Array(1);
-      binaryIdentifier[0] = 1;
-      if (typeof encoded === 'string') {
-        var view = new Uint8Array(encoded.length);
-        for (var i = 0; i < encoded.length; i++) {
-          view[i] = encoded.charCodeAt(i);
-        }
-        encoded = view.buffer;
-        binaryIdentifier[0] = 0;
-      }
-
-      var len = (encoded instanceof ArrayBuffer)
-        ? encoded.byteLength
-        : encoded.size;
-
-      var lenStr = len.toString();
-      var lengthAry = new Uint8Array(lenStr.length + 1);
-      for (var i = 0; i < lenStr.length; i++) {
-        lengthAry[i] = parseInt(lenStr[i]);
-      }
-      lengthAry[lenStr.length] = 255;
-
-      if (Blob) {
-        var blob = new Blob([binaryIdentifier.buffer, lengthAry.buffer, encoded]);
-        doneCallback(null, blob);
-      }
-    });
-  }
-
-  map(packets, encodeOne, function(err, results) {
-    return callback(new Blob(results));
-  });
-};
-
-/*
- * Decodes data when a payload is maybe expected. Strings are decoded by
- * interpreting each byte as a key code for entries marked to start with 0. See
- * description of encodePayloadAsBinary
- *
- * @param {ArrayBuffer} data, callback method
- * @api public
- */
-
-exports.decodePayloadAsBinary = function (data, binaryType, callback) {
-  if (typeof binaryType === 'function') {
-    callback = binaryType;
-    binaryType = null;
-  }
-
-  var bufferTail = data;
-  var buffers = [];
-
-  while (bufferTail.byteLength > 0) {
-    var tailArray = new Uint8Array(bufferTail);
-    var isString = tailArray[0] === 0;
-    var msgLength = '';
-
-    for (var i = 1; ; i++) {
-      if (tailArray[i] === 255) break;
-
-      // 310 = char length of Number.MAX_VALUE
-      if (msgLength.length > 310) {
-        return callback(err, 0, 1);
-      }
-
-      msgLength += tailArray[i];
-    }
-
-    bufferTail = sliceBuffer(bufferTail, 2 + msgLength.length);
-    msgLength = parseInt(msgLength);
-
-    var msg = sliceBuffer(bufferTail, 0, msgLength);
-    if (isString) {
-      try {
-        msg = String.fromCharCode.apply(null, new Uint8Array(msg));
-      } catch (e) {
-        // iPhone Safari doesn't let you apply to typed arrays
-        var typed = new Uint8Array(msg);
-        msg = '';
-        for (var i = 0; i < typed.length; i++) {
-          msg += String.fromCharCode(typed[i]);
-        }
-      }
-    }
-
-    buffers.push(msg);
-    bufferTail = sliceBuffer(bufferTail, msgLength);
-  }
-
-  var total = buffers.length;
-  buffers.forEach(function(buffer, i) {
-    callback(exports.decodePacket(buffer, binaryType, true), i, total);
-  });
-};
-
-},{"./keys":183,"./utf8":184,"after":3,"arraybuffer.slice":4,"base64-arraybuffer":6,"blob":8,"has-binary2":23}],183:[function(require,module,exports){
-
-/**
- * Gets the keys for an object.
- *
- * @return {Array} keys
- * @api private
- */
-
-module.exports = Object.keys || function keys (obj){
-  var arr = [];
-  var has = Object.prototype.hasOwnProperty;
+exports.encode = function (obj) {
+  var str = '';
 
   for (var i in obj) {
-    if (has.call(obj, i)) {
-      arr.push(i);
+    if (obj.hasOwnProperty(i)) {
+      if (str.length) str += '&';
+      str += encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]);
     }
   }
-  return arr;
+
+  return str;
 };
 
-},{}],184:[function(require,module,exports){
-/*! https://mths.be/utf8js v2.1.2 by @mathias */
+/**
+ * Parses a simple querystring into an object
+ *
+ * @param {String} qs
+ * @api private
+ */
 
-var stringFromCharCode = String.fromCharCode;
-
-// Taken from https://mths.be/punycode
-function ucs2decode(string) {
-	var output = [];
-	var counter = 0;
-	var length = string.length;
-	var value;
-	var extra;
-	while (counter < length) {
-		value = string.charCodeAt(counter++);
-		if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
-			// high surrogate, and there is a next character
-			extra = string.charCodeAt(counter++);
-			if ((extra & 0xFC00) == 0xDC00) { // low surrogate
-				output.push(((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
-			} else {
-				// unmatched surrogate; only append this code unit, in case the next
-				// code unit is the high surrogate of a surrogate pair
-				output.push(value);
-				counter--;
-			}
-		} else {
-			output.push(value);
-		}
-	}
-	return output;
-}
-
-// Taken from https://mths.be/punycode
-function ucs2encode(array) {
-	var length = array.length;
-	var index = -1;
-	var value;
-	var output = '';
-	while (++index < length) {
-		value = array[index];
-		if (value > 0xFFFF) {
-			value -= 0x10000;
-			output += stringFromCharCode(value >>> 10 & 0x3FF | 0xD800);
-			value = 0xDC00 | value & 0x3FF;
-		}
-		output += stringFromCharCode(value);
-	}
-	return output;
-}
-
-function checkScalarValue(codePoint, strict) {
-	if (codePoint >= 0xD800 && codePoint <= 0xDFFF) {
-		if (strict) {
-			throw Error(
-				'Lone surrogate U+' + codePoint.toString(16).toUpperCase() +
-				' is not a scalar value'
-			);
-		}
-		return false;
-	}
-	return true;
-}
-/*--------------------------------------------------------------------------*/
-
-function createByte(codePoint, shift) {
-	return stringFromCharCode(((codePoint >> shift) & 0x3F) | 0x80);
-}
-
-function encodeCodePoint(codePoint, strict) {
-	if ((codePoint & 0xFFFFFF80) == 0) { // 1-byte sequence
-		return stringFromCharCode(codePoint);
-	}
-	var symbol = '';
-	if ((codePoint & 0xFFFFF800) == 0) { // 2-byte sequence
-		symbol = stringFromCharCode(((codePoint >> 6) & 0x1F) | 0xC0);
-	}
-	else if ((codePoint & 0xFFFF0000) == 0) { // 3-byte sequence
-		if (!checkScalarValue(codePoint, strict)) {
-			codePoint = 0xFFFD;
-		}
-		symbol = stringFromCharCode(((codePoint >> 12) & 0x0F) | 0xE0);
-		symbol += createByte(codePoint, 6);
-	}
-	else if ((codePoint & 0xFFE00000) == 0) { // 4-byte sequence
-		symbol = stringFromCharCode(((codePoint >> 18) & 0x07) | 0xF0);
-		symbol += createByte(codePoint, 12);
-		symbol += createByte(codePoint, 6);
-	}
-	symbol += stringFromCharCode((codePoint & 0x3F) | 0x80);
-	return symbol;
-}
-
-function utf8encode(string, opts) {
-	opts = opts || {};
-	var strict = false !== opts.strict;
-
-	var codePoints = ucs2decode(string);
-	var length = codePoints.length;
-	var index = -1;
-	var codePoint;
-	var byteString = '';
-	while (++index < length) {
-		codePoint = codePoints[index];
-		byteString += encodeCodePoint(codePoint, strict);
-	}
-	return byteString;
-}
-
-/*--------------------------------------------------------------------------*/
-
-function readContinuationByte() {
-	if (byteIndex >= byteCount) {
-		throw Error('Invalid byte index');
-	}
-
-	var continuationByte = byteArray[byteIndex] & 0xFF;
-	byteIndex++;
-
-	if ((continuationByte & 0xC0) == 0x80) {
-		return continuationByte & 0x3F;
-	}
-
-	// If we end up here, it’s not a continuation byte
-	throw Error('Invalid continuation byte');
-}
-
-function decodeSymbol(strict) {
-	var byte1;
-	var byte2;
-	var byte3;
-	var byte4;
-	var codePoint;
-
-	if (byteIndex > byteCount) {
-		throw Error('Invalid byte index');
-	}
-
-	if (byteIndex == byteCount) {
-		return false;
-	}
-
-	// Read first byte
-	byte1 = byteArray[byteIndex] & 0xFF;
-	byteIndex++;
-
-	// 1-byte sequence (no continuation bytes)
-	if ((byte1 & 0x80) == 0) {
-		return byte1;
-	}
-
-	// 2-byte sequence
-	if ((byte1 & 0xE0) == 0xC0) {
-		byte2 = readContinuationByte();
-		codePoint = ((byte1 & 0x1F) << 6) | byte2;
-		if (codePoint >= 0x80) {
-			return codePoint;
-		} else {
-			throw Error('Invalid continuation byte');
-		}
-	}
-
-	// 3-byte sequence (may include unpaired surrogates)
-	if ((byte1 & 0xF0) == 0xE0) {
-		byte2 = readContinuationByte();
-		byte3 = readContinuationByte();
-		codePoint = ((byte1 & 0x0F) << 12) | (byte2 << 6) | byte3;
-		if (codePoint >= 0x0800) {
-			return checkScalarValue(codePoint, strict) ? codePoint : 0xFFFD;
-		} else {
-			throw Error('Invalid continuation byte');
-		}
-	}
-
-	// 4-byte sequence
-	if ((byte1 & 0xF8) == 0xF0) {
-		byte2 = readContinuationByte();
-		byte3 = readContinuationByte();
-		byte4 = readContinuationByte();
-		codePoint = ((byte1 & 0x07) << 0x12) | (byte2 << 0x0C) |
-			(byte3 << 0x06) | byte4;
-		if (codePoint >= 0x010000 && codePoint <= 0x10FFFF) {
-			return codePoint;
-		}
-	}
-
-	throw Error('Invalid UTF-8 detected');
-}
-
-var byteArray;
-var byteCount;
-var byteIndex;
-function utf8decode(byteString, opts) {
-	opts = opts || {};
-	var strict = false !== opts.strict;
-
-	byteArray = ucs2decode(byteString);
-	byteCount = byteArray.length;
-	byteIndex = 0;
-	var codePoints = [];
-	var tmp;
-	while ((tmp = decodeSymbol(strict)) !== false) {
-		codePoints.push(tmp);
-	}
-	return ucs2encode(codePoints);
-}
-
-module.exports = {
-	version: '2.1.2',
-	encode: utf8encode,
-	decode: utf8decode
+exports.decode = function(qs){
+  var qry = {};
+  var pairs = qs.split('&');
+  for (var i = 0, l = pairs.length; i < l; i++) {
+    var pair = pairs[i].split('=');
+    qry[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+  }
+  return qry;
 };
 
-},{}],185:[function(require,module,exports){
-arguments[4][50][0].apply(exports,arguments)
-},{"dup":50}],186:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
+/**
+ * Parses an URI
+ *
+ * @author Steven Levithan <stevenlevithan.com> (MIT license)
+ * @api private
+ */
+
+var re = /^(?:(?![^:@]+:[^:@\/]*@)(http|https|ws|wss):\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?((?:[a-f0-9]{0,4}:){2,7}[a-f0-9]{0,4}|[^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
+
+var parts = [
+    'source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'anchor'
+];
+
+module.exports = function parseuri(str) {
+    var src = str,
+        b = str.indexOf('['),
+        e = str.indexOf(']');
+
+    if (b != -1 && e != -1) {
+        str = str.substring(0, b) + str.substring(b, e).replace(/:/g, ';') + str.substring(e, str.length);
+    }
+
+    var m = re.exec(str || ''),
+        uri = {},
+        i = 14;
+
+    while (i--) {
+        uri[parts[i]] = m[i] || '';
+    }
+
+    if (b != -1 && e != -1) {
+        uri.source = src;
+        uri.host = uri.host.substring(1, uri.host.length - 1).replace(/;/g, ':');
+        uri.authority = uri.authority.replace('[', '').replace(']', '').replace(/;/g, ':');
+        uri.ipv6uri = true;
+    }
+
+    return uri;
+};
+
+},{}],195:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -35810,7 +35762,7 @@ exports.connect = lookup;
 exports.Manager = require('./manager');
 exports.Socket = require('./socket');
 
-},{"./manager":187,"./socket":189,"./url":190,"debug":170,"socket.io-parser":45}],187:[function(require,module,exports){
+},{"./manager":196,"./socket":198,"./url":199,"debug":180,"socket.io-parser":201}],196:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -36385,7 +36337,7 @@ Manager.prototype.onreconnect = function () {
   this.emitAll('reconnect', attempt);
 };
 
-},{"./on":188,"./socket":189,"backo2":5,"component-bind":12,"component-emitter":191,"debug":170,"engine.io-client":172,"indexof":27,"socket.io-parser":45}],188:[function(require,module,exports){
+},{"./on":197,"./socket":198,"backo2":5,"component-bind":12,"component-emitter":179,"debug":180,"engine.io-client":182,"indexof":30,"socket.io-parser":201}],197:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -36411,7 +36363,7 @@ function on (obj, ev, fn) {
   };
 }
 
-},{}],189:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -36851,7 +36803,7 @@ Socket.prototype.binary = function (binary) {
   return this;
 };
 
-},{"./on":188,"component-bind":12,"component-emitter":191,"debug":170,"has-binary2":23,"parseqs":36,"socket.io-parser":45,"to-array":51}],190:[function(require,module,exports){
+},{"./on":197,"component-bind":12,"component-emitter":179,"debug":180,"has-binary2":26,"parseqs":193,"socket.io-parser":201,"to-array":44}],199:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -36928,9 +36880,766 @@ function url (uri, loc) {
   return obj;
 }
 
-},{"debug":170,"parseuri":37}],191:[function(require,module,exports){
-arguments[4][181][0].apply(exports,arguments)
-},{"dup":181}],192:[function(require,module,exports){
+},{"debug":180,"parseuri":194}],200:[function(require,module,exports){
+/*global Blob,File*/
+
+/**
+ * Module requirements
+ */
+
+var isArray = require('isarray');
+var isBuf = require('./is-buffer');
+var toString = Object.prototype.toString;
+var withNativeBlob = typeof Blob === 'function' || (typeof Blob !== 'undefined' && toString.call(Blob) === '[object BlobConstructor]');
+var withNativeFile = typeof File === 'function' || (typeof File !== 'undefined' && toString.call(File) === '[object FileConstructor]');
+
+/**
+ * Replaces every Buffer | ArrayBuffer in packet with a numbered placeholder.
+ * Anything with blobs or files should be fed through removeBlobs before coming
+ * here.
+ *
+ * @param {Object} packet - socket.io event packet
+ * @return {Object} with deconstructed packet and list of buffers
+ * @api public
+ */
+
+exports.deconstructPacket = function(packet) {
+  var buffers = [];
+  var packetData = packet.data;
+  var pack = packet;
+  pack.data = _deconstructPacket(packetData, buffers);
+  pack.attachments = buffers.length; // number of binary 'attachments'
+  return {packet: pack, buffers: buffers};
+};
+
+function _deconstructPacket(data, buffers) {
+  if (!data) return data;
+
+  if (isBuf(data)) {
+    var placeholder = { _placeholder: true, num: buffers.length };
+    buffers.push(data);
+    return placeholder;
+  } else if (isArray(data)) {
+    var newData = new Array(data.length);
+    for (var i = 0; i < data.length; i++) {
+      newData[i] = _deconstructPacket(data[i], buffers);
+    }
+    return newData;
+  } else if (typeof data === 'object' && !(data instanceof Date)) {
+    var newData = {};
+    for (var key in data) {
+      newData[key] = _deconstructPacket(data[key], buffers);
+    }
+    return newData;
+  }
+  return data;
+}
+
+/**
+ * Reconstructs a binary packet from its placeholder packet and buffers
+ *
+ * @param {Object} packet - event packet with placeholders
+ * @param {Array} buffers - binary buffers to put in placeholder positions
+ * @return {Object} reconstructed packet
+ * @api public
+ */
+
+exports.reconstructPacket = function(packet, buffers) {
+  packet.data = _reconstructPacket(packet.data, buffers);
+  packet.attachments = undefined; // no longer useful
+  return packet;
+};
+
+function _reconstructPacket(data, buffers) {
+  if (!data) return data;
+
+  if (data && data._placeholder) {
+    return buffers[data.num]; // appropriate buffer (should be natural order anyway)
+  } else if (isArray(data)) {
+    for (var i = 0; i < data.length; i++) {
+      data[i] = _reconstructPacket(data[i], buffers);
+    }
+  } else if (typeof data === 'object') {
+    for (var key in data) {
+      data[key] = _reconstructPacket(data[key], buffers);
+    }
+  }
+
+  return data;
+}
+
+/**
+ * Asynchronously removes Blobs or Files from data via
+ * FileReader's readAsArrayBuffer method. Used before encoding
+ * data as msgpack. Calls callback with the blobless data.
+ *
+ * @param {Object} data
+ * @param {Function} callback
+ * @api private
+ */
+
+exports.removeBlobs = function(data, callback) {
+  function _removeBlobs(obj, curKey, containingObject) {
+    if (!obj) return obj;
+
+    // convert any blob
+    if ((withNativeBlob && obj instanceof Blob) ||
+        (withNativeFile && obj instanceof File)) {
+      pendingBlobs++;
+
+      // async filereader
+      var fileReader = new FileReader();
+      fileReader.onload = function() { // this.result == arraybuffer
+        if (containingObject) {
+          containingObject[curKey] = this.result;
+        }
+        else {
+          bloblessData = this.result;
+        }
+
+        // if nothing pending its callback time
+        if(! --pendingBlobs) {
+          callback(bloblessData);
+        }
+      };
+
+      fileReader.readAsArrayBuffer(obj); // blob -> arraybuffer
+    } else if (isArray(obj)) { // handle array
+      for (var i = 0; i < obj.length; i++) {
+        _removeBlobs(obj[i], i, obj);
+      }
+    } else if (typeof obj === 'object' && !isBuf(obj)) { // and object
+      for (var key in obj) {
+        _removeBlobs(obj[key], key, obj);
+      }
+    }
+  }
+
+  var pendingBlobs = 0;
+  var bloblessData = data;
+  _removeBlobs(bloblessData);
+  if (!pendingBlobs) {
+    callback(bloblessData);
+  }
+};
+
+},{"./is-buffer":202,"isarray":191}],201:[function(require,module,exports){
+
+/**
+ * Module dependencies.
+ */
+
+var debug = require('debug')('socket.io-parser');
+var Emitter = require('component-emitter');
+var binary = require('./binary');
+var isArray = require('isarray');
+var isBuf = require('./is-buffer');
+
+/**
+ * Protocol version.
+ *
+ * @api public
+ */
+
+exports.protocol = 4;
+
+/**
+ * Packet types.
+ *
+ * @api public
+ */
+
+exports.types = [
+  'CONNECT',
+  'DISCONNECT',
+  'EVENT',
+  'ACK',
+  'ERROR',
+  'BINARY_EVENT',
+  'BINARY_ACK'
+];
+
+/**
+ * Packet type `connect`.
+ *
+ * @api public
+ */
+
+exports.CONNECT = 0;
+
+/**
+ * Packet type `disconnect`.
+ *
+ * @api public
+ */
+
+exports.DISCONNECT = 1;
+
+/**
+ * Packet type `event`.
+ *
+ * @api public
+ */
+
+exports.EVENT = 2;
+
+/**
+ * Packet type `ack`.
+ *
+ * @api public
+ */
+
+exports.ACK = 3;
+
+/**
+ * Packet type `error`.
+ *
+ * @api public
+ */
+
+exports.ERROR = 4;
+
+/**
+ * Packet type 'binary event'
+ *
+ * @api public
+ */
+
+exports.BINARY_EVENT = 5;
+
+/**
+ * Packet type `binary ack`. For acks with binary arguments.
+ *
+ * @api public
+ */
+
+exports.BINARY_ACK = 6;
+
+/**
+ * Encoder constructor.
+ *
+ * @api public
+ */
+
+exports.Encoder = Encoder;
+
+/**
+ * Decoder constructor.
+ *
+ * @api public
+ */
+
+exports.Decoder = Decoder;
+
+/**
+ * A socket.io Encoder instance
+ *
+ * @api public
+ */
+
+function Encoder() {}
+
+var ERROR_PACKET = exports.ERROR + '"encode error"';
+
+/**
+ * Encode a packet as a single string if non-binary, or as a
+ * buffer sequence, depending on packet type.
+ *
+ * @param {Object} obj - packet object
+ * @param {Function} callback - function to handle encodings (likely engine.write)
+ * @return Calls callback with Array of encodings
+ * @api public
+ */
+
+Encoder.prototype.encode = function(obj, callback){
+  debug('encoding packet %j', obj);
+
+  if (exports.BINARY_EVENT === obj.type || exports.BINARY_ACK === obj.type) {
+    encodeAsBinary(obj, callback);
+  } else {
+    var encoding = encodeAsString(obj);
+    callback([encoding]);
+  }
+};
+
+/**
+ * Encode packet as string.
+ *
+ * @param {Object} packet
+ * @return {String} encoded
+ * @api private
+ */
+
+function encodeAsString(obj) {
+
+  // first is type
+  var str = '' + obj.type;
+
+  // attachments if we have them
+  if (exports.BINARY_EVENT === obj.type || exports.BINARY_ACK === obj.type) {
+    str += obj.attachments + '-';
+  }
+
+  // if we have a namespace other than `/`
+  // we append it followed by a comma `,`
+  if (obj.nsp && '/' !== obj.nsp) {
+    str += obj.nsp + ',';
+  }
+
+  // immediately followed by the id
+  if (null != obj.id) {
+    str += obj.id;
+  }
+
+  // json data
+  if (null != obj.data) {
+    var payload = tryStringify(obj.data);
+    if (payload !== false) {
+      str += payload;
+    } else {
+      return ERROR_PACKET;
+    }
+  }
+
+  debug('encoded %j as %s', obj, str);
+  return str;
+}
+
+function tryStringify(str) {
+  try {
+    return JSON.stringify(str);
+  } catch(e){
+    return false;
+  }
+}
+
+/**
+ * Encode packet as 'buffer sequence' by removing blobs, and
+ * deconstructing packet into object with placeholders and
+ * a list of buffers.
+ *
+ * @param {Object} packet
+ * @return {Buffer} encoded
+ * @api private
+ */
+
+function encodeAsBinary(obj, callback) {
+
+  function writeEncoding(bloblessData) {
+    var deconstruction = binary.deconstructPacket(bloblessData);
+    var pack = encodeAsString(deconstruction.packet);
+    var buffers = deconstruction.buffers;
+
+    buffers.unshift(pack); // add packet info to beginning of data list
+    callback(buffers); // write all the buffers
+  }
+
+  binary.removeBlobs(obj, writeEncoding);
+}
+
+/**
+ * A socket.io Decoder instance
+ *
+ * @return {Object} decoder
+ * @api public
+ */
+
+function Decoder() {
+  this.reconstructor = null;
+}
+
+/**
+ * Mix in `Emitter` with Decoder.
+ */
+
+Emitter(Decoder.prototype);
+
+/**
+ * Decodes an encoded packet string into packet JSON.
+ *
+ * @param {String} obj - encoded packet
+ * @return {Object} packet
+ * @api public
+ */
+
+Decoder.prototype.add = function(obj) {
+  var packet;
+  if (typeof obj === 'string') {
+    packet = decodeString(obj);
+    if (exports.BINARY_EVENT === packet.type || exports.BINARY_ACK === packet.type) { // binary packet's json
+      this.reconstructor = new BinaryReconstructor(packet);
+
+      // no attachments, labeled binary but no binary data to follow
+      if (this.reconstructor.reconPack.attachments === 0) {
+        this.emit('decoded', packet);
+      }
+    } else { // non-binary full packet
+      this.emit('decoded', packet);
+    }
+  } else if (isBuf(obj) || obj.base64) { // raw binary data
+    if (!this.reconstructor) {
+      throw new Error('got binary data when not reconstructing a packet');
+    } else {
+      packet = this.reconstructor.takeBinaryData(obj);
+      if (packet) { // received final buffer
+        this.reconstructor = null;
+        this.emit('decoded', packet);
+      }
+    }
+  } else {
+    throw new Error('Unknown type: ' + obj);
+  }
+};
+
+/**
+ * Decode a packet String (JSON data)
+ *
+ * @param {String} str
+ * @return {Object} packet
+ * @api private
+ */
+
+function decodeString(str) {
+  var i = 0;
+  // look up type
+  var p = {
+    type: Number(str.charAt(0))
+  };
+
+  if (null == exports.types[p.type]) {
+    return error('unknown packet type ' + p.type);
+  }
+
+  // look up attachments if type binary
+  if (exports.BINARY_EVENT === p.type || exports.BINARY_ACK === p.type) {
+    var start = i + 1;
+    while (str.charAt(++i) !== '-' && i != str.length) {}
+    var buf = str.substring(start, i);
+    if (buf != Number(buf) || str.charAt(i) !== '-') {
+      throw new Error('Illegal attachments');
+    }
+    p.attachments = Number(buf);
+  }
+
+  // look up namespace (if any)
+  if ('/' === str.charAt(i + 1)) {
+    var start = i + 1;
+    while (++i) {
+      var c = str.charAt(i);
+      if (',' === c) break;
+      if (i === str.length) break;
+    }
+    p.nsp = str.substring(start, i);
+  } else {
+    p.nsp = '/';
+  }
+
+  // look up id
+  var next = str.charAt(i + 1);
+  if ('' !== next && Number(next) == next) {
+    var start = i + 1;
+    while (++i) {
+      var c = str.charAt(i);
+      if (null == c || Number(c) != c) {
+        --i;
+        break;
+      }
+      if (i === str.length) break;
+    }
+    p.id = Number(str.substring(start, i + 1));
+  }
+
+  // look up json data
+  if (str.charAt(++i)) {
+    var payload = tryParse(str.substr(i));
+    var isPayloadValid = payload !== false && (p.type === exports.ERROR || isArray(payload));
+    if (isPayloadValid) {
+      p.data = payload;
+    } else {
+      return error('invalid payload');
+    }
+  }
+
+  debug('decoded %s as %j', str, p);
+  return p;
+}
+
+function tryParse(str) {
+  try {
+    return JSON.parse(str);
+  } catch(e){
+    return false;
+  }
+}
+
+/**
+ * Deallocates a parser's resources
+ *
+ * @api public
+ */
+
+Decoder.prototype.destroy = function() {
+  if (this.reconstructor) {
+    this.reconstructor.finishedReconstruction();
+  }
+};
+
+/**
+ * A manager of a binary event's 'buffer sequence'. Should
+ * be constructed whenever a packet of type BINARY_EVENT is
+ * decoded.
+ *
+ * @param {Object} packet
+ * @return {BinaryReconstructor} initialized reconstructor
+ * @api private
+ */
+
+function BinaryReconstructor(packet) {
+  this.reconPack = packet;
+  this.buffers = [];
+}
+
+/**
+ * Method to be called when binary data received from connection
+ * after a BINARY_EVENT packet.
+ *
+ * @param {Buffer | ArrayBuffer} binData - the raw binary data received
+ * @return {null | Object} returns null if more binary data is expected or
+ *   a reconstructed packet object if all buffers have been received.
+ * @api private
+ */
+
+BinaryReconstructor.prototype.takeBinaryData = function(binData) {
+  this.buffers.push(binData);
+  if (this.buffers.length === this.reconPack.attachments) { // done with buffer list
+    var packet = binary.reconstructPacket(this.reconPack, this.buffers);
+    this.finishedReconstruction();
+    return packet;
+  }
+  return null;
+};
+
+/**
+ * Cleans up binary packet reconstruction variables.
+ *
+ * @api private
+ */
+
+BinaryReconstructor.prototype.finishedReconstruction = function() {
+  this.reconPack = null;
+  this.buffers = [];
+};
+
+function error(msg) {
+  return {
+    type: exports.ERROR,
+    data: 'parser error: ' + msg
+  };
+}
+
+},{"./binary":200,"./is-buffer":202,"component-emitter":203,"debug":180,"isarray":191}],202:[function(require,module,exports){
+(function (Buffer){(function (){
+
+module.exports = isBuf;
+
+var withNativeBuffer = typeof Buffer === 'function' && typeof Buffer.isBuffer === 'function';
+var withNativeArrayBuffer = typeof ArrayBuffer === 'function';
+
+var isView = function (obj) {
+  return typeof ArrayBuffer.isView === 'function' ? ArrayBuffer.isView(obj) : (obj.buffer instanceof ArrayBuffer);
+};
+
+/**
+ * Returns true if obj is a buffer or an arraybuffer.
+ *
+ * @api private
+ */
+
+function isBuf(obj) {
+  return (withNativeBuffer && Buffer.isBuffer(obj)) ||
+          (withNativeArrayBuffer && (obj instanceof ArrayBuffer || isView(obj)));
+}
+
+}).call(this)}).call(this,require("buffer").Buffer)
+
+},{"buffer":10}],203:[function(require,module,exports){
+
+/**
+ * Expose `Emitter`.
+ */
+
+if (typeof module !== 'undefined') {
+  module.exports = Emitter;
+}
+
+/**
+ * Initialize a new `Emitter`.
+ *
+ * @api public
+ */
+
+function Emitter(obj) {
+  if (obj) return mixin(obj);
+};
+
+/**
+ * Mixin the emitter properties.
+ *
+ * @param {Object} obj
+ * @return {Object}
+ * @api private
+ */
+
+function mixin(obj) {
+  for (var key in Emitter.prototype) {
+    obj[key] = Emitter.prototype[key];
+  }
+  return obj;
+}
+
+/**
+ * Listen on the given `event` with `fn`.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.on =
+Emitter.prototype.addEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+    .push(fn);
+  return this;
+};
+
+/**
+ * Adds an `event` listener that will be invoked a single
+ * time then automatically removed.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.once = function(event, fn){
+  function on() {
+    this.off(event, on);
+    fn.apply(this, arguments);
+  }
+
+  on.fn = fn;
+  this.on(event, on);
+  return this;
+};
+
+/**
+ * Remove the given callback for `event` or all
+ * registered callbacks.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.off =
+Emitter.prototype.removeListener =
+Emitter.prototype.removeAllListeners =
+Emitter.prototype.removeEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+
+  // all
+  if (0 == arguments.length) {
+    this._callbacks = {};
+    return this;
+  }
+
+  // specific event
+  var callbacks = this._callbacks['$' + event];
+  if (!callbacks) return this;
+
+  // remove all handlers
+  if (1 == arguments.length) {
+    delete this._callbacks['$' + event];
+    return this;
+  }
+
+  // remove specific handler
+  var cb;
+  for (var i = 0; i < callbacks.length; i++) {
+    cb = callbacks[i];
+    if (cb === fn || cb.fn === fn) {
+      callbacks.splice(i, 1);
+      break;
+    }
+  }
+
+  // Remove event specific arrays for event types that no
+  // one is subscribed for to avoid memory leak.
+  if (callbacks.length === 0) {
+    delete this._callbacks['$' + event];
+  }
+
+  return this;
+};
+
+/**
+ * Emit `event` with the given args.
+ *
+ * @param {String} event
+ * @param {Mixed} ...
+ * @return {Emitter}
+ */
+
+Emitter.prototype.emit = function(event){
+  this._callbacks = this._callbacks || {};
+
+  var args = new Array(arguments.length - 1)
+    , callbacks = this._callbacks['$' + event];
+
+  for (var i = 1; i < arguments.length; i++) {
+    args[i - 1] = arguments[i];
+  }
+
+  if (callbacks) {
+    callbacks = callbacks.slice(0);
+    for (var i = 0, len = callbacks.length; i < len; ++i) {
+      callbacks[i].apply(this, args);
+    }
+  }
+
+  return this;
+};
+
+/**
+ * Return array of callbacks for `event`.
+ *
+ * @param {String} event
+ * @return {Array}
+ * @api public
+ */
+
+Emitter.prototype.listeners = function(event){
+  this._callbacks = this._callbacks || {};
+  return this._callbacks['$' + event] || [];
+};
+
+/**
+ * Check if this emitter has `event` handlers.
+ *
+ * @param {String} event
+ * @return {Boolean}
+ * @api public
+ */
+
+Emitter.prototype.hasListeners = function(event){
+  return !! this.listeners(event).length;
+};
+
+},{}],204:[function(require,module,exports){
 var tus = require('tus-js-client');
 
 function isCordova() {
@@ -36959,14 +37668,16 @@ module.exports = function getFingerprint(uppyFileObj) {
     return Promise.resolve(uppyFingerprint);
   };
 };
-},{"tus-js-client":55}],193:[function(require,module,exports){
+},{"tus-js-client":48}],205:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -37247,7 +37958,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         _this2.uppy.emit('upload-success', file, uploadResp);
 
         if (upload.url) {
-          _this2.uppy.log('Download ' + upload.file.name + ' from ' + upload.url);
+          _this2.uppy.log("Download " + upload.file.name + " from " + upload.url);
         }
 
         resolve(upload);
@@ -37704,11 +38415,25 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
       if ('error' in file && file.error) {
         return Promise.reject(new Error(file.error));
-      } else if (file.isRemote) {
-        return _this9.uploadRemote(file, current, total);
-      } else {
-        return _this9.upload(file, current, total);
       }
+
+      if (file.isRemote) {
+        // We emit upload-started here, so that it's also emitted for files
+        // that have to wait due to the `limit` option.
+        // Don't double-emit upload-started for Golden Retriever-restored files that were already started
+        if (!file.progress.uploadStarted || !file.isRestored) {
+          _this9.uppy.emit('upload-started', file);
+        }
+
+        return _this9.uploadRemote(file, current, total);
+      } // Don't double-emit upload-started for Golden Retriever-restored files that were already started
+
+
+      if (!file.progress.uploadStarted || !file.isRestored) {
+        _this9.uppy.emit('upload-started', file);
+      }
+
+      return _this9.upload(file, current, total);
     });
     return settle(promises);
   }
@@ -37766,13 +38491,15 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Tus;
-}(Plugin), _class.VERSION = "1.8.5", _temp);
-},{"./getFingerprint":192,"@uppy/companion-client":81,"@uppy/core":84,"@uppy/utils/lib/EventTracker":199,"@uppy/utils/lib/NetworkError":201,"@uppy/utils/lib/RateLimitedQueue":203,"@uppy/utils/lib/emitSocketProgress":208,"@uppy/utils/lib/getSocketHost":222,"@uppy/utils/lib/hasProperty":226,"@uppy/utils/lib/isNetworkError":229,"@uppy/utils/lib/settle":236,"tus-js-client":55}],194:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.9.2", _temp);
+},{"./getFingerprint":204,"@uppy/companion-client":75,"@uppy/core":78,"@uppy/utils/lib/EventTracker":213,"@uppy/utils/lib/NetworkError":215,"@uppy/utils/lib/RateLimitedQueue":217,"@uppy/utils/lib/emitSocketProgress":222,"@uppy/utils/lib/getSocketHost":237,"@uppy/utils/lib/hasProperty":241,"@uppy/utils/lib/isNetworkError":244,"@uppy/utils/lib/settle":251,"tus-js-client":48}],206:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -37812,6 +38539,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         d: "M46.575 10.883v-9h12v9zm12 5h10v18h-32v-18h10v9h12z",
         fill: "#fff"
       }), h("rect", {
+        className: "uppy-ProviderIconBg",
         width: "32",
         height: "32",
         rx: "16"
@@ -37864,11 +38592,15 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Unsplash;
-}(Plugin), _class.VERSION = "0.1.7", _temp);
-},{"@uppy/companion-client":81,"@uppy/core":84,"@uppy/provider-views":148,"preact":38}],195:[function(require,module,exports){
+}(Plugin), _class.VERSION = "0.1.13", _temp);
+},{"@uppy/companion-client":75,"@uppy/core":78,"@uppy/provider-views":155,"preact":207}],207:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],208:[function(require,module,exports){
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h,
@@ -37906,21 +38638,21 @@ var UrlUI = /*#__PURE__*/function (_Component) {
     var _this2 = this;
 
     return h("div", {
-      class: "uppy-Url"
+      className: "uppy-Url"
     }, h("input", {
-      class: "uppy-u-reset uppy-c-textInput uppy-Url-input",
+      className: "uppy-u-reset uppy-c-textInput uppy-Url-input",
       type: "text",
       "aria-label": this.props.i18n('enterUrlToImport'),
       placeholder: this.props.i18n('enterUrlToImport'),
-      onkeyup: this.handleKeyPress,
+      onKeyUp: this.handleKeyPress,
       ref: function ref(input) {
         _this2.input = input;
       },
       "data-uppy-super-focusable": true
     }), h("button", {
-      class: "uppy-u-reset uppy-c-btn uppy-c-btn-primary uppy-Url-importButton",
+      className: "uppy-u-reset uppy-c-btn uppy-c-btn-primary uppy-Url-importButton",
       type: "button",
-      onclick: this.handleClick
+      onClick: this.handleClick
     }, this.props.i18n('import')));
   };
 
@@ -37928,14 +38660,16 @@ var UrlUI = /*#__PURE__*/function (_Component) {
 }(Component);
 
 module.exports = UrlUI;
-},{"preact":38}],196:[function(require,module,exports){
+},{"preact":211}],209:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
@@ -37961,8 +38695,9 @@ function UrlIcon() {
     viewBox: "0 0 32 32"
   }, h("g", {
     fill: "none",
-    "fill-rule": "evenodd"
+    fillRule: "evenodd"
   }, h("rect", {
+    className: "uppy-ProviderIconBg",
     fill: "#FF753E",
     width: "32",
     height: "32",
@@ -37970,7 +38705,7 @@ function UrlIcon() {
   }), h("path", {
     d: "M22.788 15.389l-2.199 2.19a3.184 3.184 0 0 1-.513.437c-.806.584-1.686.876-2.638.876a4.378 4.378 0 0 1-3.519-1.752c-.22-.292-.146-.802.147-1.021.293-.22.806-.146 1.026.146.953 1.313 2.785 1.532 4.105.583a.571.571 0 0 0 .293-.292l2.199-2.189c1.1-1.167 1.1-2.992-.073-4.086a2.976 2.976 0 0 0-4.105 0l-1.246 1.24a.71.71 0 0 1-1.026 0 .703.703 0 0 1 0-1.022l1.246-1.24a4.305 4.305 0 0 1 6.083 0c1.833 1.605 1.906 4.451.22 6.13zm-7.183 5.035l-1.246 1.24a2.976 2.976 0 0 1-4.105 0c-1.172-1.094-1.172-2.991-.073-4.086l2.2-2.19.292-.291c.66-.438 1.393-.657 2.2-.584.805.146 1.465.51 1.905 1.168.22.292.733.365 1.026.146.293-.22.367-.73.147-1.022-.733-.949-1.76-1.532-2.859-1.678-1.1-.22-2.272.073-3.225.802l-.44.438-2.199 2.19c-1.686 1.75-1.612 4.524.074 6.202.88.803 1.979 1.241 3.078 1.241 1.1 0 2.199-.438 3.079-1.24l1.246-1.241a.703.703 0 0 0 0-1.022c-.294-.292-.807-.365-1.1-.073z",
     fill: "#FFF",
-    "fill-rule": "nonzero"
+    fillRule: "nonzero"
   })));
 }
 /**
@@ -38021,7 +38756,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     _this.handleRootPaste = _this.handleRootPaste.bind(_assertThisInitialized(_this));
     _this.client = new RequestClient(uppy, {
       companionUrl: _this.opts.companionUrl,
-      companionHeaders: _this.opts.companionHeaders || _this.opts.serverHeaders
+      companionHeaders: _this.opts.companionHeaders || _this.opts.serverHeaders,
+      companionCookiesRule: _this.opts.companionCookiesRule
     });
     return _this;
   }
@@ -38123,11 +38859,13 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       _this3.uppy.log('[Url] Adding remote file');
 
       try {
-        _this3.uppy.addFile(tagFile);
+        return _this3.uppy.addFile(tagFile);
       } catch (err) {
         if (!err.isRestriction) {
           _this3.uppy.log(err);
         }
+
+        return err;
       }
     }).catch(function (err) {
       _this3.uppy.log(err);
@@ -38136,6 +38874,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         message: _this3.i18n('failedToFetch'),
         details: err
       }, 'error', 4000);
+
+      return err;
     });
   };
 
@@ -38179,8 +38919,8 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return Url;
-}(Plugin), _class.VERSION = "1.5.17", _temp);
-},{"./UrlUI.js":195,"./utils/forEachDroppedOrPastedUrl":197,"@uppy/companion-client":81,"@uppy/core":84,"@uppy/utils/lib/Translator":204,"preact":38}],197:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.5.23", _temp);
+},{"./UrlUI.js":208,"./utils/forEachDroppedOrPastedUrl":210,"@uppy/companion-client":75,"@uppy/core":78,"@uppy/utils/lib/Translator":218,"preact":211}],210:[function(require,module,exports){
 var toArray = require('@uppy/utils/lib/toArray');
 /*
   SITUATION
@@ -38253,12 +38993,11 @@ module.exports = function forEachDroppedOrPastedUrl(dataTransfer, isDropOrPaste,
 
         if (atLeastOneFileIsDragged) {
           return;
-        } else {
-          urlItems = items.filter(function (item) {
-            return item.kind === 'string' && item.type === 'text/plain';
-          });
         }
 
+        urlItems = items.filter(function (item) {
+          return item.kind === 'string' && item.type === 'text/plain';
+        });
         break;
       }
 
@@ -38282,7 +39021,9 @@ module.exports = function forEachDroppedOrPastedUrl(dataTransfer, isDropOrPaste,
     });
   });
 };
-},{"@uppy/utils/lib/toArray":237}],198:[function(require,module,exports){
+},{"@uppy/utils/lib/toArray":252}],211:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],212:[function(require,module,exports){
 /**
  * Little AbortController proxy module so we can swap out the implementation easily later.
  */
@@ -38308,7 +39049,7 @@ function createAbortError(message) {
 exports.AbortController = AbortController;
 exports.AbortSignal = AbortSignal;
 exports.createAbortError = createAbortError;
-},{"abortcontroller-polyfill/dist/abortcontroller":2}],199:[function(require,module,exports){
+},{"abortcontroller-polyfill/dist/abortcontroller":2}],213:[function(require,module,exports){
 /**
  * Create a wrapper around an event emitter with a `remove` method to remove
  * all events that were added using the wrapped emitter.
@@ -38340,16 +39081,16 @@ module.exports = /*#__PURE__*/function () {
 
   return EventTracker;
 }();
-},{}],200:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 module.exports = ['a[href]:not([tabindex^="-"]):not([inert]):not([aria-hidden])', 'area[href]:not([tabindex^="-"]):not([inert]):not([aria-hidden])', 'input:not([disabled]):not([inert]):not([aria-hidden])', 'select:not([disabled]):not([inert]):not([aria-hidden])', 'textarea:not([disabled]):not([inert]):not([aria-hidden])', 'button:not([disabled]):not([inert]):not([aria-hidden])', 'iframe:not([tabindex^="-"]):not([inert]):not([aria-hidden])', 'object:not([tabindex^="-"]):not([inert]):not([aria-hidden])', 'embed:not([tabindex^="-"]):not([inert]):not([aria-hidden])', '[contenteditable]:not([tabindex^="-"]):not([inert]):not([aria-hidden])', '[tabindex]:not([tabindex^="-"]):not([inert]):not([aria-hidden])'];
-},{}],201:[function(require,module,exports){
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+},{}],215:[function(require,module,exports){
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
 
 function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
 
 function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
 
@@ -38377,7 +39118,7 @@ var NetworkError = /*#__PURE__*/function (_Error) {
 }( /*#__PURE__*/_wrapNativeSuper(Error));
 
 module.exports = NetworkError;
-},{}],202:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 /**
  * Helper to abort upload requests if there has not been any progress for `timeout` ms.
  * Create an instance using `timer = new ProgressTimeout(10000, onTimeout)`
@@ -38420,17 +39161,8 @@ var ProgressTimeout = /*#__PURE__*/function () {
 }();
 
 module.exports = ProgressTimeout;
-},{}],203:[function(require,module,exports){
-/**
- * Array.prototype.findIndex ponyfill for old browsers.
- */
-function findIndex(array, predicate) {
-  for (var i = 0; i < array.length; i++) {
-    if (predicate(array[i])) return i;
-  }
-
-  return -1;
-}
+},{}],217:[function(require,module,exports){
+var findIndex = require('./findIndex');
 
 function createCancelError() {
   return new Error('Cancelled');
@@ -38611,7 +39343,7 @@ module.exports = /*#__PURE__*/function () {
 
   return RateLimitedQueue;
 }();
-},{}],204:[function(require,module,exports){
+},{"./findIndex":226}],218:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var has = require('./hasProperty');
@@ -38677,7 +39409,7 @@ module.exports = /*#__PURE__*/function () {
    *
    * @param {string} phrase that needs interpolation, with placeholders
    * @param {object} options with values that will be used to replace placeholders
-   * @returns {string} interpolated
+   * @returns {any[]} interpolated
    */
   ;
 
@@ -38703,7 +39435,7 @@ module.exports = /*#__PURE__*/function () {
         // in the same phrase.
 
 
-        interpolated = insertReplacement(interpolated, new RegExp('%\\{' + arg + '\\}', 'g'), replacement);
+        interpolated = insertReplacement(interpolated, new RegExp("%\\{" + arg + "\\}", 'g'), replacement);
       }
     }
 
@@ -38767,9 +39499,9 @@ module.exports = /*#__PURE__*/function () {
       if (options && typeof options.smart_count !== 'undefined') {
         var plural = this.locale.pluralize(options.smart_count);
         return this.interpolate(string[plural], options);
-      } else {
-        throw new Error('Attempted to use a string with plural forms, but no value was given for %{smart_count}');
       }
+
+      throw new Error('Attempted to use a string with plural forms, but no value was given for %{smart_count}');
     }
 
     return this.interpolate(string, options);
@@ -38777,7 +39509,7 @@ module.exports = /*#__PURE__*/function () {
 
   return Translator;
 }();
-},{"./hasProperty":226}],205:[function(require,module,exports){
+},{"./hasProperty":241}],219:[function(require,module,exports){
 var dataURItoBlob = require('./dataURItoBlob');
 /**
  * Save a <canvas> element's content to a Blob object.
@@ -38798,7 +39530,7 @@ module.exports = function canvasToBlob(canvas, type, quality) {
     return dataURItoBlob(canvas.toDataURL(type, quality), {});
   });
 };
-},{"./dataURItoBlob":206}],206:[function(require,module,exports){
+},{"./dataURItoBlob":220}],220:[function(require,module,exports){
 module.exports = function dataURItoBlob(dataURI, opts, toFile) {
   // get the base64 data
   var data = dataURI.split(',')[1]; // user may provide mime type, if not get it from data URI
@@ -38835,7 +39567,7 @@ module.exports = function dataURItoBlob(dataURI, opts, toFile) {
     type: mimeType
   });
 };
-},{}],207:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 var _require = require('./AbortController'),
     createAbortError = _require.createAbortError;
 /**
@@ -38875,7 +39607,7 @@ module.exports = function delay(ms, opts) {
     }
   });
 };
-},{"./AbortController":198}],208:[function(require,module,exports){
+},{"./AbortController":212}],222:[function(require,module,exports){
 var throttle = require('lodash.throttle');
 
 function _emitSocketProgress(uploader, progressData, file) {
@@ -38897,8 +39629,8 @@ module.exports = throttle(_emitSocketProgress, 300, {
   leading: true,
   trailing: true
 });
-},{"lodash.throttle":31}],209:[function(require,module,exports){
-var NetworkError = require('@uppy/utils/lib/NetworkError');
+},{"lodash.throttle":34}],223:[function(require,module,exports){
+var NetworkError = require('./NetworkError');
 /**
  * Wrapper around window.fetch that throws a NetworkError when appropriate
  */
@@ -38913,7 +39645,7 @@ module.exports = function fetchWithNetworkError() {
     }
   });
 };
-},{"@uppy/utils/lib/NetworkError":201}],210:[function(require,module,exports){
+},{"./NetworkError":215}],224:[function(require,module,exports){
 var isDOMElement = require('./isDOMElement');
 /**
  * Find one or more DOM elements.
@@ -38933,7 +39665,7 @@ module.exports = function findAllDOMElements(element) {
     return [element];
   }
 };
-},{"./isDOMElement":227}],211:[function(require,module,exports){
+},{"./isDOMElement":242}],225:[function(require,module,exports){
 var isDOMElement = require('./isDOMElement');
 /**
  * Find a DOM element.
@@ -38956,7 +39688,22 @@ module.exports = function findDOMElement(element, context) {
     return element;
   }
 };
-},{"./isDOMElement":227}],212:[function(require,module,exports){
+},{"./isDOMElement":242}],226:[function(require,module,exports){
+/**
+ * Array.prototype.findIndex ponyfill for old browsers.
+ *
+ * @param {Array} array
+ * @param {Function} predicate
+ * @returns {number}
+ */
+module.exports = function findIndex(array, predicate) {
+  for (var i = 0; i < array.length; i++) {
+    if (predicate(array[i])) return i;
+  }
+
+  return -1;
+};
+},{}],227:[function(require,module,exports){
 /**
  * Takes a file object and turns it into fileID, by converting file.name to lowercase,
  * removing extra characters and adding type, size and lastModified
@@ -38970,23 +39717,23 @@ module.exports = function generateFileID(file) {
   var id = 'uppy';
 
   if (typeof file.name === 'string') {
-    id += '-' + encodeFilename(file.name.toLowerCase());
+    id += "-" + encodeFilename(file.name.toLowerCase());
   }
 
   if (file.type !== undefined) {
-    id += '-' + file.type;
+    id += "-" + file.type;
   }
 
   if (file.meta && typeof file.meta.relativePath === 'string') {
-    id += '-' + encodeFilename(file.meta.relativePath.toLowerCase());
+    id += "-" + encodeFilename(file.meta.relativePath.toLowerCase());
   }
 
   if (file.data.size !== undefined) {
-    id += '-' + file.data.size;
+    id += "-" + file.data.size;
   }
 
   if (file.data.lastModified !== undefined) {
-    id += '-' + file.data.lastModified;
+    id += "-" + file.data.lastModified;
   }
 
   return id;
@@ -38995,7 +39742,7 @@ module.exports = function generateFileID(file) {
 function encodeFilename(name) {
   var suffix = '';
   return name.replace(/[^A-Z0-9]/ig, function (character) {
-    suffix += '-' + encodeCharacter(character);
+    suffix += "-" + encodeCharacter(character);
     return '/';
   }) + suffix;
 }
@@ -39003,11 +39750,11 @@ function encodeFilename(name) {
 function encodeCharacter(character) {
   return character.charCodeAt(0).toString(32);
 }
-},{}],213:[function(require,module,exports){
+},{}],228:[function(require,module,exports){
 module.exports = function getBytesRemaining(fileProgress) {
   return fileProgress.bytesTotal - fileProgress.bytesUploaded;
 };
-},{}],214:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 var webkitGetAsEntryApi = require('./utils/webkitGetAsEntryApi/index');
 
 var fallbackApi = require('./utils/fallbackApi');
@@ -39030,11 +39777,11 @@ module.exports = function getDroppedFiles(dataTransfer, _temp) {
   // Get all files from all subdirs. Works (at least) in Chrome, Mozilla, and Safari
   if (dataTransfer.items && dataTransfer.items[0] && 'webkitGetAsEntry' in dataTransfer.items[0]) {
     return webkitGetAsEntryApi(dataTransfer, logDropError); // Otherwise just return all first-order files
-  } else {
-    return fallbackApi(dataTransfer);
   }
+
+  return fallbackApi(dataTransfer);
 };
-},{"./utils/fallbackApi":215,"./utils/webkitGetAsEntryApi/index":218}],215:[function(require,module,exports){
+},{"./utils/fallbackApi":230,"./utils/webkitGetAsEntryApi/index":233}],230:[function(require,module,exports){
 var toArray = require('../../toArray'); // .files fallback, should be implemented in any browser
 
 
@@ -39042,7 +39789,7 @@ module.exports = function fallbackApi(dataTransfer) {
   var files = toArray(dataTransfer.files);
   return Promise.resolve(files);
 };
-},{"../../toArray":237}],216:[function(require,module,exports){
+},{"../../toArray":252}],231:[function(require,module,exports){
 /**
  * Recursive function, calls the original callback() when the directory is entirely parsed.
  *
@@ -39071,7 +39818,7 @@ module.exports = function getFilesAndDirectoriesFromDirectory(directoryReader, o
     onSuccess(oldEntries);
   });
 };
-},{}],217:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 /**
  * Get the relative path from the FileEntry#fullPath, because File#webkitRelativePath is always '', at least onDrop.
  *
@@ -39082,13 +39829,13 @@ module.exports = function getFilesAndDirectoriesFromDirectory(directoryReader, o
 module.exports = function getRelativePath(fileEntry) {
   // fileEntry.fullPath - "/simpsons/hi.jpeg" or undefined (for browsers that don't support it)
   // fileEntry.name - "hi.jpeg"
-  if (!fileEntry.fullPath || fileEntry.fullPath === '/' + fileEntry.name) {
+  if (!fileEntry.fullPath || fileEntry.fullPath === "/" + fileEntry.name) {
     return null;
-  } else {
-    return fileEntry.fullPath;
   }
+
+  return fileEntry.fullPath;
 };
-},{}],218:[function(require,module,exports){
+},{}],233:[function(require,module,exports){
 var toArray = require('../../../toArray');
 
 var getRelativePath = require('./getRelativePath');
@@ -39147,7 +39894,7 @@ module.exports = function webkitGetAsEntryApi(dataTransfer, logDropError) {
     return files;
   });
 };
-},{"../../../toArray":237,"./getFilesAndDirectoriesFromDirectory":216,"./getRelativePath":217}],219:[function(require,module,exports){
+},{"../../../toArray":252,"./getFilesAndDirectoriesFromDirectory":231,"./getRelativePath":232}],234:[function(require,module,exports){
 /**
  * Takes a full filename string and returns an object {name, extension}
  *
@@ -39162,14 +39909,14 @@ module.exports = function getFileNameAndExtension(fullFileName) {
       name: fullFileName,
       extension: undefined
     };
-  } else {
-    return {
-      name: fullFileName.slice(0, lastDot),
-      extension: fullFileName.slice(lastDot + 1)
-    };
   }
+
+  return {
+    name: fullFileName.slice(0, lastDot),
+    extension: fullFileName.slice(lastDot + 1)
+  };
 };
-},{}],220:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 var getFileNameAndExtension = require('./getFileNameAndExtension');
 
 var mimeTypes = require('./mimeTypes');
@@ -39181,15 +39928,17 @@ module.exports = function getFileType(file) {
   if (file.type) {
     // if mime type is set in the file object already, use that
     return file.type;
-  } else if (fileExtension && mimeTypes[fileExtension]) {
+  }
+
+  if (fileExtension && mimeTypes[fileExtension]) {
     // else, see if we can map extension to a mime type
     return mimeTypes[fileExtension];
-  } else {
-    // if all fails, fall back to a generic byte stream type
-    return 'application/octet-stream';
-  }
+  } // if all fails, fall back to a generic byte stream type
+
+
+  return 'application/octet-stream';
 };
-},{"./getFileNameAndExtension":219,"./mimeTypes":232}],221:[function(require,module,exports){
+},{"./getFileNameAndExtension":234,"./mimeTypes":247}],236:[function(require,module,exports){
 // TODO Check which types are actually supported in browsers. Chrome likes webm
 // from my testing, but we may need more.
 // We could use a library but they tend to contain dozens of KBs of mappings,
@@ -39218,7 +39967,7 @@ module.exports = function getFileTypeExtension(mimeType) {
   mimeType = mimeType.replace(/;.*$/, '');
   return mimeToExtensions[mimeType] || null;
 };
-},{}],222:[function(require,module,exports){
+},{}],237:[function(require,module,exports){
 module.exports = function getSocketHost(url) {
   // get the host domain
   var regex = /^(?:https?:\/\/|\/\/)?(?:[^@\n]+@)?(?:www\.)?([^\n]+)/i;
@@ -39226,14 +39975,14 @@ module.exports = function getSocketHost(url) {
   var socketProtocol = /^http:\/\//i.test(url) ? 'ws' : 'wss';
   return socketProtocol + "://" + host;
 };
-},{}],223:[function(require,module,exports){
+},{}],238:[function(require,module,exports){
 module.exports = function getSpeed(fileProgress) {
   if (!fileProgress.bytesUploaded) return 0;
   var timeElapsed = new Date() - fileProgress.uploadStarted;
   var uploadSpeed = fileProgress.bytesUploaded / (timeElapsed / 1000);
   return uploadSpeed;
 };
-},{}],224:[function(require,module,exports){
+},{}],239:[function(require,module,exports){
 /**
  * Get the declared text direction for an element.
  *
@@ -39255,7 +40004,7 @@ function getTextDirection(element) {
 }
 
 module.exports = getTextDirection;
-},{}],225:[function(require,module,exports){
+},{}],240:[function(require,module,exports){
 /**
  * Returns a timestamp in the format of `hours:minutes:seconds`
  */
@@ -39264,7 +40013,7 @@ module.exports = function getTimeStamp() {
   var hours = pad(date.getHours().toString());
   var minutes = pad(date.getMinutes().toString());
   var seconds = pad(date.getSeconds().toString());
-  return hours + ':' + minutes + ':' + seconds;
+  return hours + ":" + minutes + ":" + seconds;
 };
 /**
  * Adds zero to strings shorter than two characters
@@ -39274,11 +40023,11 @@ module.exports = function getTimeStamp() {
 function pad(str) {
   return str.length !== 2 ? 0 + str : str;
 }
-},{}],226:[function(require,module,exports){
+},{}],241:[function(require,module,exports){
 module.exports = function has(object, key) {
   return Object.prototype.hasOwnProperty.call(object, key);
 };
-},{}],227:[function(require,module,exports){
+},{}],242:[function(require,module,exports){
 /**
  * Check if an object is a DOM element. Duck-typing based on `nodeType`.
  *
@@ -39287,7 +40036,7 @@ module.exports = function has(object, key) {
 module.exports = function isDOMElement(obj) {
   return obj && typeof obj === 'object' && obj.nodeType === Node.ELEMENT_NODE;
 };
-},{}],228:[function(require,module,exports){
+},{}],243:[function(require,module,exports){
 /**
  * Checks if the browser supports Drag & Drop (not supported on mobile devices, for example).
  *
@@ -39310,7 +40059,7 @@ module.exports = function isDragDropSupported() {
 
   return true;
 };
-},{}],229:[function(require,module,exports){
+},{}],244:[function(require,module,exports){
 function isNetworkError(xhr) {
   if (!xhr) {
     return false;
@@ -39320,7 +40069,7 @@ function isNetworkError(xhr) {
 }
 
 module.exports = isNetworkError;
-},{}],230:[function(require,module,exports){
+},{}],245:[function(require,module,exports){
 /**
  * Check if a URL string is an object URL from `URL.createObjectURL`.
  *
@@ -39330,7 +40079,7 @@ module.exports = isNetworkError;
 module.exports = function isObjectURL(url) {
   return url.indexOf('blob:') === 0;
 };
-},{}],231:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 module.exports = function isPreviewSupported(fileType) {
   if (!fileType) return false;
   var fileTypeSpecific = fileType.split('/')[1]; // list of images that browsers can preview
@@ -39341,7 +40090,7 @@ module.exports = function isPreviewSupported(fileType) {
 
   return false;
 };
-},{}],232:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 // ___Why not add the mime-types package?
 //    It's 19.7kB gzipped, and we only need mime types for well-known extensions (for file previews).
 // ___Where to take new extensions from?
@@ -39397,7 +40146,7 @@ module.exports = {
   gz: 'application/gzip',
   dmg: 'application/x-apple-diskimage'
 };
-},{}],233:[function(require,module,exports){
+},{}],248:[function(require,module,exports){
 var secondsToTime = require('./secondsToTime');
 
 module.exports = function prettyETA(seconds) {
@@ -39405,17 +40154,17 @@ module.exports = function prettyETA(seconds) {
   // display minutes if hours is being displayed
   // Display a leading zero if the there is a preceding unit: 1m 05s, but 5s
 
-  var hoursStr = time.hours ? time.hours + 'h ' : '';
-  var minutesVal = time.hours ? ('0' + time.minutes).substr(-2) : time.minutes;
-  var minutesStr = minutesVal ? minutesVal + 'm' : '';
-  var secondsVal = minutesVal ? ('0' + time.seconds).substr(-2) : time.seconds;
-  var secondsStr = time.hours ? '' : minutesVal ? ' ' + secondsVal + 's' : secondsVal + 's';
+  var hoursStr = time.hours ? time.hours + "h " : '';
+  var minutesVal = time.hours ? ("0" + time.minutes).substr(-2) : time.minutes;
+  var minutesStr = minutesVal ? minutesVal + "m" : '';
+  var secondsVal = minutesVal ? ("0" + time.seconds).substr(-2) : time.seconds;
+  var secondsStr = time.hours ? '' : minutesVal ? " " + secondsVal + "s" : secondsVal + "s";
   return "" + hoursStr + minutesStr + secondsStr;
 };
-},{"./secondsToTime":235}],234:[function(require,module,exports){
+},{"./secondsToTime":250}],249:[function(require,module,exports){
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-var getFileNameAndExtension = require('@uppy/utils/lib/getFileNameAndExtension');
+var getFileNameAndExtension = require('./getFileNameAndExtension');
 
 module.exports = function remoteFileObjToLocal(file) {
   return _extends({}, file, {
@@ -39423,7 +40172,7 @@ module.exports = function remoteFileObjToLocal(file) {
     extension: file.name ? getFileNameAndExtension(file.name).extension : null
   });
 };
-},{"@uppy/utils/lib/getFileNameAndExtension":219}],235:[function(require,module,exports){
+},{"./getFileNameAndExtension":234}],250:[function(require,module,exports){
 module.exports = function secondsToTime(rawSeconds) {
   var hours = Math.floor(rawSeconds / 3600) % 24;
   var minutes = Math.floor(rawSeconds / 60) % 60;
@@ -39434,7 +40183,7 @@ module.exports = function secondsToTime(rawSeconds) {
     seconds: seconds
   };
 };
-},{}],236:[function(require,module,exports){
+},{}],251:[function(require,module,exports){
 module.exports = function settle(promises) {
   var resolutions = [];
   var rejections = [];
@@ -39457,14 +40206,14 @@ module.exports = function settle(promises) {
     };
   });
 };
-},{}],237:[function(require,module,exports){
+},{}],252:[function(require,module,exports){
 /**
  * Converts list into array
  */
 module.exports = function toArray(list) {
   return Array.prototype.slice.call(list || [], 0);
 };
-},{}],238:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 /**
  * Truncates a string to the given number of chars (maxLength) by inserting '...' in the middle of that string.
  * Partially taken from https://stackoverflow.com/a/5723274/3192470.
@@ -39478,16 +40227,18 @@ module.exports = function truncateString(string, maxLength) {
 
   if (string.length <= maxLength) {
     return string; // Return truncated substring without '...' if string can't be meaningfully truncated
-  } else if (maxLength <= separator.length) {
-    return string.substr(0, maxLength); // Return truncated string divided in half by '...'
-  } else {
-    var charsToShow = maxLength - separator.length;
-    var frontChars = Math.ceil(charsToShow / 2);
-    var backChars = Math.floor(charsToShow / 2);
-    return string.substr(0, frontChars) + separator + string.substr(string.length - backChars);
   }
+
+  if (maxLength <= separator.length) {
+    return string.substr(0, maxLength); // Return truncated string divided in half by '...'
+  }
+
+  var charsToShow = maxLength - separator.length;
+  var frontChars = Math.ceil(charsToShow / 2);
+  var backChars = Math.floor(charsToShow / 2);
+  return string.substr(0, frontChars) + separator + string.substr(string.length - backChars);
 };
-},{}],239:[function(require,module,exports){
+},{}],254:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -39501,12 +40252,17 @@ module.exports = function (props) {
     viewBox: "0 0 66 55"
   }, h("path", {
     d: "M57.3 8.433c4.59 0 8.1 3.51 8.1 8.1v29.7c0 4.59-3.51 8.1-8.1 8.1H8.7c-4.59 0-8.1-3.51-8.1-8.1v-29.7c0-4.59 3.51-8.1 8.1-8.1h9.45l4.59-7.02c.54-.54 1.35-1.08 2.16-1.08h16.2c.81 0 1.62.54 2.16 1.08l4.59 7.02h9.45zM33 14.64c-8.62 0-15.393 6.773-15.393 15.393 0 8.62 6.773 15.393 15.393 15.393 8.62 0 15.393-6.773 15.393-15.393 0-8.62-6.773-15.393-15.393-15.393zM33 40c-5.648 0-9.966-4.319-9.966-9.967 0-5.647 4.318-9.966 9.966-9.966s9.966 4.319 9.966 9.966C42.966 35.681 38.648 40 33 40z",
-    "fill-rule": "evenodd"
+    fillRule: "evenodd"
   }));
 };
-},{"preact":38}],240:[function(require,module,exports){
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+},{"preact":266}],255:[function(require,module,exports){
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+/* eslint-disable jsx-a11y/media-has-caption */
 var _require = require('preact'),
     h = _require.h,
     Component = _require.Component;
@@ -39518,6 +40274,10 @@ var RecordButton = require('./RecordButton');
 var RecordingLength = require('./RecordingLength');
 
 var VideoSourceSelect = require('./VideoSourceSelect');
+
+var SubmitButton = require('./SubmitButton');
+
+var DiscardButton = require('./DiscardButton');
 
 function isModeAvailable(modes, mode) {
   return modes.indexOf(mode) !== -1;
@@ -39533,57 +40293,149 @@ var CameraScreen = /*#__PURE__*/function (_Component) {
   var _proto = CameraScreen.prototype;
 
   _proto.componentDidMount = function componentDidMount() {
-    this.props.onFocus();
+    var onFocus = this.props.onFocus;
+    onFocus();
   };
 
   _proto.componentWillUnmount = function componentWillUnmount() {
-    this.props.onStop();
+    var onStop = this.props.onStop;
+    onStop();
   };
 
   _proto.render = function render() {
-    var shouldShowRecordButton = this.props.supportsRecording && (isModeAvailable(this.props.modes, 'video-only') || isModeAvailable(this.props.modes, 'audio-only') || isModeAvailable(this.props.modes, 'video-audio'));
-    var shouldShowSnapshotButton = isModeAvailable(this.props.modes, 'picture');
-    var shouldShowRecordingLength = this.props.supportsRecording && this.props.showRecordingLength;
-    var shouldShowVideoSourceDropdown = this.props.showVideoSourceDropdown && this.props.videoSources && this.props.videoSources.length > 1;
+    var _this = this;
+
+    var _this$props = this.props,
+        src = _this$props.src,
+        recordedVideo = _this$props.recordedVideo,
+        recording = _this$props.recording,
+        modes = _this$props.modes,
+        supportsRecording = _this$props.supportsRecording,
+        videoSources = _this$props.videoSources,
+        showVideoSourceDropdown = _this$props.showVideoSourceDropdown,
+        showRecordingLength = _this$props.showRecordingLength,
+        onSubmit = _this$props.onSubmit,
+        i18n = _this$props.i18n,
+        mirror = _this$props.mirror,
+        onSnapshot = _this$props.onSnapshot,
+        onStartRecording = _this$props.onStartRecording,
+        onStopRecording = _this$props.onStopRecording,
+        onDiscardRecordedVideo = _this$props.onDiscardRecordedVideo,
+        recordingLengthSeconds = _this$props.recordingLengthSeconds;
+    var hasRecordedVideo = !!recordedVideo;
+    var shouldShowRecordButton = !hasRecordedVideo && supportsRecording && (isModeAvailable(modes, 'video-only') || isModeAvailable(modes, 'audio-only') || isModeAvailable(modes, 'video-audio'));
+    var shouldShowSnapshotButton = !hasRecordedVideo && isModeAvailable(modes, 'picture');
+    var shouldShowRecordingLength = supportsRecording && showRecordingLength;
+    var shouldShowVideoSourceDropdown = showVideoSourceDropdown && videoSources && videoSources.length > 1;
+    var videoProps = {
+      playsinline: true
+    };
+
+    if (recordedVideo) {
+      videoProps.muted = false;
+      videoProps.controls = true;
+      videoProps.src = recordedVideo; // reset srcObject in dom. If not resetted, stream sticks in element
+
+      if (this.videoElement) {
+        this.videoElement.srcObject = undefined;
+      }
+    } else {
+      videoProps.muted = true;
+      videoProps.autoplay = true;
+      videoProps.srcObject = src;
+    }
+
     return h("div", {
-      class: "uppy uppy-Webcam-container"
+      className: "uppy uppy-Webcam-container"
     }, h("div", {
-      class: "uppy-Webcam-videoContainer"
-    }, h("video", {
-      class: "uppy-Webcam-video  " + (this.props.mirror ? 'uppy-Webcam-video--mirrored' : ''),
-      autoplay: true,
-      muted: true,
-      playsinline: true,
-      srcObject: this.props.src || ''
-    })), h("div", {
-      class: "uppy-Webcam-footer"
+      className: "uppy-Webcam-videoContainer"
+    }, h("video", _extends({
+      /* eslint-disable-next-line no-return-assign */
+      ref: function ref(videoElement) {
+        return _this.videoElement = videoElement;
+      },
+      className: "uppy-Webcam-video  " + (mirror ? 'uppy-Webcam-video--mirrored' : '')
+      /* eslint-disable-next-line react/jsx-props-no-spreading */
+
+    }, videoProps))), h("div", {
+      className: "uppy-Webcam-footer"
     }, h("div", {
-      class: "uppy-Webcam-videoSourceContainer"
+      className: "uppy-Webcam-videoSourceContainer"
     }, shouldShowVideoSourceDropdown ? VideoSourceSelect(this.props) : null), h("div", {
-      class: "uppy-Webcam-buttonContainer"
-    }, shouldShowSnapshotButton ? SnapshotButton(this.props) : null, ' ', shouldShowRecordButton ? RecordButton(this.props) : null), h("div", {
-      class: "uppy-Webcam-recordingLength"
-    }, shouldShowRecordingLength ? RecordingLength(this.props) : null)));
+      className: "uppy-Webcam-buttonContainer"
+    }, shouldShowSnapshotButton && h(SnapshotButton, {
+      onSnapshot: onSnapshot,
+      i18n: i18n
+    }), shouldShowRecordButton && h(RecordButton, {
+      recording: recording,
+      onStartRecording: onStartRecording,
+      onStopRecording: onStopRecording,
+      i18n: i18n
+    }), hasRecordedVideo && h(SubmitButton, {
+      onSubmit: onSubmit,
+      i18n: i18n
+    }), hasRecordedVideo && h(DiscardButton, {
+      onDiscard: onDiscardRecordedVideo,
+      i18n: i18n
+    })), shouldShowRecordingLength && h("div", {
+      className: "uppy-Webcam-recordingLength"
+    }, h(RecordingLength, {
+      recordingLengthSeconds: recordingLengthSeconds,
+      i18n: i18n
+    }))));
   };
 
   return CameraScreen;
 }(Component);
 
 module.exports = CameraScreen;
-},{"./RecordButton":242,"./RecordingLength":243,"./SnapshotButton":244,"./VideoSourceSelect":245,"preact":38}],241:[function(require,module,exports){
+},{"./DiscardButton":256,"./RecordButton":258,"./RecordingLength":259,"./SnapshotButton":260,"./SubmitButton":261,"./VideoSourceSelect":262,"preact":266}],256:[function(require,module,exports){
+var _require = require('preact'),
+    h = _require.h;
+
+function DiscardButton(_ref) {
+  var onDiscard = _ref.onDiscard,
+      i18n = _ref.i18n;
+  return h("button", {
+    className: "uppy-u-reset uppy-c-btn uppy-Webcam-button",
+    type: "button",
+    title: i18n('discardRecordedFile'),
+    "aria-label": i18n('discardRecordedFile'),
+    onClick: onDiscard,
+    "data-uppy-super-focusable": true
+  }, h("svg", {
+    width: "13",
+    height: "13",
+    viewBox: "0 0 13 13",
+    xmlns: "http://www.w3.org/2000/svg",
+    "aria-hidden": "true",
+    focusable: "false",
+    className: "uppy-c-icon"
+  }, h("g", {
+    fill: "#FFF",
+    fillRule: "evenodd"
+  }, h("path", {
+    d: "M.496 11.367L11.103.76l1.414 1.414L1.911 12.781z"
+  }), h("path", {
+    d: "M11.104 12.782L.497 2.175 1.911.76l10.607 10.606z"
+  }))));
+}
+
+module.exports = DiscardButton;
+},{"preact":266}],257:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
 module.exports = function (props) {
   return h("div", {
-    class: "uppy-Webcam-permissons"
+    className: "uppy-Webcam-permissons"
   }, h("div", {
-    class: "uppy-Webcam-permissonsIcon"
+    className: "uppy-Webcam-permissonsIcon"
   }, props.icon()), h("h1", {
-    class: "uppy-Webcam-title"
+    className: "uppy-Webcam-title"
   }, props.hasCamera ? props.i18n('allowAccessTitle') : props.i18n('noCameraTitle')), h("p", null, props.hasCamera ? props.i18n('allowAccessDescription') : props.i18n('noCameraDescription')));
 };
-},{"preact":38}],242:[function(require,module,exports){
+},{"preact":266}],258:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -39595,16 +40447,16 @@ module.exports = function RecordButton(_ref) {
 
   if (recording) {
     return h("button", {
-      class: "uppy-u-reset uppy-c-btn uppy-Webcam-button uppy-Webcam-button--video",
+      className: "uppy-u-reset uppy-c-btn uppy-Webcam-button",
       type: "button",
       title: i18n('stopRecording'),
       "aria-label": i18n('stopRecording'),
-      onclick: onStopRecording,
+      onClick: onStopRecording,
       "data-uppy-super-focusable": true
     }, h("svg", {
       "aria-hidden": "true",
       focusable: "false",
-      class: "uppy-c-icon",
+      className: "uppy-c-icon",
       width: "100",
       height: "100",
       viewBox: "0 0 100 100"
@@ -39617,16 +40469,16 @@ module.exports = function RecordButton(_ref) {
   }
 
   return h("button", {
-    class: "uppy-u-reset uppy-c-btn uppy-Webcam-button uppy-Webcam-button--video",
+    className: "uppy-u-reset uppy-c-btn uppy-Webcam-button",
     type: "button",
     title: i18n('startRecording'),
     "aria-label": i18n('startRecording'),
-    onclick: onStartRecording,
+    onClick: onStartRecording,
     "data-uppy-super-focusable": true
   }, h("svg", {
     "aria-hidden": "true",
     focusable: "false",
-    class: "uppy-c-icon",
+    className: "uppy-c-icon",
     width: "100",
     height: "100",
     viewBox: "0 0 100 100"
@@ -39636,7 +40488,7 @@ module.exports = function RecordButton(_ref) {
     r: "40"
   })));
 };
-},{"preact":38}],243:[function(require,module,exports){
+},{"preact":266}],259:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -39652,7 +40504,7 @@ module.exports = function RecordingLength(_ref) {
     })
   }, formattedRecordingLengthSeconds);
 };
-},{"./formatSeconds":246,"preact":38}],244:[function(require,module,exports){
+},{"./formatSeconds":263,"preact":266}],260:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -39662,15 +40514,45 @@ module.exports = function (_ref) {
   var onSnapshot = _ref.onSnapshot,
       i18n = _ref.i18n;
   return h("button", {
-    class: "uppy-u-reset uppy-c-btn uppy-Webcam-button uppy-Webcam-button--picture",
+    className: "uppy-u-reset uppy-c-btn uppy-Webcam-button uppy-Webcam-button--picture",
     type: "button",
     title: i18n('takePicture'),
     "aria-label": i18n('takePicture'),
-    onclick: onSnapshot,
+    onClick: onSnapshot,
     "data-uppy-super-focusable": true
   }, CameraIcon());
 };
-},{"./CameraIcon":239,"preact":38}],245:[function(require,module,exports){
+},{"./CameraIcon":254,"preact":266}],261:[function(require,module,exports){
+var _require = require('preact'),
+    h = _require.h;
+
+function SubmitButton(_ref) {
+  var onSubmit = _ref.onSubmit,
+      i18n = _ref.i18n;
+  return h("button", {
+    className: "uppy-u-reset uppy-c-btn uppy-Webcam-button uppy-Webcam-button--submit",
+    type: "button",
+    title: i18n('submitRecordedFile'),
+    "aria-label": i18n('submitRecordedFile'),
+    onClick: onSubmit,
+    "data-uppy-super-focusable": true
+  }, h("svg", {
+    width: "12",
+    height: "9",
+    viewBox: "0 0 12 9",
+    xmlns: "http://www.w3.org/2000/svg",
+    "aria-hidden": "true",
+    focusable: "false",
+    className: "uppy-c-icon"
+  }, h("path", {
+    fill: "#fff",
+    fillRule: "nonzero",
+    d: "M10.66 0L12 1.31 4.136 9 0 4.956l1.34-1.31L4.136 6.38z"
+  })));
+}
+
+module.exports = SubmitButton;
+},{"preact":266}],262:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -39682,7 +40564,7 @@ module.exports = function (_ref) {
     className: "uppy-Webcam-videoSource"
   }, h("select", {
     className: "uppy-u-reset uppy-Webcam-videoSource-select",
-    onchange: function onchange(event) {
+    onChange: function onChange(event) {
       onChangeVideoSource(event.target.value);
     }
   }, videoSources.map(function (videoSource) {
@@ -39693,7 +40575,7 @@ module.exports = function (_ref) {
     }, videoSource.label);
   })));
 };
-},{"preact":38}],246:[function(require,module,exports){
+},{"preact":266}],263:[function(require,module,exports){
 /**
  * Takes an Integer value of seconds (e.g. 83) and converts it into a human-readable formatted string (e.g. '1:23').
  *
@@ -39704,14 +40586,16 @@ module.exports = function (_ref) {
 module.exports = function formatSeconds(seconds) {
   return Math.floor(seconds / 60) + ":" + String(seconds % 60).padStart(2, 0);
 };
-},{}],247:[function(require,module,exports){
+},{}],264:[function(require,module,exports){
 var _class, _temp;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var _require = require('preact'),
     h = _require.h;
@@ -39806,16 +40690,19 @@ function getMediaDevices() {
 module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   _inheritsLoose(Webcam, _Plugin);
 
+  // eslint-disable-next-line global-require
   function Webcam(uppy, opts) {
     var _this;
 
     _this = _Plugin.call(this, uppy, opts) || this;
     _this.mediaDevices = getMediaDevices();
-    _this.supportsUserMedia = !!_this.mediaDevices;
+    _this.supportsUserMedia = !!_this.mediaDevices; // eslint-disable-next-line no-restricted-globals
+
     _this.protocol = location.protocol.match(/https/i) ? 'https' : 'http';
     _this.id = _this.opts.id || 'Webcam';
     _this.title = _this.opts.title || 'Camera';
     _this.type = 'acquirer';
+    _this.capturedMediaFile = null;
 
     _this.icon = function () {
       return h("svg", {
@@ -39826,8 +40713,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         viewBox: "0 0 32 32"
       }, h("g", {
         fill: "none",
-        "fill-rule": "evenodd"
+        fillRule: "evenodd"
       }, h("rect", {
+        className: "uppy-ProviderIconBg",
         fill: "#03BFEF",
         width: "32",
         height: "32",
@@ -39835,7 +40723,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       }), h("path", {
         d: "M22 11c1.133 0 2 .867 2 2v7.333c0 1.134-.867 2-2 2H10c-1.133 0-2-.866-2-2V13c0-1.133.867-2 2-2h2.333l1.134-1.733C13.6 9.133 13.8 9 14 9h4c.2 0 .4.133.533.267L19.667 11H22zm-6 1.533a3.764 3.764 0 0 0-3.8 3.8c0 2.129 1.672 3.801 3.8 3.801s3.8-1.672 3.8-3.8c0-2.13-1.672-3.801-3.8-3.801zm0 6.261c-1.395 0-2.46-1.066-2.46-2.46 0-1.395 1.065-2.461 2.46-2.461s2.46 1.066 2.46 2.46c0 1.395-1.065 2.461-2.46 2.461z",
         fill: "#FFF",
-        "fill-rule": "nonzero"
+        fillRule: "nonzero"
       })));
     };
 
@@ -39850,7 +40738,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         noCameraTitle: 'Camera Not Available',
         noCameraDescription: 'In order to take pictures or record video, please connect a camera device',
         recordingStoppedMaxSize: 'Recording stopped because the file size is about to exceed the limit',
-        recordingLength: 'Recording length %{recording_length}'
+        recordingLength: 'Recording length %{recording_length}',
+        submitRecordedFile: 'Submit recorded file',
+        discardRecordedFile: 'Discard recorded file'
       }
     }; // set default options
 
@@ -39875,18 +40765,20 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     _this.setPluginState = _this.setPluginState.bind(_assertThisInitialized(_this));
     _this.render = _this.render.bind(_assertThisInitialized(_this)); // Camera controls
 
-    _this._start = _this._start.bind(_assertThisInitialized(_this));
-    _this._stop = _this._stop.bind(_assertThisInitialized(_this));
-    _this._takeSnapshot = _this._takeSnapshot.bind(_assertThisInitialized(_this));
-    _this._startRecording = _this._startRecording.bind(_assertThisInitialized(_this));
-    _this._stopRecording = _this._stopRecording.bind(_assertThisInitialized(_this));
-    _this._oneTwoThreeSmile = _this._oneTwoThreeSmile.bind(_assertThisInitialized(_this));
-    _this._focus = _this._focus.bind(_assertThisInitialized(_this));
-    _this._changeVideoSource = _this._changeVideoSource.bind(_assertThisInitialized(_this));
+    _this.start = _this.start.bind(_assertThisInitialized(_this));
+    _this.stop = _this.stop.bind(_assertThisInitialized(_this));
+    _this.takeSnapshot = _this.takeSnapshot.bind(_assertThisInitialized(_this));
+    _this.startRecording = _this.startRecording.bind(_assertThisInitialized(_this));
+    _this.stopRecording = _this.stopRecording.bind(_assertThisInitialized(_this));
+    _this.discardRecordedVideo = _this.discardRecordedVideo.bind(_assertThisInitialized(_this));
+    _this.submit = _this.submit.bind(_assertThisInitialized(_this));
+    _this.oneTwoThreeSmile = _this.oneTwoThreeSmile.bind(_assertThisInitialized(_this));
+    _this.focus = _this.focus.bind(_assertThisInitialized(_this));
+    _this.changeVideoSource = _this.changeVideoSource.bind(_assertThisInitialized(_this));
     _this.webcamActive = false;
 
     if (_this.opts.countdown) {
-      _this.opts.onBeforeSnapshot = _this._oneTwoThreeSmile;
+      _this.opts.onBeforeSnapshot = _this.oneTwoThreeSmile;
     }
 
     _this.setPluginState({
@@ -39930,6 +40822,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     });
   };
 
+  _proto.isAudioOnly = function isAudioOnly() {
+    return this.opts.modes.length === 1 && this.opts.modes[0] === 'audio-only';
+  };
+
   _proto.getConstraints = function getConstraints(deviceId) {
     var _this$opts$videoConst;
 
@@ -39938,7 +40834,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     }
 
     var acceptsAudio = this.opts.modes.indexOf('video-audio') !== -1 || this.opts.modes.indexOf('audio-only') !== -1;
-    var acceptsVideo = this.opts.modes.indexOf('video-audio') !== -1 || this.opts.modes.indexOf('video-only') !== -1 || this.opts.modes.indexOf('picture') !== -1;
+    var acceptsVideo = !this.isAudioOnly() && (this.opts.modes.indexOf('video-audio') !== -1 || this.opts.modes.indexOf('video-only') !== -1 || this.opts.modes.indexOf('picture') !== -1);
 
     var videoConstraints = _extends({}, (_this$opts$videoConst = this.opts.videoConstraints) != null ? _this$opts$videoConst : {
       facingMode: this.opts.facingMode
@@ -39951,9 +40847,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       audio: acceptsAudio,
       video: acceptsVideo ? videoConstraints : false
     };
-  };
+  } // eslint-disable-next-line consistent-return
+  ;
 
-  _proto._start = function _start(options) {
+  _proto.start = function start(options) {
     var _this2 = this;
 
     if (options === void 0) {
@@ -39965,6 +40862,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     }
 
     this.webcamActive = true;
+    this.opts.mirror = true;
     var constraints = this.getConstraints(options && options.deviceId ? options.deviceId : null);
     this.hasCameraCheck().then(function (hasCamera) {
       _this2.setPluginState({
@@ -39975,13 +40873,14 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       return _this2.mediaDevices.getUserMedia(constraints).then(function (stream) {
         _this2.stream = stream;
         var currentDeviceId = null;
+        var tracks = _this2.isAudioOnly() ? stream.getAudioTracks() : stream.getVideoTracks();
 
         if (!options || !options.deviceId) {
-          currentDeviceId = stream.getVideoTracks()[0].getSettings().deviceId;
+          currentDeviceId = tracks[0].getSettings().deviceId;
         } else {
-          stream.getVideoTracks().forEach(function (videoTrack) {
-            if (videoTrack.getSettings().deviceId === options.deviceId) {
-              currentDeviceId = videoTrack.getSettings().deviceId;
+          tracks.forEach(function (track) {
+            if (track.getSettings().deviceId === options.deviceId) {
+              currentDeviceId = track.getSettings().deviceId;
             }
           });
         } // Update the sources now, so we can access the names.
@@ -40008,7 +40907,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
    */
   ;
 
-  _proto._getMediaRecorderOptions = function _getMediaRecorderOptions() {
+  _proto.getMediaRecorderOptions = function getMediaRecorderOptions() {
     var options = {}; // Try to use the `opts.preferredVideoMimeType` or one of the `allowedFileTypes` for the recording.
     // If the browser doesn't support it, we'll fall back to the browser default instead.
     // Safari doesn't have the `isTypeSupported` API.
@@ -40023,11 +40922,14 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         preferredVideoMimeTypes = restrictions.allowedFileTypes.map(toMimeType).filter(isVideoMimeType);
       }
 
-      var acceptableMimeTypes = preferredVideoMimeTypes.filter(function (candidateType) {
+      var filterSupportedTypes = function filterSupportedTypes(candidateType) {
         return MediaRecorder.isTypeSupported(candidateType) && getFileTypeExtension(candidateType);
-      });
+      };
+
+      var acceptableMimeTypes = preferredVideoMimeTypes.filter(filterSupportedTypes);
 
       if (acceptableMimeTypes.length > 0) {
+        // eslint-disable-next-line prefer-destructuring
         options.mimeType = acceptableMimeTypes[0];
       }
     }
@@ -40035,12 +40937,12 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     return options;
   };
 
-  _proto._startRecording = function _startRecording() {
+  _proto.startRecording = function startRecording() {
     var _this3 = this;
 
     // only used if supportsMediaRecorder() returned true
     // eslint-disable-next-line compat/compat
-    this.recorder = new MediaRecorder(this.stream, this._getMediaRecorderOptions());
+    this.recorder = new MediaRecorder(this.stream, this.getMediaRecorderOptions());
     this.recordingChunks = [];
     var stoppingBecauseOfMaxSize = false;
     this.recorder.addEventListener('dataavailable', function (event) {
@@ -40063,7 +40965,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
           _this3.uppy.info(_this3.i18n('recordingStoppedMaxSize'), 'warning', 4000);
 
-          _this3._stopRecording();
+          _this3.stopRecording();
         }
       }
     }); // use a "time slice" of 500ms: ondataavailable will be called each 500ms
@@ -40087,10 +40989,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     });
   };
 
-  _proto._stopRecording = function _stopRecording() {
+  _proto.stopRecording = function stopRecording() {
     var _this4 = this;
 
-    var stopped = new Promise(function (resolve, reject) {
+    var stopped = new Promise(function (resolve) {
       _this4.recorder.addEventListener('stop', function () {
         resolve();
       });
@@ -40114,7 +41016,14 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       return _this4.getVideo();
     }).then(function (file) {
       try {
-        _this4.uppy.addFile(file);
+        _this4.capturedMediaFile = file; // create object url for capture result preview
+
+        _this4.setPluginState({
+          // eslint-disable-next-line compat/compat
+          recordedVideo: URL.createObjectURL(file.data)
+        });
+
+        _this4.opts.mirror = false;
       } catch (err) {
         // Logging the error, exept restrictions, which is handled in Core
         if (!err.isRestriction) {
@@ -40131,7 +41040,28 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     });
   };
 
-  _proto._stop = function _stop() {
+  _proto.discardRecordedVideo = function discardRecordedVideo() {
+    this.setPluginState({
+      recordedVideo: null
+    });
+    this.opts.mirror = true;
+    this.capturedMediaFile = null;
+  };
+
+  _proto.submit = function submit() {
+    try {
+      if (this.capturedMediaFile) {
+        this.uppy.addFile(this.capturedMediaFile);
+      }
+    } catch (err) {
+      // Logging the error, exept restrictions, which is handled in Core
+      if (!err.isRestriction) {
+        this.uppy.log(err, 'error');
+      }
+    }
+  };
+
+  _proto.stop = function stop() {
     if (this.stream) {
       this.stream.getAudioTracks().forEach(function (track) {
         track.stop();
@@ -40143,17 +41073,21 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
     this.webcamActive = false;
     this.stream = null;
+    this.setPluginState({
+      recordedVideo: null
+    });
   };
 
-  _proto._getVideoElement = function _getVideoElement() {
+  _proto.getVideoElement = function getVideoElement() {
     return this.el.querySelector('.uppy-Webcam-video');
   };
 
-  _proto._oneTwoThreeSmile = function _oneTwoThreeSmile() {
+  _proto.oneTwoThreeSmile = function oneTwoThreeSmile() {
     var _this5 = this;
 
     return new Promise(function (resolve, reject) {
-      var count = _this5.opts.countdown;
+      var count = _this5.opts.countdown; // eslint-disable-next-line consistent-return
+
       var countDown = setInterval(function () {
         if (!_this5.webcamActive) {
           clearInterval(countDown);
@@ -40178,7 +41112,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     });
   };
 
-  _proto._takeSnapshot = function _takeSnapshot() {
+  _proto.takeSnapshot = function takeSnapshot() {
     var _this6 = this;
 
     if (this.captureInProgress) return;
@@ -40190,7 +41124,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
       return Promise.reject(new Error("onBeforeSnapshot: " + message));
     }).then(function () {
-      return _this6._getImage();
+      return _this6.getImage();
     }).then(function (tagFile) {
       _this6.captureInProgress = false;
 
@@ -40208,10 +41142,10 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     });
   };
 
-  _proto._getImage = function _getImage() {
+  _proto.getImage = function getImage() {
     var _this7 = this;
 
-    var video = this._getVideoElement();
+    var video = this.getVideoElement();
 
     if (!video) {
       return Promise.reject(new Error('No video element found, likely due to the Webcam tab being closed.'));
@@ -40249,7 +41183,14 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   _proto.getVideo = function getVideo() {
-    var mimeType = this.recordingChunks[0].type;
+    // Sometimes in iOS Safari, Blobs (especially the first Blob in the recordingChunks Array)
+    // have empty 'type' attributes (e.g. '') so we need to find a Blob that has a defined 'type'
+    // attribute in order to determine the correct MIME type.
+    var mimeType = this.recordingChunks.find(function (blob) {
+      var _blob$type;
+
+      return ((_blob$type = blob.type) == null ? void 0 : _blob$type.length) > 0;
+    }).type;
     var fileExtension = getFileTypeExtension(mimeType);
 
     if (!fileExtension) {
@@ -40271,7 +41212,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     return Promise.resolve(file);
   };
 
-  _proto._focus = function _focus() {
+  _proto.focus = function focus() {
     var _this8 = this;
 
     if (!this.opts.countdown) return;
@@ -40280,10 +41221,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     }, 1000);
   };
 
-  _proto._changeVideoSource = function _changeVideoSource(deviceId) {
-    this._stop();
-
-    this._start({
+  _proto.changeVideoSource = function changeVideoSource(deviceId) {
+    this.stop();
+    this.start({
       deviceId: deviceId
     });
   };
@@ -40302,7 +41242,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
   _proto.render = function render() {
     if (!this.webcamActive) {
-      this._start();
+      this.start();
     }
 
     var webcamState = this.getPluginState();
@@ -40315,13 +41255,16 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       });
     }
 
-    return h(CameraScreen, _extends({}, webcamState, {
-      onChangeVideoSource: this._changeVideoSource,
-      onSnapshot: this._takeSnapshot,
-      onStartRecording: this._startRecording,
-      onStopRecording: this._stopRecording,
-      onFocus: this._focus,
-      onStop: this._stop,
+    return h(CameraScreen // eslint-disable-next-line react/jsx-props-no-spreading
+    , _extends({}, webcamState, {
+      onChangeVideoSource: this.changeVideoSource,
+      onSnapshot: this.takeSnapshot,
+      onStartRecording: this.startRecording,
+      onStopRecording: this.stopRecording,
+      onDiscardRecordedVideo: this.discardRecordedVideo,
+      onSubmit: this.submit,
+      onFocus: this.focus,
+      onStop: this.stop,
       i18n: this.i18n,
       modes: this.opts.modes,
       showRecordingLength: this.opts.showRecordingLength,
@@ -40349,7 +41292,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
     if (this.mediaDevices) {
       this.updateVideoSources();
 
-      this.mediaDevices.ondevicechange = function (event) {
+      this.mediaDevices.ondevicechange = function () {
         _this10.updateVideoSources();
 
         if (_this10.stream) {
@@ -40366,9 +41309,9 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
           });
 
           if (restartStream) {
-            _this10._stop();
+            _this10.stop();
 
-            _this10._start();
+            _this10.start();
           }
         }
       };
@@ -40377,26 +41320,30 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
   _proto.uninstall = function uninstall() {
     if (this.stream) {
-      this._stop();
+      this.stop();
     }
 
     this.unmount();
   };
 
   return Webcam;
-}(Plugin), _class.VERSION = "1.8.5", _temp);
-},{"./CameraIcon":239,"./CameraScreen":240,"./PermissionsScreen":241,"./supportsMediaRecorder":248,"@uppy/core":84,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/canvasToBlob":205,"@uppy/utils/lib/getFileTypeExtension":221,"@uppy/utils/lib/mimeTypes":232,"preact":38}],248:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.8.13", _temp);
+},{"./CameraIcon":254,"./CameraScreen":255,"./PermissionsScreen":257,"./supportsMediaRecorder":265,"@uppy/core":78,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/canvasToBlob":219,"@uppy/utils/lib/getFileTypeExtension":236,"@uppy/utils/lib/mimeTypes":247,"preact":266}],265:[function(require,module,exports){
 module.exports = function supportsMediaRecorder() {
   /* eslint-disable compat/compat */
   return typeof MediaRecorder === 'function' && !!MediaRecorder.prototype && typeof MediaRecorder.prototype.start === 'function';
   /* eslint-enable compat/compat */
 };
-},{}],249:[function(require,module,exports){
+},{}],266:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],267:[function(require,module,exports){
 var _class, _temp;
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -40709,11 +41656,12 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         }
 
         if (opts.validateStatus(ev.target.status, xhr.responseText, xhr)) {
-          var body = opts.getResponseData(xhr.responseText, xhr);
-          var uploadURL = body[opts.responseUrlFieldName];
+          var _body = opts.getResponseData(xhr.responseText, xhr);
+
+          var uploadURL = _body[opts.responseUrlFieldName];
           var uploadResp = {
             status: ev.target.status,
-            body: body,
+            body: _body,
             uploadURL: uploadURL
           };
 
@@ -40724,19 +41672,18 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
           }
 
           return resolve(file);
-        } else {
-          var _body = opts.getResponseData(xhr.responseText, xhr);
-
-          var error = buildResponseError(xhr, opts.getResponseError(xhr.responseText, xhr));
-          var response = {
-            status: ev.target.status,
-            body: _body
-          };
-
-          _this3.uppy.emit('upload-error', file, error, response);
-
-          return reject(error);
         }
+
+        var body = opts.getResponseData(xhr.responseText, xhr);
+        var error = buildResponseError(xhr, opts.getResponseError(xhr.responseText, xhr));
+        var response = {
+          status: ev.target.status,
+          body: body
+        };
+
+        _this3.uppy.emit('upload-error', file, error, response);
+
+        return reject(error);
       });
       xhr.addEventListener('error', function (ev) {
         _this3.uppy.log("[XHRUpload] " + id + " errored");
@@ -40765,11 +41712,16 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         xhr.responseType = opts.responseType;
       }
 
-      Object.keys(opts.headers).forEach(function (header) {
-        xhr.setRequestHeader(header, opts.headers[header]);
-      });
-
       var queuedRequest = _this3.requests.run(function () {
+        // When using an authentication system like JWT, the bearer token goes as a header. This
+        // header needs to be fresh each time the token is refreshed so computing and setting the
+        // headers just before the upload starts enables this kind of authentication to work properly.
+        // Otherwise, half-way through the list of uploads the token could be stale and the upload would fail.
+        var currentOpts = _this3.getOptions(file);
+
+        Object.keys(currentOpts.headers).forEach(function (header) {
+          xhr.setRequestHeader(header, currentOpts.headers[header]);
+        });
         xhr.send(data);
         return function () {
           timer.done();
@@ -41009,11 +41961,13 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
 
       if (file.error) {
         return Promise.reject(new Error(file.error));
-      } else if (file.isRemote) {
-        return _this6.uploadRemote(file, current, total);
-      } else {
-        return _this6.upload(file, current, total);
       }
+
+      if (file.isRemote) {
+        return _this6.uploadRemote(file, current, total);
+      }
+
+      return _this6.upload(file, current, total);
     });
     return settle(promises);
   };
@@ -41121,15 +42075,15 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
   };
 
   return XHRUpload;
-}(Plugin), _class.VERSION = "1.7.0", _temp);
-},{"@uppy/companion-client":81,"@uppy/core":84,"@uppy/utils/lib/EventTracker":199,"@uppy/utils/lib/NetworkError":201,"@uppy/utils/lib/ProgressTimeout":202,"@uppy/utils/lib/RateLimitedQueue":203,"@uppy/utils/lib/Translator":204,"@uppy/utils/lib/emitSocketProgress":208,"@uppy/utils/lib/getSocketHost":222,"@uppy/utils/lib/isNetworkError":229,"@uppy/utils/lib/settle":236,"cuid":16}],250:[function(require,module,exports){
+}(Plugin), _class.VERSION = "1.7.5", _temp);
+},{"@uppy/companion-client":75,"@uppy/core":78,"@uppy/utils/lib/EventTracker":213,"@uppy/utils/lib/NetworkError":215,"@uppy/utils/lib/ProgressTimeout":216,"@uppy/utils/lib/RateLimitedQueue":217,"@uppy/utils/lib/Translator":218,"@uppy/utils/lib/emitSocketProgress":222,"@uppy/utils/lib/getSocketHost":237,"@uppy/utils/lib/isNetworkError":244,"@uppy/utils/lib/settle":251,"cuid":15}],268:[function(require,module,exports){
 require('es6-promise/auto');
 
 require('whatwg-fetch');
 
 module.exports = require('./');
 
-},{"./":251,"es6-promise/auto":20,"whatwg-fetch":67}],251:[function(require,module,exports){
+},{"./":269,"es6-promise/auto":22,"whatwg-fetch":60}],269:[function(require,module,exports){
 // Core
 exports.Core = require('@uppy/core');
 exports.debugLogger = exports.Core.debugLogger; // Utilities
@@ -41144,6 +42098,7 @@ exports.ReduxStore = require('@uppy/store-redux'); // UI plugins
 
 exports.Dashboard = require('@uppy/dashboard');
 exports.DragDrop = require('@uppy/drag-drop');
+exports.DropTarget = require('@uppy/drop-target');
 exports.FileInput = require('@uppy/file-input');
 exports.Informer = require('@uppy/informer');
 exports.ProgressBar = require('@uppy/progress-bar');
@@ -41173,6 +42128,6 @@ exports.ReduxDevTools = require('@uppy/redux-dev-tools');
 exports.ThumbnailGenerator = require('@uppy/thumbnail-generator');
 exports.locales = {};
 
-},{"@uppy/aws-s3":73,"@uppy/aws-s3-multipart":71,"@uppy/box":75,"@uppy/companion-client":81,"@uppy/core":84,"@uppy/dashboard":103,"@uppy/drag-drop":110,"@uppy/dropbox":111,"@uppy/facebook":112,"@uppy/file-input":113,"@uppy/form":114,"@uppy/golden-retriever":118,"@uppy/google-drive":120,"@uppy/image-editor":122,"@uppy/informer":123,"@uppy/instagram":124,"@uppy/onedrive":125,"@uppy/progress-bar":126,"@uppy/provider-views":148,"@uppy/redux-dev-tools":149,"@uppy/screen-capture":156,"@uppy/status-bar":159,"@uppy/store-default":160,"@uppy/store-redux":161,"@uppy/thumbnail-generator":162,"@uppy/transloadit":168,"@uppy/tus":193,"@uppy/unsplash":194,"@uppy/url":196,"@uppy/webcam":247,"@uppy/xhr-upload":249}]},{},[250])(250)
+},{"@uppy/aws-s3":66,"@uppy/aws-s3-multipart":64,"@uppy/box":68,"@uppy/companion-client":75,"@uppy/core":78,"@uppy/dashboard":98,"@uppy/drag-drop":106,"@uppy/drop-target":108,"@uppy/dropbox":109,"@uppy/facebook":111,"@uppy/file-input":113,"@uppy/form":115,"@uppy/golden-retriever":119,"@uppy/google-drive":121,"@uppy/image-editor":124,"@uppy/informer":126,"@uppy/instagram":128,"@uppy/onedrive":130,"@uppy/progress-bar":132,"@uppy/provider-views":155,"@uppy/redux-dev-tools":157,"@uppy/screen-capture":164,"@uppy/status-bar":168,"@uppy/store-default":170,"@uppy/store-redux":171,"@uppy/thumbnail-generator":172,"@uppy/transloadit":177,"@uppy/tus":205,"@uppy/unsplash":206,"@uppy/url":209,"@uppy/webcam":264,"@uppy/xhr-upload":267}]},{},[268])(268)
 });
 //# sourceMappingURL=uppy.js.map

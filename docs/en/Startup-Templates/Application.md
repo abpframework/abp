@@ -6,7 +6,7 @@ This template provides a layered application structure based on the [Domain Driv
 
 This document explains **the solution structure** and projects in details. If you want to start quickly, follow the guides below:
 
-* [The getting started document](../Getting-Started-With-Startup-Templates.md) explains how to create a new application in a few minutes.
+* [The getting started document](../Getting-Started.md) explains how to create a new application in a few minutes.
 * [The application development tutorial](../Tutorials/Part-1) explains step by step application development.
 
 ## How to Start With?
@@ -410,7 +410,7 @@ Actions, reducers, sagas, selectors are created in the `src/store` folder. Store
 
 #### Theming
 
-[Native Base](https://nativebase.io/) is used as UI components library. Native Base components can customize easily. See the [Native Base customize](https://docs.nativebase.io/Customize.html#Customize) documentation. We followed the same way.
+[Native Base](https://nativebase.io/) is used as UI components library. Native Base components can customize easily. See the [Native Base customize](https://docs.nativebase.io/customizing-components) documentation. We followed the same way.
 
 * Native Base theme variables are in the `src/theme/variables` folder.
 * Native Base component styles are in the `src/theme/components` folder. These files have been generated with Native Base's `ejectTheme` script.

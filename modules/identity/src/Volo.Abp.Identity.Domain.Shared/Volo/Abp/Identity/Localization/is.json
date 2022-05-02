@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Lykilorðinu þínu hefur verið breytt.",
     "PersonalSettingsSavedMessage": "Stillingarnar þínar hafa verið vistaðar",
     "Volo.Abp.Identity:DefaultError": "Óþekkt villa hefur komið upp.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Bjartsýn samhliða bilun, hlut hefur verið breytt.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Bjartsýn samhliðaskoðun hefur mistekist. Einingin sem þú ert að vinna á hefur breytt af öðrum notanda. Vinsamlegast fargaðu breytingunum og reyndu aftur.",
     "Volo.Abp.Identity:DuplicateEmail": "Netfang '{0}' er nú þegar í notkun.",
     "Volo.Abp.Identity:DuplicateRoleName": "Hlutverkanafn '{0}' nú þegar til.",
     "Volo.Abp.Identity:DuplicateUserName": "Notandanafn '{0}' er nú þegar í notkun.",

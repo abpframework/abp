@@ -93,6 +93,8 @@ Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
 {{ if UI == "MVC" || UI == "BlazorServer" }}
 
+> Before starting the application, run `abp install-libs` command in your Web directory to restore the client-side libraries. This will populate the `libs` folder.
+
 {{ if Tiered == "Yes" }}
 
 > Tiered solutions use **Redis** as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
