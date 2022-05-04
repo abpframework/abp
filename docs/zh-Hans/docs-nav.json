@@ -263,6 +263,10 @@
           "path": "Data-Seeding.md"
         },
         {
+          "text": "分布式锁",
+          "path": "Distributed-Locking.md"
+        },
+        {
           "text": "虚拟文件系统",
           "path": "Virtual-File-System.md"
         },
@@ -693,6 +697,16 @@
     {
       "text": "测试",
       "path": "Testing.md"
+    },
+    {
+      "text": "部署",
+      "path": "Deployment/Index.md",
+      "items": [
+        {
+          "text": "部署到群集环境",
+          "path": "Deployment/Clustered-Environment.md"
+        }
+      ]
     },
     {
       "text": "示例",
