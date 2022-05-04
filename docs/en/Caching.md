@@ -2,7 +2,7 @@
 
 ABP Framework extends the [ASP.NET Core distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
 
-> **Default implementation of the `IDistributedCache` interface is the `MemoryDistributedCache` which works in-memory.** See [ASP.NET Core's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) to see how to switch to Redis or another cache provider. Also, see the [Redis Cache](Redis-Cache.md) document if you want to use the Redis as the distributed cache server.
+> **Default implementation of the `IDistributedCache` interface is` MemoryDistributedCache` which works in-memory.** See [ASP.NET Core's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) to see how to switch to Redis or another cache provider. Also, see the [Redis Cache](Redis-Cache.md) document if you want to use Redis as the distributed cache server.
 
 ## Installation
 
