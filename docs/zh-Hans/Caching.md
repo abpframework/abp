@@ -47,7 +47,7 @@ ASP.NET Core 定义了 `IDistributedCache` 接口用于 get/set 缓存值 . 但�
 
 ABP框架在[Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching/)包定义了通用的泛型 `IDistributedCache<TCacheItem>` 接口. `TCacheItem` 是存储在缓存中的对象类型.
 
-`IDistributedCache<TCacheItem>` 接口了上述中的问题;
+`IDistributedCache<TCacheItem>` 解决了上述中的问题;
 
 * 它在内部 **序列化/反序列化** 缓存对象. 默认使用 **JSON** 序列化, 但可以替换[依赖注入](Dependency-Injection.md)系统中 `IDistributedCacheSerializer` 服务的实现来覆盖默认的处理.
 * 它根据缓存中对象类型自动向缓存key添加 **缓存名称** 前缀. 默认缓存名是缓存对象类的全名(如果你的类名以`CacheItem` 结尾, 那么`CacheItem` 会被忽略,不应用到缓存名称上). 你也可以在缓存类上使用 `CacheName` 设置换缓存的名称.
