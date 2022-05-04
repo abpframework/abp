@@ -374,7 +374,8 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                         .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -1121,7 +1122,8 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                         .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<string>("Name")
                         .HasMaxLength(64)

@@ -6,15 +6,15 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.CmsKit.EntityFrameworkCore;
+using Volo.BloggingTestApp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace Volo.CmsKit.Migrations
+namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
 {
-    [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20220225084616_Initial")]
-    partial class Initial
+    [DbContext(typeof(BloggingTestAppDbContext))]
+    [Migration("20220504031950_Add_IsActive_To_BlogUser")]
+    partial class Add_IsActive_To_BlogUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,268 +25,6 @@ namespace Volo.CmsKit.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationName")
-                        .HasMaxLength(96)
-                        .HasColumnType("nvarchar(96)")
-                        .HasColumnName("ApplicationName");
-
-                    b.Property<string>("BrowserInfo")
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)")
-                        .HasColumnName("BrowserInfo");
-
-                    b.Property<string>("ClientId")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("ClientId");
-
-                    b.Property<string>("ClientIpAddress")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("ClientIpAddress");
-
-                    b.Property<string>("ClientName")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
-                        .HasColumnName("ClientName");
-
-                    b.Property<string>("Comments")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("Comments");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<string>("CorrelationId")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("CorrelationId");
-
-                    b.Property<string>("Exceptions")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ExecutionDuration")
-                        .HasColumnType("int")
-                        .HasColumnName("ExecutionDuration");
-
-                    b.Property<DateTime>("ExecutionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<string>("HttpMethod")
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)")
-                        .HasColumnName("HttpMethod");
-
-                    b.Property<int?>("HttpStatusCode")
-                        .HasColumnType("int")
-                        .HasColumnName("HttpStatusCode");
-
-                    b.Property<Guid?>("ImpersonatorTenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ImpersonatorTenantId");
-
-                    b.Property<string>("ImpersonatorTenantName")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("ImpersonatorTenantName");
-
-                    b.Property<Guid?>("ImpersonatorUserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ImpersonatorUserId");
-
-                    b.Property<string>("ImpersonatorUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("ImpersonatorUserName");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.Property<string>("TenantName")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("TenantName");
-
-                    b.Property<string>("Url")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("Url");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("UserId");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("UserName");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId", "ExecutionTime");
-
-                    b.HasIndex("TenantId", "UserId", "ExecutionTime");
-
-                    b.ToTable("AbpAuditLogs", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AuditLogId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("AuditLogId");
-
-                    b.Property<int>("ExecutionDuration")
-                        .HasColumnType("int")
-                        .HasColumnName("ExecutionDuration");
-
-                    b.Property<DateTime>("ExecutionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ExecutionTime");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<string>("MethodName")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
-                        .HasColumnName("MethodName");
-
-                    b.Property<string>("Parameters")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)")
-                        .HasColumnName("Parameters");
-
-                    b.Property<string>("ServiceName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("ServiceName");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuditLogId");
-
-                    b.HasIndex("TenantId", "ServiceName", "MethodName", "ExecutionTime");
-
-                    b.ToTable("AbpAuditLogActions", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AuditLogId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("AuditLogId");
-
-                    b.Property<DateTime>("ChangeTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ChangeTime");
-
-                    b.Property<byte>("ChangeType")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("ChangeType");
-
-                    b.Property<string>("EntityId")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
-                        .HasColumnName("EntityId");
-
-                    b.Property<Guid?>("EntityTenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("EntityTypeFullName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
-                        .HasColumnName("EntityTypeFullName");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuditLogId");
-
-                    b.HasIndex("TenantId", "EntityTypeFullName", "EntityId");
-
-                    b.ToTable("AbpEntityChanges", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EntityChangeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("NewValue")
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)")
-                        .HasColumnName("NewValue");
-
-                    b.Property<string>("OriginalValue")
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)")
-                        .HasColumnName("OriginalValue");
-
-                    b.Property<string>("PropertyName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
-                        .HasColumnName("PropertyName");
-
-                    b.Property<string>("PropertyTypeFullName")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("PropertyTypeFullName");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EntityChangeId");
-
-                    b.ToTable("AbpEntityPropertyChanges", (string)null);
-                });
 
             modelBuilder.Entity("Volo.Abp.BlobStoring.Database.DatabaseBlob", b =>
                 {
@@ -359,39 +97,6 @@ namespace Volo.CmsKit.Migrations
                     b.HasIndex("TenantId", "Name");
 
                     b.ToTable("AbpBlobContainers", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureValue", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("ProviderName")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name", "ProviderName", "ProviderKey")
-                        .IsUnique()
-                        .HasFilter("[ProviderName] IS NOT NULL AND [ProviderKey] IS NOT NULL");
-
-                    b.ToTable("AbpFeatureValues", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
@@ -671,7 +376,8 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -1071,7 +777,7 @@ namespace Volo.CmsKit.Migrations
                     b.ToTable("AbpSettings", (string)null);
                 });
 
-            modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
+            modelBuilder.Entity("Volo.Blogging.Blogs.Blog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1099,82 +805,10 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
 
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name");
-
-                    b.ToTable("AbpTenants", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.TenantManagement.TenantConnectionString", b =>
-                {
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
+                    b.Property<string>("Description")
                         .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
-                    b.HasKey("TenantId", "Name");
-
-                    b.ToTable("AbpTenantConnectionStrings", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.Blogs.Blog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DeletionTime");
+                        .HasColumnType("nvarchar(1024)")
+                        .HasColumnName("Description");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
@@ -1196,30 +830,25 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Name");
 
-                    b.Property<string>("Slug")
+                    b.Property<string>("ShortName")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)")
+                        .HasColumnName("ShortName");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CmsBlogs", (string)null);
+                    b.ToTable("BlgBlogs", (string)null);
                 });
 
-            modelBuilder.Entity("Volo.CmsKit.Blogs.BlogFeature", b =>
+            modelBuilder.Entity("Volo.Blogging.Comments.Comment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BlogId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1227,78 +856,6 @@ namespace Volo.CmsKit.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<string>("FeatureName")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<bool>("IsEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CmsBlogFeatures", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.Blogs.BlogPost", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BlogId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<string>("Content")
-                        .HasMaxLength(2147483647)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CoverImageMediaId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -1334,293 +891,38 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<string>("ShortDescription")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<Guid?>("TenantId")
+                    b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("Slug", "BlogId");
-
-                    b.ToTable("CmsBlogPosts", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.Comments.Comment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<string>("EntityId")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("EntityType")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
+                        .HasColumnName("PostId");
 
                     b.Property<Guid?>("RepliedCommentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
+                        .HasColumnName("RepliedCommentId");
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId", "RepliedCommentId");
-
-                    b.HasIndex("TenantId", "EntityType", "EntityId");
-
-                    b.ToTable("CmsComments", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.GlobalResources.GlobalResource", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(2147483647)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CmsGlobalResources", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.MediaDescriptors.MediaDescriptor", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("EntityType")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("MimeType")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<long>("Size")
-                        .HasMaxLength(2147483647)
-                        .HasColumnType("bigint");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CmsMediaDescriptors", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.Menus.MenuItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<string>("CssClass")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("ElementId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("PageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Target")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
                         .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasColumnType("nvarchar(1024)")
+                        .HasColumnName("Text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CmsMenuItems", (string)null);
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("RepliedCommentId");
+
+                    b.ToTable("BlgComments", (string)null);
                 });
 
-            modelBuilder.Entity("Volo.CmsKit.Pages.Page", b =>
+            modelBuilder.Entity("Volo.Blogging.Posts.Post", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BlogId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("BlogId");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -1629,8 +931,14 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<string>("Content")
-                        .HasMaxLength(2147483647)
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1048576)
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Content");
+
+                    b.Property<string>("CoverImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CoverImage");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -1647,6 +955,11 @@ namespace Volo.CmsKit.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("Description");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
@@ -1666,135 +979,60 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<string>("Script")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Style")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
+                    b.Property<int>("ReadCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)")
+                        .HasColumnName("Title");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)")
+                        .HasColumnName("Url");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId", "Slug");
+                    b.HasIndex("BlogId");
 
-                    b.ToTable("CmsPages", (string)null);
+                    b.ToTable("BlgPosts", (string)null);
                 });
 
-            modelBuilder.Entity("Volo.CmsKit.Ratings.Rating", b =>
+            modelBuilder.Entity("Volo.Blogging.Posts.PostTag", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid>("CreatorId")
+                    b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<string>("EntityId")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("EntityType")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<short>("StarCount")
-                        .HasColumnType("smallint");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId", "EntityType", "EntityId", "CreatorId");
-
-                    b.ToTable("CmsRatings", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.Reactions.UserReaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<string>("EntityId")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("EntityType")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("ReactionName")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId", "EntityType", "EntityId", "ReactionName");
-
-                    b.HasIndex("TenantId", "CreatorId", "EntityType", "EntityId", "ReactionName");
-
-                    b.ToTable("CmsUserReactions", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.Tags.EntityTag", b =>
-                {
-                    b.Property<string>("EntityId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnName("PostId");
 
                     b.Property<Guid>("TagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
+                        .HasColumnName("TagId");
 
-                    b.HasKey("EntityId", "TagId");
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
 
-                    b.HasIndex("TenantId", "EntityId", "TagId");
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
 
-                    b.ToTable("CmsEntityTags", (string)null);
+                    b.HasKey("PostId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("BlgPostTags", (string)null);
                 });
 
-            modelBuilder.Entity("Volo.CmsKit.Tags.Tag", b =>
+            modelBuilder.Entity("Volo.Blogging.Tagging.Tag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BlogId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1819,10 +1057,10 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
 
-                    b.Property<string>("EntityType")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                    b.Property<string>("Description")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)")
+                        .HasColumnName("Description");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
@@ -1844,21 +1082,20 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)")
+                        .HasColumnName("Name");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
+                    b.Property<int>("UsageCount")
+                        .HasColumnType("int")
+                        .HasColumnName("UsageCount");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId", "Name");
-
-                    b.ToTable("CmsTags", (string)null);
+                    b.ToTable("BlgTags", (string)null);
                 });
 
-            modelBuilder.Entity("Volo.CmsKit.Users.CmsUser", b =>
+            modelBuilder.Entity("Volo.Blogging.Users.BlogUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1885,6 +1122,10 @@ namespace Volo.CmsKit.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<string>("Name")
                         .HasMaxLength(64)
@@ -1919,38 +1160,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId", "Email");
-
-                    b.HasIndex("TenantId", "UserName");
-
-                    b.ToTable("CmsUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
-                {
-                    b.HasOne("Volo.Abp.AuditLogging.AuditLog", null)
-                        .WithMany("Actions")
-                        .HasForeignKey("AuditLogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
-                {
-                    b.HasOne("Volo.Abp.AuditLogging.AuditLog", null)
-                        .WithMany("EntityChanges")
-                        .HasForeignKey("AuditLogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
-                {
-                    b.HasOne("Volo.Abp.AuditLogging.EntityChange", null)
-                        .WithMany("PropertyChanges")
-                        .HasForeignKey("EntityChangeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("BlgUsers", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.BlobStoring.Database.DatabaseBlob", b =>
@@ -2050,36 +1260,41 @@ namespace Volo.CmsKit.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Volo.Abp.TenantManagement.TenantConnectionString", b =>
+            modelBuilder.Entity("Volo.Blogging.Comments.Comment", b =>
                 {
-                    b.HasOne("Volo.Abp.TenantManagement.Tenant", null)
-                        .WithMany("ConnectionStrings")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.Blogs.BlogPost", b =>
-                {
-                    b.HasOne("Volo.CmsKit.Users.CmsUser", "Author")
+                    b.HasOne("Volo.Blogging.Posts.Post", null)
                         .WithMany()
-                        .HasForeignKey("AuthorId")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Author");
+                    b.HasOne("Volo.Blogging.Comments.Comment", null)
+                        .WithMany()
+                        .HasForeignKey("RepliedCommentId");
                 });
 
-            modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
+            modelBuilder.Entity("Volo.Blogging.Posts.Post", b =>
                 {
-                    b.Navigation("Actions");
-
-                    b.Navigation("EntityChanges");
+                    b.HasOne("Volo.Blogging.Blogs.Blog", null)
+                        .WithMany()
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
+            modelBuilder.Entity("Volo.Blogging.Posts.PostTag", b =>
                 {
-                    b.Navigation("PropertyChanges");
+                    b.HasOne("Volo.Blogging.Posts.Post", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Volo.Blogging.Tagging.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
@@ -2105,9 +1320,9 @@ namespace Volo.CmsKit.Migrations
                     b.Navigation("Roles");
                 });
 
-            modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
+            modelBuilder.Entity("Volo.Blogging.Posts.Post", b =>
                 {
-                    b.Navigation("ConnectionStrings");
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

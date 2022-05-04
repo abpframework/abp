@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Migrations
+namespace Volo.CmsKit.Migrations
 {
     public partial class Initial : Migration
     {
@@ -41,6 +41,21 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpAuditLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpBlobContainers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBlobContainers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -256,16 +271,13 @@ namespace MyCompanyName.MyProjectName.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IdentityServerApiResources",
+                name: "CmsBlogFeatures",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    AllowedAccessTokenSigningAlgorithms = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
+                    BlogId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FeatureName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    IsEnabled = table.Column<bool>(type: "bit", nullable: false),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -278,21 +290,17 @@ namespace MyCompanyName.MyProjectName.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityServerApiResources", x => x.Id);
+                    table.PrimaryKey("PK_CmsBlogFeatures", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "IdentityServerApiScopes",
+                name: "CmsBlogs",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Required = table.Column<bool>(type: "bit", nullable: false),
-                    Emphasize = table.Column<bool>(type: "bit", nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -305,139 +313,218 @@ namespace MyCompanyName.MyProjectName.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityServerApiScopes", x => x.Id);
+                    table.PrimaryKey("PK_CmsBlogs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "IdentityServerClients",
+                name: "CmsComments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ClientName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    ClientUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    LogoUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    ProtocolType = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    RequireClientSecret = table.Column<bool>(type: "bit", nullable: false),
-                    RequireConsent = table.Column<bool>(type: "bit", nullable: false),
-                    AllowRememberConsent = table.Column<bool>(type: "bit", nullable: false),
-                    AlwaysIncludeUserClaimsInIdToken = table.Column<bool>(type: "bit", nullable: false),
-                    RequirePkce = table.Column<bool>(type: "bit", nullable: false),
-                    AllowPlainTextPkce = table.Column<bool>(type: "bit", nullable: false),
-                    RequireRequestObject = table.Column<bool>(type: "bit", nullable: false),
-                    AllowAccessTokensViaBrowser = table.Column<bool>(type: "bit", nullable: false),
-                    FrontChannelLogoutUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    FrontChannelLogoutSessionRequired = table.Column<bool>(type: "bit", nullable: false),
-                    BackChannelLogoutUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    BackChannelLogoutSessionRequired = table.Column<bool>(type: "bit", nullable: false),
-                    AllowOfflineAccess = table.Column<bool>(type: "bit", nullable: false),
-                    IdentityTokenLifetime = table.Column<int>(type: "int", nullable: false),
-                    AllowedIdentityTokenSigningAlgorithms = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    AccessTokenLifetime = table.Column<int>(type: "int", nullable: false),
-                    AuthorizationCodeLifetime = table.Column<int>(type: "int", nullable: false),
-                    ConsentLifetime = table.Column<int>(type: "int", nullable: true),
-                    AbsoluteRefreshTokenLifetime = table.Column<int>(type: "int", nullable: false),
-                    SlidingRefreshTokenLifetime = table.Column<int>(type: "int", nullable: false),
-                    RefreshTokenUsage = table.Column<int>(type: "int", nullable: false),
-                    UpdateAccessTokenClaimsOnRefresh = table.Column<bool>(type: "bit", nullable: false),
-                    RefreshTokenExpiration = table.Column<int>(type: "int", nullable: false),
-                    AccessTokenType = table.Column<int>(type: "int", nullable: false),
-                    EnableLocalLogin = table.Column<bool>(type: "bit", nullable: false),
-                    IncludeJwtId = table.Column<bool>(type: "bit", nullable: false),
-                    AlwaysSendClientClaims = table.Column<bool>(type: "bit", nullable: false),
-                    ClientClaimsPrefix = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    PairWiseSubjectSalt = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    UserSsoLifetime = table.Column<int>(type: "int", nullable: true),
-                    UserCodeType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DeviceCodeLifetime = table.Column<int>(type: "int", nullable: false),
-                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EntityType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    RepliedCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerClients", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerDeviceFlowCodes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DeviceCode = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    UserCode = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    SubjectId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    SessionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false),
-                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerDeviceFlowCodes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerIdentityResources",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    Required = table.Column<bool>(type: "bit", nullable: false),
-                    Emphasize = table.Column<bool>(type: "bit", nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
-                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerIdentityResources", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerPersistedGrants",
-                columns: table => new
-                {
-                    Key = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    SubjectId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    SessionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ConsumedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityServerPersistedGrants", x => x.Key);
+                    table.PrimaryKey("PK_CmsComments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsEntityTags",
+                columns: table => new
+                {
+                    TagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsEntityTags", x => new { x.EntityId, x.TagId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsGlobalResources",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsGlobalResources", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsMediaDescriptors",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EntityType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    MimeType = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Size = table.Column<long>(type: "bigint", maxLength: 2147483647, nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsMediaDescriptors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsMenuItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    Target = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ElementId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CssClass = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsMenuItems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsPages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
+                    Script = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsPages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsRatings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EntityType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    StarCount = table.Column<short>(type: "smallint", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsRatings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsTags",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EntityType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsTags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsUserReactions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EntityType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    ReactionName = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsUserReactions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -486,6 +573,29 @@ namespace MyCompanyName.MyProjectName.Migrations
                         name: "FK_AbpEntityChanges_AbpAuditLogs_AuditLogId",
                         column: x => x.AuditLogId,
                         principalTable: "AbpAuditLogs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpBlobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ContainerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Content = table.Column<byte[]>(type: "varbinary(max)", maxLength: 2147483647, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBlobs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AbpBlobs_AbpBlobContainers_ContainerId",
+                        column: x => x.ContainerId,
+                        principalTable: "AbpBlobContainers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -673,318 +783,36 @@ namespace MyCompanyName.MyProjectName.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IdentityServerApiResourceClaims",
+                name: "CmsBlogPosts",
                 columns: table => new
                 {
-                    Type = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BlogId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ShortDescription = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
+                    CoverImageMediaId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityServerApiResourceClaims", x => new { x.ApiResourceId, x.Type });
+                    table.PrimaryKey("PK_CmsBlogPosts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_IdentityServerApiResourceClaims_IdentityServerApiResources_ApiResourceId",
-                        column: x => x.ApiResourceId,
-                        principalTable: "IdentityServerApiResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerApiResourceProperties",
-                columns: table => new
-                {
-                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerApiResourceProperties", x => new { x.ApiResourceId, x.Key, x.Value });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerApiResourceProperties_IdentityServerApiResources_ApiResourceId",
-                        column: x => x.ApiResourceId,
-                        principalTable: "IdentityServerApiResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerApiResourceScopes",
-                columns: table => new
-                {
-                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Scope = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerApiResourceScopes", x => new { x.ApiResourceId, x.Scope });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerApiResourceScopes_IdentityServerApiResources_ApiResourceId",
-                        column: x => x.ApiResourceId,
-                        principalTable: "IdentityServerApiResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerApiResourceSecrets",
-                columns: table => new
-                {
-                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
-                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerApiResourceSecrets", x => new { x.ApiResourceId, x.Type, x.Value });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerApiResourceSecrets_IdentityServerApiResources_ApiResourceId",
-                        column: x => x.ApiResourceId,
-                        principalTable: "IdentityServerApiResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerApiScopeClaims",
-                columns: table => new
-                {
-                    Type = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ApiScopeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerApiScopeClaims", x => new { x.ApiScopeId, x.Type });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerApiScopeClaims_IdentityServerApiScopes_ApiScopeId",
-                        column: x => x.ApiScopeId,
-                        principalTable: "IdentityServerApiScopes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerApiScopeProperties",
-                columns: table => new
-                {
-                    ApiScopeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerApiScopeProperties", x => new { x.ApiScopeId, x.Key, x.Value });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerApiScopeProperties_IdentityServerApiScopes_ApiScopeId",
-                        column: x => x.ApiScopeId,
-                        principalTable: "IdentityServerApiScopes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerClientClaims",
-                columns: table => new
-                {
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerClientClaims", x => new { x.ClientId, x.Type, x.Value });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerClientClaims_IdentityServerClients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "IdentityServerClients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerClientCorsOrigins",
-                columns: table => new
-                {
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Origin = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerClientCorsOrigins", x => new { x.ClientId, x.Origin });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerClientCorsOrigins_IdentityServerClients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "IdentityServerClients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerClientGrantTypes",
-                columns: table => new
-                {
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GrantType = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerClientGrantTypes", x => new { x.ClientId, x.GrantType });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerClientGrantTypes_IdentityServerClients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "IdentityServerClients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerClientIdPRestrictions",
-                columns: table => new
-                {
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Provider = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerClientIdPRestrictions", x => new { x.ClientId, x.Provider });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerClientIdPRestrictions_IdentityServerClients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "IdentityServerClients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerClientPostLogoutRedirectUris",
-                columns: table => new
-                {
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PostLogoutRedirectUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerClientPostLogoutRedirectUris", x => new { x.ClientId, x.PostLogoutRedirectUri });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerClientPostLogoutRedirectUris_IdentityServerClients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "IdentityServerClients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerClientProperties",
-                columns: table => new
-                {
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerClientProperties", x => new { x.ClientId, x.Key, x.Value });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerClientProperties_IdentityServerClients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "IdentityServerClients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerClientRedirectUris",
-                columns: table => new
-                {
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RedirectUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerClientRedirectUris", x => new { x.ClientId, x.RedirectUri });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerClientRedirectUris_IdentityServerClients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "IdentityServerClients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerClientScopes",
-                columns: table => new
-                {
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Scope = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerClientScopes", x => new { x.ClientId, x.Scope });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerClientScopes_IdentityServerClients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "IdentityServerClients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerClientSecrets",
-                columns: table => new
-                {
-                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerClientSecrets", x => new { x.ClientId, x.Type, x.Value });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerClientSecrets_IdentityServerClients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "IdentityServerClients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerIdentityResourceClaims",
-                columns: table => new
-                {
-                    Type = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    IdentityResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerIdentityResourceClaims", x => new { x.IdentityResourceId, x.Type });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerIdentityResourceClaims_IdentityServerIdentityResources_IdentityResourceId",
-                        column: x => x.IdentityResourceId,
-                        principalTable: "IdentityServerIdentityResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityServerIdentityResourceProperties",
-                columns: table => new
-                {
-                    IdentityResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityServerIdentityResourceProperties", x => new { x.IdentityResourceId, x.Key, x.Value });
-                    table.ForeignKey(
-                        name: "FK_IdentityServerIdentityResourceProperties_IdentityServerIdentityResources_IdentityResourceId",
-                        column: x => x.IdentityResourceId,
-                        principalTable: "IdentityServerIdentityResources",
+                        name: "FK_CmsBlogPosts_CmsUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "CmsUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1031,6 +859,21 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "IX_AbpAuditLogs_TenantId_UserId_ExecutionTime",
                 table: "AbpAuditLogs",
                 columns: new[] { "TenantId", "UserId", "ExecutionTime" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobContainers_TenantId_Name",
+                table: "AbpBlobContainers",
+                columns: new[] { "TenantId", "Name" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobs_ContainerId",
+                table: "AbpBlobs",
+                column: "ContainerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobs_TenantId_ContainerId_Name",
+                table: "AbpBlobs",
+                columns: new[] { "TenantId", "ContainerId", "Name" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
@@ -1166,46 +1009,73 @@ namespace MyCompanyName.MyProjectName.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityServerClients_ClientId",
-                table: "IdentityServerClients",
-                column: "ClientId");
+                name: "IX_CmsBlogPosts_AuthorId",
+                table: "CmsBlogPosts",
+                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityServerDeviceFlowCodes_DeviceCode",
-                table: "IdentityServerDeviceFlowCodes",
-                column: "DeviceCode",
-                unique: true);
+                name: "IX_CmsBlogPosts_Slug_BlogId",
+                table: "CmsBlogPosts",
+                columns: new[] { "Slug", "BlogId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityServerDeviceFlowCodes_Expiration",
-                table: "IdentityServerDeviceFlowCodes",
-                column: "Expiration");
+                name: "IX_CmsComments_TenantId_EntityType_EntityId",
+                table: "CmsComments",
+                columns: new[] { "TenantId", "EntityType", "EntityId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityServerDeviceFlowCodes_UserCode",
-                table: "IdentityServerDeviceFlowCodes",
-                column: "UserCode");
+                name: "IX_CmsComments_TenantId_RepliedCommentId",
+                table: "CmsComments",
+                columns: new[] { "TenantId", "RepliedCommentId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityServerPersistedGrants_Expiration",
-                table: "IdentityServerPersistedGrants",
-                column: "Expiration");
+                name: "IX_CmsEntityTags_TenantId_EntityId_TagId",
+                table: "CmsEntityTags",
+                columns: new[] { "TenantId", "EntityId", "TagId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityServerPersistedGrants_SubjectId_ClientId_Type",
-                table: "IdentityServerPersistedGrants",
-                columns: new[] { "SubjectId", "ClientId", "Type" });
+                name: "IX_CmsPages_TenantId_Slug",
+                table: "CmsPages",
+                columns: new[] { "TenantId", "Slug" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityServerPersistedGrants_SubjectId_SessionId_Type",
-                table: "IdentityServerPersistedGrants",
-                columns: new[] { "SubjectId", "SessionId", "Type" });
+                name: "IX_CmsRatings_TenantId_EntityType_EntityId_CreatorId",
+                table: "CmsRatings",
+                columns: new[] { "TenantId", "EntityType", "EntityId", "CreatorId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsTags_TenantId_Name",
+                table: "CmsTags",
+                columns: new[] { "TenantId", "Name" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUserReactions_TenantId_CreatorId_EntityType_EntityId_ReactionName",
+                table: "CmsUserReactions",
+                columns: new[] { "TenantId", "CreatorId", "EntityType", "EntityId", "ReactionName" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUserReactions_TenantId_EntityType_EntityId_ReactionName",
+                table: "CmsUserReactions",
+                columns: new[] { "TenantId", "EntityType", "EntityId", "ReactionName" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUsers_TenantId_Email",
+                table: "CmsUsers",
+                columns: new[] { "TenantId", "Email" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUsers_TenantId_UserName",
+                table: "CmsUsers",
+                columns: new[] { "TenantId", "UserName" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "AbpAuditLogActions");
+
+            migrationBuilder.DropTable(
+                name: "AbpBlobs");
 
             migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
@@ -1253,61 +1123,43 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "AbpUserTokens");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerApiResourceClaims");
+                name: "CmsBlogFeatures");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerApiResourceProperties");
+                name: "CmsBlogPosts");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerApiResourceScopes");
+                name: "CmsBlogs");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerApiResourceSecrets");
+                name: "CmsComments");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerApiScopeClaims");
+                name: "CmsEntityTags");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerApiScopeProperties");
+                name: "CmsGlobalResources");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerClientClaims");
+                name: "CmsMediaDescriptors");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerClientCorsOrigins");
+                name: "CmsMenuItems");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerClientGrantTypes");
+                name: "CmsPages");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerClientIdPRestrictions");
+                name: "CmsRatings");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerClientPostLogoutRedirectUris");
+                name: "CmsTags");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerClientProperties");
+                name: "CmsUserReactions");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerClientRedirectUris");
-
-            migrationBuilder.DropTable(
-                name: "IdentityServerClientScopes");
-
-            migrationBuilder.DropTable(
-                name: "IdentityServerClientSecrets");
-
-            migrationBuilder.DropTable(
-                name: "IdentityServerDeviceFlowCodes");
-
-            migrationBuilder.DropTable(
-                name: "IdentityServerIdentityResourceClaims");
-
-            migrationBuilder.DropTable(
-                name: "IdentityServerIdentityResourceProperties");
-
-            migrationBuilder.DropTable(
-                name: "IdentityServerPersistedGrants");
+                name: "AbpBlobContainers");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChanges");
@@ -1325,16 +1177,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "AbpUsers");
 
             migrationBuilder.DropTable(
-                name: "IdentityServerApiResources");
-
-            migrationBuilder.DropTable(
-                name: "IdentityServerApiScopes");
-
-            migrationBuilder.DropTable(
-                name: "IdentityServerClients");
-
-            migrationBuilder.DropTable(
-                name: "IdentityServerIdentityResources");
+                name: "CmsUsers");
 
             migrationBuilder.DropTable(
                 name: "AbpAuditLogs");

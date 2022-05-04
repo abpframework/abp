@@ -4,7 +4,7 @@
 
 namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
 {
-    public partial class IsActiveonmodules : Migration
+    public partial class Add_IsActive_To_BlogUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
