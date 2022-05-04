@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Jelszavát sikeresen megváltoztattuk.",
     "PersonalSettingsSavedMessage": "Személyes beállításait sikeresen mentette.",
     "Volo.Abp.Identity:DefaultError": "Ismeretlen hiba történt.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Optimista párhuzamossági hiba, az objektum módosult.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Az optimista párhuzamosság-ellenőrzés sikertelen. Az entitást, amelyen dolgozik, egy másik felhasználó módosította. Kérjük, dobja el a módosításokat, és próbálja újra.",
     "Volo.Abp.Identity:DuplicateEmail": "Az '{0}' email cím már foglalt.",
     "Volo.Abp.Identity:DuplicateRoleName": "Szerepkör neve '{0}' foglalt.",
     "Volo.Abp.Identity:DuplicateUserName": "'{0}' felahsználónév foglalt.",

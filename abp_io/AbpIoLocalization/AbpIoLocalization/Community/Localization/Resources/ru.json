@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "Для создания эффектного поста добавьте фото обложки. Загрузите изображения с соотношением сторон 16: 9 для наилучшего просмотра. Максимальный размер файла: 1 МБ.",
     "ThankYouForContribution": "Спасибо за ваш вклад в сообщество ABP.",
     "GithubPost": "Статья на Github",
-    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\"> 1. </span> Напишите статью в любом общедоступном репозитории GitHub с форматом Markdown. Пример <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Posts/2020-12-04-Event-Organizer/Post.md\"> </a>",
+    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\"> 1. </span> Напишите статью в любом общедоступном репозитории GitHub с форматом Markdown. Пример <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\"> </a>",
     "GithubPostSubmitStepTwo": "<span class=\"font-weight-bold\"> 2. </span> Отправьте URL своей статьи, используя форму.",
     "GithubPostSubmitStepThree": "<span class=\"font-weight-bold\"> 3. </span> Ваша статья будет отображаться на этом веб-сайте.",
     "YoutubeVideo": "YouTube видео",

@@ -7,6 +7,8 @@
         "Volo.CmsKit.Admin.Tags.EntityTagAdminController": {
           "controllerName": "EntityTagAdmin",
           "controllerGroupName": "EntityTagAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Tags.EntityTagAdminController",
           "interfaces": [
             {
@@ -154,6 +156,8 @@
         "Volo.CmsKit.Admin.Tags.TagAdminController": {
           "controllerName": "TagAdmin",
           "controllerGroupName": "TagAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Tags.TagAdminController",
           "interfaces": [
             {
@@ -422,6 +426,8 @@
         "Volo.CmsKit.Admin.Pages.PageAdminController": {
           "controllerName": "PageAdmin",
           "controllerGroupName": "PageAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Pages.PageAdminController",
           "interfaces": [
             {
@@ -675,6 +681,8 @@
         "Volo.CmsKit.Admin.Menus.MenuItemAdminController": {
           "controllerName": "MenuItemAdmin",
           "controllerGroupName": "MenuItemAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Menus.MenuItemAdminController",
           "interfaces": [
             {
@@ -1000,6 +1008,8 @@
         "Volo.CmsKit.Admin.MediaDescriptors.MediaDescriptorAdminController": {
           "controllerName": "MediaDescriptorAdmin",
           "controllerGroupName": "MediaDescriptorAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.Admin.MediaDescriptors.MediaDescriptorAdminController",
           "interfaces": [
             {
@@ -1115,9 +1125,77 @@
             }
           }
         },
+        "Volo.CmsKit.Admin.GlobalResources.GlobalResourceAdminController": {
+          "controllerName": "GlobalResourceAdmin",
+          "controllerGroupName": "GlobalResourceAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
+          "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceAdminController",
+          "interfaces": [
+            {
+              "type": "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService"
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit-admin/global-resources",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesDto",
+                "typeSimple": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService"
+            },
+            "SetGlobalResourcesAsyncByInput": {
+              "uniqueName": "SetGlobalResourcesAsyncByInput",
+              "name": "SetGlobalResourcesAsync",
+              "httpMethod": "POST",
+              "url": "api/cms-kit-admin/global-resources",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesUpdateDto, Volo.CmsKit.Admin.Application.Contracts",
+                  "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesUpdateDto",
+                  "typeSimple": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesUpdateDto",
+                  "typeSimple": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService"
+            }
+          }
+        },
         "Volo.CmsKit.Admin.Comments.CommentAdminController": {
           "controllerName": "CommentAdmin",
           "controllerGroupName": "CommentAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Comments.CommentAdminController",
           "interfaces": [
             {
@@ -1337,6 +1415,8 @@
         "Volo.CmsKit.Admin.Blogs.BlogAdminController": {
           "controllerName": "BlogAdmin",
           "controllerGroupName": "BlogAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Blogs.BlogAdminController",
           "interfaces": [
             {
@@ -1590,6 +1670,8 @@
         "Volo.CmsKit.Admin.Blogs.BlogFeatureAdminController": {
           "controllerName": "BlogFeatureAdmin",
           "controllerGroupName": "BlogFeatureAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Blogs.BlogFeatureAdminController",
           "interfaces": [
             {
@@ -1696,6 +1778,8 @@
         "Volo.CmsKit.Admin.Blogs.BlogPostAdminController": {
           "controllerName": "BlogPostAdmin",
           "controllerGroupName": "BlogPostAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Blogs.BlogPostAdminController",
           "interfaces": [
             {

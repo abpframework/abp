@@ -11,25 +11,25 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components;
 
 public partial class PermissionManagementModal
 {
-    [Inject] private IPermissionAppService PermissionAppService { get; set; }
-    [Inject] private ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
+    [Inject] protected IPermissionAppService PermissionAppService { get; set; }
+    [Inject] protected ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
-    private Modal _modal;
+    protected Modal _modal;
 
-    private string _providerName;
-    private string _providerKey;
+    protected string _providerName;
+    protected string _providerKey;
 
-    private string _entityDisplayName;
-    private List<PermissionGroupDto> _groups;
+    protected string _entityDisplayName;
+    protected List<PermissionGroupDto> _groups;
 
-    private List<PermissionGrantInfoDto> _disabledPermissions = new List<PermissionGrantInfoDto>();
+    protected List<PermissionGrantInfoDto> _disabledPermissions = new List<PermissionGrantInfoDto>();
 
-    private string _selectedTabName;
+    protected string _selectedTabName;
 
-    private int _grantedPermissionCount = 0;
-    private int _notGrantedPermissionCount = 0;
+    protected int _grantedPermissionCount = 0;
+    protected int _notGrantedPermissionCount = 0;
 
-    private bool GrantAll {
+    protected bool GrantAll {
         get {
             if (_notGrantedPermissionCount == 0)
             {
@@ -113,15 +113,16 @@ public partial class PermissionManagementModal
         }
     }
 
-    private Task CloseModal()
+    protected Task CloseModal()
     {
         return InvokeAsync(_modal.Hide);
     }
 
-    private async Task SaveAsync()
+    protected virtual async Task SaveAsync()
     {
         try
         {
+            
             var updateDto = new UpdatePermissionsDto
             {
                 Permissions = _groups
@@ -129,6 +130,14 @@ public partial class PermissionManagementModal
                     .Select(p => new UpdatePermissionDto { IsGranted = p.IsGranted, Name = p.Name })
                     .ToArray()
             };
+            
+            if (!updateDto.Permissions.Any(x => x.IsGranted))
+            {
+                if (!await Message.Confirm(L["RemoveAllPermissionsWarningMessage"].Value))
+                {
+                    return;
+                }
+            }
 
             await PermissionAppService.UpdateAsync(_providerName, _providerKey, updateDto);
 
@@ -142,12 +151,12 @@ public partial class PermissionManagementModal
         }
     }
 
-    private string GetNormalizedGroupName(string name)
+    protected virtual string GetNormalizedGroupName(string name)
     {
         return "PermissionGroup_" + name.Replace(".", "_");
     }
 
-    private void GroupGrantAllChanged(bool value, PermissionGroupDto permissionGroup)
+    protected virtual void GroupGrantAllChanged(bool value, PermissionGroupDto permissionGroup)
     {
         foreach (var permission in permissionGroup.Permissions)
         {
@@ -158,7 +167,7 @@ public partial class PermissionManagementModal
         }
     }
 
-    private void PermissionChanged(bool value, PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
+    protected virtual void PermissionChanged(bool value, PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
     {
         SetPermissionGrant(permission, value);
 
@@ -200,22 +209,22 @@ public partial class PermissionManagementModal
         permission.IsGranted = value;
     }
 
-    private PermissionGrantInfoDto GetParentPermission(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
+    protected PermissionGrantInfoDto GetParentPermission(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
     {
         return permissionGroup.Permissions.First(x => x.Name == permission.ParentName);
     }
 
-    private List<PermissionGrantInfoDto> GetChildPermissions(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
+    protected List<PermissionGrantInfoDto> GetChildPermissions(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
     {
         return permissionGroup.Permissions.Where(x => x.Name.StartsWith(permission.Name)).ToList();
     }
 
-    private bool IsDisabledPermission(PermissionGrantInfoDto permissionGrantInfo)
+    protected bool IsDisabledPermission(PermissionGrantInfoDto permissionGrantInfo)
     {
         return _disabledPermissions.Any(x => x == permissionGrantInfo);
     }
 
-    private string GetShownName(PermissionGrantInfoDto permissionGrantInfo)
+    protected virtual string GetShownName(PermissionGrantInfoDto permissionGrantInfo)
     {
         if (!IsDisabledPermission(permissionGrantInfo))
         {

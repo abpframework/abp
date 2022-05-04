@@ -110,6 +110,7 @@
   /* disable selection/Copy of UIWebView */
   -webkit-touch-callout: none;
   /* disable the IOS popup when long-press on a link */
+  user-select: none;
 }
 .vakata-context {
   display: none;
@@ -161,6 +162,9 @@
 }
 .vakata-context li > a:focus {
   outline: 0;
+}
+.vakata-context .vakata-context-no-icons {
+  margin-left: 0;
 }
 .vakata-context .vakata-context-hover > a {
   position: relative;

@@ -19,18 +19,18 @@
 
 	var modifierTokens = {
 		'css': {
-			pattern: /\{[^}]+\}/,
+			pattern: /\{[^{}]+\}/,
 			inside: {
 				rest: Prism.languages.css
 			}
 		},
 		'class-id': {
-			pattern: /(\()[^)]+(?=\))/,
+			pattern: /(\()[^()]+(?=\))/,
 			lookbehind: true,
 			alias: 'attr-value'
 		},
 		'lang': {
-			pattern: /(\[)[^\]]+(?=\])/,
+			pattern: /(\[)[^\[\]]+(?=\])/,
 			lookbehind: true,
 			alias: 'attr-value'
 		},
@@ -62,7 +62,7 @@
 				// # List item
 				// * List item
 				'list': {
-					pattern: withModifier(/^[*#]+<MOD>*\s+.+/.source, 'm'),
+					pattern: withModifier(/^[*#]+<MOD>*\s+\S.*/.source, 'm'),
 					inside: {
 						'modifier': {
 							pattern: withModifier(/(^[*#]+)<MOD>+/.source),
@@ -77,7 +77,7 @@
 				'table': {
 					// Modifiers can be applied to the row: {color:red}.|1|2|3|
 					// or the cell: |{color:red}.1|2|3|
-					pattern: withModifier(/^(?:(?:<MOD>|<PAR>|[<>=^~])+\.\s*)?(?:\|(?:(?:<MOD>|<PAR>|[<>=^~_]|[\\/]\d+)+\.)?[^|]*)+\|/.source, 'm'),
+					pattern: withModifier(/^(?:(?:<MOD>|<PAR>|[<>=^~])+\.\s*)?(?:\|(?:(?:<MOD>|<PAR>|[<>=^~_]|[\\/]\d+)+\.|(?!(?:<MOD>|<PAR>|[<>=^~_]|[\\/]\d+)+\.))[^|]*)+\|/.source, 'm'),
 					inside: {
 						'modifier': {
 							// Modifiers for rows after the first one are
@@ -91,6 +91,7 @@
 				},
 
 				'inline': {
+					// eslint-disable-next-line regexp/no-super-linear-backtracking
 					pattern: withModifier(/(^|[^a-zA-Z\d])(\*\*|__|\?\?|[*_%@+\-^~])<MOD>*.+?\2(?![a-zA-Z\d])/.source),
 					lookbehind: true,
 					inside: {
@@ -98,18 +99,21 @@
 
 						// *bold*, **bold**
 						'bold': {
+							// eslint-disable-next-line regexp/no-super-linear-backtracking
 							pattern: withModifier(/(^(\*\*?)<MOD>*).+?(?=\2)/.source),
 							lookbehind: true
 						},
 
 						// _italic_, __italic__
 						'italic': {
+							// eslint-disable-next-line regexp/no-super-linear-backtracking
 							pattern: withModifier(/(^(__?)<MOD>*).+?(?=\2)/.source),
 							lookbehind: true
 						},
 
 						// ??cite??
 						'cite': {
+							// eslint-disable-next-line regexp/no-super-linear-backtracking
 							pattern: withModifier(/(^\?\?<MOD>*).+?(?=\?\?)/.source),
 							lookbehind: true,
 							alias: 'string'
@@ -117,6 +121,7 @@
 
 						// @code@
 						'code': {
+							// eslint-disable-next-line regexp/no-super-linear-backtracking
 							pattern: withModifier(/(^@<MOD>*).+?(?=@)/.source),
 							lookbehind: true,
 							alias: 'keyword'
@@ -124,18 +129,21 @@
 
 						// +inserted+
 						'inserted': {
+							// eslint-disable-next-line regexp/no-super-linear-backtracking
 							pattern: withModifier(/(^\+<MOD>*).+?(?=\+)/.source),
 							lookbehind: true
 						},
 
 						// -deleted-
 						'deleted': {
+							// eslint-disable-next-line regexp/no-super-linear-backtracking
 							pattern: withModifier(/(^-<MOD>*).+?(?=-)/.source),
 							lookbehind: true
 						},
 
 						// %span%
 						'span': {
+							// eslint-disable-next-line regexp/no-super-linear-backtracking
 							pattern: withModifier(/(^%<MOD>*).+?(?=%)/.source),
 							lookbehind: true
 						},
@@ -154,11 +162,11 @@
 					pattern: /^\[[^\]]+\]\S+$/m,
 					inside: {
 						'string': {
-							pattern: /(\[)[^\]]+(?=\])/,
+							pattern: /(^\[)[^\]]+(?=\])/,
 							lookbehind: true
 						},
 						'url': {
-							pattern: /(\])\S+$/,
+							pattern: /(^\])\S+$/,
 							lookbehind: true
 						},
 						'punctuation': /[\[\]]/
@@ -168,9 +176,11 @@
 				// "text":http://example.com
 				// "text":link-ref
 				'link': {
+					// eslint-disable-next-line regexp/no-super-linear-backtracking
 					pattern: withModifier(/"<MOD>*[^"]+":.+?(?=[^\w/]?(?:\s|$))/.source),
 					inside: {
 						'text': {
+							// eslint-disable-next-line regexp/no-super-linear-backtracking
 							pattern: withModifier(/(^"<MOD>*)[^"]+(?=")/.source),
 							lookbehind: true
 						},
@@ -190,10 +200,10 @@
 				// !image.jpg!
 				// !image.jpg(Title)!:http://example.com
 				'image': {
-					pattern: withModifier(/!(?:<MOD>|<PAR>|[<>=])*[^!\s()]+(?:\([^)]+\))?!(?::.+?(?=[^\w/]?(?:\s|$)))?/.source),
+					pattern: withModifier(/!(?:<MOD>|<PAR>|[<>=])*(?![<>=])[^!\s()]+(?:\([^)]+\))?!(?::.+?(?=[^\w/]?(?:\s|$)))?/.source),
 					inside: {
 						'source': {
-							pattern: withModifier(/(^!(?:<MOD>|<PAR>|[<>=])*)[^!\s()]+(?:\([^)]+\))?(?=!)/.source),
+							pattern: withModifier(/(^!(?:<MOD>|<PAR>|[<>=])*)(?![<>=])[^!\s()]+(?:\([^)]+\))?(?=!)/.source),
 							lookbehind: true,
 							alias: 'url'
 						},
@@ -224,7 +234,7 @@
 					pattern: /\b[A-Z\d]+\([^)]+\)/,
 					inside: {
 						'comment': {
-							pattern: /(\()[^)]+(?=\))/,
+							pattern: /(\()[^()]+(?=\))/,
 							lookbehind: true
 						},
 						'punctuation': /[()]/
@@ -233,7 +243,7 @@
 
 				// Prism(C)
 				'mark': {
-					pattern: /\b\((?:TM|R|C)\)/,
+					pattern: /\b\((?:C|R|TM)\)/,
 					alias: 'comment',
 					inside: {
 						'punctuation': /[()]/

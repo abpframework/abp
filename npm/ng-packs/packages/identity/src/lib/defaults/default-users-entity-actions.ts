@@ -15,7 +15,7 @@ export const DEFAULT_USERS_ENTITY_ACTIONS = EntityAction.createMany<IdentityUser
     text: 'AbpIdentity::Permissions',
     action: data => {
       const component = data.getInjected(UsersComponent);
-      component.openPermissionsModal(data.record.id);
+      component.openPermissionsModal(data.record.id, data.record.userName);
     },
     permission: 'AbpIdentity.Users.ManagePermissions',
   },

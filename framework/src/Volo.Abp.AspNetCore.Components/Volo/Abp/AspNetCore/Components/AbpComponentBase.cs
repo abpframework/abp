@@ -166,7 +166,7 @@ public abstract class AbpComponentBase : OwningComponentBase
         return localizer;
     }
 
-    protected async Task HandleErrorAsync(Exception exception)
+    protected virtual async Task HandleErrorAsync(Exception exception)
     {
         Logger.LogException(exception);
         await InvokeAsync(async () =>

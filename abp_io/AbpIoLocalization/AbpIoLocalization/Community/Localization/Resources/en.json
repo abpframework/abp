@@ -85,7 +85,9 @@
     "CommunityPostRequestErrorMessage": "Could not get the latest post request from Github.",
     "PostRequestFromGithubIssue": "There aren't any post requests now.",
     "LatestPosts": "Latest Posts",
-    "ArticleRequests": "Post Requests",
+    "ArticleRequests": "Request a content",
+    "ArticleRequestsDescription": "Want to see a specific content here? You can ask the community to create it!",
+    "LatestContentRequests": "Latest content requests",
     "AllPostRequests": "See All Post Requests",
     "SubscribeToTheNewsletter": "Subscribe to the Newsletter",
     "NewsletterEmailDefinition": "Get information about happenings in ABP, such as new releases, free sources, posts, and more.",
@@ -102,7 +104,7 @@
     "VideoPost": "Video Post",
     "Post": "Post",
     "Read": "Read",
-    "CreateGithubPostUrlInfo": "Original GitHub URL of the post.",
+    "CreateGithubPostUrlInfo": "Full URL of the Markdown file on GitHub (<a href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\" target=\"blank\">example</a>).",
     "CreateVideoContentUrlInfo": "Original Youtube URL of the post.",
     "CreateExternalPostUrlInfo": "Original External Url of the post.",
     "VideoContentForm": "Submit Video on YouTube",
@@ -115,7 +117,7 @@
     "ExternalPostUrl": "External Post Url",
     "ThankYouForContribution": "Thank you for contributing to the ABP Community.",
     "GithubPost": "GitHub Post",
-    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Write a post on any public GitHub repository with the Markdown format. <a target=\"_blank\" class=\"fw-6 text-white text-decoration-underline\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Posts/2020-12-04-Event-Organizer/Post.md\">example</a>",
+    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Write a post on any public GitHub repository with the Markdown format. <a target=\"_blank\" class=\"fw-6 text-white text-decoration-underline\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\">example</a>",
     "GithubPostSubmitStepTwo": "<span class=\"font-weight-bold\">2.</span> Submit your post URL using the form.",
     "GithubPostSubmitStepThree": "<span class=\"font-weight-bold\">3.</span> Your post will be rendered in this website.",
     "YoutubeVideo": "Youtube Video",
@@ -160,6 +162,9 @@
     "Previous": "Previous",
     "Next": "Next",
     "Share": "Share",
-    "SortBy": "Sort by"
+    "SortBy": "Sort by",
+    "NoPublishedEventsYet": "No published events yet.",
+    "SubscribeYoutubeChannel": "Subscribe to the Youtube Channel",
+    "Enum:EventType:0": "Talks"
   }
 }

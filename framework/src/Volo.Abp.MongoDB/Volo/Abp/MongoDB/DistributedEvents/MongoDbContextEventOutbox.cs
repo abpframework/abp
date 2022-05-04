@@ -68,4 +68,18 @@ public class MongoDbContextEventOutbox<TMongoDbContext> : IMongoDbContextEventOu
             await dbContext.OutgoingEvents.DeleteOneAsync(x => x.Id.Equals(id));
         }
     }
+
+    [UnitOfWork]
+    public async Task DeleteManyAsync(IEnumerable<Guid> ids)
+    {
+        var dbContext = (IHasEventOutbox)await MongoDbContextProvider.GetDbContextAsync();
+        if (dbContext.SessionHandle != null)
+        {
+            await dbContext.OutgoingEvents.DeleteManyAsync(dbContext.SessionHandle, x => ids.Contains(x.Id));
+        }
+        else
+        {
+            await dbContext.OutgoingEvents.DeleteManyAsync(x => ids.Contains(x.Id));
+        }
+    }
 }

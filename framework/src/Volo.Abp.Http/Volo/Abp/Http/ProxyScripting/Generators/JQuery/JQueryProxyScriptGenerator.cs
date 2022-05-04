@@ -114,7 +114,7 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
         if (versionParam != null)
         {
             var version = FindBestApiVersion(action);
-            script.AppendLine($"      var {ProxyScriptingJsFuncHelper.NormalizeJsVariableName(versionParam.Name)} = '{version}';");
+            script.AppendLine($"      var {ProxyScriptingJsFuncHelper.NormalizeJsVariableName(versionParam.Name)} = api_version ? api_version : '{version}';");
         }
 
         script.AppendLine("      return abp.ajax($.extend(true, {");

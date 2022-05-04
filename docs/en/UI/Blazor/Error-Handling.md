@@ -16,6 +16,8 @@ There are different type of `Exception` classes handled differently by the ABP F
 
 `UserFriendlyException` is a special type of exception. You can directly show a error message dialog to the user by throwing such an exception.
 
+> For Blazor Server, exceptions must be handled manually. Otherwise it crashes the whole application. Auto Exception Handling is not possible with Blazor Server right now, please follow [this issue](https://github.com/abpframework/abp/issues/8195) to see progress. In meantime, you can use try-catch blocks and call the `HandleErrorAsync` method of ABP to handle errors manually, which shows an error dialog for you.
+
 **Example**
 
 ````csharp
@@ -26,9 +28,23 @@ There are different type of `Exception` classes handled differently by the ABP F
 
 @code
 {
+    //for Blazor WASM
     private void TestException()
     {
         throw new UserFriendlyException("A user friendly error message!");
+    }
+
+    //for Blazor Server
+    private async Task TestException()
+    {
+        try 
+        {
+            throw new UserFriendlyException("A user friendly error message!");
+        }
+        catch(UserFriendlyException ex) 
+        {
+            await HandleErrorAsync(ex);
+        }
     }
 }
 ````

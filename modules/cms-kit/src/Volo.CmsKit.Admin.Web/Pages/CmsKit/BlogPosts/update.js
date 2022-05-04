@@ -10,6 +10,7 @@ $(function () {
     var $blogPostIdInput = $('#Id');
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
+    var $buttonRemoveCoverImage = $('#button-remove-cover-image');
 
     var UPPY_FILE_ID = "uppy-upload-file";
 
@@ -63,22 +64,25 @@ $(function () {
 
     function submitEntityTags(blogPostId) {
 
-        var tags = $tagsInput.val().split(',').map(x => x.trim()).filter(x => x);
+        if ($tagsInput.val()) {
 
-        if (tags.length === 0) {
-            finishSaving();
-            return;
+            var tags = $tagsInput.val().split(',').map(x => x.trim()).filter(x => x);
+
+            if (tags.length > 0) {
+                volo.cmsKit.admin.tags.entityTagAdmin
+                    .setEntityTags({
+                        entityType: 'BlogPost',
+                        entityId: blogPostId,
+                        tags: tags
+                    })
+                    .then(function (result) {
+                        finishSaving(result);
+                    });
+                return;
+            }
         }
 
-        volo.cmsKit.admin.tags.entityTagAdmin
-            .setEntityTags({
-                entityType: 'BlogPost',
-                entityId: blogPostId,
-                tags: tags
-            })
-            .then(function (result) {
-                finishSaving(result);
-            });
+        finishSaving();
     }
 
     function getUppyHeaders() {
@@ -152,7 +156,6 @@ $(function () {
         }
     }
 
-
     // -----------------------------------
     var fileUploadUri = "/api/cms-kit-admin/media/blogpost";
     var fileUriPrefix = "/api/cms-kit/media/";
@@ -225,4 +228,16 @@ $(function () {
             }
         });
     }
+
+    $buttonRemoveCoverImage.on('click', function () {
+        abp.message.confirm(
+            l('RemoveCoverImageConfirmationMessage'),
+            function (isConfirmed) {
+                if (isConfirmed) {
+                    $coverImage.val(null);
+                    $('#CurrentCoverImageArea').remove();
+                }
+            }
+        );
+    });
 });

@@ -58,7 +58,7 @@ Prism.languages['excel-formula'] = {
 		alias: 'property'
 	},
 	'number': /(?:\b\d+(?:\.\d+)?|\B\.\d+)(?:e[+-]?\d+)?\b/i,
-	'boolean': /\b(?:TRUE|FALSE)\b/i,
+	'boolean': /\b(?:FALSE|TRUE)\b/i,
 	'operator': /[-+*/^%=&,]|<[=>]?|>=?/,
 	'punctuation': /[[\]();{}|]/
 };

@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Auditing;
+using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Admin.Blogs;
 
@@ -24,4 +25,6 @@ public class BlogPostListDto : EntityDto<Guid>, IHasCreationTime, IHasModificati
     public DateTime CreationTime { get; set; }
 
     public DateTime? LastModificationTime { get; set; }
+    
+    public BlogPostStatus? Status { get; set; }
 }
