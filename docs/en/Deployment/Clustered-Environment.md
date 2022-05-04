@@ -63,7 +63,7 @@ The [Database BLOB provider](../Blob-Storing-Database) is the easiest way since 
 
 > [ABP Commercial](https://commercial.abp.io/) startup solution templates come with the database BLOB provider as pre-installed, and stores BLOBs in the application's database.
 
-Check the [BLOB Storing](../Blob-Storing.md) document to see all available BLOG storage providers.
+Check the [BLOB Storing](../Blob-Storing.md) document to see all available BLOB storage providers.
 
 ## Configuring Background Jobs
 
