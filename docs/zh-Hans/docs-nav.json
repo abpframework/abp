@@ -516,6 +516,10 @@
               "path": "UI/AspNetCore/Customization-User-Interface.md"
             },
             {
+              "text": "测试",
+              "path": "UI/AspNetCore/Testing.md"
+            },
+            {
               "text": "主题化",
               "path": "UI/AspNetCore/Theming.md"
             }
@@ -535,6 +539,10 @@
             {
               "text": "服务代理",
               "path": "UI/Angular/Service-Proxies.md"
+            },
+            {
+              "text": "单元测试",
+              "path": "UI/Angular/Testing.md"
             },
             {
               "text": "HTTP请求",
@@ -681,6 +689,10 @@
           "path": "SignalR-Integration.md"
         }
       ]
+    },
+    {
+      "text": "测试",
+      "path": "Testing.md"
     },
     {
       "text": "示例",
