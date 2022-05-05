@@ -96,7 +96,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         return steps;
     }
 
-    private void ConfigureDockerFiles(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void ConfigureDockerFiles(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         switch (context.BuildArgs.UiFramework)
         {
