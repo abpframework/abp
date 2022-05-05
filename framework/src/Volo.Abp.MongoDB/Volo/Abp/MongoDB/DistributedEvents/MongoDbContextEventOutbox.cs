@@ -70,7 +70,7 @@ public class MongoDbContextEventOutbox<TMongoDbContext> : IMongoDbContextEventOu
     }
 
     [UnitOfWork]
-    public async Task DeleteManyAsync(IEnumerable<Guid> ids)
+    public virtual async Task DeleteManyAsync(IEnumerable<Guid> ids)
     {
         var dbContext = (IHasEventOutbox)await MongoDbContextProvider.GetDbContextAsync();
         if (dbContext.SessionHandle != null)
