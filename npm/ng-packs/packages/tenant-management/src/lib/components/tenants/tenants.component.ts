@@ -108,7 +108,7 @@ export class TenantsComponent implements OnInit {
       )
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.toasterService.success('AbpUi::SuccessfullySaved');
+          this.toasterService.success('AbpUi::SuccessfullyDeleted');
           this.service.delete(id).subscribe(() => this.list.get());
         }
       });
