@@ -704,6 +704,10 @@
                 {
                   "text": "The Basic Theme",
                   "path": "UI/AspNetCore/Basic-Theme.md"
+                },
+                {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/mvc.md"
                 }
               ]
             },
@@ -816,6 +820,10 @@
                 {
                   "text": "The Basic Theme",
                   "path": "UI/Blazor/Basic-Theme.md"
+                },
+                {
+                  "text": "The Basic Theme",
+                  "path": "Themes/LeptonXLite/blazor.md"
                 },
                 {
                   "text": "Branding",
@@ -1071,6 +1079,10 @@
                     {
                       "text": "The Basic Theme",
                       "path": "UI/Angular/Basic-Theme.md"
+                    },
+                    {
+                      "text": "LeptonX Lite",
+                      "path": "Themes/LeptonXLite/angular.md"
                     }
                   ]
                 },
@@ -1226,15 +1238,12 @@
       "path": "Testing.md"
     },
     {
-      "text": "Samples",
+      "text": "Deployment",
+      "path": "Deployment/Index.md",
       "items": [
         {
-          "text": "All Samples",
-          "path": "Samples/Index.md"
-        },
-        {
-          "text": "Microservice Demo",
-          "path": "Samples/Microservice-Demo.md"
+          "text": "Deploying to a Clustered Environment",
+          "path": "Deployment/Clustered-Environment.md"
         }
       ]
     },
@@ -1292,6 +1301,19 @@
         {
           "text": "Virtual File Explorer",
           "path": "Modules/Virtual-File-Explorer.md"
+        }
+      ]
+    },
+    {
+      "text": "Samples",
+      "items": [
+        {
+          "text": "All Samples",
+          "path": "Samples/Index.md"
+        },
+        {
+          "text": "Microservice Demo",
+          "path": "Samples/Microservice-Demo.md"
         }
       ]
     },

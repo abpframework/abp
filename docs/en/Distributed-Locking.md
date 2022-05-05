@@ -1,7 +1,5 @@
 # Distributed Locking
-Distributed locking is a technique to manage many applications that try to access the same resource.
-The main purpose is to allow only one of many applications to access the same resource at the same time.
-Otherwise, accessing the same object from various applications may corrupt the value of resources. 
+Distributed locking is a technique to manage many applications that try to access the same resource. The main purpose is to allow only one of many applications to access the same resource at the same time. Otherwise, accessing the same object from various applications may corrupt the value of the resources. 
 
 > ABP's current distributed locking implementation is based on the [DistributedLock](https://github.com/madelson/DistributedLock) library.
 
@@ -15,7 +13,7 @@ abp add-package Volo.Abp.DistributedLocking
 
 This package provides the necessary API to use the distributed locking system, however, you should configure a provider before using it.
 
-### Configuring a provider
+### Configuring a Provider
 
 The [DistributedLock](https://github.com/madelson/DistributedLock) library provides [various of implementations](https://github.com/madelson/DistributedLock#implementations) for the locking, like [Redis](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.Redis.md) and [ZooKeeper](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.ZooKeeper.md).
 
@@ -61,7 +59,7 @@ This code gets the Redis connection string from the [configuration](Configuratio
 
 There are two ways to use the distributed locking API: ABP's `IAbpDistributedLock` abstraction and [DistributedLock](https://github.com/madelson/DistributedLock) library's API.
 
-### Using the IAbpDistributedLock service
+### Using the IAbpDistributedLock Service
 
 `IAbpDistributedLock` is a simple service provided by the ABP framework for simple usage of distributed locking.
 
@@ -103,6 +101,10 @@ namespace AbpDemo
 * `timeout` (`TimeSpan`): A timeout value to wait to obtain the lock. Default value is `TimeSpan.Zero`, which means it doesn't wait if the lock is already owned by another application.
 * `cancellationToken`: A cancellation token that can be triggered later to cancel the operation.
 
-### Using DistributedLock library's API
+### Using DistributedLock Library's API
 
 ABP's `IAbpDistributedLock` service is very limited and mainly designed to be internally used by the ABP Framework. For your own applications, you can use the DistributedLock library's own API. See its [own documentation](https://github.com/madelson/DistributedLock) for details.
+
+## The Volo.Abp.DistributedLocking.Abstractions Package
+
+If you are building a reusable library or an application module, then you may not want to bring an additional dependency to your module for simple applications that run as a single instance. In this case, your library can depend on the [Volo.Abp.DistributedLocking.Abstractions](https://nuget.org/packages/Volo.Abp.DistributedLocking.Abstractions) package which defines the `IAbpDistributedLock` service and implements it as in-process (not distributed actually). In this way, your library can run properly (without a distributed lock provider dependency) in an application that runs as a single instance. If the application is deployed to a [clustered environment](Deployment/Clustered-Environment.md), then the application developer should install a real distributed provider as explained in the *Installation* section.
