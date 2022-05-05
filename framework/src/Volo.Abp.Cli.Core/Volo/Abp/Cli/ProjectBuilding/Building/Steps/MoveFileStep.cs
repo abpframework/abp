@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+﻿using System.Linq;
+
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
 public class MoveFileStep : ProjectBuildPipelineStep
 {
@@ -14,8 +16,9 @@ public class MoveFileStep : ProjectBuildPipelineStep
     public override void Execute(ProjectBuildContext context)
     {
         var fileToMove = context.Files.Find(x => x.Name == _filePath);
+        var newFileExist = context.Files.Any(x => x.Name == _newPath);
         
-        if (fileToMove == null)
+        if (fileToMove == null || newFileExist)
         {
             return;
         }
