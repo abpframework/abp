@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
@@ -14,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Volo\Abp\OpenIddict\Applications" />
     <Folder Include="Volo\Abp\OpenIddict\Authorizations" />
     <Folder Include="Volo\Abp\OpenIddict\Scopes" />
     <Folder Include="Volo\Abp\OpenIddict\Tokens" />

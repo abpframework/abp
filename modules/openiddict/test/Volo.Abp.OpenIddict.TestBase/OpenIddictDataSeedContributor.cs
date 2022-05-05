@@ -35,7 +35,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
     private async Task CreateScopesAsync()
     {
-        var scope1 = (OpenIddictScope)await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor()
+        var scope1 = (OpenIddictScopeModel)await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor()
         {
             Name = AbpOpenIddictTestData.Scope1Name,
             DisplayName = "Test Scope 1",
@@ -51,7 +51,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         });
         AbpOpenIddictTestData.Scope1Id = scope1.Id;
 
-        var scope2 = (OpenIddictScope)await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor()
+        var scope2 = (OpenIddictScopeModel)await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor()
         {
             Name = AbpOpenIddictTestData.Scope2Name,
             DisplayName = "Test Scope 2",
@@ -71,7 +71,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
     private async Task CreateApplicationsAsync()
     {
-        var app1 = (OpenIddictApplication)await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+        var app1 = (OpenIddictApplicationModel)await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
         {
             ClientId = AbpOpenIddictTestData.App1ClientId,
             ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
@@ -120,7 +120,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         });
         AbpOpenIddictTestData.App1Id = app1.Id;
 
-        var app2 = (OpenIddictApplication)await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+        var app2 = (OpenIddictApplicationModel)await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
         {
             ClientId = AbpOpenIddictTestData.App2ClientId,
             ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
