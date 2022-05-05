@@ -1097,10 +1097,10 @@
                 {
                   "text": "Extensions",
                   "items": [
-                     {
+                    {
                       "text": "Overall",
                       "path": "UI/Angular/Extensions-Overall.md"
-                     },
+                    },
                     {
                       "text": "Entity Action Extensions",
                       "path": "UI/Angular/Entity-Action-Extensions.md"
@@ -1116,6 +1116,10 @@
                     {
                       "text": "Dynamic Form Extensions",
                       "path": "UI/Angular/Dynamic-Form-Extensions.md"
+                    },
+                    {
+                      "text": "Date, time and datetime format pipes",
+                      "path": "UI/Angular/DateTime-Format-Pipe.md"
                     }
                   ]
                 }
