@@ -15,7 +15,7 @@
 }
 
 .command-line-prompt > span:before {
-	opacity: 0.4;
+	opacity: 0.7;
 	content: ' ';
 	display: block;
 	padding-right: 0.8em;
