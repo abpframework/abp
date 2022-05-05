@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="SharpZipLib" Version="1.3.3" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="NuGet.Versioning" Version="5.11.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="$(MicrosoftPackageVersion)" />
