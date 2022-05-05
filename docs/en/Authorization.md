@@ -459,7 +459,7 @@ public static class CurrentUserExtensions
 }
 ```
 
-## See Also
+## See Also:
 
 * [Permission Management Module](Modules/Permission-Management.md)
 * [ASP.NET Core MVC / Razor Pages JavaScript Auth API](UI/AspNetCore/JavaScript-API/Auth.md)
