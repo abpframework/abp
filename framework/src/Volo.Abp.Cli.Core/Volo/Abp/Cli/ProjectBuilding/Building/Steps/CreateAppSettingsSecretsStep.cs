@@ -30,7 +30,9 @@ public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
             );
         }
 
-        var projectFiles = context.Files.Where(x => x.Content.Contains(AppSettingsPlaceholder)).ToList();
+        var projectFiles = context.Files.Where(x => 
+            x.Name.EndsWith(".csproj") &&
+            x.Content.Contains(AppSettingsPlaceholder)).ToList();
 
         foreach (var projectFile in projectFiles)
         {
@@ -40,7 +42,21 @@ public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
 
     private static byte[] GetAppSettingsSecretJsonContent(ProjectBuildContext context)
     {
-        return context.Template.IsPro()
+        bool condition;
+        if (context.Template != null)
+        {
+            condition = context.Template.IsPro();
+        }
+        else if (context.Module != null)
+        {
+            condition = context.Module.IsPro;
+        }
+        else
+        {
+            condition = false;
+        }
+        
+        return condition
             ? $"{{{Environment.NewLine}  \"AbpLicenseCode\": \"{CliConsts.LicenseCodePlaceHolder}\" {Environment.NewLine}}}".GetBytes()
             : $"{{{Environment.NewLine}}}".GetBytes();
     }
@@ -52,11 +68,30 @@ public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
 
     private static string ReplaceAppSettingsSecretsPlaceholder(string content)
     {
-        var replaceContent = $"<None Remove=\"{CliConsts.AppSettingsSecretJsonFileName}\" />{Environment.NewLine}" +
-                $"    <Content Include=\"{CliConsts.AppSettingsSecretJsonFileName}\">{Environment.NewLine}" +
+        var path = string.Empty;
+        
+        var appSettingsRemoveLine = content.SplitToLines().FirstOrDefault(l=>
+            l.Contains("None") &&
+            l.Contains("Remove") &&
+            l.Contains(CliConsts.AppSettingsJsonFileName));
+
+        if (appSettingsRemoveLine != null)
+        {
+             var prefix = appSettingsRemoveLine.Split("\"")
+                .Select(s => s.Trim())
+                .First(s => s.Contains(CliConsts.AppSettingsJsonFileName))
+                .Replace(CliConsts.AppSettingsJsonFileName, "");
+
+             path = string.IsNullOrWhiteSpace(prefix) ? string.Empty : prefix;
+        }
+        
+        
+        var replaceContent = $"<None Remove=\"{ path + CliConsts.AppSettingsSecretJsonFileName}\" />{Environment.NewLine}" +
+                $"    <Content Include=\"{path + CliConsts.AppSettingsSecretJsonFileName}\">{Environment.NewLine}" +
                 $"      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>{Environment.NewLine}" +
                 $"      <CopyToOutputDirectory>Always</CopyToOutputDirectory>{Environment.NewLine}" +
                 "    </Content>";
+        
         return content.Replace(AppSettingsPlaceholder, replaceContent);
     }
 }

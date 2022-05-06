@@ -21,7 +21,7 @@ abp add-package Volo.Abp.Caching.StackExchangeRedis
 
 ## Configuration
 
-Volo.Abp.Caching.StackExchangeRedis package automatically gets the redis [configuration](Configuration.md) from the `IConfiguration`. So, for example, you can set your configuration inside the `appsettings.json`:
+Volo.Abp.Caching.StackExchangeRedis package automatically gets the Redis [configuration](Configuration.md) from the `IConfiguration`. So, for example, you can set your configuration inside the `appsettings.json`:
 
 ````js
 "Redis": { 

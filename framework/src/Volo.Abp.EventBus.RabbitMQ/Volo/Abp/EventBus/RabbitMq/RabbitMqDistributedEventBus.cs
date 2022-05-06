@@ -34,6 +34,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
     protected IRabbitMqMessageConsumerFactory MessageConsumerFactory { get; }
     protected IRabbitMqMessageConsumer Consumer { get; private set; }
 
+    private bool _exchangeCreated;
+
     public RabbitMqDistributedEventBus(
         IOptions<AbpRabbitMqEventBusOptions> options,
         IConnectionPool connectionPool,
@@ -180,7 +182,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
     }
 
-    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         await PublishAsync(eventType, eventData, null);
     }
@@ -197,7 +199,30 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         return PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, null, eventId: outgoingEvent.Id);
     }
 
-    public override async Task ProcessFromInboxAsync(
+    public async override Task PublishManyFromOutboxAsync(
+        IEnumerable<OutgoingEventInfo> outgoingEvents,
+        OutboxConfig outboxConfig)
+    {
+        using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
+        {
+            var outgoingEventArray = outgoingEvents.ToArray();
+            channel.ConfirmSelect();
+
+            foreach (var outgoingEvent in outgoingEventArray)
+            {
+                await PublishAsync(
+                    channel,
+                    outgoingEvent.EventName, 
+                    outgoingEvent.EventData,  
+                    properties: null,
+                    eventId: outgoingEvent.Id);
+            }
+
+            channel.WaitForConfirmsOrDie();
+        }
+    }
+
+    public async override Task ProcessFromInboxAsync(
         IncomingEventInfo incomingEvent,
         InboxConfig inboxConfig)
     {
@@ -233,7 +258,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         return PublishAsync(eventName, body, properties, headersArguments);
     }
 
-    protected Task PublishAsync(
+    protected virtual Task PublishAsync(
         string eventName,
         byte[] body,
         IBasicProperties properties,
@@ -242,35 +267,64 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
     {
         using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
         {
+            return PublishAsync(channel, eventName, body, properties, headersArguments, eventId);
+        }
+    }
+
+    protected virtual Task PublishAsync(
+        IModel channel,
+        string eventName,
+        byte[] body,
+        IBasicProperties properties,
+        Dictionary<string, object> headersArguments = null,
+        Guid? eventId = null)
+    {
+        EnsureExchangeExists(channel);
+
+        if (properties == null)
+        {
+            properties = channel.CreateBasicProperties();
+            properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
+        }
+
+        if (properties.MessageId.IsNullOrEmpty())
+        {
+            properties.MessageId = (eventId ?? GuidGenerator.Create()).ToString("N");
+        }
+
+        SetEventMessageHeaders(properties, headersArguments);
+
+        channel.BasicPublish(
+            exchange: AbpRabbitMqEventBusOptions.ExchangeName,
+            routingKey: eventName,
+            mandatory: true,
+            basicProperties: properties,
+            body: body
+        );
+
+        return Task.CompletedTask;
+    }
+
+    private void EnsureExchangeExists(IModel channel)
+    {
+        if (_exchangeCreated)
+        {
+            return;
+        }
+
+        try
+        {
+            channel.ExchangeDeclarePassive(AbpRabbitMqEventBusOptions.ExchangeName);
+        }
+        catch (Exception)
+        {
             channel.ExchangeDeclare(
                 AbpRabbitMqEventBusOptions.ExchangeName,
                 AbpRabbitMqEventBusOptions.GetExchangeTypeOrDefault(),
                 durable: true
             );
-
-            if (properties == null)
-            {
-                properties = channel.CreateBasicProperties();
-                properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
-            }
-
-            if (properties.MessageId.IsNullOrEmpty())
-            {
-                properties.MessageId = (eventId ?? GuidGenerator.Create()).ToString("N");
-            }
-
-            SetEventMessageHeaders(properties, headersArguments);
-
-            channel.BasicPublish(
-                exchange: AbpRabbitMqEventBusOptions.ExchangeName,
-                routingKey: eventName,
-                mandatory: true,
-                basicProperties: properties,
-                body: body
-            );
         }
-
-        return Task.CompletedTask;
+        _exchangeCreated = true;
     }
 
     private void SetEventMessageHeaders(IBasicProperties properties, Dictionary<string, object> headersArguments)
@@ -306,7 +360,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
 
         foreach (var handlerFactory in
-            HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
+                 HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
             handlerFactoryList.Add(
                 new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));

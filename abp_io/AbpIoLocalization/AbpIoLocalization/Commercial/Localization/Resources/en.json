@@ -49,7 +49,7 @@
     "IndexPageHeroSection": "<span class=\"first-line\">A complete</span><span class=\"second-line\"> web development platform</span><span class=\"third-line\">built-on <img src=\"{0}\" width=\"110\" class=\"ml-1\" /> framework</span>",
     "AbpCommercialShortDescription": "ABP Commercial provides pre-built application modules, rapid application development tooling, professional UI themes, premium support and more.",
     "LiveDemo": "Live Demo",
-    "GetLicence": "Get a Licence",
+    "GetLicence": "Get a License",
     "Application": "Application",
     "StartupTemplates": "Startup Templates",
     "Startup": "Startup",
@@ -199,12 +199,13 @@
     "WhatHappensWhenLicenseEndsExplanation5": "You can not use the ABP Suite.",
     "WhatHappensWhenLicenseEndsExplanation6": "You can not get the <a href=\"{0}\">premium support</a> anymore.",
     "WhatHappensWhenLicenseEndsExplanation7": "You can extend (renew) your license if you want to continue getting these benefits. If you extend your license within <strong>1 month</strong> after your license expires, the following discounts will be applied: Team License {0}% discount, Business License {1}% discount, Enterprise License {2}% discount.",
+    "WhatHappensWhenLicenseEndsExplanation8": "The ABP projects you generated are not stored on our servers. Therefore, it is your responsibility to keep the source code you download. When your license expires, there's no way to get your generated ABP project source code.",
     "WhenShouldIRenewMyLicense": "When should I renew my license?",
     "WhenShouldIRenewMyLicenseExplanation": "If you renew your license within <strong>1 month</strong> after your license expires, the following discounts will be applied: Team License {0}% discount, Business License {1}% discount, Enterprise License {2}% discount. However, if you renew your license after <strong>1 month</strong> since the expiry date of your license, the renewal price will be the same as the license purchase price and there will be no discount on your renewal.",
     "TrialPlan": "Do you have a trial plan?",
     "TrialPlanExplanation": "For now, ABP Commercial doesn't have a trial plan. For the Team licenses we provide 30 days money back guarantee. You can just request a refund in the first 30 days. For the Business and Enterprise licenses, we provide 60% refund in 30 days. This is because Business and Enterprise licenses include the full source code of all the modules and the themes.",
     "DoYouAcceptBankWireTransfer": "Do you accept bank wire transfers?",
-    "DoYouAcceptBankWireTransferExplanation": "Yes, we accept bank wire transfers.<br />After sending the license fee via bank transfer, email us your receipt and the type of license requested at accounting@abp.io, here's our international bank account information:",
+    "DoYouAcceptBankWireTransferExplanation": "Yes, we accept bank wire transfers.<br/>After sending the license fee via bank transfer, send your receipt and requested license type to accounting@abp.io.<br/>Our international bank account information:",
     "HowToUpgrade": "How to upgrade existing applications when a new version is available?",
     "HowToUpgradeExplanation1": "When you create a new application using ABP Commercial, all the modules and theme are used as NuGet and NPM packages. So, you can easily upgrade the packages when a new version is available.",
     "HowToUpgradeExplanation2": "In addition to the standard NuGet/NPM upgrades, <a href=\"{0}\">ABP CLI</a> provides an update command that automatically finds and upgrades all ABP related packages in your solution.",
@@ -271,7 +272,7 @@
     "Enterprise": "Enterprise",
     "Custom": "Custom",
     "IncludedDeveloperLicenses": "Included developer licenses",
-    "CustomLicenceOrAdditionalServices": "Need custom licence or additional services?",
+    "CustomLicenceOrAdditionalServices": "Need custom license or additional services?",
     "CustomOrVolumeLicense": "Custom or volume license",
     "LiveTrainingSupport": "Live training & support",
     "AndMore": "and more",
@@ -506,6 +507,7 @@
     "OnboardingTrainingFaqTitle": "Do you have ABP onboarding training?",
     "OnboardingTrainingFaqExplanation": "Yes, we have ABP Training Services to help you get your ABP project started fast. You will learn about ABP from an ABP core team member and you will get the skills to begin your ABP project. In the onboarding training, we will explain how to set up your development environment, install the required tools, create a fully functional CRUD page. The training will be live and the Zoom application will be used, and we are open to using other online meeting platforms. The language of the training will be English. You can also ask your questions about ABP during the sessions. A convenient time and date will be planned for both parties. To get more information, contact us at <a href=\"mailto:info@abp.io\">info@abp.io</a>.",
     "AddBasket": "Add to Basket",
-    "SendTrainingRequest": "Send Training Request"
+    "SendTrainingRequest": "Send Training Request",
+    "OnlyEnglishVersionOfThisDocumentIsTheRecentAndValid": "* The English version of this document is the most up-to-date and the English version will prevail in any dispute."
   }
 }

@@ -48,7 +48,7 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
         var apiName = args.ApiName ?? defaultValue;
         var source = args.Source ?? defaultValue;
         var target = args.Target ?? defaultValue;
-
+        var url = args.Url ?? string.Empty;
         var commandBuilder = new StringBuilder("npx ng g @abp/ng.schematics:" + schematicsCommandName);
 
         if (module != null)
@@ -69,6 +69,11 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
         if (target != null)
         {
             commandBuilder.Append($" --target {target}");
+        }
+
+        if (url != null)
+        {
+            commandBuilder.Append($" --url {url}");
         }
 
         _cmdhelper.RunCmd(commandBuilder.ToString());

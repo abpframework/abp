@@ -12,7 +12,7 @@ public class RemoveFileStep : ProjectBuildPipelineStep
 
     public override void Execute(ProjectBuildContext context)
     {
-        var fileToRemove = context.Files.Find(x => x.Name.EndsWith(_filePath));
+        var fileToRemove = context.Files.Find(x => x.Name == _filePath);;
         if (fileToRemove != null)
         {
             context.Files.Remove(fileToRemove);

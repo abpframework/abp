@@ -382,6 +382,17 @@
     "SuccessfullyAdded": "Successfully added",
     "PurchaseState": "Purchase State",
     "ShowBetweenDayCount": "Show Between Days",
-    "PurchaseOrder": "Purchase Order"
+    "PurchaseOrder": "Purchase Order",
+    "ShowCreateInvoiceOfOrganization": "Create Invoice",
+    "ShowCreateQuotationOfOrganization": "Create Quotation",
+    "BookDiscounts": "Book Discounts",
+    "Permission:BookDiscount": "Book Discount",
+    "Menu:BookDiscounts": "Book Discounts",
+    "BookType": "Book Type",
+    "PurchasePlatform": "Purchase Platform",
+    "StartTime": "Start Time",
+    "EndTime": "End Time",
+    "CreateABookDiscount": "Create a book discount",
+    "BookDiscountDeletionConfirmationMessage": "Are you sure you want to delete this book discount?"
   }
 }

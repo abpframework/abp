@@ -91,9 +91,9 @@ Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
 ## Run the Application
 
-> Please execute the `abp install-libs` command to restore the libs required by the web project before running the application.
-
 {{ if UI == "MVC" || UI == "BlazorServer" }}
+
+> Before starting the application, run `abp install-libs` command in your Web directory to restore the client-side libraries. This will populate the `libs` folder.
 
 {{ if Tiered == "Yes" }}
 

@@ -1,5 +1,7 @@
 # ABP Framework Migration Guides
 
+The following documents explain how to migrate your existing ABP applications. We write migration documents only if you need to take an action while upgrading your solution. Otherwise, you can easily upgrade your solution using the [abp update command](../Upgrading.md).
+
 - [5.1 to 5.2](Abp-5_2.md)
 - [4.x to 5.0](Abp-5_0.md)
 - [4.2 to 4.3](Abp-4_3.md)

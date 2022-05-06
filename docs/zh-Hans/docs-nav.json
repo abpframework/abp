@@ -263,6 +263,10 @@
           "path": "Data-Seeding.md"
         },
         {
+          "text": "分布式锁",
+          "path": "Distributed-Locking.md"
+        },
+        {
           "text": "虚拟文件系统",
           "path": "Virtual-File-System.md"
         },
@@ -405,14 +409,16 @@
                   "path": "Entities.md"
                 },
                 {
-                  "text": "值对象"
+                  "text": "值对象",
+                  "path": "Value-Objects.md"
                 },
                 {
                   "text": "仓储",
                   "path": "Repositories.md"
                 },
                 {
-                  "text": "领域服务"
+                  "text": "领域服务",
+                  "path": "Domain-Services.md"
                 },
                 {
                   "text": "规约",
@@ -516,6 +522,10 @@
               "path": "UI/AspNetCore/Customization-User-Interface.md"
             },
             {
+              "text": "测试",
+              "path": "UI/AspNetCore/Testing.md"
+            },
+            {
               "text": "主题化",
               "path": "UI/AspNetCore/Theming.md"
             }
@@ -535,6 +545,10 @@
             {
               "text": "服务代理",
               "path": "UI/Angular/Service-Proxies.md"
+            },
+            {
+              "text": "单元测试",
+              "path": "UI/Angular/Testing.md"
             },
             {
               "text": "HTTP请求",
@@ -683,6 +697,20 @@
       ]
     },
     {
+      "text": "测试",
+      "path": "Testing.md"
+    },
+    {
+      "text": "部署",
+      "path": "Deployment/Index.md",
+      "items": [
+        {
+          "text": "部署到群集环境",
+          "path": "Deployment/Clustered-Environment.md"
+        }
+      ]
+    },
+    {
       "text": "示例",
       "items": [
         {
@@ -782,7 +810,13 @@
       "items": [
         {
           "text": "CLI",
-          "path": "CLI.md"
+          "path": "CLI.md",
+          "items": [
+            {
+              "text": "新命令示例",
+              "path": "CLI-New-Command-Samples.md"
+            }
+          ]
         },
         {
           "text": "API文档",
