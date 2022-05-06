@@ -18,13 +18,6 @@ public class SettingManagementFeatureDefinitionProvider : FeatureDefinitionProvi
             L("Feature:SettingManagementEnable"),
             L("Feature:SettingManagementEnableDescription"),
             new ToggleStringValueType());
-        
-        group.AddFeature(
-            "MaxNumber",
-            "",
-            L("Max number"),
-            new FixedLocalizableString("Test feature max number"),
-            new FreeTextStringValueType());
 
         settingEnableFeature.CreateChild(
             SettingManagementFeatures.AllowTenantsToChangeEmailSettings,
@@ -32,14 +25,6 @@ public class SettingManagementFeatureDefinitionProvider : FeatureDefinitionProvi
             L("Feature:AllowTenantsToChangeEmailSettings"),
             L("Feature:AllowTenantsToChangeEmailSettingsDescription"),
             new ToggleStringValueType(),
-            isAvailableToHost: false);
-        
-        settingEnableFeature.CreateChild(
-            "MinNumber",
-            "",
-            L("Min number"),
-            new FixedLocalizableString("Test feature min number"),
-            new FreeTextStringValueType(),
             isAvailableToHost: false);
     }
 
