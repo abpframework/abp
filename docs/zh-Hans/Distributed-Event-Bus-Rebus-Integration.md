@@ -1,6 +1,8 @@
 # 分布式事件总线Rebus集成
 
+
 > 本文解释了 **如何配置[Rebus](http://mookid.dk/category/rebus/)** 做为分布式总线提供程序. 参阅[分布式事件总线文档](Distributed-Event-Bus.md)了解如何使用分布式事件总线系统.
+
 
 ## 安装
 
