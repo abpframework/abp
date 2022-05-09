@@ -289,6 +289,19 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
+
+        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.ProgressiveWebApp.Short))
+        {
+            context.Symbols.Add("PWA");
+        }
+        else
+        {
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/service-worker.js"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/service-worker.published.js"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/manifest.json"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/icon-192.png"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/icon-512.png"));
+        }
     }
 
     protected void ConfigureWithBlazorServerUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
@@ -364,6 +377,11 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
+        }
+
+        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.ProgressiveWebApp.Short))
+        {
+            context.Symbols.Add("PWA");
         }
     }
 
@@ -446,6 +464,38 @@ public abstract class AppTemplateBase : TemplateInfo
             context.BuildArgs.MobileApp == MobileApp.None)
         {
             steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
+        }
+    }
+
+    private void ConfigureDockerFiles(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        switch (context.BuildArgs.UiFramework)
+        {
+            case UiFramework.None:
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
+                break;
+            case UiFramework.Angular:
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
+                steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
+                break;
+            case UiFramework.Blazor:
+            case UiFramework.BlazorServer:
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
+                break;
+            case UiFramework.NotSpecified:
+            case UiFramework.Mvc:
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
+                break;
         }
     }
 }

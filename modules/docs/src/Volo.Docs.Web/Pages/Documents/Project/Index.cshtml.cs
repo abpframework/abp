@@ -78,6 +78,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public bool FullSearchEnabled { get; set; }
 
+        public bool IsLatestVersion => Version == LatestVersionInfo.Version;
+
         private const int MaxDescriptionMetaTagLength = 200;
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
@@ -99,6 +101,7 @@ namespace Volo.Docs.Pages.Documents.Project
             _projectAppService = projectAppService;
             _documentSectionRenderer = documentSectionRenderer;
             _uiOptions = options.Value;
+
 
             LocalizationResourceType = typeof(DocsResource);
         }
@@ -215,15 +218,21 @@ namespace Volo.Docs.Pages.Documents.Project
                 .Append("/").Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version).Append("/").Append(DocumentName).ToString();
 
             sb.Clear();
-            
+
             return Redirect(sb.Append("/Abp/Languages/Switch?culture=").Append(LanguageCode).Append("&uiCulture=")
                 .Append(LanguageCode).Append("&returnUrl=").Append(returnUrl).ToString());
         }
 
+        public string GetFullUrlOfTheLatestDocument()
+        {
+            return Request.Scheme + "://" + Request.Host.Value + Request.PathBase +
+                   DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" +
+                   DocsAppConsts.Latest + "/" + DocumentName;
+        }
+
         private IActionResult RedirectToDefaultLanguage()
         {
-            return RedirectToPage(new
-            {
+            return RedirectToPage(new {
                 projectName = ProjectName,
                 version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
                 languageCode = DefaultLanguageCode,
@@ -233,8 +242,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private IActionResult RedirectToDefaultDocument()
         {
-            return RedirectToPage(new
-            {
+            return RedirectToPage(new {
                 projectName = ProjectName,
                 version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
                 documentName = "",
@@ -332,7 +340,7 @@ namespace Volo.Docs.Pages.Documents.Project
         private VersionInfoViewModel GetLatestVersionInfo(List<VersionInfoViewModel> versions)
         {
             if (Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
-                && (GithubVersionProviderSource) (long) Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Branches)
+                && (GithubVersionProviderSource)(long)Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Branches)
             {
                 var LatestVersionBranchNameWithoutPrefix = RemoveVersionPrefix(Project.LatestVersionBranchName);
 
@@ -372,9 +380,9 @@ namespace Volo.Docs.Pages.Documents.Project
         private void SetLatestVersionBranchName(List<VersionInfoViewModel> versions)
         {
             if (!Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
-                || (GithubVersionProviderSource) (long) Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Releases)
+                || (GithubVersionProviderSource)(long)Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Releases)
             {
-                versions.First(v=> !SemanticVersionHelper.IsPreRelease(v.Version)).Version = Project.LatestVersionBranchName;
+                versions.First(v => !SemanticVersionHelper.IsPreRelease(v.Version)).Version = Project.LatestVersionBranchName;
             }
         }
 
@@ -459,7 +467,7 @@ namespace Volo.Docs.Pages.Documents.Project
             LanguageSelectListItems = new List<SelectListItem>();
 
             var sb = new StringBuilder();
-            
+
             foreach (var language in LanguageConfig.Languages)
             {
                 LanguageSelectListItems.Add(
@@ -641,8 +649,8 @@ namespace Volo.Docs.Pages.Documents.Project
                     }
                 );
             }
-            
-            
+
+
             return await _documentAppService.GetAsync(
                 new GetDocumentInput
                 {

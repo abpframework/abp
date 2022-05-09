@@ -35,6 +35,11 @@ public class FakeExternalLoginProvider : ExternalLoginProviderBase, ITransientDe
         );
     }
 
+    public override Task<bool> IsEnabledAsync()
+    {
+        return Task.FromResult(true);
+    }
+
     protected override Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName)
     {
         if (userName != "ext_user")

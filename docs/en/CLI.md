@@ -18,13 +18,13 @@ dotnet tool update -g Volo.Abp.Cli
 
 ## Global Options
 
-While each command may have a set of options, there are some global options those can be used with any command;
+While each command may have a set of options, there are some global options that can be used with any command;
 
 * `--skip-cli-version-check`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
 
 ## Commands
 
-Here, the list of all available commands before explaining their details:
+Here, is the list of all available commands before explaining their details:
 
 * **`help`**: Shows help on the usage of the ABP CLI.
 * **`new`**: Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
@@ -115,6 +115,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
+    * `--pwa`: Specifies to Configure Angular or Blazor WebAssembly project as Progressive Web Application.
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
 * `--preview`: Use latest preview version.

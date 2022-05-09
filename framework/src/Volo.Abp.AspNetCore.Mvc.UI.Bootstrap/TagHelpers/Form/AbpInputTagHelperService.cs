@@ -268,7 +268,6 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         }
 
         var label = new TagBuilder("label");
-        label.AddCssClass("form-label");
         label.Attributes.Add("for", GetIdAttributeValue(inputTag));
         label.InnerHtml.AppendHtml(TagHelper.Label);
 
@@ -291,15 +290,10 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
     {
         if (IsOutputHidden(inputTag))
         {
-            return "";
+            return string.Empty;
         }
 
-        if (isCheckbox)
-        {
-            return "";
-        }
-
-        var text = "";
+        string text;
 
         if (!string.IsNullOrEmpty(TagHelper.InfoText))
         {
@@ -314,7 +308,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             }
             else
             {
-                return "";
+                return string.Empty;
             }
         }
 

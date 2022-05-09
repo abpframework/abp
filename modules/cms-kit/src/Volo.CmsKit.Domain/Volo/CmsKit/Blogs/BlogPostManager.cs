@@ -30,6 +30,7 @@ public class BlogPostManager : DomainService
         [NotNull] Blog blog,
         [NotNull] string title,
         [NotNull] string slug,
+        [NotNull] BlogPostStatus status,
         [CanBeNull] string shortDescription = null,
         [CanBeNull] string content = null,
         [CanBeNull] Guid? coverImageMediaId = null)
@@ -40,17 +41,18 @@ public class BlogPostManager : DomainService
         Check.NotNullOrEmpty(slug, nameof(slug));
 
         var blogPost = new BlogPost(
-                    GuidGenerator.Create(),
-                    blog.Id,
-                    author.Id,
-                    title,
-                    slug,
-                    shortDescription,
-                    content,
-                    coverImageMediaId,
-                    CurrentTenant.Id
-                    );
-
+            GuidGenerator.Create(),
+            blog.Id,
+            author.Id,
+            title,
+            slug,
+            shortDescription,
+            content,
+            coverImageMediaId,
+            CurrentTenant.Id,
+            status
+        );
+        
         await CheckSlugExistenceAsync(blog.Id, blogPost.Slug);
 
         return blogPost;

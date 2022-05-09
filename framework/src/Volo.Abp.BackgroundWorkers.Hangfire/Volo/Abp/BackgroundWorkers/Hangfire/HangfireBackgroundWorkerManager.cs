@@ -40,12 +40,13 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
             var unProxyWorker = ProxyHelper.UnProxy(hangfireBackgroundWorker);
             if (hangfireBackgroundWorker.RecurringJobId.IsNullOrWhiteSpace())
             {
-                RecurringJob.AddOrUpdate(() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(), hangfireBackgroundWorker.CronExpression);
+                RecurringJob.AddOrUpdate(() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(),
+                    hangfireBackgroundWorker.CronExpression, hangfireBackgroundWorker.TimeZone, hangfireBackgroundWorker.Queue);
             }
             else
             {
                 RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId, () => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(),
-                    hangfireBackgroundWorker.CronExpression);
+                    hangfireBackgroundWorker.CronExpression, hangfireBackgroundWorker.TimeZone, hangfireBackgroundWorker.Queue);
             }
         }
         else
@@ -79,7 +80,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
             var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
             var workerAdapter = Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker;
 
-            RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(), GetCron(period.Value));
+            RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(), GetCron(period.Value), workerAdapter.TimeZone, workerAdapter.Queue);
         }
 
         return Task.CompletedTask;
