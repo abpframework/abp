@@ -48,7 +48,7 @@ The Basic Theme is a theme implementation for the Blazor UI. It is a minimalist 
     @using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling
     @using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
     ```
-  * Add Basic theme style bundled between `<head>` tags.
+  * Add Basic theme style bundles between `<head>` tags.
     ```html
     <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global" />
     ```
