@@ -135,6 +135,66 @@ In the [Deploying to a Clustered Environment](https://docs.abp.io/en/abp/5.3/Dep
 
 If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), that contains a list of all issues and pull requests closed with this version.
 
+## What's New with ABP Commercial 5.3?
+
+### GDPR Module
+
+> **GDPR (General Data Protection Regulation)** is a regulation in EU law on data protection and known as the toughest privacy and security law in the world. GDPR applies to any organisation operating within the EU, as well as any organisations outside of the EU which offer goods or services to customers or businesses in the EU.
+
+With this version we are introducing the new **GDPR Module**. This was one of the most awaited features, so we've prioritized it and implemented it in this version.
+
+GDPR Module is pre-installed in the [startup templates](https://docs.abp.io/en/commercial/5.3/startup-templates/index) for MVC. So, no need to manually install it. When you create a new startup template, you can directly use this module. We'll also implement this module for the other UI types as soon as possible and also add extra functionality such as "Cookie Consent" and more. Currently, there are two main functionality of this module and they are "Download Personal Data" and "Delete Personal Data".
+
+![](./gdpr-user-menu.png)
+
+There is a "Personal Data" section in the user menu like in the screenshot above and when you click to this section, you'll be redirected to the "Personal Data" page. On that page, you can either request to "Download Personal Data" or "Delete Personal Data". 
+
+![](./gdpr-personal-data-page.png)
+
+### CMS Kit Pro - Polling Feature
+
+We've added the new **Polling** feature to the **CMS Kit Pro** module. This feature allows you to use a voting system in your application easily.
+
+<!-- TODO: describe polling feature ! -->
+
+### OAuth Resource Owner Password as External Login Provider
+
+> The Resource Owner Password flow allows for the exchanging of the user name and password of a user for an access token. When using the resource owner password credentials grant, the user provides the credentials (user name and password) directly to the application.
+
+You can login by providing a username and password from an External Login Provider.
+
+*Example: Use OAuth external login provider with Keycloak*
+
+![](./oauth-external-provider.gif)
+
+### Suite New Features & Enhancements
+
+In this version, there are couple of enhancements and new features in **Suite** and they are listed briefly below:
+
+* It's now possible to create a **app-nolayers (Application - single layer)** template via Suite and also code-generation is supported for **app-nolayers** template with this version.
+* Suite allows users to see and download their Suite logs.
+* Suite allows to generate code via CLI. If you have JSON file that contains a code block, like your entity, you can use the `abp suite generate` command to generate CRUD pages.
+
+*Example:*
+
+```bash
+abp suite generate -e C:\Users\.suite\entities\Country.json -s C:\Users\my-proj\SuiteProj\SuiteProj.sln
+```
+
+### Suite Webinar (Take a closer look at the code generation: ABP Suite)
+
+![](./webinar.png)
+
+We've organized a webinar for Suite and in this webinar, we've talked about ABP Suite's capabilities, important features and more...
+
+You can watch the event from [here](https://www.youtube.com/watch?v=RFArBh60RSA&t=3s), if you haven't watched yet.
+
+### Docker Compose Configurations for Single Layer Startup Template
+<!-- TODO: briefly introduce it! -->
+
+### Microservice Solution Enhancements
+<!-- TODO: list enhancements here! -->
+
 ## Community News
 
 ### New ABP Community Posts
@@ -142,7 +202,7 @@ If you want to see more details, you can check [the release on GitHub](https://g
 * [Anto Subash](https://twitter.com/antosubash) created a series named ["Microservice with ABP"](https://blog.antosubash.com/posts/abp-microservice-series) and shared couple of video posts about the ABP Microservice solution.
 * [Francisco Kadzi](https://github.com/CiscoNinja) has created his first ABP Community article that shows how to ["Customize ABP Angular Application UI with AdminLTE"](https://community.abp.io/posts/customize-abp-angular-application-ui-with-adminlte.-7qu1m67s).
 * [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) has created an article to show how to ["Dealing with Multiple Implementations of a Service in ASP.NET Core & ABP Dependency Injection"](https://community.abp.io/posts/dealing-with-multiple-implementations-of-a-service-in-asp.net-core-abp-dependency-injection-ysfp4ho2) with examples.
-* Manoj Kumar submitted a new article about how to use "ABP authentication in a Flutter application". It was a frequently asked topic, which you can read [here](https://community.abp.io/posts/flutter-web-authentication-from-abp-mp6l2ehx).
+* [Manoj Kumar](https://community.abp.io/members/manojkumar.t@shloklabs.com) submitted a new article about how to use "ABP authentication in a Flutter application". It was a frequently asked topic, which you can read [here](https://community.abp.io/posts/flutter-web-authentication-from-abp-mp6l2ehx).
 * [Engincan Veske](https://twitter.com/EngincanVeske) created a new Community Article to show "Concurrency Check/Control in ABP". You can read from [here](https://community.abp.io/posts/handle-concurrency-with-ef-core-in-an-abp-framework-project-with-asp.net-core-mvc-jlkc3w8f).
 
 ### ABP Community Talks 2022.4 - "How can you contribute to the open source ABP Framework?" (May 10, 2022 - 17:00 UTC)
