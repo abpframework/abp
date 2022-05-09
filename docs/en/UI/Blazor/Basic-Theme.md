@@ -33,7 +33,6 @@ The Basic Theme is a theme implementation for the Blazor UI. It is a minimalist 
 
 {{end}}
 
-
 {{if UI == "BlazorServer"}}
 
 * Make sure [AspNetCore Basic Theme](../AspNetCore/Basic-Theme.md) installation steps are completed. 
@@ -58,7 +57,6 @@ The Basic Theme is a theme implementation for the Blazor UI. It is a minimalist 
     ```
 
 {{end}}
-
 
 ## The Layout
 
@@ -91,7 +89,6 @@ See the [Customization / Overriding Components](Customization-Overriding-Compone
 
 You can run the following [ABP CLI](../../CLI.md) command in **Blazor WebAssembly** project directory to copy the source code to your solution:
 
-
 {{if UI == "Blazor"}}
 
 `abp add-package Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme --with-source-code --add-to-solution-file`
@@ -113,7 +110,6 @@ Then, navigate to downloaded `Volo.Abp.AspNetCore.Components.Server.BasicTheme` 
 {{end}}
 
 ----
-
 
 Or, you can download the source code of the Basic Theme, manually copy the project content into your solution, re-arrange the package/module dependencies (see the Installation section above to understand how it was installed to the project) and freely customize the theme based on your application requirements.
 
