@@ -38,25 +38,25 @@ You can use any IDE that supports .NET 6.x, like **[Visual Studio 2022](https://
 
 There is only one breaking changes in this version upgrade and it's explained below.
 
-* Upgraded the [AutoMapper](https://github.com/AutoMapper/AutoMapper) library to **v11.0.1**. So, you need to upgrade your projects that uses **AutoMapper** library (probably your `*.Application` project) to **netstandard2.1** or **net6** if it's **netstandard2.0**. See [#12189](https://github.com/abpframework/abp/pull/12189).
+* Upgraded the [AutoMapper](https://github.com/AutoMapper/AutoMapper) library to **v11.0.1**. So, you need to upgrade your projects that use the **AutoMapper** library (your `*.Application` project etc.) to **netstandard2.1** or **net6**. See [#12189](https://github.com/abpframework/abp/pull/12189).
 
 ## What's New with ABP Framework 5.3?
 
-In this section, I will introduce some major features released with this version. Here, a brief list of titles explained in the next sections:
+In this section, I will introduce some major features released with this version. Here is a brief list of titles explained in the next sections:
 
 * Single-layer option added to the [*Get Started*](https://abp.io/get-started) page
-* PWA Support for Blazor WASM & Angular UIs
+* PWA Support for Startup Templates
 * Introduce the `Volo.Abp.Gdpr.Abstractions` package
 * Batch Publish Events from Outbox to the Event Bus
 * Improvements on **eShopOnAbp** Project & E-Book Announcement
 * LeptonX Lite Documentations & Project Status & Roadmap
 * OpenIddict Module
 * Deployment Documentations
-* Other news...
+* Other news
 
 ### Single-layer Option on *Get Started* Page
 
-We've created a new startup template named `app-nolayers` and [announced](https://blog.abp.io/abp/ABP.IO-Platform-5-2-RC-Has-Been-Published) it in the previous version. In this version, we've added this startup template option to the *Get Started* page.
+We've created a new startup template named `app-nolayers` and [announced](https://blog.abp.io/abp/ABP.IO-Platform-5-2-RC-Has-Been-Published) it in the previous version. In this version, we've also added this startup template option to the *Get Started* page.
 
 *You can examine the screenshot below to see how to create an `app-nolayers` template from the ["Get Started"](https://abp.io/get-started) page.*
 
@@ -98,12 +98,12 @@ We've made some optimizations for the **Batch Event Publishing** in this version
 
 ### Improvements on eShopOnAbp Project & E-Book Announcement
 
-There are couple of developments on **eShopOnAbp** project made in this version. You can see the brief description of the some of the improvements below:
+There are a couple of developments on the **eShopOnAbp** project made in this version. You can see the brief descriptions of the some of the improvements below:
 
 * Local certificates have been created to use while working in Kubernetes and also Helm Charts have been updated. See [#107](https://github.com/abpframework/eShopOnAbp/pull/107).
-* Order Management page has been created. See [#92](https://github.com/abpframework/eShopOnAbp/pull/92).
+* The Order Management page has been created. See [#92](https://github.com/abpframework/eShopOnAbp/pull/92).
 * Database migration event handlers have been removed and "Distributed Locking" used for database migrations. See [#85](https://github.com/abpframework/eShopOnAbp/pull/85) and [#102](https://github.com/abpframework/eShopOnAbp/pull/102).
-* Switched from Ocelot to YARP as gateway. See [#97](https://github.com/abpframework/eShopOnAbp/pull/97).
+* Switched from Ocelot to YARP as the gateway. See [#97](https://github.com/abpframework/eShopOnAbp/pull/97).
 
 We have exciting news to share with the community, we're working on an "ABP Microservice Development" e-book. In this book, we're using the **eShopOnAbp** project as a reference microservice solution and we're trying to explain our experiences during the microservice application development process through this project.
 
@@ -114,7 +114,7 @@ It is finally here, we've released the **1.0.0-beta.1** version for the **Lepton
 
 ![](./leptonx-lite-documentations.png)
 
-Lepton X Lite documents have been written for the three UI types within this version. You can see the related documentation from the screenshot above. You can follow these documentations and try the new **LeptonX Lite Theme**.
+Lepton X Lite documents have been written for the three UI types within this version. You can see the related documentation from the screenshot above. You can follow these documents and try the new **LeptonX Lite Theme**.
 
 We don't suggest using the **beta.1** version on production but we highly demand you to test the **LeptonX Lite** and provide feedback to us. It's really important for us to be able to release a more stable version. Thanks in advance.
 
@@ -122,49 +122,48 @@ For the following versions (beta.2 and RC versions), we will focus on;
 
 * Fixing the reported bugs from the community
 * Providing documentations as much as possible
-* Adding new custom pages to demo
+* Adding new custom pages to the demo
 
 <!-- TODO: mention the status of the module? -->
 ### OpenIddict Module
 
 ### Deployment Documentations
 
-Deploying an ABP based application is not so different than deploying any .NET or ASP.NET Core application. You can deploy it to a cloud provider (e.g. Azure, AWS, Google Could) or on-premise server, IIS or any other web server. However, we wanted to prepare a "Deployment Guide" to mention the important points and considerations.
+Deploying an ABP-based application is not so different than deploying any .NET or ASP.NET Core application. You can deploy it to a cloud provider (e.g. Azure, AWS, Google Could) or on-premise server, IIS or any other web server. However, we wanted to prepare a "Deployment Guide" to mention the important points and considerations.
 
 ![](./deployment-documentation.png)
 
-We've created two new deployment documentations, you can find them under the ["Deployment"](https://docs.abp.io/en/abp/5.3/Deployment/Index) section of our documentation website.
+We've created two new deployment documents, you can find them under the ["Deployment"](https://docs.abp.io/en/abp/5.3/Deployment/Index) section of our documentation website.
 
-In the [Deploying to a Clustered Environment](https://docs.abp.io/en/abp/5.3/Deployment/Clustered-Environment) documentation, we've documented the topics that you should consider when you are developing your application to a clustered environment and explains how you can deal with these topics in your ABP based application. 
+In the [Deploying to a Clustered Environment](https://docs.abp.io/en/abp/5.3/Deployment/Clustered-Environment) documentation, we've documented the topics that you should consider when you are developing your application to a clustered environment and explained how you can deal with these topics in your ABP-based application. 
 
 ### Other News
 
-* Upgraded the [AutoMapper](https://github.com/AutoMapper/AutoMapper) library to **v11.0.1**. See [#12189](https://github.com/abpframework/abp/pull/12189).
-* Global Features was only accessible from the C# code. From this version Global Features can be also provided from application configurations. See [#12043](https://github.com/abpframework/abp/pull/12043).
-* Get the user's detailed informations (name, surname and phone number) from external login. See [#12085](https://github.com/abpframework/abp/pull/12085).
+* Global Features was only accessible from the C# code. From this version, Global Features can be also provided from application configurations. See [#12043](https://github.com/abpframework/abp/pull/12043).
+* Get the user's detailed information (name, surname and phone number) from external login. See [#12085](https://github.com/abpframework/abp/pull/12085).
 * Date Pipes for Angular. See [#11909](https://github.com/abpframework/abp/issues/11909).
 
-If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), that contains a list of all issues and pull requests closed with this version.
+If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), which contains a list of all issues and pull requests closed with this version.
 
 ## What's New with ABP Commercial 5.3?
 
 ### GDPR Module
 
-> **GDPR (General Data Protection Regulation)** is a regulation in EU law on data protection and known as the toughest privacy and security law in the world. GDPR applies to any organisation operating within the EU, as well as any organisations outside of the EU which offer goods or services to customers or businesses in the EU.
+> **GDPR (General Data Protection Regulation)** is a regulation in EU law on data protection and known as the toughest privacy and security law in the world. GDPR applies to any organization operating within the EU, as well as any organizations outside of the EU which offer goods or services to customers or businesses in the EU.
 
-With this version we are introducing the new **GDPR Module**. This was one of the most awaited features, so we've prioritized it and implemented it in this version.
+With this version, we are introducing the new **GDPR Module**. This was one of the most awaited features, so we've prioritized it and implemented it in this version.
 
 GDPR Module is pre-installed in the [startup templates](https://docs.abp.io/en/commercial/5.3/startup-templates/index) for MVC. So, no need to manually install it. When you create a new startup template, you can directly use this module. We'll also implement this module for the other UI types as soon as possible and also add extra functionality such as "Cookie Consent" and more. 
 
-Currently, there are two main functionality of this module and they are "Download Personal Data" and "Delete Personal Data".
+Currently, there are two main functions of this module and they are "Download Personal Data" and "Delete Personal Data".
 
 ![](./gdpr-user-menu.png)
 
-There is a "Personal Data" section in the user menu like in the screenshot above and when you click to this section, you'll be redirected to the "Personal Data" page. On that page, you can either request to "Download Personal Data" or "Delete Personal Data". 
+There is a "Personal Data" section in the user menu like in the screenshot above and when you click on this section, you'll be redirected to the "Personal Data" page. On that page, you can either request to "Download Personal Data" or "Delete Personal Data". 
 
 ![](./gdpr-personal-data-page.png)
 
-After you've requested to download "Personal Data", you need to wait for 1 hour by default (it's configurable, you can use configure the related option). Because the GDPR module is developed by considering the distributed systems and therefore a specific time should be passed to ensure all the published events are handled.
+After you've requested to download "Personal Data", you need to wait for 1 hour by default (you can configure the related option). Because the GDPR module is developed by considering the distributed systems and therefore a specific time should be passed to ensure all the published events are handled and all personal data is collected.
 
 ### CMS Kit Pro - Polling Feature
 
@@ -174,16 +173,15 @@ You can create a question, define some options for it and the poll will be creat
 
 ![](./poll-question-example.png)
 
-Also there is a admin side of the Polling Feature. You can easily manage your polls in your admin (back-office) project. You can create, update, delete and show the results of the poll in the Polls page.
+Also, there is an admin side of the Polling Feature. You can easily manage your polls in your admin (back-office) project. You can create, update, delete and show the results of the poll on the Polls page.
 
 ![](./poll-questions.png)
-
 
 ### OAuth Resource Owner Password as External Login Provider
 
 > The Resource Owner Password flow allows for the exchanging of the user name and password of a user for an access token. When using the resource owner password credentials grant, the user provides the credentials (user name and password) directly to the application.
 
-You can login by providing a username and password from an External Login Provider.
+Thanks to that you can login by providing a username and password from an External Login Provider.
 
 *Example: Use OAuth external login provider with Keycloak*
 
@@ -191,11 +189,11 @@ You can login by providing a username and password from an External Login Provid
 
 ### Suite New Features & Enhancements
 
-In this version, there are couple of enhancements and new features in **Suite** and they are listed briefly below:
+In this version, there are some enhancements and new features in **Suite** and they are listed briefly below:
 
-* It's now possible to create a **app-nolayers (Application - single layer)** template via Suite and also code-generation is supported for **app-nolayers** template with this version.
-* With this version, Suite allows users to see and download Suite logs.
-* Suite allows to generate code via CLI. If you have JSON file that contains code blocks, like entity configurations, you can use the `abp suite generate` command to generate CRUD pages based on it.
+* It's now possible to create an **app-nolayers (Application - single layer)** template via Suite and also code-generation is supported for the **app-nolayers** template with this version.
+* With this version, Suite allows users to see and download their logs.
+* Suite allows generating code via CLI. If you have JSON file that contains code blocks, like entity configurations, you can use the `abp suite generate` command to generate CRUD pages based on it.
 
 *Example:*
 
@@ -209,19 +207,19 @@ abp suite generate -e C:\Users\.suite\entities\Country.json -s C:\Users\my-proj\
 
 We've organized a webinar for Suite and in this webinar, we've talked about ABP Suite's capabilities, important features and more...
 
-You can watch the event from [here](https://www.youtube.com/watch?v=RFArBh60RSA&t=3s), if you haven't watched yet.
+You can watch the event from [here](https://www.youtube.com/watch?v=RFArBh60RSA&t=3s), if you haven't watched it yet.
 
 ### Docker Compose Configurations for Single Layer Startup Template
 
 Dockerfiles, docker-compose files and build script files have been added to the Single Layer Startup Template (app-nolayers) with this version.
 
-In this way, applications created with this template can now be deployed more easily.
+In this way, applications created with this template now can be deployed more easily.
 
 ### Microservice Solution Enhancements
 
-There are couple of enhancements made in the Microservice Solution. You can see the list of these enhancements:
+There are some enhancements made in the Microservice Solution. You can see the list of these enhancements:
 
-* Initial migration on the template has been updated for the small improvement that made in the **Language Management** module.
+* Initial migration on the template has been updated for the small improvement that was made in the **Language Management** module.
 * Database migration event handlers have been removed and "Distributed Locking" used for the database migrations.
 
 ### PWA Support for the Application Pro Template
@@ -237,7 +235,7 @@ abp new MyProgressiveWebApp -t app-pro -u blazor --pwa
 
 ### New ABP Community Posts
 
-* [Anto Subash](https://twitter.com/antosubash) created a series named ["Microservice with ABP"](https://blog.antosubash.com/posts/abp-microservice-series) and shared couple of video posts about the ABP Microservice solution.
+* [Anto Subash](https://twitter.com/antosubash) created a series named ["Microservice with ABP"](https://blog.antosubash.com/posts/abp-microservice-series) and shared a couple of video posts about the ABP Microservice solution.
 * [Francisco Kadzi](https://github.com/CiscoNinja) has created his first ABP Community article that shows how to ["Customize ABP Angular Application UI with AdminLTE"](https://community.abp.io/posts/customize-abp-angular-application-ui-with-adminlte.-7qu1m67s).
 * [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) has created an article to show how to ["Dealing with Multiple Implementations of a Service in ASP.NET Core & ABP Dependency Injection"](https://community.abp.io/posts/dealing-with-multiple-implementations-of-a-service-in-asp.net-core-abp-dependency-injection-ysfp4ho2) with examples.
 * [Manoj Kumar](https://community.abp.io/members/manojkumar.t@shloklabs.com) submitted a new article about how to use "ABP authentication in a Flutter application". It was a frequently asked topic, which you can read [here](https://community.abp.io/posts/flutter-web-authentication-from-abp-mp6l2ehx).
@@ -247,7 +245,7 @@ abp new MyProgressiveWebApp -t app-pro -u blazor --pwa
 
 ![](./community-talks-2022.4.png)
 
-We've [asked you to pick the topic of the next Community Talks](https://twitter.com/abpframework/status/1514567683072745474?s=20&t=rJfHrB3DYDNsk2EXS8zBBQ) and you've chosen the "How to contribute to open source ABP Framework?" for the next talk topic. So, in this Community Talk, we will be talking about "How to contribute to ABP Framework" with one of the top contributors [Ismail Yılmaz](https://github.com/iyilm4z). The event will be on **May 10, 2022, at 17:00 (UTC)** on YouTube.
+We've [asked you to pick the topic of the next Community Talks](https://twitter.com/abpframework/status/1514567683072745474?s=20&t=rJfHrB3DYDNsk2EXS8zBBQ) and you've chosen the "How to contribute to open source ABP Framework?" for the next talk topic. So, in this Community Talk, we will be talking about "How to contribute to ABP Framework" with one of the top contributors of the ABP Framework, [Ismail Yılmaz](https://github.com/iyilm4z). The event will be on **May 10, 2022, at 17:00 (UTC)** on YouTube.
 
 > You can register for the event from [here](https://kommunity.com/volosoft/events/abp-community-talks-20224-how-to-contribute-to-the-open-source-abp-framework-d9b50664), if you haven't registered yet.
 
@@ -255,10 +253,8 @@ You can also [subscribe to the Volosoft channel](https://www.youtube.com/channel
 
 ### Discord Server
 
-We've created an official ABP Discord server so the ABP Community can interact with each other. 
+We've created an official ABP Discord server so the ABP Community can interact with each other and create a blog-post to introduce it. You can read the [ABP Discord Server announcement post](https://blog.abp.io/abp/Official-ABP-Discord-Server-is-Here) to learn more about ABP Discord Server.
 
 Thanks to the ABP Community, **700+** people joined our Discord Server so far and it grows every day.
-
-> You can read the [ABP Discord Server announcement post](https://blog.abp.io/abp/Official-ABP-Discord-Server-is-Here) to learn more about ABP Discord Server.
 
 You can join our Discord Server from [here](https://discord.gg/abp), if you haven't yet.
