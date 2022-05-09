@@ -369,7 +369,7 @@ public abstract class ProjectCreationCommandBase
 
         if (string.IsNullOrWhiteSpace(efCoreProjectPath))
         {
-            Logger.LogWarning("Couldn't find EntityFrameworkCore project to create initial migrations!");
+            Logger.LogWarning("Couldn't find the project to create initial migrations!");
             return;
         }
         
