@@ -48,7 +48,7 @@ In this section, I will introduce some major features released with this version
 * PWA Support for Blazor WASM & Angular UIs
 * Introduce the `Volo.Abp.Gdpr.Abstractions` package
 * Batch Publish Events from Outbox to the Event Bus
-* Improvements on **eShopOnAbp** project
+* Improvements on **eShopOnAbp** Project & E-Book Announcement
 * LeptonX Lite Documentations & Project Status & Roadmap
 * OpenIddict Module
 * Deployment Documentations
@@ -60,15 +60,15 @@ We've created a new startup template named `app-nolayers` and [announced](https:
 
 *You can examine the screenshot below to see how to create an `app-nolayers` template from the ["Get Started"](https://abp.io/get-started) page.*
 
-![Get Started Page / app-nolayers](./app-nolayers-get-started.png)
+![](./app-nolayers-get-started.png)
 
-### PWA Support for Blazor WASM & Angular UIs
+### PWA Support for Startup Templates
 
 With v5.3 ABP supports PWA for Blazor WASM & Angular UIs. To create a startup template with the PWA support, you can use the `--pwa` parameter.
 Example:
 
 ```bash
-abp new MyProgressiveWebApp -u blazor --pwa
+abp new MyProgressiveWebApp -t app -u blazor --pwa
 ```
 
 ### Introduce the `Volo.Abp.Gdpr.Abstractions` package
@@ -77,7 +77,9 @@ A new `Volo.Abp.Gdpr.Abstractions` package is added to the framework.
 
 Anyone can use this package to use the pre-defined ETOs and implement GDPR-related operations for their own applications. 
 
-In that point, we are introducing the **GDPR Module** for the ABP Commercial customers and this module does the GDPR-related operations on behalf of you, such as *"Download/Delete Personal Data"*. I'll describe the **GDPR Module** later in this blog post.
+In that point, we are introducing the **GDPR Module** for the ABP Commercial customers and this module does the GDPR-related operations on behalf of you, such as *"Download/Delete Personal Data"*. I'll describe the **GDPR Module** later in this blog post. 
+
+> Please see the **GDPR Module** section below to learn more about this module.
 
 ### Batch Publish Events from Outbox to the Event Bus
 
@@ -94,8 +96,17 @@ We've made some optimizations for the **Batch Event Publishing** in this version
 
 *You can see the optimization results above for "Batch Publishing (1000 Events)"*
 
-<!-- TODO: list the enhancements -->
-### Improvements on eShopOnAbp project
+### Improvements on eShopOnAbp Project & E-Book Announcement
+
+There are couple of developments on **eShopOnAbp** project made in this version. You can see the brief description of the some of the improvements below:
+
+* Local certificates have been created to use while working in Kubernetes and also Helm Charts have been updated. See [#107](https://github.com/abpframework/eShopOnAbp/pull/107).
+* Order Management page has been created. See [#92](https://github.com/abpframework/eShopOnAbp/pull/92).
+* Database migration event handlers have been removed and "Distributed Locking" used for database migrations. See [#85](https://github.com/abpframework/eShopOnAbp/pull/85) and [#102](https://github.com/abpframework/eShopOnAbp/pull/102).
+* Switched from Ocelot to YARP as gateway. See [#97](https://github.com/abpframework/eShopOnAbp/pull/97).
+
+We have exciting news to share with the community, we're working on an "ABP Microservice Development" e-book. In this book, we're using the **eShopOnAbp** project as a reference microservice solution and we're trying to explain our experiences during the microservice application development process through this project.
+
 
 ### LeptonX Lite Documentations & Project Status & Roadmap
 
@@ -129,7 +140,7 @@ In the [Deploying to a Clustered Environment](https://docs.abp.io/en/abp/5.3/Dep
 ### Other News
 
 * Upgraded the [AutoMapper](https://github.com/AutoMapper/AutoMapper) library to **v11.0.1**. See [#12189](https://github.com/abpframework/abp/pull/12189).
-* Global Features was only accessible from C# code. From this version Global Features can be provided from application configurations. See [#12043](https://github.com/abpframework/abp/pull/12043).
+* Global Features was only accessible from the C# code. From this version Global Features can be also provided from application configurations. See [#12043](https://github.com/abpframework/abp/pull/12043).
 * Get the user's detailed informations (name, surname and phone number) from external login. See [#12085](https://github.com/abpframework/abp/pull/12085).
 * Date Pipes for Angular. See [#11909](https://github.com/abpframework/abp/issues/11909).
 
@@ -143,7 +154,9 @@ If you want to see more details, you can check [the release on GitHub](https://g
 
 With this version we are introducing the new **GDPR Module**. This was one of the most awaited features, so we've prioritized it and implemented it in this version.
 
-GDPR Module is pre-installed in the [startup templates](https://docs.abp.io/en/commercial/5.3/startup-templates/index) for MVC. So, no need to manually install it. When you create a new startup template, you can directly use this module. We'll also implement this module for the other UI types as soon as possible and also add extra functionality such as "Cookie Consent" and more. Currently, there are two main functionality of this module and they are "Download Personal Data" and "Delete Personal Data".
+GDPR Module is pre-installed in the [startup templates](https://docs.abp.io/en/commercial/5.3/startup-templates/index) for MVC. So, no need to manually install it. When you create a new startup template, you can directly use this module. We'll also implement this module for the other UI types as soon as possible and also add extra functionality such as "Cookie Consent" and more. 
+
+Currently, there are two main functionality of this module and they are "Download Personal Data" and "Delete Personal Data".
 
 ![](./gdpr-user-menu.png)
 
@@ -151,11 +164,20 @@ There is a "Personal Data" section in the user menu like in the screenshot above
 
 ![](./gdpr-personal-data-page.png)
 
+After you've requested to download "Personal Data", you need to wait for 1 hour by default (it's configurable, you can use configure the related option). Because the GDPR module is developed by considering the distributed systems and therefore a specific time should be passed to ensure all the published events are handled.
+
 ### CMS Kit Pro - Polling Feature
 
-We've added the new **Polling** feature to the **CMS Kit Pro** module. This feature allows you to use a voting system in your application easily.
+We've added the new **Polling** feature to the **CMS Kit Pro** module. This feature allows you to use a questionnaire/voting system in your application easily.
 
-<!-- TODO: describe polling feature ! -->
+You can create a question, define some options for it and the poll will be created for you. You can see the example poll in the screenshot below.
+
+![](./poll-question-example.png)
+
+Also there is a admin side of the Polling Feature. You can easily manage your polls in your admin (back-office) project. You can create, update, delete and show the results of the poll in the Polls page.
+
+![](./poll-questions.png)
+
 
 ### OAuth Resource Owner Password as External Login Provider
 
@@ -172,8 +194,8 @@ You can login by providing a username and password from an External Login Provid
 In this version, there are couple of enhancements and new features in **Suite** and they are listed briefly below:
 
 * It's now possible to create a **app-nolayers (Application - single layer)** template via Suite and also code-generation is supported for **app-nolayers** template with this version.
-* Suite allows users to see and download their Suite logs.
-* Suite allows to generate code via CLI. If you have JSON file that contains a code block, like your entity, you can use the `abp suite generate` command to generate CRUD pages.
+* With this version, Suite allows users to see and download Suite logs.
+* Suite allows to generate code via CLI. If you have JSON file that contains code blocks, like entity configurations, you can use the `abp suite generate` command to generate CRUD pages based on it.
 
 *Example:*
 
@@ -190,10 +212,26 @@ We've organized a webinar for Suite and in this webinar, we've talked about ABP 
 You can watch the event from [here](https://www.youtube.com/watch?v=RFArBh60RSA&t=3s), if you haven't watched yet.
 
 ### Docker Compose Configurations for Single Layer Startup Template
-<!-- TODO: briefly introduce it! -->
+
+Dockerfiles, docker-compose files and build script files have been added to the Single Layer Startup Template (app-nolayers) with this version.
+
+In this way, applications created with this template can now be deployed more easily.
 
 ### Microservice Solution Enhancements
-<!-- TODO: list enhancements here! -->
+
+There are couple of enhancements made in the Microservice Solution. You can see the list of these enhancements:
+
+* Initial migration on the template has been updated for the small improvement that made in the **Language Management** module.
+* Database migration event handlers have been removed and "Distributed Locking" used for the database migrations.
+
+### PWA Support for the Application Pro Template
+
+Application Pro template also supports the PWA for Blazor WASM & Angular UIS. To create a startup template with the PWA support, you can use the `--pwa` parameter.
+Example:
+
+```bash
+abp new MyProgressiveWebApp -t app-pro -u blazor --pwa
+```
 
 ## Community News
 
