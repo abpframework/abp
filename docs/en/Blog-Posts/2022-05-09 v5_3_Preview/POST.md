@@ -1,4 +1,4 @@
-# ABP.IO Platform 5.3 RC.1 Has Been Released
+# ABP.IO Platform 5.3 RC Has Been Released
 
 Today, we are happy to release the [ABP Framework](https://abp.io/) and  [ABP Commercial](https://commercial.abp.io/) version **5.3 RC** (Release Candidate). This blog post introduces the new features and important changes in this new version.
 
@@ -16,7 +16,7 @@ Follow the steps below to try the version 5.3.0 RC today:
 dotnet tool update Volo.Abp.Cli -g --version 5.3.0-rc.1
 ````
 
-​	**or install** it if you haven't before:
+**or install** it if you haven't before:
 
 ````bash
 dotnet tool install Volo.Abp.Cli -g --version 5.3.0-rc.1
@@ -34,14 +34,13 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 You can use any IDE that supports .NET 6.x, like **[Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)**.
 
----
-
-<!-- TODO: we need to prepare a migration guide to explain AutoMapper v11 upgrade and mention it in the below section.? -->
 ## Migration Notes & Breaking Changes
 
----
+There is only one breaking changes in this version upgrade and it's explained below.
 
-## What's New with ABP Framework 5.2?
+* Upgraded the [AutoMapper](https://github.com/AutoMapper/AutoMapper) library to **v11.0.1**. So, you need to upgrade your projects that uses **AutoMapper** library (probably your `*.Application` project) to **netstandard2.1** or **net6** if it's **netstandard2.0**. See [#12189](https://github.com/abpframework/abp/pull/12189).
+
+## What's New with ABP Framework 5.3?
 
 In this section, I will introduce some major features released with this version. Here, a brief list of titles explained in the next sections:
 
@@ -50,20 +49,91 @@ In this section, I will introduce some major features released with this version
 * Introduce the `Volo.Abp.Gdpr.Abstractions` package
 * Batch Publish Events from Outbox to the Event Bus
 * Improvements on **eShopOnAbp** project
-* LeptonX Lite Documentations & Status of the Project
-* Progress of the OpenIddict module
-* New Deployment Documentations
+* LeptonX Lite Documentations & Project Status & Roadmap
+* OpenIddict Module
+* Deployment Documentations
 * Other news...
 
-### Single-layer Option on Get Started Page
+### Single-layer Option on *Get Started* Page
 
-We've created a new startup template named `app-nolayers` and [announced](https://blog.abp.io/abp/ABP.IO-Platform-5-2-RC-Has-Been-Published) it in the previous version. In this version, we've also add this startup template option to the *Get Started* page, so anyone can also create a single layer application template via *Get Started* page.
+We've created a new startup template named `app-nolayers` and [announced](https://blog.abp.io/abp/ABP.IO-Platform-5-2-RC-Has-Been-Published) it in the previous version. In this version, we've added this startup template option to the *Get Started* page.
+
+*You can examine the screenshot below to see how to create an `app-nolayers` template from the ["Get Started"](https://abp.io/get-started) page.*
 
 ![Get Started Page / app-nolayers](./app-nolayers-get-started.png)
 
 ### PWA Support for Blazor WASM & Angular UIs
 
----
+With v5.3 ABP supports PWA for Blazor WASM & Angular UIs. To create a startup template with the PWA support, you can use the `--pwa` parameter.
+Example:
+
+```bash
+abp new MyProgressiveWebApp -u blazor --pwa
+```
+
+### Introduce the `Volo.Abp.Gdpr.Abstractions` package
+
+A new `Volo.Abp.Gdpr.Abstractions` package is added to the framework. 
+
+Anyone can use this package to use the pre-defined ETOs and implement GDPR-related operations for their own applications. 
+
+In that point, we are introducing the **GDPR Module** for the ABP Commercial customers and this module does the GDPR-related operations on behalf of you, such as *"Download/Delete Personal Data"*. I'll describe the **GDPR Module** later in this blog post.
+
+### Batch Publish Events from Outbox to the Event Bus
+
+We've introduced the "Transactional Outbox & Inbox Patterns" in [**v5.0**](https://blog.abp.io/abp/ABP-IO-Platform-5.0-RC-1-Has-Been-Released), it was one of the most awaited features by distributed software developers.
+
+We've made some optimizations for the **Batch Event Publishing** in this version, you can examine the related development from [here](https://github.com/abpframework/abp/pull/11243). After the optimization, the results are impressive.
+
+|   | Before | After |
+|---|---|---|
+| **RabbitMQ** | 50080ms | 547ms  |
+| **Kafka** | 15303ms | 475ms |
+| **Azure (Remote Service)** | 116157ms | 1534ms |
+| **Rebus (RabbitMQ transport)** | 26094ms | 560ms |
+
+*You can see the optimization results above for "Batch Publishing (1000 Events)"*
+
+<!-- TODO: list the enhancements -->
+### Improvements on eShopOnAbp project
+
+### LeptonX Lite Documentations & Project Status & Roadmap
+
+It is finally here, we've released the **1.0.0-beta.1** version for the **LeptonX Lite**.
+
+![](./leptonx-lite-documentations.png)
+
+Lepton X Lite documents have been written for the three UI types within this version. You can see the related documentation from the screenshot above. You can follow these documentations and try the new **LeptonX Lite Theme**.
+
+We don't suggest using the **beta.1** version on production but we highly demand you to test the **LeptonX Lite** and provide feedback to us. It's really important for us to be able to release a more stable version. Thanks in advance.
+
+For the following versions (beta.2 and RC versions), we will focus on;
+
+* Fixing the reported bugs from the community
+* Providing documentations as much as possible
+* Adding new custom pages to demo
+
+<!-- TODO: mention the status of the module? -->
+### OpenIddict Module
+
+### Deployment Documentations
+
+Deploying an ABP based application is not so different than deploying any .NET or ASP.NET Core application. You can deploy it to a cloud provider (e.g. Azure, AWS, Google Could) or on-premise server, IIS or any other web server. However, we wanted to prepare a "Deployment Guide" to mention the important points and considerations.
+
+![](./deployment-documentation.png)
+
+We've created two new deployment documentations, you can find them under the ["Deployment"](https://docs.abp.io/en/abp/5.3/Deployment/Index) section of our documentation website.
+
+In the [Deploying to a Clustered Environment](https://docs.abp.io/en/abp/5.3/Deployment/Clustered-Environment) documentation, we've documented the topics that you should consider when you are developing your application to a clustered environment and explains how you can deal with these topics in your ABP based application. 
+
+### Other News
+
+* Upgraded the [AutoMapper](https://github.com/AutoMapper/AutoMapper) library to **v11.0.1**. See [#12189](https://github.com/abpframework/abp/pull/12189).
+* Global Features was only accessible from C# code. From this version Global Features can be provided from application configurations. See [#12043](https://github.com/abpframework/abp/pull/12043).
+* Get the user's detailed informations (name, surname and phone number) from external login. See [#12085](https://github.com/abpframework/abp/pull/12085).
+* Date Pipes for Angular. See [#11909](https://github.com/abpframework/abp/issues/11909).
+
+If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), that contains a list of all issues and pull requests closed with this version.
 
 ## Community News
 
