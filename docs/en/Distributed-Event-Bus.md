@@ -295,3 +295,113 @@ This example;
 * Configure to use the `ProductEto` as the event transfer object to publish for the `Product` related events.
 
 > Distributed event system use the [object to object mapping](Object-To-Object-Mapping.md) system to map `Product` objects to `ProductEto` objects. So, you need to configure the object mapping (`Product` -> `ProductEto`) too. You can check the [object to object mapping document](Object-To-Object-Mapping.md) to learn how to do it.
+
+## Outbox / Inbox for Transactional Events
+
+The **[transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)** is used to publishing distributed events within the **same transaction** that manipulates the application's database. When you enable outbox, distributed events are saved into the database inside the same transaction with your data changes, then sent to the actual message broker by a separate [background worker](Background-Workers.md) with a re-try system. In this way, it ensures the consistency between your database state and the published events.
+
+The **transactional inbox pattern**, on the other hand, saves incoming events into database first. Then (in a [background worker](Background-Workers.md)) executes the event handler in a transactional manner and removes the event from the inbox queue in the same transaction. It ensures that the event is only executed one time by keeping the processed messages for a while and discarding the duplicate events received from the message broker.
+
+Enabling the event outbox and inbox systems require a few manual steps for your application. Please apply  the instructions in the following sections to make them running.
+
+> Outbox and Inbox can be separately enabled and configured, so you may only use one of them if you want.
+
+### Pre-requirements
+
+* The outbox/inbox system uses the distributed lock system to handle concurrency when you run multiple instances of your application/service. So, you should **configure the distributed lock system** with one of the providers as [explained in this document](Distributed-Locking.md).
+* The outbox/inbox system supports [Entity Framework Core](Entity-Framework-Core.md) (EF Core) and [MongoDB](MongoDB.md) **database providers** out of the box. So, your applications should use one of these database providers. For other database providers, see the *Implementing a Custom Database Provider* section.
+
+> If you are using MongoDB, be sure that you enabled multi-document database transactions  that was introduced in MongoDB version 4.0. See the *Transactions* section of the [MongoDB](MongoDB.md) document.
+
+### Enabling event outbox
+
+Open your `DbContext` class (EF Core or MongoDB), implement the `IHasEventOutbox` interface. You should end up by adding a `DbSet` property into your `DbContext` class:
+
+```csharp
+public DbSet<OutgoingEventRecord> OutgoingEvents { get; set; }
+```
+
+Add the following lines inside the `OnModelCreating` method of your `DbContext` class (only for EF Core):
+
+```csharp
+builder.ConfigureEventOutbox();
+```
+
+For EF Core, use the standard `Add-Migration` and `Update-Database` commands to apply changes into your database (you can skip this step for MongoDB). If you want to use the command-line terminal, run the following commands in the root directory of the database integration project:
+
+```bash
+dotnet ef migrations add "Added_Event_Outbox"
+dotnet ef database update
+```
+
+Finally, write the following configuration code inside the `ConfigureServices` method of your [module class](Module-Development-Basics.md) (replace `YourDbContext` with your own `DbContext` class):
+
+````csharp
+Configure<AbpDistributedEventBusOptions>(options =>
+{
+    options.Outboxes.Configure(config =>
+    {
+        config.UseDbContext<YourDbContext>();
+    });
+});
+````
+
+### Enabling event inbox
+
+Open your `DbContext` class (EF Core or MongoDB), implement the `IHasEventInbox` interface. You should end up by adding a `DbSet` property into your `DbContext` class:
+
+```csharp
+public DbSet<IncomingEventRecord> IncomingEvents { get; set; }
+```
+
+Add the following lines inside the `OnModelCreating` method of your `DbContext` class (only for EF Core):
+
+```csharp
+builder.ConfigureEventInbox();
+```
+
+For EF Core, use the standard `Add-Migration` and `Update-Database` commands to apply changes into your database (you can skip this step for MongoDB). If you want to use the command-line terminal, run the following commands in the root directory of the database integration project:
+
+```bash
+dotnet ef migrations add "Added_Event_Inbox"
+dotnet ef database update
+```
+
+Finally, write the following configuration code inside the `ConfigureServices` method of your [module class](Module-Development-Basics.md) (replace `YourDbContext` with your own `DbContext` class):
+
+````csharp
+Configure<AbpDistributedEventBusOptions>(options =>
+{
+    options.Inboxes.Configure(config =>
+    {
+        config.UseDbContext<YourDbContext>();
+    });
+});
+````
+
+### Advanced Topics
+
+#### Implementing a Custom Database Provider
+
+If your application or service is using a database provider other than EF Core and MongoDB, you should manually integrate outbox/inbox system with your database provider.
+
+> Outbox and Inbox table/data must be stored in the same database with your application's data (since we want to create a single database transaction that includes application's database operations and outbox/inbox table operations). Otherwise, you should care about distributed (multi-database) transaction support which is not provided by most of the vendors and may require additional configuration.
+
+ABP provides `IEventOutbox` and `IEventInbox` abstractions as extension point for the outbox/inbox system. You can create classes by implementing these interfaces and register them to [dependency injection](Dependency-Injection.md).
+
+Once you implement your custom event boxes, you can configure `AbpDistributedEventBusOptions` to use your event box classes:
+
+````csharp
+Configure<AbpDistributedEventBusOptions>(options =>
+{
+    options.Outboxes.Configure(config =>
+    {
+        config.ImplementationType = typeof(MyOutbox); //Your Outbox class
+    });
+    
+    options.Inboxes.Configure(config =>
+    {
+        config.ImplementationType = typeof(MyInbox); //Your Inbox class
+    });
+});
+````
