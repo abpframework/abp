@@ -92,8 +92,10 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
       * `angular`: Angular UI. There are some additional options for this template:
         * `--separate-identity-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor`: Blazor UI. There are some additional options for this template:
         * `--separate-identity-server`The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
         * `--tiered`: The Identity Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *IdentityServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
       * `none`: Without UI. No front-end layer will be created. There are some additional options for this template:
@@ -115,7 +117,6 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
-    * `--pwa`: Specifies to Configure Angular or Blazor WebAssembly project as Progressive Web Application.
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
 * `--preview`: Use latest preview version.
