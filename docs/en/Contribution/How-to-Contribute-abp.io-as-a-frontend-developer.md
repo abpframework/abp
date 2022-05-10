@@ -35,6 +35,8 @@ The path of the Backend app is “templates\app\aspnet-core.” If you want to w
 
 Before running the backend, you should run the Db migrator project. The DbMigrator created initial tables and values. The path of DbMigrator is `templates\app\aspnet-core\src\MyCompanyName.MyProjectName.DbMigrator`. Open a terminal in the path and execute the command `dotnet run` in terminal
 
+One last step before the running the backend is installing client-side libraries. Go to `templates\app\aspnet-core`. Open a terminal in the path and execute the command `abp install-libs` in terminal
+
 Next step you should go to path of backend host project. The path is `templates\app\aspnet-core\src\MyCompanyName.MyProjectName.HttpApi.HostWithIds`. Open a terminal in the path and execute the command `dotnet run` in terminal
 
 Your backend should be running successfully
