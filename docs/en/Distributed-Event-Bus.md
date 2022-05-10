@@ -498,3 +498,7 @@ Configure<AbpDistributedEventBusOptions>(options =>
     });
 });
 ````
+
+## See Also
+
+* [Local Event Bus](Local-Event-Bus.md)
