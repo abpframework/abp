@@ -379,11 +379,90 @@ Configure<AbpDistributedEventBusOptions>(options =>
 });
 ````
 
+### Additional Configuration
+
+> The default configuration will be enough for most cases. However, there are some options you may want to set for outbox and inbox.
+
+#### Outbox configuration
+
+Remember how outboxes are configured:
+
+````csharp
+Configure<AbpDistributedEventBusOptions>(options =>
+{
+    options.Outboxes.Configure(config =>
+    {
+        // TODO: Set options
+    });
+});
+````
+
+Here, the following properties are available on the `config` object:
+
+* `IsSendingEnabled` (default: `true`): You can set to `false` to disable sending outbox events to the actual event bus. If you disable this, events can still be added to outbox, but not sent. This can be helpful if you have multiple applications (or application instances) writing to outbox, but use one of them to send the events.
+* `Selector`: A predicate to filter the event (ETO) types to be used for this configuration. Should return `true` to select the event. It selects all the events by default. This is especially useful if you want to ignore some ETO types from the outbox, or want to define named outbox configurations and group events within these configurations. See the *Named Configurations* section.
+* `ImplementationType`: Type of the class that implements the database operations for the outbox. This is normally set when you call `UseDbContext` as shown before. See *Implementing a Custom Outbox/Inbox Database Provider* section for advanced usages.
+
+#### Inbox configuration
+
+Remember how inboxes are configured:
+
+````csharp
+Configure<AbpDistributedEventBusOptions>(options =>
+{
+    options.Inboxes.Configure(config =>
+    {
+        // TODO: Set options
+    });
+});
+````
+
+Here, the following properties are available on the `config` object:
+
+* `IsProcessingEnabled` (default: `true`): You can set to `false` to disable processing (handling) events in the inbox. If you disable this, events can still be received, but not executed. This can be helpful if you have multiple applications (or application instances), but use one of them to execute the event handlers.
+* `EventSelector`: A predicate to filter the event (ETO) types to be used for this configuration. This is especially useful if you want to ignore some ETO types from the inbox, or want to define named inbox configurations and group events within these configurations. See the *Named Configurations* section.
+* `HandlerSelector`: A predicate to filter the event handled types (classes implementing the `IDistributedEventHandler<TEvent>` interface) to be used for this configuration. This is especially useful if you want to ignore some event handler types from inbox processing, or want to define named inbox configurations and group event handlers within these configurations. See the *Named Configurations* section.
+* `ImplementationType`: Type of the class that implements the database operations for the inbox. This is normally set when you call `UseDbContext` as shown before. See *Implementing a Custom Outbox/Inbox Database Provider* section for advanced usages.
+
 ### Advanced Topics
 
-#### Implementing a Custom Database Provider
+#### Named Configurations
 
-If your application or service is using a database provider other than EF Core and MongoDB, you should manually integrate outbox/inbox system with your database provider.
+> All the concepts explained in this section is also valid for inbox configurations. We will show examples only for outbox to keep the document shorter.
+
+See the following outbox configuration code:
+
+````csharp
+Configure<AbpDistributedEventBusOptions>(options =>
+{
+    options.Outboxes.Configure(config =>
+    {
+        //TODO
+    });
+});
+````
+
+This is equivalent of the following code:
+
+````csharp
+Configure<AbpDistributedEventBusOptions>(options =>
+{
+    options.Outboxes.Configure("Default", config =>
+    {
+        //TODO
+    });
+});
+````
+
+`Default` is this code indicates the configuration name. If you don't specify it (like in the previous code block), `Default` is used as the configuration name.
+
+That means you can define more than one configuration for outbox (also for inbox) with different names. ABP runs all the configured outboxes.
+
+Multiple outboxes can be needed if your application have more than one database and you want to run different outbox queues for different databases. In this case, you can use the `Selector` option to decide the events should be handled by an outbox. See the *Additional Configurations* section above.
+
+#### Implementing a Custom Outbox/Inbox Database Provider
+
+If your application or service is using a database provider other than [EF Core](Entity-Framework-Core.md) and [MongoDB](MongoDB.md), you should manually integrate outbox/inbox system with your database provider.
 
 > Outbox and Inbox table/data must be stored in the same database with your application's data (since we want to create a single database transaction that includes application's database operations and outbox/inbox table operations). Otherwise, you should care about distributed (multi-database) transaction support which is not provided by most of the vendors and may require additional configuration.
 
