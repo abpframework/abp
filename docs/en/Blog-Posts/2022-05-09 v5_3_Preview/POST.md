@@ -34,11 +34,11 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 You can use any IDE that supports .NET 6.x, like **[Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)**.
 
-## Migration Notes & Breaking Changes
+## Migration Notes
 
-There is only one breaking change in this version upgrade and it's explained below.
+There is a change in this version that may effect your applications:
 
-* Upgraded the [AutoMapper](https://github.com/AutoMapper/AutoMapper) library to **v11.0.1**. So, you need to upgrade your projects that use the **AutoMapper** library (your `*.Application` project etc.) to **netstandard2.1** or **net6**. See [#12189](https://github.com/abpframework/abp/pull/12189).
+* Upgraded the [AutoMapper](https://github.com/AutoMapper/AutoMapper) library to **v11.0.1**. So, you need to change your project's target SDK that use the **AutoMapper** library (typically your `*.Application` project). You can change it from `netstandard2.0` to `netstandard2.1` or `net6` if needed. You can write to [#12189](https://github.com/abpframework/abp/pull/12189) if you need any help.
 
 ## What's New with ABP Framework 5.3?
 
@@ -58,13 +58,14 @@ In this section, I will introduce some major features released with this version
 
 We've created a new startup template named `app-nolayers` and [announced](https://blog.abp.io/abp/ABP.IO-Platform-5-2-RC-Has-Been-Published) it in the previous version. In this version, we've also added this startup template option to the *Get Started* page.
 
-*You can examine the screenshot below to see how to create an `app-nolayers` template from the ["Get Started"](https://abp.io/get-started) page.*
+*You can examine the screenshot below to see how to create an `app-nolayers` template from the ["Get Started"](https://abp.io/get-started) page:*
 
 ![](./app-nolayers-get-started.png)
 
 ### PWA Support for Startup Templates
 
-ABP v5.3 now supports PWA for Blazor WASM & Angular UIs. To create a startup template with the PWA support, you can use the `--pwa` parameter.
+ABP v5.3 application startup template now supports PWA for Blazor WASM & Angular UIs. To create a startup template with the PWA support, you can use the `--pwa` parameter.
+
 Example:
 
 ```bash
@@ -73,9 +74,7 @@ abp new MyProgressiveWebApp -t app -u blazor --pwa
 
 ### Introducing the `Volo.Abp.Gdpr.Abstractions` Package
 
-A new `Volo.Abp.Gdpr.Abstractions` package has been added to the framework. 
-
-Anyone can use this package to use the pre-defined ETOs and implement GDPR-related operations for their own applications. 
+A new `Volo.Abp.Gdpr.Abstractions` package has been added to the framework. This is an abstraction package, so doesn't contain any actual GDPR implementation. It defines some classes and interfaces to put a standard for who want to implement a GDPR module that can run in a modular or microservice system.
 
 At that point, we are introducing the **GDPR Module** for the ABP Commercial customers and this module does the GDPR-related operations on behalf of you, such as *"Download/Delete Personal Data"*. I'll describe the **GDPR Module** later in this blog post. 
 
@@ -85,33 +84,20 @@ At that point, we are introducing the **GDPR Module** for the ABP Commercial cus
 
 We introduced the "Transactional Outbox & Inbox Patterns" in [**ABP v5.0**](https://blog.abp.io/abp/ABP-IO-Platform-5.0-RC-1-Has-Been-Released), it was one of the most awaited features by several software developers.
 
-We've made some optimizations for the **Batch Event Publishing** in this version, you can examine the related development from [here](https://github.com/abpframework/abp/pull/11243). After the optimization, the results are impressive.
-
-|   | Before | After |
-|---|---|---|
-| **RabbitMQ** | 50080ms | 547ms  |
-| **Kafka** | 15303ms | 475ms |
-| **Azure (Remote Service)** | 116157ms | 1534ms |
-| **Rebus (RabbitMQ transport)** | 26094ms | 560ms |
-
-*You can see the optimization results above for "Batch Publishing (1000 Events)"*
+We've made some optimizations for the **Batch Event Publishing** in this version, you can examine the related development from [here](https://github.com/abpframework/abp/pull/11243). After the optimization, the results are impressive. It is enabled by default (if you have configured [event outbox](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#outbox-inbox-for-transactional-events)), so you don't need to any manual configuration.
 
 ### Improvements on eShopOnAbp Project & E-Book Announcement
 
-There are some developments on the **eShopOnAbp** project made in this version. You can see the brief descriptions of some of the improvements below:
+There are some developments on the [eShopOnAbp project](https://github.com/abpframework/eShopOnAbp) made in this version. You can see the brief descriptions of some of the improvements below:
 
 * Local certificates have been created to use while working in Kubernetes and also Helm Charts have been updated. See [#107](https://github.com/abpframework/eShopOnAbp/pull/107).
 * The Order Management page has been created. See [#92](https://github.com/abpframework/eShopOnAbp/pull/92).
 * Database migration event handlers have been removed and "Distributed Locking" is now used for database migrations. See [#85](https://github.com/abpframework/eShopOnAbp/pull/85) and [#102](https://github.com/abpframework/eShopOnAbp/pull/102).
 * Switched from Ocelot to YARP as the gateway. See [#97](https://github.com/abpframework/eShopOnAbp/pull/97).
 
-We have exciting news to share with the community, we're working on an "ABP Microservice Development" e-book. In this book, we're using the **eShopOnAbp** project as a reference microservice solution and we're trying to explain our experiences during the microservice application development process through this project.
+We have exciting news to share with the community, we're working on an "ABP Microservice Development" e-book. In this book, we're using the eShopOnAbp project as a reference microservice solution and we're trying to explain our experiences during the microservice application development process through this project.
 
-We're planning to create this book in nine chapters and make it available after the third chapter is written. You will be able to download this free e-book from the [abp.io](https://abp.io/) website. You can see the title of these three chapters below:
-
-- Chapter 1 : Introduction (This chapter explains the main problems of microservice development and the purpose of the eShopOnAbp solution.)
-- Chapter 2 : Running the Solution (This chapter explains the various ways to run the solution such as using Microsoft's Tye tool.)
-- Chapter 3 : Understanding the authentication system (This chapter explains the authentication system used in the **eShopOnAbp** solution.)
+We're planning to create this book in nine chapters and make it available after the third chapter is written. After that, you will be able to download this free e-book from the [abp.io](https://abp.io/) website.
 
 ### LeptonX Lite Documentations & Project Status & Roadmap
 
@@ -147,8 +133,6 @@ Deploying an ABP-based application is not so different than deploying any .NET o
 
 ![](./deployment-documentation.png)
 
-We've created two new deployment documents, you can find them under the ["Deployment"](https://docs.abp.io/en/abp/5.3/Deployment/Index) section of our documentation website.
-
 In the [Deploying to a Clustered Environment](https://docs.abp.io/en/abp/5.3/Deployment/Clustered-Environment) documentation, we've documented the topics that you should consider when you are developing your application to a clustered environment and explained how you can deal with these topics in your ABP-based application. 
 
 ### Other News
@@ -156,7 +140,6 @@ In the [Deploying to a Clustered Environment](https://docs.abp.io/en/abp/5.3/Dep
 * Global Features were only accessible from the C# code. From this version and on, Global Features can be also provided from application configurations. See [#12043](https://github.com/abpframework/abp/pull/12043).
 * Getting the user's detailed information (name, surname and phone number) from external login. See [#12085](https://github.com/abpframework/abp/pull/12085).
 * Date Pipes for Angular. See [#11909](https://github.com/abpframework/abp/issues/11909).
-* A bug has been reported to us about a plain password leak on the `AbpAuditLogActions` table for the **TenantCreateDto.AdminPassword**. We've [fixed this problem](https://github.com/abpframework/abp/pull/12499), and it will be available in the next release.
 
 If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), which contains a list of all the issues and pull requests closed with this version.
 
@@ -182,13 +165,11 @@ After you've requested to download "Personal Data", you need to wait for 1 hour 
 
 ### CMS Kit Pro - Polling Feature
 
-We've added the new **Polling** feature to the **CMS Kit Pro** module. This feature allows you to use a questionnaire/voting system in your application easily.
-
-You can create a question, define some options for it and the poll will be created for you. You can see the example poll in the screenshot below.
+We've added a **Polling** feature to the **CMS Kit Pro** module. This feature allows you to use a questionnaire/voting system in your application easily. You can create a question, define some options for it and the poll will be created for you. You can see the example poll in the screenshot below:
 
 ![](./poll-question-example.png)
 
-Also, there is an admin side of the Polling Feature. You can easily manage your polls in your admin (back-office) project. You can create, update, delete and show the results of the poll on the Polls page.
+Also, there is an admin side of the Polling Feature. You can easily manage your polls in your admin (back-office) project. You can create, update, delete and show the results of the poll on the Polls page:
 
 ![](./poll-questions.png)
 
@@ -196,9 +177,9 @@ Also, there is an admin side of the Polling Feature. You can easily manage your 
 
 > The Resource Owner Password flow allows for the exchanging of the username and password of a user for an access token. When using the resource owner password credentials grant, the user provides the credentials (username and password) directly to the application.
 
-Thanks to that you can login by providing a username and password from an External Login Provider.
+Now, you can login by entering a username and password from an OAuth server.
 
-*Example: Use OAuth external login provider with Keycloak*
+Example: Use OAuth external login provider with Keycloak:
 
 ![](./oauth-external-provider.gif)
 
@@ -207,16 +188,16 @@ Thanks to that you can login by providing a username and password from an Extern
 In this version, there are some enhancements and new features in **Suite** and they are listed briefly below:
 
 * It's now possible to create an **app-nolayers (Application - single layer)** template via Suite and also code-generation is supported for the **app-nolayers** template with this version.
-* Suite now allows users to see and download their logs.
+* Suite now allows users to see and download its logs.
 * Suite now allows generating code via CLI. If you have a JSON file that contains code blocks, like entity configurations, you can use the `abp suite generate` command to generate CRUD pages based on it.
 
-*Example:*
+Example:
 
 ```bash
 abp suite generate -e C:\Users\.suite\entities\Country.json -s C:\Users\my-proj\SuiteProj\SuiteProj.sln
 ```
 
-### Suite Webinar (Take a closer look at the code generation: ABP Suite)
+### Suite Webinar: Take a closer look at the code generation
 
 ![](./webinar.png)
 
@@ -258,7 +239,7 @@ abp new MyProgressiveWebApp -t app-pro -u blazor --pwa
 * [Manoj Kumar](https://community.abp.io/members/manojkumar.t@shloklabs.com) submitted a new article about how to use "ABP authentication in a Flutter application". It was a frequently asked topic, which you can read [here](https://community.abp.io/posts/flutter-web-authentication-from-abp-mp6l2ehx).
 * [Engincan Veske](https://twitter.com/EngincanVeske) created a new Community Article to show "Concurrency Check/Control in ABP". You can read it [here](https://community.abp.io/posts/handle-concurrency-with-ef-core-in-an-abp-framework-project-with-asp.net-core-mvc-jlkc3w8f).
 
-### ABP Community Talks 2022.4 - "How can you contribute to the open source ABP Framework?" (May 10, 2022 - 17:00 UTC)
+### ABP Community Talks 2022.4: How can you contribute to the open source ABP Framework? (May 10, 2022 - 17:00 UTC)
 
 ![](./community-talks-2022.4.png)
 
