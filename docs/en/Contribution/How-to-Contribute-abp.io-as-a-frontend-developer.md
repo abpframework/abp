@@ -11,6 +11,12 @@
 - Abp CLI https://docs.abp.io/en/abp/latest/cli
 - A code editor
 
+Note: This arcticle prepare Windows OS. You may change the path type of your OS. an Example
+
+Windows: `templates\app\aspnet-core\src\MyCompanyName.MyProjectName.DbMigrator\appsettings.json`
+
+Unix: `templates/app/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json`
+
 ### Sample docker commands
 
 You need to install SQL Server and Redis. You can install these programs without docker, but my example uses docker containers. Your computer should have Docker Engine. Then open the terminal en execute the commands one by one.
