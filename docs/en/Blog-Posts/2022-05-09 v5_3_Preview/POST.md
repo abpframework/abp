@@ -98,7 +98,7 @@ We've made some optimizations for the **Batch Event Publishing** in this version
 
 ### Improvements on eShopOnAbp Project & E-Book Announcement
 
-There are a couple of developments on the **eShopOnAbp** project made in this version. You can see the brief descriptions of the some of the improvements below:
+There are some developments on the **eShopOnAbp** project made in this version. You can see the brief descriptions of the some of the improvements below:
 
 * Local certificates have been created to use while working in Kubernetes and also Helm Charts have been updated. See [#107](https://github.com/abpframework/eShopOnAbp/pull/107).
 * The Order Management page has been created. See [#92](https://github.com/abpframework/eShopOnAbp/pull/92).
@@ -107,6 +107,11 @@ There are a couple of developments on the **eShopOnAbp** project made in this ve
 
 We have exciting news to share with the community, we're working on an "ABP Microservice Development" e-book. In this book, we're using the **eShopOnAbp** project as a reference microservice solution and we're trying to explain our experiences during the microservice application development process through this project.
 
+We're planning to create this book in nine chapters and make it available after the three chapter is written. You will be able to download this free e-book from the [abp.io](https://abp.io/) website. You can see the title of these three chapters below:
+
+- Chapter 1 : Introduction (This chapter explains the main problems of microservice development and the purpose of the eShopOnAbp solution.)
+- Chapter 2 : Running the Solution (This chapter explains the various ways to run the solution such as using the Microsoft's Tye tool.)
+- Chapter 3 : Understanding the authentication system (This chapter explains the authentication system used in the **eShopOnAbp** solution.)
 
 ### LeptonX Lite Documentations & Project Status & Roadmap
 
@@ -124,8 +129,17 @@ For the following versions (beta.2 and RC versions), we will focus on;
 * Providing documentations as much as possible
 * Adding new custom pages to the demo
 
-<!-- TODO: mention the status of the module? -->
 ### OpenIddict Module
+
+We have [announced the plan of replacing the IdentityServer](https://github.com/abpframework/abp/issues/11989). ABP currently uses **IdentityServer4** to add **OAuth** features as built-in on the server-side. However, since *IdentityServer4's support ends at the end of the year 2022*. Its replacement is Duende IdentityServer, which is not a free software anymore. (see [more](https://blog.duendesoftware.com/posts/20220111_fair_trade/))
+
+Therefore, we've decided to completely drop the **IdentityServer4** from the ABP platform and implementing the [OpenIddict](https://github.com/openiddict/openiddict-core) and making it installed into the startup templates. 
+
+We've implemented both open source and commercial OpenIddict modules, we plan to remove Identity Server and replace it with OpenIddict for template projects in **v5.4**. Please check [#12084](https://github.com/abpframework/abp/pull/12084) to see the development made on the open-source side.
+
+We're creating the documentation for OpenIddict Module, if you want to have general knowledge about this module, you can check the documentation from [here](https://github.com/abpframework/abp/blob/dev/docs/en/Modules/OpenIddict.md). Currently, this is a draft documentation but it gives overall knowledge about OpenIddict Module, we'll complete this documentation in v5.4 and you'll be able to read it completely.
+
+Currently, we are also working on Keycloak integration possibilities in parallel to the OpenIddict integration research and we've prepared some samples that you can examine. You can see [#154](https://github.com/abpframework/abp-samples/pull/154) and [#158](https://github.com/abpframework/abp-samples/pull/158).
 
 ### Deployment Documentations
 
