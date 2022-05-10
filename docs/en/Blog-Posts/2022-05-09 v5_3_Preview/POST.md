@@ -50,9 +50,9 @@ In this section, I will introduce some major features released with this version
 * Batch Publish Events from Outbox to the Event Bus
 * Improvements on **eShopOnAbp** Project & E-Book Announcement
 * LeptonX Lite Documentations & Project Status & Roadmap
-* OpenIddict Module
+* OpenIddict Module & Keycloack Integration
 * Deployment Documentations
-* Other news
+* Other News
 
 ### Single-layer Option on *Get Started* Page
 
@@ -129,7 +129,7 @@ For the following versions (beta.2 and RC versions), we will focus on;
 * Providing documentations as much as possible
 * Adding new custom pages to the demo
 
-### OpenIddict Module
+### OpenIddict Module & Keycloack Integration
 
 We have [announced the plan of replacing the IdentityServer](https://github.com/abpframework/abp/issues/11989). ABP currently uses **IdentityServer4** to add **OAuth** features as built-in on the server-side. However, since *IdentityServer4's support ends at the end of the year 2022*. Its replacement is Duende IdentityServer, which is not a free software anymore. (see [more](https://blog.duendesoftware.com/posts/20220111_fair_trade/))
 
@@ -156,6 +156,7 @@ In the [Deploying to a Clustered Environment](https://docs.abp.io/en/abp/5.3/Dep
 * Global Features was only accessible from the C# code. From this version, Global Features can be also provided from application configurations. See [#12043](https://github.com/abpframework/abp/pull/12043).
 * Get the user's detailed information (name, surname and phone number) from external login. See [#12085](https://github.com/abpframework/abp/pull/12085).
 * Date Pipes for Angular. See [#11909](https://github.com/abpframework/abp/issues/11909).
+* A bug has been reported to us about a plain password leak on the `AbpAuditLogActions` table for the **TenantCreateDto.AdminPassword**. We've [fixed this problem](https://github.com/abpframework/abp/pull/12499), and it will be available in the next release.
 
 If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), which contains a list of all issues and pull requests closed with this version.
 
@@ -267,7 +268,7 @@ You can also [subscribe to the Volosoft channel](https://www.youtube.com/channel
 
 ### Discord Server
 
-We've created an official ABP Discord server so the ABP Community can interact with each other and create a blog-post to introduce it. You can read the [ABP Discord Server announcement post](https://blog.abp.io/abp/Official-ABP-Discord-Server-is-Here) to learn more about ABP Discord Server.
+We've created an official ABP Discord server so the ABP Community can interact with each other and create a blog-post to introduce it. You can read the [ABP Discord Server announcement post](https://blog.abp.io/abp/Official-ABP-Discord-Server-is-Here) to learn more about ABP Discord Server. 
 
 Thanks to the ABP Community, **700+** people joined our Discord Server so far and it grows every day.
 
