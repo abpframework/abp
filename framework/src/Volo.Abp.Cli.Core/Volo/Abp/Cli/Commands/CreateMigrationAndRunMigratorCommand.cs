@@ -13,16 +13,16 @@ namespace Volo.Abp.Cli.Commands;
 
 public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientDependency
 {
-    private readonly InitialMigrationCreator _ınıtialMigrationCreator;
+    private readonly InitialMigrationCreator _initialMigrationCreator;
     public const string Name = "create-migration-and-run-migrator";
 
     public ICmdHelper CmdHelper { get; }
     public DotnetEfToolManager DotnetEfToolManager { get; }
     public ILogger<CreateMigrationAndRunMigratorCommand> Logger { get; set; }
 
-    public CreateMigrationAndRunMigratorCommand(ICmdHelper cmdHelper, InitialMigrationCreator ınıtialMigrationCreator, DotnetEfToolManager dotnetEfToolManager)
+    public CreateMigrationAndRunMigratorCommand(ICmdHelper cmdHelper, InitialMigrationCreator initialMigrationCreator, DotnetEfToolManager dotnetEfToolManager)
     {
-        _ınıtialMigrationCreator = ınıtialMigrationCreator;
+        _initialMigrationCreator = initialMigrationCreator;
         CmdHelper = cmdHelper;
         DotnetEfToolManager = dotnetEfToolManager;
         Logger = NullLogger<CreateMigrationAndRunMigratorCommand>.Instance;
@@ -46,7 +46,7 @@ public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientD
 
         await DotnetEfToolManager.BeSureInstalledAsync();
 
-        var migrationsCreatedSuccessfully = await _ınıtialMigrationCreator.CreateAsync(commandLineArgs.Target, !nolayers);
+        var migrationsCreatedSuccessfully = await _initialMigrationCreator.CreateAsync(commandLineArgs.Target, !nolayers);
 
         if (migrationsCreatedSuccessfully)
         {
