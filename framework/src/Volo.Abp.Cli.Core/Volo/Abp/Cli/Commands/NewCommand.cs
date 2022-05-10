@@ -32,8 +32,9 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
         IInstallLibsService installLibsService,
-        AngularPwaSupportAdder angularPwaSupportAdder)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder)
+        AngularPwaSupportAdder angularPwaSupportAdder,
+        InitialMigrationCreator ınitialMigrationCreator)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder, ınitialMigrationCreator)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
@@ -79,6 +80,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
         RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
+        await CreateInitialMigrationsAsync(projectArgs);
         await RunInstallLibsForWebTemplateAsync(projectArgs);
         ConfigurePwaSupportForAngular(projectArgs);
 

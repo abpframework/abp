@@ -1,0 +1,22 @@
+﻿@using Microsoft.Extensions.Primitives
+@using Volo.Abp.OpenIddict.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@model AuthorizeViewModel
+@inject IHtmlLocalizer<AbpOpenIddictResource> L
+
+<div class="jumbotron">
+    <h1>@L["LogOut"]</h1>
+    <p class="lead text-left">@L["AreYouSureYouWantToSignOut"]</p>
+
+    <form method="post" action="~/connect/logout">
+        @Html.AntiForgeryToken()
+        @* Flow the request parameters so they can be received by the LogoutPost action: *@
+        @foreach (var parameter in Context.Request.HasFormContentType ? (IEnumerable<KeyValuePair<string, StringValues>>) Context.Request.Form : Context.Request.Query)
+        {
+            <input type="hidden" name="@parameter.Key" value="@parameter.Value"/>
+        }
+
+        <input class="btn btn-primary" name="submit.Accept" type="submit" value="@L["Yes"]"/>
+        <input class="btn btn-danger ms-1" name="submit.Deny" type="submit" value="@L["No"]"/>
+    </form>
+</div>
