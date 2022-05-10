@@ -22,7 +22,8 @@ namespace Volo.Docs.Bundling
             "sass",
             "scss",
             "sql",
-            "typescript"
+            "typescript",
+            "diff"
         };
 
         public override void ConfigureBundle(BundleConfigurationContext context)
