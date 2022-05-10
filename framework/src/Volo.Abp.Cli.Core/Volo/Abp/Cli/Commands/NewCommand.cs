@@ -10,7 +10,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
+using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
+using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -21,8 +23,6 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 {
     public const string Name = "new";
 
-    public ILogger<NewCommand> Logger { get; set; }
-
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
 
@@ -30,13 +30,14 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         , ITemplateInfoProvider templateInfoProvider,
         ConnectionStringProvider connectionStringProvider,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
-        ICmdHelper cmdHelper)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper)
+        ICmdHelper cmdHelper,
+        IInstallLibsService installLibsService,
+        AngularPwaSupportAdder angularPwaSupportAdder,
+        InitialMigrationCreator ınitialMigrationCreator)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder, ınitialMigrationCreator)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
-
-        Logger = NullLogger<NewCommand>.Instance;
     }
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
@@ -79,7 +80,10 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
         RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
-        RunInstallLibsForWebTemplate(projectArgs);
+        await CreateInitialMigrationsAsync(projectArgs);
+        await RunInstallLibsForWebTemplateAsync(projectArgs);
+        ConfigurePwaSupportForAngular(projectArgs);
+
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }
 

@@ -307,7 +307,7 @@ public abstract class AbpCrudPageBase<
     protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TListViewModel> e)
     {
         CurrentSorting = e.Columns
-            .Where(c => c.SortDirection != SortDirection.None)
+            .Where(c => c.SortDirection != SortDirection.Default)
             .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
             .JoinAsString(",");
         CurrentPage = e.Page;

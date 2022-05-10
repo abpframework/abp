@@ -33,6 +33,6 @@ public abstract class TemplateInfo
 
     public bool IsPro()
     {
-        return Name.EndsWith("pro", StringComparison.OrdinalIgnoreCase);
+        return Name.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
     }
 }

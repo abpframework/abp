@@ -17,7 +17,7 @@ public class HangfirePeriodicBackgroundWorkerAdapter<TWorker> : HangfireBackgrou
         _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic);
     }
 
-    public override async Task DoWorkAsync()
+    public async override Task DoWorkAsync()
     {
         var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);
         var worker = ServiceProvider.GetRequiredService<TWorker>();

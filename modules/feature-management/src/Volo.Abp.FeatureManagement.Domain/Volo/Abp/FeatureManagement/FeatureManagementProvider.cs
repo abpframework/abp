@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Features;
 
 namespace Volo.Abp.FeatureManagement;
@@ -17,6 +18,11 @@ public abstract class FeatureManagementProvider : IFeatureManagementProvider
     public virtual bool Compatible(string providerName)
     {
         return providerName == Name;
+    }
+
+    public virtual Task<IAsyncDisposable> HandleContextAsync(string providerName, string providerKey)
+    {
+        return Task.FromResult<IAsyncDisposable>(NullAsyncDisposable.Instance);
     }
 
     public virtual async Task<string> GetOrNullAsync(FeatureDefinition feature, string providerKey)

@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "Um einen effektiven Beitrag zu erstellen, fügen Sie ein Titelbild hinzu. Laden Sie Bilder mit einem Seitenverhältnis von 16:9 hoch, um die beste Ansicht zu erhalten. Maximale Dateigröße: 1 MB.",
     "ThankYouForContribution": "Vielen Dank für Ihren Beitrag zur ABP-Community.",
     "GithubPost": "Github-Artikel",
-    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Schreiben Sie einen Artikel in einem öffentlichen GitHub-Repository im Markdown-Format. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Posts/2020-12-04-Event-Organizer/Post.md\">Beispiel </a>",
+    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Schreiben Sie einen Artikel in einem öffentlichen GitHub-Repository im Markdown-Format. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\">Beispiel </a>",
     "GithubPostSubmitStepTwo": "<span class=\"font-weight-bold\">2.</span> Senden Sie Ihre Artikel-URL über das Formular.",
     "GithubPostSubmitStepThree": "<span class=\"font-weight-bold\">3.</span> Ihr Artikel wird auf dieser Website wiedergegeben.",
     "YoutubeVideo": "Youtube-Video",

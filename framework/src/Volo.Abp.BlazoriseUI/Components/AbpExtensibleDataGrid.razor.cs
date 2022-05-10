@@ -1,12 +1,10 @@
 ﻿using System;
-using Blazorise.Extensions;
-using Blazorise.DataGrid;
-using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Blazorise.DataGrid;
+using Blazorise.Extensions;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
-using System.Threading.Tasks;
-using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 
 namespace Volo.Abp.BlazoriseUI.Components;
@@ -33,6 +31,10 @@ public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
     [Parameter] public IEnumerable<TableColumn> Columns { get; set; }
 
     [Parameter] public int CurrentPage { get; set; } = 1;
+
+    [Parameter] public string Class { get; set; }
+
+    [Parameter] public bool Responsive { get; set; }
 
     [Inject]
     public IStringLocalizerFactory StringLocalizerFactory { get; set; }

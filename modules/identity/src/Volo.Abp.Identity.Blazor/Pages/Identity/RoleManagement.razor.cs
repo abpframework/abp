@@ -64,7 +64,7 @@ public partial class RoleManagement
                     new EntityAction
                     {
                         Text = L["Delete"],
-                        Visible = (data) => HasDeletePermission,
+                        Visible = (data) => HasDeletePermission && !data.As<IdentityRoleDto>().IsStatic,
                         Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityRoleDto>()),
                         ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityRoleDto>())
                     }
@@ -81,11 +81,12 @@ public partial class RoleManagement
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = EntityActions.Get<RoleManagement>()
+                        Actions = EntityActions.Get<RoleManagement>(),
                     },
                     new TableColumn
                     {
                         Title = L["RoleName"],
+                        Sortable = true,
                         Data = nameof(IdentityRoleDto.Name),
                         Component = typeof(RoleNameComponent)
                     },

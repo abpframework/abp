@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\identityserver\src\Volo.Abp.PermissionManagement.Domain.IdentityServer\Volo.Abp.PermissionManagement.Domain.IdentityServer.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.Application\Volo.Abp.PermissionManagement.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.EntityFrameworkCore\Volo.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.HttpApi\Volo.Abp.PermissionManagement.HttpApi.csproj" />

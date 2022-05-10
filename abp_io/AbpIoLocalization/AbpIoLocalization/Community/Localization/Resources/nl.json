@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "Voeg een omslagfoto toe om een effectieve post te maken. Upload afbeeldingen met een beeldverhouding van 16:9 voor de beste weergave. Maximale bestandsgrootte: 1 MB.",
     "ThankYouForContribution": "Bedankt voor uw bijdrage aan de ABP-community.",
     "GithubPost": "Github-artikel",
-    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Schrijf een artikel op een openbare GitHub-repository met het Markdown-formaat. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Posts/2020-12-04-Event-Organizer/Post.md\">voorbeeld </a>",
+    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Schrijf een artikel op een openbare GitHub-repository met het Markdown-formaat. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\">voorbeeld </a>",
     "GithubPostSubmitStepTwo": "<span class=\"font-weight-bold\">2.</span> Dien uw artikel-URL in via het formulier.",
     "GithubPostSubmitStepThree": "<span class=\"font-weight-bold\">3.</span> Uw artikel wordt weergegeven op deze website.",
     "YoutubeVideo": "Youtube video",

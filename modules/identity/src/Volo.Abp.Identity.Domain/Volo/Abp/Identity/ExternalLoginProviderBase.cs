@@ -32,6 +32,8 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
     }
 
     public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
+    
+    public abstract Task<bool> IsEnabledAsync();
 
     public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName)
     {
