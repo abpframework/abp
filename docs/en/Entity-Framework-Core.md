@@ -607,18 +607,6 @@ Whenever you access to a property/collection, EF Core automatically performs an 
 
 See also [lazy loading document](https://docs.microsoft.com/en-us/ef/core/querying/related-data/lazy) of the EF Core.
 
-## Repository Extensions
-
-There are some useful repository extension methods.
-
-````csharp
-EnsureCollectionLoadedAsync     // **Explicitly load** a sub collection.
-EnsurePropertyLoadedAsync       // **Explicitly load** a navigation property.
-EnsureExistsAsync               // Make sure the entitys exists, It accepts the entity id or a query expression.
-HardDeleteAsync                 // Hard delete the entitys, It accepts one or more entities or query expressions.
-HardDeleteWithUnitOfWorkAsync   // Hard delete the entitys in a uow(create a new uow if current is null), It accepts one or more entities or query expressions.
-````
-
 ## Access to the EF Core API
 
 In most cases, you want to hide EF Core APIs behind a repository (this is the main purpose of the repository pattern). However, if you want to access the `DbContext` instance over the repository, you can use `GetDbContext()` or `GetDbSet()` extension methods. Example:
