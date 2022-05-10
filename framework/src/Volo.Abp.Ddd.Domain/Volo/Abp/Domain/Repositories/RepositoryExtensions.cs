@@ -15,7 +15,7 @@ namespace Volo.Abp.Domain.Repositories;
 
 public static class RepositoryExtensions
 {
-    public static async Task EnsureCollectionLoadedAsync<TEntity, TKey, TProperty>(
+    public async static Task EnsureCollectionLoadedAsync<TEntity, TKey, TProperty>(
         this IBasicRepository<TEntity, TKey> repository,
         TEntity entity,
         Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
@@ -31,7 +31,7 @@ public static class RepositoryExtensions
         }
     }
 
-    public static async Task EnsurePropertyLoadedAsync<TEntity, TKey, TProperty>(
+    public async static Task EnsurePropertyLoadedAsync<TEntity, TKey, TProperty>(
         this IBasicRepository<TEntity, TKey> repository,
         TEntity entity,
         Expression<Func<TEntity, TProperty>> propertyExpression,
@@ -47,7 +47,33 @@ public static class RepositoryExtensions
         }
     }
 
-    public static async Task HardDeleteAsync<TEntity>(
+    public async static Task EnsureExistsAsync<TEntity, TKey>(
+       this IRepository<TEntity, TKey> repository,
+       TKey id,
+       CancellationToken cancellationToken = default
+    )
+       where TEntity : class, IEntity<TKey>
+    {
+        if (!await repository.AnyAsync(x => x.Id.Equals(id), cancellationToken))
+        {
+            throw new EntityNotFoundException(typeof(TEntity), id);
+        }
+    }
+
+    public async static Task EnsureExistsAsync<TEntity, TKey>(
+        this IRepository<TEntity, TKey> repository,
+        Expression<Func<TEntity, bool>> expression,
+        CancellationToken cancellationToken = default
+    )
+        where TEntity : class, IEntity<TKey>
+    {
+        if (!await repository.AnyAsync(expression, cancellationToken))
+        {
+            throw new EntityNotFoundException(typeof(TEntity));
+        }
+    }
+
+    public async static Task HardDeleteAsync<TEntity>(
         this IRepository<TEntity> repository,
         Expression<Func<TEntity, bool>> predicate,
         bool autoSave = false,
@@ -71,7 +97,7 @@ public static class RepositoryExtensions
         }
     }
 
-    public static async Task HardDeleteAsync<TEntity>(
+    public async static Task HardDeleteAsync<TEntity>(
         this IBasicRepository<TEntity> repository,
         IEnumerable<TEntity> entities,
         bool autoSave = false,
@@ -95,7 +121,7 @@ public static class RepositoryExtensions
         }
     }
 
-    public static async Task HardDeleteAsync<TEntity>(
+    public async static Task HardDeleteAsync<TEntity>(
         this IBasicRepository<TEntity> repository,
         TEntity entity,
         bool autoSave = false,
@@ -139,7 +165,7 @@ public static class RepositoryExtensions
         return unitOfWorkManagerAccessor.UnitOfWorkManager;
     }
 
-    private static async Task HardDeleteWithUnitOfWorkAsync<TEntity>(
+    private async static Task HardDeleteWithUnitOfWorkAsync<TEntity>(
         IRepository<TEntity> repository,
         Expression<Func<TEntity, bool>> predicate,
         bool autoSave,
@@ -155,7 +181,7 @@ public static class RepositoryExtensions
         }
     }
 
-    private static async Task HardDeleteWithUnitOfWorkAsync<TEntity>(
+    private async static Task HardDeleteWithUnitOfWorkAsync<TEntity>(
         IBasicRepository<TEntity> repository,
         IEnumerable<TEntity> entities,
         bool autoSave,
@@ -173,7 +199,7 @@ public static class RepositoryExtensions
         await repository.DeleteManyAsync(entities, autoSave, cancellationToken);
     }
 
-    private static async Task HardDeleteWithUnitOfWorkAsync<TEntity>(
+    private async static Task HardDeleteWithUnitOfWorkAsync<TEntity>(
         IBasicRepository<TEntity> repository,
         TEntity entity,
         bool autoSave,
