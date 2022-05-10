@@ -20,7 +20,7 @@ For example, [pre-built application modules](Modules/Index.md) is designed to wo
 
 There are two ways of publishing distributed events explained in the following sections.
 
-### IDistributedEventBus
+### Using IDistributedEventBus to Publish Events
 
 `IDistributedEventBus` can be [injected](Dependency-Injection.md) and used to publish a distributed event.
 
@@ -57,7 +57,7 @@ namespace AbpDemo
 }
 ````
 
-`PublishAsync` method gets a single parameter: the event object, which is responsible to hold the data related to the event. It is a simple plain class:
+`PublishAsync` method gets the event object, which is responsible to hold the data related to the event. It is a simple plain class:
 
 ````csharp
 using System;
@@ -80,15 +80,15 @@ Even if you don't need to transfer any data, you need to create a class (which i
 
 #### Event Name
 
-`EventName` attribute is optional, but suggested. If you don't declare it, the event name will be the full name of the event class, `AbpDemo.StockCountChangedEto` in this case.
+`EventName` attribute is optional, but suggested. If you don't declare it for an event type (ETO class), the event name will be the full name of the event class, `AbpDemo.StockCountChangedEto` in this case.
 
 #### About Serialization for the Event Objects
 
-Event transfer objects **must be serializable** since they will be serialized/deserialized to JSON or other format when it is transferred to out of the process.
+Event transfer objects (ETOs) **must be serializable** since they will be serialized/deserialized to JSON or other format when it is transferred to out of the process.
 
 Avoid circular references, polymorphism, private setters and provide default (empty) constructors if you have any other constructor as a good practice (while some serializers may tolerate it), just like the DTOs.
 
-### Inside Entity / Aggregate Root Classes
+### Publishing Events Inside Entity / Aggregate Root Classes
 
 [Entities](Entities.md) can not inject services via dependency injection, but it is very common to publish distributed events inside entity / aggregate root classes.
 
@@ -296,6 +296,16 @@ This example;
 
 > Distributed event system use the [object to object mapping](Object-To-Object-Mapping.md) system to map `Product` objects to `ProductEto` objects. So, you need to configure the object mapping (`Product` -> `ProductEto`) too. You can check the [object to object mapping document](Object-To-Object-Mapping.md) to learn how to do it.
 
+## Transaction and Exception Handling
+
+Distributed event bus works in-process (since default implementation is `LocalDistributedEventBus`) unless you configure an actual provider (e.g. [Kafka](Distributed-Event-Bus-Kafka-Integration.md) or [Redis](Distributed-Event-Bus-RabbitMQ-Integration.md)). In-process event bus always executes event handlers in the same [unit of work](Unit-Of-Work.md) scope that you publishes the events in. That means, if an event handler throws an exception, then the related unit of work (the database transaction) is rolled back. In this way, your application logic and event handling logic becomes transactional (atomic) and consistent. If you want to ignore errors in an event handler, you must use a `try-catch` block in your handler and shouldn't re-throw the exception.
+
+When you switch to an actual distributed event bus provider (e.g. [Kafka](Distributed-Event-Bus-Kafka-Integration.md) or [Redis](Distributed-Event-Bus-RabbitMQ-Integration.md)), then the event handlers will be executed in different processes/applications as their purpose is to create distributed systems. In this case, the only way to implement transactional event publishing is to use the outbox/inbox patterns as explained in the *Outbox / Inbox for Transactional Events* section.
+
+If you don't configure outbox/inbox pattern or use the `LocalDistributedEventBus`, then events are published at the end of the unit of work by default, just before the unit of work is completed (that means throwing exception in an event handler still rollbacks the unit of work), even if you publish them in the middle of unit of work. If you want to immediately publish the event, you can set `onUnitOfWorkComplete` to `false` while using `IDistributedEventBus.PublishAsync` method.
+
+> Keeping the default behavior is recommended unless you don't have a unique requirement. `onUnitOfWorkComplete` option is not available when you publish events inside entity / aggregate root classes (see the *Publishing Events Inside Entity / Aggregate Root Classes* section).
+
 ## Outbox / Inbox for Transactional Events
 
 The **[transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)** is used to publishing distributed events within the **same transaction** that manipulates the application's database. When you enable outbox, distributed events are saved into the database inside the same transaction with your data changes, then sent to the actual message broker by a separate [background worker](Background-Workers.md) with a re-try system. In this way, it ensures the consistency between your database state and the published events.
@@ -423,6 +433,10 @@ Here, the following properties are available on the `config` object:
 * `EventSelector`: A predicate to filter the event (ETO) types to be used for this configuration. This is especially useful if you want to ignore some ETO types from the inbox, or want to define named inbox configurations and group events within these configurations. See the *Named Configurations* section.
 * `HandlerSelector`: A predicate to filter the event handled types (classes implementing the `IDistributedEventHandler<TEvent>` interface) to be used for this configuration. This is especially useful if you want to ignore some event handler types from inbox processing, or want to define named inbox configurations and group event handlers within these configurations. See the *Named Configurations* section.
 * `ImplementationType`: Type of the class that implements the database operations for the inbox. This is normally set when you call `UseDbContext` as shown before. See *Implementing a Custom Outbox/Inbox Database Provider* section for advanced usages.
+
+### Skipping Outbox
+
+`IDistributedEventBus.PublishAsync` method provides an optional parameter, `useOutbox`, which is set to `true` by default. If you bypass outbox and immediately publish an event, you can set it to `false` for a specific event publishing operation.
 
 ### Advanced Topics
 
