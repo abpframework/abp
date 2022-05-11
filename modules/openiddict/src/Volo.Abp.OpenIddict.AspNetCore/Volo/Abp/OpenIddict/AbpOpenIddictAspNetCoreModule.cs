@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.OpenIddict;
 
 [DependsOn(
-    typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpOpenIddictDomainModule)
