@@ -22,7 +22,7 @@ namespace Volo.Abp.OpenIddict;
     typeof(AbpDddDomainModule),
     typeof(AbpIdentityDomainModule),
     typeof(AbpOpenIddictDomainSharedModule),
-    typeof(AbpDistributedLockingModule),
+    typeof(AbpDistributedLockingAbstractionsModule),
     typeof(AbpCachingModule),
     typeof(AbpGuidsModule)
 )]

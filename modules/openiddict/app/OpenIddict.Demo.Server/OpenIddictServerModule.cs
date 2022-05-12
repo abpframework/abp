@@ -1,12 +1,7 @@
 ﻿using System.Text;
-using JetBrains.Annotations;
-using Medallion.Threading;
-using Medallion.Threading.Redis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Demo.Server.EntityFrameworkCore;
-using OpenIddict.Validation.AspNetCore;
-using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -112,12 +107,6 @@ public class OpenIddictServerModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddSingleton<IDistributedLockProvider>(sp =>
-        {
-            var connection = ConnectionMultiplexer.Connect("127.0.0.1");
-            return new RedisDistributedSynchronizationProvider(connection.GetDatabase());
-        });
-
         Configure<AbpOpenIddictAspNetCoreOptions>(options =>
         {
             options.AddDevelopmentEncryptionAndSigningCertificate = false;
