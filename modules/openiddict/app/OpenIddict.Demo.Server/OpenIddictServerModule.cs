@@ -1,9 +1,12 @@
 ﻿using System.Text;
 using JetBrains.Annotations;
+using Medallion.Threading;
+using Medallion.Threading.Redis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Demo.Server.EntityFrameworkCore;
 using OpenIddict.Validation.AspNetCore;
+using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -109,16 +112,13 @@ public class OpenIddictServerModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        // This is work for the OpenIddictServerBuilder.AddValidation()
-        context.Services.ConfigureApplicationCookie(options =>
+        context.Services.AddSingleton<IDistributedLockProvider>(sp =>
         {
-            options.ForwardDefaultSelector = ctx => ctx.Request.Path.StartsWithSegments("/api")
-                ? OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme
-                : null;
+            var connection = ConnectionMultiplexer.Connect("127.0.0.1");
+            return new RedisDistributedSynchronizationProvider(connection.GetDatabase());
         });
 
-
-        Configure<AbpOpenIddictOptions>(options =>
+        Configure<AbpOpenIddictAspNetCoreOptions>(options =>
         {
             options.AddDevelopmentEncryptionAndSigningCertificate = false;
         });
