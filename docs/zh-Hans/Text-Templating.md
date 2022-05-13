@@ -203,11 +203,13 @@ PascalCase 属性名(如 `UserName`) 在模板中使用蛇形命名(如 `user_na
 
 假设你需要向用户发送电子邮件重置密码. 模板内容:
 
-````
-<a title="{%{{{L "ResetMyPasswordTitle"}}}%}" href="{%{{{model.link}}}%}">{%{{{L "ResetMyPassword" model.name}}}%}</a>
+
+````csharp
+@inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase<ResetMyPasswordModelNamespace.ResetMyPasswordModel>
+<a title="@Localizer["ResetMyPasswordTitle"]" href="@Model.Link">@Localizer["ResetMyPassword", Model.Name]</a>
 ````
 
-`L` 函数用于根据当前用户的文化来定位给定的Key,你需要在本地化文件中定义 `ResetMyPassword` 键:
+`Localizer` 函数用于根据当前用户的文化来定位给定的Key,你需要在本地化文件中定义 `ResetMyPassword` 键:
 
 ````json
 "ResetMyPasswordTitle": "Reset my password",
