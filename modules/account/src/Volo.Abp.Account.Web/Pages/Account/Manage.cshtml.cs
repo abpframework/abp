@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Extensions;
 using Volo.Abp.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -30,6 +32,13 @@ public class ManageModel : AccountPageModel
         foreach (var contributor in Options.Contributors)
         {
             await contributor.ConfigureAsync(ProfileManagementPageCreationContext);
+        }
+
+        if (!Url.IsLocalUrl(ReturnUrl) &&
+            !ReturnUrl.StartsWith(UriHelper.BuildAbsolute(Request.Scheme, Request.Host, Request.PathBase).RemovePostFix("/")) &&
+            !AppUrlProvider.IsRedirectAllowedUrl(ReturnUrl))
+        {
+            ReturnUrl = null;
         }
 
         return Page();
