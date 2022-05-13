@@ -23,7 +23,7 @@ LeptonX Lite has implementation for the ABP Framework Blazor WebAssembly & Blazo
   dotnet add package Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme
   ```
 
-- Remmove **Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme** reference from the project since it's not necessary after switching to LeptonX Lite.
+- Remove **Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme** reference from the project since it's not necessary after switching to LeptonX Lite.
 
 - Remove the old theme from the **DependsOn** attribute in your module class and add the **AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule** type to the **DependsOn** attribute.
 
@@ -58,7 +58,7 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
   dotnet add package Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme
   ```
 
-- Remmove **Volo.Abp.AspNetCore.Components.Server.BasicTheme** reference from the project since it's not necessary after switching to LeptonX Lite.
+- Remove **Volo.Abp.AspNetCore.Components.Server.BasicTheme** reference from the project since it's not necessary after switching to LeptonX Lite.
 
 
 - Remove old theme from the **DependsOn** attribute in your module class and add the **AbpAspNetCoreComponentsServerLeptonXLiteThemeModule** type to the **DependsOn** attribute.
@@ -73,7 +73,7 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
   )]
   ```
 
-- Replace BlazorBasicThemeBundles with BlazorLeptonXLiteThemeBundles in AbpBundlingOptions
+- Replace `BlazorBasicThemeBundles` with `BlazorLeptonXLiteThemeBundles` in `AbpBundlingOptions`:
   ```diff
   options.StyleBundles.Configure(
     // Remove following line
