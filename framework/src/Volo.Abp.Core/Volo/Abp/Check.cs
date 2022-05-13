@@ -162,4 +162,182 @@ public static class Check
 
         return value;
     }
+
+    public static Int16 NotNegativeOrZero(
+        Int16 type,
+        [InvokerParameterName][NotNull] string parameterName)
+    {
+        if(type == 0)
+        {
+            throw new ArgumentException($"{parameterName} is equal to zero");
+        }
+        else if(type < 0)
+        {
+            throw new ArgumentException($"{parameterName} is less than zero");
+        }
+        return type;
+    }
+
+    public static Int32 NotNegativeOrZero(
+        Int32 type,
+        [InvokerParameterName][NotNull] string parameterName)
+    {
+        if (type == 0)
+        {
+            throw new ArgumentException($"{parameterName} is equal to zero");
+        }
+        else if (type < 0)
+        {
+            throw new ArgumentException($"{parameterName} is less than zero");
+        }
+        return type;
+    }
+
+    public static Int64 NotNegativeOrZero(
+        Int64 type,
+        [InvokerParameterName][NotNull] string parameterName)
+    {
+        if (type == 0)
+        {
+            throw new ArgumentException($"{parameterName} is equal to zero");
+        }
+        else if (type < 0)
+        {
+            throw new ArgumentException($"{parameterName} is less than zero");
+        }
+        return type;
+    }
+
+    public static float NotNegativeOrZero(
+        float type,
+        [InvokerParameterName][NotNull] string parameterName)
+    {
+        if (type == 0)
+        {
+            throw new ArgumentException($"{parameterName} is equal to zero");
+        }
+        else if (type < 0)
+        {
+            throw new ArgumentException($"{parameterName} is less than zero");
+        }
+        return type;
+    }
+
+    public static double NotNegativeOrZero(
+        double type,
+        [InvokerParameterName][NotNull] string parameterName)
+    {
+        if (type == 0)
+        {
+            throw new ArgumentException($"{parameterName} is equal to zero");
+        }
+        else if (type < 0)
+        {
+            throw new ArgumentException($"{parameterName} is less than zero");
+        }
+        return type;
+    }
+
+    public static decimal NotNegativeOrZero(
+        decimal type,
+        [InvokerParameterName][NotNull] string parameterName)
+    {
+        if (type == 0)
+        {
+            throw new ArgumentException($"{parameterName} is equal to zero");
+        }
+        else if (type < 0)
+        {
+            throw new ArgumentException($"{parameterName} is less than zero");
+        }
+        return type;
+    }
+
+
+
+    public static Int16 WithinRange(
+        Int16 type,
+        [InvokerParameterName][NotNull] string parameterName,
+        Int16 minimumValue,
+        Int16 maximumValue = Int16.MaxValue)
+    {
+        if(type < minimumValue || type > maximumValue)
+        {
+            throw new ArgumentException($"{parameterName} is out of range min: {minimumValue} - max: {maximumValue}");
+        }
+
+        return type;
+    }
+    public static Int32 WithinRange(
+        Int32 type,
+        [InvokerParameterName][NotNull] string parameterName,
+        Int32 minimumValue,
+        Int32 maximumValue = Int32.MaxValue)
+    {
+        if (type < minimumValue || type > maximumValue)
+        {
+            throw new ArgumentException($"{parameterName} is out of range min: {minimumValue} - max: {maximumValue}");
+        }
+
+        return type;
+    }
+
+    public static Int64 WithinRange(
+        Int64 type,
+        [InvokerParameterName][NotNull] string parameterName,
+        Int64 minimumValue,
+        Int64 maximumValue = Int64.MaxValue)
+    {
+        if (type < minimumValue || type > maximumValue)
+        {
+            throw new ArgumentException($"{parameterName} is out of range min: {minimumValue} - max: {maximumValue}");
+        }
+
+        return type;
+    }
+
+
+    public static float WithinRange(
+        float type,
+        [InvokerParameterName][NotNull] string parameterName,
+        float minimumValue,
+        float maximumValue = float.MaxValue)
+    {
+        if (type < minimumValue || type > maximumValue)
+        {
+            throw new ArgumentException($"{parameterName} is out of range min: {minimumValue} - max: {maximumValue}");
+        }
+
+        return type;
+    }
+
+    public static double WithinRange(
+        double type,
+        [InvokerParameterName][NotNull] string parameterName,
+        double minimumValue,
+        double maximumValue = double.MaxValue)
+    {
+        if (type < minimumValue || type > maximumValue)
+        {
+            throw new ArgumentException($"{parameterName} is out of range min: {minimumValue} - max: {maximumValue}");
+        }
+
+        return type;
+    }
+
+
+    public static decimal WithinRange(
+        decimal type,
+        [InvokerParameterName][NotNull] string parameterName,
+        decimal minimumValue,
+        decimal maximumValue = decimal.MaxValue)
+    {
+        if (type < minimumValue || type > maximumValue)
+        {
+            throw new ArgumentException($"{parameterName} is out of range min: {minimumValue} - max: {maximumValue}");
+        }
+
+        return type;
+    }
+
 }
