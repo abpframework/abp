@@ -704,6 +704,10 @@
                 {
                   "text": "The Basic Theme",
                   "path": "UI/AspNetCore/Basic-Theme.md"
+                },
+                {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/mvc.md"
                 }
               ]
             },
@@ -816,6 +820,10 @@
                 {
                   "text": "The Basic Theme",
                   "path": "UI/Blazor/Basic-Theme.md"
+                },
+                {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/blazor.md"
                 },
                 {
                   "text": "Branding",
@@ -1071,6 +1079,10 @@
                     {
                       "text": "The Basic Theme",
                       "path": "UI/Angular/Basic-Theme.md"
+                    },
+                    {
+                      "text": "LeptonX Lite",
+                      "path": "Themes/LeptonXLite/angular.md"
                     }
                   ]
                 },
@@ -1085,10 +1097,10 @@
                 {
                   "text": "Extensions",
                   "items": [
-                     {
+                    {
                       "text": "Overall",
                       "path": "UI/Angular/Extensions-Overall.md"
-                     },
+                    },
                     {
                       "text": "Entity Action Extensions",
                       "path": "UI/Angular/Entity-Action-Extensions.md"
@@ -1104,6 +1116,10 @@
                     {
                       "text": "Dynamic Form Extensions",
                       "path": "UI/Angular/Dynamic-Form-Extensions.md"
+                    },
+                    {
+                      "text": "Date, time and datetime format pipes",
+                      "path": "UI/Angular/DateTime-Format-Pipe.md"
                     }
                   ]
                 }
@@ -1226,15 +1242,12 @@
       "path": "Testing.md"
     },
     {
-      "text": "Samples",
+      "text": "Deployment",
+      "path": "Deployment/Index.md",
       "items": [
         {
-          "text": "All Samples",
-          "path": "Samples/Index.md"
-        },
-        {
-          "text": "Microservice Demo",
-          "path": "Samples/Microservice-Demo.md"
+          "text": "Deploying to a Clustered Environment",
+          "path": "Deployment/Clustered-Environment.md"
         }
       ]
     },
@@ -1277,6 +1290,10 @@
           "text": "IdentityServer",
           "path": "Modules/IdentityServer.md"
         },
+		{
+          "text": "OpenIddict",
+          "path": "Modules/OpenIddict.md"
+        },
         {
           "text": "Permission Management",
           "path": "Modules/Permission-Management.md"
@@ -1292,6 +1309,19 @@
         {
           "text": "Virtual File Explorer",
           "path": "Modules/Virtual-File-Explorer.md"
+        }
+      ]
+    },
+    {
+      "text": "Samples",
+      "items": [
+        {
+          "text": "All Samples",
+          "path": "Samples/Index.md"
+        },
+        {
+          "text": "Microservice Demo",
+          "path": "Samples/Microservice-Demo.md"
         }
       ]
     },

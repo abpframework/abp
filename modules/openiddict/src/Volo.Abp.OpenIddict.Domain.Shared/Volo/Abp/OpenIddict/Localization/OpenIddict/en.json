@@ -1,0 +1,15 @@
+{
+  "culture": "en",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "The OpenID Connect request cannot be retrieved.",
+    "TheUserDetailsCannotBbeRetrieved" : "The user details cannot be retrieved.",
+    "TheApplicationDetailsCannotBeFound": "The application details cannot be found.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Details concerning the calling client application cannot be found.",
+    "TheSpecifiedGrantTypeIsNotImplemented.": "The specified grant type {0} is not implemented.",
+    "Authorization": "Authorization",
+    "DoYouWantToGrantAccessToYourData": "Do you want to grant {0} access to your data?",
+    "ScopesRequested": "Scopes requested",
+    "LogOut": "Log out",
+    "AreYouSureYouWantToSignOut": "Are you sure you want to sign out?"
+  }
+}

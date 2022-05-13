@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
@@ -122,6 +123,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         var actionApiDescriptionModel = FindActionApiDescriptionModel(controller, action);
         if (actionApiDescriptionModel == null)
         {
+            Logger.LogWarning($"Could not find ApiDescriptionModel for action: {action.ActionName} in controller: {controller.ControllerName}, May be the generate-proxy.json is not up to date.");
             return;;
         }
 

@@ -1,0 +1,15 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "无法检索 OpenID Connect 请求.",
+    "TheUserDetailsCannotBbeRetrieved" : "无法检索用户详细信息.",
+    "TheApplicationDetailsCannotBeFound": "找不到应用详情.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "找不到有关调用客户端应用程序的详细信息.",
+    "TheSpecifiedGrantTypeIsNotImplemented.": "未实施指定的授权类型 {0}.",
+    "Authorization": "授权",
+    "DoYouWantToGrantAccessToYourData": "是否要授予 {0} 访问你的数据的权限?",
+    "ScopesRequested": "要求的Scope",
+    "LogOut": "注销",
+    "AreYouSureYouWantToSignOut": "你确定要退出吗?"
+  }
+}

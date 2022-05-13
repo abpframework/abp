@@ -139,6 +139,24 @@
 			"title": "ARFF",
 			"owner": "Golmote"
 		},
+		"armasm": {
+			"title": "ARM Assembly",
+			"alias": "arm-asm",
+			"owner": "RunDevelopment"
+		},
+		"arturo": {
+			"title": "Arturo",
+			"alias": "art",
+			"optional": [
+				"bash",
+				"css",
+				"javascript",
+				"markup",
+				"markdown",
+				"sql"
+			],
+			"owner": "drkameleon"
+		},
 		"asciidoc": {
 			"alias": "adoc",
 			"title": "AsciiDoc",
@@ -173,6 +191,14 @@
 		"avro-idl": {
 			"title":"Avro IDL",
 			"alias": "avdl",
+			"owner": "RunDevelopment"
+		},
+		"awk": {
+			"title": "AWK",
+			"alias": "gawk",
+			"aliasTitles": {
+				"gawk": "GAWK"
+			},
 			"owner": "RunDevelopment"
 		},
 		"bash": {
@@ -299,6 +325,10 @@
 			"title": "Content-Security-Policy",
 			"owner": "ScottHelme"
 		},
+		"cooklang": {
+			"title": "Cooklang",
+			"owner": "ahue"
+		},
 		"coq": {
 			"title": "Coq",
 			"owner": "RunDevelopment"
@@ -316,6 +346,10 @@
 		},
 		"csv": {
 			"title": "CSV",
+			"owner": "RunDevelopment"
+		},
+		"cue": {
+			"title": "CUE",
 			"owner": "RunDevelopment"
 		},
 		"cypher": {
@@ -472,6 +506,11 @@
 			"title": "GEDCOM",
 			"owner": "Golmote"
 		},
+		"gettext": {
+			"title": "gettext",
+			"alias": "po",
+			"owner": "RunDevelopment"
+		},
 		"gherkin": {
 			"title": "Gherkin",
 			"owner": "hason"
@@ -488,6 +527,11 @@
 		"gn": {
 			"title": "GN",
 			"alias": "gni",
+			"owner": "RunDevelopment"
+		},
+		"linker-script": {
+			"title": "GNU Linker Script",
+			"alias": "ld",
 			"owner": "RunDevelopment"
 		},
 		"go": {
@@ -529,7 +573,10 @@
 		"handlebars": {
 			"title": "Handlebars",
 			"require": "markup-templating",
-			"alias": "hbs",
+			"alias": ["hbs", "mustache"],
+			"aliasTitles": {
+				"mustache": "Mustache"
+			},
 			"owner": "Golmote"
 		},
 		"haskell": {
@@ -830,6 +877,10 @@
 			"require": "markup",
 			"owner": "Golmote"
 		},
+		"mata": {
+			"title": "Mata",
+			"owner": "RunDevelopment"
+		},
 		"matlab": {
 			"title": "MATLAB",
 			"owner": "Golmote"
@@ -922,6 +973,10 @@
 			"title": "OCaml",
 			"owner": "Golmote"
 		},
+		"odin": {
+			"title": "Odin",
+			"owner": "edukisto"
+		},
 		"opencl": {
 			"title": "OpenCL",
 			"require": "c",
@@ -995,6 +1050,11 @@
 			"require": "php",
 			"modify": "php",
 			"owner": "milesj"
+		},
+		"plant-uml": {
+			"title": "PlantUML",
+			"alias": "plantuml",
+			"owner": "RunDevelopment"
 		},
 		"plsql": {
 			"title": "PL/SQL",
@@ -1152,6 +1212,11 @@
 			"alias": "rpy",
 			"owner": "HyuchiaDiego"
 		},
+		"rescript": {
+			"title": "ReScript",
+			"alias": "res",
+			"owner": "vmarcosp"
+		},
 		"rest": {
 			"title": "reST (reStructuredText)",
 			"owner": "Golmote"
@@ -1277,6 +1342,11 @@
 			"title": "Stan",
 			"owner": "RunDevelopment"
 		},
+		"stata": {
+			"title": "Stata Ado",
+			"require": ["mata", "java", "python"],
+			"owner": "RunDevelopment"
+		},
 		"iecst": {
 			"title": "Structured Text (IEC 61131-3)",
 			"owner": "serhioromano"
@@ -1284,6 +1354,11 @@
 		"stylus": {
 			"title": "Stylus",
 			"owner": "vkbansal"
+		},
+		"supercollider": {
+			"title": "SuperCollider",
+			"alias": "sclang",
+			"owner": "RunDevelopment"
 		},
 		"swift": {
 			"title": "Swift",

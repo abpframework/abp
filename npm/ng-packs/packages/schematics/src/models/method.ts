@@ -1,5 +1,6 @@
 import { eBindingSourceId, eMethodModifier } from '../enums';
-import { camel } from '../utils/text';
+import { camel, camelizeHyphen } from '../utils/text';
+import { getParamName } from '../utils/methods';
 import { ParameterInBody } from './api-definition';
 import { Property } from './model';
 import { Omissible } from './util';
@@ -46,16 +47,17 @@ export class Body {
     const { bindingSourceId, descriptorName, jsonName, name, nameOnMethod } = param;
     const camelName = camel(name);
     const paramName = jsonName || camelName;
-    const value = descriptorName
-      ? shouldQuote(paramName)
+    let value = camelizeHyphen(nameOnMethod);
+    if (descriptorName) {
+      value = shouldQuote(paramName)
         ? `${descriptorName}['${paramName}']`
-        : `${descriptorName}.${paramName}`
-      : nameOnMethod;
+        : `${descriptorName}.${paramName}`;
+    }
 
     switch (bindingSourceId) {
       case eBindingSourceId.Model:
       case eBindingSourceId.Query:
-        this.params.push(paramName === value ? value : `${paramName}: ${value}`);
+        this.params.push(paramName === value ? value : `${getParamName(paramName)}: ${value}`);
         break;
       case eBindingSourceId.Body:
         this.body = value;
