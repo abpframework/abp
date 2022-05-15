@@ -100,7 +100,7 @@ public class SolutionModuleAdder : ITransientDependency
         Check.NotNull(solutionFile, nameof(solutionFile));
         Check.NotNull(moduleName, nameof(moduleName));
 
-        await PublishEventAsync(1, "Retriving module info...");
+        await PublishEventAsync(1, "Retrieving module info...");
         var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
 
 

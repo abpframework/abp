@@ -41,7 +41,7 @@ public class BlogPostManager_Tests : CmsKitDomainTestBase
 
         var blog = await blogRepository.GetAsync(cmsKitTestData.Blog_Id);
 
-        var blogPost = await blogPostManager.CreateAsync(author, blog, title, slug);
+        var blogPost = await blogPostManager.CreateAsync(author, blog, title, slug, BlogPostStatus.Published);
 
         blogPost.Id.ShouldNotBe(Guid.Empty);
         blogPost.Title.ShouldBe(title);
@@ -57,7 +57,7 @@ public class BlogPostManager_Tests : CmsKitDomainTestBase
         var blog = await blogRepository.GetAsync(cmsKitTestData.Blog_Id);
 
         await Should.ThrowAsync<BlogPostSlugAlreadyExistException>(async () =>
-            await blogPostManager.CreateAsync(author, blog, "Any New Title", cmsKitTestData.BlogPost_1_Slug));
+            await blogPostManager.CreateAsync(author, blog, "Any New Title", cmsKitTestData.BlogPost_1_Slug, BlogPostStatus.Published));
     }
 
     [Fact]

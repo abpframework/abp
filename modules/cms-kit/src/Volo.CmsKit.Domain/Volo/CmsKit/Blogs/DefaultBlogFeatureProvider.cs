@@ -16,6 +16,7 @@ public class DefaultBlogFeatureProvider : IDefaultBlogFeatureProvider, ITransien
                 new BlogFeature(blogId, ReactionsFeature.Name),
                 new BlogFeature(blogId, RatingsFeature.Name),
                 new BlogFeature(blogId, TagsFeature.Name),
+                new BlogFeature(blogId, BlogPostScrollIndexFeature.Name)
             });
     }
 }

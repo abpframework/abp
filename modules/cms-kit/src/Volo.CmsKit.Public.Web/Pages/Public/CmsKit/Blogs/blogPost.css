@@ -21,3 +21,20 @@ span.area-title {
 .popover {
     min-width: 276px;
 }
+
+#scroll-index {
+    position: sticky;
+    top: 20px;
+}
+
+#scroll-index .scroll-top-btn.showup{
+    display: block;
+}
+
+#scroll-index .scroll-top-btn{
+    display: none;
+    font-size: .85em;
+    color: #aaa;
+    text-decoration: none;
+    padding-left: 18px;
+}

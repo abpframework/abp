@@ -258,7 +258,7 @@ ABP's distributed cache interfaces provide methods to perform batch methods thos
 
 Distributed cache service provides an interesting feature. Assume that you've updated the price of a book in the database, then set the new price to the cache, so you can use the cached value later. What if you have an exception after setting the cache and you **rollback the transaction** that updates the price of the book? In this case, cache value will be incorrect.
 
-`IDistributedCache<..>` methods gets an optional parameter, named `considerOuw`, which is `false` by default. If you set it to `true`, then the changes you made for the cache are not actually applied to the real cache store, but associated with the current [unit of work](Unit-Of-Work.md). You get the value you set in the same unit of work, but the changes are applied **only if the current unit of work succeed**.
+`IDistributedCache<..>` methods gets an optional parameter, named `considerUow`, which is `false` by default. If you set it to `true`, then the changes you made for the cache are not actually applied to the real cache store, but associated with the current [unit of work](Unit-Of-Work.md). You get the value you set in the same unit of work, but the changes are applied **only if the current unit of work succeed**.
 
 ### IDistributedCacheSerializer
 
