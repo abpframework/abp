@@ -119,6 +119,10 @@
           "path": "Startup-Templates/Application.md"
         },
         {
+          "text": "Application (Single Layer)",
+          "path": "Startup-Templates/Application-Single-Layer.md"
+        },
+        {
           "text": "Module",
           "path": "Startup-Templates/Module.md"
         },
