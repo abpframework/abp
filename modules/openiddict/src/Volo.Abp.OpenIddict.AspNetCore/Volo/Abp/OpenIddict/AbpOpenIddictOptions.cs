@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.OpenIddict;
 
-public class AbpOpenIddictOptions
+public class AbpOpenIddictAspNetCoreOptions
 {
     /// <summary>
     /// Updates <see cref="AbpClaimTypes"/> to be compatible with OpenIddict claims.

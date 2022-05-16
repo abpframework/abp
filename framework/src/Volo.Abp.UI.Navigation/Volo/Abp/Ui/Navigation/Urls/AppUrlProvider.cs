@@ -45,7 +45,7 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
 
     public bool IsRedirectAllowedUrl(string url)
     {
-        var allow = Options.RedirectAllowedUrls.Any(url.StartsWith);
+        var allow = Options.RedirectAllowedUrls.Any(x => url.StartsWith(x, StringComparison.CurrentCultureIgnoreCase));
         if (!allow)
         {
             Logger.LogError($"Invalid RedirectUrl: {url}, Use {nameof(AppUrlProvider)} to configure it!");

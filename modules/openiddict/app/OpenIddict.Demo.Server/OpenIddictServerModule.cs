@@ -1,9 +1,7 @@
 ﻿using System.Text;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Demo.Server.EntityFrameworkCore;
-using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -109,16 +107,7 @@ public class OpenIddictServerModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        // This is work for the OpenIddictServerBuilder.AddValidation()
-        context.Services.ConfigureApplicationCookie(options =>
-        {
-            options.ForwardDefaultSelector = ctx => ctx.Request.Path.StartsWithSegments("/api")
-                ? OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme
-                : null;
-        });
-
-
-        Configure<AbpOpenIddictOptions>(options =>
+        Configure<AbpOpenIddictAspNetCoreOptions>(options =>
         {
             options.AddDevelopmentEncryptionAndSigningCertificate = false;
         });

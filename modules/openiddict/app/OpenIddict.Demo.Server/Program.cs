@@ -1,9 +1,6 @@
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Demo.Server;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Localization;
-using Volo.Abp.OpenIddict.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
@@ -43,6 +40,13 @@ builder.Services.Configure<AbpLocalizationOptions>(options =>
 //         options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78"));
 //         options.TokenValidationParameters.TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80"));
 //     });
+
+// builder.Services.ConfigureApplicationCookie(options =>
+// {
+//     options.ForwardDefaultSelector = ctx => ctx.Request.Path.StartsWithSegments("/api")
+//         ? OtherScheme
+//         : null;
+// });
 
 await builder.AddApplicationAsync<OpenIddictServerModule>();
 
