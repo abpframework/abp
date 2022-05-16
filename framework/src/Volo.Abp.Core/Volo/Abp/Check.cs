@@ -162,4 +162,17 @@ public static class Check
 
         return value;
     }
+
+    public static T NotDefault<T>(
+        T value,
+        [InvokerParameterName][NotNull] string parameterName)
+        where T : struct
+    {
+        if(value.Equals(default(T)))
+        {
+            throw new ArgumentException($"{parameterName} has a default value or is empty!", parameterName);
+        }
+
+        return value;
+    }
 }
