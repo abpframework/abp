@@ -14,6 +14,7 @@
     "TestEmailSubject": "Test email {0}",
     "TestEmailBody": "Test email body message here",
     "SuccessfullySent": "Successfully sent",
+    "Send": "Send",
     "Menu:Emailing": "Emailing",
     "SmtpHost": "Host",
     "SmtpPort": "Port",

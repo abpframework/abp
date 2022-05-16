@@ -14,6 +14,7 @@
     "TestEmailSubject": "Test email {0}",
     "TestEmailBody": "E-posta gövdesi mesajını burada test edin",
     "SuccessfullySent": "Başarıyla gönderildi",
+    "Send": "Gönder",
     "Menu:Emailing": "Email",
     "SmtpHost": "Sunucu",
     "SmtpPort": "Port",

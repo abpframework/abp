@@ -14,6 +14,7 @@
     "TestEmailSubject": "測試邮件 {0}",
     "TestEmailBody": "測試邮件內容",
     "SuccessfullySent": "成功發送",
+    "Send": "發送",
     "Menu:Emailing": "信箱",
     "SmtpHost": "主機",
     "SmtpPort": "Port",

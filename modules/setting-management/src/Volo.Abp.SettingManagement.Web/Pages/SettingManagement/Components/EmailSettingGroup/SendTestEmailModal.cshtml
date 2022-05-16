@@ -20,6 +20,12 @@
             <abp-input asp-for="Input.Subject" />
             <abp-input asp-for="Input.Body" />
         </abp-modal-body>
-        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+        <abp-modal-footer>
+            <abp-button data-bs-dismiss="modal" button-type="Secondary">@L["Cancel"]</abp-button>
+            <abp-button button-type="Primary" type="submit">
+                <i class="fa fa-send"></i> @L["Send"]
+            </abp-button>
+        </abp-modal-footer>
+        
     </abp-modal>
 </form>
