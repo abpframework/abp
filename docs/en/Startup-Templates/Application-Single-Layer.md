@@ -12,7 +12,7 @@ This document explains the **solution structure** and project in details. If you
 
 ABP's [Application Startup Template](Application.md) provides a well-organized and layered solution to create maintainable business applications based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practises. However, some developers find this template little bit complex (or unneccessary) for simple and short-time applications.
 
-In that point, for such applications a single-layered application template is created. Time template has the same functionality, features and modules on runtime with the [Application Startup Template](Application.md) but the development model is minimal and everything is in the single project (`.csproj`).
+In that point, for such applications a single-layered application template is created. This template has the same functionality, features and modules on runtime with the [Application Startup Template](Application.md) and ABP modules are already installed but the development model is minimal and everything is in the single project (`.csproj`).
 
 ## How to Start with?
 
@@ -37,17 +37,17 @@ abp new Acme.BookStore -t app-nolayers
 
 This template provides multiple UI frameworks:
 
-* `mvc`: ASP.NET Core MVC UI with Razor Pages
+* `mvc`: ASP.NET Core MVC UI with Razor Pages (default)
 * `blazor-server`: Blazor Server UI
 * `angular`: Angular UI
-* `none`: Without UI <!-- TODO: try this!!! -!>
+* `none`: Without UI
 
 > Currently, this template doesn't have Blazor WASM UI, because it requries 3 projects at least (server-side, UI and shared library between these two projects). We'll consider to add Blazor WASM UI support based on your feedback.
 
-Use the `-u` or `ui` option to specify the UI framework, while creating the solution:
+Use the `-u` or `--ui` option to specify the UI framework, while creating the solution:
 
 ```bash
-abp new Acme.BookStore -u angular
+abp new Acme.BookStore -t app-nolayers -u angular
 ```
 
 * This example specifies the UI type (`-u` option) as `angular`, you can also specify the `mvc` or `blazor-server` for UI type.
@@ -66,3 +66,36 @@ abp new Acme.BookStore -d mongodb
 ```
 
 ## Solution Structure
+
+If you don't specify any additional option while creating an `app-nolayers` template, you will have a solution like shown below:
+
+![](../images/bookstore-single-layer-solution-structure.png)
+
+As you can see, it's a single layer template rather than a layered-architecture solution (like `Application Startup Template`).
+
+### Folder Structure
+
+Since this template provides single layer solution, we've seperated concerns into folders instead of layers and you can see the pre-defined folders like shown below:
+
+![](../images/single-layer-folder-structure.png)
+
+* You can define your `entities`, `application services`, `DTOs` etc. in this single project (in the related folders). 
+
+## How to Run?
+
+Before running the application, you need to create the database and seed the initial data. To do that, you can run the following command in the directory of your project:
+
+```bash
+dotnet run --migrate-database
+```
+
+* This command will create the database and seed the initial data for you. Then you can run the application with any IDE that supports .NET or by running the `dotnet run` CLI command in the directory of your project. Default username is `admin` and password is `1q2w3E*`.
+
+> If you create an `app-nolayers` template with **Angular UI** you also need to run the angular project to see the UI.
+
+### Angular UI <!-- TODO: move under "solution structure" section / remove this section? -->
+
+If you choose `Angular` as the UI framework, the solution is being separated into two folders:
+
+* `angular` folder contains the Angular UI application, the client-side code.
+* `aspnet-core` folder contains the ASP.NET Core solution, the server-side code.
