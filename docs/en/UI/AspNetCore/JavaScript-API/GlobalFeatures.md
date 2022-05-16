@@ -7,15 +7,18 @@
 ## Usage
 
 ````js
+//Gets all enabled global features.
 > abp.globalFeatures.enabledFeatures
 
 [ 'Shopping.Payment', 'Ecommerce.Subscription' ]
 
-> abp.globalFeatures.moduleEnabledFeatures
 
-{ Ecommerce }
+//Check the global feature is enabled
+> abp.globalFeatures.isEnabled('Ecommerce.Subscription')
 
-> abp.globalFeatures.moduleEnabledFeatures.Ecommerce
+true
 
-[ 'Ecommerce.Subscription', 'Ecommerce.Invoice' ]
+> abp.globalFeatures.isEnabled('My.Subscription')
+
+false
 ````
