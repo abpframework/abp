@@ -31,5 +31,10 @@ public class ValueObject_Tests
         address2 = new Address(cityId, "Baris Manco", 42, "home");
 
         address1.ValueEquals(address2).ShouldBeFalse();
+
+        var emailAddress1 = new EmailAddress("test@abp.io");
+        var emailAddress2 = new EmailAddress(null);
+
+        emailAddress1.ValueEquals(emailAddress2).ShouldBeFalse();
     }
 }
