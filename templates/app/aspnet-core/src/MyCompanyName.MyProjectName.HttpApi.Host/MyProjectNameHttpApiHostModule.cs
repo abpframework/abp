@@ -102,7 +102,7 @@ public class MyProjectNameHttpApiHostModule : AbpModule
             {
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = "AbpAPIResource";
+                options.Audience = "MyProjectName";
                 
                 // See OpenIddictServerModule`s PreConfigureServices method.
                 options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78"));
