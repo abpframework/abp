@@ -170,18 +170,14 @@ public partial class EmailSettingGroupViewComponent
     public class SendTestEmailViewModel
     {
         [Required]
-        [Display(Name = "SenderEmailAddress")]
         public string SenderEmailAddress { get; set; }
 
         [Required]
-        [Display(Name = "TargetEmailAddress")]
         public string TargetEmailAddress { get; set; }
 
         [Required]
-        [Display(Name = "Subject")]
         public string Subject { get; set; }
     
-        [Display(Name = "Body")]
         public string Body { get; set; }
     }
 }
