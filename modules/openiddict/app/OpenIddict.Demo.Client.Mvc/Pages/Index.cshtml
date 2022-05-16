@@ -1,14 +1,13 @@
 ﻿@page
 @using Microsoft.AspNetCore.Authentication
+@using System.Net.Http.Headers
+@using System.Text.Json
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-
     <a class="btn btn-primary" href="/Login">Login</a>
     <a class="btn btn-warning" href="/Logout">Loout</a>
 
@@ -25,5 +24,22 @@
             <br/>
             @await HttpContext.GetTokenAsync("access_token")
         </p>
+
+        var client = new HttpClient();
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44303/api/claims");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
+
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        <code style="display: block; white-space: pre-wrap; text-align: left">
+            @{
+                var apiResponse = JsonSerializer.Serialize(JsonDocument.Parse(await response.Content.ReadAsStringAsync()), new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+            }
+            @apiResponse;
+        </code>
     }
 </div>
