@@ -163,7 +163,7 @@ public static class Check
         return value;
     }
 
-    public static Int16 NotNegativeOrZero(
+    public static Int16 Positive(
         Int16 type,
         [InvokerParameterName][NotNull] string parameterName)
     {
@@ -178,7 +178,7 @@ public static class Check
         return type;
     }
 
-    public static Int32 NotNegativeOrZero(
+    public static Int32 Positive(
         Int32 type,
         [InvokerParameterName][NotNull] string parameterName)
     {
@@ -193,7 +193,7 @@ public static class Check
         return type;
     }
 
-    public static Int64 NotNegativeOrZero(
+    public static Int64 Positive(
         Int64 type,
         [InvokerParameterName][NotNull] string parameterName)
     {
@@ -208,7 +208,7 @@ public static class Check
         return type;
     }
 
-    public static float NotNegativeOrZero(
+    public static float Positive(
         float type,
         [InvokerParameterName][NotNull] string parameterName)
     {
@@ -223,7 +223,7 @@ public static class Check
         return type;
     }
 
-    public static double NotNegativeOrZero(
+    public static double Positive(
         double type,
         [InvokerParameterName][NotNull] string parameterName)
     {
@@ -238,7 +238,7 @@ public static class Check
         return type;
     }
 
-    public static decimal NotNegativeOrZero(
+    public static decimal Positive(
         decimal type,
         [InvokerParameterName][NotNull] string parameterName)
     {
@@ -255,7 +255,7 @@ public static class Check
 
 
 
-    public static Int16 WithinRange(
+    public static Int16 Range(
         Int16 type,
         [InvokerParameterName][NotNull] string parameterName,
         Int16 minimumValue,
@@ -268,7 +268,7 @@ public static class Check
 
         return type;
     }
-    public static Int32 WithinRange(
+    public static Int32 Range(
         Int32 type,
         [InvokerParameterName][NotNull] string parameterName,
         Int32 minimumValue,
@@ -282,7 +282,7 @@ public static class Check
         return type;
     }
 
-    public static Int64 WithinRange(
+    public static Int64 Range(
         Int64 type,
         [InvokerParameterName][NotNull] string parameterName,
         Int64 minimumValue,
@@ -297,7 +297,7 @@ public static class Check
     }
 
 
-    public static float WithinRange(
+    public static float Range(
         float type,
         [InvokerParameterName][NotNull] string parameterName,
         float minimumValue,
@@ -311,7 +311,7 @@ public static class Check
         return type;
     }
 
-    public static double WithinRange(
+    public static double Range(
         double type,
         [InvokerParameterName][NotNull] string parameterName,
         double minimumValue,
@@ -326,7 +326,7 @@ public static class Check
     }
 
 
-    public static decimal WithinRange(
+    public static decimal Range(
         decimal type,
         [InvokerParameterName][NotNull] string parameterName,
         decimal minimumValue,
