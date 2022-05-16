@@ -1,5 +1,5 @@
 # Consuming REST APIs from a .NET Client Using ABP's Client Proxy System
-In this article, we will show how to consume rest api by using static client proxy by creating a new project and converting that from dynamic client proxy to static client proxy. Also, I will glance at the differences between static and dynamic generic proxies.
+In this article, we will show how to consume Rest API  by creating a new project and converting that from the dynamic client proxy to the static client proxy. Also, I will glance at the differences and similarities between static and dynamic generic proxies.
 
 Article flow
 * Create a new ABP application with ABP CLI
@@ -20,7 +20,7 @@ abp new Acme.BookStore -t app
 
 > If you haven't installed it yet, you should install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI).
 
-At the same folder build the project with the following command on the cli.
+In the same folder build the project with the following command on the cli.
 ````shell
 dotnet build /graphbuild
 ````
@@ -35,9 +35,8 @@ Now your project is ready you can run it properly.
 
 From now on, we will add some files to show the case to you.  
 
-
 ### Create application service interface
-You should open your web application then find `Pages` folder and a create new folder named `Books`.
+You should open your web application then find `Pages` folder and create a new folder under it named `Books`.
 You should create a new razor page and a new js file as named index.
 
 Change the Pages/Books/Index.cshtml as the following:   
@@ -62,7 +61,7 @@ Change the Pages/Books/Index.cshtml as the following:
 </abp-card>
 ```
 
-Now change index.js file as the following content
+Now change index.js file as the following content, as weel.
 ```js
 $(function () {
     var l = abp.localization.getResource('BookStore');
@@ -97,15 +96,15 @@ $(function () {
 Assume that we have an `IBookAppService` interface:
 
 ````csharp
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Acme.BookStore.Books
 {
     public interface IBookAppService : IApplicationService
     {
-        Task<List<BookDto>> GetListAsync();
+        Task<PagedResultDto<BookDto>> GetListAsync(PagedAndSortedResultRequestDto input);
     }
 }
 ````
@@ -132,6 +131,13 @@ namespace Acme.BookStore.Books
 ```
 
 ```csharp
+using Acme.BookStore.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+
 namespace Acme.BookStore.Books
 {
     public class BookAppService : ApplicationService, IBookAppService
@@ -158,7 +164,9 @@ It simply returns a list of books. You probably want to get the books from a dat
 Add a new test class, named BookAppService_Tests in the Application.Tests
 
 ```csharp
+using Shouldly;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Xunit;
 
 namespace Acme.BookStore.Books
@@ -175,15 +183,17 @@ namespace Acme.BookStore.Books
         [Fact]
         public async Task Should_Get_List_Of_Books()
         {
-            var result = await _bookAppService.GetListAsync();
-            Assert.Equal(3, result.Count);
+            var result = await _bookAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+
+            result.TotalCount.ShouldBeGreaterThan(0);
+            result.Items.ShouldContain(b => b.Name == "Mother");
         }
     }
 }
 ```
 
 ### Convert application to use static client proxies
-Before showing you how to use static client proxies instead of dynamic client proxy, I ask for talk differences between both approach. Their similarty, advantages and disadvantages to each other.
+Before showing you how to use static client proxies instead of dynamic client proxies, I ask you to talk differences between both approaches. Their similarities, advantages and disadvantages to each other.
 
 ##### Benefits
 * Maps C# method calls to remote server HTTP calls by considering the HTTP method, route, query string parameters, request payload and other details.
@@ -194,9 +204,10 @@ Before showing you how to use static client proxies instead of dynamic client pr
 * Properly handles the error messages sent by the server and throws proper exceptions.
 
 ##### Differences
-Static generic proxies provide better performance because it doesn't need to run on runtime, but you should **re-generate** once changing API endpoint definition. Dynamic generic proxies don't need **re-generate** again because working on the runtime can take more a bit of time. 
+Static generic proxies provide better performance because it doesn't need to run on runtime, but you should **re-generate** once changing API endpoint definition. Dynamic generic proxies don't need **re-generate** again because it works on the runtime but it happens more a bit time. 
 
-First, add Volo.Abp.Http.Client NuGet package to your client project:
+Now focus on how to do it,
+Firstly add Volo.Abp.Http.Client NuGet package to your client project:
 ````shell
 Install-Package Volo.Abp.Http.Client
 ````
@@ -236,7 +247,7 @@ Also, you should then run the below command under your web project for the UI si
 abp generate-proxy -t js -u http://localhost:44397/
 ````
 
-You have been should the generated files under the runned folder.
+You should have seen the generated files under the selected folder.
 
 ### Add authorization
 ABP Framework provides an authorization system based on the ASP.NET Core's authorization infrastructure.
@@ -244,6 +255,8 @@ Even so, to use that need to make some configurations.
 
 Under `Acme.BookStore.Application.Contracts` open `BookStorePermissions` and paste the below code
 ```csharp
+namespace Acme.BookStore.Permissions;
+
 public static class BookStorePermissions
 {
     public const string GroupName = "BookStore";
@@ -255,8 +268,12 @@ public static class BookStorePermissions
 
 }
 ```
-Also need to change `BookStorePermissionDefinitionProvider` under the same folder and project as following.
+Also need to change `BookStorePermissionDefinitionProvider` under the same folder and project as follows.
 ```csharp
+using Acme.BookStore.Localization;
+using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Localization;
+
 public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvider
 {
     public override void Define(IPermissionDefinitionContext context)
@@ -275,7 +292,7 @@ And now you should add [Authorize(BookStorePermissions.Books.Default)] to `BookA
 If you don't give permission you should see the following screen.
 ![access denied](./access_denied.png)
 
-After completing that you can make localization configuration and you should give permission from the Admin UI side. Now you should the following screen.
+After completing that you can make the localization configuration and you should give permission at the Admin UI side. Now you should the following screen.
 ![list page](./list.png)
 
 ### Further Reading
