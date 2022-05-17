@@ -1,6 +1,7 @@
 {
   "culture": "sl",
   "texts": {
+    "Menu:Account": "Račun",
     "UserName": "Uporabniško ime",
     "EmailAddress": "E-poštni naslov",
     "UserNameOrEmailAddress": "Uporabniško ime ali e-poštni naslov",

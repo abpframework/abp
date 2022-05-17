@@ -1,10 +1,11 @@
-import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpHeaders, HttpParameterCodec, HttpParams } from '@angular/common/http';
 
 export namespace Rest {
   export type Config = Partial<{
     apiName: string;
     skipHandleError: boolean;
     observe: Observe;
+    httpParamEncoder?: HttpParameterCodec;
   }>;
 
   export const enum Observe {
@@ -20,6 +21,8 @@ export namespace Rest {
     Text = 'text',
   }
 
+  export type Params = HttpParams | { [param: string]: any };
+
   export interface Request<T> {
     body?: T;
     headers?:
@@ -28,11 +31,7 @@ export namespace Rest {
           [header: string]: string | string[];
         };
     method: string;
-    params?:
-      | HttpParams
-      | {
-          [param: string]: any;
-        };
+    params?: Params;
     reportProgress?: boolean;
     responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
     url: string;

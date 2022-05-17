@@ -1,0 +1,35 @@
+{
+  "name": "Volo.Abp.SettingManagement.Domain",
+  "hash": "ab6abd0e7049113520283a287695c165",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.SettingManagement",
+      "contentType": "abpModule",
+      "name": "AbpSettingManagementDomainModule"
+    },
+    {
+      "namespace": "Volo.Abp.SettingManagement",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Setting"
+    },
+    {
+      "namespace": "Volo.Abp.SettingManagement",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.SettingManagement",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Setting"
+      },
+      "contentType": "repositoryInterface",
+      "name": "ISettingRepository"
+    }
+  ]
+}

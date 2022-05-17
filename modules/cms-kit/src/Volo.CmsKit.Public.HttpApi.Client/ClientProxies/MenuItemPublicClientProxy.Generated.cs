@@ -11,15 +11,14 @@ using System.Collections.Generic;
 using Volo.CmsKit.Menus;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Public.Menus.ClientProxies
+namespace Volo.CmsKit.Public.Menus.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IMenuItemPublicAppService), typeof(MenuItemPublicClientProxy))]
+public partial class MenuItemPublicClientProxy : ClientProxyBase<IMenuItemPublicAppService>, IMenuItemPublicAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IMenuItemPublicAppService), typeof(MenuItemPublicClientProxy))]
-    public partial class MenuItemPublicClientProxy : ClientProxyBase<IMenuItemPublicAppService>, IMenuItemPublicAppService
+    public virtual async Task<List<MenuItemDto>> GetListAsync()
     {
-        public virtual async Task<List<MenuItemDto>> GetListAsync()
-        {
-            return await RequestAsync<List<MenuItemDto>>(nameof(GetListAsync));
-        }
+        return await RequestAsync<List<MenuItemDto>>(nameof(GetListAsync));
     }
 }

@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.FeatureManagement.Web",
+  "hash": "54ac0a56a5e7786d63e587ccfdc62e05",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "contentType": "abpModule",
+      "name": "AbpFeatureManagementWebModule"
+    }
+  ]
+}

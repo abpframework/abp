@@ -137,7 +137,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                     }
                     else if (node.LastSignificantUpdateTime != null && node.LastSignificantUpdateTime + TimeSpan.FromDays(14) > DateTime.Now)
                     {
-                        var updBadge = sb.Append("<span class='badge bg-light ms-2' title=\"").Append(_localizer["UpdatedExplanation"]).Append("\">").Append(_localizer["Upd"]).Append("</span>").ToString();
+                        var updBadge = sb.Append("<span class='badge bg-primary ms-2' title=\"").Append(_localizer["UpdatedExplanation"]).Append("\">").Append(_localizer["Upd"]).Append("</span>").ToString();
                         badgeStringBuilder.Append(updBadge);
                     }
                 }

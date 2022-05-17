@@ -1,13 +1,21 @@
 ﻿@typeparam TEntity
 @typeparam TResourceType
 @using Abp.Localization
+@inherits ExtensionPropertyComponentBase<TEntity, TResourceType>
 
-<Field>
-    <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
-    <Select @bind-SelectedValue="@SelectedValue" >
-        @foreach (var item in SelectItems)
-        {
-            <SelectItem Value="@item.Value">@item.Text</SelectItem>
-        }
-    </Select>
-</Field>
+<Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
+    <Field>
+        <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
+        <Select @bind-SelectedValue="@SelectedValue">
+            <ChildContent>
+                @foreach (var item in SelectItems)
+                {
+                    <SelectItem Value="@item.Value">@item.Text</SelectItem>
+                }
+            </ChildContent>
+            <Feedback>
+                <ValidationError/>
+            </Feedback>
+        </Select>
+    </Field>
+</Validation>

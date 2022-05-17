@@ -36,6 +36,7 @@ using Volo.Abp.Http;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -77,12 +78,12 @@ public class AbpAspNetCoreMvcModule : AbpModule
         {
             var statusCodes = new List<int>
             {
-                    (int) HttpStatusCode.Forbidden,
-                    (int) HttpStatusCode.Unauthorized,
-                    (int) HttpStatusCode.BadRequest,
-                    (int) HttpStatusCode.NotFound,
-                    (int) HttpStatusCode.NotImplemented,
-                    (int) HttpStatusCode.InternalServerError
+                (int) HttpStatusCode.Forbidden,
+                (int) HttpStatusCode.Unauthorized,
+                (int) HttpStatusCode.BadRequest,
+                (int) HttpStatusCode.NotFound,
+                (int) HttpStatusCode.NotImplemented,
+                (int) HttpStatusCode.InternalServerError
             };
 
             options.SupportedResponseTypes.AddIfNotContains(statusCodes.Select(statusCode => new ApiResponseType
@@ -119,7 +120,6 @@ public class AbpAspNetCoreMvcModule : AbpModule
             );
 
         var mvcBuilder = context.Services.AddMvc()
-            .AddRazorRuntimeCompilation()
             .AddDataAnnotationsLocalization(options =>
             {
                 options.DataAnnotationLocalizerProvider = (type, factory) =>
@@ -134,21 +134,18 @@ public class AbpAspNetCoreMvcModule : AbpModule
                     }
 
                     return factory.CreateDefaultOrNull() ??
-                           factory.Create(type);
+                            factory.Create(type);
                 };
             })
             .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
-        mvcCoreBuilder.AddAbpHybridJson();
-
-        Configure<MvcRazorRuntimeCompilationOptions>(options =>
+        if (context.Services.GetHostingEnvironment().IsDevelopment() &&
+            context.Services.ExecutePreConfiguredActions<AbpAspNetCoreMvcOptions>().EnableRazorRuntimeCompilationOnDevelopment)
         {
-            options.FileProviders.Add(
-                new RazorViewEngineVirtualFileProvider(
-                    context.Services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
-                )
-            );
-        });
+            mvcCoreBuilder.AddAbpRazorRuntimeCompilation();
+        }
+
+        mvcCoreBuilder.AddAbpHybridJson();
 
         context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
@@ -188,6 +185,11 @@ public class AbpAspNetCoreMvcModule : AbpModule
                 endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpointContext.Endpoints.MapRazorPages();
             });
+        });
+
+        Configure<DynamicJavaScriptProxyOptions>(options =>
+        {
+            options.DisableModule("abp");
         });
     }
 

@@ -9,26 +9,25 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 
 // ReSharper disable once CheckNamespace
-namespace Pages.Abp.MultiTenancy.ClientProxies
-{
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IAbpTenantAppService), typeof(AbpTenantClientProxy))]
-    public partial class AbpTenantClientProxy : ClientProxyBase<IAbpTenantAppService>, IAbpTenantAppService
-    {
-        public virtual async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
-        {
-            return await RequestAsync<FindTenantResultDto>(nameof(FindTenantByNameAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), name }
-            });
-        }
+namespace Pages.Abp.MultiTenancy.ClientProxies;
 
-        public virtual async Task<FindTenantResultDto> FindTenantByIdAsync(Guid id)
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IAbpTenantAppService), typeof(AbpTenantClientProxy))]
+public partial class AbpTenantClientProxy : ClientProxyBase<IAbpTenantAppService>, IAbpTenantAppService
+{
+    public virtual async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
+    {
+        return await RequestAsync<FindTenantResultDto>(nameof(FindTenantByNameAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<FindTenantResultDto>(nameof(FindTenantByIdAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(string), name }
+        });
+    }
+
+    public virtual async Task<FindTenantResultDto> FindTenantByIdAsync(Guid id)
+    {
+        return await RequestAsync<FindTenantResultDto>(nameof(FindTenantByIdAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id }
+        });
     }
 }

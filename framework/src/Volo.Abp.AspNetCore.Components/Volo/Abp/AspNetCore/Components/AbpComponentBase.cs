@@ -11,7 +11,9 @@ using Volo.Abp.AspNetCore.Components.ExceptionHandling;
 using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.Components.Notifications;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Timing;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Components;
@@ -54,6 +56,9 @@ public abstract class AbpComponentBase : OwningComponentBase
     protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
     private ICurrentUser _currentUser;
 
+    protected ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
+    private ICurrentTenant _currentTenant;
+
     protected IUiMessageService Message => LazyGetNonScopedRequiredService(ref _message);
     private IUiMessageService _message;
 
@@ -65,6 +70,9 @@ public abstract class AbpComponentBase : OwningComponentBase
 
     protected IAlertManager AlertManager => LazyGetNonScopedRequiredService(ref _alertManager);
     private IAlertManager _alertManager;
+
+    protected IClock Clock => LazyGetNonScopedRequiredService(ref _clock);
+    private IClock _clock;
 
     protected AlertList Alerts => AlertManager.Alerts;
 
@@ -158,7 +166,7 @@ public abstract class AbpComponentBase : OwningComponentBase
         return localizer;
     }
 
-    protected async Task HandleErrorAsync(Exception exception)
+    protected virtual async Task HandleErrorAsync(Exception exception)
     {
         Logger.LogException(exception);
         await InvokeAsync(async () =>

@@ -285,8 +285,16 @@
           ]
         },
         {
+          "text": "Cancellation Token Provider",
+          "path": "Cancellation-Token-Provider.md"
+        },
+        {
           "text": "CSRF/XSRF & Anti Forgery",
           "path": "CSRF-Anti-Forgery.md"
+        },
+        {
+          "text": "Concurrency Check",
+          "path": "Concurrency-Check.md"
         },
         {
           "text": "Current User",
@@ -301,6 +309,10 @@
           "path": "Data-Seeding.md"
         },
         {
+          "text": "Distributed Locking",
+          "path": "Distributed-Locking.md"
+        },
+        {
           "text": "Email Sending",
           "items": [
             {
@@ -312,10 +324,6 @@
               "path": "MailKit.md"
             }
           ]
-        },
-        {
-          "text": "SMS Sending",
-          "path": "SMS-Sending.md"
         },
         {
           "text": "Event Bus",
@@ -353,10 +361,6 @@
           ]
         },
         {
-          "text": "JSON",
-          "path": "JSON.md"
-        },
-        {
           "text": "Features",
           "path": "Features.md"
         },
@@ -369,8 +373,20 @@
           "path": "Guid-Generation.md"
         },
         {
+          "text": "JSON",
+          "path": "JSON.md"
+        },
+        {
           "text": "Object to Object Mapping",
           "path": "Object-To-Object-Mapping.md"
+        },
+        {
+          "text": "Simple State Checker",
+          "path": "SimpleStateChecker.md"
+        },
+        {
+          "text": "SMS Sending",
+          "path": "SMS-Sending.md"
         },
         {
           "text": "String Encryption",
@@ -397,14 +413,6 @@
         {
           "text": "Virtual File System",
           "path": "Virtual-File-System.md"
-        },
-        {
-          "text": "Cancellation Token Provider",
-          "path": "Cancellation-Token-Provider.md"
-        },
-        {
-          "text": "Simple State Checker",
-          "path": "SimpleStateChecker.md"
         }
       ]
     },
@@ -579,6 +587,10 @@
           "path": "API/Dynamic-CSharp-API-Clients.md"
         },
         {
+          "text": "Static C# API Clients",
+          "path": "API/Static-CSharp-API-Clients.md"
+        },
+        {
           "text": "ABP Endpoints",
           "items": [
             {
@@ -590,6 +602,10 @@
         {
           "text": "Swagger Integration",
           "path": "API/Swagger-Integration.md"
+        },
+        {
+          "text": "API Versioning",
+          "path": "API/API-Versioning.md"
         }
       ]
     },
@@ -620,12 +636,20 @@
               "path": "UI/AspNetCore/Data-Tables.md"
             },
             {
+              "text": "Auto-Complete Select",
+              "path": "UI/AspNetCore/AutoComplete-Select.md"
+            },
+            {
               "text": "Page Alerts",
               "path": "UI/AspNetCore/Page-Alerts.md"
             },
             {
               "text": "Dynamic JavaScript API Client Proxies",
               "path": "UI/AspNetCore/Dynamic-JavaScript-Proxies.md"
+            },
+            {
+              "text": "Static JavaScript API Client Proxies",
+              "path": "UI/AspNetCore/Static-JavaScript-Proxies.md"
             },
             {
               "text": "Client Side Package Management",
@@ -680,6 +704,10 @@
                 {
                   "text": "The Basic Theme",
                   "path": "UI/AspNetCore/Basic-Theme.md"
+                },
+                {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/mvc.md"
                 }
               ]
             },
@@ -792,6 +820,10 @@
                 {
                   "text": "The Basic Theme",
                   "path": "UI/Blazor/Basic-Theme.md"
+                },
+                {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/blazor.md"
                 },
                 {
                   "text": "Branding",
@@ -1047,6 +1079,10 @@
                     {
                       "text": "The Basic Theme",
                       "path": "UI/Angular/Basic-Theme.md"
+                    },
+                    {
+                      "text": "LeptonX Lite",
+                      "path": "Themes/LeptonXLite/angular.md"
                     }
                   ]
                 },
@@ -1061,10 +1097,10 @@
                 {
                   "text": "Extensions",
                   "items": [
-                     {
+                    {
                       "text": "Overall",
                       "path": "UI/Angular/Extensions-Overall.md"
-                     },
+                    },
                     {
                       "text": "Entity Action Extensions",
                       "path": "UI/Angular/Entity-Action-Extensions.md"
@@ -1080,6 +1116,10 @@
                     {
                       "text": "Dynamic Form Extensions",
                       "path": "UI/Angular/Dynamic-Form-Extensions.md"
+                    },
+                    {
+                      "text": "Date, time and datetime format pipes",
+                      "path": "UI/Angular/DateTime-Format-Pipe.md"
                     }
                   ]
                 }
@@ -1202,15 +1242,12 @@
       "path": "Testing.md"
     },
     {
-      "text": "Samples",
+      "text": "Deployment",
+      "path": "Deployment/Index.md",
       "items": [
         {
-          "text": "All Samples",
-          "path": "Samples/Index.md"
-        },
-        {
-          "text": "Microservice Demo",
-          "path": "Samples/Microservice-Demo.md"
+          "text": "Deploying to a Clustered Environment",
+          "path": "Deployment/Clustered-Environment.md"
         }
       ]
     },
@@ -1253,6 +1290,10 @@
           "text": "IdentityServer",
           "path": "Modules/IdentityServer.md"
         },
+		{
+          "text": "OpenIddict",
+          "path": "Modules/OpenIddict.md"
+        },
         {
           "text": "Permission Management",
           "path": "Modules/Permission-Management.md"
@@ -1268,6 +1309,19 @@
         {
           "text": "Virtual File Explorer",
           "path": "Modules/Virtual-File-Explorer.md"
+        }
+      ]
+    },
+    {
+      "text": "Samples",
+      "items": [
+        {
+          "text": "All Samples",
+          "path": "Samples/Index.md"
+        },
+        {
+          "text": "Microservice Demo",
+          "path": "Samples/Microservice-Demo.md"
         }
       ]
     },

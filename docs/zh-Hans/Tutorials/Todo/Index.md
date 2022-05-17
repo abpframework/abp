@@ -682,7 +682,7 @@ ABP提供了一个便捷的功能来自动创建客户端服务, 以方便地使
 当启动 `TodoApp.HttpApi.Host` 项目后, 在`angular`文件夹中打开一个命令行终端并输入以下命令: 
 
 ````bash
-abp generate-proxy
+abp generate-proxy -t ng
 ````
 
 如果一切顺利, 它应该生成如下输出: 

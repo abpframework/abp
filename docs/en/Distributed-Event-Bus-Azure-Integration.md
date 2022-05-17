@@ -28,7 +28,7 @@ This is the simplest way to configure the Azure Service Bus settings. It is also
     "ServiceBus": {
       "Connections": {
         "Default": {
-          "ConnectionString": "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName={{Policy Name}};SharedAccessKey={};EntityPath=marketing-consent"
+          "ConnectionString": "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName={%{{{Policy Name}}}%};SharedAccessKey={};EntityPath=marketing-consent"
         }
       }
     },
@@ -58,10 +58,10 @@ If you need to connect to another Azure Service Bus Namespace the Default, you n
     "ServiceBus": {
       "Connections": {
         "Default": {
-          "ConnectionString": "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={{SharedAccessKey}}"
+          "ConnectionString": "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={%{{{SharedAccessKey}}}%}"
         },
         "SecondConnection": {
-          "ConnectionString": "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName={{Policy Name}};SharedAccessKey={{SharedAccessKey}}"
+          "ConnectionString": "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName={%{{{Policy Name}}}%};SharedAccessKey={%{{{SharedAccessKey}}}%}"
         }
       }
     },
@@ -86,7 +86,7 @@ You can use any of the [ServiceBusAdministrationClientOptions](https://docs.micr
     "ServiceBus": {
       "Connections": {
         "Default": {
-          "ConnectionString": "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName={{Policy Name}};SharedAccessKey={};EntityPath=marketing-consent",
+          "ConnectionString": "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName={%{{{Policy Name}}}%};SharedAccessKey={};EntityPath=marketing-consent",
           "Admin": {
             "Retry": {
               "MaxRetries": 3
@@ -124,7 +124,7 @@ You can configure this options inside the `ConfigureServices` of your [module](M
 ````csharp
 Configure<AbpAzureServiceBusOptions>(options =>
 {
-    options.Connections.Default.ConnectionString = "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName={{Policy Name}};SharedAccessKey={}";
+    options.Connections.Default.ConnectionString = "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName={%{{{Policy Name}}}%};SharedAccessKey={}";
     options.Connections.Default.Admin.Retry.MaxRetries = 3;
     options.Connections.Default.Client.RetryOptions.MaxRetries = 1;
 });

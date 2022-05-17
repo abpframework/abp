@@ -1,5 +1,5 @@
 module.exports = {
     mappings: {
-        "@node_modules/@toast-ui/editor/dist/*.*": "@libs/tui-editor/"
+        "@node_modules/@abp/tui-editor/src/*.*": "@libs/tui-editor/"
     }
 }

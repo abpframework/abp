@@ -1,0 +1,35 @@
+{
+  "name": "Volo.Abp.FeatureManagement.Domain",
+  "hash": "dc844bd57c080aeb4c391df420023816",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "contentType": "abpModule",
+      "name": "AbpFeatureManagementDomainModule"
+    },
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "FeatureValue"
+    },
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Abp.FeatureManagement",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "FeatureValue"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IFeatureValueRepository"
+    }
+  ]
+}

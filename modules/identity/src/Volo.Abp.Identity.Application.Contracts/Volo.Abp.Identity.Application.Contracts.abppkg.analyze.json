@@ -1,11 +1,77 @@
 {
   "name": "Volo.Abp.Identity.Application.Contracts",
-  "hash": "7d48962330d53c649b5db86b7e77bce9",
+  "hash": "34252fd920a045fc04c43ed2e9b9a5e9",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity",
       "contentType": "abpModule",
       "name": "AbpIdentityApplicationContractsModule"
+    },
+    {
+      "displayName": "Role management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Roles"
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Roles.Create"
+    },
+    {
+      "displayName": "Edit",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Roles.Update"
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Roles.Delete"
+    },
+    {
+      "displayName": "Change permissions",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Roles.ManagePermissions"
+    },
+    {
+      "displayName": "User management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users"
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users.Create"
+    },
+    {
+      "displayName": "Edit",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users.Update"
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users.Delete"
+    },
+    {
+      "displayName": "Change permissions",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users.ManagePermissions"
+    },
+    {
+      "displayName": "User lookup",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.UserLookup"
     }
   ]
 }

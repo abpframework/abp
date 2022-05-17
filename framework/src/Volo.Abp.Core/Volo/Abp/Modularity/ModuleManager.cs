@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -30,6 +31,26 @@ public class ModuleManager : IModuleManager, ISingletonDependency
             .ToArray();
     }
 
+    public virtual async Task InitializeModulesAsync(ApplicationInitializationContext context)
+    {
+        foreach (var contributor in _lifecycleContributors)
+        {
+            foreach (var module in _moduleContainer.Modules)
+            {
+                try
+                {
+                    await contributor.InitializeAsync(context, module.Instance);
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpInitializationException($"An error occurred during the initialize {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
+                }
+            }
+        }
+
+        _logger.LogInformation("Initialized all ABP modules.");
+    }
+
     public void InitializeModules(ApplicationInitializationContext context)
     {
         foreach (var contributor in _lifecycleContributors)
@@ -48,6 +69,26 @@ public class ModuleManager : IModuleManager, ISingletonDependency
         }
 
         _logger.LogInformation("Initialized all ABP modules.");
+    }
+
+    public virtual async Task ShutdownModulesAsync(ApplicationShutdownContext context)
+    {
+        var modules = _moduleContainer.Modules.Reverse().ToList();
+
+        foreach (var contributor in _lifecycleContributors)
+        {
+            foreach (var module in modules)
+            {
+                try
+                {
+                    await contributor.ShutdownAsync(context, module.Instance);
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpShutdownException($"An error occurred during the shutdown {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
+                }
+            }
+        }
     }
 
     public void ShutdownModules(ApplicationShutdownContext context)

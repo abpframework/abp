@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Quartz;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz;
@@ -26,17 +27,25 @@ public class QuartzPeriodicBackgroundWorkerAdapter<TWorker> : QuartzBackgroundWo
     public void BuildWorker(IBackgroundWorker worker)
     {
         int? period;
-        var workerType = worker.GetType();
+        var workerType = ProxyHelper.GetUnProxiedType(worker);
 
-        if (worker is AsyncPeriodicBackgroundWorkerBase || worker is PeriodicBackgroundWorkerBase)
+        if (worker is AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase)
         {
-            if (typeof(TWorker) != worker.GetType())
+            if (typeof(TWorker) != workerType)
             {
                 throw new ArgumentException($"{nameof(worker)} type is different from the generic type");
             }
 
-            var timer = (AbpAsyncTimer)worker.GetType().GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
-            period = timer?.Period;
+            var timer = workerType.GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
+
+            if (worker is AsyncPeriodicBackgroundWorkerBase)
+            {
+                period = ((AbpAsyncTimer)timer)?.Period;
+            }
+            else
+            {
+                period = ((AbpTimer)timer)?.Period;
+            }
         }
         else
         {
@@ -60,26 +69,26 @@ public class QuartzPeriodicBackgroundWorkerAdapter<TWorker> : QuartzBackgroundWo
 
     public override async Task Execute(IJobExecutionContext context)
     {
-        var worker = (IBackgroundWorker)ServiceProvider.GetService(typeof(TWorker));
+        var worker = (IBackgroundWorker) ServiceProvider.GetService(typeof(TWorker));
         var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);
 
         switch (worker)
         {
             case AsyncPeriodicBackgroundWorkerBase asyncWorker:
+            {
+                if (_doWorkAsyncMethod != null)
                 {
-                    if (_doWorkAsyncMethod != null)
-                    {
-                        await (Task)_doWorkAsyncMethod.Invoke(asyncWorker, new object[] { workerContext });
-                    }
-
-                    break;
+                    await (Task) _doWorkAsyncMethod.Invoke(asyncWorker, new object[] {workerContext});
                 }
+
+                break;
+            }
             case PeriodicBackgroundWorkerBase syncWorker:
-                {
-                    _doWorkMethod?.Invoke(syncWorker, new object[] { workerContext });
+            {
+                _doWorkMethod?.Invoke(syncWorker, new object[] {workerContext});
 
-                    break;
-                }
+                break;
+            }
         }
     }
 }

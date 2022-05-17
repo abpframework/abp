@@ -17,7 +17,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
         <ProjectReference Include="..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
-        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EventBus.Boxes\Volo.Abp.EventBus.Boxes.csproj" />
+        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
     </ItemGroup>
 
 </Project>

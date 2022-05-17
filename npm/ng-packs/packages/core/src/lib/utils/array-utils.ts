@@ -1,4 +1,4 @@
-export function pushValueTo<T extends any>(array: T[]) {
+export function pushValueTo<T>(array: T[]) {
   return (element: T) => {
     array.push(element);
     return array;

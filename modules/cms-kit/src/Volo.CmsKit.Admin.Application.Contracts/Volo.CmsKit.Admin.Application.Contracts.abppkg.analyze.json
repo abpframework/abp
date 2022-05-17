@@ -1,0 +1,149 @@
+{
+  "name": "Volo.CmsKit.Admin.Application.Contracts",
+  "hash": "13d7ce3b75a6b7d304cc3ca44785a2e1",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit.Admin",
+      "contentType": "abpModule",
+      "name": "CmsKitAdminApplicationContractsModule"
+    },
+    {
+      "displayName": "Comment Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Comments"
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Comments.Delete"
+    },
+    {
+      "displayName": "Tag Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Tags"
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Tags.Create"
+    },
+    {
+      "displayName": "Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Tags.Update"
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Tags.Delete"
+    },
+    {
+      "displayName": "Page Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Pages"
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Pages.Create"
+    },
+    {
+      "displayName": "Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Pages.Update"
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Pages.Delete"
+    },
+    {
+      "displayName": "Blog Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Blogs"
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Blogs.Create"
+    },
+    {
+      "displayName": "Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Blogs.Update"
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Blogs.Delete"
+    },
+    {
+      "displayName": "Features",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Blogs.Features"
+    },
+    {
+      "displayName": "Blog Post Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.BlogPosts"
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.BlogPosts.Create"
+    },
+    {
+      "displayName": "Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.BlogPosts.Update"
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.BlogPosts.Delete"
+    },
+    {
+      "displayName": "Menu Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Menus"
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Menus.Create"
+    },
+    {
+      "displayName": "Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Menus.Update"
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Menus.Delete"
+    }
+  ]
+}

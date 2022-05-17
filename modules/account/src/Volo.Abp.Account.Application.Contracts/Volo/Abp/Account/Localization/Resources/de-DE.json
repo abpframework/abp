@@ -1,6 +1,7 @@
 {
   "culture": "de-DE",
   "texts": {
+    "Menu:Account": "Account",
     "UserName": "Benutzername",
     "EmailAddress": "E-Mail-Adresse",
     "UserNameOrEmailAddress": "Benutzername oder E-Mail-Adresse",

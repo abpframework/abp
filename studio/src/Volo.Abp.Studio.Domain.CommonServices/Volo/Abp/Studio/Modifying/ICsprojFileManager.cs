@@ -10,7 +10,14 @@ public interface ICsprojFileManager
 
     Task AddPackageReferenceAsync(string filePath, string packageName, string version);
 
+    Task AddImportAsync(string filePath, string importFilePath);
+
+    Task AddAssemblyVersionAsync(string filePath, string version);
+
+    Task AddCopyLocalLockFileAssembliesAsync(string filePath);
+
     Task ConvertPackageReferenceToProjectReferenceAsync(string filePath, string projectToReference);
+
 
     Task<string> GetTargetFrameworkAsync(string filePath);
 

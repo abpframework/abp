@@ -9,34 +9,33 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Admin.Comments;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Admin.Comments.ClientProxies
+namespace Volo.CmsKit.Admin.Comments.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(ICommentAdminAppService), typeof(CommentAdminClientProxy))]
+public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppService>, ICommentAdminAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(ICommentAdminAppService), typeof(CommentAdminClientProxy))]
-    public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppService>, ICommentAdminAppService
+    public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
     {
-        public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
+        return await RequestAsync<PagedResultDto<CommentWithAuthorDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PagedResultDto<CommentWithAuthorDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(CommentGetListInput), input }
-            });
-        }
+            { typeof(CommentGetListInput), input }
+        });
+    }
 
-        public virtual async Task<CommentWithAuthorDto> GetAsync(Guid id)
+    public virtual async Task<CommentWithAuthorDto> GetAsync(Guid id)
+    {
+        return await RequestAsync<CommentWithAuthorDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<CommentWithAuthorDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
     }
 }

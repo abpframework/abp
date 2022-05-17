@@ -1,6 +1,7 @@
 {
   "culture": "zh-Hant",
   "texts": {
+    "Menu:Account": "帳號",
     "UserName": "使用者名稱",
     "EmailAddress": "電子信箱地址",
     "UserNameOrEmailAddress": "使用者名稱或電子信箱地址",

@@ -76,6 +76,7 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AuthorizePage("/CmsKit/Menus/MenuItems/CreateModal", CmsKitAdminPermissions.Menus.Create);
             options.Conventions.AuthorizePage("/CmsKit/Menus/MenuItems/UpdateModal", CmsKitAdminPermissions.Menus.Update);
             options.Conventions.AuthorizeFolder("/CmsKit/Menus/MenuItems", CmsKitAdminPermissions.Menus.Update);
+            options.Conventions.AuthorizeFolder("/CmsKit/GlobalResources", CmsKitAdminPermissions.GlobalResources.Default);
         });
 
         Configure<RazorPagesOptions>(options =>
@@ -91,6 +92,7 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AddPageRoute("/CmsKit/Comments/Index", "/Cms/Comments");
             options.Conventions.AddPageRoute("/CmsKit/Comments/Details", "/Cms/Comments/{Id}");
             options.Conventions.AddPageRoute("/CmsKit/Menus/MenuItems/Index", "/Cms/Menus/Items");
+            options.Conventions.AddPageRoute("/CmsKit/GlobalResources/Index", "/Cms/GlobalResources");
         });
 
         Configure<AbpPageToolbarOptions>(options =>

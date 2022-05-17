@@ -15,7 +15,7 @@ ABP CLI 的`generate-proxies` 命令在 `src/app` 文件夹中创建按模块名
 在angular应用程序的**根文件夹**中运行以下命令:
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 
 它只为你自己的应用程序的服务创建代理. 不会为你正在使用的应用程序模块的服务创建代理(默认情况下). 有几个选项,参见[CLI文档](../../CLI).

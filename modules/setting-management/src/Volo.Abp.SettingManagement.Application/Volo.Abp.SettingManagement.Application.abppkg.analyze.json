@@ -1,0 +1,20 @@
+{
+  "name": "Volo.Abp.SettingManagement.Application",
+  "hash": "90ab6555763837d82c6afbfb2ffff2b4",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.SettingManagement",
+      "contentType": "abpModule",
+      "name": "AbpSettingManagementApplicationModule"
+    },
+    {
+      "namespace": "Volo.Abp.SettingManagement",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Abp.SettingManagement.IEmailSettingsAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "EmailSettingsAppService"
+    }
+  ]
+}

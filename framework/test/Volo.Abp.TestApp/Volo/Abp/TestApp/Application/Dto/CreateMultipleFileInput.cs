@@ -7,7 +7,7 @@ public class CreateMultipleFileInput
 {
     public string Name { get; set; }
 
-    public IEnumerable<IRemoteStreamContent> Contents { get; set; }
+    public IEnumerable<RemoteStreamContent> Contents { get; set; }
 
     public CreateFileInput Inner { get; set; }
 }

@@ -45,7 +45,7 @@ namespace AbpDemo
         public virtual async Task ChangeStockCountAsync(Guid productId, int newCount)
         {
             await _distributedEventBus.PublishAsync(
-                new StockCountChangedEvent
+                new StockCountChangedEto
                 {
                     ProductId = productId,
                     NewCount = newCount
@@ -264,7 +264,7 @@ Configure<AbpDistributedEntityEventOptions>(options =>
 
 因此可以实现 `IDistributedEventHandler<EntityUpdatedEto<EntityEto>>` 订阅事件. 但是订阅这样的通用事件不是一个好方法,你可以为实体类型定义对应的ETO.
 
-**示例: 为 `Product` 声明使用 `ProductDto`**
+**示例: 为 `Product` 声明使用 `ProductEto`**
 
 ````csharp
 Configure<AbpDistributedEntityEventOptions>(options =>

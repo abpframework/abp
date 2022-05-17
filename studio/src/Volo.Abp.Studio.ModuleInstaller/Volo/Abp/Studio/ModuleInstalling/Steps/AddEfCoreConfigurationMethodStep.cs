@@ -36,7 +36,14 @@ public class AddEfCoreConfigurationMethodStep : ModuleInstallingPipelineStep
 
         foreach (var declaration in context.EfCoreConfigurationMethodDeclarations)
         {
-            _dbContextFileBuilderConfigureAdder.Add(dbContextFile, declaration.Namespace + ":" + declaration.MethodName);
+            try
+            {
+                _dbContextFileBuilderConfigureAdder.Add(dbContextFile, declaration.Namespace + ":" + declaration.MethodName);
+            }
+            catch (Exception e)
+            {
+                continue;
+            }
         }
     }
 }

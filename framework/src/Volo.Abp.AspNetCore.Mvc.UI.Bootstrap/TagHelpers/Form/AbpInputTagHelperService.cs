@@ -54,9 +54,11 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
             LeaveOnlyGroupAttributes(context, output);
-            output.Attributes.AddClass("mb-3");
+            output.Attributes.AddClass(isCheckBox ? "mb-2" : "mb-3");
             if (isCheckBox)
             {
+                output.Attributes.AddClass("custom-checkbox");
+                output.Attributes.AddClass("custom-control");
                 output.Attributes.AddClass("form-check");
             }
             output.Content.AppendHtml(innerHtml);
@@ -104,14 +106,14 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
     {
-        return "<div class=\"" + (isCheckbox ? "mb-3 form-check" : "mb-3") + "\">" +
-               Environment.NewLine + innerHtml + Environment.NewLine +
-               "</div>";
+        return "<div class=\"" + (isCheckbox ? "custom-checkbox custom-control mb-2 form-check" : "mb-3") + "\">" +
+                Environment.NewLine + innerHtml + Environment.NewLine +
+                "</div>";
     }
 
     protected virtual TagHelper GetInputTagHelper(TagHelperContext context, TagHelperOutput output)
     {
-        if (TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>() != null)
+        if (TryGetTextAreaAttribute(output) != null)
         {
             var textAreaTagHelper = new TextAreaTagHelper(_generator)
             {
@@ -197,7 +199,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
     protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
     {
         if (inputTagHelperOutput.Attributes.ContainsName("disabled") == false &&
-                 (TagHelper.IsDisabled || TagHelper.AspFor.ModelExplorer.GetAttribute<DisabledInput>() != null))
+                    (TagHelper.IsDisabled || TagHelper.AspFor.ModelExplorer.GetAttribute<DisabledInput>() != null))
         {
             inputTagHelperOutput.Attributes.Add("disabled", "");
         }
@@ -266,7 +268,6 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         }
 
         var label = new TagBuilder("label");
-        label.AddCssClass("form-label");
         label.Attributes.Add("for", GetIdAttributeValue(inputTag));
         label.InnerHtml.AppendHtml(TagHelper.Label);
 
@@ -289,15 +290,10 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
     {
         if (IsOutputHidden(inputTag))
         {
-            return "";
+            return string.Empty;
         }
 
-        if (isCheckbox)
-        {
-            return "";
-        }
-
-        var text = "";
+        string text;
 
         if (!string.IsNullOrEmpty(TagHelper.InfoText))
         {
@@ -312,7 +308,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             }
             else
             {
-                return "";
+                return string.Empty;
             }
         }
 
@@ -346,7 +342,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual void ConvertToTextAreaIfTextArea(TagHelperOutput tagHelperOutput)
     {
-        var textAreaAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>();
+        var textAreaAttribute = TryGetTextAreaAttribute(tagHelperOutput);
 
         if (textAreaAttribute == null)
         {
@@ -364,6 +360,18 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         {
             tagHelperOutput.Attributes.Add("cols", textAreaAttribute.Cols);
         }
+    }
+
+    protected virtual TextArea TryGetTextAreaAttribute(TagHelperOutput output)
+    {
+        var textAreaAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>();
+
+        if (textAreaAttribute == null && output.Attributes.Any(a => a.Name == "text-area"))
+        {
+            return new TextArea();
+        }
+
+        return textAreaAttribute;
     }
 
     protected virtual TagHelperAttributeList GetInputAttributes(TagHelperContext context, TagHelperOutput output)

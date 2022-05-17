@@ -15,7 +15,7 @@ const check = (pkgJsonPath) => {
     return childProcess
       .execSync(
         `ncu "/^@(${packages}).*$/" --packageFile ${pkgJsonPath} -u${
-          program.prerelease ? ' --target newest' : ''
+          program.prerelease ? ' --target greatest' : ' --target patch'
         }${program.registry ? ` --registry ${program.registry}` : ''}`
       )
       .toString();

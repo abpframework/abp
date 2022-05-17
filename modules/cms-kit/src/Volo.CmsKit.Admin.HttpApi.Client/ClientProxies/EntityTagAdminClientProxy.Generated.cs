@@ -9,34 +9,33 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Admin.Tags;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Admin.Tags.ClientProxies
+namespace Volo.CmsKit.Admin.Tags.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IEntityTagAdminAppService), typeof(EntityTagAdminClientProxy))]
+public partial class EntityTagAdminClientProxy : ClientProxyBase<IEntityTagAdminAppService>, IEntityTagAdminAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IEntityTagAdminAppService), typeof(EntityTagAdminClientProxy))]
-    public partial class EntityTagAdminClientProxy : ClientProxyBase<IEntityTagAdminAppService>, IEntityTagAdminAppService
+    public virtual async Task AddTagToEntityAsync(EntityTagCreateDto input)
     {
-        public virtual async Task AddTagToEntityAsync(EntityTagCreateDto input)
+        await RequestAsync(nameof(AddTagToEntityAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(AddTagToEntityAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(EntityTagCreateDto), input }
-            });
-        }
+            { typeof(EntityTagCreateDto), input }
+        });
+    }
 
-        public virtual async Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
+    public virtual async Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
+    {
+        await RequestAsync(nameof(RemoveTagFromEntityAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(RemoveTagFromEntityAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(EntityTagRemoveDto), input }
-            });
-        }
+            { typeof(EntityTagRemoveDto), input }
+        });
+    }
 
-        public virtual async Task SetEntityTagsAsync(EntityTagSetDto input)
+    public virtual async Task SetEntityTagsAsync(EntityTagSetDto input)
+    {
+        await RequestAsync(nameof(SetEntityTagsAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(SetEntityTagsAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(EntityTagSetDto), input }
-            });
-        }
+            { typeof(EntityTagSetDto), input }
+        });
     }
 }

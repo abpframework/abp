@@ -11,7 +11,10 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
+using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
@@ -23,6 +26,7 @@ public class NpmPackagesUpdater : ITransientDependency
 {
     public ILogger<NpmPackagesUpdater> Logger { get; set; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    public IInstallLibsService InstallLibsService { get; }
     public ICmdHelper CmdHelper { get; }
 
     private readonly PackageJsonFileFinder _packageJsonFileFinder;
@@ -35,17 +39,21 @@ public class NpmPackagesUpdater : ITransientDependency
         NpmGlobalPackagesChecker npmGlobalPackagesChecker,
         ICancellationTokenProvider cancellationTokenProvider,
         CliHttpClientFactory cliHttpClientFactory,
+        IInstallLibsService installLibsService,
         ICmdHelper cmdHelper)
     {
         _packageJsonFileFinder = packageJsonFileFinder;
         _npmGlobalPackagesChecker = npmGlobalPackagesChecker;
         CancellationTokenProvider = cancellationTokenProvider;
+        InstallLibsService = installLibsService;
         CmdHelper = cmdHelper;
         _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<NpmPackagesUpdater>.Instance;
     }
 
-    public async Task Update(string rootDirectory, bool includePreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, string version = null)
+    public async Task Update(string rootDirectory, bool includePreviews = false,
+        bool includeReleaseCandidates = false,
+        bool switchToStable = false, string version = null)
     {
         var fileList = _packageJsonFileFinder.Find(rootDirectory);
 
@@ -60,7 +68,9 @@ public class NpmPackagesUpdater : ITransientDependency
 
         async Task UpdateAsync(string file)
         {
-            var updated = await UpdatePackagesInFile(file, includePreviews, includeReleaseCandidates, switchToStable, version);
+            var updated = await UpdatePackagesInFile(file, includePreviews, includeReleaseCandidates,
+                switchToStable,
+                version);
             packagesUpdated.TryAdd(file, updated);
         }
 
@@ -91,7 +101,7 @@ public class NpmPackagesUpdater : ITransientDependency
             if (!IsAngularProject(fileDirectory))
             {
                 Thread.Sleep(1000);
-                RunGulp(fileDirectory);
+                RunInstallLibsAsync(fileDirectory);
             }
         }
     }
@@ -112,21 +122,14 @@ public class NpmPackagesUpdater : ITransientDependency
     {
         var fileName = Path.Combine(directoryName, ".npmrc");
         var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
-        var voloRegistry = await GetVoloRegistryAsync();
 
         if (await NpmrcFileExistAsync(directoryName))
         {
-
             var fileContent = File.ReadAllText(fileName);
 
             if (!fileContent.Contains(abpRegistry))
             {
                 fileContent += Environment.NewLine + abpRegistry;
-            }
-
-            if (!fileContent.Contains(voloRegistry))
-            {
-                fileContent += Environment.NewLine + voloRegistry;
             }
 
             File.WriteAllText(fileName, fileContent);
@@ -137,40 +140,8 @@ public class NpmPackagesUpdater : ITransientDependency
         using var fs = File.Create(fileName);
 
         var content = new UTF8Encoding(true)
-            .GetBytes(abpRegistry + Environment.NewLine + voloRegistry);
+            .GetBytes(abpRegistry);
         fs.Write(content, 0, content.Length);
-    }
-
-    private async Task<string> GetVoloRegistryAsync()
-    {
-        var apikey = await GetApiKeyAsync();
-
-        if (string.IsNullOrWhiteSpace(apikey))
-        {
-            return "";
-        }
-
-        return "@volo:registry=https://www.myget.org/F/abp-commercial/auth/" + apikey + "/npm/";
-    }
-
-    public async Task<string> GetApiKeyAsync()
-    {
-        try
-        {
-            var client = _cliHttpClientFactory.CreateClient();
-            using (var response = await client.GetHttpResponseMessageWithRetryAsync(
-                url: $"{CliUrls.WwwAbpIo}api/myget/apikey/",
-                cancellationToken: CancellationTokenProvider.Token,
-                logger: Logger
-            ))
-            {
-                return Encoding.Default.GetString(await response.Content.ReadAsByteArrayAsync());
-            }
-        }
-        catch (Exception)
-        {
-            return string.Empty;
-        }
     }
 
     private static bool IsAngularProject(string fileDirectory)
@@ -197,7 +168,8 @@ public class NpmPackagesUpdater : ITransientDependency
 
         foreach (var abpPackage in abpPackages)
         {
-            var updated = await TryUpdatingPackage(filePath, abpPackage, includePreviews, includeReleaseCandidates, switchToStable, specifiedVersion);
+            var updated = await TryUpdatingPackage(filePath, abpPackage, includePreviews, includeReleaseCandidates,
+                switchToStable, specifiedVersion);
 
             if (updated)
             {
@@ -231,15 +203,19 @@ public class NpmPackagesUpdater : ITransientDependency
                 return false;
             }
 
-            if (SemanticVersion.Parse(specifiedVersion) <= SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
+            if (SemanticVersion.Parse(specifiedVersion) <=
+                SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
             {
                 return false;
             }
+
             version = specifiedVersion.EnsureStartsWith('^');
         }
         else
         {
-            if ((includePreviews || (!switchToStable && (currentVersion != null && currentVersion.Contains("-preview")))) && !includeReleaseCandidates)
+            if ((includePreviews ||
+                 (!switchToStable && (currentVersion != null && currentVersion.Contains("-preview")))) &&
+                !includeReleaseCandidates)
             {
                 version = "preview";
             }
@@ -323,16 +299,16 @@ public class NpmPackagesUpdater : ITransientDependency
 
             abpPackages
                 .AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/"))
-                .ToList());
+                    .ToList());
         }
 
         return abpPackages;
     }
 
-    protected virtual void RunGulp(string fileDirectory)
+    protected virtual async Task RunInstallLibsAsync(string fileDirectory)
     {
-        Logger.LogInformation($"Running Gulp on {fileDirectory}");
-        CmdHelper.RunCmd($"cd {fileDirectory} && gulp");
+        Logger.LogInformation("Installing client-side packages...");
+        await InstallLibsService.InstallLibsAsync(fileDirectory);
     }
 
     protected virtual void RunYarn(string fileDirectory)

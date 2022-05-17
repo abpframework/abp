@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Tu contraseña ha sido cambiada satisfactoriamente.",
     "PersonalSettingsSavedMessage": "Tu configuración personal ha sido guardada satisfactoriamente.",
     "Volo.Abp.Identity:DefaultError": "Error desconocido.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Fallo de concurrencia optimista",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Se ha producido un error en la comprobación de simultaneidad optimista. La entidad en la que está trabajando ha sido modificada por otro usuario. Descarte los cambios y vuelva a intentarlo.",
     "Volo.Abp.Identity:DuplicateEmail": "E-mail '{0}' está en uso.",
     "Volo.Abp.Identity:DuplicateRoleName": "El nombre de rol '{0}' ya está en uso.",
     "Volo.Abp.Identity:DuplicateUserName": "El nombre de usuario '{0}' ya está en uso.",

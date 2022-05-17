@@ -1,0 +1,47 @@
+{
+  "name": "Volo.Abp.TenantManagement.Application.Contracts",
+  "hash": "69c3349a2601f6ea9fe76ccd603203f7",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.TenantManagement",
+      "contentType": "abpModule",
+      "name": "AbpTenantManagementApplicationContractsModule"
+    },
+    {
+      "displayName": "Tenant management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants"
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants.Create"
+    },
+    {
+      "displayName": "Edit",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants.Update"
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants.Delete"
+    },
+    {
+      "displayName": "Manage features",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants.ManageFeatures"
+    },
+    {
+      "displayName": "Manage connection strings",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants.ManageConnectionStrings"
+    }
+  ]
+}

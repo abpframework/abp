@@ -1,9 +1,7 @@
 import {
-  AuthGuard,
-  DynamicLayoutComponent,
-  PermissionGuard,
+  AuthGuard, PermissionGuard,
   ReplaceableComponents,
-  ReplaceableRouteContainerComponent,
+  ReplaceableRouteContainerComponent, RouterOutletComponent
 } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -16,7 +14,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'roles', pathMatch: 'full' },
   {
     path: '',
-    component: DynamicLayoutComponent,
+    component: RouterOutletComponent,
     canActivate: [AuthGuard, PermissionGuard, IdentityExtensionsGuard],
     children: [
       {

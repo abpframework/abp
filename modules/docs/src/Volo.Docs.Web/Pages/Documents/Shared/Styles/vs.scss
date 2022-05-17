@@ -68,7 +68,7 @@ a { text-decoration: none;}
                         }
                     }
 
-                    select.form-control, input.form-control {
+                    select.form-select, input.form-control {
                         padding: 0 10px 2px 10px;
                         border: 0;
                         min-height: 34px;
@@ -81,8 +81,12 @@ a { text-decoration: none;}
                         }
                     }
 
-                    select.form-control {
+                    select.form-select {
                         padding: 0 10px 2px 6px;
+                        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+                        background-repeat: no-repeat !important;
+                        background-position: right 0.75rem center !important;
+                        background-size: 16px 12px !important;
                     }
                 }
             }
@@ -594,7 +598,7 @@ a { text-decoration: none;}
             .docs-version {
                 .version-select {
 
-                    select.form-control, input.form-control {
+                    select.form-select, input.form-control {
                         background: #000000;
                         color: white;
                     }

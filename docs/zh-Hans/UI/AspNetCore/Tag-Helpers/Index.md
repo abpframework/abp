@@ -4,7 +4,7 @@ ABP框架定义了一组**标签助手组件**. 简化开发ASP.NET Core (MVC / 
 
 ## bootstrap 组件包装
 
-大多数标签助手是[Bootstrap](https://getbootstrap.com/) (v4+)的包装. 编写bootstrap代码并不是那么简单,其中包含太多的重复HTML标签并且也没有类型安全. ABP标签助手使其 **简单** 并且 **类型安全**.
+大多数标签助手是[Bootstrap](https://getbootstrap.com/) (v5+)的包装. 编写bootstrap代码并不是那么简单,其中包含太多的重复HTML标签并且也没有类型安全. ABP标签助手使其 **简单** 并且 **类型安全**.
 
 我们的目标并不是100%的包装bootstrap组件. 仍然可以编写 **原生bootstrap代码** (实际上标签助手生成的也是原生的bootstrap代码), 但我们建议尽量使用标签助手.
 

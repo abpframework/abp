@@ -9,7 +9,7 @@ Prism.languages.bbcode = {
 				}
 			},
 			'attr-value': {
-				pattern: /=\s*(?:"[^"]*"|'[^']*'|[^\s'"\]=]+)/i,
+				pattern: /=\s*(?:"[^"]*"|'[^']*'|[^\s'"\]=]+)/,
 				inside: {
 					'punctuation': [
 						/^=/,

@@ -7,6 +7,8 @@
     "Description:Abp.Ldap.ServerPort": "Server poort",
     "DisplayName:Abp.Ldap.BaseDc": "Basisdomein component",
     "Description:Abp.Ldap.BaseDc": "Basisdomein component",
+    "DisplayName:Abp.Ldap.Domain": "Domain",
+    "Description:Abp.Ldap.Domain": "Domain",
     "DisplayName:Abp.Ldap.UserName": "Gebruikersnaam",
     "Description:Abp.Ldap.UserName": "Gebruikersnaam",
     "DisplayName:Abp.Ldap.Password": "Wachtwoord",

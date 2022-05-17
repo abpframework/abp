@@ -50,6 +50,10 @@
     "BlobStoring.Database.Host.ConsoleApp.ConsoleApp": {
       "path": "host/BlobStoring.Database.Host.ConsoleApp/src/BlobStoring.Database.Host.ConsoleApp.ConsoleApp/BlobStoring.Database.Host.ConsoleApp.ConsoleApp.abppkg.json",
       "folder": "host/BlobStoring.Database.Host.ConsoleApp/src"
+    },
+    "Volo.Abp.BlobStoring.Database.Installer": {
+      "path": "src/Volo.Abp.BlobStoring.Database.Installer/Volo.Abp.BlobStoring.Database.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }

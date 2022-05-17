@@ -175,8 +175,8 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
       this.isConfirmationOpen = true;
       this.confirmationService
         .warn(
-          'AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage',
-          'AbpAccount::AreYouSure',
+          'AbpUi::AreYouSureYouWantToCancelEditingWarningMessage',
+          'AbpUi::AreYouSure',
           { dismissible: false },
         )
         .subscribe((status: Confirmation.Status) => {

@@ -17,7 +17,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Auth;
 
-public class AuthService : ITransientDependency
+public class AuthService : IAuthService, ITransientDependency
 {
     protected IIdentityModelAuthenticationService AuthenticationService { get; }
     protected ILogger<AuthService> Logger { get; }
@@ -86,6 +86,21 @@ public class AuthService : ITransientDependency
         {
             configuration["[o]abp-organization-name"] = organizationName;
         }
+
+        var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration);
+
+        File.WriteAllText(CliPaths.AccessToken, accessToken, Encoding.UTF8);
+    }
+
+    public async Task DeviceLoginAsync()
+    {
+        var configuration = new IdentityClientConfiguration(
+            CliUrls.AccountAbpIo,
+            "role email abpio abpio_www abpio_commercial openid offline_access",
+            "abp-cli",
+            "1q2w3e*",
+            OidcConstants.GrantTypes.DeviceCode
+        );
 
         var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration);
 

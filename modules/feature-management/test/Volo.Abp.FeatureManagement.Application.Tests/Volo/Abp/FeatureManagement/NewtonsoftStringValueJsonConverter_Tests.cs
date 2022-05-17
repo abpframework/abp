@@ -9,7 +9,7 @@ public class NewtonsoftStringValueJsonConverter_Tests : StringValueJsonConverter
     {
         services.PreConfigure<AbpJsonOptions>(options =>
         {
-            options.UseHybridSerializer = true;
+            options.UseHybridSerializer = false;
         });
     }
 }

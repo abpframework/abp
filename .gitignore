@@ -318,3 +318,8 @@ tempkey.jwk
 
 # appsettings.secrets.json
 appsettings.secrets.json
+deploy/nuget-api-key.txt
+deploy/npm-auth-token.txt
+deploy/ssh-password.txt
+deploy/github-api-key.txt
+deploy/_run_all_log.txt

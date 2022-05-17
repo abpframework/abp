@@ -24,10 +24,6 @@ public class NpmGlobalPackagesChecker : ITransientDependency
         {
             InstallYarn();
         }
-        if (!installedNpmPackages.Contains(" gulp@"))
-        {
-            InstallGulp();
-        }
     }
 
     protected virtual string GetInstalledNpmPackages()
@@ -40,11 +36,5 @@ public class NpmGlobalPackagesChecker : ITransientDependency
     {
         Logger.LogInformation("Installing yarn...");
         CmdHelper.RunCmd("npm install yarn -g");
-    }
-
-    protected virtual void InstallGulp()
-    {
-        Logger.LogInformation("Installing gulp...");
-        CmdHelper.RunCmd("npm install gulp -g");
     }
 }

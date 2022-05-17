@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,6 +34,15 @@ internal class AbpApplicationWithExternalServiceProvider : AbpApplicationBase, I
         }
 
         SetServiceProvider(serviceProvider);
+    }
+
+    public async Task InitializeAsync(IServiceProvider serviceProvider)
+    {
+        Check.NotNull(serviceProvider, nameof(serviceProvider));
+
+        SetServiceProvider(serviceProvider);
+
+        await InitializeModulesAsync();
     }
 
     public void Initialize([NotNull] IServiceProvider serviceProvider)

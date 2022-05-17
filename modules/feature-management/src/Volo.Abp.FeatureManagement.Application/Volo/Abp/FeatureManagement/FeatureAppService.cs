@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Features;
 
 namespace Volo.Abp.FeatureManagement;
@@ -71,7 +73,10 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 
             SetFeatureDepth(groupDto.Features, providerName, providerKey);
 
-            result.Groups.Add(groupDto);
+            if (groupDto.Features.Any())
+            {
+                result.Groups.Add(groupDto);
+            }
         }
 
         return result;

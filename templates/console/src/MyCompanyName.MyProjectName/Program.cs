@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -10,7 +9,7 @@ namespace MyCompanyName.MyProjectName;
 
 public class Program
 {
-    public static async Task<int> Main(string[] args)
+    public async static Task<int> Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
 #if DEBUG
@@ -27,7 +26,15 @@ public class Program
         try
         {
             Log.Information("Starting console host.");
-            await CreateHostBuilder(args).RunConsoleAsync();
+
+            await Host.CreateDefaultBuilder(args)
+                .ConfigureServices(services =>
+                {
+                    services.AddHostedService<MyProjectNameHostedService>();
+                })
+                .UseSerilog()
+                .RunConsoleAsync();
+
             return 0;
         }
         catch (Exception ex)
@@ -39,19 +46,5 @@ public class Program
         {
             Log.CloseAndFlush();
         }
-
     }
-
-    internal static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .UseAutofac()
-            .UseSerilog()
-            .ConfigureAppConfiguration((context, config) =>
-            {
-                    //setup your additional configuration sources
-                })
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddApplication<MyProjectNameModule>();
-            });
 }

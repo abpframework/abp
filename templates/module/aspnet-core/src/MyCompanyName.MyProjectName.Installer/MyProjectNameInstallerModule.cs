@@ -2,7 +2,7 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompany.MyProjectName;
+namespace MyCompanyName.MyProjectName;
 
 [DependsOn(
     typeof(AbpStudioModuleInstallerModule),

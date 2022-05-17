@@ -10,56 +10,55 @@ using Volo.Blogging.Admin.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Blogging.Admin.ClientProxies
+namespace Volo.Blogging.Admin.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IBlogManagementAppService), typeof(BlogManagementClientProxy))]
+public partial class BlogManagementClientProxy : ClientProxyBase<IBlogManagementAppService>, IBlogManagementAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IBlogManagementAppService), typeof(BlogManagementClientProxy))]
-    public partial class BlogManagementClientProxy : ClientProxyBase<IBlogManagementAppService>, IBlogManagementAppService
+    public virtual async Task<ListResultDto<BlogDto>> GetListAsync()
     {
-        public virtual async Task<ListResultDto<BlogDto>> GetListAsync()
-        {
-            return await RequestAsync<ListResultDto<BlogDto>>(nameof(GetListAsync));
-        }
+        return await RequestAsync<ListResultDto<BlogDto>>(nameof(GetListAsync));
+    }
 
-        public virtual async Task<BlogDto> GetAsync(Guid id)
+    public virtual async Task<BlogDto> GetAsync(Guid id)
+    {
+        return await RequestAsync<BlogDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<BlogDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
+    public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
+    {
+        return await RequestAsync<BlogDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<BlogDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(CreateBlogDto), input }
-            });
-        }
+            { typeof(CreateBlogDto), input }
+        });
+    }
 
-        public virtual async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
+    public virtual async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
+    {
+        return await RequestAsync<BlogDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<BlogDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id },
-                { typeof(UpdateBlogDto), input }
-            });
-        }
+            { typeof(Guid), id },
+            { typeof(UpdateBlogDto), input }
+        });
+    }
 
-        public virtual async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task ClearCacheAsync(Guid id)
+    public virtual async Task ClearCacheAsync(Guid id)
+    {
+        await RequestAsync(nameof(ClearCacheAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(ClearCacheAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
     }
 }

@@ -207,7 +207,7 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
 
     protected virtual void ConfigureApiExplorer(ControllerModel controller)
     {
-        if (controller.ApiExplorer.GroupName.IsNullOrEmpty())
+        if (Options.ChangeControllerModelApiExplorerGroupName && controller.ApiExplorer.GroupName.IsNullOrEmpty())
         {
             controller.ApiExplorer.GroupName = controller.ControllerName;
         }

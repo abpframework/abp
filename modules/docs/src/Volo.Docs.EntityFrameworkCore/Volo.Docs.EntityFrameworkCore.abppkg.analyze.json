@@ -1,0 +1,34 @@
+{
+  "name": "Volo.Docs.EntityFrameworkCore",
+  "hash": "2da3ab87dd243fc228af9141b263a838",
+  "contents": [
+    {
+      "namespace": "Volo.Docs.EntityFrameworkCore",
+      "contentType": "abpModule",
+      "name": "DocsEntityFrameworkCoreModule"
+    },
+    {
+      "namespace": "Volo.Docs.EntityFrameworkCore",
+      "connectionStringName": "Docs",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Docs.Documents.Document",
+          "contentType": "databaseTable",
+          "name": "DocsDocuments"
+        },
+        {
+          "entityFullName": "Volo.Docs.Documents.DocumentContributor",
+          "contentType": "databaseTable",
+          "name": "DocsDocumentContributors"
+        },
+        {
+          "entityFullName": "Volo.Docs.Projects.Project",
+          "contentType": "databaseTable",
+          "name": "DocsProjects"
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "DocsDbContext"
+    }
+  ]
+}

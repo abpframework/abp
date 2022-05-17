@@ -23,40 +23,40 @@ import { ValidationErrorComponent } from './components/validation-error/validati
 import { LazyStyleHandler } from './handlers/lazy-style.handler';
 import { BASIC_THEME_NAV_ITEM_PROVIDERS } from './providers/nav-item.provider';
 import { BASIC_THEME_STYLES_PROVIDERS } from './providers/styles.provider';
+import { BASIC_THEME_USER_MENU_PROVIDERS } from './providers/user-menu.provider';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
 @NgModule({
-  declarations: [
-    ...LAYOUTS,
-    ValidationErrorComponent,
-    LogoComponent,
-    NavItemsComponent,
-    RoutesComponent,
-    CurrentUserComponent,
-    LanguagesComponent,
-    PageAlertContainerComponent,
-    TenantBoxComponent,
-    AuthWrapperComponent,
-  ],
-  exports: [
-    ...LAYOUTS,
-    ValidationErrorComponent,
-    LogoComponent,
-    NavItemsComponent,
-    RoutesComponent,
-    CurrentUserComponent,
-    LanguagesComponent,
-    PageAlertContainerComponent,
-  ],
-  imports: [
-    CoreModule,
-    ThemeSharedModule,
-    NgbCollapseModule,
-    NgbDropdownModule,
-    NgxValidateCoreModule,
-  ],
-  entryComponents: [...LAYOUTS, ValidationErrorComponent, CurrentUserComponent, LanguagesComponent],
+    declarations: [
+        ...LAYOUTS,
+        ValidationErrorComponent,
+        LogoComponent,
+        NavItemsComponent,
+        RoutesComponent,
+        CurrentUserComponent,
+        LanguagesComponent,
+        PageAlertContainerComponent,
+        TenantBoxComponent,
+        AuthWrapperComponent,
+    ],
+    exports: [
+        ...LAYOUTS,
+        ValidationErrorComponent,
+        LogoComponent,
+        NavItemsComponent,
+        RoutesComponent,
+        CurrentUserComponent,
+        LanguagesComponent,
+        PageAlertContainerComponent,
+    ],
+    imports: [
+        CoreModule,
+        ThemeSharedModule,
+        NgbCollapseModule,
+        NgbDropdownModule,
+        NgxValidateCoreModule,
+    ]
 })
 export class BaseThemeBasicModule {}
 
@@ -70,6 +70,7 @@ export class ThemeBasicModule {
       ngModule: ThemeBasicModule,
       providers: [
         BASIC_THEME_NAV_ITEM_PROVIDERS,
+        BASIC_THEME_USER_MENU_PROVIDERS,
         BASIC_THEME_STYLES_PROVIDERS,
         {
           provide: VALIDATION_ERROR_TEMPLATE,

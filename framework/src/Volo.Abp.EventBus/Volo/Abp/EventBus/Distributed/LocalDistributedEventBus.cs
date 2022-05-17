@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -132,7 +132,7 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
     {
         return _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
     }
-
+    
     public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true) where TEvent : class
     {
         return _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);

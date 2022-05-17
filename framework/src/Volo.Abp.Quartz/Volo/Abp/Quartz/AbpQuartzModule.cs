@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Quartz;
 using Quartz.Impl;
-using Quartz.Impl.AdoJobStore.Common;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
@@ -18,8 +18,8 @@ public class AbpQuartzModule : AbpModule
 
         context.Services.AddQuartz(options.Properties, build =>
         {
-                // these are the defaults
-                if (options.Properties[StdSchedulerFactory.PropertySchedulerJobFactoryType] == null)
+            // these are the defaults
+            if (options.Properties[StdSchedulerFactory.PropertySchedulerJobFactoryType] == null)
             {
                 build.UseMicrosoftDependencyInjectionScopedJobFactory();
             }
@@ -62,20 +62,30 @@ public class AbpQuartzModule : AbpModule
         });
     }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpQuartzOptions>>().Value;
 
         _scheduler = context.ServiceProvider.GetRequiredService<IScheduler>();
 
-        AsyncHelper.RunSync(() => options.StartSchedulerFactory.Invoke(_scheduler));
+        await options.StartSchedulerFactory.Invoke(_scheduler);
+    }
+
+    public async override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    {
+        if (_scheduler.IsStarted)
+        {
+            await _scheduler.Shutdown();
+        }
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 
     public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        if (_scheduler.IsStarted)
-        {
-            AsyncHelper.RunSync(() => _scheduler.Shutdown());
-        }
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
     }
 }

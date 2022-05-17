@@ -1,0 +1,20 @@
+{
+  "name": "Volo.Abp.PermissionManagement.Application",
+  "hash": "111aa17278856d07dcb113e05766b739",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.PermissionManagement",
+      "contentType": "abpModule",
+      "name": "AbpPermissionManagementApplicationModule"
+    },
+    {
+      "namespace": "Volo.Abp.PermissionManagement",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Abp.PermissionManagement.IPermissionAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "PermissionAppService"
+    }
+  ]
+}

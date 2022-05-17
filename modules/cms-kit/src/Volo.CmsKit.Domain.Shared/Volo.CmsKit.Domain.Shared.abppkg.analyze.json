@@ -1,0 +1,11 @@
+{
+  "name": "Volo.CmsKit.Domain.Shared",
+  "hash": "515d3328db0b4ded3a5076a582f00053",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit",
+      "contentType": "abpModule",
+      "name": "CmsKitDomainSharedModule"
+    }
+  ]
+}

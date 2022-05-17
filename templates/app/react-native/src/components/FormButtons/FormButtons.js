@@ -1,11 +1,10 @@
-import React, { forwardRef } from 'react';
-import PropTypes from 'prop-types';
-import { Button, Text, connectStyle } from 'native-base';
-import { View, StyleSheet, Alert } from 'react-native';
 import i18n from 'i18n-js';
+import { Button, Text } from 'native-base';
+import PropTypes from 'prop-types';
+import React, { forwardRef } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 
 function FormButtons({
-  style,
   submit,
   remove,
   removeMessage,
@@ -30,11 +29,10 @@ function FormButtons({
   };
 
   return (
-    <View style={style.container}>
+    <View style={styles.container}>
       {isShowRemove ? (
         <Button
-          abpButton
-          danger
+          bg="danger.500"
           style={{ flex: 1, borderRadius: 0 }}
           onPress={() => confirmation()}
           disabled={isRemoveDisabled}>
@@ -43,8 +41,6 @@ function FormButtons({
       ) : null}
       {isShowSubmit ? (
         <Button
-          abpButton
-          primary
           style={{ flex: 1, borderRadius: 0 }}
           onPress={submit}
           disabled={isSubmitDisabled}>
@@ -79,4 +75,4 @@ const styles = StyleSheet.create({
 
 const Forwarded = forwardRef((props, ref) => <FormButtons {...props} forwardedRef={ref} />);
 
-export default connectStyle('ABP.FormButtons', styles)(Forwarded);
+export default Forwarded;

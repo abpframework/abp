@@ -2,12 +2,18 @@
 @typeparam TResourceType
 @using Volo.Abp.BlazoriseUI
 @using Volo.Abp.Localization
+@inherits ExtensionPropertyComponentBase<TEntity, TResourceType>
 
 @if (PropertyInfo != null && Entity != null)
 {
-    <Field>
-        <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>-->
-        <TimeEdit TValue="TimeSpan?" @bind-Time="@Value">
-        </TimeEdit>
-    </Field>
+    <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
+        <Field>
+            <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>-->
+            <TimeEdit TValue="TimeSpan?" @bind-Time="@Value">
+                 <Feedback>
+                    <ValidationError/>
+                </Feedback>
+            </TimeEdit>
+        </Field>
+    </Validation>
 }

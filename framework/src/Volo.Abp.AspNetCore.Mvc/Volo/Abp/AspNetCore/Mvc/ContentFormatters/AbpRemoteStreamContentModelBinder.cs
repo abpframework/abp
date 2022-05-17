@@ -8,7 +8,8 @@ using Volo.Abp.Content;
 
 namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters;
 
-public class AbpRemoteStreamContentModelBinder : IModelBinder
+public class AbpRemoteStreamContentModelBinder<TRemoteStreamContent> : IModelBinder
+    where TRemoteStreamContent: class, IRemoteStreamContent
 {
     public async Task BindModelAsync(ModelBindingContext bindingContext)
     {
@@ -17,7 +18,7 @@ public class AbpRemoteStreamContentModelBinder : IModelBinder
             throw new ArgumentNullException(nameof(bindingContext));
         }
 
-        var postedFiles = new List<IRemoteStreamContent>();
+        var postedFiles = GetCompatibleCollection<TRemoteStreamContent>(bindingContext);
 
         // If we're at the top level, then use the FieldName (parameter or property name).
         // This handles the fact that there will be nothing in the ValueProviders for this parameter
@@ -42,7 +43,7 @@ public class AbpRemoteStreamContentModelBinder : IModelBinder
         }
 
         object value;
-        if (bindingContext.ModelType == typeof(IRemoteStreamContent) || bindingContext.ModelType == typeof(RemoteStreamContent))
+        if (bindingContext.ModelType == typeof(TRemoteStreamContent))
         {
             if (postedFiles.Count == 0)
             {
@@ -63,7 +64,7 @@ public class AbpRemoteStreamContentModelBinder : IModelBinder
 
             // Perform any final type mangling needed.
             var modelType = bindingContext.ModelType;
-            if (modelType == typeof(IRemoteStreamContent[]) || modelType == typeof(RemoteStreamContent[]))
+            if (modelType == typeof(TRemoteStreamContent[]))
             {
                 value = postedFiles.ToArray();
             }
@@ -91,7 +92,7 @@ public class AbpRemoteStreamContentModelBinder : IModelBinder
     private async Task GetFormFilesAsync(
         string modelName,
         ModelBindingContext bindingContext,
-        ICollection<IRemoteStreamContent> postedFiles)
+        ICollection<TRemoteStreamContent> postedFiles)
     {
         var request = bindingContext.HttpContext.Request;
         if (request.HasFormContentType)
@@ -108,13 +109,52 @@ public class AbpRemoteStreamContentModelBinder : IModelBinder
 
                 if (file.Name.Equals(modelName, StringComparison.OrdinalIgnoreCase))
                 {
-                    postedFiles.Add(new RemoteStreamContent(file.OpenReadStream(), file.FileName, file.ContentType, file.Length));
+                    postedFiles.Add(new RemoteStreamContent(file.OpenReadStream(), file.FileName, file.ContentType, file.Length).As<TRemoteStreamContent>());
                 }
             }
         }
         else if (bindingContext.IsTopLevelObject)
         {
-            postedFiles.Add(new RemoteStreamContent(request.Body, null, request.ContentType, request.ContentLength));
+            postedFiles.Add(new RemoteStreamContent(request.Body, null, request.ContentType, request.ContentLength).As<TRemoteStreamContent>());
         }
+    }
+
+    private static ICollection<T> GetCompatibleCollection<T>(ModelBindingContext bindingContext)
+    {
+        var model = bindingContext.Model;
+        var modelType = bindingContext.ModelType;
+
+        // There's a limited set of collection types we can create here.
+        //
+        // For the simple cases: Choose List<T> if the destination type supports it (at least as an intermediary).
+        //
+        // For more complex cases: If the destination type is a class that implements ICollection<T>, then activate
+        // an instance and return that.
+        //
+        // Otherwise just give up.
+        if (typeof(T).IsAssignableFrom(modelType))
+        {
+            return new List<T>();
+        }
+
+        if (modelType == typeof(T[]))
+        {
+            return new List<T>();
+        }
+
+        // Does collection exist and can it be reused?
+        if (model is ICollection<T> collection && !collection.IsReadOnly)
+        {
+            collection.Clear();
+
+            return collection;
+        }
+
+        if (modelType.IsAssignableFrom(typeof(List<T>)))
+        {
+            return new List<T>();
+        }
+
+        return (ICollection<T>)Activator.CreateInstance(modelType);
     }
 }

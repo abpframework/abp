@@ -1,6 +1,7 @@
 {
   "culture": "zh-Hans",
   "texts": {
+    "Menu:Account": "账户",
     "UserName": "用户名称",
     "EmailAddress": "邮箱地址",
     "UserNameOrEmailAddress": "用户名称或邮箱地址",

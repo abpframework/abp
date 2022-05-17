@@ -8,6 +8,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Public.Comments;
+using Volo.CmsKit.Public.Web.Renderers;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting;
 
@@ -21,13 +22,16 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting;
 public class CommentingViewComponent : AbpViewComponent
 {
     public ICommentPublicAppService CommentPublicAppService { get; }
+    public IMarkdownToHtmlRenderer MarkdownToHtmlRenderer { get; }
     public AbpMvcUiOptions AbpMvcUiOptions { get; }
 
     public CommentingViewComponent(
         ICommentPublicAppService commentPublicAppService,
-        IOptions<AbpMvcUiOptions> options)
+        IOptions<AbpMvcUiOptions> options,
+        IMarkdownToHtmlRenderer markdownToHtmlRenderer)
     {
         CommentPublicAppService = commentPublicAppService;
+        MarkdownToHtmlRenderer = markdownToHtmlRenderer;
         AbpMvcUiOptions = options.Value;
     }
 
@@ -35,8 +39,9 @@ public class CommentingViewComponent : AbpViewComponent
         string entityType,
         string entityId)
     {
-        var result = await CommentPublicAppService
-            .GetListAsync(entityType, entityId);
+        var comments = (await CommentPublicAppService
+            .GetListAsync(entityType, entityId)).Items;
+
 
         var loginUrl = $"{AbpMvcUiOptions.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-comment_{entityType}_{entityId}";
 
@@ -45,10 +50,29 @@ public class CommentingViewComponent : AbpViewComponent
             EntityId = entityId,
             EntityType = entityType,
             LoginUrl = loginUrl,
-            Comments = result.Items.OrderByDescending(i => i.CreationTime).ToList()
+            Comments = comments.OrderByDescending(i => i.CreationTime).ToList()
         };
 
+        await ConvertMarkdownTextsToHtml(viewModel);
+
         return View("~/Pages/CmsKit/Shared/Components/Commenting/Default.cshtml", viewModel);
+    }
+
+    private async Task ConvertMarkdownTextsToHtml(CommentingViewModel viewModel)
+    {
+        viewModel.RawCommentTexts = new Dictionary<Guid, string>();
+
+        foreach (var comment in viewModel.Comments)
+        {
+            viewModel.RawCommentTexts.Add(comment.Id, comment.Text);
+            comment.Text = await MarkdownToHtmlRenderer.RenderAsync(comment.Text, true);
+
+            foreach (var reply in comment.Replies)
+            {
+                viewModel.RawCommentTexts.Add(reply.Id, reply.Text);
+                reply.Text = await MarkdownToHtmlRenderer.RenderAsync(reply.Text, true);
+            }
+        }
     }
 
     public class CommentingViewModel
@@ -60,5 +84,8 @@ public class CommentingViewComponent : AbpViewComponent
         public string LoginUrl { get; set; }
 
         public IReadOnlyList<CommentWithDetailsDto> Comments { get; set; }
+
+        public Dictionary<Guid, string> RawCommentTexts { get; set; }
     }
 }
+

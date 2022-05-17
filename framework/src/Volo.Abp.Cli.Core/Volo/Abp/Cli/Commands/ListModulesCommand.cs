@@ -12,6 +12,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class ListModulesCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "list-modules";
+    
     public ModuleInfoProvider ModuleInfoProvider { get; }
     public ILogger<ListModulesCommand> Logger { get; set; }
 

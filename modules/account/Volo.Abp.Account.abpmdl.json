@@ -37,6 +37,10 @@
     "Volo.Abp.Account.Blazor": {
       "path": "src/Volo.Abp.Account.Blazor/Volo.Abp.Account.Blazor.abppkg.json",
       "folder": "src"
+    },
+    "Volo.Abp.Account.Installer": {
+      "path": "src/Volo.Abp.Account.Installer/Volo.Abp.Account.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }

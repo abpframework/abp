@@ -1,6 +1,7 @@
 {
   "culture": "sk",
   "texts": {
+    "Menu:Account": "Účet",
     "UserName": "Používateľské meno",
     "EmailAddress": "Emailová adresa",
     "UserNameOrEmailAddress": "Používateľské meno alebo emailová adresa",

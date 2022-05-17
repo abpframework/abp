@@ -41,29 +41,29 @@ public class AbpCliCoreModule : AbpModule
 
         Configure<AbpCliOptions>(options =>
         {
-                //TODO: Define constants like done for GenerateProxyCommand.Name.
-                options.Commands["help"] = typeof(HelpCommand);
-            options.Commands["prompt"] = typeof(PromptCommand);
-            options.Commands["new"] = typeof(NewCommand);
-            options.Commands["get-source"] = typeof(GetSourceCommand);
-            options.Commands["update"] = typeof(UpdateCommand);
-            options.Commands["add-package"] = typeof(AddPackageCommand);
-            options.Commands["add-module"] = typeof(AddModuleCommand);
-            options.Commands["list-modules"] = typeof(ListModulesCommand);
-            options.Commands["login"] = typeof(LoginCommand);
-            options.Commands["login-info"] = typeof(LoginInfoCommand);
-            options.Commands["logout"] = typeof(LogoutCommand);
+            options.Commands[HelpCommand.Name] = typeof(HelpCommand);
+            options.Commands[PromptCommand.Name] = typeof(PromptCommand);
+            options.Commands[NewCommand.Name] = typeof(NewCommand);
+            options.Commands[GetSourceCommand.Name] = typeof(GetSourceCommand);
+            options.Commands[UpdateCommand.Name] = typeof(UpdateCommand);
+            options.Commands[AddPackageCommand.Name] = typeof(AddPackageCommand);
+            options.Commands[AddModuleCommand.Name] = typeof(AddModuleCommand);
+            options.Commands[ListModulesCommand.Name] = typeof(ListModulesCommand);
+            options.Commands[LoginCommand.Name] = typeof(LoginCommand);
+            options.Commands[LoginInfoCommand.Name] = typeof(LoginInfoCommand);
+            options.Commands[LogoutCommand.Name] = typeof(LogoutCommand);
             options.Commands[GenerateProxyCommand.Name] = typeof(GenerateProxyCommand);
             options.Commands[RemoveProxyCommand.Name] = typeof(RemoveProxyCommand);
-            options.Commands["suite"] = typeof(SuiteCommand);
-            options.Commands["switch-to-preview"] = typeof(SwitchToPreviewCommand);
-            options.Commands["switch-to-stable"] = typeof(SwitchToStableCommand);
-            options.Commands["switch-to-nightly"] = typeof(SwitchToNightlyCommand);
-            options.Commands["translate"] = typeof(TranslateCommand);
-            options.Commands["build"] = typeof(BuildCommand);
-            options.Commands["bundle"] = typeof(BundleCommand);
-            options.Commands["create-migration-and-run-migrator"] = typeof(CreateMigrationAndRunMigratorCommand);
-            options.Commands["install-libs"] = typeof(InstallLibsCommand);
+            options.Commands[SuiteCommand.Name] = typeof(SuiteCommand);
+            options.Commands[SwitchToPreviewCommand.Name] = typeof(SwitchToPreviewCommand);
+            options.Commands[SwitchToStableCommand.Name] = typeof(SwitchToStableCommand);
+            options.Commands[SwitchToNightlyCommand.Name] = typeof(SwitchToNightlyCommand);
+            options.Commands[TranslateCommand.Name] = typeof(TranslateCommand);
+            options.Commands[BuildCommand.Name] = typeof(BuildCommand);
+            options.Commands[BundleCommand.Name] = typeof(BundleCommand);
+            options.Commands[CreateMigrationAndRunMigratorCommand.Name] = typeof(CreateMigrationAndRunMigratorCommand);
+            options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
+            options.Commands[CleanCommand.Name] = typeof(CleanCommand);
         });
 
         Configure<AbpCliServiceProxyOptions>(options =>

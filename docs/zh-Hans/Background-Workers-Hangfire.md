@@ -67,6 +67,33 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
 
 > 你可以直接实现 `IHangfireBackgroundWorker`, 但是 `HangfireBackgroundWorkerBase` 提供了一些有用的属性,例如 `Logger`.
 
+### UnitOfWork
+
+使用 `UnitOfWorkAttribute` 你需要为工作者定义一个接口:
+
+```csharp
+public interface IMyLogWorker : IHangfireBackgroundWorker
+{
+}
+
+[ExposeServices(typeof(IMyLogWorker))]
+public class MyLogWorker : HangfireBackgroundWorkerBase, IMyLogWorker
+{
+    public MyLogWorker()
+    {
+        RecurringJobId = nameof(MyLogWorker);
+        CronExpression = Cron.Daily();
+    }
+
+    [UnitOfWork]
+    public override Task DoWorkAsync()
+    {
+        Logger.LogInformation("Executed MyLogWorker..!");
+        return Task.CompletedTask;
+    }
+}
+```
+
 ## 注册到后台工作者管理器
 
 创建一个后台工作者后, 你应该添加到 `IBackgroundWorkerManager`, 最常用的地方是在你模块类的 `OnApplicationInitialization` 方法中:
@@ -79,6 +106,9 @@ public class MyModule : AbpModule
         ApplicationInitializationContext context)
     {
         context.AddBackgroundWorker<MyLogWorker>();
+
+        //如果定义了接口
+        //context.AddBackgroundWorker<IMyLogWorker>(); 
     }
 }
 ````

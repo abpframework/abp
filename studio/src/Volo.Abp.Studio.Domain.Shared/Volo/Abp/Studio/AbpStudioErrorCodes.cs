@@ -21,6 +21,7 @@ public static class AbpStudioErrorCodes
     public const string PackageNotSpecified = "AbpStudio:PackageNotSpecified";
     public const string DbmsMustBeSpecified = "AbpStudio:DbmsMustBeSpecified";
     public const string UserNotLoggedIn = "AbpStudio:UserNotLoggedIn";
+    public const string LoginFailed = "AbpStudio:LoginFailed";
     public const string PackageAlreadyExist = "AbpStudio:PackageAlreadyExist";
     public const string AbpModuleFileNotFound = "AbpStudio:AbpModuleFileNotFound";
     public const string DllNotFound = "AbpStudio:DllNotFound";

@@ -93,6 +93,8 @@ Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
 {{ if UI == "MVC" || UI == "BlazorServer" }}
 
+> Before starting the application, run `abp install-libs` command in your Web directory to restore the client-side libraries. This will populate the `libs` folder.
+
 {{ if Tiered == "Yes" }}
 
 > Tiered solutions use **Redis** as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
@@ -139,7 +141,7 @@ Ensure that the `.IdentityServer` project is the startup project. Run the applic
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
 
-You can login, but you cannot enter to the main application here. This is just the authentication server.
+You can login, but you cannot enter to the main application here. This is **just the authentication server**.
 
 Ensure that the `.HttpApi.Host` project is the startup project and run the application which will open a Swagger UI:
 

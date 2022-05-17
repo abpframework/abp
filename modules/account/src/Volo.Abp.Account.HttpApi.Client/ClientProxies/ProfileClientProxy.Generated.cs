@@ -9,31 +9,30 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Identity;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Abp.Account.ClientProxies
+namespace Volo.Abp.Account.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IProfileAppService), typeof(ProfileClientProxy))]
+public partial class ProfileClientProxy : ClientProxyBase<IProfileAppService>, IProfileAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IProfileAppService), typeof(ProfileClientProxy))]
-    public partial class ProfileClientProxy : ClientProxyBase<IProfileAppService>, IProfileAppService
+    public virtual async Task<ProfileDto> GetAsync()
     {
-        public virtual async Task<ProfileDto> GetAsync()
-        {
-            return await RequestAsync<ProfileDto>(nameof(GetAsync));
-        }
+        return await RequestAsync<ProfileDto>(nameof(GetAsync));
+    }
 
-        public virtual async Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
+    public virtual async Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
+    {
+        return await RequestAsync<ProfileDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<ProfileDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(UpdateProfileDto), input }
-            });
-        }
+            { typeof(UpdateProfileDto), input }
+        });
+    }
 
-        public virtual async Task ChangePasswordAsync(ChangePasswordInput input)
+    public virtual async Task ChangePasswordAsync(ChangePasswordInput input)
+    {
+        await RequestAsync(nameof(ChangePasswordAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(ChangePasswordAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(ChangePasswordInput), input }
-            });
-        }
+            { typeof(ChangePasswordInput), input }
+        });
     }
 }

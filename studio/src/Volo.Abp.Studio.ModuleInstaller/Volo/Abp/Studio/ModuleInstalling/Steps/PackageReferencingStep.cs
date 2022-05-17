@@ -25,8 +25,12 @@ public class PackageReferencingStep : ModuleInstallingPipelineStep
                 await AddReferenceAsync(context, targetPackage, referencePackage);
 
                 var targetAbpModulePath = FindAbpModuleFile(targetPackage.Path);
+                var referencePackageAbpModuleName = FindAbpModuleName(referencePackage);
 
-                await _abpModuleFileManager.AddDependency(targetAbpModulePath, FindAbpModuleName(referencePackage));
+                if (targetAbpModulePath != null && referencePackageAbpModuleName != null)
+                {
+                    await _abpModuleFileManager.AddDependency(targetAbpModulePath, referencePackageAbpModuleName);
+                }
             }
         }
     }
@@ -72,9 +76,14 @@ public class PackageReferencingStep : ModuleInstallingPipelineStep
 
     private string FindAbpModuleName(PackageInfoWithAnalyze package)
     {
-        var abpModuleModel = package.Analyze.Contents.Where(y =>
+        var abpModuleModel = package.Analyze?.Contents.Where(y =>
             y.ContentType == AbpModuleModel.ContentTypeName
-        ).Cast<AbpModuleModel>().First();
+        ).Cast<AbpModuleModel>().FirstOrDefault();
+
+        if (abpModuleModel == null)
+        {
+            return null;
+        }
 
         return abpModuleModel.Namespace + "." + abpModuleModel.Name;
     }

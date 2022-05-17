@@ -12,7 +12,7 @@ The most common question is;
 
 The answer is, **you don't**. ABP Angular application is integrated with the backend (HttpApi.Host project) where it loads the configurations, **permissions** etc. For none-tiered angular applications, **HttpApi.Host** project also has IdentityServer4 embedded; also serving as **Authorization Server**. Angular application authentication flow is shown below.
 
-<img src="auth-diagram.jpeg" alt="auth-diagram" style="zoom:50%;" />
+![auth-diagram](auth-diagram.jpeg)
 
 > What if I want Azure AD as my authorization server and not IdentityServer?
 
@@ -80,7 +80,7 @@ Navigate to Manage Azure Active Directory in [azure portal](https://portal.azure
 
 Enter a name for your application and **App.SelfUrl** + **AzureAd.CallbackPath** as redirect uri then register.
 
-<img src="azure-app-register.JPG" alt="azure-app-register" style="zoom:75%;" />
+![azure-app-register](azure-app-register.JPG)
 
 Now navigate to **Authentication** on the left menu and enable **ID tokens**.
 

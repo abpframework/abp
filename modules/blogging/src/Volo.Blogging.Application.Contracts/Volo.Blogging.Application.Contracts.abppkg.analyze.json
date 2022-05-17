@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Blogging.Application.Contracts",
+  "hash": "2f9db4cac9c4fdbbbacb91565e42a287",
+  "contents": [
+    {
+      "namespace": "Volo.Blogging",
+      "contentType": "abpModule",
+      "name": "BloggingApplicationContractsModule"
+    }
+  ]
+}

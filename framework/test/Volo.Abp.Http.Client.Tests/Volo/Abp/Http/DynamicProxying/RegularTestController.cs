@@ -10,7 +10,7 @@ namespace Volo.Abp.Http.DynamicProxying;
 
 [Route("api/regular-test-controller")]
 [RemoteService] //Automatically enables API explorer and apply ABP conventions.
-                //[ApiExplorerSettings(IgnoreApi = false)] //alternative
+//[ApiExplorerSettings(IgnoreApi = false)] //alternative
 public class RegularTestController : AbpController, IRegularTestController
 {
     [HttpGet]
@@ -32,7 +32,7 @@ public class RegularTestController : AbpController, IRegularTestController
     public Task GetException2Async()
     {
         throw new BusinessException("Volo.Abp.Http.DynamicProxying:10001")
-            .WithData("0", "TEST");
+            .WithData("0","TEST");
     }
 
     [HttpGet]
@@ -83,6 +83,22 @@ public class RegularTestController : AbpController, IRegularTestController
     public Task<Car> GetObjectandIdAsync(int id, [FromBody] Car bodyValue)
     {
         bodyValue.Year = id;
+        return Task.FromResult(bodyValue);
+    }
+
+    [HttpGet]
+    [Route("post-object-and-first-release-date-with-url/{time:datetime}")]
+    public Task<Car> GetObjectandFirstReleaseDateAsync(DateTime time, Car bodyValue)
+    {
+        bodyValue.FirstReleaseDate = time;
+        return Task.FromResult(bodyValue);
+    }
+
+    [HttpGet]
+    [Route("post-object-and-count-with-url/{count}")]
+    public Task<Car> GetObjectandCountAsync(int count, Car bodyValue)
+    {
+        bodyValue.Year = count;
         return Task.FromResult(bodyValue);
     }
 

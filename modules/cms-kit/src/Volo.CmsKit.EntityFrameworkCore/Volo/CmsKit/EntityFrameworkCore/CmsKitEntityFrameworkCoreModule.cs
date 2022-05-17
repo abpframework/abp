@@ -4,6 +4,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Users.EntityFrameworkCore;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
@@ -35,6 +36,7 @@ public class CmsKitEntityFrameworkCoreModule : AbpModule
             options.AddRepository<BlogPost, EfCoreBlogPostRepository>();
             options.AddRepository<BlogFeature, EfCoreBlogFeatureRepository>();
             options.AddRepository<MediaDescriptor, EfCoreMediaDescriptorRepository>();
+            options.AddRepository<GlobalResource, EfCoreGlobalResourceRepository>();
         });
     }
 }

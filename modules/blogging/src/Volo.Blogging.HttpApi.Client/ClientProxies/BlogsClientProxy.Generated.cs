@@ -10,31 +10,30 @@ using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Blogging.ClientProxies
+namespace Volo.Blogging.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IBlogAppService), typeof(BlogsClientProxy))]
+public partial class BlogsClientProxy : ClientProxyBase<IBlogAppService>, IBlogAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IBlogAppService), typeof(BlogsClientProxy))]
-    public partial class BlogsClientProxy : ClientProxyBase<IBlogAppService>, IBlogAppService
+    public virtual async Task<ListResultDto<BlogDto>> GetListAsync()
     {
-        public virtual async Task<ListResultDto<BlogDto>> GetListAsync()
-        {
-            return await RequestAsync<ListResultDto<BlogDto>>(nameof(GetListAsync));
-        }
+        return await RequestAsync<ListResultDto<BlogDto>>(nameof(GetListAsync));
+    }
 
-        public virtual async Task<BlogDto> GetByShortNameAsync(string shortName)
+    public virtual async Task<BlogDto> GetByShortNameAsync(string shortName)
+    {
+        return await RequestAsync<BlogDto>(nameof(GetByShortNameAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<BlogDto>(nameof(GetByShortNameAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), shortName }
-            });
-        }
+            { typeof(string), shortName }
+        });
+    }
 
-        public virtual async Task<BlogDto> GetAsync(Guid id)
+    public virtual async Task<BlogDto> GetAsync(Guid id)
+    {
+        return await RequestAsync<BlogDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<BlogDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
     }
 }

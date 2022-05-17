@@ -12,6 +12,13 @@ public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
 
     private JsonSerializerOptions _writeJsonSerializerOptions;
 
+    protected readonly AbpFeatureManagementApplicationContractsOptions Options;
+
+    public StringValueTypeJsonConverter(AbpFeatureManagementApplicationContractsOptions options)
+    {
+        Options = options;
+    }
+
     public override IStringValueType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
@@ -21,7 +28,8 @@ public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
         {
             var name = nameJsonProperty.Value.GetString();
 
-            _readJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(), new SelectionStringValueItemSourceJsonConverter());
+            _readJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(Options),
+                new SelectionStringValueItemSourceJsonConverter());
 
             return name switch
             {

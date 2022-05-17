@@ -1,0 +1,29 @@
+{
+  "name": "Volo.Abp.BlobStoring.Database.MongoDB",
+  "hash": "4c911e5e8a2e8c4630d12f394a157819",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.BlobStoring.Database.MongoDB",
+      "contentType": "abpModule",
+      "name": "BlobStoringDatabaseMongoDbModule"
+    },
+    {
+      "namespace": "Volo.Abp.BlobStoring.Database.MongoDB",
+      "connectionStringName": "AbpBlobStoring",
+      "databaseCollections": [
+        {
+          "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlobContainer",
+          "contentType": "databaseCollection",
+          "name": "AbpBlobContainers"
+        },
+        {
+          "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlob",
+          "contentType": "databaseCollection",
+          "name": "AbpBlobs"
+        }
+      ],
+      "contentType": "mongoDbContext",
+      "name": "BlobStoringMongoDbContext"
+    }
+  ]
+}

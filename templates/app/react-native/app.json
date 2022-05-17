@@ -21,7 +21,11 @@
     },
     "android": {
       "package": "com.MyCompanyName.MyProjectName",
-      "versionCode": 1
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
     },
     "web": {
       "favicon": "./assets/icon.png"

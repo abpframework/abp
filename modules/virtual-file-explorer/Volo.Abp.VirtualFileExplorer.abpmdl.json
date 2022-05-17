@@ -13,6 +13,10 @@
     "Volo.Abp.VirtualFileExplorer.DemoApp": {
       "path": "app/Volo.Abp.VirtualFileExplorer.DemoApp/Volo.Abp.VirtualFileExplorer.DemoApp.abppkg.json",
       "folder": "app"
+    },
+    "Volo.Abp.VirtualFileExplorer.Installer": {
+      "path": "src/Volo.Abp.VirtualFileExplorer.Installer/Volo.Abp.VirtualFileExplorer.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }

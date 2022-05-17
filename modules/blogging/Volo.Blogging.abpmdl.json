@@ -1,0 +1,103 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "app": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Volo.Blogging.Domain.Shared": {
+      "path": "src/Volo.Blogging.Domain.Shared/Volo.Blogging.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.Domain": {
+      "path": "src/Volo.Blogging.Domain/Volo.Blogging.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.Application.Contracts": {
+      "path": "src/Volo.Blogging.Application.Contracts/Volo.Blogging.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.Application": {
+      "path": "src/Volo.Blogging.Application/Volo.Blogging.Application.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.EntityFrameworkCore": {
+      "path": "src/Volo.Blogging.EntityFrameworkCore/Volo.Blogging.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.HttpApi": {
+      "path": "src/Volo.Blogging.HttpApi/Volo.Blogging.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.HttpApi.Client": {
+      "path": "src/Volo.Blogging.HttpApi.Client/Volo.Blogging.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.Web": {
+      "path": "src/Volo.Blogging.Web/Volo.Blogging.Web.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.BloggingTestApp.EntityFrameworkCore": {
+      "path": "app/Volo.BloggingTestApp.EntityFrameworkCore/Volo.BloggingTestApp.EntityFrameworkCore.abppkg.json",
+      "folder": "app"
+    },
+    "Volo.BloggingTestApp": {
+      "path": "app/Volo.BloggingTestApp/Volo.BloggingTestApp.abppkg.json",
+      "folder": "app"
+    },
+    "Volo.Blogging.TestBase": {
+      "path": "test/Volo.Blogging.TestBase/Volo.Blogging.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Blogging.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Blogging.EntityFrameworkCore.Tests/Volo.Blogging.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Blogging.Application.Tests": {
+      "path": "test/Volo.Blogging.Application.Tests/Volo.Blogging.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Blogging.MongoDB": {
+      "path": "src/Volo.Blogging.MongoDB/Volo.Blogging.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.BloggingTestApp.MongoDB": {
+      "path": "app/Volo.BloggingTestApp.MongoDB/Volo.BloggingTestApp.MongoDB.abppkg.json",
+      "folder": "app"
+    },
+    "Volo.Blogging.MongoDB.Tests": {
+      "path": "test/Volo.Blogging.MongoDB.Tests/Volo.Blogging.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Blogging.Domain.Tests": {
+      "path": "test/Volo.Blogging.Domain.Tests/Volo.Blogging.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Blogging.Admin.Application.Contracts": {
+      "path": "src/Volo.Blogging.Admin.Application.Contracts/Volo.Blogging.Admin.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.Admin.Application": {
+      "path": "src/Volo.Blogging.Admin.Application/Volo.Blogging.Admin.Application.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.Admin.HttpApi": {
+      "path": "src/Volo.Blogging.Admin.HttpApi/Volo.Blogging.Admin.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.Admin.HttpApi.Client": {
+      "path": "src/Volo.Blogging.Admin.HttpApi.Client/Volo.Blogging.Admin.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.Admin.Web": {
+      "path": "src/Volo.Blogging.Admin.Web/Volo.Blogging.Admin.Web.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.Application.Contracts.Shared": {
+      "path": "src/Volo.Blogging.Application.Contracts.Shared/Volo.Blogging.Application.Contracts.Shared.abppkg.json",
+      "folder": "src"
+    }
+  }
+}

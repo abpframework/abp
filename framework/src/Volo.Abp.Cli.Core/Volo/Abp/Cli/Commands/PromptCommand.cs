@@ -7,6 +7,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class PromptCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "prompt";
+    
     public Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
         return Task.CompletedTask;

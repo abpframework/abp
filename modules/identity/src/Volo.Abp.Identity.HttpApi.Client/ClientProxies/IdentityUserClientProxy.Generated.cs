@@ -9,89 +9,88 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Identity;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Abp.Identity.ClientProxies
+namespace Volo.Abp.Identity.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserClientProxy))]
+public partial class IdentityUserClientProxy : ClientProxyBase<IIdentityUserAppService>, IIdentityUserAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserClientProxy))]
-    public partial class IdentityUserClientProxy : ClientProxyBase<IIdentityUserAppService>, IIdentityUserAppService
+    public virtual async Task<IdentityUserDto> GetAsync(Guid id)
     {
-        public virtual async Task<IdentityUserDto> GetAsync(Guid id)
+        return await RequestAsync<IdentityUserDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<IdentityUserDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
+    public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
+    {
+        return await RequestAsync<PagedResultDto<IdentityUserDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PagedResultDto<IdentityUserDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(GetIdentityUsersInput), input }
-            });
-        }
+            { typeof(GetIdentityUsersInput), input }
+        });
+    }
 
-        public virtual async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
+    public virtual async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
+    {
+        return await RequestAsync<IdentityUserDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<IdentityUserDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(IdentityUserCreateDto), input }
-            });
-        }
+            { typeof(IdentityUserCreateDto), input }
+        });
+    }
 
-        public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
+    public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
+    {
+        return await RequestAsync<IdentityUserDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<IdentityUserDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id },
-                { typeof(IdentityUserUpdateDto), input }
-            });
-        }
+            { typeof(Guid), id },
+            { typeof(IdentityUserUpdateDto), input }
+        });
+    }
 
-        public virtual async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
+    public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
+    {
+        return await RequestAsync<ListResultDto<IdentityRoleDto>>(nameof(GetRolesAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<ListResultDto<IdentityRoleDto>>(nameof(GetRolesAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync()
-        {
-            return await RequestAsync<ListResultDto<IdentityRoleDto>>(nameof(GetAssignableRolesAsync));
-        }
+    public virtual async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync()
+    {
+        return await RequestAsync<ListResultDto<IdentityRoleDto>>(nameof(GetAssignableRolesAsync));
+    }
 
-        public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
+    public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
+    {
+        await RequestAsync(nameof(UpdateRolesAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(UpdateRolesAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id },
-                { typeof(IdentityUserUpdateRolesDto), input }
-            });
-        }
+            { typeof(Guid), id },
+            { typeof(IdentityUserUpdateRolesDto), input }
+        });
+    }
 
-        public virtual async Task<IdentityUserDto> FindByUsernameAsync(string userName)
+    public virtual async Task<IdentityUserDto> FindByUsernameAsync(string userName)
+    {
+        return await RequestAsync<IdentityUserDto>(nameof(FindByUsernameAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<IdentityUserDto>(nameof(FindByUsernameAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), userName }
-            });
-        }
+            { typeof(string), userName }
+        });
+    }
 
-        public virtual async Task<IdentityUserDto> FindByEmailAsync(string email)
+    public virtual async Task<IdentityUserDto> FindByEmailAsync(string email)
+    {
+        return await RequestAsync<IdentityUserDto>(nameof(FindByEmailAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<IdentityUserDto>(nameof(FindByEmailAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), email }
-            });
-        }
+            { typeof(string), email }
+        });
     }
 }

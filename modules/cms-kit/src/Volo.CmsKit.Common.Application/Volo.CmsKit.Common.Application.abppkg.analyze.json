@@ -1,0 +1,38 @@
+{
+  "name": "Volo.CmsKit.Common.Application",
+  "hash": "8c5b6af4aae1a9199e8ed2a8481cf201",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit",
+      "contentType": "abpModule",
+      "name": "CmsKitCommonApplicationModule"
+    },
+    {
+      "namespace": "Volo.CmsKit.Tags",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.CmsKit.Tags.ITagAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "TagAppService"
+    },
+    {
+      "namespace": "Volo.CmsKit.MediaDescriptors",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.CmsKit.MediaDescriptors.IMediaDescriptorAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "MediaDescriptorAppService"
+    },
+    {
+      "namespace": "Volo.CmsKit.Blogs",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.CmsKit.Blogs.IBlogFeatureAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "BlogFeatureAppService"
+    }
+  ]
+}

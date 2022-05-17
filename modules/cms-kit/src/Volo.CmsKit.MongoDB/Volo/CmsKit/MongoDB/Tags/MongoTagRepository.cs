@@ -82,19 +82,19 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
     }
 
 
-    public async Task<List<Tag>> GetListAsync(string filter)
+    public async Task<List<Tag>> GetListAsync(string filter, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableByFilterAsync(filter)).ToListAsync();
+        return await (await GetQueryableByFilterAsync(filter, cancellationToken)).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<int> GetCountAsync(string filter)
+    public async Task<int> GetCountAsync(string filter, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableByFilterAsync(filter)).CountAsync();
+        return await (await GetQueryableByFilterAsync(filter, cancellationToken)).CountAsync(GetCancellationToken(cancellationToken));
     }
 
-    private async Task<IMongoQueryable<Tag>> GetQueryableByFilterAsync(string filter)
+    private async Task<IMongoQueryable<Tag>> GetQueryableByFilterAsync(string filter, CancellationToken cancellationToken = default)
     {
-        var mongoQueryable = await GetMongoQueryableAsync();
+        var mongoQueryable = await GetMongoQueryableAsync(cancellationToken: cancellationToken);
 
         if (!filter.IsNullOrWhiteSpace())
         {

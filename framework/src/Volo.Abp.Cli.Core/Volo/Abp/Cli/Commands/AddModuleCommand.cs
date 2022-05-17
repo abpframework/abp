@@ -14,6 +14,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class AddModuleCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "add-module";
+    
     private AddModuleInfoOutput _lastAddedModuleInfo;
     public ILogger<AddModuleCommand> Logger { get; set; }
 

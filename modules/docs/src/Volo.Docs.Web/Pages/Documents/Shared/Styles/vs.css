@@ -48,17 +48,21 @@ a {
             background: #000; }
             .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select .input-group-text i {
               color: #666; }
-          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
+          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
             padding: 0 10px 2px 10px;
             border: 0;
             min-height: 34px;
             height: 34px;
             font-size: .9em;
             border-radius: 0px; }
-            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:visited, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:visited {
+            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select:visited, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-select:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:visited {
               box-shadow: none; }
-          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control {
-            padding: 0 10px 2px 6px; }
+          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select {
+            padding: 0 10px 2px 6px;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 0.75rem center !important;
+            background-size: 16px 12px !important; }
       .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-filter {
         padding: 0 1rem;
         margin: .5rem 0;
@@ -247,9 +251,8 @@ a {
         margin-bottom: 1rem;
         margin-left: 0;
         border-left: 3px solid #d2dbe4;
-        padding: 1em 1.5em;
         background-color: #e9edf1;
-        padding-bottom: .2em;
+        padding: 1em 1.5em !important;
         font-size: 1em; }
       .docs-page .docs-content article.docs-body img {
         max-width: 100%;
@@ -356,7 +359,7 @@ a {
       .docs-page .docs-page-index .scroll-top-btn.showup {
         display: block; }
 
-.docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
+.docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-select, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
   background: #000000;
   color: white; }
 

@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.Studio.Domain.Shared",
+  "hash": "64d3a6a5ecb4776705864ea8cc2b56b5",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Studio",
+      "contentType": "abpModule",
+      "name": "AbpStudioDomainSharedModule"
+    }
+  ]
+}

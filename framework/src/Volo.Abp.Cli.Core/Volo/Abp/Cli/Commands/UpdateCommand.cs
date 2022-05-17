@@ -13,6 +13,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class UpdateCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "update";
+    
     public ILogger<UpdateCommand> Logger { get; set; }
 
     private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;

@@ -19,14 +19,4 @@
     <ProjectReference Include="..\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Volo.Abp.Identity.EntityFrameworkCore.abppkg.json" />
-    <EmbeddedResource Include="Volo.Abp.Identity.EntityFrameworkCore.abppkg.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </EmbeddedResource>
-    <None Remove="Volo.Abp.Identity.EntityFrameworkCore.abppkg.analyze.json" />
-    <EmbeddedResource Include="Volo.Abp.Identity.EntityFrameworkCore.abppkg.analyze.json" />
-  </ItemGroup>
-
 </Project>

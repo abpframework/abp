@@ -59,10 +59,10 @@ public class PersonAppServiceClientProxy_Tests : AbpHttpClientTestBase
         var id2 = Guid.NewGuid();
 
         var @params = await _peopleAppService.GetParams(new List<Guid>
-            {
-                id1,
-                id2
-            }, new[] { "name1", "name2" });
+        {
+            id1,
+            id2
+        }, new[] { "name1", "name2" });
 
         @params.ShouldContain(id1.ToString("N"));
         @params.ShouldContain(id2.ToString("N"));
@@ -224,10 +224,10 @@ public class PersonAppServiceClientProxy_Tests : AbpHttpClientTestBase
         memoryStream2.Position = 0;
 
         var result = await _peopleAppService.UploadMultipleAsync(new List<IRemoteStreamContent>()
-            {
-                new RemoteStreamContent(memoryStream, "File1.rtf", "application/rtf"),
-                new RemoteStreamContent(memoryStream2, "File2.rtf", "application/rtf2")
-            });
+        {
+            new RemoteStreamContent(memoryStream, "File1.rtf", "application/rtf"),
+            new RemoteStreamContent(memoryStream2, "File2.rtf", "application/rtf2")
+        });
         result.ShouldBe("File1:application/rtf:File1.rtfFile2:application/rtf2:File2.rtf");
     }
 
@@ -263,11 +263,11 @@ public class PersonAppServiceClientProxy_Tests : AbpHttpClientTestBase
         var result = await _peopleAppService.CreateMultipleFileAsync(new CreateMultipleFileInput()
         {
             Name = "123.rtf",
-            Contents = new List<IRemoteStreamContent>()
-                {
-                    new RemoteStreamContent(memoryStream, "1-1.rtf", "application/rtf"),
-                    new RemoteStreamContent(memoryStream2, "1-2.rtf", "application/rtf2")
-                },
+            Contents = new List<RemoteStreamContent>()
+            {
+                new RemoteStreamContent(memoryStream, "1-1.rtf", "application/rtf"),
+                new RemoteStreamContent(memoryStream2, "1-2.rtf", "application/rtf2")
+            },
             Inner = new CreateFileInput()
             {
                 Name = "789.rtf",
@@ -283,18 +283,18 @@ public class PersonAppServiceClientProxy_Tests : AbpHttpClientTestBase
         var result = await _peopleAppService.GetParamsFromQueryAsync(new GetParamsInput()
         {
             NameValues = new List<GetParamsNameValue>()
+            {
+                new GetParamsNameValue()
                 {
-                    new GetParamsNameValue()
-                    {
-                        Name = "name1",
-                        Value = "value1"
-                    },
-                    new GetParamsNameValue()
-                    {
-                        Name = "name2",
-                        Value = "value2"
-                    }
+                    Name = "name1",
+                    Value = "value1"
                 },
+                new GetParamsNameValue()
+                {
+                    Name = "name2",
+                    Value = "value2"
+                }
+            },
             NameValue = new GetParamsNameValue()
             {
                 Name = "name3",
@@ -310,18 +310,18 @@ public class PersonAppServiceClientProxy_Tests : AbpHttpClientTestBase
         var result = await _peopleAppService.GetParamsFromFormAsync(new GetParamsInput()
         {
             NameValues = new List<GetParamsNameValue>()
+            {
+                new GetParamsNameValue()
                 {
-                    new GetParamsNameValue()
-                    {
-                        Name = "name1",
-                        Value = "value1"
-                    },
-                    new GetParamsNameValue()
-                    {
-                        Name = "name2",
-                        Value = "value2"
-                    }
+                    Name = "name1",
+                    Value = "value1"
                 },
+                new GetParamsNameValue()
+                {
+                    Name = "name2",
+                    Value = "value2"
+                }
+            },
             NameValue = new GetParamsNameValue()
             {
                 Name = "name3",

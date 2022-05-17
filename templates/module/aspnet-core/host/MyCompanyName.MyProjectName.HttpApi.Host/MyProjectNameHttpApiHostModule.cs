@@ -31,6 +31,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName;
@@ -46,6 +47,7 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpTenantManagementEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
     )]
@@ -82,11 +84,11 @@ public class MyProjectNameHttpApiHostModule : AbpModule
             configuration["AuthServer:Authority"],
             new Dictionary<string, string>
             {
-                    {"MyProjectName", "MyProjectName API"}
+                {"MyProjectName", "MyProjectName API"}
             },
             options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo {Title = "MyProjectName API", Version = "v1"});
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });

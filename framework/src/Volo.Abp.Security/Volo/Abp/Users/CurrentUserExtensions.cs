@@ -35,7 +35,7 @@ public static class CurrentUserExtensions
     public static Guid? FindImpersonatorTenantId([NotNull] this ICurrentUser currentUser)
     {
         var impersonatorTenantId = currentUser.FindClaimValue(AbpClaimTypes.ImpersonatorTenantId);
-        if (impersonatorTenantId == null || impersonatorTenantId.IsNullOrWhiteSpace())
+        if (impersonatorTenantId.IsNullOrWhiteSpace())
         {
             return null;
         }
@@ -50,7 +50,7 @@ public static class CurrentUserExtensions
     public static Guid? FindImpersonatorUserId([NotNull] this ICurrentUser currentUser)
     {
         var impersonatorUserId = currentUser.FindClaimValue(AbpClaimTypes.ImpersonatorUserId);
-        if (impersonatorUserId == null || impersonatorUserId.IsNullOrWhiteSpace())
+        if (impersonatorUserId.IsNullOrWhiteSpace())
         {
             return null;
         }
@@ -60,5 +60,15 @@ public static class CurrentUserExtensions
         }
 
         return null;
+    }
+
+    public static string FindImpersonatorTenantName([NotNull] this ICurrentUser currentUser)
+    {
+        return currentUser.FindClaimValue(AbpClaimTypes.ImpersonatorTenantName);
+    }
+
+    public static string FindImpersonatorUserName([NotNull] this ICurrentUser currentUser)
+    {
+        return currentUser.FindClaimValue(AbpClaimTypes.ImpersonatorUserName);
     }
 }

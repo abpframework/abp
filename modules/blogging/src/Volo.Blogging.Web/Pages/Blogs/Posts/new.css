@@ -2,7 +2,7 @@
     background-color: #F9F9F9;
     min-height: 19.5em;
 }
-#qa-new-post-container .new-post-editor .CodeMirror-scroll {
+#qa-new-post-container .new-post-editor .ProseMirror {
     min-height: 20em;
 }
 

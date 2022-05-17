@@ -58,6 +58,10 @@
     "Volo.Abp.BackgroundJobs.DemoApp.Quartz": {
       "path": "app/Volo.Abp.BackgroundJobs.DemoApp.Quartz/Volo.Abp.BackgroundJobs.DemoApp.Quartz.abppkg.json",
       "folder": "app"
+    },
+    "Volo.Abp.BackgroundJobs.Installer": {
+      "path": "src/Volo.Abp.BackgroundJobs.Installer/Volo.Abp.BackgroundJobs.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }

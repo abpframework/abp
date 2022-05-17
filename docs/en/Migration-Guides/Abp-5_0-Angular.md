@@ -1,6 +1,6 @@
 # Angular UI v4.x to v5.0 Migration Guide
 
-This document is for the ABP MVC / Razor Pages UI. See also [the main migration guide](Abp-5_0.md).
+> This document is for the Angular UI. See also [the main migration guide](Abp-5_0.md).
 
 ## Overall
 
@@ -19,6 +19,8 @@ See the overall list of breaking changes:
 ## Angular v12
 
 The new ABP Angular UI is based on Angular v12. We started to compile Angular UI packages with the Ivy compilation. Therefore, **new packages only work with Angular v12**. If you are still on the older version of Angular v12, you have to update to Angular v12. The update is usually very easy. See [Angular Update Guide](https://update.angular.io/?l=2&v=11.0-12.0) for further information.
+
+> **ABP Angular UI is not yet compatible with Angular v13 due to some issues.**
 
 ## Bootstrap 5
 

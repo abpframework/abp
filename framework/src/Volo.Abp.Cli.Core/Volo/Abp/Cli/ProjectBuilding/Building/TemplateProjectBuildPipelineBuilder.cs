@@ -26,10 +26,7 @@ public static class TemplateProjectBuildPipelineBuilder
         pipeline.Steps.Add(new TemplateCodeDeleteStep());
         pipeline.Steps.Add(new SolutionRenameStep());
 
-        if (context.Template.Name == AppProTemplate.TemplateName ||
-            context.Template.Name == MicroserviceProTemplate.TemplateName ||
-            context.Template.Name == MicroserviceServiceProTemplate.TemplateName ||
-            context.Template.Name == ModuleProTemplate.TemplateName)
+        if (context.Template.IsPro())
         {
             pipeline.Steps.Add(new LicenseCodeReplaceStep()); // todo: move to custom steps?
         }
@@ -38,6 +35,12 @@ public static class TemplateProjectBuildPipelineBuilder
             context.Template.Name == AppProTemplate.TemplateName)
         {
             pipeline.Steps.Add(new DatabaseManagementSystemChangeStep(context.Template.As<AppTemplateBase>().HasDbMigrations)); // todo: move to custom steps?
+        }
+
+        if (context.Template.Name == AppNoLayersTemplate.TemplateName ||
+            context.Template.Name == AppNoLayersProTemplate.TemplateName)
+        {
+            pipeline.Steps.Add(new AppNoLayersDatabaseManagementSystemChangeStep()); // todo: move to custom steps?
         }
 
         if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor || context.BuildArgs.UiFramework == UiFramework.BlazorServer)

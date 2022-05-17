@@ -1,0 +1,20 @@
+{
+  "name": "Volo.Abp.FeatureManagement.Application",
+  "hash": "0a1e4a174a26dbb996988ce6c9964901",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "contentType": "abpModule",
+      "name": "AbpFeatureManagementApplicationModule"
+    },
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Abp.FeatureManagement.IFeatureAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "FeatureAppService"
+    }
+  ]
+}

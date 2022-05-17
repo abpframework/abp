@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.TenantManagement.Domain.Shared",
+  "hash": "e1a3dc97dda872a01da2654848372f27",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.TenantManagement",
+      "contentType": "abpModule",
+      "name": "AbpTenantManagementDomainSharedModule"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
@@ -41,11 +42,15 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
     public virtual async Task<int> GetCountAsync(
         string filter = null,
         Guid? blogId = null,
+        Guid? authorId = null,
+        BlogPostStatus? statusFilter = null,
         CancellationToken cancellationToken = default)
     {
         var queryable = (await GetDbSetAsync())
-           .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
-           .WhereIf(!string.IsNullOrEmpty(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
+            .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
+            .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
+            .WhereIf(statusFilter.HasValue, x => x.Status == statusFilter)
+            .WhereIf(!string.IsNullOrEmpty(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
 
         var count = await queryable.CountAsync(GetCancellationToken(cancellationToken));
         return count;
@@ -54,6 +59,8 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
     public virtual async Task<List<BlogPost>> GetListAsync(
         string filter = null,
         Guid? blogId = null,
+        Guid? authorId = null,
+        BlogPostStatus? statusFilter = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string sorting = null,
@@ -66,7 +73,9 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
 
         var queryable = blogPostsDbSet
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
-            .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
+            .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
+            .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
+            .WhereIf(statusFilter.HasValue, x => x.Status == statusFilter);
 
         queryable = queryable.OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(BlogPost.CreationTime)} desc" : sorting);
 
@@ -94,5 +103,39 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
 
         return await (await GetDbSetAsync()).AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug,
             GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
+    {
+        return await (await CreateAuthorsQueryableAsync())
+            .Skip(skipCount)
+            .Take(maxResultCount)
+            .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()))
+            .OrderBy(sorting.IsNullOrEmpty() ? nameof(CmsUser.UserName) : sorting)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default)
+    {
+        return await (await CreateAuthorsQueryableAsync())
+            .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()))
+            .CountAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await (await CreateAuthorsQueryableAsync()).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken))
+            ?? throw new EntityNotFoundException(typeof(CmsUser), id);
+    }
+
+    private async Task<IQueryable<CmsUser>> CreateAuthorsQueryableAsync()
+    {
+        return (await GetDbContextAsync()).BlogPosts.Select(x => x.Author).Distinct();
+    }
+    
+    public virtual async Task<bool> HasBlogPostWaitingForReviewAsync(CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .AnyAsync(x => x.Status == BlogPostStatus.WaitingForReview, GetCancellationToken(cancellationToken));
     }
 }

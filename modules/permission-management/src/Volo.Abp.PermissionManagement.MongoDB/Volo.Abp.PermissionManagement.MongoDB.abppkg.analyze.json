@@ -1,0 +1,24 @@
+{
+  "name": "Volo.Abp.PermissionManagement.MongoDB",
+  "hash": "56f2712fd206ad7dee9f2a2116935af1",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.PermissionManagement.MongoDB",
+      "contentType": "abpModule",
+      "name": "AbpPermissionManagementMongoDbModule"
+    },
+    {
+      "namespace": "Volo.Abp.PermissionManagement.MongoDB",
+      "connectionStringName": "AbpPermissionManagement",
+      "databaseCollections": [
+        {
+          "entityFullName": "Volo.Abp.PermissionManagement.PermissionGrant",
+          "contentType": "databaseCollection",
+          "name": "AbpPermissionGrants"
+        }
+      ],
+      "contentType": "mongoDbContext",
+      "name": "PermissionManagementMongoDbContext"
+    }
+  ]
+}

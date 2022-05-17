@@ -1,6 +1,7 @@
 {
   "culture": "tr",
   "texts": {
+    "Menu:Account": "Hesap",
     "UserName": "Kullanıcı adı",
     "EmailAddress": "E-posta adresi",
     "UserNameOrEmailAddress": "Kullanıcı adı veya e-posta",

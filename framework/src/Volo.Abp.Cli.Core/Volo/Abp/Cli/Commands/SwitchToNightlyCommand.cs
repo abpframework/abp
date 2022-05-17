@@ -8,6 +8,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class SwitchToNightlyCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "switch-to-nightly";
+    
     private readonly PackagePreviewSwitcher _packagePreviewSwitcher;
 
     public SwitchToNightlyCommand(PackagePreviewSwitcher packagePreviewSwitcher)

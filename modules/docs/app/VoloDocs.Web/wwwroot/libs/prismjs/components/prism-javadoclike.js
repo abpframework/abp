@@ -2,13 +2,13 @@
 
 	var javaDocLike = Prism.languages.javadoclike = {
 		'parameter': {
-			pattern: /(^\s*(?:\/{3}|\*|\/\*\*)\s*@(?:param|arg|arguments)\s+)\w+/m,
+			pattern: /(^[\t ]*(?:\/{3}|\*|\/\*\*)\s*@(?:arg|arguments|param)\s+)\w+/m,
 			lookbehind: true
 		},
 		'keyword': {
 			// keywords are the first word in a line preceded be an `@` or surrounded by curly braces.
 			// @word, {@word}
-			pattern: /(^\s*(?:\/{3}|\*|\/\*\*)\s*|\{)@[a-z][a-zA-Z-]+\b/m,
+			pattern: /(^[\t ]*(?:\/{3}|\*|\/\*\*)\s*|\{)@[a-z][a-zA-Z-]+\b/m,
 			lookbehind: true
 		},
 		'punctuation': /[{}]/

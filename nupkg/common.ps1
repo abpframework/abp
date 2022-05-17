@@ -2,6 +2,70 @@
 $packFolder = (Get-Item -Path "./" -Verbose).FullName
 $rootFolder = Join-Path $packFolder "../"
 
+function Write-Info   
+{
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $text
+    )
+
+	Write-Host $text -ForegroundColor Black -BackgroundColor Green
+
+	try 
+	{
+	   $host.UI.RawUI.WindowTitle = $text
+	}		
+	catch 
+	{
+		#Changing window title is not suppoerted!
+	}
+}
+
+function Write-Error   
+{
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $text
+    )
+
+	Write-Host $text -ForegroundColor Red -BackgroundColor Black 
+}
+
+function Seperator   
+{
+	Write-Host ("_" * 100)  -ForegroundColor gray 
+}
+
+function Get-Current-Version { 
+	$commonPropsFilePath = resolve-path "../common.props"
+	$commonPropsXmlCurrent = [xml](Get-Content $commonPropsFilePath ) 
+	$currentVersion = $commonPropsXmlCurrent.Project.PropertyGroup.Version.Trim()
+	return $currentVersion
+}
+
+function Get-Current-Branch {
+	return git branch --show-current
+}	   
+
+function Read-File {
+	param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $filePath
+    )
+		
+	$pathExists = Test-Path -Path $filePath -PathType Leaf
+	if ($pathExists)
+	{
+		return Get-Content $filePath		
+	}
+	else{
+		Write-Error  "$filePath path does not exist!"
+	}
+}
+
 # List of solutions
 $solutions = (
     "framework",
@@ -22,7 +86,7 @@ $solutions = (
     "modules/virtual-file-explorer",
     "modules/blob-storing-database",
     "modules/cms-kit",
-    "modules/studio"
+    "studio"
 )
 
 # List of projects
@@ -99,8 +163,8 @@ $projects = (
     "framework/src/Volo.Abp.Emailing",
     "framework/src/Volo.Abp.EntityFrameworkCore",
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
-    # "framework/src/Volo.Abp.EntityFrameworkCore.Oracle",
-    # "framework/src/Volo.Abp.EntityFrameworkCore.Oracle.Devart",
+    "framework/src/Volo.Abp.EntityFrameworkCore.Oracle",
+    "framework/src/Volo.Abp.EntityFrameworkCore.Oracle.Devart",
     "framework/src/Volo.Abp.EntityFrameworkCore.PostgreSql",
     "framework/src/Volo.Abp.EntityFrameworkCore.Sqlite",
     "framework/src/Volo.Abp.EntityFrameworkCore.SqlServer",
@@ -113,6 +177,7 @@ $projects = (
     "framework/src/Volo.Abp.ExceptionHandling",
     "framework/src/Volo.Abp.Features",
     "framework/src/Volo.Abp.FluentValidation",
+    "framework/src/Volo.Abp.Gdpr.Abstractions",
     "framework/src/Volo.Abp.GlobalFeatures",
     "framework/src/Volo.Abp.Guids",
     "framework/src/Volo.Abp.HangFire",
@@ -166,6 +231,7 @@ $projects = (
     "modules/account/src/Volo.Abp.Account.HttpApi",
     "modules/account/src/Volo.Abp.Account.Web",
     "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
+    "modules/account/src/Volo.Abp.Account.Web.OpenIddict",
     "modules/account/src/Volo.Abp.Account.Blazor",
     "modules/account/src/Volo.Abp.Account.Installer",
     "studio/source-codes/Volo.Abp.Account.SourceCode",
@@ -210,6 +276,7 @@ $projects = (
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi",
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi.Client",
     "modules/blogging/src/Volo.Blogging.Admin.Web",
+    "studio/source-codes/Volo.Blogging.SourceCode",
 
     # modules/client-simulation
     "modules/client-simulation/src/Volo.ClientSimulation",
@@ -230,6 +297,7 @@ $projects = (
     "modules/docs/src/Volo.Docs.HttpApi",
     "modules/docs/src/Volo.Docs.MongoDB",
     "modules/docs/src/Volo.Docs.Web",
+    "studio/source-codes/Volo.Docs.SourceCode",
 
     # modules/feature-management
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Application.Contracts",
@@ -273,6 +341,14 @@ $projects = (
     "modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer",
     "modules/identityserver/src/Volo.Abp.IdentityServer.Installer",
     "studio/source-codes/Volo.Abp.IdentityServer.SourceCode",
+
+    # modules/openiddict
+    "modules/openiddict/src/Volo.Abp.OpenIddict.AspNetCore",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.Domain",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.Domain.Shared",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.EntityFrameworkCore",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.MongoDB",
+    "modules/openiddict/src/Volo.Abp.PermissionManagement.Domain.OpenIddict",
 
     # modules/permission-management
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application.Contracts",

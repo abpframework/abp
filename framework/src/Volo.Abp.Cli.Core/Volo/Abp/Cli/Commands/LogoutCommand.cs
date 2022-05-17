@@ -9,6 +9,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class LogoutCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "logout";
+    
     public ILogger<LogoutCommand> Logger { get; set; }
 
     protected AuthService AuthService { get; }

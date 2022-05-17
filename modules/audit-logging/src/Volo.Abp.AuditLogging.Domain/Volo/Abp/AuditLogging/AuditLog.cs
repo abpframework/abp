@@ -24,7 +24,11 @@ public class AuditLog : AggregateRoot<Guid>, IMultiTenant
 
     public virtual Guid? ImpersonatorUserId { get; protected set; }
 
+    public virtual string ImpersonatorUserName { get; protected set; }
+
     public virtual Guid? ImpersonatorTenantId { get; protected set; }
+
+    public virtual string ImpersonatorTenantName { get; protected set; }
 
     public virtual DateTime ExecutionTime { get; protected set; }
 
@@ -77,7 +81,9 @@ public class AuditLog : AggregateRoot<Guid>, IMultiTenant
         string url,
         int? httpStatusCode,
         Guid? impersonatorUserId,
+        string impersonatorUserName,
         Guid? impersonatorTenantId,
+        string impersonatorTenantName,
         ExtraPropertyDictionary extraPropertyDictionary,
         List<EntityChange> entityChanges,
         List<AuditLogAction> actions,
@@ -101,8 +107,9 @@ public class AuditLog : AggregateRoot<Guid>, IMultiTenant
         Url = url.Truncate(AuditLogConsts.MaxUrlLength);
         HttpStatusCode = httpStatusCode;
         ImpersonatorUserId = impersonatorUserId;
+        ImpersonatorUserName = impersonatorUserName.Truncate(AuditLogConsts.MaxUserNameLength);
         ImpersonatorTenantId = impersonatorTenantId;
-
+        ImpersonatorTenantName = impersonatorTenantName.Truncate(AuditLogConsts.MaxTenantNameLength);
         ExtraProperties = extraPropertyDictionary;
         EntityChanges = entityChanges;
         Actions = actions;

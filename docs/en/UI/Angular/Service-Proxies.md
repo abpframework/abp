@@ -15,7 +15,7 @@ ABP introduces an endpoint that exposes server-side method contracts. When the `
 Run the following command in the **root folder** of the angular application:
 
 ```bash
-abp generate-proxy
+abp generate-proxy -t ng
 ```
 
 The command without any parameters creates proxies only for your own application's services and places them in your default Angular application. There are several parameters you may use to modify this behavior. See the [CLI documentation](../../CLI) for details.

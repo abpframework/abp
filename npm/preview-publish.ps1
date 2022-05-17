@@ -1,12 +1,9 @@
 param(
   [string]$Version,
-  [string]$User,
-  [string]$Pass,
-  [string]$Email,
   [string]$Registry
 )
 
-npm install
+yarn install
 
 $NextVersion = $(node publish-utils.js --nextVersion)
 $RootFolder = (Get-Item -Path "./" -Verbose).FullName
@@ -21,8 +18,8 @@ exit
 
 $commands = (
   "cd ng-packs\scripts",
-  "npm install",
-  "npm run publish-packages -- --nextVersion $Version --preview --registry $Registry",
+  "yarn",
+  "npm run publish-packages -- --nextVersion $Version --preview --registry $Registry --skipVersionValidation",
   "cd ../../",
   "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
   "npm run replace-with-tilde",

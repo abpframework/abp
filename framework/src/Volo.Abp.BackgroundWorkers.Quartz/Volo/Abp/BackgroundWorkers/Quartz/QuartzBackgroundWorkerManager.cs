@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz;
@@ -33,9 +34,9 @@ public class QuartzBackgroundWorkerManager : IBackgroundWorkerManager, ISingleto
         }
     }
 
-    public virtual void Add(IBackgroundWorker worker)
+    public virtual async Task AddAsync(IBackgroundWorker worker)
     {
-        AsyncHelper.RunSync(() => ReScheduleJobAsync(worker));
+        await ReScheduleJobAsync(worker);
     }
 
     protected virtual async Task ReScheduleJobAsync(IBackgroundWorker worker)
@@ -56,7 +57,7 @@ public class QuartzBackgroundWorkerManager : IBackgroundWorkerManager, ISingleto
         }
         else
         {
-            var adapterType = typeof(QuartzPeriodicBackgroundWorkerAdapter<>).MakeGenericType(worker.GetType());
+            var adapterType = typeof(QuartzPeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
 
             var workerAdapter = Activator.CreateInstance(adapterType) as IQuartzBackgroundWorkerAdapter;
 

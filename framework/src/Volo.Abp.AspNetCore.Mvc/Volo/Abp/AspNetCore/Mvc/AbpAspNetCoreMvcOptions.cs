@@ -14,10 +14,16 @@ public class AbpAspNetCoreMvcOptions
 
     public bool AutoModelValidation { get; set; }
 
+    public bool EnableRazorRuntimeCompilationOnDevelopment { get; set; }
+
+    public bool ChangeControllerModelApiExplorerGroupName { get; set; }
+
     public AbpAspNetCoreMvcOptions()
     {
         ConventionalControllers = new AbpConventionalControllerOptions();
         IgnoredControllersOnModelExclusion = new HashSet<Type>();
         AutoModelValidation = true;
+        EnableRazorRuntimeCompilationOnDevelopment = true;
+        ChangeControllerModelApiExplorerGroupName = true;
     }
 }

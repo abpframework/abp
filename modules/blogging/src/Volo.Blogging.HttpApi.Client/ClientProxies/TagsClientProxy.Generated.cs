@@ -11,19 +11,18 @@ using System.Collections.Generic;
 using Volo.Blogging.Tagging.Dtos;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Blogging.ClientProxies
+namespace Volo.Blogging.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(ITagAppService), typeof(TagsClientProxy))]
+public partial class TagsClientProxy : ClientProxyBase<ITagAppService>, ITagAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(ITagAppService), typeof(TagsClientProxy))]
-    public partial class TagsClientProxy : ClientProxyBase<ITagAppService>, ITagAppService
+    public virtual async Task<List<TagDto>> GetPopularTagsAsync(Guid blogId, GetPopularTagsInput input)
     {
-        public virtual async Task<List<TagDto>> GetPopularTagsAsync(Guid blogId, GetPopularTagsInput input)
+        return await RequestAsync<List<TagDto>>(nameof(GetPopularTagsAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<List<TagDto>>(nameof(GetPopularTagsAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), blogId },
-                { typeof(GetPopularTagsInput), input }
-            });
-        }
+            { typeof(Guid), blogId },
+            { typeof(GetPopularTagsInput), input }
+        });
     }
 }

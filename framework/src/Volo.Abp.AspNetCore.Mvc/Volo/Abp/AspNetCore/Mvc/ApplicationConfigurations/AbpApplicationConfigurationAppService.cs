@@ -14,6 +14,7 @@ using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
@@ -87,6 +88,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         {
             Auth = await GetAuthConfigAsync(),
             Features = await GetFeaturesConfigAsync(),
+            GlobalFeatures = await GetGlobalFeaturesConfigAsync(),
             Localization = await GetLocalizationConfigAsync(),
             CurrentUser = GetCurrentUser(),
             Setting = await GetSettingConfigAsync(),
@@ -129,6 +131,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             TenantId = _currentUser.TenantId,
             ImpersonatorUserId = _currentUser.FindImpersonatorUserId(),
             ImpersonatorTenantId = _currentUser.FindImpersonatorTenantId(),
+            ImpersonatorUserName = _currentUser.FindImpersonatorUserName(),
+            ImpersonatorTenantName = _currentUser.FindImpersonatorTenantName(),
             UserName = _currentUser.UserName,
             SurName = _currentUser.SurName,
             Name = _currentUser.Name,
@@ -281,6 +285,24 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         return result;
     }
+
+    protected virtual Task<ApplicationGlobalFeatureConfigurationDto> GetGlobalFeaturesConfigAsync()
+    {
+        var result = new ApplicationGlobalFeatureConfigurationDto();
+
+        foreach (var enabledFeatureName in GlobalFeatureManager.Instance.GetEnabledFeatureNames())
+        {
+            result.EnabledFeatures.AddIfNotContains(enabledFeatureName);
+        }
+
+        foreach (var module in GlobalFeatureManager.Instance.Modules)
+        {
+            result.ModuleEnabledFeatures.AddIfNotContains(new KeyValuePair<string, List<string>>(module.Key, module.Value.GetFeatures().Select(x => x.FeatureName).ToList()));
+        }
+
+        return Task.FromResult(result);
+    }
+
 
     protected virtual async Task<TimingDto> GetTimingConfigAsync()
     {

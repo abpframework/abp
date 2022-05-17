@@ -1,0 +1,87 @@
+{
+  "name": "Volo.Docs.Domain",
+  "hash": "4d8e34c525b142b8afff3b212951f70e",
+  "contents": [
+    {
+      "namespace": "Volo.Docs",
+      "contentType": "abpModule",
+      "name": "DocsDomainModule"
+    },
+    {
+      "namespace": "Volo.Docs.Projects",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Project"
+    },
+    {
+      "namespace": "Volo.Docs.Documents",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [
+        "Volo.Docs.Documents.DocumentContributor"
+      ],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Document"
+    },
+    {
+      "namespace": "Volo.Docs.GitHub.Documents",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "GithubDocumentSource"
+    },
+    {
+      "namespace": "Volo.Docs.GitHub.Documents",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "GithubPatchAnalyzer"
+    },
+    {
+      "namespace": "Volo.Docs.FileSystem.Documents",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "FileSystemDocumentSource"
+    },
+    {
+      "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "ElasticDocumentFullSearch"
+    },
+    {
+      "namespace": "Volo.Docs.Projects",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Docs.Projects",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Project"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IProjectRepository"
+    },
+    {
+      "namespace": "Volo.Docs.Documents",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.Docs.Documents",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [
+          "Volo.Docs.Documents.DocumentContributor"
+        ],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Document"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IDocumentRepository"
+    }
+  ]
+}

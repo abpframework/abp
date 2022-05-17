@@ -7,30 +7,46 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Public.Blogs;
+using Volo.CmsKit.Users;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Public.Blogs.ClientProxies
-{
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IBlogPostPublicAppService), typeof(BlogPostPublicClientProxy))]
-    public partial class BlogPostPublicClientProxy : ClientProxyBase<IBlogPostPublicAppService>, IBlogPostPublicAppService
-    {
-        public virtual async Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
-        {
-            return await RequestAsync<BlogPostPublicDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), blogSlug },
-                { typeof(string), blogPostSlug }
-            });
-        }
+namespace Volo.CmsKit.Public.Blogs.ClientProxies;
 
-        public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IBlogPostPublicAppService), typeof(BlogPostPublicClientProxy))]
+public partial class BlogPostPublicClientProxy : ClientProxyBase<IBlogPostPublicAppService>, IBlogPostPublicAppService
+{
+    public virtual async Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
+    {
+        return await RequestAsync<BlogPostPublicDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PagedResultDto<BlogPostPublicDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), blogSlug },
-                { typeof(PagedAndSortedResultRequestDto), input }
-            });
-        }
+            { typeof(string), blogSlug },
+            { typeof(string), blogPostSlug }
+        });
+    }
+
+    public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, BlogPostGetListInput input)
+    {
+        return await RequestAsync<PagedResultDto<BlogPostPublicDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), blogSlug },
+            { typeof(BlogPostGetListInput), input }
+        });
+    }
+
+    public virtual async Task<PagedResultDto<CmsUserDto>> GetAuthorsHasBlogPostsAsync(BlogPostFilteredPagedAndSortedResultRequestDto input)
+    {
+        return await RequestAsync<PagedResultDto<CmsUserDto>>(nameof(GetAuthorsHasBlogPostsAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(BlogPostFilteredPagedAndSortedResultRequestDto), input }
+        });
+    }
+
+    public virtual async Task<CmsUserDto> GetAuthorHasBlogPostAsync(Guid id)
+    {
+        return await RequestAsync<CmsUserDto>(nameof(GetAuthorHasBlogPostAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id }
+        });
     }
 }

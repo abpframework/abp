@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Docs.Admin.Web",
+  "hash": "213ccad3d288d801779462d0fb32d938",
+  "contents": [
+    {
+      "namespace": "Volo.Docs.Admin",
+      "contentType": "abpModule",
+      "name": "DocsAdminWebModule"
+    }
+  ]
+}

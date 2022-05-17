@@ -1,11 +1,134 @@
 {
   "name": "Volo.Abp.IdentityServer.EntityFrameworkCore",
-  "hash": "034f1be234bf02cb8e782935c47c0eeb",
+  "hash": "318cb62a76fa2873fa488ccea5bfc666",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer.EntityFrameworkCore",
       "contentType": "abpModule",
       "name": "AbpIdentityServerEntityFrameworkCoreModule"
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.EntityFrameworkCore",
+      "connectionStringName": "AbpIdentityServer",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource",
+          "contentType": "databaseTable",
+          "name": "IdentityServerApiResources"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceClaim",
+          "contentType": "databaseTable",
+          "name": "IdentityServerApiResourceClaims"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty",
+          "contentType": "databaseTable",
+          "name": "IdentityServerApiResourceProperties"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceScope",
+          "contentType": "databaseTable",
+          "name": "IdentityServerApiResourceScopes"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceSecret",
+          "contentType": "databaseTable",
+          "name": "IdentityServerApiResourceSecrets"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope",
+          "contentType": "databaseTable",
+          "name": "IdentityServerApiScopes"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScopeClaim",
+          "contentType": "databaseTable",
+          "name": "IdentityServerApiScopeClaims"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScopeProperty",
+          "contentType": "databaseTable",
+          "name": "IdentityServerApiScopeProperties"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
+          "contentType": "databaseTable",
+          "name": "IdentityServerClients"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientClaim",
+          "contentType": "databaseTable",
+          "name": "IdentityServerClientClaims"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientCorsOrigin",
+          "contentType": "databaseTable",
+          "name": "IdentityServerClientCorsOrigins"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientGrantType",
+          "contentType": "databaseTable",
+          "name": "IdentityServerClientGrantTypes"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientIdPRestriction",
+          "contentType": "databaseTable",
+          "name": "IdentityServerClientIdPRestrictions"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientPostLogoutRedirectUri",
+          "contentType": "databaseTable",
+          "name": "IdentityServerClientPostLogoutRedirectUris"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientProperty",
+          "contentType": "databaseTable",
+          "name": "IdentityServerClientProperties"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientRedirectUri",
+          "contentType": "databaseTable",
+          "name": "IdentityServerClientRedirectUris"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientScope",
+          "contentType": "databaseTable",
+          "name": "IdentityServerClientScopes"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientSecret",
+          "contentType": "databaseTable",
+          "name": "IdentityServerClientSecrets"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Devices.DeviceFlowCodes",
+          "contentType": "databaseTable",
+          "name": "IdentityServerDeviceFlowCodes"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
+          "contentType": "databaseTable",
+          "name": "IdentityServerPersistedGrants"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
+          "contentType": "databaseTable",
+          "name": "IdentityServerIdentityResources"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResourceClaim",
+          "contentType": "databaseTable",
+          "name": "IdentityServerIdentityResourceClaims"
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResourceProperty",
+          "contentType": "databaseTable",
+          "name": "IdentityServerIdentityResourceProperties"
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "IdentityServerDbContext"
     }
   ]
 }

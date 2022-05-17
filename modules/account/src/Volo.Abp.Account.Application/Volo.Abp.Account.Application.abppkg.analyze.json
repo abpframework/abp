@@ -1,0 +1,49 @@
+{
+  "name": "Volo.Abp.Account.Application",
+  "hash": "7fb9c3f35b18f2e9a0577d571fccf9df",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Account",
+      "contentType": "abpModule",
+      "name": "AbpAccountApplicationModule"
+    },
+    {
+      "namespace": "Volo.Abp.Account",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Abp.Account.IAccountAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "AccountAppService"
+    },
+    {
+      "namespace": "Volo.Abp.Account",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.Abp.Account.IProfileAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "ProfileAppService"
+    },
+    {
+      "defaultValue": "true",
+      "displayName": "Is self-registration enabled",
+      "description": "Whether a user can register the account by him or herself.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Account.IsSelfRegistrationEnabled"
+    },
+    {
+      "defaultValue": "true",
+      "displayName": "Authenticate with a local account",
+      "description": "Indicates if the server will allow users to authenticate with a local account.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Account.EnableLocalLogin"
+    }
+  ]
+}

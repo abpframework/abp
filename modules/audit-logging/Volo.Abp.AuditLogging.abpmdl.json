@@ -37,6 +37,10 @@
     "Volo.Abp.AuditLogging.MongoDB.Tests": {
       "path": "test/Volo.Abp.AuditLogging.MongoDB.Tests/Volo.Abp.AuditLogging.MongoDB.Tests.abppkg.json",
       "folder": "test"
+    },
+    "Volo.Abp.AuditLogging.Installer": {
+      "path": "src/Volo.Abp.AuditLogging.Installer/Volo.Abp.AuditLogging.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }

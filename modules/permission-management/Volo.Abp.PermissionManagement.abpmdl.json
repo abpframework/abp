@@ -73,6 +73,10 @@
     "Volo.Abp.PermissionManagement.Blazor.WebAssembly": {
       "path": "src/Volo.Abp.PermissionManagement.Blazor.WebAssembly/Volo.Abp.PermissionManagement.Blazor.WebAssembly.abppkg.json",
       "folder": "src"
+    },
+    "Volo.Abp.PermissionManagement.Installer": {
+      "path": "src/Volo.Abp.PermissionManagement.Installer/Volo.Abp.PermissionManagement.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }

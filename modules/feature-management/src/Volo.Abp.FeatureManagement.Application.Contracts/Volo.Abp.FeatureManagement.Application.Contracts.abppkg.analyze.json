@@ -1,0 +1,17 @@
+{
+  "name": "Volo.Abp.FeatureManagement.Application.Contracts",
+  "hash": "d438aa348fe9ac8c5a4ee759a8b850da",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "contentType": "abpModule",
+      "name": "AbpFeatureManagementApplicationContractsModule"
+    },
+    {
+      "displayName": "Manage Host features",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "FeatureManagement.ManageHostFeatures"
+    }
+  ]
+}

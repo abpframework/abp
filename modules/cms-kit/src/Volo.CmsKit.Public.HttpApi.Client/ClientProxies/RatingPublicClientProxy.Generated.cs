@@ -10,38 +10,37 @@ using Volo.CmsKit.Public.Ratings;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Public.Ratings.ClientProxies
+namespace Volo.CmsKit.Public.Ratings.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IRatingPublicAppService), typeof(RatingPublicClientProxy))]
+public partial class RatingPublicClientProxy : ClientProxyBase<IRatingPublicAppService>, IRatingPublicAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IRatingPublicAppService), typeof(RatingPublicClientProxy))]
-    public partial class RatingPublicClientProxy : ClientProxyBase<IRatingPublicAppService>, IRatingPublicAppService
+    public virtual async Task<RatingDto> CreateAsync(string entityType, string entityId, CreateUpdateRatingInput input)
     {
-        public virtual async Task<RatingDto> CreateAsync(string entityType, string entityId, CreateUpdateRatingInput input)
+        return await RequestAsync<RatingDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<RatingDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), entityType },
-                { typeof(string), entityId },
-                { typeof(CreateUpdateRatingInput), input }
-            });
-        }
+            { typeof(string), entityType },
+            { typeof(string), entityId },
+            { typeof(CreateUpdateRatingInput), input }
+        });
+    }
 
-        public virtual async Task DeleteAsync(string entityType, string entityId)
+    public virtual async Task DeleteAsync(string entityType, string entityId)
+    {
+        await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), entityType },
-                { typeof(string), entityId }
-            });
-        }
+            { typeof(string), entityType },
+            { typeof(string), entityId }
+        });
+    }
 
-        public virtual async Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId)
+    public virtual async Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId)
+    {
+        return await RequestAsync<List<RatingWithStarCountDto>>(nameof(GetGroupedStarCountsAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<List<RatingWithStarCountDto>>(nameof(GetGroupedStarCountsAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), entityType },
-                { typeof(string), entityId }
-            });
-        }
+            { typeof(string), entityType },
+            { typeof(string), entityId }
+        });
     }
 }

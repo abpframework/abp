@@ -73,6 +73,10 @@
     "Volo.Abp.TenantManagement.Blazor.Server": {
       "path": "src/Volo.Abp.TenantManagement.Blazor.Server/Volo.Abp.TenantManagement.Blazor.Server.abppkg.json",
       "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Installer": {
+      "path": "src/Volo.Abp.TenantManagement.Installer/Volo.Abp.TenantManagement.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }

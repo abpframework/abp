@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.RabbitMQ;
 using Volo.Abp.Threading;
@@ -17,31 +18,37 @@ public class AbpBackgroundJobsRabbitMqModule : AbpModule
         context.Services.AddSingleton(typeof(IJobQueue<>), typeof(JobQueue<>));
     }
 
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        await StartJobQueueManagerAsync(context);
+    }
+
+    public async override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    {
+        await StopJobQueueManagerAsync(context);
+    }
+
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        StartJobQueueManager(context);
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 
     public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        StopJobQueueManager(context);
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
     }
 
-    private static void StartJobQueueManager(ApplicationInitializationContext context)
+    private async static Task StartJobQueueManagerAsync(ApplicationInitializationContext context)
     {
-        AsyncHelper.RunSync(
-            () => context.ServiceProvider
-                .GetRequiredService<IJobQueueManager>()
-                .StartAsync()
-        );
+        await context.ServiceProvider
+            .GetRequiredService<IJobQueueManager>()
+            .StartAsync();
     }
 
-    private static void StopJobQueueManager(ApplicationShutdownContext context)
+    private async static Task StopJobQueueManagerAsync(ApplicationShutdownContext context)
     {
-        AsyncHelper.RunSync(
-            () => context.ServiceProvider
-                .GetRequiredService<IJobQueueManager>()
-                .StopAsync()
-        );
+        await context.ServiceProvider
+            .GetRequiredService<IJobQueueManager>()
+            .StopAsync();
     }
 }

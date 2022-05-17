@@ -74,6 +74,10 @@
     "Volo.Abp.SettingManagement.Blazor.WebAssembly": {
       "path": "src/Volo.Abp.SettingManagement.Blazor.WebAssembly/Volo.Abp.SettingManagement.Blazor.WebAssembly.abppkg.json",
       "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.Installer": {
+      "path": "src/Volo.Abp.SettingManagement.Installer/Volo.Abp.SettingManagement.Installer.abppkg.json",
+      "folder": "src"
     }
   }
 }

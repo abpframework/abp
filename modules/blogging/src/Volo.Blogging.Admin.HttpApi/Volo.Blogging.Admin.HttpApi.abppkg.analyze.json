@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Blogging.Admin.HttpApi",
+  "hash": "4397a28b60e20715a0d7559a882c7070",
+  "contents": [
+    {
+      "namespace": "Volo.Blogging.Admin",
+      "contentType": "abpModule",
+      "name": "BloggingAdminHttpApiModule"
+    }
+  ]
+}

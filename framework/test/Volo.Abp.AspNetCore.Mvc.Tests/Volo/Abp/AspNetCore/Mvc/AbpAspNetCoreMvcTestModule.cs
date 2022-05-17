@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
@@ -69,12 +70,12 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
 
             options.AddPolicy("TestPermission1_And_TestPermission2", policy =>
             {
-                policy.Requirements.Add(new PermissionsRequirement(new[] { "TestPermission1", "TestPermission2" }, requiresAll: true));
+                policy.Requirements.Add(new PermissionsRequirement(new []{"TestPermission1", "TestPermission2"}, requiresAll: true));
             });
 
             options.AddPolicy("TestPermission1_Or_TestPermission2", policy =>
             {
-                policy.Requirements.Add(new PermissionsRequirement(new[] { "TestPermission1", "TestPermission2" }, requiresAll: false));
+                policy.Requirements.Add(new PermissionsRequirement(new []{"TestPermission1", "TestPermission2"}, requiresAll: false));
             });
         });
 
@@ -113,6 +114,11 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         Configure<RazorPagesOptions>(options =>
         {
             options.RootDirectory = "/Volo/Abp/AspNetCore/Mvc";
+        });
+
+        Configure<RazorViewEngineOptions>(options =>
+        {
+            options.ViewLocationFormats.Add("/Volo/Abp/AspNetCore/App/Views/{1}/{0}.cshtml");
         });
 
         Configure<AbpClaimsMapOptions>(options =>

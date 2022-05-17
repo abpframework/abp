@@ -9,29 +9,28 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.FeatureManagement;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Abp.FeatureManagement.ClientProxies
-{
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IFeatureAppService), typeof(FeaturesClientProxy))]
-    public partial class FeaturesClientProxy : ClientProxyBase<IFeatureAppService>, IFeatureAppService
-    {
-        public virtual async Task<GetFeatureListResultDto> GetAsync(string providerName, string providerKey)
-        {
-            return await RequestAsync<GetFeatureListResultDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), providerName },
-                { typeof(string), providerKey }
-            });
-        }
+namespace Volo.Abp.FeatureManagement.ClientProxies;
 
-        public virtual async Task UpdateAsync(string providerName, string providerKey, UpdateFeaturesDto input)
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IFeatureAppService), typeof(FeaturesClientProxy))]
+public partial class FeaturesClientProxy : ClientProxyBase<IFeatureAppService>, IFeatureAppService
+{
+    public virtual async Task<GetFeatureListResultDto> GetAsync(string providerName, string providerKey)
+    {
+        return await RequestAsync<GetFeatureListResultDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(UpdateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), providerName },
-                { typeof(string), providerKey },
-                { typeof(UpdateFeaturesDto), input }
-            });
-        }
+            { typeof(string), providerName },
+            { typeof(string), providerKey }
+        });
+    }
+
+    public virtual async Task UpdateAsync(string providerName, string providerKey, UpdateFeaturesDto input)
+    {
+        await RequestAsync(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), providerName },
+            { typeof(string), providerKey },
+            { typeof(UpdateFeaturesDto), input }
+        });
     }
 }

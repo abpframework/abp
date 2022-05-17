@@ -19,14 +19,4 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Volo.Abp.Identity.HttpApi.Client.abppkg.analyze.json" />
-    <EmbeddedResource Include="Volo.Abp.Identity.HttpApi.Client.abppkg.analyze.json" />
-    <None Remove="Volo.Abp.Identity.HttpApi.Client.abppkg.json" />
-    <EmbeddedResource Include="Volo.Abp.Identity.HttpApi.Client.abppkg.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
 </Project>

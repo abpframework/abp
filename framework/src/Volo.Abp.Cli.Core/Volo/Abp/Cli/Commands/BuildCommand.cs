@@ -12,6 +12,8 @@ namespace Volo.Abp.Cli.Commands;
 
 public class BuildCommand : IConsoleCommand, ITransientDependency
 {
+    public const string Name = "build";
+    
     public IDotNetProjectDependencyFiller DotNetProjectDependencyFiller { get; set; }
 
     public IChangedProjectFinder ChangedProjectFinder { get; set; }

@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.Users.EntityFrameworkCore",
+  "hash": "edd7cc214a1b8f121f773be7b88957ff",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Users.EntityFrameworkCore",
+      "contentType": "abpModule",
+      "name": "AbpUsersEntityFrameworkCoreModule"
+    }
+  ]
+}

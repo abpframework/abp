@@ -16,12 +16,11 @@ public class AbpJsonModule : AbpModule
         context.Services.TryAddEnumerable(ServiceDescriptor
             .Transient<IConfigureOptions<AbpSystemTextJsonSerializerOptions>, AbpSystemTextJsonSerializerOptionsSetup>());
 
+        var preActions = context.Services.GetPreConfigureActions<AbpJsonOptions>();
         Configure<AbpJsonOptions>(options =>
         {
             options.Providers.Add<AbpNewtonsoftJsonSerializerProvider>();
-
-            var abpJsonOptions = context.Services.ExecutePreConfiguredActions<AbpJsonOptions>();
-            if (abpJsonOptions.UseHybridSerializer)
+            if (preActions.Configure().UseHybridSerializer)
             {
                 options.Providers.Add<AbpSystemTextJsonSerializerProvider>();
             }

@@ -16,9 +16,10 @@ if (-Not $Registry) {
   $Registry = "https://registry.npmjs.org";
 }
 
-$NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry"
-$UpdateGulpCommand = "yarn update-gulp --registry $Registry"
 $UpdateNgPacksCommand = "yarn update ./ng-packs abp --registry $Registry"
+$NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry --skipVersionValidation"
+$UpdateGulpCommand = "yarn update-gulp --registry $Registry"
+
 
 $IsPrerelease = $(node publish-utils.js --prerelease --customVersion $Version) -eq "true";
 

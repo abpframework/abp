@@ -1,0 +1,360 @@
+{
+  "name": "Volo.CmsKit.Domain",
+  "hash": "6e431ab37f61b3f7bb7ca8517a1543d6",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit",
+      "contentType": "abpModule",
+      "name": "CmsKitDomainModule"
+    },
+    {
+      "namespace": "Volo.CmsKit.Users",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "CmsUser"
+    },
+    {
+      "namespace": "Volo.CmsKit.Tags",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Tag"
+    },
+    {
+      "namespace": "Volo.CmsKit.Reactions",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "UserReaction"
+    },
+    {
+      "namespace": "Volo.CmsKit.Ratings",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Rating"
+    },
+    {
+      "namespace": "Volo.CmsKit.Pages",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Page"
+    },
+    {
+      "namespace": "Volo.CmsKit.Menus",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "MenuItem"
+    },
+    {
+      "namespace": "Volo.CmsKit.MediaDescriptors",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "MediaDescriptor"
+    },
+    {
+      "namespace": "Volo.CmsKit.Comments",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Comment"
+    },
+    {
+      "namespace": "Volo.CmsKit.Blogs",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "Blog"
+    },
+    {
+      "namespace": "Volo.CmsKit.Blogs",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "BlogFeature"
+    },
+    {
+      "namespace": "Volo.CmsKit.Blogs",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [
+        "Volo.CmsKit.Users.CmsUser"
+      ],
+      "contentType": "aggregateRoot",
+      "name": "BlogPost"
+    },
+    {
+      "namespace": "Volo.CmsKit.Tags",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "EntityTagManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.Tags",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "TagManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.Reactions",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "ReactionManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.Ratings",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "RatingManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.Pages",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "PageManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.Menus",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "MenuItemManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.MediaDescriptors",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "MediaDescriptorManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.Comments",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "CommentManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.Blogs",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "BlogFeatureManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.Blogs",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "BlogManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.Blogs",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "BlogPostManager"
+    },
+    {
+      "namespace": "Volo.CmsKit.Users",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Users",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "CmsUser"
+      },
+      "contentType": "repositoryInterface",
+      "name": "ICmsUserRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.Tags",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Tags",
+        "primaryKeyType": null,
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "EntityTag"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IEntityTagRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.Tags",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Tags",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Tag"
+      },
+      "contentType": "repositoryInterface",
+      "name": "ITagRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.Reactions",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Reactions",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "UserReaction"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IUserReactionRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.Ratings",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Ratings",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Rating"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IRatingRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.Pages",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Pages",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Page"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IPageRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.Menus",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Menus",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "MenuItem"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IMenuItemRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.MediaDescriptors",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.MediaDescriptors",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "MediaDescriptor"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IMediaDescriptorRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.Comments",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Comments",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Comment"
+      },
+      "contentType": "repositoryInterface",
+      "name": "ICommentRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.Blogs",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Blogs",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "BlogFeature"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IBlogFeatureRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.Blogs",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Blogs",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [
+          "Volo.CmsKit.Users.CmsUser"
+        ],
+        "contentType": "entity",
+        "name": "BlogPost"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IBlogPostRepository"
+    },
+    {
+      "namespace": "Volo.CmsKit.Blogs",
+      "summary": null,
+      "entityModel": {
+        "namespace": "Volo.CmsKit.Blogs",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "Blog"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IBlogRepository"
+    }
+  ]
+}
