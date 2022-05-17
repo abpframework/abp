@@ -179,6 +179,7 @@ abp generate-proxy -t csharp -u http://localhost:44397/
 ````
 
 You should have seen the generated files under the selected folder.
+<br/>
 ![files of the static proxy](./static-proxy.png)
 
 Now you can run your test console application and you should see the same output.
