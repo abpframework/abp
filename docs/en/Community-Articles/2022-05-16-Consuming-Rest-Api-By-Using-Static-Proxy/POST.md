@@ -20,80 +20,14 @@ abp new Acme.BookStore -t app
 
 > If you haven't installed it yet, you should install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI).
 
-In the same folder build the project with the following command on the cli.
-````shell
-dotnet build /graphbuild
-````
+After restoring the project will download the NuGet packages.
 
-It will restore the project and download the NuGet packages.
-
-Now you should run the DbMigrator project to up your database.
-
-Now your project is ready you can run it properly.
-
-![structure-of-the-project](./structure.png)
+Now you should run the DbMigrator project to up your database and your project is ready for running.
 
 From now on, we will add some files to show the case to you.  
 
 ### Create application service interface
-You should open your web application then find `Pages` folder and create a new folder under it named `Books`.
-You should create a new razor page and a new js file as named index.
-
-Change the Pages/Books/Index.cshtml as the following:   
-```csharp
-@page
-@using Acme.BookStore.Localization
-@using Acme.BookStore.Web.Pages.Books
-@using Microsoft.Extensions.Localization
-@model IndexModel
-@inject IStringLocalizer<BookStoreResource> L
-@section scripts
-{
-    <abp-script src="/Pages/Books/index.js" />
-}
-<abp-card>
-    <abp-card-header>
-        <h2>@L["Books"]</h2>
-    </abp-card-header>
-    <abp-card-body>
-        <abp-table striped-rows="true" id="BooksTable"></abp-table>
-    </abp-card-body>
-</abp-card>
-```
-
-Now change index.js file as the following content, as weel.
-```js
-$(function () {
-    var l = abp.localization.getResource('BookStore');
-    $('#BooksTable').DataTable(
-        abp.libs.datatables.normalizeConfiguration({
-            serverSide: true,
-            paging: true,
-            order: [[1, "asc"]],
-            searching: false,
-            scrollX: true,
-            ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList),
-            columnDefs: [
-                {
-                    title: l('Name'),
-                    data: "name"
-                },
-                {
-                    title: l('AuthorName'),
-                    data: "authorName"
-                },
-                {
-                    title: l('Price'),
-                    data: "price"
-                }
-            ]
-        })
-    );
-});
-```
-
-# Implement the application service
-Assume that we have an `IBookAppService` interface:
+Define an interface for the application service. Create an `IBookAppService` interface in the `Books` folder (namespace) of the `Acme.BookStore.Application.Contracts` project:
 
 ````csharp
 using System.Threading.Tasks;
@@ -109,7 +43,7 @@ namespace Acme.BookStore.Books
 }
 ````
 
-That uses a `BookDto` defined as shown:
+Create a `Books` folder (namespace) in the `Acme.BookStore.Application.Contracts` project and add a `BookDto` class inside it: 
 
 ```csharp
 using System;
@@ -129,6 +63,9 @@ namespace Acme.BookStore.Books
     }
 }
 ```
+
+# Implement the application service
+It is time to implement the `IBookAppService` interface. Create a new class, named `BookAppService` in the `Books` namespace (folder) of the `Acme.BookStore.Application` project:
 
 ```csharp
 using Acme.BookStore.Permissions;
@@ -161,36 +98,37 @@ namespace Acme.BookStore.Books
 It simply returns a list of books. You probably want to get the books from a database, but it doesn't matter for this article. To do it you can visit [here] (https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF)
 
 ### Consume the app service from the console application
-Add a new test class, named BookAppService_Tests in the Application.Tests
+Change `ClientDemoService` as shown the following in the `Acme.BookStore.HttpApi.Client.ConsoleTestApp` project under the test folder.
 
 ```csharp
-using Shouldly;
+using Acme.BookStore.Books;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Xunit;
+using Volo.Abp.DependencyInjection;
 
-namespace Acme.BookStore.Books
+namespace Acme.BookStore.HttpApi.Client.ConsoleTestApp;
+
+public class ClientDemoService : ITransientDependency
 {
-    public class BookAppService_Tests : BookStoreApplicationTestBase
+    private readonly IBookAppService _bookAppService;
+
+    public ClientDemoService(IBookAppService bookAppService )
     {
-        private readonly IBookAppService _bookAppService;
+        _bookAppService = bookAppService;
+    }
 
-        public BookAppService_Tests()
-        {
-            _bookAppService = GetRequiredService<IBookAppService>();
-        }
-
-        [Fact]
-        public async Task Should_Get_List_Of_Books()
-        {
-            var result = await _bookAppService.GetListAsync(new PagedAndSortedResultRequestDto());
-
-            result.TotalCount.ShouldBeGreaterThan(0);
-            result.Items.ShouldContain(b => b.Name == "Mother");
-        }
+    public async Task RunAsync()
+    {
+        var listOfBooks = await _bookAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+        Console.WriteLine($"Books: {string.Join(", ", listOfBooks.Items.Select(p => p.Name).ToList())}");
     }
 }
 ```
+
+The output should be 
+> Books: Anna Karenina, Crime and Punishment, Mother
 
 ### Convert application to use static client proxies
 Before showing you how to use static client proxies instead of dynamic client proxies, I ask you to talk differences between both approaches. Their similarities, advantages and disadvantages to each other.
@@ -211,22 +149,21 @@ Firstly add Volo.Abp.Http.Client NuGet package to your client project:
 ````shell
 Install-Package Volo.Abp.Http.Client
 ````
-Then add AbpHttpClientModule dependency to your module:
-```csharp
-[DependsOn(
-    typeof(AbpHttpClientModule)
-    //the other dependencies
-    )]
 
-public class BookStoreApplicationModule : AbpModule
+> The [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application) comes pre-configured for the **dynamic** client proxy generation, in the `HttpApi.Client` project. If you want to switch to the **static** client proxies, change `context.Services.AddHttpClientProxies` to `context.Services.AddStaticHttpClientProxies` in the module class of your `HttpApi.Client` project.
+
+```csharp
+public class BookStoreHttpApiClientModule : AbpModule
 {
+    public const string RemoteServiceName = "Default";
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
        //Other configurations
 
-        // Prepare for static client proxy generation
         context.Services.AddStaticHttpClientProxies(
-            typeof(BookStoreApplicationContractsModule).Assembly
+            typeof(BookStoreApplicationContractsModule).Assembly,
+            RemoteServiceName
         );
     }
 }
@@ -234,7 +171,6 @@ public class BookStoreApplicationModule : AbpModule
 
 `AddStaticHttpClientProxies` method gets an assembly, finds all service interfaces in the given assembly, and prepares for static client proxy generation.
 
-> The [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application) comes pre-configured for the **dynamic** client proxy generation, in the `HttpApi.Client` project. If you want to switch to the **static** client proxies, change `context.Services.AddHttpClientProxies` to `context.Services.AddStaticHttpClientProxies` in the module class of your `HttpApi.Client` project.
 
 Now you're ready to generate the client proxy code by running the following command in the root folder of your client project when your project is running.
 
@@ -242,12 +178,11 @@ Now you're ready to generate the client proxy code by running the following comm
 abp generate-proxy -t csharp -u http://localhost:44397/
 ````
 
-Also, you should then run the below command under your web project for the UI side for MVC
-````bash
-abp generate-proxy -t js -u http://localhost:44397/
-````
-
 You should have seen the generated files under the selected folder.
+![files of the static proxy](./static-proxy.png)
+
+Now you can run your test console application and you should see the same output.
+> Books: Anna Karenina, Crime and Punishment, Mother
 
 ### Add authorization
 ABP Framework provides an authorization system based on the ASP.NET Core's authorization infrastructure.
@@ -289,11 +224,14 @@ public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvide
 }
 ```
 And now you should add [Authorize(BookStorePermissions.Books.Default)] to `BookAppService`
-If you don't give permission you should see the following screen.
-![access denied](./access_denied.png)
+If you don't give permission you should see the following error on the console application.
 
-After completing that you can make the localization configuration and you should give permission at the Admin UI side. Now you should the following screen.
-![list page](./list.png)
+> Authorization failed. These requirements were not met:
+PermissionRequirement: BookStore.Books
+AuthenticationScheme: Identity.Application was forbidden.
+Request finished HTTP/1.1 GET https://localhost:44397/api/app/book?SkipCount=0&MaxResultCount=10&api-version=1.0 - - - 403 0 - 156.9766ms
+
+After completing that you can make the localization configuration and you should give permission at the Admin UI side. You can see the same output again and all will be alright.
 
 ### Further Reading
 In this small tutorial, I explained how you can create an example project and apply static client proxy instead of dynamic client proxy. Also summarized the differences between both approaches.
