@@ -12,7 +12,7 @@ This is a single-part quick-start tutorial to build a simple todo application wi
 
 ![todo-list](../todo-list.png)
 
-You can find the source code of the completed application [here](TODO: sample's url???).
+You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
 
 ## Pre-Requirements
 
@@ -46,11 +46,11 @@ abp new TodoApp -t app-nolayers{{if UI=="BlazorServer"}} -u blazor-server{{else 
 
 {{if UI=="NG"}}
 
-This will create a new solution with a single-project, named *TodoApp* with `angular` and `aspnet-core` folders. Once the solution is ready, open the solution in your favorite IDE.
+This will create a new solution with a single project, named *TodoApp* with `angular` and `aspnet-core` folders. Once the solution is ready, open the solution in your favorite IDE.
 
 {{else}}
 
-This will create a new solution with a single-project, named *TodoApp*. Once the solution is ready, open it in your favorite IDE.
+This will create a new solution with a single project, named *TodoApp*. Once the solution is ready, open it in your favorite IDE.
 
 {{end}}
 
@@ -68,13 +68,13 @@ This command will create the database and seed the initial data for you. Then yo
 
 {{if UI=="MVC" || UI=="BlazorServer"}}
 
-It is good to run the application before starting the development. Running the application is pretty straigth-forward, you can run the application with any IDE that supports .NET or by running the `dotnet run` CLI command in the directory of your project to see the initial UI: 
+It is good to run the application before starting the development. Running the application is pretty straight-forward, you can run the application with any IDE that supports .NET or by running the `dotnet run` CLI command in the directory of your project: 
 
 {{else if UI=="NG"}}
 
 It is good to run the application before starting the development. The solution has two main applications:
 
-* `TodoApp` (in the .NET solution) host the server-side HTTP API, so Angular application can consume it. (server-side application)
+* `TodoApp` (in the .NET solution) hosts the server-side HTTP API, so the Angular application can consume it. (server-side application)
 * `angular` folder contains the Angular application. (client-side application)
 
 Firstly, run the `TodoApp` project in your favorite IDE (or run the `dotnet run` CLI command on your project directory) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
@@ -101,9 +101,9 @@ This command takes time, but eventually runs and opens the application in your d
 
 ![todo-ui-initial](../todo-ui-initial.png)
 
-You can click on the *Login* button, use `admin` as the username and `1q2w3E*` as the password to login to the application.
+You can click on the *Login* button and use `admin` as the username and `1q2w3E*` as the password to login to the application.
 
-All ready. We can start coding!
+All right. We can start coding!
 
 ## Defining Entities
 
@@ -156,7 +156,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 }
 ````
 
-We've mapped the `TodoItem` entity to the `TodoItems` table in the database. The next step is creating a migration and apply the changes to the database.
+We've mapped the `TodoItem` entity to the `TodoItems` table in the database. The next step is to create a migration and apply the changes to the database.
 
 ### Code First Migrations
 
@@ -168,11 +168,11 @@ Open a command-line terminal in the directory of your project and type the follo
 dotnet ef migrations add Added_TodoItem
 ````
 
-This will add a new migration class to the project:
+This will add a new migration class to the project. You should see the migration in the **Migrations** folder.
 
-![todo-efcore-migration](../todo-efcore-migration-single-layer.png) TODO: add this screenshot???
+![todo-efcore-migration](todo-efcore-migration-single-layer.png) 
 
-You can apply changes to the database using the following command, in the same command-line terminal:
+Then, you can apply changes to the database using the following command, in the same command-line terminal:
 
 ````bash
 dotnet ef database update
@@ -180,7 +180,7 @@ dotnet ef database update
 
 {{else if DB=="Mongo"}}
 
-Next step is to setup the [MongoDB](../../../MongoDB.md) configuration. Open the `TodoAppMongoDbContext` class (it's under the **Data** folder) in your project and make the following changes:
+The next step is to setup the [MongoDB](../../../MongoDB.md) configuration. Open the `TodoAppMongoDbContext` class (it's under the **Data** folder) in your project and make the following changes:
 
 1. Add a new property to the class:
 
@@ -239,7 +239,7 @@ public class TodoItemDto
 }
 ```
 
-This is a very simple DTO class that have the same properties with our `TodoItem` entity. We are ready to implement the `ITodoAppService`.
+This is a very simple DTO class that has the same properties as the `TodoItem` entity. We are ready to implement the `ITodoAppService`.
 
 ## Application Service Implementation
 
@@ -284,11 +284,11 @@ public async Task<List<TodoItemDto>> GetListAsync()
 }
 ````
 
-We are simply getting the complete `TodoItem` list from the database, mapping them to `TodoItemDto` objects and returning as the result.
+We are simply getting the `TodoItem` list from the database, mapping them to `TodoItemDto` objects and returning as the result.
 
 #### Creating a New Todo Item
 
-Next method is `CreateAsync` and we can implement it as shown below:
+The next method is `CreateAsync` and we can implement it as shown below:
 
 ````csharp
 public async Task<TodoItemDto> CreateAsync(string text)
@@ -328,8 +328,179 @@ It is time to show the todo items on the UI! Before starting to write the code, 
 
 {{if UI=="MVC"}}
 
+### Index.cshtml.cs
+
+Open the `Index.cshtml.cs` file in the `Pages` folder and replace the content with the following code block:
+
+```csharp
+using TodoApp.Services;
+using TodoApp.Services.Dtos;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+
+namespace TodoApp.Pages;
+
+public class IndexModel : AbpPageModel
+{
+    public List<TodoItemDto> TodoItems { get; set; }
+
+    private readonly ITodoAppService _todoAppService;
+
+    public IndexModel(ITodoAppService todoAppService)
+    {
+        _todoAppService = todoAppService;
+    }
+    
+    public async Task OnGetAsync()
+    {
+        TodoItems = await _todoAppService.GetListAsync();
+    }
+}
+```
+
+This class uses the `ITodoAppService` to get the list of todo items and assign the `TodoItems` property. We will use it to render the todo items on the razor page.
+
+### Index.cshtml
+
+Open the `Index.cshtml` file in the `Pages` folder and replace it with the following content:
+
+```xml
+@page
+@model TodoApp.Pages.IndexModel
+
+@section styles {
+    <abp-style src="/Pages/Index.css" />
+}
+@section scripts {
+    <abp-script src="/Pages/Index.js" />
+}
+
+<div class="container">
+    <abp-card>
+        <abp-card-header>
+            <abp-card-title>
+                TODO LIST
+            </abp-card-title>
+        </abp-card-header>
+        <abp-card-body>            
+            <!-- FORM FOR NEW TODO ITEMS -->
+            <form id="NewItemForm" class="row row-cols-lg-auto g-3 align-items-center">
+                <div class="col-12">
+                    <div class="input-group">
+                        <input id="NewItemText" type="text" class="form-control" placeholder="enter text...">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <!-- TODO ITEMS LIST -->
+            <ul id="TodoList">
+                @foreach (var todoItem in Model.TodoItems)
+                {
+                    <li data-id="@todoItem.Id">
+                        <i class="fa fa-trash-o"></i> @todoItem.Text
+                    </li>
+                }
+            </ul>
+        </abp-card-body>
+    </abp-card>
+</div>
+```
+
+We are using ABP's [card tag helper](../../UI/AspNetCore/Tag-Helpers/Cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers](../../UI/AspNetCore/Tag-Helpers/Index.md) make it much easier and type safe.
+
+This page imports a CSS and a JavaScript file, so we should also create them.
+
+### Index.js
+
+Create an `Index.js` file in the `Pages` folder and add the following content:
+
+````js
+$(function () {
+    
+    // DELETING ITEMS /////////////////////////////////////////
+    $('#TodoList').on('click', 'li i', function(){
+        var $li = $(this).parent();
+        var id = $li.attr('data-id');
+        
+        todoApp.services.todo.delete(id).then(function(){
+            $li.remove();
+            abp.notify.info('Deleted the todo item.');
+        });
+    });
+    
+    // CREATING NEW ITEMS /////////////////////////////////////
+    $('#NewItemForm').submit(function(e){
+        e.preventDefault();
+        
+        var todoText = $('#NewItemText').val();        
+        todoApp.services.todo.create(todoText).then(function(result){
+            $('<li data-id="' + result.id + '">')
+                .html('<i class="fa fa-trash-o"></i> ' + result.text)
+                .appendTo($('#TodoList'));
+            $('#NewItemText').val('');
+        });
+    });
+});
+````
+
+In the first part, we are subscribing to the click events of the trash icons near the todo items, deleting the related item on the server and showing a notification on the UI. Also, we are removing the deleted item from the DOM, so we don't need to refresh the page.
+
+In the second part, we are creating a new todo item on the server. If it succeeds, we are then manipulating the DOM to insert a new `<li>` element to the todo list. This way we don't need to refresh the whole page after creating a new todo item.
+
+The interesting part here is how we communicate with the server. See the [*Dynamic JavaScript Proxies & Auto API Controllers*](#dynamic-javascript-proxies--auto-api-controllers) section to understand how it works. But now, let's continue and complete the application.
+
+### Index.css
+
+As the final touch, create the `Index.css` file in the `Pages` folder and add the following content:
+
+````css
+#TodoList{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#TodoList li {
+    padding: 5px;
+    margin: 5px 0px;
+    border: 1px solid #cccccc;
+    background-color: #f5f5f5;
+}
+
+#TodoList li i
+{
+    opacity: 0.5;
+}
+
+#TodoList li i:hover
+{
+    opacity: 1;
+    color: #ff0000;
+    cursor: pointer;
+}
+````
+
+This is a simple styling for the todo page. We believe that you can do much better :)
+
+Now, you can run the application again and see the result.
+
+### Dynamic JavaScript Proxies & Auto API Controllers
+
+In the `Index.js` file, we've used the `todoApp.services.todo.delete(...)` and `todoApp.services.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
+
+> **services** keyword comes from the namespace (`namespace TodoApp.Services;`).
+
+However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to **API Controllers** by convention.
+
+If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
+
+![todo-api](../todo-api.png)
+
+<!-- TODO: Add UI section for Blazor Server! -->
 {{else if UI=="BlazorServer"}}
 
+<!-- TODO: Add UI section for Angular project! -->
 {{else if UI=="NG"}}
 
 {{end}}
@@ -340,8 +511,8 @@ In this tutorial, we've built a very simple application to warm up with the ABP 
 
 ## Source Code
 
-You can find source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
+You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
 
 ## See Also
 
-* [Web Application Development Tutorial](../Part-1.md) to see a real-life web application development in a layered architecture.
+* Check the [Web Application Development Tutorial](../Part-1.md) to see a real-life web application development in a layered architecture using the [Application Startup Template](../../../Startup-Templates/Application.md).
