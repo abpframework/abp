@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Blazor.Menus;
+using OpenIddict.Abstractions;
 using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.Autofac.WebAssembly;
@@ -73,17 +74,25 @@ public class MyProjectNameBlazorModule : AbpModule
         builder.Services.AddOidcAuthentication(options =>
         {
             builder.Configuration.Bind("AuthServer", options.ProviderOptions);
-            
-            options.UserOptions.NameClaim = JwtClaimTypes.Name;
-            options.UserOptions.RoleClaim = JwtClaimTypes.Role;
-            
+            options.UserOptions.NameClaim = OpenIddictConstants.Claims.Name;
+            options.UserOptions.RoleClaim = OpenIddictConstants.Claims.Role;
+
             options.ProviderOptions.DefaultScopes.Add("MyProjectName");
             options.ProviderOptions.DefaultScopes.Add("roles");
             options.ProviderOptions.DefaultScopes.Add("email");
             options.ProviderOptions.DefaultScopes.Add("phone");
         });
 
-        AbpClaimTypes.UserName = JwtClaimTypes.Name;
+        AbpClaimTypes.UserId = OpenIddictConstants.Claims.Subject;
+        AbpClaimTypes.Role = OpenIddictConstants.Claims.Role;
+        AbpClaimTypes.UserName = OpenIddictConstants.Claims.Name;
+        AbpClaimTypes.Name = OpenIddictConstants.Claims.GivenName;
+        AbpClaimTypes.SurName = OpenIddictConstants.Claims.FamilyName;
+        AbpClaimTypes.PhoneNumber = OpenIddictConstants.Claims.PhoneNumber;
+        AbpClaimTypes.PhoneNumberVerified = OpenIddictConstants.Claims.PhoneNumberVerified;
+        AbpClaimTypes.Email = OpenIddictConstants.Claims.Email;
+        AbpClaimTypes.EmailVerified = OpenIddictConstants.Claims.EmailVerified;
+
     }
 
     private static void ConfigureUI(WebAssemblyHostBuilder builder)

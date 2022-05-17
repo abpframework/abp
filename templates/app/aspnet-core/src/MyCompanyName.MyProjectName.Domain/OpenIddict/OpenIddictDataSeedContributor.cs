@@ -27,10 +27,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
     private readonly IStringLocalizer<OpenIddictResponse> L;
 
     public OpenIddictDataSeedContributor(
-        IConfiguration configuration, 
-        IOpenIddictApplicationManager applicationManager, 
-        IOpenIddictScopeManager scopeManager, 
-        IPermissionDataSeeder permissionDataSeeder, 
+        IConfiguration configuration,
+        IOpenIddictApplicationManager applicationManager,
+        IOpenIddictScopeManager scopeManager,
+        IPermissionDataSeeder permissionDataSeeder,
         IStringLocalizer<OpenIddictResponse> l)
     {
         _configuration = configuration;
@@ -62,19 +62,19 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             });
         }
     }
-    
+
     private async Task CreateApplicationsAsync()
     {
         var commonScopes = new List<string>
         {
-            OpenIddictConstants.Permissions.Scopes.Address, 
-            OpenIddictConstants.Permissions.Scopes.Email, 
-            OpenIddictConstants.Permissions.Scopes.Phone, 
-            OpenIddictConstants.Permissions.Scopes.Profile, 
+            OpenIddictConstants.Permissions.Scopes.Address,
+            OpenIddictConstants.Permissions.Scopes.Email,
+            OpenIddictConstants.Permissions.Scopes.Phone,
+            OpenIddictConstants.Permissions.Scopes.Profile,
             OpenIddictConstants.Permissions.Scopes.Roles,
             "MyProjectName"
         };
-        
+
         var configurationSection = _configuration.GetSection("OpenIddict:Applications");
 
         //Web Client
@@ -93,7 +93,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 secret: null,
                 grantTypes: new List<string> //Hybrid flow
                 {
-                    OpenIddictConstants.GrantTypes.AuthorizationCode, 
+                    OpenIddictConstants.GrantTypes.AuthorizationCode,
                     OpenIddictConstants.GrantTypes.Implicit
                 },
                 scopes: commonScopes,
@@ -101,7 +101,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
             );
         }
-        
+
         //Console Test / Angular Client
         var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
         if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
@@ -113,20 +113,19 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Console Test / Angular Application",
                 secret: configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*",
-                grantTypes: new List<string> 
+                grantTypes: new List<string>
                 {
-                    OpenIddictConstants.GrantTypes.AuthorizationCode,  
-                    OpenIddictConstants.GrantTypes.Password,  
-                    OpenIddictConstants.GrantTypes.ClientCredentials, 
-                    "LinkLogin", 
-                    "Impersonation"
+                    OpenIddictConstants.GrantTypes.AuthorizationCode,
+                    OpenIddictConstants.GrantTypes.Password,
+                    OpenIddictConstants.GrantTypes.ClientCredentials,
+                    OpenIddictConstants.GrantTypes.RefreshToken
                 },
                 scopes: commonScopes,
                 redirectUri: webClientRootUrl,
                 postLogoutRedirectUri: webClientRootUrl
             );
         }
-        
+
         // Blazor Client
         var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
         if (!blazorClientId.IsNullOrWhiteSpace())
@@ -139,7 +138,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Blazor Application",
                 secret: null,
-                grantTypes: new List<string> 
+                grantTypes: new List<string>
                 {
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
                 },
@@ -161,7 +160,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Blazor Application",
                 secret: configurationSection["MyProjectName_Swagger:ClientSecret"],
-                grantTypes: new List<string> 
+                grantTypes: new List<string>
                 {
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
                 },
@@ -170,7 +169,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             );
         }
     }
-    
+
     private async Task CreateApplicationAsync(
         [NotNull] string name,
         [NotNull] string type,
@@ -187,7 +186,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         {
             throw new BusinessException(L["NoClientSecretCanBeSetForPublicApplications"]);
         }
-        
+
         if (string.IsNullOrEmpty(secret) && string.Equals(type, OpenIddictConstants.ClientTypes.Confidential, StringComparison.OrdinalIgnoreCase))
         {
             throw new BusinessException(L["TheClientSecretIsRequiredForConfidentialApplications"]);
@@ -198,7 +197,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             return;
             //throw new BusinessException(L["TheClientIdentifierIsAlreadyTakenByAnotherApplication"]);
         }
-        
+
         var client = await _applicationManager.FindByClientIdAsync(name);
         if (client == null)
         {
@@ -213,7 +212,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
             Check.NotNullOrEmpty(grantTypes, nameof(grantTypes));
             Check.NotNullOrEmpty(scopes, nameof(scopes));
-            
+
             if (new [] { OpenIddictConstants.GrantTypes.AuthorizationCode, OpenIddictConstants.GrantTypes.Implicit }.All(grantTypes.Contains))
             {
                 application.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeIdToken);
@@ -229,7 +228,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             {
                 application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Logout);
             }
-            
+
             foreach (var grantType in grantTypes)
             {
                 if (grantType == OpenIddictConstants.GrantTypes.AuthorizationCode)
@@ -242,36 +241,36 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Authorization);
                 }
-                
-                if (grantType == OpenIddictConstants.GrantTypes.AuthorizationCode || 
-                    grantType == OpenIddictConstants.GrantTypes.ClientCredentials || 
-                    grantType == OpenIddictConstants.GrantTypes.Password || 
+
+                if (grantType == OpenIddictConstants.GrantTypes.AuthorizationCode ||
+                    grantType == OpenIddictConstants.GrantTypes.ClientCredentials ||
+                    grantType == OpenIddictConstants.GrantTypes.Password ||
                     grantType == OpenIddictConstants.GrantTypes.RefreshToken ||
                     grantType == OpenIddictConstants.GrantTypes.DeviceCode)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
                 }
-                
+
                 if (grantType == OpenIddictConstants.GrantTypes.ClientCredentials)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.ClientCredentials);
                 }
-                
+
                 if (grantType == OpenIddictConstants.GrantTypes.Implicit)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.Implicit);
                 }
-                
+
                 if (grantType == OpenIddictConstants.GrantTypes.Password)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.Password);
                 }
-                
+
                 if (grantType == OpenIddictConstants.GrantTypes.RefreshToken)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.RefreshToken);
                 }
-                
+
                 if (grantType == OpenIddictConstants.GrantTypes.Implicit)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.IdToken);
@@ -285,13 +284,13 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
             var buildInScopes = new []
             {
-                OpenIddictConstants.Permissions.Scopes.Address, 
-                OpenIddictConstants.Permissions.Scopes.Email, 
-                OpenIddictConstants.Permissions.Scopes.Phone, 
-                OpenIddictConstants.Permissions.Scopes.Profile, 
+                OpenIddictConstants.Permissions.Scopes.Address,
+                OpenIddictConstants.Permissions.Scopes.Email,
+                OpenIddictConstants.Permissions.Scopes.Phone,
+                OpenIddictConstants.Permissions.Scopes.Profile,
                 OpenIddictConstants.Permissions.Scopes.Roles
             };
-                
+
             foreach (var scope in scopes)
             {
                 if (buildInScopes.Contains(scope))
@@ -303,7 +302,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     application.Permissions.Add(OpenIddictConstants.Permissions.Prefixes.Scope + scope);
                 }
             }
-            
+
             if (redirectUri != null)
             {
                 if (!redirectUri.IsNullOrEmpty())
@@ -312,14 +311,14 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     {
                         throw new BusinessException(L["InvalidRedirectUri", redirectUri]);
                     }
-                    
+
                     if (application.RedirectUris.All(x => x != uri))
                     {
                         application.RedirectUris.Add(uri);
                     }
                 }
             }
-            
+
             if (postLogoutRedirectUri != null)
             {
                 if (!postLogoutRedirectUri.IsNullOrEmpty())
@@ -328,14 +327,14 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     {
                         throw new BusinessException(L["InvalidPostLogoutRedirectUri", postLogoutRedirectUri]);
                     }
-                    
+
                     if (application.PostLogoutRedirectUris.All(x => x != uri))
                     {
                         application.PostLogoutRedirectUris.Add(uri);
                     }
                 }
             }
-                    
+
             if (permissions != null)
             {
                 await _permissionDataSeeder.SeedAsync(

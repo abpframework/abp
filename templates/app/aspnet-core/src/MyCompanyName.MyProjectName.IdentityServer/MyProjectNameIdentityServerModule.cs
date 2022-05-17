@@ -60,12 +60,6 @@ public class MyProjectNameIdentityServerModule : AbpModule
             builder.AddEncryptionKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80")));
         });
 
-        PreConfigure<AbpOpenIddictWildcardDomainOptions>(options =>
-        {
-            options.EnableWildcardDomainSupport = true;
-            options.WildcardDomainsFormat.Add("https://{0}.abp.io/signin-oidc");
-        });
-
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
@@ -81,7 +75,7 @@ public class MyProjectNameIdentityServerModule : AbpModule
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
-        
+
         Configure<AbpOpenIddictAspNetCoreOptions>(options =>
         {
             options.AddDevelopmentEncryptionAndSigningCertificate = false;

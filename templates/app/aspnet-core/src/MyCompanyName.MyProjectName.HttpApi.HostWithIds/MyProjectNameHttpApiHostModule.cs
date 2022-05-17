@@ -59,12 +59,6 @@ public class MyProjectNameHttpApiHostModule : AbpModule
             builder.AddEncryptionKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80")));
         });
 
-        PreConfigure<AbpOpenIddictWildcardDomainOptions>(options =>
-        {
-            options.EnableWildcardDomainSupport = true;
-            options.WildcardDomainsFormat.Add("https://{0}.abp.io/signin-oidc");
-        });
-
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
@@ -75,11 +69,16 @@ public class MyProjectNameHttpApiHostModule : AbpModule
             });
         });
     }
-    
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+        Configure<AbpOpenIddictAspNetCoreOptions>(options =>
+        {
+            options.AddDevelopmentEncryptionAndSigningCertificate = false;
+        });
 
         ConfigureBundles();
         ConfigureUrls(configuration);
@@ -161,10 +160,10 @@ public class MyProjectNameHttpApiHostModule : AbpModule
                 options.Audience = "MyProjectName";
                 options.BackchannelHttpHandler = new HttpClientHandler
                 {
-                    ServerCertificateCustomValidationCallback =
-                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                 };
-                
+                options.MapInboundClaims = false;
+
                 options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78"));
                 options.TokenValidationParameters.TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80"));
             });
