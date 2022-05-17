@@ -6,13 +6,13 @@ This template provides a single-layered application for a quick start with ABP F
 
 This document explains the **solution structure** and project in detail.
 
-### What is the Difference Between the Application Startup Template?
+### What is the Difference Between the Application Startup Templates?
 
 ABP's [Application Startup Template](Application.md) provides a well-organized and layered solution to create maintainable business applications based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices. However, some developers find this template a little bit complex (or unnecessary) for simple and short-time applications.
 
 At this point, a single-layer application template has been created for such applications. This template has the same functionality, features and modules on runtime with the [Application Startup Template](Application.md) but the development model is minimal and everything is in a single project (`.csproj`).
 
-## How to Start with?
+## How to Start with It?
 
 You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can directly create & download this startup template from the [Get Started](https://abp.io/get-started) page. How to download via CLI is explained in this section.
 
@@ -65,7 +65,7 @@ abp new Acme.BookStore -t app-nolayers -d mongodb
 
 ## Solution Structure
 
-If you don't specify any additional options while creating an `app-nolayers` template, you will have a solution like shown below:
+If you don't specify any additional options while creating an `app-nolayers` template, you will have a solution as shown below:
 
 ![](../images/bookstore-single-layer-solution-structure.png)
 
@@ -73,7 +73,7 @@ It's a single-layer template rather than a layered-architecture solution (like t
 
 ### Folder Structure
 
-Since this template provides single-layer solution, we've separated concerns into folders instead of layers and you can see the pre-defined folders like shown below:
+Since this template provides a single-layer solution, we've separated concerns into folders instead of layers and you can see the pre-defined folders as shown below:
 
 ![](../images/single-layer-folder-structure.png)
 
@@ -94,10 +94,10 @@ dotnet run --migrate-database
 
 ### Angular UI 
 
-If you choose `Angular` as the UI framework, the solution is being separated into two folders:
+If you choose `Angular` as the UI framework, the solution will be separated into two folders:
 
-* `angular` folder contains the Angular UI application, the client-side code.
-* `aspnet-core` folder contains the ASP.NET Core solution (a single project), the server-side code.
+* An `angular` folder that contains the Angular UI application, the client-side code.
+* An `aspnet-core` folder that contains the ASP.NET Core solution (a single project), the server-side code.
 
 The server-side is similar to the solution described in the [Solution Structure](#solution-structure) section above. This project serves the API, so the `Angular` application can consume it.
 
