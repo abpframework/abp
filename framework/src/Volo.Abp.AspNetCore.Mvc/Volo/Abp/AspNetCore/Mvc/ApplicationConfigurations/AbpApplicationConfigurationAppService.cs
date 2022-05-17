@@ -295,14 +295,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             result.EnabledFeatures.AddIfNotContains(enabledFeatureName);
         }
 
-        foreach (var module in GlobalFeatureManager.Instance.Modules)
-        {
-            result.ModuleEnabledFeatures.AddIfNotContains(new KeyValuePair<string, List<string>>(module.Key, module.Value.GetFeatures().Select(x => x.FeatureName).ToList()));
-        }
-
         return Task.FromResult(result);
     }
-
 
     protected virtual async Task<TimingDto> GetTimingConfigAsync()
     {
