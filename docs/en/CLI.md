@@ -18,13 +18,13 @@ dotnet tool update -g Volo.Abp.Cli
 
 ## Global Options
 
-While each command may have a set of options, there are some global options those can be used with any command;
+While each command may have a set of options, there are some global options that can be used with any command;
 
 * `--skip-cli-version-check`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
 
 ## Commands
 
-Here, the list of all available commands before explaining their details:
+Here, is the list of all available commands before explaining their details:
 
 * **`help`**: Shows help on the usage of the ABP CLI.
 * **`new`**: Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
@@ -92,8 +92,10 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
       * `angular`: Angular UI. There are some additional options for this template:
         * `--separate-identity-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor`: Blazor UI. There are some additional options for this template:
         * `--separate-identity-server`The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
         * `--tiered`: The Identity Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *IdentityServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
       * `none`: Without UI. No front-end layer will be created. There are some additional options for this template:

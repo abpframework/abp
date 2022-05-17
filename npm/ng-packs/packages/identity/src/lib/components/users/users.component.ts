@@ -6,7 +6,7 @@ import {
   IdentityUserService,
 } from '@abp/ng.identity/proxy';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
+import {Confirmation, ConfirmationService, ToasterService} from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
@@ -75,6 +75,7 @@ export class UsersComponent implements OnInit {
     public readonly list: ListService<GetIdentityUsersInput>,
     protected confirmationService: ConfirmationService,
     protected service: IdentityUserService,
+    private toasterService: ToasterService,
     protected fb: FormBuilder,
     protected injector: Injector,
   ) {}
@@ -163,7 +164,9 @@ export class UsersComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.service.delete(id).subscribe(() => this.list.get());
+          this.service.delete(id).subscribe(() => {
+            this.toasterService.success('AbpUi::SuccessfullyDeleted');
+            this.list.get()});
         }
       });
   }

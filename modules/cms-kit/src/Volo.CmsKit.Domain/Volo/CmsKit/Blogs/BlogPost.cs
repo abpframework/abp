@@ -29,7 +29,9 @@ public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant
     public Guid AuthorId { get; set; }
 
     public virtual CmsUser Author { get; set; }
-
+    
+    public virtual BlogPostStatus Status { get; set; }
+    
     protected BlogPost()
     {
     }
@@ -43,7 +45,9 @@ public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant
         [CanBeNull] string shortDescription = null,
         [CanBeNull] string content = null,
         [CanBeNull] Guid? coverImageMediaId = null,
-        [CanBeNull] Guid? tenantId = null) : base(id)
+        [CanBeNull] Guid? tenantId = null,
+        [CanBeNull] BlogPostStatus? state = null
+        ) : base(id)
     {
         TenantId = tenantId;
         BlogId = blogId;
@@ -53,6 +57,7 @@ public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant
         SetShortDescription(shortDescription);
         SetContent(content);
         CoverImageMediaId = coverImageMediaId;
+        Status = state ?? BlogPostStatus.Draft;
     }
 
     public virtual void SetTitle(string title)
@@ -75,5 +80,20 @@ public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant
     public virtual void SetContent(string content)
     {
         Content = Check.Length(content, nameof(content), BlogPostConsts.MaxContentLength);
+    }
+    
+    public virtual void SetDraft()
+    {
+        Status = BlogPostStatus.Draft;
+    }
+    
+    public virtual void SetPublished()
+    {
+        Status = BlogPostStatus.Published;
+    }
+
+    public virtual void SetWaitingForReview()
+    {
+        Status = BlogPostStatus.WaitingForReview;
     }
 }

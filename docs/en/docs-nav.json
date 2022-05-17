@@ -704,6 +704,10 @@
                 {
                   "text": "The Basic Theme",
                   "path": "UI/AspNetCore/Basic-Theme.md"
+                },
+                {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/mvc.md"
                 }
               ]
             },
@@ -816,6 +820,10 @@
                 {
                   "text": "The Basic Theme",
                   "path": "UI/Blazor/Basic-Theme.md"
+                },
+                {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/blazor.md"
                 },
                 {
                   "text": "Branding",
@@ -1071,6 +1079,10 @@
                     {
                       "text": "The Basic Theme",
                       "path": "UI/Angular/Basic-Theme.md"
+                    },
+                    {
+                      "text": "LeptonX Lite",
+                      "path": "Themes/LeptonXLite/angular.md"
                     }
                   ]
                 },
@@ -1085,10 +1097,10 @@
                 {
                   "text": "Extensions",
                   "items": [
-                     {
+                    {
                       "text": "Overall",
                       "path": "UI/Angular/Extensions-Overall.md"
-                     },
+                    },
                     {
                       "text": "Entity Action Extensions",
                       "path": "UI/Angular/Entity-Action-Extensions.md"
@@ -1104,6 +1116,10 @@
                     {
                       "text": "Dynamic Form Extensions",
                       "path": "UI/Angular/Dynamic-Form-Extensions.md"
+                    },
+                    {
+                      "text": "Date, time and datetime format pipes",
+                      "path": "UI/Angular/DateTime-Format-Pipe.md"
                     }
                   ]
                 }

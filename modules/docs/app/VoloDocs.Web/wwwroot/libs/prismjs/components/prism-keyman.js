@@ -28,7 +28,7 @@ Prism.languages.keyman = {
 		alias: 'keyword'
 	},
 	'structural-keyword': {
-		pattern: /\b(?:ansi|begin|group|match|nomatch|unicode|using keys)\b/i,
+		pattern: /\b(?:ansi|begin|group|match|newcontext|nomatch|postkeystroke|readonly|unicode|using keys)\b/i,
 		alias: 'keyword'
 	},
 
