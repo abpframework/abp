@@ -95,4 +95,21 @@ public static class AbpQueryableExtensions
             ? (TQueryable)query.Where(predicate)
             : query;
     }
+
+    /// <summary>
+    /// Order a <see cref="IQueryable{T}"/> by given predicate if given condition is true.
+    /// </summary>
+    /// <param name="query">Queryable to apply filtering</param>
+    /// <param name="condition">A boolean value</param>
+    /// <param name="sorting">Order the query</param>
+    /// <returns>Order or not order query based on <paramref name="condition"/></returns>
+    public static TQueryable OrderByIf<T, TQueryable>([NotNull] this TQueryable query, bool condition, string sorting)
+        where TQueryable : IQueryable<T>
+    {
+        Check.NotNull(query, nameof(query));
+
+        return condition
+            ? (TQueryable)Dynamic.Core.DynamicQueryableExtensions.OrderBy(query, sorting)
+            : query;
+    }
 }
