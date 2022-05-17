@@ -13,7 +13,7 @@ This document explains **the solution structure** and projects in details. If yo
 
 You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can directly create & download from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
 
-First, install the ABP CLI if you haven't installed before:
+First, install the ABP CLI if you haven't installed it before:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
@@ -25,8 +25,8 @@ Then use the `abp new` command in an empty folder to create a new solution:
 abp new Acme.BookStore -t app
 ````
 
-* `Acme.BookStore` is the solution name, like *YourCompany.YourProduct*. You can use single level, two-levels or three-levels naming.
-* This example specified the template name (`-t` or `--template` option). However, `app` is already the default template if you don't specify it.
+* `Acme.BookStore` is the solution name, like *YourCompany.YourProduct*. You can use single-level, two-level or three-level naming.
+* This example specified the template name (`-t` or `--template` option). However, `app` is already the default template if you didn't specify it.
 
 ### Specify the UI Framework
 
@@ -36,7 +36,7 @@ This template provides multiple UI frameworks:
 * `blazor`: Blazor UI
 * `angular`: Angular UI
 
-Use `-u` or `--ui` option to specify the UI framework:
+Use the `-u` or `--ui` option to specify the UI framework:
 
 ````bash
 abp new Acme.BookStore -u angular
@@ -61,7 +61,7 @@ This template supports the following mobile application frameworks:
 
 - `react-native`: React Native
 
-Use `-m` (or `--mobile`) option to specify the mobile application framework:
+Use the `-m` (or `--mobile`) option to specify the mobile application framework:
 
 ````bash
 abp new Acme.BookStore -m react-native
@@ -75,7 +75,7 @@ Based on the options you've specified, you will get a slightly different solutio
 
 ### Default Structure
 
-If you don't specify any additional option, you will have a solution like shown below:
+If you don't specify any additional options, you will have a solution as shown below:
 
 ![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-v3.png)
 
@@ -93,7 +93,7 @@ This project contains constants, enums and other objects these are actually a pa
 
 A `BookType` enum and a `BookConsts` class (which may have some constant fields for the `Book` entity, like `MaxNameLength`) are good candidates for this project.
 
-* This project has no dependency to other projects in the solution. All other projects depend on this directly or indirectly.
+* This project has no dependency on other projects in the solution. All other projects depend on this one directly or indirectly.
 
 #### .Domain Project
 
@@ -105,7 +105,7 @@ A `Book` entity, a `BookManager` domain service and an `IBookRepository` interfa
 
 #### .Application.Contracts Project
 
-This project mainly contains [application service](../Application-Services.md) **interfaces** and [Data Transfer Objects](../Data-Transfer-Objects.md) (DTO) of the application layer. It does exists to separate interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
+This project mainly contains [application service](../Application-Services.md) **interfaces** and [Data Transfer Objects](../Data-Transfer-Objects.md) (DTO) of the application layer. It exists to separate the interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
 
 An `IBookAppService` interface and a `BookCreationDto` class are good candidates for this project.
 
@@ -130,7 +130,7 @@ This is the integration project for the EF Core. It defines the `DbContext` and 
 
 #### .DbMigrator Project
 
-This is a console application which simplifies to execute database migrations on development and production environments. When you run this application, it;
+This is a console application that simplifies the execution of database migrations on development and production environments. When you run this application, it:
 
 * Creates the database if necessary.
 * Applies the pending database migrations.
@@ -140,24 +140,24 @@ This is a console application which simplifies to execute database migrations on
 
 Especially, seeding initial data is important at this point. ABP has a modular data seed infrastructure. See [its documentation](../Data-Seeding.md) for more about the data seeding.
 
-While creating database & applying migrations seems only necessary for relational databases, this projects comes even if you choose a NoSQL database provider (like MongoDB). In that case, it still seeds initial data which is necessary for the application.
+While creating database & applying migrations seem only necessary for relational databases, this project comes even if you choose a NoSQL database provider (like MongoDB). In that case, it still seeds the initial data which is necessary for the application.
 
 * Depends on the `.EntityFrameworkCore` project (for EF Core) since it needs to access to the migrations.
-* Depends on the `.Application.Contracts` project to be able to access permission definitions, because initial data seeder grants all permissions for the admin role by default.
+* Depends on the `.Application.Contracts` project to be able to access permission definitions, because the initial data seeder grants all permissions to the admin role by default.
 
 #### .HttpApi Project
 
 This project is used to define your API Controllers.
 
-Most of time you don't need to manually define API Controllers since ABP's [Auto API Controllers](../API/Auto-API-Controllers.md) feature creates them automagically based on your application layer. However, in case of you need to write API controllers, this is the best place to do it.
+Most of the time you don't need to manually define API Controllers since ABP's [Auto API Controllers](../API/Auto-API-Controllers.md) feature creates them automagically based on your application layer. However, in case of you need to write API controllers, this is the best place to do it.
 
 * Depends on the `.Application.Contracts` project to be able to inject the application service interfaces.
 
 #### .HttpApi.Client Project
 
-This is a project that defines C# client proxies to use the HTTP APIs of the solution. You can share this library to 3rd-party clients, so they can easily consume your HTTP APIs in their Dotnet applications (For other type of applications, they can still use your APIs, either manually or using a tool in their own platform)
+This is a project that defines C# client proxies to use the HTTP APIs of the solution. You can share this library to 3rd-party clients, so they can easily consume your HTTP APIs in their Dotnet applications (For other types of applications, they can still use your APIs, either manually or using a tool in their own platform)
 
-Most of time you don't need to manually create C# client proxies, thanks to ABP's [Dynamic C# API Clients](../API/Dynamic-CSharp-API-Clients.md) feature.
+Most of the time you don't need to manually create C# client proxies, thanks to ABP's [Dynamic C# API Clients](../API/Dynamic-CSharp-API-Clients.md) feature.
 
 `.HttpApi.Client.ConsoleTestApp` project is a console application created to demonstrate the usage of the client proxies.
 
@@ -169,17 +169,17 @@ Most of time you don't need to manually create C# client proxies, thanks to ABP'
 
 This project contains the User Interface (UI) of the application if you are using ASP.NET Core MVC UI. It contains Razor pages, JavaScript files, CSS files, images and so on...
 
-This project contains the main `appsettings.json` file that contains the connection string and other configuration of the application.
+This project contains the main `appsettings.json` file that contains the connection string and other configurations of the application.
 
-* Depends on the `.HttpApi` since UI layer needs to use APIs and application service interfaces of the solution.
+* Depends on the `.HttpApi` project since the UI layer needs to use APIs and the application service interfaces of the solution.
 
 > If you check the source code of the `.Web.csproj` file, you will see the references to the `.Application` and the `.EntityFrameworkCore` projects.
 >
-> These references are actually not needed while coding your UI layer, because UI layer normally doesn't depend on the EF Core or the Application layer's implementation. This startup templates are ready for the tiered deployment, where API layer is hosted in a separate server than the UI layer.
+> These references are actually not needed while coding your UI layer, because the UI layer normally doesn't depend on the EF Core or the Application layer's implementation. These startup templates are ready for tiered deployment, where the API layer is hosted on a separate server than the UI layer.
 >
 > However, if you don't choose the `--tiered` option, these references will be in the .Web project to be able to host the Web, API and application layers in a single application endpoint.
 >
-> This gives you to ability to use domain entities & repositories in your presentation layer. However, this is considered as a bad practice according to the DDD.
+> This gives you the ability to use domain entities & repositories in your presentation layer. However, this is considered as a bad practice according to DDD.
 
 #### Test Projects
 
@@ -195,32 +195,32 @@ In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an a
 
 Test projects are prepared for integration testing;
 
-* It is fully integrated to ABP framework and all services in your application.
+* It is fully integrated into the ABP framework and all services in your application.
 * It uses SQLite in-memory database for EF Core. For MongoDB, it uses the [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library.
 * Authorization is disabled, so any application service can be easily used in tests.
 
-You can still create unit tests for your classes which will be harder to write (because you will need to prepare mock/fake objects), but faster to run (because it only tests a single class and skips all initialization process).
+You can still create unit tests for your classes which will be harder to write (because you will need to prepare mock/fake objects), but faster to run (because it only tests a single class and skips all the initialization processes).
 
 #### How to Run?
 
-Set `.Web` as the startup project and run the application. Default username is `admin` and password is `1q2w3E*`.
+Set `.Web` as the startup project and run the application. The default username is `admin` and the password is `1q2w3E*`.
 
 See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) for more information.
 
 ### Tiered Structure
 
-If you have selected the ASP.NET Core UI and specified the `--tiered` option, the solution created will be a tiered solution. The purpose of the tiered structure is to be able to **deploy Web application and HTTP API to different servers**:
+If you have selected the ASP.NET Core UI and specified the `--tiered` option, the solution created will be a tiered solution. The purpose of the tiered structure is to be able to **deploy Web applications and HTTP API to different servers**:
 
 ![bookstore-visual-studio-solution-v3](../images/tiered-solution-servers.png)
 
 * Browser runs your UI by executing HTML, CSS & JavaScript.
-* Web servers hosts static UI files (CSS, JavaScript, image... etc.) & dynamic components (e.g. Razor pages). It performs HTTP requests to the API server to execute the business logic of the application.
-* API Server hosts the HTTP APIs which then use application & domain layers of the application to perform the business logic.
+* Web servers host static UI files (CSS, JavaScript, image... etc.) & dynamic components (e.g. Razor pages). It performs HTTP requests to the API server to execute the business logic of the application.
+* The API Server hosts the HTTP APIs which then use the application & domain layers of the application to perform the business logic.
 * Finally, database server hosts your database.
 
 So, the resulting solution allows a 4-tiered deployment, by comparing to 3-tiered deployment of the default structure explained before.
 
-> Unless you actually need to such a 4-tiered deployment, its suggested to go with the default structure which is simpler to develop, deploy and maintain.
+> Unless you actually need such a 4-tiered deployment, it's suggested to go with the default structure which is simpler to develop, deploy and maintain.
 
 The solution structure is shown below:
 
@@ -246,17 +246,17 @@ This project is an application that hosts the API of the solution. It has its ow
 
 Just like the default structure, this project contains the User Interface (UI) of the application. It contains razor pages, JavaScript files, style files, images and so on...
 
-This project contains an `appsettings.json` file, but this time it does not have a connection string because it never connects to the database. Instead, it mainly contains endpoint of the remote API server and the authentication server.
+This project contains an `appsettings.json` file, but this time it does not have a connection string because it never connects to the database. Instead, it mainly contains the endpoint of the remote API server and the authentication server.
 
 #### Pre-requirements
 
-* [Redis](https://redis.io/): The applications use Redis as as distributed cache. So, you need to have Redis installed & running.
+* [Redis](https://redis.io/): The applications use Redis as a distributed cache. So, you need to have Redis installed & running.
 
 #### How to Run?
 
 You should run the application with the given order:
 
-* First, run the `.IdentityServer` since other applications depends on it.
+* First, run the `.IdentityServer` since other applications depend on it.
 * Then run the `.HttpApi.Host` since it is used by the `.Web` application.
 * Finally, you can run the `.Web` project and login to the application (using `admin` as the username and `1q2w3E*` as the password).
 
@@ -286,9 +286,9 @@ Angular application module structure:
 
 #### AppModule
 
-`AppModule` is the root module of the application. Some of ABP modules and some essential modules imported to the `AppModule`.
+`AppModule` is the root module of the application. Some of the ABP modules and some essential modules are imported to `AppModule`.
 
-ABP Config modules also have imported to `AppModule`  for initially requirements of lazy-loadable ABP modules.
+ABP Config modules have also been imported to `AppModule` for initial requirements of the lazy-loadable ABP modules.
 
 #### AppRoutingModule
 
@@ -315,22 +315,22 @@ You should add `routes` property in the `data` object to add a link on the menu 
 ```
 In the above example;
 *  If the user is not logged in, AuthGuard blocks access and redirects to the login page.
-*  PermissionGuard checks the user's permission with `requiredPolicy` property of the `rotues` object. If the user is not authorized to access the page, the 403 page appears.
-*  `name` property of `routes` is the menu link label. A localization key can be defined .
-*  `iconClass` property of `routes` object is the menu link icon class.
-*  `requiredPolicy` property of `routes` object is the required policy key to access the page.
+*  PermissionGuard checks the user's permission with the `requiredPolicy` property of the `routes` object. If the user is not authorized to access the page, the 403 page appears.
+*  The `name` property of `routes` is the menu link label. A localization key can be defined.
+*  The `iconClass` property of the `routes` object is the menu link icon class.
+*  The `requiredPolicy` property of the `routes` object is the required policy key to access the page.
 
 After the above `routes` definition, if the user is authorized, the dashboard link will appear on the menu.
 
 #### Shared Module
 
-The modules that may be required for all modules have imported to the `SharedModule`. You should import the `SharedModule` to all modules.
+The modules that may be required for all modules have been imported to the `SharedModule`. You should import `SharedModule` to all modules.
 
 See the [Sharing Modules](https://angular.io/guide/sharing-ngmodules) document.
 
 #### Environments
 
-The files under the `src/environments` folder has the essential configuration of the application.
+The files under the `src/environments` folder have the essential configuration of the application.
 
 #### Home Module
 
@@ -338,11 +338,11 @@ Home module is an example lazy-loadable module that loads on the root address of
 
 #### Styles
 
-The required style files added to `styles` array in the `angular.json`. `AppComponent` loads some style files lazily via `LazyLoadService` after the main bundle is loaded to shorten the first rendering time.
+The required style files are added to the `styles` array in `angular.json`. `AppComponent` loads some style files lazily via `LazyLoadService` after the main bundle is loaded to shorten the first rendering time.
 
 #### Testing
 
-You should create your tests in the same folder as the file file you want to test.
+You should create your tests in the same folder as the file you want to test.
 
 See the [testing document](https://angular.io/guide/testing).
 
@@ -356,7 +356,7 @@ See the [testing document](https://angular.io/guide/testing).
 
 ### React Native
 
-if `-m react-native` option is spesified in new project command, the solution includes the [React Native](https://reactnative.dev/) application in the `react-native` folder.
+If the `-m react-native` option is specified in the new project command, the solution includes the [React Native](https://reactnative.dev/) application in the `react-native` folder.
 
 The server-side is similar to the solution described above. `*.HttpApi.Host` project serves the API, so the React Native application consumes it.
 
@@ -366,17 +366,17 @@ React Native application folder structure as like below:
 
 ![react-native-folder-structure](../images/react-native-folder-structure.png)
 
-* `App.js` is bootstrap component of the application.
-* `Environment.js` file has the essential configuration of the application. `prod` and `dev` configurations defined in this file. 
+* `App.js` is the bootstrap component of the application.
+* `Environment.js` file has the essential configuration of the application. `prod` and `dev` configurations are defined in this file. 
 * [Contexts](https://reactjs.org/docs/context.html) are created in the `src/contexts` folder.
-* [Higher order components](https://reactjs.org/docs/higher-order-components.html) are created in the`src/hocs` folder.
-* [Custom hooks](https://reactjs.org/docs/hooks-custom.html#extracting-a-custom-hook) are created in the`src/hooks`.
+* [Higher order components](https://reactjs.org/docs/higher-order-components.html) are created in the `src/hocs` folder.
+* [Custom hooks](https://reactjs.org/docs/hooks-custom.html#extracting-a-custom-hook) are created in `src/hooks`.
 * [Axios interceptors](https://github.com/axios/axios#interceptors) are created in the `src/interceptors` folder.
 * Utility functions are exported from `src/utils` folder.
 
 #### Components
 
-Components that can be used on all screens are created in the `src/components` folder. All components have created as a function that able to use [hooks](https://reactjs.org/docs/hooks-intro.html).
+Components that can be used on all screens are created in the `src/components` folder. All components have been created as a function that is able to use [hooks](https://reactjs.org/docs/hooks-intro.html).
 
 #### Screens
 
@@ -388,13 +388,13 @@ Each screen is used in a navigator in the `src/navigators` folder.
 
 #### Navigation
 
-[React Navigation](https://reactnavigation.org/) is used as a navigation library. Navigators are created in the `src/navigators`. A [drawer](https://reactnavigation.org/docs/drawer-based-navigation/) navigator and several [stack](https://reactnavigation.org/docs/hello-react-navigation/#installing-the-stack-navigator-library) navigators have created in this folder. See the [above diagram](#screens) for navigation structure.
+[React Navigation](https://reactnavigation.org/) is used as a navigation library. Navigators are created in the `src/navigators`. A [drawer](https://reactnavigation.org/docs/drawer-based-navigation/) navigator and several [stack](https://reactnavigation.org/docs/hello-react-navigation/#installing-the-stack-navigator-library) navigators have been created in this folder. See the [above diagram](#screens) for the navigation structure.
 
 #### State Management
 
-[Redux](https://redux.js.org/) is used as state management library. [Redux Toolkit](https://redux-toolkit.js.org/) library is used as a toolset for efficient Redux development.
+[Redux](https://redux.js.org/) is used as a state management library. [Redux Toolkit](https://redux-toolkit.js.org/) library is used as a toolset for efficient Redux development.
 
-Actions, reducers, sagas, selectors are created in the `src/store` folder. Store folder as like below:
+Actions, reducers, sagas and selectors are created in the `src/store` folder. Store folder is as below:
 
 ![react-native-store-folder](../images/react-native-store-folder.png)
 
@@ -426,11 +426,11 @@ See the [Testing Overview](https://reactjs.org/docs/testing.html) document.
 
 * [Native Base](https://nativebase.io/) is used as UI components library.
 * [React Navigation](https://reactnavigation.org/) is used as navigation library.
-* [Axios](https://github.com/axios/axios) is used as HTTP client library.
+* [Axios](https://github.com/axios/axios) is used as an HTTP client library.
 * [Redux](https://redux.js.org/) is used as state management library.
 * [Redux Toolkit](https://redux-toolkit.js.org/) library is used as a toolset for efficient Redux development.
 * [Redux-Saga](https://redux-saga.js.org/) is used to manage asynchronous processes.
-* [Redux Persist](https://github.com/rt2zz/redux-persist) is used as state persistance.
+* [Redux Persist](https://github.com/rt2zz/redux-persist) is used as state persistence.
 * [Reselect](https://github.com/reduxjs/reselect) is used to create memoized selectors.
 * [i18n-js](https://github.com/fnando/i18n-js) is used as i18n library.
 * [expo-font](https://docs.expo.io/versions/latest/sdk/font/) library allows loading fonts easily.
