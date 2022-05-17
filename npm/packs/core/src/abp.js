@@ -777,7 +777,7 @@ var abp = abp || {};
 
     abp.globalFeatures = abp.globalFeatures || {};
 
-    abp.globalFeatures.enabledFeatures = abp.globalFeatures.enabledFeatures || {};
+    abp.globalFeatures.enabledFeatures = abp.globalFeatures.enabledFeatures || [];
 
     abp.globalFeatures.isEnabled = function(name){
         return abp.globalFeatures.enabledFeatures.indexOf(name) != -1;
