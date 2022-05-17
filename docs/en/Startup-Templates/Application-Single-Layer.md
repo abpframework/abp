@@ -69,7 +69,7 @@ If you don't specify any additional options while creating an `app-nolayers` tem
 
 ![](../images/bookstore-single-layer-solution-structure.png)
 
-As you can see, it's a single-layer template rather than a layered-architecture solution (like the `Application Startup Template`).
+It's a single-layer template rather than a layered-architecture solution (like the `Application Startup Template`). It's helpful to create a running application quickly without considering the layered architecture.
 
 ### Folder Structure
 
@@ -92,8 +92,6 @@ dotnet run --migrate-database
 
 > While creating a database & applying migrations seem only necessary for relational databases, this project comes even if you choose a NoSQL database provider (like MongoDB). In that case, it still seeds the initial data which is necessary for the application.
 
-> If you create an `app-nolayers` template with **Angular UI** you also need to run the angular project to see the UI.
-
 ### Angular UI 
 
 If you choose `Angular` as the UI framework, the solution is being separated into two folders:
@@ -103,6 +101,6 @@ If you choose `Angular` as the UI framework, the solution is being separated int
 
 The server-side is similar to the solution described in the [Solution Structure](#solution-structure) section above. This project serves the API, so the `Angular` application can consume it.
 
-Angular application folder structure looks like below:
+The client-side application consumes the HTTP APIs as mentioned. You can see the folder structure of the Angular project shown below:
 
 ![](../images/single-layer-angular-folder-structure.png)
