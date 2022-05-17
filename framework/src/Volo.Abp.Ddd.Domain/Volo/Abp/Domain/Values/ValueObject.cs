@@ -44,6 +44,6 @@ public abstract class ValueObject
             }
         }
 
-        return !thisValues.MoveNext() && !otherValues.MoveNext();
+        return !thisMoveNext && !otherMoveNext;
     }
 }
