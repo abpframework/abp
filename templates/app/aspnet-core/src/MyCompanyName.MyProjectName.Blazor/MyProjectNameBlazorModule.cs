@@ -83,16 +83,7 @@ public class MyProjectNameBlazorModule : AbpModule
             options.ProviderOptions.DefaultScopes.Add("phone");
         });
 
-        AbpClaimTypes.UserId = OpenIddictConstants.Claims.Subject;
-        AbpClaimTypes.Role = OpenIddictConstants.Claims.Role;
         AbpClaimTypes.UserName = OpenIddictConstants.Claims.Name;
-        AbpClaimTypes.Name = OpenIddictConstants.Claims.GivenName;
-        AbpClaimTypes.SurName = OpenIddictConstants.Claims.FamilyName;
-        AbpClaimTypes.PhoneNumber = OpenIddictConstants.Claims.PhoneNumber;
-        AbpClaimTypes.PhoneNumberVerified = OpenIddictConstants.Claims.PhoneNumberVerified;
-        AbpClaimTypes.Email = OpenIddictConstants.Claims.Email;
-        AbpClaimTypes.EmailVerified = OpenIddictConstants.Claims.EmailVerified;
-
     }
 
     private static void ConfigureUI(WebAssemblyHostBuilder builder)
