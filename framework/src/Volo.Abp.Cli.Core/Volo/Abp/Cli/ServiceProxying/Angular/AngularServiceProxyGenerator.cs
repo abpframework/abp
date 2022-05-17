@@ -100,8 +100,8 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
             );
         }
 
-        var parseError = SemanticVersion.TryParse(schematicsVersion.TrimStart('~', '^', 'v'), out var semanticSchematicsVersion);
-        if (parseError)
+        var parsed = SemanticVersion.TryParse(schematicsVersion.TrimStart('~', '^', 'v'), out var semanticSchematicsVersion);
+        if (!parsed)
         {
             Logger.LogWarning("Couldn't determinate version of \"@abp/ng.schematics\" package.");
             return;
