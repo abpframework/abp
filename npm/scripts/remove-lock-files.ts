@@ -8,6 +8,8 @@ export async function removeLockFiles() {
     '../../templates/app/angular',
     '../../templates/app/react-native',
     '../../templates/module/angular',
+    '../../templates/app-nolayers/angular',
+    '../../templates/app-nolayers/react-native',
   ];
 
   try {
