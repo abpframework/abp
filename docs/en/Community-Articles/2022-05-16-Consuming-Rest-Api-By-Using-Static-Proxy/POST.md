@@ -95,7 +95,7 @@ namespace Acme.BookStore.Books
     }
 }
 ```
-It simply returns a list of books. You probably want to get the books from a database, but it doesn't matter for this article. To do it you can visit [here] (https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF)
+It simply returns a list of books. You probably want to get the books from a database, but it doesn't matter for this article. To do it you can visit [here](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF)
 
 ### Consume the app service from the console application
 Change `ClientDemoService` as shown the following in the `Acme.BookStore.HttpApi.Client.ConsoleTestApp` project under the test folder.
