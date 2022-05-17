@@ -70,10 +70,8 @@ public class MyProjectNameIdentityServerModule : AbpModule
         {
             builder.AddValidation(options =>
             {
-                options.AddAudiences("AbpAPIResource");
-
+                options.AddAudiences("MyProjectName");
                 options.UseLocalServer();
-
                 options.UseAspNetCore();
             });
         });

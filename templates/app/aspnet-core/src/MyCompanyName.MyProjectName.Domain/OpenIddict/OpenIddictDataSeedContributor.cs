@@ -136,7 +136,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             await CreateApplicationAsync(
                 name: blazorClientId,
                 type: OpenIddictConstants.ClientTypes.Public,
-                consentType: OpenIddictConstants.ConsentTypes.Explicit,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Blazor Application",
                 secret: null,
                 grantTypes: new List<string> 
