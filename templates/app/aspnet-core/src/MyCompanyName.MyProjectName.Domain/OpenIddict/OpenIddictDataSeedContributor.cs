@@ -88,7 +88,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             await CreateApplicationAsync(
                 name: webClientId,
                 type: OpenIddictConstants.ClientTypes.Public,
-                consentType: OpenIddictConstants.ConsentTypes.Explicit,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Web Application",
                 secret: null,
                 grantTypes: new List<string> //Hybrid flow
@@ -110,7 +110,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             await CreateApplicationAsync(
                 name: consoleAndAngularClientId,
                 type: OpenIddictConstants.ClientTypes.Confidential,
-                consentType: OpenIddictConstants.ConsentTypes.Explicit,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Console Test / Angular Application",
                 secret: configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*",
                 grantTypes: new List<string> 
@@ -158,7 +158,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             await CreateApplicationAsync(
                 name: swaggerClientId,
                 type: OpenIddictConstants.ClientTypes.Confidential,
-                consentType: OpenIddictConstants.ConsentTypes.Explicit,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Blazor Application",
                 secret: configurationSection["MyProjectName_Swagger:ClientSecret"],
                 grantTypes: new List<string> 
