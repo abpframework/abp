@@ -1,0 +1,10 @@
+{
+  "culture": "fa",
+  "texts": {
+    "Volo.Authorization:010001": "اعتبار سنجی انجام نشد! دسترسی داده نشده است.",
+    "Volo.Authorization:010002": "اعتبار سنجی انجام نشد! دسترسی داده نشده است: {PolicyName}",
+    "Volo.Authorization:010003": "اعتبار سنجی انجام نشد! دسترسی به منابع مورد نظر داده نشده است: {ResourceName}",
+    "Volo.Authorization:010004": "اعتبار سنجی انجام نشد! به مورد اعلامی دسترسی داده نشده است: {ResourceName}",
+    "Volo.Authorization:010005": "اعتبار سنجی انجام نشد! به موارد اعلامی دسترسی داده نشده است: {ResourceName}"
+  }
+}

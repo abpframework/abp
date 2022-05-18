@@ -1,0 +1,7 @@
+{
+  "culture": "fa",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "زبان پیش فرض",
+    "Description:Abp.Localization.DefaultLanguage": "زبان پیش فرض برنامه"
+  }
+}

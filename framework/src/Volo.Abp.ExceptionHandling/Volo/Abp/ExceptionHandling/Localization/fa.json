@@ -1,0 +1,26 @@
+{
+  "culture": "fa",
+  "texts": {
+    "InternalServerErrorMessage": "یک خطای داخلی در حین درخواست شما رخ داد!",
+    "ValidationErrorMessage": "درخواست شما معتبر نیست!",
+    "ValidationNarrativeErrorMessageTitle": "خطاهای زیر در حین اعتبارسنجی شناسایی شد.",
+    "DefaultErrorMessage": "خطایی رخ داده است!",
+    "DefaultErrorMessageDetail": "جزئیات خطا توسط سرور ارسال نشده است.",
+    "DefaultErrorMessage401": "شما احراز هویت نشده اید!",
+    "DefaultErrorMessage401Detail": "برای انجام این عملیات باید وارد سیستم شوید.",
+    "DefaultErrorMessage403": "شما مجاز نیستید!",
+    "DefaultErrorMessage403Detail": "شما مجاز به انجام این عمل نیستید!",
+    "DefaultErrorMessage404": "منبع پیدا نشد!",
+    "DefaultErrorMessage404Detail": "منبع درخواست شده در سرور یافت نشد!",
+    "EntityNotFoundErrorMessage": "هیچ موجودیتی : {0} با شناسه = {1} وجود ندارد!",
+    "AbpDbConcurrencyErrorMessage": "داده‌هایی که ارسال کرده‌اید قبلاً توسط کاربر/مشتری دیگر تغییر کرده است. لطفاً تغییراتی را که انجام داده‌اید کنار بگذارید و از ابتدا تلاش کنید.",
+    "Error": "خطا",
+    "UnhandledException": "خطای کنترل نشده",
+    "401Message": "غیرمجاز",
+    "403Message": "ممنوع",
+    "404Message": "صفحه یافت نشد",
+    "500Message": "خطای سرور داخلی",
+    "403MessageDetail": "شما مجاز به انجام این عملیات نیستید!",
+    "404MessageDetail": "با عرض پوزش، چیزی در این آدرس وجود ندارد."
+  }
+}

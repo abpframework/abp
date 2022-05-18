@@ -1,0 +1,13 @@
+{
+  "culture": "fa",
+  "texts": {
+    "GivenTenantIsNotExist": "تننت مورد نظر وجود ندارد: {0}",
+    "GivenTenantIsNotAvailable": "تننت مورد نظر در دسترس نمیباشد: {0}",
+    "Tenant": "تننت",
+    "Switch": "جابجایی",
+    "Name": "نام",
+    "SwitchTenantHint": "برای جابجایی به سمت میزبان، قسمت نام را خالی بگذارید.",
+    "SwitchTenant": "جابجایی تننت",
+    "NotSelected": "انتخاب نشده"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "culture": "fa",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "از آدرس پیش فرض",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "از نام نمایشی پیش فرض",
+    "DisplayName:Abp.Mailing.Smtp.Host": "هاست",
+    "DisplayName:Abp.Mailing.Smtp.Port": "پورت",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "نام کاربری",
+    "DisplayName:Abp.Mailing.Smtp.Password": "رمز عبور",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "دامنه",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "فعال سازی SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "از اعتبارنامه های پیش فرض استفاده کنید",
+    "Description:Abp.Mailing.DefaultFromAddress": "از آدرس پیش فرض",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "از نام نمایشی پیش فرض",
+    "Description:Abp.Mailing.Smtp.Host": "نام یا آدرس IP میزبان مورد استفاده برای تراکنش های SMTP.",
+    "Description:Abp.Mailing.Smtp.Port": "پورتی که برای تراکنش های SMTP استفاده می شود.",
+    "Description:Abp.Mailing.Smtp.UserName": "نام کاربری مرتبط با اعتبارنامه",
+    "Description:Abp.Mailing.Smtp.Password": "رمز عبور کاربر مرتبط با اعتبارنامه.",
+    "Description:Abp.Mailing.Smtp.Domain": "نام دامنه یا رایانه ای که اعتبار را تأیید می کند.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "اینکه آیا SmtpClient از لایه سوکت های امن (SSL) برای رمزگذاری هنگام ارتباط استفاده می کند.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "اینکه آیا DefaultCredentials همراه با درخواست ها ارسال می شوند.",
+    "TextTemplate:StandardEmailTemplates.Layout": "الگوی طرح بندی ایمیل پیش فرض",
+    "TextTemplate:StandardEmailTemplates.Message": "قالب پیام ساده برای ایمیل"
+  }
+}
