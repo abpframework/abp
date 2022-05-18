@@ -70,7 +70,7 @@ public class BookAppService : ApplicationService, IBookAppService
 }
 ````
 
-* `BookAppService` 注入图书实体的默认[仓库](Repositories.md),使用`InsertAsync`方法插入 `Book` 到数据库中.
+* `BookAppService` 注入图书实体的默认[仓储](Repositories.md),使用`InsertAsync`方法插入 `Book` 到数据库中.
 * `GuidGenerator`类型是 `IGuidGenerator`,它是在`ApplicationService`基类中定义的属性. ABP将这样常用属性预注入,所以不需要手动[注入](Dependency-Injection.md).
 * 如果你想遵循DDD最佳实践,请参阅下面的*聚合示例*部分.
 
@@ -373,7 +373,7 @@ public static class IdentityUserExtensions
 
 * 对于 [Entity Framework Core](Entity-Framework-Core.md),这是两种类型的配置;
     * 默认它以 `JSON` 字符串形式存储在 `ExtraProperties` 字段中. 序列化到 `JSON` 和反序列化到 `JSON` 由ABP使用EF Core的[值转换](https://docs.microsoft.com/zh-cn/ef/core/modeling/value-conversions)系统自动完成.
-    * 如果需要,你可以使用 `ObjectExtensionManager` 为所需的额外属性定义一个单独的数据库字段. 那些使用 `ObjectExtensionManager` 配置的属性继续使用单个 `JSON` 字段. 当你使用预构建的[应用模块](Modules/Index.md)并且想要[扩展模块的实体](Customizing-Application-Modules-Extending-Entities.md). 参阅[EF Core迁移文档](Entity-Framework-Core.md)了解如何使用 `ObjectExtensionManager`.
+    * 如果需要,你可以使用 `ObjectExtensionManager` 为所需的额外属性定义一个单独的数据库字段. 未使用 `ObjectExtensionManager` 配置的属性继续使用单个 `JSON` 字段. 当你使用预构建的[应用模块](Modules/Index.md)并且想要[扩展模块的实体](Customizing-Application-Modules-Extending-Entities.md). 参阅[EF Core迁移文档](Entity-Framework-Core.md)了解如何使用 `ObjectExtensionManager`.
 * 对于 [MongoDB](MongoDB.md), 它以 **常规字段** 存储, 因为 MongoDB 天生支持这种 [额外](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) 系统.
 
 ### 讨论额外的属性
