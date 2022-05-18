@@ -158,7 +158,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 
 We've mapped the `TodoItem` entity to the `TodoItems` table in the database. The next step is to create a migration and apply the changes to the database.
 
-### Code the First Migrations
+### Code First Migrations
 
 The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
