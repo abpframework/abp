@@ -92,4 +92,6 @@ public class PersonalInfoModel
     public bool PhoneNumberConfirmed { get; set; }
 
     public bool EmailConfirmed { get; set; }
+
+    public string ConcurrencyStamp { get; set; }
 }
