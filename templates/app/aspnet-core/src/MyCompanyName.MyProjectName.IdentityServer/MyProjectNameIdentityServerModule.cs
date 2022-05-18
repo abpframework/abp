@@ -1,14 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
@@ -30,8 +28,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
-using Volo.Abp.OpenIddict.WildcardDomains;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
@@ -54,10 +50,9 @@ public class MyProjectNameIdentityServerModule : AbpModule
     {
         PreConfigure<OpenIddictServerBuilder>(builder =>
         {
-            //https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
-            //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-            builder.AddSigningKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78")));
-            builder.AddEncryptionKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80")));
+            // https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
+            // In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
+            builder.DisableAccessTokenEncryption();
         });
 
         PreConfigure<OpenIddictBuilder>(builder =>
@@ -75,11 +70,6 @@ public class MyProjectNameIdentityServerModule : AbpModule
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
-
-        Configure<AbpOpenIddictAspNetCoreOptions>(options =>
-        {
-            options.AddDevelopmentEncryptionAndSigningCertificate = false;
-        });
 
         Configure<AbpLocalizationOptions>(options =>
         {

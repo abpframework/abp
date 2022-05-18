@@ -52,10 +52,9 @@ public class MyProjectNameHttpApiHostModule : AbpModule
     {
         PreConfigure<OpenIddictServerBuilder>(builder =>
         {
-            //https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
-            //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-            builder.AddSigningKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78")));
-            builder.AddEncryptionKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80")));
+            // https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
+            // In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
+            builder.DisableAccessTokenEncryption();
         });
 
         PreConfigure<OpenIddictBuilder>(builder =>
@@ -73,11 +72,6 @@ public class MyProjectNameHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
-
-        Configure<AbpOpenIddictAspNetCoreOptions>(options =>
-        {
-            options.AddDevelopmentEncryptionAndSigningCertificate = false;
-        });
 
         ConfigureBundles();
         ConfigureUrls(configuration);
@@ -146,11 +140,6 @@ public class MyProjectNameHttpApiHostModule : AbpModule
 
     private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
     {
-        Configure<AbpOpenIddictAspNetCoreOptions>(options =>
-        {
-            options.AddDevelopmentEncryptionAndSigningCertificate = false;
-        });
-        
         context.Services.AddAuthentication()
             .AddJwtBearer(options =>
             {
@@ -161,11 +150,8 @@ public class MyProjectNameHttpApiHostModule : AbpModule
                 {
                     ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                 };
-                
-                options.MapInboundClaims = false;
 
-                options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78"));
-                options.TokenValidationParameters.TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80"));
+                options.MapInboundClaims = false;
             });
     }
 
