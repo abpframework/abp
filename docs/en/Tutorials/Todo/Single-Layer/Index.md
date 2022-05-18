@@ -77,7 +77,7 @@ It is good to run the application before starting the development. The solution 
 * `TodoApp` (in the .NET solution) hosts the server-side HTTP API, so the Angular application can consume it. (server-side application)
 * `angular` folder contains the Angular application. (client-side application)
 
-Firstly, run the `TodoApp` project in your favorite IDE (or run the `dotnet run` CLI command on your project directory) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
+Firstly, run the `TodoApp` project in your favorite IDE (or run the `dotnet run` CLI command on your project directory) to see the server-side HTTP API on [Swagger UI](https://swagger.io/tools/swagger-ui/):
 
 ![todo-swagger-ui-initial](../todo-swagger-ui-initial.png)
 
@@ -89,7 +89,7 @@ First, run the following command (or `yarn install`) to restore the NPM packages
 npm install
 ````
 
-It will take some time to install all packages. Then you can run the application using the following (or `yarn start`) command:
+It will take some time to install all the packages. Then you can run the application using the following (or `yarn start`) command:
 
 ````bash
 npm start
@@ -130,7 +130,7 @@ Next step is to setup the [Entity Framework Core](../../../Entity-Framework-Core
 
 ### Mapping Configuration
 
-Open the `TodoAppDbContext` class (it's under the **Data** folder) and add a new `DbSet` property to this class:
+Open the `TodoAppDbContext` class (under the **Data** folder) and add a new `DbSet` property to this class:
 
 ````csharp
 public DbSet<TodoItem> TodoItems { get; set; }
@@ -158,7 +158,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 
 We've mapped the `TodoItem` entity to the `TodoItems` table in the database. The next step is to create a migration and apply the changes to the database.
 
-### Code First Migrations
+### Code the First Migrations
 
 The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
@@ -265,9 +265,9 @@ public class TodoAppService : ApplicationService, ITodoAppService
 }
 ```
 
-This class inherits from the `ApplicationService` class of the ABP Framework and implements the `ITodoAppService` that created in the [Creating the Application Service Interface](#creating-the-application-service-interface) section. ABP provides default generic [repositories](../../../Repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../Dependency-Injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement the use cases described before.
+This class inherits from the `ApplicationService` class of the ABP Framework and implements the `ITodoAppService` that was created in the [Creating the Application Service Interface](#creating-the-application-service-interface) section. ABP provides default generic [repositories](../../../Repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../Dependency-Injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement the use cases described before.
 
-### Getting Todo Items
+### Getting the Todo Items
 
 Let's start by implementing the `GetListAsync` method:
 
@@ -284,7 +284,7 @@ public async Task<List<TodoItemDto>> GetListAsync()
 }
 ````
 
-We are simply getting the `TodoItem` list from the database, mapping them to `TodoItemDto` objects and returning as the result.
+We are simply getting the `TodoItem` list from the database, mapping them to the `TodoItemDto` objects and returning as the result.
 
 #### Creating a New Todo Item
 
@@ -357,7 +357,7 @@ public class IndexModel : AbpPageModel
 }
 ```
 
-This class uses the `ITodoAppService` to get the list of todo items and assign the `TodoItems` property. We will use it to render the todo items on the razor page.
+This class uses `ITodoAppService` to get the list of todo items and assign the `TodoItems` property. We will use it to render the todo items on the razor page.
 
 ### Index.cshtml
 
@@ -444,15 +444,15 @@ $(function () {
 });
 ````
 
-In the first part, we are subscribing to the click events of the trash icons near the todo items, deleting the related item on the server and showing a notification on the UI. Also, we are removing the deleted item from the DOM, so we don't need to refresh the page.
+In the first part, we subscribed to the click events of the trash icons near the todo items, deleted the related item on the server and showed a notification on the UI. Also, we removed the deleted item from the DOM, so we wouldn't need to refresh the page.
 
-In the second part, we are creating a new todo item on the server. If it succeeds, we are then manipulating the DOM to insert a new `<li>` element to the todo list. This way we don't need to refresh the whole page after creating a new todo item.
+In the second part, we created a new todo item on the server. If it succeeded, we would then manipulate the DOM to insert a new `<li>` element to the todo list. This way, we wouldn't need to refresh the whole page after creating a new todo item.
 
 The interesting part here is how we communicate with the server. See the [*Dynamic JavaScript Proxies & Auto API Controllers*](#dynamic-javascript-proxies--auto-api-controllers) section to understand how it works. But now, let's continue and complete the application.
 
 ### Index.css
 
-As the final touch, create the `Index.css` file in the `Pages` folder and add the following content:
+As for the final touch, create the `Index.css` file in the `Pages` folder and add the following content:
 
 ````css
 #TodoList{
@@ -493,7 +493,7 @@ In the `Index.js` file, we've used the `todoApp.services.todo.delete(...)` and `
 
 However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to **API Controllers** by convention.
 
-If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
+If you open [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
 
 ![todo-api](../todo-api.png)
 
