@@ -40,7 +40,7 @@ public class UserInfoController : AbpOpenIdDictControllerBase
         if (User.HasScope(OpenIddictConstants.Scopes.Profile))
         {
             claims[AbpClaimTypes.TenantId] = user.TenantId;
-            claims[OpenIddictConstants.Claims.Name] = user.UserName;
+            claims[OpenIddictConstants.Claims.PreferredUsername] = user.UserName;
             claims[OpenIddictConstants.Claims.FamilyName] = user.Surname;
         }
 

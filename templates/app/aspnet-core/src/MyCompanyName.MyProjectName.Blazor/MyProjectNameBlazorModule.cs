@@ -82,8 +82,6 @@ public class MyProjectNameBlazorModule : AbpModule
             options.ProviderOptions.DefaultScopes.Add("email");
             options.ProviderOptions.DefaultScopes.Add("phone");
         });
-
-        AbpClaimTypes.UserName = OpenIddictConstants.Claims.Name;
     }
 
     private static void ConfigureUI(WebAssemblyHostBuilder builder)
