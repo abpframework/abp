@@ -1320,8 +1320,29 @@
           "path": "Samples/Index.md"
         },
         {
-          "text": "Microservice Demo",
+          "text": "eShopOnAbp",
+          "path": "https://github.com/abpframework/eShopOnAbp"
+        },
+        {
+          "text": "EventHub",
+          "path": "https://github.com/abpframework/eventhub"
+        },
+        {
+          "text": "Microservice Demo (legacy)",
           "path": "Samples/Microservice-Demo.md"
+        }
+      ]
+    },
+    {
+      "text": "Books",
+      "items": [
+        {
+          "text": "Mastering ABP Framework",
+          "path": "https://abp.io/books/mastering-abp-framework"
+        },
+        {
+          "text": "Implementing Domain Driven Design",
+          "path": "https://abp.io/books/implementing-domain-driven-design"
         }
       ]
     },

@@ -35,6 +35,8 @@ builder.Services.AddAuthentication(options =>
 
         options.Scope.Add("email");
         options.Scope.Add("roles");
+        options.Scope.Add("phone");
+        options.Scope.Add("AbpAPI");
     });
 
 var app = builder.Build();

@@ -75,8 +75,8 @@
       "path": "host/MyCompanyName.MyProjectName.Web.Host/MyCompanyName.MyProjectName.Web.Host.abppkg.json",
       "folder": "host"
     },
-    "MyCompanyName.MyProjectName.IdentityServer": {
-      "path": "host/MyCompanyName.MyProjectName.IdentityServer/MyCompanyName.MyProjectName.IdentityServer.abppkg.json",
+    "MyCompanyName.MyProjectName.OpenIddict": {
+      "path": "host/MyCompanyName.MyProjectName.OpenIddict/MyCompanyName.MyProjectName.OpenIddict.abppkg.json",
       "folder": "host"
     },
     "MyCompanyName.MyProjectName.Host.Shared": {

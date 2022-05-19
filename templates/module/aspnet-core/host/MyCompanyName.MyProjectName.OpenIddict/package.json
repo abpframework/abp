@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "name": "my-app-openiddict",
+  "private": true,
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^5.3.0-rc.1"
+  }
+}

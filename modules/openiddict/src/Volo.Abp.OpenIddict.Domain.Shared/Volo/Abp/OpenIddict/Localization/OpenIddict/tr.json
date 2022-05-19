@@ -9,6 +9,8 @@
     "Authorization": "Yetki",
     "DoYouWantToGrantAccessToYourData": "Do you want to grant {0} access to your data?",
     "ScopesRequested": "İstenen kapsamlar",
+    "Accept": "Kabul etmek",
+    "Deny": "Reddetmek",
     "LogOut": "Çıkış Yap",
     "AreYouSureYouWantToSignOut": "Çıkış yapmak istediğinden emin misin?"
   }
