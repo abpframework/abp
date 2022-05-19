@@ -87,10 +87,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
              * solution. Otherwise, you can delete this client. */
             await CreateApplicationAsync(
                 name: webClientId,
-                type: OpenIddictConstants.ClientTypes.Public,
+                type: OpenIddictConstants.ClientTypes.Confidential,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Web Application",
-                secret: null,
+                secret: configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*",
                 grantTypes: new List<string> //Hybrid flow
                 {
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
@@ -109,10 +109,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             var webClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
             await CreateApplicationAsync(
                 name: consoleAndAngularClientId,
-                type: OpenIddictConstants.ClientTypes.Confidential,
+                type: OpenIddictConstants.ClientTypes.Public,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Console Test / Angular Application",
-                secret: configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*",
+                secret: null,
                 grantTypes: new List<string>
                 {
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
@@ -148,6 +148,29 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             );
         }
 
+        // Blazor Server Tiered Client
+        var blazorServerTieredClientId = configurationSection["MyProjectName_BlazorServerTiered:ClientId"];
+        if (!blazorServerTieredClientId.IsNullOrWhiteSpace())
+        {
+            var blazorServerTieredRootUrl = configurationSection["MyProjectName_BlazorServerTiered:RootUrl"].EnsureEndsWith('/');
+
+            await CreateApplicationAsync(
+                name: blazorServerTieredClientId,
+                type: OpenIddictConstants.ClientTypes.Confidential,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
+                displayName: "Blazor Server Application",
+                secret: configurationSection["MyProjectName_BlazorServerTiered:ClientSecret"] ?? "1q2w3e*",
+                grantTypes: new List<string> //Hybrid flow
+                {
+                    OpenIddictConstants.GrantTypes.AuthorizationCode,
+                    OpenIddictConstants.GrantTypes.Implicit
+                },
+                scopes: commonScopes,
+                redirectUri: $"{blazorServerTieredRootUrl}signin-oidc",
+                postLogoutRedirectUri: $"{blazorServerTieredRootUrl}signout-callback-oidc"
+            );
+        }
+
         // Swagger Client
         var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
         if (!swaggerClientId.IsNullOrWhiteSpace())
@@ -156,10 +179,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
             await CreateApplicationAsync(
                 name: swaggerClientId,
-                type: OpenIddictConstants.ClientTypes.Confidential,
+                type: OpenIddictConstants.ClientTypes.Public,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
-                displayName: "Blazor Application",
-                secret: configurationSection["MyProjectName_Swagger:ClientSecret"],
+                displayName: "Swagger Application",
+                secret: null,
                 grantTypes: new List<string>
                 {
                     OpenIddictConstants.GrantTypes.AuthorizationCode,

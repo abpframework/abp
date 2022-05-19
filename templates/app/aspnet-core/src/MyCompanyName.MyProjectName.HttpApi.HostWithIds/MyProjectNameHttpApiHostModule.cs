@@ -259,7 +259,6 @@ public class MyProjectNameHttpApiHostModule : AbpModule
 
             var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
             c.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-            c.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
             c.OAuthScopes("MyProjectName");
         });
 

@@ -148,6 +148,7 @@ public class MyProjectNameWebModule : AbpModule
                 options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
 
                 options.ClientId = configuration["AuthServer:ClientId"];
+                options.ClientSecret = configuration["AuthServer:ClientSecret"];
 
                 options.UsePkce = true;
                 options.SaveTokens = true;

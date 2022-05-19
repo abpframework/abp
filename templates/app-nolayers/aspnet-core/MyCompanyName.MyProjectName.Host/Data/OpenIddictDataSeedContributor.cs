@@ -72,17 +72,17 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
         var configurationSection = _configuration.GetSection("OpenIddict:Applications");
 
-        //Angular Client
+        //Console Test / Angular Client
         var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
         if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
         {
             var webClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
             await CreateApplicationAsync(
                 name: consoleAndAngularClientId,
-                type: OpenIddictConstants.ClientTypes.Confidential,
+                type: OpenIddictConstants.ClientTypes.Public,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Console Test / Angular Application",
-                secret: configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*",
+                secret: null,
                 grantTypes: new List<string>
                 {
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
@@ -104,10 +104,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
             await CreateApplicationAsync(
                 name: swaggerClientId,
-                type: OpenIddictConstants.ClientTypes.Confidential,
+                type: OpenIddictConstants.ClientTypes.Public,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
-                displayName: "Blazor Application",
-                secret: configurationSection["MyProjectName_Swagger:ClientSecret"],
+                displayName: "Swagger Application",
+                secret: null,
                 grantTypes: new List<string>
                 {
                     OpenIddictConstants.GrantTypes.AuthorizationCode,

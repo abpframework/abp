@@ -13,7 +13,6 @@ export const environment = {
     issuer: 'https://localhost:44301/',
     redirectUri: baseUrl,
     clientId: 'MyProjectName_App',
-    dummyClientSecret: '1q2w3e*',
     responseType: 'code',
     scope: 'offline_access MyProjectName',
     requireHttps: true
