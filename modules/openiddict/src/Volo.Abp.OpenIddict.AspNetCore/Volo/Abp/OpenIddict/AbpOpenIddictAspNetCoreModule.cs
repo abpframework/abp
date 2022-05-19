@@ -53,13 +53,13 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             .AddServer(builder =>
             {
                 builder
-                    .SetAuthorizationEndpointUris("/connect/authorize")
+                    .SetAuthorizationEndpointUris("/connect/authorize", "/connect/authorize/callback")
                     // /.well-known/oauth-authorization-server
                     // /.well-known/openid-configuration
                     //.SetConfigurationEndpointUris()
                     // /.well-known/jwks
                     //.SetCryptographyEndpointUris()
-                    .SetDeviceEndpointUris("/connect/device")
+                    .SetDeviceEndpointUris("/device")
                     .SetIntrospectionEndpointUris("/connect/introspect")
                     .SetLogoutEndpointUris("/connect/logout")
                     .SetRevocationEndpointUris("/connect/revocat")
