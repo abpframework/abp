@@ -348,5 +348,4 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             await _applicationManager.CreateAsync(application);
         }
     }
-
 }

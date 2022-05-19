@@ -72,32 +72,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
         var configurationSection = _configuration.GetSection("OpenIddict:Applications");
 
-        //Web Client
-        var webClientId = configurationSection["MyProjectName_Web:ClientId"];
-        if (!webClientId.IsNullOrWhiteSpace())
-        {
-            var webClientRootUrl = configurationSection["MyProjectName_Web:RootUrl"].EnsureEndsWith('/');
-
-            /* MyProjectName_Web client is only needed if you created a tiered
-             * solution. Otherwise, you can delete this client. */
-            await CreateApplicationAsync(
-                name: webClientId,
-                type: OpenIddictConstants.ClientTypes.Public,
-                consentType: OpenIddictConstants.ConsentTypes.Implicit,
-                displayName: "Web Application",
-                secret: null,
-                grantTypes: new List<string> //Hybrid flow
-                {
-                    OpenIddictConstants.GrantTypes.AuthorizationCode,
-                    OpenIddictConstants.GrantTypes.Implicit
-                },
-                scopes: commonScopes,
-                redirectUri: $"{webClientRootUrl}signin-oidc",
-                postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
-            );
-        }
-
-        //Console Test / Angular Client
+        //Angular Client
         var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
         if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
         {
@@ -118,28 +93,6 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 scopes: commonScopes,
                 redirectUri: webClientRootUrl,
                 postLogoutRedirectUri: webClientRootUrl
-            );
-        }
-
-        // Blazor Client
-        var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
-        if (!blazorClientId.IsNullOrWhiteSpace())
-        {
-            var blazorRootUrl = configurationSection["MyProjectName_Blazor:RootUrl"].TrimEnd('/');
-
-            await CreateApplicationAsync(
-                name: blazorClientId,
-                type: OpenIddictConstants.ClientTypes.Public,
-                consentType: OpenIddictConstants.ConsentTypes.Implicit,
-                displayName: "Blazor Application",
-                secret: null,
-                grantTypes: new List<string>
-                {
-                    OpenIddictConstants.GrantTypes.AuthorizationCode,
-                },
-                scopes: commonScopes,
-                redirectUri: $"{blazorRootUrl}/authentication/login-callback",
-                postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
             );
         }
 
@@ -343,5 +296,4 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             await _applicationManager.CreateAsync(application);
         }
     }
-
 }
