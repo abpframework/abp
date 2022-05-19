@@ -138,6 +138,24 @@ export class ConfigStateService {
         }),
       );
   }
+
+  getGlobalFeatureIsEnabled(key: string) {
+    const globalFeatures = this.store.state.globalFeatures;
+
+    if (!(globalFeatures?.enabledFeatures)) { return false };
+
+    return globalFeatures.enabledFeatures.indexOf(key) != -1;
+
+  }
+
+  getGlobalFeatureIsEnabled$(key: string) {
+    return this.store.sliceState(state => {
+      debugger
+      if (!(state.globalFeatures?.enabledFeatures)) { return false };
+      return state.globalFeatures.enabledFeatures.indexOf(key) != -1 || true;
+    });
+  }
+
 }
 
 function splitKeys(keys: string[] | string): string[] {
