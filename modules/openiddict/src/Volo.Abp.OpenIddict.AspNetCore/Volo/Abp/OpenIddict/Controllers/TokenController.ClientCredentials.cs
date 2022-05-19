@@ -26,13 +26,13 @@ public partial class TokenController
         // will be used to create an id_token, a token or a code.
         var identity = new ClaimsIdentity(
             TokenValidationParameters.DefaultAuthenticationType,
-            OpenIddictConstants.Claims.Name, OpenIddictConstants.Claims.Role);
+            OpenIddictConstants.Claims.PreferredUsername, OpenIddictConstants.Claims.Role);
 
         // Use the client_id as the subject identifier.
         identity.AddClaim(OpenIddictConstants.Claims.Subject, await ApplicationManager.GetClientIdAsync(application),
             OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
 
-        identity.AddClaim(OpenIddictConstants.Claims.Name, await ApplicationManager.GetDisplayNameAsync(application),
+        identity.AddClaim(OpenIddictConstants.Claims.PreferredUsername, await ApplicationManager.GetDisplayNameAsync(application),
             OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
 
         // Note: In the original OAuth 2.0 specification, the client credentials grant
@@ -65,7 +65,7 @@ public partial class TokenController
         // whether they should be included in access tokens, in identity tokens or in both.
 
         return claim.Type switch {
-            OpenIddictConstants.Claims.Name or OpenIddictConstants.Claims.Subject
+            OpenIddictConstants.Claims.PreferredUsername or OpenIddictConstants.Claims.Subject
                 => ImmutableArray.Create(OpenIddictConstants.Destinations.AccessToken,
                     OpenIddictConstants.Destinations.IdentityToken),
 

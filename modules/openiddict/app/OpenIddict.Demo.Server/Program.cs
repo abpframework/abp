@@ -41,13 +41,6 @@ builder.Services.Configure<AbpLocalizationOptions>(options =>
 //         options.TokenValidationParameters.TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80"));
 //     });
 
-// builder.Services.ConfigureApplicationCookie(options =>
-// {
-//     options.ForwardDefaultSelector = ctx => ctx.Request.Path.StartsWithSegments("/api")
-//         ? OtherScheme
-//         : null;
-// });
-
 await builder.AddApplicationAsync<OpenIddictServerModule>();
 
 var app = builder.Build();

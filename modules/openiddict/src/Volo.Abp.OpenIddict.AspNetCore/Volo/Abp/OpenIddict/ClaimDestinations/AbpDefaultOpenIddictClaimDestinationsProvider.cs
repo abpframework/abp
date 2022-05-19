@@ -28,7 +28,7 @@ public class AbpDefaultOpenIddictClaimDestinationsProvider : IAbpOpenIddictClaim
 
             switch (claim.Type)
             {
-                case OpenIddictConstants.Claims.Name:
+                case OpenIddictConstants.Claims.PreferredUsername:
                     claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);
                     if (context.Principal.HasScope(OpenIddictConstants.Scopes.Profile))
                     {

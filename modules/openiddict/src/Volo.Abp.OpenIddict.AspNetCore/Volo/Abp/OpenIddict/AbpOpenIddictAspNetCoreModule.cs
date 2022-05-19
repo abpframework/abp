@@ -40,7 +40,7 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
         {
             AbpClaimTypes.UserId = OpenIddictConstants.Claims.Subject;
             AbpClaimTypes.Role = OpenIddictConstants.Claims.Role;
-            AbpClaimTypes.UserName = OpenIddictConstants.Claims.Name;
+            AbpClaimTypes.UserName = OpenIddictConstants.Claims.PreferredUsername;
             AbpClaimTypes.Name = OpenIddictConstants.Claims.GivenName;
             AbpClaimTypes.SurName = OpenIddictConstants.Claims.FamilyName;
             AbpClaimTypes.PhoneNumber = OpenIddictConstants.Claims.PhoneNumber;
@@ -53,13 +53,13 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             .AddServer(builder =>
             {
                 builder
-                    .SetAuthorizationEndpointUris("/connect/authorize")
+                    .SetAuthorizationEndpointUris("/connect/authorize", "/connect/authorize/callback")
                     // /.well-known/oauth-authorization-server
                     // /.well-known/openid-configuration
                     //.SetConfigurationEndpointUris()
                     // /.well-known/jwks
                     //.SetCryptographyEndpointUris()
-                    .SetDeviceEndpointUris("/connect/device")
+                    .SetDeviceEndpointUris("/device")
                     .SetIntrospectionEndpointUris("/connect/introspect")
                     .SetLogoutEndpointUris("/connect/logout")
                     .SetRevocationEndpointUris("/connect/revocat")
