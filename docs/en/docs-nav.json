@@ -1334,6 +1334,19 @@
       ]
     },
     {
+      "text": "Books",
+      "items": [
+        {
+          "text": "Mastering ABP Framework",
+          "path": "https://abp.io/books/mastering-abp-framework"
+        },
+        {
+          "text": "Implementing Domain Driven Design",
+          "path": "https://abp.io/books/implementing-domain-driven-design"
+        }
+      ]
+    },
+    {
       "text": "Release Information",
       "items": [
         {
