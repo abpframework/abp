@@ -1,6 +1,6 @@
 {
   "iisSettings": {
-    "windowsAuthentication": false, 
+    "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "https://localhost:44301",
@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "IdentityServerHost": {
+    "OpenIddictHost": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:44301",
