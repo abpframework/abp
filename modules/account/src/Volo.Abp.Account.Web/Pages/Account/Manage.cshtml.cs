@@ -34,11 +34,14 @@ public class ManageModel : AccountPageModel
             await contributor.ConfigureAsync(ProfileManagementPageCreationContext);
         }
 
-        if (!Url.IsLocalUrl(ReturnUrl) &&
-            !ReturnUrl.StartsWith(UriHelper.BuildAbsolute(Request.Scheme, Request.Host, Request.PathBase).RemovePostFix("/")) &&
-            !AppUrlProvider.IsRedirectAllowedUrl(ReturnUrl))
+        if (ReturnUrl != null)
         {
-            ReturnUrl = null;
+            if (!Url.IsLocalUrl(ReturnUrl) &&
+                !ReturnUrl.StartsWith(UriHelper.BuildAbsolute(Request.Scheme, Request.Host, Request.PathBase).RemovePostFix("/")) &&
+                !AppUrlProvider.IsRedirectAllowedUrl(ReturnUrl))
+            {
+                ReturnUrl = null;
+            }
         }
 
         return Page();
