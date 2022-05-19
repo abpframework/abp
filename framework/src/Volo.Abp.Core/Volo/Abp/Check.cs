@@ -163,18 +163,7 @@ public static class Check
         return value;
     }
 
-    public static T NotDefault<T>(
-        T value,
-        [InvokerParameterName][NotNull] string parameterName)
-        where T : struct
-    {
-        if(value.Equals(default(T)))
-        {
-            throw new ArgumentException($"{parameterName} has a default value or is empty!", parameterName);
-        }
 
-        return value;
-    }
   
     public static Int16 Positive(
         Int16 value,
@@ -319,6 +308,10 @@ public static class Check
         if (value < minimumValue || value > maximumValue)
         {
             throw new ArgumentException($"{parameterName} is out of range min: {minimumValue} - max: {maximumValue}");
+        }
+        return value;
+    }
+
 
     public static double Range(
         double value,
@@ -348,5 +341,18 @@ public static class Check
 
         return value;
     }
+
+   public static T NotDefault<T>(
+        T value,
+        [InvokerParameterName][NotNull] string parameterName)
+        where T : struct
+   {
+        if(value.Equals(default(T)))
+        {
+            throw new ArgumentException($"{parameterName} has a default value or is empty!", parameterName);
+        }
+
+        return value;
+   }
 
 }
