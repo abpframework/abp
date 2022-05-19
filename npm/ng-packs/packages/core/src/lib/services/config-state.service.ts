@@ -139,13 +139,20 @@ export class ConfigStateService {
       );
   }
 
+  getGlobalFeatures() {
+    return this.store.state.globalFeatures;
+  }
+
+  getGlobalFeatures$() {
+    return this.store.sliceState(state => state.globalFeatures);
+  }
+
   getGlobalFeatureIsEnabled(key: string) {
     const globalFeatures = this.store.state.globalFeatures;
 
     if (!(globalFeatures?.enabledFeatures)) { return false };
 
     return globalFeatures.enabledFeatures.indexOf(key) != -1;
-
   }
 
   getGlobalFeatureIsEnabled$(key: string) {
