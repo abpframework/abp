@@ -37,6 +37,7 @@ public abstract class AppTemplateBase : TemplateInfo
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
         UpdateNuGetConfig(context, steps);
+        ConfigureDockerFiles(context, steps);
         ChangeConnectionString(context, steps);
         CleanupFolderHierarchy(context, steps);
 
