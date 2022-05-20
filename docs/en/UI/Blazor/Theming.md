@@ -1,5 +1,12 @@
 # Blazor UI: Theming
 
+````json
+//[doc-params]
+{
+    "UI": ["Blazor", "BlazorServer"]
+}
+````
+
 ## Introduction
 
 ABP Framework provides a complete **UI Theming** system with the following goals:
@@ -16,16 +23,27 @@ In order to accomplish these goals, ABP Framework;
 
 ### Current Themes
 
-Currently, two themes are **officially provided**:
+Currently, three themes are **officially provided**:
 
 * The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
 * The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
+* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has a [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/commercial/blazor) and a [lite](../../Themes/LeptonXLite/blazor.md) version. 
 
 ## Overall
 
 ### The Base Libraries
 
+{{if UI == "Blazor"}}
+
 All the themes must depend on the [Volo.Abp.AspNetCore.Components.WebAssembly.Theming](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Components.WebAssembly.Theming) NuGet package, so they are indirectly depending on the following libraries:
+
+{{end}}
+
+{{if UI == "BlazorServer"}}
+
+All the themes must depend on the [Volo.Abp.AspNetCore.Components.Server.Theming](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Components.Server.Theming) NuGet package, so they are indirectly depending on the following libraries:
+
+{{end}}
 
 * [Twitter Bootstrap](https://getbootstrap.com/) as the fundamental HTML/CSS framework.
 * [Blazorise](https://github.com/stsrki/Blazorise) as a component library that supports the Bootstrap and adds extra components like Data Grid and Tree.
@@ -61,9 +79,21 @@ The application layout typically includes the following parts;
 
 A theme is simply a Razor Class Library.
 
-### The Easy Way
+### The Easiest Way
 
-The easiest way to create a new theme is to copy the [Basic Theme Source Code](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme) and customize it. Once you get a copy of the theme in your solution, remove the `Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme` NuGet package and reference to the local project.
+The easiest way of creating a new theme is adding [Basic Theme Source Code](https://github.com/abpframework/abp/tree/dev/modules/basic-theme) module with source codes and customizing it. 
+
+{{if UI == "Blazor"}}
+```bash
+abp add-package Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme --with-source-code --add-to-solution-file
+```
+{{end}}
+
+{{if UI == "BlazorServer"}}
+```bash
+abp add-package Volo.Abp.AspNetCore.Components.Server.BasicTheme --with-source-code --add-to-solution-file
+```
+{{end}}
 
 ### Global Styles / Scripts
 
@@ -165,6 +195,9 @@ Configure<AbpToolbarOptions>(options =>
 
 Language Selection toolbar item is generally a dropdown that is used to switch between languages. `ILanguageProvider` is used to get the list of available languages and `CultureInfo.CurrentUICulture` is used to learn the current language.
 
+
+{{if UI == "Blazor"}}
+
 Local Storage is used to get and set the current language with the `Abp.SelectedLanguage` key.
 
 **Example: Get the currently selected language**
@@ -191,6 +224,31 @@ The theme should reload the page after changing the language:
 ````csharp
 await JsRuntime.InvokeVoidAsync("location.reload");
 ````
+
+{{end}}
+
+{{if UI == "BlazorServer"}}
+Localization works on Server side in Blazor Server. So, regular AspNetCore localization middleware is used.
+
+**Example: Get the currently selected language**
+
+````csharp
+var selectedLanguageName = CultureInfo.CurrentCulture.Name;
+````
+
+**Example: Set the selected language**
+
+````csharp
+// Get current url.
+var relativeUrl = NavigationManager.Uri.RemovePreFix(NavigationManager.BaseUri).EnsureStartsWith('/');
+
+// Redirect to ABP language switch endpoint.
+NavigationManager.NavigateTo(
+    $"/Abp/Languages/Switch?culture={newLanguage.CultureName}&uiCulture={newLanguage.UiCultureName}&returnUrl={relativeUrl}",
+    forceLoad: true
+);
+````
+{{end}}
 
 ##### User Menu
 
