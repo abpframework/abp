@@ -29,7 +29,7 @@ The Basic Theme is a theme implementation for the Blazor UI. It is a minimalist 
     ```
     `#ApplicationContainer` is a selector (like `<div id="ApplicationContainer">Loading...</div>`) in the `index.html`.
 
-* Execute `abp-bundle` command under blazor project once.
+* Execute `abp bundle` command under blazor project once.
 
 {{end}}
 
