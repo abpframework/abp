@@ -10,9 +10,9 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
 
-public class OpenIddictHostMigrationsDbContext : AbpDbContext<OpenIddictHostMigrationsDbContext>
+public class AuthServerDbContext : AbpDbContext<AuthServerDbContext>
 {
-    public OpenIddictHostMigrationsDbContext(DbContextOptions<OpenIddictHostMigrationsDbContext> options)
+    public AuthServerDbContext(DbContextOptions<AuthServerDbContext> options)
         : base(options)
     {
 

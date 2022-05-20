@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,11 +11,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace MyCompanyName.MyProjectName.Migrations
 {
-    [DbContext(typeof(OpenIddictHostMigrationsDbContext))]
-    [Migration("20220519020825_Initial")]
-    partial class Initial
+    [DbContext(typeof(AuthServerDbContext))]
+    partial class AuthServerDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
