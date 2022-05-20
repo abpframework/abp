@@ -498,6 +498,7 @@
     "ForMoreInformationClickHere": "For more information, click <a href='{0}'>here.</a>",
     "IsGetOnboardingTraining": "Would you like to get onboarding & web application development training?",
     "OnboardingWebApplicationDevelopmentTrainingMessage": "To schedule your training calendar, please contact {0} after creating the organization",
+    "CustomPurchaseMessage": "For the next step, click {0} to contact us.",
     "Note": "Note",
     "AdditionalNote": "Additional Note",
     "OnboardingTrainingFaqTitle": "Do you have ABP onboarding training?",

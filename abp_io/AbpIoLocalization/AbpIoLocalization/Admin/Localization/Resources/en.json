@@ -393,6 +393,7 @@
     "StartTime": "Start Time",
     "EndTime": "End Time",
     "CreateABookDiscount": "Create a book discount",
-    "BookDiscountDeletionConfirmationMessage": "Are you sure you want to delete this book discount?"
+    "BookDiscountDeletionConfirmationMessage": "Are you sure you want to delete this book discount?",
+    "CustomPaymentFlexSwitchDescription": "With license"
   }
 }
