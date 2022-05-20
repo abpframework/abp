@@ -202,6 +202,7 @@ $projects = (
     "framework/src/Volo.Abp.ObjectMapping",
     "framework/src/Volo.Abp.Quartz",
     "framework/src/Volo.Abp.RabbitMQ",
+    "framework/src/Volo.Abp.RemoteServices",
     "framework/src/Volo.Abp.Security",
     "framework/src/Volo.Abp.Serialization",
     "framework/src/Volo.Abp.Settings",
