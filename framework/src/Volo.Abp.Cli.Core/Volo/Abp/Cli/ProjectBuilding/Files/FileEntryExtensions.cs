@@ -39,9 +39,9 @@ public static class FileEntryExtensions
             {
                 //TODO: What if we use inline like: <TEMPLATE-REMOVE IF-NOT="..."> some-code </TEMPLATE-REMOVE>
                 //TODO: This logic skips the code in that case. Should handle it
-                ++i;
+                continue;
             }
-
+            
             if (i < lines.Length)
             {
                 newLines.Add(lines[i]);
@@ -146,6 +146,7 @@ public static class FileEntryExtensions
         var condition = marker.Trim()
             .RemovePreFix("//").Trim()
             .RemovePreFix("@*").Trim()
+            .RemovePreFix("#").Trim()
             .RemovePreFix("<!--").Trim()
             .RemovePreFix("<TEMPLATE-REMOVE").Trim()
             .RemovePostFix("*@").Trim()
