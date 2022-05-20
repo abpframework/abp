@@ -12,7 +12,7 @@ This is a single-part quick-start tutorial to build a simple todo application wi
 
 ![todo-list](../todo-list.png)
 
-You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
+You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp-SingleLayer).
 
 ## Pre-Requirements
 
@@ -81,15 +81,9 @@ Firstly, run the `TodoApp` project in your favorite IDE (or run the `dotnet run`
 
 ![todo-swagger-ui-initial](../todo-swagger-ui-initial.png)
 
-You can explore and test your HTTP API with this UI. If it works, we can run the Angular client application.
+You can explore and test your HTTP API with this UI. If it works, then we can run the Angular client application.
 
-First, run the following command (or `yarn install`) to restore the NPM packages: 
-
-````bash
-npm install
-````
-
-It will take some time to install all the packages. Then you can run the application using the following (or `yarn start`) command:
+You can run the application using the following (or `yarn start`) command:
 
 ````bash
 npm start
@@ -107,7 +101,7 @@ All right. We can start coding!
 
 ## Defining Entities
 
-This application will have a single [entity](../../../Entities.md) and we can start by creating it. So, create a new `TodoItem` class under the **Entities** folder of the project.
+This application will have a single [entity](../../../Entities.md) and we can start by creating it. So, create a new `TodoItem` class under the **Entities** folder of the project:
 
 ````csharp
 using Volo.Abp.Domain.Entities;
@@ -136,7 +130,7 @@ Open the `TodoAppDbContext` class (under the **Data** folder) and add a new `DbS
 public DbSet<TodoItem> TodoItems { get; set; }
 ````
 
-Then navigate to the `OnModelCreating` method in the same class and add the mapping code for the `TodoItem ` entity:
+Then navigate to the `OnModelCreating` method in the same class and add the following mapping code for the `TodoItem ` entity:
 
 ````csharp
 protected override void OnModelCreating(ModelBuilder builder)
@@ -168,7 +162,7 @@ Open a command-line terminal in the directory of your project and type the follo
 dotnet ef migrations add Added_TodoItem
 ````
 
-This will add a new migration class to the project. You should see the migration in the **Migrations** folder.
+This will add a new migration class to the project. You should see the new migration in the **Migrations** folder.
 
 ![todo-efcore-migration](todo-efcore-migration-single-layer.png) 
 
@@ -180,7 +174,7 @@ dotnet ef database update
 
 {{else if DB=="Mongo"}}
 
-The next step is to setup the [MongoDB](../../../MongoDB.md) configuration. Open the `TodoAppMongoDbContext` class (it's under the **Data** folder) in your project and make the following changes:
+The next step is to setup the [MongoDB](../../../MongoDB.md) configuration. Open the `TodoAppDbContext` class (under the **Data** folder) in your project and make the following changes:
 
 1. Add a new property to the class:
 
@@ -201,7 +195,7 @@ modelBuilder.Entity<TodoItem>(b =>
 
 After the database integrations, now we can start to create application service methods and implement our use-cases.
 
-## Creating the Application Service Interface
+## Creating the Application Service
 
 An [Application Service](../../Application-Services.md) is used to perform the use cases of the application. We need to perform the following use cases in this application:
 
@@ -209,25 +203,11 @@ An [Application Service](../../Application-Services.md) is used to perform the u
 * Create a new todo item
 * Delete an existing todo item
 
-Let's start with defining an interface for the application service. Create a new `ITodoAppService` interface under the **Services** folder, as shown below:
+Before starting to implement these use cases, first we need to create DTOs.
 
-```csharp
-using TodoApp.Services.Dtos;
-using Volo.Abp.Application.Services;
+### Creating the Data Transfer Object (DTO)
 
-namespace TodoApp.Services;
-
-public interface ITodoAppService : IApplicationService
-{
-    Task<List<TodoItemDto>> GetListAsync();
-    Task<TodoItemDto> CreateAsync(string text);
-    Task DeleteAsync(Guid id);
-}
-```
-
-## Creating the Data Transfer Object (DTO)
-
-`GetListAsync` and `CreateAsync` methods return `TodoItemDto`. `ApplicationService` typically gets and returns DTOs ([Data Transfer Objects](../../../Data-Transfer-Objects.md)) instead of entities but we haven't created it yet. So, create a new `TodoItemDto` class under the **Dtos** folder (it's under the **Services** folder):
+`ApplicationService` typically gets and returns DTOs ([Data Transfer Objects](../../../Data-Transfer-Objects.md)) instead of entities. So, create a new `TodoItemDto` class under the **Dtos** folder (under the **Services** folder):
 
 ```csharp
 namespace TodoApp.Services.Dtos;
@@ -239,9 +219,9 @@ public class TodoItemDto
 }
 ```
 
-This is a very simple DTO class that has the same properties as the `TodoItem` entity. We are ready to implement the `ITodoAppService`.
+* This is a very simple DTO class that has the same properties as the `TodoItem` entity. Now, we are ready to implement our use-cases.
 
-## Application Service Implementation
+### Application Service Implementation
 
 Create a `TodoAppService` class under the **Services** folder of your project, as shown below:
 
@@ -252,7 +232,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace TodoApp.Services;
 
-public class TodoAppService : ApplicationService, ITodoAppService
+public class TodoAppService : ApplicationService
 {
     private readonly IRepository<TodoItem, Guid> _todoItemRepository;
     
@@ -265,9 +245,9 @@ public class TodoAppService : ApplicationService, ITodoAppService
 }
 ```
 
-This class inherits from the `ApplicationService` class of the ABP Framework and implements the `ITodoAppService` that was created in the [Creating the Application Service Interface](#creating-the-application-service-interface) section. ABP provides default generic [repositories](../../../Repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../Dependency-Injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement the use cases described before.
+This class inherits from the `ApplicationService` class of the ABP Framework and implements our use-cases. ABP provides default generic [repositories](../../../Repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../Dependency-Injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement the use cases (`GetListAsync`, `CreateAsync` and `DeleteAsync`) described before.
 
-### Getting the Todo Items
+#### Getting the Todo Items
 
 Let's start by implementing the `GetListAsync` method:
 
@@ -318,9 +298,9 @@ public async Task DeleteAsync(Guid id)
 }
 ````
 
-The application service is ready to be used from the UI layer.
+The application service is ready to be used from the UI layer. So, let's implement it.
 
-## User Interface Layer
+## User Interface
 
 It is time to show the todo items on the UI! Before starting to write the code, it would be good to remember what we are trying to build. Here's a sample screenshot from the final UI:
 
@@ -343,9 +323,9 @@ public class IndexModel : AbpPageModel
 {
     public List<TodoItemDto> TodoItems { get; set; }
 
-    private readonly ITodoAppService _todoAppService;
+    private readonly TodoAppService _todoAppService;
 
-    public IndexModel(ITodoAppService todoAppService)
+    public IndexModel(TodoAppService todoAppService)
     {
         _todoAppService = todoAppService;
     }
@@ -357,7 +337,7 @@ public class IndexModel : AbpPageModel
 }
 ```
 
-This class uses `ITodoAppService` to get the list of todo items and assign the `TodoItems` property. We will use it to render the todo items on the razor page.
+This class uses `TodoAppService` to get the list of todo items and assign the `TodoItems` property. We will use it to render the todo items on the razor page.
 
 ### Index.cshtml
 
@@ -497,8 +477,127 @@ If you open [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `
 
 ![todo-api](../todo-api.png)
 
-<!-- TODO: Add UI section for Blazor Server! -->
 {{else if UI=="BlazorServer"}}
+
+### Index.razor.cs
+
+Open the `Index.razor.cs` file in the `Pages` folder and replace the content with the following code block:
+
+```csharp
+using Microsoft.AspNetCore.Components;
+using TodoApp.Services;
+using TodoApp.Services.Dtos;
+
+namespace TodoApp.Pages;
+
+public partial class Index
+{
+    [Inject]
+    private TodoAppService TodoAppService { get; set; }
+
+    private List<TodoItemDto> TodoItems { get; set; } = new List<TodoItemDto>();
+    private string NewTodoText { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        TodoItems = await TodoAppService.GetListAsync();
+    }
+    
+    private async Task Create()
+    {
+        var result = await TodoAppService.CreateAsync(NewTodoText);
+        TodoItems.Add(result);
+        NewTodoText = null;
+    }
+
+    private async Task Delete(TodoItemDto todoItem)
+    {
+        await TodoAppService.DeleteAsync(todoItem.Id);
+        await Notify.Info("Deleted the todo item.");
+        TodoItems.Remove(todoItem);
+    }
+}
+```
+
+This class uses the `TodoAppService` to get the list of todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
+
+### Index.razor
+
+Open the `Index.razor` file in the `Pages` folder and replace the content with the following code block:
+
+```xml
+@page "/"
+@inherits TodoAppComponentBase
+
+<div class="container">
+    <Card>
+        <CardHeader>
+            <CardTitle>
+                TODO LIST
+            </CardTitle>
+        </CardHeader>
+        <CardBody>
+            <!-- FORM FOR NEW TODO ITEMS -->
+            <form id="NewItemForm" @onsubmit:preventDefault @onsubmit="() => Create()" class="row row-cols-lg-auto g-3 align-items-center">
+                <div class="col-12">
+                    <div class="input-group">
+                        <input name="NewTodoText" type="text" @bind-value="@NewTodoText" class="form-control" placeholder="enter text..." />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <!-- TODO ITEMS LIST -->
+            <ul id="TodoList">
+                @foreach (var todoItem in TodoItems)
+                {
+                    <li data-id="@todoItem.Id">
+                        <i class="far fa-trash-alt"
+                           @onclick="() => Delete(todoItem)"></i>
+                        @todoItem.Text
+                    </li>
+                }
+            </ul>
+        </CardBody>
+    </Card>
+</div>
+```
+
+### Index.razor.css
+
+As the final touch, open the `Index.razor.css` file in the `Pages` folder and replace it with the following content:
+
+````css
+#TodoList{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#TodoList li {
+    padding: 5px;
+    margin: 5px 0px;
+    border: 1px solid #cccccc;
+    background-color: #f5f5f5;
+}
+
+#TodoList li i
+{
+    opacity: 0.5;
+}
+
+#TodoList li i:hover
+{
+    opacity: 1;
+    color: #ff0000;
+    cursor: pointer;
+}
+````
+
+This is a simple styling for the todo page. We believe that you can do much better :)
+
+Now, you can run the application again to see the result.
 
 <!-- TODO: Add UI section for Angular project! -->
 {{else if UI=="NG"}}
@@ -511,7 +610,7 @@ In this tutorial, we've built a very simple application to warm up with the ABP 
 
 ## Source Code
 
-You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
+You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp-SingleLayer).
 
 ## See Also
 
