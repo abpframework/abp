@@ -1,7 +1,7 @@
 # Loading Directive
 
 
-You may want to block a part of UI and show a spinner for a while; the `LoadingDirective` directive is making this for you. `LoadingDirective` has been exposed by the `@abp/ng.theme.shared` package.
+You may want to block a part of the UI and show a spinner for a while; the `LoadingDirective` directive makes this for you. `LoadingDirective` has been exposed by the `@abp/ng.theme.shared` package.
 
 
 ## Getting Started
@@ -22,7 +22,7 @@ export class MyFeatureModule {}
 
 ## Usage
 
-The `LoadingDirective` is easy to use. The directive's selector is **`abpLoading`**. By adding the `abpLoading` attribute to an HTML element , you can activate the `LoadingDirectiveective` for the HTML element when value is true.
+The `LoadingDirective` is easy to use. The directive's selector is **`abpLoading`**. By adding the `abpLoading` attribute to an HTML element, you can activate the `LoadingDirectiveective` for the HTML element when the value is true.
 
 See an example usage:
 
@@ -37,7 +37,7 @@ See an example usage:
 ```
 
 
-The `abpLoading` attribute has been added to the `<div>` element that containing very long text inside to activate the `LoadingDirective`.
+The `abpLoading` attribute has been added to the `<div>` element that contains very a long text inside to activate the `LoadingDirective`.
 
 See the result:
 
