@@ -131,11 +131,6 @@ Configure<AbpOpenIddictClaimDestinationsOptions>(options =>
 
 For detailed information, please refer to: [OpenIddict claim destinations](https://documentation.openiddict.com/configuration/claim-destinations.html)
 
-#### About Validation
-
-The `OpenIddict.Validation.AspNetCore` and `OpenIddict.Validation` are not integrated in the module, we use the authentication component provided by Microsoft. If you are more familiar with it, you can use it in your project.
-
-
 ### EF Core module
 
 Implements the above four repository interfaces.
