@@ -21,6 +21,8 @@ The Blazor Server application UI is actually a hybrid application that is combin
 * Finally, they are redirected back to the Blazor application to complete the login process.
 
 This is a typical and recommended approach to implement authentication in Single-Page Applications. The client side configuration is done in the startup template, so you can change it.
-{{end}}
+
 
 See the [Blazor Security document](https://docs.microsoft.com/en-us/aspnet/core/blazor/security) to understand and customize the authentication process.
+
+{{end}}
