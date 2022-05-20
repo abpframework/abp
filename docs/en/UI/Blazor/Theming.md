@@ -81,7 +81,7 @@ A theme is simply a Razor Class Library.
 
 ### The Easiest Way
 
-The easiest way to create a new theme is adding [Basic Theme Source Code](https://github.com/abpframework/abp/tree/dev/modules/basic-theme) module with source codes and customizing it. 
+The easiest way of creating a new theme is adding [Basic Theme Source Code](https://github.com/abpframework/abp/tree/dev/modules/basic-theme) module with source codes and customizing it. 
 
 {{if UI == "Blazor"}}
 ```bash
