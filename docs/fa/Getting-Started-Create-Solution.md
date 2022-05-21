@@ -43,7 +43,7 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u 
 
 ## توسعه نرم افزار موبایل
 
-جهت استفاده از ساختار های [React Native](https://reactnative.dev/) در پروژه خود از دستور  `-m react-native` (و یا `--mobile react-native`) استفاده نمایید. این دستور اجازه میدهد تمپلیت اولیه مربوط به ری اکت نیتیو مناسب تولید نرم افزار های تحت موبایل به پروژه اضافه شود
+جهت استفاده از ساختار های [React Native](https://reactnative.dev/) در پروژه خود از دستور  <span dir='ltr'>`-m react-native`</span> (و یا <span dir='ltr'>`--mobile react-native`</span>) استفاده نمایید. این دستور اجازه میدهد تمپلیت اولیه مربوط به ری اکت نیتیو مناسب تولید نرم افزار های تحت موبایل به پروژه اضافه شود
 
 
 بخش  [آغاز به کار با ری اکت ](Getting-Started-React-Native.md) را جهت راه اندازی پروژه های مربوط به ری اکت بررسی نمایید.
