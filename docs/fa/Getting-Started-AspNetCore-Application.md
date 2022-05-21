@@ -143,6 +143,6 @@ app.Run();
 
 ## کد منبع
 
-کد منبع پروژه نمونه ایجاد شده در این آموزش را از [here](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication).
+کد منبع پروژه نمونه ایجاد شده در این آموزش را از [اینجا](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication).
 
 </div>
