@@ -6,6 +6,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Files;
 
 public static class FileEntryExtensions
 {
+    private static int _maximumRecursionCount  = 20;
+    
     public static FileEntry ReplaceText(this FileEntry file, string oldText, string newText)
     {
         file.NormalizeLineEndings();
@@ -20,7 +22,7 @@ public static class FileEntryExtensions
 
     public static void RemoveTemplateCodeMarkers(this FileEntry file)
     {
-        if (!file.Content.Contains("</TEMPLATE-REMOVE>"))
+        if (!file.Content.Contains("<TEMPLATE-REMOVE") && !file.Content.Contains("</TEMPLATE-REMOVE>") )
         {
             return;
         }
@@ -37,9 +39,9 @@ public static class FileEntryExtensions
             {
                 //TODO: What if we use inline like: <TEMPLATE-REMOVE IF-NOT="..."> some-code </TEMPLATE-REMOVE>
                 //TODO: This logic skips the code in that case. Should handle it
-                ++i;
+                continue;
             }
-
+            
             if (i < lines.Length)
             {
                 newLines.Add(lines[i]);
@@ -49,9 +51,9 @@ public static class FileEntryExtensions
         file.SetLines(newLines);
     }
 
-    private static void RemoveMarkedTemplateCode(this FileEntry file, List<string> symbols)
+    private static void RemoveMarkedTemplateCode(this FileEntry file, List<string> symbols, int recursionCount = 0)
     {
-        if (!file.Content.Contains("</TEMPLATE-REMOVE>"))
+        if (!file.Content.Contains("<TEMPLATE-REMOVE") || recursionCount > _maximumRecursionCount)
         {
             return;
         }
@@ -97,9 +99,25 @@ public static class FileEntryExtensions
                     continue;
                 }
 
-                while (i < lines.Length && !lines[i].Contains("</TEMPLATE-REMOVE>"))
+                var innerConditionCount = 0;
+                
+                while (i < lines.Length)
                 {
-                    ++i;
+                    i++;
+                    
+                    if (lines[i].Contains("<TEMPLATE-REMOVE"))
+                    {
+                        innerConditionCount++;
+                    }
+                    else if (lines[i].Contains("</TEMPLATE-REMOVE>"))
+                    {
+                        if (innerConditionCount < 1)
+                        {
+                            break;
+                        }
+                        
+                        innerConditionCount--;
+                    }
                 }
 
                 if (lines[i+1].Contains("<TEMPLATE-REMOVE"))
@@ -117,6 +135,8 @@ public static class FileEntryExtensions
         }
 
         file.SetLines(newLines);
+
+        RemoveMarkedTemplateCode(file, symbols, recursionCount + 1);
     }
 
     private static TemplateRemoveMarkerParseResult ParseTemplateRemoveMarker(string marker)
@@ -126,6 +146,7 @@ public static class FileEntryExtensions
         var condition = marker.Trim()
             .RemovePreFix("//").Trim()
             .RemovePreFix("@*").Trim()
+            .RemovePreFix("#").Trim()
             .RemovePreFix("<!--").Trim()
             .RemovePreFix("<TEMPLATE-REMOVE").Trim()
             .RemovePostFix("*@").Trim()
