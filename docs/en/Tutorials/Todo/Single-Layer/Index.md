@@ -348,10 +348,10 @@ Open the `Index.cshtml` file in the `Pages` folder and replace it with the follo
 @model TodoApp.Pages.IndexModel
 
 @section styles {
-    <abp-style src="/Pages/Index.css" />
+    <abp-style src="/Pages/Index.cshtml.css" />
 }
 @section scripts {
-    <abp-script src="/Pages/Index.js" />
+    <abp-script src="/Pages/Index.cshtml.js" />
 }
 
 <div class="container">
@@ -391,9 +391,9 @@ We are using ABP's [card tag helper](../../UI/AspNetCore/Tag-Helpers/Cards.md) t
 
 This page imports a CSS and a JavaScript file, so we should also create them.
 
-### Index.js
+### Index.cshtml.js
 
-Create an `Index.js` file in the `Pages` folder and add the following content:
+Open the `Index.cshtml.js` file in the `Pages` folder and replace with the following content:
 
 ````js
 $(function () {
@@ -430,9 +430,9 @@ In the second part, we created a new todo item on the server. If it succeeded, w
 
 The interesting part here is how we communicate with the server. See the [*Dynamic JavaScript Proxies & Auto API Controllers*](#dynamic-javascript-proxies--auto-api-controllers) section to understand how it works. But now, let's continue and complete the application.
 
-### Index.css
+### Index.cshtml.css
 
-As for the final touch, create the `Index.css` file in the `Pages` folder and add the following content:
+As for the final touch, open the `Index.cshtml.css` file in the `Pages` folder and replace with the following content:
 
 ````css
 #TodoList{
@@ -467,9 +467,9 @@ Now, you can run the application again and see the result.
 
 ### Dynamic JavaScript Proxies & Auto API Controllers
 
-In the `Index.js` file, we've used the `todoApp.services.todo.delete(...)` and `todoApp.services.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
+In the `Index.cshtml.js` file, we've used the `todoApp.services.todo.delete(...)` and `todoApp.services.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
 
-> **services** keyword comes from the namespace (`namespace TodoApp.Services;`).
+> **services** keyword comes from the namespace (`namespace TodoApp.Services;`). It's a naming convention.
 
 However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to **API Controllers** by convention.
 
