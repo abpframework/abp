@@ -599,8 +599,151 @@ This is a simple styling for the todo page. We believe that you can do much bett
 
 Now, you can run the application again to see the result.
 
-<!-- TODO: Add UI section for Angular project! -->
 {{else if UI=="NG"}}
+
+### Service Proxy Generation 
+
+ABP provides a handy feature to automatically create client-side services to easily consume HTTP APIs provided by the server.
+
+You first need to run the `TodoApp` project since the proxy generator reads API definitions from the server application.
+
+Once you run the `TodoApp` project (**Swagger API Definition** will be shown), open a command-line terminal in the directory of `angular` folder and run the following command:
+
+```bash
+abp generate-proxy -t ng
+```
+
+If everything goes well, it should generate an output as shown below:
+
+```bash
+CREATE src/app/proxy/generate-proxy.json (182755 bytes)
+CREATE src/app/proxy/README.md (1000 bytes)
+CREATE src/app/proxy/services/todo.service.ts (833 bytes)
+CREATE src/app/proxy/services/dtos/models.ts (71 bytes)
+CREATE src/app/proxy/services/dtos/index.ts (26 bytes)
+CREATE src/app/proxy/services/index.ts (81 bytes)
+CREATE src/app/proxy/index.ts (61 bytes)
+```
+
+Then, we can use the `TodoService` to use the server-side HTTP APIs, as we'll do in the next section.
+
+### home.component.ts
+
+Open the `/angular/src/app/home/home.component.ts` file and replace its content with the following code block:
+
+```ts
+import { ToasterService } from "@abp/ng.theme.shared";
+import { Component, OnInit } from '@angular/core';
+import { TodoItemDto } from "@proxy/services/dtos";
+import { TodoService } from "@proxy/services";
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
+})
+
+export class HomeComponent implements OnInit {
+
+  todoItems: TodoItemDto[];
+  newTodoText: string;
+
+  constructor(
+      private todoService: TodoService,
+      private toasterService: ToasterService)
+  { }
+
+  ngOnInit(): void {
+    this.todoService.getList().subscribe(response => {
+      this.todoItems = response;
+    });
+  }
+  
+  create(): void{
+    this.todoService.create(this.newTodoText).subscribe((result) => {
+      this.todoItems = this.todoItems.concat(result);
+      this.newTodoText = null;
+    });
+  }
+
+  delete(id: string): void {
+    this.todoService.delete(id).subscribe(() => {
+      this.todoItems = this.todoItems.filter(item => item.id !== id);
+      this.toasterService.info('Deleted the todo item.');
+    });
+  }  
+}
+```
+
+We've used `TodoService` to get the list of todo items and assigned the returning value to the `todoItems` array. We've also added `create` and `delete` methods. These methods will be used on the view side.
+
+### home.component.html
+
+Open the `/angular/src/app/home/home.component.html` file and replace its content with the following code block:
+
+````html
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">TODO LIST</div>
+    </div>
+    <div class="card-body">
+      <!-- FORM FOR NEW TODO ITEMS -->
+      <form class="row row-cols-lg-auto g-3 align-items-center" (ngSubmit)="create()">
+        <div class="col-12">
+          <div class="input-group">
+            <input name="NewTodoText" type="text" [(ngModel)]="newTodoText" class="form-control" placeholder="enter text..." />
+          </div>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+      <!-- TODO ITEMS LIST -->
+      <ul id="TodoList">
+        <li *ngFor="let todoItem of todoItems">
+          <i class="fa fa-trash-o" (click)="delete(todoItem.id)"></i> {%{{{ todoItem.text }}}%}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+````
+
+### home.component.scss
+
+As the final touch, open the `/angular/src/app/home/home.component.scss` file and replace its content with the following code block:
+
+````css
+#TodoList{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#TodoList li {
+    padding: 5px;
+    margin: 5px 0px;
+    border: 1px solid #cccccc;
+    background-color: #f5f5f5;
+}
+
+#TodoList li i
+{
+    opacity: 0.5;
+}
+
+#TodoList li i:hover
+{
+    opacity: 1;
+    color: #ff0000;
+    cursor: pointer;
+}
+````
+
+This is a simple styling for the todo page. We believe that you can do much better :)
+
+Now, you can run the application again to see the result.
 
 {{end}}
 
