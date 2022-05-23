@@ -20,7 +20,7 @@
 
 这是配置Kafka设置最简单的方法. 它也非常强大,因为你可以使用[由AspNet Core支持](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/)的任何其他配置源(如环境变量).
 
-**示例：最小化配置与默认配置连接到本地的Kafka服务器**
+**示例：使用默认配置连接到本地Kafka服务器的最小配置**
 
 
 ````json

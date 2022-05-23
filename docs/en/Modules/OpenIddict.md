@@ -81,7 +81,7 @@ PreConfigure<OpenIddictServerBuilder>(builder =>
 });
 ```
 
-#### AbpOpenIddictOptions
+#### AbpOpenIddictAspNetCoreOptions
 
 `UpdateAbpClaimTypes(default: true)`:  Updates AbpClaimTypes to be compatible with identity server claims.
 `AddDevelopmentEncryptionAndSigningCertificate(default: true)`:  Registers (and generates if necessary) a user-specific development encryption/development signing certificate.

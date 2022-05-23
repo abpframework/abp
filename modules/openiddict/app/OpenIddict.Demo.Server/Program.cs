@@ -1,9 +1,6 @@
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Demo.Server;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Localization;
-using Volo.Abp.OpenIddict.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>

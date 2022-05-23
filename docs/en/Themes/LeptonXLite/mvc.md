@@ -10,25 +10,32 @@ LeptonX Lite has implementation for the ABP Framework Razor Pages. It's a simpli
 - Add **Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite** package to your **Web** application.
 
 ```bash
-abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite
+dotnet add package Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite --prerelease
 ```
+
+- Remove **Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic** reference from the project since it's not necessary after switching to LeptonX Lite.
 
 - Make sure the old theme is removed and LeptonX is added in your Module class.
 
 ```diff
 [DependsOn(
+     // Remove BasicTheme module from DependsOn attribute
 -    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-+    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule)
+     
+     // Add LeptonX Lite module to DependsOn attribute
++    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
 )]
 ```
 
-- Update AbpBundlingOptions
+- Replace `BasicThemeBundles` with `LeptonXLiteThemeBundles` in AbpBundlingOptions
 
 ```diff
 Configure<AbpBundlingOptions>(options =>
 {
     options.StyleBundles.Configure(
+        // Remove following line
 -       BasicThemeBundles.Styles.Global,
+        // Add following line instead
 +       LeptonXLiteThemeBundles.Styles.Global
         bundle =>
         {

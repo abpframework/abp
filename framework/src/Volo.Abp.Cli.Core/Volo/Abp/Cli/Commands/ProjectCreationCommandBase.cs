@@ -6,6 +6,7 @@ using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
@@ -26,6 +27,7 @@ public abstract class ProjectCreationCommandBase
     public ICmdHelper CmdHelper { get; }
     public IInstallLibsService InstallLibsService { get; }
     public AngularPwaSupportAdder AngularPwaSupportAdder { get; }
+    public InitialMigrationCreator InitialMigrationCreator { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
     public ProjectCreationCommandBase(
@@ -33,13 +35,15 @@ public abstract class ProjectCreationCommandBase
         SolutionPackageVersionFinder solutionPackageVersionFinder, 
         ICmdHelper cmdHelper, 
         IInstallLibsService installLibsService,
-        AngularPwaSupportAdder angularPwaSupportAdder)
+        AngularPwaSupportAdder angularPwaSupportAdder,
+        InitialMigrationCreator ınitialMigrationCreator)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
         InstallLibsService = installLibsService;
         AngularPwaSupportAdder = angularPwaSupportAdder;
+        InitialMigrationCreator = ınitialMigrationCreator;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -335,6 +339,41 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("Installing client-side packages...");
             await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
         }
+    }
+
+    protected async Task CreateInitialMigrationsAsync(ProjectBuildArgs projectArgs)
+    {
+        if (projectArgs.DatabaseProvider == DatabaseProvider.MongoDb)
+        {
+            return;
+        }
+        
+        var efCoreProjectPath = string.Empty;
+        bool isLayeredTemplate;
+
+        switch (projectArgs.TemplateName)
+        {
+            case AppTemplate.TemplateName:
+            case AppProTemplate.TemplateName:
+                efCoreProjectPath = Directory.GetFiles(projectArgs.OutputFolder, "*EntityFrameworkCore.csproj", SearchOption.AllDirectories).FirstOrDefault();
+                isLayeredTemplate = true;
+                break;
+            case AppNoLayersTemplate.TemplateName:
+            case AppNoLayersProTemplate.TemplateName:
+                efCoreProjectPath = Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
+                isLayeredTemplate = false;
+                break;
+            default:
+                return;
+        }
+
+        if (string.IsNullOrWhiteSpace(efCoreProjectPath))
+        {
+            Logger.LogWarning("Couldn't find the project to create initial migrations!");
+            return;
+        }
+        
+        await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
     }
 
     protected void ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)

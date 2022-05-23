@@ -1,0 +1,7 @@
+{
+  "culture": "fa",
+  "texts": {
+    "ThisFieldIsRequired": "این فیلد الزامی است",
+    "MaxLenghtErrorMessage": "این فیلد میتواند نهایتا '{0}' کاراکتر باشد"
+  }
+}

@@ -10,6 +10,8 @@
     "Authorization": "授權",
     "DoYouWantToGrantAccessToYourData": "是否要授予 {0} 訪問你的數據的權限?",
     "ScopesRequested": "要求的Scope",
+    "Accept": "接受",
+    "Deny": "拒絕",
     "LogOut": "註銷",
     "AreYouSureYouWantToSignOut": "你確定要退出嗎?"
   }

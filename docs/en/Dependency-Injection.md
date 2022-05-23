@@ -131,7 +131,7 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 If you do not specify which services to expose, ABP expose services by convention. So taking the ``TaxCalculator`` defined above:
 
 * The class itself is exposed by default. That means you can inject it by ``TaxCalculator`` class.
-* Default interfaces are exposed by default. Default interfaces are determined by naming convention. In this example, ``ICalculator`` and ``ITaxCalculator`` are default interfaces of ``TaxCalculator``, but ``ICanCalculate`` is not.
+* Default interfaces are exposed by default. Default interfaces are determined by naming convention. In this example, ``ICalculator`` and ``ITaxCalculator`` are default interfaces of ``TaxCalculator``, but ``ICanCalculate`` is not. A generic interface (e.g. `ICalculator<string>`) is also considered as a default interface if the naming convention is satisfied.
 
 ### Combining All Together
 
