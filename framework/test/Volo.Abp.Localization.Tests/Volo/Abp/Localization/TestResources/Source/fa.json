@@ -1,0 +1,11 @@
+{
+  "culture": "fa",
+  "texts": {
+    "Hello <b>{0}</b>.": "سلام <b>{0}</b>.",
+    "Car": "اتومبیل",
+    "CarPlural": "اتومبیل ها",
+    "MaxLenghtErrorMessage": "طول این فیلد میتواند نهایتا '{0}' کاراکتر باشد",
+    "Universe": "کائنات",
+    "FortyTwo": "چهل و دو"
+  }
+}

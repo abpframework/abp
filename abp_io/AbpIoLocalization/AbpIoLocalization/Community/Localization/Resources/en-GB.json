@@ -102,6 +102,7 @@
     "PostRequestMessageBody": "Here is the list of the requested posts by the Community. Do you want to write a requested post? Please click on the request and join the discussion.",
     "Language": "Language",
     "CreatePostLanguageInfo": "Language of the post",
-    "SeeMore": "See More"
+    "SeeMore": "See More",
+    "MemberNotPublishedPostYet": "This member hasn't published any posts yet."
   }
 }

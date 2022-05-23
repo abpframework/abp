@@ -78,6 +78,8 @@ abp new Acme.BookStore
 * Acme.BookStore是解决方案的名称.
 * 常见的命名方式类似于 *YourCompany.YourProject*. 不过你可以使用自己喜欢的方式,如 *YourProject* (单级命名空间) 或 *YourCompany.YourProduct.YourModule* (三级命名空间).
 
+参阅[ABP CLI 创建新解决方案示例](CLI-New-Command-Samples.md)查看更多示例.
+
 #### Options
 
 * `--template` 或者 `-t`: 指定模板. 默认的模板是 `app`,会生成web项目.可用的模板有:

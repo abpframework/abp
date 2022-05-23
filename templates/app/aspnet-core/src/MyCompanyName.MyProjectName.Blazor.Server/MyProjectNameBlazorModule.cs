@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Net.Http;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
@@ -53,7 +52,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server;
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAccountWebIdentityServerModule),
+    typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
     typeof(AbpIdentityBlazorServerModule),
     typeof(AbpTenantManagementBlazorServerModule),
@@ -73,6 +72,23 @@ public class MyProjectNameBlazorModule : AbpModule
                 typeof(MyProjectNameApplicationContractsModule).Assembly,
                 typeof(MyProjectNameBlazorModule).Assembly
             );
+        });
+
+        PreConfigure<OpenIddictServerBuilder>(builder =>
+        {
+            // https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
+            // In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
+            builder.DisableAccessTokenEncryption();
+        });
+
+        PreConfigure<OpenIddictBuilder>(builder =>
+        {
+            builder.AddValidation(options =>
+            {
+                options.AddAudiences("MyProjectName");
+                options.UseLocalServer();
+                options.UseAspNetCore();
+            });
         });
     }
 
@@ -275,7 +291,6 @@ public class MyProjectNameBlazorModule : AbpModule
         }
 
         app.UseUnitOfWork();
-        app.UseIdentityServer();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
