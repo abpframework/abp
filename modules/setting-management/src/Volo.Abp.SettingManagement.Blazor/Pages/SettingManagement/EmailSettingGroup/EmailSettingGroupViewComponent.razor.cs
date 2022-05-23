@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.Components.Web.Configuration;
 using Volo.Abp.Auditing;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.SettingManagement.Localization;
 
 namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement.EmailSettingGroup;
@@ -14,6 +15,9 @@ public partial class EmailSettingGroupViewComponent
 {
     [Inject]
     protected IEmailSettingsAppService EmailSettingsAppService { get; set; }
+    
+    [Inject]
+    protected IPermissionChecker PermissionChecker { get; set; }
 
     [Inject]
     private ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
@@ -23,7 +27,17 @@ public partial class EmailSettingGroupViewComponent
 
     protected UpdateEmailSettingsViewModel EmailSettings;
 
+    protected SendTestEmailViewModel SendTestEmailInput;
+
     protected Validations EmailSettingValidation;
+    
+    protected Validations EmailSettingTestValidation;
+    
+    protected Modal SendTestEmailModal;
+    
+    protected bool HasSendTestEmailPermission { get; set; }
+    
+    
 
     public EmailSettingGroupViewComponent()
     {
@@ -36,6 +50,8 @@ public partial class EmailSettingGroupViewComponent
         try
         {
             EmailSettings = ObjectMapper.Map<EmailSettingsDto, UpdateEmailSettingsViewModel>(await EmailSettingsAppService.GetAsync());
+            HasSendTestEmailPermission = await PermissionChecker.IsGrantedAsync(SettingManagementPermissions.EmailingTest);
+            SendTestEmailInput = new SendTestEmailViewModel();
         }
         catch (Exception ex)
         {
@@ -64,6 +80,52 @@ public partial class EmailSettingGroupViewComponent
         }
     }
     
+    protected virtual async Task OpenSendTestEmailModalAsync()
+    {
+        try
+        {
+            await EmailSettingTestValidation.ClearAll();
+            var emailSettings = await EmailSettingsAppService.GetAsync();
+            SendTestEmailInput = new SendTestEmailViewModel 
+            {
+                SenderEmailAddress = emailSettings.DefaultFromAddress,
+                TargetEmailAddress = CurrentUser.Email,
+                Subject = L["TestEmailSubject", new Random().Next(1000, 9999)],
+                Body = L["TestEmailBody"]
+            };
+            
+            await SendTestEmailModal.Show();
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    protected virtual Task CloseSendTestEmailModalAsync()
+    {
+        return InvokeAsync(SendTestEmailModal.Hide);
+    }
+
+    protected virtual async Task SendTestEmailAsync()
+    {
+        try
+        {
+            if (!await EmailSettingTestValidation.ValidateAll())
+            {
+                return;
+            }
+            
+            await EmailSettingsAppService.SendTestEmailAsync(ObjectMapper.Map<SendTestEmailViewModel, SendTestEmailInput>(SendTestEmailInput));
+
+            await Notify.Success(L["SuccessfullySent"]);
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
     public class UpdateEmailSettingsViewModel
     {
         [MaxLength(256)]
@@ -103,5 +165,19 @@ public partial class EmailSettingGroupViewComponent
         [Required]
         [Display(Name = "DefaultFromDisplayName")]
         public string DefaultFromDisplayName { get; set; }
+    }
+    
+    public class SendTestEmailViewModel
+    {
+        [Required]
+        public string SenderEmailAddress { get; set; }
+
+        [Required]
+        public string TargetEmailAddress { get; set; }
+
+        [Required]
+        public string Subject { get; set; }
+    
+        public string Body { get; set; }
     }
 }
