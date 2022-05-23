@@ -165,6 +165,7 @@
     "SortBy": "Sort by",
     "NoPublishedEventsYet": "No published events yet.",
     "SubscribeYoutubeChannel": "Subscribe to the Youtube Channel",
-    "Enum:EventType:0": "Talks"
+    "Enum:EventType:0": "Talks",
+    "MemberNotPublishedPostYet": "This member hasn't published any posts yet."
   }
 }

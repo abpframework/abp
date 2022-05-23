@@ -26,6 +26,8 @@
     "Volo.AbpIo.Domain:030009": "User not found!",
     "Volo.AbpIo.Domain:030010": "To purchase the trial license, you first need to activate your trial license!",
     "Volo.AbpIo.Domain:030011": "You cannot delete a trial license when it is purchased!",
+    "Volo.AbpIo.Domain:070000": "The organization name can only contain latin letters, numbers, dots and hyphens!",
+    "Volo.AbpIo.Domain:070001": "The company name can only contain latin letters, numbers, dots, space and hyphens!",
     "WantToLearn?": "Want to learn?",
     "ReadyToGetStarted?": "Ready to get started?",
     "JoinOurCommunity": "Join our community",
