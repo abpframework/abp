@@ -13,7 +13,7 @@ import { ConfigStateService } from '@abp/ng.core';
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private config: \) {}
+  constructor(private config: ConfigStateService) {}
 }
 ```
 

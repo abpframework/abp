@@ -9,35 +9,39 @@
 ````js
 
 import { ConfigStateService } from '@abp/ng.core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
-class DemoComponent {
+class DemoComponent implements OnInit {
   constructor(private config: ConfigStateService) {}
+ 
+  ngOnInit(): void {
+    // Gets all enabled global features.
+    const getGlobalFeatures = this.config.getGlobalFeatures();
+
+    //Example result is: `{ enabledFeatures: [ 'Shopping.Payment', 'Ecommerce.Subscription' ] }`
+
+    // or
+    this.config.getGlobalFeatures$().subscribe(getGlobalFeatures => {
+       // use getGlobalFeatures here
+    })
+
+    // Check the global feature is enabled
+    this.config.getGlobalFeatureIsEnabled('Ecommerce.Subscription')
+
+    //Example result is `true`
+
+    this.config.getGlobalFeatureIsEnabled('My.Subscription')
+
+     //Example result is `false`
+
+    // or
+    this.config.getGlobalFeatureIsEnabled$('Ecommerce.Subscription').subscribe((isEnabled:boolean) => {
+       // use isEnabled here
+    })
+  }
 }
 
-// Gets all enabled global features.
-const getGlobalFeatures = this.config.getGlobalFeatures ();
-
-// { enabledFeatures: [ 'Shopping.Payment', 'Ecommerce.Subscription' ] }
-
-// or
-this.config.getGlobalFeatures$().subscribe(getGlobalFeatures => {
-   // use getGlobalFeatures here
-})
-
-// Check the global feature is enabled
-this.config.getGlobalFeatureIsEnabled('Ecommerce.Subscription')
-
-true
-
-> this.config.getGlobalFeatureIsEnabled('My.Subscription')
-
-false
-
-// or
-this.config.getGlobalFeatureIsEnabled$('Ecommerce.Subscription').subscribe((isEnabled:boolean) => {
-   // use isEnabled here
-})
 

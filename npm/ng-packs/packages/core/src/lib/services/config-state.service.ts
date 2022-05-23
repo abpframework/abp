@@ -147,21 +147,20 @@ export class ConfigStateService {
     return this.store.sliceState(state => state.globalFeatures);
   }
 
+  private isGlobalFeatureEnabled(key: string, globalFeatures: ApplicationGlobalFeatureConfigurationDto) {
+    const features = globalFeatures.enabledFeatures || []
+    return features.some(f => key === f);
+  }
+
   getGlobalFeatureIsEnabled(key: string) {
-    const globalFeatures = this.store.state.globalFeatures;
-
-    if (!(globalFeatures?.enabledFeatures)) { return false };
-
-    return globalFeatures.enabledFeatures.indexOf(key) != -1;
+    return this.isGlobalFeatureEnabled(key, this.store.state.globalFeatures);
   }
 
   getGlobalFeatureIsEnabled$(key: string) {
-    return this.store.sliceState(state => {
-      debugger
-      if (!(state.globalFeatures?.enabledFeatures)) { return false };
-      return state.globalFeatures.enabledFeatures.indexOf(key) != -1 || true;
-    });
+    return this.store.sliceState(state => this.isGlobalFeatureEnabled(key, state.globalFeatures));
   }
+
+
 
 }
 
