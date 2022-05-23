@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
     <PackageReference Include="NSubstitute" Version="$(NSubstitutePackageVersion)" />
     <PackageReference Include="Shouldly" Version="$(ShouldlyPackageVersion)" />
     <PackageReference Include="xunit" Version="$(xUnitPackageVersion)" />
