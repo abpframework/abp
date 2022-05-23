@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="DistributedLock.Core" Version="1.0.2" />
+      <PackageReference Include="DistributedLock.Core" Version="1.0.4" />
     </ItemGroup>
 
 </Project>

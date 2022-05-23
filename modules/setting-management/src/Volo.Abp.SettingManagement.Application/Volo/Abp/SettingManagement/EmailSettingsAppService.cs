@@ -11,10 +11,13 @@ namespace Volo.Abp.SettingManagement;
 public class EmailSettingsAppService : SettingManagementAppServiceBase, IEmailSettingsAppService
 {
     protected ISettingManager SettingManager { get; }
+    
+    protected IEmailSender EmailSender { get; }
 
-    public EmailSettingsAppService(ISettingManager settingManager)
+    public EmailSettingsAppService(ISettingManager settingManager, IEmailSender emailSender)
     {
         SettingManager = settingManager;
+        EmailSender = emailSender;
     }
 
     public virtual async Task<EmailSettingsDto> GetAsync()
@@ -58,6 +61,14 @@ public class EmailSettingsAppService : SettingManagementAppServiceBase, IEmailSe
         await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.UseDefaultCredentials, input.SmtpUseDefaultCredentials.ToString().ToLowerInvariant());
         await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.DefaultFromAddress, input.DefaultFromAddress);
         await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.DefaultFromDisplayName, input.DefaultFromDisplayName);
+    }
+
+    [Authorize(SettingManagementPermissions.EmailingTest)]
+    public virtual async Task SendTestEmailAsync(SendTestEmailInput input)
+    {
+        await CheckFeatureAsync();
+
+        await EmailSender.SendAsync(input.SenderEmailAddress, input.TargetEmailAddress, input.Subject, input.Body);
     }
 
     protected virtual async Task CheckFeatureAsync()

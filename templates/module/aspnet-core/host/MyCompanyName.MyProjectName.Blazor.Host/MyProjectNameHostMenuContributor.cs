@@ -27,12 +27,12 @@ public class MyProjectNameHostMenuContributor : IMenuContributor
     {
         var accountStringLocalizer = context.GetLocalizer<AccountResource>();
 
-        var identityServerUrl = _configuration["AuthServer:Authority"] ?? "";
+        var openIddictUrl = _configuration["AuthServer:Authority"] ?? "";
 
         context.Menu.AddItem(new ApplicationMenuItem(
             "Account.Manage",
             accountStringLocalizer["ManageYourProfile"],
-            $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
+            $"{openIddictUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
             icon: "fa fa-cog",
             order: 1000,
             null).RequireAuthenticated());
