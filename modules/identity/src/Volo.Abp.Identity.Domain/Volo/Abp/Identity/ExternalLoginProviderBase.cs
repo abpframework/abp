@@ -30,6 +30,11 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider, IExter
         IdentityOptions = identityOptions;
     }
 
+    public virtual bool CanObtainUserInfoWithoutPassword()
+    {
+        return true;
+    }
+
     public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
 
     public abstract Task<bool> IsEnabledAsync();
