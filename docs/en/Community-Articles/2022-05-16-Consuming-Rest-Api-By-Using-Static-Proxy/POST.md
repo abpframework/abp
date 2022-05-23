@@ -2,12 +2,21 @@
 
 In this article, I will show how to consume your HTTP APIs from a .NET application using ABP's [dynamic](https://docs.abp.io/en/abp/latest/API/Dynamic-CSharp-API-Clients) and [static](https://docs.abp.io/en/abp/latest/API/Static-CSharp-API-Clients) client-side proxy systems. I will start by creating a new project and consume the HTTP APIs from a .NET console application using dynamic client proxies. Then I will switch to static client proxies. Finally, I will glance at the differences and similarities between static and dynamic generic proxies.
 
+**Benefits (both valid for dynamic and static proxies):**
+
+* Maps C# method calls to remote server HTTP calls by considering the HTTP method, route, query string parameters, request payload and other details.
+* Authenticates the HTTP Client by adding access token to the HTTP header.
+* Serializes to and deserialize from JSON.
+* Handles HTTP API versioning.
+* Add correlation id, current tenant id and the current culture to the request.
+* Properly handles the error messages sent by the server and throws proper exceptions.
+
 ## Create a new ABP application with the ABP CLI
 Firstly create a new solution via [ABP CLI](https://docs.abp.io/en/abp/latest/CLI):
 
-````shell
+```shell
 abp new Acme.BookStore
-````
+```
 
 > See ABP's [Getting Started document](https://docs.abp.io/en/abp/latest/Getting-Started-Setup-Environment?UI=MVC&DB=EF&Tiered=No) to learn how to create and run your application, if you haven't done it before.
 
@@ -64,9 +73,9 @@ namespace Acme.BookStore.Books
         {
             var bookDtos = new List<BookDto>()
             {
-                new BookDto(){ Name = "Anna Karenina", AuthorName ="Tolstoy", Price = 50},
+                new BookDto(){ Name = "Hunger", AuthorName ="Knut Hamsun", Price = 50},
                 new BookDto(){ Name = "Crime and Punishment", AuthorName ="Dostoevsky", Price = 60},
-                new BookDto(){ Name = "Mother", AuthorName ="Gorki", Price = 70}
+                new BookDto(){ Name = "For Whom the Bell Tolls", AuthorName ="Ernest Hemingway", Price = 70}
             };
             return Task.FromResult(new PagedResultDto<BookDto>(
                bookDtos.Count,
@@ -112,25 +121,12 @@ We are basically injecting the `IBookAppService` interface to consume the remote
 
 You can run the application to see the output:
 
-````
+```
 Books: Anna Karenina, Crime and Punishment, Mother
-````
+```
 
 ## Convert application to use static client proxies
 Before showing you how to use static client proxies instead of dynamic client proxies, I ask you to talk differences between both approaches. Their similarities, advantages and disadvantages to each other.
-
-**Benefits (both valid for dynamic and static proxies):**
-
-* Maps C# method calls to remote server HTTP calls by considering the HTTP method, route, query string parameters, request payload and other details.
-* Authenticates the HTTP Client by adding access token to the HTTP header.
-* Serializes to and deserialize from JSON.
-* Handles HTTP API versioning.
-* Add correlation id, current tenant id and the current culture to the request.
-* Properly handles the error messages sent by the server and throws proper exceptions.
-
-**Differences of dynamic and static proxies:**
-
-Static generic proxies provide **better performance** because it doesn't need to run on runtime, but you should **re-generate** once changing the API endpoint definition. Dynamic generic proxies don't need re-generate again because it works on the runtime but it has a slight performance penalty.
 
 The [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application) comes pre-configured for the **dynamic** client proxy generation, in the `HttpApi.Client` project. If you want to switch to the **static** client proxies, you should change `context.Services.AddHttpClientProxies` to `context.Services.AddStaticHttpClientProxies` in the module class of your `HttpApi.Client` project:
 
@@ -207,26 +203,43 @@ public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvide
 ```
 We can now add `[Authorize(BookStorePermissions.Books.Default)]` attribute to the `BookAppService` class:
 
-````csharp
+```csharp
 [Authorize(BookStorePermissions.Books.Default)]
 public class BookAppService : ApplicationService, IBookAppService
 {
     ...
 }
-````
+```
 
 If you now run the server, then run the console client application, you will see the following error on the console application:
 
-````
-Authorization failed. These requirements were not met:
-PermissionRequirement: BookStore.Books
-AuthenticationScheme: Identity.Application was forbidden.
-Request finished HTTP/1.1 GET https://localhost:44397/api/app/book?SkipCount=0&MaxResultCount=10&api-version=1.0 - - - 403 0 - 156.9766ms
-````
+```
+Unhandled exception. Volo.Abp.Http.Client.AbpRemoteCallException: Forbidden
+   at Volo.Abp.Http.Client.ClientProxying.ClientProxyBase`1.ThrowExceptionForResponseAsync(HttpResponseMessage response)
+   at Volo.Abp.Http.Client.ClientProxying.ClientProxyBase`1.RequestAsync(ClientProxyRequestContext requestContext)
+   at Volo.Abp.Http.Client.ClientProxying.ClientProxyBase`1.RequestAsync[T](ClientProxyRequestContext requestContext)
+   at Volo.Abp.Http.Client.ClientProxying.ClientProxyBase`1.RequestAsync[T](String methodName, ClientProxyRequestTypeValue arguments)
+   at Acme.BookStore.Books.ClientProxies.BookClientProxy.GetListAsync(PagedAndSortedResultRequestDto input) in YourPath\ABPConsumingRestApiByUsingStaticProxy\src\Acme.BookStore.HttpApi.Client\ClientProxies\BookClientProxy.Generated.cs:line 20
+   at Acme.BookStore.HttpApi.Client.ConsoleTestApp.ClientDemoService.RunAsync() in YourPath\ABPConsumingRestApiByUsingStaticProxy\test\Acme.BookStore.HttpApi.Client.ConsoleTestApp\ClientDemoService.cs:line 21
+   at Acme.BookStore.HttpApi.Client.ConsoleTestApp.ConsoleTestAppHostedService.StartAsync(CancellationToken cancellationToken) in YourPath\ABPConsumingRestApiByUsingStaticProxy\test\Acme.BookStore.HttpApi.Client.ConsoleTestApp\ConsoleTestAppHostedService.cs:line 30
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Acme.BookStore.HttpApi.Client.ConsoleTestApp.Program.Main(String[] args) in YourPath\ABPConsumingRestApiByUsingStaticProxy\test\Acme.BookStore.HttpApi.Client.ConsoleTestApp\Program.cs:line 12
+   at Acme.BookStore.HttpApi.Client.ConsoleTestApp.Program.<Main>(String[] args)
+```
 
 To fix the problem, we should grant permission for the admin user. We are granting permission to the admin user because the console application is configured to use Resource Owner Password Grant Flow. That means the client application is consuming services on behalf of the admin user. You can see the configuration in the `appsettings.json` file of the console application.
 
-**TODO: Show how to give permission, with screenshots**
+**Giving permission**
+Once you define the permissions, you can see them on the permission management modal.
+
+Go to the Administration -> Identity -> Roles page, select Permissions action for the admin role to open the permission management modal:
+![persmisson](./permission.png)
+Grant the permissions you want and save the modal.
+
+**Differences of dynamic and static proxies:**
+Static generic proxies provide **better performance** because it doesn't need to run on runtime, but you should **re-generate** once changing the API endpoint definition. Dynamic generic proxies don't need re-generate again because it works on the runtime but it has a slight performance penalty.
 
 ### Further Reading
 In this tutorial, I explained how you can create an example project and apply static client proxy instead of dynamic client proxy. Also summarized the differences between both approaches. If you want to get more information, you can read the following documents:
