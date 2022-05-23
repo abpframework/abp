@@ -127,6 +127,14 @@
     "Volo.AbpIo.Domain:080001": "Start Time can not be greater than End Time",
     "Enum:BookType:0": "Mastering ABP Framework",
     "Enum:PurchasePlatform:0": "Amazon",
-    "Enum:PurchasePlatform:1": "Packt"
+    "Enum:PurchasePlatform:1": "Packt",
+    "Copied": "Copied!",
+    "CouldNotCopy": "Could not copy!",
+    "CopyNotSupportByYourBrowser": "This feature does not work in the browser you are using.",
+    "City": "City",
+    "ZipCode": "Zip Code",
+    "Address": "Address",
+    "Homepage": "Homepage",
+    "Year": "Year"
   }
 }
