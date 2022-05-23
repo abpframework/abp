@@ -9,7 +9,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity;
 
-public abstract class ExternalLoginProviderBase : IExternalLoginProvider, IExternalLoginProviderWithPassword
+public abstract class ExternalLoginProviderBase : IExternalLoginProvider
 {
     protected IGuidGenerator GuidGenerator { get; }
     protected ICurrentTenant CurrentTenant { get; }
@@ -30,11 +30,6 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider, IExter
         IdentityOptions = identityOptions;
     }
 
-    public virtual bool CanObtainUserInfoWithoutPassword()
-    {
-        return true;
-    }
-
     public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
 
     public abstract Task<bool> IsEnabledAsync();
@@ -44,15 +39,6 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider, IExter
         await IdentityOptions.SetAsync();
 
         var externalUser = await GetUserInfoAsync(userName);
-
-        return await CreateUserAsync(externalUser, userName, providerName);
-    }
-
-    public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName, string plainPassword)
-    {
-        await IdentityOptions.SetAsync();
-
-        var externalUser = await GetUserInfoAsync(userName, plainPassword);
 
         return await CreateUserAsync(externalUser, userName, providerName);
     }
@@ -105,16 +91,7 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider, IExter
 
         await UpdateUserAsync(user, externalUser, providerName);
     }
-
-    public virtual async Task UpdateUserAsync(IdentityUser user, string providerName, string plainPassword)
-    {
-        await IdentityOptions.SetAsync();
-        
-        var externalUser = await GetUserInfoAsync(user, plainPassword);
-
-        await UpdateUserAsync(user, externalUser, providerName);
-    }
-
+    
     protected virtual async Task UpdateUserAsync(IdentityUser user, ExternalLoginUserInfo externalUser ,string providerName)
     {
         NormalizeExternalLoginUserInfo(externalUser, user.UserName);
@@ -181,16 +158,9 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider, IExter
 
     protected abstract Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName);
 
-    protected abstract Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName, string plainPassword);
-
     protected virtual Task<ExternalLoginUserInfo> GetUserInfoAsync(IdentityUser user)
     {
         return GetUserInfoAsync(user.UserName);
-    }
-    
-    protected virtual Task<ExternalLoginUserInfo> GetUserInfoAsync(IdentityUser user, string plainPassword)
-    {
-        return GetUserInfoAsync(user.UserName, plainPassword);
     }
 
     private static void NormalizeExternalLoginUserInfo(

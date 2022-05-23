@@ -4,8 +4,6 @@ namespace Volo.Abp.Identity;
 
 public interface IExternalLoginProvider
 {
-    bool CanObtainUserInfoWithoutPassword();
-    
     /// <summary>
     /// Used to try authenticate a user by this source.
     /// </summary>
@@ -30,7 +28,7 @@ public interface IExternalLoginProvider
     /// <param name="providerName">The name of this provider</param>
     /// <param name="user">The user that can be updated</param>
     Task UpdateUserAsync(IdentityUser user, string providerName);
-    
+
     /// <summary>
     /// Return a value indicating whether this source is enabled.
     /// </summary>

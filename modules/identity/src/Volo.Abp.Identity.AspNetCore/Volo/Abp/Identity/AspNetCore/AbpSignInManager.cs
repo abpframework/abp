@@ -49,8 +49,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
                 var user = await UserManager.FindByNameAsync(userName);
                 if (user == null)
                 {
-                    if (!externalLoginProvider.CanObtainUserInfoWithoutPassword() && 
-                        externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
+                    if (externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
                     {
                         user = await externalLoginProviderWithPassword.CreateUserAsync(userName, externalLoginProviderInfo.Name, password);
                     }
@@ -61,8 +60,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
                 }
                 else
                 {
-                    if (!externalLoginProvider.CanObtainUserInfoWithoutPassword() &&
-                        externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
+                    if (externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
                     {
                         await externalLoginProviderWithPassword.UpdateUserAsync(user, externalLoginProviderInfo.Name, password);
                     }
