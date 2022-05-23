@@ -36,14 +36,14 @@ public abstract class ProjectCreationCommandBase
         ICmdHelper cmdHelper, 
         IInstallLibsService installLibsService,
         AngularPwaSupportAdder angularPwaSupportAdder,
-        InitialMigrationCreator ınitialMigrationCreator)
+        InitialMigrationCreator initialMigrationCreator)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
         InstallLibsService = installLibsService;
         AngularPwaSupportAdder = angularPwaSupportAdder;
-        InitialMigrationCreator = ınitialMigrationCreator;
+        InitialMigrationCreator = initialMigrationCreator;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
