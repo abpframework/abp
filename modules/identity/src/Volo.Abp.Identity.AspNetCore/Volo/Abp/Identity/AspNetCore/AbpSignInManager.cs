@@ -49,11 +49,21 @@ public class AbpSignInManager : SignInManager<IdentityUser>
                 var user = await UserManager.FindByNameAsync(userName);
                 if (user == null)
                 {
-                    user = await externalLoginProvider.CreateUserAsync(userName, externalLoginProviderInfo.Name);
+                    user = externalLoginProvider.CanObtainUserInfoWithoutPassword
+                        ? await externalLoginProvider.CreateUserAsync(userName, externalLoginProviderInfo.Name) 
+                        : await externalLoginProvider.CreateUserAsync(userName, externalLoginProviderInfo.Name, password);
                 }
                 else
                 {
-                    await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                    if (externalLoginProvider.CanObtainUserInfoWithoutPassword)
+                    {
+                        await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                    }
+                    else
+                    {
+                        await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name, password);
+                    }
+                    
                 }
 
                 return await SignInOrTwoFactorAsync(user, isPersistent);

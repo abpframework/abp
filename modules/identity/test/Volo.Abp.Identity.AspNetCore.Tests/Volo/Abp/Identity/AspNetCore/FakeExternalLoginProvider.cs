@@ -60,4 +60,9 @@ public class FakeExternalLoginProvider : ExternalLoginProviderBase, ITransientDe
                 }
         );
     }
+
+    protected override Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName, string plainPassword)
+    {
+        return GetUserInfoAsync(userName);
+    }
 }

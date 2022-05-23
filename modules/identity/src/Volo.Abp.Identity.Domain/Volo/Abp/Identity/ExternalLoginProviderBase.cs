@@ -16,6 +16,8 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
     protected IdentityUserManager UserManager { get; }
     protected IIdentityUserRepository IdentityUserRepository { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
+    
+    public bool CanObtainUserInfoWithoutPassword { get; set; }
 
     protected ExternalLoginProviderBase(
         IGuidGenerator guidGenerator,
@@ -29,19 +31,21 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
         UserManager = userManager;
         IdentityUserRepository = identityUserRepository;
         IdentityOptions = identityOptions;
+        CanObtainUserInfoWithoutPassword = true;
     }
 
     public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
-    
+
     public abstract Task<bool> IsEnabledAsync();
 
-    public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName)
+    public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName, string plainPassword = null)
     {
         await IdentityOptions.SetAsync();
 
-        var externalUser = await GetUserInfoAsync(userName);
-        NormalizeExternalLoginUserInfo(externalUser, userName);
+        var externalUser = CanObtainUserInfoWithoutPassword ? await GetUserInfoAsync(userName) : await GetUserInfoAsync(userName, plainPassword);
 
+        NormalizeExternalLoginUserInfo(externalUser, userName);
+        
         var user = new IdentityUser(
             GuidGenerator.Create(),
             userName,
@@ -78,11 +82,17 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
         return user;
     }
 
-    public virtual async Task UpdateUserAsync(IdentityUser user, string providerName)
+    public virtual async Task UpdateUserAsync(IdentityUser user, string providerName, string plainPassword = null)
     {
         await IdentityOptions.SetAsync();
 
-        var externalUser = await GetUserInfoAsync(user);
+        if (!CanObtainUserInfoWithoutPassword)
+        {
+            Check.NotNullOrWhiteSpace(plainPassword, nameof(plainPassword));
+        }
+        
+        var externalUser = CanObtainUserInfoWithoutPassword ? await GetUserInfoAsync(user) : await GetUserInfoAsync(user, plainPassword);
+
         NormalizeExternalLoginUserInfo(externalUser, user.UserName);
 
         if (!externalUser.Name.IsNullOrWhiteSpace())
@@ -147,9 +157,16 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
 
     protected abstract Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName);
 
+    protected abstract Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName, string plainPassword);
+
     protected virtual Task<ExternalLoginUserInfo> GetUserInfoAsync(IdentityUser user)
     {
         return GetUserInfoAsync(user.UserName);
+    }
+    
+    protected virtual Task<ExternalLoginUserInfo> GetUserInfoAsync(IdentityUser user, string plainPassword)
+    {
+        return GetUserInfoAsync(user.UserName, plainPassword);
     }
 
     private static void NormalizeExternalLoginUserInfo(
