@@ -352,7 +352,7 @@ public static class Check
     /// <exception cref="ArgumentException"></exception>
     public static T NotDefaultorNull<T>(
         Nullable<T> value,
-        string parameterName)
+        [InvokerParameterName][NotNull] string parameterName)
         where T : struct
     {
         if (value.Equals(default(T)))
