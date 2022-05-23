@@ -342,17 +342,28 @@ public static class Check
         return value;
     }
 
-   public static T NotDefault<T>(
-        T value,
-        [InvokerParameterName][NotNull] string parameterName)
+    /// <summary>
+    /// Checks if value of type T (struct) is empty, default or null
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="parameterName"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public static T NotDefaultorNull<T>(
+        Nullable<T> value,
+        string parameterName)
         where T : struct
-   {
-        if(value.Equals(default(T)))
+    {
+        if (value.Equals(default(T)))
         {
             throw new ArgumentException($"{parameterName} has a default value or is empty!", parameterName);
         }
-
-        return value;
-   }
+        else if (value.HasValue == false)
+        {
+            throw new ArgumentException($"{parameterName} is null!", parameterName);
+        }
+        return (T)value;
+    }
 
 }
