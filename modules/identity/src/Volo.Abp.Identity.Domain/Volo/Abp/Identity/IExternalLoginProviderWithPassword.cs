@@ -4,6 +4,8 @@ namespace Volo.Abp.Identity
 {
     public interface IExternalLoginProviderWithPassword
     {
+        bool CanObtainUserInfoWithoutPassword { get; }
+        
         /// <summary>
         /// This method is called when a user is authenticated by this source but the user does not exists yet.
         /// So, the source should create the user and fill the properties.
