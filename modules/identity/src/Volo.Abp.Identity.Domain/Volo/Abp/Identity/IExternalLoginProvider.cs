@@ -4,7 +4,7 @@ namespace Volo.Abp.Identity;
 
 public interface IExternalLoginProvider
 {
-    bool CanObtainUserInfoWithoutPassword { get; set; }
+    bool CanObtainUserInfoWithoutPassword();
     
     /// <summary>
     /// Used to try authenticate a user by this source.
@@ -20,9 +20,8 @@ public interface IExternalLoginProvider
     /// </summary>
     /// <param name="userName">User name</param>
     /// <param name="providerName">The name of this provider</param>
-    /// <param name="plainPassword">Optional, plain password of the user</param>
     /// <returns>Newly created user</returns>
-    Task<IdentityUser> CreateUserAsync(string userName, string providerName, string plainPassword = null);
+    Task<IdentityUser> CreateUserAsync(string userName, string providerName);
 
     /// <summary>
     /// This method is called after an existing user is authenticated by this source.
@@ -30,8 +29,7 @@ public interface IExternalLoginProvider
     /// </summary>
     /// <param name="providerName">The name of this provider</param>
     /// <param name="user">The user that can be updated</param>
-    /// <param name="plainPassword">Optional, plain password of the user</param>
-    Task UpdateUserAsync(IdentityUser user, string providerName, string plainPassword = null);
+    Task UpdateUserAsync(IdentityUser user, string providerName);
     
     /// <summary>
     /// Return a value indicating whether this source is enabled.

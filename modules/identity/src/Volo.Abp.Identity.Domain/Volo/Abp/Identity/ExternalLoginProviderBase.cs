@@ -9,16 +9,13 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity;
 
-public abstract class ExternalLoginProviderBase : IExternalLoginProvider
+public abstract class ExternalLoginProviderBase : IExternalLoginProvider, IExternalLoginProviderWithPassword
 {
     protected IGuidGenerator GuidGenerator { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IdentityUserManager UserManager { get; }
     protected IIdentityUserRepository IdentityUserRepository { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
-    
-    public bool CanObtainUserInfoWithoutPassword { get; set; }
-
     protected ExternalLoginProviderBase(
         IGuidGenerator guidGenerator,
         ICurrentTenant currentTenant,
@@ -31,19 +28,32 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
         UserManager = userManager;
         IdentityUserRepository = identityUserRepository;
         IdentityOptions = identityOptions;
-        CanObtainUserInfoWithoutPassword = true;
     }
 
     public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
 
     public abstract Task<bool> IsEnabledAsync();
 
-    public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName, string plainPassword = null)
+    public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName)
     {
         await IdentityOptions.SetAsync();
 
-        var externalUser = CanObtainUserInfoWithoutPassword ? await GetUserInfoAsync(userName) : await GetUserInfoAsync(userName, plainPassword);
+        var externalUser = await GetUserInfoAsync(userName);
 
+        return await CreateUserAsync(externalUser, userName, providerName);
+    }
+
+    public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName, string plainPassword)
+    {
+        await IdentityOptions.SetAsync();
+
+        var externalUser = await GetUserInfoAsync(userName, plainPassword);
+
+        return await CreateUserAsync(externalUser, userName, providerName);
+    }
+    
+    protected virtual async Task<IdentityUser> CreateUserAsync(ExternalLoginUserInfo externalUser, string userName, string providerName)
+    {
         NormalizeExternalLoginUserInfo(externalUser, userName);
         
         var user = new IdentityUser(
@@ -82,17 +92,26 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
         return user;
     }
 
-    public virtual async Task UpdateUserAsync(IdentityUser user, string providerName, string plainPassword = null)
+    public virtual async Task UpdateUserAsync(IdentityUser user, string providerName)
     {
         await IdentityOptions.SetAsync();
-
-        if (!CanObtainUserInfoWithoutPassword)
-        {
-            Check.NotNullOrWhiteSpace(plainPassword, nameof(plainPassword));
-        }
         
-        var externalUser = CanObtainUserInfoWithoutPassword ? await GetUserInfoAsync(user) : await GetUserInfoAsync(user, plainPassword);
+        var externalUser = await GetUserInfoAsync(user);
 
+        await UpdateUserAsync(user, externalUser, providerName);
+    }
+
+    public virtual async Task UpdateUserAsync(IdentityUser user, string providerName, string plainPassword)
+    {
+        await IdentityOptions.SetAsync();
+        
+        var externalUser = await GetUserInfoAsync(user, plainPassword);
+
+        await UpdateUserAsync(user, externalUser, providerName);
+    }
+
+    protected virtual async Task UpdateUserAsync(IdentityUser user, ExternalLoginUserInfo externalUser ,string providerName)
+    {
         NormalizeExternalLoginUserInfo(externalUser, user.UserName);
 
         if (!externalUser.Name.IsNullOrWhiteSpace())

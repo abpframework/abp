@@ -28,6 +28,11 @@ public class FakeExternalLoginProvider : ExternalLoginProviderBase, ITransientDe
 
     }
 
+    public override bool CanObtainUserInfoWithoutPassword()
+    {
+        return true;
+    }
+
     public override Task<bool> TryAuthenticateAsync(string userName, string plainPassword)
     {
         return Task.FromResult(

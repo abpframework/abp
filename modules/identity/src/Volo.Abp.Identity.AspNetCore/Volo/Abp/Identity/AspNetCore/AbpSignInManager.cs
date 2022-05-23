@@ -49,21 +49,27 @@ public class AbpSignInManager : SignInManager<IdentityUser>
                 var user = await UserManager.FindByNameAsync(userName);
                 if (user == null)
                 {
-                    user = externalLoginProvider.CanObtainUserInfoWithoutPassword
-                        ? await externalLoginProvider.CreateUserAsync(userName, externalLoginProviderInfo.Name) 
-                        : await externalLoginProvider.CreateUserAsync(userName, externalLoginProviderInfo.Name, password);
-                }
-                else
-                {
-                    if (externalLoginProvider.CanObtainUserInfoWithoutPassword)
+                    if (!externalLoginProvider.CanObtainUserInfoWithoutPassword() && 
+                        externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
                     {
-                        await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                        user = await externalLoginProviderWithPassword.CreateUserAsync(userName, externalLoginProviderInfo.Name, password);
                     }
                     else
                     {
-                        await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name, password);
+                        user = await externalLoginProvider.CreateUserAsync(userName, externalLoginProviderInfo.Name);
                     }
-                    
+                }
+                else
+                {
+                    if (!externalLoginProvider.CanObtainUserInfoWithoutPassword() &&
+                        externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
+                    {
+                        await externalLoginProviderWithPassword.UpdateUserAsync(user, externalLoginProviderInfo.Name, password);
+                    }
+                    else
+                    {
+                        await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                    }
                 }
 
                 return await SignInOrTwoFactorAsync(user, isPersistent);
