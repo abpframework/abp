@@ -475,16 +475,6 @@ Logs you out by removing the session token from your computer.
 abp logout
 ```
 
-#### Options
-
-* ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when the command is executed outside of a GIT repository or when executing directory doesn't contain a .NET solution file.
-* ```--build-name``` or ```-n```: Specifies a name for the build. This option is useful when same repository is used for more than one different builds. 
-* ```--dotnet-build-arguments``` or ```-a```: Arguments to pass ```dotnet build``` when building project files.  This parameter must be passed like ```"\"{params}\""``` .
-* ```--force``` or ```-f```: Forces to build projects even they are not changed from the last successful build.
-
-For more details, see [build command documentation](CLI-BuildCommand.md).
-
-
 ### bundle
 
 This command generates script and style references for an ABP Blazor WebAssembly project and updates the **index.html** file. It helps developers to manage dependencies required by ABP modules easily.  In order ```bundle``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain a Blazor project file(*.csproj).
