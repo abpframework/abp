@@ -1,5 +1,7 @@
 # How to Use the Azure Active Directory Authentication for MVC / Razor Page Applications
 
+> This document has a newer version: https://community.abp.io/posts/how-to-use-the-azure-active-directory-authentication-for-mvc-razor-page-applications-4603b9cf
+> 
 This guide demonstrates how to  integrate AzureAD to an ABP application that enables users to sign in using OAuth 2.0 with credentials from **Azure Active Directory**. 
 
 Adding Azure Active Directory is pretty straightforward in ABP framework. Couple of configurations needs to be done correctly. 
