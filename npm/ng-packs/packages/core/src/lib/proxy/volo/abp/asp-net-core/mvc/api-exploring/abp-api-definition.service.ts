@@ -1,4 +1,4 @@
-import { RestService } from '@abp/ng.core';
+import { RestService } from '../../../../../../services/rest.service';
 import { Injectable } from '@angular/core';
 import type { ApplicationApiDescriptionModel, ApplicationApiDescriptionModelRequestDto } from '../../../http/modeling/models';
 
@@ -14,7 +14,7 @@ export class AbpApiDefinitionService {
       url: '/api/abp/api-definition',
       params: { includeTypes: model.includeTypes },
     },
-    { apiName: this.apiName });
+      { apiName: this.apiName });
 
-  constructor(private restService: RestService) {}
+  constructor(private restService: RestService) { }
 }
