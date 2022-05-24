@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "https://localhost:44307",
-      "sslPort": 44307
+      "applicationUrl": "https://localhost:44305",
+      "sslPort": 44305
     }
   },
   "profiles": {
@@ -20,7 +20,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
-      "applicationUrl": "https://localhost:44307",
+      "applicationUrl": "https://localhost:44305",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
