@@ -4,18 +4,18 @@ This document provides a road map, release schedule and planned features for the
 
 ## Next Versions
 
-### v5.4
+### v6.0
 
-In [5.4 milestone](https://github.com/abpframework/abp/milestone/67), we will be mostly working on the following topics:
+In [6.0 milestone](https://github.com/abpframework/abp/milestone/61), we will be mostly working on the following topics:
 
 * Providing an OpenIddict integration to replace current IdentityServer4 integration.
 * Maturing and documenting the [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) project, writing a free e-book that explains the solution.
 * Working on the [LeptonX](https://blog.abp.io/abp/LeptonX-Theme-for-ABP-Framework-Alpha-Release) theme and making it as the default theme for the ABP Framework UI options.
 * Improvements on the existing features and providing more guides.
 
-The planned release date for v5.4 is **July, 2022**.
+The planned stable release date for v6.0 is **July, 2022**.
 
-> After the version 5.4, we will be working for 6.0 which will be released in the end of 2022 based on .NET 7.0.
+> After the version 6.0, we will be working for ABP 7.0 which will be released in the end of 2022 based on .NET 7.0.
 
 ## Backlog Items
 

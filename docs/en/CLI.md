@@ -41,6 +41,7 @@ Here, is the list of all available commands before explaining their details:
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
+* **`login-info`**: Shows the current user's login information.
 * **`logout`**: Logouts from your computer if you've authenticated before.
 * **`bundle`**: Generates script and style references for an ABP Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
@@ -137,7 +138,7 @@ See some [examples for the new command](CLI-New-Command-Samples.md) here.
 
 ### update
 
-Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related NuGet and NPM packages in a solution or project to the latest versions.
+Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related NuGet and NPM packages in a solution or project to the latest versions. You can run it in the root folder of your solutions.
 
 Usage:
 
@@ -145,8 +146,11 @@ Usage:
 abp update [options]
 ````
 
-* If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
 * If you run in a directory with a .csproj file, it updates all ABP related packages of the project to the latest versions.
+* If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
+* If you run in a directory that contains multiple solutions in sub-folders, it can update all the solutions, including Angular projects.
+
+Note that this command can upgrade your solution from a previous version, and also can upgrade it from a preview release to the stable release of the same version.
 
 #### Options
 
@@ -467,23 +471,21 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 
 A new login with an already active session overwrites the previous session.
 
+### login-info
+
+Shows your login information such as **Name**, **Surname**, **Username**, **Email Address** and **Organization**.
+
+```bash
+abp login-info
+```
+
 ### logout
 
 Logs you out by removing the session token from your computer.
 
-```
+```bash
 abp logout
 ```
-
-#### Options
-
-* ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when the command is executed outside of a GIT repository or when executing directory doesn't contain a .NET solution file.
-* ```--build-name``` or ```-n```: Specifies a name for the build. This option is useful when same repository is used for more than one different builds. 
-* ```--dotnet-build-arguments``` or ```-a```: Arguments to pass ```dotnet build``` when building project files.  This parameter must be passed like ```"\"{params}\""``` .
-* ```--force``` or ```-f```: Forces to build projects even they are not changed from the last successful build.
-
-For more details, see [build command documentation](CLI-BuildCommand.md).
-
 
 ### bundle
 
