@@ -70,3 +70,7 @@ If you want to make a change on a specific resource file, you can find the file 
 ## Bug Report
 
 If you find any bug, please [create an issue on the Github repository](https://github.com/abpframework/abp/issues/new).
+
+## See Also
+
+* [ABP Community Talks 2022.4: How can you contribute to the open source ABP Framework?](https://www.youtube.com/watch?v=Wz4Z-O-YoPg&list=PLsNclT2aHJcOsPustEkzG6DywiO8eh0lB)
