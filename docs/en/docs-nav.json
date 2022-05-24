@@ -976,6 +976,10 @@
                   "path": "UI/Angular/Features.md"
                 },
                 {
+                  "text": "Global Features",
+                  "path": "UI/Angular/GlobalFeatures.md"
+                },
+                {
                   "text": "Permission Management",
                   "path": "UI/Angular/Permission-Management.md"
                 },

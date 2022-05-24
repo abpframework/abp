@@ -138,6 +138,30 @@ export class ConfigStateService {
         }),
       );
   }
+
+  getGlobalFeatures() {
+    return this.store.state.globalFeatures;
+  }
+
+  getGlobalFeatures$() {
+    return this.store.sliceState(state => state.globalFeatures);
+  }
+
+  private isGlobalFeatureEnabled(key: string, globalFeatures: ApplicationGlobalFeatureConfigurationDto) {
+    const features = globalFeatures.enabledFeatures || []
+    return features.some(f => key === f);
+  }
+
+  getGlobalFeatureIsEnabled(key: string) {
+    return this.isGlobalFeatureEnabled(key, this.store.state.globalFeatures);
+  }
+
+  getGlobalFeatureIsEnabled$(key: string) {
+    return this.store.sliceState(state => this.isGlobalFeatureEnabled(key, state.globalFeatures));
+  }
+
+
+
 }
 
 function splitKeys(keys: string[] | string): string[] {
