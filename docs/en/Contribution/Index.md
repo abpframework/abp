@@ -74,3 +74,7 @@ If you find any bug, please [create an issue on the Github repository](https://g
 ## Setup Frontend Development Environment
 
 [How to contribute to abp.io as a frontend developer](How-to-Contribute-abp.io-as-a-frontend-developer.md)
+
+## See Also
+
+* [ABP Community Talks 2022.4: How can you contribute to the open source ABP Framework?](https://www.youtube.com/watch?v=Wz4Z-O-YoPg&list=PLsNclT2aHJcOsPustEkzG6DywiO8eh0lB)

@@ -1029,6 +1029,10 @@
                   "path": "UI/Angular/Confirmation-Service.md"
                 },
                 {
+                  "text": "Loading Directive",
+                  "path": "UI/Angular/Loading-Directive.md"
+                },
+                {
                   "text": "Toast Overlay",
                   "path": "UI/Angular/Toaster-Service.md"
                 },
