@@ -135,6 +135,9 @@
     "ZipCode": "Zip Code",
     "Address": "Address",
     "Homepage": "Homepage",
-    "Year": "Year"
+    "Year": "Year",
+    "Copyright": "Copyright © <a href=\"{0}\" target=\"_blank\">{1}</a>",
+    "DomainDrivenDesign": "Domain Driven Design",
+    "CrossCuttingConcerns": "Cross Cutting Concerns"
   }
 }
