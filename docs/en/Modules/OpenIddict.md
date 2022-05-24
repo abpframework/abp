@@ -10,7 +10,7 @@ This module implements the domain logic and database integrations, but not provi
 
 ## Relations to Other Modules
 
-This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) with the [Account Module](Account.md).
+This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) with the [Account Module](Account.md).
 
 ## The module
 
