@@ -49,7 +49,7 @@
                                     <p class="article-sum">
                                         @Html.Raw(BloggingPageHelper.GetShortContent(post.Content))
                                     </p>
-                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">Continue Reading &#8594;</a>
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">@L["ContinueReading"] &#8594;</a>
 
                                 </div>
                                 @if (post.Writer != null)
@@ -168,7 +168,7 @@
                                             <p>
                                                 @Html.Raw(BloggingPageHelper.GetShortContent(post.Content))
                                             </p>
-                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">Continue Reading &#8594;</a>
+                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">@L["ContinueReading"] &#8594;</a>
 
                                             @if (post.Writer != null)
                                             {
