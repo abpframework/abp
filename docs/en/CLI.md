@@ -137,7 +137,7 @@ See some [examples for the new command](CLI-New-Command-Samples.md) here.
 
 ### update
 
-Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related NuGet and NPM packages in a solution or project to the latest versions.
+Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related NuGet and NPM packages in a solution or project to the latest versions. You can run it in the root folder of your solutions.
 
 Usage:
 
@@ -145,8 +145,11 @@ Usage:
 abp update [options]
 ````
 
-* If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
 * If you run in a directory with a .csproj file, it updates all ABP related packages of the project to the latest versions.
+* If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
+* If you run in a directory that contains multiple solutions in sub-folders, it can update all the solutions, including Angular projects.
+
+Note that this command can upgrade your solution from a previous version, and also can upgrade it from a preview release to the stable release of the same version.
 
 #### Options
 
