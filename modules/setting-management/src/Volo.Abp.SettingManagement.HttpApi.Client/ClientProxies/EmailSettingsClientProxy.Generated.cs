@@ -27,4 +27,12 @@ public partial class EmailSettingsClientProxy : ClientProxyBase<IEmailSettingsAp
             { typeof(UpdateEmailSettingsDto), input }
         });
     }
+
+    public virtual async Task SendTestEmailAsync(SendTestEmailInput input)
+    {
+        await RequestAsync(nameof(SendTestEmailAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(SendTestEmailInput), input }
+        });
+    }
 }

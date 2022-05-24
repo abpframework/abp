@@ -64,7 +64,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host;
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAccountWebIdentityServerModule),
+    typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
     typeof(AbpIdentityApplicationModule),
@@ -98,6 +98,23 @@ public class MyProjectNameBlazorHostModule : AbpModule
                 typeof(MyProjectNameApplicationContractsModule).Assembly,
                 typeof(MyProjectNameBlazorHostModule).Assembly
             );
+        });
+
+        PreConfigure<OpenIddictServerBuilder>(builder =>
+        {
+            // https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
+            // In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
+            builder.DisableAccessTokenEncryption();
+        });
+
+        PreConfigure<OpenIddictBuilder>(builder =>
+        {
+            builder.AddValidation(options =>
+            {
+                options.AddAudiences("MyProjectName");
+                options.UseLocalServer();
+                options.UseAspNetCore();
+            });
         });
     }
 
@@ -244,7 +261,6 @@ public class MyProjectNameBlazorHostModule : AbpModule
         }
 
         app.UseUnitOfWork();
-        app.UseIdentityServer();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
