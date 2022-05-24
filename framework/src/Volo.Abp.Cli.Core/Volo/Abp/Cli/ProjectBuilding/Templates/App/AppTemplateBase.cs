@@ -181,7 +181,8 @@ public abstract class AppTemplateBase : TemplateInfo
         if (!context.BuildArgs.PublicWebSite)
         {
             if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) ||
-                context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+                context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+                context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
             {
                 context.Symbols.Add("PUBLIC-REDIS");
             }
@@ -192,7 +193,7 @@ public abstract class AppTemplateBase : TemplateInfo
             context.Symbols.Add("public-website");
         }
 
-        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) || context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) || context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") || context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Public.Host", "MyCompanyName.MyProjectName.Web.Public"));
             steps.Add(new ChangeDbMigratorPublicPortStep());
@@ -255,7 +256,8 @@ public abstract class AppTemplateBase : TemplateInfo
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
 
-        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
             steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
@@ -277,7 +279,8 @@ public abstract class AppTemplateBase : TemplateInfo
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
 
-        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
             steps.Add(new BlazorAppsettingsFilePortChangeForSeparatedIdentityServersStep());
@@ -361,7 +364,8 @@ public abstract class AppTemplateBase : TemplateInfo
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
 
-        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
             steps.Add(new AngularEnvironmentFilePortChangeForSeparatedIdentityServersStep());
@@ -420,7 +424,8 @@ public abstract class AppTemplateBase : TemplateInfo
     protected void ConfigureTieredArchitecture(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) ||
-            context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             context.Symbols.Add("tiered");
         }
