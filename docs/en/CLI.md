@@ -41,6 +41,7 @@ Here, is the list of all available commands before explaining their details:
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
+* **`login-info`**: Shows the current user's login information.
 * **`logout`**: Logouts from your computer if you've authenticated before.
 * **`bundle`**: Generates script and style references for an ABP Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
@@ -467,11 +468,19 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 
 A new login with an already active session overwrites the previous session.
 
+### login-info
+
+Shows your login information such as **Name**, **Surname**, **Username**, **Email Address** and **Organization**.
+
+```bash
+abp login-info
+```
+
 ### logout
 
 Logs you out by removing the session token from your computer.
 
-```
+```bash
 abp logout
 ```
 
