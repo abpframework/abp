@@ -495,7 +495,7 @@
     "FullName": "Full Name",
     "LicenseTypeNotCorrect": "The license type is not correct!",
     "Trainings": "Trainings",
-    "ChoseTrainingPlaceholder": "Chose the training...",
+    "ChooseTrainingPlaceholder": "Choose the training...",
     "DoYouNeedTrainings": "Do you need one of these trainings?",
     "DoYouNeedTraining": "Do you need {0} training?",
     "GetInTouchUs": "Get in touch with us",
