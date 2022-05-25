@@ -20,5 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="OpenIddict.Server.AspNetCore" Version="3.1.1" />
+    <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="3.1.1" />
+    <PackageReference Include="OpenIddict.Validation.ServerIntegration" Version="3.1.1" />
   </ItemGroup>
 </Project>

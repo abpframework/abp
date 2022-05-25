@@ -67,7 +67,7 @@ ABP is a modular framework and the Application Modules provide **pre-built appli
 
 - [**Account**](https://docs.abp.io/en/abp/latest/Modules/Account): Provides UI for the account management and allows user to login/register to the application.
 - **[Identity](https://docs.abp.io/en/abp/latest/Modules/Identity)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
-- [**IdentityServer**](https://docs.abp.io/en/abp/latest/Modules/IdentityServer): Integrates to IdentityServer4.
+- [**OpenIddict**](https://docs.abp.io/en/abp/latest/Modules/OpenIddict): Integrates to OpenIddict.
 - [**Tenant Management**](https://docs.abp.io/en/abp/latest/Modules/Tenant-Management): Manages tenants for a [multi-tenant](https://docs.abp.io/en/abp/latest/Multi-Tenancy) (SaaS) application.
 
 See the [Application Modules](https://docs.abp.io/en/abp/latest/Modules/Index) document for all pre-built modules.

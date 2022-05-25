@@ -28,6 +28,8 @@ public partial class TokenController
             TokenValidationParameters.DefaultAuthenticationType,
             OpenIddictConstants.Claims.PreferredUsername, OpenIddictConstants.Claims.Role);
 
+        // The Subject and PreferredUsername will be removed by <see cref="RemoveClaimsFromClientCredentialsGrantType"/>.
+
         // Use the client_id as the subject identifier.
         identity.AddClaim(OpenIddictConstants.Claims.Subject, await ApplicationManager.GetClientIdAsync(application),
             OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);

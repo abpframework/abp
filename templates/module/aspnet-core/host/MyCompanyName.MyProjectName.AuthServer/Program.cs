@@ -32,7 +32,7 @@ public class Program
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
-            await builder.AddApplicationAsync<MyProjectNameOpenIddictModule>();
+            await builder.AddApplicationAsync<MyProjectNameAuthServerModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
             await app.RunAsync();

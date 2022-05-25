@@ -15,7 +15,7 @@
 * 在新文件夹中创建项目, **Entity Framework Core**, 默认应用程序模板, **拆分Identity Server**:
 
   ```bash
-  abp new Acme.BookStore -t app -u angular -m none --separate-identity-server --database-provider ef -csf
+  abp new Acme.BookStore -t app -u angular -m none --separate-auth-server --database-provider ef -csf
   ```
 
 * 在新文件夹中创建项目, **Entity Framework Core**, **自定义连接字符串**:
@@ -33,7 +33,7 @@
 * 在新文件夹中创建项目, **MongoDB**, 默认应用程序模板, 不创建移动端应用程序, **拆分Identity Server**:
 
   ```bash
-  abp new Acme.BookStore -t app -u angular -m none --separate-identity-server --database-provider mongodb -csf
+  abp new Acme.BookStore -t app -u angular -m none --separate-auth-server --database-provider mongodb -csf
   ```
 
 ## MVC
@@ -78,7 +78,7 @@
 * **Entity Framework Core**, **拆分Identity Server**, 包含移动端应用程序:
   
   ```bash
-  abp new Acme.BookStore -u blazor --separate-identity-server
+  abp new Acme.BookStore -u blazor --separate-auth-server
   ```
 
 * 在新文件夹中创建项目, **MongoDB**, 不创建移动端应用程序:
@@ -116,7 +116,7 @@
 * 在新文件夹中创建项目, **Entity Framework Core**, 拆分Identity Server:
 
     ```bash
-    abp new Acme.BookStore -u none --separate-identity-server -csf
+    abp new Acme.BookStore -u none --separate-auth-server -csf
     ```
 * **MongoDB**, 不创建移动端应用程序:
 

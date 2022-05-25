@@ -47,6 +47,7 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             AbpClaimTypes.PhoneNumberVerified = OpenIddictConstants.Claims.PhoneNumberVerified;
             AbpClaimTypes.Email = OpenIddictConstants.Claims.Email;
             AbpClaimTypes.EmailVerified = OpenIddictConstants.Claims.EmailVerified;
+            AbpClaimTypes.ClientId = OpenIddictConstants.Claims.ClientId;
         }
 
         var openIddictBuilder = services.AddOpenIddict()
@@ -125,6 +126,8 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                     builder.RemoveEventHandler(OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter.Descriptor);
                     builder.AddEventHandler(AbpValidatePostLogoutRedirectUriParameter.Descriptor);
                 }
+
+                builder.AddEventHandler(RemoveClaimsFromClientCredentialsGrantType.Descriptor);
 
                 services.ExecutePreConfiguredActions(builder);
             });

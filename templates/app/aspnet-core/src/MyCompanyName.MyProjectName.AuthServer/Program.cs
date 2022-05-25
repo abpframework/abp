@@ -27,12 +27,12 @@ public class Program
 
         try
         {
-            Log.Information("Starting MyCompanyName.MyProjectName.IdentityServer.");
+            Log.Information("Starting MyCompanyName.MyProjectName.AuthServer.");
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
-            await builder.AddApplicationAsync<MyProjectNameIdentityServerModule>();
+            await builder.AddApplicationAsync<MyProjectNameAuthServerModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
             await app.RunAsync();
@@ -40,7 +40,7 @@ public class Program
         }
         catch (Exception ex)
         {
-            Log.Fatal(ex, "MyCompanyName.MyProjectName.IdentityServer terminated unexpectedly!");
+            Log.Fatal(ex, "MyCompanyName.MyProjectName.AuthServer terminated unexpectedly!");
             return 1;
         }
         finally
