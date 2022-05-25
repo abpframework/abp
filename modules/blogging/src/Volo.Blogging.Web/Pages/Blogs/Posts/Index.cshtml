@@ -4,11 +4,11 @@
 @using Volo.Blogging
 @inject IAuthorizationService Authorization
 @model Volo.Blogging.Pages.Blog.Posts.IndexModel
-@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
 @using Volo.Blogging.Localization
 @using Volo.Blogging.Pages.Blog
 @using IndexModel = Volo.Blogging.Pages.Blog.Posts.IndexModel
-@inject IHtmlLocalizer<BloggingResource> L
+@inject IStringLocalizer<BloggingResource> L
 @inject BloggingPageHelper BloggingPageHelper
 @{
     ViewBag.Title = "Read All Blog Posts";
