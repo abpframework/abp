@@ -113,7 +113,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual TagHelper GetInputTagHelper(TagHelperContext context, TagHelperOutput output)
     {
-        if (TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>() != null)
+        if (TryGetTextAreaAttribute(output) != null)
         {
             var textAreaTagHelper = new TextAreaTagHelper(_generator)
             {
@@ -342,7 +342,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual void ConvertToTextAreaIfTextArea(TagHelperOutput tagHelperOutput)
     {
-        var textAreaAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>();
+        var textAreaAttribute = TryGetTextAreaAttribute(tagHelperOutput);
 
         if (textAreaAttribute == null)
         {
@@ -360,6 +360,18 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         {
             tagHelperOutput.Attributes.Add("cols", textAreaAttribute.Cols);
         }
+    }
+
+    protected virtual TextArea TryGetTextAreaAttribute(TagHelperOutput output)
+    {
+        var textAreaAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>();
+
+        if (textAreaAttribute == null && output.Attributes.Any(a => a.Name == "text-area"))
+        {
+            return new TextArea();
+        }
+
+        return textAreaAttribute;
     }
 
     protected virtual TagHelperAttributeList GetInputAttributes(TagHelperContext context, TagHelperOutput output)
