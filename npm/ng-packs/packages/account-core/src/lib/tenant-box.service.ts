@@ -23,7 +23,7 @@ export class TenantBoxService {
     private tenantService: AbpTenantService,
     private sessionState: SessionStateService,
     private configState: ConfigStateService,
-  ) {}
+  ) { }
 
   onSwitch() {
     const tenant = this.sessionState.getTenant();
@@ -40,7 +40,7 @@ export class TenantBoxService {
 
     this.modalBusy = true;
     this.tenantService
-      .findTenantByName(this.name, {})
+      .findTenantByName(this.name)
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(({ success, tenantId: id, ...tenant }) => {
         if (!success) {

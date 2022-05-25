@@ -39,6 +39,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`switch-to-stable`**: 切换解决方案所有ABP相关包为最新的稳定版本.
 * **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
+* **`login-info`**: 展示当前登录用户信息.
 * **`logout`**: 在你的计算机注销认证.
 * **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
 
@@ -386,6 +387,14 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 > 当使用-p参数,请注意,因为你的密码是可见的. 它对于CI / CD自动化管道很有用.
 
 请注意,新的登录将终止先前的会话并创建一个新的会话.
+
+### login-info
+
+展示你的登录信息, 如 **名称** , **用户名** , **地址** 和 **组织**.
+
+```bash
+abp login-info
+```
 
 ### logout
 
