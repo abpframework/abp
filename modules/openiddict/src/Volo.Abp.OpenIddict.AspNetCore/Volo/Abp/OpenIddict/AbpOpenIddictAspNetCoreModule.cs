@@ -127,6 +127,8 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                     builder.AddEventHandler(AbpValidatePostLogoutRedirectUriParameter.Descriptor);
                 }
 
+                builder.AddEventHandler(RemoveClaimsFromClientCredentialsGrantType.Descriptor);
+
                 services.ExecutePreConfiguredActions(builder);
             });
 
