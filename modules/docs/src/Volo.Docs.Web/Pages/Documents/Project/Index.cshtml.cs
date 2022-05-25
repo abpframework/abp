@@ -78,7 +78,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public bool FullSearchEnabled { get; set; }
 
-        public bool IsLatestVersion => Version == LatestVersionInfo.Version;
+        public bool IsLatestVersion { get; private set; } 
 
         private const int MaxDescriptionMetaTagLength = 200;
         private readonly IDocumentAppService _documentAppService;
@@ -335,6 +335,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 Value = CreateVersionLink(LatestVersionInfo, v.Version, DocumentName),
                 Selected = v.IsSelected
             }).ToList();
+            
+            IsLatestVersion = Version == LatestVersionInfo.Version;
         }
 
         private VersionInfoViewModel GetLatestVersionInfo(List<VersionInfoViewModel> versions)
