@@ -231,7 +231,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         {
             SetModificationAuditProperties(entity);
 
-            var isSoftDeleteEntity = typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity));
+            var isSoftDeleteEntity = entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted;
             if (isSoftDeleteEntity)
             {
                 SetDeletionAuditProperties(entity);
