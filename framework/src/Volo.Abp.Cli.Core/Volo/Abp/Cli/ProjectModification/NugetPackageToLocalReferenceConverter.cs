@@ -30,6 +30,11 @@ public class NugetPackageToLocalReferenceConverter : ITransientDependency
 
         foreach (var projectFile in projectFiles)
         {
+            if (!File.Exists(projectFile))
+            {
+                return;
+            }
+            
             var content = File.ReadAllText(projectFile);
             using (var stream = StreamHelper.GenerateStreamFromString(content))
             {
