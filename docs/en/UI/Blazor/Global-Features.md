@@ -1,0 +1,28 @@
+# Blazor UI: Global Features
+`GlobalFeatureManager` allows you to check the features are enabled or disabled in the blazor project.
+
+> This document only explains the JavaScript API. See the [Global Features](../../Global-Features.md) document to understand the ABP Global Features system.
+
+
+## Usage
+
+```html
+@using Volo.Abp.GlobalFeatures
+
+@* ... *@
+
+@* Global Feature can be checked with feature name *@
+@if(GlobalFeatureManager.Instance.IsEnabled("Ecommerce.Subscription"))
+{
+    <span>Ecommerce.Subscription is enabled.</span>
+}
+
+@* OR it can be checked with type *@
+
+@if(GlobalFeatureManager.Instance.IsEnabled<EcommerceSubscriptionGlobalFeature>())
+{
+    <span>Ecommerce.Subscription is enabled.</span>
+}
+```
+
+- You can follow [Check for a Global Feature](../../Global-Features#check-for-a-global-feature) section of Global Features document to check global featues in csharp.
