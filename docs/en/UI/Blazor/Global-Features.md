@@ -1,5 +1,5 @@
 # Blazor UI: Global Features
-`GlobalFeatureManager` allows you to check the features are enabled or disabled in the blazor project.
+`GlobalFeatureManager` allows you to check the global features in your Blazor applications.
 
 > This document only explains the JavaScript API. See the [Global Features](../../Global-Features.md) document to understand the ABP Global Features system.
 
