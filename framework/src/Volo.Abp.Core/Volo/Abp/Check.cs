@@ -253,8 +253,6 @@ public static class Check
         return value;
     }
 
-
-
     public static Int16 Range(
         Int16 value,
         [InvokerParameterName][NotNull] string parameterName,
@@ -340,29 +338,21 @@ public static class Check
         return value;
     }
 
-    /// <summary>
-    /// Checks if value of type T (struct) is empty, default or null
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="value"></param>
-    /// <param name="parameterName"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
-    public static T NotDefaultorNull<T>(
-        Nullable<T> value,
+    public static T NotDefaultOrNull<T>(
+        T? value,
         [InvokerParameterName][NotNull] string parameterName)
         where T : struct
     {
-        if (value.Equals(default(T)))
-        {
-            throw new ArgumentException($"{parameterName} has a default value or is empty!", parameterName);
-        }
-        else if (value.HasValue == false)
+        if (value == null)
         {
             throw new ArgumentException($"{parameterName} is null!", parameterName);
         }
 
-        return (T)value;
-    }
+        if (value.Value.Equals(default(T)))
+        {
+            throw new ArgumentException($"{parameterName} has a default value!", parameterName);
+        }
 
+        return value.Value;
+    }
 }
