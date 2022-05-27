@@ -253,7 +253,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
     private bool IsYarnAvailable()
     {
-        var output = CmdHelper.RunCmdAndGetOutput("npm list yarn -g").Trim();
+        var output = CmdHelper.RunCmdAndGetOutput("npm list yarn -g --depth 0").Trim();
         if (output.Contains("empty"))
         {
             return false;
