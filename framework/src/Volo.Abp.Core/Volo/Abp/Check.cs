@@ -163,8 +163,6 @@ public static class Check
         return value;
     }
 
-
-  
     public static Int16 Positive(
         Int16 value,
         [InvokerParameterName][NotNull] string parameterName)
@@ -363,6 +361,7 @@ public static class Check
         {
             throw new ArgumentException($"{parameterName} is null!", parameterName);
         }
+
         return (T)value;
     }
 
