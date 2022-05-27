@@ -283,7 +283,7 @@ public abstract class AppTemplateBase : TemplateInfo
             context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
-            steps.Add(new BlazorAppsettingsFilePortChangeForSeparatedIdentityServersStep());
+            steps.Add(new BlazorAppsettingsFilePortChangeForSeparatedAuthServersStep());
             steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
         }
         else
@@ -368,12 +368,12 @@ public abstract class AppTemplateBase : TemplateInfo
             context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
-            steps.Add(new AngularEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+            steps.Add(new AngularEnvironmentFilePortChangeForSeparatedAuthServersStep());
             steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
 
             if (context.BuildArgs.MobileApp == MobileApp.ReactNative)
             {
-                steps.Add(new ReactEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+                steps.Add(new ReactEnvironmentFilePortChangeForSeparatedAuthServersStep());
             }
         }
         else

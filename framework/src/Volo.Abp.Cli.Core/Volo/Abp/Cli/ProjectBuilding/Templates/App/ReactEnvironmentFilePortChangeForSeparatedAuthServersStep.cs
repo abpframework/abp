@@ -4,7 +4,7 @@ using Volo.Abp.Cli.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
-public class ReactEnvironmentFilePortChangeForSeparatedIdentityServersStep : ProjectBuildPipelineStep
+public class ReactEnvironmentFilePortChangeForSeparatedAuthServersStep : ProjectBuildPipelineStep
 {
     public override void Execute(ProjectBuildContext context)
     {

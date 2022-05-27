@@ -4,7 +4,7 @@ using Volo.Abp.Cli.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
-public class BlazorAppsettingsFilePortChangeForSeparatedIdentityServersStep : ProjectBuildPipelineStep
+public class BlazorAppsettingsFilePortChangeForSeparatedAuthServersStep : ProjectBuildPipelineStep
 {
     public override void Execute(ProjectBuildContext context)
     {
