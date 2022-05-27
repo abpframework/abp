@@ -37,18 +37,18 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
             "/aspnet-core/src/MyCompanyName.MyProjectName.Web/appsettings.json"
         );
 
-        //MyCompanyName.MyProjectName.IdentityServer
+        //MyCompanyName.MyProjectName.AuthServer
 
         ChangeProjectReference(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyCompanyName.MyProjectName.IdentityServer.csproj",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyCompanyName.MyProjectName.AuthServer.csproj",
             _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
             "MongoDB"
         );
 
         ChangeNamespaceAndKeyword(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyProjectNameIdentityServerModule.cs",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyProjectNameIdentityServerModule.cs",
             "MyCompanyName.MyProjectName.EntityFrameworkCore",
             "MyCompanyName.MyProjectName.MongoDB",
             _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
@@ -57,7 +57,7 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
 
         ChangeConnectionStringToMongoDb(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/appsettings.json"
+            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/appsettings.json"
         );
 
         //MyCompanyName.MyProjectName.HttpApi.Host

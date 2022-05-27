@@ -15,7 +15,7 @@
 
 ### 连接字符串
 
-检查在 {{if Tiered == "Yes"}}`.IdentityServer` 和`.HttpApi.Host` 项目{{else}}{{if UI=="MVC"}}`.Web` 项目{{else if UI=="BlazorServer"}}`.Blazor` 项目{{else}}`.HttpApi.Host` 项目{{end}}{{end}} 中 `appsettings.json` 文件里的**连接字符串**.
+检查在 {{if Tiered == "Yes"}}`.AuthServer` 和`.HttpApi.Host` 项目{{else}}{{if UI=="MVC"}}`.Web` 项目{{else if UI=="BlazorServer"}}`.Blazor` 项目{{else}}`.HttpApi.Host` 项目{{end}}{{end}} 中 `appsettings.json` 文件里的**连接字符串**.
 
 {{ if DB == "EF" }}
 
@@ -97,7 +97,7 @@ dotnet run
 
 > 分层解决方案使用 **Redis** 作为分布式缓存. 确保它已安装并在本地计算机上运行. 如果你使用的是远程 Redis 服务器, 请修改项目的 ` appsettings.json` 文件中的配置.
 
-1. 确保 `.IdentityServer` 项目是启动项目. 运行此应用程序, 它将在浏览器中打开 **登录** 页面.
+1. 确保 `.AuthServer` 项目是启动项目. 运行此应用程序, 它将在浏览器中打开 **登录** 页面.
 
 > 在 Visual Studio 中使用 Ctrl+F5(而不是F5) 在不进行调试的情况下运行应用程序. 如果你没有调试目的, 这会更快.
 
@@ -135,7 +135,7 @@ dotnet run
 
 > 分层解决方案使用 Redis 作为分布式缓存. 确保它已安装并在本地计算机上运行. 如果你使用的是远程 Redis 服务器, 请修改项目的 `appsettings.json` 文件中的配置.
 
-确保 `.IdentityServer` 项目是启动项目. 运行此应用程序, 它将在浏览器中打开 **登录** 页面.
+确保 `.AuthServer` 项目是启动项目. 运行此应用程序, 它将在浏览器中打开 **登录** 页面.
 
 > 在 Visual Studio 中使用 Ctrl+F5(而不是F5) 在不进行调试的情况下运行应用程序. 如果你没有调试目的, 这会更快.
 

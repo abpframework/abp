@@ -96,13 +96,7 @@ Ensure that the `TodoApp.HttpApi.Host` project is the startup project, then run 
 
 You can explore and test your HTTP API with this UI. If it works, we can run the Angular client application.
 
-First, run the following command to restore the NPM packages;
-
-````bash
-npm install
-````
-
-It will take some time to install all the packages. Then you can run the application using the following command:
+You can run the application using the following command:
 
 ````bash
 npm start

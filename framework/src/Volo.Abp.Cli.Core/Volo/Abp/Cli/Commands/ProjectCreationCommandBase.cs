@@ -31,19 +31,19 @@ public abstract class ProjectCreationCommandBase
     public ILogger<NewCommand> Logger { get; set; }
 
     public ProjectCreationCommandBase(
-        ConnectionStringProvider connectionStringProvider, 
-        SolutionPackageVersionFinder solutionPackageVersionFinder, 
-        ICmdHelper cmdHelper, 
+        ConnectionStringProvider connectionStringProvider,
+        SolutionPackageVersionFinder solutionPackageVersionFinder,
+        ICmdHelper cmdHelper,
         IInstallLibsService installLibsService,
         AngularPwaSupportAdder angularPwaSupportAdder,
-        InitialMigrationCreator ınitialMigrationCreator)
+        InitialMigrationCreator initialMigrationCreator)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
         InstallLibsService = installLibsService;
         AngularPwaSupportAdder = angularPwaSupportAdder;
-        InitialMigrationCreator = ınitialMigrationCreator;
+        InitialMigrationCreator = initialMigrationCreator;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -242,7 +242,7 @@ public abstract class ProjectCreationCommandBase
         if (AppTemplateBase.IsAppTemplate(template))
         {
             var isCommercial = template == AppProTemplate.TemplateName;
-            OpenThanksPage(projectArgs.UiFramework, projectArgs.DatabaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
+            OpenThanksPage(projectArgs.UiFramework, projectArgs.DatabaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server") || commandLineArgs.Options.ContainsKey("separate-auth-server"), isCommercial);
         }
         else if (MicroserviceTemplateBase.IsMicroserviceTemplate(template))
         {
@@ -347,7 +347,7 @@ public abstract class ProjectCreationCommandBase
         {
             return;
         }
-        
+
         var efCoreProjectPath = string.Empty;
         bool isLayeredTemplate;
 
@@ -372,7 +372,7 @@ public abstract class ProjectCreationCommandBase
             Logger.LogWarning("Couldn't find the project to create initial migrations!");
             return;
         }
-        
+
         await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
     }
 

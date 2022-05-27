@@ -10,7 +10,7 @@ This module implements the domain logic and database integrations, but not provi
 
 ## Relations to Other Modules
 
-This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) with the [Account Module](Account.md).
+This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) with the [Account Module](Account.md).
 
 ## The module
 
@@ -130,11 +130,6 @@ Configure<AbpOpenIddictClaimDestinationsOptions>(options =>
 ```
 
 For detailed information, please refer to: [OpenIddict claim destinations](https://documentation.openiddict.com/configuration/claim-destinations.html)
-
-#### About Validation
-
-The `OpenIddict.Validation.AspNetCore` and `OpenIddict.Validation` are not integrated in the module, we use the authentication component provided by Microsoft. If you are more familiar with it, you can use it in your project.
-
 
 ### EF Core module
 

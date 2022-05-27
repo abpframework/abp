@@ -173,7 +173,7 @@ public class MyProjectNameBlazorModule : AbpModule
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
 
-                options.Scope.Add("role");
+                options.Scope.Add("roles");
                 options.Scope.Add("email");
                 options.Scope.Add("phone");
                 options.Scope.Add("MyProjectName");

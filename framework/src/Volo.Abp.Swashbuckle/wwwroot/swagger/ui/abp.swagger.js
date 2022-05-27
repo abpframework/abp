@@ -8,6 +8,8 @@ var abp = abp || {};
         var firstRequest = true;
         abp.appPath = configObject.baseUrl || abp.appPath;
 
+        var requestInterceptor = configObject.requestInterceptor;
+        
         configObject.requestInterceptor = async function (request) {
 
             if(request.url.includes(excludeUrl[1])){
@@ -25,6 +27,10 @@ var abp = abp || {};
             var antiForgeryToken = abp.security.antiForgery.getToken();
             if (antiForgeryToken) {
                 request.headers[abp.security.antiForgery.tokenHeaderName] = antiForgeryToken;
+            }
+            
+            if(requestInterceptor){
+                requestInterceptor(request);
             }
             return request;
         };

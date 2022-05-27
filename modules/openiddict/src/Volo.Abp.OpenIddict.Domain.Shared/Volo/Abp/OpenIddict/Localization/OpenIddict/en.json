@@ -9,6 +9,8 @@
     "Authorization": "Authorization",
     "DoYouWantToGrantAccessToYourData": "Do you want to grant {0} access to your data?",
     "ScopesRequested": "Scopes requested",
+    "Accept": "Accept",
+    "Deny": "Deny",
     "LogOut": "Log out",
     "AreYouSureYouWantToSignOut": "Are you sure you want to sign out?"
   }

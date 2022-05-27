@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj" />
-    <PackageReference Include="Minio" Version="4.0.1" />
+    <PackageReference Include="Minio" Version="4.0.3" />
   </ItemGroup>
 
 </Project>

@@ -40,26 +40,27 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
         {
             AbpClaimTypes.UserId = OpenIddictConstants.Claims.Subject;
             AbpClaimTypes.Role = OpenIddictConstants.Claims.Role;
-            AbpClaimTypes.UserName = OpenIddictConstants.Claims.Name;
+            AbpClaimTypes.UserName = OpenIddictConstants.Claims.PreferredUsername;
             AbpClaimTypes.Name = OpenIddictConstants.Claims.GivenName;
             AbpClaimTypes.SurName = OpenIddictConstants.Claims.FamilyName;
             AbpClaimTypes.PhoneNumber = OpenIddictConstants.Claims.PhoneNumber;
             AbpClaimTypes.PhoneNumberVerified = OpenIddictConstants.Claims.PhoneNumberVerified;
             AbpClaimTypes.Email = OpenIddictConstants.Claims.Email;
             AbpClaimTypes.EmailVerified = OpenIddictConstants.Claims.EmailVerified;
+            AbpClaimTypes.ClientId = OpenIddictConstants.Claims.ClientId;
         }
 
         var openIddictBuilder = services.AddOpenIddict()
             .AddServer(builder =>
             {
                 builder
-                    .SetAuthorizationEndpointUris("/connect/authorize")
+                    .SetAuthorizationEndpointUris("/connect/authorize", "/connect/authorize/callback")
                     // /.well-known/oauth-authorization-server
                     // /.well-known/openid-configuration
                     //.SetConfigurationEndpointUris()
                     // /.well-known/jwks
                     //.SetCryptographyEndpointUris()
-                    .SetDeviceEndpointUris("/connect/device")
+                    .SetDeviceEndpointUris("/device")
                     .SetIntrospectionEndpointUris("/connect/introspect")
                     .SetLogoutEndpointUris("/connect/logout")
                     .SetRevocationEndpointUris("/connect/revocat")
@@ -125,6 +126,8 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                     builder.RemoveEventHandler(OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter.Descriptor);
                     builder.AddEventHandler(AbpValidatePostLogoutRedirectUriParameter.Descriptor);
                 }
+
+                builder.AddEventHandler(RemoveClaimsFromClientCredentialsGrantType.Descriptor);
 
                 services.ExecutePreConfiguredActions(builder);
             });

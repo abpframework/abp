@@ -20,7 +20,7 @@ We will use the ABP CLI to create a new ABP project.
 Use the `new` command of the ABP CLI to create a new project:
 
 ````shell
-abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u blazor{{else if UI == "BlazorServer"}} -u blazor-server{{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes"}}{{if UI == "MVC" || UI == "BlazorServer"}} --tiered{{else}} --separate-identity-server{{end}}{{end}}
+abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u blazor{{else if UI == "BlazorServer"}} -u blazor-server{{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes"}}{{if UI == "MVC" || UI == "BlazorServer"}} --tiered{{else}} --separate-auth-server{{end}}{{end}}
 ````
 
 *You can use different level of namespaces; e.g. BookStore, Acme.BookStore or Acme.Retail.BookStore.* 
@@ -33,7 +33,7 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u 
 
 {{ else }}
 
-* `--separate-identity-server` argument is used to separate the identity server application from the API host application. If not specified, you will have a single endpoint on the server.
+* `--separate-auth-server` argument is used to separate the identity server application from the API host application. If not specified, you will have a single endpoint on the server.
 
 {{ end }}
 
