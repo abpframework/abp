@@ -108,13 +108,6 @@ public class MyProjectNameModule : AbpModule
             );
         });
 
-		PreConfigure<OpenIddictServerBuilder>(builder =>
-		{
-			// https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
-			// In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
-			builder.DisableAccessTokenEncryption();
-		});
-
 		PreConfigure<OpenIddictBuilder>(builder =>
 		{
 			builder.AddValidation(options =>
@@ -139,7 +132,6 @@ public class MyProjectNameModule : AbpModule
         ConfigureAutoApiControllers();
         ConfigureVirtualFiles(hostingEnvironment);
         ConfigureLocalization();
-        ConfigureAuthentication(context.Services, configuration);
         ConfigureCors(context, configuration);
         ConfigureDataProtection(context, configuration, hostingEnvironment);
         ConfigureMongoDB(context);
@@ -174,17 +166,6 @@ public class MyProjectNameModule : AbpModule
             options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
             options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
         });
-    }
-
-    private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddAuthentication()
-            .AddJwtBearer(options =>
-            {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = "MyProjectName";
-            });
     }
 
     private void ConfigureLocalization()
@@ -341,7 +322,7 @@ public class MyProjectNameModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
+        app.UseAbpOpenIddictValidation();
 
         if (IsMultiTenant)
         {

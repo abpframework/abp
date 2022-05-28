@@ -104,6 +104,8 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                         .AddDevelopmentSigningCertificate();
                 }
 
+                builder.DisableAccessTokenEncryption();
+
                 var wildcardDomainsOptions = services.ExecutePreConfiguredActions<AbpOpenIddictWildcardDomainOptions>();
                 if (wildcardDomainsOptions.EnableWildcardDomainSupport)
                 {

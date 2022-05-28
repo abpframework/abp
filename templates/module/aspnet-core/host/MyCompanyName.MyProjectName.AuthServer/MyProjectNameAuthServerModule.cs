@@ -156,14 +156,6 @@ public class MyProjectNameAuthServerModule : AbpModule
             options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
         });
 
-        context.Services.AddAuthentication()
-            .AddJwtBearer(options =>
-            {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = configuration["AuthServer:ApiName"];
-            });
-
         Configure<AbpDistributedCacheOptions>(options =>
         {
             options.KeyPrefix = "MyProjectName:";
@@ -226,7 +218,7 @@ public class MyProjectNameAuthServerModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
+        app.UseAbpOpenIddictValidation();
 
         if (MultiTenancyConsts.IsEnabled)
         {

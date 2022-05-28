@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
+using OpenIddict.Validation.AspNetCore;
 
-namespace Volo.Abp.OpenIddict.Jwt;
+namespace Microsoft.AspNetCore.Builder;
 
-//TODO: Should we move this to another package..?
-
-public static class JwtTokenMiddleware
+public static class ApplicationBuilderAbpOpenIddictMiddlewareExtension
 {
-    public static IApplicationBuilder UseJwtTokenMiddleware(this IApplicationBuilder app, string schema = "Bearer")
+    public static IApplicationBuilder UseAbpOpenIddictValidation(this IApplicationBuilder app, string schema = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)
     {
         return app.Use(async (ctx, next) =>
         {
