@@ -2,6 +2,7 @@
 
 @using Volo.CmsKit.Public.Web.Renderers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
 
 @inject IMarkdownToHtmlRenderer MarkdownRenderer
 
@@ -9,9 +10,19 @@
 
 <abp-card>
     <abp-card-body>
-        @if (!Model.Content.IsNullOrEmpty())
-        {   
-            @Html.Raw(await MarkdownRenderer.RenderAsync(Model.Content))
+        @foreach (var contentFragment in Model.ContentFragments)
+        {
+            if (contentFragment is MarkdownContentFragment markdownContentFragment)
+            {
+                @Html.Raw(await MarkdownRenderer.RenderAsync(markdownContentFragment.Content))
+            }
+            else if(contentFragment is WidgetContentFragment widgetContentFragment)
+            {
+                @await Component.InvokeAsync(widgetContentFragment.Name, new
+                {
+                    widgetName = "poll-right"
+                })
+            }
         }
     </abp-card-body>
 </abp-card>
