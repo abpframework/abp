@@ -13,7 +13,6 @@ using Microsoft.OpenApi.Models;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
@@ -77,7 +76,6 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpTenantManagementEntityFrameworkCoreModule),
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpTenantManagementHttpApiModule),
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(MyProjectNameApplicationContractsModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
@@ -86,13 +84,6 @@ public class MyProjectNameAuthServerModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        PreConfigure<OpenIddictServerBuilder>(builder =>
-        {
-            // https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
-            // In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
-            builder.DisableAccessTokenEncryption();
-        });
-
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
