@@ -108,9 +108,14 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         foreach (var outgoingEvent in outgoingEventArray)
         {
-            if (!messageBatch.TryAddMessage(new ServiceBusMessage(outgoingEvent.EventData) { Subject = outgoingEvent.EventName }))
+            var message = new ServiceBusMessage(outgoingEvent.EventData) {
+                MessageId = outgoingEvent.Id.ToString(), Subject = outgoingEvent.EventName
+            };
+
+            if (!messageBatch.TryAddMessage(message))
             {
-                throw new AbpException("The message is too large to fit in the batch. Set AbpEventBusBoxesOptions.OutboxWaitingEventMaxCount to reduce the number");
+                throw new AbpException(
+                    "The message is too large to fit in the batch. Set AbpEventBusBoxesOptions.OutboxWaitingEventMaxCount to reduce the number");
             }
         }
 
