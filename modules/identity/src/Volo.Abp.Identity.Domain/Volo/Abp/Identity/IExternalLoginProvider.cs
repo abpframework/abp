@@ -28,7 +28,7 @@ public interface IExternalLoginProvider
     /// <param name="providerName">The name of this provider</param>
     /// <param name="user">The user that can be updated</param>
     Task UpdateUserAsync(IdentityUser user, string providerName);
-    
+
     /// <summary>
     /// Return a value indicating whether this source is enabled.
     /// </summary>
