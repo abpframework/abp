@@ -536,7 +536,7 @@
     "Pricing_Page_Testimonial_3": "We love ABP. We don't have to write everything from scratch. We start from out-of-the-box features and just focus on what we really need to write. Also, ABP is well-architected and the code is high quality with fewer bugs. If we would have to write everything we needed on our own, we might have to spend years. Once more things we like is that the new version, or issue fixing, or improvement come out very soon every other week. We don't wait too long.",
     "Pricing_Page_Testimonial_4": "ABP Commercial is a fantastic product would recommend. Commercial products to market for our customers in a single configurable platform. The jump start that the framework and tooling provide any team is worth every cent. ABP Commercial was the best fit for our needs.",
     "AbpBookDownloadArea_ClaimYourEBook": "Claim your <span class='gradient-framework'>Mastering ABP Framework</span> E-Book",
-    "AddMemberModal_Warning_1": "If the <strong>username</strong> you are trying to add doesn't exist in the system, please ask your team member to register on {0} and share the username of his/her account with you.",
+    "AddMemberModal_Warning_1": "If the <strong>username</strong> you are trying to add doesn't exist in the system, please ask your team member to register on <a href='{0}/Account/Register'>{0}</a> and share the username of his/her account with you.",
     "MyOrganizations_Detail_WelcomeMessage": "Welcome to your organization, {0}",
     "MyOrganizations_Detail_OrganizationManagement": "Organization <span class=\"gradient-commercial\">Management</span>",
     "OrganizationDisplayName": "Organization Display Name",
