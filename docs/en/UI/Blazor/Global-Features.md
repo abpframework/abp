@@ -22,4 +22,4 @@
 }
 ```
 
-- You can follow [Check for a Global Feature](../../Global-Features#check-for-a-global-feature) section of Global Features document to check global featues in csharp.
+- You can follow _Check for a Global Feature_ section of the [Global Features document](../../Global-Features.md) to check global features in your C# code.
