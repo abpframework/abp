@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Configuration;
@@ -118,7 +119,7 @@ public class MyProjectNameHttpApiHostModule : AbpModule
     private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
     {
         context.Services.AddAuthentication()
-            .AddJwtBearer(options =>
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
@@ -129,6 +130,16 @@ public class MyProjectNameHttpApiHostModule : AbpModule
                         HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                 };
             });
+
+        context.Services.ConfigureApplicationCookie(options =>
+        {
+            // Forward any requests that start with /api to the JWT scheme.
+            options.ForwardDefaultSelector = ctx =>
+            {
+                //You can also check request info or current identity(ctx.User.Identity.AuthenticationType)
+                return ctx.Request.Path.StartsWithSegments("/api") ? JwtBearerDefaults.AuthenticationScheme : null;
+            };
+        });
     }
 
     private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)

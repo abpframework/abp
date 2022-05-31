@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -140,12 +141,22 @@ public class MyProjectNameIdentityServerModule : AbpModule
         });
 
         context.Services.AddAuthentication()
-            .AddJwtBearer(options =>
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                 options.Audience = configuration["AuthServer:ApiName"];
             });
+
+        context.Services.ConfigureApplicationCookie(options =>
+        {
+            // Forward any requests that start with /api to the JWT scheme.
+            options.ForwardDefaultSelector = ctx =>
+            {
+                //You can also check request info or current identity(ctx.User.Identity.AuthenticationType)
+                return ctx.Request.Path.StartsWithSegments("/api") ? JwtBearerDefaults.AuthenticationScheme : null;
+            };
+        });
 
         Configure<AbpDistributedCacheOptions>(options =>
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
@@ -162,12 +163,22 @@ public class MyProjectNameModule : AbpModule
     private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication()
-            .AddJwtBearer(options =>
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,options =>
             {
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                 options.Audience = "MyProjectName";
             });
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            // Forward any requests that start with /api to the JWT scheme.
+            options.ForwardDefaultSelector = ctx =>
+            {
+                //You can also check request info or current identity(ctx.User.Identity.AuthenticationType)
+                return ctx.Request.Path.StartsWithSegments("/api") ? JwtBearerDefaults.AuthenticationScheme : null;
+            };
+        });
     }
 
     private void ConfigureLocalization()
