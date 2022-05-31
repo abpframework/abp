@@ -23,7 +23,8 @@ public static class ProjectFinder
             case NuGetPackageTarget.Web:
                 return FindProjectEndsWith(projectFiles, assemblyNames, ".Web");
             case NuGetPackageTarget.IdentityServer:
-                return FindProjectEndsWith(projectFiles, assemblyNames, ".IdentityServer");
+                return FindProjectEndsWith(projectFiles, assemblyNames, ".IdentityServer") ??
+                       FindProjectEndsWith(projectFiles, assemblyNames, ".AuthServer");
             case NuGetPackageTarget.EntityFrameworkCore:
                 return FindProjectEndsWith(projectFiles, assemblyNames, ".EntityFrameworkCore");
             case NuGetPackageTarget.MongoDB:

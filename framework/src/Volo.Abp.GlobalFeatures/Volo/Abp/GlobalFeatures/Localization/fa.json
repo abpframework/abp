@@ -1,0 +1,6 @@
+{
+  "culture": "fa",
+  "texts": {
+    "Volo.GlobalFeature:010001": "سرویس '{ServiceName}' باید ابتدا امکانات '{GlobalFeatureName}' را فعال نماید."
+  }
+}
