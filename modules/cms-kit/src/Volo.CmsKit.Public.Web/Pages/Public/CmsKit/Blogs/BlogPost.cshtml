@@ -85,7 +85,8 @@
                                 @await Component.InvokeAsync(typeof(TagViewComponent), new
                                 {
                                     entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                                    entityId = Model.BlogPost.Id.ToString()
+                                    entityId = Model.BlogPost.Id.ToString(),
+                                    urlFormat = $"/blogs/{Model.BlogSlug}?tagId={{TagId}}"
                                 })
                             }
                         }
