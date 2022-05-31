@@ -133,7 +133,7 @@ public partial class PermissionManagementModal
             
             if (!updateDto.Permissions.Any(x => x.IsGranted))
             {
-                if (!await Message.Confirm(L["RemoveAllPermissionsWarningMessage"].Value))
+                if (!await Message.Confirm(L["SaveWithoutAnyPermissionsWarningMessage"].Value))
                 {
                     return;
                 }

@@ -5,6 +5,7 @@
     "OnlyProviderPermissons": "Sadece bu sağlayıcı",
     "All": "Hepsi",
     "SelectAllInAllTabs": "Tüm izinleri ver",
-    "SelectAllInThisTab": "Hepsini seç"
+    "SelectAllInThisTab": "Hepsini seç",
+    "SaveWithoutAnyPermissionsWarningMessage": "Hiçbir izin olmadan kaydetmek istediğinize emin misiniz?"
   }
 }
