@@ -1,8 +1,8 @@
 ## Breadcrumb Component
 
 ABP provides a component that listens to the angular router's `NavigationEnd`
-event and creates inputs for `BreadcrumbItemsComponent`.This component is used in
-abp components with [`PageComponent`](./Page-Component.md).
+event and creates inputs for `BreadcrumbItemsComponent`. This component is used in
+ABP components with [`PageComponent`](./Page-Component.md).
 
 ## Breadcrumb Items Component
 
@@ -11,7 +11,7 @@ when you want to display breadcrumb items in a different way than the default.
 
 ### Usage
 
-Example for overriding the default template of `PageComponent`:
+Example of overriding the default template of `PageComponent`:
 
 ```html
 <abp-page title="Title">
@@ -43,7 +43,7 @@ export class YourComponent {
 
 ### Inputs
 
-- items: Partial<ABP.Route>[] : Array of ABP.Route objects. Source code of ABP.Route can be found in [github](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/common.ts#L69).
+- items: Partial<ABP.Route>[] : Array of ABP.Route objects. The source code of ABP.Route can be found in [github](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/common.ts#L69).
 
 ## See Also
 
