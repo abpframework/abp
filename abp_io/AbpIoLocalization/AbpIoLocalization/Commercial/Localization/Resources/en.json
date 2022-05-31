@@ -628,7 +628,7 @@
     "Tools_Page_Description": "ABP Commercial provides rapid application development tooling to increase developer productivity. ABP Suite allows you to create CRUD pages easily.",
     "DeveloperPrice": "Developer Price",
     "AdditionalDeveloperPaymentInfoSection_AdditionalDevelopers": "{0} <small>developers</small>",
-    "AdditionalDeveloperPaymentInfoSection_RemainingYear": "for <span id=\"{0}\"> {1} </span> years",
+    "LicenseRemainingDays": "for <span> {0} </span> days",
     "ExtendPaymentInfoSection_Description": "By extending/renewing your license, you will continue to get <a href=\"{0}\" target=\"_blank\">premium support</a>. You will also be able to get major updates for modules and themes. You will be able to continue creating new projects. And you will still be able to use <a href=\"{1}\" target=\"_blank\">ABP Suite</a> which speeds up your development.",
     "LicenseRenewalPrice": "License renewal price",
     "LicensePrice": "License Price",
