@@ -30,7 +30,7 @@ public class OutboxSenderManager : IBackgroundWorker
         {
             if (outboxConfig.IsSendingEnabled)
             {
-                var sender = ServiceProvider.GetRequiredService<IOutboxSender>();
+                var sender = await GetOutboxSenderAsync(outboxConfig);
                 await sender.StartAsync(outboxConfig, cancellationToken);
                 Senders.Add(sender);
             }
@@ -43,5 +43,22 @@ public class OutboxSenderManager : IBackgroundWorker
         {
             await sender.StopAsync(cancellationToken);
         }
+    }
+
+    protected async Task<IOutboxSender> GetOutboxSenderAsync(OutboxConfig outboxConfig)
+    {
+        var providers = ServiceProvider.GetRequiredService<IEnumerable<IOutboxSenderProvider>>();
+
+        foreach (var provider in providers)
+        {
+            var sender = await provider.GetOrNullAsync(outboxConfig);
+
+            if (sender is not null)
+            {
+                return sender;
+            }
+        }
+
+        throw new AbpException($"Outbox sender for {outboxConfig.Name} not found!");
     }
 }

@@ -30,7 +30,7 @@ public class InboxProcessManager : IBackgroundWorker
         {
             if (inboxConfig.IsProcessingEnabled)
             {
-                var processor = ServiceProvider.GetRequiredService<IInboxProcessor>();
+                var processor = await GetInboxProcessorAsync(inboxConfig);
                 await processor.StartAsync(inboxConfig, cancellationToken);
                 Processors.Add(processor);
             }
@@ -43,5 +43,22 @@ public class InboxProcessManager : IBackgroundWorker
         {
             await processor.StopAsync(cancellationToken);
         }
+    }
+
+    protected async Task<IInboxProcessor> GetInboxProcessorAsync(InboxConfig inboxConfig)
+    {
+        var providers = ServiceProvider.GetRequiredService<IEnumerable<IInboxProcessorProvider>>();
+
+        foreach (var provider in providers)
+        {
+            var processor = await provider.GetOrNullAsync(inboxConfig);
+
+            if (processor is not null)
+            {
+                return processor;
+            }
+        }
+
+        throw new AbpException($"Inbox processor for {inboxConfig.Name} not found!");
     }
 }
