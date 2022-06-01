@@ -11,4 +11,4 @@ This tutorial has multiple versions. Please select the one best fits for you:
 
 ## See Also
 
-* Check the [Web Application Development Tutorial](../../Part-1.md) to see a real-life web application development in a layered architecture.
+* Check the [Web Application Development Tutorial](../Part-1.md) to see a real-life web application development in a layered architecture.
