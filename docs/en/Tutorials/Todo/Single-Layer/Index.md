@@ -17,6 +17,7 @@ You can find the source code of the completed application [here](https://github.
 ## Pre-Requirements
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 6.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* [Node v14.x](https://nodejs.org/)
 
 {{if DB=="Mongo"}}
 
@@ -24,15 +25,9 @@ You can find the source code of the completed application [here](https://github.
 
 {{end}}
 
-{{if UI=="NG"}}
-
-* [Node v14.x](https://nodejs.org/)
-
-{{end}}
-
 ## Creating a New Solution
 
-In this tutorial, we will use the [ABP CLI](../../CLI.md) to create the sample application with the ABP Framework. You can run the following command in a command-line terminal to install the **ABP CLI**, if you haven't installed it yet:
+In this tutorial, we will use the [ABP CLI](../../../CLI.md) to create the sample application with the ABP Framework. You can run the following command in a command-line terminal to install the **ABP CLI**, if you haven't installed it yet:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
@@ -46,7 +41,7 @@ abp new TodoApp -t app-nolayers{{if UI=="BlazorServer"}} -u blazor-server{{else 
 
 {{if UI=="NG"}}
 
-This will create a new solution with a single project, named *TodoApp* with `angular` and `aspnet-core` folders. Once the solution is ready, open the solution in your favorite IDE.
+This will create a new solution, named *TodoApp*, with `angular` and `aspnet-core` folders. Once the solution is ready, open the solution (in the `aspnet-core` folder) with your favorite IDE.
 
 {{else}}
 
@@ -56,7 +51,7 @@ This will create a new solution with a single project, named *TodoApp*. Once the
 
 ### Create the Database
 
-You can run the following command in the directory of your project to create the database and seed the initial data:
+You can run the following command in the root directory of your project (in the same folder of the `.csproj` file) to create the database and seed the initial data:
 
 ```bash
 dotnet run --migrate-database
@@ -99,9 +94,9 @@ You can click on the *Login* button and use `admin` as the username and `1q2w3E*
 
 All right. We can start coding!
 
-## Defining Entities
+## Defining the Entity
 
-This application will have a single [entity](../../../Entities.md) and we can start by creating it. So, create a new `TodoItem` class under the **Entities** folder of the project:
+This application will have a single [entity](../../../Entities.md) and we can start by creating it. So, create a new `TodoItem` class under the `Entities` folder of the project:
 
 ````csharp
 using Volo.Abp.Domain.Entities;
@@ -124,7 +119,7 @@ Next step is to setup the [Entity Framework Core](../../../Entity-Framework-Core
 
 ### Mapping Configuration
 
-Open the `TodoAppDbContext` class (under the **Data** folder) and add a new `DbSet` property to this class:
+Open the `TodoAppDbContext` class (in the `Data` folder) and add a new `DbSet` property to this class:
 
 ````csharp
 public DbSet<TodoItem> TodoItems { get; set; }
@@ -156,13 +151,13 @@ We've mapped the `TodoItem` entity to the `TodoItems` table in the database. The
 
 The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-Open a command-line terminal in the directory of your project and type the following command:
+Open a command-line terminal in the root directory of your project and type the following command:
 
 ````bash
 dotnet ef migrations add Added_TodoItem
 ````
 
-This will add a new migration class to the project. You should see the new migration in the **Migrations** folder.
+This will add a new migration class to the project. You should see the new migration in the `Migrations` folder:
 
 ![todo-efcore-migration](todo-efcore-migration-single-layer.png) 
 
@@ -197,17 +192,17 @@ After the database integrations, now we can start to create application service 
 
 ## Creating the Application Service
 
-An [Application Service](../../Application-Services.md) is used to perform the use cases of the application. We need to perform the following use cases in this application:
+An [application service](../../../Application-Services.md) is used to perform the use cases of the application. We need to perform the following use cases in this application:
 
 * Get the list of the todo items
 * Create a new todo item
 * Delete an existing todo item
 
-Before starting to implement these use cases, first we need to create DTOs.
+Before starting to implement these use cases, first we need to create a DTO class that will be used in the application service.
 
 ### Creating the Data Transfer Object (DTO)
 
-`ApplicationService` typically gets and returns DTOs ([Data Transfer Objects](../../../Data-Transfer-Objects.md)) instead of entities. So, create a new `TodoItemDto` class under the **Dtos** folder (under the **Services** folder):
+[Application services](../../../Application-Services.md) typically get and return DTOs ([Data Transfer Objects](../../../Data-Transfer-Objects.md)) instead of entities. So, create a new `TodoItemDto` class under the `Services/Dtos` folder:
 
 ```csharp
 namespace TodoApp.Services.Dtos;
@@ -219,11 +214,11 @@ public class TodoItemDto
 }
 ```
 
-* This is a very simple DTO class that has the same properties as the `TodoItem` entity. Now, we are ready to implement our use-cases.
+This is a very simple DTO class that has the same properties as the `TodoItem` entity. Now, we are ready to implement our use-cases.
 
-### Application Service Implementation
+### The Application Service Implementation
 
-Create a `TodoAppService` class under the **Services** folder of your project, as shown below:
+Create a `TodoAppService` class under the `Services` folder of your project, as shown below:
 
 ```csharp
 using TodoApp.Entities;
@@ -245,11 +240,11 @@ public class TodoAppService : ApplicationService
 }
 ```
 
-This class inherits from the `ApplicationService` class of the ABP Framework and implements our use-cases. ABP provides default generic [repositories](../../../Repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../Dependency-Injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement the use cases (`GetListAsync`, `CreateAsync` and `DeleteAsync`) described before.
+This class inherits from the `ApplicationService` class of the ABP Framework and implements our use-cases. ABP provides default generic [repositories](../../../Repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../Dependency-Injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement our use cases.
 
 #### Getting the Todo Items
 
-Let's start by implementing the `GetListAsync` method:
+Let's start by implementing the `GetListAsync` method, which is used to get a list of todo items:
 
 ````csharp
 public async Task<List<TodoItemDto>> GetListAsync()
@@ -264,7 +259,7 @@ public async Task<List<TodoItemDto>> GetListAsync()
 }
 ````
 
-We are simply getting the `TodoItem` list from the database, mapping them to the `TodoItemDto` objects and returning as the result.
+We are simply getting the `TodoItem` list from the repository, mapping them to the `TodoItemDto` objects and returning as the result.
 
 #### Creating a New Todo Item
 
@@ -387,7 +382,7 @@ Open the `Index.cshtml` file in the `Pages` folder and replace it with the follo
 </div>
 ```
 
-We are using ABP's [card tag helper](../../UI/AspNetCore/Tag-Helpers/Cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers](../../UI/AspNetCore/Tag-Helpers/Index.md) make it much easier and type safe.
+We are using ABP's [card tag helper](../../../UI/AspNetCore/Tag-Helpers/Cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers](../../../UI/AspNetCore/Tag-Helpers/Index.md) make it much easier and type safe.
 
 This page imports a CSS and a JavaScript file, so we should also create them.
 
@@ -428,7 +423,7 @@ In the first part, we subscribed to the click events of the trash icons near the
 
 In the second part, we created a new todo item on the server. If it succeeded, we would then manipulate the DOM to insert a new `<li>` element to the todo list. This way, we wouldn't need to refresh the whole page after creating a new todo item.
 
-The interesting part here is how we communicate with the server. See the [*Dynamic JavaScript Proxies & Auto API Controllers*](#dynamic-javascript-proxies--auto-api-controllers) section to understand how it works. But now, let's continue and complete the application.
+The interesting part here is how we communicate with the server. See the *Dynamic JavaScript Proxies & Auto API Controllers* section to understand how it works. But now, let's continue and complete the application.
 
 ### Index.cshtml.css
 
@@ -469,7 +464,7 @@ Now, you can run the application again and see the result.
 
 In the `Index.cshtml.js` file, we've used the `todoApp.services.todo.delete(...)` and `todoApp.services.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
 
-> **services** keyword comes from the namespace (`namespace TodoApp.Services;`). It's a naming convention.
+> `services` keyword comes from the namespace (`namespace TodoApp.Services;`). It's a naming convention.
 
 However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to **API Controllers** by convention.
 
@@ -757,4 +752,4 @@ You can find the source code of the completed application [here](https://github.
 
 ## See Also
 
-* Check the [Web Application Development Tutorial](../Part-1.md) to see a real-life web application development in a layered architecture using the [Application Startup Template](../../../Startup-Templates/Application.md).
+* Check the [Web Application Development Tutorial](../../Part-1.md) to see a real-life web application development in a layered architecture using the [Application Startup Template](../../../Startup-Templates/Application.md).
