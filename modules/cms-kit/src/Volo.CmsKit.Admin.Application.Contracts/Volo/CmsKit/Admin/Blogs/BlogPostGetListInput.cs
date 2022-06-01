@@ -11,6 +11,8 @@ public class BlogPostGetListInput : PagedAndSortedResultRequestDto
     public Guid? BlogId { get; set; }
 
     public Guid? AuthorId { get; set; }
+    
+    public Guid? TagId { get; set; }
 
     public BlogPostStatus? Status { get; set; }
 }

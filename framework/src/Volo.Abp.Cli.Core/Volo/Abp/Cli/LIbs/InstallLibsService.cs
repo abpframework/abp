@@ -236,13 +236,13 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
     private void RunNpmInstall(string directory)
     {
         Logger.LogInformation($"Running npm install on {directory}");
-        CmdHelper.RunCmd($"cd {directory} && npm install");
+        CmdHelper.RunCmd($"npm install", directory);
     }
 
     private void RunYarn(string directory)
     {
         Logger.LogInformation($"Running Yarn on {directory}");
-        CmdHelper.RunCmd($"cd {directory} && yarn");
+        CmdHelper.RunCmd($"yarn", directory);
     }
 
     private bool IsNpmInstalled()

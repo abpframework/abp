@@ -24,6 +24,9 @@ public class IndexModel : CmsKitPublicPageModelBase
     [BindProperty(SupportsGet = true)]
     public Guid? AuthorId { get; set; }
 
+    [BindProperty(SupportsGet = true)]
+    public Guid? TagId { get; set; }
+
     public PagedResultDto<BlogPostPublicDto> Blogs { get; private set; }
 
     public PagerModel PagerModel => new PagerModel(Blogs.TotalCount, Blogs.Items.Count, CurrentPage, PageSize, Request.Path.ToString());
@@ -45,7 +48,8 @@ public class IndexModel : CmsKitPublicPageModelBase
             {
                 SkipCount = PageSize * (CurrentPage - 1),
                 MaxResultCount = PageSize,
-                AuthorId = AuthorId
+                AuthorId = AuthorId,
+                TagId = TagId
             });
 
         if (AuthorId != null)
