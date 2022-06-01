@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -102,7 +103,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             return false;
         }
 
-        foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes.Values)
+        foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes.Values.OrderBy(x => x.Selector is null))
         {
             if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
             {
@@ -137,7 +138,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
 
         using (var scope = ServiceScopeFactory.CreateScope())
         {
-            foreach (var inboxConfig in AbpDistributedEventBusOptions.Inboxes.Values)
+            foreach (var inboxConfig in AbpDistributedEventBusOptions.Inboxes.Values.OrderBy(x => x.EventSelector is null))
             {
                 if (inboxConfig.EventSelector == null || inboxConfig.EventSelector(eventType))
                 {
