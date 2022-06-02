@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
-using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -18,7 +18,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.MongoDB;
 using Volo.Abp.Identity;
@@ -51,7 +51,6 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAutofacModule),
     typeof(AbpAutoMapperModule),
-    typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -121,6 +120,11 @@ public class MyProjectNameModule : AbpModule
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
+        
+        if (hostingEnvironment.IsDevelopment())
+        {
+            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+        }
 
         ConfigureBundles();
         ConfigureMultiTenancy();
@@ -131,7 +135,7 @@ public class MyProjectNameModule : AbpModule
         ConfigureVirtualFiles(hostingEnvironment);
         ConfigureLocalization();
         ConfigureCors(context, configuration);
-        ConfigureDataProtection(context, configuration, hostingEnvironment);
+        ConfigureDataProtection(context);
         ConfigureMongoDB(context);
     }
 
@@ -276,17 +280,9 @@ public class MyProjectNameModule : AbpModule
         });
     }
 
-    private void ConfigureDataProtection(
-        ServiceConfigurationContext context,
-        IConfiguration configuration,
-        IWebHostEnvironment hostingEnvironment)
+    private void ConfigureDataProtection(ServiceConfigurationContext context)
     {
-        var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
-        if (!hostingEnvironment.IsDevelopment())
-        {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
-        }
+        context.Services.AddDataProtection().SetApplicationName("MyProjectName");
     }
 
     private void ConfigureMongoDB(ServiceConfigurationContext context)
