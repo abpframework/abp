@@ -990,6 +990,10 @@
                   "path": "UI/Angular/Features.md"
                 },
                 {
+                  "text": "Global Features",
+                  "path": "UI/Angular/GlobalFeatures.md"
+                },
+                {
                   "text": "Permission Management",
                   "path": "UI/Angular/Permission-Management.md"
                 },
@@ -1041,6 +1045,10 @@
                 {
                   "text": "Confirmation Popup",
                   "path": "UI/Angular/Confirmation-Service.md"
+                },
+                {
+                  "text": "Loading Directive",
+                  "path": "UI/Angular/Loading-Directive.md"
                 },
                 {
                   "text": "Toast Overlay",
@@ -1303,6 +1311,10 @@
         {
           "text": "IdentityServer",
           "path": "Modules/IdentityServer.md"
+        },
+		{
+          "text": "OpenIddict",
+          "path": "Modules/OpenIddict.md"
         },
         {
           "text": "Permission Management",

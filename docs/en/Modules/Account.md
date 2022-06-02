@@ -2,7 +2,7 @@
 
 Account module implements the basic authentication features like **login**, **register**, **forgot password** and **account management**.
 
-This module is based on [Microsoft's Identity library](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity) and the [Identity Module](Identity.md). It has [IdentityServer](https://github.com/IdentityServer) integration (based on the [IdentityServer Module](IdentityServer.md)) to provide **single sign-on**, access control and other advanced authentication features.
+This module is based on [Microsoft's Identity library](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity) and the [Identity Module](Identity.md). It has [IdentityServer](https://github.com/IdentityServer) integration (based on the [IdentityServer Module](IdentityServer.md)) and [OpenIddict](https://github.com/openiddict) integration (based on the [OpenIddict Module](OpenIddict.md)) to provide **single sign-on**, access control and other advanced authentication features.
 
 ## How to Install
 
@@ -41,6 +41,10 @@ Social/external login buttons becomes visible if you setup it. See the *Social/E
 `/Account/Manage` page is used to change password and personal information of the user.
 
 ![account-module-manage-account](../images/account-module-manage-account.png)
+
+## OpenIddict Integration
+
+[Volo.Abp.Account.Web.OpenIddict](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) package provides integration for the [OpenIddict](https://github.com/openiddict). This package comes as installed with the [application startup template](../Startup-Templates/Application.md). See the [OpenIddict Module](OpenIddict.md) documentation.
 
 ## IdentityServer Integration
 
