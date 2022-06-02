@@ -1,10 +1,7 @@
-﻿using System.Text;
+﻿using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using OpenIddict.Abstractions;
 using OpenIddict.Demo.Server.EntityFrameworkCore;
-using OpenIddict.Server.AspNetCore;
-using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -81,12 +78,32 @@ public class OpenIddictServerModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+        {
+            //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
+            options.AddDevelopmentEncryptionAndSigningCertificate = false;
+        });
+
         PreConfigure<OpenIddictServerBuilder>(builder =>
         {
-            //https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
             //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-            builder.AddSigningKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78")));
-            builder.AddEncryptionKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80")));
+            using (var algorithm = RSA.Create(keySizeInBits: 2048))
+            {
+                var subject = new X500DistinguishedName("CN=Fabrikam Encryption Certificate");
+                var request = new CertificateRequest(subject, algorithm, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature, critical: true));
+                var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
+                builder.AddSigningCertificate(certificate);
+            }
+
+            using (var algorithm = RSA.Create(keySizeInBits: 2048))
+            {
+                var subject = new X500DistinguishedName("CN=Fabrikam Signing Certificate");
+                var request = new CertificateRequest(subject, algorithm, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.KeyEncipherment, critical: true));
+                var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
+                builder.AddEncryptionCertificate(certificate);
+            }
         });
 
         PreConfigure<AbpOpenIddictWildcardDomainOptions>(options =>
@@ -110,18 +127,6 @@ public class OpenIddictServerModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.ConfigureApplicationCookie(options =>
-        {
-            options.ForwardDefaultSelector = ctx => ctx.Request.Path.StartsWithSegments("/api")
-                ? OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme
-                : null;
-        });
-
-        Configure<AbpOpenIddictAspNetCoreOptions>(options =>
-        {
-            options.AddDevelopmentEncryptionAndSigningCertificate = false;
-        });
-
         context.Services.AddAbpDbContext<ServerDbContext>(options =>
         {
             options.AddDefaultRepositories(includeAllEntities: true);

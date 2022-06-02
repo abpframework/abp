@@ -7,7 +7,6 @@ using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -57,7 +56,6 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpEntityFrameworkCoreSqlServerModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreSerilogModule),
 
     // Account module packages
@@ -110,13 +108,6 @@ public class MyProjectNameModule : AbpModule
             );
         });
 
-		PreConfigure<OpenIddictServerBuilder>(builder =>
-		{
-			// https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
-			// In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
-			builder.DisableAccessTokenEncryption();
-		});
-
 		PreConfigure<OpenIddictBuilder>(builder =>
 		{
 			builder.AddValidation(options =>
@@ -137,11 +128,10 @@ public class MyProjectNameModule : AbpModule
         ConfigureMultiTenancy();
         ConfigureUrls(configuration);
         ConfigureAutoMapper(context);
-        ConfigureSwagger(context.Services);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureAutoApiControllers();
         ConfigureVirtualFiles(hostingEnvironment);
         ConfigureLocalization();
-        ConfigureAuthentication(context.Services, configuration);
         ConfigureCors(context, configuration);
         ConfigureDataProtection(context, configuration, hostingEnvironment);
         ConfigureEfCore(context);
@@ -176,17 +166,6 @@ public class MyProjectNameModule : AbpModule
             options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
             options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
         });
-    }
-
-    private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddAuthentication()
-            .AddJwtBearer(options =>
-            {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = "MyProjectName";
-            });
     }
 
     private void ConfigureLocalization()
@@ -248,16 +227,20 @@ public class MyProjectNameModule : AbpModule
         });
     }
 
-    private void ConfigureSwagger(IServiceCollection services)
+    private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAbpSwaggerGen(
+        services.AddAbpSwaggerGenWithOAuth(
+            configuration["AuthServer:Authority"],
+            new Dictionary<string, string>
+            {
+                    {"MyProjectName", "MyProjectName API"}
+            },
             options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
-            }
-        );
+            });
     }
 
     private void ConfigureAutoMapper(ServiceConfigurationContext context)
@@ -350,7 +333,7 @@ public class MyProjectNameModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
+        app.UseAbpOpenIddictValidation();
 
         if (IsMultiTenant)
         {
@@ -364,6 +347,10 @@ public class MyProjectNameModule : AbpModule
         app.UseAbpSwaggerUI(options =>
         {
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+
+            var configuration = context.GetConfiguration();
+            options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            options.OAuthScopes("MyProjectName");
         });
 
         app.UseAuditing();

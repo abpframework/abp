@@ -48,13 +48,6 @@ public class MyProjectNameAuthServerModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        PreConfigure<OpenIddictServerBuilder>(builder =>
-        {
-            // https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
-            // In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
-            builder.DisableAccessTokenEncryption();
-        });
-
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
