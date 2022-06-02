@@ -137,7 +137,7 @@ Configure<AbpAzureServiceBusOptions>(options =>
 Using these options classes can be combined with the `appsettings.json` way. Configuring an option property in the code overrides the value in the configuration file.
 
 ### Azure eventbus Topic
-opics are automatically created for each event if the **TopicPerEvent** option is specified
+Topics are automatically created for each event if the **TopicPerEvent** option is specified
 
 ### Azure Topic Name
 `AzureTopicName` attribute is optional. If you don't declare it, and `TopicPerEvent` is **false** only one Topic is used for all events.
