@@ -27,7 +27,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     private readonly IAzureServiceBusSerializer _serializer;
     private readonly ConcurrentDictionary<Type, List<IEventHandlerFactory>> _handlerFactories;
     private readonly ConcurrentDictionary<string, Type> _eventTypes;
-    private IAzureServiceBusMessageConsumer _consumer;
+    private readonly ConcurrentDictionary<Type, IAzureServiceBusMessageConsumer> _consumerDictionary;
 
     public AzureDistributedEventBus(
         IServiceScopeFactory serviceScopeFactory,
@@ -55,26 +55,17 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         _publisherPool = publisherPool;
         _handlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         _eventTypes = new ConcurrentDictionary<string, Type>();
+        _consumerDictionary = new ConcurrentDictionary<Type, IAzureServiceBusMessageConsumer>();
     }
 
     public void Initialize()
     {
-        _consumer = _messageConsumerFactory.CreateMessageConsumer(
-            _options.TopicName,
-            _options.SubscriberName,
-            _options.ConnectionName);
-
-        _consumer.OnMessageReceived(ProcessEventAsync);
         SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
     }
 
     private async Task ProcessEventAsync(ServiceBusReceivedMessage message)
     {
         var eventName = message.Subject;
-        if (eventName == null)
-        {
-            return;
-        }
         var eventType = _eventTypes.GetOrDefault(eventName);
         if (eventType == null)
         {
@@ -91,14 +82,14 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await TriggerHandlersAsync(eventType, eventData);
     }
 
-    public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
+    public override async Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id);
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id.ToString("N"));
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
     {
-        var outgoingEventArray =  outgoingEvents.ToArray();
+        var outgoingEventArray = outgoingEvents.ToArray();
 
         var publisher = await _publisherPool.GetAsync(
             _options.TopicName,
@@ -117,7 +108,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await publisher.SendMessagesAsync(messageBatch);
     }
 
-    public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
+    public override async Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
     {
         var eventType = _eventTypes.GetOrDefault(incomingEvent.EventName);
         if (eventType == null)
@@ -139,8 +130,43 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return _serializer.Serialize(eventData);
     }
 
+    private string GetTopicName(Type eventType)
+    {
+        return AzureTopicAttribute.GetTopicNameOrDefault(eventType, _options);
+    }
+
+    private string GetTopicName(string eventName)
+    {
+        var eventType = _eventTypes.GetOrDefault(eventName);
+        return eventType!=null? GetTopicName(eventType) : _options.TopicName;
+    }
+
+    private void CreateConsumer(Type eventType)
+    {
+       _ = _consumerDictionary.GetOrAdd(eventType,
+            type =>
+            {
+                var consumer = _messageConsumerFactory.CreateMessageConsumer(
+                            GetTopicName(eventType),
+                            _options.SubscriberName,
+                            _options.ConnectionName);
+
+                consumer.OnMessageReceived(ProcessEventAsync);
+                return consumer;
+            });
+    }
+
+    private void RemoveConsumer(Type eventType)
+    {
+        if( _consumerDictionary.TryRemove(eventType, out IAzureServiceBusMessageConsumer consumer))
+        {
+            AsyncHelper.RunSync(()=> consumer.StopProcessingAsync());
+        };
+    }
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
+        CreateConsumer(eventType);
+
         var handlerFactories = GetOrCreateHandlerFactories(eventType);
 
         if (factory.IsInFactories(handlerFactories))
@@ -156,6 +182,8 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
     {
         Check.NotNull(action, nameof(action));
+
+        RemoveConsumer(typeof(TEvent));
 
         GetOrCreateHandlerFactories(typeof(TEvent))
             .Locking(factories =>
@@ -205,9 +233,14 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             .Locking(factories => factories.Clear());
     }
 
-    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await PublishAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData);
+        string messageId = null;
+
+        if (eventData is IAzureEventETO azureevent)
+            messageId = azureevent.MessageId;
+
+        await PublishAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData, messageId);
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -215,30 +248,29 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
     }
 
-    protected virtual Task PublishAsync(string eventName, object eventData)
+    protected virtual Task PublishAsync(string eventName, object eventData, string eventId)
     {
         var body = _serializer.Serialize(eventData);
 
-        return PublishAsync(eventName, body, null);
+        return PublishAsync(eventName, body, eventId);
     }
 
     protected virtual async Task PublishAsync(
         string eventName,
         byte[] body,
-        Guid? eventId)
+        string eventId)
     {
+        var topicName = GetTopicName(eventName);
+        if (eventId.IsNullOrEmpty()) eventId = Guid.NewGuid().ToString("N");
+
         var message = new ServiceBusMessage(body)
         {
-            Subject = eventName
+            Subject = eventName,
+            MessageId = eventId
         };
 
-        if (message.MessageId.IsNullOrWhiteSpace())
-        {
-            message.MessageId = (eventId ?? GuidGenerator.Create()).ToString("N");
-        }
-
         var publisher = await _publisherPool.GetAsync(
-            _options.TopicName,
+            topicName,
             _options.ConnectionName);
 
         await publisher.SendMessageAsync(message);

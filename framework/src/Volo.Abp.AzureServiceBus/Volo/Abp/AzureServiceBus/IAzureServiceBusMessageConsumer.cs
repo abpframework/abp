@@ -7,4 +7,5 @@ namespace Volo.Abp.AzureServiceBus;
 public interface IAzureServiceBusMessageConsumer
 {
     void OnMessageReceived(Func<ServiceBusReceivedMessage, Task> callback);
+    Task StopProcessingAsync();
 }

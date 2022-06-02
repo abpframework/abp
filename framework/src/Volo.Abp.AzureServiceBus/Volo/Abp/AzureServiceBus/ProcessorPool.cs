@@ -1,11 +1,10 @@
+using Azure.Messaging.ServiceBus;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
-using Azure.Messaging.ServiceBus;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AzureServiceBus;
@@ -21,12 +20,13 @@ public class ProcessorPool : IProcessorPool, ISingletonDependency
 
     public ProcessorPool(
         IOptions<AbpAzureServiceBusOptions> options,
-        IConnectionPool connectionPool)
+        IConnectionPool connectionPool,
+        ILogger<ProcessorPool> logger)
     {
         _options = options.Value;
         _connectionPool = connectionPool;
         _processors = new ConcurrentDictionary<string, Lazy<ServiceBusProcessor>>();
-        Logger = new NullLogger<ProcessorPool>();
+        Logger = logger;
     }
 
     public async Task<ServiceBusProcessor> GetAsync(string subscriptionName, string topicName, string connectionName)
@@ -39,6 +39,7 @@ public class ProcessorPool : IProcessorPool, ISingletonDependency
             {
                 var config = _options.Connections.GetOrDefault(connectionName);
                 var client = _connectionPool.GetClient(connectionName);
+                Logger.LogDebug($"Create processor {topicName} {subscriptionName} PrefetchCount: {config.Processor.PrefetchCount} MaxConcurrentCalls: {config.Processor.MaxConcurrentCalls}");
                 return client.CreateProcessor(topicName, subscriptionName, config.Processor);
             })
         ).Value;
