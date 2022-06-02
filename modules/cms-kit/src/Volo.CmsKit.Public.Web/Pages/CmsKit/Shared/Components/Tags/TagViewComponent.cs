@@ -26,7 +26,8 @@ public class TagViewComponent : AbpViewComponent
 
     public virtual async Task<IViewComponentResult> InvokeAsync(
         string entityType,
-        string entityId)
+        string entityId,
+        string urlFormat)
     {
         var tagDtos = await TagAppService.GetAllRelatedTagsAsync(entityType, entityId);
 
@@ -34,7 +35,8 @@ public class TagViewComponent : AbpViewComponent
         {
             EntityId = entityId,
             EntityType = entityType,
-            Tags = tagDtos
+            Tags = tagDtos,
+            UrlFormat = urlFormat
         };
 
         return View("~/Pages/CmsKit/Shared/Components/Tags/Default.cshtml", viewModel);
@@ -45,5 +47,6 @@ public class TagViewComponent : AbpViewComponent
         public List<TagDto> Tags { get; set; }
         public string EntityId { get; set; }
         public string EntityType { get; set; }
+        public string UrlFormat { get; set; }
     }
 }

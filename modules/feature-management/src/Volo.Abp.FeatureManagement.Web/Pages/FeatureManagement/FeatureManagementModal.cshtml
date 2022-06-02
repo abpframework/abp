@@ -55,10 +55,10 @@
                                                            disabled="@disabled"
                                                            group-data-feature-name="@feature.Name"
                                                            group-data-parent-name="@(feature.ParentName ?? "")"
-                                                           group-style="margin-left: @(feature.Depth * 20)px"/>
+                                                           group-style="margin-inline-start: @(feature.Depth * 20)px"/>
                                                 @if (feature.Description != null)
                                                 {
-                                                    <div class="form-text" style="margin-left: @(feature.Depth * 20)px">@feature.Description</div>
+                                                    <div class="form-text" style="margin-inline-start: @(feature.Depth * 20)px">@feature.Description</div>
                                                 }
 
                                             }
@@ -78,16 +78,16 @@
                                                            type="@type"
                                                            group-data-feature-name="@feature.Name"
                                                            group-data-parent-name="@(feature.ParentName ?? "")"
-                                                           group-style="margin-left: @(feature.Depth * 25)px"/>
+                                                           group-style="margin-inline-start: @(feature.Depth * 25)px"/>
                                                 @if (feature.Description != null)
                                                 {
-                                                    <div class="form-text" style="margin-left: @(feature.Depth * 25)px">@feature.Description</div>
+                                                    <div class="form-text" style="margin-inline-start: @(feature.Depth * 25)px">@feature.Description</div>
                                                 }
                                             }
 
                                             @if (feature.ValueType is SelectionStringValueType selectType)
                                             {
-                                                <div data-feature-name="@feature.Name" data-parent-name="@(feature.ParentName ?? "")" style="margin-left: @(feature.Depth * 25)px" class="mb-3">
+                                                <div data-feature-name="@feature.Name" data-parent-name="@(feature.ParentName ?? "")" style="margin-inline-start: @(feature.Depth * 25)px" class="mb-3">
                                                     <label class="form-label" for="@feature.Name">@feature.DisplayName</label>
 
                                                     <select id="@feature.Name" name="FeatureGroups[@i].Features[@j].Value" class="form-select">
@@ -105,7 +105,7 @@
                                                     </select>
                                                     @if (feature.Description != null)
                                                     {
-                                                        <div class="form-text" style="margin-left: @(feature.Depth * 25)px">@feature.Description</div>
+                                                        <div class="form-text" style="margin-inline-start: @(feature.Depth * 25)px">@feature.Description</div>
                                                     }
                                                 </div>
                                             }
