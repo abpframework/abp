@@ -13,6 +13,7 @@ public class ContentParser : IContentParser, ITransientDependency
                 Content = "**ABP Framework** is completely open source and developed in a community-driven manner."
             },
             new WidgetContentFragment("CmsPoll") { Properties = { { "widgetName", "poll-right" } } },
+            new WidgetContentFragment("CmsPollByName") { Properties = { { "name", "poll-name" } } },
             new MarkdownContentFragment {
                 Content = "Thanks _for_ *your* feedback."
             }

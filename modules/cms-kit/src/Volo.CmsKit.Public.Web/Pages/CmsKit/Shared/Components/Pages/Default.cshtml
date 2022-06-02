@@ -16,12 +16,23 @@
             {
                 @Html.Raw(await MarkdownRenderer.RenderAsync(markdownContentFragment.Content))
             }
-            else if(contentFragment is WidgetContentFragment widgetContentFragment)
+            else if (contentFragment is WidgetContentFragment widgetContentFragment)
             {
-                @await Component.InvokeAsync(widgetContentFragment.Name, new
+                //TODO
+                if (widgetContentFragment.Name == "CmsPoll")
                 {
-                    widgetName = "poll-right"
-                })
+                    @await Component.InvokeAsync(widgetContentFragment.Name, new
+                        {
+                            widgetName = "poll-right"
+                        })
+                }
+                else
+                {
+                    @await Component.InvokeAsync(widgetContentFragment.Name,new
+                        {
+                            name = "poll-name"
+                        })
+                }
             }
         }
     </abp-card-body>
