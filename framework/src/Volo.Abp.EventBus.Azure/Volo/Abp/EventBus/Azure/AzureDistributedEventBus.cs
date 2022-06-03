@@ -108,9 +108,12 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         foreach (var outgoingEvent in outgoingEventArray)
         {
-            var message = new ServiceBusMessage(outgoingEvent.EventData) {
-                MessageId = outgoingEvent.Id.ToString(), Subject = outgoingEvent.EventName
-            };
+            var message = new ServiceBusMessage(outgoingEvent.EventData) { Subject = outgoingEvent.EventName };
+
+            if (message.MessageId.IsNullOrWhiteSpace())
+            {
+                message.MessageId = outgoingEvent.Id.ToString();
+            }
 
             if (!messageBatch.TryAddMessage(message))
             {
