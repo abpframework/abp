@@ -55,6 +55,15 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
             "MyProjectNameMongoDbModule"
         );
 
+        ChangeNamespaceAndKeyword(
+            context,
+            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyProjectNameAuthServerModule.cs",
+            "MyCompanyName.MyProjectName.EntityFrameworkCore",
+            "MyCompanyName.MyProjectName.MongoDB",
+            _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
+            "MyProjectNameMongoDbModule"
+        );
+
         ChangeConnectionStringToMongoDb(
             context,
             "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/appsettings.json"

@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
@@ -17,7 +14,6 @@ using Microsoft.OpenApi.Models;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -27,7 +23,6 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -41,7 +36,6 @@ namespace MyCompanyName.MyProjectName;
     typeof(MyProjectNameApplicationModule),
     typeof(MyProjectNameEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
@@ -50,13 +44,6 @@ public class MyProjectNameHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        PreConfigure<OpenIddictServerBuilder>(builder =>
-        {
-            // https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
-            // In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
-            builder.DisableAccessTokenEncryption();
-        });
-
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
@@ -76,7 +63,6 @@ public class MyProjectNameHttpApiHostModule : AbpModule
         ConfigureBundles();
         ConfigureUrls(configuration);
         ConfigureConventionalControllers();
-        ConfigureAuthentication(context, configuration);
         ConfigureLocalization();
         ConfigureVirtualFileSystem(context);
         ConfigureCors(context, configuration);
@@ -136,23 +122,6 @@ public class MyProjectNameHttpApiHostModule : AbpModule
         {
             options.ConventionalControllers.Create(typeof(MyProjectNameApplicationModule).Assembly);
         });
-    }
-
-    private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
-    {
-        context.Services.AddAuthentication()
-            .AddJwtBearer(options =>
-            {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = "MyProjectName";
-                options.BackchannelHttpHandler = new HttpClientHandler
-                {
-                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                };
-
-                options.MapInboundClaims = false;
-            });
     }
 
     private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
@@ -241,7 +210,7 @@ public class MyProjectNameHttpApiHostModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
+        app.UseAbpOpenIddictValidation();
 
         if (MultiTenancyConsts.IsEnabled)
         {

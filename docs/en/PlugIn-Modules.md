@@ -178,10 +178,8 @@ namespace MyMvcUIPlugIn
                 //Add plugin assembly
                 mvcBuilder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(MyMvcUIPlugInModule).Assembly));
 
-                //Add views assembly
-                var viewDllPath = Path.Combine(Path.GetDirectoryName(typeof(MyMvcUIPlugInModule).Assembly.Location), "MyMvcUIPlugIn.Views.dll");
-                var viewAssembly = new CompiledRazorAssemblyPart(Assembly.LoadFrom(viewDllPath));
-                mvcBuilder.PartManager.ApplicationParts.Add(viewAssembly);
+                //Add CompiledRazorAssemblyPart if the PlugIn module contains razor views.
+                mvcBuilder.PartManager.ApplicationParts.Add(new CompiledRazorAssemblyPart(typeof(MyMvcUIPlugInModule).Assembly));
             });
         }
     }
@@ -189,8 +187,7 @@ namespace MyMvcUIPlugIn
 ````
 
 * Depending on the `AbpAspNetCoreMvcUiThemeSharedModule` since we added the related NuGet package.
-* Adding the plug-in's assembly to the `PartManager` of ASP.NET Core MVC. This is required by ASP.NET Core. Otherwise, your controllers inside the plug-in doesn't work.
-* Adding the plug-in's views assembly to the `PartManager` of ASP.NET Core MVC. This is required by ASP.NET Core. Otherwise, your views inside the plug-in doesn't work.
+* Adding the plug-in's assembly as `AssemblyPart` and `CompiledRazorAssemblyPart` to the `PartManager` of ASP.NET Core MVC. This is required by ASP.NET Core. Otherwise, your controllers or views inside the plug-in doesn't work.
 
 You can now add a razor page, like `MyPlugInPage.cshtml` inside the `Pages` folder:
 
@@ -205,7 +202,7 @@ Now, you can build the plug-in project. It will produce the following output:
 
 ![simple-razor-plug-in-dll-file](images/simple-razor-plug-in-dll-file.png)
 
-Copy the `MyMvcUIPlugIn.dll` and `MyMvcUIPlugIn.Views.dll` into the plug-in folder (`D:\Temp\MyPlugIns` for this example).
+Copy the `MyMvcUIPlugIn.dll` into the plug-in folder (`D:\Temp\MyPlugIns` for this example).
 
 If you have configured the main application like described above (see Basic Usage section), you should be able to visit the `/MyPlugInPage` URL when your application:
 

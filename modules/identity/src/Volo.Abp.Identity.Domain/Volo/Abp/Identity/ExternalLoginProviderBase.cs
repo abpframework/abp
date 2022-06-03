@@ -16,7 +16,6 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
     protected IdentityUserManager UserManager { get; }
     protected IIdentityUserRepository IdentityUserRepository { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
-
     protected ExternalLoginProviderBase(
         IGuidGenerator guidGenerator,
         ICurrentTenant currentTenant,
@@ -32,7 +31,7 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
     }
 
     public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
-    
+
     public abstract Task<bool> IsEnabledAsync();
 
     public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName)
@@ -40,8 +39,14 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
         await IdentityOptions.SetAsync();
 
         var externalUser = await GetUserInfoAsync(userName);
-        NormalizeExternalLoginUserInfo(externalUser, userName);
 
+        return await CreateUserAsync(externalUser, userName, providerName);
+    }
+    
+    protected virtual async Task<IdentityUser> CreateUserAsync(ExternalLoginUserInfo externalUser, string userName, string providerName)
+    {
+        NormalizeExternalLoginUserInfo(externalUser, userName);
+        
         var user = new IdentityUser(
             GuidGenerator.Create(),
             userName,
@@ -81,8 +86,14 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
     public virtual async Task UpdateUserAsync(IdentityUser user, string providerName)
     {
         await IdentityOptions.SetAsync();
-
+        
         var externalUser = await GetUserInfoAsync(user);
+
+        await UpdateUserAsync(user, externalUser, providerName);
+    }
+    
+    protected virtual async Task UpdateUserAsync(IdentityUser user, ExternalLoginUserInfo externalUser ,string providerName)
+    {
         NormalizeExternalLoginUserInfo(externalUser, user.UserName);
 
         if (!externalUser.Name.IsNullOrWhiteSpace())

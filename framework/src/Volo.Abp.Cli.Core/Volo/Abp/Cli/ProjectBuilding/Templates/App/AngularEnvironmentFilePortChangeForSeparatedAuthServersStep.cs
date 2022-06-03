@@ -4,7 +4,7 @@ using Volo.Abp.Cli.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
-public class AngularEnvironmentFilePortChangeForSeparatedIdentityServersStep : ProjectBuildPipelineStep
+public class AngularEnvironmentFilePortChangeForSeparatedAuthServersStep : ProjectBuildPipelineStep
 {
     public override void Execute(ProjectBuildContext context)
     {

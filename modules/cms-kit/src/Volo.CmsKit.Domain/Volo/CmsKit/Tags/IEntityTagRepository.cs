@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -15,4 +16,9 @@ public interface IEntityTagRepository : IBasicRepository<EntityTag>
         CancellationToken cancellationToken = default);
 
     Task DeleteManyAsync(Guid[] tagIds, CancellationToken cancellationToken = default);
+
+    Task<List<string>> GetEntityIdsFilteredByTagAsync(
+        [NotNull] Guid tagId,
+        [CanBeNull] Guid? tenantId,
+        CancellationToken cancellationToken = default);
 }

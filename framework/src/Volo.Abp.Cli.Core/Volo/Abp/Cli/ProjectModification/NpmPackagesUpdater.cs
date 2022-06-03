@@ -314,13 +314,13 @@ public class NpmPackagesUpdater : ITransientDependency
     protected virtual void RunYarn(string fileDirectory)
     {
         Logger.LogInformation($"Running Yarn on {fileDirectory}");
-        CmdHelper.RunCmd($"cd {fileDirectory} && yarn");
+        CmdHelper.RunCmd($"yarn", fileDirectory);
     }
 
     protected virtual void RunNpmInstall(string fileDirectory)
     {
         Logger.LogInformation($"Running npm install on {fileDirectory}");
-        CmdHelper.RunCmd($"cd {fileDirectory} && npm install");
+        CmdHelper.RunCmd($"npm install", fileDirectory);
     }
 
     protected virtual List<string> GetPackageVersionList(JProperty package)

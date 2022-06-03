@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
@@ -14,7 +13,6 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Components.Server.BasicTheme;
 using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
@@ -50,7 +48,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server;
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
@@ -74,13 +71,6 @@ public class MyProjectNameBlazorModule : AbpModule
             );
         });
 
-        PreConfigure<OpenIddictServerBuilder>(builder =>
-        {
-            // https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
-            // In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
-            builder.DisableAccessTokenEncryption();
-        });
-
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
@@ -99,7 +89,6 @@ public class MyProjectNameBlazorModule : AbpModule
 
         ConfigureUrls(configuration);
         ConfigureBundles();
-        ConfigureAuthentication(context, configuration);
         ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
         ConfigureLocalizationServices();
@@ -143,17 +132,6 @@ public class MyProjectNameBlazorModule : AbpModule
                 }
             );
         });
-    }
-
-    private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
-    {
-        context.Services.AddAuthentication()
-            .AddJwtBearer(options =>
-            {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = "MyProjectName";
-            });
     }
 
     private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
@@ -283,7 +261,7 @@ public class MyProjectNameBlazorModule : AbpModule
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
+        app.UseAbpOpenIddictValidation();
 
         if (MultiTenancyConsts.IsEnabled)
         {
