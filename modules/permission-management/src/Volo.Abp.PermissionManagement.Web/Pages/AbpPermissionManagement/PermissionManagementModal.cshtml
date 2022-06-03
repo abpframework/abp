@@ -1,12 +1,14 @@
 @page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.Localization
 @using Volo.Abp.PermissionManagement.Localization
 @using Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 @model PermissionManagementModal
 @inject IHtmlLocalizer<AbpPermissionManagementResource> L
 @{
     Layout = null;
+    var marginLeftOrRight = CultureHelper.IsRtl ? "right" : "left";
 }
 
 <form method="post" asp-page="/AbpPermissionManagement/PermissionManagementModal" data-script-class="abp.modals.PermissionManagement" id="PermissionManagementForm">
@@ -43,7 +45,7 @@
                                                disabled="@permission.IsDisabled(Model.ProviderName)"
                                                group-data-permission-name="@permission.Name"
                                                group-data-parent-name="@(permission.ParentName ?? "")"
-                                               group-style="margin-left: @(permission.Depth * 20)px"/>
+                                               group-style="margin-@marginLeftOrRight: @(permission.Depth * 20)px"/>
                                     <input asp-for="@permission.Name" abp-id-name="@Model.Groups[i].Permissions[j].Name"/>
                                 }
                             </div>
