@@ -33,10 +33,10 @@ public class AbpDddApplicationModule : AbpModule
     {
         Configure<AbpApiDescriptionModelOptions>(options =>
         {
-                //TODO: Should we move related items to their own projects?
-                options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));
             options.IgnoredInterfaces.AddIfNotContains(typeof(IApplicationService));
             options.IgnoredInterfaces.AddIfNotContains(typeof(IUnitOfWorkEnabled));
+            //TODO: Should we add others, like IAuditingEnabled...?
         });
     }
 }
