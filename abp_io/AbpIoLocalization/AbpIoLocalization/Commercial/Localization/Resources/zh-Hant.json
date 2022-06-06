@@ -180,7 +180,6 @@
     "ChangingLicenseType": "將來更改我的許可類型嗎?",
     "ChangingLicenseTypeExplanation": "你始終可以在同一許可中添加新的開發人員. 參閱 \"有多少開發者可以參與ABP商業版工作?\". 你還可以通過支付計算出的價格差來升級到更高的許可. 當你升級到更高的許可計劃時,可以享受新計劃的好處,但是許可升級不會更改許可的到期日期.",
     "LicenseExtendUpgradeDiff": "許可擴展和升級有什麽區別?",
-    "LicenseExtendUpgradeDiffExplanation": "<strong>擴展:</strong> 通過擴展/更新許可,你將繼續獲得高級支持,並獲得有關模塊和主題的重大更新. 此外你將能夠繼續創建新項目. 而且你仍然可以使用ABP Suite來加快開發速度.<hr/><strong>升級:</strong> 通過升級許可,你將升級到更高的許可計劃,這將使你獲得更多好處. 查看 <a href=\"/pricing\">許可比較表</a>來檢查許可計劃之間的差異. <strong>另一方面,當你升級時你的許可到期日期不會改變!</strong>要延長你的許可終止日期,你需要延長你的許可.",
     "LicenseRenewalCost": "一年後的許可續期費用是多少?",
     "LicenseRenewalCostExplanation": "標準 Team 許可證的續訂（擴展）價格為 ${0}，標準 Business License 為 ${1}，標準 Enterprise License 為 ${2}。 如果您已經是客戶，請<a href='{3}' target='_blank'>登錄您的帳戶</a>查看可用的續訂價格。",
     "HowDoIRenewMyLicense": "如何續費我的許可證?",

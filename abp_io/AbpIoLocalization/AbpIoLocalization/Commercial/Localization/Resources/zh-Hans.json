@@ -180,7 +180,6 @@
     "ChangingLicenseType": "将来更改我的许可类型吗?",
     "ChangingLicenseTypeExplanation": "你始终可以在同一许可中添加新的开发人员. 参阅 \"有多少开发者可以参与ABP商业版工作?\". 你还可以通过支付计算出的价格差来升级到更高的许可. 当你升级到更高的许可计划时,可以享受新计划的好处,但是许可升级不会更改许可的到期日期.",
     "LicenseExtendUpgradeDiff": "许可扩展和升级有什么区别?",
-    "LicenseExtendUpgradeDiffExplanation": "<strong>扩展:</strong> 通过扩展/更新许可,你将继续获得高级支持,并获得有关模块和主题的重大更新. 此外你将能够继续创建新项目. 而且你仍然可以使用ABP Suite来加快开发速度.<hr/><strong>升级:</strong> 通过升级许可,你将升级到更高的许可计划,这将使你获得更多好处. 查看 <a href=\"/pricing\">许可比较表</a>来检查许可计划之间的差异. <strong>另一方面,当你升级时你的许可到期日期不会改变!</strong>要延长你的许可终止日期,你需要延长你的许可.",
     "LicenseRenewalCost": "一年后的许可续期费用是多少?",
     "LicenseRenewalCostExplanation": "标准 Team 许可证的续订（扩展）价格为 ${0}，标准 Business License 为 ${1}，标准 Enterprise License 为 ${2}。 如果您已经是客户，请<a href='{3}' target='_blank'>登录您的帐户</a>查看可用的续订价格。",
     "HowDoIRenewMyLicense": "如何续费我的许可证?",
