@@ -1,0 +1,15 @@
+{
+  "culture": "fa",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "نام منبع هویت از قبل موجود می باشد: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "نام منبع Api از قبل وجود دارد: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "نام Api Scope از قبل وجود دارد: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId از قبل وجود دارد: {ClientId}",
+    "UserLockedOut": "حساب کاربری شما به دلیل تلاشهای نامعتبر برای ورود قفل شده است. لطفا کمی صبر کنید و دوباره امتحان کنید.",
+    "InvalidUserNameOrPassword": "نام کاربری یا رمز عبور نامعتبر!",
+    "LoginIsNotAllowed": "شما اجازه ورود به سیستم را ندارید! حساب شما غیرفعال است یا نیاز به تایید ایمیل/شماره تلفن شما دارد.",
+    "InvalidUsername": "نام کاربری یا رمز عبور نامعتبر!",
+    "InvalidAuthenticatorCode": "کد احراز هویت نامعتبر!",
+    "TheTargetUserIsNotLinkedToYou": "کاربر هدف به شما پیوند داده نشده است!"
+  }
+}
