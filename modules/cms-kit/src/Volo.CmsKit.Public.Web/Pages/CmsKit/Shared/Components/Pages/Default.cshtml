@@ -18,21 +18,10 @@
             }
             else if (contentFragment is WidgetContentFragment widgetContentFragment)
             {
-                //TODO
-                if (widgetContentFragment.Name == "CmsPoll")
+                @await Component.InvokeAsync(widgetContentFragment.Name,  new
                 {
-                    @await Component.InvokeAsync(widgetContentFragment.Name, new
-                        {
-                            widgetName = "poll-right"
-                        })
-                }
-                else
-                {
-                    @await Component.InvokeAsync(widgetContentFragment.Name,new
-                        {
-                            name = "poll-name"
-                        })
-                }
+                    name = "poll-name"
+                })
             }
         }
     </abp-card-body>
