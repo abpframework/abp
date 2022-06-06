@@ -243,3 +243,7 @@ async function onFetch(event) {
 * You can configure this file, if you want to cache additional file extensions such as `.webp` or etc. Also, you can use some additional features of PWA by configuring this file.
 * By default, dll files (`*.dll`) and some static assets (`*.js`, `*.css`, etc.) are cached.
 * Cached files will be stored in the `service-worker-assets.js` (**/bin/Debug/{TARGET FRAMEWORK}/wwwroot/service-worker-assets.js**). You can change this file name by renaming it in between `ServiceWorkerAssetsManifest` tags on your `*.csproj` file.
+
+## See Also
+
+* [ASP.NET Core Blazor Progressive Web Application (PWA)](https://docs.microsoft.com/en-us/aspnet/core/blazor/progressive-web-app).
