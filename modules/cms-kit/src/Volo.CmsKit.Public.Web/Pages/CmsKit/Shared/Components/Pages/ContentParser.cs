@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -16,19 +18,44 @@ public class ContentParser : IContentParser, ITransientDependency
 
     public async Task<List<ContentFragment>> ParseAsync(string content)
     {
+        if (!_options.WidgetConfigs.Any())
+        {
+            return new List<ContentFragment>()
+            {
+                new MarkdownContentFragment() { Content = content }
+            };
+        }
+
+        MatchCollection mc = Regex.Matches(content, @"(?<=\[Wid)(.*?)(?=\])");//(?<=X)(.*?)(?=Y)
+
+        string split = "-----";
+
+        var polls = new List<string>();
+        foreach (Match m in mc)
+        {
+            polls.Add("[Wid" + m + "]");
+            content = content.Replace("[Wid" + m + "]", split);
+        }
+
+        var splittedContent = content.Split(split, StringSplitOptions.RemoveEmptyEntries);
+
+        var contentFragments = new List<ContentFragment>();
         var name = _options.WidgetConfigs.FirstOrDefault(p => p.Key == "Poll").Value?.Name;
-        return new List<ContentFragment> {
-            new MarkdownContentFragment {
-                Content = "**ABP Framework** is completely open source and developed in a community-driven manner."
-            },
-            new WidgetContentFragment(name) {
-                Properties = { 
-                    { "name", "poll-name" }
-                } 
-            },
-            new MarkdownContentFragment {
-                Content = "Thanks _for_ *your* feedback."
+        for (int b = 0; b < splittedContent.Length; b++)
+        {
+            contentFragments.Add(new MarkdownContentFragment() { Content = splittedContent[b] });
+            if (b != splittedContent.Length - 1)
+            {
+                contentFragments.Add(new WidgetContentFragment(name)
+                {
+                    Properties =
+                    {
+                        { "name", "poll-name" }
+                    }
+                });
             }
-        };
+        }
+
+        return contentFragments;
     }
 }
