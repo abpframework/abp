@@ -921,6 +921,10 @@
               "path": "UI/Blazor/Global-Scripts-Styles.md"
             },
             {
+              "text": "Global Features",
+              "path": "UI/Blazor/Global-Features.md"
+            },
+            {
               "text": "Routing",
               "path": "UI/Blazor/Routing.md"
             }
