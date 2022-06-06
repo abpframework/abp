@@ -923,6 +923,10 @@
             {
               "text": "Routing",
               "path": "UI/Blazor/Routing.md"
+            },
+            {
+              "text": "PWA Configuration",
+              "path": "UI/Blazor/Pwa-Configuration.md"
             }
           ]
         },
