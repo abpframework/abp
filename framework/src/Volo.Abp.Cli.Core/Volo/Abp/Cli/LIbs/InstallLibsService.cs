@@ -236,13 +236,13 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
     private void RunNpmInstall(string directory)
     {
         Logger.LogInformation($"Running npm install on {directory}");
-        CmdHelper.RunCmd($"cd {directory} && npm install");
+        CmdHelper.RunCmd($"npm install", directory);
     }
 
     private void RunYarn(string directory)
     {
         Logger.LogInformation($"Running Yarn on {directory}");
-        CmdHelper.RunCmd($"cd {directory} && yarn");
+        CmdHelper.RunCmd($"yarn", directory);
     }
 
     private bool IsNpmInstalled()
@@ -253,7 +253,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
     private bool IsYarnAvailable()
     {
-        var output = CmdHelper.RunCmdAndGetOutput("npm list yarn -g").Trim();
+        var output = CmdHelper.RunCmdAndGetOutput("npm list yarn -g --depth 0").Trim();
         if (output.Contains("empty"))
         {
             return false;

@@ -1,0 +1,26 @@
+{
+  "culture": "fa",
+  "texts": {
+    "InternalServerErrorMessage": "هنگام درخواست شما خطای داخلی رخ داد!",
+    "ValidationErrorMessage": "درخواست شما معتبر نمی باشد!",
+    "ValidationNarrativeErrorMessageTitle": "خطاهای زیر هنگام اعتبار سنجی شناسایی گردید.",
+    "DefaultErrorMessage": "خطایی روی داده است!",
+    "DefaultErrorMessageDetail": "جزئیات خطا توسط سرور ارسال نمی شود.",
+    "DefaultErrorMessage401": "احراز هویت نشده اید!",
+    "DefaultErrorMessage401Detail": "برای انجام این عملیات باید وارد سیستم شوید.",
+    "DefaultErrorMessage403": "شما مجاز نیستید!",
+    "DefaultErrorMessage403Detail": "شما مجوز لازم برای انجام این عملیات را ندارید!",
+    "DefaultErrorMessage404": "منبع درخواستی یافت نشد!",
+    "DefaultErrorMessage404Detail": "منبع درخواستی در سرور یافت نشد!",
+    "EntityNotFoundErrorMessage": "هیچ موجودیتی {0} با id = {1} وجود ندارد!",
+    "AbpDbConcurrencyErrorMessage": "اطلاعات ارسالی شما قبلاً توسط کاربر/مشتری دیگری تغییر یافته است. لطفاً تغییراتی را که انجام داده اید لغو کنید و مجددا تلاش فرمایید.",
+    "Error": "خطا",
+    "UnhandledException": "خطای پیش بینی نشده!",
+    "401Message": "غیر مجاز",
+    "403Message": "ممنوع",
+    "404Message": "صفحه موردنظر یافت نشد",
+    "500Message": "خطای داخلی رخ داد",
+    "403MessageDetail": "شما مجاز به انجام این عملیات نمی باشید!",
+    "404MessageDetail": "با عرض پورش، در این آدرس هیچ محتوایی وجود ندارد."
+  }
+}

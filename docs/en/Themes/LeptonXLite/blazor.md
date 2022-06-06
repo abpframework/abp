@@ -16,19 +16,25 @@ LeptonX Lite has implementation for the ABP Framework Blazor WebAssembly & Blazo
 ## Installation
 
 {{if UI == "Blazor"}}
-- Complete the [MVC Razor Pages Installation](mvc.md#installation) for the **HttpApi.Host** application first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and if identity server is separated, install to the **IdentityServer**_.
+- Complete the [MVC Razor Pages Installation](mvc.md#installation) for the **HttpApi.Host** application first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and if identity server is separated, install to the **OpenIddict**_.
 
-- Add **Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme** package to your **Blazor WebAssembly** application.
+- Add **Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme** package to your **Blazor WebAssembly** application with the following command:
+
   ```bash
-  dotnet add package Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme
+  dotnet add package Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme --prerelease
   ```
+
+- Remove **Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme** reference from the project since it's not necessary after switching to LeptonX Lite.
 
 - Remove the old theme from the **DependsOn** attribute in your module class and add the **AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule** type to the **DependsOn** attribute.
 
 ```diff
 [DependsOn(
+     // Remove BasicTheme module from DependsOn attribute
 -    typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
-+    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule)
+
+    // Add LeptonX Lite module to DependsOn attribute
++    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule),
 )]
 ```
 
@@ -46,26 +52,35 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
 
 {{if UI == "BlazorServer"}}
 
-- Complete the [MVC Razor Pages Installation](mvc.md#installation) first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and **IdentityServer**_.
+- Complete the [MVC Razor Pages Installation](mvc.md#installation) first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and **AuthServer**_.
 
-- Add **Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme** package to your **Blazor server** application.
+- Add **Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme** package to your **Blazor server** application with the following command:
+
   ```bash
-  dotnet add package Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme
+  dotnet add package Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme --prerelease
   ```
 
-- Remove old theme from the **DependsOn** attribute in your module class and add the **AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule** type to the **DependsOn** attribute.
+- Remove **Volo.Abp.AspNetCore.Components.Server.BasicTheme** reference from the project since it's not necessary after switching to LeptonX Lite.
+
+
+- Remove old theme from the **DependsOn** attribute in your module class and add the **AbpAspNetCoreComponentsServerLeptonXLiteThemeModule** type to the **DependsOn** attribute.
 
   ```diff
   [DependsOn(
+      // Remove BasicTheme module from DependsOn attribute
   -    typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
+
+      // Add LeptonX Lite module to DependsOn attribute
   +    typeof(AbpAspNetCoreComponentsServerLeptonXLiteThemeModule)
   )]
   ```
 
-- Update AbpBundlingOptions
+- Replace `BlazorBasicThemeBundles` with `BlazorLeptonXLiteThemeBundles` in `AbpBundlingOptions`:
   ```diff
   options.StyleBundles.Configure(
+    // Remove following line
   - BlazorBasicThemeBundles.Styles.Global,
+    // Add following line instead
   + BlazorLeptonXLiteThemeBundles.Styles.Global,
     bundle =>
     {
@@ -84,12 +99,16 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
     ```
   - Then replace script & style bundles as following:
     ```diff
+    // Remove following line
     - <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global" />
+    // Add following line instead
     + <abp-style-bundle name="@BlazorLeptonXLiteThemeBundles.Styles.Global" />
     ```
 
     ```diff
+    // Remove following line
     - <abp-script-bundle name="@BlazorBasicThemeBundles.Scripts.Global" />
+    // Add following line instead
     + <abp-script-bundle name="@BlazorLeptonXLiteThemeBundles.Scripts.Global" />
     ```
 

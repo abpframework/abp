@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -12,6 +14,12 @@ namespace Volo.Abp.Cli.ProjectModification;
 
 public class NugetPackageToLocalReferenceConverter : ITransientDependency
 {
+    public ILogger<NugetPackageToLocalReferenceConverter> Logger { get; set; }
+
+    public NugetPackageToLocalReferenceConverter(){
+        Logger = NullLogger<NugetPackageToLocalReferenceConverter>.Instance;
+    }
+    
     public async Task Convert(ModuleWithMastersInfo module, string solutionFile, string modulePrefix = "Volo.")
     {
         var nugetPackageList = GetNugetPackages(module);
@@ -30,6 +38,12 @@ public class NugetPackageToLocalReferenceConverter : ITransientDependency
 
         foreach (var projectFile in projectFiles)
         {
+            if (!File.Exists(projectFile))
+            {
+                Logger.LogWarning($"{projectFile} could not be found, skipping...");
+                return;
+            }
+            
             var content = File.ReadAllText(projectFile);
             using (var stream = StreamHelper.GenerateStreamFromString(content))
             {

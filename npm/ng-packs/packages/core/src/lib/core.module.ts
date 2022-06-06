@@ -34,6 +34,9 @@ import { TENANT_KEY } from './tokens/tenant-key.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
+import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
+import { ShortTimePipe } from './pipes/short-time.pipe';
+import { ShortDatePipe } from './pipes/short-date.pipe';
 
 export function storageFactory(): OAuthStorage {
   return oAuthStorage;
@@ -67,6 +70,9 @@ export function storageFactory(): OAuthStorage {
         SortPipe,
         StopPropagationDirective,
         ToInjectorPipe,
+        ShortDateTimePipe,
+        ShortTimePipe,
+        ShortDatePipe
     ],
     imports: [
         OAuthModule,
@@ -92,6 +98,10 @@ export function storageFactory(): OAuthStorage {
         SortPipe,
         StopPropagationDirective,
         ToInjectorPipe,
+        ShortDateTimePipe,
+        ShortTimePipe,
+        ShortDatePipe
+
     ],
     providers: [LocalizationPipe]
 })

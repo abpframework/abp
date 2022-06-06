@@ -34,23 +34,16 @@ This sample simply shows a message. In real life, you probably want to call an H
 Now, we can create a class implementing the `IToolbarContributor` interface:
 
 ````csharp
-using System.Threading.Tasks;
-using MyCompanyName.MyProjectName.Blazor.Components;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Toolbars;
-
-namespace MyCompanyName.MyProjectName.Blazor
+public class MyToolbarContributor : IToolbarContributor
 {
-    public class MyToolbarContributor : IToolbarContributor
+    public Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
     {
-        public Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
+        if (context.Toolbar.Name == StandardToolbars.Main)
         {
-            if (context.Toolbar.Name == StandardToolbars.Main)
-            {
-                context.Toolbar.Items.Insert(0, new ToolbarItem(typeof(Notification)));
-            }
-
-            return Task.CompletedTask;
+            context.Toolbar.Items.Insert(0, new ToolbarItem(typeof(Notification)));
         }
+
+        return Task.CompletedTask;
     }
 }
 ````

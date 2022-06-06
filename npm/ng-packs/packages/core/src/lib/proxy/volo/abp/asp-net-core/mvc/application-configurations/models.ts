@@ -1,7 +1,7 @@
-import type { LanguageInfo } from '../../../localization/models';
-import type { NameValue } from '../../../models';
 import type { CurrentTenantDto, MultiTenancyInfoDto } from '../multi-tenancy/models';
 import type { ObjectExtensionsDto } from './object-extending/models';
+import type { LanguageInfo } from '../../../localization/models';
+import type { NameValue } from '../../../models';
 
 export interface ApplicationAuthConfigurationDto {
   policies: Record<string, boolean>;
@@ -14,6 +14,7 @@ export interface ApplicationConfigurationDto {
   setting: ApplicationSettingConfigurationDto;
   currentUser: CurrentUserDto;
   features: ApplicationFeatureConfigurationDto;
+  globalFeatures: ApplicationGlobalFeatureConfigurationDto;
   multiTenancy: MultiTenancyInfoDto;
   currentTenant: CurrentTenantDto;
   timing: TimingDto;
@@ -23,6 +24,10 @@ export interface ApplicationConfigurationDto {
 
 export interface ApplicationFeatureConfigurationDto {
   values: Record<string, string>;
+}
+
+export interface ApplicationGlobalFeatureConfigurationDto {
+  enabledFeatures: string[];
 }
 
 export interface ApplicationLocalizationConfigurationDto {
@@ -58,6 +63,10 @@ export interface CurrentUserDto {
   isAuthenticated: boolean;
   id?: string;
   tenantId?: string;
+  impersonatorUserId?: string;
+  impersonatorTenantId?: string;
+  impersonatorUserName?: string;
+  impersonatorTenantName?: string;
   userName?: string;
   name?: string;
   surName?: string;
@@ -66,8 +75,6 @@ export interface CurrentUserDto {
   phoneNumber?: string;
   phoneNumberVerified: boolean;
   roles: string[];
-  impersonatorUserId?: string;
-  impersonatorTenantId?: string;
 }
 
 export interface DateTimeFormatDto {

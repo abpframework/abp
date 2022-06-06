@@ -1,5 +1,7 @@
 # Microservice Demo Solution
 
+> This solution is no longer maintained. See [the eShopOnAbp project](https://github.com/abpframework/eShopOnAbp) for the replacement solution.
+
 *"Microservices are a software development technique—a variant of the **service-oriented architecture** (SOA) architectural style that structures an application as a collection of **loosely coupled services**. In a microservices architecture, services are **fine-grained** and the protocols are **lightweight**. The benefit of decomposing an application into different smaller services is that it improves **modularity**. This makes the application easier to understand, develop, test, and become more resilient to architecture erosion. It **parallelizes development** by enabling small autonomous teams to **develop, deploy and scale** their respective services independently. It also allows the architecture of an individual service to emerge through **continuous refactoring**. Microservices-based architectures enable **continuous delivery and deployment**."*
 
 — [Wikipedia](https://en.wikipedia.org/wiki/Microservices)

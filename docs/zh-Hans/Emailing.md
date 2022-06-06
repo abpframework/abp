@@ -22,8 +22,9 @@ abp add-package Volo.Abp.Emailing
 
 ### IEmailSender
 
-[Inject](Dependency-Injection.md) 将 `IEmailSender` 注入任何服务并使用 `SendAsync` 方法发送电子邮件。
-**Example**
+[注入](Dependency-Injection.md) `IEmailSender` 到任何服务并使用 `SendAsync` 方法发送电子邮件。
+
+**示例**
 
 ````csharp
 using System.Threading.Tasks;
