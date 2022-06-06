@@ -1,0 +1,10 @@
+{
+  "culture": "fa",
+  "texts": {
+    "Permissions": "دسترسی ها",
+    "OnlyProviderPermissons": "فقط این ارائه دهنده",
+    "All": "همه",
+    "SelectAllInAllTabs": "اعطای همه مجوزها",
+    "SelectAllInThisTab": "انتخاب همه"
+  }
+}

@@ -88,3 +88,13 @@ div.dataTables_wrapper div.dataTables_length label {
     left: auto;
     right: 100%;
 } 
+.rtl div.dataTables_wrapper div.dataTables_filter input {
+    margin-left: auto;
+    margin-right: 0.5em;
+}
+.rtl div.dataTables_wrapper div.dataTables_filter {
+    text-align: left;
+}
+.rtl table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, table.dataTable tfoot td {
+    text-align: right;
+}
