@@ -394,6 +394,7 @@
     "EndTime": "End Time",
     "CreateABookDiscount": "Create a book discount",
     "BookDiscountDeletionConfirmationMessage": "Are you sure you want to delete this book discount?",
-    "CustomPaymentFlexSwitchDescription": "With license"
+    "CustomPaymentFlexSwitchDescription": "With license",
+    "AllowFeatureUpgradeOnLicenseExpire": "Allow feature upgrade on license expire"
   }
 }
