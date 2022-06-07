@@ -5,12 +5,12 @@
 @if (EmailSettings != null)
 {
     <Form>
-        <Validations @ref="@IdentitySettingValidation" Model="@EmailSettings" ValidateOnLoad="false">
+        <Validations @ref="@EmailSettingValidation" Model="@EmailSettings" ValidateOnLoad="false">
             <Row>
                 <Column>
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
-                            <FieldLabel>@L["DefaultFromDisplayName"]</FieldLabel>
+                            <FieldLabel>@L["DefaultFromDisplayName"] *</FieldLabel>
                             <TextEdit @bind-Text="@EmailSettings.DefaultFromDisplayName">
                                 <Feedback>
                                     <ValidationError />
@@ -20,7 +20,7 @@
                     </Validation>
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
-                            <FieldLabel>@L["DefaultFromAddress"]</FieldLabel>
+                            <FieldLabel>@L["DefaultFromAddress"] *</FieldLabel>
                             <TextEdit @bind-Text="@EmailSettings.DefaultFromAddress">
                                 <Feedback>
                                     <ValidationError />

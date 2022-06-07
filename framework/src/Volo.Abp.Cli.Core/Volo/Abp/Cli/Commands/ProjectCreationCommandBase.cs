@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
+using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
@@ -22,13 +24,22 @@ public abstract class ProjectCreationCommandBase
     public ConnectionStringProvider ConnectionStringProvider { get; }
     public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
     public ICmdHelper CmdHelper { get; }
+    public IInstallLibsService InstallLibsService { get; }
+    public AngularPwaSupportAdder AngularPwaSupportAdder { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
-    public ProjectCreationCommandBase(ConnectionStringProvider connectionStringProvider, SolutionPackageVersionFinder solutionPackageVersionFinder, ICmdHelper cmdHelper)
+    public ProjectCreationCommandBase(
+        ConnectionStringProvider connectionStringProvider, 
+        SolutionPackageVersionFinder solutionPackageVersionFinder, 
+        ICmdHelper cmdHelper, 
+        IInstallLibsService installLibsService,
+        AngularPwaSupportAdder angularPwaSupportAdder)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
+        InstallLibsService = installLibsService;
+        AngularPwaSupportAdder = angularPwaSupportAdder;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -46,6 +57,12 @@ public abstract class ProjectCreationCommandBase
         if (preview)
         {
             Logger.LogInformation("Preview: yes");
+        }
+
+        var pwa = commandLineArgs.Options.ContainsKey(Options.ProgressiveWebApp.Short);
+        if (pwa)
+        {
+            Logger.LogInformation("Progressive Web App: yes");
         }
 
         var databaseProvider = GetDatabaseProvider(commandLineArgs);
@@ -162,7 +179,8 @@ public abstract class ProjectCreationCommandBase
             gitHubVoloLocalRepositoryPath,
             templateSource,
             commandLineArgs.Options,
-            connectionString
+            connectionString,
+            pwa
         );
     }
 
@@ -307,14 +325,27 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected virtual void RunInstallLibsForWebTemplate(ProjectBuildArgs projectArgs)
+    protected async Task RunInstallLibsForWebTemplateAsync(ProjectBuildArgs projectArgs)
     {
         if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) ||
             ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) ||
             AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName) ||
             MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
         {
-            CmdHelper.RunCmd("abp install-libs", projectArgs.OutputFolder);
+            Logger.LogInformation("Installing client-side packages...");
+            await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
+        }
+    }
+
+    protected void ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)
+    {
+        var isAngular = projectArgs.UiFramework == UiFramework.Angular;
+        var isPwa = projectArgs.Pwa;
+
+        if (isAngular && isPwa)
+        {
+            Logger.LogInformation("Adding PWA Support to Angular app.");
+            AngularPwaSupportAdder.AddPwaSupport(projectArgs.OutputFolder);
         }
     }
 
@@ -475,6 +506,11 @@ public abstract class ProjectCreationCommandBase
         public static class Preview
         {
             public const string Long = "preview";
+        }
+
+        public static class ProgressiveWebApp
+        {
+            public const string Short = "pwa";
         }
     }
 }

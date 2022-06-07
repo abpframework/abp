@@ -17,6 +17,8 @@ public class ApplicationConfigurationDto
 
     public ApplicationFeatureConfigurationDto Features { get; set; }
 
+    public ApplicationGlobalFeatureConfigurationDto GlobalFeatures { get; set; }
+
     public MultiTenancyInfoDto MultiTenancy { get; set; }
 
     public CurrentTenantDto CurrentTenant { get; set; }

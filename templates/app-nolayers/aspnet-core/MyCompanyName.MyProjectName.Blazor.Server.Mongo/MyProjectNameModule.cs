@@ -1,5 +1,6 @@
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
@@ -21,6 +22,7 @@ using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.MongoDB;
+using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.Blazor.Server;
 using Volo.Abp.FeatureManagement.MongoDB;
@@ -123,6 +125,11 @@ public class MyProjectNameModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        if (hostingEnvironment.IsDevelopment())
+        {
+            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+        }
+        
         ConfigureUrls(configuration);
         ConfigureBundles();
         ConfigureAutoMapper(context);
