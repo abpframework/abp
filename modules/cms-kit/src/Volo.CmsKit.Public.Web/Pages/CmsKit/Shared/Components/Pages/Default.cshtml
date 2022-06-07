@@ -20,7 +20,7 @@
             {
                 @await Component.InvokeAsync(widgetContentFragment.Name,  new
                 {
-                    name = "poll-name"
+                    name = widgetContentFragment.Properties.FirstOrDefault().Value
                 })
             }
         }

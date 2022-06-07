@@ -28,6 +28,9 @@ public class ContentParser : IContentParser, ITransientDependency
 
         MatchCollection mc = Regex.Matches(content, @"(?<=\[Wid)(.*?)(?=\])");//(?<=X)(.*?)(?=Y)
 
+        MatchCollection mcPollName = Regex.Matches(content, @"(?<=PollName="")(.*?)(?="")");
+        var pollNames = mcPollName.Select(p => p.Value).ToList();
+
         string split = "-----";
 
         var polls = new List<string>();
@@ -41,16 +44,16 @@ public class ContentParser : IContentParser, ITransientDependency
 
         var contentFragments = new List<ContentFragment>();
         var name = _options.WidgetConfigs.FirstOrDefault(p => p.Key == "Poll").Value?.Name;
-        for (int b = 0; b < splittedContent.Length; b++)
+        for (int i = 0; i < splittedContent.Length; i++)
         {
-            contentFragments.Add(new MarkdownContentFragment() { Content = splittedContent[b] });
-            if (b != splittedContent.Length - 1)
+            contentFragments.Add(new MarkdownContentFragment() { Content = splittedContent[i] });
+            if (i != splittedContent.Length - 1)
             {
                 contentFragments.Add(new WidgetContentFragment(name)
                 {
                     Properties =
                     {
-                        { "name", "poll-name" }
+                        { "name", pollNames[i] }
                     }
                 });
             }
