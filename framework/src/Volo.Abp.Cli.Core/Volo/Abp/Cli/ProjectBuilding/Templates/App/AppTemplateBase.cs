@@ -33,6 +33,7 @@ public abstract class AppTemplateBase : TemplateInfo
         RemoveMigrations(context, steps);
         ConfigureTieredArchitecture(context, steps);
         ConfigurePublicWebSite(context, steps);
+        ConfigureTheme(context);
         RemoveUnnecessaryPorts(context, steps);
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
@@ -172,6 +173,22 @@ public abstract class AppTemplateBase : TemplateInfo
             else
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Public.Host"));
+            }
+        }
+    }
+
+    protected void ConfigureTheme(ProjectBuildContext context)
+    {
+        if (context.BuildArgs.Theme.HasValue)
+        {
+            if (context.BuildArgs.Theme == Theme.LeptonXLite)
+            {
+                context.Symbols.Add("LEPTONX-LITE");
+            }
+
+            if (context.BuildArgs.Theme == Theme.Basic)
+            {
+                context.Symbols.Add("BASIC");
             }
         }
     }

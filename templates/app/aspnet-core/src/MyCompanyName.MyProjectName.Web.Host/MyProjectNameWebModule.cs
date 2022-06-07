@@ -19,8 +19,14 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+//<TEMPLATE-REMOVE IF-NOT='BASIC'>
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
+//</TEMPLATE-REMOVE>
+//<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
+//</TEMPLATE-REMOVE>
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AspNetCore.Serilog;
@@ -50,7 +56,12 @@ namespace MyCompanyName.MyProjectName.Web;
     typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
     typeof(AbpAspNetCoreMvcClientModule),
     typeof(AbpHttpClientWebModule),
+    //<TEMPLATE-REMOVE IF-NOT='BASIC'>
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    //</TEMPLATE-REMOVE>
+    //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
+    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
+    //</TEMPLATE-REMOVE>
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpSettingManagementWebModule),
@@ -94,6 +105,19 @@ public class MyProjectNameWebModule : AbpModule
 
     private void ConfigureBundles()
     {
+        //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.StyleBundles.Configure(
+                LeptonXLiteThemeBundles.Styles.Global,
+                bundle =>
+                {
+                    bundle.AddFiles("/global-styles.css");
+                }
+            );
+        });
+        //</TEMPLATE-REMOVE>
+        //<TEMPLATE-REMOVE IF-NOT='BASIC'>
         Configure<AbpBundlingOptions>(options =>
         {
             options.StyleBundles.Configure(
@@ -104,6 +128,7 @@ public class MyProjectNameWebModule : AbpModule
                 }
             );
         });
+        //</TEMPLATE-REMOVE>
     }
 
     private void ConfigureCache()

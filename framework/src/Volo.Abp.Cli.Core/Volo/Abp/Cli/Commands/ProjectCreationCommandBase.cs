@@ -93,6 +93,12 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("UI Framework: " + uiFramework);
         }
 
+        var theme = uiFramework == UiFramework.None ? (Theme?)null : GetTheme(commandLineArgs);
+        if (theme.HasValue)
+        {
+            Logger.LogInformation("Theme: " + theme);
+        }
+
         var publicWebSite = uiFramework != UiFramework.None && commandLineArgs.Options.ContainsKey(Options.PublicWebSite.Long);
         if (publicWebSite)
         {
@@ -134,7 +140,6 @@ public abstract class ProjectCreationCommandBase
         if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
         {
             var slnFile = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
-
             if (slnFile == null)
             {
                 throw new CliUsageException("This command should be run inside a folder that contains a microservice solution!");
@@ -184,7 +189,8 @@ public abstract class ProjectCreationCommandBase
             templateSource,
             commandLineArgs.Options,
             connectionString,
-            pwa
+            pwa,
+            theme
         );
     }
 
@@ -460,6 +466,21 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
+    protected virtual Theme GetTheme(CommandLineArgs commandLineArgs)
+    {
+        var optionValue = commandLineArgs.Options.GetOrNull(Options.Theme.Long);
+        switch (optionValue)
+        {
+            case null:
+            case "leptonx-lite":
+                return Theme.LeptonXLite;
+            case "basic":
+                return Theme.Basic;
+            default:
+                throw new CliUsageException("The option you provided for Theme is invalid!");
+        }
+    }
+
     public static class Options
     {
         public static class Template
@@ -550,6 +571,11 @@ public abstract class ProjectCreationCommandBase
         public static class ProgressiveWebApp
         {
             public const string Short = "pwa";
+        }
+        
+        public static class Theme
+        {
+            public const string Long = "theme";
         }
     }
 }
