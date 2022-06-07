@@ -27,6 +27,7 @@ dotnet tool update -g Volo.Abp.Cli
 这里是所有可用的命令列表:
 
 * **`help`**: 展示ABP CLI的用法帮助信息.
+* **`cli`**: 更新或删除ABP CLI.
 * **`new`**：生成基于ABP的[启动模板](Startup-Templates/Index.md).
 * **`update`**：自动更新的ABP解决方案ABP相关的NuGet和NPM包.
 * **`clean`**: 删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
@@ -58,6 +59,25 @@ abp help [command-name]
 ````bash
 abp help        # Shows a general help.
 abp help new    # Shows help about the "new" command.
+````
+
+### cli
+
+更新或删除ABP CLI
+
+用法:
+
+````bash
+abp cli [command-name]
+````
+
+示例:
+
+````bash
+abp cli update
+abp cli update --preview
+abp cli update --version 5.0.0
+abp cli remove
 ````
 
 ### new
