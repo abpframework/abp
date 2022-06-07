@@ -110,7 +110,7 @@ export const environment = {
   // other options removed for sake of brevity
 
   oAuthConfig: {
-    issuer: 'https://localhost:44305', // IdentityServer url
+    issuer: 'https://localhost:44305', // AuthServer url
     clientId: 'MyProjectName_App',
     dummyClientSecret: '1q2w3e*',
     scope: 'offline_access MyProjectName',

@@ -15,7 +15,7 @@ The following commands are for creating Angular UI projects:
 * **Entity Framework Core**, default app template, **separate Identity Server**, creates the project in a new folder:
 
   ```bash
-  abp new Acme.BookStore -t app -u angular -m none --separate-identity-server --database-provider ef -csf
+  abp new Acme.BookStore -t app -u angular -m none --separate-auth-server --database-provider ef -csf
   ```
 
 * **Entity Framework Core**,  **custom connection string**, creates the project in a new folder:
@@ -33,7 +33,7 @@ The following commands are for creating Angular UI projects:
 * **MongoDB**, default app template, no mobile app, **separate Identity Server**, creates the project in a new folder:
 
   ```bash
-  abp new Acme.BookStore -t app -u angular -m none --separate-identity-server --database-provider mongodb -csf
+  abp new Acme.BookStore -t app -u angular -m none --separate-auth-server --database-provider mongodb -csf
   ```
 
 ## MVC
@@ -78,7 +78,7 @@ The following commands are for creating Blazor projects:
 * **Entity Framework Core**, **separate Identity Server**, mobile app included:
   
   ```bash
-  abp new Acme.BookStore -u blazor --separate-identity-server
+  abp new Acme.BookStore -u blazor --separate-auth-server
   ```
 
 * **MongoDB**, no mobile app, creates the project in a new folder:
@@ -116,7 +116,7 @@ In the default app template, there is always a frontend project. In this option 
 * **Entity Framework Core**, separate Identity Server, creates the project in a new folder:
 
     ```bash
-    abp new Acme.BookStore -u none --separate-identity-server -csf
+    abp new Acme.BookStore -u none --separate-auth-server -csf
     ```
 * **MongoDB**, no mobile app:
 

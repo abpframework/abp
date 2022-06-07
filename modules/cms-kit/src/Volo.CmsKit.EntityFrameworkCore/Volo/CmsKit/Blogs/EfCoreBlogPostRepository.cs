@@ -11,14 +11,20 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
+using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs;
 
 public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPost, Guid>, IBlogPostRepository
 {
-    public EfCoreBlogPostRepository(IDbContextProvider<CmsKitDbContext> dbContextProvider) : base(dbContextProvider)
+    private EntityTagManager _entityTagManager;
+
+    public EfCoreBlogPostRepository(
+        IDbContextProvider<CmsKitDbContext> dbContextProvider,
+        EntityTagManager entityTagManager) : base(dbContextProvider)
     {
+        _entityTagManager = entityTagManager;
     }
 
     public async Task<BlogPost> GetBySlugAsync(
@@ -43,10 +49,18 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
         string filter = null,
         Guid? blogId = null,
         Guid? authorId = null,
+        Guid? tagId = null,
         BlogPostStatus? statusFilter = null,
         CancellationToken cancellationToken = default)
     {
+        List<string> entityIdFilters = null;
+        if (tagId.HasValue)
+        {
+            entityIdFilters = await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
+        }
+
         var queryable = (await GetDbSetAsync())
+            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()))
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
             .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
             .WhereIf(statusFilter.HasValue, x => x.Status == statusFilter)
@@ -60,6 +74,7 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
         string filter = null,
         Guid? blogId = null,
         Guid? authorId = null,
+        Guid? tagId = null,
         BlogPostStatus? statusFilter = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
@@ -71,7 +86,14 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
         var blogPostsDbSet = dbContext.Set<BlogPost>();
         var usersDbSet = dbContext.Set<CmsUser>();
 
-        var queryable = blogPostsDbSet
+        List<string> entityIdFilters = null;
+        if (tagId.HasValue)
+        {
+            entityIdFilters = await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
+        }
+
+        var queryable = (await GetDbSetAsync())
+            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()))
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
             .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
             .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
