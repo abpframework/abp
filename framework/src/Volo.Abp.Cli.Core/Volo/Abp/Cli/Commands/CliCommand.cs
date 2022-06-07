@@ -59,7 +59,6 @@ public class CliCommand : IConsoleCommand, ITransientDependency
 
     private async Task UpdateCliAsync(string version = null, bool preview = false)
     {
-        RemoveCli();
         var infoText = "Updating ABP CLI ";
         if (version != null)
         {
@@ -94,15 +93,7 @@ public class CliCommand : IConsoleCommand, ITransientDependency
                 versionOption = $" --version {version}";
             }
 
-            _cmdHelper.RunCmd(
-                $"dotnet tool update {CliPackageName}{versionOption} -g",
-                out var exitCode
-            );
-
-            if (exitCode != 0)
-            {
-                ShowCliManualUpdateCommand();
-            }
+            _cmdHelper.RunCmdAndExit($"dotnet tool update {CliPackageName}{versionOption} -g", delaySeconds: 2);
         }
         catch (Exception ex)
         {
@@ -131,7 +122,7 @@ public class CliCommand : IConsoleCommand, ITransientDependency
     private void RemoveCli()
     {
         Logger.LogInformation("Removing CLI...");
-        _cmdHelper.RunCmd("dotnet tool uninstall " + CliPackageName + " -g");
+        _cmdHelper.RunCmdAndExit("dotnet tool uninstall " + CliPackageName + " -g", delaySeconds: 2);
     }
 
     public string GetUsageInfo()
