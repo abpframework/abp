@@ -49,7 +49,9 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
 
     internal virtual void SetSlug(string slug)
     {
-        Slug = Check.NotNullOrEmpty(slug, nameof(slug), PageConsts.MaxSlugLength);
+        Slug = SlugNormalizer.Normalize(
+                Check.NotNullOrEmpty(slug, nameof(slug), PageConsts.MaxSlugLength)
+            );
     }
 
     public virtual void SetContent(string content)
