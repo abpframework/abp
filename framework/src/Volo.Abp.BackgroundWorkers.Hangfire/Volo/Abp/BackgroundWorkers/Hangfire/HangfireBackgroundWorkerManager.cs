@@ -33,19 +33,19 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
         return Task.CompletedTask;
     }
 
-    public Task AddAsync(IBackgroundWorker worker)
+    public Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
     {
         if (worker is IHangfireBackgroundWorker hangfireBackgroundWorker)
         {
             var unProxyWorker = ProxyHelper.UnProxy(hangfireBackgroundWorker);
             if (hangfireBackgroundWorker.RecurringJobId.IsNullOrWhiteSpace())
             {
-                RecurringJob.AddOrUpdate(() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(),
+                RecurringJob.AddOrUpdate(() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(cancellationToken),
                     hangfireBackgroundWorker.CronExpression, hangfireBackgroundWorker.TimeZone, hangfireBackgroundWorker.Queue);
             }
             else
             {
-                RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId, () => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(),
+                RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId, () => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(cancellationToken),
                     hangfireBackgroundWorker.CronExpression, hangfireBackgroundWorker.TimeZone, hangfireBackgroundWorker.Queue);
             }
         }
@@ -80,7 +80,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
             var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
             var workerAdapter = Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker;
 
-            RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(), GetCron(period.Value), workerAdapter.TimeZone, workerAdapter.Queue);
+            RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(cancellationToken), GetCron(period.Value), workerAdapter.TimeZone, workerAdapter.Queue);
         }
 
         return Task.CompletedTask;
