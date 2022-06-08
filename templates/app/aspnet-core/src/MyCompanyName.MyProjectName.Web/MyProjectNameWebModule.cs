@@ -107,18 +107,18 @@ public class MyProjectNameWebModule : AbpModule
     {
         Configure<AbpBundlingOptions>(options =>
         {
-            //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
+            //<TEMPLATE-REMOVE IF-NOT='BASIC'>
             options.StyleBundles.Configure(
-                LeptonXLiteThemeBundles.Styles.Global,
+                BasicThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
                 }
             );
             //</TEMPLATE-REMOVE>
-            //<TEMPLATE-REMOVE IF-NOT='BASIC'>
+            //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
             options.StyleBundles.Configure(
-                BasicThemeBundles.Styles.Global,
+                LeptonXLiteThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");

@@ -9,6 +9,9 @@
   <ItemGroup>
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <!--<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>-->
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="1.0.0-beta.2" />
+    <!--</TEMPLATE-REMOVE>-->
   </ItemGroup>
 
   <ItemGroup>
@@ -65,11 +68,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.MongoDB\Volo.Abp.AuditLogging.MongoDB.csproj" />
   </ItemGroup>
-
+  <!--<TEMPLATE-REMOVE IF-NOT='BASIC'>-->
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
   </ItemGroup>
-
+  <!--</TEMPLATE-REMOVE>-->
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
   </ItemGroup>

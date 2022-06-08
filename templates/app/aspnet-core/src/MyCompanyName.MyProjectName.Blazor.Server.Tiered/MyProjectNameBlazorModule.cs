@@ -26,6 +26,8 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 //</TEMPLATE-REMOVE>
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -68,6 +70,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered;
     //</TEMPLATE-REMOVE>
     //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
     typeof(AbpAspNetCoreComponentsServerLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     //</TEMPLATE-REMOVE>
     typeof(AbpAutofacModule),
     typeof(AbpSwashbuckleModule),
@@ -155,7 +158,7 @@ public class MyProjectNameBlazorModule : AbpModule
             //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
             // MVC UI
             options.StyleBundles.Configure(
-                BlazorLeptonXLiteThemeBundles.Styles.Global,
+                LeptonXLiteThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
