@@ -24,3 +24,11 @@
     transform: translate(-50%, -50%);
   }
 }
+
++//<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
+:root {
+  --lpx-logo: url('/assets/images/logo.png');
+  --lpx-logo-icon: url('/assets/images/logo-icon.png');
+  --lpx-brand: #edae53;
+} 
+//</TEMPLATE-REMOVE>

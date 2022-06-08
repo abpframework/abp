@@ -65,6 +65,9 @@
                 "inject": true,
                 "bundleName": "bootstrap-ltr.min"
               },
+              //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              //</TEMPLATE-REMOVE>
               "src/styles.scss"
             ],
             "scripts": []
