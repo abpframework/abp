@@ -53,12 +53,12 @@ namespace MyCompanyName.MyProjectName.Blazor.Server;
     typeof(MyProjectNameApplicationModule),
     typeof(MyProjectNameEntityFrameworkCoreModule),
     typeof(MyProjectNameHttpApiModule),
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountWebOpenIddictModule),
     //<TEMPLATE-REMOVE IF-NOT='BASIC'>
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
     //</TEMPLATE-REMOVE>
     //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
