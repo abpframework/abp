@@ -9,9 +9,8 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly;
 
 [ExposeServices(
     typeof(WebAssemblyCachedApplicationConfigurationClient),
-    typeof(ICachedApplicationConfigurationClient),
-    typeof(IAsyncInitialize)
-    )]
+    typeof(ICachedApplicationConfigurationClient)
+)]
 public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
 {
     protected AbpApplicationConfigurationClientProxy ApplicationConfigurationAppService { get; }
