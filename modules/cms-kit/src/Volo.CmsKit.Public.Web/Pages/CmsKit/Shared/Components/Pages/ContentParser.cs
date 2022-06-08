@@ -26,36 +26,64 @@ public class ContentParser : IContentParser, ITransientDependency
             };
         }
 
-        MatchCollection mc = Regex.Matches(content, @"(?<=\[Wid)(.*?)(?=\])");//(?<=X)(.*?)(?=Y)
+        string delimeter = "----";
+        var replacedText = Regex.Replace(content, @"\[.*?\]", delimeter);
 
-        MatchCollection mcPollName = Regex.Matches(content, @"(?<=PollName="")(.*?)(?="")");
-        var pollNames = mcPollName.Select(p => p.Value).ToList();
+        var parsedList = new List<string>();
 
-        string split = "-----";
-
-        var polls = new List<string>();
-        foreach (Match m in mc)
+        if (!replacedText.Contains(delimeter))
         {
-            polls.Add("[Wid" + m + "]");
-            content = content.Replace("[Wid" + m + "]", split);
+            parsedList.Add(replacedText);
         }
 
-        var splittedContent = content.Split(split, StringSplitOptions.RemoveEmptyEntries);
+        while (replacedText.Contains(delimeter))
+        {
+            //For parsing delimeter
+            var index = replacedText.IndexOf(delimeter);
+            if (index != 0)
+            {
+                parsedList.Add(replacedText.Substring(0, index));
+                replacedText = replacedText.Substring(index, replacedText.Length - index);
+                index = 0;
+            }
+
+            parsedList.Add(replacedText.Substring(index, delimeter.Length));
+            replacedText = replacedText.Substring(delimeter.Length, replacedText.Length - delimeter.Length);
+
+            //for parsing the other side
+            index = replacedText.IndexOf(delimeter);
+            if (index != -1)
+            {
+                parsedList.Add(replacedText.Substring(0, index));
+                replacedText = replacedText.Substring(index, replacedText.Length - index);
+
+            }
+            else
+            {
+                parsedList.Add(replacedText);
+            }
+        }
+
+        var name = _options.WidgetConfigs.FirstOrDefault(p => p.Key == "Poll").Value?.Name;
+
+        var pollNames = Regex.Matches(content, @"(?<=PollName="")(.*?)(?="")").Select(p => p.Value).ToList();
 
         var contentFragments = new List<ContentFragment>();
-        var name = _options.WidgetConfigs.FirstOrDefault(p => p.Key == "Poll").Value?.Name;
-        for (int i = 0; i < splittedContent.Length; i++)
+        for (int i = 0, k = 0; i < parsedList.Count; i++)
         {
-            contentFragments.Add(new MarkdownContentFragment() { Content = splittedContent[i] });
-            if (i != splittedContent.Length - 1)
+            if (parsedList[i] == delimeter)
             {
                 contentFragments.Add(new WidgetContentFragment(name)
                 {
                     Properties =
                     {
-                        { "name", pollNames[i] }
+                        { "name", pollNames[k++] }
                     }
                 });
+            }
+            else
+            {
+                contentFragments.Add(new MarkdownContentFragment() { Content = parsedList[i] });
             }
         }
 
