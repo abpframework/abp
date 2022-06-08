@@ -15,11 +15,16 @@
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.5" />
+    <!--<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>-->
+    <PackageReference Include="Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme" Version="1.0.0-beta.2" />
+    <!--</TEMPLATE-REMOVE>-->
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Autofac.WebAssembly\Volo.Abp.Autofac.WebAssembly.csproj" />
+    <!--<TEMPLATE-REMOVE IF-NOT='BASIC'>-->
     <ProjectReference Include="..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj" />
+    <!--</TEMPLATE-REMOVE>-->
   </ItemGroup>
 
   <ItemGroup>

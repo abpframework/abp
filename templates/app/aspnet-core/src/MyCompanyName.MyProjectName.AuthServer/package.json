@@ -3,6 +3,8 @@
   "name": "my-app-authserver",
   "private": true,
   "dependencies": {
+    //<TEMPLATE-REMOVE IF-NOT='BASIC'>
     "@abp/aspnetcore.mvc.ui.theme.basic": "^5.3.0-rc.3"
+    //</TEMPLATE-REMOVE>
   }
 }

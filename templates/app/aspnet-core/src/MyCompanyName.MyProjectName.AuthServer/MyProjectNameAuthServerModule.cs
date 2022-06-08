@@ -17,8 +17,14 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+//<TEMPLATE-REMOVE IF-NOT='BASIC'>
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
+//</TEMPLATE-REMOVE>
+//<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
+//</TEMPLATE-REMOVE>
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Auditing;
@@ -40,7 +46,12 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
+    //<TEMPLATE-REMOVE IF-NOT='BASIC'>
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    //</TEMPLATE-REMOVE>
+    //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
+    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
+    //</TEMPLATE-REMOVE>
     typeof(MyProjectNameEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreSerilogModule)
     )]
@@ -95,6 +106,7 @@ public class MyProjectNameAuthServerModule : AbpModule
 
         Configure<AbpBundlingOptions>(options =>
         {
+            //<TEMPLATE-REMOVE IF-NOT='BASIC'>
             options.StyleBundles.Configure(
                 BasicThemeBundles.Styles.Global,
                 bundle =>
@@ -102,6 +114,16 @@ public class MyProjectNameAuthServerModule : AbpModule
                     bundle.AddFiles("/global-styles.css");
                 }
             );
+            //</TEMPLATE-REMOVE>
+            //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
+            options.StyleBundles.Configure(
+                LeptonXLiteThemeBundles.Styles.Global,
+                bundle =>
+                {
+                    bundle.AddFiles("/global-styles.css");
+                }
+            );
+            //</TEMPLATE-REMOVE>
         });
 
         Configure<AbpAuditingOptions>(options =>

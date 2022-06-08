@@ -116,7 +116,6 @@ public class MyProjectNameWebModule : AbpModule
                 }
             );
             //</TEMPLATE-REMOVE>
-            
             //<TEMPLATE-REMOVE IF-NOT='BASIC'>
             options.StyleBundles.Configure(
                 BasicThemeBundles.Styles.Global,

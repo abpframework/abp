@@ -105,9 +105,9 @@ public class MyProjectNameWebModule : AbpModule
 
     private void ConfigureBundles()
     {
-        //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
         Configure<AbpBundlingOptions>(options =>
         {
+            //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
             options.StyleBundles.Configure(
                 LeptonXLiteThemeBundles.Styles.Global,
                 bundle =>
@@ -115,11 +115,8 @@ public class MyProjectNameWebModule : AbpModule
                     bundle.AddFiles("/global-styles.css");
                 }
             );
-        });
-        //</TEMPLATE-REMOVE>
-        //<TEMPLATE-REMOVE IF-NOT='BASIC'>
-        Configure<AbpBundlingOptions>(options =>
-        {
+            //</TEMPLATE-REMOVE>
+            //<TEMPLATE-REMOVE IF-NOT='BASIC'>
             options.StyleBundles.Configure(
                 BasicThemeBundles.Styles.Global,
                 bundle =>
@@ -127,8 +124,8 @@ public class MyProjectNameWebModule : AbpModule
                     bundle.AddFiles("/global-styles.css");
                 }
             );
+            //</TEMPLATE-REMOVE>
         });
-        //</TEMPLATE-REMOVE>
     }
 
     private void ConfigureCache()

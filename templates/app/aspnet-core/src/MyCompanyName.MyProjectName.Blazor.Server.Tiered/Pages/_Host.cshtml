@@ -1,8 +1,14 @@
 ﻿@page "/"
 @namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Pages
 @using System.Globalization
+@*<TEMPLATE-REMOVE IF-NOT='BASIC'>*@
 @using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling
 @using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
+@*</TEMPLATE-REMOVE>*@
+@*<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>*@
+@using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite
+@using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling
+@*</TEMPLATE-REMOVE>*@
 @using Volo.Abp.Localization
 @{
     Layout = null;
@@ -16,11 +22,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MyCompanyName.MyProjectName.Blazor.Server</title>
     <base href="~/" />
-    
-    <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global" />
+
+    @*<TEMPLATE-REMOVE IF-NOT='BASIC'>*@
+    <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global"/>
+    @*</TEMPLATE-REMOVE>*@
+    @*<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>*@
+    <abp-style-bundle name="@BlazorLeptonXLiteThemeBundles.Styles.Global"/>
+    @*</TEMPLATE-REMOVE>*@
 </head>
 <body class="abp-application-layout bg-light @rtl">
-    <component type="typeof(App)" render-mode="Server" />
+    @*<TEMPLATE-REMOVE IF-NOT='BASIC'>*@
+    <component type="typeof(Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic.App)" render-mode="Server" />
+    @*</TEMPLATE-REMOVE>*@
+    @*<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>*@
+    <component type="typeof(Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite.App)" render-mode="Server" />
+    @*</TEMPLATE-REMOVE>*@
 
     <div id="blazor-error-ui">
         <environment include="Staging,Production">
@@ -33,6 +49,11 @@
         <a class="dismiss">🗙</a>
     </div>
 
+    @*<TEMPLATE-REMOVE IF-NOT='BASIC'>*@
     <abp-script-bundle name="@BlazorBasicThemeBundles.Scripts.Global" />
+    @*</TEMPLATE-REMOVE>*@
+    @*<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>*@
+    <abp-script-bundle name="@BlazorLeptonXLiteThemeBundles.Scripts.Global" />
+    @*</TEMPLATE-REMOVE>*@
 </body>
 </html>
