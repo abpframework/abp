@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -10,6 +9,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages;
 
 public class ContentParser : IContentParser, ITransientDependency
 {
+    private const string delimeter = "----";
     private readonly CmsKitContentWidgetOptions _options;
     public ContentParser(IOptions<CmsKitContentWidgetOptions> options)
     {
@@ -26,7 +26,6 @@ public class ContentParser : IContentParser, ITransientDependency
             };
         }
 
-        string delimeter = "----";
         var replacedText = Regex.Replace(content, @"\[.*?\]", delimeter);
 
         var parsedList = new List<string>();
@@ -56,7 +55,6 @@ public class ContentParser : IContentParser, ITransientDependency
             {
                 parsedList.Add(replacedText.Substring(0, index));
                 replacedText = replacedText.Substring(index, replacedText.Length - index);
-
             }
             else
             {
@@ -64,22 +62,27 @@ public class ContentParser : IContentParser, ITransientDependency
             }
         }
 
-        var name = _options.WidgetConfigs.FirstOrDefault(p => p.Key == "Poll").Value?.Name;
-
         var pollNames = Regex.Matches(content, @"(?<=PollName="")(.*?)(?="")").Select(p => p.Value).ToList();
+        var polls = Regex.Matches(content, @"(?<=Widget Type="")(.*?)(?="")").Select(p => p.Value).ToList();
 
         var contentFragments = new List<ContentFragment>();
+
         for (int i = 0, k = 0; i < parsedList.Count; i++)
         {
             if (parsedList[i] == delimeter)
             {
-                contentFragments.Add(new WidgetContentFragment(name)
+                var name = _options.WidgetConfigs.Where(p => p.Key == polls[k]).Select(p => p.Value.Name).FirstOrDefault();
+                if (name is not null)
                 {
-                    Properties =
+                    contentFragments.Add(new WidgetContentFragment(name)
                     {
-                        { "name", pollNames[k++] }
-                    }
-                });
+                        Properties =
+                        {
+                            { "Name", pollNames[k]}
+                        }
+                    });
+                }
+                k++;
             }
             else
             {

@@ -8,11 +8,11 @@ public class WidgetContentFragment : ContentFragment
     
     public string ViewComponentName { get; set; }
 
-    public Dictionary<string, string> Properties { get; }
+    public IDictionary<string, object> Properties { get; }
 
     public WidgetContentFragment(string name)
     {
         Name = name;
-        Properties = new Dictionary<string, string>();
+        Properties = new Dictionary<string, object>();
     }
 }

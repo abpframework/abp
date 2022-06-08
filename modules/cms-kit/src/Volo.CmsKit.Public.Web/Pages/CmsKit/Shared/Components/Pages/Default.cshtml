@@ -18,10 +18,7 @@
             }
             else if (contentFragment is WidgetContentFragment widgetContentFragment)
             {
-                @await Component.InvokeAsync(widgetContentFragment.Name,  new
-                {
-                    name = widgetContentFragment.Properties.FirstOrDefault().Value
-                })
+                @await Component.InvokeAsync(widgetContentFragment.Name,  widgetContentFragment.Properties)
             }
         }
     </abp-card-body>
