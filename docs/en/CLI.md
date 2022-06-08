@@ -27,6 +27,7 @@ While each command may have a set of options, there are some global options that
 Here, is the list of all available commands before explaining their details:
 
 * **`help`**: Shows help on the usage of the ABP CLI.
+* **`cli`**: Update or remove ABP CLI.
 * **`new`**: Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
@@ -61,6 +62,25 @@ Examples:
 ````bash
 abp help        # Shows a general help.
 abp help new    # Shows help about the "new" command.
+````
+
+### cli
+
+Update or remove ABP CLI.
+
+Usage:
+
+````bash
+abp cli [command-name]
+````
+
+Examples:
+
+````bash
+abp cli update
+abp cli update --preview
+abp cli update --version 5.0.0
+abp cli remove
 ````
 
 ### new
