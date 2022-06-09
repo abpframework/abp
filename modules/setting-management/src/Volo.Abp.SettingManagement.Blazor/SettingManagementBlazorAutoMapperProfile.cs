@@ -9,5 +9,7 @@ public class SettingManagementBlazorAutoMapperProfile : Profile
     {
         CreateMap<EmailSettingGroupViewComponent.UpdateEmailSettingsViewModel, UpdateEmailSettingsDto>();
         CreateMap<EmailSettingsDto, EmailSettingGroupViewComponent.UpdateEmailSettingsViewModel>();
+
+        CreateMap<EmailSettingGroupViewComponent.SendTestEmailViewModel, SendTestEmailInput>();
     }
 }

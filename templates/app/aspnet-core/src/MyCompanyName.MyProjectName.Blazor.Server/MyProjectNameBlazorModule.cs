@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Net.Http;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
@@ -15,7 +13,6 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Components.Server.BasicTheme;
 using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
@@ -51,9 +48,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server;
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAccountWebIdentityServerModule),
+    typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
     typeof(AbpIdentityBlazorServerModule),
     typeof(AbpTenantManagementBlazorServerModule),
@@ -74,6 +70,16 @@ public class MyProjectNameBlazorModule : AbpModule
                 typeof(MyProjectNameBlazorModule).Assembly
             );
         });
+
+        PreConfigure<OpenIddictBuilder>(builder =>
+        {
+            builder.AddValidation(options =>
+            {
+                options.AddAudiences("MyProjectName");
+                options.UseLocalServer();
+                options.UseAspNetCore();
+            });
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -83,7 +89,6 @@ public class MyProjectNameBlazorModule : AbpModule
 
         ConfigureUrls(configuration);
         ConfigureBundles();
-        ConfigureAuthentication(context, configuration);
         ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
         ConfigureLocalizationServices();
@@ -127,17 +132,6 @@ public class MyProjectNameBlazorModule : AbpModule
                 }
             );
         });
-    }
-
-    private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
-    {
-        context.Services.AddAuthentication()
-            .AddJwtBearer(options =>
-            {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = "MyProjectName";
-            });
     }
 
     private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
@@ -267,7 +261,7 @@ public class MyProjectNameBlazorModule : AbpModule
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
+        app.UseAbpOpenIddictValidation();
 
         if (MultiTenancyConsts.IsEnabled)
         {
@@ -275,7 +269,6 @@ public class MyProjectNameBlazorModule : AbpModule
         }
 
         app.UseUnitOfWork();
-        app.UseIdentityServer();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
