@@ -7,7 +7,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Components.Web.Security;
 
-public class AbpComponentsClaimsCache : IScopedDependency
+[ExposeServices(
+    typeof(AbpComponentsClaimsCache),
+    typeof(IAsyncInitialize)
+)]
+public class AbpComponentsClaimsCache : IScopedDependency, IAsyncInitialize
 {
     public ClaimsPrincipal Principal { get; private set; }
 

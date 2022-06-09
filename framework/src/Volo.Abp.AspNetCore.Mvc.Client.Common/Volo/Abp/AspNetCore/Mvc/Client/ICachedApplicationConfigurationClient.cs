@@ -3,7 +3,7 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client;
 
-public interface ICachedApplicationConfigurationClient
+public interface ICachedApplicationConfigurationClient : IAsyncInitialize
 {
     Task<ApplicationConfigurationDto> GetAsync();
 
