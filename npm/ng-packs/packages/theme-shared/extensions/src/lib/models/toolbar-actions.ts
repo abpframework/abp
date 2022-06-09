@@ -3,11 +3,11 @@ import { O } from 'ts-toolbelt';
 import {
   Action,
   ActionContributorCallback,
-  ActionContributorCallbacks,
+  ActionContributorCallbacks, ActionData,
   ActionList,
   Actions,
-  ActionsFactory,
-} from './actions';
+  ActionsFactory
+} from "./actions";
 
 export class ToolbarActionList<R = any> extends ActionList<
   R,
@@ -77,3 +77,5 @@ export type ToolbarActionContributorCallback<R = any> = ActionContributorCallbac
 export type ToolbarActionContributorCallbacks<R = any> = ActionContributorCallbacks<
   ToolbarActionList<R>
 >;
+export type InferredData<L> = ActionData<InferredRecord<L>>;
+export type InferredRecord<L> = L extends ActionList<infer R> ? R : never;
