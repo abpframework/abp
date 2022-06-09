@@ -68,7 +68,9 @@ export type ToolbarComponentOptions<R = any> = O.Optional<
   'permission' | 'visible' | 'action'
 >;
 
-export type ToolbarActionDefaults<R = any> = Record<string, ToolbarAction<R>[]>;
+export type ToolbarActionDefault<R = any> = ToolbarAction<R> | ToolbarComponent<R>;
+
+export type ToolbarActionDefaults<R = any> = Record<string, Array<ToolbarActionDefault<R>>>;
 export type ToolbarActionContributorCallback<R = any> = ActionContributorCallback<
   ToolbarActionList<R>
 >;
