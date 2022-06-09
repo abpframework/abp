@@ -63,7 +63,12 @@ public class AbpOpenIddictScopeCacheAbpOpenIddictAuthorizationCache : AbpOpenIdd
 
     public virtual async IAsyncEnumerable<OpenIddictScopeModel> FindByNamesAsync(ImmutableArray<string> names, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(names, nameof(names));
+        Check.NotNull(names, nameof(names));
+
+        foreach (var name in names)
+        {
+            Check.NotNullOrEmpty(name, nameof(name));
+        }
 
         // Note: this method is only partially cached.
         await foreach (var scope in Store.FindByNamesAsync(names, cancellationToken))
