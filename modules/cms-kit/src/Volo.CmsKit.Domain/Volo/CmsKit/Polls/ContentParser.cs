@@ -1,12 +1,11 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.CmsKit.Public.Blogs;
 
-namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs;
+namespace Volo.CmsKit.Polls;
 
 public class ContentParser : IContentParser, ITransientDependency
 {
@@ -63,8 +62,8 @@ public class ContentParser : IContentParser, ITransientDependency
             }
         }
 
-        var pollNames = Regex.Matches(content, @"(?<=PollName="")(.*?)(?="")").Select(p => p.Value).ToList();
-        var polls = Regex.Matches(content, @"(?<=Widget Type="")(.*?)(?="")").Select(p => p.Value).ToList();
+        var pollNames = Regex.Matches(content, @"(?<=PollName="")(.*?)(?="")").Cast<Match>().Select(p => p.Value).ToList();
+        var polls = Regex.Matches(content, @"(?<=Widget Type="")(.*?)(?="")").Cast<Match>().Select(p => p.Value).ToList();
 
         var contentFragments = new List<ContentFragment>();
 

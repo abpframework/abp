@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+using Volo.CmsKit.Public.Polls;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages;
 
@@ -22,20 +23,20 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages;
     })]
 public class DefaultPageViewComponent : AbpViewComponent
 {
-    private readonly IContentParser _contentParser;
+    protected IPollViewComponentAppService PollViewComponentAppService { get; set; }
 
-    public DefaultPageViewComponent(IContentParser contentParser)
+    public DefaultPageViewComponent(IPollViewComponentAppService pollViewComponentAppService)
     {
-        _contentParser = contentParser;
+        PollViewComponentAppService = pollViewComponentAppService;
     }
-    
+
     public virtual async Task<IViewComponentResult> InvokeAsync(
         Guid pageId,
         string title,
         string content)
     {
-        var contentFragments = await _contentParser.ParseAsync(content);
-        
+        var contentFragments = await PollViewComponentAppService.ParseAsync(content);
+
         var model = new PageViewModel
         {
             Id = pageId,

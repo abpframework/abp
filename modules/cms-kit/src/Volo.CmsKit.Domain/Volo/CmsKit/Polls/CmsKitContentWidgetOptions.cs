@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs;
+namespace Volo.CmsKit.Polls;
 
 public class CmsKitContentWidgetOptions
 {
-    public Dictionary<string, ContentWidgetConfig> WidgetConfigs { get; } 
+    public Dictionary<string, ContentWidgetConfig> WidgetConfigs { get; }
 
     public CmsKitContentWidgetOptions()
     {

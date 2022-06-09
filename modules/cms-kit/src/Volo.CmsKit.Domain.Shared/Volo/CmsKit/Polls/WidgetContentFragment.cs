@@ -1,11 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Volo.CmsKit.Public.Blogs;
-
+namespace Volo.CmsKit.Polls;
 public class WidgetContentFragment : ContentFragment
 {
     public string Name { get; }
-    
+
     public string ViewComponentName { get; set; }
 
     public IDictionary<string, object> Properties { get; }

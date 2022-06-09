@@ -1,4 +1,4 @@
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages;
+﻿namespace Volo.CmsKit.Polls;
 
 public class MarkdownContentFragment : ContentFragment
 {

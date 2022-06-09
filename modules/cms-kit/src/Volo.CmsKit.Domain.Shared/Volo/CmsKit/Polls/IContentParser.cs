@@ -1,7 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages;
+namespace Volo.CmsKit.Polls;
 
 public interface IContentParser
 {
