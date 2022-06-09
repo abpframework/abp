@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 using Volo.CmsKit.Users;
 
@@ -14,6 +15,8 @@ public class BlogPostPublicDto : AuditedEntityDto<Guid>
     public string Slug { get; set; }
 
     public string ShortDescription { get; set; }
+
+    public List<ContentFragment> ContentFragments { get; set; }
 
     public string Content { get; set; }
 

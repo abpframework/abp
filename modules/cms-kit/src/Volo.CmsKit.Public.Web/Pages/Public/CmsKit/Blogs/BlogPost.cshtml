@@ -1,5 +1,6 @@
 ﻿@page
 
+@using Volo.CmsKit.Public.Blogs
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
 @using Volo.CmsKit.Public.Web.Pages
 @using Volo.Abp.GlobalFeatures
@@ -65,11 +66,18 @@
                             </a>
                             <small style="opacity:.65;">@Model.BlogPost.CreationTime</small>
                         </p>
-                        @if (!Model.BlogPost.Content.IsNullOrEmpty())
+                        @foreach (var contentFragment in Model.BlogPost.ContentFragments)
                         {
-                            @Html.Raw(await MarkdownRenderer.RenderAsync(Model.BlogPost.Content))
+                            if (contentFragment is MarkdownContentFragment markdownContentFragment)
+                            {
+                                @Html.Raw(await MarkdownRenderer.RenderAsync(markdownContentFragment.Content))
+                            }
+                            else if (contentFragment is WidgetContentFragment widgetContentFragment)
+                            {
+                                @await Component.InvokeAsync(widgetContentFragment.Name,  widgetContentFragment.Properties)
+                            }
                         }
-
+                        
                         <p class="mb-3">
                             @if (Model.BlogPost.LastModificationTime != null)
                             {

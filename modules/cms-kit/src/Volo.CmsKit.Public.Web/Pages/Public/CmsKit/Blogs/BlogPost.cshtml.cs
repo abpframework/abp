@@ -1,11 +1,5 @@
-﻿using Markdig;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
@@ -37,17 +31,24 @@ public class BlogPostModel : CmsKitPublicPageModelBase
 
     protected IBlogFeatureAppService BlogFeatureAppService { get; }
 
+    private readonly IContentParser _contentParser;
+
+
     public BlogPostModel(
         IBlogPostPublicAppService blogPostPublicAppService,
-        IBlogFeatureAppService blogFeaturePublicAppService)
+        IBlogFeatureAppService blogFeaturePublicAppService
+,
+        IContentParser contentParser)
     {
         BlogPostPublicAppService = blogPostPublicAppService;
         BlogFeatureAppService = blogFeaturePublicAppService;
+        _contentParser = contentParser;
     }
 
     public virtual async Task OnGetAsync()
     {
         BlogPost = await BlogPostPublicAppService.GetAsync(BlogSlug, BlogPostSlug);
+        BlogPost.ContentFragments = await _contentParser.ParseAsync(BlogPost.Content);
 
         if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
         {
