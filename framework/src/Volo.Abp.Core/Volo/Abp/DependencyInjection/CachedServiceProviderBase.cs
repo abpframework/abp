@@ -12,10 +12,10 @@ public abstract class CachedServiceProviderBase
     {
         _serviceProvider = serviceProvider;
         _cachedServices = new ConcurrentDictionary<Type, Lazy<object>>();
-        _cachedServices.TryAdd(typeof(IServiceProvider), new Lazy<object>(() => this));
+        _cachedServices.TryAdd(typeof(IServiceProvider), new Lazy<object>(() => _serviceProvider));
     }
 
-    public object GetService(Type serviceType)
+    public virtual object GetService(Type serviceType)
     {
         return _cachedServices.GetOrAdd(
             serviceType,
