@@ -365,7 +365,6 @@
     "StartTrial": "Ücretsiz Denememi Başlat",
     "ContactUsIssues": "Herhangi bir sorununuz varsa bizimle iletişime geçin",
     "TrialActivatedWarning": "Sayın {0}, bir kullanıcının yalnızca 1 ücretsiz deneme süresi hakkı vardır. Deneme sürenizi zaten kullandınız.",
-    "ActivationRequirement": "Ücretsiz denemenizi başlatmanıza bir adım kaldı.<br>Hesabınızı etkinleştirmek için <b>{0}</b> adresine bir e-posta gönderdik. Gelen kutunuzu/önemsiz/spam kutularınızı kontrol edin!",
     "SaveAndDownload": "Kaydet ve İndir",
     "CompanyNameValidationMessage": "Şirket adı çok uzun!",
     "AddressValidationMessage": "Adres çok uzun!",

@@ -362,7 +362,6 @@
     "StartTrial": "Bắt đầu bản dùng thử miễn phí của tôi",
     "ContactUsIssues": "Liên hệ với chúng tôi nếu bạn có bất kỳ vấn đề nào",
     "TrialActivatedWarning": "Kính gửi {0}, người dùng chỉ được phép có 1 thời gian dùng thử miễn phí. Bạn đã sử dụng thời gian dùng thử của mình.",
-    "ActivationRequirement": "Bạn chỉ còn một bước nữa là bắt đầu dùng thử miễn phí. <br> Chúng tôi đã gửi email đến <b> {0} </b> để kích hoạt tài khoản của bạn. Kiểm tra hộp thư đến/hộp thư rác/hộp thư rác của bạn!",
     "SaveAndDownload": "Lưu và tải xuống",
     "CompanyNameValidationMessage": "Tên công ty quá dài!",
     "AddressValidationMessage": "Địa chỉ quá dài!",

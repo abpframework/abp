@@ -362,7 +362,6 @@
     "StartTrial": "Byrjaðu ókeypis prufuáskriftina mína",
     "ContactUsIssues": "Hafðu samband við okkur ef þú hefur einhver vandamál",
     "TrialActivatedWarning": "Kæri {0}, notandi á rétt á aðeins 1 ókeypis prufutíma. Þú hefur þegar notað prufutíma þinn.",
-    "ActivationRequirement": "Þú ert einu skrefi frá því að hefja ókeypis prufuáskriftina. <br> Við höfum sent tölvupóst til <b> {0} </b> til að virkja reikninginn þinn. Athugaðu pósthólfið þitt/rusl/ruslpóstsboxin!",
     "SaveAndDownload": "Vista og hala niður",
     "CompanyNameValidationMessage": "Nafn fyrirtækis er of langt!",
     "AddressValidationMessage": "Heimilisfang er of langt!",

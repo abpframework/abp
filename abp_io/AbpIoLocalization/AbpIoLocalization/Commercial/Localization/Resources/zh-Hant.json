@@ -364,7 +364,6 @@
     "StartTrial": "開始我的免費試用",
     "ContactUsIssues": "如果您有任何問題，請聯繫我們",
     "TrialActivatedWarning": "親愛的{0}，用戶只能享受 1 個免費試用期。您已經使用了試用期。",
-    "ActivationRequirement": "您距離開始免費試用僅一步之遙。<br>我們已向 <b>{0}</b> 發送了一封電子郵件以激活您的帳戶。檢查您的收件箱/垃圾箱/垃圾郵件箱！",
     "SaveAndDownload": "保存和下載",
     "CompanyNameValidationMessage": "公司名稱太長！",
     "AddressValidationMessage": "地址太長！",

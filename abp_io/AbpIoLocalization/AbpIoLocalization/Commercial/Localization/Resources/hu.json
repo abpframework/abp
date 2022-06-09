@@ -362,7 +362,6 @@
     "StartTrial": "Indítsa el az ingyenes próbaverziómat",
     "ContactUsIssues": "Ha bármilyen problémája van, lépjen kapcsolatba velünk",
     "TrialActivatedWarning": "Kedves {0}! Egy felhasználó csak 1 ingyenes próbaidőszakra jogosult. Már felhasználta a próbaidőszakot.",
-    "ActivationRequirement": "Már egy lépésre van az ingyenes próbaidőszak megkezdésétől.<br>E-mailt küldtünk a(z) <b>{0}</b> címre, hogy aktiváljuk fiókját. Ellenőrizze a beérkező levelek/levélszemét/levélszemét-fiókokat!",
     "SaveAndDownload": "Mentés és letöltés",
     "CompanyNameValidationMessage": "A cég neve túl hosszú!",
     "AddressValidationMessage": "A cím túl hosszú!",

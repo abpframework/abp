@@ -362,7 +362,6 @@
     "StartTrial": "Inizia la mia prova gratuita",
     "ContactUsIssues": "Contattaci per qualsiasi problema",
     "TrialActivatedWarning": "Caro {0}, un utente ha diritto di avere 1 solo periodo di prova gratuito. Hai già utilizzato il tuo periodo di prova.",
-    "ActivationRequirement": "Ti manca un solo passo per iniziare il tuo periodo di prova gratuito.<br>Abbiamo inviato un'email a <b>{0}</b> per attivare il tuo account. Controlla la tua casella di posta e non dimenticare la cartella spam!",
     "SaveAndDownload": "Salva e Scarica",
     "CompanyNameValidationMessage": "Il nome dell'azienda è troppo lungo!",
     "AddressValidationMessage": "L'indirizzo è troppo lungo!",

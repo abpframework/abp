@@ -362,7 +362,6 @@
     "StartTrial": "Aloita ilmainen kokeilujaksoni",
     "ContactUsIssues": "Ota yhteyttä, jos sinulla on ongelmia",
     "TrialActivatedWarning": "Hyvä {0}, käyttäjällä on oikeus vain yhteen ilmaiseen kokeilujaksoon. Olet jo käyttänyt kokeilujaksosi.",
-    "ActivationRequirement": "Olet yhden askeleen päässä ilmaisen kokeilujakson aloittamisesta.<br>Olemme lähettäneet sähköpostin osoitteeseen <b>{0}</b> tilisi aktivoimiseksi. Tarkista saapuneet/roskaposti-/roskapostilaatikot!",
     "SaveAndDownload": "Tallenna ja lataa",
     "CompanyNameValidationMessage": "Yrityksen nimi on liian pitkä!",
     "AddressValidationMessage": "Osoite on liian pitkä!",

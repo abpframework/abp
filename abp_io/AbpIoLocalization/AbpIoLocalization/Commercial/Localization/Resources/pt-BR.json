@@ -362,7 +362,6 @@
     "StartTrial": "Comece meu teste grátis",
     "ContactUsIssues": "Contate-nos se tiver algum problema",
     "TrialActivatedWarning": "Caro {0}, um usuário tem direito a apenas 1 período de teste gratuito. Você já usou seu período de teste.",
-    "ActivationRequirement": "Você está a um passo de iniciar seu teste gratuito. <br> Enviamos um e-mail para <b> {0} </b> para ativar sua conta. Verifique sua caixa de entrada/caixas de lixo/spam!",
     "SaveAndDownload": "Salvar e baixar",
     "CompanyNameValidationMessage": "O nome da empresa é muito longo!",
     "AddressValidationMessage": "O endereço é muito longo!",

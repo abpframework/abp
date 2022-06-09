@@ -362,7 +362,6 @@
     "StartTrial": "Rozpocznij mój bezpłatny okres próbny",
     "ContactUsIssues": "Skontaktuj się z nami, jeśli masz jakiekolwiek problemy",
     "TrialActivatedWarning": "Drogi {0}, użytkownik może mieć tylko 1 bezpłatny okres próbny. Korzystałeś już z okresu próbnego.",
-    "ActivationRequirement": "Jesteś o krok od rozpoczęcia bezpłatnego okresu próbnego.<br>Wysłaliśmy wiadomość e-mail na adres <b>{0}</b>, aby aktywować Twoje konto. Sprawdź swoją skrzynkę odbiorczą/śmieci/spam!",
     "SaveAndDownload": "Zapisz i pobierz",
     "CompanyNameValidationMessage": "Nazwa firmy jest za długa!",
     "AddressValidationMessage": "Adres jest za długi!",

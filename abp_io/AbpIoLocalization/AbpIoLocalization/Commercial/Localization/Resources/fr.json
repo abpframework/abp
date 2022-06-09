@@ -362,7 +362,6 @@
     "StartTrial": "Commencer mon essai gratuit",
     "ContactUsIssues": "Contactez-nous si vous avez des problèmes",
     "TrialActivatedWarning": "Cher {0}, un utilisateur n'a droit qu'à une seule période d'essai gratuite. Vous avez déjà utilisé votre période d'essai.",
-    "ActivationRequirement": "Il ne vous reste plus qu'une étape pour commencer votre essai gratuit.<br>Nous avons envoyé un e-mail à <b>{0}</b> pour activer votre compte. Vérifiez votre boîte de réception/boîtes de courrier indésirable/spam !",
     "SaveAndDownload": "Enregistrer et télécharger",
     "CompanyNameValidationMessage": "Le nom de l'entreprise est trop long !",
     "AddressValidationMessage": "L'adresse est trop longue !",

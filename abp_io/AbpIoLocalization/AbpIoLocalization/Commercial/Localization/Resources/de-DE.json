@@ -362,7 +362,6 @@
     "StartTrial": "Starten Sie meine kostenlose Testversion",
     "ContactUsIssues": "Kontaktieren Sie uns, wenn Sie irgendwelche Probleme haben",
     "TrialActivatedWarning": "Sehr geehrte(r) {0}, ein Nutzer hat nur 1 kostenlosen Testzeitraum. Sie haben Ihren Testzeitraum bereits genutzt.",
-    "ActivationRequirement": "Sie sind nur noch einen Schritt davon entfernt, Ihre kostenlose Testversion zu starten.<br>Wir haben eine E-Mail an <b>{0}</b> gesendet, um Ihr Konto zu aktivieren. Überprüfen Sie Ihren Posteingang/Junk/Spam-Ordner!",
     "SaveAndDownload": "Speichern und herunterladen",
     "CompanyNameValidationMessage": "Firmenname ist zu lang!",
     "AddressValidationMessage": "Adresse ist zu lang!",
