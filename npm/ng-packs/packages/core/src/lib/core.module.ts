@@ -37,7 +37,7 @@ import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
 import { ShortTimePipe } from './pipes/short-time.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
-import {PipeFunction} from "./pipes";
+import { PipeFunction } from "./pipes";
 
 export function storageFactory(): OAuthStorage {
   return oAuthStorage;
