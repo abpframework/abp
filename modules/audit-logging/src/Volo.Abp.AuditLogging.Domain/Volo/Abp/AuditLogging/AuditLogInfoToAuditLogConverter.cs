@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
@@ -17,12 +18,14 @@ public class AuditLogInfoToAuditLogConverter : IAuditLogInfoToAuditLogConverter,
     protected IGuidGenerator GuidGenerator { get; }
     protected IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; }
     protected IJsonSerializer JsonSerializer { get; }
+    protected AbpExceptionHandlingOptions ExceptionHandlingOptions { get; }
 
-    public AuditLogInfoToAuditLogConverter(IGuidGenerator guidGenerator, IExceptionToErrorInfoConverter exceptionToErrorInfoConverter, IJsonSerializer jsonSerializer)
+    public AuditLogInfoToAuditLogConverter(IGuidGenerator guidGenerator, IExceptionToErrorInfoConverter exceptionToErrorInfoConverter, IJsonSerializer jsonSerializer, IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions)
     {
         GuidGenerator = guidGenerator;
         ExceptionToErrorInfoConverter = exceptionToErrorInfoConverter;
         JsonSerializer = jsonSerializer;
+        ExceptionHandlingOptions = exceptionHandlingOptions.Value;
     }
 
     public virtual Task<AuditLog> ConvertAsync(AuditLogInfo auditLogInfo)
@@ -50,7 +53,11 @@ public class AuditLogInfoToAuditLogConverter : IAuditLogInfoToAuditLogConverter,
                           .ToList()
                       ?? new List<AuditLogAction>();
 
-        var remoteServiceErrorInfos = auditLogInfo.Exceptions?.Select(exception => ExceptionToErrorInfoConverter.Convert(exception, true))
+        var remoteServiceErrorInfos = auditLogInfo.Exceptions?.Select(exception => ExceptionToErrorInfoConverter.Convert(exception, options =>
+                                          {
+                                              options.SendExceptionsDetailsToClients = ExceptionHandlingOptions.SendExceptionsDetailsToClients;
+                                              options.SendStackTraceToClients = ExceptionHandlingOptions.SendStackTraceToClients;
+                                          }))
                                       ?? new List<RemoteServiceErrorInfo>();
 
         var exceptions = remoteServiceErrorInfos.Any()
