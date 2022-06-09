@@ -192,7 +192,6 @@
     "WhenShouldIRenewMyLicense": "Quando devo renovar minha licença?",
     "WhenShouldIRenewMyLicenseExplanation": "Se você renovar sua licença em <strong> 1 mês </strong> após a expiração da licença, os seguintes descontos serão aplicados: Licença de equipe {0}% de desconto, Licença de negócios {1}% de desconto, Licença empresarial {2}% de desconto . Se você renovar sua licença <strong> 1 mês </strong> após a data de expiração de sua licença, o preço de renovação será o mesmo que o preço de compra da licença e não haverá desconto em sua renovação.",
     "TrialPlan": "Você tem um plano experimental?",
-    "TrialPlanExplanation": "Por enquanto, a ABP Commercial não tem um plano de teste. Para as licenças Team, oferecemos 30 dias de garantia de devolução do dinheiro. Você pode apenas solicitar um reembolso nos primeiros 30 dias. Para as licenças Business e Enterprise, oferecemos reembolso de 60% em 30 dias. Isso ocorre porque as licenças Business e Enterprise incluem o código-fonte completo de todos os módulos e temas.",
     "DoYouAcceptBankWireTransfer": "Você aceita transferência bancária?",
     "DoYouAcceptBankWireTransferExplanation": "Sim, aceitamos transferência bancária. <br /> Após enviar a taxa de licença por transferência bancária, envie-nos um e-mail para accounting@abp.io com seu recibo e o tipo de licença solicitada. Nossas informações de conta bancária internacional:",
     "HowToUpgrade": "Como atualizar os aplicativos existentes quando uma nova versão estiver disponível?",

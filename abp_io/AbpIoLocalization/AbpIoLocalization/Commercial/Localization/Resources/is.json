@@ -192,7 +192,6 @@
     "WhenShouldIRenewMyLicense": "Hvenær ætti ég að endurnýja leyfið mitt?",
     "WhenShouldIRenewMyLicenseExplanation": "Ef þú endurnýjar leyfið þitt innan <strong>eins mánaðar</strong> eftir að leyfið þitt rennur út verða eftirfarandi afslættir notaðir: Team Leyfi {0}% afsláttur, Business License {1}% afsláttur, Enterprise License {2}% afsláttur . Ef þú endurnýjar leyfið þitt <strong>1 mánuði</strong> eftir að leyfið rennur út, verður endurnýjunarverðið það sama og kaupverð leyfisins og enginn afsláttur af endurnýjun þinni.",
     "TrialPlan": "Ertu með prufuáætlun?",
-    "TrialPlanExplanation": "Í bili hefur ABP Commercial ekki prufuáætlun. Fyrir teymis leyfi veitum við 30 daga endurgreiðsluábyrgð. Þú getur bara óskað eftir endurgreiðslu fyrstu 30 dagana. Viðskipta- og fyrirtækjalyfið veitir 60% endurgreiðslu á 30 dögum. Þetta er vegna þess að viðskipta- og fyrirtækjaleyfi innihalda fullan kóða allra eininga og þemanna.",
     "DoYouAcceptBankWireTransfer": "Samþykki þið bankamillifærslu?",
     "DoYouAcceptBankWireTransferExplanation": "Já, við tökum við bankamillifærslu.<br />Eftir að hafa sent leyfisgjaldið með millifærslu skaltu senda okkur tölvupóst á accounting@abp.io kvittun þína og tegund leyfis sem óskað er eftir. Upplýsingar um alþjóðlega bankareikninginn okkar:",
     "HowToUpgrade": "Hvernig á að uppfæra núverandi forrit þegar ný útgáfa er í boði?",

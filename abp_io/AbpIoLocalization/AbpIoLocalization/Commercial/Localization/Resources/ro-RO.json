@@ -192,7 +192,6 @@
     "WhenShouldIRenewMyLicense": "Când ar trebui să-mi reînnoiesc licenţa?",
     "WhenShouldIRenewMyLicenseExplanation": "Dacă vă reînnoiți licența în termen de <strong>o lună</strong> de la expirarea licenței, se vor aplica următoarele reduceri: Licență de echipă {0}% reducere, Licență de afaceri {1}% reducere, Licență Enterprise {2}% reducere . Dacă vă reînnoiți licența la <strong>1 lună</strong> după data de expirare a licenței, prețul de reînnoire va fi același cu prețul de achiziție a licenței și nu va exista nicio reducere la reînnoirea dvs.",
     "TrialPlan": "Aveţi un plan de încercare?",
-    "TrialPlanExplanation": "Pentru moment, ABP Comercial nu include un plan de încercare. Pentru licenţa de Team oferim înapoirea banilor în termen de 30 de zile. Puteţi să solicitaţi o restituire în primele 30 de zile. Pentru licenţele de tip Business şi Enterprise, noi asigurăm restituirea a 60% din sumă în 30 de zile. Acest lucru se datorează faptului că licenţele de tip Business şi Enterprise includ codul sursă complet al tuturor modulelor şi temelor.",
     "DoYouAcceptBankWireTransfer": "Acceptaţi transfer bancar?",
     "DoYouAcceptBankWireTransferExplanation": "Da, acceptăm transfer bancar.<br />După ce ați trimis taxa de licență prin transfer bancar, trimiteți-ne un e-mail la accounting@abp.io chitanța dvs. și tipul de licență solicitat. Informațiile noastre internaționale despre contul nostru bancar:",
     "HowToUpgrade": "Cum se actualizează aplicaţiile existente atunci când este disponibilă o nouă versiune?",

@@ -195,7 +195,6 @@
     "WhenShouldIRenewMyLicense": "Ehliyetimi ne zaman yenilemeliyim?",
     "WhenShouldIRenewMyLicenseExplanation": "Lisansınızın süresi dolduktan sonra <strong>1 ay</strong> içinde lisansınızı yenilerseniz, aşağıdaki indirimler uygulanacaktır: Takım Lisansı %{0} indirim, İşletme Lisansı %{1} indirim, Kurumsal Lisans %{2} indirim . Lisansınızın sona erme tarihinden <strong>1 ay</strong> sonra lisansınızı yenilerseniz, yenileme fiyatı lisans satın alma fiyatı ile aynı olacak ve yenilemenizde indirim yapılmayacaktır.",
     "TrialPlan": "Deneme planınız var mı?",
-    "TrialPlanExplanation": "ABP Commercial'ın şimdilik bir deneme planı yok. Ekip lisansları için 30 gün para iade garantisi veriyoruz. Sadece ilk 30 gün içinde geri ödeme talebinde bulunabilirsiniz. Business ve Enterprise lisansları için 30 gün içinde %60 geri ödeme sağlıyoruz. Bunun nedeni, Business ve Enterprise lisanslarının tüm modüllerin ve temaların tam kaynak kodunu içermesidir.",
     "DoYouAcceptBankWireTransfer": "Banka havalesini kabul ediyor musunuz?",
     "DoYouAcceptBankWireTransferExplanation": "Evet, banka havalesini kabul ediyoruz.<br />Lisans ücretini banka havalesi yoluyla gönderdikten sonra, dekontunuzu ve talep edilen lisans türünü accounting@abp.io adresinden bize e-posta ile gönderin. Uluslararası banka hesap bilgilerimiz:",
     "HowToUpgrade": "Yeni bir sürüm mevcut olduğunda mevcut uygulamalar nasıl yükseltilir?",
