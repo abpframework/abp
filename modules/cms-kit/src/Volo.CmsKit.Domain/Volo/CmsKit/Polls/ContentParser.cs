@@ -56,7 +56,7 @@ public class ContentParser : IContentParser, ITransientDependency
                 parsedList.Add(replacedText.Substring(0, index));
                 replacedText = replacedText.Substring(index, replacedText.Length - index);
             }
-            else
+            else if (replacedText.Length > 0)
             {
                 parsedList.Add(replacedText);
             }
