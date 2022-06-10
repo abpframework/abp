@@ -17,7 +17,7 @@
 		<ApplicationTitle>MyCompanyName.MyProjectName</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.mycompanyname.myprojectname</ApplicationId>
+		<ApplicationId>com.mycompanyname.myprojectname</ApplicationId>
 		<ApplicationIdGuid>27317750-B571-4690-B433-B358B2480E01</ApplicationIdGuid>
 
 		<!-- Versions -->
