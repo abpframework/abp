@@ -16,10 +16,11 @@ import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageToolbarComponent<R = any> extends AbstractActionsComponent<ToolbarActionList<R>> {
+  getData = () => this.data;
+
   readonly trackByFn: TrackByFunction<ToolbarComponent<R>> = (_, item) =>
     item.action || item.component;
-
-  constructor(private readonly injector: Injector) {
+  constructor(public readonly injector: Injector) {
     super(injector);
   }
 }
