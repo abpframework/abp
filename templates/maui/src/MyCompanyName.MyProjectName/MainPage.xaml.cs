@@ -1,6 +1,8 @@
-﻿namespace MyCompanyName.MyProjectName;
+﻿using Volo.Abp.DependencyInjection;
 
-public partial class MainPage : ContentPage
+namespace MyCompanyName.MyProjectName;
+
+public partial class MainPage : ContentPage, ISingletonDependency
 {
 	private readonly HelloWorldService _helloWorldService;
 	
@@ -18,8 +20,7 @@ public partial class MainPage : ContentPage
     {
 		HelloLab.Text = _helloWorldService.SayHello();
     }
-
-
+    
     private void OnCounterClicked(object sender, EventArgs e)
 	{
 		count++;
@@ -32,4 +33,3 @@ public partial class MainPage : ContentPage
 		SemanticScreenReader.Announce(CounterBtn.Text);
 	}
 }
-
