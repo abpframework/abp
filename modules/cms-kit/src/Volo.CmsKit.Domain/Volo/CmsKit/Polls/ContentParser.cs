@@ -71,16 +71,19 @@ public class ContentParser : IContentParser, ITransientDependency
         {
             if (parsedList[i] == delimeter)
             {
-                var name = _options.WidgetConfigs.Where(p => p.Key == polls[k]).Select(p => p.Value.Name).FirstOrDefault();
-                if (name is not null)
+                if (polls.Count > k)
                 {
-                    contentFragments.Add(new WidgetContentFragment(name)
+                    var name = _options.WidgetConfigs.Where(p => p.Key == polls[k]).Select(p => p.Value.Name).FirstOrDefault();
+                    if (name is not null && pollNames.Count > k)
                     {
-                        Properties =
+                        contentFragments.Add(new WidgetContentFragment(name)
                         {
-                            { "Name", pollNames[k]}
-                        }
-                    });
+                            Properties =
+                            {
+                                { "Name", pollNames[k]}
+                            }
+                        });
+                    }
                 }
                 k++;
             }
