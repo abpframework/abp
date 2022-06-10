@@ -62,8 +62,8 @@ public class ContentParser : IContentParser, ITransientDependency
             }
         }
 
-        var pollNames = Regex.Matches(content, @"(?<=PollName="")(.*?)(?="")").Cast<Match>().Select(p => p.Value).ToList();
-        var polls = Regex.Matches(content, @"(?<=Widget Type="")(.*?)(?="")").Cast<Match>().Select(p => p.Value).ToList();
+        var pollNames = Regex.Matches(content, @"(?<=PollName\s*=\s*"")(.*?)(?="")").Cast<Match>().Select(p => p.Value).ToList();
+        var polls = Regex.Matches(content, @"(?<=Widget Type\s*=\s*"")(.*?)(?="")").Cast<Match>().Select(p => p.Value).ToList();
 
         var contentFragments = new List<ContentFragment>();
 
