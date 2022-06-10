@@ -17,7 +17,7 @@
 		<ApplicationTitle>MyCompanyName.MyProjectName</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.mycompanyname.myprojectname</ApplicationId>
+		<ApplicationId>com.companyname.mycompanyname.myprojectname</ApplicationId>
 		<ApplicationIdGuid>27317750-B571-4690-B433-B358B2480E01</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -34,10 +34,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
+	    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>
