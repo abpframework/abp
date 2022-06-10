@@ -25,11 +25,15 @@ export class ToolbarActionsFactory<R = any> extends ActionsFactory<ToolbarAction
 export class ToolbarAction<R = any> extends Action<R> {
   readonly text: string;
   readonly icon: string;
+  readonly btnClass?: string;
 
   constructor(options: ToolbarActionOptions<R>) {
     super(options.permission || '', options.visible, options.action);
     this.text = options.text;
     this.icon = options.icon || '';
+     if(options.btnClass){
+       this.btnClass = options.btnClass;
+     };
   }
 
   static create<R = any>(options: ToolbarActionOptions<R>) {
@@ -60,7 +64,7 @@ export class ToolbarComponent<R = any> extends Action<R> {
 
 export type ToolbarActionOptions<R = any> = O.Optional<
   O.Writable<ToolbarAction<R>>,
-  'permission' | 'visible' | 'icon'
+  'permission' | 'visible' | 'icon' | 'btnClass'
 >;
 
 export type ToolbarComponentOptions<R = any> = O.Optional<
