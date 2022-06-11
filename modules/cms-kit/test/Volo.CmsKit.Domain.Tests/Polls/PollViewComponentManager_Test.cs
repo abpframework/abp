@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Shouldly;
@@ -27,10 +26,10 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
                         [Widget Type=  ""Poll"" PollName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var page = await pollManager.ParseAsync(content);
+        var poll = await pollManager.ParseAsync(content);
 
-        page.ShouldNotBeNull();
-        page.Count.ShouldBe(1);//Ignored Widget
+        poll.ShouldNotBeNull();
+        poll.Count.ShouldBe(1);//Ignored Widget
     }
 
     [Fact]
@@ -42,10 +41,10 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
                         [Widget Type=  ""Poll"" PollName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var page = await pollManager.ParseAsync(content);
+        var poll = await pollManager.ParseAsync(content);
 
-        page.ShouldNotBeNull();
-        page.Count.ShouldBe(2);
+        poll.ShouldNotBeNull();
+        poll.Count.ShouldBe(2);
     }
 
     [Fact]
@@ -57,10 +56,10 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
                         [Widget Wrong Type=  ""Poll"" PollName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var page = await pollManager.ParseAsync(content);
+        var poll = await pollManager.ParseAsync(content);
 
-        page.ShouldNotBeNull();
-        page.Count.ShouldBe(2);
+        poll.ShouldNotBeNull();
+        poll.Count.ShouldBe(2);
     }
 
     [Fact]
@@ -72,22 +71,22 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
                         [Widget Type=  ""Poll"" PollWrongName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var page = await pollManager.ParseAsync(content);
+        var poll = await pollManager.ParseAsync(content);
 
-        page.ShouldNotBeNull();
-        page.Count.ShouldBe(2);
+        poll.ShouldNotBeNull();
+        poll.Count.ShouldBe(2);
     }
 
     [Theory]
-    [MemberData(nameof(ExampleData))] 
+    [MemberData(nameof(ExampleData))]
     public async Task ParseAsync_ShouldWorkProperlyWithCorrectInputs(string content, int expectedLine)
     {
         _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
 
-        var page = await pollManager.ParseAsync(content);
+        var poll = await pollManager.ParseAsync(content);
 
-        page.ShouldNotBeNull();
-        page.Count.ShouldBe(expectedLine);
+        poll.ShouldNotBeNull();
+        poll.Count.ShouldBe(expectedLine);
     }
 
     public static IEnumerable<object[]> ExampleData =>
