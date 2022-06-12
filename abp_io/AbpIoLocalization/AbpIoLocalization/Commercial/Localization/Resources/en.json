@@ -727,6 +727,10 @@
     "Landing_Page_PaymentModuleDescription_1": "Provides integration for different payment gateways.",
     "Landing_Page_PaymentModuleDescription_2": "This module provides integration for payment gateways, so you can easily get payment from your customers.",
     "Landing_Page_PaymentModuleDescription_3": "This module supports the following payment gateways",
-    "Welcome_Page_UseSameCredentialForCommercialWebsites": "Use the same credentials for both <a href=\"https://commercial.abp.io\" class=\"text-primary\">commercial.abp.io</a> and <a href=\"https://support.abp.io\" class=\"text-primary\">support.abp.io</a>."
+    "Welcome_Page_UseSameCredentialForCommercialWebsites": "Use the same credentials for both <a href=\"https://commercial.abp.io\" class=\"text-primary\">commercial.abp.io</a> and <a href=\"https://support.abp.io\" class=\"text-primary\">support.abp.io</a>.",
+    "WatchCrudPagesVideo": "Watch the Creating CRUD Pages with ABP Suite Video!",
+    "WatchGeneratingFromDatabaseVideo": "Watch the ABP Suite: Generating CRUD Pages From Existing Database Tables Video!",
+    "WatchTakeCloserLookVideo": "Watch the Take a closer look at the code generation: ABP Suite Video!"
+    
   }
 }
