@@ -1,12 +1,14 @@
-import { Type } from '@angular/core';
+import { Injector, Type } from '@angular/core';
 import { O } from 'ts-toolbelt';
 import {
   Action,
   ActionContributorCallback,
   ActionContributorCallbacks,
+  ActionData,
   ActionList,
   Actions,
   ActionsFactory,
+  ReadonlyActionData,
 } from './actions';
 
 export class ToolbarActionList<R = any> extends ActionList<
@@ -31,9 +33,9 @@ export class ToolbarAction<R = any> extends Action<R> {
     super(options.permission || '', options.visible, options.action);
     this.text = options.text;
     this.icon = options.icon || '';
-     if(options.btnClass){
-       this.btnClass = options.btnClass;
-     };
+    if (options.btnClass) {
+      this.btnClass = options.btnClass;
+    }
   }
 
   static create<R = any>(options: ToolbarActionOptions<R>) {
@@ -72,10 +74,20 @@ export type ToolbarComponentOptions<R = any> = O.Optional<
   'permission' | 'visible' | 'action'
 >;
 
-export type ToolbarActionDefaults<R = any> = Record<string, ToolbarAction<R>[]>;
+export type ToolbarActionDefault<R = any> = ToolbarAction<R> | ToolbarComponent<R>;
+
+export type ToolbarActionDefaults<R = any> = Record<string, Array<ToolbarActionDefault<R>>>;
 export type ToolbarActionContributorCallback<R = any> = ActionContributorCallback<
   ToolbarActionList<R>
 >;
 export type ToolbarActionContributorCallbacks<R = any> = ActionContributorCallbacks<
   ToolbarActionList<R>
 >;
+export type InferredData<L> = ActionData<InferredRecord<L>>;
+export type InferredRecord<L> = L extends ActionList<infer R> ? R : never;
+
+export interface HasCreateInjectorPipe<R> {
+  getData: () => ReadonlyActionData<R>;
+  injector: Injector;
+  getInjected: InferredData<ToolbarActionList<R>>['getInjected'];
+}

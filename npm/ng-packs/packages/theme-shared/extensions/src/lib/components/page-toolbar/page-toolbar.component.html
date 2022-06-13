@@ -8,7 +8,7 @@
       <ng-container *abpPermission="action.permission">
         <ng-container *ngIf="action.component as component; else button">
           <ng-container
-            *ngComponentOutlet="component; injector: createInjector(action)"
+            *ngComponentOutlet="component; injector: record | createInjector: action:this"
           ></ng-container>
         </ng-container>
 
