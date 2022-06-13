@@ -7,3 +7,4 @@ While you can start with an empty project and add needed packages manually, star
 * [**module**](Module.md): Module/service template.
 * [**console**](Console.md): Console template.
 * [**WPF**](WPF.md): WPF template.
+* [**MAUI**](MAUI.md): MAUI template.
