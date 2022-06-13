@@ -13,14 +13,22 @@ export class CreateInjectorPipe<R> implements PipeTransform {
   ): Injector {
     const get = <T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags) => {
       const componentData = context.getData();
-      return token === EXTENSIONS_ACTION_DATA
-        ? componentData
-        : token === EXTENSIONS_ACTION_CALLBACK
-        ? data => {
-            data = data ?? context.getData();
-            return action.action(data);
-          }
-        : context.getInjected.call(context.injector, token, notFoundValue, flags);
+      const componentDataCallback = data => {
+        data = data ?? context.getData();
+        return action.action(data);
+      };
+      let extensionData;
+      switch (token) {
+        case EXTENSIONS_ACTION_DATA:
+          extensionData = componentData;
+          break;
+        case EXTENSIONS_ACTION_CALLBACK:
+          extensionData = componentDataCallback;
+          break;
+        default:
+          extensionData = context.getInjected.call(context.injector, token, notFoundValue, flags);
+      }
+      return extensionData;
     };
     return { get };
   }
