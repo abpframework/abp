@@ -1,4 +1,4 @@
-import { Type } from '@angular/core';
+import { Injector, Type } from '@angular/core';
 import { O } from 'ts-toolbelt';
 import {
   Action,
@@ -8,6 +8,7 @@ import {
   ActionList,
   Actions,
   ActionsFactory,
+  ReadonlyActionData,
 } from './actions';
 
 export class ToolbarActionList<R = any> extends ActionList<
@@ -84,3 +85,9 @@ export type ToolbarActionContributorCallbacks<R = any> = ActionContributorCallba
 >;
 export type InferredData<L> = ActionData<InferredRecord<L>>;
 export type InferredRecord<L> = L extends ActionList<infer R> ? R : never;
+
+export interface HasCreateInjectorPipe<R> {
+  getData: () => ReadonlyActionData<R>;
+  injector: Injector;
+  getInjected: InferredData<ToolbarActionList<R>>['getInjected'];
+}

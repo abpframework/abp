@@ -1,7 +1,6 @@
 import { InjectFlags, InjectionToken, Injector, Pipe, PipeTransform, Type } from '@angular/core';
-import { ToolbarComponent } from '../models/toolbar-actions';
+import { HasCreateInjectorPipe, ToolbarComponent } from '../models/toolbar-actions';
 import { EXTENSIONS_ACTION_CALLBACK, EXTENSIONS_ACTION_DATA } from '../tokens/extensions.token';
-import { PageToolbarComponent } from '../components/page-toolbar/page-toolbar.component';
 
 @Pipe({
   name: 'createInjector',
@@ -10,7 +9,7 @@ export class CreateInjectorPipe<R> implements PipeTransform {
   public transform(
     _: any,
     action: ToolbarComponent<R>,
-    context: PageToolbarComponent<R>,
+    context: HasCreateInjectorPipe<R>,
   ): Injector {
     const get = <T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags) => {
       const componentData = context.getData();

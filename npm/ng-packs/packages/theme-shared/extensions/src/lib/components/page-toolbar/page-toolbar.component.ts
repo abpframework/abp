@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component, Injector, TrackByFunction } from '@angular/core';
-import { ToolbarActionList, ToolbarComponent } from '../../models/toolbar-actions';
+import {
+  HasCreateInjectorPipe,
+  ToolbarActionList,
+  ToolbarComponent,
+} from '../../models/toolbar-actions';
 import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
 import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.component';
 
@@ -15,7 +19,10 @@ import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.c
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageToolbarComponent<R = any> extends AbstractActionsComponent<ToolbarActionList<R>> {
+export class PageToolbarComponent<R = any>
+  extends AbstractActionsComponent<ToolbarActionList<R>>
+  implements HasCreateInjectorPipe<R>
+{
   defaultBtnClass = 'btn btn-sm btn-primary';
 
   getData = () => this.data;
