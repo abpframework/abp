@@ -16,6 +16,8 @@ import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageToolbarComponent<R = any> extends AbstractActionsComponent<ToolbarActionList<R>> {
+  defaultBtnClass = 'btn btn-sm btn-primary';
+
   getData = () => this.data;
 
   readonly trackByFn: TrackByFunction<ToolbarComponent<R>> = (_, item) =>

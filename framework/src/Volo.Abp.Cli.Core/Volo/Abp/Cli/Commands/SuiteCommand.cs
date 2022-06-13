@@ -132,6 +132,11 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         if (!response.IsNullOrWhiteSpace())
         {
             Logger.LogError(response);
+
+            if (response.Contains("Commercial.SuiteTemplates.dll"))
+            {
+                Logger.LogInformation("The solution should be built before generating an entity! Use `dotnet build` to build your solution.");
+            }
         }
         else
         {

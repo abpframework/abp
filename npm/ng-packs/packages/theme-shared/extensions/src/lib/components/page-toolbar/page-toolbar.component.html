@@ -13,7 +13,7 @@
         </ng-container>
 
         <ng-template #button>
-          <button (click)="action.action(data)" type="button" class="btn btn-primary btn-sm">
+          <button (click)="action.action(data)" type="button" [ngClass]="action.btnClass ? action.btnClass : defaultBtnClass" >
             <i [ngClass]="action.icon" [class.me-1]="action.icon"></i>
             {{ action.text | abpLocalization }}
           </button>

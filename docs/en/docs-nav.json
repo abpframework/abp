@@ -2,7 +2,17 @@
   "items": [
     {
       "text": "Quick Start",
-      "path": "Tutorials/Todo/Index.md"
+      "path": "Tutorials/Todo/Overall.md",
+      "items": [
+        {
+          "text": "With single-layer solution",
+          "path": "Tutorials/Todo/Single-Layer/Index.md"
+        },
+        {
+          "text": "With layered architecture",
+          "path": "Tutorials/Todo/Index.md"
+        }
+      ]
     },
     {
       "text": "Getting Started",
@@ -117,6 +127,10 @@
         {
           "text": "Application",
           "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "Application (Single Layer)",
+          "path": "Startup-Templates/Application-Single-Layer.md"
         },
         {
           "text": "Module",
@@ -907,8 +921,16 @@
               "path": "UI/Blazor/Global-Scripts-Styles.md"
             },
             {
+              "text": "Global Features",
+              "path": "UI/Blazor/Global-Features.md"
+            },
+            {
               "text": "Routing",
               "path": "UI/Blazor/Routing.md"
+            },
+            {
+              "text": "PWA Configuration",
+              "path": "UI/Blazor/Pwa-Configuration.md"
             }
           ]
         },

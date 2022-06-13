@@ -109,7 +109,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
   * **`module`**: [Module template](Startup-Templates/Module.md). Additional options:
     * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
   * **`console`**: [Console template](Startup-Templates/Console.md).
-  * **`app-nolayers`**: Application single layer template.
+  * **`app-nolayers`**: [Single-layer application template](Startup-Templates/Application-Single-Layer.md). Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC.
       * `angular`: Angular UI.
