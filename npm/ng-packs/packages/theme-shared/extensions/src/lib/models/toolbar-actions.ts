@@ -3,11 +3,12 @@ import { O } from 'ts-toolbelt';
 import {
   Action,
   ActionContributorCallback,
-  ActionContributorCallbacks, ActionData,
+  ActionContributorCallbacks,
+  ActionData,
   ActionList,
   Actions,
-  ActionsFactory
-} from "./actions";
+  ActionsFactory,
+} from './actions';
 
 export class ToolbarActionList<R = any> extends ActionList<
   R,
@@ -31,9 +32,9 @@ export class ToolbarAction<R = any> extends Action<R> {
     super(options.permission || '', options.visible, options.action);
     this.text = options.text;
     this.icon = options.icon || '';
-     if(options.btnClass){
-       this.btnClass = options.btnClass;
-     };
+    if (options.btnClass) {
+      this.btnClass = options.btnClass;
+    }
   }
 
   static create<R = any>(options: ToolbarActionOptions<R>) {
