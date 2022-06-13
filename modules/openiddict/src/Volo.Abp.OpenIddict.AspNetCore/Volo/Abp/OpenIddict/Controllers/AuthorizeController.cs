@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
@@ -16,6 +15,7 @@ using Volo.Abp.OpenIddict.ViewModels.Authorization;
 namespace Volo.Abp.OpenIddict.Controllers;
 
 [Route("connect/authorize")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class AuthorizeController : AbpOpenIdDictControllerBase
 {
     [HttpGet, HttpPost]
@@ -159,9 +159,17 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
     }
 
     [HttpPost]
-    [Authorize, AbpFormValueRequired("submit.Accept")]
-    public virtual async Task<IActionResult> HandleAcceptConsentAsync()
+    [Authorize]
+    [Route("callback")]
+    public virtual async Task<IActionResult> HandleCallbackAsync()
     {
+        if (await HasFormValueAsync("deny"))
+        {
+            // Notify OpenIddict that the authorization grant has been denied by the resource owner
+            // to redirect the user agent to the client application using the appropriate response_mode.
+            return Forbid(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
         var request = await GetOpenIddictServerRequestAsync(HttpContext);
 
         // Retrieve the profile of the logged in user.
@@ -223,14 +231,5 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
 
         // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-    }
-
-    [Authorize, AbpFormValueRequired("submit.Deny")]
-    [HttpPost]
-    public virtual Task<IActionResult> HandleDenyConsentAsync()
-    {
-        // Notify OpenIddict that the authorization grant has been denied by the resource owner
-        // to redirect the user agent to the client application using the appropriate response_mode.
-        return Task.FromResult<IActionResult>(Forbid(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme));
     }
 }

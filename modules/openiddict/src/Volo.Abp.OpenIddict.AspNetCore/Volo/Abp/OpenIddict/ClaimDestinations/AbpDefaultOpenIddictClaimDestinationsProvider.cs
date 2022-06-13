@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using OpenIddict.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
@@ -27,7 +28,15 @@ public class AbpDefaultOpenIddictClaimDestinationsProvider : IAbpOpenIddictClaim
 
             switch (claim.Type)
             {
-                case OpenIddictConstants.Claims.Name:
+                case OpenIddictConstants.Claims.PreferredUsername:
+                    claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);
+                    if (context.Principal.HasScope(OpenIddictConstants.Scopes.Profile))
+                    {
+                        claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
+                    }
+                    break;
+
+                case JwtRegisteredClaimNames.UniqueName:
                     claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);
                     if (context.Principal.HasScope(OpenIddictConstants.Scopes.Profile))
                     {

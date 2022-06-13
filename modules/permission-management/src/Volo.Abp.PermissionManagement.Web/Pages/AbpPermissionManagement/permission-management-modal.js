@@ -265,7 +265,7 @@ var abp = abp || {};
                     e.preventDefault();
                     
                     if(!$form.find("input:checked").length > 0) {
-                        abp.message.confirm(l("RemoveAllPermissionsWarningMessage"))
+                        abp.message.confirm(l("SaveWithoutAnyPermissionsWarningMessage"))
                             .then(function (confirmed) {
                                 if(confirmed) {
                                     $form.submit();

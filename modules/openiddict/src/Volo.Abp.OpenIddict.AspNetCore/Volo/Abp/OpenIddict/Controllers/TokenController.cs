@@ -9,6 +9,7 @@ using Volo.Abp.OpenIddict.ExtensionGrantTypes;
 namespace Volo.Abp.OpenIddict.Controllers;
 
 [Route("connect/token")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public partial class TokenController : AbpOpenIdDictControllerBase
 {
     [HttpGet, HttpPost, Produces("application/json")]

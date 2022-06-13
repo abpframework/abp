@@ -27,6 +27,7 @@ While each command may have a set of options, there are some global options that
 Here, is the list of all available commands before explaining their details:
 
 * **`help`**: Shows help on the usage of the ABP CLI.
+* **`cli`**: Update or remove ABP CLI.
 * **`new`**: Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
@@ -41,6 +42,7 @@ Here, is the list of all available commands before explaining their details:
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
+* **`login-info`**: Shows the current user's login information.
 * **`logout`**: Logouts from your computer if you've authenticated before.
 * **`bundle`**: Generates script and style references for an ABP Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
@@ -60,6 +62,25 @@ Examples:
 ````bash
 abp help        # Shows a general help.
 abp help new    # Shows help about the "new" command.
+````
+
+### cli
+
+Update or remove ABP CLI.
+
+Usage:
+
+````bash
+abp cli [command-name]
+````
+
+Examples:
+
+````bash
+abp cli update
+abp cli update --preview
+abp cli update --version 5.0.0
+abp cli remove
 ````
 
 ### new
@@ -91,24 +112,27 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
       * `angular`: Angular UI. There are some additional options for this template:
-        * `--separate-identity-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--separate-auth-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor`: Blazor UI. There are some additional options for this template:
-        * `--separate-identity-server`The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--separate-auth-server`The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
-        * `--tiered`: The Identity Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *IdentityServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
+        * `--tiered`: The Identity Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
       * `none`: Without UI. No front-end layer will be created. There are some additional options for this template:
-        * `--separate-identity-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--separate-auth-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
     * `--mobile` or `-m`: Specifies the mobile application framework. If not specified, no mobile application will be created. Available options:
       * `react-native`: React Native.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
+    * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
+        * `leptonx-lite`: [LeptonX Lite Theme](/Themes/LeptonXLite/mvc.md).
+        * `basic`: [Basic Theme](/UI/AspNetCore/Basic-Theme.md).
   * **`module`**: [Module template](Startup-Templates/Module.md). Additional options:
     * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
   * **`console`**: [Console template](Startup-Templates/Console.md).
-  * **`app-nolayers`**: Application single layer template.
+  * **`app-nolayers`**: [Single-layer application template](Startup-Templates/Application-Single-Layer.md). Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC.
       * `angular`: Angular UI.
@@ -117,6 +141,9 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
+    * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
+        * `leptonx-lite`: [LeptonX Lite Theme](/Themes/LeptonXLite/mvc.md).
+        * `basic`: [Basic Theme](/UI/AspNetCore/Basic-Theme.md).        
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
 * `--preview`: Use latest preview version.
@@ -137,7 +164,7 @@ See some [examples for the new command](CLI-New-Command-Samples.md) here.
 
 ### update
 
-Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related NuGet and NPM packages in a solution or project to the latest versions.
+Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related NuGet and NPM packages in a solution or project to the latest versions. You can run it in the root folder of your solutions.
 
 Usage:
 
@@ -145,8 +172,11 @@ Usage:
 abp update [options]
 ````
 
-* If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
 * If you run in a directory with a .csproj file, it updates all ABP related packages of the project to the latest versions.
+* If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
+* If you run in a directory that contains multiple solutions in sub-folders, it can update all the solutions, including Angular projects.
+
+Note that this command can upgrade your solution from a previous version, and also can upgrade it from a preview release to the stable release of the same version.
 
 #### Options
 
@@ -467,23 +497,21 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 
 A new login with an already active session overwrites the previous session.
 
+### login-info
+
+Shows your login information such as **Name**, **Surname**, **Username**, **Email Address** and **Organization**.
+
+```bash
+abp login-info
+```
+
 ### logout
 
 Logs you out by removing the session token from your computer.
 
-```
+```bash
 abp logout
 ```
-
-#### Options
-
-* ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when the command is executed outside of a GIT repository or when executing directory doesn't contain a .NET solution file.
-* ```--build-name``` or ```-n```: Specifies a name for the build. This option is useful when same repository is used for more than one different builds. 
-* ```--dotnet-build-arguments``` or ```-a```: Arguments to pass ```dotnet build``` when building project files.  This parameter must be passed like ```"\"{params}\""``` .
-* ```--force``` or ```-f```: Forces to build projects even they are not changed from the last successful build.
-
-For more details, see [build command documentation](CLI-BuildCommand.md).
-
 
 ### bundle
 

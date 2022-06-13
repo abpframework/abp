@@ -231,8 +231,8 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         {
             SetModificationAuditProperties(entity);
 
-            var isSoftDeleteEntity = typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity));
-            if (isSoftDeleteEntity)
+            var isEntityDeleted = entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted;
+            if (isEntityDeleted)
             {
                 SetDeletionAuditProperties(entity);
                 TriggerEntityDeleteEvents(entity);
@@ -465,7 +465,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         cancellationToken = GetCancellationToken(cancellationToken);
 
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .OrderBy(sorting)
+            .OrderByIf<TEntity, IQueryable<TEntity>>(!sorting.IsNullOrWhiteSpace(), sorting)
             .As<IMongoQueryable<TEntity>>()
             .PageBy<TEntity, IMongoQueryable<TEntity>>(skipCount, maxResultCount)
             .ToListAsync(cancellationToken);

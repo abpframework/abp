@@ -59,4 +59,18 @@ public abstract class AbpOpenIdDictControllerBase : AbpController
     {
         await OpenIddictClaimDestinationsManager.SetAsync(principal);
     }
+
+    protected virtual async Task<bool> HasFormValueAsync(string name)
+    {
+        if (Request.HasFormContentType)
+        {
+            var form = await Request.ReadFormAsync();
+            if (!string.IsNullOrEmpty(form[name]))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

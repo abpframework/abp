@@ -33,7 +33,11 @@
     <!--/ABP:Scripts-->
 
     <!-- <TEMPLATE-REMOVE IF-NOT='PWA'> -->
-    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <script>
+        if('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
     <!-- </TEMPLATE-REMOVE> -->
 </body>
 </html>

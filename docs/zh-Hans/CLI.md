@@ -27,6 +27,7 @@ dotnet tool update -g Volo.Abp.Cli
 这里是所有可用的命令列表:
 
 * **`help`**: 展示ABP CLI的用法帮助信息.
+* **`cli`**: 更新或删除ABP CLI.
 * **`new`**：生成基于ABP的[启动模板](Startup-Templates/Index.md).
 * **`update`**：自动更新的ABP解决方案ABP相关的NuGet和NPM包.
 * **`clean`**: 删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
@@ -39,6 +40,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`switch-to-stable`**: 切换解决方案所有ABP相关包为最新的稳定版本.
 * **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
+* **`login-info`**: 展示当前登录用户信息.
 * **`logout`**: 在你的计算机注销认证.
 * **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
 
@@ -57,6 +59,25 @@ abp help [command-name]
 ````bash
 abp help        # Shows a general help.
 abp help new    # Shows help about the "new" command.
+````
+
+### cli
+
+更新或删除ABP CLI
+
+用法:
+
+````bash
+abp cli [command-name]
+````
+
+示例:
+
+````bash
+abp cli update
+abp cli update --preview
+abp cli update --version 5.0.0
+abp cli remove
 ````
 
 ### new
@@ -88,11 +109,11 @@ abp new Acme.BookStore
       * `mvc`: ASP.NET Core MVC.此模板的其他选项:
         * `--tiered`: 创建分层解决方案,Web和Http Api层在物理上是分开的.如果未指定会创建一个分层的解决方案,此解决方案没有那么复杂,适合大多数场景.
       * `angular`: Angular. 这个模板还有一些额外的选项:
-        * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `blazor`: Blazor. 这个模板还有一些额外的选项:
-        * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `none`: 无UI. 这个模板还有一些额外的选项:
-        * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
     * `--mobile` 或者 `-m`: 指定移动应用程序框架. 如果未指定,则不会创建任何移动应用程序,其他选项:
       * `none`: 不包含移动应用程序.
       * `react-native`: React Native.
@@ -386,6 +407,14 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 > 当使用-p参数,请注意,因为你的密码是可见的. 它对于CI / CD自动化管道很有用.
 
 请注意,新的登录将终止先前的会话并创建一个新的会话.
+
+### login-info
+
+展示你的登录信息, 如 **名称** , **用户名** , **地址** 和 **组织**.
+
+```bash
+abp login-info
+```
 
 ### logout
 

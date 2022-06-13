@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
-using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -19,21 +18,21 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.MongoDB;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.MongoDB;
-using Volo.Abp.IdentityServer.MongoDB;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.OpenIddict.MongoDB;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.PermissionManagement.IdentityServer;
+using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.Swashbuckle;
@@ -52,24 +51,22 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAutofacModule),
     typeof(AbpAutoMapperModule),
-    typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreSerilogModule),
 
     // Account module packages
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
-    typeof(AbpAccountWebIdentityServerModule),
+    typeof(AbpAccountWebOpenIddictModule),
 
     // Identity module packages
     typeof(AbpPermissionManagementDomainIdentityModule),
-    typeof(AbpPermissionManagementDomainIdentityServerModule),
+    typeof(AbpPermissionManagementDomainOpenIddictModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityMongoDbModule),
-    typeof(AbpIdentityServerMongoDbModule),
+    typeof(AbpOpenIddictMongoDbModule),
 
     // Audit logging module packages
     typeof(AbpAuditLoggingMongoDbModule),
@@ -107,24 +104,38 @@ public class MyProjectNameModule : AbpModule
                 typeof(MyProjectNameResource)
             );
         });
+
+		PreConfigure<OpenIddictBuilder>(builder =>
+		{
+			builder.AddValidation(options =>
+			{
+				options.AddAudiences("MyProjectName");
+				options.UseLocalServer();
+				options.UseAspNetCore();
+			});
+		});
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
+        
+        if (hostingEnvironment.IsDevelopment())
+        {
+            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+        }
 
         ConfigureBundles();
         ConfigureMultiTenancy();
         ConfigureUrls(configuration);
         ConfigureAutoMapper(context);
-        ConfigureSwagger(context.Services);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureAutoApiControllers();
         ConfigureVirtualFiles(hostingEnvironment);
         ConfigureLocalization();
-        ConfigureAuthentication(context.Services, configuration);
         ConfigureCors(context, configuration);
-        ConfigureDataProtection(context, configuration, hostingEnvironment);
+        ConfigureDataProtection(context);
         ConfigureMongoDB(context);
     }
 
@@ -157,17 +168,6 @@ public class MyProjectNameModule : AbpModule
             options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
             options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
         });
-    }
-
-    private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddAuthentication()
-            .AddJwtBearer(options =>
-            {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = "MyProjectName";
-            });
     }
 
     private void ConfigureLocalization()
@@ -229,16 +229,20 @@ public class MyProjectNameModule : AbpModule
         });
     }
 
-    private void ConfigureSwagger(IServiceCollection services)
+    private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAbpSwaggerGen(
+        services.AddAbpSwaggerGenWithOAuth(
+            configuration["AuthServer:Authority"],
+            new Dictionary<string, string>
+            {
+                    {"MyProjectName", "MyProjectName API"}
+            },
             options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
-            }
-        );
+            });
     }
 
     private void ConfigureAutoMapper(ServiceConfigurationContext context)
@@ -276,17 +280,9 @@ public class MyProjectNameModule : AbpModule
         });
     }
 
-    private void ConfigureDataProtection(
-        ServiceConfigurationContext context,
-        IConfiguration configuration,
-        IWebHostEnvironment hostingEnvironment)
+    private void ConfigureDataProtection(ServiceConfigurationContext context)
     {
-        var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
-        if (!hostingEnvironment.IsDevelopment())
-        {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
-        }
+        context.Services.AddDataProtection().SetApplicationName("MyProjectName");
     }
 
     private void ConfigureMongoDB(ServiceConfigurationContext context)
@@ -324,7 +320,7 @@ public class MyProjectNameModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
+        app.UseAbpOpenIddictValidation();
 
         if (IsMultiTenant)
         {
@@ -332,7 +328,6 @@ public class MyProjectNameModule : AbpModule
         }
 
         app.UseUnitOfWork();
-        app.UseIdentityServer();
         app.UseAuthorization();
 
         app.UseSwagger();

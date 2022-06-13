@@ -1,0 +1,13 @@
+﻿{
+  "culture": "fa",
+  "texts": {
+    "GivenTenantIsNotExist": "مستاجر وارد شده یافت نشد: {0}",
+    "GivenTenantIsNotAvailable": "مستاجر وارد شده در دسترس نمی باشد: {0}",
+    "Tenant": "مستاجر",
+    "Switch": "تعویض",
+    "Name": "نام",
+    "SwitchTenantHint": "برای رفتن به داشبورد اصلی فیلد نام را خالی بگذارید.",
+    "SwitchTenant": "تعویض مستاجر",
+    "NotSelected": "انتخاب نشده است"
+  }
+}

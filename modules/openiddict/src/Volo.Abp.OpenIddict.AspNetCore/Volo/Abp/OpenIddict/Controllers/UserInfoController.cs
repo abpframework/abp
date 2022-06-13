@@ -12,6 +12,7 @@ namespace Volo.Abp.OpenIddict.Controllers;
 
 [Route("connect/userinfo")]
 [Authorize(AuthenticationSchemes = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class UserInfoController : AbpOpenIdDictControllerBase
 {
     [HttpGet]
@@ -40,7 +41,7 @@ public class UserInfoController : AbpOpenIdDictControllerBase
         if (User.HasScope(OpenIddictConstants.Scopes.Profile))
         {
             claims[AbpClaimTypes.TenantId] = user.TenantId;
-            claims[OpenIddictConstants.Claims.Name] = user.UserName;
+            claims[OpenIddictConstants.Claims.PreferredUsername] = user.UserName;
             claims[OpenIddictConstants.Claims.FamilyName] = user.Surname;
         }
 

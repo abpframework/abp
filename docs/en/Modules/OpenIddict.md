@@ -10,7 +10,7 @@ This module implements the domain logic and database integrations, but not provi
 
 ## Relations to Other Modules
 
-This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) with the [Account Module](Account.md).
+This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) with the [Account Module](Account.md).
 
 ## The module
 
@@ -131,11 +131,6 @@ Configure<AbpOpenIddictClaimDestinationsOptions>(options =>
 
 For detailed information, please refer to: [OpenIddict claim destinations](https://documentation.openiddict.com/configuration/claim-destinations.html)
 
-#### About Validation
-
-The `OpenIddict.Validation.AspNetCore` and `OpenIddict.Validation` are not integrated in the module, we use the authentication component provided by Microsoft. If you are more familiar with it, you can use it in your project.
-
-
 ### EF Core module
 
 Implements the above four repository interfaces.
@@ -155,41 +150,21 @@ https://documentation.openiddict.com
 
 https://github.com/openiddict/openiddict-core#resources
 
-### Token encryption
+### Disable AccessToken Encryption
 
-https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-
-> By default, OpenIddict enforces encryption for all the token types it supports. While this enforcement cannot be disabled for authorization codes, refresh tokens and device codes for security reasons, it can be relaxed for access tokens when integration with third-party APIs/resource servers is desired. Access token encryption can also be disabled if the resource servers receiving the access tokens don't fully support JSON Web Encryption.
+ABP disables the `access token encryption` by default for compatibility, you can manually enable it if needed.
 
 ```cs
-PreConfigure<OpenIddictServerBuilder>(builder =>
+public override void PreConfigureServices(ServiceConfigurationContext context)
 {
-    builder.DisableAccessTokenEncryption();
-});
-```
-
-An example of using `SecurityKey`
-
-> In production, it is recommended to use two RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
-
-```cs
-// In OpenIddict Server
-PreConfigure<OpenIddictServerBuilder>(builder =>
-{
-    builder.AddSigningKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78")));
-    builder.AddEncryptionKey(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80")));
-});
-
-//In Client AddJwtBearer
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    PreConfigure<OpenIddictServerBuilder>(builder =>
     {
-        //Other configuration
-
-        options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_C40DBB176E78"));
-        options.TokenValidationParameters.TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Abp_OpenIddict_Demo_87E33FC57D80"));
+        builder.Configure(options => options.DisableAccessTokenEncryption = false);
     });
+}
 ```
+
+https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
 
 
 ### PKCE

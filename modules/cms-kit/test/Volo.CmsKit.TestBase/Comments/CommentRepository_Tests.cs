@@ -55,6 +55,15 @@ public abstract class CommentRepository_Tests<TStartupModule> : CmsKitTestBase<T
     }
 
     [Fact]
+    public async Task GetWithAuthorAsync()
+    {
+        var commentDetail = await _commentRepository.GetWithAuthorAsync(_cmsKitTestData.CommentWithChildId);
+
+        commentDetail.ShouldNotBeNull();
+        commentDetail.Author.ShouldNotBeNull();
+    }
+
+    [Fact]
     public async Task DeleteWithRepliesAsync()
     {
         var comment = await _commentRepository.GetAsync(_cmsKitTestData.CommentWithChildId);

@@ -147,3 +147,16 @@ Console.WriteLine("Access token: {0}", tokenResponse.AccessToken);
 Console.WriteLine();
 Console.WriteLine("Refresh token: {0}", tokenResponse.RefreshToken);
 Console.WriteLine();
+
+serverRequest = new HttpRequestMessage(HttpMethod.Get, api);
+serverRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+serverResponse = await client.SendAsync(serverRequest);
+serverResponse.EnsureSuccessStatusCode();
+
+Console.WriteLine("ClientCredentials API response: {0}", JsonSerializer.Serialize(JsonDocument.Parse(await serverResponse.Content.ReadAsStringAsync()), new JsonSerializerOptions
+{
+    WriteIndented = true
+}));
+
+Console.WriteLine();

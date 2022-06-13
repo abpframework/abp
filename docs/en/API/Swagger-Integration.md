@@ -101,7 +101,7 @@ services.AddAbpSwaggerGen(
 
 For non MVC/Tiered applications, we need to configure Swagger with OAUTH to handle authorization.  
 
-> ABP Framework uses IdentityServer by default. To get more information about IDS, check this [documentation](../Modules/IdentityServer.md). 
+> ABP Framework uses OpenIddict by default. To get more information about OpenIddict, check this [documentation](../Modules/OpenIddict.md). 
 
 
 

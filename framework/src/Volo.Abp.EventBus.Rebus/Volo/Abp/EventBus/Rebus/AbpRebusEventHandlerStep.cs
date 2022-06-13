@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Rebus.Messages;
@@ -14,9 +15,12 @@ public class AbpRebusEventHandlerStep : IIncomingStep
         var message = context.Load<Message>();
         var handlerInvokers = context.Load<HandlerInvokers>().ToList();
 
-        handlerInvokers.RemoveAll(x => x.Handler.GetType() == typeof(RebusDistributedEventHandlerAdapter<object>));
-        context.Save(new HandlerInvokers(message, handlerInvokers));
-
+        if (handlerInvokers.All(x => x.Handler is IRebusDistributedEventHandlerAdapter))
+        {
+            handlerInvokers = new List<HandlerInvoker> {handlerInvokers.Last()};
+            context.Save(new HandlerInvokers(message, handlerInvokers));
+        }
+        
         return next();
     }
 }
