@@ -3,14 +3,17 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.CmsKit.Polls;
 
-namespace Volo.CmsKit.Polls;
+namespace Volo.CmsKit.Contents;
 
-public class ContentParser : IContentParser, ITransientDependency
+public class ContentParser : ITransientDependency
 {
     private const string delimeter = "----";
     private readonly CmsKitContentWidgetOptions _options;
+
     public ContentParser(IOptions<CmsKitContentWidgetOptions> options)
     {
         _options = options.Value;
@@ -18,6 +21,13 @@ public class ContentParser : IContentParser, ITransientDependency
 
     public async Task<List<ContentFragment>> ParseAsync(string content)
     {
+        return new List<ContentFragment> {
+            new ContentFragment() { Type = "Markdown" }.SetProperty("Content", "This is *a markdown* text."),
+            new ContentFragment() { Type = "Widget" }.SetProperty("Type", "Poll").SetProperty("Code", "6dhah8dd"),
+            new ContentFragment() { Type = "Markdown" }.SetProperty("Content", "This is *another markdown* text.")
+        };
+
+        /*
         if (!_options.WidgetConfigs.Any())
         {
             return new List<ContentFragment>()
@@ -101,6 +111,7 @@ public class ContentParser : IContentParser, ITransientDependency
         }
 
         return contentFragments;
+        */
     }
 
     private void ParseWidgets(string content, Dictionary<string, List<KeyValuePair<string, string>>> parsedWidgets)
@@ -109,14 +120,17 @@ public class ContentParser : IContentParser, ITransientDependency
         for (int p = 0; p < widgets.Count; p++)
         {
             var preparedContent = string.Join("", widgets[p]);
-            var keys = Regex.Matches(preparedContent, @"(?<=[\[Widget]?\s)(.*?)(?=="")").Cast<Match>().Select(p => p.Value).Where(p => p != string.Empty).ToList();
-            var values = Regex.Matches(preparedContent, @"(?<=\s*[a-zA-Z]*=\s*"")(.*?)(?="")").Cast<Match>().Select(p => p.Value).ToList();
+            var keys = Regex.Matches(preparedContent, @"(?<=[\[Widget]?\s)(.*?)(?=="")").Cast<Match>()
+                .Select(p => p.Value).Where(p => p != string.Empty).ToList();
+            var values = Regex.Matches(preparedContent, @"(?<=\s*[a-zA-Z]*=\s*"")(.*?)(?="")").Cast<Match>()
+                .Select(p => p.Value).ToList();
 
             var list = new List<KeyValuePair<string, string>>();
             for (int kv = 0; kv < keys.Count; kv++)
             {
                 list.Add(new KeyValuePair<string, string>(keys[kv], values[kv]));
             }
+
             parsedWidgets.Add($"{p}.Widget", list);
         }
     }

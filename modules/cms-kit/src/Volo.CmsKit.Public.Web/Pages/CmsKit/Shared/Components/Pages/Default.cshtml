@@ -1,8 +1,8 @@
 ﻿@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 
-@using Volo.CmsKit.Polls
 @using Volo.CmsKit.Public.Web.Renderers
-@using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
+@using Volo.Abp.Data
+@using Volo.CmsKit.Contents
 
 @inject IMarkdownToHtmlRenderer MarkdownRenderer
 
@@ -10,15 +10,15 @@
 
 <abp-card>
     <abp-card-body>
-        @foreach (var contentFragment in Model.ContentFragments)
+        @foreach (ContentFragment contentFragment in Model.ContentFragments)
         {
-            if (contentFragment is MarkdownContentFragment markdownContentFragment)
+            if (contentFragment.Type == "Markdown") //TODO: Constant
             {
-                @Html.Raw(await MarkdownRenderer.RenderAsync(markdownContentFragment.Content))
+                @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
             }
-            else if (contentFragment is WidgetContentFragment widgetContentFragment)
+            else if (contentFragment.Type == "Widget") //TODO: Constant
             {
-                @await Component.InvokeAsync(widgetContentFragment.Name,  widgetContentFragment.Properties)
+                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties)
             }
         }
     </abp-card-body>

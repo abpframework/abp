@@ -32,7 +32,8 @@ public class PublicApplicationAutoMapperProfile : Profile
 
         CreateMap<Page, PageDto>();
 
-        CreateMap<BlogPost, BlogPostPublicDto>(MemberList.None);
+        CreateMap<BlogPost, BlogPostPublicDto>(MemberList.None) //TODO: Remove MemberList.None (enable validation)
+            .Ignore(x => x.ContentFragments); 
 
         CreateMap<MenuItem, MenuItemDto>();
 

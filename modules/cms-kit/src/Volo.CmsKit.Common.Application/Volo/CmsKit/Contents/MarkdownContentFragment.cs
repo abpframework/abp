@@ -1,4 +1,4 @@
-﻿namespace Volo.CmsKit.Polls;
+﻿namespace Volo.CmsKit.Contents;
 
 public class MarkdownContentFragment : ContentFragment
 {

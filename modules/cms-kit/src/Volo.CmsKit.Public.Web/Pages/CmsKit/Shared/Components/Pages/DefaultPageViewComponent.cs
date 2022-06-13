@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-using Volo.CmsKit.Public.Polls;
+using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages;
 
@@ -21,22 +22,14 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages;
     {
         "/Pages/Public/CmsKit/highlightOnLoad.js"
     })]
-public class DefaultPageViewComponent : AbpViewComponent
+public class DefaultPageViewComponent : AbpViewComponent //TODO: Remove component, directly render in the page
 {
-    protected IPollViewComponentAppService PollViewComponentAppService { get; set; }
-
-    public DefaultPageViewComponent(IPollViewComponentAppService pollViewComponentAppService)
-    {
-        PollViewComponentAppService = pollViewComponentAppService;
-    }
-
     public virtual async Task<IViewComponentResult> InvokeAsync(
         Guid pageId,
         string title,
-        string content)
+        string content,
+        List<ContentFragment> contentFragments)
     {
-        var contentFragments = await PollViewComponentAppService.ParseAsync(content);
-
         var model = new PageViewModel
         {
             Id = pageId,

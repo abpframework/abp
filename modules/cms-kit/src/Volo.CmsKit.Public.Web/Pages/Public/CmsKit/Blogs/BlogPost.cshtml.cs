@@ -4,7 +4,6 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Public.Blogs;
-using Volo.CmsKit.Public.Polls;
 
 namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs;
 
@@ -32,23 +31,17 @@ public class BlogPostModel : CmsKitPublicPageModelBase
 
     protected IBlogFeatureAppService BlogFeatureAppService { get; }
 
-    protected IPollViewComponentAppService PollViewComponentAppService { get; }
-
-
     public BlogPostModel(
         IBlogPostPublicAppService blogPostPublicAppService,
-        IBlogFeatureAppService blogFeaturePublicAppService,
-        IPollViewComponentAppService pollViewComponentAppService)
+        IBlogFeatureAppService blogFeaturePublicAppService)
     {
         BlogPostPublicAppService = blogPostPublicAppService;
         BlogFeatureAppService = blogFeaturePublicAppService;
-        PollViewComponentAppService = pollViewComponentAppService;
     }
 
     public virtual async Task OnGetAsync()
     {
         BlogPost = await BlogPostPublicAppService.GetAsync(BlogSlug, BlogPostSlug);
-        BlogPost.ContentFragments = await PollViewComponentAppService.ParseAsync(BlogPost.Content);
 
         if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
         {

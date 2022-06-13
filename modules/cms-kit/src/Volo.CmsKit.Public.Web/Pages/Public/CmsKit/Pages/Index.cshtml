@@ -1,5 +1,6 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.CmsKit.Contents
 @using Volo.CmsKit.Localization
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
 
@@ -27,5 +28,6 @@
     {
         pageId = Model.Page.Id,
         title = Model.Page.Title,
-        content = Model.Page.Content
+        content = Model.Page.Content,
+        contentFragments = Model.Page.ContentFragments
     })
