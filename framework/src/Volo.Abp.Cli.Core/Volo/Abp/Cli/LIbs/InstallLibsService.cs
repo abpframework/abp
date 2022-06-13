@@ -54,6 +54,11 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             return;
         }
 
+        if (!IsYarnAvailable())
+        {
+            Logger.LogWarning("YARN is not installed, which may cause package inconsistency, please use YARN instead of NPM. visit https://classic.yarnpkg.com/lang/en/docs/install/ and install YARN");
+        }
+
         Logger.LogInformation($"Found {projectPaths.Count} projects.");
         foreach (var projectPath in projectPaths)
         {
