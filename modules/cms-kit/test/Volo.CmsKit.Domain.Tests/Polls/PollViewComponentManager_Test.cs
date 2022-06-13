@@ -20,6 +20,23 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
     }
 
     [Fact]
+    public async Task AA_ParseAsync_ShouldWorkMoreDynamically()
+    {
+        _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
+        _options.Value.AddWidgetConfig("ImageGallery", new ContentWidgetConfig("ImageGallery"));//test
+
+        var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
+                        [Widget Type=""Poll"" PollName =""poll-name""]
+                        Thanks _for_ *your * feedback.
+                        [Widget Type=""ImageGallery"" GalleryName=""Xyz"" Source=""GoogleDrive""]";
+
+        var poll = await pollManager.ParseAsync(content);
+
+        poll.ShouldNotBeNull();
+        poll.Count.ShouldBe(4);
+    }
+
+    [Fact]
     public async Task ParseAsync_ShouldWorkWithoutConfigOptions()
     {
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.

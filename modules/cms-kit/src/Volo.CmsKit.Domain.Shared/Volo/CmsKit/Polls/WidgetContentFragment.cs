@@ -7,7 +7,7 @@ public class WidgetContentFragment : ContentFragment
 
     public string ViewComponentName { get; set; }
 
-    public IDictionary<string, object> Properties { get; }
+    public IDictionary<string, object> Properties { get; set; }
 
     public WidgetContentFragment(string name)
     {

@@ -62,8 +62,9 @@ public class ContentParser : IContentParser, ITransientDependency
             }
         }
 
-        var pollNames = Regex.Matches(content, @"(?<=PollName\s*=\s*"")(.*?)(?="")").Cast<Match>().Select(p => p.Value).ToList();
-        var polls = Regex.Matches(content, @"(?<=Widget Type\s*=\s*"")(.*?)(?="")").Cast<Match>().Select(p => p.Value).ToList();
+
+        Dictionary<string, List<KeyValuePair<string, string>>> parsedWidgets = new();
+        ParseWidgets(content, parsedWidgets);
 
         var contentFragments = new List<ContentFragment>();
 
@@ -71,17 +72,23 @@ public class ContentParser : IContentParser, ITransientDependency
         {
             if (parsedList[i] == delimeter)
             {
-                if (polls.Count > k)
+                var values = parsedWidgets.GetOrDefault($"{k}.Widget").Select(p => p.Value).ToList();
+                var keys = parsedWidgets.GetOrDefault($"{k}.Widget").Select(p => p.Key).ToList();
+
+                if (parsedWidgets.Count > k)
                 {
-                    var name = _options.WidgetConfigs.Where(p => p.Key == polls[k]).Select(p => p.Value.Name).FirstOrDefault();
-                    if (name is not null && pollNames.Count > k)
+                    var name = _options.WidgetConfigs.Where(p => p.Key == values[0]).Select(p => p.Value.Name).FirstOrDefault();
+                    if (name is not null && parsedWidgets.Count > k)
                     {
+                        var properties = new Dictionary<string, object>();
+                        for (int kv = 0; kv < values.Count; kv++)
+                        {
+                            properties.Add(keys[kv], values[kv]);
+                        }
+
                         contentFragments.Add(new WidgetContentFragment(name)
                         {
-                            Properties =
-                            {
-                                { "Name", pollNames[k]}
-                            }
+                            Properties = properties
                         });
                     }
                 }
@@ -94,5 +101,23 @@ public class ContentParser : IContentParser, ITransientDependency
         }
 
         return contentFragments;
+    }
+
+    private void ParseWidgets(string content, Dictionary<string, List<KeyValuePair<string, string>>> parsedWidgets)
+    {
+        var widgets = Regex.Matches(content, @"(?<=\[Widget)(.*?)(?=\])").Cast<Match>().Select(p => p.Value).ToList();
+        for (int p = 0; p < widgets.Count; p++)
+        {
+            var preparedContent = string.Join("", widgets[p]);
+            var keys = Regex.Matches(preparedContent, @"(?<=[\[Widget]?\s)(.*?)(?=="")").Cast<Match>().Select(p => p.Value).Where(p => p != string.Empty).ToList();
+            var values = Regex.Matches(preparedContent, @"(?<=\s*[a-zA-Z]*=\s*"")(.*?)(?="")").Cast<Match>().Select(p => p.Value).ToList();
+
+            var list = new List<KeyValuePair<string, string>>();
+            for (int kv = 0; kv < keys.Count; kv++)
+            {
+                list.Add(new KeyValuePair<string, string>(keys[kv], values[kv]));
+            }
+            parsedWidgets.Add($"{p}.Widget", list);
+        }
     }
 }
