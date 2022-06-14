@@ -75,10 +75,13 @@
                             }
                             else if (contentFragment.Type == "Widget") //TODO: Constant
                             {
-                                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties)
+                                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), new 
+                                    {
+                                        extraProperties = contentFragment.ExtraProperties
+                                    }
+                                )
                             }
                         }
-                        
                         <p class="mb-3">
                             @if (Model.BlogPost.LastModificationTime != null)
                             {

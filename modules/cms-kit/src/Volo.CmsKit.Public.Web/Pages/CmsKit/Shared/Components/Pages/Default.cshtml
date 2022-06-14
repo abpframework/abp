@@ -17,9 +17,13 @@
                 @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
             }
             else if (contentFragment.Type == "Widget") //TODO: Constant
-            {
-                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties)
+                            {
+                                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), new 
+                                    {
+                                        extraProperties = contentFragment.ExtraProperties
+                                    }
+                                )
+                            }
             }
-        }
     </abp-card-body>
 </abp-card>
