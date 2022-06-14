@@ -21,18 +21,11 @@ public class ContentParser : ITransientDependency
 
     public async Task<List<ContentFragment>> ParseAsync(string content)
     {
-        return new List<ContentFragment> {
-            new ContentFragment() { Type = "Markdown" }.SetProperty("Content", "This is *a markdown* text."),
-            new ContentFragment() { Type = "Widget" }.SetProperty("Type", "Poll").SetProperty("Code", "6dhah8dd"),
-            new ContentFragment() { Type = "Markdown" }.SetProperty("Content", "This is *another markdown* text.")
-        };
-
-        /*
         if (!_options.WidgetConfigs.Any())
         {
-            return new List<ContentFragment>()
+            return new List<ContentFragment>
             {
-                new MarkdownContentFragment() { Content = content }
+                new ContentFragment() { Type = "Markdown" }.SetProperty("Content", content),
             };
         }
 
@@ -87,31 +80,31 @@ public class ContentParser : ITransientDependency
 
                 if (parsedWidgets.Count > k)
                 {
-                    var name = _options.WidgetConfigs.Where(p => p.Key == values[0]).Select(p => p.Value.Name).FirstOrDefault();
+                    var widgetType = values[0];
+                    var name = _options.WidgetConfigs.Where(p => p.Key == widgetType).Select(p => p.Value.Name).FirstOrDefault();
                     if (name is not null && parsedWidgets.Count > k)
                     {
-                        var properties = new Dictionary<string, object>();
+                        values[0] = name;
+                        var contentFragment = new ContentFragment() { Type = "Widget" };
+                        contentFragments.Add(contentFragment);
                         for (int kv = 0; kv < values.Count; kv++)
                         {
-                            properties.Add(keys[kv], values[kv]);
+                            
+                            contentFragments.FindLast(p=>p == contentFragment)
+                                .SetProperty(keys[kv], values[kv]);
                         }
-
-                        contentFragments.Add(new WidgetContentFragment(name)
-                        {
-                            Properties = properties
-                        });
                     }
                 }
                 k++;
             }
             else
             {
-                contentFragments.Add(new MarkdownContentFragment() { Content = parsedList[i] });
+                contentFragments.Add(new ContentFragment() { Type = "Markdown" }
+                .SetProperty("Content", parsedList[i]));
             }
         }
 
         return contentFragments;
-        */
     }
 
     private void ParseWidgets(string content, Dictionary<string, List<KeyValuePair<string, string>>> parsedWidgets)
