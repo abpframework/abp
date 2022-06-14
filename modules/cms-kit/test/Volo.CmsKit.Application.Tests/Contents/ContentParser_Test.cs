@@ -10,13 +10,12 @@ public class ContentParser_Test : CmsKitDomainTestBase
 {
     private readonly CmsKitTestData testData;
     private readonly IOptions<CmsKitContentWidgetOptions> _options;
-    private readonly ContentParser contentParser;
+    private ContentParser contentParser;
 
     public ContentParser_Test()
     {
         testData = GetRequiredService<CmsKitTestData>();
         _options = GetRequiredService<IOptions<CmsKitContentWidgetOptions>>();
-        contentParser = GetRequiredService<ContentParser>();
     }
 
     [Fact]
@@ -24,6 +23,7 @@ public class ContentParser_Test : CmsKitDomainTestBase
     {
         _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
         _options.Value.AddWidgetConfig("ImageGallery", new ContentWidgetConfig("ImageGallery"));//test
+        contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
                         [Widget Type=""Poll"" PollName =""poll-name""]
@@ -43,55 +43,58 @@ public class ContentParser_Test : CmsKitDomainTestBase
                         [Widget Type=  ""Poll"" PollName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var poll = await contentParser.ParseAsync(content);
+        var widgets = await contentParser.ParseAsync(content);
 
-        poll.ShouldNotBeNull();
-        poll.Count.ShouldBe(1);//Ignored Widget
+        widgets.ShouldNotBeNull();
+        widgets.Count.ShouldBe(1);//Ignored Widget
     }
 
     [Fact]
     public async Task ParseAsync_ShouldWorkWithWrongConfigOptions()
     {
         _options.Value.AddWidgetConfig(testData.WidgetName, new ContentWidgetConfig(testData.PollName));
+        contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
                         [Widget Type=  ""Poll"" PollName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var poll = await contentParser.ParseAsync(content);
+        var widgets = await contentParser.ParseAsync(content);
 
-        poll.ShouldNotBeNull();
-        poll.Count.ShouldBe(2);
+        widgets.ShouldNotBeNull();
+        widgets.Count.ShouldBe(2);
     }
 
     [Fact]
     public async Task ParseAsync_ShouldWorkWithWrongWidgetType()
     {
         _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
+        contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
                         [Widget Wrong Type=  ""Poll"" PollName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var poll = await contentParser.ParseAsync(content);
+        var widgets = await contentParser.ParseAsync(content);
 
-        poll.ShouldNotBeNull();
-        poll.Count.ShouldBe(2);
+        widgets.ShouldNotBeNull();
+        widgets.Count.ShouldBe(2);
     }
 
     [Fact]
     public async Task ParseAsync_ShouldWorkWithWrongPollName()
     {
         _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
+        contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
                         [Widget Type=  ""Poll"" PollWrongName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var poll = await contentParser.ParseAsync(content);
+        var widgets = await contentParser.ParseAsync(content);
 
-        poll.ShouldNotBeNull();
-        poll.Count.ShouldBe(2);
+        widgets.ShouldNotBeNull();
+        widgets.Count.ShouldBe(2);
     }
 
     [Theory]
@@ -99,11 +102,12 @@ public class ContentParser_Test : CmsKitDomainTestBase
     public async Task ParseAsync_ShouldWorkProperlyWithCorrectInputs(string content, int expectedLine)
     {
         _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
+        contentParser = new ContentParser(_options);
 
-        var poll = await contentParser.ParseAsync(content);
+        var widgets = await contentParser.ParseAsync(content);
 
-        poll.ShouldNotBeNull();
-        poll.Count.ShouldBe(expectedLine);
+        widgets.ShouldNotBeNull();
+        widgets.Count.ShouldBe(expectedLine);
     }
 
     public static IEnumerable<object[]> ExampleData =>
