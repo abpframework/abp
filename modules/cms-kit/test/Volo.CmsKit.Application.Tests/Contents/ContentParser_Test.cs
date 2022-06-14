@@ -2,22 +2,23 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Shouldly;
+using Volo.CmsKit.Polls;
 using Xunit;
 
-namespace Volo.CmsKit.Polls;
-
-public class PollViewComponentManager_Test : CmsKitDomainTestBase
+namespace Volo.CmsKit.Contents;
+public class ContentParser_Test : CmsKitDomainTestBase
 {
     private readonly CmsKitTestData testData;
     private readonly IOptions<CmsKitContentWidgetOptions> _options;
+    private readonly ContentParser contentParser;
 
-    public PollViewComponentManager_Test()
+    public ContentParser_Test()
     {
         testData = GetRequiredService<CmsKitTestData>();
         _options = GetRequiredService<IOptions<CmsKitContentWidgetOptions>>();
+        contentParser = GetRequiredService<ContentParser>();
     }
 
-    /* TODO: Enable again
     [Fact]
     public async Task AA_ParseAsync_ShouldWorkMoreDynamically()
     {
@@ -29,10 +30,10 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
                         Thanks _for_ *your * feedback.
                         [Widget Type=""ImageGallery"" GalleryName=""Xyz"" Source=""GoogleDrive""]";
 
-        var poll = await pollManager.ParseAsync(content);
+        var widgets = await contentParser.ParseAsync(content);
 
-        poll.ShouldNotBeNull();
-        poll.Count.ShouldBe(4);
+        widgets.ShouldNotBeNull();
+        widgets.Count.ShouldBe(4);
     }
 
     [Fact]
@@ -42,7 +43,7 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
                         [Widget Type=  ""Poll"" PollName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var poll = await pollManager.ParseAsync(content);
+        var poll = await contentParser.ParseAsync(content);
 
         poll.ShouldNotBeNull();
         poll.Count.ShouldBe(1);//Ignored Widget
@@ -57,7 +58,7 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
                         [Widget Type=  ""Poll"" PollName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var poll = await pollManager.ParseAsync(content);
+        var poll = await contentParser.ParseAsync(content);
 
         poll.ShouldNotBeNull();
         poll.Count.ShouldBe(2);
@@ -72,7 +73,7 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
                         [Widget Wrong Type=  ""Poll"" PollName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var poll = await pollManager.ParseAsync(content);
+        var poll = await contentParser.ParseAsync(content);
 
         poll.ShouldNotBeNull();
         poll.Count.ShouldBe(2);
@@ -87,7 +88,7 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
                         [Widget Type=  ""Poll"" PollWrongName =""poll-name""]
                         Thanks _for_ *your * feedback.";
 
-        var poll = await pollManager.ParseAsync(content);
+        var poll = await contentParser.ParseAsync(content);
 
         poll.ShouldNotBeNull();
         poll.Count.ShouldBe(2);
@@ -99,7 +100,7 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
     {
         _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
 
-        var poll = await pollManager.ParseAsync(content);
+        var poll = await contentParser.ParseAsync(content);
 
         poll.ShouldNotBeNull();
         poll.Count.ShouldBe(expectedLine);
@@ -128,11 +129,4 @@ public class PollViewComponentManager_Test : CmsKitDomainTestBase
               new object[] { @"Thanks _for_ *your * feedback.
                     Thanks _for_ *your * feedback.", 1}
          };
-*/
 }
-
-
-
-
-
-
