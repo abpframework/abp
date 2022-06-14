@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Volo.CmsKit.Contents;
-using Volo.CmsKit.Polls;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages;
 

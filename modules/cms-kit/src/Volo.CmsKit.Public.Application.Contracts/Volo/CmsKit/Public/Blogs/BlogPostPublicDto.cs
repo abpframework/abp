@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 using Volo.CmsKit.Contents;
-using Volo.CmsKit.Polls;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Blogs;

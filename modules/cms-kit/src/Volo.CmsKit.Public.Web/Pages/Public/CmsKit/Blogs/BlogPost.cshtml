@@ -1,6 +1,6 @@
 ﻿@page
 
-@using Volo.CmsKit.Polls
+@using Volo.Abp.Data
 @using Volo.CmsKit.Public.Blogs
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
 @using Volo.CmsKit.Public.Web.Pages
@@ -69,13 +69,13 @@
                         </p>
                         @foreach (var contentFragment in Model.BlogPost.ContentFragments)
                         {
-                            if (contentFragment is MarkdownContentFragment markdownContentFragment)
+                            if (contentFragment.Type == "Markdown") //TODO: Constant
                             {
-                                @Html.Raw(await MarkdownRenderer.RenderAsync(markdownContentFragment.Content))
+                                @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
                             }
-                            else if (contentFragment is WidgetContentFragment widgetContentFragment)
+                            else if (contentFragment.Type == "Widget") //TODO: Constant
                             {
-                                @await Component.InvokeAsync(widgetContentFragment.Name,  widgetContentFragment.Properties)
+                                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties)
                             }
                         }
                         
