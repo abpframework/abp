@@ -19,20 +19,28 @@ public class ContentParser : ITransientDependency
         _options = options.Value;
     }
 
-    public async Task<List<ContentFragment>> ParseAsync(string content)
+    public Task<List<ContentFragment>> ParseAsync(string content)
     {
         if (!_options.WidgetConfigs.Any())
         {
-            return new List<ContentFragment>
+            return Task.FromResult(new List<ContentFragment>
             {
                 new ContentFragment() { Type = "Markdown" }.SetProperty("Content", content),
-            };
+            });
         }
 
-        var replacedText = Regex.Replace(content, @"\[.*?\]", delimeter);
-
         var parsedList = new List<string>();
+        ParseContent(content, parsedList);
 
+        var contentFragments = new List<ContentFragment>();
+        FillContentFragment(content, parsedList, contentFragments);
+
+        return Task.FromResult(contentFragments);
+    }
+
+    private void ParseContent(string content, List<string> parsedList)
+    {
+        var replacedText = Regex.Replace(content, @"\[.*?\]", delimeter);
         if (!replacedText.Contains(delimeter))
         {
             parsedList.Add(replacedText);
@@ -64,34 +72,40 @@ public class ContentParser : ITransientDependency
                 parsedList.Add(replacedText);
             }
         }
+    }
 
-
-        Dictionary<string, List<KeyValuePair<string, string>>> parsedWidgets = new();
-        ParseWidgets(content, parsedWidgets);
-
-        var contentFragments = new List<ContentFragment>();
-
+    private void FillContentFragment(string content, List<string> parsedList, List<ContentFragment> contentFragments)
+    {
+        content = Regex.Replace(content, @"=\s*""", @"=""");
+        content = Regex.Replace(content, @"""\s*=", @"""=");
+        var widgets = Regex.Matches(content, @"(?<=\[Widget)(.*?)(?=\])").Cast<Match>().Select(p => p.Value).ToList();
         for (int i = 0, k = 0; i < parsedList.Count; i++)
         {
             if (parsedList[i] == delimeter)
             {
-                var values = parsedWidgets.GetOrDefault($"{k}.Widget").Select(p => p.Value).ToList();
-                var keys = parsedWidgets.GetOrDefault($"{k}.Widget").Select(p => p.Key).ToList();
-
-                if (parsedWidgets.Count > k)
+                if (widgets.Count > k)
                 {
-                    var widgetType = values[0];
-                    var name = _options.WidgetConfigs.Where(p => p.Key == widgetType).Select(p => p.Value.Name).FirstOrDefault();
-                    if (name is not null && parsedWidgets.Count > k)
+                    var preparedContent = string.Join("", widgets[k]);
+                    var keys = Regex.Matches(preparedContent, @"(?<=\s)(.*?)(?==\s*"")").Cast<Match>()
+                        .Select(p => p.Value).Where(p => p != string.Empty).ToList();
+                    var values = Regex.Matches(preparedContent, @"(?<=\s*[a-zA-Z]*=\s*"")(.*?)(?="")").Cast<Match>()
+                        .Select(p => p.Value).ToList();
+
+                    var widgetTypeIndex = keys.IndexOf("Type");
+                    if (widgetTypeIndex != -1)
                     {
-                        values[0] = name;
-                        var contentFragment = new ContentFragment() { Type = "Widget" };
-                        contentFragments.Add(contentFragment);
-                        for (int kv = 0; kv < values.Count; kv++)
+                        var widgetType = values[widgetTypeIndex];
+                        var name = _options.WidgetConfigs.Where(p => p.Key == widgetType).Select(p => p.Value.Name).FirstOrDefault();
+                        if (name is not null && widgets.Count > k)
                         {
-                            
-                            contentFragments.FindLast(p=>p == contentFragment)
-                                .SetProperty(keys[kv], values[kv]);
+                            values[0] = name;
+                            var contentFragment = new ContentFragment() { Type = "Widget" };
+                            contentFragments.Add(contentFragment);
+                            for (int kv = 0; kv < values.Count; kv++)
+                            {
+                                contentFragments.FindLast(p => p == contentFragment)
+                                    .SetProperty(keys[kv], values[kv]);
+                            }
                         }
                     }
                 }
@@ -103,28 +117,6 @@ public class ContentParser : ITransientDependency
                 .SetProperty("Content", parsedList[i]));
             }
         }
-
-        return contentFragments;
     }
 
-    private void ParseWidgets(string content, Dictionary<string, List<KeyValuePair<string, string>>> parsedWidgets)
-    {
-        var widgets = Regex.Matches(content, @"(?<=\[Widget)(.*?)(?=\])").Cast<Match>().Select(p => p.Value).ToList();
-        for (int p = 0; p < widgets.Count; p++)
-        {
-            var preparedContent = string.Join("", widgets[p]);
-            var keys = Regex.Matches(preparedContent, @"(?<=[\[Widget]?\s)(.*?)(?=="")").Cast<Match>()
-                .Select(p => p.Value).Where(p => p != string.Empty).ToList();
-            var values = Regex.Matches(preparedContent, @"(?<=\s*[a-zA-Z]*=\s*"")(.*?)(?="")").Cast<Match>()
-                .Select(p => p.Value).ToList();
-
-            var list = new List<KeyValuePair<string, string>>();
-            for (int kv = 0; kv < keys.Count; kv++)
-            {
-                list.Add(new KeyValuePair<string, string>(keys[kv], values[kv]));
-            }
-
-            parsedWidgets.Add($"{p}.Widget", list);
-        }
-    }
 }
