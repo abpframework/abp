@@ -1,5 +1,6 @@
 ﻿@page
 
+@using System.Dynamic
 @using Volo.Abp.Data
 @using Volo.CmsKit.Public.Blogs
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
@@ -75,11 +76,7 @@
                             }
                             else if (contentFragment.Type == "Widget") //TODO: Constant
                             {
-                                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), new 
-                                    {
-                                        extraProperties = contentFragment.ExtraProperties
-                                    }
-                                )
+                                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), ConvertToDynamicObject(contentFragment.ExtraProperties))
                             }
                         }
                         <p class="mb-3">
@@ -166,5 +163,22 @@
             entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
             entityId = Model.BlogPost.Id.ToString()
         })
+    }
+}
+
+@{
+    dynamic ConvertToDynamicObject(Dictionary<string, object> dict)
+    {
+        var eo = new ExpandoObject();
+        var eoColl = (ICollection<KeyValuePair<string, object>>)eo;
+
+        foreach (var kvp in dict)
+        {
+            eoColl.Add(kvp);
+        }
+
+        dynamic eoDynamic = eo;
+
+        return eoDynamic;
     }
 }

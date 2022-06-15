@@ -1,5 +1,6 @@
 ﻿@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 
+@using System.Dynamic
 @using Volo.CmsKit.Public.Web.Renderers
 @using Volo.Abp.Data
 @using Volo.CmsKit.Contents
@@ -18,12 +19,26 @@
             }
             else if (contentFragment.Type == "Widget") //TODO: Constant
             {
-                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), new 
-                    {
-                        extraProperties = contentFragment.ExtraProperties
-                    }
-                )
+                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), ConvertToDynamicObject(contentFragment.ExtraProperties))
             }
         }
     </abp-card-body>
 </abp-card>
+
+
+@{
+    dynamic ConvertToDynamicObject(Dictionary<string, object> dict)
+    {
+        var eo = new ExpandoObject();
+        var eoColl = (ICollection<KeyValuePair<string, object>>)eo;
+
+        foreach (var kvp in dict)
+        {
+            eoColl.Add(kvp);
+        }
+
+        dynamic eoDynamic = eo;
+
+        return eoDynamic;
+    }
+}
