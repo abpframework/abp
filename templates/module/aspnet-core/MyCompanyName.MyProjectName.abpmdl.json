@@ -75,8 +75,8 @@
       "path": "host/MyCompanyName.MyProjectName.Web.Host/MyCompanyName.MyProjectName.Web.Host.abppkg.json",
       "folder": "host"
     },
-    "MyCompanyName.MyProjectName.IdentityServer": {
-      "path": "host/MyCompanyName.MyProjectName.IdentityServer/MyCompanyName.MyProjectName.IdentityServer.abppkg.json",
+    "MyCompanyName.MyProjectName.AuthServer": {
+      "path": "host/MyCompanyName.MyProjectName.AuthServer/MyCompanyName.MyProjectName.AuthServer.abppkg.json",
       "folder": "host"
     },
     "MyCompanyName.MyProjectName.Host.Shared": {

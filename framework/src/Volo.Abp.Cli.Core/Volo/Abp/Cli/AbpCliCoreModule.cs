@@ -64,6 +64,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[CreateMigrationAndRunMigratorCommand.Name] = typeof(CreateMigrationAndRunMigratorCommand);
             options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
+            options.Commands[CliCommand.Name] = typeof(CliCommand);
         });
 
         Configure<AbpCliServiceProxyOptions>(options =>

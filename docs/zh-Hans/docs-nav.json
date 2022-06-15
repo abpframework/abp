@@ -409,14 +409,16 @@
                   "path": "Entities.md"
                 },
                 {
-                  "text": "值对象"
+                  "text": "值对象",
+                  "path": "Value-Objects.md"
                 },
                 {
                   "text": "仓储",
                   "path": "Repositories.md"
                 },
                 {
-                  "text": "领域服务"
+                  "text": "领域服务",
+                  "path": "Domain-Services.md"
                 },
                 {
                   "text": "规约",
@@ -808,7 +810,13 @@
       "items": [
         {
           "text": "CLI",
-          "path": "CLI.md"
+          "path": "CLI.md",
+          "items": [
+            {
+              "text": "新命令示例",
+              "path": "CLI-New-Command-Samples.md"
+            }
+          ]
         },
         {
           "text": "API文档",

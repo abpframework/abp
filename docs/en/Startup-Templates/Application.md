@@ -226,15 +226,15 @@ The solution structure is shown below:
 
 ![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-tiered.png)
 
-As different from the default structure, two new projects come into play: `.IdentityServer` & `.HttpApi.Host`.
+As different from the default structure, two new projects come into play: `.AuthServer` & `.HttpApi.Host`.
 
-#### .IdentityServer Project
+#### .AuthServer Project
 
-This project is used as an authentication server for other projects. `.Web` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the IdentityServer. Then uses the access token to call the HTTP API server. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
+This project is used as an authentication server for other projects. `.Web` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the AuthServer. Then uses the access token to call the HTTP API server. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
 
 ![tiered-solution-applications](../images/tiered-solution-applications.png)
 
-ABP uses the open source [IdentityServer4](https://identityserver.io/) framework for the authentication between applications. See [IdentityServer4 documentation](http://docs.identityserver.io) for details about the IdentityServer4 and OpenID Connect protocol.
+ABP uses the open source [OpenIddcit](https://github.com/openiddict/openiddict-core) framework for the authentication between applications. See [OpenIddcit documentation](https://documentation.openiddict.com/) for details about the OpenIddict and OpenID Connect protocol.
 
 It has its own `appsettings.json` that contains database connection and other configurations.
 
@@ -256,7 +256,7 @@ This project contains an `appsettings.json` file, but this time it does not have
 
 You should run the application with the given order:
 
-* First, run the `.IdentityServer` since other applications depend on it.
+* First, run the `.AuthServer` since other applications depend on it.
 * Then run the `.HttpApi.Host` since it is used by the `.Web` application.
 * Finally, you can run the `.Web` project and login to the application (using `admin` as the username and `1q2w3E*` as the password).
 

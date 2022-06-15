@@ -39,7 +39,7 @@ export class FormSubmitDirective implements OnInit {
     private host: ElementRef<HTMLFormElement>,
     private cdRef: ChangeDetectorRef,
     private subscription: SubscriptionService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.subscription.addOne(this.formGroupDirective.ngSubmit, () => {

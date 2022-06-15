@@ -31,7 +31,6 @@ public class Program
         {
             loggerConfiguration.MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning);
             loggerConfiguration.MinimumLevel.Override("Microsoft", LogEventLevel.Warning);
-            loggerConfiguration.MinimumLevel.Override("IdentityServer4.Startup", LogEventLevel.Warning);
         }
 
         Log.Logger = loggerConfiguration.CreateLogger();
