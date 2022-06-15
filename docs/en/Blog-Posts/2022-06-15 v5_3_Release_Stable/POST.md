@@ -6,7 +6,7 @@
 
 Since all the new features are already explained in details with the [5.3 RC Announcement Post](https://blog.abp.io/abp/ABP.IO-Platform-5.3-RC-Has-Been-Published), I will not repeat all the details again. See the [RC Blog Post](https://blog.abp.io/abp/ABP.IO-Platform-5.3-RC-Has-Been-Published) for all the features and enhancements.
 
-## Getting Started With 5.3
+## Getting Started with 5.3
 
 ### Creating New Solutions
 
@@ -20,7 +20,7 @@ You can create a new solution with the ABP Framework version 5.3 by either using
 
 First of all, install the ABP CLI or upgrade to the latest version.
 
-If you haven't installed yet:
+If you haven't installed it yet:
 
 ```bash
 dotnet tool install -g Volo.Abp.Cli
@@ -32,7 +32,7 @@ To update an existing installation:
 dotnet tool update -g Volo.Abp.Cli
 ```
 
-#### Upgrading Existing Solutions With ABP Update Command
+#### Upgrading Existing Solutions with the ABP Update Command
 
 [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) provides a handy command to update all the ABP related NuGet and NPM packages in your solution with a single command:
 
@@ -44,7 +44,7 @@ Run this command in the root folder of your solution.
 
 ## Migration Guides
 
-Check the following migration guides for the applications with version 5.2 upgrading to version 5.3.
+Check the following migration guides for the applications with version 5.2 that are upgrading to version 5.3.
 
 * [ABP Framework 5.2 to 5.3 migration guide](https://docs.abp.io/en/abp/5.3/Migration-Guides/Abp-5_3)
 * [ABP Commercial 5.2 to 5.3 migration guide](https://docs.abp.io/en/commercial/5.3/migration-guides/v5_3)
