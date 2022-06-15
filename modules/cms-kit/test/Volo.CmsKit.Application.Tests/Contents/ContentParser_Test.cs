@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Shouldly;
-using Volo.CmsKit.Polls;
 using Xunit;
 
 namespace Volo.CmsKit.Contents;

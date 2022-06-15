@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
-using Volo.CmsKit.Polls;
 
 namespace Volo.CmsKit.Contents;
 
