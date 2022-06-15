@@ -17,18 +17,10 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
-//<TEMPLATE-REMOVE IF-NOT='BASIC'>
-using Volo.Abp.AspNetCore.Components.Server.BasicTheme;
-using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
-//</TEMPLATE-REMOVE>
-//<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
-//</TEMPLATE-REMOVE>
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -64,14 +56,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered;
     typeof(AbpAspNetCoreMvcClientModule),
     typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
     typeof(AbpHttpClientIdentityModelWebModule),
-    //<TEMPLATE-REMOVE IF-NOT='BASIC'>
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-    typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
-    //</TEMPLATE-REMOVE>
-    //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
     typeof(AbpAspNetCoreComponentsServerLeptonXLiteThemeModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
-    //</TEMPLATE-REMOVE>
     typeof(AbpAutofacModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -134,28 +120,6 @@ public class MyProjectNameBlazorModule : AbpModule
     {
         Configure<AbpBundlingOptions>(options =>
         {
-            //<TEMPLATE-REMOVE IF-NOT='BASIC'>
-            // MVC UI
-            options.StyleBundles.Configure(
-                BasicThemeBundles.Styles.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/global-styles.css");
-                }
-            );
-
-            //BLAZOR UI
-            options.StyleBundles.Configure(
-                BlazorBasicThemeBundles.Styles.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/blazor-global-styles.css");
-                    //You can remove the following line if you don't use Blazor CSS isolation for components
-                    bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.Tiered.styles.css");
-                }
-            );
-            //</TEMPLATE-REMOVE>
-            //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
             // MVC UI
             options.StyleBundles.Configure(
                 LeptonXLiteThemeBundles.Styles.Global,
@@ -175,7 +139,6 @@ public class MyProjectNameBlazorModule : AbpModule
                     bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.Tiered.styles.css");
                 }
             );
-            //</TEMPLATE-REMOVE>
         });
     }
 
@@ -228,7 +191,6 @@ public class MyProjectNameBlazorModule : AbpModule
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}basic-theme{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiMultiTenancyModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy", Path.DirectorySeparatorChar)));
                 //options.FileSets.ReplaceEmbeddedByPhysical<AbpPermissionManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}permission-management{0}src{0}Volo.Abp.PermissionManagement.Web", Path.DirectorySeparatorChar)));
                 //options.FileSets.ReplaceEmbeddedByPhysical<AbpFeatureManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}feature-management{0}src{0}Volo.Abp.FeatureManagement.Web", Path.DirectorySeparatorChar)));

@@ -8,14 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Blazor.Menus;
 using OpenIddict.Abstractions;
-//<TEMPLATE-REMOVE IF-NOT='BASIC'>
-using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
-using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
-//</TEMPLATE-REMOVE>
-//<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
 using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme;
 using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite;
-//</TEMPLATE-REMOVE>
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.AutoMapper;
@@ -31,12 +25,7 @@ namespace MyCompanyName.MyProjectName.Blazor;
 [DependsOn(
     typeof(AbpAutofacWebAssemblyModule),
     typeof(MyProjectNameHttpApiClientModule),
-    //<TEMPLATE-REMOVE IF-NOT='BASIC'>
-    typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
-    //</TEMPLATE-REMOVE>
-    //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
     typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule),
-    //</TEMPLATE-REMOVE>
     typeof(AbpIdentityBlazorWebAssemblyModule),
     typeof(AbpTenantManagementBlazorWebAssemblyModule),
     typeof(AbpSettingManagementBlazorWebAssemblyModule)
@@ -97,12 +86,7 @@ public class MyProjectNameBlazorModule : AbpModule
 
     private static void ConfigureUI(WebAssemblyHostBuilder builder)
     {
-        //<TEMPLATE-REMOVE IF-NOT='BASIC'>
-        builder.RootComponents.Add<Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic.App>("#ApplicationContainer");
-        //</TEMPLATE-REMOVE>
-        //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
-        builder.RootComponents.Add<Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite.App>("#ApplicationContainer");
-        //</TEMPLATE-REMOVE>
+        builder.RootComponents.Add<App>("#ApplicationContainer");
 
     }
 

@@ -17,14 +17,8 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-//<TEMPLATE-REMOVE IF-NOT='BASIC'>
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
-//</TEMPLATE-REMOVE>
-//<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
-//</TEMPLATE-REMOVE>
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Auditing;
@@ -46,12 +40,7 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
-    //<TEMPLATE-REMOVE IF-NOT='BASIC'>
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-    //</TEMPLATE-REMOVE>
-    //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
-    //</TEMPLATE-REMOVE>
     typeof(MyProjectNameEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreSerilogModule)
     )]
@@ -106,16 +95,6 @@ public class MyProjectNameAuthServerModule : AbpModule
 
         Configure<AbpBundlingOptions>(options =>
         {
-            //<TEMPLATE-REMOVE IF-NOT='BASIC'>
-            options.StyleBundles.Configure(
-                BasicThemeBundles.Styles.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/global-styles.css");
-                }
-            );
-            //</TEMPLATE-REMOVE>
-            //<TEMPLATE-REMOVE IF-NOT='LEPTONX-LITE'>
             options.StyleBundles.Configure(
                 LeptonXLiteThemeBundles.Styles.Global,
                 bundle =>
@@ -123,7 +102,6 @@ public class MyProjectNameAuthServerModule : AbpModule
                     bundle.AddFiles("/global-styles.css");
                 }
             );
-            //</TEMPLATE-REMOVE>
         });
 
         Configure<AbpAuditingOptions>(options =>
@@ -141,7 +119,6 @@ public class MyProjectNameAuthServerModule : AbpModule
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}basic-theme{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}account{0}src{0}Volo.Abp.Account.Web", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebOpenIddictModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}account{0}src{0}Volo.Abp.Account.Web.OpenIddict", Path.DirectorySeparatorChar)));
                 //</TEMPLATE-REMOVE>
