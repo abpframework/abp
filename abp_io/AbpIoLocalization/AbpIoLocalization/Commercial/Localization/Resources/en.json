@@ -207,7 +207,7 @@
     "WhenShouldIRenewMyLicense": "When should I renew my license?",
     "WhenShouldIRenewMyLicenseExplanation": "If you renew your license within <strong>1 month</strong> after your license expires, the following discounts will be applied: Team License {0}% discount, Business License {1}% discount, Enterprise License {2}% discount. However, if you renew your license after <strong>1 month</strong> since the expiry date of your license, the renewal price will be the same as the license purchase price and there will be no discount on your renewal.",
     "TrialPlan": "Do you have a trial plan?",
-    "TrialPlanExplanation": "For now, ABP Commercial doesn't have a trial plan. For the Team licenses we provide 30 days money back guarantee. You can just request a refund in the first 30 days. For the Business and Enterprise licenses, we provide 60% refund in 30 days. This is because Business and Enterprise licenses include the full source code of all the modules and the themes.",
+    "TrialPlanExplanation": "It has a 14 days trial period for the ABP Commercial team license. For more information visit <a href={0} target='_blank'>here</a>. Furthermore, for the Team licenses we provide a 30 days money-back guarantee. You can just request a refund in the first 30 days. For the Business and Enterprise licenses, we provide 60% refund in 30 days. This is because Business and Enterprise licenses include the full source code of all the modules and the themes.",
     "DoYouAcceptBankWireTransfer": "Do you accept bank wire transfers?",
     "DoYouAcceptBankWireTransferExplanation": "Yes, we accept bank wire transfers.<br/>After sending the license fee via bank transfer, send your receipt and requested license type to accounting@abp.io.<br/>Our international bank account information:",
     "HowToUpgrade": "How to upgrade existing applications when a new version is available?",
@@ -374,9 +374,9 @@
     "CompanySize": "Company Size",
     "Next": "Next",
     "StartTrial": "Start My Free Trial",
-    "ContactUsIssues": "Contact us if you have any issues",
+    "ContactUsQuestions": "Contact us if you have any questions",
     "TrialActivatedWarning": "A user is entitled to have only 1 free trial period. You already used your trial period.",
-    "ActivationRequirement": "You are one step away from starting your free trial.<br>We have sent an email to <b>{0}</b> to activate your account. Check your inbox/junk/spam boxes!",
+    "ActivationRequirement": "You are last one step away from starting a free trial.<br>After checking your information, we will activate your license. Once your license is activated, we will send an email to <b>{0}</b>. Don't worry, this process won't take long!",
     "SaveAndDownload": "Save And Download",
     "CompanyNameValidationMessage": "Company name is too long!",
     "AddressValidationMessage": "Address is too long!",
@@ -602,6 +602,10 @@
     "TrainingDetailsHeaderInfo_TrainingHour": "{0} hour(s)",
     "Trainings_Content": "Content of Training",
     "Trial_Page_StartYourFreeTrial": "Start Your <span class=\"gradient-commercial\">Free Trial</span>",
+    "TrialLicenseFeatures": "You'll be able to benefit from all ABP commercial features",
+    "WhatHappensWhenTrialLicenseExpires": "You cannot continue to develop your project after the license expiration",
+    "TrialPeriodDays": "You'll have a {0} days Team License",
+    "TrialForumSupportIncident": "You'll have {0} forum support incidents",
     "Contact_Page_Title": "Contact with ABP Development Team",
     "Contact_Page_Description": "Contact with ABP Development team, if you need any help or share your thoughts and opinions! ABP Support Team is ready to help.",
     "Demo_Page_Title": "Create a Demo",
@@ -723,6 +727,10 @@
     "Landing_Page_PaymentModuleDescription_1": "Provides integration for different payment gateways.",
     "Landing_Page_PaymentModuleDescription_2": "This module provides integration for payment gateways, so you can easily get payment from your customers.",
     "Landing_Page_PaymentModuleDescription_3": "This module supports the following payment gateways",
-    "Welcome_Page_UseSameCredentialForCommercialWebsites": "Use the same credentials for both <a href=\"https://commercial.abp.io\" class=\"text-primary\">commercial.abp.io</a> and <a href=\"https://support.abp.io\" class=\"text-primary\">support.abp.io</a>."
+    "Welcome_Page_UseSameCredentialForCommercialWebsites": "Use the same credentials for both <a href=\"https://commercial.abp.io\" class=\"text-primary\">commercial.abp.io</a> and <a href=\"https://support.abp.io\" class=\"text-primary\">support.abp.io</a>.",
+    "WatchCrudPagesVideo": "Watch the \"Creating CRUD Pages with ABP Suite\" Video!",
+    "WatchGeneratingFromDatabaseVideo": "Watch the \"ABP Suite: Generating CRUD Pages From Existing Database Tables\" Video!",
+    "WatchTakeCloserLookVideo": "Watch the \"Take a closer look at the code generation: ABP Suite\" Video!"
+    
   }
 }

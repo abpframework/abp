@@ -39,7 +39,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
        Check.NotNull(scope, nameof(scope));
 
        await Repository.InsertAsync(scope.ToEntity(), autoSave: true, cancellationToken: cancellationToken);
-       
+
        scope = (await Repository.FindAsync(scope.Id, cancellationToken: cancellationToken)).ToModel();
    }
 
@@ -66,7 +66,8 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
 
     public virtual async IAsyncEnumerable<OpenIddictScopeModel> FindByNamesAsync(ImmutableArray<string> names, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(names, nameof(names));
+        Check.NotNull(names, nameof(names));
+
         foreach (var name in names)
         {
             Check.NotNullOrEmpty(name, nameof(name));
@@ -384,7 +385,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         var entity = await Repository.GetAsync(scope.Id, cancellationToken: cancellationToken);
 
         await Repository.UpdateAsync(scope.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
-        
+
         scope = (await Repository.FindAsync(entity.Id, cancellationToken: cancellationToken)).ToModel();
     }
 }

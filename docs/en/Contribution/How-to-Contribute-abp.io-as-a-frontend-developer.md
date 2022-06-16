@@ -22,7 +22,7 @@ Unix: `templates/app/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/apps
 You need to install SQL Server and Redis. You can install these programs without docker, but my example uses docker containers. Your computer should have Docker Engine. Then open the terminal en execute the commands one by one.
 For the Sql Server
 
-docker run -v sqlvolume:/var/opt/mssql -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=yourpassword -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+docker run -v sqlvolume:/var/opt/mssql -e 'ACCEPT_EULA=Y' -e "SA_PASSWORD=yourpassword" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
 
 For the Redis
 
