@@ -23,4 +23,8 @@
     <Content Remove="Volo\Abp\OpenIddict\Localization\OpenIddict\*.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Volo\Abp\OpenIddict\Localization\OpenIddict\pt-BR.json" />
+  </ItemGroup>
+
 </Project>
