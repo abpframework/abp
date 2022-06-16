@@ -9,8 +9,7 @@ namespace MyCompanyName.MyProjectName.Pages;
 public class IndexModel : AbpPageModel
 {
     public List<Client> Clients { get; protected set; }
-
-    // TODO: Consider using IClientStore here.
+    
     protected IClientRepository ClientRepository { get; }
     
     public IndexModel(IClientRepository clientRepository)
