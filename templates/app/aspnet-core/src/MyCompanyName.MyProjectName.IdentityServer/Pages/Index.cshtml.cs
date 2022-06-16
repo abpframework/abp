@@ -1,10 +1,25 @@
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using IdentityServer4.Stores;
+using Volo.Abp.IdentityServer.Clients;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace MyCompanyName.MyProjectName.Pages;
 
 public class IndexModel : AbpPageModel
 {
-    public void OnGet()
+    public List<Client> Clients { get; protected set; }
+
+    // TODO: Consider using IClientStore here.
+    protected IClientRepository ClientRepository { get; }
+    
+    public IndexModel(IClientRepository clientRepository)
     {
+        this.ClientRepository = clientRepository;
+    }
+
+    public async Task OnGetAsync()
+    {
+        Clients = await ClientRepository.GetListAsync(includeDetails: true);
     }
 }
