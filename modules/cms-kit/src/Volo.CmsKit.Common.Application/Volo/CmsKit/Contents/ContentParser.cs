@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using static Volo.CmsKit.Contents.ContentConsts;
 
 namespace Volo.CmsKit.Contents;
 
 public class ContentParser : ITransientDependency
 {
-    private const string delimeter = "----";
     private readonly CmsKitContentWidgetOptions _options;
 
     public ContentParser(IOptions<CmsKitContentWidgetOptions> options)
@@ -39,16 +39,16 @@ public class ContentParser : ITransientDependency
 
     private void ParseContent(string content, List<string> parsedList)
     {
-        var replacedText = Regex.Replace(content, @"\[.*?\]", delimeter);
-        if (!replacedText.Contains(delimeter))
+        var replacedText = Regex.Replace(content, @"\[.*?\]", Delimeter);
+        if (!replacedText.Contains(Delimeter))
         {
             parsedList.Add(replacedText);
         }
 
-        while (replacedText.Contains(delimeter))
+        while (replacedText.Contains(Delimeter))
         {
             //For parsing delimeter
-            var index = replacedText.IndexOf(delimeter);
+            var index = replacedText.IndexOf(Delimeter);
             if (index != 0)
             {
                 parsedList.Add(replacedText.Substring(0, index));
@@ -56,11 +56,11 @@ public class ContentParser : ITransientDependency
                 index = 0;
             }
 
-            parsedList.Add(replacedText.Substring(index, delimeter.Length));
-            replacedText = replacedText.Substring(delimeter.Length, replacedText.Length - delimeter.Length);
+            parsedList.Add(replacedText.Substring(index, Delimeter.Length));
+            replacedText = replacedText.Substring(Delimeter.Length, replacedText.Length - Delimeter.Length);
 
             //for parsing the other side
-            index = replacedText.IndexOf(delimeter);
+            index = replacedText.IndexOf(Delimeter);
             if (index != -1)
             {
                 parsedList.Add(replacedText.Substring(0, index));
@@ -80,7 +80,7 @@ public class ContentParser : ITransientDependency
         var widgets = Regex.Matches(content, @"(?<=\[Widget)(.*?)(?=\])").Cast<Match>().Select(p => p.Value).ToList();
         for (int i = 0, k = 0; i < parsedList.Count; i++)
         {
-            if (parsedList[i] == delimeter)
+            if (parsedList[i] == Delimeter)
             {
                 if (widgets.Count > k)
                 {
@@ -98,7 +98,7 @@ public class ContentParser : ITransientDependency
                         if (name is not null && widgets.Count > k)
                         {
                             values[0] = name;
-                            var contentFragment = new ContentFragment() { Type = "Widget" };
+                            var contentFragment = new ContentFragment() { Type = Widget };
                             contentFragments.Add(contentFragment);
                             for (int kv = 0; kv < values.Count; kv++)
                             {
@@ -112,7 +112,7 @@ public class ContentParser : ITransientDependency
             }
             else
             {
-                contentFragments.Add(new ContentFragment() { Type = "Markdown" }
+                contentFragments.Add(new ContentFragment() { Type = Markdown }
                 .SetProperty("Content", parsedList[i]));
             }
         }
