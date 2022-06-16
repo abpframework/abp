@@ -292,6 +292,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 if (grantType == OpenIddictConstants.GrantTypes.RefreshToken)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.RefreshToken);
+                    application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Revocation);
                 }
 
                 if (grantType == OpenIddictConstants.GrantTypes.Implicit)
