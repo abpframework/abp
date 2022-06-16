@@ -1,33 +1,63 @@
-﻿@page
-@using Microsoft.AspNetCore.Mvc.Localization
+﻿
+@page
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 @using Volo.CmsKit.Contents
-@using Volo.CmsKit.Localization
-@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
+@using System.Dynamic
+@using Volo.CmsKit.Public.Web.Renderers
+@using Volo.Abp.Data
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+
+@inject IMarkdownToHtmlRenderer MarkdownRenderer
+
 
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages.IndexModel
 
-@inject IHtmlLocalizer<CmsKitResource> L
 
 @section styles{
     
     <abp-style src="/Pages/Public/CmsKit/Pages/index.css" />
 
     <style>
-        @Html.Raw(Model.Page.Style)
+        @Html.Raw(Model.PageDto.Style)
     </style>
 }
 
 @section scripts{
     <script>
-        @Html.Raw(Model.Page.Script)
+        @Html.Raw(Model.PageDto.Script)
     </script>
 }
 
-@await Component.InvokeAsync(typeof(DefaultPageViewComponent),
-    new
+<abp-card>
+    <abp-card-body>
+        @foreach (ContentFragment contentFragment in Model.PageDto.ContentFragments)
+        {
+            if (contentFragment.Type == "Markdown") //TODO: Constant
+            {
+                @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
+            }
+            else if (contentFragment.Type == "Widget") //TODO: Constant
+            {
+                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), ConvertToDynamicObject(contentFragment.ExtraProperties))
+            }
+        }
+    </abp-card-body>
+</abp-card>
+
+@{
+    dynamic ConvertToDynamicObject(Dictionary<string, object> dict)
     {
-        pageId = Model.Page.Id,
-        title = Model.Page.Title,
-        content = Model.Page.Content,
-        contentFragments = Model.Page.ContentFragments
-    })
+        var eo = new ExpandoObject();
+        var eoColl = (ICollection<KeyValuePair<string, object>>)eo;
+
+        foreach (var kvp in dict)
+        {
+            eoColl.Add(kvp);
+        }
+
+        dynamic eoDynamic = eo;
+
+        return eoDynamic;
+    }
+}

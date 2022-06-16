@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages;
+namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages;
 
 public class PageViewModel
 {

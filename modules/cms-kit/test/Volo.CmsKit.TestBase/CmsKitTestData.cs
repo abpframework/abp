@@ -130,5 +130,5 @@ public class CmsKitTestData : ISingletonDependency
 
     public string PollName { get; } = "Poll";
 
-    public string WidgetName { get; } = "CmsPollByName";
+    public string WidgetName { get; } = "CmsPollByCode";
 }
