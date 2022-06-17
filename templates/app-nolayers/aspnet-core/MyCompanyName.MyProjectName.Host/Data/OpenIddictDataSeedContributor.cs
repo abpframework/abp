@@ -197,6 +197,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     grantType == OpenIddictConstants.GrantTypes.DeviceCode)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
+                    application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Revocation);
                 }
 
                 if (grantType == OpenIddictConstants.GrantTypes.ClientCredentials)
