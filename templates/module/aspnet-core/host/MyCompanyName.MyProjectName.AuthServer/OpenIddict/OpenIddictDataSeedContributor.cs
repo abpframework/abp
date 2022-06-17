@@ -90,7 +90,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 type: OpenIddictConstants.ClientTypes.Confidential,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Web Application",
-                secret: configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*",
+                secret: configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*",
                 grantTypes: new List<string> //Hybrid flow
                 {
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
@@ -106,7 +106,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
         if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
         {
-            var webClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
+            var consoleAndAngularClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
             await CreateApplicationAsync(
                 name: consoleAndAngularClientId,
                 type: OpenIddictConstants.ClientTypes.Public,
@@ -121,8 +121,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     OpenIddictConstants.GrantTypes.RefreshToken
                 },
                 scopes: commonScopes,
-                redirectUri: webClientRootUrl,
-                postLogoutRedirectUri: webClientRootUrl
+                redirectUri: consoleAndAngularClientRootUrl,
+                postLogoutRedirectUri: consoleAndAngularClientRootUrl
             );
         }
 
@@ -249,6 +249,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     grantType == OpenIddictConstants.GrantTypes.DeviceCode)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
+                    application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Revocation);
                 }
 
                 if (grantType == OpenIddictConstants.GrantTypes.ClientCredentials)
