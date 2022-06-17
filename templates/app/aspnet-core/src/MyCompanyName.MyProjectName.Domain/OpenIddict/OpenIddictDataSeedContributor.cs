@@ -90,7 +90,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 type: OpenIddictConstants.ClientTypes.Confidential,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Web Application",
-                secret: configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*",
+                secret: configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*",
                 grantTypes: new List<string> //Hybrid flow
                 {
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
