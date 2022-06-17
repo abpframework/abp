@@ -18,7 +18,9 @@ public static class OpenIddictApplicationExtensions
             Properties = model.Properties,
             RedirectUris = model.RedirectUris,
             Requirements = model.Requirements,
-            Type = model.Type
+            Type = model.Type,
+            ClientUri = model.ClientUri,
+            LogoUri = model.LogoUri
         };
 
         foreach (var extraProperty in model.ExtraProperties)
@@ -45,6 +47,8 @@ public static class OpenIddictApplicationExtensions
         entity.RedirectUris = model.RedirectUris;
         entity.Requirements = model.Requirements;
         entity.Type = model.Type;
+        entity.ClientUri = model.ClientUri;
+        entity.LogoUri = model.LogoUri;
 
         foreach (var extraProperty in model.ExtraProperties)
         {
@@ -75,7 +79,9 @@ public static class OpenIddictApplicationExtensions
             Properties = entity.Properties,
             RedirectUris = entity.RedirectUris,
             Requirements = entity.Requirements,
-            Type = entity.Type
+            Type = entity.Type,
+            ClientUri = entity.ClientUri,
+            LogoUri = entity.LogoUri
         };
 
         foreach (var extraProperty in entity.ExtraProperties)
