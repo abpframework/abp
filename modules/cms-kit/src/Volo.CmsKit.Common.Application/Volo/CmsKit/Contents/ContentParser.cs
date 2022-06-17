@@ -24,7 +24,7 @@ public class ContentParser : ITransientDependency
         {
             return Task.FromResult(new List<ContentFragment>
             {
-                new ContentFragment() { Type = "Markdown" }.SetProperty("Content", content),
+                new ContentFragment() { Type = Markdown }.SetProperty(Content, content),
             });
         }
 
@@ -113,7 +113,7 @@ public class ContentParser : ITransientDependency
             else
             {
                 contentFragments.Add(new ContentFragment() { Type = Markdown }
-                .SetProperty("Content", parsedList[i]));
+                .SetProperty(Content, parsedList[i]));
             }
         }
     }
