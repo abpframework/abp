@@ -197,6 +197,11 @@ Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrame
 ```bash
 dotnet ef migrations add Created_Book_Entity
 ```
+Note:The dotnet ef tool is no longer part of the .NET Core SDK.So you should install it before hand by running following comand:
+
+```bash
+dotnet tool install --global dotnet-ef
+```
 
 This will add a new migration class to the project:
 
