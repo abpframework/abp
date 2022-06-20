@@ -110,21 +110,21 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         #region MyCompanyName.MyProjectName.Blazor.Server
         ReplacePackageReferenceWithProjectReference(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyCompanyName.MyProjectName.Blazor.Server.csproj",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyCompanyName.MyProjectName.Blazor.csproj",
             "Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme",
-        @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
+            @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
             );
 
         ReplacePackageReferenceWithProjectReference(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyCompanyName.MyProjectName.Blazor.Server.csproj",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyCompanyName.MyProjectName.Blazor.csproj",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite",
             @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.Server.BasicTheme\Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj"
         );
         
         ChangeNamespaceAndKeyword(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameBlazorModule.cs",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
             "Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme",
             "Volo.Abp.AspNetCore.Components.Server.BasicTheme",
             "AbpAspNetCoreComponentsServerLeptonXLiteThemeModule",
@@ -133,7 +133,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         
         ChangeNamespaceAndKeyword(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameBlazorModule.cs",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
             "AbpAspNetCoreMvcUiLeptonXLiteThemeModule",
@@ -142,7 +142,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         
         ChangeNamespaceAndKeyword(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameBlazorModule.cs",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
             "Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling",
             "Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling",
             "LeptonXLiteThemeBundles.Styles.Global",
@@ -151,7 +151,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         
         ChangeNamespaceAndKeyword(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameBlazorModule.cs",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
             "BlazorLeptonXLiteThemeBundles.Styles.Global",
@@ -160,7 +160,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         
         ChangeNamespaceAndKeyword(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/Pages/_Host.cshtml",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/Pages/_Host.cshtml",
             "Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite",
             "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic",
             "BlazorLeptonXLiteThemeBundles.Styles.Global",
@@ -169,7 +169,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         
         ChangeNamespaceAndKeyword(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/Pages/_Host.cshtml",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/Pages/_Host.cshtml",
             "Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling",
             "Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling",
             "BlazorLeptonXLiteThemeBundles.Scripts.Global",
@@ -503,7 +503,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         for (var i = 0; i < lines.Length; i++)
         {
-            if (lines[i].Contains($"using {oldNamespace};"))
+            if (lines[i].Contains($"using {oldNamespace}"))
             {
                 lines[i] = $"using {newNamespace};";
             }
