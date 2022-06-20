@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20220519051356_Initial")]
+    [Migration("20220617083820_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -598,7 +598,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -944,6 +945,9 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                     b.Property<string>("ClientSecret")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ClientUri")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(40)
@@ -993,6 +997,9 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
+
+                    b.Property<string>("LogoUri")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Permissions")
                         .HasColumnType("nvarchar(max)");
