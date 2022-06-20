@@ -71,34 +71,34 @@
                                 <small style="opacity:.65;">@Model.BlogPost.CreationTime</small>
                             </p>
                             @foreach (var contentFragment in Model.BlogPost.ContentFragments)
-                        {
-                            if (contentFragment.Type == ContentConsts.Markdown)
                             {
-                                @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
+                                if (contentFragment.Type == ContentConsts.Markdown)
+                                {
+                                    @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
+                                }
+                                else if (contentFragment.Type == ContentConsts.Widget)
+                                {
+                                    @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
+                                }
                             }
-                            else if (contentFragment.Type == ContentConsts.Widget)
-                            {
-                                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
-                            }
-                        }
-                        <p class="mb-3">
-                            @if (Model.BlogPost.LastModificationTime != null)
-                            {
-                                <small style="opacity:.65;">@L["LastModification"].Value : @Model.BlogPost.LastModificationTime</small>
-                            }
-                        </p>
-                        <hr />
+                            <p class="mb-3">
+                                @if (Model.BlogPost.LastModificationTime != null)
+                                {
+                                    <small style="opacity:.65;">@L["LastModification"].Value : @Model.BlogPost.LastModificationTime</small>
+                                }
+                            </p>
+                            <hr />
 
-                        @if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
-                        {
-                            if (Model.TagsFeature?.IsEnabled == true)
+                            @if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
                             {
-                                @await Component.InvokeAsync(typeof(TagViewComponent), new
-                        {
-                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                        entityId = Model.BlogPost.Id.ToString(),
-                        urlFormat = $"/blogs/{Model.BlogSlug}?tagId={{TagId}}"
-                        })
+                                if (Model.TagsFeature?.IsEnabled == true)
+                                {
+                                    @await Component.InvokeAsync(typeof(TagViewComponent), new
+                            {
+                            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                            entityId = Model.BlogPost.Id.ToString(),
+                            urlFormat = $"/blogs/{Model.BlogSlug}?tagId={{TagId}}"
+                            })
                             }
                         }
                     </div>
