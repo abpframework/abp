@@ -152,6 +152,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
 
             await CreateClientAsync(
                 name: webClientId,
+                clientUri: webClientRootUrl,
                 scopes: commonScopes,
                 grantTypes: new[] { "hybrid" },
                 secret: (configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
@@ -172,6 +173,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
 
             await CreateClientAsync(
                 name: consoleAndAngularClientId,
+                clientUri: webClientRootUrl,
                 scopes: commonScopes,
                 grantTypes: new[] { "password", "client_credentials", "authorization_code" },
                 secret: (configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*").Sha256(),
@@ -192,6 +194,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
 
             await CreateClientAsync(
                 name: blazorClientId,
+                clientUri: blazorRootUrl,
                 scopes: commonScopes,
                 grantTypes: new[] { "authorization_code" },
                 secret: configurationSection["MyProjectName_Blazor:ClientSecret"]?.Sha256(),
@@ -217,6 +220,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
 
             await CreateClientAsync(
                 name: blazorServerTieredClientId,
+                clientUri: blazorServerTieredClientRootUrl,
                 scopes: commonScopes,
                 grantTypes: new[] { "hybrid" },
                 secret: (configurationSection["MyProjectName_BlazorServerTiered:ClientSecret"] ?? "1q2w3e*").Sha256(),
@@ -237,6 +241,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
 
             await CreateClientAsync(
                 name: swaggerClientId,
+                clientUri: swaggerRootUrl,
                 scopes: commonScopes,
                 grantTypes: new[] { "authorization_code" },
                 secret: configurationSection["MyProjectName_Swagger:ClientSecret"]?.Sha256(),
@@ -251,6 +256,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
         string name,
         IEnumerable<string> scopes,
         IEnumerable<string> grantTypes,
+        string clientUri = null,
         string secret = null,
         string redirectUri = null,
         string postLogoutRedirectUri = null,
@@ -270,6 +276,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
                 )
                 {
                     ClientName = name,
+                    ClientUri = clientUri,
                     ProtocolType = "oidc",
                     Description = name,
                     AlwaysIncludeUserClaimsInIdToken = true,
@@ -285,6 +292,11 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
                 },
                 autoSave: true
             );
+        }
+
+        if (client.ClientUri != clientUri)
+        {
+            client.ClientUri = clientUri;
         }
 
         foreach (var scope in scopes)
