@@ -1,0 +1,17 @@
+{
+  "culture": "el",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "Κεντρικός διακομιστής",
+    "Description:Abp.Ldap.ServerHost": "Κεντρικός διακομιστής",
+    "DisplayName:Abp.Ldap.ServerPort": "Θύρα",
+    "Description:Abp.Ldap.ServerPort": "Θύρα",
+    "DisplayName:Abp.Ldap.BaseDc": "Στοιχείο Βασικού τομέα",
+    "Description:Abp.Ldap.BaseDc": "Στοιχείο Βασικού τομέα",
+    "DisplayName:Abp.Ldap.Domain": "Τομέας",
+    "Description:Abp.Ldap.Domain": "Τομέας",
+    "DisplayName:Abp.Ldap.UserName": "Όνομα χρήστη",
+    "Description:Abp.Ldap.UserName": "Όνομα χρήστη",
+    "DisplayName:Abp.Ldap.Password": "Κωδικός Πρόσβασης",
+    "Description:Abp.Ldap.Password": "Κωδικός Πρόσβασης"
+  }
+}

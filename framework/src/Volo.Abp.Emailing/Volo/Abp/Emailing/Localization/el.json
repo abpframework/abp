@@ -1,0 +1,25 @@
+{
+  "culture": "el",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Προεπιλογή από τη διεύθυνση",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Προεπιλογή από το εμφανιζόμενο όνομα",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Διακομιστής",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Θύρα",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Όνομα χρήστη",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Κωδικός πρόσβασης",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Τομέας",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Ενεργοποίηση SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Χρήση προεπιλεγμένων διαπιστευτηρίων",
+    "Description:Abp.Mailing.DefaultFromAddress": "Προεπιλογή από τη διεύθυνση",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Προεπιλογή από το εμφανιζόμενο όνομα",
+    "Description:Abp.Mailing.Smtp.Host": "Το όνομα ή διεύθυνση IP του διακομιστή που χρησιμοποιείται για συναλλαγές SMTP.",
+    "Description:Abp.Mailing.Smtp.Port": "Θύρα που χρησιμοποιείται για συναλλαγές SMTP.",
+    "Description:Abp.Mailing.Smtp.UserName": "Όνομα χρήστη που συνδέεται με τα διαπιστευτήρια.",
+    "Description:Abp.Mailing.Smtp.Password": "Κωδικός πρόσβασης για το όνομα χρήστη που συνδέεται με τα διαπιστευτήρια .",
+    "Description:Abp.Mailing.Smtp.Domain": "Ο τομέας ή το όνομα του διακομιστή που επαληθεύει τα διαπιστευτήρια.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Εάν o SmtpClient χρησιμοποιεί Secure Sockets Layer (SSL) για την κρυπτογράφηση της σύνδεσης.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Εάν τα προεπιλεγμένα διαπιστευτήρια αποστέλλονται με αιτήματα.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Προεπιλεγμένο πρότυπο διάταξης email",
+    "TextTemplate:StandardEmailTemplates.Message": "Απλό πρότυπο μηνυμάτων για email"
+  }
+}

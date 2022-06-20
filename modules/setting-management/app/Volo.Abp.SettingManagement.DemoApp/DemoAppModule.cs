@@ -96,6 +96,7 @@ public class DemoAppModule : AbpModule
             options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
             options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
             options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+            options.Languages.Add(new LanguageInfo("el", "el", "Ελληνικά"));
         });
 
         Configure<AbpMultiTenancyOptions>(options =>
