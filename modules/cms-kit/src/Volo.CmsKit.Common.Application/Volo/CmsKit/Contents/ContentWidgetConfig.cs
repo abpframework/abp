@@ -5,9 +5,9 @@ namespace Volo.CmsKit.Contents;
 public class ContentWidgetConfig
 {
     public string Name { get; }
-    public Type ViewComponentType { get; set; }
+    public Type ViewComponentType { get; set; } //TODO: Remove this
 
-    public ContentWidgetConfig(string name)
+    public ContentWidgetConfig(string name) //TODO: widgetName
     {
         Name = name;
     }

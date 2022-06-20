@@ -3,21 +3,19 @@ using System.Dynamic;
 
 namespace Volo.CmsKit.Web.Contents;
 
-public static class Helper
+public static class DictionaryDynamicExtensions
 {
-    public static dynamic ConvertToDynamicObject(this Dictionary<string, object> dict)
+    public static dynamic ConvertToDynamicObject(this Dictionary<string, object> dict) //TODO: Move to AbpDictionaryExtensions
     {
-        var eo = new ExpandoObject();
-        var eoColl = (ICollection<KeyValuePair<string, object>>)eo;
+        var expandoObject = new ExpandoObject();
+        var eoColl = (ICollection<KeyValuePair<string, object>>)expandoObject;
 
         foreach (var kvp in dict)
         {
             eoColl.Add(kvp);
         }
 
-        dynamic eoDynamic = eo;
-
-        return eoDynamic;
+        return expandoObject;
     }
 }
 
