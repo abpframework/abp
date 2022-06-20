@@ -51,18 +51,18 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         #endregion
         
-        #region MyCompanyName.MyProjectName.HttpApi.HostWithIds
+        #region MyCompanyName.MyProjectName.HttpApi.Host
 
         ReplacePackageReferenceWithProjectReference(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyCompanyName.MyProjectName..HttpApi.HostWithIds.csproj",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyCompanyName.MyProjectName.HttpApi.Host.csproj",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite",
             @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
         );
         
         ChangeNamespaceAndKeyword(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyProjectNameHttpApiHostModule.cs",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
             "AbpAspNetCoreMvcUiLeptonXLiteThemeModule",
@@ -71,7 +71,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         ChangeNamespaceAndKeyword(
             context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyProjectNameHttpApiHostModule.cs",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
             "LeptonXLiteThemeBundles.Styles.Global",
