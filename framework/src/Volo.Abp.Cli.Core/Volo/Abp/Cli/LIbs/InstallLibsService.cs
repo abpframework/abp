@@ -78,8 +78,15 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             }
 
             // MVC or BLAZOR SERVER
-            if (projectPath.EndsWith("csproj"))
+            if (projectPath.EndsWith(".csproj"))
             {
+                var packageJsonFilePath = Path.Combine(Path.GetDirectoryName(projectPath), "package.json");
+                
+                if (!File.Exists(packageJsonFilePath))
+                {
+                    continue;
+                }
+                
                 if (IsYarnAvailable())
                 {
                     RunYarn(projectDirectory);
