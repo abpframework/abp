@@ -21,14 +21,18 @@ public class ThemePackageAdder : ITransientDependency
 
     public void AddNpmPackage(string rootDirectory, string package, string version)
     {
-        var packageJsonFilePaths = PackageJsonFileFinder.Find(rootDirectory);
+        var packageJsonFilePaths = PackageJsonFileFinder.Find(rootDirectory)
+            .Where(x => !File.Exists(x.RemovePostFix("package.json") + "angular.json"))
+            .ToList();
         
         AddPackage(packageJsonFilePaths, package, version);
     }
 
     public void AddAngularPackage(string rootDirectory, string package, string version)
     {
-        var angularPackageJsonFilePaths = PackageJsonFileFinder.Find(rootDirectory).Where(x => File.Exists(x.RemovePostFix("package.json") + "angular.json")).ToList();
+        var angularPackageJsonFilePaths = PackageJsonFileFinder.Find(rootDirectory)
+            .Where(x => File.Exists(x.RemovePostFix("package.json") + "angular.json"))
+            .ToList();
 
         AddPackage(angularPackageJsonFilePaths, package, version);
     }
@@ -41,7 +45,7 @@ public class ThemePackageAdder : ITransientDependency
         }
         
         var installCommand = IsYarnAvailable() ? "yarn add " : "npm install ";
-        var packageVersion = !string.IsNullOrWhiteSpace(version) ? $" --version {version}" : string.Empty;
+        var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
 
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {

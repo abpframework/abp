@@ -31,7 +31,7 @@ public abstract class ProjectCreationCommandBase
     public InitialMigrationCreator InitialMigrationCreator { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
-    public ThemePackageAdder ThemePackageAdder { get; set; }
+    public ThemePackageAdder ThemePackageAdder { get; }
 
     public ProjectCreationCommandBase(
         ConnectionStringProvider connectionStringProvider,
@@ -503,7 +503,7 @@ public abstract class ProjectCreationCommandBase
 
     private void ConfigureNpmPackagesForBasicTheme(ProjectBuildArgs projectArgs)
     {
-        if (projectArgs.UiFramework is UiFramework.Mvc or UiFramework.NotSpecified or UiFramework.BlazorServer)
+        if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
         {
             ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.mvc.ui.theme.basic", projectArgs.Version);
         }
@@ -513,7 +513,7 @@ public abstract class ProjectCreationCommandBase
             ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.components.server.basictheme", projectArgs.Version);
         }
 
-        if (projectArgs.UiFramework == UiFramework.Angular)
+        if (projectArgs.UiFramework is UiFramework.Angular)
         {
             ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
         }
