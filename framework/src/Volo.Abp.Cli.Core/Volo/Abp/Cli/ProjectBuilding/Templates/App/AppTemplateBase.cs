@@ -33,7 +33,7 @@ public abstract class AppTemplateBase : TemplateInfo
         RemoveMigrations(context, steps);
         ConfigureTieredArchitecture(context, steps);
         ConfigurePublicWebSite(context, steps);
-        ConfigureTheme(context);
+        ConfigureTheme(context, steps);
         RemoveUnnecessaryPorts(context, steps);
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
@@ -177,19 +177,62 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    protected void ConfigureTheme(ProjectBuildContext context)
+    protected void ConfigureTheme(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
-        if (context.BuildArgs.Theme.HasValue)
+        if (!context.BuildArgs.Theme.HasValue)
         {
-            if (context.BuildArgs.Theme == Theme.LeptonXLite)
-            {
-                context.Symbols.Add("LEPTONX-LITE");
-            }
+            return;
+        }
+        
+        if (context.BuildArgs.Theme != Theme.LeptonXLite)
+        {
+            steps.Add(new ChangeThemeStep());
+            RemoveLeptonXThemePackagesFromPackageJsonFiles(steps);
+        }
+    }
 
-            if (context.BuildArgs.Theme == Theme.Basic)
-            {
-                context.Symbols.Add("BASIC");
-            }
+    private void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps)
+    {
+        var packageJsonFilePaths = new List<string>() 
+        {
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Web/package.json",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package.json",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Mvc/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Mvc.Mongo/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Host/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Host.Mongo/package.json",
+        };
+
+        var blazorServerPackageJsonFilePaths = new List<string>() 
+        {
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/package.json",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Blazor.Server/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
+        };
+
+        var angularPackageJsonFilePaths = new List<string>() 
+        {
+            "/angular/package.json"
+        };
+
+        foreach (var packageJsonFilePath in packageJsonFilePaths)
+        {
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, "@abp/aspnetcore.mvc.ui.theme.leptonxlite"));
+        }
+
+        foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
+        {
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, "@abp/aspnetcore.mvc.ui.theme.leptonxlite"));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, "@abp/aspnetcore.components.server.leptonxlitetheme"));
+        }
+
+        foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
+        {
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "@abp/ng.theme.lepton-x"));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
         }
     }
 

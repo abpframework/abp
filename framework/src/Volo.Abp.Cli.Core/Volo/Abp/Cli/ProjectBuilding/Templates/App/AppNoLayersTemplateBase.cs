@@ -87,7 +87,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         UpdateNuGetConfig(context, steps);
         ChangeConnectionString(context, steps);
         ConfigureDockerFiles(context, steps);
-        ConfigureTheme(context);
+        ConfigureTheme(context, steps);
 
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
         {

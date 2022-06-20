@@ -6,6 +6,7 @@ using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using NuGet.Versioning;
 using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
@@ -30,13 +31,16 @@ public abstract class ProjectCreationCommandBase
     public InitialMigrationCreator InitialMigrationCreator { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
+    public ThemePackageAdder ThemePackageAdder { get; set; }
+
     public ProjectCreationCommandBase(
         ConnectionStringProvider connectionStringProvider,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
         IInstallLibsService installLibsService,
         AngularPwaSupportAdder angularPwaSupportAdder,
-        InitialMigrationCreator initialMigrationCreator)
+        InitialMigrationCreator initialMigrationCreator,
+        ThemePackageAdder themePackageAdder)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
@@ -44,6 +48,7 @@ public abstract class ProjectCreationCommandBase
         InstallLibsService = installLibsService;
         AngularPwaSupportAdder = angularPwaSupportAdder;
         InitialMigrationCreator = initialMigrationCreator;
+        ThemePackageAdder = themePackageAdder;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -478,6 +483,39 @@ public abstract class ProjectCreationCommandBase
                 return Theme.Basic;
             default:
                 throw new CliUsageException("The option you provided for Theme is invalid!");
+        }
+    }
+
+    protected void ConfigureNpmPackagesForTheme(ProjectBuildArgs projectArgs)
+    {
+        if (!projectArgs.Theme.HasValue)
+        {
+            return;
+        }
+
+        switch (projectArgs.Theme)
+        {
+            case Theme.Basic:
+                ConfigureNpmPackagesForBasicTheme(projectArgs);
+                break;
+        }
+    }
+
+    private void ConfigureNpmPackagesForBasicTheme(ProjectBuildArgs projectArgs)
+    {
+        if (projectArgs.UiFramework is UiFramework.Mvc or UiFramework.NotSpecified or UiFramework.BlazorServer)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.mvc.ui.theme.basic", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.BlazorServer)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.components.server.basictheme", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework == UiFramework.Angular)
+        {
+            ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
         }
     }
 

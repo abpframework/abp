@@ -33,6 +33,9 @@
   <ItemGroup>
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="1.0.0-beta.2" />
   </ItemGroup>
 
