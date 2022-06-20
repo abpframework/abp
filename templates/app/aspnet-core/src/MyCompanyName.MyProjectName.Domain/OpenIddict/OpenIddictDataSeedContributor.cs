@@ -10,6 +10,7 @@ using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
@@ -21,14 +22,14 @@ namespace MyCompanyName.MyProjectName.OpenIddict;
 public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDependency
 {
     private readonly IConfiguration _configuration;
-    private readonly IOpenIddictApplicationManager _applicationManager;
+    private readonly IAbpApplicationManager _applicationManager;
     private readonly IOpenIddictScopeManager _scopeManager;
     private readonly IPermissionDataSeeder _permissionDataSeeder;
     private readonly IStringLocalizer<OpenIddictResponse> L;
 
     public OpenIddictDataSeedContributor(
         IConfiguration configuration,
-        IOpenIddictApplicationManager applicationManager,
+        IAbpApplicationManager applicationManager,
         IOpenIddictScopeManager scopeManager,
         IPermissionDataSeeder permissionDataSeeder,
         IStringLocalizer<OpenIddictResponse> l)
@@ -201,6 +202,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         string secret,
         List<string> grantTypes,
         List<string> scopes,
+        string clientUri = null,
         string redirectUri = null,
         string postLogoutRedirectUri = null,
         List<string> permissions = null)
@@ -224,13 +226,14 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         var client = await _applicationManager.FindByClientIdAsync(name);
         if (client == null)
         {
-            var application = new OpenIddictApplicationDescriptor
+            var application = new AbpApplicationDescriptor
             {
                 ClientId = name,
                 Type = type,
                 ClientSecret = secret,
                 ConsentType = consentType,
-                DisplayName = displayName
+                DisplayName = displayName,
+                ClientUri = clientUri,
             };
 
             Check.NotNullOrEmpty(grantTypes, nameof(grantTypes));
