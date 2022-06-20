@@ -129,18 +129,38 @@ public abstract class ProjectCreationCommandBase
         SolutionName solutionName;
         if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
         {
-            var slnFile = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+            var slnPath = commandLineArgs.Options.GetOrNull(Options.MainSolution.Short, Options.MainSolution.Long);
 
-            if (slnFile == null)
+            if (slnPath == null)
             {
-                throw new CliUsageException("This command should be run inside a folder that contains a microservice solution!");
+                slnPath = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+            }
+            else if (slnPath.EndsWith(".sln"))
+            {
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(slnPath));
+                outputFolderRoot = Path.GetDirectoryName(slnPath);
+            }
+            else if (!Directory.Exists(slnPath))
+            {
+                slnPath = null;
+            }
+            else
+            {
+                Directory.SetCurrentDirectory(slnPath);
+                outputFolderRoot = slnPath;
+                slnPath = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+            }
+            
+            if (slnPath == null)
+            {
+                throw new CliUsageException($"This command should be run inside a folder that contains a microservice solution! Or use -{Options.MainSolution.Short} parameter.");
             }
 
-            var microserviceSolutionName = Path.GetFileName(slnFile).RemovePostFix(".sln");
+            var microserviceSolutionName = Path.GetFileName(slnPath).RemovePostFix(".sln");
 
-            version ??= SolutionPackageVersionFinder.Find(slnFile);
+            version ??= SolutionPackageVersionFinder.Find(slnPath);
             solutionName = SolutionName.Parse(microserviceSolutionName, projectName);
-            outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, projectName);
+            outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, solutionName.ProjectName);
             uiFramework = uiFramework == UiFramework.NotSpecified ? FindMicroserviceSolutionUiFramework(outputFolderRoot) : uiFramework;
         }
         else
@@ -511,6 +531,12 @@ public abstract class ProjectCreationCommandBase
         public static class ProgressiveWebApp
         {
             public const string Short = "pwa";
+        }
+
+        public static class MainSolution
+        {
+            public const string Short = "ms";
+            public const string Long = "main-solution";
         }
     }
 }
