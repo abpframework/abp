@@ -20,8 +20,8 @@ public class ContentParser_Test : CmsKitDomainTestBase
     [Fact]
     public async Task ParseAsync_ShouldWorkWithDifferentWidgetTypes()
     {
-        _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
-        _options.Value.AddWidgetConfig("ImageGallery", new ContentWidgetConfig("ImageGallery"));//test
+        _options.Value.AddWidget(testData.PollName, testData.WidgetName);
+        _options.Value.AddWidget("ImageGallery", "ImageGallery");
         contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
@@ -54,7 +54,7 @@ public class ContentParser_Test : CmsKitDomainTestBase
     [Fact]
     public async Task ParseAsync_ShouldWorkWithWrongConfigOptions()
     {
-        _options.Value.AddWidgetConfig(testData.WidgetName, new ContentWidgetConfig(testData.PollName));
+        _options.Value.AddWidget(testData.WidgetName, testData.PollName);
         contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
@@ -70,7 +70,7 @@ public class ContentParser_Test : CmsKitDomainTestBase
     [Fact]
     public async Task ParseAsync_ShouldWorkWithWrongWidgetType()
     {
-        _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
+        _options.Value.AddWidget(testData.PollName, testData.WidgetName);
         contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
@@ -86,7 +86,7 @@ public class ContentParser_Test : CmsKitDomainTestBase
     [Fact]
     public async Task ParseAsync_ShouldWorkWithWrongPollName()
     {
-        _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
+        _options.Value.AddWidget(testData.PollName, testData.WidgetName);
         contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
@@ -103,7 +103,7 @@ public class ContentParser_Test : CmsKitDomainTestBase
     [MemberData(nameof(ExampleData))]
     public async Task ParseAsync_ShouldWorkProperlyWithCorrectInputs(string content, int expectedLine)
     {
-        _options.Value.AddWidgetConfig(testData.PollName, new ContentWidgetConfig(testData.WidgetName));
+        _options.Value.AddWidget(testData.PollName, testData.WidgetName);
         contentParser = new ContentParser(_options);
 
         var widgets = await contentParser.ParseAsync(content);
