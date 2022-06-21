@@ -112,8 +112,14 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             .Where(file => ExcludeDirectory.All(x => file.IndexOf(x, StringComparison.OrdinalIgnoreCase) == -1))
             .Where(file =>
             {
-                if (file.EndsWith("csproj"))
+                if (file.EndsWith(".csproj"))
                 {
+                    var packageJsonFilePath = Path.Combine(Path.GetDirectoryName(file), "package.json");
+                    if (!File.Exists(packageJsonFilePath))
+                    {
+                        return false;
+                    }
+                
                     using (var reader = File.OpenText(file))
                     {
                         return reader.ReadToEnd().Contains("Microsoft.NET.Sdk.Web");
