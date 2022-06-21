@@ -142,6 +142,7 @@
     "MinimumSearchContent": "En az 3 karakter girmelisiniz!",
     "Volo.AbpIo.Domain:060001": "Kaynak URL (\"{PostUrl}\") Github URL'si değil",
     "Volo.AbpIo.Domain:060002": "Makale İçeriği Github(\"{PostUrl}\") kaynağında mevcut değil.",
-    "Volo.AbpIo.Domain:060003": "Makale içeriği bulunamadı!"
+    "Volo.AbpIo.Domain:060003": "Makale içeriği bulunamadı!",
+    "MemberNotPublishedPostYet": "Bu üye henüz bir gönderi yayınlamadı."
   }
 }

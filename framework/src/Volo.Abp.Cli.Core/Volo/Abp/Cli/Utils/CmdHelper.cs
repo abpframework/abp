@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Volo.Abp.DependencyInjection;
@@ -125,15 +126,31 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         return output.Trim();
     }
 
-    public string GetArguments(string command)
+    public void RunCmdAndExit(string command, string workingDirectory = null, int? delaySeconds = null)
+    {
+        var procStartInfo = new ProcessStartInfo(
+            GetFileName(),
+            GetArguments(command, delaySeconds)
+        );
+
+        if (!string.IsNullOrEmpty(workingDirectory))
+        {
+            procStartInfo.WorkingDirectory = workingDirectory;
+        }
+
+        Process.Start(procStartInfo);
+        Environment.Exit(0);
+    }
+
+    public string GetArguments(string command, int? delaySeconds = null)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            return "-c \"" + command + "\"";
+            return delaySeconds == null ? "-c \"" + command + "\"" : "-c \"" + $"sleep {delaySeconds}s > /dev/null && " + command + "\"";
         }
 
         //Windows default.
-        return "/C \"" + command + "\"";
+        return delaySeconds == null ? "/C \"" + command + "\"" : "/C \"" + $"timeout /nobreak /t {delaySeconds} >null && " + command + "\"";
     }
 
     public string GetFileName()
