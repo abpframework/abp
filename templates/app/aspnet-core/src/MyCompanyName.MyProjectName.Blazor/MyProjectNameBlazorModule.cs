@@ -8,13 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Blazor.Menus;
 using OpenIddict.Abstractions;
-using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
+using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme;
+using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
-using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
 using Volo.Abp.Identity.Blazor.WebAssembly;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.Blazor.WebAssembly;
@@ -25,7 +25,7 @@ namespace MyCompanyName.MyProjectName.Blazor;
 [DependsOn(
     typeof(AbpAutofacWebAssemblyModule),
     typeof(MyProjectNameHttpApiClientModule),
-    typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule),
     typeof(AbpIdentityBlazorWebAssemblyModule),
     typeof(AbpTenantManagementBlazorWebAssemblyModule),
     typeof(AbpSettingManagementBlazorWebAssemblyModule)
@@ -87,6 +87,7 @@ public class MyProjectNameBlazorModule : AbpModule
     private static void ConfigureUI(WebAssemblyHostBuilder builder)
     {
         builder.RootComponents.Add<App>("#ApplicationContainer");
+
     }
 
     private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)

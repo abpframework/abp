@@ -6,6 +6,7 @@ using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using NuGet.Versioning;
 using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
@@ -30,13 +31,16 @@ public abstract class ProjectCreationCommandBase
     public InitialMigrationCreator InitialMigrationCreator { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
+    public ThemePackageAdder ThemePackageAdder { get; }
+
     public ProjectCreationCommandBase(
         ConnectionStringProvider connectionStringProvider,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
         IInstallLibsService installLibsService,
         AngularPwaSupportAdder angularPwaSupportAdder,
-        InitialMigrationCreator initialMigrationCreator)
+        InitialMigrationCreator initialMigrationCreator,
+        ThemePackageAdder themePackageAdder)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
@@ -44,6 +48,7 @@ public abstract class ProjectCreationCommandBase
         InstallLibsService = installLibsService;
         AngularPwaSupportAdder = angularPwaSupportAdder;
         InitialMigrationCreator = initialMigrationCreator;
+        ThemePackageAdder = themePackageAdder;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -93,6 +98,12 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("UI Framework: " + uiFramework);
         }
 
+        var theme = uiFramework == UiFramework.None ? (Theme?)null : GetTheme(commandLineArgs);
+        if (theme.HasValue)
+        {
+            Logger.LogInformation("Theme: " + theme);
+        }
+
         var publicWebSite = uiFramework != UiFramework.None && commandLineArgs.Options.ContainsKey(Options.PublicWebSite.Long);
         if (publicWebSite)
         {
@@ -134,7 +145,6 @@ public abstract class ProjectCreationCommandBase
         if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
         {
             var slnFile = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
-
             if (slnFile == null)
             {
                 throw new CliUsageException("This command should be run inside a folder that contains a microservice solution!");
@@ -184,7 +194,8 @@ public abstract class ProjectCreationCommandBase
             templateSource,
             commandLineArgs.Options,
             connectionString,
-            pwa
+            pwa,
+            theme
         );
     }
 
@@ -460,6 +471,54 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
+    protected virtual Theme GetTheme(CommandLineArgs commandLineArgs)
+    {
+        var optionValue = commandLineArgs.Options.GetOrNull(Options.Theme.Long);
+        switch (optionValue)
+        {
+            case null:
+            case "leptonx-lite":
+                return Theme.LeptonXLite;
+            case "basic":
+                return Theme.Basic;
+            default:
+                throw new CliUsageException("The option you provided for Theme is invalid!");
+        }
+    }
+
+    protected void ConfigureNpmPackagesForTheme(ProjectBuildArgs projectArgs)
+    {
+        if (!projectArgs.Theme.HasValue)
+        {
+            return;
+        }
+
+        switch (projectArgs.Theme)
+        {
+            case Theme.Basic:
+                ConfigureNpmPackagesForBasicTheme(projectArgs);
+                break;
+        }
+    }
+
+    private void ConfigureNpmPackagesForBasicTheme(ProjectBuildArgs projectArgs)
+    {
+        if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.mvc.ui.theme.basic", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.BlazorServer)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.components.server.basictheme", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.Angular)
+        {
+            ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
+        }
+    }
+
     public static class Options
     {
         public static class Template
@@ -550,6 +609,11 @@ public abstract class ProjectCreationCommandBase
         public static class ProgressiveWebApp
         {
             public const string Short = "pwa";
+        }
+        
+        public static class Theme
+        {
+            public const string Long = "theme";
         }
     }
 }
