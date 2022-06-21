@@ -28,7 +28,6 @@ public class IndexModel : AbpPageModel
 
     public async Task OnGetAsync()
     {
-        var cts = new CancellationTokenSource(30);
         Applications = await OpenIdApplicationRepository.GetListAsync();
 
         Languages = await LanguageProvider.GetLanguagesAsync();
