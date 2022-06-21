@@ -65,7 +65,7 @@
     "Volo.Abp.Identity:010001": "Você não pode deletar sua própria conta!",
     "Volo.Abp.Identity:010002": "Não é possível definir mais de {MaxUserMembershipCount} unidade de organização para um usuário!",
     "Volo.Abp.Identity:010003": "Não é possível alterar a senha de um usuário conectado externamente!",
-    "Volo.Abp.Identity:010004": "Já existe uma unidade organizacional com o nome {0}. Duas unidades com o mesmo nome não pode ser criada no mesmo nível.",
+    "Volo.Abp.Identity:010004": "Já existe uma unidade organizacional com o nome {0}. Duas unidades com o mesmo nome não podem ser criadas no mesmo nível.",
     "Volo.Abp.Identity:010005": "Perfis estáticos não podem ser renomeados.",
     "Volo.Abp.Identity:010006": "Perfis estáticos não podem ser excluídos.",
     "Volo.Abp.Identity:010007": "Você não pode alterar sua configuração de dois fatores.",
@@ -104,7 +104,7 @@
     "Description:Abp.Identity.Lockout.LockoutDuration": "A duração que um usuário fica bloqueado quando ocorre um bloqueio.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "O número de tentativas de acesso malsucedidas permitidas antes que um usuário seja bloqueado, assumindo que o bloqueio esteja habilitado.",
     "Description:Abp.Identity.SignIn.RequireConfirmedEmail": "Se um endereço de e-mail confirmado é necessário para fazer login.",
-    "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Se o phoneNumber pode ser confirmado pelo usuário.",
+    "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Se o número de telefone pode ser confirmado pelo usuário.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Se um número de telefone confirmado é necessário para fazer login.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Se o nome de usuário pode ser atualizado pelo usuário.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Se o e-mail pode ser atualizado pelo usuário."

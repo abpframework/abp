@@ -995,6 +995,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<string>("ClientSecret")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ClientUri")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(40)
@@ -1044,6 +1047,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
+
+                    b.Property<string>("LogoUri")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Permissions")
                         .HasColumnType("nvarchar(max)");
