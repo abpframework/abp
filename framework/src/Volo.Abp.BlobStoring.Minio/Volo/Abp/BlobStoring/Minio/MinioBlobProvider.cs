@@ -95,14 +95,17 @@ public class MinioBlobProvider : BlobProviderBase, ITransientDependency
     protected virtual MinioClient GetMinioClient(BlobProviderArgs args)
     {
         var configuration = args.Configuration.GetMinioConfiguration();
-        var client = new MinioClient(configuration.EndPoint, configuration.AccessKey, configuration.SecretKey);
+
+        var client = new MinioClient()
+            .WithEndpoint(configuration.EndPoint)
+            .WithCredentials(configuration.AccessKey, configuration.SecretKey);
 
         if (configuration.WithSSL)
         {
             client.WithSSL();
         }
 
-        return client;
+        return client.Build();
     }
 
     protected virtual async Task CreateBucketIfNotExists(MinioClient client, string containerName)
