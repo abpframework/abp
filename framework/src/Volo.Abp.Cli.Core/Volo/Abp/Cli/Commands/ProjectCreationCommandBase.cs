@@ -13,10 +13,12 @@ using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Events;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
 using Volo.Abp.Cli.Utils;
+using Volo.Abp.EventBus.Local;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -28,6 +30,7 @@ public abstract class ProjectCreationCommandBase
     public IInstallLibsService InstallLibsService { get; }
     public AngularPwaSupportAdder AngularPwaSupportAdder { get; }
     public InitialMigrationCreator InitialMigrationCreator { get; }
+    public ILocalEventBus EventBus { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
     public ProjectCreationCommandBase(
@@ -36,7 +39,8 @@ public abstract class ProjectCreationCommandBase
         ICmdHelper cmdHelper,
         IInstallLibsService installLibsService,
         AngularPwaSupportAdder angularPwaSupportAdder,
-        InitialMigrationCreator initialMigrationCreator)
+        InitialMigrationCreator initialMigrationCreator,
+        ILocalEventBus eventBus)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
@@ -44,6 +48,7 @@ public abstract class ProjectCreationCommandBase
         InstallLibsService = installLibsService;
         AngularPwaSupportAdder = angularPwaSupportAdder;
         InitialMigrationCreator = initialMigrationCreator;
+        EventBus = eventBus;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -190,6 +195,10 @@ public abstract class ProjectCreationCommandBase
 
     protected void ExtractProjectZip(ProjectBuildResult project, string outputFolder)
     {
+        EventBus.PublishAsync(new ProjectCreationProgressEvent {
+            Message = "Extracting solution to file system"
+        }, false);
+        
         using (var templateFileStream = new MemoryStream(project.ZipContent))
         {
             using (var zipInputStream = new ZipInputStream(templateFileStream))
@@ -321,10 +330,14 @@ public abstract class ProjectCreationCommandBase
         throw new CliUsageException("The option you provided for Database Provider is invalid!");
     }
 
-    protected virtual void RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
+    protected virtual async Task RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
     {
         if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
         {
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+                Message = "Building the microservice solution"
+            }, false);
+            
             CmdHelper.RunCmd("dotnet build /graphbuild", projectArgs.OutputFolder);
         }
     }
@@ -337,6 +350,11 @@ public abstract class ProjectCreationCommandBase
             MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
         {
             Logger.LogInformation("Installing client-side packages...");
+            
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+                Message = "Installing client-side packages"
+            }, false);
+            
             await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
         }
     }
@@ -373,10 +391,14 @@ public abstract class ProjectCreationCommandBase
             return;
         }
 
+        await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+            Message = "Creating the initial migration"
+        }, false);
+        
         await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
     }
 
-    protected void ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)
+    protected async Task ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)
     {
         var isAngular = projectArgs.UiFramework == UiFramework.Angular;
         var isPwa = projectArgs.Pwa;
@@ -384,6 +406,7 @@ public abstract class ProjectCreationCommandBase
         if (isAngular && isPwa)
         {
             Logger.LogInformation("Adding PWA Support to Angular app.");
+            
             AngularPwaSupportAdder.AddPwaSupport(projectArgs.OutputFolder);
         }
     }

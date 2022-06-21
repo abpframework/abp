@@ -16,13 +16,14 @@ using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Local;
 
 namespace Volo.Abp.Cli.Commands;
 
 public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransientDependency
 {
     public const string Name = "new";
-
+    
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
 
@@ -33,8 +34,9 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         ICmdHelper cmdHelper,
         IInstallLibsService installLibsService,
         AngularPwaSupportAdder angularPwaSupportAdder,
-        InitialMigrationCreator ınitialMigrationCreator)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder, ınitialMigrationCreator)
+        InitialMigrationCreator ınitialMigrationCreator,
+        ILocalEventBus eventBus)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder, ınitialMigrationCreator, eventBus)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
@@ -79,10 +81,10 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
-        RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
+        await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
         await RunInstallLibsForWebTemplateAsync(projectArgs);
-        ConfigurePwaSupportForAngular(projectArgs);
+        await ConfigurePwaSupportForAngular(projectArgs);
 
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }
