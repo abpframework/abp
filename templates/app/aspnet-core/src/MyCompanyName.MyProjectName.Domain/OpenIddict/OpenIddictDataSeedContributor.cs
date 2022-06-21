@@ -99,6 +99,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 },
                 scopes: commonScopes,
                 redirectUri: $"{webClientRootUrl}signin-oidc",
+                clientUri: webClientRootUrl,
                 postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
             );
         }
@@ -123,6 +124,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 },
                 scopes: commonScopes,
                 redirectUri: consoleAndAngularClientRootUrl,
+                clientUri: consoleAndAngularClientRootUrl,
                 postLogoutRedirectUri: consoleAndAngularClientRootUrl
             );
         }
@@ -145,6 +147,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 },
                 scopes: commonScopes,
                 redirectUri: $"{blazorRootUrl}/authentication/login-callback",
+                clientUri: blazorRootUrl,
                 postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
             );
         }
@@ -168,6 +171,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 },
                 scopes: commonScopes,
                 redirectUri: $"{blazorServerTieredRootUrl}signin-oidc",
+                clientUri: blazorServerTieredRootUrl,
                 postLogoutRedirectUri: $"{blazorServerTieredRootUrl}signout-callback-oidc"
             );
         }
@@ -189,7 +193,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
                 },
                 scopes: commonScopes,
-                redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html"
+                redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html",
+                clientUri: swaggerRootUrl
             );
         }
     }
