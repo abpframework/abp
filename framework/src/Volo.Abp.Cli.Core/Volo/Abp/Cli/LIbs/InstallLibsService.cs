@@ -25,18 +25,17 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
         Path.Combine("obj", "debug")
     };
 
-    public ICmdHelper CmdHelper { get; }
+    public NpmHelper NpmHelper { get; }
     public const string LibsDirectory = "./wwwroot/libs";
 
     public ILogger<InstallLibsService> Logger { get; set; }
 
     private readonly IJsonSerializer _jsonSerializer;
 
-    public InstallLibsService(IJsonSerializer jsonSerializer, ICmdHelper cmdHelper)
+    public InstallLibsService(IJsonSerializer jsonSerializer, NpmHelper npmHelper)
     {
-        CmdHelper = cmdHelper;
+        NpmHelper = npmHelper;
         _jsonSerializer = jsonSerializer;
-        Logger = NullLogger<InstallLibsService>.Instance;
     }
 
     public async Task InstallLibsAsync(string directory)
@@ -48,13 +47,13 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             return;
         }
 
-        if (!IsNpmInstalled())
+        if (!NpmHelper.IsNpmInstalled())
         {
             Logger.LogWarning("NPM is not installed, visit https://nodejs.org/en/download/ and install NPM");
             return;
         }
 
-        if (!IsYarnAvailable())
+        if (!NpmHelper.IsYarnAvailable())
         {
             Logger.LogWarning("YARN is not installed, which may cause package inconsistency, please use YARN instead of NPM. visit https://classic.yarnpkg.com/lang/en/docs/install/ and install YARN");
         }
@@ -72,13 +71,13 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             // angular
             if (projectPath.EndsWith("angular.json"))
             {
-                if (IsYarnAvailable())
+                if (NpmHelper.IsYarnAvailable())
                 {
-                    RunYarn(projectDirectory);
+                    NpmHelper.RunYarn(projectDirectory);
                 }
                 else
                 {
-                    RunNpmInstall(projectDirectory);
+                    NpmHelper.RunNpmInstall(projectDirectory);
                 }
             }
 
@@ -86,19 +85,19 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             if (projectPath.EndsWith(".csproj"))
             {
                 var packageJsonFilePath = Path.Combine(Path.GetDirectoryName(projectPath), "package.json");
-                
+
                 if (!File.Exists(packageJsonFilePath))
                 {
                     continue;
                 }
-                
-                if (IsYarnAvailable())
+
+                if (NpmHelper.IsYarnAvailable())
                 {
-                    RunYarn(projectDirectory);
+                    NpmHelper.RunYarn(projectDirectory);
                 }
                 else
                 {
-                    RunNpmInstall(projectDirectory);
+                    NpmHelper.RunNpmInstall(projectDirectory);
                 }
 
                 await CleanAndCopyResources(projectDirectory);
@@ -243,32 +242,5 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
         }
 
         return pattern;
-    }
-
-    private void RunNpmInstall(string directory)
-    {
-        Logger.LogInformation($"Running npm install on {directory}");
-        CmdHelper.RunCmd($"npm install", directory);
-    }
-
-    private void RunYarn(string directory)
-    {
-        Logger.LogInformation($"Running Yarn on {directory}");
-        CmdHelper.RunCmd($"yarn", directory);
-    }
-
-    private bool IsNpmInstalled()
-    {
-        var output = CmdHelper.RunCmdAndGetOutput("npm -v").Trim();
-        return SemanticVersion.TryParse(output, out _);
-    }
-
-    private bool IsYarnAvailable()
-    {
-        var output = CmdHelper.RunCmdAndGetOutput("yarn -v").Trim();
-        if (!SemanticVersion.TryParse(output, out var version)){
-            return false;
-        }
-        return version > SemanticVersion.Parse("1.20.0");
     }
 }

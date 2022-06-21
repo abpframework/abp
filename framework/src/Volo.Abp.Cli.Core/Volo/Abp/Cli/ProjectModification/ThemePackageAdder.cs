@@ -10,12 +10,12 @@ namespace Volo.Abp.Cli.ProjectModification;
 
 public class ThemePackageAdder : ITransientDependency
 {
-    protected ICmdHelper CmdHelper { get; }
+    protected NpmHelper NpmHelper { get; }
     protected PackageJsonFileFinder PackageJsonFileFinder { get; }
 
-    public ThemePackageAdder(ICmdHelper cmdHelper, PackageJsonFileFinder packageJsonFileFinder)
+    public ThemePackageAdder(NpmHelper npmHelper, PackageJsonFileFinder packageJsonFileFinder)
     {
-        CmdHelper = cmdHelper;
+        NpmHelper = npmHelper;
         PackageJsonFileFinder = packageJsonFileFinder;
     }
 
@@ -24,7 +24,7 @@ public class ThemePackageAdder : ITransientDependency
         var packageJsonFilePaths = PackageJsonFileFinder.Find(rootDirectory)
             .Where(x => !File.Exists(x.RemovePostFix("package.json") + "angular.json"))
             .ToList();
-        
+
         AddPackage(packageJsonFilePaths, package, version);
     }
 
@@ -43,20 +43,19 @@ public class ThemePackageAdder : ITransientDependency
         {
             return;
         }
-        
-        var installCommand = IsYarnAvailable() ? "yarn add " : "npm install ";
-        var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
 
+        var yarnAvailable = NpmHelper.IsYarnAvailable();
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
             var directory = Path.GetDirectoryName(packageJsonFilePath).EnsureEndsWith(Path.DirectorySeparatorChar);
-            CmdHelper.RunCmd(installCommand + package + packageVersion, workingDirectory: directory);
+            if (yarnAvailable)
+            {
+                NpmHelper.YarnAddPackage(package, version, directory);
+            }
+            else
+            {
+                NpmHelper.NpmInstallPackage(package, version, directory);
+            }
         }
-    }
-
-    private bool IsYarnAvailable()
-    {
-        var output = CmdHelper.RunCmdAndGetOutput("yarn -v").Trim();
-        return SemanticVersion.TryParse(output, out _);
     }
 }
