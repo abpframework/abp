@@ -184,14 +184,14 @@ public abstract class AppTemplateBase : TemplateInfo
             return;
         }
         
-        if (context.BuildArgs.Theme != Theme.LeptonXLite)
+        if (context.BuildArgs.Theme != AppTemplate.DefaultTheme || context.BuildArgs.Theme != AppProTemplate.DefaultTheme)
         {
             steps.Add(new ChangeThemeStep());
-            RemoveLeptonXThemePackagesFromPackageJsonFiles(steps);
+            RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, context.BuildArgs.Theme.Value);
         }
     }
 
-    private void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps)
+    private void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, Theme theme)
     {
         var packageJsonFilePaths = new List<string>() 
         {
