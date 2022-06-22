@@ -322,8 +322,6 @@
     "EndDate": "End date",
     "PurchasedDate": "Purchased date",
     "OrganizationDetail": "Organization Detail",
-    "SendActivationMail": "Send Activation Mail",
-    "ActivationMailSentSuccessfully": "Activation mail sent successfully!",
     "TrialLicenseStatus": "Trial license status",
     "TrialLicenseDetail": "Trial License Detail",
     "AcceptsMarketingCommunications": "Marketing Communications",
@@ -341,6 +339,9 @@
     "SendWelcomeEmail": "Send Welcome Email",
     "SendWelcomeEmailWarningMessage": "Are you sure you want to send welcome email to the organization members?",
     "SendWelcomeEmailSuccessMessage": "Welcome email sent successfully!",
+    "Activate": "Activate",
+    "ActivateTrialLicenseWarningMessage": " When you activate a trial license, a welcome e-mail will be sent to the user. Do you want to activate it?",
+    "ActivateTrialLicenseSuccessMessage": "Activated successfully and the welcome e-mail sent to the organization members.",
     "PaymentRequestId": "Payment Request Id",
     "AdditionalDeveloperCount": "Additional developer count",
     "LicensePrice": "License price",
@@ -394,6 +395,8 @@
     "EndTime": "End Time",
     "CreateABookDiscount": "Create a book discount",
     "BookDiscountDeletionConfirmationMessage": "Are you sure you want to delete this book discount?",
-    "CustomPaymentFlexSwitchDescription": "With license"
+    "CustomPaymentFlexSwitchDescription": "With license",
+    "AllowFeatureUpgradeOnLicenseExpire": "Allow feature upgrade on license expire",
+    "Deleted{0}": "[Deleted {0}]"
   }
 }

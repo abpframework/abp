@@ -65,6 +65,7 @@
                 "inject": true,
                 "bundleName": "bootstrap-ltr.min"
               },
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/styles.scss"
             ],
             "scripts": []

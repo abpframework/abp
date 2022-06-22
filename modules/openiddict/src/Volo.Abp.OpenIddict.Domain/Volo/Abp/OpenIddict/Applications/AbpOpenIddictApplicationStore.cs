@@ -8,14 +8,13 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenIddict.Abstractions;
 using Volo.Abp.Guids;
 using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.OpenIddict.Applications;
 
-public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictApplicationRepository>, IOpenIddictApplicationStore<OpenIddictApplicationModel>
+public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictApplicationRepository>, IAbpOpenIdApplicationStore
 {
     protected IOpenIddictTokenRepository TokenRepository { get; }
 
@@ -44,7 +43,7 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
         Check.NotNull(application, nameof(application));
 
         await Repository.InsertAsync(application.ToEntity(), autoSave: true, cancellationToken: cancellationToken);
-        
+
         application = (await Repository.FindAsync(application.Id, cancellationToken: cancellationToken)).ToModel();
     }
 
@@ -530,5 +529,19 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
         await Repository.UpdateAsync(application.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
 
         application = (await Repository.FindAsync(entity.Id, cancellationToken: cancellationToken)).ToModel();
+    }
+
+    public virtual ValueTask<string> GetClientUriAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
+    {
+        Check.NotNull(application, nameof(application));
+
+        return new ValueTask<string>(application.ClientUri);
+    }
+
+    public virtual ValueTask<string> GetLogoUriAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
+    {
+        Check.NotNull(application, nameof(application));
+
+        return new ValueTask<string>(application.LogoUri);
     }
 }
