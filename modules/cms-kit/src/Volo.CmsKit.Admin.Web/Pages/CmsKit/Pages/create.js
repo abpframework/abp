@@ -6,6 +6,8 @@ $(function () {
     var $slug = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-page-create');
 
+    var widgetModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Contents/AddWidgetModal", modalClass: "addWidgetModal" });
+
     var scriptEditor = CodeMirror.fromTextArea(document.getElementById("ViewModel_Script"), {
         mode: "javascript",
         lineNumbers: true
@@ -25,7 +27,7 @@ $(function () {
 
     $createForm.on('submit', function (e) {
         e.preventDefault();
-        
+
         if ($createForm.valid()) {
 
             abp.ui.setBusy();
@@ -112,6 +114,19 @@ $(function () {
             minHeight: "25em",
             initialEditType: 'markdown',
             language: $editorContainer.data("language"),
+            toolbarItems: [
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'image', 'link'],
+                ['code', 'codeblock'],
+                // Using Option: Customize the last button
+                [{
+                    el: createLastButton(),
+                    command: 'bold',
+                    tooltip: 'Add Widget'
+                }]
+            ],
             hooks: {
                 addImageBlobHook: uploadFile,
             },
@@ -121,6 +136,15 @@ $(function () {
                     $editorInput.trigger("change");
                 }
             }
+        });
+
+        editor.insertToolbarItem({ groupIndex: 0, itemIndex: 0 }, {
+            name: 'myItem',
+            tooltip: 'Custom Button',
+            command: 'bold',
+            text: '@',
+            className: 'toastui-editor-toolbar-icons first',
+            style: { backgroundImage: 'none' }
         });
     }
 
@@ -154,5 +178,22 @@ $(function () {
                 callback(fileUrl, mediaDto.name);
             }
         });
+    }
+
+    function createLastButton() {
+        const button = document.createElement('button');
+
+        button.className = 'toastui-editor-toolbar-icons last dropdown';
+        button.style.backgroundImage = 'none';
+        button.style.margin = '0';
+        button.innerHTML = `AW`;
+        button.addEventListener('click', (event) => {
+            //editor.exec('bold');
+            event.preventDefault();
+            alert("ye");
+            widgetModal.open();
+        });
+
+        return button;
     }
 });

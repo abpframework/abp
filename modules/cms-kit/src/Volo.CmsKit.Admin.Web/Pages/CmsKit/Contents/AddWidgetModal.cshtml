@@ -1,0 +1,29 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.CmsKit.Admin.Web.Pages
+@using Volo.CmsKit.Localization
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents;
+@inject IHtmlLocalizer<CmsKitResource> L
+
+
+@model AddWidgetModal;
+@{
+    Layout = null;
+}
+
+@section scripts
+{
+    <abp-script src="/Pages/CmsKit/Contents/addWidgetModal.js" />
+}
+
+<abp-modal size="Large" id="addWidgetModal">
+    <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
+
+    <abp-modal-body>
+        <div class="mb-3">
+            <small class="text-muted">Text</small>
+            <input id="textId" type="text" />
+            <button class="btn btn-primary float-end" type="submit" id="poll-change-text-button">@L["Save"]</button>
+        </div>
+    </abp-modal-body>
+</abp-modal>
