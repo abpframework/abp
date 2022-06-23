@@ -1,8 +1,8 @@
 ﻿@page "/"
 @namespace MyCompanyName.MyProjectName.Blazor.Server.Pages
 @using System.Globalization
-@using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling
-@using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
+@using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite
+@using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling
 @using Volo.Abp.Localization
 @{
     Layout = null;
@@ -16,10 +16,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MyCompanyName.MyProjectName.Blazor.Server</title>
     <base href="~/" />
-
-    <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global" />
+    
+    <abp-style-bundle name="@BlazorLeptonXLiteThemeBundles.Styles.Global" />
 </head>
 <body class="abp-application-layout bg-light @rtl">
+
     <component type="typeof(App)" render-mode="Server" />
 
     <div id="blazor-error-ui">
@@ -33,6 +34,6 @@
         <a class="dismiss">🗙</a>
     </div>
 
-    <abp-script-bundle name="@BlazorBasicThemeBundles.Scripts.Global" />
+    <abp-script-bundle name="@BlazorLeptonXLiteThemeBundles.Scripts.Global" />
 </body>
 </html>
