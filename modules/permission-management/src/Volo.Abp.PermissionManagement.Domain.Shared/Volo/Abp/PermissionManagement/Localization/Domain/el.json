@@ -1,0 +1,11 @@
+{
+  "culture": "el",
+  "texts": {
+    "Permissions": "Δικαιώματα",
+    "OnlyProviderPermissons": "Μόνο δικαιώματα παρόχου",
+    "All": "Όλα",
+    "SelectAllInAllTabs": "Χορήγηση όλων των δικαιώματων",
+    "SelectAllInThisTab": "Επιλογή όλων",
+    "SaveWithoutAnyPermissionsWarningMessage": "Είστε βέβαιοι ότι θέλετε να αποθηκεύσετε χωρίς δικαιώματα;"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "culture": "el",
+  "texts": {
+    "ThisFieldIsRequired": "Αυτό το πεδίο είναι υποχρεωτικό",
+    "MaxLenghtErrorMessage": "Αυτό το πεδίο μπορεί να έχει το μέγιστο '{0}' χαρακτήρες"
+  }
+}

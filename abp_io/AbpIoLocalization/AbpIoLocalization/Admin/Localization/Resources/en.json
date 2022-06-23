@@ -396,6 +396,7 @@
     "CreateABookDiscount": "Create a book discount",
     "BookDiscountDeletionConfirmationMessage": "Are you sure you want to delete this book discount?",
     "CustomPaymentFlexSwitchDescription": "With license",
-    "AllowFeatureUpgradeOnLicenseExpire": "Allow feature upgrade on license expire"
+    "AllowFeatureUpgradeOnLicenseExpire": "Allow feature upgrade on license expire",
+    "Deleted{0}": "[Deleted {0}]"
   }
 }

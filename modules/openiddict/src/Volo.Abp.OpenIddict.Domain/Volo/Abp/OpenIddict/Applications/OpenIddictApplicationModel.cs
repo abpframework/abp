@@ -72,4 +72,14 @@ public class OpenIddictApplicationModel : ExtensibleObject
     /// Gets or sets the application type associated with the current application.
     /// </summary>
     public virtual string Type { get; set; }
+
+    /// <summary>
+    /// URI to further information about client.
+    /// </summary>
+    public string ClientUri { get; set; }
+
+    /// <summary>
+    /// URI to client logo.
+    /// </summary>
+    public string LogoUri { get; set; }
 }

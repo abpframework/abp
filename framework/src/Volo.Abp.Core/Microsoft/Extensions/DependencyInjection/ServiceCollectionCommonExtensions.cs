@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 using Volo.Abp;
+using Volo.Abp.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,11 @@ public static class ServiceCollectionCommonExtensions
     public static bool IsAdded(this IServiceCollection services, Type type)
     {
         return services.Any(d => d.ServiceType == type);
+    }
+
+    public static ITypeFinder GetTypeFinder(this IServiceCollection services)
+    {
+        return services.GetSingletonInstance<ITypeFinder>();
     }
 
     public static T GetSingletonInstanceOrNull<T>(this IServiceCollection services)
