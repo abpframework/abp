@@ -10,8 +10,10 @@ using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Events;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.Cli.ProjectBuilding;
@@ -26,6 +28,7 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
     protected AbpCliOptions Options { get; }
     protected IJsonSerializer JsonSerializer { get; }
     protected IApiKeyService ApiKeyService { get; }
+    protected ILocalEventBus EventBus { get; }
 
     private readonly IConfiguration _configuration;
 
@@ -35,7 +38,8 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
         IOptions<AbpCliOptions> options,
         IJsonSerializer jsonSerializer,
         IApiKeyService apiKeyService,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        ILocalEventBus eventBus)
     {
         SourceCodeStore = sourceCodeStore;
         TemplateInfoProvider = templateInfoProvider;
@@ -43,6 +47,7 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
         Options = options.Value;
         JsonSerializer = jsonSerializer;
         ApiKeyService = apiKeyService;
+        EventBus = eventBus;
         _configuration = configuration;
 
         Logger = NullLogger<TemplateProjectBuilder>.Instance;
@@ -54,6 +59,10 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
 
         NormalizeArgs(args, templateInfo);
 
+        await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+            Message = "Fetching the solution template"
+        }, false);
+        
         var templateFile = await SourceCodeStore.GetAsync(
             args.TemplateName,
             SourceCodeTypes.Template,
@@ -116,7 +125,11 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
         {
             appTemplateBase.HasDbMigrations = SemanticVersion.Parse(templateFile.Version) < new SemanticVersion(4, 3, 99);
         }
-
+        
+        await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+            Message = "Preparing the solution according to preferences"
+        }, false);
+        
         TemplateProjectBuildPipelineBuilder.Build(context).Execute();
 
         if (!templateInfo.DocumentUrl.IsNullOrEmpty())
