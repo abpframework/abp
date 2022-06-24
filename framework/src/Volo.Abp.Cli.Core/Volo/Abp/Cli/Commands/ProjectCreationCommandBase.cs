@@ -518,6 +518,16 @@ public abstract class ProjectCreationCommandBase
             case Theme.Basic:
                 ConfigureNpmPackagesForBasicTheme(projectArgs);
                 break;
+            case Theme.Lepton:
+                ConfigureNpmPackagesForLeptonTheme(projectArgs);
+                break;
+            case Theme.NotSpecified:
+            case Theme.LeptonXLite:
+            case Theme.LeptonX:
+            case null:
+                break;
+            default:
+                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidArgExceptionMessage(Options.Theme.Long));
         }
     }
 
@@ -536,6 +546,25 @@ public abstract class ProjectCreationCommandBase
         if (projectArgs.UiFramework is UiFramework.Angular)
         {
             ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
+        }
+    }
+    
+    private void ConfigureNpmPackagesForLeptonTheme(ProjectBuildArgs projectArgs)
+    {
+        if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.mvc.ui.theme.lepton", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.BlazorServer)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.components.server.leptontheme", projectArgs.Version);
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.mvc.ui.theme.lepton", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.Angular)
+        {
+            ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@volo/abp.ng.theme.lepton", projectArgs.Version);
         }
     }
 

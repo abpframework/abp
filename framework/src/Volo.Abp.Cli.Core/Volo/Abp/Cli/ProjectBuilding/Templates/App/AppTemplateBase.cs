@@ -187,11 +187,11 @@ public abstract class AppTemplateBase : TemplateInfo
         if (context.BuildArgs.Theme != AppTemplate.DefaultTheme || context.BuildArgs.Theme != AppProTemplate.DefaultTheme)
         {
             steps.Add(new ChangeThemeStep());
-            RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, context.BuildArgs.Theme.Value);
+            RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, this.IsPro());
         }
     }
 
-    private void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, Theme theme)
+    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isPro)
     {
         var packageJsonFilePaths = new List<string>() 
         {
@@ -218,20 +218,30 @@ public abstract class AppTemplateBase : TemplateInfo
             "/angular/package.json"
         };
 
+        var mvcUiPackageName = "@abp/aspnetcore.mvc.ui.theme.leptonxlite";
+        var blazorServerUiPackageName = "@abp/aspnetcore.components.server.leptonxlitetheme";
+        var ngUiPackageName = "@abp/ng.theme.lepton-x";
+        if (isPro)
+        {
+            mvcUiPackageName = "@volo/abp.aspnetcore.mvc.ui.theme.leptonx";
+            blazorServerUiPackageName = "@volo/aspnetcore.components.server.leptonxtheme";
+            ngUiPackageName = "@volosoft/abp.ng.theme.lepton-x";
+        }
+        
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, "@abp/aspnetcore.mvc.ui.theme.leptonxlite"));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
         }
 
         foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, "@abp/aspnetcore.mvc.ui.theme.leptonxlite"));
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, "@abp/aspnetcore.components.server.leptonxlitetheme"));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
         }
 
         foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "@abp/ng.theme.lepton-x"));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
             steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
         }
     }
