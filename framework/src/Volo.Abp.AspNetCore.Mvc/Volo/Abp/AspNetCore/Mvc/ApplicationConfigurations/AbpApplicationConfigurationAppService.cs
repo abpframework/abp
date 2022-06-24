@@ -13,6 +13,7 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
@@ -99,7 +100,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             CurrentTenant = GetCurrentTenant(),
             Timing = await GetTimingConfigAsync(),
             Clock = GetClockConfig(),
-            ObjectExtensions = _cachedObjectExtensionsDtoService.Get()
+            ObjectExtensions = _cachedObjectExtensionsDtoService.Get(),
+            ExtraProperties = new ExtraPropertyDictionary()
         };
 
         if (_options.Contributors.Any())
