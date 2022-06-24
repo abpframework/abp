@@ -137,15 +137,6 @@ $(function () {
                 }
             }
         });
-
-        editor.insertToolbarItem({ groupIndex: 0, itemIndex: 0 }, {
-            name: 'myItem',
-            tooltip: 'Custom Button',
-            command: 'bold',
-            text: '@',
-            className: 'toastui-editor-toolbar-icons first',
-            style: { backgroundImage: 'none' }
-        });
     }
 
     function uploadFile(blob, callback, source) {
@@ -188,9 +179,7 @@ $(function () {
         button.style.margin = '0';
         button.innerHTML = `AW`;
         button.addEventListener('click', (event) => {
-            //editor.exec('bold');
             event.preventDefault();
-            alert("ye");
             widgetModal.open();
         });
 
