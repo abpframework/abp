@@ -16,13 +16,14 @@ using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Local;
 
 namespace Volo.Abp.Cli.Commands;
 
 public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransientDependency
 {
     public const string Name = "new";
-
+    
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
 
@@ -34,8 +35,9 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         IInstallLibsService installLibsService,
         AngularPwaSupportAdder angularPwaSupportAdder,
         InitialMigrationCreator initialMigrationCreator,
-        ThemePackageAdder themePackageAdder)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder, initialMigrationCreator, themePackageAdder)
+        ThemePackageAdder themePackageAdder,
+        ILocalEventBus eventBus)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder, initialMigrationCreator, themePackageAdder, eventBus)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
@@ -81,10 +83,10 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
         ConfigureNpmPackagesForTheme(projectArgs);
-        RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
+        await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
         await RunInstallLibsForWebTemplateAsync(projectArgs);
-        ConfigurePwaSupportForAngular(projectArgs);
+        await ConfigurePwaSupportForAngular(projectArgs);
 
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }

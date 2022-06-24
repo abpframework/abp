@@ -10,8 +10,6 @@
     "DoYouWantToGrantAccessToYourData": "Θέλετε να παραχωρήσετε στον χρήστη {0} πρόσβαση στα δεδομένα σας;",
     "ScopesRequested": "Ζητούνται πεδία εφαρμογής",
     "Accept": "Αποδοχή",
-    "Deny": "Άρνηση",
-    "LogOut": "Αποσύνδεση",
-    "AreYouSureYouWantToSignOut": "Είστε βέβαιοι ότι θέλετε να αποσυνδεθείτε;"
+    "Deny": "Άρνηση"
   }
 }

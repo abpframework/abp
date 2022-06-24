@@ -219,7 +219,7 @@ Example:
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 ````
 
-* This example adds the Volo.Abp.MongoDB package to the project.
+* This example adds the `Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic` package to the project.
 
 #### Options
 
