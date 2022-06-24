@@ -246,8 +246,19 @@ public class AngularSourceCodeAdder : ITransientDependency
 
         foreach (var folder in angularPathsInDownloadedSourceCode)
         {
+            var nodeModulesFolder = Path.Combine(folder, "node_modules");
+            var vscodeFolder = Path.Combine(folder, ".vscode");
+            if (Directory.Exists(nodeModulesFolder))
+            {
+                Directory.Delete(nodeModulesFolder, true);
+            }
+            if (Directory.Exists(vscodeFolder))
+            {
+                Directory.Delete(vscodeFolder, true);
+            }
+            
             var projectsInFolder = Directory.GetDirectories(folder);
-
+            
             if (projectsInFolder.Length == 1 && Path.GetFileName(projectsInFolder[0]) == "projects")
             {
                 var foldersUnderProject = Directory.GetDirectories(Path.Combine(folder, "projects"));
@@ -266,9 +277,9 @@ public class AngularSourceCodeAdder : ITransientDependency
 
                     Directory.Move(folderUnderProject, Path.Combine(folder, Path.GetFileName(folderUnderProject)));
                 }
-
-                projectsInFolder = Directory.GetDirectories(folder);
             }
+
+            projectsInFolder = Directory.GetDirectories(folder);
 
             foreach (var projectInFolder in projectsInFolder)
             {
