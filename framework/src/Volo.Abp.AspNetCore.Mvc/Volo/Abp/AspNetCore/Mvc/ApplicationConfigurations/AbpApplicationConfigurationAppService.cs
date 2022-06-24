@@ -41,6 +41,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     private readonly ITimezoneProvider _timezoneProvider;
     private readonly AbpClockOptions _abpClockOptions;
     private readonly ICachedObjectExtensionsDtoService _cachedObjectExtensionsDtoService;
+    private readonly AbpApplicationConfigurationOptions _options;
 
     public AbpApplicationConfigurationAppService(
         IOptions<AbpLocalizationOptions> localizationOptions,
@@ -58,7 +59,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         ILanguageProvider languageProvider,
         ITimezoneProvider timezoneProvider,
         IOptions<AbpClockOptions> abpClockOptions,
-        ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService)
+        ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService,
+        IOptions<AbpApplicationConfigurationOptions> options)
     {
         _serviceProvider = serviceProvider;
         _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
@@ -74,6 +76,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         _timezoneProvider = timezoneProvider;
         _abpClockOptions = abpClockOptions.Value;
         _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
+        _options = options.Value;
         _localizationOptions = localizationOptions.Value;
         _multiTenancyOptions = multiTenancyOptions.Value;
     }
@@ -98,6 +101,18 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             Clock = GetClockConfig(),
             ObjectExtensions = _cachedObjectExtensionsDtoService.Get()
         };
+
+        if (_options.Contributors.Any())
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var context = new ApplicationConfigurationContributorContext(scope.ServiceProvider, result);
+                foreach (var contributor in _options.Contributors)
+                {
+                    await contributor.ContributeAsync(context);
+                }
+            }
+        }
 
         Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetAsync().");
 

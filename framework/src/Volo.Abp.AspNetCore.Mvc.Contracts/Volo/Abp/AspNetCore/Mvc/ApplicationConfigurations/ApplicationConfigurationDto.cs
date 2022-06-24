@@ -1,11 +1,12 @@
 ﻿using System;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 [Serializable]
-public class ApplicationConfigurationDto
+public class ApplicationConfigurationDto : ExtensibleObject
 {
     public ApplicationLocalizationConfigurationDto Localization { get; set; }
 
