@@ -127,7 +127,7 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
         }
         
         await EventBus.PublishAsync(new ProjectCreationProgressEvent {
-            Message = "Preparing the solution according to preferences"
+            Message = "Customizing the solution template"
         }, false);
         
         TemplateProjectBuildPipelineBuilder.Build(context).Execute();
