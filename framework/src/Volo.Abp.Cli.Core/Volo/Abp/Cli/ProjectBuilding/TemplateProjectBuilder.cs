@@ -60,7 +60,7 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
         NormalizeArgs(args, templateInfo);
 
         await EventBus.PublishAsync(new ProjectCreationProgressEvent {
-            Message = "Fetching the solution template"
+            Message = "Downloading the solution template"
         }, false);
         
         var templateFile = await SourceCodeStore.GetAsync(
