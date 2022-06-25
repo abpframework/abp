@@ -207,7 +207,7 @@ public abstract class ProjectCreationCommandBase
     protected void ExtractProjectZip(ProjectBuildResult project, string outputFolder)
     {
         EventBus.PublishAsync(new ProjectCreationProgressEvent {
-            Message = "Extracting solution to file system"
+            Message = "Extracting the solution archieve"
         }, false);
         
         using (var templateFileStream = new MemoryStream(project.ZipContent))
