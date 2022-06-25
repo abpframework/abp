@@ -403,7 +403,7 @@ public abstract class ProjectCreationCommandBase
         }
 
         await EventBus.PublishAsync(new ProjectCreationProgressEvent {
-            Message = "Creating the initial migration"
+            Message = "Creating the initial DB migration"
         }, false);
         
         await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
