@@ -31,7 +31,7 @@ Volo.Abp.Caching.StackExchangeRedis 包自动从`IConfiguration`获取Redis[配�
 设置`IsEnabled`为可选的，如果未设置将默认视为`true`.
 
 
-或者，你可以在[模块](Module-Development-Basics.md)的ConfigureServices方法中配置标准的[RedisCacheOptions](https://docs.microsoft.com/zh-cn/dotnet/api/microsoft.extensions.caching.stackexchangeredis.rediscacheoptions)类： `ConfigureServices` 
+或者，你可以在[模块](Module-Development-Basics.md)的ConfigureServices方法中配置标准的[RedisCacheOptions](https://docs.microsoft.com/zh-cn/dotnet/api/microsoft.extensions.caching.stackexchangeredis.rediscacheoptions)类：
 
 ````csharp
 Configure<RedisCacheOptions>(options =>
