@@ -51,4 +51,9 @@ public abstract class SettingPageContributorBase : ISettingPageContributor
     }
 
     public abstract Task ConfigureAsync(SettingPageCreationContext context);
+
+    public virtual Task<bool> CheckPermissionsAsync(SettingPageCreationContext context)
+    {
+        return Task.FromResult(true);
+    }
 }

@@ -83,6 +83,17 @@ public class SettingPageContributorManager : IScopedDependency
             }
         }
 
+        var context = new SettingPageCreationContext(ServiceProvider);
+        foreach (var contributor in contributors.Where(x => x is not SettingPageContributorBase))
+        {
+#pragma warning disable CS0618
+            if (await contributor.CheckPermissionsAsync(context))
+#pragma warning restore CS0618
+            {
+                availableContributors.Add(contributor);
+            }
+        }
+
         return availableContributors;
     }
 }
