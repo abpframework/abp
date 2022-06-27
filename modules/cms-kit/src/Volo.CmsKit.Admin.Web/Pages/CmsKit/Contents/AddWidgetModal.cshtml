@@ -17,13 +17,23 @@
 }
 
 <abp-modal size="Large" id="addWidgetModal">
+
     <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
 
     <abp-modal-body>
-        <div class="container row md-3">
+        <div class="container row">
             <abp-select asp-for="ViewModel.Widget" />
-            <input hidden id="textId" type="text" />
+            <div id="PropertySideId">
+                @foreach (var item in Model.ViewModel.Properties.FirstOrDefault(p=>p.Key == "Poll").Properties)
+                {
+                    <div class="form-group">
+                    <label for="@(item)">@item</label>
+                    <input class="properties form-control" id="@(item)" type="text" />
+                    </div>
+                }
+            </div>
             <button class="btn btn-primary float-end" type="submit" id="save-changes">@L["Save"]</button>
         </div>
     </abp-modal-body>
+    
 </abp-modal>

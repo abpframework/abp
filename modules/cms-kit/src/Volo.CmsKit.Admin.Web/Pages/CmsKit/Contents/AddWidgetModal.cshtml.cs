@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -26,8 +27,14 @@ public class AddWidgetModal : AbpPageModel
 
     public async Task OnGetAsync()
     {
+        ViewModel = new ContentViewModel();
+
+        var widgets = await ContentAdminAppService.GetWidgetsAsync();
+        ViewModel.Properties = widgets.Items.ToArray();
+
+
         Widgets = new List<SelectListItem>() { new("", "") };
-        Widgets.AddRange((await ContentAdminAppService.GetWidgetsAsync())
+        Widgets.AddRange(widgets
             .Items
             .Select(w => new SelectListItem(w.Key, w.Key))
             .ToList());
@@ -37,5 +44,8 @@ public class AddWidgetModal : AbpPageModel
     {
         [SelectItems(nameof(Widgets))]
         public string Widget { get; set; }
+
+        public ContentWidgetDto[] Properties { get; set; } = Array.Empty<ContentWidgetDto>();
+
     }
 }
