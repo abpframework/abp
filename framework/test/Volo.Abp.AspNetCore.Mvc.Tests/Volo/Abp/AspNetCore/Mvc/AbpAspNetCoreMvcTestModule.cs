@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -126,6 +127,11 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         {
             options.Maps.Add("SerialNumber", () => ClaimTypes.SerialNumber);
             options.Maps.Add("DateOfBirth", () => ClaimTypes.DateOfBirth);
+        });
+
+        Configure<AbpApplicationConfigurationOptions>(options =>
+        {
+            options.Contributors.Add(new TestApplicationConfigurationContributor());
         });
     }
 
