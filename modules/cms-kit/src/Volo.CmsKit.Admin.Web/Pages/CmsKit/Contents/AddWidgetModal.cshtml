@@ -20,9 +20,9 @@
     <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
 
     <abp-modal-body>
-        <div class="mb-3">
-            <small class="text-muted">Text</small>
-            <input id="textId" type="text" />
+        <div class="container row md-3">
+            <abp-select asp-for="ViewModel.Widget" />
+            <input hidden id="textId" type="text" />
             <button class="btn btn-primary float-end" type="submit" id="save-changes">@L["Save"]</button>
         </div>
     </abp-modal-body>
