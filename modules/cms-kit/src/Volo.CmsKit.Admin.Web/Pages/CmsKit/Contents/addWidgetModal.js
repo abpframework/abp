@@ -4,45 +4,23 @@ $(function () {
 
         var initModal = function () {
 
-            $('#PropertySideIdPoll').hide();
-            $('#PropertySideIdComment').hide();
-
-            //var getRelatedProperties = function () {
-            //    var html = "";
-
-            //    for (var i = 0; i < 2; i++) {
-            //        html += "<div class=\"form-group\"> " +
-            //            " <label for=\"" + i + "\">" + i + "</label>" +
-            //            " <input class=\"properties form-control\" id=\"" + i + " type=\"text\" />" +
-            //            " </div>";
-            //    }
-
-            //    $("#ye").each(function () {
-            //        debugger
-            //        alert("a");
-            //    });
-
-            //    return html;
-            //}
-
             let widgetType;
-
             $("#ViewModel_Widget").change(function () {
                 widgetType = this.value;
-                debugger
-                if (widgetType == "Poll") {
-                    $('#PropertySideIdPoll').show();
-                    $('#PropertySideIdComment').hide();
-                }
-                else {
-                    $('#PropertySideIdPoll').hide();
-                    $('#PropertySideIdComment').show();
-                }
 
-                //var newHtml = getRelatedProperties();
-
-                //$("#PropertySideId").append(newHtml);
-
+                $("#PropertySideId").html('');
+                volo.cmsKit.admin.contents.contentAdmin.getWidgets().then(function (data) {
+                    var widgetTypes = data.items.filter(v => v.key === widgetType);
+                    //TODO null check
+                    var firstWidgetType = widgetTypes[0];
+                    for (const property of firstWidgetType.properties) {
+                        let html = "<div class=\"form-group\"> " +
+                            " <label for=\"" + property.key + "\">" + property.name + "</label>" +
+                            " <input class=\"properties form-control\" id=\"" + property.key + "\" type=\"text\" />" +
+                            " </div>";
+                        $("#PropertySideId").append(html);
+                    }
+                });
             });
 
             $("#save-changes").click(function () {
@@ -54,15 +32,14 @@ $(function () {
                         values.push($(this).val());
                     }
                 });
-
-                var contentEditorText = $("#ContentEditor")[0].innerText.split("\n")[1];
+                //TODO review here
+                var contentEditorText = $("#ContentEditor")[0].innerText.split("\n")[2];
 
                 var updatedText = "[Widget Type=\"" + widgetType + "\" ";
 
                 for (var i = 0; i < keys.length; i++) {
                     updatedText += keys[i] + "=\"" + values[i] + "\" ";
                 }
-
                 updatedText += "]";
                 $('.ProseMirror div').contents()[0].data = contentEditorText + updatedText;
 

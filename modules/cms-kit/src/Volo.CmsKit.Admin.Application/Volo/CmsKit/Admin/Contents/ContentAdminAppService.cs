@@ -16,7 +16,7 @@ public class ContentAdminAppService : CmsKitAdminAppServiceBase, IContentAdminAp
         _options = options.Value;
     }
 
-    public Task<ListResultDto<ContentWidgetDto>> GetWidgetsAsync()
+    public virtual Task<ListResultDto<ContentWidgetDto>> GetWidgetsAsync()
     {
         //TODO remove
         if (!_options.WidgetConfigs.Any())
@@ -24,6 +24,12 @@ public class ContentAdminAppService : CmsKitAdminAppServiceBase, IContentAdminAp
             _options.AddWidget("Poll", "CmsPollByCode", new List<PropertyDto>()
             {
                 new PropertyDto() { Key = "Code", Name = "Code" }
+            });
+
+            _options.AddWidget("Comment", "CmsCommenting", new List<PropertyDto>()
+            {
+                new PropertyDto() { Key = "EntityType", Name = "EntityType" },
+                new PropertyDto() { Key = "EntityId", Name = "EntityId" }
             });
         }
         return Task.FromResult(new ListResultDto<ContentWidgetDto>()
