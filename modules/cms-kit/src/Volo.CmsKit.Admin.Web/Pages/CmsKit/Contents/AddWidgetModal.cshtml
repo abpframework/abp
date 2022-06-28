@@ -5,7 +5,6 @@
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents;
 @inject IHtmlLocalizer<CmsKitResource> L
 
-
 @model AddWidgetModal;
 @{
     Layout = null;
@@ -23,12 +22,21 @@
     <abp-modal-body>
         <div class="container row">
             <abp-select asp-for="ViewModel.Widget" />
-            <div id="PropertySideId">
-                @foreach (var item in Model.ViewModel.Properties.FirstOrDefault(p=>p.Key == "Poll").Properties)
+            <div id="PropertySideIdPoll">
+                @foreach (var item in Model.ViewModel.ContentWidgets.FirstOrDefault(p=>p.Key == "Poll").Properties)
                 {
                     <div class="form-group">
-                    <label for="@(item)">@item</label>
-                    <input class="properties form-control" id="@(item)" type="text" />
+                    <label for="@(item.Key)">@item.Name</label>
+                    <input class="properties form-control" id="@(item.Key)" type="text" />
+                    </div>
+                }
+            </div>
+            <div id="PropertySideIdComment">
+                @foreach (var item in Model.ViewModel.ContentWidgets.FirstOrDefault(p=>p.Key == "Comment").Properties)
+                {
+                    <div class="form-group">
+                    <label for="@(item.Key)">@item.Name</label>
+                    <input class="properties form-control" id="@(item.Key)" type="text" />
                     </div>
                 }
             </div>

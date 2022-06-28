@@ -5,11 +5,17 @@ namespace Volo.CmsKit.Contents;
 public class ContentWidgetConfig
 {
     public string Name { get; }
-    //TODO remove - just for example
-    public List<string> Properties { get; } = new() { "Type", "Code" };
+    public List<PropertyDto> Properties { get; }
 
     public ContentWidgetConfig(string widgetName)
     {
+        Properties = new();
         Name = widgetName;
     }
+
+    public void AddProperty(string key, string name)
+    {
+        Properties.Add(new PropertyDto() { Key = key, Name = name });
+    }
+
 }

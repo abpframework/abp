@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
@@ -20,7 +21,10 @@ public class ContentAdminAppService : CmsKitAdminAppServiceBase, IContentAdminAp
         //TODO remove
         if (!_options.WidgetConfigs.Any())
         {
-            _options.AddWidget("Poll", "CmsPollByCode");
+            _options.AddWidget("Poll", "CmsPollByCode", new List<PropertyDto>()
+            {
+                new PropertyDto() { Key = "Code", Name = "Code" }
+            });
         }
         return Task.FromResult(new ListResultDto<ContentWidgetDto>()
         {

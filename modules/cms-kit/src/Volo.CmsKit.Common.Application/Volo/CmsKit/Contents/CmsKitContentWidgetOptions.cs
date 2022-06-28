@@ -11,8 +11,10 @@ public class CmsKitContentWidgetOptions
         WidgetConfigs = new();
     }
 
-    public void AddWidget(string widgetName, string widgetKey)
+    public void AddWidget(string widgetName, string widgetKey, List<PropertyDto> properties = null)
     {
-        WidgetConfigs.Add(widgetName, new ContentWidgetConfig(widgetKey));
+        var conf = new ContentWidgetConfig(widgetKey);
+        conf.Properties.AddRange(properties);
+        WidgetConfigs.Add(widgetName, conf);
     }
 }

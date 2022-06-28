@@ -4,10 +4,45 @@ $(function () {
 
         var initModal = function () {
 
-            $('#PropertySideId').hide();
+            $('#PropertySideIdPoll').hide();
+            $('#PropertySideIdComment').hide();
+
+            //var getRelatedProperties = function () {
+            //    var html = "";
+
+            //    for (var i = 0; i < 2; i++) {
+            //        html += "<div class=\"form-group\"> " +
+            //            " <label for=\"" + i + "\">" + i + "</label>" +
+            //            " <input class=\"properties form-control\" id=\"" + i + " type=\"text\" />" +
+            //            " </div>";
+            //    }
+
+            //    $("#ye").each(function () {
+            //        debugger
+            //        alert("a");
+            //    });
+
+            //    return html;
+            //}
+
+            let widgetType;
 
             $("#ViewModel_Widget").change(function () {
-                $('#PropertySideId').show();
+                widgetType = this.value;
+                debugger
+                if (widgetType == "Poll") {
+                    $('#PropertySideIdPoll').show();
+                    $('#PropertySideIdComment').hide();
+                }
+                else {
+                    $('#PropertySideIdPoll').hide();
+                    $('#PropertySideIdComment').show();
+                }
+
+                //var newHtml = getRelatedProperties();
+
+                //$("#PropertySideId").append(newHtml);
+
             });
 
             $("#save-changes").click(function () {
@@ -20,9 +55,9 @@ $(function () {
                     }
                 });
 
-                var contentEditorText = $("#ContentEditor")[0].innerText.split("\n")[2];
+                var contentEditorText = $("#ContentEditor")[0].innerText.split("\n")[1];
 
-                var updatedText = "[Widget ";
+                var updatedText = "[Widget Type=\"" + widgetType + "\" ";
 
                 for (var i = 0; i < keys.length; i++) {
                     updatedText += keys[i] + "=\"" + values[i] + "\" ";

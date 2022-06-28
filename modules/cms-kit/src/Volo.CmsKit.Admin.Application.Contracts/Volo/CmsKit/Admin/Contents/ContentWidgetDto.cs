@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Admin.Contents;
 
@@ -7,5 +8,5 @@ namespace Volo.CmsKit.Admin.Contents;
 public class ContentWidgetDto
 {
     public string Key { get; set; }
-    public List<string> Properties { get; set; } = new();
+    public List<PropertyDto> Properties { get; set; } = new();
 }

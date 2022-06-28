@@ -17,7 +17,6 @@ public class AddWidgetModal : AbpPageModel
     [BindProperty]
     public ContentViewModel ViewModel { get; set; }
 
-
     public List<SelectListItem> Widgets { get; set; } = new();
 
     public AddWidgetModal(IContentAdminAppService contentAdminAppService)
@@ -30,8 +29,7 @@ public class AddWidgetModal : AbpPageModel
         ViewModel = new ContentViewModel();
 
         var widgets = await ContentAdminAppService.GetWidgetsAsync();
-        ViewModel.Properties = widgets.Items.ToArray();
-
+        ViewModel.ContentWidgets = widgets.Items.ToArray();
 
         Widgets = new List<SelectListItem>() { new("", "") };
         Widgets.AddRange(widgets
@@ -45,7 +43,7 @@ public class AddWidgetModal : AbpPageModel
         [SelectItems(nameof(Widgets))]
         public string Widget { get; set; }
 
-        public ContentWidgetDto[] Properties { get; set; } = Array.Empty<ContentWidgetDto>();
+        public ContentWidgetDto[] ContentWidgets { get; set; } = Array.Empty<ContentWidgetDto>();
 
     }
 }
