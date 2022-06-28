@@ -21,7 +21,6 @@
                $('#tab-content').children('.tab-pane').removeClass('show').removeClass('active');
                _this.attr('data-bs-target', '#' + $.escapeSelector($.escapeSelector(id)));
                $('#tab-content').append('<div id=' + $.escapeSelector(id) + ' class="tab-pane fade active show">' + response + '</div>');
-               abp.event.trigger('Abp.SettingManagement.View.Render.' + id);
            })
         });
     }).first().click();
