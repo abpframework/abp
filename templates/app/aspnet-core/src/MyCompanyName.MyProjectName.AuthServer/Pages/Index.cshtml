@@ -1,0 +1,119 @@
+﻿@page
+@using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MyCompanyName.MyProjectName.Pages
+@using MyCompanyName.MyProjectName.Localization
+@using Volo.Abp.Users
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.Ui.Branding
+@model IndexModel
+@inject IHtmlLocalizer<MyProjectNameResource> L
+@inject ICurrentUser CurrentUser
+@inject IBrandingProvider BrandingProvider
+@inject ITheme Theme
+
+@{
+    Layout = Theme.GetEmptyLayout();
+}
+
+<div class="d-flex align-items-center" style="min-height: 100vh;">
+    <div class="container">
+        <abp-row>
+
+            <div class="col mx-auto account-column">
+                <div class="account-brand p-4 text-center mb-1">
+
+                    @if (!BrandingProvider.LogoUrl.IsNullOrEmpty())
+                    {
+                        <a class="navbar-brand" href="/" alt="@BrandingProvider.AppName"></a>
+                    }
+                    else
+                    {
+                        <h1>@BrandingProvider.AppName</h1>
+                    }
+                </div>
+                <abp-card>
+
+                    <abp-card-body>
+
+                        <div class="container">
+                            <abp-row>
+                                <abp-column size="_9">
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3 p-2">
+                                            <i class="fa fa-user d-block" style="font-size: 10em; color: #12b900"></i>
+                                        </div>
+                                        <div class="p2">
+                                            @if (CurrentUser.IsAuthenticated)
+                                            {
+                                                <span class="fs-16">
+                                                    @L["Welcome"] <span class="fw-7">@CurrentUser.UserName</span>
+                                                </span>
+                                                <span class="fs-14 d-block text-dark-800 opacity-75 mb-1">@CurrentUser.Email</span>
+                                                <div class="d-grid gap-2">
+                                                    <a abp-button="Outline_Primary" asp-controller="Manage" asp-action="Index" asp-area="Account">@L["MyAccount"]</a>
+                                                    <a abp-button="Primary" asp-controller="Logout" asp-action="Index" asp-area="Account">@L["Logout"]</a>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <a abp-button="Primary" asp-controller="Login" asp-action="Index" asp-area="Account">@L["Login"]</a>
+                                            }
+                                        </div>
+
+                                    </div>
+                                </abp-column>
+                                <abp-column size="_3">
+                                    <div class="ml-auto p-2 float-end">
+                                        <abp-dropdown>
+                                            <abp-dropdown-button text="@Model.CurrentLanguage" />
+                                            <abp-dropdown-menu>
+                                                @foreach (var language in Model.Languages)
+                                                {
+                                                    <abp-dropdown-item href="~/Abp/Languages/Switch?culture=@(language.CultureName)&uiCulture=@(language.UiCultureName)&returnUrl=@(System.Net.WebUtility.UrlEncode(Request.GetEncodedPathAndQuery()))">@language.DisplayName</abp-dropdown-item>
+                                                }
+                                            </abp-dropdown-menu>
+                                        </abp-dropdown>
+                                    </div>
+                                </abp-column>
+
+                            </abp-row>
+                            <hr class="m-4" />
+
+                            <abp-row>
+
+                                @foreach (var application in Model.Applications)
+                                {
+                                    <abp-column size-md="_4" class="mb-2">
+                                        <abp-card>
+                                            <abp-card-body>
+
+                                                @if (!application.LogoUri.IsNullOrEmpty())
+                                                {
+                                                    <div class="mx-auto">
+                                                        <img src="@application.LogoUri" style="height:64px" class="mb-3" />
+                                                    </div>
+                                                }
+
+                                                <h4>@application.DisplayName</h4>
+                                                <span class="text-muted">@application.ClientUri</span>
+                                                <div class="mt-1">
+                                                    <a abp-button="Outline_Secondary" href="@application.ClientUri">@L["Visit"]</a>
+                                                </div>
+                                            </abp-card-body>
+                                        </abp-card>
+                                    </abp-column>
+                                }
+
+                            </abp-row>
+                        </div>
+
+                    </abp-card-body>
+
+                </abp-card>
+            </div>
+
+        </abp-row>
+    </div>
+</div>

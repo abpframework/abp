@@ -465,7 +465,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         cancellationToken = GetCancellationToken(cancellationToken);
 
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .OrderBy(sorting)
+            .OrderByIf<TEntity, IQueryable<TEntity>>(!sorting.IsNullOrWhiteSpace(), sorting)
             .As<IMongoQueryable<TEntity>>()
             .PageBy<TEntity, IMongoQueryable<TEntity>>(skipCount, maxResultCount)
             .ToListAsync(cancellationToken);

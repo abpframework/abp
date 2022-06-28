@@ -252,7 +252,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
             : await GetDbSetAsync();
 
         return await queryable
-            .OrderBy(sorting)
+            .OrderByIf<TEntity, IQueryable<TEntity>>(!sorting.IsNullOrWhiteSpace(), sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

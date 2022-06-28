@@ -14,7 +14,7 @@ public enum NuGetPackageTarget : byte
     MongoDB = 9,
     SignalR = 10,
     Blazor = 11,
-    IdentityServer = 12,
+    IdentityServer = 12, //todo: Rename to AuthServer
     BlazorServer = 13,
     BlazorWebAssembly = 14
 }

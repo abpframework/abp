@@ -6,12 +6,11 @@ using MyCompanyName.MyProjectName.Menus;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.MongoDB;
@@ -24,16 +23,16 @@ using Volo.Abp.FeatureManagement.MongoDB;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.MongoDB;
 using Volo.Abp.Identity.Web;
-using Volo.Abp.IdentityServer.MongoDB;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.OpenIddict.MongoDB;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.PermissionManagement.IdentityServer;
+using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.SettingManagement.Web;
@@ -55,22 +54,21 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAutofacModule),
     typeof(AbpAutoMapperModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-
+    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
+    
     // Account module packages
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
-    typeof(AbpAccountWebIdentityServerModule),
+    typeof(AbpAccountWebOpenIddictModule),
 
     // Identity module packages
     typeof(AbpPermissionManagementDomainIdentityModule),
-    typeof(AbpPermissionManagementDomainIdentityServerModule),
+    typeof(AbpPermissionManagementDomainOpenIddictModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityMongoDbModule),
-    typeof(AbpIdentityServerMongoDbModule),
+    typeof(AbpOpenIddictMongoDbModule),
     typeof(AbpIdentityWebModule),
 
     // Audit logging module packages
@@ -112,6 +110,16 @@ public class MyProjectNameModule : AbpModule
                 typeof(MyProjectNameResource)
             );
         });
+
+		PreConfigure<OpenIddictBuilder>(builder =>
+		{
+			builder.AddValidation(options =>
+			{
+				options.AddAudiences("MyProjectName");
+				options.UseLocalServer();
+				options.UseAspNetCore();
+			});
+		});
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -133,7 +141,6 @@ public class MyProjectNameModule : AbpModule
         ConfigureAutoApiControllers();
         ConfigureVirtualFiles(hostingEnvironment);
         ConfigureLocalization();
-        ConfigureAuthentication(context.Services, configuration);
         ConfigureMongoDB(context);
     }
 
@@ -158,24 +165,13 @@ public class MyProjectNameModule : AbpModule
         Configure<AbpBundlingOptions>(options =>
         {
             options.StyleBundles.Configure(
-                BasicThemeBundles.Styles.Global,
+                LeptonXLiteThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
                 }
             );
         });
-    }
-
-    private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddAuthentication()
-            .AddJwtBearer(options =>
-            {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = "MyProjectName";
-            });
     }
 
     private void ConfigureLocalization()
@@ -208,6 +204,7 @@ public class MyProjectNameModule : AbpModule
             options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
             options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
             options.Languages.Add(new LanguageInfo("es", "es", "Español"));
+            options.Languages.Add(new LanguageInfo("el", "el", "Ελληνικά"));
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>
@@ -305,7 +302,7 @@ public class MyProjectNameModule : AbpModule
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
+        app.UseAbpOpenIddictValidation();
 
         if (IsMultiTenant)
         {
@@ -313,7 +310,6 @@ public class MyProjectNameModule : AbpModule
         }
 
         app.UseUnitOfWork();
-        app.UseIdentityServer();
         app.UseAuthorization();
 
         app.UseSwagger();

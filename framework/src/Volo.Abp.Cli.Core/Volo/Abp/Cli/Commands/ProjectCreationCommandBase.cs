@@ -6,16 +6,20 @@ using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using NuGet.Versioning;
+using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Events;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
 using Volo.Abp.Cli.Utils;
+using Volo.Abp.EventBus.Local;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -26,20 +30,30 @@ public abstract class ProjectCreationCommandBase
     public ICmdHelper CmdHelper { get; }
     public IInstallLibsService InstallLibsService { get; }
     public AngularPwaSupportAdder AngularPwaSupportAdder { get; }
+    public InitialMigrationCreator InitialMigrationCreator { get; }
+    public ILocalEventBus EventBus { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
+    public ThemePackageAdder ThemePackageAdder { get; }
+
     public ProjectCreationCommandBase(
-        ConnectionStringProvider connectionStringProvider, 
-        SolutionPackageVersionFinder solutionPackageVersionFinder, 
-        ICmdHelper cmdHelper, 
+        ConnectionStringProvider connectionStringProvider,
+        SolutionPackageVersionFinder solutionPackageVersionFinder,
+        ICmdHelper cmdHelper,
         IInstallLibsService installLibsService,
-        AngularPwaSupportAdder angularPwaSupportAdder)
+        AngularPwaSupportAdder angularPwaSupportAdder,
+        InitialMigrationCreator initialMigrationCreator,
+        ThemePackageAdder themePackageAdder,
+		ILocalEventBus eventBus)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
         InstallLibsService = installLibsService;
         AngularPwaSupportAdder = angularPwaSupportAdder;
+        InitialMigrationCreator = initialMigrationCreator;
+        EventBus = eventBus;
+        ThemePackageAdder = themePackageAdder;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -87,6 +101,12 @@ public abstract class ProjectCreationCommandBase
         if (uiFramework != UiFramework.NotSpecified)
         {
             Logger.LogInformation("UI Framework: " + uiFramework);
+        }
+
+        var theme = uiFramework == UiFramework.None ? (Theme?)null : GetTheme(commandLineArgs);
+        if (theme.HasValue)
+        {
+            Logger.LogInformation("Theme: " + theme);
         }
 
         var publicWebSite = uiFramework != UiFramework.None && commandLineArgs.Options.ContainsKey(Options.PublicWebSite.Long);
@@ -200,12 +220,17 @@ public abstract class ProjectCreationCommandBase
             templateSource,
             commandLineArgs.Options,
             connectionString,
-            pwa
+            pwa,
+            theme
         );
     }
 
     protected void ExtractProjectZip(ProjectBuildResult project, string outputFolder)
     {
+        EventBus.PublishAsync(new ProjectCreationProgressEvent {
+            Message = "Extracting the solution archieve"
+        }, false);
+        
         using (var templateFileStream = new MemoryStream(project.ZipContent))
         {
             using (var zipInputStream = new ZipInputStream(templateFileStream))
@@ -258,7 +283,7 @@ public abstract class ProjectCreationCommandBase
         if (AppTemplateBase.IsAppTemplate(template))
         {
             var isCommercial = template == AppProTemplate.TemplateName;
-            OpenThanksPage(projectArgs.UiFramework, projectArgs.DatabaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
+            OpenThanksPage(projectArgs.UiFramework, projectArgs.DatabaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server") || commandLineArgs.Options.ContainsKey("separate-auth-server"), isCommercial);
         }
         else if (MicroserviceTemplateBase.IsMicroserviceTemplate(template))
         {
@@ -337,10 +362,14 @@ public abstract class ProjectCreationCommandBase
         throw new CliUsageException("The option you provided for Database Provider is invalid!");
     }
 
-    protected virtual void RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
+    protected virtual async Task RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
     {
         if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
         {
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+                Message = "Building the microservice solution"
+            }, false);
+            
             CmdHelper.RunCmd("dotnet build /graphbuild", projectArgs.OutputFolder);
         }
     }
@@ -353,11 +382,55 @@ public abstract class ProjectCreationCommandBase
             MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
         {
             Logger.LogInformation("Installing client-side packages...");
+            
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+                Message = "Installing client-side packages"
+            }, false);
+            
             await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
         }
     }
 
-    protected void ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)
+    protected async Task CreateInitialMigrationsAsync(ProjectBuildArgs projectArgs)
+    {
+        if (projectArgs.DatabaseProvider == DatabaseProvider.MongoDb)
+        {
+            return;
+        }
+
+        var efCoreProjectPath = string.Empty;
+        bool isLayeredTemplate;
+
+        switch (projectArgs.TemplateName)
+        {
+            case AppTemplate.TemplateName:
+            case AppProTemplate.TemplateName:
+                efCoreProjectPath = Directory.GetFiles(projectArgs.OutputFolder, "*EntityFrameworkCore.csproj", SearchOption.AllDirectories).FirstOrDefault();
+                isLayeredTemplate = true;
+                break;
+            case AppNoLayersTemplate.TemplateName:
+            case AppNoLayersProTemplate.TemplateName:
+                efCoreProjectPath = Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
+                isLayeredTemplate = false;
+                break;
+            default:
+                return;
+        }
+
+        if (string.IsNullOrWhiteSpace(efCoreProjectPath))
+        {
+            Logger.LogWarning("Couldn't find the project to create initial migrations!");
+            return;
+        }
+
+        await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+            Message = "Creating the initial DB migration"
+        }, false);
+        
+        await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+    }
+
+    protected async Task ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)
     {
         var isAngular = projectArgs.UiFramework == UiFramework.Angular;
         var isPwa = projectArgs.Pwa;
@@ -365,6 +438,7 @@ public abstract class ProjectCreationCommandBase
         if (isAngular && isPwa)
         {
             Logger.LogInformation("Adding PWA Support to Angular app.");
+            
             AngularPwaSupportAdder.AddPwaSupport(projectArgs.OutputFolder);
         }
     }
@@ -438,6 +512,54 @@ public abstract class ProjectCreationCommandBase
                 return UiFramework.BlazorServer;
             default:
                 throw new CliUsageException("The option you provided for UI Framework is invalid!");
+        }
+    }
+
+    protected virtual Theme GetTheme(CommandLineArgs commandLineArgs)
+    {
+        var optionValue = commandLineArgs.Options.GetOrNull(Options.Theme.Long);
+        switch (optionValue)
+        {
+            case null:
+            case "leptonx-lite":
+                return Theme.LeptonXLite;
+            case "basic":
+                return Theme.Basic;
+            default:
+                throw new CliUsageException("The option you provided for Theme is invalid!");
+        }
+    }
+
+    protected void ConfigureNpmPackagesForTheme(ProjectBuildArgs projectArgs)
+    {
+        if (!projectArgs.Theme.HasValue)
+        {
+            return;
+        }
+
+        switch (projectArgs.Theme)
+        {
+            case Theme.Basic:
+                ConfigureNpmPackagesForBasicTheme(projectArgs);
+                break;
+        }
+    }
+
+    private void ConfigureNpmPackagesForBasicTheme(ProjectBuildArgs projectArgs)
+    {
+        if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.mvc.ui.theme.basic", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.BlazorServer)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.components.server.basictheme", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.Angular)
+        {
+            ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
         }
     }
 
@@ -537,6 +659,10 @@ public abstract class ProjectCreationCommandBase
         {
             public const string Short = "ms";
             public const string Long = "main-solution";
+        
+        public static class Theme
+        {
+            public const string Long = "theme";
         }
     }
 }

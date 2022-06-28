@@ -10,20 +10,23 @@
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="1.0.0-beta.2" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Swashbuckle\Volo.Abp.Swashbuckle.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Authentication.JwtBearer\Volo.Abp.AspNetCore.Authentication.JwtBearer.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Serilog\Volo.Abp.AspNetCore.Serilog.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\account\src\Volo.Abp.Account.Application\Volo.Abp.Account.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\account\src\Volo.Abp.Account.HttpApi\Volo.Abp.Account.HttpApi.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\account\src\Volo.Abp.Account.Web.IdentityServer\Volo.Abp.Account.Web.IdentityServer.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\account\src\Volo.Abp.Account.Web.OpenIddict\Volo.Abp.Account.Web.OpenIddict.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,12 +34,12 @@
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.HttpApi\Volo.Abp.Identity.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.MongoDB\Volo.Abp.Identity.MongoDB.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\identityserver\src\Volo.Abp.IdentityServer.MongoDB\Volo.Abp.IdentityServer.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\openiddict\src\Volo.Abp.OpenIddict.MongoDB\Volo.Abp.OpenIddict.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\modules\identityserver\src\Volo.Abp.PermissionManagement.Domain.IdentityServer\Volo.Abp.PermissionManagement.Domain.IdentityServer.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\openiddict\src\Volo.Abp.PermissionManagement.Domain.OpenIddict\Volo.Abp.PermissionManagement.Domain.OpenIddict.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.Application\Volo.Abp.PermissionManagement.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.MongoDB\Volo.Abp.PermissionManagement.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.HttpApi\Volo.Abp.PermissionManagement.HttpApi.csproj" />
@@ -65,10 +68,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.MongoDB\Volo.Abp.AuditLogging.MongoDB.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
   </ItemGroup>
 
   <ItemGroup>

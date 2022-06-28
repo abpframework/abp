@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,9 +18,9 @@ public class HangfirePeriodicBackgroundWorkerAdapter<TWorker> : HangfireBackgrou
         _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic);
     }
 
-    public async override Task DoWorkAsync()
+    public async override Task DoWorkAsync(CancellationToken cancellationToken = default)
     {
-        var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);
+        var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider, cancellationToken);
         var worker = ServiceProvider.GetRequiredService<TWorker>();
 
         switch (worker)
