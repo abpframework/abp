@@ -190,16 +190,22 @@ abp add-package <包名> [options]
 示例:
 
 ````
-abp add-package Volo.Abp.MongoDB
+abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 ````
 
-* 示例中将Volo.Abp.MongoDB包添加到项目中.
+* 示例中将`Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic`包添加到项目中.
 
 #### Options
 
 * `--project` 或 `-p`: 指定项目 (.csproj) 路径. 如果未指定,Cli会尝试在当前目录查找.csproj文件.
 * `--with-source-code`: 下载包的源码到你的解决方案文件夹，而不是NuGet/NPM软件包.
 * `--add-to-solution-file`: 添加下载/创建的包添加到解决方案文件中,你在IDE中打开解决方案时也会看到包的项目. (仅当 `--with-source-code` 为 `True` 时可用.)
+
+> 当前只有基本主题包([MVC](https://docs.abp.io/zh-Hans/abp/latest/UI/AspNetCore/Basic-Theme) 和 [Blazor](https://docs.abp.io/zh-Hans/abp/latest/UI/Blazor/Basic-Theme)) 可以下载.
+> - Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
+> - Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
+> - Volo.Abp.AspNetCore.Components.Web.BasicTheme
+> - Volo.Abp.AspNetCore.Components.Server.BasicTheme
 
 ### add-module
 

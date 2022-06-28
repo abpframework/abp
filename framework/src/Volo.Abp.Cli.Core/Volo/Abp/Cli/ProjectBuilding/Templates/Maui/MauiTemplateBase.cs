@@ -16,7 +16,7 @@ public class MauiTemplateBase: TemplateInfo
     {
         var steps = new List<ProjectBuildPipelineStep>
         {
-            new ChangeApplicationIdGuidStep()
+            new MauiChangeApplicationIdGuidStep()
         };
         
         return steps;
