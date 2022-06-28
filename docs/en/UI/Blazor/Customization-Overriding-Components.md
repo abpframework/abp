@@ -1,5 +1,12 @@
 # Blazor UI: Customization / Overriding Components
 
+````json
+//[doc-params]
+{
+    "UI": ["Blazor", "BlazorServer"]
+}
+````
+
 This document explains how to override the user interface of a depended [application module](../../Modules/Index.md) or [theme](Theming.md) for Blazor applications.
 
 ## Overriding a Razor Component
@@ -26,9 +33,16 @@ The next step is to create a razor component, like `MyBranding.razor`, in your a
 
 The content of the `MyBranding.razor` is shown below:
 
+
 ````html
 @using Volo.Abp.DependencyInjection
+{{if UI == "BlazorServer"}}
+@using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Themes.Basic
+{{end}}
+{{if UI == "Blazor"}}
 @using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
+{{end}}
+
 @inherits Branding
 @attribute [ExposeServices(typeof(Branding))]
 @attribute [Dependency(ReplaceServices = true)]
@@ -39,7 +53,7 @@ The content of the `MyBranding.razor` is shown below:
 
 Let's explain the code:
 
-* `@inherits Branding` line inherits the Branding component defined by the [Basic Theme](Basic-Theme.md) (in the `Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic` namespace).
+* `@inherits Branding` line inherits the Branding component defined by the [Basic Theme](Basic-Theme.md) (in the {{if UI == "BlazorServer"}}`Volo.Abp.AspNetCore.Components.Server.BasicTheme.Themes.Basic`{{end}} {{if UI == "Blazor"}}`Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic`{{end}} namespace).
 * `@attribute [ExposeServices(typeof(Branding))]` registers this service (component) to [dependency injection](../../Dependency-Injection.md) for the `Branding` service (component).
 * `@attribute [Dependency(ReplaceServices = true)]` replaces the `Branding` class (component) with this new `MyBranding` class (component).
 * The rest of the code is related the content and styling of the component.
@@ -57,7 +71,12 @@ If you prefer to use code-behind file for the C# code of your component, you can
 **MyBlazor.razor**
 
 ````html
+{{if UI == "BlazorServer"}}
+@using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Themes.Basic
+{{end}}
+{{if UI == "Blazor"}}
 @using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
+{{end}}
 @inherits Branding
 <a href="/">
     <img src="bookstore-logo.png" width="250" height="60"/>
@@ -67,7 +86,13 @@ If you prefer to use code-behind file for the C# code of your component, you can
 **MyBlazor.razor.cs**
 
 ````csharp
+{{if UI == "BlazorServer"}}
+using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Themes.Basic;
+{{end}}
+{{if UI == "Blazor"}}
 using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic;
+{{end}}
+
 using Volo.Abp.DependencyInjection;
 
 namespace MyProject.Blazor.Components

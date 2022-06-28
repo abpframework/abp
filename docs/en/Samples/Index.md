@@ -2,15 +2,19 @@
 
 Here, a list of official samples built with the ABP Framework. Most of these samples are located under the [abpframework/abp-samples](https://github.com/abpframework/abp-samples) GitHub repository.
 
-### Microservice Demo
+## eShopOnAbp
 
-A complete solution to demonstrate how to build systems based on the microservice architecture.
+Reference microservice solution built with the ABP Framework and .NET.
 
-* [The complete documentation for this sample](Microservice-Demo.md)
-* [Source code](https://github.com/abpframework/abp-samples/tree/master/MicroserviceDemo)
-* [Microservice architecture document](../Microservice-Architecture.md)
+* [Source code](https://github.com/abpframework/eShopOnAbp)
 
-### Book Store
+## EventHub
+
+This is a reference application built with the ABP Framework. It implements the Domain Driven Design with multiple application layers.
+
+* [Source code](https://github.com/abpframework/eventhub)
+
+## Book Store
 
 A simple CRUD application to show basic principles of developing an application with the ABP Framework. The same sample was implemented with different technologies:
 
@@ -28,7 +32,7 @@ A simple CRUD application to show basic principles of developing an application 
 
 While there is no Razor Pages & MongoDB combination, you can check both documents to understand it since DB & UI selection don't effect each other.
 
-### Other Samples
+## Other Samples
 
 * **Event Organizer**: A sample application to create events (meetups) and allow others to register the events. Developed using EF Core and Blazor UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/EventOrganizer)
@@ -82,6 +86,6 @@ While there is no Razor Pages & MongoDB combination, you can check both document
 * **Empty ASP.NET Core Application**: The most basic ASP.NET Core application with the ABP Framework installed.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication)
   * [Documentation](../Getting-Started-AspNetCore-Application.md)
-* **Using Elsa Workflow with ABP Framework**: Shows how we can use Elsa Core workflow library within our ABP-based application. 
+* **Using Elsa Workflow with ABP Framework**: Shows how to use the Elsa Core workflow library within an ABP-based application. 
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/ElsaDemo)
   * [Article](https://community.abp.io/articles/using-elsa-workflow-with-the-abp-framework-773siqi9)

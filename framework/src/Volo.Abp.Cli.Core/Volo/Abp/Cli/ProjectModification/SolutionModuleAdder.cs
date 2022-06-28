@@ -100,7 +100,7 @@ public class SolutionModuleAdder : ITransientDependency
         Check.NotNull(solutionFile, nameof(solutionFile));
         Check.NotNull(moduleName, nameof(moduleName));
 
-        await PublishEventAsync(1, "Retriving module info...");
+        await PublishEventAsync(1, "Retrieving module info...");
         var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
 
 
@@ -679,7 +679,7 @@ public class SolutionModuleAdder : ITransientDependency
 
         if (!string.IsNullOrEmpty(dbMigratorProject))
         {
-            CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProject) + "\" && dotnet run", out int exitCode);
+            CmdHelper.RunCmd($"dotnet run", out int exitCode, workingDirectory: Path.GetDirectoryName(dbMigratorProject));
         }
     }
 
@@ -804,6 +804,6 @@ public class SolutionModuleAdder : ITransientDependency
         return projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
             .Any(p => p.EndsWith(".HttpApi.Host"))
             && projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
-            .Any(p => p.EndsWith(".IdentityServer"));
+            .Any(p => p.EndsWith(".IdentityServer") || p.EndsWith(".AuthServer"));
     }
 }

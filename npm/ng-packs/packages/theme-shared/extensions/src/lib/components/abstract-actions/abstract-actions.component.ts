@@ -2,6 +2,7 @@ import { Directive, Injector, Input } from '@angular/core';
 import { ActionData, ActionList } from '../../models/actions';
 import { ExtensionsService } from '../../services/extensions.service';
 import { EXTENSIONS_ACTION_TYPE, EXTENSIONS_IDENTIFIER } from '../../tokens/extensions.token';
+import { InferredData, InferredRecord } from '../../models/toolbar-actions';
 
 // Fix for https://github.com/angular/angular/issues/23904
 // @dynamic
@@ -25,6 +26,3 @@ export abstract class AbstractActionsComponent<L extends ActionList<any>> extend
     this.actionList = extensions[type].get(name).actions as unknown as L;
   }
 }
-
-type InferredData<L> = ActionData<InferredRecord<L>>;
-type InferredRecord<L> = L extends ActionList<infer R> ? R : never;

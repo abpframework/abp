@@ -6,6 +6,7 @@
 	letter-spacing: -1px;
 	margin-right: 1em;
 	pointer-events: none;
+	text-align: right;
 
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -14,7 +15,7 @@
 }
 
 .command-line-prompt > span:before {
-	color: #999;
+	opacity: 0.4;
 	content: ' ';
 	display: block;
 	padding-right: 0.8em;
@@ -30,4 +31,13 @@
 
 .command-line-prompt > span[data-prompt]:before {
 	content: attr(data-prompt);
+}
+
+.command-line-prompt > span[data-continuation-prompt]:before {
+	content: attr(data-continuation-prompt);
+}
+
+.command-line span.token.output {
+	/* Make shell output lines a bit lighter to distinguish them from shell commands */
+	opacity: 0.7;
 }

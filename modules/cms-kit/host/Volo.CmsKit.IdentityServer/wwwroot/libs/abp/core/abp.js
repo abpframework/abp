@@ -73,7 +73,7 @@ var abp = abp || {};
 
     abp.localization = abp.localization || {};
 
-    abp.localization.values = {};
+    abp.localization.values =  abp.localization.values || {};
 
     abp.localization.localize = function (key, sourceName) {
         if (sourceName === '_') { //A convention to suppress the localization
@@ -773,4 +773,14 @@ var abp = abp || {};
         return abp.features.values[name];
     };
     
+    /* GLOBAL FEATURES *************************************************/
+
+    abp.globalFeatures = abp.globalFeatures || {};
+
+    abp.globalFeatures.enabledFeatures = abp.globalFeatures.enabledFeatures || [];
+
+    abp.globalFeatures.isEnabled = function(name){
+        return abp.globalFeatures.enabledFeatures.indexOf(name) != -1;
+    }
+
 })();

@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
@@ -51,6 +52,12 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
 
         foreach (var controller in GetClientProxyControllers(application))
         {
+            if (ShouldBeRemove(application, controller))
+            {
+                application.Controllers.Remove(controller);
+                continue;
+            }
+
             controller.ControllerName = controller.ControllerName.RemovePostFix("ClientProxy");
 
             var controllerApiDescription = FindControllerApiDescriptionModel(controller);
@@ -64,6 +71,13 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
             ConfigureClientProxyApiExplorer(controller);
             ConfigureParameters(controller);
         }
+    }
+
+    protected virtual bool ShouldBeRemove(ApplicationModel application, ControllerModel controllerModel)
+    {
+        return application.Controllers
+            .Where(x => x.ControllerType != controllerModel.ControllerType)
+            .Any(x => FindAppServiceInterfaceType(x) == FindAppServiceInterfaceType(controllerModel));
     }
 
     protected virtual void ConfigureClientProxySelector(ControllerModel controller)
@@ -109,6 +123,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         var actionApiDescriptionModel = FindActionApiDescriptionModel(controller, action);
         if (actionApiDescriptionModel == null)
         {
+            Logger.LogWarning($"Could not find ApiDescriptionModel for action: {action.ActionName} in controller: {controller.ControllerName}, May be the generate-proxy.json is not up to date.");
             return;;
         }
 
@@ -157,7 +172,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
     {
         if (ControllerWithAttributeRoute.Contains(controller))
         {
-            if (controller.ApiExplorer.GroupName.IsNullOrEmpty())
+            if (Options.ChangeControllerModelApiExplorerGroupName && controller.ApiExplorer.GroupName.IsNullOrEmpty())
             {
                 controller.ApiExplorer.GroupName = controller.ControllerName;
             }

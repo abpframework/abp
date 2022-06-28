@@ -13,6 +13,12 @@ Dynamic C# proxies automatically handle the following stuff for you;
 
 This system can be used by any type of .NET client to consume your HTTP APIs.
 
+## Static vs Dynamic Client Proxies
+
+ABP provides **two types** of client proxy generation system. This document explains the **dynamic client proxies**, which generates client-side proxies on runtime. You can also see the [Static C# API Client Proxies](Static-CSharp-API-Clients.md) documentation to learn how to generate proxies on development time.
+
+Development-time (static) client proxy generation has a **performance advantage** since it doesn't need to obtain the HTTP API definition on runtime. However, you should **re-generate** the client proxy code whenever you change your API endpoint definition. On the other hand, dynamic client proxies are generated on runtime and provides an **easier development experience**.
+
 ## Service Interface
 
 Your service/controller should implement an interface that is shared between the server and the client. So, first define a service interface in a shared library project, typically in the `Application.Contracts` project if you've created your solution using the startup templates.
@@ -72,7 +78,7 @@ public class MyClientAppModule : AbpModule
 
 ### Endpoint Configuration
 
-`RemoteServices` section in the `appsettings.json` file is used to get remote service address by default. Simplest configuration is shown below:
+`RemoteServices` section in the `appsettings.json` file is used to get remote service address by default. The simplest configuration is shown below:
 
 ```json
 {
@@ -204,3 +210,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 ````
 
 This example uses the [Microsoft.Extensions.Http.Polly](https://www.nuget.org/packages/Microsoft.Extensions.Http.Polly) package. You also need to import the `Polly` namespace (`using Polly;`) to be able to use the `WaitAndRetryAsync` method.
+
+## See Also
+
+* [Static C# Client Proxies](Static-CSharp-API-Clients.md)

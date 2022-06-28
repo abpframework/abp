@@ -6,7 +6,7 @@
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>@L["Features"]</ModalTitle>
-            <CloseButton Clicked="CloseModal" />
+            <CloseButton Clicked="CloseModal"/>
         </ModalHeader>
         <ModalBody MaxHeight="50">
             @if (Groups == null || !Groups.Any())
@@ -15,7 +15,7 @@
             }
             else
             {
-                <Tabs TabPosition="TabPosition.Left" Pills="true" @bind-SelectedTab="@SelectedTabName">
+                <Tabs TabPosition="TabPosition.Start" Pills="true" @bind-SelectedTab="@SelectedTabName">
                     <Items>
                         @foreach (var group in Groups)
                         {
@@ -25,54 +25,69 @@
                         }
                     </Items>
                     <Content>
-                        @foreach (var group in Groups)
+                        @for (var i = 0; i < Groups.Count; i++)
                         {
-                            <TabPanel Name="@GetNormalizedGroupName(group.Name)">
-                                <h4>@group.DisplayName</h4>
+                            var index = i;
+                            <TabPanel Name="@GetNormalizedGroupName(Groups[index].Name)">
+                                <h4>@Groups[index].DisplayName</h4>
                                 <hr class="mt-2 mb-3"/>
-                                @foreach (var feature in group.Features)
+                                @foreach (var feature in Groups[index].Features)
                                 {
-                                    var disabled = IsDisabled(feature.Provider.Name);
+                                    <div class="mt-2">
+                                        @{
+                                            var disabled = IsDisabled(feature.Provider.Name);
 
-                                    if (feature.ValueType is FreeTextStringValueType)
-                                    {
-                                        <Field Style="@GetFeatureStyles(feature)">
-                                            <FieldLabel>@feature.DisplayName</FieldLabel>
-                                            <TextEdit Disabled="@disabled"
-                                                      Text="@feature.Value"
-                                                      TextChanged="@(async(v) => await OnFeatureValueChangedAsync(v, feature))" />
-                                            @if (feature.Description != null)
+                                            if (feature.ValueType is FreeTextStringValueType)
                                             {
-                                                <span>@feature.Description</span>
+                                                <Field Style="@GetFeatureStyles(feature)">
+                                                    <FieldLabel>@feature.DisplayName</FieldLabel>
+                                                    <TextEdit Disabled="@disabled"
+                                                              Text="@feature.Value"
+                                                              TextChanged="@(async (v) => await OnFeatureValueChangedAsync(v, feature))"/>
+                                                    @if (feature.Description != null)
+                                                    {
+                                                        <div class="form-text">@feature.Description</div>
+                                                    }
+                                                </Field>
                                             }
-                                        </Field>
-                                    }
 
-                                    if (feature.ValueType is SelectionStringValueType)
-                                    {
-                                        var items = ((SelectionStringValueType)feature.ValueType).ItemSource.Items;
+                                            if (feature.ValueType is SelectionStringValueType)
+                                            {
+                                                var items = ((SelectionStringValueType) feature.ValueType).ItemSource.Items;
 
-                                        <Field Style="@GetFeatureStyles(feature)">
-                                            <FieldLabel>@feature.DisplayName</FieldLabel>
-                                            <Select TValue="string"
-                                                    @bind-SelectedValue="@SelectionStringValues[feature.Name]">
-                                                @foreach (var item in items)
-                                                {
-                                                    <SelectItem Value="@item.Value">
-                                                        @CreateStringLocalizer(item.DisplayText.ResourceName).GetString(item.DisplayText.Name)
-                                                    </SelectItem>
-                                                }
-                                            </Select>
-                                        </Field>
-                                    }
+                                                <Field Style="@GetFeatureStyles(feature)">
+                                                    <FieldLabel>@feature.DisplayName</FieldLabel>
+                                                    <Select TValue="string"
+                                                            @bind-SelectedValue="@SelectionStringValues[feature.Name]">
+                                                        @foreach (var item in items)
+                                                        {
+                                                            <SelectItem Value="@item.Value">
+                                                                @CreateStringLocalizer(item.DisplayText.ResourceName).GetString(item.DisplayText.Name)
+                                                            </SelectItem>
+                                                        }
+                                                    </Select>
+                                                    @if (feature.Description != null)
+                                                    {
+                                                        <div class="form-text">@feature.Description</div>
+                                                    }
+                                                </Field>
+                                            }
 
-                                    if (feature.ValueType is ToggleStringValueType)
-                                    {
-                                        <Field Style="@GetFeatureStyles(feature)" >
-                                            <Check
-                                                TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async(v) => await OnSelectedValueChangedAsync(v, feature))">@feature.DisplayName</Check>
-                                        </Field>
-                                    }
+                                            if (feature.ValueType is ToggleStringValueType)
+                                            {
+                                                <Field Style="@GetFeatureStyles(feature)">
+                                                    <Check
+                                                        TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))">
+                                                        @feature.DisplayName
+                                                    </Check>
+                                                    @if (feature.Description != null)
+                                                    {
+                                                        <div class="form-text">@feature.Description</div>
+                                                    }
+                                                </Field>
+                                            }
+                                        }
+                                    </div>
                                 }
 
                             </TabPanel>

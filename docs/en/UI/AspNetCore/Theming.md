@@ -122,9 +122,13 @@ The empty layout provides an empty page. It typically includes the following par
 
 ## Implementing a Theme
 
-### The Easy Way
+### The Easiest Way
 
-The easiest way to create a new theme is to copy the [Basic Theme Source Code](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic) and customize it. Once you get a copy of the theme in your solution, remove the `Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic` NuGet package and reference to the local project.
+The easiest way of creating a new theme is adding [Basic Theme Source Code](https://github.com/abpframework/abp/tree/dev/modules/basic-theme) module with source codes and customizing it. 
+
+```bash
+abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic --with-source-code --add-to-solution-file
+```
 
 ### The ITheme Interface
 
@@ -363,7 +367,7 @@ Another pre-defined section is the Content Toolbar section which can be used by 
 
 ````html
 <div id="AbpContentToolbar">
-    <div class="text-right mb-2">
+    <div class="text-end mb-2">
         @RenderSection("content_toolbar", false)
     </div>
 </div>

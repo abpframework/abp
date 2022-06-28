@@ -47,7 +47,7 @@ public static class PageToolbarExtensions
         string text,
         Func<Task> clicked,
         object icon = null,
-        Color color = Color.Primary,
+        Color color = null,
         bool disabled = false,
         int order = 0,
         string requiredPolicyName = null)
@@ -55,7 +55,7 @@ public static class PageToolbarExtensions
         toolbar.AddComponent<ToolbarButton>(
             new Dictionary<string, object>
             {
-                    { nameof(ToolbarButton.Color), color},
+                    { nameof(ToolbarButton.Color), color ?? Color.Primary},
                     { nameof(ToolbarButton.Text), text},
                     { nameof(ToolbarButton.Disabled), disabled},
                     { nameof(ToolbarButton.Icon), icon},

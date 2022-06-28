@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Rebus.Config;
 using Rebus.Handlers;
 using Rebus.Pipeline;
 using Rebus.Pipeline.Receive;
-using Rebus.ServiceProvider;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EventBus.Rebus;
@@ -41,11 +41,11 @@ public class AbpEventBusRebusModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        context.ServiceProvider.UseRebus();
-
         context
             .ServiceProvider
             .GetRequiredService<RebusDistributedEventBus>()
             .Initialize();
+            
+        context.ServiceProvider.UseRebus();
     }
 }

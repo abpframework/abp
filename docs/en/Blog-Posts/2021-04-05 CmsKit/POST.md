@@ -79,7 +79,7 @@ For example,
 
 
 
-We've covered the initial features, installation and configuration steps in this post. You can read the [open-source](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit) and [commercial](https://docs.abp.io/en/commercial/latest/modules/CMS-Kit) documentation to get further information about features and the CMS Kit module. CMS Kit's initial version contains lots of features that you can easily integrate and use in your applications. We're planning to improve the existing features, fixing bugs and adding new features in upcoming releases. If you want to give some feedback or have a feature request, please reach out to us from [GitHub](https://github.com/abpframework/abp) or [support.abp.io](https://support.abp.io). We will be happy to plan the CMS Kit module's future together.
+We've covered the initial features, installation and configuration steps in this post. You can read the [open-source](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Index) and [commercial](https://docs.abp.io/en/commercial/latest/modules/CMS-Kit) documentation to get further information about features and the CMS Kit module. CMS Kit's initial version contains lots of features that you can easily integrate and use in your applications. We're planning to improve the existing features, fixing bugs and adding new features in upcoming releases. If you want to give some feedback or have a feature request, please reach out to us from [GitHub](https://github.com/abpframework/abp) or [support.abp.io](https://support.abp.io). We will be happy to plan the CMS Kit module's future together.
 
 Thank you!
 

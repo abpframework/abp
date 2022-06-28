@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -38,5 +39,17 @@ public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext,
                 x.EntityId == entityId &&
                 x.TenantId == tenantId,
             cancellationToken: GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<List<string>> GetEntityIdsFilteredByTagAsync(
+        [NotNull] Guid tagId,
+        [CanBeNull] Guid? tenantId,
+        CancellationToken cancellationToken = default)
+    {
+        var blogPostQueryable = (await GetQueryableAsync())
+            .Where(q => q.TagId == tagId && q.TenantId == tenantId)
+            .Select(q => q.EntityId);
+
+        return await AsyncExecuter.ToListAsync(blogPostQueryable, GetCancellationToken(cancellationToken));
     }
 }

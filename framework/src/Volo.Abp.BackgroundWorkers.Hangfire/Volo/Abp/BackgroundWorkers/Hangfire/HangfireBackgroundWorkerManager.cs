@@ -3,8 +3,10 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Hangfire;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Hangfire;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Hangfire;
@@ -12,8 +14,17 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire;
 [Dependency(ReplaceServices = true)]
 public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDependency
 {
+    private AbpHangfireBackgroundJobServer _backgroundJobServer;
+    private readonly IServiceProvider _serviceProvider;
+
+    public HangfireBackgroundWorkerManager(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
     public Task StartAsync(CancellationToken cancellationToken = default)
     {
+        _backgroundJobServer = _serviceProvider.GetRequiredService<AbpHangfireBackgroundJobServer>();
         return Task.CompletedTask;
     }
 
@@ -22,19 +33,20 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
         return Task.CompletedTask;
     }
 
-    public Task AddAsync(IBackgroundWorker worker)
+    public Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
     {
         if (worker is IHangfireBackgroundWorker hangfireBackgroundWorker)
         {
             var unProxyWorker = ProxyHelper.UnProxy(hangfireBackgroundWorker);
             if (hangfireBackgroundWorker.RecurringJobId.IsNullOrWhiteSpace())
             {
-                RecurringJob.AddOrUpdate(() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(),hangfireBackgroundWorker.CronExpression);
+                RecurringJob.AddOrUpdate(() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(cancellationToken),
+                    hangfireBackgroundWorker.CronExpression, hangfireBackgroundWorker.TimeZone, hangfireBackgroundWorker.Queue);
             }
             else
             {
-                RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId,() => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(),
-                    hangfireBackgroundWorker.CronExpression);
+                RecurringJob.AddOrUpdate(hangfireBackgroundWorker.RecurringJobId, () => ((IHangfireBackgroundWorker)unProxyWorker).DoWorkAsync(cancellationToken),
+                    hangfireBackgroundWorker.CronExpression, hangfireBackgroundWorker.TimeZone, hangfireBackgroundWorker.Queue);
             }
         }
         else
@@ -68,7 +80,7 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
             var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
             var workerAdapter = Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker;
 
-            RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(), GetCron(period.Value));
+            RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(cancellationToken), GetCron(period.Value), workerAdapter.TimeZone, workerAdapter.Queue);
         }
 
         return Task.CompletedTask;

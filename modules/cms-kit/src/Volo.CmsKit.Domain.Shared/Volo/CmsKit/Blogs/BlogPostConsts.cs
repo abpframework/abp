@@ -1,6 +1,4 @@
-﻿using Volo.CmsKit.GlobalFeatures;
-
-namespace Volo.CmsKit.Blogs;
+﻿namespace Volo.CmsKit.Blogs;
 
 public static class BlogPostConsts
 {

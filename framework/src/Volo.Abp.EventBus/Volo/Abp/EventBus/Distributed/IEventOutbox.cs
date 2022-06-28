@@ -12,4 +12,6 @@ public interface IEventOutbox
     Task<List<OutgoingEventInfo>> GetWaitingEventsAsync(int maxCount, CancellationToken cancellationToken = default);
 
     Task DeleteAsync(Guid id);
+
+    Task DeleteManyAsync(IEnumerable<Guid> ids);
 }

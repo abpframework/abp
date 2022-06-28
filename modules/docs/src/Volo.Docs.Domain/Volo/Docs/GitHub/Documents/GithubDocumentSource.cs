@@ -383,7 +383,7 @@ namespace Volo.Docs.GitHub.Documents
             catch (Exception ex)
             {
                 //TODO: Only handle when document is really not available
-                Logger.LogWarning(ex.Message, ex);
+                Logger.LogWarning($"{ex.Message}: {rawUrl}", ex);
                 throw new DocumentNotFoundException(rawUrl);
             }
         }

@@ -6,6 +6,8 @@ param(
 
 . ..\nupkg\common.ps1
 
+Start-Transcript -Append _run_all_log.txt
+
 if (!$branch)
 {
 	$branch = Read-Host "Enter the branch name"
@@ -41,3 +43,4 @@ $publishGithubReleaseParams = @{
 ./7-publish-github-release.ps1 @publishGithubReleaseParams
 ./8-download-release-zip.ps1
 
+Stop-Transcript

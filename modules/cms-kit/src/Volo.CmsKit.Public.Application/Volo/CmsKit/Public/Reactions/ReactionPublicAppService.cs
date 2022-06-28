@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
@@ -39,7 +41,9 @@ public class ReactionPublicAppService : CmsKitPublicAppServiceBase, IReactionPub
                     CurrentUser.GetId(),
                     entityType,
                     entityId
-                )).ToDictionary(x => x.ReactionName, x => x)
+                ))
+                .GroupBy(x => x.ReactionName)
+                .ToDictionary(x => x.Key, x => x.First())
             : null;
 
         var reactionWithSelectionDtos = new List<ReactionWithSelectionDto>();

@@ -1,7 +1,7 @@
 export const enum ePropType {
   Boolean = 'boolean',
   Date = 'date',
-  DateTime = 'dateTime',
+  DateTime = 'datetime',
   Email = 'email',
   Enum = 'enum',
   Hidden = 'hidden',

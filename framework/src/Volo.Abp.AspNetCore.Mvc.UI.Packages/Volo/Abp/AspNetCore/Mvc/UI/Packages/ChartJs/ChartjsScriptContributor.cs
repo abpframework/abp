@@ -6,6 +6,6 @@ public class ChartjsScriptContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.Add("/libs/chart.js/Chart.js");
+        context.Files.Add("/libs/chart.js/chart.js");
     }
 }

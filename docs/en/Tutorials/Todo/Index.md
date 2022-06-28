@@ -17,16 +17,11 @@ You can find the source code of the completed application [here](https://github.
 ## Pre-Requirements
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 6.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* [Node v14.x](https://nodejs.org/)
 
 {{if DB=="Mongo"}}
 
 * [MongoDB Server 4.0+](https://docs.mongodb.com/manual/administration/install-community/)
-
-{{end}}
-
-{{if UI=="NG"}}
-
-* [Node v14.x](https://nodejs.org/)
 
 {{end}}
 
@@ -96,13 +91,7 @@ Ensure that the `TodoApp.HttpApi.Host` project is the startup project, then run 
 
 You can explore and test your HTTP API with this UI. If it works, we can run the Angular client application.
 
-First, run the following command to restore the NPM packages;
-
-````bash
-npm install
-````
-
-It will take some time to install all the packages. Then you can run the application using the following command:
+You can run the application using the following command:
 
 ````bash
 npm start

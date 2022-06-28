@@ -31,7 +31,7 @@ If you don't think to make huge changes on the pre-built modules, re-using them 
 
 If you want to make **huge changes** or add **major features** on a pre-built module, but the available extension points are not enough, you can consider to directly work the source code of the depended module.
 
-In this case, you typically **add the source code** of the module to your solution and replace **every** package reference in the solution with its corresponding local project references.  **[ABP CLI](CLI.md)**  automates this process for you.
+In this case, you typically **add the source code** of the module to your solution and replace **every** package reference in the solution with its corresponding local project references.  **[ABP CLI](CLI.md)**'s `add-module` command automates this process for you with the `--with-source-code` parameter. This command can also replace a module by its source code if the module already installed as NuGet packages.
 
 
 #### Separating the Module Solution

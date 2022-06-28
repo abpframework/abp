@@ -69,6 +69,6 @@ public class MongoTenantRepository : MongoDbRepository<ITenantManagementMongoDbC
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)
-            ).CountAsync(cancellationToken: cancellationToken);
+            ).CountAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

@@ -84,7 +84,7 @@ namespace AbpDemo
 
 #### 关于序列化的事件对象
 
-事件传输对象**必须是可序列化**的,因为将其传输到流程外时，它们将被序列化/反序列化为JSON或其他格式.
+事件传输对象**必须是可序列化**的,因为将其传输到进程外时，它们将被序列化/反序列化为JSON或其他格式.
 
 避免循环引用,多态,私有setter,并提供默认(空)构造函数,如果你有其他的构造函数.(虽然某些序列化器可能会正常工作),就像DTO一样.
 
@@ -264,7 +264,7 @@ Configure<AbpDistributedEntityEventOptions>(options =>
 
 因此可以实现 `IDistributedEventHandler<EntityUpdatedEto<EntityEto>>` 订阅事件. 但是订阅这样的通用事件不是一个好方法,你可以为实体类型定义对应的ETO.
 
-**示例: 为 `Product` 声明使用 `ProductDto`**
+**示例: 为 `Product` 声明使用 `ProductEto`**
 
 ````csharp
 Configure<AbpDistributedEntityEventOptions>(options =>

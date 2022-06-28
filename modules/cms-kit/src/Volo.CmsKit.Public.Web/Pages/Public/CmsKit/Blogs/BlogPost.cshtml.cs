@@ -1,11 +1,5 @@
-﻿using Markdig;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
@@ -30,6 +24,8 @@ public class BlogPostModel : CmsKitPublicPageModelBase
     public BlogFeatureDto RatingsFeature { get; private set; }
 
     public BlogFeatureDto TagsFeature { get; private set; }
+    
+    public BlogFeatureDto BlogPostScrollIndexFeature { get; private set; }
 
     protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
 
@@ -65,6 +61,11 @@ public class BlogPostModel : CmsKitPublicPageModelBase
         if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
         {
             TagsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.TagsFeature.Name);
+        }
+
+        if (GlobalFeatureManager.Instance.IsEnabled<BlogPostScrollIndexFeature>())
+        {
+            BlogPostScrollIndexFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.BlogPostScrollIndexFeature.Name);
         }
     }
 }

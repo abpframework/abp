@@ -4,7 +4,7 @@ ABP Framework offers an **opinionated architecture** to build enterprise softwar
 
 ## Getting Started
 
-* [Quick Start](Tutorials/Todo/Index.md) is a single-part, quick-start tutorial to build a simple application with the ABP Framework. Start with this tutorial if you want to quickly understand how ABP works.
+* [Quick Start](Tutorials/Todo/Overall.md) is a single-part, quick-start tutorial to build a simple application with the ABP Framework. Start with this tutorial if you want to quickly understand how ABP works.
 * [Getting Started](Getting-Started.md) guide can be used to create and run ABP based solutions with different options and details.
 * [Web Application Development Tutorial](Tutorials/Part-1.md) is a complete tutorial to develop a full stack web application with all aspects of a real-life solution.
 
@@ -47,7 +47,7 @@ Application Modules provides pre-built application functionalities;
 
 * [**Account**](Modules/Account.md): Provides UI for the account management and allows user to login/register to the application.
 * **[Identity](Modules/Identity.md)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
-* [**IdentityServer**](Modules/IdentityServer.md): Integrates to IdentityServer4.
+* [**OpenIddict**](Modules/OpenIddict.md): Integrates to OpenIddict.
 * [**Tenant Management**](Modules/Tenant-Management.md): Manages tenants for a [multi-tenant](Multi-Tenancy.md) (SaaS) application.
 
 See the [Application Modules](Modules/Index.md) document for all pre-built modules.
