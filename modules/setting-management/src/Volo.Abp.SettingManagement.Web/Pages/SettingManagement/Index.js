@@ -7,7 +7,7 @@
             return;
         }
 
-        var id = _this.attr("id")
+        var id = _this.data("id")
         abp.ui.block({
           elm: '#tab-content',
           busy: true,
