@@ -44,7 +44,7 @@ public abstract class ProjectCreationCommandBase
         AngularPwaSupportAdder angularPwaSupportAdder,
         InitialMigrationCreator initialMigrationCreator,
         ThemePackageAdder themePackageAdder,
-		ILocalEventBus eventBus)
+        ILocalEventBus eventBus)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
@@ -170,7 +170,7 @@ public abstract class ProjectCreationCommandBase
                 outputFolderRoot = slnPath;
                 slnPath = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
             }
-            
+
             if (slnPath == null)
             {
                 throw new CliUsageException($"This command should be run inside a folder that contains a microservice solution! Or use -{Options.MainSolution.Short} parameter.");
@@ -227,10 +227,11 @@ public abstract class ProjectCreationCommandBase
 
     protected void ExtractProjectZip(ProjectBuildResult project, string outputFolder)
     {
-        EventBus.PublishAsync(new ProjectCreationProgressEvent {
+        EventBus.PublishAsync(new ProjectCreationProgressEvent
+        {
             Message = "Extracting the solution archieve"
         }, false);
-        
+
         using (var templateFileStream = new MemoryStream(project.ZipContent))
         {
             using (var zipInputStream = new ZipInputStream(templateFileStream))
@@ -366,10 +367,11 @@ public abstract class ProjectCreationCommandBase
     {
         if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
         {
-            await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent
+            {
                 Message = "Building the microservice solution"
             }, false);
-            
+
             CmdHelper.RunCmd("dotnet build /graphbuild", projectArgs.OutputFolder);
         }
     }
@@ -382,11 +384,12 @@ public abstract class ProjectCreationCommandBase
             MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
         {
             Logger.LogInformation("Installing client-side packages...");
-            
-            await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent
+            {
                 Message = "Installing client-side packages"
             }, false);
-            
+
             await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
         }
     }
@@ -423,10 +426,11 @@ public abstract class ProjectCreationCommandBase
             return;
         }
 
-        await EventBus.PublishAsync(new ProjectCreationProgressEvent {
+        await EventBus.PublishAsync(new ProjectCreationProgressEvent
+        {
             Message = "Creating the initial DB migration"
         }, false);
-        
+
         await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
     }
 
@@ -438,7 +442,7 @@ public abstract class ProjectCreationCommandBase
         if (isAngular && isPwa)
         {
             Logger.LogInformation("Adding PWA Support to Angular app.");
-            
+
             AngularPwaSupportAdder.AddPwaSupport(projectArgs.OutputFolder);
         }
     }
@@ -659,7 +663,8 @@ public abstract class ProjectCreationCommandBase
         {
             public const string Short = "ms";
             public const string Long = "main-solution";
-        
+        }
+
         public static class Theme
         {
             public const string Long = "theme";
