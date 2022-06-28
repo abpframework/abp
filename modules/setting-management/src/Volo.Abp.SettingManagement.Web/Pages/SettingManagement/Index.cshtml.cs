@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
@@ -32,6 +33,19 @@ public class IndexModel : AbpPageModel
     public virtual Task<IActionResult> OnPostAsync()
     {
         return Task.FromResult<IActionResult>(Page());
+    }
+
+    public virtual async Task<IActionResult> OnPostRenderViewAsync(string id)
+    {
+        var context = await SettingPageContributorManager.ConfigureAsync();
+
+        var view = context.Groups.FirstOrDefault(x => x.Id == id);
+        if (view != null)
+        {
+            return ViewComponent(view.ComponentType, view.Parameter);
+        }
+
+        return NoContent();
     }
 
     public virtual async Task<NoContentResult> OnPostRefreshConfigurationAsync()
