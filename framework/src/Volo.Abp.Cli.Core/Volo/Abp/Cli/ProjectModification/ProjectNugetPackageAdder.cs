@@ -396,6 +396,6 @@ public class ProjectNugetPackageAdder : ITransientDependency
         return projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
                    .Any(p => p.EndsWith(".HttpApi.Host"))
                && projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
-                   .Any(p => p.EndsWith(".IdentityServer"));
+                   .Any(p => p.EndsWith(".IdentityServer") || p.EndsWith(".AuthServer"));
     }
 }

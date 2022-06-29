@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers;
@@ -14,5 +15,6 @@ public interface IBackgroundWorkerManager : IRunnable
     /// <param name="worker">
     /// The worker. It should be resolved from IOC.
     /// </param>
-    Task AddAsync(IBackgroundWorker worker);
+    /// <param name="cancellationToken"></param>
+    Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default);
 }

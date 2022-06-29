@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Quartz;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz;
 
@@ -34,12 +33,12 @@ public class QuartzBackgroundWorkerManager : IBackgroundWorkerManager, ISingleto
         }
     }
 
-    public virtual async Task AddAsync(IBackgroundWorker worker)
+    public virtual async Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
     {
-        await ReScheduleJobAsync(worker);
+        await ReScheduleJobAsync(worker, cancellationToken);
     }
 
-    protected virtual async Task ReScheduleJobAsync(IBackgroundWorker worker)
+    protected virtual async Task ReScheduleJobAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
     {
         if (worker is IQuartzBackgroundWorker quartzWork)
         {
@@ -52,7 +51,7 @@ public class QuartzBackgroundWorkerManager : IBackgroundWorkerManager, ISingleto
             }
             else
             {
-                await DefaultScheduleJobAsync(quartzWork);
+                await DefaultScheduleJobAsync(quartzWork, cancellationToken);
             }
         }
         else
@@ -65,22 +64,22 @@ public class QuartzBackgroundWorkerManager : IBackgroundWorkerManager, ISingleto
 
             if (workerAdapter?.Trigger != null)
             {
-                await DefaultScheduleJobAsync(workerAdapter);
+                await DefaultScheduleJobAsync(workerAdapter, cancellationToken);
             }
         }
     }
 
-    protected virtual async Task DefaultScheduleJobAsync(IQuartzBackgroundWorker quartzWork)
+    protected virtual async Task DefaultScheduleJobAsync(IQuartzBackgroundWorker quartzWork, CancellationToken cancellationToken = default)
     {
-        if (await _scheduler.CheckExists(quartzWork.JobDetail.Key))
+        if (await _scheduler.CheckExists(quartzWork.JobDetail.Key, cancellationToken))
         {
-            await _scheduler.AddJob(quartzWork.JobDetail, true, true);
-            await _scheduler.ResumeJob(quartzWork.JobDetail.Key);
-            await _scheduler.RescheduleJob(quartzWork.Trigger.Key, quartzWork.Trigger);
+            await _scheduler.AddJob(quartzWork.JobDetail, true, true, cancellationToken);
+            await _scheduler.ResumeJob(quartzWork.JobDetail.Key, cancellationToken);
+            await _scheduler.RescheduleJob(quartzWork.Trigger.Key, quartzWork.Trigger, cancellationToken);
         }
         else
         {
-            await _scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger);
+            await _scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger, cancellationToken);
         }
     }
 }
