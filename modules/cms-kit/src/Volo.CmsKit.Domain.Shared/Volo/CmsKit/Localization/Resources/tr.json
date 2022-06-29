@@ -187,6 +187,9 @@
     "InThisDocument": "Bu belgede",
     "RemoveCoverImageConfirmationMessage": "Kapak resmini kaldırmak istediğinize emin misiniz?",
     "RemoveCoverImage": "Kapak resmini kaldır",
-    "CmsKit.BlogPost.ScrollIndex": "Blog yazılarında hızlı gezinme çubuğu"
+    "CmsKit.BlogPost.ScrollIndex": "Blog yazılarında hızlı gezinme çubuğu",
+    "Add": "Ekle",
+    "AddWidget": "Widget Ekle",
+    "PleaseConfigureWidgets": "Lütfen widget'leri yapılandırın"
   }
 }

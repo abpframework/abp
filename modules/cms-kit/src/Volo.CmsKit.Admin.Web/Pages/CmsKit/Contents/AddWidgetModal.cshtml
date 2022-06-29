@@ -17,14 +17,20 @@
 
 <abp-modal size="Large" id="addWidgetModal">
 
-    <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
+    <abp-modal-header title="@L["AddWidget"].Value"></abp-modal-header>
 
     <abp-modal-body>
         <div class="container row">
+            @if(Model.Widgets.Count() > 1){
             <abp-select asp-for="ViewModel.Widget" />
             <div id="PropertySideId">
             </div>
-            <button class="btn btn-primary float-end" type="submit" id="save-changes">@L["Save"]</button>
+                <button class="btn btn-primary float-end" type="submit" id="save-changes">@L["Add"]</button>
+            }
+            else
+            {
+                <p>@L["PleaseConfigureWidgets"].Value</p>
+            }
         </div>
     </abp-modal-body>
     
