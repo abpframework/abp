@@ -169,6 +169,7 @@ $(function () {
     function checkHasBlogPostWaitingForReview(){
         if (!abp.auth.isGranted('CmsKit.BlogPosts.Publish')){
             $('#alertHasBlogPostWaitingForReview').hide();
+            return;
         }
         
         blogsService.hasBlogPostWaitingForReview().then(function (result) {

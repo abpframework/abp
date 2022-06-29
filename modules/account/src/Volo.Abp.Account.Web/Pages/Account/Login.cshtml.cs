@@ -75,8 +75,7 @@ public class LoginModel : AccountPageModel
 
         if (IsExternalLoginOnly)
         {
-            //return await ExternalLogin(vm.ExternalLoginScheme, returnUrl);
-            throw new NotImplementedException();
+            return await OnPostExternalLogin(ExternalProviders.First().AuthenticationScheme);
         }
 
         return Page();
@@ -277,7 +276,7 @@ public class LoginModel : AccountPageModel
         CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
         CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
         CheckIdentityErrors(await UserManager.AddDefaultRolesAsync(user));
-        
+
         user.Name = info.Principal.FindFirstValue(AbpClaimTypes.Name);
         user.Surname = info.Principal.FindFirstValue(AbpClaimTypes.SurName);
 

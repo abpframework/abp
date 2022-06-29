@@ -12,18 +12,18 @@ public class IndexModel : CommonPageModel
 
     protected IPagePublicAppService PagePublicAppService { get; }
 
-    public PageDto Page;
+    public PageDto PageDto{ get; private set; }
 
-    public IndexModel(IPagePublicAppService pagePublicAppService)
+public IndexModel(IPagePublicAppService pagePublicAppService)
     {
         PagePublicAppService = pagePublicAppService;
     }
 
     public async Task<IActionResult> OnGetAsync()
     {
-        Page = await PagePublicAppService.FindBySlugAsync(Slug);
+        PageDto = await PagePublicAppService.FindBySlugAsync(Slug);
 
-        if (Page == null)
+        if (PageDto == null)
         {
             return NotFound();
         }

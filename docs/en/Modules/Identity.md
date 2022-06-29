@@ -105,8 +105,8 @@ You can inject and use `IdentitySecurityLogManager` or `ISecurityLogManager` to 
 ```cs
 await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
 {
-	Identity = "IdentityServer";
-	Action = "ChangePassword";
+	Identity = "IdentityServer",
+	Action = "ChangePassword"
 });
 ```
 

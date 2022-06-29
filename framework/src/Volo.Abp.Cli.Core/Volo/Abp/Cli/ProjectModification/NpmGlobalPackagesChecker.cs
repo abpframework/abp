@@ -7,34 +7,22 @@ namespace Volo.Abp.Cli.ProjectModification;
 
 public class NpmGlobalPackagesChecker : ITransientDependency
 {
-    public ICmdHelper CmdHelper { get; }
+    public NpmHelper NpmHelper { get; }
     public ILogger<NpmGlobalPackagesChecker> Logger { get; set; }
 
-    public NpmGlobalPackagesChecker(ICmdHelper cmdHelper)
+    public NpmGlobalPackagesChecker(NpmHelper npmHelper)
     {
-        CmdHelper = cmdHelper;
+        NpmHelper = npmHelper;
         Logger = NullLogger<NpmGlobalPackagesChecker>.Instance;
     }
 
     public void Check()
     {
-        var installedNpmPackages = GetInstalledNpmPackages();
+        var installedNpmPackages = NpmHelper.GetInstalledNpmPackages();
 
         if (!installedNpmPackages.Contains(" yarn@"))
         {
-            InstallYarn();
+            NpmHelper.InstallYarn();
         }
-    }
-
-    protected virtual string GetInstalledNpmPackages()
-    {
-        Logger.LogInformation("Checking installed npm global packages...");
-        return CmdHelper.RunCmdAndGetOutput("npm list -g --depth 0 --silent", out int exitCode);
-    }
-
-    protected virtual void InstallYarn()
-    {
-        Logger.LogInformation("Installing yarn...");
-        CmdHelper.RunCmd("npm install yarn -g");
     }
 }

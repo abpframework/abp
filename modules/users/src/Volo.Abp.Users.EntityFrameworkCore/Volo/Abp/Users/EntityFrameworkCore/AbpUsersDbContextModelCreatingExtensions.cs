@@ -16,5 +16,6 @@ public static class AbpUsersDbContextModelCreatingExtensions
         b.Property(u => u.EmailConfirmed).HasDefaultValue(false).HasColumnName(nameof(IUser.EmailConfirmed));
         b.Property(u => u.PhoneNumber).HasMaxLength(AbpUserConsts.MaxPhoneNumberLength).HasColumnName(nameof(IUser.PhoneNumber));
         b.Property(u => u.PhoneNumberConfirmed).HasDefaultValue(false).HasColumnName(nameof(IUser.PhoneNumberConfirmed));
+        b.Property(u => u.IsActive).HasColumnName(nameof(IUser.IsActive));
     }
 }
