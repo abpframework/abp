@@ -65,7 +65,7 @@ function validatePassword(shouldContain: 'small' | 'capital' | 'number' | 'speci
     };
     const regex = regexMap[shouldContain];
 
-    const hasError = regex[shouldContain].test(value);
+    const hasError = regex.test(value);
 
     if (!hasError) {
       return null;
