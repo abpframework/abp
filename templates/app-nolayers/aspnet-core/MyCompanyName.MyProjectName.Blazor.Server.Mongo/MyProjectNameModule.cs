@@ -1,5 +1,6 @@
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
@@ -129,7 +130,7 @@ public class MyProjectNameModule : AbpModule
         {
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
         }
-        
+
         ConfigureUrls(configuration);
         ConfigureBundles();
         ConfigureAutoMapper(context);
@@ -188,6 +189,8 @@ public class MyProjectNameModule : AbpModule
                 options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                 options.Audience = "MyProjectName";
             });
+
+        context.Services.ForwardIdentityAuthenticationForBearer();
     }
 
     private void ConfigureLocalizationServices()

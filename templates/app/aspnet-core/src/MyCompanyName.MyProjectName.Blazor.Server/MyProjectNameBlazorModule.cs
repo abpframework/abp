@@ -4,6 +4,7 @@ using System.Net.Http;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -138,6 +139,8 @@ public class MyProjectNameBlazorModule : AbpModule
                 options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                 options.Audience = "MyProjectName";
             });
+
+        context.Services.ForwardIdentityAuthenticationForBearer();
     }
 
     private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
