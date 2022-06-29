@@ -4,3 +4,4 @@ export * from './nav-item';
 export * from './statistics';
 export * from './toaster';
 export * from './user-menu';
+export * from './validation';
