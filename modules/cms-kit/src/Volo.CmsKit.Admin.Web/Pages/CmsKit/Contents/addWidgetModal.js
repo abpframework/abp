@@ -11,7 +11,6 @@ $(function () {
                 $("#PropertySideId").html('');
                 volo.cmsKit.admin.contents.contentAdmin.getWidgets().then(function (data) {
                     var widgetTypes = data.items.filter(v => v.key === widgetType);
-                    //TODO null check
                     var firstWidgetType = widgetTypes[0];
                     for (const property of firstWidgetType.properties) {
                         let html = "<div class=\"form-group\"> " +
@@ -38,13 +37,17 @@ $(function () {
                     .replace('MarkdownWYSIWYG', '')
                     .replace('AW', '');
 
-                var updatedText = "[Widget Type=\"" + widgetType + "\" ";
+                let updatedText = '';
+                if (widgetType != undefined) {
 
-                for (var i = 0; i < keys.length; i++) {
-                    updatedText += keys[i] + "=\"" + values[i] + "\" ";
+                    updatedText = "[Widget Type=\"" + widgetType + "\" ";
+
+                    for (var i = 0; i < keys.length; i++) {
+                        updatedText += keys[i] + "=\"" + values[i] + "\" ";
+                    }
+
+                    updatedText += "]";
                 }
-
-                updatedText += "]";
 
                 if (contentEditorText == '\n\n\n') {
                     //TODO fails event
@@ -54,10 +57,8 @@ $(function () {
                     $("#ContentEditor")[0].innerHTML = replacedInnerHtml;
                 }
                 else {
-
                     $('.ProseMirror div').contents()[0].data = contentEditorText + updatedText;
                 }
-
 
                 $('#addWidgetModal').modal('hide');
             });
