@@ -68,9 +68,9 @@ export function validatePassword(
     };
     const regex = regexMap[shouldContain];
 
-    const hasError = regex[shouldContain].test(value);
+    const isValid = regex.test(value);
 
-    if (!hasError) {
+    if (isValid) {
       return null;
     }
 
