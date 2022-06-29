@@ -1,7 +1,8 @@
 import { ABP, ConfigStateService } from '@abp/ng.core';
 import { Injector } from '@angular/core';
 import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
-import { PasswordRules, normalizeDiacritics } from '@ngx-validate/core';
+import { normalizeDiacritics, PasswordRules } from '@ngx-validate/core';
+import { PasswordRule } from "../models/validation";
 
 const { minLength, maxLength } = Validators;
 
@@ -51,7 +52,9 @@ const errorMessageMap = {
   special: 'passwordRequiresNonAlphanumeric',
 };
 
-function validatePassword(shouldContain: 'small' | 'capital' | 'number' | 'special'): ValidatorFn {
+export function validatePassword(
+  shouldContain: PasswordRule
+): ValidatorFn {
   return (control: AbstractControl) => {
     if (!control.value) return null;
 
