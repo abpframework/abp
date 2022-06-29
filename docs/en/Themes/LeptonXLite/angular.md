@@ -79,4 +79,4 @@ To change the logos and brand color of `LeptonX`, simply add the following CSS t
 
 ### Server Side
 
-In order to migrate to LeptonX on your server side projects (Host and/or AuthServer projects), please follow the [Server Side Migration](mvc.md) document.
+In order to migrate to LeptonX on your server side projects (Host and/or AuthServer projects), please follow the [Server Side Migration](AspNetCore.md) document.

@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy;
@@ -21,6 +23,15 @@ public class AbpAspNetCoreMultiTenancyOptions
         TenantKey = TenantResolverConsts.DefaultTenantKey;
         MultiTenancyMiddlewareErrorPageBuilder = async (context, exception) =>
         {
+            // Try to delete the tenant's cookie if it does not exist or is inactive.
+            var tenantResolveResult = context.RequestServices.GetRequiredService<ITenantResolveResultAccessor>().Result;
+            if (tenantResolveResult != null &&
+                tenantResolveResult.AppliedResolvers.Contains(CookieTenantResolveContributor.ContributorName))
+            {
+                var options = context.RequestServices.GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value;
+                AbpMultiTenancyCookieHelper.SetTenantCookie(context, null, options.TenantKey);
+            }
+
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError; ;
             context.Response.ContentType = "text/html";
 
@@ -31,8 +42,8 @@ public class AbpAspNetCoreMultiTenancyOptions
             await context.Response.WriteAsync($"<h3>{message}</h3>{details}<br>\r\n");
             await context.Response.WriteAsync("</body></html>\r\n");
 
-                // Note the 500 spaces are to work around an IE 'feature'
-                await context.Response.WriteAsync(new string(' ', 500));
+            // Note the 500 spaces are to work around an IE 'feature'
+            await context.Response.WriteAsync(new string(' ', 500));
         };
     }
 }

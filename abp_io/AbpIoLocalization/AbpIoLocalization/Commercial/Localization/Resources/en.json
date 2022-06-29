@@ -536,6 +536,7 @@
     "Pricing_Page_Testimonial_2": "We are seeing the value of using ABP Commercial to reduce the overhead of custom development projects. And the team is able to unify the code pattern in different project streams. We see more potential in the framework for us to build new features faster than before. We trust we will be constantly seeing the value of leveraging ABP Commercial.",
     "Pricing_Page_Testimonial_3": "We love ABP. We don't have to write everything from scratch. We start from out-of-the-box features and just focus on what we really need to write. Also, ABP is well-architected and the code is high quality with fewer bugs. If we would have to write everything we needed on our own, we might have to spend years. Once more things we like is that the new version, or issue fixing, or improvement come out very soon every other week. We don't wait too long.",
     "Pricing_Page_Testimonial_4": "ABP Commercial is a fantastic product would recommend. Commercial products to market for our customers in a single configurable platform. The jump start that the framework and tooling provide any team is worth every cent. ABP Commercial was the best fit for our needs.",
+    "Pricing_Page_Testimonial_5": "ABP Framework is not only a framework, but it is also a guide for project development/management, because it provides DDD, GenericRepository, DI, Microservice, and Modularity training. Even if you are not going to use the framework itself, you can develop yourself with docs.abp.io which is well and professionally prepared (OpenIddict, Redis, Quartz etc.). Because many things are pre-built, it shortens project development time significantly (Such as login page, exception handling, data filtering, seeding, audit logging, localization, auto API controller etc.). As an example from our application, I have used Local Event Bus for stock control. So, I am able to manage order movements by writing stock handler. It is wonderful not to lose time for CreationTime, CreatorId. They are being filled automatically.",
     "AbpBookDownloadArea_ClaimYourEBook": "Claim your <span class='gradient-framework'>Mastering ABP Framework</span> E-Book",
     "AddMemberModal_Warning_1": "If the <strong>username</strong> you are trying to add doesn't exist in the system, please ask your team member to register on <a href='{0}/Account/Register'>{0}</a> and share the username of his/her account with you.",
     "MyOrganizations_Detail_WelcomeMessage": "Welcome to your organization, {0}",
@@ -730,7 +731,10 @@
     "Welcome_Page_UseSameCredentialForCommercialWebsites": "Use the same credentials for both <a href=\"https://commercial.abp.io\" class=\"text-primary\">commercial.abp.io</a> and <a href=\"https://support.abp.io\" class=\"text-primary\">support.abp.io</a>.",
     "WatchCrudPagesVideo": "Watch the \"Creating CRUD Pages with ABP Suite\" Video!",
     "WatchGeneratingFromDatabaseVideo": "Watch the \"ABP Suite: Generating CRUD Pages From Existing Database Tables\" Video!",
-    "WatchTakeCloserLookVideo": "Watch the \"Take a closer look at the code generation: ABP Suite\" Video!"
-    
+    "WatchTakeCloserLookVideo": "Watch the \"Take a closer look at the code generation: ABP Suite\" Video!",
+    "ConfirmedEmailAddressRequiredToStartTrial": "You should have a confirmed email address in order to start a trial license.",
+    "EmailVerificationMailNotSent": "Email verification mail couldn't send.",
+    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">Click here to get a confirmation email</a> if you haven't got it before.",
+    "WhichLicenseTypeYouAreInterestedIn": "Which license type you are interested in?"
   }
 }

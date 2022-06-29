@@ -13,4 +13,8 @@ export const DEFAULT_VALIDATION_BLUEPRINTS = {
   range: 'AbpValidation::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
   required: 'AbpValidation::ThisFieldIsRequired.',
   url: 'AbpValidation::ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl',
+  passwordRequiresLower: 'AbpIdentity::Volo.Abp.Identity:PasswordRequiresLower',
+  passwordRequiresUpper: 'AbpIdentity::Volo.Abp.Identity:PasswordRequiresUpper',
+  passwordRequiresDigit: 'AbpIdentity::Volo.Abp.Identity:PasswordRequiresDigit',
+  passwordRequiresNonAlphanumeric: 'AbpIdentity::Volo.Abp.Identity:PasswordRequiresNonAlphanumeric',
 };
