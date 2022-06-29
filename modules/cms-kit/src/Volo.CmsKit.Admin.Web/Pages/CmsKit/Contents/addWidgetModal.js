@@ -32,16 +32,32 @@ $(function () {
                         values.push($(this).val());
                     }
                 });
-                //TODO review here
-                var contentEditorText = $("#ContentEditor")[0].innerText.split("\n")[2];
+
+                var contentEditorText = $("#ContentEditor")[0].innerText
+                    .replace('WritePreview', '')
+                    .replace('MarkdownWYSIWYG', '')
+                    .replace('AW', '');
 
                 var updatedText = "[Widget Type=\"" + widgetType + "\" ";
 
                 for (var i = 0; i < keys.length; i++) {
                     updatedText += keys[i] + "=\"" + values[i] + "\" ";
                 }
+
                 updatedText += "]";
-                $('.ProseMirror div').contents()[0].data = contentEditorText + updatedText;
+
+                if (contentEditorText == '\n\n\n') {
+                    //TODO fails event
+                    var fixedData = "<div>" + updatedText + "</div>";
+                    var innerHtml = $("#ContentEditor")[0].innerHTML;
+                    var replacedInnerHtml = innerHtml.replace('<div><br></div>', fixedData);
+                    $("#ContentEditor")[0].innerHTML = replacedInnerHtml;
+                }
+                else {
+
+                    $('.ProseMirror div').contents()[0].data = contentEditorText + updatedText;
+                }
+
 
                 $('#addWidgetModal').modal('hide');
             });
