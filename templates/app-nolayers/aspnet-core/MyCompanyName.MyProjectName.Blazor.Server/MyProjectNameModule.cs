@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.Menus;
+using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -63,7 +64,7 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAspNetCoreComponentsServerLeptonXLiteThemeModule),
-    
+
     // Account module packages
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
@@ -140,6 +141,7 @@ public class MyProjectNameModule : AbpModule
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
         }
 
+        ConfigureAuthentication(context);
         ConfigureUrls(configuration);
         ConfigureBundles();
         ConfigureAutoMapper(context);
@@ -151,6 +153,11 @@ public class MyProjectNameModule : AbpModule
         ConfigureBlazorise(context);
         ConfigureRouter(context);
         ConfigureEfCore(context);
+    }
+
+    private void ConfigureAuthentication(ServiceConfigurationContext context)
+    {
+        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
     }
 
     private void ConfigureUrls(IConfiguration configuration)
