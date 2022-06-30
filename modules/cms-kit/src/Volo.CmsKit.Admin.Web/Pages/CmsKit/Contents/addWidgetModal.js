@@ -12,14 +12,29 @@ $(function () {
                 volo.cmsKit.admin.contents.contentAdmin.getWidgets().then(function (data) {
                     var widgetTypes = data.items.filter(v => v.key === widgetType);
                     var firstWidgetType = widgetTypes[0];
-                    for (const property of firstWidgetType.properties) {
-                        let html = "<div class=\"form-group\"> " +
-                            " <label for=\"" + property.key + "\">" + property.name + "</label>" +
-                            " <input class=\"properties form-control\" id=\"" + property.key + "\" type=\"text\" />" +
-                            " </div>";
+                    if (firstWidgetType.key == "Poll") {
+                        $("#polls").removeAttr("hidden");
+                        let widgetKey = $('#Widget').find('option:selected').val();
+                        let html = " <input hidden class=\"properties form-control\" value=\"" + widgetKey + "\" id=\"Code\" type=\"text\" />"
                         $("#PropertySideId").append(html);
                     }
+                    else {
+                        for (const property of firstWidgetType.properties) {
+                            let html = "<div class=\"form-group\"> " +
+                                " <label for=\"" + property.key + "\">" + property.name + "</label>" +
+                                " <input class=\"properties form-control\" id=\"" + property.key + "\" type=\"text\" />" +
+                                " </div>";
+                            $("#PropertySideId").append(html);
+                        }
+                    }
                 });
+            });
+
+            $("#Widget").change(function () {
+                $("#PropertySideId").html('');
+                let widgetKey = $(this).find('option:selected').val();
+                let html = " <input hidden class=\"properties form-control\" value=\"" + widgetKey + "\" id=\"Code\" type=\"text\" />"
+                $("#PropertySideId").append(html);
             });
 
             $("#save-changes").click(function () {

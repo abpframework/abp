@@ -16,15 +16,16 @@
 }
 
 <abp-modal size="Large" id="addWidgetModal">
-
     <abp-modal-header title="@L["AddWidget"].Value"></abp-modal-header>
-
     <abp-modal-body>
         <div class="container row">
-            @if(Model.Widgets.Count() > 1){
-            <abp-select asp-for="ViewModel.Widget" />
-            <div id="PropertySideId">
-            </div>
+            @if(Model.Widgets.Count() > 1)
+            {
+                <abp-select asp-for="ViewModel.Widget" />
+                <div id="polls" hidden>@await Component.InvokeAsync("CmsPolls")</div>
+                @*<div id="polls" hidden><abp-select id="Widget" asp-for="ViewModel.Widget" /></div>*@
+                <div id="PropertySideId">
+                </div>
                 <button class="btn btn-primary float-end" type="submit" id="save-changes">@L["Add"]</button>
             }
             else
@@ -33,5 +34,4 @@
             }
         </div>
     </abp-modal-body>
-    
 </abp-modal>
