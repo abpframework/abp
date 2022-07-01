@@ -14,9 +14,6 @@ $(function () {
                     var firstWidgetType = widgetTypes[0];
                     if (firstWidgetType.key == "Poll") {
                         $("#polls").removeAttr("hidden");
-                        let widgetKey = $('#Widget').find('option:selected').val();
-                        let html = " <input hidden class=\"properties form-control\" value=\"" + widgetKey + "\" id=\"Code\" type=\"text\" />"
-                        $("#PropertySideId").append(html);
                     }
                     else {
                         for (const property of firstWidgetType.properties) {
@@ -30,9 +27,9 @@ $(function () {
                 });
             });
 
-            $("#Widget").change(function () {
+            $("#WidgetCode").keyup(function (e) {
                 $("#PropertySideId").html('');
-                let widgetKey = $(this).find('option:selected').val();
+                let widgetKey = $(this).val();
                 let html = " <input hidden class=\"properties form-control\" value=\"" + widgetKey + "\" id=\"Code\" type=\"text\" />"
                 $("#PropertySideId").append(html);
             });
