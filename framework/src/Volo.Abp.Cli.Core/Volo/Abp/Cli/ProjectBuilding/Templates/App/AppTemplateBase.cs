@@ -548,27 +548,41 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             case UiFramework.None:
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.Server.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/appsettings.json"));
                 steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
                 break;
             case UiFramework.Angular:
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.Server.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/appsettings.json"));
                 steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
                 break;
             case UiFramework.Blazor:
-            case UiFramework.BlazorServer:
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.Server.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
                 steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
                 break;
+            case UiFramework.BlazorServer:
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/appsettings.json"));
+                steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.Server.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
+                break;
             case UiFramework.NotSpecified:
             case UiFramework.Mvc:
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.Server.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/appsettings.json"));
                 steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
                 break;
         }
