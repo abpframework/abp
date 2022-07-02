@@ -2,13 +2,23 @@
   "items": [
     {
       "text": "快速入门",
-      "path": "Tutorials/Todo/Index.md"
+      "path": "Tutorials/Todo/Overall.md",
+      "items": [
+        {
+          "text": "单层解决方案",
+          "path": "Tutorials/Todo/Single-Layer/Index.md"
+        },
+        {
+          "text": "分层架构解决方案",
+          "path": "Tutorials/Todo/Index.md"
+        }
+      ]
     },
     {
       "text": "入门教程",
       "items": [
         {
-          "text": "Web应用程序",
+          "text": "Web 应用程序",
           "path": "Getting-Started.md",
           "items": [
             {
@@ -30,37 +40,12 @@
           "path": "Startup-Templates/Console.md"
         },
         {
-          "text": "WPF应用程序",
+          "text": "WPF 应用程序",
           "path": "Startup-Templates/WPF.md"
         },
         {
-          "text": "空Web应用程序",
+          "text": "空 Web 应用程序",
           "path": "Getting-Started-AspNetCore-Application.md"
-        }
-      ]
-    },
-    {
-      "text": "启动模板",
-      "items": [
-        {
-          "text": "概述",
-          "path": "Startup-Templates/Index.md"
-        },
-        {
-          "text": "应用程序",
-          "path": "Startup-Templates/Application.md"
-        },
-        {
-          "text": "模块",
-          "path": "Startup-Templates/Module.md"
-        },
-        {
-          "text": "控制台",
-          "path": "Startup-Templates/Console.md"
-        },
-        {
-          "text": "WPF",
-          "path": "Startup-Templates/WPF.md"
         }
       ]
     },
@@ -68,7 +53,7 @@
       "text": "教程",
       "items": [
         {
-          "text": "应用开发",
+          "text": "Web 应用程序开发",
           "items": [
             {
               "text": "1: 创建应用服务端",
@@ -117,22 +102,53 @@
           "path": "https://community.abp.io/articles"
         },
         {
-          "text": "从ASP.NET Boilerplate迁移",
+          "text": "从 ASP.NET Boilerplate 迁移",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
         }
       ]
     },
     {
-      "text": "基础知识",
+      "text": "CLI",
+      "path": "CLI.md",
       "items": [
         {
-          "text": "配置",
-          "path": "Configuration.md"
+          "text": "新命令的示例",
+          "path": "CLI-New-Command-Samples.md"
+        }
+      ]
+    },
+    {
+      "text": "启动模板",
+      "items": [
+        {
+          "text": "概述",
+          "path": "Startup-Templates/Index.md"
         },
         {
-          "text": "选项",
-          "path": "Options.md"
+          "text": "应用程序",
+          "path": "Startup-Templates/Application.md"
         },
+        {
+          "text": "应用程序 (单层)",
+          "path": "Startup-Templates/Application-Single-Layer.md"
+        },
+        {
+          "text": "模块",
+          "path": "Startup-Templates/Module.md"
+        },
+        {
+          "text": "控制台",
+          "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
+        }
+      ]
+    },
+    {
+      "text": "基础",
+      "items": [
         {
           "text": "依赖注入",
           "path": "Dependency-Injection.md",
@@ -144,26 +160,30 @@
           ]
         },
         {
-          "text": "本地化",
-          "path": "Localization.md"
+          "text": "配置",
+          "path": "Configuration.md"
         },
         {
-          "text": "异常处理",
-          "path": "Exception-Handling.md"
+          "text": "选项",
+          "path": "Options.md"
+        },
+        {
+          "text": "授权",
+          "path": "Authorization.md"
         },
         {
           "text": "验证",
           "path": "Validation.md",
           "items": [
             {
-              "text": "FluentValidation集成",
+              "text": "FluentValidation 集成",
               "path": "FluentValidation.md"
             }
           ]
         },
         {
-          "text": "授权",
-          "path": "Authorization.md"
+          "text": "本地化",
+          "path": "Localization.md"
         },
         {
           "text": "缓存",
@@ -176,11 +196,11 @@
           ]
         },
         {
-          "text": "日志",
-          "path": "Logging.md"
+          "text": "异常处理",
+          "path": "Exception-Handling.md"
         },
         {
-          "text": "设置管理",
+          "text": "设置",
           "path": "Settings.md"
         },
         {
@@ -190,46 +210,132 @@
         {
           "text": "对象扩展",
           "path": "Object-Extensions.md"
+        },
+        {
+          "text": "日志",
+          "path": "Logging.md"
         }
       ]
     },
     {
       "text": "基础设施",
-      "items":[
+      "items": [
         {
-          "text": "后台服务",
+          "text": "审计日志",
+          "path": "Audit-Logging.md"
+        },
+        {
+          "text": "后台作业",
+          "path": "Background-Jobs.md",
           "items": [
             {
-              "text": "后台作业",
-              "path": "Background-Jobs.md",
-              "items": [
-                {
-                  "text": "Hangfire 集成",
-                  "path": "Background-Jobs-Hangfire.md"
-                },
-                {
-                  "text": "RabbitMQ 集成",
-                  "path": "Background-Jobs-RabbitMq.md"
-                },
-                {
-                  "text": "Quartz 集成",
-                  "path": "Background-Jobs-Quartz.md"
-                }
-              ]
+              "text": "Hangfire 集成",
+              "path": "Background-Jobs-Hangfire.md"
             },
             {
-              "text": "后台工作者",
-              "path": "Background-Workers.md",
+              "text": "RabbitMQ 集成",
+              "path": "Background-Jobs-RabbitMq.md"
+            },
+            {
+              "text": "Quartz 集成",
+              "path": "Background-Jobs-Quartz.md"
+            }
+          ]
+        },
+        {
+          "text": "后台工作者",
+          "path": "Background-Workers.md",
+          "items": [
+            {
+              "text": "Quartz 集成",
+              "path": "Background-Workers-Quartz.md"
+            },
+            {
+              "text": "Hangfire 集成",
+              "path": "Background-Workers-Hangfire.md"
+            }
+          ]
+        },
+        {
+          "text": "BLOB 存储",
+          "items": [
+            {
+              "text": "BLOB 存储系统",
+              "path": "Blob-Storing.md"
+            },
+            {
+              "text": "存储提供程序",
               "items": [
                 {
-                  "text": "Quartz 集成",
-                  "path": "Background-Workers-Quartz.md"
+                  "text": "文件系统提供程序",
+                  "path": "Blob-Storing-File-System.md"
                 },
                 {
-                  "text": "Hangfire 集成",
-                  "path": "Background-Workers-Hangfire.md"
+                  "text": "数据库提供程序",
+                  "path": "Blob-Storing-Database.md"
+                },
+                {
+                  "text": "Azure 提供程序",
+                  "path": "Blob-Storing-Azure.md"
+                },
+                {
+                  "text": "Aliyun 提供程序",
+                  "path": "Blob-Storing-Aliyun.md"
+                },
+                {
+                  "text": "Minio 提供程序",
+                  "path": "Blob-Storing-Minio.md"
+                },
+                {
+                  "text": "AWS 提供程序",
+                  "path": "Blob-Storing-Aws.md"
+                },
+                {
+                  "text": "创建自定义提供程序",
+                  "path": "Blob-Storing-Custom-Provider.md"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "text": "Cancellation Token Provider",
+          "path": "Cancellation-Token-Provider.md"
+        },
+        {
+          "text": "CSRF/XSRF & 防伪",
+          "path": "CSRF-Anti-Forgery.md"
+        },
+        {
+          "text": "并发检查",
+          "path": "Concurrency-Check.md"
+        },
+        {
+          "text": "当前用户",
+          "path": "CurrentUser.md"
+        },
+        {
+          "text": "数据过滤",
+          "path": "Data-Filtering.md"
+        },
+        {
+          "text": "种子数据",
+          "path": "Data-Seeding.md"
+        },
+        {
+          "text": "分布式锁",
+          "path": "Distributed-Locking.md"
+        },
+        {
+          "text": "邮件发送",
+          "items": [
+            {
+              "text": "电子邮件发送系统",
+              "path": "Emailing.md"
+            },
+            {
+              "text": "MailKit 集成",
+              "path": "MailKit.md"
             }
           ]
         },
@@ -241,13 +347,17 @@
               "path": "Event-Bus.md"
             },
             {
-              "text": "本地 Event Bus",
+              "text": "本地事件总线",
               "path": "Local-Event-Bus.md"
             },
             {
-              "text": "分布式 Event Bus",
+              "text": "分布式事件总线",
               "path": "Distributed-Event-Bus.md",
               "items": [
+                {
+                  "text": "Azure Service Bus 集成",
+                  "path": "Distributed-Event-Bus-Azure-Integration.md"
+                },
                 {
                   "text": "RabbitMQ 集成",
                   "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
@@ -265,106 +375,64 @@
           ]
         },
         {
-          "text": "种子数据",
-          "path": "Data-Seeding.md"
+          "text": "Features",
+          "path": "Features.md"
         },
         {
-          "text": "分布式锁",
-          "path": "Distributed-Locking.md"
-        },
-        {
-          "text": "虚拟文件系统",
-          "path": "Virtual-File-System.md"
-        },
-        {
-          "text": "审计日志",
-          "path": "Audit-Logging.md"
-        },
-        {
-          "text": "数据过滤",
-          "path": "Data-Filtering.md"
-        },
-        {
-          "text": "当前用户",
-          "path": "CurrentUser.md"
-        },
-        {
-          "text": "对象到对象映射",
-          "path": "Object-To-Object-Mapping.md"
-
-        },
-        {
-          "text": "邮件发送",
-          "items": [
-            {
-              "text": "邮件发送系统",
-              "path": "Emailing.md"
-            },
-            {
-              "text": "MailKit集成",
-              "path": "MailKit.md"
-            }
-          ]
-        },
-        {
-          "text": "BLOB存储",
-          "items": [
-            {
-              "text": "BLOB存储系统",
-              "path": "Blob-Storing.md"
-            },
-            {
-              "text": "存储提供程序",
-              "items": [
-                {
-                  "text": "文件系统提供程序",
-                  "path": "Blob-Storing-File-System.md"
-                },
-                {
-                  "text": "数据库系统提供程序",
-                  "path": "Blob-Storing-Database.md"
-                },
-                {
-                  "text": "Azure提供程序",
-                  "path": "Blob-Storing-Azure.md"
-                },
-                {
-                  "text": "Aliyun提供程序",
-                  "path": "Blob-Storing-Aliyun.md"
-                },
-                {
-                  "text": "Minio提供程序",
-                  "path": "Blob-Storing-Minio.md"
-                },
-                {
-                  "text": "AWS提供程序",
-                  "path": "Blob-Storing-Aws.md"
-                },
-                {
-                  "text": "创建自定义提供程序",
-                  "path": "Blob-Storing-Custom-Provider.md"
-                }
-              ]
-            }            
-          ]
-        },
-        {
-          "text": "文本模板",
-          "path": "Text-Templating.md"
+          "text": "Global Features",
+          "path": "Global-Features.md"
         },
         {
           "text": "GUID 生成",
           "path": "Guid-Generation.md"
         },
         {
-          "text": "时钟",
+          "text": "JSON",
+          "path": "JSON.md"
+        },
+        {
+          "text": "对象到对象映射",
+          "path": "Object-To-Object-Mapping.md"
+        },
+        {
+          "text": "简单状态检查器",
+          "path": "SimpleStateChecker.md"
+        },
+        {
+          "text": "SMS 发送",
+          "path": "SMS-Sending.md"
+        },
+        {
+          "text": "字符串加密",
+          "path": "String-Encryption.md"
+        },
+        {
+          "text": "文本模板化",
+          "path": "Text-Templating.md",
+          "items": [
+            {
+              "text": "Razor 集成",
+              "path": "Text-Templating-Razor.md"
+            },
+            {
+              "text": "Scriban 集成",
+              "path": "Text-Templating-Scriban.md"
+            }
+          ]
+        },
+        {
+          "text": "定时",
           "path": "Timing.md"
+        },
+        {
+          "text": "虚拟文件系统",
+          "path": "Virtual-File-System.md"
         }
       ]
     },
     {
       "text": "架构",
-      "items":[
+      "items": [
         {
           "text": "模块化",
           "items": [
@@ -373,30 +441,86 @@
               "path": "Module-Development-Basics.md"
             },
             {
-              "text": "模块插件",
+              "text": "插件模块",
               "path": "PlugIn-Modules.md"
             },
             {
-              "text": "自定义应用模块",
-              "path": "Customizing-Application-Modules-Guide.md",
+              "text": "最佳实践",
               "items": [
                 {
-                  "text": "扩展实体",
-                  "path": "Customizing-Application-Modules-Extending-Entities.md"
+                  "text": "概述",
+                  "path": "Best-Practices/Index.md"
                 },
                 {
-                  "text": "重写服务",
-                  "path": "Customizing-Application-Modules-Overriding-Services.md"
+                  "text": "模块架构",
+                  "path": "Best-Practices/Module-Architecture.md"
                 },
                 {
-                  "text": "重写用户界面",
-                  "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
+                  "text": "领域层",
+                  "items": [
+                    {
+                      "text": "实体",
+                      "path": "Best-Practices/Entities.md"
+                    },
+                    {
+                      "text": "仓储",
+                      "path": "Best-Practices/Repositories.md"
+                    },
+                    {
+                      "text": "领域服务",
+                      "path": "Best-Practices/Domain-Services.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "应用层",
+                  "items": [
+                    {
+                      "text": "应用服务",
+                      "path": "Best-Practices/Application-Services.md"
+                    },
+                    {
+                      "text": "数据传输对象",
+                      "path": "Best-Practices/Data-Transfer-Objects.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "数据访问",
+                  "items": [
+                    {
+                      "text": "Entity Framework Core 集成",
+                      "path": "Best-Practices/Entity-Framework-Core-Integration.md"
+                    },
+                    {
+                      "text": "MongoDB 集成",
+                      "path": "Best-Practices/MongoDB-Integration.md"
+                    }
+                  ]
                 }
               ]
             },
             {
-              "text": "最佳实践",
-              "path": "Best-Practices/Index.md"
+              "text": "自定义/扩展模块",
+              "path": "Customizing-Application-Modules-Guide.md",
+              "items": [
+                {
+                  "text": "概述",
+                  "path": "Customizing-Application-Modules-Guide.md"
+                },
+                {
+                  "text": "模块实体扩展系统",
+                  "path": "Module-Entity-Extensions.md"
+                },
+                {
+                  "text": "自定义/扩展实体",
+                  "path": "Customizing-Application-Modules-Extending-Entities.md"
+                },
+                {
+                  "text": "定制/覆盖服务",
+                  "path": "Customizing-Application-Modules-Overriding-Services.md"
+                }
+              ]
             }
           ]
         },
@@ -433,7 +557,7 @@
               ]
             },
             {
-              "text": "应用服务层",
+              "text": "应用层",
               "items": [
                 {
                   "text": "应用服务",
@@ -444,21 +568,21 @@
                   "path": "Data-Transfer-Objects.md"
                 },
                 {
-                  "text": "工作单元",
+                  "text": "工作单元(Unit-Of-Work)",
                   "path": "Unit-Of-Work.md"
                 }
               ]
             },
             {
-              "text": "指南: 实现DDD",
-              "path": "Domain-Driven-Design-Implementation-Guide.md"
+              "text": "电子书：实施 DDD",
+              "path": "https://abp.io/books/implementing-domain-driven-design"
             }
           ]
         },
         {
           "text": "多租户",
           "path": "Multi-Tenancy.md"
-        },    
+        },
         {
           "text": "微服务架构",
           "path": "Microservice-Architecture.md"
@@ -469,15 +593,19 @@
       "text": "API",
       "items": [
         {
-          "text": "自动API控制器",
+          "text": "自动 API 控制器",
           "path": "API/Auto-API-Controllers.md"
         },
         {
-          "text": "动态C# API客户端",
+          "text": "动态 C# API 客户端",
           "path": "API/Dynamic-CSharp-API-Clients.md"
         },
         {
-          "text": "ABP端点",
+          "text": "静态 C# API 客户端",
+          "path": "API/Static-CSharp-API-Clients.md"
+        },
+        {
+          "text": "ABP 端点",
           "items": [
             {
               "text": "应用程序配置",
@@ -486,7 +614,11 @@
           ]
         },
         {
-          "text": "API版本控制",
+          "text": "Swagger 集成",
+          "path": "API/Swagger-Integration.md"
+        },
+        {
+          "text": "API接口版本控制",
           "path": "API/API-Versioning.md"
         }
       ]
@@ -495,14 +627,50 @@
       "text": "用户界面",
       "items": [
         {
-          "text": "ASP.NET Core",
+          "text": "MVC / Razor Pages",
           "items": [
+            {
+              "text": "概述",
+              "path": "UI/AspNetCore/Overall.md"
+            },
+            {
+              "text": "Navigation / Menus",
+              "path": "UI/AspNetCore/Navigation-Menu.md"
+            },
+            {
+              "text": "Forms & Validation",
+              "path": "UI/AspNetCore/Forms-Validation.md"
+            },
+            {
+              "text": "Modals",
+              "path": "UI/AspNetCore/Modals.md"
+            },
+            {
+              "text": "Data Tables",
+              "path": "UI/AspNetCore/Data-Tables.md"
+            },
+            {
+              "text": "Auto-Complete Select",
+              "path": "UI/AspNetCore/AutoComplete-Select.md"
+            },
+            {
+              "text": "Page Alerts",
+              "path": "UI/AspNetCore/Page-Alerts.md"
+            },
+            {
+              "text": "动态 JavaScript API 客户端 代理",
+              "path": "UI/AspNetCore/Dynamic-JavaScript-Proxies.md"
+            },
+            {
+              "text": "静态 JavaScript API 客户端 代理",
+              "path": "UI/AspNetCore/Static-JavaScript-Proxies.md"
+            },
             {
               "text": "客户端包管理",
               "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
             {
-              "text": "捆绑&压缩",
+              "text": "Bundling & Minification",
               "path": "UI/AspNetCore/Bundling-Minification.md"
             },
             {
@@ -510,30 +678,259 @@
               "path": "UI/AspNetCore/Tag-Helpers/Index.md",
               "items": [
                 {
-                  "text": "Form元素",
+                  "text": "Form 元素",
                   "path": "UI/AspNetCore/Tag-Helpers/Form-elements.md"
                 },
                 {
-                  "text": "动态表单",
+                  "text": "动态 Forms",
                   "path": "UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md"
                 }
               ]
             },
             {
-              "text": "仪表板和小部件(Widget)系统",
+              "text": "Widgets",
               "path": "UI/AspNetCore/Widgets.md"
             },
             {
-              "text": "自定义/扩展UI",
-              "path": "UI/AspNetCore/Customization-User-Interface.md"
+              "text": "Toolbars",
+              "path": "UI/AspNetCore/Toolbars.md"
             },
             {
-              "text": "测试",
+              "text": "Page Header",
+              "path": "UI/AspNetCore/Page-Header.md"
+            },
+            {
+              "text": "Branding",
+              "path": "UI/AspNetCore/Branding.md"
+            },
+            {
+              "text": "Layout Hooks",
+              "path": "UI/AspNetCore/Layout-Hooks.md"
+            },
+            {
+              "text": "Testing 测试",
               "path": "UI/AspNetCore/Testing.md"
             },
             {
-              "text": "主题化",
-              "path": "UI/AspNetCore/Theming.md"
+              "text": "主题",
+              "path": "UI/AspNetCore/Theming.md",
+              "items": [
+                {
+                  "text": "基本主题",
+                  "path": "UI/AspNetCore/Basic-Theme.md"
+                },
+                {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/AspNetCore.md"
+                }
+              ]
+            },
+            {
+              "text": "JavaScript API",
+              "items": [
+                {
+                  "text": "概述",
+                  "path": "UI/AspNetCore/JavaScript-API/Index.md"
+                },
+                {
+                  "text": "Localization",
+                  "path": "UI/AspNetCore/JavaScript-API/Localization.md"
+                },
+                {
+                  "text": "Auth",
+                  "path": "UI/AspNetCore/JavaScript-API/Auth.md"
+                },
+                {
+                  "text": "当前用户",
+                  "path": "UI/AspNetCore/JavaScript-API/CurrentUser.md"
+                },
+                {
+                  "text": "Settings",
+                  "path": "UI/AspNetCore/JavaScript-API/Settings.md"
+                },
+                {
+                  "text": "Features",
+                  "path": "UI/AspNetCore/JavaScript-API/Features.md"
+                },
+                {
+                  "text": "AJAX",
+                  "path": "UI/AspNetCore/JavaScript-API/Ajax.md"
+                },
+                {
+                  "text": "Message",
+                  "path": "UI/AspNetCore/JavaScript-API/Message.md"
+                },
+                {
+                  "text": "Notify",
+                  "path": "UI/AspNetCore/JavaScript-API/Notify.md"
+                },
+                {
+                  "text": "Block/Busy",
+                  "path": "UI/AspNetCore/JavaScript-API/Block-Busy.md"
+                },
+                {
+                  "text": "Events",
+                  "path": "UI/AspNetCore/JavaScript-API/Events.md"
+                },
+                {
+                  "text": "DOM",
+                  "path": "UI/AspNetCore/JavaScript-API/DOM.md"
+                },
+                {
+                  "text": "Logging",
+                  "path": "UI/AspNetCore/JavaScript-API/Logging.md"
+                },
+                {
+                  "text": "Resource Loader",
+                  "path": "UI/AspNetCore/JavaScript-API/ResourceLoader.md"
+                }
+              ]
+            },
+            {
+              "text": "自定义/扩展 UI",
+              "items": [
+                {
+                  "text": "概述",
+                  "path": "UI/AspNetCore/Customization-User-Interface.md"
+                },
+                {
+                  "text": "Entity Action 扩展",
+                  "path": "UI/AspNetCore/Entity-Action-Extensions.md"
+                },
+                {
+                  "text": "Data Table Column 扩展",
+                  "path": "UI/AspNetCore/Data-Table-Column-Extensions.md"
+                },
+                {
+                  "text": "Page Toolbar 扩展",
+                  "path": "UI/AspNetCore/Page-Toolbar-Extensions.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "Blazor",
+          "items": [
+            {
+              "text": "概述",
+              "path": "UI/Blazor/Overall.md"
+            },
+            {
+              "text": "Navigation / Menu",
+              "path": "UI/Blazor/Navigation-Menu.md"
+            },
+            {
+              "text": "Localization",
+              "path": "UI/Blazor/Localization.md"
+            },
+            {
+              "text": "主题",
+              "items": [
+                {
+                  "text": "概述",
+                  "path": "UI/Blazor/Theming.md"
+                },
+                {
+                  "text": "基本主题",
+                  "path": "UI/Blazor/Basic-Theme.md"
+                },
+                {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/Blazor.md"
+                },
+                {
+                  "text": "Branding",
+                  "path": "UI/Blazor/Branding.md"
+                },
+                {
+                  "text": "Page Header",
+                  "path": "UI/Blazor/Page-Header.md"
+                },
+                {
+                  "text": "Toolbars",
+                  "path": "UI/Blazor/Toolbars.md"
+                }
+              ]
+            },
+            {
+              "text": "安全",
+              "items": [
+                {
+                  "text": "认证",
+                  "path": "UI/Blazor/Authentication.md"
+                },
+                {
+                  "text": "授权",
+                  "path": "UI/Blazor/Authorization.md"
+                }
+              ]
+            },
+            {
+              "text": "服务",
+              "items": [
+                {
+                  "text": "当前用户",
+                  "path": "UI/Blazor/CurrentUser.md"
+                },
+                {
+                  "text": "当前租户",
+                  "path": "UI/Blazor/CurrentTenant.md"
+                },
+                {
+                  "text": "Notification",
+                  "path": "UI/Blazor/Notification.md"
+                },
+                {
+                  "text": "Message",
+                  "path": "UI/Blazor/Message.md"
+                },
+                {
+                  "text": "Page Alerts",
+                  "path": "UI/Blazor/Page-Alerts.md"
+                },
+                {
+                  "text": "Page Progress",
+                  "path": "UI/Blazor/Page-Progress.md"
+                }
+              ]
+            },
+            {
+              "text": "其他组件",
+              "items": [
+                {
+                  "text": "SubmitButton",
+                  "path": "UI/Blazor/Components/SubmitButton.md"
+                }
+              ]
+            },
+            {
+              "text": "Settings",
+              "path": "UI/Blazor/Settings.md"
+            },
+            {
+              "text": "错误处理",
+              "path": "UI/Blazor/Error-Handling.md"
+            },
+            {
+              "text": "自定义/覆盖组件",
+              "path": "UI/Blazor/Customization-Overriding-Components.md"
+            },
+            {
+              "text": "全局 Scripts & Styles",
+              "path": "UI/Blazor/Global-Scripts-Styles.md"
+            },
+            {
+              "text": "Global Features",
+              "path": "UI/Blazor/Global-Features.md"
+            },
+            {
+              "text": "路由",
+              "path": "UI/Blazor/Routing.md"
+            },
+            {
+              "text": "PWA 配置",
+              "path": "UI/Blazor/Pwa-Configuration.md"
             }
           ]
         },
@@ -541,80 +938,235 @@
           "text": "Angular",
           "items": [
             {
-              "text": "v2.x 到 v3 迁移指南",
-              "path": "UI/Angular/Migration-Guide-v3.md"
+              "text": "快速入门",
+              "path": "UI/Angular/Quick-Start.md"
             },
             {
-              "text": "环境",
-              "path": "UI/Angular/Environment.md"
+              "text": "开发",
+              "items": [
+                {
+                  "text": "环境变量",
+                  "path": "UI/Angular/Environment.md"
+                },
+                {
+                  "text": "About Feature Libraries",
+                  "path": "UI/Angular/Feature-Libraries.md"
+                },
+                {
+                  "text": "服务代理",
+                  "path": "UI/Angular/Service-Proxies.md"
+                },
+                {
+                  "text": "PWA 配置",
+                  "path": "UI/Angular/PWA-Configuration.md"
+                },
+                {
+                  "text": "单元测试",
+                  "path": "UI/Angular/Testing.md"
+                }
+              ]
             },
             {
-              "text": "服务代理",
-              "path": "UI/Angular/Service-Proxies.md"
+              "text": "核心功能",
+              "items": [
+                {
+                  "text": "配置状态服务",
+                  "path": "UI/Angular/Config-State-Service.md"
+                },
+                {
+                  "text": "授权",
+                  "path": "UI/Angular/Authorization.md"
+                },
+                {
+                  "text": "HTTP 请求",
+                  "path": "UI/Angular/HTTP-Requests.md"
+                },
+                {
+                  "text": "本地化",
+                  "path": "UI/Angular/Localization.md"
+                },
+                {
+                  "text": "表单验证",
+                  "path": "UI/Angular/Form-Validation.md"
+                },
+                {
+                  "text": "Settings",
+                  "path": "UI/Angular/Settings.md"
+                },
+                {
+                  "text": "Features",
+                  "path": "UI/Angular/Features.md"
+                },
+                {
+                  "text": "Global Features",
+                  "path": "UI/Angular/GlobalFeatures.md"
+                },
+                {
+                  "text": "权限管理",
+                  "path": "UI/Angular/Permission-Management.md"
+                },
+                {
+                  "text": "多租户",
+                  "path": "UI/Angular/Multi-Tenancy.md"
+                },
+                {
+                  "text": "账户模块",
+                  "path": "UI/Angular/Account-Module"
+                }
+              ]
             },
             {
-              "text": "单元测试",
-              "path": "UI/Angular/Testing.md"
+              "text": "Utilities",
+              "items": [
+                {
+                  "text": "管理 RxJS 订阅",
+                  "path": "UI/Angular/Subscription-Service.md"
+                },
+                {
+                  "text": "Working with Lists",
+                  "path": "UI/Angular/List-Service.md"
+                },
+                {
+                  "text": "Easy *ngFor trackBy",
+                  "path": "UI/Angular/Track-By-Service.md"
+                },
+                {
+                  "text": "路由器事件",
+                  "path": "UI/Angular/Router-Events.md"
+                },
+                {
+                  "text": "插入 Scripts & Styles 到 DOM",
+                  "path": "UI/Angular/Dom-Insertion-Service.md"
+                },
+                {
+                  "text": "延迟加载 Scripts & Styles",
+                  "path": "UI/Angular/Lazy-Load-Service.md"
+                },
+                {
+                  "text": "Projecting Angular Content",
+                  "path": "UI/Angular/Content-Projection-Service.md"
+                },
+                {
+                  "text": "Modal",
+                  "path": "UI/Angular/Modal.md"
+                },
+                {
+                  "text": "Confirmation Popup",
+                  "path": "UI/Angular/Confirmation-Service.md"
+                },
+                {
+                  "text": "Loading Directive",
+                  "path": "UI/Angular/Loading-Directive.md"
+                },
+                {
+                  "text": "Toast Overlay",
+                  "path": "UI/Angular/Toaster-Service.md"
+                },
+                {
+                  "text": "Page Alerts",
+                  "path": "UI/Angular/Page-Alerts.md"
+                },
+                {
+                  "text": "省略",
+                  "path": "UI/Angular/Ellipsis-Directive.md"
+                },
+                {
+                  "text": "Context 策略",
+                  "path": "UI/Angular/Context-Strategy.md"
+                },
+                {
+                  "text": "跨域策略",
+                  "path": "UI/Angular/Cross-Origin-Strategy.md"
+                },
+                {
+                  "text": "Dom 策略",
+                  "path": "UI/Angular/Dom-Strategy.md"
+                },
+                {
+                  "text": "容器策略",
+                  "path": "UI/Angular/Container-Strategy.md"
+                },
+                {
+                  "text": "内容安全策略",
+                  "path": "UI/Angular/Content-Security-Strategy.md"
+                }
+              ]
             },
             {
-              "text": "HTTP请求",
-              "path": "UI/Angular/HTTP-Requests.md"
+              "text": "定制",
+              "items": [
+                {
+                  "text": "定制指南",
+                  "path": "UI/Angular/Customization-User-Interface.md"
+                },
+                {
+                  "text": "主题",
+                  "items": [
+                    {
+                      "text": "概述",
+                      "path": "UI/Angular/Theming.md"
+                    },
+                    {
+                      "text": "基本主题",
+                      "path": "UI/Angular/Basic-Theme.md"
+                    },
+                    {
+                      "text": "LeptonX Lite",
+                      "path": "Themes/LeptonXLite/Angular.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "修改菜单",
+                  "path": "UI/Angular/Modifying-the-Menu.md"
+                },
+                {
+                  "text": "组件更换",
+                  "path": "UI/Angular/Component-Replacement.md"
+                },
+                {
+                  "text": "扩展",
+                  "items": [
+                    {
+                      "text": "概述",
+                      "path": "UI/Angular/Extensions-Overall.md"
+                    },
+                    {
+                      "text": "Entity Action 扩展",
+                      "path": "UI/Angular/Entity-Action-Extensions.md"
+                    },
+                    {
+                      "text": "Data Table Column 扩展",
+                      "path": "UI/Angular/Data-Table-Column-Extensions.md"
+                    },
+                    {
+                      "text": "Page Toolbar 扩展",
+                      "path": "UI/Angular/Page-Toolbar-Extensions.md"
+                    },
+                    {
+                      "text": "Dynamic Form 扩展",
+                      "path": "UI/Angular/Dynamic-Form-Extensions.md"
+                    },
+                    {
+                      "text": "Date, time and datetime format pipes",
+                      "path": "UI/Angular/DateTime-Format-Pipe.md"
+                    }
+                  ]
+                }
+              ]
             },
             {
-              "text": "本地化",
-              "path": "UI/Angular/Localization.md"
-            },
-            {
-              "text": "权限管理",
-              "path": "UI/Angular/Permission-Management.md"
-            },
-            {
-              "text": "多租户",
-              "path": "UI/Angular/Multi-Tenancy.md"
-            },
-            {
-              "text": "确认弹层",
-              "path": "UI/Angular/Confirmation-Service.md"
-            },
-            {
-              "text": "Toast Overlay",
-              "path": "UI/Angular/Toaster-Service.md"
-            },
-            {
-              "text": "配置状态",
-              "path": "UI/Angular/Config-State.md"
-            },
-            {
-              "text": "修改菜单",
-              "path": "UI/Angular/Modifying-the-Menu.md"
-            },
-            {
-              "text": "替换组件",
-              "path": "UI/Angular/Component-Replacement.md"
-            },
-            {
-              "text": "懒加载Scripts与Styles",
-              "path": "UI/Angular/Lazy-Load-Service.md"
-            },
-            {
-              "text": "DomInsertionService",
-              "path": "UI/Angular/Dom-Insertion-Service.md"
-            },
-            {
-              "text": "ContentProjectionService",
-              "path": "UI/Angular/Content-Projection-Service.md"
-            },
-            {
-              "text": "TrackByService",
-              "path": "UI/Angular/Track-By-Service.md"
-            },
-            {
-              "text": "SubscriptionService",
-              "path": "UI/Angular/Subscription-Service.md"
-            },
-            {
-              "text": "ListService",
-              "path": "UI/Angular/List-Service.md"
+              "text": "组件",
+              "items": [
+                {
+                  "text": "Page",
+                  "path": "UI/Angular/Page-Component.md"
+                },
+                {
+                  "text": "Chart",
+                  "path": "UI/Angular/Chart-Component.md"
+                }
+              ]
             }
           ]
         },
@@ -628,8 +1180,12 @@
           ]
         },
         {
-          "text": "通用",
+          "text": "Common",
           "items": [
+            {
+              "text": "Overriding the User Interface",
+              "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
+            },
             {
               "text": "Utilities",
               "items": [
@@ -640,14 +1196,14 @@
               ]
             }
           ]
-        } 
+        }
       ]
     },
     {
       "text": "数据访问",
       "items": [
         {
-          "text": "概述", 
+          "text": "概述",
           "path": "Data-Access.md"
         },
         {
@@ -659,24 +1215,33 @@
               "path": "Entity-Framework-Core-Migrations.md"
             },
             {
-              
-              "text": "切换DMBS",
+              "text": "切换 DBMS",
               "path": "Entity-Framework-Core-Other-DBMS.md",
-              "items":[
+              "items": [
                 {
-                  "text": "到MySql",
+                  "text": "To MySQL",
                   "path": "Entity-Framework-Core-MySQL.md"
                 },
                 {
-                  "text": "到PostgreSQL",
+                  "text": "To PostgreSQL",
                   "path": "Entity-Framework-Core-PostgreSQL.md"
                 },
                 {
-                  "text": " Oracle",
-                  "path": "Entity-Framework-Core-Oracle.md"
+                  "text": "To Oracle",
+                  "path": "Entity-Framework-Core-Oracle.md",
+                  "items": [
+                    {
+                      "text": "Oracle (官方)",
+                      "path": "Entity-Framework-Core-Oracle-Official.md"
+                    },
+                    {
+                      "text": "Oracle (Devart)",
+                      "path": "Entity-Framework-Core-Oracle-Devart.md"
+                    }
+                  ]
                 },
                 {
-                  "text": "到SQLite",
+                  "text": "To SQLite",
                   "path": "Entity-Framework-Core-SQLite.md"
                 }
               ]
@@ -697,7 +1262,7 @@
       "text": "实时",
       "items": [
         {
-          "text": "SignalR集成",
+          "text": "SignalR 集成",
           "path": "SignalR-Integration.md"
         }
       ]
@@ -717,31 +1282,18 @@
       ]
     },
     {
-      "text": "示例",
-      "items": [
-        {
-          "text": "所有示例",
-          "path": "Samples/Index.md"
-        },
-        {
-          "text": "微服务示例",
-          "path": "Samples/Microservice-Demo.md"
-        }
-      ]
-    },  
-    {
       "text": "应用模块",
-      "items":[
+      "items": [
         {
           "text": "概述",
           "path": "Modules/Index.md"
         },
         {
-          "text": "账户",
+          "text": "帐户",
           "path": "Modules/Account.md"
         },
         {
-          "text": "审计日志",
+          "text": "审核日志记录",
           "path": "Modules/Audit-Logging.md"
         },
         {
@@ -769,6 +1321,10 @@
           "path": "Modules/IdentityServer.md"
         },
         {
+          "text": "OpenIddict",
+          "path": "Modules/OpenIddict.md"
+        },
+        {
           "text": "权限管理",
           "path": "Modules/Permission-Management.md"
         },
@@ -787,7 +1343,41 @@
       ]
     },
     {
-      "text": "发布信息",
+      "text": "样品",
+      "items": [
+        {
+          "text": "所有样品",
+          "path": "Samples/Index.md"
+        },
+        {
+          "text": "eShopOnAbp",
+          "path": "https://github.com/abpframework/eShopOnAbp"
+        },
+        {
+          "text": "事件中心",
+          "path": "https://github.com/abpframework/eventhub"
+        },
+        {
+          "text": "微服务演示（旧版）",
+          "path": "Samples/Microservice-Demo.md"
+        }
+      ]
+    },
+    {
+      "text": "书",
+      "items": [
+        {
+          "text": "掌握 ABP 框架",
+          "path": "https://abp.io/books/mastering-abp-framework"
+        },
+        {
+          "text": "实现领域驱动设计",
+          "path": "https://abp.io/books/implementing-domain-driven-design"
+        }
+      ]
+    },
+    {
+      "text": "版本信息",
       "items": [
         {
           "text": "升级",
@@ -798,35 +1388,20 @@
           "path": "https://abp.io/packages"
         },
         {
-          "text": "预览版本",
+          "text": "预览版",
           "path": "Previews.md"
         },
         {
-          "text": "每日构建",
+          "text": "每晚构建",
           "path": "Nightly-Builds.md"
-        },    
+        },
         {
           "text": "路线图",
           "path": "Road-Map.md"
-        }
-      ]
-    },
-    {
-      "text": "参考",
-      "items": [
-        {
-          "text": "CLI",
-          "path": "CLI.md",
-          "items": [
-            {
-              "text": "新命令示例",
-              "path": "CLI-New-Command-Samples.md"
-            }
-          ]
         },
         {
-          "text": "API文档",
-          "path": "{ApiDocumentationUrl}"
+          "text": "迁移指南",
+          "path": "Migration-Guides/Index.md"
         }
       ]
     },
