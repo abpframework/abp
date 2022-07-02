@@ -4,6 +4,11 @@ $(function () {
 
         var initModal = function () {
 
+
+            $('head').append('<script type="text/javascript" src="/Pages/CmsKit/Polls/Polls.js"></script>');
+            $('head').append('<script type="text/javascript" src="/client-proxies/cms-kit-pro-proxy.js"></script>');
+            $('head').append('<script type="text/javascript" src="/client-proxies/cms-kit-pro-admin-proxy.js"></script>');
+
             let widgetType;
             $("#ViewModel_Widget").change(function () {
                 widgetType = this.value;
