@@ -11,7 +11,6 @@
     <ItemGroup>
         <ProjectReference Include="..\..\src\Volo.Abp.DistributedLocking.Abstractions\Volo.Abp.DistributedLocking.Abstractions.csproj" />
         <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-        <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     </ItemGroup>
 

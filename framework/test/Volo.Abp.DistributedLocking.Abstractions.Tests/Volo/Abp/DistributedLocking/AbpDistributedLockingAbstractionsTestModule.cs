@@ -1,12 +1,10 @@
-﻿using Volo.Abp.Autofac;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
 
 namespace Volo.Abp.DistributedLocking;
 
 [DependsOn(
     typeof(AbpTestBaseModule),
-    typeof(AbpDistributedLockingAbstractionsModule),
-    typeof(AbpAutofacModule)
+    typeof(AbpDistributedLockingAbstractionsModule)
 )]
 public class AbpDistributedLockingAbstractionsTestModule : AbpModule
 {

@@ -10,7 +10,7 @@ public class LocalDistributedLock_Tests : AbpDistributedLockingAbstractionsTestB
 
     public LocalDistributedLock_Tests()
     {
-        _distributedLock = GetRequiredService<IAbpDistributedLock>();
+        _distributedLock = new LocalAbpDistributedLock();
     }
 
     [Fact]
