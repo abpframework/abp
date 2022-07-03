@@ -4,7 +4,6 @@ $(function () {
 
         var initModal = function () {
 
-
             $('head').append('<script type="text/javascript" src="/Pages/CmsKit/Polls/Polls.js"></script>');
             $('head').append('<script type="text/javascript" src="/client-proxies/cms-kit-pro-proxy.js"></script>');
             $('head').append('<script type="text/javascript" src="/client-proxies/cms-kit-pro-admin-proxy.js"></script>');
@@ -32,14 +31,13 @@ $(function () {
                 });
             });
 
-            $("#WidgetCode").keyup(function (e) {
-                $("#PropertySideId").html('');
-                let widgetKey = $(this).val();
-                let html = " <input hidden class=\"properties form-control\" value=\"" + widgetKey + "\" id=\"Code\" type=\"text\" />"
-                $("#PropertySideId").append(html);
-            });
-
             $("#save-changes").click(function () {
+                var widgetKey = $('#WidgetCodes option').attr("data-key");
+                if (widgetKey != undefined) {
+                    let html = " <input hidden class=\"properties form-control\" value=\"" + widgetKey + "\" id=\"Code\" type=\"text\" />"
+                    $("#PropertySideId").append(html);
+                }
+
                 var keys = [];
                 var values = [];
                 $(".properties").each(function () {
