@@ -4,5 +4,4 @@ namespace Volo.Abp;
 
 public class AbpTestModule : AbpModule
 {
-
 }
