@@ -12,7 +12,7 @@ public class EmailingPageContributor : SettingPageContributorBase
     public EmailingPageContributor()
     {
         RequiredFeatures(SettingManagementFeatures.Enable);
-        RequiredTenantSideFeatures(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+        RequiredTenantSideFeatures(SettingManagementFeatures.AllowChangingEmailSettings);
         RequiredPermissions(SettingManagementPermissions.Emailing);
     }
     public override Task ConfigureAsync(SettingPageCreationContext context)

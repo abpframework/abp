@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Beállításkezelés",
     "Feature:SettingManagementEnable": "Beállításkezelés engedélyezése",
     "Feature:SettingManagementEnableDescription": "A beállításkezelő rendszer engedélyezése az alkalmazásban.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Engedélyezze a bérlőknek az e-mail beállítások módosítását.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Engedélyezze a bérlőknek az e-mail beállítások módosítását."
+    "Feature:AllowChangingEmailSettings": "Az e-mail beállítások módosításának engedélyezése.",
+    "Feature:AllowChangingEmailSettingsDescription": "Az e-mail beállítások módosításának engedélyezése."
   }
 }

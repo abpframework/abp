@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Asetusten hallinta",
     "Feature:SettingManagementEnable": "Ota asetusten hallinta käyttöön",
     "Feature:SettingManagementEnableDescription": "Ota asetustenhallintajärjestelmä käyttöön sovelluksessa.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Salli vuokralaisten muuttaa sähköpostiasetuksia.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Salli vuokralaisten muuttaa sähköpostiasetuksia."
+    "Feature:AllowChangingEmailSettings": "Salli sähköpostiasetusten muuttaminen.",
+    "Feature:AllowChangingEmailSettingsDescription": "Salli sähköpostiasetusten muuttaminen."
   }
 }
