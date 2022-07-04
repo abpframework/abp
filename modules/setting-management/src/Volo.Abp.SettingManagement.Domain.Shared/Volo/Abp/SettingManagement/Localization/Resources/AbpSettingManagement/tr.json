@@ -28,7 +28,7 @@
     "Feature:SettingManagementGroup": "Ayar yönetimi",
     "Feature:SettingManagementEnable": "Ayar yönetimini etkinleştir",
     "Feature:SettingManagementEnableDescription": "Uygulamada ayar yönetim sistemini etkinleştirin.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Kiracıların e-posta ayarlarını değiştirmesine izin verin.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Kiracıların e-posta ayarlarını değiştirmesine izin verin."
+    "Feature:AllowChangingEmailSettings": "E-posta ayarlarını değiştirmeye izin verin.",
+    "Feature:AllowChangingEmailSettingsDescription": "E-posta ayarlarını değiştirmeye izin verin."
   }
 }
