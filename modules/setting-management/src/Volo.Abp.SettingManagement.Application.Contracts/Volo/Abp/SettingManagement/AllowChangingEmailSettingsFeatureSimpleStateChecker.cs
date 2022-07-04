@@ -7,7 +7,7 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.SettingManagement;
 
-public class AllowTenantsToChangeEmailSettingsFeatureSimpleStateChecker : ISimpleStateChecker<PermissionDefinition>
+public class AllowChangingEmailSettingsFeatureSimpleStateChecker : ISimpleStateChecker<PermissionDefinition>
 {
     public async Task<bool> IsEnabledAsync(SimpleStateCheckerContext<PermissionDefinition> context)
     {
@@ -19,6 +19,6 @@ public class AllowTenantsToChangeEmailSettingsFeatureSimpleStateChecker : ISimpl
         }
 
         var featureChecker = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
-        return await featureChecker.IsEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+        return await featureChecker.IsEnabledAsync(SettingManagementFeatures.AllowChangingEmailSettings);
     }
 }

@@ -10,7 +10,7 @@
     "SenderEmailAddress": "Διεύθυνση email αποστολέα",
     "TargetEmailAddress": "Διεύθυνση email παραλήπτη",
     "Subject": "Θέμα",
-    "Body": "Κείμενο",   
+    "Body": "Κείμενο",
     "TestEmailSubject": "Δοκιμαστικό email {0}",
     "TestEmailBody": "Δοκιμαστικό κείμενο email εδώ",
     "SuccessfullySent": "Στάλθηκε με επιτυχία",
@@ -28,7 +28,7 @@
     "Feature:SettingManagementGroup": "Διαχείριση ρυθμίσεων",
     "Feature:SettingManagementEnable": "Ενεργοποίηση διαχείρισης ρυθμίσεων",
     "Feature:SettingManagementEnableDescription": "Ενεργοποίηση συστήματος διαχείρισης ρυθμίσεων στην εφαρμογή.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Επιτρέψτε στους μισθωτές να αλλάξουν τις ρυθμίσεις email.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Επιτρέψτε στους μισθωτές να αλλάξουν τις ρυθμίσεις email."
+    "Feature:AllowChangingEmailSettings": "Επιτρέψτε την αλλαγή των ρυθμίσεων email.",
+    "Feature:AllowChangingEmailSettingsDescription": "Επιτρέψτε την αλλαγή των ρυθμίσεων email."
   }
 }
