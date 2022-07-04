@@ -33,6 +33,7 @@ public abstract class AppTemplateBase : TemplateInfo
         RemoveMigrations(context, steps);
         ConfigureTieredArchitecture(context, steps);
         ConfigurePublicWebSite(context, steps);
+        ConfigureTheme(context, steps);
         RemoveUnnecessaryPorts(context, steps);
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
@@ -176,12 +177,72 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
+    protected void ConfigureTheme(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        if (!context.BuildArgs.Theme.HasValue)
+        {
+            return;
+        }
+        
+        if (context.BuildArgs.Theme != Theme.LeptonXLite)
+        {
+            steps.Add(new ChangeThemeStep());
+            RemoveLeptonXThemePackagesFromPackageJsonFiles(steps);
+        }
+    }
+
+    private void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps)
+    {
+        var packageJsonFilePaths = new List<string>() 
+        {
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Web/package.json",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package.json",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Mvc/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Mvc.Mongo/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Host/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Host.Mongo/package.json",
+        };
+
+        var blazorServerPackageJsonFilePaths = new List<string>() 
+        {
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/package.json",
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Blazor.Server/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
+        };
+
+        var angularPackageJsonFilePaths = new List<string>() 
+        {
+            "/angular/package.json"
+        };
+
+        foreach (var packageJsonFilePath in packageJsonFilePaths)
+        {
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, "@abp/aspnetcore.mvc.ui.theme.leptonxlite"));
+        }
+
+        foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
+        {
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, "@abp/aspnetcore.mvc.ui.theme.leptonxlite"));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, "@abp/aspnetcore.components.server.leptonxlitetheme"));
+        }
+
+        foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
+        {
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "@abp/ng.theme.lepton-x"));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+        }
+    }
+
     protected void ConfigurePublicWebSite(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (!context.BuildArgs.PublicWebSite)
         {
             if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) ||
-                context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+                context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+                context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
             {
                 context.Symbols.Add("PUBLIC-REDIS");
             }
@@ -192,7 +253,7 @@ public abstract class AppTemplateBase : TemplateInfo
             context.Symbols.Add("public-website");
         }
 
-        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) || context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) || context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") || context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Public.Host", "MyCompanyName.MyProjectName.Web.Public"));
             steps.Add(new ChangeDbMigratorPublicPortStep());
@@ -255,7 +316,8 @@ public abstract class AppTemplateBase : TemplateInfo
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
 
-        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
             steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
@@ -263,7 +325,7 @@ public abstract class AppTemplateBase : TemplateInfo
         else
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
@@ -277,16 +339,18 @@ public abstract class AppTemplateBase : TemplateInfo
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
 
-        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
-            steps.Add(new BlazorAppsettingsFilePortChangeForSeparatedIdentityServersStep());
+            steps.Add(new BlazorAppsettingsFilePortChangeForSeparatedAuthServersStep());
             steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
         }
         else
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
@@ -325,8 +389,9 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server", "MyCompanyName.MyProjectName.Blazor"));
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44313"));
         }
     }
@@ -347,6 +412,7 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44303"));
         }
 
@@ -361,21 +427,23 @@ public abstract class AppTemplateBase : TemplateInfo
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
 
-        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
-            steps.Add(new AngularEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+            steps.Add(new AngularEnvironmentFilePortChangeForSeparatedAuthServersStep());
             steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
 
             if (context.BuildArgs.MobileApp == MobileApp.ReactNative)
             {
-                steps.Add(new ReactEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+                steps.Add(new ReactEnvironmentFilePortChangeForSeparatedAuthServersStep());
             }
         }
         else
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
@@ -420,7 +488,8 @@ public abstract class AppTemplateBase : TemplateInfo
     protected void ConfigureTieredArchitecture(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) ||
-            context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
         {
             context.Symbols.Add("tiered");
         }

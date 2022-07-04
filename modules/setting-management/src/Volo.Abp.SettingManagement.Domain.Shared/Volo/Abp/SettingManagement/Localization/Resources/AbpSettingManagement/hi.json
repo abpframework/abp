@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "सेटिंग प्रबंधन",
     "Feature:SettingManagementEnable": "सेटिंग प्रबंधन सक्षम करें",
     "Feature:SettingManagementEnableDescription": "एप्लिकेशन में सेटिंग प्रबंधन प्रणाली सक्षम करें।",
-    "Feature:AllowTenantsToChangeEmailSettings": "किरायेदारों को ईमेल सेटिंग बदलने की अनुमति दें।",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "किरायेदारों को ईमेल सेटिंग बदलने की अनुमति दें।"
+    "Feature:AllowChangingEmailSettings": "ईमेल सेटिंग्स बदलने की अनुमति दें।",
+    "Feature:AllowChangingEmailSettingsDescription": "ईमेल सेटिंग्स बदलने की अनुमति दें।"
   }
 }

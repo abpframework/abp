@@ -7,11 +7,6 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly;
 
-[ExposeServices(
-    typeof(WebAssemblyCachedApplicationConfigurationClient),
-    typeof(ICachedApplicationConfigurationClient),
-    typeof(IAsyncInitialize)
-    )]
 public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
 {
     protected AbpApplicationConfigurationClientProxy ApplicationConfigurationAppService { get; }

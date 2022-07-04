@@ -1,5 +1,5 @@
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
@@ -13,25 +13,19 @@ public class IndexModel : AbpPageModel
 {
     public SettingPageCreationContext SettingPageCreationContext { get; private set; }
 
-    protected ILocalEventBus LocalEventBus { get; }
-    protected SettingManagementPageOptions Options { get; }
+    protected SettingPageContributorManager SettingPageContributorManager { get; }
 
-    public IndexModel(
-        IOptions<SettingManagementPageOptions> options,
-        ILocalEventBus localEventBus)
+    protected ILocalEventBus LocalEventBus { get; }
+
+    public IndexModel(ILocalEventBus localEventBus, SettingPageContributorManager settingPageContributorManager)
     {
         LocalEventBus = localEventBus;
-        Options = options.Value;
+        SettingPageContributorManager = settingPageContributorManager;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
-        SettingPageCreationContext = new SettingPageCreationContext(ServiceProvider);
-
-        foreach (var contributor in Options.Contributors)
-        {
-            await contributor.ConfigureAsync(SettingPageCreationContext);
-        }
+        SettingPageCreationContext = await SettingPageContributorManager.ConfigureAsync();
 
         return Page();
     }
@@ -39,6 +33,19 @@ public class IndexModel : AbpPageModel
     public virtual Task<IActionResult> OnPostAsync()
     {
         return Task.FromResult<IActionResult>(Page());
+    }
+
+    public virtual async Task<IActionResult> OnPostRenderViewAsync(string id)
+    {
+        var context = await SettingPageContributorManager.ConfigureAsync();
+
+        var view = context.Groups.FirstOrDefault(x => x.Id == id);
+        if (view != null)
+        {
+            return ViewComponent(view.ComponentType, view.Parameter);
+        }
+
+        return NoContent();
     }
 
     public virtual async Task<NoContentResult> OnPostRefreshConfigurationAsync()

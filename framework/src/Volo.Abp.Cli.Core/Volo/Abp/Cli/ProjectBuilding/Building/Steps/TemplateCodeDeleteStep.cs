@@ -15,7 +15,9 @@ public class TemplateCodeDeleteStep : ProjectBuildPipelineStep
                 file.Name.EndsWith(".gitignore") ||
                 file.Name.EndsWith(".yml") ||
                 file.Name.EndsWith(".ps1") ||
-                file.Name.EndsWith(".html"))
+                file.Name.EndsWith(".html") || 
+                file.Name.EndsWith(".ts") ||
+                file.Name.EndsWith(".scss"))
             {
                 file.RemoveTemplateCode(context.Symbols);
                 file.RemoveTemplateCodeMarkers();

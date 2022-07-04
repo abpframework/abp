@@ -141,11 +141,11 @@ namespace Volo.Docs.Documents
                 GetCancellationToken(cancellationToken));
         }
 
-        public async Task DeleteAsync(Guid projectId, string name, string languageCode, string version, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(Guid projectId, string name, string languageCode, string version, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             await DeleteAsync(x =>
                 x.ProjectId == projectId && x.Name == name && x.LanguageCode == languageCode &&
-                x.Version == version, cancellationToken: cancellationToken);
+                x.Version == version, autoSave, cancellationToken: cancellationToken);
         }
 
         public async Task<Document> GetAsync(Guid id, CancellationToken cancellationToken = default)

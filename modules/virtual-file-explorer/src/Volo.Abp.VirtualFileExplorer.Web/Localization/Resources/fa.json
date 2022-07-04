@@ -1,0 +1,14 @@
+{
+  "culture": "fa",
+  "texts": {
+    "VirtualFileExplorer": "کاوشگر فایل مجازی",
+    "VirtualFileType": "نوع فایل مجازی",
+    "Menu:VirtualFileExplorer": "کاوشگر فایل مجازی",
+    "LastUpdateTime": "آخرین زمان به روز رسانی",
+    "VirtualFileName": "نام فایل مجازی",
+    "FileContent": "محتوای فایل",
+    "Size": "اندازه",
+    "BackToRoot": "بازگشت به ریشه",
+    "EmptyFileInfoList": "هیچ فایل مجازی وجود ندارد"
+  }
+}
