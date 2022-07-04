@@ -13,14 +13,21 @@ $(function () {
                 widgetType = this.value;
 
                 $("#PropertySideId").html('');
+                $("#WidgetCode").attr("hidden", "true");
+
                 volo.cmsKit.admin.contents.contentAdmin.getWidgets().then(function (data) {
                     var widgetTypes = data.items.filter(v => v.key === widgetType);
                     var firstWidgetType = widgetTypes[0];
                     if (firstWidgetType.key == "Poll") {
                         $("#polls").removeAttr("hidden");
+                        $("#WidgetCode").removeAttr("hidden");
                     }
                     else {
+
+                        $("#WidgetCode").attr("hidden", "true");
+
                         for (const property of firstWidgetType.properties) {
+
                             let html = "<div class=\"form-group\"> " +
                                 " <label for=\"" + property.key + "\">" + property.name + "</label>" +
                                 " <input class=\"properties form-control\" id=\"" + property.key + "\" type=\"text\" />" +
