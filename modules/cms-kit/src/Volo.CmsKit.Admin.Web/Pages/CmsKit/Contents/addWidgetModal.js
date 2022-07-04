@@ -4,27 +4,23 @@ $(function () {
 
         var initModal = function () {
 
-            $('head').append('<script type="text/javascript" src="/Pages/CmsKit/Polls/Polls.js"></script>');
-            $('head').append('<script type="text/javascript" src="/client-proxies/cms-kit-pro-proxy.js"></script>');
-            $('head').append('<script type="text/javascript" src="/client-proxies/cms-kit-pro-admin-proxy.js"></script>');
-
             let widgetType;
             $("#ViewModel_Widget").change(function () {
                 widgetType = this.value;
 
                 $("#PropertySideId").html('');
-                $("#WidgetCode").attr("hidden", "true");
+                $("#WidgetCodeDiv").hide();
 
                 volo.cmsKit.admin.contents.contentAdmin.getWidgets().then(function (data) {
                     var widgetTypes = data.items.filter(v => v.key === widgetType);
                     var firstWidgetType = widgetTypes[0];
                     if (firstWidgetType.key == "Poll") {
                         $("#polls").removeAttr("hidden");
-                        $("#WidgetCode").removeAttr("hidden");
+                        $("#WidgetCodeDiv").show();
                     }
                     else {
 
-                        $("#WidgetCode").attr("hidden", "true");
+                        $("#WidgetCodeDiv").hide();
 
                         for (const property of firstWidgetType.properties) {
 
@@ -39,7 +35,7 @@ $(function () {
             });
 
             $("#save-changes").click(function () {
-                var widgetKey = $('#WidgetCodes option').attr("data-key");
+                var widgetKey = $("#WidgetCode").val();
                 if (widgetKey != undefined) {
                     let html = " <input hidden class=\"properties form-control\" value=\"" + widgetKey + "\" id=\"Code\" type=\"text\" />"
                     $("#PropertySideId").append(html);
