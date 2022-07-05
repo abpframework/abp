@@ -97,11 +97,11 @@ public class HangfireBackgroundWorkerManager : IBackgroundWorkerManager, ISingle
         }
         else if (time.TotalMinutes <= 59)
         {
-            cron = $"*/{time.TotalMinutes} * * * *";
+            cron = $"0 */{time.TotalMinutes} * * * *";
         }
         else if (time.TotalHours <= 23)
         {
-            cron = $"0 */{time.TotalHours} * * *";
+            cron = $"0 0 */{time.TotalHours} * * *";
         }
         else
         {
