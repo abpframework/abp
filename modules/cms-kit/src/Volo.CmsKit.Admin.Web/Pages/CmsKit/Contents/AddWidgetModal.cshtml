@@ -10,8 +10,7 @@
     Layout = null;
 }
 
-@section scripts
-    {
+@section scripts {
     <abp-script src="/Pages/CmsKit/Contents/addWidgetModal.js" />
 }
 
@@ -22,7 +21,10 @@
                 @if (Model.Widgets.Count() > 1)
             {
                 <abp-select asp-for="ViewModel.Widget" />
-                <div hidden id="polls">@await Component.InvokeAsync("CmsPolls")</div>
+                foreach (var item in Model.ViewModel.Details)
+                {
+                    <div hidden id="polls">@await Component.InvokeAsync(@item.InternalName)</div>
+                }
                 <div class="mb-3" id="PropertySideId">
                 </div>
                 <button class="btn btn-primary float-end" type="submit" id="save-changes">@L["Add"]</button>

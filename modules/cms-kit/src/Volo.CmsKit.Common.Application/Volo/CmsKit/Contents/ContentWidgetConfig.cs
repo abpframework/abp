@@ -1,21 +1,14 @@
-﻿using System.Collections.Generic;
-
-namespace Volo.CmsKit.Contents;
+﻿namespace Volo.CmsKit.Contents;
 
 public class ContentWidgetConfig
 {
     public string Name { get; }
-    public List<PropertyDto> Properties { get; }
+    public string InternalName { get; }
 
-    public ContentWidgetConfig(string widgetName)
+    public ContentWidgetConfig(string widgetName, string internalName)
     {
-        Properties = new();
         Name = widgetName;
-    }
-
-    public void AddProperty(string key, string name)
-    {
-        Properties.Add(new PropertyDto() { Key = key, Name = name });
+        InternalName = internalName;
     }
 
 }

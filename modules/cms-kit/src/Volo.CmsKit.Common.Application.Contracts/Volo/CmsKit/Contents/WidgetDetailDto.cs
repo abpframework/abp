@@ -3,8 +3,8 @@
 namespace Volo.CmsKit.Contents;
 
 [Serializable]
-public class PropertyDto
+public class WidgetDetailDto
 {
-    public string Key { get; set; }
     public string Name { get; set; }
+    public string InternalName { get; set; }
 }

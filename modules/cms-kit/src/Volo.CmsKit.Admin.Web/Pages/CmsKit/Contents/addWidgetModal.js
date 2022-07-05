@@ -6,15 +6,15 @@ $(function () {
 
             let widgetType;
             $("#ViewModel_Widget").change(function () {
-                widgetType = this.value;
+                widgetType = $("#ViewModel_Widget").find(":selected").text();
 
                 $("#PropertySideId").html('');
                 $("#WidgetCodeDiv").hide();
 
                 volo.cmsKit.admin.contents.contentAdmin.getWidgets().then(function (data) {
-                    var widgetTypes = data.items.filter(v => v.key === widgetType);
+                    var widgetTypes = data.items.filter(v => v.details.name === widgetType);
                     var firstWidgetType = widgetTypes[0];
-                    if (firstWidgetType.key == "Poll") {
+                    if (firstWidgetType.key == "CmsPollByCode") {
                         $("#polls").removeAttr("hidden");
                         $("#WidgetCodeDiv").show();
                     }

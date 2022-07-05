@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.CmsKit.Admin.Contents;
+using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents;
 
@@ -25,10 +26,16 @@ public class AddWidgetModal : AbpPageModel
 
     public async Task OnGetAsync()
     {
+        var widgets = await ContentAdminAppService.GetWidgetsAsync();
+        ViewModel = new ContentViewModel()
+        {
+            Details = widgets.Items.Select(p => p.Details).ToList()
+        };
+
         Widgets = new List<SelectListItem>() { new("", "") };
-        Widgets.AddRange((await ContentAdminAppService.GetWidgetsAsync())
+        Widgets.AddRange(widgets
             .Items
-            .Select(w => new SelectListItem(w.Key, w.Key))
+            .Select(w => new SelectListItem(w.Details.Name, w.Key))
             .ToList());
     }
 
@@ -36,5 +43,7 @@ public class AddWidgetModal : AbpPageModel
     {
         [SelectItems(nameof(Widgets))]
         public string Widget { get; set; }
+
+        public List<WidgetDetailDto> Details { get; set; }
     }
 }
