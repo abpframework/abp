@@ -40,6 +40,9 @@
     <!-- Polly https://www.nuget.org/packages/Polly -->
     <PollyPackageVersion>7.2.3</PollyPackageVersion>
 
+    <!-- All LeptonXLite Packages https://www.nuget.org/packages?q=LeptonXLite -->
+    <LeptonXLiteThemePackageVersion>1.0.0-beta.2</LeptonXLiteThemePackageVersion>
+
     <IsTestProject Condition="$(MSBuildProjectFullPath.Contains('test')) and ($(MSBuildProjectName.EndsWith('.Tests')) or $(MSBuildProjectName.EndsWith('.TestBase')))">true</IsTestProject>
 
   </PropertyGroup>
