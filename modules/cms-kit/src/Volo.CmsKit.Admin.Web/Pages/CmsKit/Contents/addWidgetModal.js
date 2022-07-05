@@ -61,7 +61,8 @@ $(function () {
                     updatedText = "[Widget Type=\"" + widgetType + "\" ";
 
                     for (var i = 0; i < keys.length; i++) {
-                        updatedText += keys[i] + "=\"" + values[i] + "\" ";
+                        updatedText += keys[i] + "=\"" + values[i];
+                        updatedText += i == (keys.length - 1) ? "\"" : "\" ";
                     }
 
                     updatedText += "]";
