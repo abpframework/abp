@@ -10,8 +10,6 @@
     "DoYouWantToGrantAccessToYourData": "Deseja permitir {0} acesse seus dados?",
     "ScopesRequested": "Escopo solicitado",
     "Accept": "Aceitar",
-    "Deny": "Negar",
-    "LogOut": "Sair",
-    "AreYouSureYouWantToSignOut": "Tem certeza que deseja sair?"
+    "Deny": "Negar"
   }
 }

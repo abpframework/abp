@@ -5063,7 +5063,7 @@ select.form-select option:checked[selected], select.form-select option:focus[sel
 }
 .card .card-title {
   font-size: 1.25em;
-  font-weight: 600;
+  font-weight: 500;
   color: #161616;
 }
 .card.text-white .card-title, .card.text-white .card-text {
@@ -11891,7 +11891,7 @@ body {
   background-color: #161616;
 }
 
-li {
+.lpx-breadcrumb li, .lpx-nav-menu li {
   list-style-type: none;
 }
 
@@ -11948,11 +11948,11 @@ li {
 }
 
 .lpx-main-title {
-  font-size: 1.5em !important;
+  font-size: 1.5rem !important;
   font-weight: 600;
   color: #161616;
-  margin-bottom: 1em;
-  margin-top: 0.3333333333em;
+  margin-bottom: 0.75rem;
+  margin-top: 0.25rem;
 }
 
 .lpx-sidebar {

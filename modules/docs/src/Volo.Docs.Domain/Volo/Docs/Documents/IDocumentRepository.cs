@@ -23,6 +23,7 @@ namespace Volo.Docs.Documents
             string name,
             string languageCode,
             string version,
+            bool autoSave = false,
             CancellationToken cancellationToken = default);
 
         Task<List<Document>> GetListAsync(

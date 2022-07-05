@@ -41,16 +41,8 @@ public class ProducerPool : IProducerPool, ISingletonDependency
             {
                 var producerConfig = new ProducerConfig(Options.Connections.GetOrDefault(connection));
                 Options.ConfigureProducer?.Invoke(producerConfig);
-
-                if (producerConfig.TransactionalId.IsNullOrWhiteSpace())
-                {
-                    producerConfig.TransactionalId = Guid.NewGuid().ToString();
-                }
+                return new ProducerBuilder<string, byte[]>(producerConfig).Build();
                 
-                var producer = new ProducerBuilder<string, byte[]>(producerConfig).Build();
-                producer.InitTransactions(DefaultTransactionsWaitDuration);
-                
-                return producer;
             })).Value;
     }
 

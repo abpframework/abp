@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Gestion des paramètres",
     "Feature:SettingManagementEnable": "Activer la gestion des paramètres",
     "Feature:SettingManagementEnableDescription": "Activer le système de gestion des paramètres dans l'application.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Autoriser les locataires à modifier les paramètres de messagerie.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Autoriser les locataires à modifier les paramètres de messagerie."
+    "Feature:AllowChangingEmailSettings": "Autoriser la modification des paramètres de messagerie.",
+    "Feature:AllowChangingEmailSettingsDescription": "Autoriser la modification des paramètres de messagerie."
   }
 }

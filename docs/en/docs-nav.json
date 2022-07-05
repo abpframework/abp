@@ -721,7 +721,7 @@
                 },
                 {
                   "text": "LeptonX Lite",
-                  "path": "Themes/LeptonXLite/mvc.md"
+                  "path": "Themes/LeptonXLite/AspNetCore.md"
                 }
               ]
             },
@@ -837,7 +837,7 @@
                 },
                 {
                   "text": "LeptonX Lite",
-                  "path": "Themes/LeptonXLite/blazor.md"
+                  "path": "Themes/LeptonXLite/Blazor.md"
                 },
                 {
                   "text": "Branding",
@@ -1112,7 +1112,7 @@
                     },
                     {
                       "text": "LeptonX Lite",
-                      "path": "Themes/LeptonXLite/angular.md"
+                      "path": "Themes/LeptonXLite/Angular.md"
                     }
                   ]
                 },

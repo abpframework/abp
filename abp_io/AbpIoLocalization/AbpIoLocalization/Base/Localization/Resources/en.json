@@ -161,6 +161,9 @@
     "Error_Page_500_Title": "Looks like something went wrong!",
     "Error_Page_500_Description_1": "We track these errors automatically, but if the problem persists feel free to <br /> contact us. In the meantime, try refreshing.",
     "Error_Page_500_Description_2": "Contact with us at <a href=\"mailto:info@abp.io\" target=\"_blank\">info@abp.io</a>.",
-    "Books": "Books"
+    "Books": "Books",
+    "ABPDiscordServer": "ABP Discord Server",
+    "ABPCommunityTalks": "ABP Community Talks",
+    "ABPCommunityPosts": "ABP Community Posts"
   }
 }

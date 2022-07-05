@@ -18,6 +18,8 @@ import { PermissionService } from '../services/permission.service';
 export class PermissionDirective implements OnDestroy, OnChanges {
   @Input('abpPermission') condition: string | undefined;
 
+  @Input('abpPermissionRunChangeDetection') runChangeDetection = true;
+
   subscription!: Subscription;
 
   constructor(
@@ -38,7 +40,11 @@ export class PermissionDirective implements OnDestroy, OnChanges {
       .subscribe(isGranted => {
         this.vcRef.clear();
         if (isGranted) this.vcRef.createEmbeddedView(this.templateRef);
-        this.cdRef.detectChanges();
+        if (this.runChangeDetection) {
+          this.cdRef.detectChanges();
+        } else {
+          this.cdRef.markForCheck();
+        }
       });
   }
 
