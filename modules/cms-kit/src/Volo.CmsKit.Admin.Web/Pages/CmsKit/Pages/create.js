@@ -122,7 +122,7 @@ $(function () {
                 ['code', 'codeblock'],
                 // Using Option: Customize the last button
                 [{
-                    el: createLastButton(),
+                    el: createAddWidgetButton(),
                     command: 'bold',
                     tooltip: 'Add Widget'
                 }]
@@ -171,7 +171,7 @@ $(function () {
         });
     }
 
-    function createLastButton() {
+    function createAddWidgetButton() {
         //TODO add auth
         const button = document.createElement('button');
 
