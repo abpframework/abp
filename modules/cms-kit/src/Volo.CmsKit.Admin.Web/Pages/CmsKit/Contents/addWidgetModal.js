@@ -12,9 +12,9 @@ $(function () {
                 $("#WidgetCodeDiv").hide();
 
                 volo.cmsKit.admin.contents.contentAdmin.getWidgets().then(function (data) {
-                    var widgetTypes = data.items.filter(v => v.details.name === widgetType);
+                    var widgetTypes = data.items.filter(v => v.key === widgetType);
                     var firstWidgetType = widgetTypes[0];
-                    if (firstWidgetType.key == "CmsPollByCode") {
+                    if (firstWidgetType.key == "Poll") {
                         $("#polls").removeAttr("hidden");
                         $("#WidgetCodeDiv").show();
                     }

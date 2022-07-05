@@ -35,7 +35,7 @@ public class AddWidgetModal : AbpPageModel
         Widgets = new List<SelectListItem>() { new("", "") };
         Widgets.AddRange(widgets
             .Items
-            .Select(w => new SelectListItem(w.Details.Name, w.Key))
+            .Select(w => new SelectListItem(w.Key, w.Details.Name))
             .ToList());
     }
 
