@@ -21,9 +21,10 @@
                 @if (Model.Widgets.Count() > 1)
             {
                 <abp-select asp-for="ViewModel.Widget" />
+
                 foreach (var item in Model.ViewModel.Details)
                 {
-                    <div hidden id="polls">@await Component.InvokeAsync(@item.InternalName)</div>
+                    <div hidden id="editor-@item.Name">@await Component.InvokeAsync(@item.EditorComponentName)</div>
                 }
                 <div class="mb-3" id="PropertySideId">
                 </div>

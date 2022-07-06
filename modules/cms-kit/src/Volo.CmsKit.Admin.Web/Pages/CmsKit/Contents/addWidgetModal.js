@@ -6,32 +6,11 @@ $(function () {
 
             let widgetType;
             $("#ViewModel_Widget").change(function () {
-                widgetType = $("#ViewModel_Widget").find(":selected").text();
+                widgetType = $("#ViewModel_Widget").val();
 
-                $("#PropertySideId").html('');
-                $("#WidgetCodeDiv").hide();
+                $('.widget-detail').attr('hidden', 'true');
 
-                volo.cmsKit.admin.contents.contentAdmin.getWidgets().then(function (data) {
-                    var widgetTypes = data.items.filter(v => v.key === widgetType);
-                    var firstWidgetType = widgetTypes[0];
-                    if (firstWidgetType.key == "Poll") {
-                        $("#polls").removeAttr("hidden");
-                        $("#WidgetCodeDiv").show();
-                    }
-                    else {
-
-                        $("#WidgetCodeDiv").hide();
-
-                        for (const property of firstWidgetType.properties) {
-
-                            let html = "<div class=\"form-group\"> " +
-                                " <label for=\"" + property.key + "\">" + property.name + "</label>" +
-                                " <input class=\"properties form-control\" id=\"" + property.key + "\" type=\"text\" />" +
-                                " </div>";
-                            $("#PropertySideId").append(html);
-                        }
-                    }
-                });
+                $('#editor-' + widgetType).removeAttr('hidden');
             });
 
             $("#save-changes").click(function () {

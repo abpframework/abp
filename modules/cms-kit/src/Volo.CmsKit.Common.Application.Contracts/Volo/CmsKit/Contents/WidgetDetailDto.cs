@@ -6,5 +6,5 @@ namespace Volo.CmsKit.Contents;
 public class WidgetDetailDto
 {
     public string Name { get; set; }
-    public string InternalName { get; set; }
+    public string EditorComponentName { get; set; }
 }

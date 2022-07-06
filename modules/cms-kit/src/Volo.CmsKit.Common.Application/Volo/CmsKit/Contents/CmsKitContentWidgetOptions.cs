@@ -11,9 +11,9 @@ public class CmsKitContentWidgetOptions
         WidgetConfigs = new();
     }
 
-    public void AddWidget(string widgetKey, string widgetName, string internalWidgetName = null)
+    public void AddWidget(string widgetKey, string widgetName, string editorWidgetName = null)
     {
-        var config = new ContentWidgetConfig(widgetName, internalWidgetName);
+        var config = new ContentWidgetConfig(widgetName, editorWidgetName);
         WidgetConfigs.Add(widgetKey, config);
     }
 }

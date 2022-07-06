@@ -25,7 +25,7 @@ public class ContentAdminAppService : CmsKitAdminAppServiceBase, IContentAdminAp
                     new ContentWidgetDto
                     {
                         Key = n.Key,
-                        Details = new WidgetDetailDto() { InternalName = n.Value.InternalName, Name = n.Value.Name },
+                        Details = new WidgetDetailDto() { EditorComponentName = n.Value.InternalName, Name = n.Value.Name },
 
                     }).ToList()
         });
