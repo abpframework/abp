@@ -40,7 +40,7 @@ public class AbpSystemTextJsonSerializerProvider : IJsonSerializerProvider, ITra
         return JsonSerializer.Deserialize(jsonString, type, CreateJsonSerializerOptions(camelCase));
     }
 
-    private readonly ConcurrentDictionary<string, JsonSerializerOptions> JsonSerializerOptionsCache = new ConcurrentDictionary<string, JsonSerializerOptions>();
+    private readonly static ConcurrentDictionary<string, JsonSerializerOptions> JsonSerializerOptionsCache = new ConcurrentDictionary<string, JsonSerializerOptions>();
 
     protected virtual JsonSerializerOptions CreateJsonSerializerOptions(bool camelCase = true, bool indented = false)
     {
