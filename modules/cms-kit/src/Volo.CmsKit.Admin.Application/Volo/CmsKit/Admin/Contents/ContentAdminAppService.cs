@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
@@ -25,7 +24,7 @@ public class ContentAdminAppService : CmsKitAdminAppServiceBase, IContentAdminAp
                     new ContentWidgetDto
                     {
                         Key = n.Key,
-                        Details = new WidgetDetailDto() { EditorComponentName = n.Value.InternalName, Name = n.Value.Name },
+                        Details = new WidgetDetailDto() { EditorComponentName = n.Value.EditorComponentName, Name = n.Value.Name },
 
                     }).ToList()
         });
