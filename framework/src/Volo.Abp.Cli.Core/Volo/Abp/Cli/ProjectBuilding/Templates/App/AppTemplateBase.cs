@@ -184,14 +184,15 @@ public abstract class AppTemplateBase : TemplateInfo
             return;
         }
         
-        if (context.BuildArgs.Theme != AppTemplate.DefaultTheme || context.BuildArgs.Theme != AppProTemplate.DefaultTheme)
+        if (context.BuildArgs.Theme is not AppTemplate.DefaultTheme or AppProTemplate.DefaultTheme)
         {
             steps.Add(new ChangeThemeStep());
-            RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, this.IsPro());
+            steps.Add(new ChangeThemeStyleStep());
+            RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, IsPro());
         }
     }
 
-    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isPro)
+    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate)
     {
         var packageJsonFilePaths = new List<string>() 
         {
@@ -218,15 +219,9 @@ public abstract class AppTemplateBase : TemplateInfo
             "/angular/package.json"
         };
 
-        var mvcUiPackageName = "@abp/aspnetcore.mvc.ui.theme.leptonxlite";
-        var blazorServerUiPackageName = "@abp/aspnetcore.components.server.leptonxlitetheme";
-        var ngUiPackageName = "@abp/ng.theme.lepton-x";
-        if (isPro)
-        {
-            mvcUiPackageName = "@volo/abp.aspnetcore.mvc.ui.theme.leptonx";
-            blazorServerUiPackageName = "@volo/aspnetcore.components.server.leptonxtheme";
-            ngUiPackageName = "@volosoft/abp.ng.theme.lepton-x";
-        }
+        var mvcUiPackageName = isProTemplate ? "@volo/abp.aspnetcore.mvc.ui.theme.leptonx" : "@abp/aspnetcore.mvc.ui.theme.leptonxlite";
+        var blazorServerUiPackageName = isProTemplate ? "@volo/aspnetcore.components.server.leptonxtheme" : "@abp/aspnetcore.components.server.leptonxlitetheme";
+        var ngUiPackageName = isProTemplate ? "@volosoft/abp.ng.theme.lepton-x" : "@abp/ng.theme.lepton-x";
         
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {

@@ -103,10 +103,16 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("UI Framework: " + uiFramework);
         }
 
-        var theme = uiFramework == UiFramework.None ? (Theme?)null : GetTheme(commandLineArgs, template);
+        var theme = uiFramework == UiFramework.None ? (Theme?)null : GetThemeByTemplateOrNull(commandLineArgs, template);
         if (theme.HasValue)
         {
             Logger.LogInformation("Theme: " + theme);
+        }
+
+        var themeStyle = theme.HasValue ? GetThemeStyleOrNull(commandLineArgs) : (ThemeStyle?)null;
+        if(themeStyle.HasValue) 
+        {
+            Logger.LogInformation("Theme Style: " + themeStyle);
         }
 
         var publicWebSite = uiFramework != UiFramework.None && commandLineArgs.Options.ContainsKey(Options.PublicWebSite.Long);
@@ -200,7 +206,8 @@ public abstract class ProjectCreationCommandBase
             commandLineArgs.Options,
             connectionString,
             pwa,
-            theme
+            theme,
+            themeStyle
         );
     }
 
@@ -338,7 +345,7 @@ public abstract class ProjectCreationCommandBase
             return DatabaseProvider.MongoDb;
         }
 
-        throw new CliUsageException(ExceptionMessageHelper.GetInvalidArgExceptionMessage("Database Provider"));
+        throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Database Provider"));
     }
 
     protected virtual async Task RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
@@ -446,7 +453,7 @@ public abstract class ProjectCreationCommandBase
             case "oracle":
                 return DatabaseManagementSystem.Oracle;
             default:
-                throw new CliUsageException(ExceptionMessageHelper.GetInvalidArgExceptionMessage("Database Management System"));
+                throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Database Management System"));
         }
     }
 
@@ -462,7 +469,7 @@ public abstract class ProjectCreationCommandBase
             case "react-native":
                 return MobileApp.ReactNative;
             default:
-                throw new CliUsageException(ExceptionMessageHelper.GetInvalidArgExceptionMessage("Mobile App"));
+                throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Mobile App"));
         }
     }
 
@@ -490,14 +497,20 @@ public abstract class ProjectCreationCommandBase
             case "blazor-server":
                 return UiFramework.BlazorServer;
             default:
-                throw new CliUsageException(ExceptionMessageHelper.GetInvalidArgExceptionMessage("UI Framework"));
+                throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("UI Framework"));
         }
     }
 
-    protected virtual Theme GetTheme(CommandLineArgs commandLineArgs, string template = "app")
+    protected virtual Theme GetThemeByTemplateOrNull(CommandLineArgs commandLineArgs, string template = "app")
     {
-        var theme = commandLineArgs.Options.GetOrNull(Options.Theme.Long);
-        theme = theme?.ToLower();
+        var theme = commandLineArgs.Options.GetOrNull(Options.Theme.Long)?.ToLower();
+
+        return template switch
+        {
+            AppTemplate.TemplateName or null => GetAppTheme(),
+            AppProTemplate.TemplateName => GetAppProTheme(),
+            _ => throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage(Options.Theme.Long))
+        };
 
         Theme GetAppTheme()
         {
@@ -520,12 +533,23 @@ public abstract class ProjectCreationCommandBase
                 _ => Theme.NotSpecified
             };
         }
+    }
 
-        return template switch
+    protected virtual ThemeStyle? GetThemeStyleOrNull(CommandLineArgs commandLineArgs, Theme theme) 
+    {
+        if(theme != Theme.LeptonX) 
         {
-            AppTemplate.TemplateName or null => GetAppTheme(),
-            AppProTemplate.TemplateName => GetAppProTheme(),
-            _ => throw new CliUsageException(ExceptionMessageHelper.GetInvalidArgExceptionMessage(Options.Theme.Long))
+            return null;
+        }
+
+        var themeStyle = commandLineArgs.Options.GetOrNull(Options.ThemeStyle.Long)?.ToLower();
+        return themeStyle switch 
+        {
+            null => ThemeStyle.NotSpecified,
+            "dim" => ThemeStyle.Dim,
+            "light" => ThemeStyle.Light,
+            "dark" => ThemeStyle.Dark,
+            _ => throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage(Options.ThemeStyle.Long))
         };
     }
 
@@ -550,7 +574,7 @@ public abstract class ProjectCreationCommandBase
             case null:
                 break;
             default:
-                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidArgExceptionMessage(Options.Theme.Long));
+                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage(Options.Theme.Long));
         }
     }
 
@@ -686,6 +710,11 @@ public abstract class ProjectCreationCommandBase
         public static class Theme
         {
             public const string Long = "theme";
+        }
+
+        public static class ThemeStyle
+        {
+            public const string Long = "theme-style";
         }
     }
 }
