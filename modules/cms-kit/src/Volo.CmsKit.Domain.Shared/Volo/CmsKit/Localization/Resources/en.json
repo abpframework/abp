@@ -181,6 +181,9 @@
     "HasBlogPostWaitingForReviewMessage": "You have a blog post waiting for review. Click to list.",
     "SelectAStatus": "Select a status",
     "Status": "Status",
-    "CmsKit.BlogPost.ScrollIndex": "Quick navigation bar in blog posts"
+    "CmsKit.BlogPost.ScrollIndex": "Quick navigation bar in blog posts",
+    "Add": "Add",
+    "AddWidget": "Add Widget",
+    "PleaseConfigureWidgets": "Please configure widgets"
   }
 }

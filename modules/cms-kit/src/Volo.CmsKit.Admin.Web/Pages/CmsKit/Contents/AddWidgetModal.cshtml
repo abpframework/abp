@@ -1,0 +1,39 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.CmsKit.Admin.Web.Pages
+@using Volo.CmsKit.Localization
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents;
+@inject IHtmlLocalizer<CmsKitResource> L
+
+@model AddWidgetModal;
+@{
+    Layout = null;
+}
+
+@section scripts {
+    <abp-script src="/Pages/CmsKit/Contents/addWidgetModal.js" />
+}
+
+    <abp-modal size="Large" id="addWidgetModal">
+        <abp-modal-header title="@L["AddWidget"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <div class="container">
+                @if (Model.Widgets.Count() > 1)
+            {
+                <abp-select asp-for="ViewModel.Widget" />
+
+                foreach (var item in Model.ViewModel.Details)
+                {
+                    <div hidden id="editor-@item.Name">@await Component.InvokeAsync(@item.EditorComponentName)</div>
+                }
+                <div class="mb-3" id="PropertySideId">
+                </div>
+                <button class="btn btn-primary float-end" type="submit" id="save-changes">@L["Add"]</button>
+            }
+            else
+            {
+                <p>@L["PleaseConfigureWidgets"].Value</p>
+            }
+        </div>
+    </abp-modal-body>
+</abp-modal>
