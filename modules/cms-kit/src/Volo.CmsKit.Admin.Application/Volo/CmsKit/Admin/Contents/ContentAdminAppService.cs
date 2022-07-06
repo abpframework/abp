@@ -18,11 +18,6 @@ public class ContentAdminAppService : CmsKitAdminAppServiceBase, IContentAdminAp
 
     public virtual Task<ListResultDto<ContentWidgetDto>> GetWidgetsAsync()
     {
-        //TODO remove
-        if (!_options.WidgetConfigs.Any())
-        {
-            _options.AddWidget("CmsPollByCode", "Poll", "CmsPolls");
-        }
         return Task.FromResult(new ListResultDto<ContentWidgetDto>()
         {
             Items = _options.WidgetConfigs
