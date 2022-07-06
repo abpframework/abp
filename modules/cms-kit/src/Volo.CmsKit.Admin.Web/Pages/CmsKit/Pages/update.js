@@ -147,7 +147,7 @@ $(function () {
         button.className = 'toastui-editor-toolbar-icons last dropdown';
         button.style.backgroundImage = 'none';
         button.style.margin = '0';
-        button.innerHTML = `AW`;
+        button.innerHTML = `W`;
         button.addEventListener('click', (event) => {
             event.preventDefault();
             widgetModal.open();
