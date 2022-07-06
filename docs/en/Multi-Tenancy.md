@@ -45,7 +45,7 @@ Configure<AbpMultiTenancyOptions>(options =>
     {
         // Handle the exception.
 
-        //return true to stop the pipeline false to continue.
+        // Return true to stop the pipeline, false to continue.
         return true;
     };
 });

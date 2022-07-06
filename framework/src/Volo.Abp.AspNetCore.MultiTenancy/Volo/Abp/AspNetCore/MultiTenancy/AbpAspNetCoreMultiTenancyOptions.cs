@@ -16,6 +16,9 @@ public class AbpAspNetCoreMultiTenancyOptions
     /// </summary>
     public string TenantKey { get; set; }
 
+    /// <summary>
+    /// Return true to stop the pipeline, false to continue.
+    /// </summary>
     public Func<HttpContext, Exception, Task<bool>> MultiTenancyMiddlewareErrorPageBuilder { get; set; }
 
     public AbpAspNetCoreMultiTenancyOptions()
