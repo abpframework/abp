@@ -4,13 +4,14 @@ $(function () {
 
         var initModal = function () {
 
-            let widgetType;
+            let widgetName, widgetType;
             $("#ViewModel_Widget").change(function () {
-                widgetType = $("#ViewModel_Widget").val();
+                widgetName = $("#ViewModel_Widget").val();
+                widgetType = $("#ViewModel_Widget").find(":selected").text();
 
                 $('.widget-detail').attr('hidden', 'true');
 
-                $('#editor-' + widgetType).removeAttr('hidden');
+                $('#editor-' + widgetName).removeAttr('hidden');
             });
 
             $("#save-changes").click(function () {
@@ -32,7 +33,7 @@ $(function () {
                 var contentEditorText = $("#ContentEditor")[0].innerText
                     .replace('WritePreview', '')
                     .replace('MarkdownWYSIWYG', '')
-                    .replace('AW', '');
+                    .replace('W', '');
 
                 let updatedText = '';
                 if (widgetType != undefined) {
