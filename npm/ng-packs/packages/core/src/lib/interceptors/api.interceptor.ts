@@ -1,5 +1,5 @@
 import { HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { finalize } from 'rxjs/operators';
 import { SessionStateService } from '../services/session-state.service';
@@ -45,6 +45,8 @@ export class ApiInterceptor implements HttpInterceptor {
     if (!existingHeaders?.has(this.tenantKey) && tenant?.id) {
       headers[this.tenantKey] = tenant.id;
     }
+
+    headers['X-Requested-With'] = 'XMLHttpRequest';
 
     return headers;
   }
