@@ -7,5 +7,5 @@ namespace Volo.Abp.Modularity;
 
 public interface IDynamicDependsOnProvider
 {
-    public IEnumerable<Type> GetDependencyTypes(IConfiguration config);
+    IEnumerable<Type> GetDependencyTypes(IConfiguration config);
 }
