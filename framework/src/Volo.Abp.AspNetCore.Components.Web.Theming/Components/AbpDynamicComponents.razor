@@ -1,0 +1,7 @@
+﻿@if (AbpDynamicComponentOptions.Value.Components.Any())
+{
+    foreach (var (componentType, parameters) in AbpDynamicComponentOptions.Value.Components)
+    {
+        <DynamicComponent Type="@componentType" Parameters="@parameters" />   
+    }
+}
