@@ -11,9 +11,8 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://localhost:44305',
+    issuer: 'https://localhost:44305/',
     clientId: 'MyProjectName_App',
-    dummyClientSecret: '1q2w3e*',
     scope: 'offline_access MyProjectName',
     responseType: 'code',
     redirectUri: baseUrl,
