@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Volo.Abp.Modularity;
 
 internal static class AbpModuleHelper
 {
-    public static List<Type> FindAllModuleTypes(Type startupModuleType, ILogger logger)
+    public static List<Type> FindAllModuleTypes(Type startupModuleType, ILogger logger, IConfiguration config)
     {
         var moduleTypes = new List<Type>();
         logger.Log(LogLevel.Information, "Loaded ABP modules:");
-        AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType, logger);
+        AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType, logger, config);
         return moduleTypes;
     }
 
-    public static List<Type> FindDependedModuleTypes(Type moduleType)
+    public static List<Type> FindDependedModuleTypes(Type moduleType, IConfiguration config)
     {
         AbpModule.CheckAbpModuleType(moduleType);
 
@@ -34,6 +35,18 @@ internal static class AbpModuleHelper
             }
         }
 
+        if (typeof(IDynamicDependsOnProvider).IsAssignableFrom(moduleType))
+        {
+            var typesProvider = Activator.CreateInstance(moduleType) as IDynamicDependsOnProvider;
+            var dependencyTypes = typesProvider.GetDependencyTypes(config);
+            foreach (var dependencyType in dependencyTypes)
+            {
+                AbpModule.CheckAbpModuleType(moduleType);
+
+                dependencies.AddIfNotContains(dependencyType);
+            }
+        }
+
         return dependencies;
     }
 
@@ -41,6 +54,7 @@ internal static class AbpModuleHelper
         List<Type> moduleTypes,
         Type moduleType,
         ILogger logger,
+        IConfiguration config,
         int depth = 0)
     {
         AbpModule.CheckAbpModuleType(moduleType);
@@ -53,9 +67,9 @@ internal static class AbpModuleHelper
         moduleTypes.Add(moduleType);
         logger.Log(LogLevel.Information, $"{new string(' ', depth * 2)}- {moduleType.FullName}");
 
-        foreach (var dependedModuleType in FindDependedModuleTypes(moduleType))
+        foreach (var dependedModuleType in FindDependedModuleTypes(moduleType, config))
         {
-            AddModuleAndDependenciesRecursively(moduleTypes, dependedModuleType, logger, depth + 1);
+            AddModuleAndDependenciesRecursively(moduleTypes, dependedModuleType, logger, config, depth + 1);
         }
     }
 }

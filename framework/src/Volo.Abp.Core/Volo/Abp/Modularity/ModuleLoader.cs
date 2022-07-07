@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity.PlugIns;
 
@@ -8,6 +9,8 @@ namespace Volo.Abp.Modularity;
 
 public class ModuleLoader : IModuleLoader
 {
+    private IConfiguration m_config = null;
+
     public IAbpModuleDescriptor[] LoadModules(
         IServiceCollection services,
         Type startupModuleType,
@@ -44,15 +47,16 @@ public class ModuleLoader : IModuleLoader
         PlugInSourceList plugInSources)
     {
         var logger = services.GetInitLogger<AbpApplicationBase>();
+        m_config = services.GetSingletonInstance<IConfiguration>();
 
         //All modules starting from the startup module
-        foreach (var moduleType in AbpModuleHelper.FindAllModuleTypes(startupModuleType, logger))
+        foreach (var moduleType in AbpModuleHelper.FindAllModuleTypes(startupModuleType, logger, m_config))
         {
             modules.Add(CreateModuleDescriptor(services, moduleType));
         }
 
         //Plugin modules
-        foreach (var moduleType in plugInSources.GetAllModules(logger))
+        foreach (var moduleType in plugInSources.GetAllModules(logger, m_config))
         {
             if (modules.Any(m => m.Type == moduleType))
             {
@@ -92,7 +96,7 @@ public class ModuleLoader : IModuleLoader
 
     protected virtual void SetDependencies(List<AbpModuleDescriptor> modules, AbpModuleDescriptor module)
     {
-        foreach (var dependedModuleType in AbpModuleHelper.FindDependedModuleTypes(module.Type))
+        foreach (var dependedModuleType in AbpModuleHelper.FindDependedModuleTypes(module.Type, m_config))
         {
             var dependedModule = modules.FirstOrDefault(m => m.Type == dependedModuleType);
             if (dependedModule == null)
