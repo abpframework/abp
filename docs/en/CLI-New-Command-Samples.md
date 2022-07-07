@@ -64,6 +64,14 @@ The following commands are for creating MVC UI projects:
   abp new Acme.BookStore -u mvc --tiered --database-provider mongodb -csf
   ```
 
+* **Public Website**, Entity Framework Core, no mobile app, creates the project in a new folder:
+  
+  ```bash
+  abp new Acme.BookStore -t app -u mvc --mobile none --database-provider ef -csf --with-public-website
+  ```
+  
+  _Note that Public Website is only included in PRO templates._
+  
 
 ## Blazor
 
