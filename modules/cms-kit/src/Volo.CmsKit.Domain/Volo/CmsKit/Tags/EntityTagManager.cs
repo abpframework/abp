@@ -71,4 +71,12 @@ public class EntityTagManager : DomainService
             await AddTagToEntityAsync(tag.Id, entityType, entityId, CurrentTenant?.Id);
         }
     }
+
+    public async Task<List<string>> GetEntityIdsFilteredByTagAsync(
+        [NotNull] Guid tagId,
+        [CanBeNull] Guid? tenantId,
+        CancellationToken cancellationToken = default)
+    {
+        return await EntityTagRepository.GetEntityIdsFilteredByTagAsync(tagId, tenantId, cancellationToken);
+    }
 }

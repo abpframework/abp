@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.MultiTenancy;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -46,6 +48,20 @@ public static class AbpOpenIdConnectExtensions
                     remoteFailureContext.Response.Redirect($"{remoteFailureContext.Request.PathBase}/");
                 }
                 return Task.CompletedTask;
+            };
+            
+            options.Events.OnTokenValidated = async (context) =>
+            {
+                var client = context.HttpContext.RequestServices.GetRequiredService<IOpenIdLocalUserCreationClient>();
+                try
+                {
+                    await client.CreateOrUpdateAsync(context);
+                }
+                catch (Exception ex)
+                {
+                    var logger = context.HttpContext.RequestServices.GetService<ILogger<AbpAspNetCoreAuthenticationOpenIdConnectModule>>();
+                    logger?.LogException(ex);
+                }
             };
         });
     }

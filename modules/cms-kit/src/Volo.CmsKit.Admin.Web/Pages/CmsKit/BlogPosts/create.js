@@ -22,6 +22,7 @@ $(function () {
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
     var $tagsWrapper = $('#blog-post-tags-wrapper');
+    var widgetModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Contents/AddWidgetModal", modalClass: "addWidgetModal" });
 
     var UPPY_FILE_ID = "uppy-upload-file";
 
@@ -274,6 +275,19 @@ $(function () {
             minHeight: "25em",
             initialEditType: 'markdown',
             language: $editorContainer.data("language"),
+            toolbarItems: [
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'image', 'link'],
+                ['code', 'codeblock'],
+                // Using Option: Customize the last button
+                [{
+                    el: createAddWidgetButton(),
+                    command: 'bold',
+                    tooltip: 'Add Widget'
+                }]
+            ],
             hooks: {
                 addImageBlobHook: uploadFile,
             },
@@ -317,5 +331,20 @@ $(function () {
                 callback(fileUrl, mediaDto.name);
             }
         });
+    }
+
+    function createAddWidgetButton() {
+        const button = document.createElement('button');
+
+        button.className = 'toastui-editor-toolbar-icons last dropdown';
+        button.style.backgroundImage = 'none';
+        button.style.margin = '0';
+        button.innerHTML = `W`;
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            widgetModal.open();
+        });
+
+        return button;
     }
 });

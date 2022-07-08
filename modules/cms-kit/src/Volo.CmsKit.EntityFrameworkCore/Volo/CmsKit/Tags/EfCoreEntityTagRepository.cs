@@ -1,8 +1,10 @@
 ﻿using JetBrains.Annotations;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -38,5 +40,16 @@ public class EfCoreEntityTagRepository : EfCoreRepository<ICmsKitDbContext, Enti
                 x.EntityId == entityId &&
                 x.TenantId == tenantId,
             cancellationToken: GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<List<string>> GetEntityIdsFilteredByTagAsync(
+        [NotNull] Guid tagId,
+        [CanBeNull] Guid? tenantId,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbContextAsync()).Set<EntityTag>()
+            .Where(q => q.TagId == tagId && q.TenantId == tenantId)
+            .Select(q => q.EntityId)
+            .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

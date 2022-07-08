@@ -1,9 +1,6 @@
-﻿using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Shouldly;
+using Xunit;
 
 namespace Volo.CmsKit.Pages;
 
@@ -20,6 +17,7 @@ public class PageManager_Test : CmsKitDomainTestBase
         pageRepository = GetRequiredService<IPageRepository>();
     }
 
+    [Fact]
     public async Task CreateAsync_ShouldWorkProperly_WithNonExistingSlug()
     {
         var title = "My awesome page";
@@ -34,6 +32,7 @@ public class PageManager_Test : CmsKitDomainTestBase
         page.Content.ShouldBe(content);
     }
 
+    [Fact]
     public async Task CreateAsync_ShouldThrowException_WithExistingSlug()
     {
         var title = "My awesome page";
@@ -46,6 +45,7 @@ public class PageManager_Test : CmsKitDomainTestBase
         exception.ShouldNotBeNull();
     }
 
+    [Fact]
     public async Task SetSlugAsync_ShouldWorkProperly_WithNonExistingSlug()
     {
         var newSlug = "freshly-generated-new-slug";
@@ -56,6 +56,7 @@ public class PageManager_Test : CmsKitDomainTestBase
         page.Slug.ShouldBe(newSlug);
     }
 
+    [Fact]
     public async Task SetSlugAsync_ShouldThrowException_WithExistingSlug()
     {
         var newSlug = testData.Page_2_Slug;

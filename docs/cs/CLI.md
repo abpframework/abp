@@ -45,9 +45,9 @@ abp new Acme.BookStore
       * `mvc`: ASP.NET Core MVC. Pro tuto šablonu jsou dostupné dodatečné možnosti:
         * `--tiered`: Vytvoří stupňovité řešení, kde jsou vrstvy Web a Http API fyzicky odděleny. Pokud není uvedeno, tak vytvoří vrstvené řešení, které je méně složité a vhodné pro většinu scénářů.
       * `angular`: Angular. Pro tuto šablonu jsou dostupné dodatečné možnosti:
-        * `--separate-identity-server`: Oddělí identity server aplikaci od API host aplikace. Pokud není uvedeno, bude na straně serveru jediný koncový bod.
+        * `--separate-auth-server`: Oddělí identity server aplikaci od API host aplikace. Pokud není uvedeno, bude na straně serveru jediný koncový bod.
       * `none`: Bez UI. Pro tuto šablonu jsou dostupné dodatečné možnosti:
-        * `--separate-identity-server`: Oddělí identity server aplikaci od API host aplikace. Pokud není uvedeno, bude na straně serveru jediný koncový bod.
+        * `--separate-auth-server`: Oddělí identity server aplikaci od API host aplikace. Pokud není uvedeno, bude na straně serveru jediný koncový bod.
     * `--database-provider` nebo `-d`: Určuje poskytovatele databáze. Výchozí poskytovatel je `ef`. Dostupní poskytovatelé:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.

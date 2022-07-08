@@ -8,25 +8,19 @@ import type { FindTenantResultDto } from '../../../volo/abp/asp-net-core/mvc/mul
 export class AbpTenantService {
   apiName = 'abp';
 
-  findTenantById = (id: string, headers: Record<string, string>) =>
-    this.restService.request<any, FindTenantResultDto>(
-      {
-        method: 'GET',
-        url: `/api/abp/multi-tenancy/tenants/by-id/${id}`,
-        headers,
-      },
-      { apiName: this.apiName },
-    );
+  findTenantById = (id: string) =>
+    this.restService.request<any, FindTenantResultDto>({
+      method: 'GET',
+      url: `/api/abp/multi-tenancy/tenants/by-id/${id}`,
+    },
+      { apiName: this.apiName });
 
-  findTenantByName = (name: string, headers: Record<string, string>) =>
-    this.restService.request<any, FindTenantResultDto>(
-      {
-        method: 'GET',
-        url: `/api/abp/multi-tenancy/tenants/by-name/${name}`,
-        headers,
-      },
-      { apiName: this.apiName },
-    );
+  findTenantByName = (name: string) =>
+    this.restService.request<any, FindTenantResultDto>({
+      method: 'GET',
+      url: `/api/abp/multi-tenancy/tenants/by-name/${name}`,
+    },
+      { apiName: this.apiName });
 
-  constructor(private restService: RestService) {}
+  constructor(private restService: RestService) { }
 }
