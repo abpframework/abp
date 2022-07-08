@@ -18,8 +18,8 @@ ABP平台提供了[React Native](https://reactnative.dev/)模板用于开发移�
 
 ![React Native tiered project local IP entry](images/rn-tiered-local-ip.png)
 
-* 打开 `.IdentityServer` 文件夹下的 `appsettings.json` 文件. 将 `SelfUrl` 属性的 `localhost` 替换为你本地的IP地址.
-* 打开 `.IdentityServer/Properties` 文件夹下的 `launchSettings.json` 文件. 将 `applicationUrl` 属性的 `localhost` 替换为你本地的IP地址.
+* 打开 `.AuthServer` 文件夹下的 `appsettings.json` 文件. 将 `SelfUrl` 属性的 `localhost` 替换为你本地的IP地址.
+* 打开 `.AuthServer/Properties` 文件夹下的 `launchSettings.json` 文件. 将 `applicationUrl` 属性的 `localhost` 替换为你本地的IP地址.
 * 打开 `.HttpApi.Host` 文件夹下的 `appsettings.json` 文件. 将 `Authority` 属性的 `localhost` 替换为你本地的IP地址.
 * 打开 `.HttpApi.Host/Properties` 文件夹下的 `launchSettings.json` 文件. 将 `applicationUrl` 属性的 `localhost` 替换为你本地的IP地址.
 
@@ -41,7 +41,7 @@ yarn
 
 {{ if Tiered == "Yes" }}
 
-> 确保 `issuer` 与正在运行的 `.IdentityServer` 项目匹配, `apiUrl` 与正在运行的 `.HttpApi.Host` 项目匹配.
+> 确保 `issuer` 与正在运行的 `.AuthServer` 项目匹配, `apiUrl` 与正在运行的 `.HttpApi.Host` 项目匹配.
 
 {{else}}
 

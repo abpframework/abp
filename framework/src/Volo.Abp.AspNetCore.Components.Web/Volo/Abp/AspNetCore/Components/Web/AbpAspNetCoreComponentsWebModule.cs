@@ -13,11 +13,6 @@ namespace Volo.Abp.AspNetCore.Components.Web;
     )]
 public class AbpAspNetCoreComponentsWebModule : AbpModule
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
-    {
-
-    }
-
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.Replace(ServiceDescriptor.Transient<IComponentActivator, ServiceProviderComponentActivator>());

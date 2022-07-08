@@ -62,7 +62,11 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   readonly!: boolean;
 
-  disabled!: boolean;
+  disabledFn = (data:PropData) => false;
+  
+  get disabled() {
+      return this.disabledFn(this.data)
+  }
 
   private readonly form: FormGroup;
 
@@ -175,7 +179,10 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
     if (options) this.options$ = options(this.data);
     if (readonly) this.readonly = readonly(this.data);
-    if (disabled) this.disabled = disabled(this.data);
+     
+    if (disabled) {
+      this.disabledFn = disabled;
+    }
     if (validators) {
       this.validators = validators(this.data);
       this.setAsterisk();

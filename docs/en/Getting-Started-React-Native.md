@@ -65,8 +65,8 @@ A React Native application running on an Android emulator or a physical phone **
 
 ![React Native tiered project local IP entry](images/rn-tiered-local-ip.png)
 
-* Open the `appsettings.json` in the `.IdentityServer` folder. Replace the `localhost` address on the `SelfUrl` property with your local IP address.
-* Open the `launchSettings.json` in the `.IdentityServer/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
+* Open the `appsettings.json` in the `.AuthServer` folder. Replace the `localhost` address on the `SelfUrl` property with your local IP address.
+* Open the `launchSettings.json` in the `.AuthServer/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
 * Open the `appsettings.json` in the `.HttpApi.Host` folder. Replace the `localhost` address on the `Authority` property with your local IP address.
 * Open the `launchSettings.json` in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
 
@@ -85,7 +85,7 @@ Run the backend application as described in the [getting started document](Getti
 
 {{ if Tiered == "Yes" }}
 
-> Make sure that `issuer` matches the running address of the `.IdentityServer` project, `apiUrl` matches the running address of the `.HttpApi.Host` or `.Web` project.
+> Make sure that `issuer` matches the running address of the `.AuthServer` project, `apiUrl` matches the running address of the `.HttpApi.Host` or `.Web` project.
 
 {{else}}
 

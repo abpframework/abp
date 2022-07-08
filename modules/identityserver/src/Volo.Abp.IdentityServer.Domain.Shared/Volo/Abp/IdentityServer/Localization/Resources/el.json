@@ -1,0 +1,15 @@
+{
+  "culture": "el",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Το όνομα του πόρου ταυτότητας υπάρχει ήδη:{Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Το όνομα πόρου Api υπάρχει ήδη: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Το όνομα πεδίου Api υπάρχει ήδη:{Name}",
+    "Volo.IdentityServer:DuplicateClientId": "Η ταυτότητα του χρήστη υπάρχει ήδη: {ClientId}",
+    "UserLockedOut": "Ο λογαριασμός χρήστη έχει κλειδωθεί λόγω μη έγκυρων προσπαθειών σύνδεσης. Περιμένετε λίγο και προσπαθήστε ξανά.",
+    "InvalidUserNameOrPassword": "Μη έγκυρο όνομα ή κωδικός!",
+    "LoginIsNotAllowed": "Δεν επιτρέπεται να συνδεθείτε! Ο λογαριασμός σας είναι ανενεργός ή χρειάζεται να επιβεβαιώσετε το email/τον αριθμό τηλεφώνου σας.",
+    "InvalidUsername": "Μη έγκυρο όνομα ή κωδικός!",
+    "InvalidAuthenticatorCode": "Μη έγκυρος κωδικός ελέγχου ταυτότητας!",
+    "TheTargetUserIsNotLinkedToYou": "Ο χρήστης-στόχος δεν είναι συνδεδεμένος με εσάς!"
+  }
+}

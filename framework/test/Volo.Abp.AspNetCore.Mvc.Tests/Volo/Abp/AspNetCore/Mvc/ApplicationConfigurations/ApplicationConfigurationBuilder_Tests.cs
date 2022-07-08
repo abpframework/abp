@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Data;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
@@ -15,5 +16,6 @@ public class ApplicationConfigurationBuilder_Tests : AspNetCoreMvcTestBase
 
         config.Auth.ShouldNotBeNull();
         config.Localization.ShouldNotBeNull();
+        config.GetProperty("TestKey").ShouldBe("TestValue");
     }
 }

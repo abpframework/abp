@@ -47,7 +47,7 @@ Application Modules provides pre-built application functionalities;
 
 * [**Account**](Modules/Account.md): Provides UI for the account management and allows user to login/register to the application.
 * **[Identity](Modules/Identity.md)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
-* [**IdentityServer**](Modules/IdentityServer.md): Integrates to IdentityServer4.
+* [**OpenIddict**](Modules/OpenIddict.md): Integrates to OpenIddict.
 * [**Tenant Management**](Modules/Tenant-Management.md): Manages tenants for a [multi-tenant](Multi-Tenancy.md) (SaaS) application.
 
 See the [Application Modules](Modules/Index.md) document for all pre-built modules.
