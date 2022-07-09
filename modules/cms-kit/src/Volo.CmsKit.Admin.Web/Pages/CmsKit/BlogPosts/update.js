@@ -169,13 +169,14 @@ $(function () {
         });
     }
 
+    var editor;
     function initEditor(element) {
         var $editorContainer = $(element);
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
 
-        var editor = new toastui.Editor({
+        editor = new toastui.Editor({
             el: $editorContainer[0],
             usageStatistics: false,
             useCommandShortcut: true,
@@ -253,6 +254,11 @@ $(function () {
                 }
             }
         );
+    });
+
+    $('#GeneratedWidgetText').click(function (e) {
+        var txt = $('#GeneratedWidgetText').val();
+        editor.insertText(txt);
     });
 
     function createAddWidgetButton() {
