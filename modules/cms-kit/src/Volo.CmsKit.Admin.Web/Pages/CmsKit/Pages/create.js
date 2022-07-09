@@ -139,10 +139,6 @@ $(function () {
             }
         });
     }
-
-    //$('.ProseMirror').on('click', function (e) {
-        
-    //});
     
     function uploadFile(blob, callback, source) {
         var UPPY_OPTIONS = {
