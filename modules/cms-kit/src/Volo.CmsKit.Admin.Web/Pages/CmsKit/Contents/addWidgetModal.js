@@ -44,7 +44,7 @@ $(function () {
                 }
 
                 $('#GeneratedWidgetText').val(updatedText);
-                $("#GeneratedWidgetText").trigger("click");
+                $("#GeneratedWidgetText").trigger("change");
 
                 $('#addWidgetModal').modal('hide');
             });

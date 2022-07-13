@@ -250,7 +250,7 @@ $(function () {
         );
     });
 
-    $('#GeneratedWidgetText').click(function () {
+    $('#GeneratedWidgetText').on('change', function () {
         var txt = $('#GeneratedWidgetText').val();
         editor.insertText(txt);
     });

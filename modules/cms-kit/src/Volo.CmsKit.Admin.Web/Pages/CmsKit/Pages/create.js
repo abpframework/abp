@@ -166,13 +166,12 @@ $(function () {
         });
     }
 
-    $('#GeneratedWidgetText').click(function () {
+    $('#GeneratedWidgetText').on('change',function () {
         var txt = $('#GeneratedWidgetText').val();
         editor.insertText(txt);
     });
     
     function createAddWidgetButton() {
-        //TODO add auth
         const button = document.createElement('button');
 
         button.className = 'toastui-editor-toolbar-icons last dropdown';
