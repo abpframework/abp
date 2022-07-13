@@ -6,8 +6,6 @@ $(function () {
     var $slug = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-page-create');
 
-    initAllEditors();
-
     var widgetModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Contents/AddWidgetModal", modalClass: "addWidgetModal" });
 
     var scriptEditor = CodeMirror.fromTextArea(document.getElementById("ViewModel_Script"), {
@@ -91,15 +89,11 @@ $(function () {
     var fileUploadUri = "/api/cms-kit-admin/media/page";
     var fileUriPrefix = "/api/cms-kit/media/";
 
-
-    function initAllEditors() {
-        $('.content-editor').each(function (i, item) {
-            initEditor(item);
-        });
-    }
+    initEditor();
+    
     var editor;
-    function initEditor(element) {
-        var $editorContainer = $(element);
+    function initEditor() {
+        var $editorContainer = $("#ContentEditor");
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
@@ -172,7 +166,7 @@ $(function () {
         });
     }
 
-    $('#GeneratedWidgetText').click(function (e) {
+    $('#GeneratedWidgetText').click(function () {
         var txt = $('#GeneratedWidgetText').val();
         editor.insertText(txt);
     });
