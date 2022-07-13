@@ -25,7 +25,7 @@ You can find the source code of the completed application [here](https://github.
 
 {{end}}
 
-## Installing ABP CLI Tool
+## Install ABP CLI Tool
 
 We will use the [ABP CLI](../../CLI.md) to create new ABP solutions. You can run the following command on a terminal window to install this dotnet tool:
 
@@ -33,7 +33,7 @@ We will use the [ABP CLI](../../CLI.md) to create new ABP solutions. You can run
 dotnet tool install -g Volo.Abp.Cli
 ````
 
-## Creating a New Solution
+## Create Your ABP Solution
 
 Create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
