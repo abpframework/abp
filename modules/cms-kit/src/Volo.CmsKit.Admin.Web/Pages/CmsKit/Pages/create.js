@@ -89,21 +89,16 @@ $(function () {
     var fileUploadUri = "/api/cms-kit-admin/media/page";
     var fileUriPrefix = "/api/cms-kit/media/";
 
-    initAllEditors();
-
-    function initAllEditors() {
-        $('.content-editor').each(function (i, item) {
-            initEditor(item);
-        });
-    }
-
-    function initEditor(element) {
-        var $editorContainer = $(element);
+    initEditor();
+    
+    var editor;
+    function initEditor() {
+        var $editorContainer = $("#ContentEditor");
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
 
-        var editor = new toastui.Editor({
+        editor = new toastui.Editor({
             el: $editorContainer[0],
             usageStatistics: false,
             useCommandShortcut: true,
@@ -138,7 +133,7 @@ $(function () {
             }
         });
     }
-
+    
     function uploadFile(blob, callback, source) {
         var UPPY_OPTIONS = {
             endpoint: fileUploadUri,
@@ -171,8 +166,12 @@ $(function () {
         });
     }
 
+    $('#GeneratedWidgetText').on('change',function () {
+        var txt = $('#GeneratedWidgetText').val();
+        editor.insertText(txt);
+    });
+    
     function createAddWidgetButton() {
-        //TODO add auth
         const button = document.createElement('button');
 
         button.className = 'toastui-editor-toolbar-icons last dropdown';
