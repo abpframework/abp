@@ -30,11 +30,6 @@ $(function () {
                     }
                 });
 
-                var contentEditorText = $("#ContentEditor")[0].innerText
-                    .replace('WritePreview', '')
-                    .replace('MarkdownWYSIWYG', '')
-                    .replace('W', '');
-
                 let updatedText = '';
                 if (widgetType != undefined) {
 
@@ -48,16 +43,8 @@ $(function () {
                     updatedText += "]";
                 }
 
-                if (contentEditorText == '\n\n\n') {
-                    //TODO fails event
-                    var fixedData = "<div>" + updatedText + "</div>";
-                    var innerHtml = $("#ContentEditor")[0].innerHTML;
-                    var replacedInnerHtml = innerHtml.replace('<div><br></div>', fixedData);
-                    $("#ContentEditor")[0].innerHTML = replacedInnerHtml;
-                }
-                else {
-                    $('.ProseMirror div').contents()[0].data = contentEditorText + updatedText;
-                }
+                $('#GeneratedWidgetText').val(updatedText);
+                $("#GeneratedWidgetText").trigger("change");
 
                 $('#addWidgetModal').modal('hide');
             });

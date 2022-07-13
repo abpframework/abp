@@ -7,7 +7,7 @@ $(function () {
         Published: 1,
         SendToReview: 2
     };
-    
+
     var $selectBlog = $('#BlogSelectionSelect');
     var $formCreate = $('#form-blog-post-create');
     var $title = $('#ViewModel_Title');
@@ -250,21 +250,17 @@ $(function () {
     var fileUploadUri = "/api/cms-kit-admin/media/blogpost";
     var fileUriPrefix = "/api/cms-kit/media/";
 
-    initAllEditors();
+    initEditor();
 
-    function initAllEditors() {
-        $('.content-editor').each(function (i, item) {
-            initEditor(item);
-        });
-    }
+    var editor;
 
-    function initEditor(element) {
-        var $editorContainer = $(element);
+    function initEditor() {
+        var $editorContainer = $("#ContentEditor");
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
 
-        var editor = new toastui.Editor({
+        editor = new toastui.Editor({
             el: $editorContainer[0],
             usageStatistics: false,
             useCommandShortcut: true,
@@ -332,6 +328,11 @@ $(function () {
             }
         });
     }
+
+    $('#GeneratedWidgetText').on('change', function () {
+        var txt = $('#GeneratedWidgetText').val();
+        editor.insertText(txt);
+    });
 
     function createAddWidgetButton() {
         const button = document.createElement('button');
