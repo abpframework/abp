@@ -79,6 +79,7 @@ $solutions = (
     "modules/feature-management",
     "modules/identity",
     "modules/identityserver",
+    "modules/openiddict",
     "modules/permission-management",
     "modules/setting-management",
     "modules/tenant-management",

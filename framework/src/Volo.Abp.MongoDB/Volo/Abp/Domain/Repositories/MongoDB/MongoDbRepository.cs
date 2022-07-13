@@ -518,12 +518,12 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         );
     }
 
-    public virtual Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default)
+    public virtual Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
     {
-        return GetMongoQueryableAsync<TEntity>(cancellationToken);
+        return GetMongoQueryableAsync<TEntity>(cancellationToken, aggregateOptions);
     }
 
-    protected virtual async Task<IMongoQueryable<TOtherEntity>> GetMongoQueryableAsync<TOtherEntity>(CancellationToken cancellationToken = default)
+    protected virtual async Task<IMongoQueryable<TOtherEntity>> GetMongoQueryableAsync<TOtherEntity>(CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -532,12 +532,12 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
         return ApplyDataFilters<IMongoQueryable<TOtherEntity>, TOtherEntity>(
             dbContext.SessionHandle != null
-                ? collection.AsQueryable(dbContext.SessionHandle)
-                : collection.AsQueryable()
+                ? collection.AsQueryable(dbContext.SessionHandle, aggregateOptions)
+                : collection.AsQueryable(aggregateOptions)
         );
     }
 
-    public virtual async Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -545,8 +545,8 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         var collection = await GetCollectionAsync(cancellationToken);
 
         var aggregate = dbContext.SessionHandle != null
-                ? collection.Aggregate(dbContext.SessionHandle)
-                : collection.Aggregate();
+                ? collection.Aggregate(dbContext.SessionHandle, aggregateOptions)
+                : collection.Aggregate(aggregateOptions);
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<ISoftDelete>())
         {

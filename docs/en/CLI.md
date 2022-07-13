@@ -34,6 +34,7 @@ Here, is the list of all available commands before explaining their details:
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
 * **`list-modules`**: Lists names of open-source application modules.
+* **`list-templates`**: Lists the names of available templates to create a solution.
 * **`get-source`**: Downloads the source code of a module.
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
 * **`remove-proxy`**: Removes previously generated client side proxies.

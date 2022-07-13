@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using Volo.Docs.Utils;
 
 namespace Volo.Docs.HtmlConverting
@@ -26,7 +27,7 @@ namespace Volo.Docs.HtmlConverting
                                          (localDirectory.IsNullOrEmpty() ? "" : localDirectory.TrimStart('/').EnsureEndsWith('/')) +
                                          match.Groups[2].Value.TrimStart('/');
 
-                    return match.Groups[1] + " src=\"" + newImageSource + "\" " + match.Groups[3];
+                    return match.Groups[1] + " src=\"" + HttpUtility.HtmlEncode(newImageSource) + "\" " + match.Groups[3];
 
                 }, RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline);
 

@@ -1,10 +1,12 @@
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.Menus;
+using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -137,7 +139,8 @@ public class MyProjectNameModule : AbpModule
         {
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
         }
-        
+
+        ConfigureAuthentication(context);
         ConfigureUrls(configuration);
         ConfigureBundles();
         ConfigureAutoMapper(context);
@@ -149,6 +152,11 @@ public class MyProjectNameModule : AbpModule
         ConfigureBlazorise(context);
         ConfigureRouter(context);
         ConfigureMongoDB(context);
+    }
+
+    private void ConfigureAuthentication(ServiceConfigurationContext context)
+    {
+        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
     }
 
     private void ConfigureUrls(IConfiguration configuration)
