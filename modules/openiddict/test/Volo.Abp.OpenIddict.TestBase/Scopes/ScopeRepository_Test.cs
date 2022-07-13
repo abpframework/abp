@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.Scopes;
@@ -10,9 +11,9 @@ public abstract class ScopeRepository_Test<TStartupModule> : OpenIddictTestBase<
 {
     protected IOpenIddictScopeRepository ScopeRepository { get; }
 
-    protected ScopeRepository_Test(IOpenIddictScopeRepository scopeRepository)
+    protected ScopeRepository_Test()
     {
-        ScopeRepository = scopeRepository;
+        ScopeRepository = ServiceProvider.GetRequiredService<IOpenIddictScopeRepository>();
     }
 
     [Fact]
