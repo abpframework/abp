@@ -54,7 +54,7 @@ public class ResourceStore_Cache_Tests : AbpIdentityServerDomainTestBase
         apiResources1.Count.ShouldBe(1);
         apiResources1.First().Name.ShouldBe("Test-ApiResource-Name-1");
 
-        var apiResources2 = (await _resourceStore.FindApiResourcesByScopeNameAsync(new[] { "Test-ApiResource-ApiScope-Name-1", nameof(ApiResourceScope.Scope) })).ToList();
+        var apiResources2 = (await _resourceStore.FindApiResourcesByScopeNameAsync(new[] { "Test-ApiResource-ApiScope-Name-1", "Test-ApiResource-ApiScope-Name-2", nameof(ApiResourceScope.Scope) })).ToList();
         apiResources2.ShouldNotBeEmpty();
         apiResources2.Count.ShouldBe(2);
         apiResources2.ShouldContain(x => x.Name == "Test-ApiResource-Name-1");
