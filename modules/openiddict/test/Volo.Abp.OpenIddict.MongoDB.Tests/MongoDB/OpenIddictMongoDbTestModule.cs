@@ -2,6 +2,7 @@
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.Identity.MongoDB;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.OpenIddict.MongoDB;
 
@@ -22,6 +23,11 @@ public class OpenIddictMongoDbTestModule : AbpModule
         Configure<AbpDbConnectionOptions>(options =>
         {
             options.ConnectionStrings.Default = connectionString;
+        });
+
+        Configure<AbpUnitOfWorkDefaultOptions>(options =>
+        {
+            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
         });
     }
 }
