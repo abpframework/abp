@@ -7,7 +7,7 @@ $(function () {
         Published: 1,
         SendToReview: 2
     };
-    
+
     var $selectBlog = $('#BlogSelectionSelect');
     var $formCreate = $('#form-blog-post-create');
     var $title = $('#ViewModel_Title');
@@ -329,11 +329,11 @@ $(function () {
         });
     }
 
-    $('#GeneratedWidgetText').click(function (e) {
+    $('#GeneratedWidgetText').click(function () {
         var txt = $('#GeneratedWidgetText').val();
         editor.insertText(txt);
     });
-    
+
     function createAddWidgetButton() {
         const button = document.createElement('button');
 
