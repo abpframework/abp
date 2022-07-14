@@ -109,7 +109,7 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("Theme: " + theme);
         }
 
-        var themeStyle = theme.HasValue ? GetThemeStyleOrNull(commandLineArgs) : (ThemeStyle?)null;
+        var themeStyle = theme.HasValue ? GetThemeStyleOrNull(commandLineArgs, theme.Value) : (ThemeStyle?)null;
         if(themeStyle.HasValue) 
         {
             Logger.LogInformation("Theme Style: " + themeStyle);
@@ -596,7 +596,6 @@ public abstract class ProjectCreationCommandBase
             case Theme.NotSpecified:
             case Theme.LeptonXLite:
             case Theme.LeptonX:
-            case null:
                 break;
             default:
                  throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage(Options.Theme.Long));
