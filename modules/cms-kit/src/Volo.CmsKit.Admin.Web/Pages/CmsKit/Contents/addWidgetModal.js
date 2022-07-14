@@ -3,6 +3,8 @@ $(function () {
     abp.modals.addWidgetModal = function () {
 
         var initModal = function () {
+            var activeEditor;
+            var activeForm;
 
             let widgetName, widgetType;
             $("#ViewModel_Widget").change(function () {
@@ -11,47 +13,28 @@ $(function () {
 
                 $('.widget-detail').attr('hidden', 'true');
 
-                $('#editor-' + widgetName).removeAttr('hidden');
+                activeEditor = $('#editor-' + widgetName);
+                activeEditor.removeAttr('hidden');
+
+                activeForm = $('#editor-' + widgetName + ' form');
             });
 
-            $("#save-changes").click(function () {
-                var widgetKey = $("#WidgetCode").val();
-                if (widgetKey != undefined) {
-                    let html = " <input hidden class=\"properties form-control\" value=\"" + widgetKey + "\" id=\"Code\" type=\"text\" />"
-                    $("#PropertySideId").append(html);
-                }
-                else {
-                    
-                    var val = $('#NewOption').is(":checked");
-                    let html = " <input hidden class=\"properties form-control\" value=\"" + val + "\" id=\"IsShow\" type=\"text\" />"
-                    $("#PropertySideId").append(html);
-                }
+            $(".save-changes").click(function () {
 
-                var keys = [];
-                var values = [];
-                $(".properties").each(function () {
-                    if (($.trim($(this).val()).length > 0)) {
-                        keys.push(this.id);
-                        values.push($(this).val());
+                let properties = activeForm.serializeFormToObject();          
+
+                let widgetText = "[Widget Type=\"" + widgetType + "\" ";
+
+                for (var propertyName in properties) {
+                    if (!propertyName.includes(']') && !propertyName.includes('[')) {
+                        widgetText += propertyName + "=\"" + properties[propertyName] + "\" ";
                     }
-                });
-
-                let updatedText = '';
-                if (widgetType != undefined) {
-
-                    updatedText = "[Widget Type=\"" + widgetType + "\" ";
-
-                    for (var i = 0; i < keys.length; i++) {
-                        updatedText += keys[i] + "=\"" + values[i];
-                        updatedText += i == (keys.length - 1) ? "\"" : "\" ";
-                    }
-
-                    updatedText += "]";
                 }
 
-                $('#GeneratedWidgetText').val(updatedText);
+                widgetText = widgetText.trim() + "]";
+
+                $('#GeneratedWidgetText').val(widgetText);
                 $("#GeneratedWidgetText").trigger("change");
-
                 $('#addWidgetModal').modal('hide');
             });
         };

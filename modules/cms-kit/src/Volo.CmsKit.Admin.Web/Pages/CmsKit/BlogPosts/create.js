@@ -329,9 +329,9 @@ $(function () {
         });
     }
 
-    $('#GeneratedWidgetText').on('change', function () {
-        var txt = $('#GeneratedWidgetText').val();
-        editor.insertText(txt);
+    $('#GeneratedWidgetText').on('change', function (text) {
+
+        editor.insertText(text);
     });
 
     function createAddWidgetButton() {
