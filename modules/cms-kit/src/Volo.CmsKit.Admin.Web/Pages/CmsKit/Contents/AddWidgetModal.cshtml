@@ -1,5 +1,6 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using Volo.CmsKit.Admin.Web.Pages
 @using Volo.CmsKit.Localization
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents;
@@ -20,15 +21,17 @@
             <div class="container">
                 @if (Model.Widgets.Count() > 1)
             {
+
                 <abp-select asp-for="ViewModel.Widget" />
 
                 foreach (var item in Model.ViewModel.Details)
                 {
-                    <div hidden id="editor-@item.Name">@await Component.InvokeAsync(@item.EditorComponentName)</div>
+                    <div hidden id="editor-@item.Name">
+                        <form data-check-form-on-close="false">
+                            @await Component.InvokeAsync(@item.EditorComponentName)
+                        </form>
+                    </div>
                 }
-                <div class="mb-3" id="PropertySideId">
-                </div>
-                <button class="btn btn-primary float-end" type="submit" id="save-changes">@L["Add"]</button>
             }
             else
             {
@@ -36,4 +39,7 @@
             }
         </div>
     </abp-modal-body>
+    <abp-modal-footer>
+        <button class="btn btn-primary float-end save-changes" type="submit">@L["Add"]</button>
+    </abp-modal-footer>
 </abp-modal>
