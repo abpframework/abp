@@ -541,9 +541,9 @@ public abstract class ProjectCreationCommandBase
         {
             return theme switch
             {
-                null or "leptonx-lite" => Theme.LeptonXLite,
+                // null or "leptonx-lite" => Theme.LeptonXLite,
                 "basic" => Theme.Basic,
-                _ => Theme.NotSpecified
+                _ => Theme.LeptonXLite 
             };
         }
     
@@ -551,10 +551,10 @@ public abstract class ProjectCreationCommandBase
         {
             return theme switch
             {
-                null or "leptonx" => Theme.LeptonX,
+                // null or "leptonx" => Theme.LeptonX,
                 "lepton" => Theme.Lepton,
                 "basic" => Theme.Basic,
-                _ => Theme.NotSpecified
+                _ => Theme.LeptonX //TODO: default???
             };
         }
     }
@@ -569,11 +569,11 @@ public abstract class ProjectCreationCommandBase
         var themeStyle = commandLineArgs.Options.GetOrNull(Options.ThemeStyle.Long)?.ToLower();
         return themeStyle switch 
         {
-            null => ThemeStyle.NotSpecified,
-            "dim" => ThemeStyle.Dim,
+            // null => ThemeStyle.NotSpecified, TODO: remove it!!!
+            "dim" or null => ThemeStyle.Dim,
             "light" => ThemeStyle.Light,
             "dark" => ThemeStyle.Dark,
-            _ => throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage(Options.ThemeStyle.Long))
+            _ => null
         };
     }
 

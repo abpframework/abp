@@ -2,7 +2,6 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
-//TODO: Remove this step and move it to the ChangeThemeStep.cs?
 public class ChangeThemeStyleStep : ProjectBuildPipelineStep
 {
     public override void Execute(ProjectBuildContext context)
@@ -40,11 +39,11 @@ public class ChangeThemeStyleStep : ProjectBuildPipelineStep
 
         foreach(var filePath in filePaths)
         {
-            ReplaceThemeStyleName(context, filePath, defaultThemeStyleName, newThemeStyleName);
+            ChangeThemeStyleName(context, filePath, defaultThemeStyleName, newThemeStyleName);
         }
     }
 
-    protected void ReplaceThemeStyleName(ProjectBuildContext context, string filePath, string oldThemeStyleName, string newThemeStyleName)
+    protected void ChangeThemeStyleName(ProjectBuildContext context, string filePath, string oldThemeStyleName, string newThemeStyleName)
     {
         var file = context.FindFile(filePath);
         if (file == null)
