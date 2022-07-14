@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Directive,
   Input,
@@ -8,19 +9,23 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { ReplaySubject, Subscription } from 'rxjs';
+import { distinctUntilChanged, take } from 'rxjs/operators';
 import { PermissionService } from '../services/permission.service';
 
 @Directive({
   selector: '[abpPermission]',
 })
-export class PermissionDirective implements OnDestroy, OnChanges {
+export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit {
   @Input('abpPermission') condition: string | undefined;
 
   @Input('abpPermissionRunChangeDetection') runChangeDetection = true;
 
   subscription!: Subscription;
+
+  cdrSubject = new ReplaySubject();
+
+  rendered = false;
 
   constructor(
     @Optional() private templateRef: TemplateRef<any>,
@@ -41,7 +46,11 @@ export class PermissionDirective implements OnDestroy, OnChanges {
         this.vcRef.clear();
         if (isGranted) this.vcRef.createEmbeddedView(this.templateRef);
         if (this.runChangeDetection) {
-          this.cdRef.detectChanges();
+          if (!this.rendered) {
+            this.cdrSubject.next();
+          } else {
+            this.cdRef.detectChanges();
+          }
         } else {
           this.cdRef.markForCheck();
         }
@@ -54,5 +63,10 @@ export class PermissionDirective implements OnDestroy, OnChanges {
 
   ngOnChanges() {
     this.check();
+  }
+
+  ngAfterViewInit() {
+    this.cdrSubject.pipe(take(1)).subscribe(() => this.cdRef.detectChanges());
+    this.rendered = true;
   }
 }
