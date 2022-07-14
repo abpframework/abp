@@ -526,23 +526,22 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected virtual Theme GetThemeByTemplateOrNull(CommandLineArgs commandLineArgs, string template = "app")
+    protected virtual Theme? GetThemeByTemplateOrNull(CommandLineArgs commandLineArgs, string template = "app")
     {
         var theme = commandLineArgs.Options.GetOrNull(Options.Theme.Long)?.ToLower();
 
         return template switch
         {
-            AppTemplate.TemplateName or null => GetAppTheme(),
-            AppProTemplate.TemplateName => GetAppProTheme(),
-            _ => throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage(Options.Theme.Long))
+            AppTemplate.TemplateName or AppNoLayersTemplate.TemplateName => GetAppTheme(),
+            AppProTemplate.TemplateName or AppNoLayersProTemplate.TemplateName or MicroserviceProTemplate.TemplateName => GetAppProTheme(),
+            _ => null
         };
 
         Theme GetAppTheme()
         {
             return theme switch
             {
-                null => AppTemplate.DefaultTheme,
-                "leptonx-lite" => Theme.LeptonXLite,
+                null or "leptonx-lite" => Theme.LeptonXLite,
                 "basic" => Theme.Basic,
                 _ => Theme.NotSpecified
             };
@@ -552,9 +551,9 @@ public abstract class ProjectCreationCommandBase
         {
             return theme switch
             {
-                null => AppProTemplate.DefaultTheme,
-                "leptonx" => Theme.LeptonX,
+                null or "leptonx" => Theme.LeptonX,
                 "lepton" => Theme.Lepton,
+                "basic" => Theme.Basic,
                 _ => Theme.NotSpecified
             };
         }

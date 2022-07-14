@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NuGet.Versioning;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
@@ -179,19 +181,27 @@ public abstract class AppTemplateBase : TemplateInfo
 
     protected void ConfigureTheme(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
-        if (!context.BuildArgs.Theme.HasValue)
+        if (!context.BuildArgs.Theme.HasValue || IsDefaultThemeForTemplate(context.BuildArgs.Theme.Value))
         {
             return;
         }
-        
-        if (context.BuildArgs.Theme is not AppTemplate.DefaultTheme or AppProTemplate.DefaultTheme)
-        {
-            steps.Add(new ChangeThemeStep());
-            steps.Add(new ChangeThemeStyleStep());
-            RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, IsPro());
-        }
+
+        steps.Add(new ChangeThemeStep());
+        steps.Add(new ChangeThemeStyleStep());
+        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro());
     }
 
+    private static bool IsDefaultThemeForTemplate(Theme theme)
+    {
+        var defaultThemesForTemplates = new[] 
+        {
+            AppTemplate.DefaultTheme, AppProTemplate.DefaultTheme, AppNoLayersTemplate.DefaultTheme,
+            AppNoLayersProTemplate.DefaultTheme, MicroserviceProTemplate.DefaultTheme
+        };
+        
+        return defaultThemesForTemplates.Contains(theme);
+    }
+    
     private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate)
     {
         var packageJsonFilePaths = new List<string>() 
