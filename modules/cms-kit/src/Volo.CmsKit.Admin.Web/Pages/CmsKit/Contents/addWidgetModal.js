@@ -20,6 +20,12 @@ $(function () {
                     let html = " <input hidden class=\"properties form-control\" value=\"" + widgetKey + "\" id=\"Code\" type=\"text\" />"
                     $("#PropertySideId").append(html);
                 }
+                else {
+                    
+                    var val = $('#NewOption').is(":checked");
+                    let html = " <input hidden class=\"properties form-control\" value=\"" + val + "\" id=\"IsShow\" type=\"text\" />"
+                    $("#PropertySideId").append(html);
+                }
 
                 var keys = [];
                 var values = [];
