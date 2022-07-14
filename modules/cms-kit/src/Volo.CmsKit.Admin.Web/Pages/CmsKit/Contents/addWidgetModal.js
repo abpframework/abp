@@ -21,7 +21,7 @@ $(function () {
 
             $(".save-changes").click(function () {
 
-                let properties = activeForm.serializeFormToObject();
+                let properties = activeForm.serializeFormToObject();          
 
                 let widgetText = "[Widget Type=\"" + widgetType + "\" ";
 

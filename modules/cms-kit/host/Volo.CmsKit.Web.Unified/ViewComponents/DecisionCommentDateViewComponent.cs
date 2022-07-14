@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+using Volo.Abp.Localization;
 
 namespace Volo.CmsKit.ViewComponents;
 
@@ -10,20 +12,20 @@ namespace Volo.CmsKit.ViewComponents;
     AutoInitialize = true
 )]
 
-[ViewComponent(Name = "ExampleModalDate")]
-public class ExampleModalDateViewComponent : AbpViewComponent
+[ViewComponent(Name = "DecisionCommentDate")]
+public class DecisionCommentDateViewComponent : AbpViewComponent
 {
-    public ExampleModalDateViewComponent()
+    public DecisionCommentDateViewComponent()
     {
     }
 
     public virtual async Task<IViewComponentResult> InvokeAsync()
     {
-        return View("~/ViewComponents/ExampleModalDate.cshtml", new ExampleModalDateViewModel());
+        return View("~/ViewComponents/DecisionCommentDate.cshtml", new DecisionCommentDateViewModel());
     }
 }
 
-public class ExampleModalDateViewModel
+public class DecisionCommentDateViewModel
 {
     [DisplayName("Show date in the component")]
     public bool IsShow { get; set; } = true;

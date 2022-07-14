@@ -153,7 +153,7 @@ public class CmsKitWebUnifiedModule : AbpModule
 
         Configure<CmsKitContentWidgetOptions>(options =>
         {
-            options.AddWidget("ExampleWidget", "ExampleDate", "ExampleModalDate");
+            options.AddWidget("ExComment", "CommentDate", "DecisionCommentDate");
         });
     }
 
