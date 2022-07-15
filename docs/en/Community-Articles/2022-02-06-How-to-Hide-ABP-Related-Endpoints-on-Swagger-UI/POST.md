@@ -425,4 +425,26 @@ That's it. Now we can open the Setting Management page and enable/disable the sw
 
 ![](./swagger-hide-endpoints.gif)
 
+--- 
+
+## July 2022 Update
+
+With ABP v5.2+, there is a built-in option to hide/show ABP related endpoints on runtime. To hide ABP's default endpoints, call the `HideAbpEndpoints` method in your Swagger configuration as below:
+
+```csharp
+services.AddAbpSwaggerGen(
+    options => 
+    {
+        //... other options
+        
+        //Hides ABP Related endpoints on Swagger UI
+        options.HideAbpEndpoints();
+    }
+)
+```
+
+> For more info, please see the [Swagger Integration](https://docs.abp.io/en/abp/latest/API/Swagger-Integration#hide-abp-endpoints-on-swagger-ui) docs.
+
+---
+
 Thanks for reading.

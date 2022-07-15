@@ -15,4 +15,8 @@
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.MongoDB\Volo.Abp.Identity.MongoDB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Volo\Abp\OpenIddict" />
+  </ItemGroup>
+
 </Project>

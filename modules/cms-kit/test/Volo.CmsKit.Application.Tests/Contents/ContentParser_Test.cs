@@ -20,8 +20,8 @@ public class ContentParser_Test : CmsKitDomainTestBase
     [Fact]
     public async Task ParseAsync_ShouldWorkWithDifferentWidgetTypes()
     {
-        _options.Value.AddWidget(testData.PollName, testData.WidgetName);
-        _options.Value.AddWidget("ImageGallery", "ImageGallery");
+        _options.Value.AddWidget(testData.PollName, testData.WidgetName, string.Empty);
+        _options.Value.AddWidget("ImageGallery", "ImageGallery", string.Empty);
         contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
@@ -54,7 +54,7 @@ public class ContentParser_Test : CmsKitDomainTestBase
     [Fact]
     public async Task ParseAsync_ShouldWorkWithWrongConfigOptions()
     {
-        _options.Value.AddWidget(testData.WidgetName, testData.PollName);
+        _options.Value.AddWidget(testData.WidgetName, testData.PollName, string.Empty);
         contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
@@ -70,7 +70,7 @@ public class ContentParser_Test : CmsKitDomainTestBase
     [Fact]
     public async Task ParseAsync_ShouldWorkWithWrongWidgetType()
     {
-        _options.Value.AddWidget(testData.PollName, testData.WidgetName);
+        _options.Value.AddWidget(testData.PollName, testData.WidgetName, string.Empty);
         contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
@@ -86,7 +86,7 @@ public class ContentParser_Test : CmsKitDomainTestBase
     [Fact]
     public async Task ParseAsync_ShouldWorkWithWrongPollName()
     {
-        _options.Value.AddWidget(testData.PollName, testData.WidgetName);
+        _options.Value.AddWidget(testData.PollName, testData.WidgetName, string.Empty);
         contentParser = new ContentParser(_options);
 
         var content = @"**ABP Framework** is completely open source and developed in a community-driven manner.
@@ -103,7 +103,7 @@ public class ContentParser_Test : CmsKitDomainTestBase
     [MemberData(nameof(ExampleData))]
     public async Task ParseAsync_ShouldWorkProperlyWithCorrectInputs(string content, int expectedLine)
     {
-        _options.Value.AddWidget(testData.PollName, testData.WidgetName);
+        _options.Value.AddWidget(testData.PollName, testData.WidgetName, string.Empty);
         contentParser = new ContentParser(_options);
 
         var widgets = await contentParser.ParseAsync(content);
