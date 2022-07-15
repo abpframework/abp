@@ -39,7 +39,7 @@ public class SettingDefinition
     /// A list of allowed providers to get/set value of this setting.
     /// An empty list indicates that all providers are allowed.
     /// </summary>
-    public List<string> Providers { get; } //TODO: Rename to AllowedProviders
+    public List<string> Providers { get; }
 
     /// <summary>
     /// Is this setting inherited from parent scopes.
@@ -98,7 +98,7 @@ public class SettingDefinition
     {
         if (!providers.IsNullOrEmpty())
         {
-            Providers.AddRange(providers);
+            Providers.AddIfNotContains(providers);
         }
 
         return this;
