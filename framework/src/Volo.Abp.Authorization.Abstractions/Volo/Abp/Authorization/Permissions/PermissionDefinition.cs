@@ -122,7 +122,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
     }
 
     /// <summary>
-    /// Set the <see cref="StateProviders"/> property.
+    /// Adds one or more providers to the <see cref="Providers"/> list.
     /// This is a shortcut for nested calls on this object.
     /// </summary>
     public virtual PermissionDefinition WithProviders(params string[] providers)

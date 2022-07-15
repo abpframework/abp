@@ -91,7 +91,7 @@ public class SettingDefinition
     }
 
     /// <summary>
-    /// Sets a property in the <see cref="Properties"/> dictionary.
+    /// Adds one or more providers to the <see cref="Providers"/> list.
     /// This is a shortcut for nested calls on this object.
     /// </summary>
     public virtual SettingDefinition WithProviders(params string[] providers)
