@@ -30,7 +30,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
     /// A list of allowed providers to get/set value of this permission.
     /// An empty list indicates that all providers are allowed.
     /// </summary>
-    public List<string> Providers { get; } //TODO: Rename to AllowedProviders?
+    public List<string> Providers { get; }
 
     public List<ISimpleStateChecker<PermissionDefinition>> StateCheckers { get; }
 
@@ -129,7 +129,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
     {
         if (!providers.IsNullOrEmpty())
         {
-            Providers.AddRange(providers);
+            Providers.AddIfNotContains(providers);
         }
 
         return this;
