@@ -186,6 +186,11 @@ public abstract class AppTemplateBase : TemplateInfo
             return;
         }
 
+        if (context.BuildArgs.Theme == Theme.LeptonX)
+        {
+            context.Symbols.Add("LEPTONX");
+        }
+        
         steps.Add(new ChangeThemeStep());
         steps.Add(new ChangeThemeStyleStep());
         RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro());
