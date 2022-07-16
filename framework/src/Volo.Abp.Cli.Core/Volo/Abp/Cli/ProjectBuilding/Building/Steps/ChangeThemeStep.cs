@@ -35,64 +35,12 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             ? "LeptonXLite" 
             : "LeptonX";
         
-        #region MyCompanyName.MyProjectName.Web
+        #region MVC Projects
 
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyCompanyName.MyProjectName.Web.csproj",
-            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-            @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
-            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
-            $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
-            "AbpAspNetCoreMvcUiBasicThemeModule"
-        );
-
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
-            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
-            $"{defaultThemeName}ThemeBundles.Styles.Global",
-            "BasicThemeBundles.Styles.Global"
-        );
+        ChangeThemeToBasicForMvcProjects(context, defaultThemeName);
 
         #endregion
-        
-        #region MyCompanyName.MyProjectName.HttpApi.Host
 
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyCompanyName.MyProjectName.HttpApi.Host.csproj",
-            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-            @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
-            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
-            $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
-            "AbpAspNetCoreMvcUiBasicThemeModule"
-        );
-
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
-            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
-            $"{defaultThemeName}ThemeBundles.Styles.Global",
-            "BasicThemeBundles.Styles.Global"
-        );
-
-        #endregion
-        
         #region MyCompanyName.MyProjectName.Blazor
         
         ReplacePackageReferenceWithProjectReference(
@@ -120,50 +68,9 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         
         #endregion
 
-        #region MyCompanyName.MyProjectName.Blazor.Server && MyCompanyName.MyProjectName.Blazor.Server.Tiered
+        #region Blazor.Server Projects
 
         ChangeThemeToBasicForBlazorServerProjects(context, defaultThemeName);
-        
-        #endregion
-
-        #region MyCompanyName.MyProjectName.AuthServer
-
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyCompanyName.MyProjectName.AuthServer.csproj",
-            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-            @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyProjectNameAuthServerModule.cs",
-            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
-            $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
-            "AbpAspNetCoreMvcUiBasicThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyProjectNameAuthServerModule.cs",
-            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
-            $"{defaultThemeName}ThemeBundles.Styles.Global",
-            "BasicThemeBundles.Styles.Global"
-        );
-        
-        #endregion
-        
-        #region MyCompanyName.MyProjectName.Web.Mvc && MyCompanyName.MyProjectName.Web.Mvc.Mongo
-
-        ChangeThemeToBasicForMvcProjects(context, defaultThemeName); //TODO: rename?
-        
-        #endregion
-
-        #region MyCompanyName.MyProjectName.Blazor.Server && MyCompanyName.MyProjectName.Blazor.Server.Mongo - (app-nolayers)
-
-        ChangeThemeToBasicForNoLayersBlazorServerProjects(context, defaultThemeName);
         
         #endregion
 
@@ -211,15 +118,9 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         
         #endregion
 
-        #region MyCompanyName.MyProjectName.Web
+        #region MVC Projects
 
-        ChangeThemeToLeptonForMvc(context, "Web");
-
-        #endregion
-
-        #region MyCompanyName.MyProjectName.HttpApi.Host
-
-        ChangeThemeToLeptonForMvc(context, "HttpApi.Host");
+        ChangeThemeToLeptonForMvcProjects(context);
 
         #endregion
         
@@ -243,155 +144,10 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         #endregion
 
-        #region MyCompanyName.MyProjectName.Blazor.Server
+        #region MyCompanyName.MyProjectName.Blazor.Server && MyCompanyName.MyProjectName.Blazor.Server.Tiered 
 
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyCompanyName.MyProjectName.Blazor.csproj",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
-        );
+        ChangeThemeToLeptonForBlazorServerProjects(context);
 
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyCompanyName.MyProjectName.Blazor.csproj",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
-            @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.Server.LeptonTheme\Volo.Abp.AspNetCore.Components.Server.LeptonTheme.csproj"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme",
-            "AbpAspNetCoreComponentsServerLeptonXThemeModule",
-            "AbpAspNetCoreComponentsServerLeptonThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
-            "AbpAspNetCoreMvcUiLeptonXThemeModule",
-            "AbpAspNetCoreMvcUiLeptonThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
-            "LeptonXThemeBundles.Styles.Global",
-            "LeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
-            "BlazorLeptonXThemeBundles.Styles.Global",
-            "BlazorLeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/Pages/_Host.cshtml",
-            "Volo.Abp.AspNetCore.Components.Web.LeptonXTheme.Components",
-            "Volo.Abp.AspNetCore.Components.Web.LeptonTheme.Components",
-            "BlazorLeptonXThemeBundles.Styles.Global",
-            "BlazorLeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/Pages/_Host.cshtml",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
-            "BlazorLeptonXThemeBundles.Scripts.Global",
-            "BlazorLeptonThemeBundles.Scripts.Global"
-        );
-
-        #endregion
-
-        //TODO: refactor!!! (same with blazor.server except paths)
-        #region MyCompanyName.MyProjectName.Blazor.Server.Tiered 
-
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/MyCompanyName.MyProjectName.Blazor.Server.Tiered.csproj",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
-        );
-
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/MyCompanyName.MyProjectName.Blazor.Server.Tiered.csproj",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
-            @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.Server.LeptonTheme\Volo.Abp.AspNetCore.Components.Server.LeptonTheme.csproj"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/MyProjectNameBlazorModule.cs",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme",
-            "AbpAspNetCoreComponentsServerLeptonXThemeModule",
-            "AbpAspNetCoreComponentsServerLeptonThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/MyProjectNameBlazorModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
-            "AbpAspNetCoreMvcUiLeptonXThemeModule",
-            "AbpAspNetCoreMvcUiLeptonThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/MyProjectNameBlazorModule.cs",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
-            "LeptonXThemeBundles.Styles.Global",
-            "LeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/MyProjectNameBlazorModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
-            "BlazorLeptonXThemeBundles.Styles.Global",
-            "BlazorLeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/Pages/_Host.cshtml",
-            "Volo.Abp.AspNetCore.Components.Web.LeptonXTheme.Components",
-            "Volo.Abp.AspNetCore.Components.Web.LeptonTheme.Components",
-            "BlazorLeptonXThemeBundles.Styles.Global",
-            "BlazorLeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/Pages/_Host.cshtml",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
-            "BlazorLeptonXThemeBundles.Scripts.Global",
-            "BlazorLeptonThemeBundles.Scripts.Global"
-        );
-
-        #endregion
-        
-        #region MyCompanyName.MyProjectName.AuthServer
-
-        ChangeThemeToLeptonForMvc(context, "AuthServer");
-        
         #endregion
 
         #region Angular
@@ -424,307 +180,88 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         #endregion
 
-        //TODO: refactor!!!
         // Single-Layers
-        
-        #region MyCompanyName.MyProjectName.Web.Mvc
-        
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Mvc/MyCompanyName.MyProjectName.Web.Mvc.csproj",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            @"..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
-        );
-        
-        var file = context.Files.FirstOrDefault(f => !f.Name.Contains("Test") && f.Name.Contains(@"/aspnet-core/src/MyCompanyName.MyProjectName.Web.Mvc/MyCompanyName.MyProjectName.Web.Mvc.csproj") && f.Name.Contains(".csproj"));
-        if (file != null)
-        {
-            AddProjectReference(file, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.Web\Volo.Abp.LeptonTheme.Management.Web.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file), $"LeptonThemeManagement{ConvertProjectNameToModuleName("Web")}Module");
-            
-            AddProjectReference(file, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.HttpApi\Volo.Abp.LeptonTheme.Management.HttpApi.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file), $"LeptonThemeManagement{ConvertProjectNameToModuleName("HttpApi")}Module", underManagementFolder: false);
+        #region MyCompanyName.MyProjectName.Web.Mvc && MyCompanyName.MyProjectName.Web.Mvc.Mongo
 
-            AddProjectReference(file, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.Application\Volo.Abp.LeptonTheme.Management.Application.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file), $"LeptonThemeManagement{ConvertProjectNameToModuleName("Application")}Module");
-        }
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Mvc/MyProjectNameWebModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
-            "AbpAspNetCoreMvcUiLeptonXThemeModule",
-            "AbpAspNetCoreMvcUiLeptonThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Mvc/MyProjectNameWebModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
-            "LeptonXThemeBundles.Styles.Global",
-            "LeptonThemeBundles.Styles.Global"
-        );
-        
+        var projectNames = new[] {"Web", "HttpApi", "Application"};
+        ConfigureLeptonManagementPackagesForNoLayersMvc(context, @"/aspnet-core/src/MyCompanyName.MyProjectName.Web.Mvc/MyCompanyName.MyProjectName.Web.Mvc.csproj", projectNames);
+        ConfigureLeptonManagementPackagesForNoLayersMvc(context, @"/aspnet-core/src/MyCompanyName.MyProjectName.Web.Mvc/MyCompanyName.MyProjectName.Web.Mvc.Mongo.csproj", projectNames);
+
         #endregion
-        
-        #region MyCompanyName.MyProjectName.Web.Mvc.Mongo
 
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Mvc.Mongo/MyCompanyName.MyProjectName.Web.Mvc.Mongo.csproj",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            @"..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
-        );
-        
-        var file2 = context.Files.FirstOrDefault(f => !f.Name.Contains("Test") && f.Name.Contains(@"/aspnet-core/src/MMyCompanyName.MyProjectName.Web.Mvc.Mongo/MyCompanyName.MyProjectName.Web.Mvc.Mongo.csproj") && f.Name.Contains(".csproj"));
-        if (file2 != null)
-        {
-            AddProjectReference(file2, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.Web\Volo.Abp.LeptonTheme.Management.Web.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file2), $"LeptonThemeManagement{ConvertProjectNameToModuleName("Web")}Module");
-            
-            AddProjectReference(file2, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.HttpApi\Volo.Abp.LeptonTheme.Management.HttpApi.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file2), $"LeptonThemeManagement{ConvertProjectNameToModuleName("HttpApi")}Module", underManagementFolder: false);
+        #region MyCompanyName.MyProjectName.Blazor.Server && MyCompanyName.MyProjectName.Blazor.Server.Mongo - (app-nolayers)
 
-            AddProjectReference(file2, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.Application\Volo.Abp.LeptonTheme.Management.Application.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file2), $"LeptonThemeManagement{ConvertProjectNameToModuleName("Application")}Module");
-        }
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Mvc.Mongo/MyProjectNameWebModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
-            "AbpAspNetCoreMvcUiLeptonXThemeModule",
-            "AbpAspNetCoreMvcUiLeptonThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Mvc.Mongo/MyProjectNameWebModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
-            "LeptonXThemeBundles.Styles.Global",
-            "LeptonThemeBundles.Styles.Global"
-        );
-        
-        #endregion
-        
-        #region MyCompanyName.MyProjectName.Blazor.Server - (app-nolayers)
-        
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyCompanyName.MyProjectName.Blazor.Server.csproj",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            @"..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
-        );
-        
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyCompanyName.MyProjectName.Blazor.Server.csproj",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
-            @"..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.Server.LeptonTheme\Volo.Abp.AspNetCore.Components.Server.LeptonTheme.csproj"
-        );
-        
-        var file3 = context.Files.FirstOrDefault(f => !f.Name.Contains("Test") && f.Name.Contains(@"/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyCompanyName.MyProjectName.Blazor.Server.csproj") && f.Name.Contains(".csproj"));
-        if (file3 != null)
-        {
-            AddProjectReference(file3, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.Blazor.Server\Volo.Abp.LeptonTheme.Management.Blazor.Server.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file3), $"LeptonThemeManagement{ConvertProjectNameToModuleName("Blazor.Server")}Module");
-            
-            AddProjectReference(file3, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.HttpApi\Volo.Abp.LeptonTheme.Management.HttpApi.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file3), $"LeptonThemeManagement{ConvertProjectNameToModuleName("HttpApi")}Module", underManagementFolder: false);
-
-            AddProjectReference(file3, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.Application\Volo.Abp.LeptonTheme.Management.Application.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file3), $"LeptonThemeManagement{ConvertProjectNameToModuleName("Application")}Module");
-        }
-
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameModule.cs",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme",
-            "AbpAspNetCoreComponentsServerLeptonXThemeModule",
-            "AbpAspNetCoreComponentsServerLeptonThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
-            "AbpAspNetCoreMvcUiLeptonXThemeModule",
-            "AbpAspNetCoreMvcUiLeptonThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameModule.cs",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
-            "LeptonXThemeBundles.Styles.Global",
-            "LeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
-            "BlazorLeptonXThemeBundles.Styles.Global",
-            "BlazorLeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/Pages/_Host.cshtml",
-            "Volo.Abp.AspNetCore.Components.Web.LeptonXTheme.Components",
-            "Volo.Abp.AspNetCore.Components.Web.LeptonTheme.Components",
-            "BlazorLeptonXThemeBundles.Styles.Global",
-            "BlazorLeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/Pages/_Host.cshtml",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
-            "BlazorLeptonXThemeBundles.Scripts.Global",
-            "BlazorLeptonThemeBundles.Scripts.Global"
-        );
-        
-        #endregion
-        
-        #region MyCompanyName.MyProjectName.Blazor.Server.Mongo 
-        
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Mongo/MyCompanyName.MyProjectName.Blazor.Server.Mongo.csproj",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            @"..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
-        );
-        
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Mongo/MyCompanyName.MyProjectName.Blazor.Server.Mongo.csproj",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
-            @"..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.Server.LeptonTheme\Volo.Abp.AspNetCore.Components.Server.LeptonTheme.csproj"
-        );
-        
-        var file4 = context.Files.FirstOrDefault(f => !f.Name.Contains("Test") && f.Name.Contains(@"/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Mongo/MyCompanyName.MyProjectName.Blazor.Server.Mongo.csproj") && f.Name.Contains(".csproj"));
-        if (file4 != null)
-        {
-            AddProjectReference(file4, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.Blazor.Server\Volo.Abp.LeptonTheme.Management.Blazor.Server.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file4), $"LeptonThemeManagement{ConvertProjectNameToModuleName("Blazor.Server")}Module");
-            
-            AddProjectReference(file4, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.HttpApi\Volo.Abp.LeptonTheme.Management.HttpApi.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file4), $"LeptonThemeManagement{ConvertProjectNameToModuleName("HttpApi")}Module", underManagementFolder: false);
-
-            AddProjectReference(file4, @"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.Application\Volo.Abp.LeptonTheme.Management.Application.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file4), $"LeptonThemeManagement{ConvertProjectNameToModuleName("Application")}Module");
-        }
-
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Mongo/MyProjectNameModule.cs",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme",
-            "AbpAspNetCoreComponentsServerLeptonXThemeModule",
-            "AbpAspNetCoreComponentsServerLeptonThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Mongo/MyProjectNameModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
-            "AbpAspNetCoreMvcUiLeptonXThemeModule",
-            "AbpAspNetCoreMvcUiLeptonThemeModule"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Mongo/MyProjectNameModule.cs",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
-            "LeptonXThemeBundles.Styles.Global",
-            "LeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Mongo/MyProjectNameModule.cs",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
-            "BlazorLeptonXThemeBundles.Styles.Global",
-            "BlazorLeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Mongo/Pages/_Host.cshtml",
-            "Volo.Abp.AspNetCore.Components.Web.LeptonXTheme.Components",
-            "Volo.Abp.AspNetCore.Components.Web.LeptonTheme.Components",
-            "BlazorLeptonXThemeBundles.Styles.Global",
-            "BlazorLeptonThemeBundles.Styles.Global"
-        );
-        
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Mongo/Pages/_Host.cshtml",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
-            "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
-            "BlazorLeptonXThemeBundles.Scripts.Global",
-            "BlazorLeptonThemeBundles.Scripts.Global"
-        );
+        ChangeThemeToLeptonForNoLayersBlazorServerProjects(context);
         
         #endregion
         
         // Microservices
+        //TODO: add for microservices!!!
     }
 
-    private void ChangeThemeToLeptonForMvc(ProjectBuildContext context, string projectName)
+    private void ConfigureLeptonManagementPackagesForNoLayersMvc(ProjectBuildContext context, string targetProjectPath, string[] projectNames)
     {
-        var projectPath = $"/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj";
-        var projectFile = context.Files.FirstOrDefault(x => x.Name.Contains(projectPath));
-        if (projectFile is null)
+        var file = context.Files.FirstOrDefault(f => !f.Name.Contains("Test") && f.Name.Contains(targetProjectPath) && f.Name.Contains(".csproj"));
+        if (file == null)
         {
             return;
         }
+
+        foreach (var projectName in projectNames)
+        {
+            AddProjectReference(file, $@"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.{projectName}\Volo.Abp.LeptonTheme.Management.{projectName}.csproj");
+            AddModuleDependency(ConvertProjectFileToModuleFile(context, file), $"LeptonThemeManagement{ConvertProjectNameToModuleName($"{projectName}")}Module");
+        }
+    }
+
+    private void ChangeThemeToLeptonForMvcProjects(ProjectBuildContext context)
+    {
+        var projectNames = new[] {
+            "Web", "HttpApi.Host", "AuthServer", //app
+            "Web.Mvc", "Web.Mvc.Mongo" //app-nolayers
+        };
+        foreach (var projectName in projectNames)
+        {
+            var projectPath = $"/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj";
+            var projectFile = context.Files.FirstOrDefault(x => x.Name.Contains(projectPath));
+            if (projectFile == null)
+            {
+                return;
+            }
         
-        var moduleFile = ConvertProjectFileToModuleFile(context, projectFile);
+            var moduleFile = ConvertProjectFileToModuleFile(context, projectFile);
         
-        ReplacePackageReferenceWithProjectReference(
-            context,
-            projectFile.Name,
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
-        );
+            ReplacePackageReferenceWithProjectReference(
+                context,
+                projectFile.Name,
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+                @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
+            );
         
-        ChangeNamespaceAndKeyword(
-            context,
-            moduleFile.Name,
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
-            "LeptonXThemeBundles.Styles.Global",
-            "LeptonThemeBundles.Styles.Global"
-        );
+            ChangeNamespaceAndKeyword(
+                context,
+                moduleFile.Name,
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
+                "LeptonXThemeBundles.Styles.Global",
+                "LeptonThemeBundles.Styles.Global"
+            );
         
-        ChangeNamespaceAndKeyword(
-            context,
-            moduleFile.Name,
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
-            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
-            "AbpAspNetCoreMvcUiLeptonXThemeModule",
-            "AbpAspNetCoreMvcUiLeptonThemeModule"
-        );
+            ChangeNamespaceAndKeyword(
+                context,
+                moduleFile.Name,
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
+                "AbpAspNetCoreMvcUiLeptonXThemeModule",
+                "AbpAspNetCoreMvcUiLeptonThemeModule"
+            );
         
-        RemoveLinesByStatement(
-            context,
-            moduleFile.Name,
-            "using Volo.Abp.LeptonX.Shared;"
-        );
+            RemoveLinesByStatement(
+                context,
+                moduleFile.Name,
+                "Volo.Abp.LeptonX.Shared;"
+            );
+        }
     }
     
     private void AddLeptonThemeManagementReferenceToProjects(ProjectBuildContext context)
@@ -1037,40 +574,30 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             new MoveFolderStep(file.Name, file.Name.Replace("LeptonX", folderName)).Execute(context);
         }
     }
-    
-    
-    private void ChangeThemeToBasicForBlazorServerProjects(ProjectBuildContext context, string defaultThemeName)
-    {
-        var projectNames = new[] {"Blazor", "Blazor.Server.Tiered"};
 
-        foreach (var projectName in projectNames)
+    private void ChangeThemeToBasicForMvcProjects(ProjectBuildContext context, string defaultThemeName)
+    {
+        var projects = new Dictionary<string, string>
+        {
+            {"Web", "MyProjectNameWebModule"},
+            {"HttpApi.Host", "MyProjectNameHttpApiHostModule"},
+            {"AuthServer", "MyProjectNameAuthServerModule"},
+            {"Web.Mvc", "MyProjectNameWebModule"},
+            {"Web.Mvc.Mongo", "MyProjectNameWebModule"},
+        };
+
+        foreach (var project in projects)
         {
             ReplacePackageReferenceWithProjectReference(
                 context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj",
-                $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}Theme",
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/MyCompanyName.MyProjectName.{project.Key}.csproj",
+                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
                 @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
             );
-
-            ReplacePackageReferenceWithProjectReference(
-                context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj",
-                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.Server.BasicTheme\Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj"
-            );
-
+        
             ChangeNamespaceAndKeyword(
                 context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
-                $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}Theme",
-                "Volo.Abp.AspNetCore.Components.Server.BasicTheme",
-                $"AbpAspNetCoreComponentsServer{defaultThemeName}ThemeModule",
-                "AbpAspNetCoreComponentsServerBasicThemeModule"
-            );
-
-            ChangeNamespaceAndKeyword(
-                context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/{project.Value}.cs",
                 $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
                 "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
                 $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
@@ -1079,7 +606,62 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
             ChangeNamespaceAndKeyword(
                 context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/{project.Value}.cs",
+                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
+                $"{defaultThemeName}ThemeBundles.Styles.Global",
+                "BasicThemeBundles.Styles.Global"
+            );
+        }
+    }
+    
+    private void ChangeThemeToBasicForBlazorServerProjects(ProjectBuildContext context, string defaultThemeName)
+    {
+        var projects = new Dictionary<string, string>
+        {
+            {"Blazor", "MyProjectNameBlazorModule"},
+            {"Blazor.Server.Tiered", "MyProjectNameBlazorModule"},
+            {"Blazor.Server", "MyProjectNameModule"},
+            {"Blazor.Server.Mongo", "MyProjectNameModule"}
+        };
+
+        foreach (var project in projects)
+        {
+            ReplacePackageReferenceWithProjectReference(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/MyCompanyName.MyProjectName.{project.Key}.csproj",
+                $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}Theme",
+                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
+            );
+
+            ReplacePackageReferenceWithProjectReference(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/MyCompanyName.MyProjectName.{project.Key}.csproj",
+                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
+                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.Server.BasicTheme\Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/{project.Value}.cs",
+                $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}Theme",
+                "Volo.Abp.AspNetCore.Components.Server.BasicTheme",
+                $"AbpAspNetCoreComponentsServer{defaultThemeName}ThemeModule",
+                "AbpAspNetCoreComponentsServerBasicThemeModule"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/{project.Value}.cs",
+                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+                $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
+                "AbpAspNetCoreMvcUiBasicThemeModule"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/{project.Value}.cs",
                 $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}Theme.Bundling",
                 "Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling",
                 $"{defaultThemeName}ThemeBundles.Styles.Global",
@@ -1088,7 +670,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
             ChangeNamespaceAndKeyword(
                 context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/{project.Value}.cs",
                 $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
                 "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
                 $"Blazor{defaultThemeName}ThemeBundles.Styles.Global",
@@ -1097,7 +679,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
             ChangeNamespaceAndKeyword(
                 context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/Pages/_Host.cshtml",
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/Pages/_Host.cshtml",
                 $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Themes.{defaultThemeName}",
                 "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic",
                 $"Blazor{defaultThemeName}ThemeBundles.Styles.Global",
@@ -1106,7 +688,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
             ChangeNamespaceAndKeyword(
                 context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/Pages/_Host.cshtml",
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{project.Key}/Pages/_Host.cshtml",
                 $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}Theme.Bundling",
                 "Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling",
                 $"Blazor{defaultThemeName}ThemeBundles.Scripts.Global",
@@ -1115,93 +697,158 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         }
     }
 
-    private void ChangeThemeToBasicForMvcProjects(ProjectBuildContext context, string defaultThemeName)
+    private void ChangeThemeToLeptonForBlazorServerProjects(ProjectBuildContext context)
     {
-        var projectNames = new[] {"Web.Mvc", "Web.Mvc.Mongo"};
-
+        var projectNames = new[] {"Blazor", "Blazor.Server.Tiered"};
         foreach (var projectName in projectNames)
         {
             ReplacePackageReferenceWithProjectReference(
                 context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName{projectName}.csproj",
-                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+                @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
             );
-        
-            ChangeNamespaceAndKeyword(
+
+            ReplacePackageReferenceWithProjectReference(
                 context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameWebModule.cs",
-                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
-                $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
-                "AbpAspNetCoreMvcUiBasicThemeModule"
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
+                @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.Server.LeptonTheme\Volo.Abp.AspNetCore.Components.Server.LeptonTheme.csproj"
             );
 
             ChangeNamespaceAndKeyword(
                 context,
-                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameWebModule.cs",
-                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
-                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
-                $"{defaultThemeName}ThemeBundles.Styles.Global",
-                "BasicThemeBundles.Styles.Global"
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonTheme",
+                "AbpAspNetCoreComponentsServerLeptonXThemeModule",
+                "AbpAspNetCoreComponentsServerLeptonThemeModule"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
+                "AbpAspNetCoreMvcUiLeptonXThemeModule",
+                "AbpAspNetCoreMvcUiLeptonThemeModule"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
+                "LeptonXThemeBundles.Styles.Global",
+                "LeptonThemeBundles.Styles.Global"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
+                "BlazorLeptonXThemeBundles.Styles.Global",
+                "BlazorLeptonThemeBundles.Styles.Global"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/Pages/_Host.cshtml",
+                "Volo.Abp.AspNetCore.Components.Web.LeptonXTheme.Components",
+                "Volo.Abp.AspNetCore.Components.Web.LeptonTheme.Components",
+                "BlazorLeptonXThemeBundles.Styles.Global",
+                "BlazorLeptonThemeBundles.Styles.Global"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/Pages/_Host.cshtml",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
+                "BlazorLeptonXThemeBundles.Scripts.Global",
+                "BlazorLeptonThemeBundles.Scripts.Global"
             );
         }
     }
 
-    private void ChangeThemeToBasicForNoLayersBlazorServerProjects(ProjectBuildContext context, string defaultThemeName)
+    private void ChangeThemeToLeptonForNoLayersBlazorServerProjects(ProjectBuildContext context)
     {
-        var projectNames = new[] {"Blazor.Server", "Blazor.Server.Mongo"};
-        
+        var blazorServerProjects = new[] { "Blazor.Server", "HttpApi", "Application" };
+
+        var projectNames = new[] { "Blazor.Server", "Blazor.Server.Mongo" };
         foreach (var projectName in projectNames)
         {
             ReplacePackageReferenceWithProjectReference(
                 context,
                 $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj",
-                $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}Theme",
-                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+                @"..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
             );
-        
+
             ReplacePackageReferenceWithProjectReference(
                 context,
                 $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj",
-                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.Server.BasicTheme\Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj"
+                "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
+                @"..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.Server.LeptonTheme\Volo.Abp.AspNetCore.Components.Server.LeptonTheme.csproj"
             );
-            
+
+            ConfigureLeptonManagementPackagesForNoLayersMvc(context,
+                $@"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj",
+                blazorServerProjects);
+
             ChangeNamespaceAndKeyword(
                 context,
                 $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameModule.cs",
-                $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}Theme",
-                "Volo.Abp.AspNetCore.Components.Server.BasicTheme",
-                $"AbpAspNetCoreComponentsServer{defaultThemeName}ThemeModule",
-                "AbpAspNetCoreComponentsServerBasicThemeModule"
+                "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonTheme",
+                "AbpAspNetCoreComponentsServerLeptonXThemeModule",
+                "AbpAspNetCoreComponentsServerLeptonThemeModule"
             );
-        
+
             ChangeNamespaceAndKeyword(
                 context,
                 $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameModule.cs",
-                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
-                $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
-                "AbpAspNetCoreMvcUiBasicThemeModule"
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
+                "AbpAspNetCoreMvcUiLeptonXThemeModule",
+                "AbpAspNetCoreMvcUiLeptonThemeModule"
             );
-        
+
             ChangeNamespaceAndKeyword(
                 context,
                 $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameModule.cs",
-                $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}Theme.Bundling",
-                "Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling",
-                $"{defaultThemeName}ThemeBundles.Styles.Global",
-                "BasicThemeBundles.Styles.Global"
+                "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
+                "LeptonXThemeBundles.Styles.Global",
+                "LeptonThemeBundles.Styles.Global"
             );
-        
+
             ChangeNamespaceAndKeyword(
                 context,
                 $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/MyProjectNameModule.cs",
-                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
-                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
-                $"Blazor{defaultThemeName}ThemeBundles.Styles.Global",
-                "BlazorBasicThemeBundles.Styles.Global"
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
+                "BlazorLeptonXThemeBundles.Styles.Global",
+                "BlazorLeptonThemeBundles.Styles.Global"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/Pages/_Host.cshtml",
+                "Volo.Abp.AspNetCore.Components.Web.LeptonXTheme.Components",
+                "Volo.Abp.AspNetCore.Components.Web.LeptonTheme.Components",
+                "BlazorLeptonXThemeBundles.Styles.Global",
+                "BlazorLeptonThemeBundles.Styles.Global"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                $"/aspnet-core/src/MyCompanyName.MyProjectName.{projectName}/Pages/_Host.cshtml",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme.Bundling",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
+                "BlazorLeptonXThemeBundles.Scripts.Global",
+                "BlazorLeptonThemeBundles.Scripts.Global"
             );
         }
     }
