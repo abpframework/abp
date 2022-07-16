@@ -76,6 +76,20 @@ describe('PermissionDirective', () => {
       expect(detectChanges).toHaveBeenCalled();
     });
 
+    it('should not call change detection before ngAfterViewInit', () => {
+      // hook before ngAfterViewInit
+
+      const detectChanges = jest.spyOn(cdr, 'detectChanges');
+      spectator.setHostInput({ condition: 'test' });
+      grantedPolicy$.next(true);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      directive.onInit = () => {
+        expect(detectChanges).not.toHaveBeenCalled();
+      };
+      expect(detectChanges).toHaveBeenCalled();
+    });
+
     describe('#subscription', () => {
       it('should call the unsubscribe', () => {
         const spy = jest.fn(() => {});

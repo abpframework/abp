@@ -46,6 +46,7 @@ using Volo.CmsKit.Comments;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit;
 
@@ -151,6 +152,11 @@ public class CmsKitWebUnifiedModule : AbpModule
         Configure<AbpMultiTenancyOptions>(options =>
         {
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
+
+        Configure<CmsKitContentWidgetOptions>(options =>
+        {
+            options.AddWidget("ExComment", "CommentDate", "DecisionCommentDate");
         });
     }
 

@@ -25,15 +25,17 @@ You can find the source code of the completed application [here](https://github.
 
 {{end}}
 
-## Creating a New Solution
+## Install ABP CLI Tool
 
-We will use the [ABP CLI](../../CLI.md) to create new solutions with the ABP Framework. You can run the following command in a command-line terminal to install it:
+We will use the [ABP CLI](../../CLI.md) to create new ABP solutions. You can run the following command on a terminal window to install this dotnet tool:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
 ````
 
-Then create an empty folder, open a command-line terminal and execute the following command in the terminal:
+## Create Your ABP Solution
+
+Create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
 ````bash
 abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{else if UI=="NG"}} -u angular{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
