@@ -181,7 +181,7 @@ public abstract class AppTemplateBase : TemplateInfo
 
     protected void ConfigureTheme(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
-        if (!context.BuildArgs.Theme.HasValue || IsDefaultThemeForTemplate(context.BuildArgs.Theme.Value))
+        if (!context.BuildArgs.Theme.HasValue)
         {
             return;
         }
@@ -189,10 +189,15 @@ public abstract class AppTemplateBase : TemplateInfo
         if (context.BuildArgs.Theme == Theme.LeptonX)
         {
             context.Symbols.Add("LEPTONX");
+            steps.Add(new ChangeThemeStyleStep());
+        }
+
+        if (IsDefaultThemeForTemplate(context.BuildArgs.Theme.Value))
+        {
+            return;
         }
         
         steps.Add(new ChangeThemeStep());
-        steps.Add(new ChangeThemeStyleStep());
         RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro());
     }
 
@@ -200,8 +205,8 @@ public abstract class AppTemplateBase : TemplateInfo
     {
         var defaultThemesForTemplates = new[] 
         {
-            AppTemplate.DefaultTheme, AppProTemplate.DefaultTheme, AppNoLayersTemplate.DefaultTheme,
-            AppNoLayersProTemplate.DefaultTheme, MicroserviceProTemplate.DefaultTheme
+            AppTemplate.DefaultTheme, AppProTemplate.DefaultTheme, 
+            AppNoLayersTemplate.DefaultTheme, AppNoLayersProTemplate.DefaultTheme
         };
         
         return defaultThemesForTemplates.Contains(theme);
@@ -209,7 +214,7 @@ public abstract class AppTemplateBase : TemplateInfo
     
     private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate)
     {
-        var packageJsonFilePaths = new List<string>() 
+        var packageJsonFilePaths = new List<string>
         {
             "/aspnet-core/src/MyCompanyName.MyProjectName.Web/package.json",
             "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package.json",
@@ -218,10 +223,10 @@ public abstract class AppTemplateBase : TemplateInfo
             "/aspnet-core/MyCompanyName.MyProjectName.Mvc/package.json",
             "/aspnet-core/MyCompanyName.MyProjectName.Mvc.Mongo/package.json",
             "/aspnet-core/MyCompanyName.MyProjectName.Host/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Host.Mongo/package.json",
+            "/aspnet-core/MyCompanyName.MyProjectName.Host.Mongo/package.json"
         };
 
-        var blazorServerPackageJsonFilePaths = new List<string>() 
+        var blazorServerPackageJsonFilePaths = new List<string>
         {
             "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/package.json",
             "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
@@ -229,7 +234,7 @@ public abstract class AppTemplateBase : TemplateInfo
             "/aspnet-core/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
         };
 
-        var angularPackageJsonFilePaths = new List<string>() 
+        var angularPackageJsonFilePaths = new List<string> 
         {
             "/angular/package.json"
         };

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
@@ -6,7 +7,7 @@ public class ChangeThemeStyleStep : ProjectBuildPipelineStep
 {
     public override void Execute(ProjectBuildContext context)
     {
-        if (!context.BuildArgs.Theme.HasValue || context.BuildArgs.Theme != Theme.LeptonX)
+        if (context.BuildArgs.Theme != Theme.LeptonX)
         {
             return;
         }
@@ -29,12 +30,20 @@ public class ChangeThemeStyleStep : ProjectBuildPipelineStep
 
         var filePaths = new List<string> 
         {
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/MyProjectNameBlazorModule.cs",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyProjectNameAuthServerModule.cs"
+            "/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
+            "/MyCompanyName.MyProjectName.Web.Host/MyProjectNameWebModule.cs",
+            "/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
+            "/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyProjectNameHttpApiHostModule.cs",
+            "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
+            "/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameBlazorModule.cs",
+            "/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameModule.cs",
+            "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/MyProjectNameModule.cs",
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameModule.cs",
+            "/MyCompanyName.MyProjectName.Host.Mongo/MyProjectNameModule.cs",
+            "/MyCompanyName.MyProjectName.Mvc/MyProjectNameModule.cs",
+            "/MyCompanyName.MyProjectName.Mvc.Mongo/MyProjectNameModule.cs",
+            "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/MyProjectNameBlazorModule.cs",
+            "/MyCompanyName.MyProjectName.AuthServer/MyProjectNameAuthServerModule.cs",
         };
 
         foreach(var filePath in filePaths)
@@ -45,7 +54,7 @@ public class ChangeThemeStyleStep : ProjectBuildPipelineStep
 
     protected void ChangeThemeStyleName(ProjectBuildContext context, string filePath, string oldThemeStyleName, string newThemeStyleName)
     {
-        var file = context.FindFile(filePath);
+        var file = context.Files.FirstOrDefault(x => x.Name.Contains(filePath));
         if (file == null)
         {
             return;
