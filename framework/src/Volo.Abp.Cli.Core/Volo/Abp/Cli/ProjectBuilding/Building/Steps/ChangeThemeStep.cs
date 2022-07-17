@@ -265,41 +265,53 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         var projects = new Dictionary<string, string> 
         {
             {"Domain", "MyCompanyName.MyProjectName.Domain.csproj"},
-            {"Domain", "MyCompanyName.MyProjectName.AdministrationService.Domain.csproj"},
             {"Domain.Shared", "MyCompanyName.MyProjectName.Domain.Shared.csproj"},
-            {"Domain.Shared", "MyCompanyName.MyProjectName.AdministrationService.Domain.Shared.csproj"},
             {"Application", "MyCompanyName.MyProjectName.Application.csproj"},
-            {"Application", "MyCompanyName.MyProjectName.AdministrationService.Application.csproj"},
             {"Application.Contracts", "MyCompanyName.MyProjectName.Application.Contracts.csproj"},
-            {"Application.Contracts", "MyCompanyName.MyProjectName.AdministrationService.Application.Contracts.csproj"},
             {"Blazor.WebAssembly", "MyCompanyName.MyProjectName.Blazor.csproj"},
             {"Blazor.Server", "MyCompanyName.MyProjectName.Blazor.Server.csproj"},
             {"HttpApi", "MyCompanyName.MyProjectName.HttpApi.csproj"},
-            {"HttpApi", "MyCompanyName.MyProjectName.AdministrationService.HttpApi.csproj"},
             {"HttpApi.Client", "MyCompanyName.MyProjectName.HttpApi.Client.csproj"},
-            {"HttpApi.Client", "MyCompanyName.MyProjectName.AdministrationService.HttpApi.Client.csproj"},
             {"Web.Host", "MyCompanyName.MyProjectName.Web.Host.csproj"},
             {"Web", "MyCompanyName.MyProjectName.Web.csproj"},
-            {"Web", "MyCompanyName.MyProjectName.AdministrationService.Web.csproj"}
         };
 
         foreach (var project in projects)
         {
-            var reference = $@"..\..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.{project.Key}\Volo.Abp.LeptonTheme.Management.{project.Key}.csproj";
-            var projectFile = context.Files.FirstOrDefault(f => !f.Name.Contains("Test") && f.Name.Contains(project.Value) && f.Name.Contains(".csproj"));
-            if (projectFile is null)
-            {
-                continue;
-            }
-            
-            projects[project.Key] = projectFile.Name;
-            
-            AddProjectReference(projectFile, reference);
-
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, projectFile), 
-                $"LeptonThemeManagement{ConvertProjectNameToModuleName(project.Key)}Module",
-                underManagementFolder: project.Key != "HttpApi");
+            AddLeptonThemeManagementReference(context, project);
         }
+
+        var microserviceServiceProjects = new Dictionary<string, string>
+        {
+            {"Domain", "MyCompanyName.MyProjectName.AdministrationService.Domain.csproj"},
+            {"Domain.Shared", "MyCompanyName.MyProjectName.AdministrationService.Domain.Shared.csproj"},
+            {"Application", "MyCompanyName.MyProjectName.AdministrationService.Application.csproj"},
+            {"Application.Contracts", "MyCompanyName.MyProjectName.AdministrationService.Application.Contracts.csproj"},
+            {"HttpApi", "MyCompanyName.MyProjectName.AdministrationService.HttpApi.csproj"},
+            {"HttpApi.Client", "MyCompanyName.MyProjectName.AdministrationService.HttpApi.Client.csproj"},
+            {"Web", "MyCompanyName.MyProjectName.AdministrationService.Web.csproj"}
+        };
+        
+        foreach (var microserviceServiceProject in microserviceServiceProjects)
+        {
+            AddLeptonThemeManagementReference(context, microserviceServiceProject);
+        }
+    }
+    
+    private void AddLeptonThemeManagementReference(ProjectBuildContext context, KeyValuePair<string, string> projectInfo) 
+    {
+        var reference = $@"..\..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.{projectInfo.Key}\Volo.Abp.LeptonTheme.Management.{projectInfo.Key}.csproj";
+        var projectFile = context.Files.FirstOrDefault(f => !f.Name.Contains("Test") && f.Name.Contains(projectInfo.Value) && f.Name.Contains(".csproj"));
+        if (projectFile is null)
+        {
+            return;
+        }
+            
+        AddProjectReference(projectFile, reference);
+
+        AddModuleDependency(ConvertProjectFileToModuleFile(context, projectFile), 
+            $"LeptonThemeManagement{ConvertProjectNameToModuleName(projectInfo.Key)}Module",
+            underManagementFolder: projectInfo.Key != "HttpApi");
     }
 
     private void AddModuleDependency(FileEntry moduleFile, string dependency, bool underManagementFolder = true)
