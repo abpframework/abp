@@ -24,8 +24,67 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
         DeleteUnrelatedProjects(context, steps);
         RandomizeStringEncryption(context, steps);
         UpdateNuGetConfig(context, steps);
+        ConfigureTheme(context, steps);
 
         return steps;
+    }
+    
+    protected void ConfigureTheme(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        if (!context.BuildArgs.Theme.HasValue)
+        {
+            return;
+        }
+
+        if (context.BuildArgs.Theme == Theme.LeptonX)
+        {
+            context.Symbols.Add("LEPTONX");
+            steps.Add(new ChangeThemeStyleStep());
+            return;
+        }
+
+        steps.Add(new ChangeThemeStep());
+        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps);
+    }
+
+    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps)
+    {
+        var packageJsonFilePaths = new List<string> 
+        {
+            "/MyCompanyName.MyProjectName.AuthServer/package.json",
+            "/MyCompanyName.MyProjectName.Web/package.json"
+        };
+
+        var blazorServerPackageJsonFilePaths = new List<string> 
+        {
+            "/MyCompanyName.MyProjectName.Blazor.Server/package.json"
+        };
+
+        var angularPackageJsonFilePaths = new List<string> 
+        {
+            "/angular/package.json"
+        };
+
+        var mvcUiPackageName = "@volo/abp.aspnetcore.mvc.ui.theme.leptonx";
+        var blazorServerUiPackageName = "@volo/aspnetcore.components.server.leptonxtheme";
+        var ngUiPackageName = "@volosoft/abp.ng.theme.lepton-x";
+
+        foreach (var packageJsonFilePath in packageJsonFilePaths)
+        {
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
+        }
+
+        foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
+        {
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
+        }
+
+        foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
+        {
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+        }
     }
 
     private static void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
