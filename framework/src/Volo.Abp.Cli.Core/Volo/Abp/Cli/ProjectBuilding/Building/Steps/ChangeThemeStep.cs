@@ -179,11 +179,11 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         #endregion
 
-        #region MyCompanyName.MyProjectName.Web.Mvc && MyCompanyName.MyProjectName.Web.Mvc.Mongo
+        #region MyCompanyName.MyProjectName.Mvc && MyCompanyName.MyProjectName.Mvc.Mongo
 
         var projectNames = new[] {"Web", "HttpApi", "Application"};
-        ConfigureLeptonManagementPackagesForNoLayersMvc(context, @"/MyCompanyName.MyProjectName.Web.Mvc/MyCompanyName.MyProjectName.Web.Mvc.csproj", projectNames);
-        ConfigureLeptonManagementPackagesForNoLayersMvc(context, @"/MyCompanyName.MyProjectName.Web.Mvc/MyCompanyName.MyProjectName.Web.Mvc.Mongo.csproj", projectNames);
+        ConfigureLeptonManagementPackagesForNoLayersMvc(context, @"/MyCompanyName.MyProjectName.Mvc/MyCompanyName.MyProjectName.Mvc.csproj", projectNames);
+        ConfigureLeptonManagementPackagesForNoLayersMvc(context, @"/MyCompanyName.MyProjectName.Mvc/MyCompanyName.MyProjectName.Mvc.Mongo.csproj", projectNames);
 
         #endregion
 
@@ -610,8 +610,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             {"Web", "MyProjectNameWebModule"},
             {"HttpApi.Host", "MyProjectNameHttpApiHostModule"},
             {"AuthServer", "MyProjectNameAuthServerModule"},
-            {"Web.Mvc", "MyProjectNameWebModule"},
-            {"Web.Mvc.Mongo", "MyProjectNameWebModule"},
+            {"Mvc", "MyProjectNameWebModule"},
+            {"Mvc.Mongo", "MyProjectNameWebModule"},
         };
 
         foreach (var project in projects)
