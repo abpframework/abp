@@ -213,7 +213,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     {
         var projectNames = new[] 
         {
-            "Web", "HttpApi.Host", "AuthServer", "Web.Mvc", "Web.Mvc.Mongo"
+            "Web", "HttpApi.Host", "AuthServer", "Mvc", "Mvc.Mongo"
         };
         
         foreach (var projectName in projectNames)

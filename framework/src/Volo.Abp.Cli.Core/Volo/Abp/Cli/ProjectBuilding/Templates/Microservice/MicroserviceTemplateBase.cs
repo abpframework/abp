@@ -51,18 +51,18 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
     {
         var packageJsonFilePaths = new List<string> 
         {
-            "/apps/auth-server/src/MyCompanyName.MyProjectName.AuthServer/package.json",
-            "/apps/web/src/MyCompanyName.MyProjectName.Web/package.json"
+            "/MyCompanyName.MyProjectName.AuthServer/package.json",
+            "/MyCompanyName.MyProjectName.Web/package.json"
         };
 
         var blazorServerPackageJsonFilePaths = new List<string> 
         {
-            "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server/package.json"
+            "/MyCompanyName.MyProjectName.Blazor.Server/package.json"
         };
 
         var angularPackageJsonFilePaths = new List<string> 
         {
-            "/apps/angular/package.json"
+            "/angular/package.json"
         };
 
         var mvcUiPackageName = "@volo/abp.aspnetcore.mvc.ui.theme.leptonx";

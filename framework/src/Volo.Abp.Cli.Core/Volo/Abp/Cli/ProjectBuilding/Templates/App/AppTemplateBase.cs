@@ -216,22 +216,22 @@ public abstract class AppTemplateBase : TemplateInfo
     {
         var packageJsonFilePaths = new List<string>
         {
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web/package.json",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package.json",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Mvc/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Mvc.Mongo/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Host/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Host.Mongo/package.json"
+            "/MyCompanyName.MyProjectName.Web/package.json",
+            "/MyCompanyName.MyProjectName.Web.Host/package.json",
+            "/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
+            "/MyCompanyName.MyProjectName.AuthServer/package.json",
+            "/MyCompanyName.MyProjectName.Mvc/package.json",
+            "/MyCompanyName.MyProjectName.Mvc.Mongo/package.json",
+            "/MyCompanyName.MyProjectName.Host/package.json",
+            "/MyCompanyName.MyProjectName.Host.Mongo/package.json"
         };
 
         var blazorServerPackageJsonFilePaths = new List<string>
         {
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/package.json",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Blazor.Server/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
+            "/MyCompanyName.MyProjectName.Blazor.Server/package.json",
+            "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
+            "/MyCompanyName.MyProjectName.Blazor.Server/package.json",
+            "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
         };
 
         var angularPackageJsonFilePaths = new List<string> 
