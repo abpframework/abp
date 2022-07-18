@@ -204,8 +204,14 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         foreach (var projectName in projectNames)
         {
+            var moduleFile = ConvertProjectFileToModuleFile(context, file);
+            if (moduleFile == null)
+            {
+                continue;
+            }
+            
             AddProjectReference(file, $@"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.{projectName}\Volo.Abp.LeptonTheme.Management.{projectName}.csproj");
-            AddModuleDependency(ConvertProjectFileToModuleFile(context, file), $"LeptonThemeManagement{ConvertProjectNameToModuleName($"{projectName}")}Module");
+            AddModuleDependency(moduleFile, $"LeptonThemeManagement{ConvertProjectNameToModuleName($"{projectName}")}Module");
         }
     }
 
@@ -226,6 +232,10 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             }
         
             var moduleFile = ConvertProjectFileToModuleFile(context, projectFile);
+            if (moduleFile == null)
+            {
+                continue;
+            }
         
             ReplacePackageReferenceWithProjectReference(
                 context,
@@ -306,11 +316,16 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         {
             return;
         }
+
+        var moduleFile = ConvertProjectFileToModuleFile(context, projectFile);
+        if (moduleFile == null)
+        {
+            return;
+        }
             
         AddProjectReference(projectFile, reference);
 
-        AddModuleDependency(ConvertProjectFileToModuleFile(context, projectFile), 
-            $"LeptonThemeManagement{ConvertProjectNameToModuleName(projectInfo.Key)}Module",
+        AddModuleDependency(moduleFile, $"LeptonThemeManagement{ConvertProjectNameToModuleName(projectInfo.Key)}Module",
             underManagementFolder: projectInfo.Key != "HttpApi");
     }
 
@@ -555,9 +570,14 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     private static FileEntry ConvertProjectFileToModuleFile(ProjectBuildContext context, FileEntry projectFile)
     {
         var splittedProjectFileName = projectFile.Name.RemovePostFix("/").Split("/");
-        var fileName = splittedProjectFileName.Last();
         
         splittedProjectFileName = splittedProjectFileName.Take(splittedProjectFileName.Length - 1).ToArray();
+        
+        var fileName = splittedProjectFileName?.Last();
+        if (fileName == null)
+        {
+            return null;
+        }
         
         fileName = fileName
             .Replace("MyCompanyName.", "")
@@ -565,8 +585,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             .Replace(".", "");
 
         fileName = ConvertProjectNameToModuleName(fileName);
-
-        return context.Files.First(f => f.Name.Contains(splittedProjectFileName.Last() + "/" + fileName));
+        
+        return context.Files.FirstOrDefault(f => f.Name.Contains(splittedProjectFileName.Last() + "/" + fileName));
     }
     
     private static string ConvertProjectNameToModuleName(string moduleName)
