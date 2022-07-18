@@ -209,7 +209,7 @@ public abstract class AppTemplateBase : TemplateInfo
             AppNoLayersTemplate.DefaultTheme, AppNoLayersProTemplate.DefaultTheme
         };
         
-        return defaultThemesForTemplates.Contains(theme);
+        return defaultThemesForTemplates.Any(defaultTheme => defaultTheme == theme);
     }
     
     private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate)
@@ -220,8 +220,7 @@ public abstract class AppTemplateBase : TemplateInfo
             "/MyCompanyName.MyProjectName.Web.Host/package.json",
             "/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
             "/MyCompanyName.MyProjectName.AuthServer/package.json",
-            "/MyCompanyName.MyProjectName.Mvc/package.json",
-            "/MyCompanyName.MyProjectName.Mvc.Mongo/package.json",
+            "/MyCompanyName.MyProjectName/package.json",
             "/MyCompanyName.MyProjectName.Host/package.json",
             "/MyCompanyName.MyProjectName.Host.Mongo/package.json"
         };
@@ -230,7 +229,6 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             "/MyCompanyName.MyProjectName.Blazor.Server/package.json",
             "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
-            "/MyCompanyName.MyProjectName.Blazor.Server/package.json",
             "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
         };
 

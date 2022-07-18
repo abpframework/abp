@@ -182,8 +182,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         #region MyCompanyName.MyProjectName.Mvc && MyCompanyName.MyProjectName.Mvc.Mongo
 
         var projectNames = new[] {"Web", "HttpApi", "Application"};
-        ConfigureLeptonManagementPackagesForNoLayersMvc(context, @"/MyCompanyName.MyProjectName.Mvc/MyCompanyName.MyProjectName.Mvc.csproj", projectNames);
-        ConfigureLeptonManagementPackagesForNoLayersMvc(context, @"/MyCompanyName.MyProjectName.Mvc/MyCompanyName.MyProjectName.Mvc.Mongo.csproj", projectNames);
+        ConfigureLeptonManagementPackagesForNoLayersMvc(context, @"/MyCompanyName.MyProjectName.Mvc/MyCompanyName.MyProjectName.csproj", projectNames);
 
         #endregion
 
@@ -219,12 +218,13 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     {
         var projectNames = new[] 
         {
-            "Web", "HttpApi.Host", "AuthServer", "Mvc", "Mvc.Mongo"
+            ".Web", ".HttpApi.Host", ".AuthServer", 
+            "" //for app-nolayers-mvc
         };
         
         foreach (var projectName in projectNames)
         {
-            var projectPath = $"/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj";
+            var projectPath = $"/MyCompanyName.MyProjectName{projectName}/MyCompanyName.MyProjectName{projectName}.csproj";
             var projectFile = context.Files.FirstOrDefault(x => x.Name.Contains(projectPath));
             if (projectFile == null)
             {
@@ -607,25 +607,24 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     {
         var projects = new Dictionary<string, string>
         {
-            {"Web", "MyProjectNameWebModule"},
-            {"HttpApi.Host", "MyProjectNameHttpApiHostModule"},
-            {"AuthServer", "MyProjectNameAuthServerModule"},
-            {"Mvc", "MyProjectNameWebModule"},
-            {"Mvc.Mongo", "MyProjectNameWebModule"},
+            {".Web", "MyProjectNameWebModule"},
+            {".HttpApi.Host", "MyProjectNameHttpApiHostModule"},
+            {".AuthServer", "MyProjectNameAuthServerModule"},
+            {"", "MyProjectNameWebModule"}
         };
 
         foreach (var project in projects)
         {
             ReplacePackageReferenceWithProjectReference(
                 context,
-                $"/MyCompanyName.MyProjectName.{project.Key}/MyCompanyName.MyProjectName.{project.Key}.csproj",
+                $"/MyCompanyName.MyProjectName{project.Key}/MyCompanyName.MyProjectName{project.Key}.csproj",
                 $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
                 @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
             );
         
             ChangeNamespaceAndKeyword(
                 context,
-                $"/MyCompanyName.MyProjectName.{project.Key}/{project.Value}.cs",
+                $"/MyCompanyName.MyProjectName{project.Key}/{project.Value}.cs",
                 $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
                 "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
                 $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
@@ -634,7 +633,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
             ChangeNamespaceAndKeyword(
                 context,
-                $"/MyCompanyName.MyProjectName.{project.Key}/{project.Value}.cs",
+                $"/MyCompanyName.MyProjectName{project.Key}/{project.Value}.cs",
                 $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
                 "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
                 $"{defaultThemeName}ThemeBundles.Styles.Global",
