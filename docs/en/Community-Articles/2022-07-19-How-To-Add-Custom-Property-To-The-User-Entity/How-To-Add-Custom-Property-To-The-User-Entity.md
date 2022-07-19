@@ -1,12 +1,12 @@
 # How to Add Custom Properties to the User Entity
 
-> **Note:** If your application is greater than version 4.3.3, please follow [this article](../2022-07-19-How-To-Add-Custom-Property-To-The-User-Entity/How-To-Add-Custom-Property-To-The-User-Entity.md).
+> **Note:** If your application is less than version 4.4.x, please follow [this article](../2020-10-08-How-To-Add-Custom-Property-To-The-User-Entity/How-To-Add-Custom-Property-To-The-User-Entity.md).
 
 ## Introduction
 
 In this step-by-step article, I will explain how you can customize the user entity class, which is available in every web application you create using the ABP framework, according to your needs. When you read this article, you will learn how to override the services of built-in modules, extend the entities, extend data transfer objects and customize the user interface in the applications you develop using the ABP framework. 
 
-> **Note:** This article is not about customizing the `Login` page. If you have such a need, please follow [this article](https://file+.vscode-resource.vscode-cdn.net/Users/berkan/Documents/workspace/abp/docs/en/Community-Articles/2020-05-09-Customize-the-Login-Page-for-MVC-Razor-Page-Applications/POST.md).
+> **Note:** This article is not about customizing the `Login` page. If you have such a need, please follow [this article](../2020-05-09-Customize-the-Login-Page-for-MVC-Razor-Page-Applications/POST.md).
 
 You can see the screenshots below which we will reach at the end of the article.
 
@@ -32,17 +32,7 @@ After the download is finished, we can run **CustomizeUserDemo.DbMigrator** proj
 
 In this article, we will go through a scenario together and find the solutions to our questions through this scenario. However, since the scenario is not a real-life scenario, it may be strange, please don't get too about this issue :)
 
-## Step-1
-
-Add two new properties to the `AppUser` in the Users folder of the **CustomizeUserDemo.Domain** project as follows:
-
-```csharp
-public string Title { get; protected set; }
-
-public int Reputation { get; protected set; }
-```
-
-## Step-2 
+## Step-1 
 
 Create the Users folder in the **CustomizeUserDemo.Domain.Shared** project, create the class `UserConsts` inside the folder and update the class you created as below:
 
@@ -61,7 +51,7 @@ public static class UserConsts
 }
 ```
 
-## Step-3
+## Step-2
 
 Update the `CustomizeUserDemoEfCoreEntityExtensionMappings` class in the **CustomizeUserDemo.EntityFramework** project in the EntityFrameworkCore folder as below:
 
@@ -79,15 +69,15 @@ public static class CustomizeUserDemoEfCoreEntityExtensionMappings
         {
             ObjectExtensionManager.Instance
                 .MapEfCoreProperty<IdentityUser, string>(
-                    nameof(AppUser.Title),
-                    (entityBuilder, propertyBuilder) =>
+                    UserConsts.TitlePropertyName,
+                    (_, propertyBuilder) =>
                     {
                         propertyBuilder.HasDefaultValue("");
                         propertyBuilder.HasMaxLength(UserConsts.MaxTitleLength);
                     }
                 ).MapEfCoreProperty<IdentityUser, int>(
-                    nameof(AppUser.Reputation),
-                    (entityBuilder, propertyBuilder) =>
+                    UserConsts.ReputationPropertyName,
+                    (_, propertyBuilder) =>
                     {
                         propertyBuilder.HasDefaultValue(UserConsts.MinReputationValue);
                     }
@@ -123,7 +113,7 @@ When we updated the database, you can see that the `Title` and `Reputation` colu
 
 ![user-table](./user-table.png)
 
-## Step-4
+## Step-3
 Open the `CustomizeUserDemoModuleExtensionConfigurator` in the **CustomizeUserDemo.Domain.Shared** project, and change the contents of the `ConfigureExtraProperties` method as shown below:
 ```csharp
 private static void ConfigureExtraProperties()
