@@ -176,6 +176,7 @@ $projects = (
     "framework/src/Volo.Abp.EventBus.Kafka",
     "framework/src/Volo.Abp.EventBus.Rebus",
     "framework/src/Volo.Abp.EventBus.Azure",
+    "framework/src/Volo.Abp.EventBus.Dapr",
     "framework/src/Volo.Abp.ExceptionHandling",
     "framework/src/Volo.Abp.Features",
     "framework/src/Volo.Abp.FluentValidation",
