@@ -155,6 +155,7 @@ $projects = (
     "framework/src/Volo.Abp.Core",
     "framework/src/Volo.Abp",
     "framework/src/Volo.Abp.Dapper",
+    "framework/src/Volo.Abp.Dapr",
     "framework/src/Volo.Abp.Data",
     "framework/src/Volo.Abp.Ddd.Application",
     "framework/src/Volo.Abp.Ddd.Application.Contracts",
