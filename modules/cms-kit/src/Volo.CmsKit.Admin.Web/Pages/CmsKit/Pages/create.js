@@ -90,7 +90,7 @@ $(function () {
     var fileUriPrefix = "/api/cms-kit/media/";
 
     initEditor();
-    
+
     var editor;
     function initEditor() {
         var $editorContainer = $("#ContentEditor");
@@ -133,7 +133,7 @@ $(function () {
             }
         });
     }
-    
+
     function uploadFile(blob, callback, source) {
         var UPPY_OPTIONS = {
             endpoint: fileUploadUri,
@@ -166,11 +166,17 @@ $(function () {
         });
     }
 
-    $('#GeneratedWidgetText').on('change',function () {
+    $('#GeneratedWidgetText').on('change', function () {
         var txt = $('#GeneratedWidgetText').val();
         editor.insertText(txt);
     });
-    
+
+    $('.tab-item').on('click', function () {
+        if ($(this).attr("aria-label") == 'Preview' && editor.isMarkdownMode()) {
+            editor.setMarkdown(editor.getMarkdown(), true);
+        }
+    });
+
     function createAddWidgetButton() {
         const button = document.createElement('button');
 
