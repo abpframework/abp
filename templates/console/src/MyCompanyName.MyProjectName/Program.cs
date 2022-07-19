@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using Volo.Abp;
 
 namespace MyCompanyName.MyProjectName;
 
@@ -27,13 +28,23 @@ public class Program
         {
             Log.Information("Starting console host.");
 
-            await Host.CreateDefaultBuilder(args)
-                .ConfigureServices(services =>
+            var builder = Host.CreateDefaultBuilder(args);
+
+            builder.ConfigureServices(services =>
+            {
+                services.AddHostedService<MyProjectNameHostedService>();
+                services.AddApplicationAsync<MyProjectNameModule>(options =>
                 {
-                    services.AddHostedService<MyProjectNameHostedService>();
-                })
-                .UseSerilog()
-                .RunConsoleAsync();
+                    options.Services.ReplaceConfiguration(services.GetConfiguration());
+                    options.UseAutofac();
+                    options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
+                });
+            }).UseConsoleLifetime();
+
+            var host = builder.Build();
+            await host.Services.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().InitializeAsync(host.Services);
+
+            await host.RunAsync();
 
             return 0;
         }
