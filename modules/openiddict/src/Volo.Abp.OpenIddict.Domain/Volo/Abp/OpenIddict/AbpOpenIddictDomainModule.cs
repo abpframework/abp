@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using OpenIddict.Abstractions;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
 using Volo.Abp.DistributedLocking;
@@ -67,6 +69,10 @@ public class AbpOpenIddictDomainModule : AbpModule
                     .AddAuthorizationStore<AbpOpenIddictAuthorizationStore>()
                     .AddScopeStore<AbpOpenIddictScopeStore>()
                     .AddTokenStore<AbpOpenIddictTokenStore>();
+
+                builder.ReplaceApplicationManager(typeof(AbpApplicationManager));
+
+                builder.Services.TryAddScoped(provider => (IAbpApplicationManager)provider.GetRequiredService<IOpenIddictApplicationManager>());
 
                 services.ExecutePreConfiguredActions(builder);
             });

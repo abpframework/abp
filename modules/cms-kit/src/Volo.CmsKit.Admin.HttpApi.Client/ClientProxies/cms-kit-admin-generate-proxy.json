@@ -1191,6 +1191,35 @@
             }
           }
         },
+        "Volo.CmsKit.Admin.Contents.ContentAdminController": {
+          "controllerName": "ContentAdmin",
+          "controllerGroupName": "ContentAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
+          "type": "Volo.CmsKit.Admin.Contents.ContentAdminController",
+          "interfaces": [
+            {
+              "type": "Volo.CmsKit.Admin.Contents.IContentAdminAppService"
+            }
+          ],
+          "actions": {
+            "GetWidgetsAsync": {
+              "uniqueName": "GetWidgetsAsync",
+              "name": "GetWidgetsAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit-admin/contents",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.CmsKit.Admin.Contents.ContentWidgetDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.CmsKit.Admin.Contents.ContentWidgetDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.CmsKit.Admin.Contents.IContentAdminAppService"
+            }
+          }
+        },
         "Volo.CmsKit.Admin.Comments.CommentAdminController": {
           "controllerName": "CommentAdmin",
           "controllerGroupName": "CommentAdmin",
@@ -1944,6 +1973,18 @@
                 {
                   "nameOnMethod": "input",
                   "name": "AuthorId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "TagId",
                   "jsonName": null,
                   "type": "System.Guid?",
                   "typeSimple": "string?",

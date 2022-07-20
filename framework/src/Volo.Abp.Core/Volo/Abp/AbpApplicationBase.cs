@@ -223,7 +223,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     {
         if (_configuredServices)
         {
-            throw new AbpInitializationException("Services have already been configured! If you call ConfigureServicesAsync method, you must have set AbpApplicationCreationOptions.SkipConfigureServices tu true before.");
+            throw new AbpInitializationException("Services have already been configured! If you call ConfigureServicesAsync method, you must have set AbpApplicationCreationOptions.SkipConfigureServices to true before.");
         }
     }
 
@@ -231,7 +231,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     public virtual void ConfigureServices()
     {
         CheckMultipleConfigureServices();
-        
+
         var context = new ServiceConfigurationContext(Services);
         Services.AddSingleton(context);
 

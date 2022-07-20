@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
+﻿using Volo.Abp.Cli.ProjectBuilding.Building;
+
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 public class AppTemplate : AppTemplateBase
 {
@@ -6,6 +8,8 @@ public class AppTemplate : AppTemplateBase
     /// "app".
     /// </summary>
     public const string TemplateName = "app";
+    
+    public const Theme DefaultTheme = Theme.LeptonXLite;
 
     public AppTemplate()
         : base(TemplateName)

@@ -285,7 +285,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         CancellationToken cancellationToken = default)
     {
         return (await GetQueryableAsync())
-            .OrderBy(sorting)
+            .OrderByIf<TEntity, IQueryable<TEntity>>(!sorting.IsNullOrWhiteSpace(), sorting)
             .PageBy(skipCount, maxResultCount)
             .ToList();
     }

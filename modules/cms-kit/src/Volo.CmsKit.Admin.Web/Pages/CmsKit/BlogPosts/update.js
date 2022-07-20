@@ -11,6 +11,7 @@ $(function () {
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
     var $buttonRemoveCoverImage = $('#button-remove-cover-image');
+    var widgetModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Contents/AddWidgetModal", modalClass: "addWidgetModal" });
 
     var UPPY_FILE_ID = "uppy-upload-file";
 
@@ -160,21 +161,16 @@ $(function () {
     var fileUploadUri = "/api/cms-kit-admin/media/blogpost";
     var fileUriPrefix = "/api/cms-kit/media/";
 
-    initAllEditors();
+    initEditor();
 
-    function initAllEditors() {
-        $('.content-editor').each(function (i, item) {
-            initEditor(item);
-        });
-    }
-
-    function initEditor(element) {
-        var $editorContainer = $(element);
+    var editor;
+    function initEditor() {
+        var $editorContainer = $("#ContentEditor");
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
 
-        var editor = new toastui.Editor({
+        editor = new toastui.Editor({
             el: $editorContainer[0],
             usageStatistics: false,
             useCommandShortcut: true,
@@ -185,6 +181,19 @@ $(function () {
             minHeight: "25em",
             initialEditType: 'markdown',
             language: $editorContainer.data("language"),
+            toolbarItems: [
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'image', 'link'],
+                ['code', 'codeblock'],
+                // Using Option: Customize the last button
+                [{
+                    el: createAddWidgetButton(),
+                    command: 'bold',
+                    tooltip: 'Add Widget'
+                }]
+            ],
             hooks: {
                 addImageBlobHook: uploadFile,
             },
@@ -240,4 +249,24 @@ $(function () {
             }
         );
     });
+
+    $('#GeneratedWidgetText').on('change', function () {
+        var txt = $('#GeneratedWidgetText').val();
+        editor.insertText(txt);
+    });
+
+    function createAddWidgetButton() {
+        const button = document.createElement('button');
+
+        button.className = 'toastui-editor-toolbar-icons last dropdown';
+        button.style.backgroundImage = 'none';
+        button.style.margin = '0';
+        button.innerHTML = `W`;
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            widgetModal.open();
+        });
+
+        return button;
+    }
 });

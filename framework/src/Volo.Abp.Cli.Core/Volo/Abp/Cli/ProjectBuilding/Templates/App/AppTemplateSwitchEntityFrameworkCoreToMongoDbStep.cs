@@ -45,16 +45,7 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
             _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
             "MongoDB"
         );
-
-        ChangeNamespaceAndKeyword(
-            context,
-            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyProjectNameIdentityServerModule.cs",
-            "MyCompanyName.MyProjectName.EntityFrameworkCore",
-            "MyCompanyName.MyProjectName.MongoDB",
-            _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
-            "MyProjectNameMongoDbModule"
-        );
-
+        
         ChangeNamespaceAndKeyword(
             context,
             "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyProjectNameAuthServerModule.cs",
@@ -210,6 +201,9 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
             "MyProjectNameMongoDbCollectionFixtureBase"
         );
 
+        // TODO: remove this method after published 6.0.0
+        ProvideIdentityServerBackwardCompatibility(context);
+
         if (context.BuildArgs.PublicWebSite)
         {
             ChangeProjectReference(
@@ -323,5 +317,32 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
         }
 
         throw new ApplicationException("Could not find the 'Default' connection string in appsettings.json file!");
+    }
+    
+    // TODO: remove this method after published 6.0.0
+    private void ProvideIdentityServerBackwardCompatibility(ProjectBuildContext context)
+    {
+        ChangeProjectReference(
+            context,
+            "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyCompanyName.MyProjectName.IdentityServer.csproj",
+            _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
+            "MongoDB"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyProjectNameIdentityServerModule.cs",
+            "MyCompanyName.MyProjectName.EntityFrameworkCore",
+            "MyCompanyName.MyProjectName.MongoDB",
+            _hasDbMigrations
+                ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule"
+                : "MyProjectNameEntityFrameworkCoreModule",
+            "MyProjectNameMongoDbModule"
+        );
+
+        ChangeConnectionStringToMongoDb(
+            context,
+            "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/appsettings.json"
+        );
     }
 }

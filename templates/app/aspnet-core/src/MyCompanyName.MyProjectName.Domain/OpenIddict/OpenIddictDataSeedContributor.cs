@@ -10,6 +10,7 @@ using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
@@ -21,14 +22,14 @@ namespace MyCompanyName.MyProjectName.OpenIddict;
 public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDependency
 {
     private readonly IConfiguration _configuration;
-    private readonly IOpenIddictApplicationManager _applicationManager;
+    private readonly IAbpApplicationManager _applicationManager;
     private readonly IOpenIddictScopeManager _scopeManager;
     private readonly IPermissionDataSeeder _permissionDataSeeder;
     private readonly IStringLocalizer<OpenIddictResponse> L;
 
     public OpenIddictDataSeedContributor(
         IConfiguration configuration,
-        IOpenIddictApplicationManager applicationManager,
+        IAbpApplicationManager applicationManager,
         IOpenIddictScopeManager scopeManager,
         IPermissionDataSeeder permissionDataSeeder,
         IStringLocalizer<OpenIddictResponse> l)
@@ -90,7 +91,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 type: OpenIddictConstants.ClientTypes.Confidential,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Web Application",
-                secret: configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*",
+                secret: configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*",
                 grantTypes: new List<string> //Hybrid flow
                 {
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
@@ -98,6 +99,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 },
                 scopes: commonScopes,
                 redirectUri: $"{webClientRootUrl}signin-oidc",
+                clientUri: webClientRootUrl,
                 postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
             );
         }
@@ -106,7 +108,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
         if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
         {
-            var webClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
+            var consoleAndAngularClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
             await CreateApplicationAsync(
                 name: consoleAndAngularClientId,
                 type: OpenIddictConstants.ClientTypes.Public,
@@ -121,8 +123,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     OpenIddictConstants.GrantTypes.RefreshToken
                 },
                 scopes: commonScopes,
-                redirectUri: webClientRootUrl,
-                postLogoutRedirectUri: webClientRootUrl
+                redirectUri: consoleAndAngularClientRootUrl,
+                clientUri: consoleAndAngularClientRootUrl,
+                postLogoutRedirectUri: consoleAndAngularClientRootUrl
             );
         }
 
@@ -144,6 +147,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 },
                 scopes: commonScopes,
                 redirectUri: $"{blazorRootUrl}/authentication/login-callback",
+                clientUri: blazorRootUrl,
                 postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
             );
         }
@@ -167,6 +171,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 },
                 scopes: commonScopes,
                 redirectUri: $"{blazorServerTieredRootUrl}signin-oidc",
+                clientUri: blazorServerTieredRootUrl,
                 postLogoutRedirectUri: $"{blazorServerTieredRootUrl}signout-callback-oidc"
             );
         }
@@ -188,7 +193,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
                 },
                 scopes: commonScopes,
-                redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html"
+                redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html",
+                clientUri: swaggerRootUrl
             );
         }
     }
@@ -201,6 +207,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         string secret,
         List<string> grantTypes,
         List<string> scopes,
+        string clientUri = null,
         string redirectUri = null,
         string postLogoutRedirectUri = null,
         List<string> permissions = null)
@@ -224,13 +231,14 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         var client = await _applicationManager.FindByClientIdAsync(name);
         if (client == null)
         {
-            var application = new OpenIddictApplicationDescriptor
+            var application = new AbpApplicationDescriptor
             {
                 ClientId = name,
                 Type = type,
                 ClientSecret = secret,
                 ConsentType = consentType,
-                DisplayName = displayName
+                DisplayName = displayName,
+                ClientUri = clientUri,
             };
 
             Check.NotNullOrEmpty(grantTypes, nameof(grantTypes));
@@ -272,6 +280,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     grantType == OpenIddictConstants.GrantTypes.DeviceCode)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
+                    application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Revocation);
                 }
 
                 if (grantType == OpenIddictConstants.GrantTypes.ClientCredentials)

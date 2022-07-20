@@ -28,7 +28,7 @@ export class FormSubmitDirective implements OnInit {
   notValidateOnSubmit: string | boolean;
 
   @Input()
-  markAsDirtyWhenSubmit = true
+  markAsDirtyWhenSubmit = true;
 
   @Output() readonly ngSubmit = new EventEmitter();
 

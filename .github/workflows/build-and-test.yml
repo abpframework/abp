@@ -31,6 +31,9 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+permissions:
+  contents: read
+
 jobs:
   build-test:
     runs-on: windows-latest

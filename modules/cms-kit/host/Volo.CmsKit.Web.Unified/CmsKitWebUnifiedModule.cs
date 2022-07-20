@@ -46,6 +46,7 @@ using Volo.CmsKit.Comments;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit;
 
@@ -145,11 +146,17 @@ public class CmsKitWebUnifiedModule : AbpModule
             options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
             options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+            options.Languages.Add(new LanguageInfo("el", "el", "Ελληνικά"));
         });
 
         Configure<AbpMultiTenancyOptions>(options =>
         {
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
+
+        Configure<CmsKitContentWidgetOptions>(options =>
+        {
+            options.AddWidget("ExComment", "CommentDate", "DecisionCommentDate");
         });
     }
 

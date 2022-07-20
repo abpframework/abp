@@ -20,7 +20,9 @@ namespace Volo.Abp.Caching;
 /// Represents a distributed cache of <typeparamref name="TCacheItem" /> type.
 /// </summary>
 /// <typeparam name="TCacheItem">The type of cache item being cached.</typeparam>
-public class DistributedCache<TCacheItem> : DistributedCache<TCacheItem, string>, IDistributedCache<TCacheItem>
+public class DistributedCache<TCacheItem> : 
+    DistributedCache<TCacheItem, string>,
+    IDistributedCache<TCacheItem>
     where TCacheItem : class
 {
     public DistributedCache(

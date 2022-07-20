@@ -64,7 +64,7 @@ public class BlazorServerLookupApiRequestService : ILookupApiRequestService, ITr
                 client.BaseAddress = new Uri(baseUrl);
                 foreach (var header in HttpContextAccessor.HttpContext.Request.Headers)
                 {
-                    requestMessage.Headers.Add(header.Key, header.Value.ToArray());
+                    requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
                 }
             }
         }

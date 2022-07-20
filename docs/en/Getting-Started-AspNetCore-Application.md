@@ -77,7 +77,7 @@ using BasicAspNetCoreApplication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-await builder.Services.AddApplicationAsync<AppModule>();
+await builder.AddApplicationAsync<AppModule>();
 
 var app = builder.Build();
 
@@ -85,7 +85,7 @@ await app.InitializeApplicationAsync();
 await app.RunAsync();
 ````
 
-``builder.Services.AddApplicationAsync<AppModule>();`` adds all services defined in all modules starting from the ``AppModule``.
+``builder.AddApplicationAsync<AppModule>();`` adds all services defined in all modules starting from the ``AppModule``.
 
 ``app.InitializeApplicationAsync()`` initializes and starts the application.
 
@@ -125,7 +125,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseAutofac();  //Add this line
 
-await builder.Services.AddApplicationAsync<AppModule>();
+await builder.AddApplicationAsync<AppModule>();
 
 var app = builder.Build();
 

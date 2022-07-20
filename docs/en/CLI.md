@@ -27,12 +27,14 @@ While each command may have a set of options, there are some global options that
 Here, is the list of all available commands before explaining their details:
 
 * **`help`**: Shows help on the usage of the ABP CLI.
+* **`cli`**: Update or remove ABP CLI.
 * **`new`**: Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
 * **`list-modules`**: Lists names of open-source application modules.
+* **`list-templates`**: Lists the names of available templates to create a solution.
 * **`get-source`**: Downloads the source code of a module.
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
 * **`remove-proxy`**: Removes previously generated client side proxies.
@@ -61,6 +63,25 @@ Examples:
 ````bash
 abp help        # Shows a general help.
 abp help new    # Shows help about the "new" command.
+````
+
+### cli
+
+Update or remove ABP CLI.
+
+Usage:
+
+````bash
+abp cli [command-name]
+````
+
+Examples:
+
+````bash
+abp cli update
+abp cli update --preview
+abp cli update --version 5.0.0
+abp cli remove
 ````
 
 ### new
@@ -106,6 +127,9 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
+    * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
+        * `leptonx-lite`: [LeptonX Lite Theme](/Themes/LeptonXLite/mvc.md).
+        * `basic`: [Basic Theme](/UI/AspNetCore/Basic-Theme.md).
   * **`module`**: [Module template](Startup-Templates/Module.md). Additional options:
     * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
   * **`console`**: [Console template](Startup-Templates/Console.md).
@@ -118,6 +142,9 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
+    * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
+        * `leptonx-lite`: [LeptonX Lite Theme](/Themes/LeptonXLite/mvc.md).
+        * `basic`: [Basic Theme](/UI/AspNetCore/Basic-Theme.md).        
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
 * `--preview`: Use latest preview version.
@@ -193,7 +220,7 @@ Example:
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 ````
 
-* This example adds the Volo.Abp.MongoDB package to the project.
+* This example adds the `Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic` package to the project.
 
 #### Options
 

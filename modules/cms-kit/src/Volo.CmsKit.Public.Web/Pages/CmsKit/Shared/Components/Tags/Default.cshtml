@@ -10,19 +10,14 @@
             {
                 if (Model.UrlFormat.IsNullOrWhiteSpace())
                 {
-
-                    <span class="badge bg-light px-3 py-2 cmskit-tag font-weight-normal">
+                    <span class="badge rounded-pill bg-light text-dark px-3 py-2 cmskit-tag font-weight-normal">
                         @tag.Name
                     </span>
                 }
                 else
                 {
                     var formattedUrl = Model.UrlFormat.Replace("{TagId}", tag.Id.ToString());
-                    <a href="@formattedUrl">
-                        <span class="badge bg-light px-3 py-2 cmskit-tag font-weight-normal">
-                            @tag.Name
-                        </span>
-                    </a>
+                    <a href="@formattedUrl"><span class="badge rounded-pill bg-light text-dark px-3 py-2 cmskit-tag font-weight-normal">@tag.Name</span></a>
                 }
             }
         }

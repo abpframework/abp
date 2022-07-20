@@ -15,7 +15,7 @@ The Basic Theme is a theme implementation for the Blazor UI. It is a minimalist 
 
 ## Installation
 
-**This theme is already installed** when you create a new solution using the [startup templates](../../Startup-Templates/Index.md). If you need to manually install it, follow the steps below:
+If you need to manually this theme, follow the steps below:
 
 {{if UI == "Blazor"}}
 
@@ -87,7 +87,7 @@ See the [Customization / Overriding Components](Customization-Overriding-Compone
 
 ### Copy & Customize
 
-You can run the following [ABP CLI](../../CLI.md) command in **Blazor WebAssembly** project directory to copy the source code to your solution:
+You can run the following [ABP CLI](../../CLI.md) command in **Blazor{{if UI == "Blazor"}}WebAssembly{{else}} Server{{end}}** project directory to copy the source code to your solution:
 
 {{if UI == "Blazor"}}
 

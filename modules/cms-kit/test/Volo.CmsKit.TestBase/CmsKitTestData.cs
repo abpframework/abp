@@ -127,4 +127,8 @@ public class CmsKitTestData : ISingletonDependency
     public string MenuItem_3_Name { get; } = "Products";
 
     public string MenuItem_3_Url { get; } = "/products";
+
+    public string PollName { get; } = "Poll";
+
+    public string WidgetName { get; } = "CmsPollByCode";
 }

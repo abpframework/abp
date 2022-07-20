@@ -7,6 +7,8 @@ LeptonX Lite has implementation for the ABP Framework Angular Client. It's a sim
 
 ## Installation
 
+This theme is **already installed** when you create a new solution using the startup templates. If you are using any other template, you can install this theme by following the steps below:
+
 To add `LeptonX-lite` into your project,
 
 * Install `@abp/ng.theme.lepton-x`
@@ -79,4 +81,4 @@ To change the logos and brand color of `LeptonX`, simply add the following CSS t
 
 ### Server Side
 
-In order to migrate to LeptonX on your server side projects (Host and/or AuthServer projects), please follow the [Server Side Migration](mvc.md) document.
+In order to migrate to LeptonX on your server side projects (Host and/or AuthServer projects), please follow the [Server Side Migration](AspNetCore.md) document.
