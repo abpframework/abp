@@ -12,13 +12,13 @@
                 {
                     @if (Model.CurrentRating != null)
                     {
-                        <a href="#" class="rating-undo-link">
+                        <a href="#" class="rating-undo-link text-decoration-none">
                             <small class="text-muted"><i class="fa fa-undo"></i> @L["Undo"]</small>
                         </a>
                     }
                     if (Model.Ratings != null)
                     {
-                        <a href="#" class="text-muted ms-1" data-bs-toggle="modal" data-bs-target="#ratingDetail">
+                        <a href="#" class="text-muted ms-1 text-decoration-none" data-bs-toggle="modal" data-bs-target="#ratingDetail">
                             <i class="far fa-question-circle"></i>
                         </a>
 
