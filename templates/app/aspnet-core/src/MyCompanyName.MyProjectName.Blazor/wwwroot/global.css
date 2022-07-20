@@ -5516,7 +5516,9 @@ select.form-select option:checked[selected], select.form-select option:focus[sel
 
 .alert-brand {
   color: #686b6e;
-  background: rgba(247, 37, 133, 0.2);
+  background: rgba(247, 37, 133, 0.35);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .alert-brand a,
 .alert-brand .icon,
@@ -5527,7 +5529,9 @@ select.form-select option:checked[selected], select.form-select option:focus[sel
 
 .alert-primary {
   color: #686b6e;
-  background: rgba(53, 93, 255, 0.2);
+  background: rgba(53, 93, 255, 0.35);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .alert-primary a,
 .alert-primary .icon,
@@ -5538,7 +5542,9 @@ select.form-select option:checked[selected], select.form-select option:focus[sel
 
 .alert-secondary {
   color: #686b6e;
-  background: rgba(108, 93, 211, 0.2);
+  background: rgba(108, 93, 211, 0.35);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .alert-secondary a,
 .alert-secondary .icon,
@@ -5549,7 +5555,9 @@ select.form-select option:checked[selected], select.form-select option:focus[sel
 
 .alert-success {
   color: #686b6e;
-  background: rgba(79, 191, 103, 0.2);
+  background: rgba(79, 191, 103, 0.35);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .alert-success a,
 .alert-success .icon,
@@ -5560,7 +5568,9 @@ select.form-select option:checked[selected], select.form-select option:focus[sel
 
 .alert-info {
   color: #686b6e;
-  background: rgba(67, 138, 167, 0.2);
+  background: rgba(67, 138, 167, 0.35);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .alert-info a,
 .alert-info .icon,
@@ -5571,7 +5581,9 @@ select.form-select option:checked[selected], select.form-select option:focus[sel
 
 .alert-warning {
   color: #686b6e;
-  background: rgba(255, 159, 56, 0.2);
+  background: rgba(255, 159, 56, 0.35);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .alert-warning a,
 .alert-warning .icon,
@@ -5582,7 +5594,9 @@ select.form-select option:checked[selected], select.form-select option:focus[sel
 
 .alert-danger {
   color: #686b6e;
-  background: rgba(192, 13, 73, 0.2);
+  background: rgba(192, 13, 73, 0.35);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .alert-danger a,
 .alert-danger .icon,
@@ -5593,7 +5607,9 @@ select.form-select option:checked[selected], select.form-select option:focus[sel
 
 .alert-light {
   color: #686b6e;
-  background: rgba(245, 245, 247, 0.2);
+  background: rgba(245, 245, 247, 0.35);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .alert-light a,
 .alert-light .icon,
@@ -5604,7 +5620,9 @@ select.form-select option:checked[selected], select.form-select option:focus[sel
 
 .alert-dark {
   color: #686b6e;
-  background: rgba(22, 22, 22, 0.2);
+  background: rgba(22, 22, 22, 0.35);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .alert-dark a,
 .alert-dark .icon,
@@ -12073,6 +12091,19 @@ body {
 
 .lpx-nav {
   padding-top: 72px;
+}
+
+.lpx-topbar-content {
+  display: flex;
+  align-items: center;
+  margin-right: 0.4rem;
+  gap: 0.7rem;
+  font-size: 0.875em;
+}
+.lpx-topbar-content .lpx-avatar .lpx-avatar-img,
+.lpx-topbar-content .lpx-avatar .lpx-avatar-icon {
+  height: 24px;
+  width: 24px;
 }
 
 @media only screen and (min-width: 1200px) {
