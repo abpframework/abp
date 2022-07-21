@@ -12,9 +12,9 @@ public class IndexModel : CommonPageModel
 
     protected IPagePublicAppService PagePublicAppService { get; }
 
-    public PageDto PageDto{ get; private set; }
+    public PageDto PageDto { get; private set; }
 
-public IndexModel(IPagePublicAppService pagePublicAppService)
+    public IndexModel(IPagePublicAppService pagePublicAppService)
     {
         PagePublicAppService = pagePublicAppService;
     }
