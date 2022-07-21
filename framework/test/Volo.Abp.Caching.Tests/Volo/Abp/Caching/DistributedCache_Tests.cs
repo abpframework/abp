@@ -949,7 +949,7 @@ public class DistributedCache_Tests : AbpIntegratedTest<AbpCachingTestModule>
     }
 
     [Fact]
-    public async Task Should_Get_Same_Instance_When_Resolve_With_Or_Without_Key()
+    public async Task Should_Get_Same_Cache_Set_When_Resolve_With_Or_Without_Key()
     {
         var cache1 = GetRequiredService<IDistributedCache<PersonCacheItem>>();
         var cache2 = GetRequiredService<IDistributedCache<PersonCacheItem, string>>();
