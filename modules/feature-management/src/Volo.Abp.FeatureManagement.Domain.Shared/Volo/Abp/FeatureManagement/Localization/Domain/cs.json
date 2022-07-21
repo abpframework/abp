@@ -3,6 +3,7 @@
   "texts": {
     "Features": "Funkce",
     "NoFeatureFoundMessage": "Nejsou zde dostupné žádné funkce.",
+    "ManageHostFeatures": "Správa funkcí hostitele",
     "Permission:FeatureManagement": "Správa funkcí",
     "Permission:FeatureManagement.ManageHostFeatures": "Správa funkcí hostitele",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Hodnota funkce {0} není platná!"

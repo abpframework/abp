@@ -3,6 +3,7 @@
     "texts": {
       "Features": "Funkciók",
       "NoFeatureFoundMessage": "Nincs elérhető funkció.",
+      "ManageHostFeatures": "Host funkciók kezelése",
       "Permission:FeatureManagement": "Funkciókezelés",
       "Permission:FeatureManagement.ManageHostFeatures": "Host funkciók kezelése",
       "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "A (z) {0} szolgáltatás értéke érvénytelen!"

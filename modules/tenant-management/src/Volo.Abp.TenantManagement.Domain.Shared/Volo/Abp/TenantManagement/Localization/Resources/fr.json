@@ -10,7 +10,6 @@
   "ConnectionStrings": "Chaînes de connexion",
   "DisplayName:DefaultConnectionString": "Chaîne de connexion par défaut",
   "DisplayName:UseSharedDatabase": "Utiliser la base de données partagée",
-  "ManageHostFeatures": "Gérer les fonctionnalités de l’hôte",
   "Permission:TenantManagement": "Gestion des locataires",
   "Permission:Create": "Créer",
   "Permission:Edit": "Modifier",
