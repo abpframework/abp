@@ -37,9 +37,9 @@ public class AbpDateTimeConverter : JsonConverter<DateTime>, ITransientDependenc
             throw new JsonException("Reader's TokenType is not String!");
         }
 
-        if (reader.TryGetDateTime(out var d2))
+        if (reader.TryGetDateTime(out var d3))
         {
-            return _clock.Normalize(d2);
+            return _clock.Normalize(d3);
         }
 
         throw new JsonException("Can't get datetime from the reader!");

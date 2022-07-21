@@ -409,6 +409,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.RemoteServices", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.PlugIn", "test\Volo.Abp.AspNetCore.Mvc.PlugIn\Volo.Abp.AspNetCore.Mvc.PlugIn.csproj", "{C6D6D878-208A-4FD2-822E-365545D8681B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Json.Newtonsoft", "src\Volo.Abp.Json.Newtonsoft\Volo.Abp.Json.Newtonsoft.csproj", "{9DD41C8F-0886-483C-B98B-C55EAA7F226D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Json.SystemTextJson", "src\Volo.Abp.Json.SystemTextJson\Volo.Abp.Json.SystemTextJson.csproj", "{0AD06E14-CBFE-4551-8D18-9E921D8F2A87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Json.Core", "src\Volo.Abp.Json.Core\Volo.Abp.Json.Core.csproj", "{08531C5D-0436-4721-986D-96446CF54316}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1219,6 +1225,18 @@ Global
 		{C6D6D878-208A-4FD2-822E-365545D8681B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6D6D878-208A-4FD2-822E-365545D8681B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6D6D878-208A-4FD2-822E-365545D8681B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DD41C8F-0886-483C-B98B-C55EAA7F226D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DD41C8F-0886-483C-B98B-C55EAA7F226D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DD41C8F-0886-483C-B98B-C55EAA7F226D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DD41C8F-0886-483C-B98B-C55EAA7F226D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AD06E14-CBFE-4551-8D18-9E921D8F2A87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD06E14-CBFE-4551-8D18-9E921D8F2A87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AD06E14-CBFE-4551-8D18-9E921D8F2A87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AD06E14-CBFE-4551-8D18-9E921D8F2A87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08531C5D-0436-4721-986D-96446CF54316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08531C5D-0436-4721-986D-96446CF54316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08531C5D-0436-4721-986D-96446CF54316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08531C5D-0436-4721-986D-96446CF54316}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1425,6 +1443,9 @@ Global
 		{3683340D-92F5-4B14-B77B-34A163333309} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{EDFFDA74-090D-439C-A58D-06CCF86D4423} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{C6D6D878-208A-4FD2-822E-365545D8681B} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{9DD41C8F-0886-483C-B98B-C55EAA7F226D} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{0AD06E14-CBFE-4551-8D18-9E921D8F2A87} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{08531C5D-0436-4721-986D-96446CF54316} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
