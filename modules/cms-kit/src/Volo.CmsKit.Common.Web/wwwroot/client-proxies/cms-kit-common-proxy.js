@@ -20,6 +20,21 @@
 
   })();
 
+  // controller volo.cmsKit.contents.content
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.contents.content');
+
+    volo.cmsKit.contents.content.parse = function(content, parse, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit/contents/' + parse + '' + abp.utils.buildQueryString([{ name: 'content', value: content }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+  })();
+
   // controller volo.cmsKit.blogs.blogFeature
 
   (function(){
