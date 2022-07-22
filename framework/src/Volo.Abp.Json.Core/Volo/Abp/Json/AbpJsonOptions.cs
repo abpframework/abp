@@ -9,17 +9,10 @@ public class AbpJsonOptions
     /// </summary>
     public string DefaultDateTimeFormat { get; set; }
 
-    /// <summary>
-    /// It will try to use System.Json.Text to handle JSON if it can otherwise use Newtonsoft.
-    /// Affects both AbpJsonModule and AbpAspNetCoreMvcModule.
-    /// </summary>
-    public bool UseHybridSerializer { get; set; }
-
     public ITypeList<IJsonSerializerProvider> Providers { get; }
 
     public AbpJsonOptions()
     {
         Providers = new TypeList<IJsonSerializerProvider>();
-        UseHybridSerializer = true;
     }
 }

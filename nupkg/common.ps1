@@ -112,6 +112,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.Client.Common",
     "framework/src/Volo.Abp.AspNetCore.Mvc.Contracts",
     "framework/src/Volo.Abp.AspNetCore.Mvc",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.NewtonsoftJson",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling",

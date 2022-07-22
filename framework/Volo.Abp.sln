@@ -415,6 +415,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Json.SystemTextJso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Json.Core", "src\Volo.Abp.Json.Core\Volo.Abp.Json.Core.csproj", "{08531C5D-0436-4721-986D-96446CF54316}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.NewtonsoftJson", "src\Volo.Abp.AspNetCore.Mvc.NewtonsoftJson\Volo.Abp.AspNetCore.Mvc.NewtonsoftJson.csproj", "{0CFC9D4F-F12F-4B44-ABCF-AB4A0E9E85B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1237,6 +1239,10 @@ Global
 		{08531C5D-0436-4721-986D-96446CF54316}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08531C5D-0436-4721-986D-96446CF54316}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08531C5D-0436-4721-986D-96446CF54316}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CFC9D4F-F12F-4B44-ABCF-AB4A0E9E85B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CFC9D4F-F12F-4B44-ABCF-AB4A0E9E85B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CFC9D4F-F12F-4B44-ABCF-AB4A0E9E85B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CFC9D4F-F12F-4B44-ABCF-AB4A0E9E85B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1446,6 +1452,7 @@ Global
 		{9DD41C8F-0886-483C-B98B-C55EAA7F226D} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{0AD06E14-CBFE-4551-8D18-9E921D8F2A87} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{08531C5D-0436-4721-986D-96446CF54316} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{0CFC9D4F-F12F-4B44-ABCF-AB4A0E9E85B2} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

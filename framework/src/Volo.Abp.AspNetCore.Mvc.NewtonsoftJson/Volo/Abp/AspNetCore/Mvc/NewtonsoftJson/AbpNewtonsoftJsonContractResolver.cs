@@ -8,13 +8,13 @@ using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.AspNetCore.Mvc.Json;
+namespace Volo.Abp.AspNetCore.Mvc.NewtonsoftJson;
 
-public class AbpMvcJsonContractResolver : DefaultContractResolver, ITransientDependency
+public class AbpNewtonsoftJsonContractResolver : DefaultContractResolver, ITransientDependency
 {
     private readonly Lazy<AbpJsonIsoDateTimeConverter> _dateTimeConverter;
 
-    public AbpMvcJsonContractResolver(IServiceProvider serviceProvider)
+    public AbpNewtonsoftJsonContractResolver(IServiceProvider serviceProvider)
     {
         _dateTimeConverter = new Lazy<AbpJsonIsoDateTimeConverter>(
             serviceProvider.GetRequiredService<AbpJsonIsoDateTimeConverter>,

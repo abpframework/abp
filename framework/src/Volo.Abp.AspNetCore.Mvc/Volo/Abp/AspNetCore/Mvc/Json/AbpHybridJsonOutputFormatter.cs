@@ -1,21 +1,16 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Json.SystemTextJson;
+using Microsoft.Extensions.Options;
 
 namespace Volo.Abp.AspNetCore.Mvc.Json;
 
 public class AbpHybridJsonOutputFormatter : TextOutputFormatter
 {
-    private readonly SystemTextJsonOutputFormatter _systemTextJsonOutputFormatter;
-    private readonly NewtonsoftJsonOutputFormatter _newtonsoftJsonOutputFormatter;
-
-    public AbpHybridJsonOutputFormatter(SystemTextJsonOutputFormatter systemTextJsonOutputFormatter, NewtonsoftJsonOutputFormatter newtonsoftJsonOutputFormatter)
+    public AbpHybridJsonOutputFormatter()
     {
-        _systemTextJsonOutputFormatter = systemTextJsonOutputFormatter;
-        _newtonsoftJsonOutputFormatter = newtonsoftJsonOutputFormatter;
-
         SupportedEncodings.Add(Encoding.UTF8);
         SupportedEncodings.Add(Encoding.Unicode);
 
@@ -24,19 +19,24 @@ public class AbpHybridJsonOutputFormatter : TextOutputFormatter
         SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationAnyJsonSyntax);
     }
 
-    public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
+    public async override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
     {
-        await GetTextInputFormatter(context).WriteResponseBodyAsync(context, selectedEncoding);
+        await (await GetTextInputFormatter(context)).WriteResponseBodyAsync(context, selectedEncoding);
     }
 
-    protected virtual TextOutputFormatter GetTextInputFormatter(OutputFormatterWriteContext context)
+    protected virtual async Task<TextOutputFormatter> GetTextInputFormatter(OutputFormatterWriteContext context)
     {
-        var typesMatcher = context.HttpContext.RequestServices.GetRequiredService<AbpSystemTextJsonUnsupportedTypeMatcher>();
-        if (!typesMatcher.Match(context.ObjectType))
+        var options = context.HttpContext.RequestServices.GetRequiredService<IOptions<AbpHybridJsonFormatterOptions>>().Value;
+
+        foreach (var outputFormatterType in options.TextOutputFormatters)
         {
-            return _systemTextJsonOutputFormatter;
+            var outputFormatter = context.HttpContext.RequestServices.GetRequiredService(outputFormatterType).As<IAbpHybridJsonOutputFormatter>();
+            if (await outputFormatter.CanHandleAsync(context.ObjectType))
+            {
+                return await outputFormatter.GetTextOutputFormatterAsync();
+            }
         }
 
-        return _newtonsoftJsonOutputFormatter;
+        throw new AbpException($"The {nameof(AbpHybridJsonOutputFormatter)} can't handle '{context.ObjectType.GetFullNameWithAssemblyName()}'!");
     }
 }
