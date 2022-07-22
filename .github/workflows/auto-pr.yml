@@ -1,4 +1,4 @@
-name: Merge branch dev with rel-5.3
+name: Merge branch rel-6.0 with rel-5.3
 on:
   push:
     branches:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: dev
+          ref: rel-6.0
       - name: Reset promotion branch
         run: |
           git fetch origin rel-5.3:rel-5.3
@@ -24,7 +24,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           branch: auto-merge/rel-5-3/${{github.run_number}}
-          title: Merge branch dev with rel-5.3
-          body: This PR generated automatically to merge dev with rel-5.3. Please review the changed files before merging to prevent any errors that may occur.
+          title: Merge branch rel-6.0 with rel-5.3
+          body: This PR generated automatically to merge rel-6.0 with rel-5.3. Please review the changed files before merging to prevent any errors that may occur.
           reviewers: ${{github.actor}}
           token: ${{ github.token }}
