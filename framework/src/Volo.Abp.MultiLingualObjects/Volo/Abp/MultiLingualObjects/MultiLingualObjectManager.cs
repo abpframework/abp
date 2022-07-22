@@ -19,7 +19,10 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
     {
         SettingProvider = settingProvider;
     }
-    public virtual async Task<TTranslation> GetTranslationAsync<TTranslation>(ICollection<TTranslation> translations, string culture, bool fallbackToParentCultures)
+    public virtual async Task<TTranslation> GetTranslationAsync<TTranslation>(
+        ICollection<TTranslation> translations,
+        string culture,
+        bool fallbackToParentCultures)
         where TTranslation : class, IObjectTranslation
 
     {
