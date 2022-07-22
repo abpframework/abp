@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System;
 using Volo.Abp.Application.Dtos;
-using Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Public.Pages;
+namespace Volo.CmsKit.Contents;
 
 [Serializable]
 public class PageDto : EntityDto<Guid>
@@ -13,7 +12,7 @@ public class PageDto : EntityDto<Guid>
     public string Slug { get; set; }
 
     public string Content { get; set; }
-    
+
     public List<ContentFragment> ContentFragments { get; set; }
 
     public string Script { get; set; }
