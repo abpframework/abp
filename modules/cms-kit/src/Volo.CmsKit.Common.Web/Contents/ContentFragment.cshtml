@@ -1,0 +1,20 @@
+﻿@using Volo.CmsKit.Web.Contents;
+@using System.Dynamic
+@using Volo.Abp.Data
+@using Volo.CmsKit.Web.Renderers;
+
+@model ContentFragmentViewComponent
+
+@inject IMarkdownToHtmlRenderer MarkdownRenderer
+
+@foreach (var contentFragment in Model.PageDto.ContentFragments)
+{
+    if (contentFragment.Type == "Markdown")
+    {
+        @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
+    }
+    else if (contentFragment.Type == "Widget")
+    {
+        @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
+    }
+}
