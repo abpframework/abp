@@ -1,6 +1,6 @@
 $(function () {
     var l = abp.localization.getResource("CmsKit");
-
+    
     var $createForm = $('#form-page-create');
     var $title = $('#ViewModel_Title');
     var $slug = $('#ViewModel_Slug');
@@ -173,7 +173,17 @@ $(function () {
 
     $('.tab-item').on('click', function () {
         if ($(this).attr("aria-label") == 'Preview' && editor.isMarkdownMode()) {
-            editor.setMarkdown(editor.getMarkdown(), true);
+
+            let content = editor.getMarkdown();
+            localStorage.setItem('content', content);
+            
+            volo.cmsKit.contents.content.parseAsHtml(content).then(function (data) {
+                editor.setHTML(data);
+            });
+        }
+        else if ($(this).attr("aria-label") == 'Write'){
+            var retrievedObject = localStorage.getItem('content');
+            editor.setMarkdown(retrievedObject);
         }
     });
 
