@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Json;
+using Volo.Abp.Json.Newtonsoft;
 
 namespace Volo.Abp.FeatureManagement;
 
@@ -9,7 +10,7 @@ public class SystemTextJsonStringValueJsonConverter_Tests : StringValueJsonConve
     {
         services.PreConfigure<AbpJsonOptions>(options =>
         {
-            options.UseHybridSerializer = true;
+            options.Providers.Remove<AbpNewtonsoftJsonSerializerProvider>();
         });
     }
 }
