@@ -165,14 +165,14 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
                 arguments: Queue.Arguments
             );
 
-            var consumer = new AsyncEventingBasicConsumer(Channel);
-            consumer.Received += HandleIncomingMessageAsync;
-
             if (Queue.PrefetchCount.HasValue)
             {
                 Channel.BasicQos(0, Queue.PrefetchCount.Value, false);
             }
-
+            
+            var consumer = new AsyncEventingBasicConsumer(Channel);
+            consumer.Received += HandleIncomingMessageAsync;
+            
             Channel.BasicConsume(
                 queue: Queue.QueueName,
                 autoAck: false,

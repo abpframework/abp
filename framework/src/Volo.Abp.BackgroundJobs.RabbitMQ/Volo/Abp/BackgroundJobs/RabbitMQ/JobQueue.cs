@@ -141,13 +141,13 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
 
         if (AbpBackgroundJobOptions.IsJobExecutionEnabled)
         {
-            Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
-            Consumer.Received += MessageReceived;
-
             if (QueueConfiguration.PrefetchCount.HasValue)
             {
                 ChannelAccessor.Channel.BasicQos(0, QueueConfiguration.PrefetchCount.Value, false);
             }
+            
+            Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
+            Consumer.Received += MessageReceived;
             
             //TODO: What BasicConsume returns?
             ChannelAccessor.Channel.BasicConsume(
