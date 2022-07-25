@@ -66,7 +66,9 @@ public class SettingPageContributorManager : IScopedDependency
             if (available)
             {
                 var requiredTenantSideFeatures = contributor.GetRequiredFeatures(MultiTenancySides.Tenant);
-                if (requiredTenantSideFeatures.Any() && !await featureChecker.IsEnabledAsync(true, requiredTenantSideFeatures.ToArray()))
+                if (requiredTenantSideFeatures.Any() &&
+                    ServiceProvider.GetRequiredService<ICurrentTenant>().IsAvailable &&
+                    !await featureChecker.IsEnabledAsync(true, requiredTenantSideFeatures.ToArray()))
                 {
                     available = false;
                 }
