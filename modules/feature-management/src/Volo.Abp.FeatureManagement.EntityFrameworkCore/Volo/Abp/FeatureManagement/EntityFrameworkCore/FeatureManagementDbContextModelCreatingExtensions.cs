@@ -17,7 +17,7 @@ public static class FeatureManagementDbContextModelCreatingExtensions
 
         builder.Entity<FeatureValue>(b =>
         {
-            b.ToTable(FeatureManagementDbProperties.DbTablePrefix + "FeatureValues", FeatureManagementDbProperties.DbSchema);
+            b.ToTable(AbpFeatureManagementDbProperties.DbTablePrefix + "FeatureValues", AbpFeatureManagementDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
