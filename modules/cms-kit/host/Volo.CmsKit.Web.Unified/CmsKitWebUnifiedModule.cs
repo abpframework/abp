@@ -153,7 +153,7 @@ public class CmsKitWebUnifiedModule : AbpModule
 
         Configure<CmsKitContentWidgetOptions>(options =>
         {
-            options.AddWidget("ExComment", "CommentDate", "DecisionCommentDate");
+            options.AddWidget("Today", "CmsToday", "Format");
         });
     }
 
