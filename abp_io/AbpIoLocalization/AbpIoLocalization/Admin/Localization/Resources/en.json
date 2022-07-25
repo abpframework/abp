@@ -399,6 +399,6 @@
     "AllowFeatureUpgradeOnLicenseExpire": "Allow feature upgrade on license expire",
     "Deleted{0}": "[Deleted {0}]",
     "Tags": "Tags",
-    "SetTagsInfo": "Enter tags separated by commas. Example CSharp, Entity Framework"
+    "SetTagsInfo": "Tags should be comma-separated. Eg: CSharp, Entity Framework"
   }
 }
