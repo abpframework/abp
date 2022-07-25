@@ -294,7 +294,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
         {
-            ((ISoftDelete)entity).IsDeleted = true;
+            ObjectHelper.TrySetProperty(((ISoftDelete)entity), x => x.IsDeleted, () => true);
             ApplyAbpConceptsForDeletedEntity(entity);
 
             ReplaceOneResult result;
@@ -365,8 +365,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         {
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
             {
-                ((ISoftDelete)entity).IsDeleted = true;
-
+                ObjectHelper.TrySetProperty(((ISoftDelete)entity), x => x.IsDeleted, () => true);
                 softDeletedEntities.Add(entity, SetNewConcurrencyStamp(entity));
             }
             else
