@@ -20,23 +20,25 @@
         <abp-modal-body>
             <div class="container">
                 @if (Model.Widgets.Count() > 1)
-            {
-
-                <abp-select asp-for="ViewModel.Widget" />
-
-                foreach (var item in Model.ViewModel.Details)
                 {
-                    <div hidden id="editor-@item.Name">
-                        <form data-check-form-on-close="false">
-                            @await Component.InvokeAsync(@item.EditorComponentName)
-                        </form>
-                    </div>
+                    <abp-select asp-for="ViewModel.Widget" />
+
+                    foreach (var item in Model.ViewModel.Details)
+                    {
+                        if (item.EditorComponentName is not null)
+                        {
+                            <div hidden id="editor-@item.Name">
+                                <form data-check-form-on-close="false">
+                                    @await Component.InvokeAsync(@item.EditorComponentName)
+                                </form>
+                            </div>
+                        }
+                    }
                 }
-            }
-            else
-            {
-                <p>@L["PleaseConfigureWidgets"].Value</p>
-            }
+                else
+                {
+                    <p>@L["PleaseConfigureWidgets"].Value</p>
+                }
         </div>
     </abp-modal-body>
     <abp-modal-footer>
