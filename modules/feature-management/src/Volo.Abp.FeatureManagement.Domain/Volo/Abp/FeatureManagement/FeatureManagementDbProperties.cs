@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.FeatureManagement;
 
-public static class FeatureManagementDbProperties
+public static class AbpFeatureManagementDbProperties
 {
     public static string DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
 

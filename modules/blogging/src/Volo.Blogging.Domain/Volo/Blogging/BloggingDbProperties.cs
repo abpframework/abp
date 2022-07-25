@@ -1,6 +1,6 @@
 ﻿namespace Volo.Blogging
 {
-    public static class BloggingDbProperties
+    public static class AbpBloggingDbProperties
     {
         /// <summary>
         /// Default value: "Blg".

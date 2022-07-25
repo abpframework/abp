@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.BlobStoring.Database;
 
-public static class BlobStoringDatabaseDbProperties
+public static class AbpBlobStoringDatabaseDbProperties
 {
     public static string DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
 

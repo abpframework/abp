@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.BackgroundJobs;
 
-public static class BackgroundJobsDbProperties
+public static class AbpBackgroundJobsDbProperties
 {
     public static string DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
 
