@@ -26,11 +26,14 @@
 
                 foreach (var item in Model.ViewModel.Details)
                 {
-                    <div hidden id="editor-@item.Name">
-                        <form data-check-form-on-close="false">
-                            @await Component.InvokeAsync(@item.EditorComponentName)
-                        </form>
-                    </div>
+                    if (item.EditorComponentName is not null)
+                    {
+                        <div hidden id="editor-@item.Name">
+                            <form data-check-form-on-close="false">
+                                @await Component.InvokeAsync(@item.EditorComponentName)
+                            </form>
+                        </div>
+                    }
                 }
             }
             else
