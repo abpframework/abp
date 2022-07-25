@@ -1,8 +1,10 @@
 import execa from 'execa';
 import fse from 'fs-extra';
 import fs from 'fs';
+import program from 'commander';
 
-const templates = ['app', 'app-nolayers', 'module'];
+const defaultTemplates = ['app', 'app-nolayers', 'module'];
+const defaultTemplatePath = '../../../templates';
 const packageMap = {
   account: 'ng.account',
   'account-core': 'ng.account.core',
@@ -16,7 +18,11 @@ const packageMap = {
   'theme-basic': 'ng.theme.basic',
   'theme-shared': 'ng.theme.shared',
 };
-
+program.option('-t, --templates  <templates>', 'template dirs', false);
+program.option('-p, --template-path <templatePath>', 'root template path', false);
+program.parse(process.argv);
+const templates = program.templates ? program.templates.split(',') : defaultTemplates;
+const templateRootPath = program.templatePath ? program.templatePath : defaultTemplatePath;
 (async () => {
   await execa('yarn', ['build'], {
     stdout: 'inherit',
@@ -33,7 +39,7 @@ async function runEachTemplate(
   handler: (template: string, templatePath?: string) => void | Promise<any>,
 ) {
   for (var template of templates) {
-    const templatePath = `../../../templates/${template}/angular`;
+    const templatePath = `${templateRootPath}/${template}/angular`;
     const result = handler(template, templatePath);
     result instanceof Promise ? await result : result;
   }
