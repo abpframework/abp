@@ -1,9 +1,9 @@
 # Dynamic Widget
 
-CMS kit provides a dynamic [widget](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) used to render the components previously developed by the software in the content of the pages and blog posts. Its means, that in static content you can use dynamic content. We will mention how you can do it. You have two choices to define the widget in the system: Writing and with UI.
+CMS kit provides a dynamic [widget](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) used to render the components previously developed by the software in the content of the pages and blog posts. Its means, that in static content you can use dynamic content. We will mention how you can do it. You have two choices to define the widget in the system: Writing and UI.
 
 ### Adding the widget
-Firstly we will show how to using the widget system via writing manually in the page and blogpost contents.
+Firstly we will show how to use the widget system via writing manually in the page and blogpost contents.
 
 Let's define the view component
 
@@ -39,17 +39,17 @@ Configure<CmsKitContentWidgetOptions>(options =>
 Now you're ready to add your widget by writing.
 [Widget Type="Today"]
 
-After completing the above steps, you should see the above screenshot by going `Pages/Slug`
+After completing the above steps, you can see the output at the right of the below screenshot.
 ![cmskit-without-parameter.png](../../images/cmskit-without-parameter.png)
 
 ### Adding by using UI 
 Now we will mention the second option, using UI.
-Once writing these definitions can make some mistakes hence we added a new feature to use widget system easily. To the right of the editor, you will see the customized `W` button to add a dynamic widget like the below image. Don't forget please this is design mode and you need to view your page in view mode after saving. Also `Preview` tab on the editor will be ready to check your output easily for widget configurations in the next features.
+Once writing these definitions can make some mistakes hence we added a new feature to use the widget system easily. To the right of the editor, you will see the customized `W` button to add a dynamic widget like the below image. Don't forget please this is design mode and you need to view your page in view mode after saving. Also `Preview` tab on the editor will be ready to check your output easily for widget configurations in the next features.
 
 ![cms-kit-page-editor](../../images/cms-kit-page-editor.png)
 
 ### Adding by using UI with parameters
-Let's improve the above example by adding a new parameter named format. Via this feature, we can use the widget system with many different scenrios but not prolonging the document. Also these examples can be expandable with dependendency injection and getting values from database, but we will use an basic example. We will add format parameter to customize the date.
+Let's improve the above example by adding a new parameter named format. Via this feature, we can use the widget system with many different scenarios but not prolong the document. Also, these examples can be expandable with dependency injection and getting values from the database, but we will use a basic example. We will add the format parameter to customize the date.
 
 ```csharp
 [Widget]
