@@ -12,12 +12,15 @@ If you have customized the `MultiTenancyMiddlewareErrorPageBuilder` of `AbpMulti
 
 ## Migrating to LeptonX Lite
 
-LeptonX Lite is now being introduced and you can follow [Migrating from Lepton to LeptonX guide](#todo) to migrate your existing application.
-Migrating to OpenIddict
+LeptonX Liite is now being introduced and you can follow the guides below to migrate your existing applications:
+
+- [Migrating to LeptonX MVC UI](../themes/LeptonXLite/AspNetCore.md)
+- [Migrating to LeptonX Angular UI](../themes/LeptonXLite/angular.md)
+- [Migrating to LeptonX Blazor UI](../themes/LeptonXLite/blazor.md)
 
 ## Migrating to OpenIddict
 
-After the [announcement of plan to replace the IdentityServer](https://github.com/abpframework/abp/issues/11989), we have successfully implemented [Openiddict](https://github.com/openiddict/openiddict-core) as a replacement for IdentityServer4 as OpenID-Provider. You can follow [Migrating Identity Server to OpenIddict guide](./IdentityServer_To_OpenIddict.md)
+After the [announcement of plan to replace the IdentityServer](https://github.com/abpframework/abp/issues/11989), we have successfully implemented [Openiddict](https://github.com/openiddict/openiddict-core) as a replacement for IdentityServer4 as OpenID-Provider. You can follow [Migrating Identity Server to OpenIddict guide](./IdentityServer_To_OpenIddict.md).
 
 ## See Also
 
