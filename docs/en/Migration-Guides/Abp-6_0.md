@@ -10,11 +10,14 @@ This document is a guide for upgrading ABP v5.3 solutions to ABP v6.0. There is 
 
 If you have customized the `MultiTenancyMiddlewareErrorPageBuilder` of `AbpMultiTenancyOptions`, the pipeline now returns **true**  to stop the pipeline as default behavior. See [AbpMultiTenancyOptions: Handle inactive and non-existent tenants](https://github.com/abpframework/abp/blob/dev/docs/en/Multi-Tenancy.md#abpmultitenancyoptions-handle-inactive-and-non-existent-tenants) for more info.
 
+## Migrating to LeptonX Lite
 
+LeptonX Lite is now being introduced and you can follow [Migrating from Lepton to LeptonX guide](#todo) to migrate your existing application.
+Migrating to OpenIddict
 
-## Renamed UrlSortingMiddleware (volo)
+## Migrating to OpenIddict
 
-There was a typo in CMS.Kit.Pro.Public.Web module. UrlSortingMiddleware is renamed to UrlS**h**ortingMiddleware. 
+After the [announcement of plan to replace the IdentityServer](https://github.com/abpframework/abp/issues/11989), we have successfully implemented [Openiddict](https://github.com/openiddict/openiddict-core) as a replacement for IdentityServer4 as OpenID-Provider. You can follow [Migrating Identity Server to OpenIddict guide](./IdentityServer_To_OpenIddict.md)
 
 ## See Also
 
