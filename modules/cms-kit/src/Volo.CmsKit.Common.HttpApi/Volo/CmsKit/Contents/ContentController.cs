@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
@@ -32,14 +31,14 @@ public class ContentController : Controller, IContentAppService
 
     [HttpGet]
     [Route("{parseashtml}")]
-    public async Task<string> ParseAsHtmlAsync(string content)
+    public virtual async Task<string> ParseAsHtmlAsync(string content)
     {
         var fragments = await ParseAsync(content);
         return await RenderViewComponent("ContentFragment", new PageDto() { ContentFragments = fragments });
     }
-    public virtual async Task<List<ContentFragment>> ParseAsync(string content)
+    public virtual Task<List<ContentFragment>> ParseAsync(string content)
     {
-        return await ContentAppService.ParseAsync(content);
+        return ContentAppService.ParseAsync(content);
     }
 
     private async Task<string> RenderViewComponent(string viewComponent, object args)
