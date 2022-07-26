@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 
 public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
 {
-    public async Task OnExceptionAsync(ExceptionContext context)
+    public virtual async Task OnExceptionAsync(ExceptionContext context)
     {
         if (!ShouldHandleException(context))
         {
