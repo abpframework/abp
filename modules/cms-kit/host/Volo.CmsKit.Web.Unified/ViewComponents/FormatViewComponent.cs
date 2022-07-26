@@ -19,11 +19,11 @@ public class FormatViewComponent : AbpViewComponent
 
     public virtual async Task<IViewComponentResult> InvokeAsync()
     {
-        return View("~/ViewComponents/Format.cshtml", new DecisionCommentDateViewModel());
+        return View("~/ViewComponents/Format.cshtml", new FormatViewModel());
     }
 }
 
-public class DecisionCommentDateViewModel
+public class FormatViewModel
 {
     [DisplayName("Format your date in the component")]
     public string Format { get; set; }
