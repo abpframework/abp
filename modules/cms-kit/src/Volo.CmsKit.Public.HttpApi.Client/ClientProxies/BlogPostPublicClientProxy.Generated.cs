@@ -2,11 +2,9 @@
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Http.Client;
-using Volo.Abp.Http.Modeling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.ClientProxying;
-using Volo.CmsKit.Public.Blogs;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.Users;
 
 // ReSharper disable once CheckNamespace
