@@ -7,7 +7,7 @@
 
 @inject IMarkdownToHtmlRenderer MarkdownRenderer
 
-@foreach (var contentFragment in Model.PageDto.ContentFragments)
+@foreach (var contentFragment in Model.ContentDto.ContentFragments)
 {
     if (contentFragment.Type == "Markdown")
     {

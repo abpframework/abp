@@ -1,26 +1,22 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Web.Contents;
 
+[ViewComponent(Name = "ContentFragment")]
 [Widget(
     AutoInitialize = true
 )]
-[ViewComponent(Name = "ContentFragment")]
-public class ContentFragmentViewComponent : ViewComponent
+public class ContentFragmentViewComponent : AbpViewComponent
 {
-    public PageDto PageDto { get; set; }
+    public IContent ContentDto { get; set; }
 
-    public ContentFragmentViewComponent()
+    public virtual async Task<IViewComponentResult> InvokeAsync(IContent contentDto)
     {
-        PageDto = new();
-    }
-
-    public virtual async Task<IViewComponentResult> InvokeAsync(PageDto pageDto)
-    {
-        return View("~/Contents/ContentFragment.cshtml", new ContentFragmentViewComponent() { PageDto = pageDto });
+        return View("~/Contents/ContentFragment.cshtml", new ContentFragmentViewComponent() { ContentDto = contentDto });
     }
 }
 
