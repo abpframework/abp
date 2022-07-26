@@ -1,0 +1,21 @@
+# ABP Version 6.0 Migration Guide
+
+This document is a guide for upgrading ABP v5.3 solutions to ABP v6.0. There is a change in this version that may effect your applications, please read it carefully and apply the necessary changes to your application.
+
+## Added IsActive property
+
+`IsActive` property is added to `IUserData`. This property is set to **true** by default. **Cmskit** and **Blog** modules are effected by this change. You need to add new migration to your existing application if you are using any of these modules. Please see [#11417](https://github.com/abpframework/abp/pull/11417) for more info.
+
+## Default behavior change in MultiTenancyMiddlewareErrorPageBuilder
+
+If you have customized the `MultiTenancyMiddlewareErrorPageBuilder` of `AbpMultiTenancyOptions`, the pipeline now returns **true**  to stop the pipeline as default behavior. See [AbpMultiTenancyOptions: Handle inactive and non-existent tenants](https://github.com/abpframework/abp/blob/dev/docs/en/Multi-Tenancy.md#abpmultitenancyoptions-handle-inactive-and-non-existent-tenants) for more info.
+
+
+
+## Renamed UrlSortingMiddleware (volo)
+
+There was a typo in CMS.Kit.Pro.Public.Web module. UrlSortingMiddleware is renamed to UrlS**h**ortingMiddleware. 
+
+## See Also
+
+* [Official blog post for the 6.0 release](https://blog.abp.io/abp/ABP.IO-Platform-6.0-RC-Has-Been-Published)
