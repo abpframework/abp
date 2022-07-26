@@ -1,3 +1,4 @@
+
 export interface EmailSettingsDto {
   smtpHost?: string;
   smtpPort: number;
@@ -8,6 +9,13 @@ export interface EmailSettingsDto {
   smtpUseDefaultCredentials: boolean;
   defaultFromAddress?: string;
   defaultFromDisplayName?: string;
+}
+
+export interface SendTestEmailInput {
+  senderEmailAddress: string;
+  targetEmailAddress: string;
+  subject: string;
+  body?: string;
 }
 
 export interface UpdateEmailSettingsDto {

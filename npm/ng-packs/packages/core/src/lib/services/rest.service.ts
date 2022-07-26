@@ -38,9 +38,9 @@ export class RestService {
     api = api || this.getApiFromStore(config.apiName);
     const { method, params, ...options } = request;
     const { observe = Rest.Observe.Body, skipHandleError } = config;
-
+    const url = this.removeDuplicateSlashes(api + request.url);
     return this.http
-      .request<R>(method, api + request.url, {
+      .request<R>(method, url, {
         observe,
         ...(params && {
           params: this.getParams(params, config.httpParamEncoder),
@@ -61,5 +61,9 @@ export class RestService {
     return encoder
       ? new HttpParams({ encoder, fromObject: filteredParams })
       : new HttpParams({ fromObject: filteredParams });
+  }
+
+  private removeDuplicateSlashes(url: string): string {
+    return url.replace(/([^:]\/)\/+/g, '$1');
   }
 }

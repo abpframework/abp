@@ -184,6 +184,7 @@
     "Post_Index_Page_MetaDescription": "ABP Community's purpose is to create a contribution environment for developers who use the ABP framework.",
     "Layout_Title": "{0} | ABP Community",
     "Layout_MetaDescription": "ABP Community is an environment where people can share posts about ABP framework and follows the projects.",
-    "Index_Page_CommunityIntroduction": "This is a hub for ABP Framework, .NET and software development. You can read the articles, watch the video tutorials, get informed about ABP’s development progress and ABP-related events, help other developers and share your expertise with the ABP community."
+    "Index_Page_CommunityIntroduction": "This is a hub for ABP Framework, .NET and software development. You can read the articles, watch the video tutorials, get informed about ABP’s development progress and ABP-related events, help other developers and share your expertise with the ABP community.",
+    "TagsInArticle": "Tags in article"
   }
 }

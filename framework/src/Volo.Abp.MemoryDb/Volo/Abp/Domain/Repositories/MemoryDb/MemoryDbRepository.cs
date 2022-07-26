@@ -253,7 +253,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
 
         if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
         {
-            softDeleteEntity.IsDeleted = true;
+            ObjectHelper.TrySetProperty(softDeleteEntity, x => x.IsDeleted, () => true);
             (await GetCollectionAsync()).Update(entity);
         }
         else
