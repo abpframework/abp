@@ -1,6 +1,6 @@
 ﻿namespace Volo.CmsKit;
 
-public static class CmsKitDbProperties
+public static class AbpCmsKitDbProperties
 {
     public static string DbTablePrefix { get; set; } = "Cms";
 

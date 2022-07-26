@@ -6,7 +6,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.FeatureManagement.MongoDB;
 
 [IgnoreMultiTenancy]
-[ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
+[ConnectionStringName(AbpFeatureManagementDbProperties.ConnectionStringName)]
 public interface IFeatureManagementMongoDbContext : IAbpMongoDbContext
 {
     IMongoCollection<FeatureValue> FeatureValues { get; }
