@@ -1,3 +1,4 @@
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CoreModule } from '@abp/ng.core';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
@@ -8,7 +9,7 @@ import { SETTING_MANAGEMENT_SETTING_TAB_PROVIDERS } from './providers/setting-ta
 import { EmailSettingGroupComponent } from './components/email-setting-group/email-setting-group.component';
 
 @NgModule({
-  imports: [CoreModule, NgxValidateCoreModule],
+  imports: [CoreModule,ThemeSharedModule,NgxValidateCoreModule],
   declarations: [EmailSettingGroupComponent],
   exports: [EmailSettingGroupComponent],
 })
