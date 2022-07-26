@@ -1,7 +1,9 @@
+import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { collapse, ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
+import { SettingManagementPolicyNames } from '../../enums/policy-names';
 import { EmailSettingsService } from '../../proxy/email-settings.service';
 import { EmailSettingsDto } from '../../proxy/models';
 
@@ -12,8 +14,11 @@ import { EmailSettingsDto } from '../../proxy/models';
 })
 export class EmailSettingGroupComponent implements OnInit {
   form!: FormGroup;
-
+  emailTestForm: FormGroup;
   saving = false;
+  emailingPolicy = SettingManagementPolicyNames.Emailing;
+  isEmailTestModalOpen = false;
+  modalSize:NgbModalOptions= { size:"lg"} 
 
   constructor(
     private emailSettingsService: EmailSettingsService,
@@ -57,4 +62,30 @@ export class EmailSettingGroupComponent implements OnInit {
         this.getData();
       });
   }
+  openSendEmailModal() {
+    this.buildEmailTestForm();
+    this.isEmailTestModalOpen = true;
+  }
+
+  buildEmailTestForm() {
+    this.emailTestForm = this.fb.group({
+      senderEmailAddress: ['', [Validators.required, Validators.email]],
+      targetEmailAddress: ['', [Validators.required, Validators.email]],
+      subject: ['', [Validators.required]],
+      body: [''],
+    });
+  }
+
+  emailTestFormSubmit() {
+
+    if(this.emailTestForm.invalid){
+      return;
+    }
+     this.emailSettingsService.sendTestEmail(this.emailTestForm.value).subscribe(res => {
+      this.toasterService.success('AbpSettingManagement::SuccessfullySent');
+      this.isEmailTestModalOpen = false;
+    })
+      
+  }
+
 }
