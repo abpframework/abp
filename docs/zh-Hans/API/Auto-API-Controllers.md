@@ -23,6 +23,29 @@ public class BookStoreWebModule : AbpModule
     }
 }
 ````
+你还可以通过ConventionalControllerSetting 配置创建自动API控制器的属性，例如：通过配置RemoteServiceName更改生成动态APi的服务名称。
+
+````
+    Configure<AbpAspNetCoreMvcOptions>(options =>
+    {
+        options
+            .ConventionalControllers
+            .Create(typeof(PersonApplicationModule).Assembly, x=> x.RemoteServiceName = "YourServiceName");
+    });
+````
+
+然后，你可以看到模块API：/api/abp/api-definition中的 remoteServiceName 成功应用了配置。
+{
+  "modules": {
+    "abp": {
+      "rootPath": "abp",
+      "remoteServiceName": "YourServiceName",
+      "controllers": { 
+            // ... 
+       }
+    }
+  }
+}
 
 此示例代码配置包含类`BookStoreApplicationModule`的程序集中的所有应用程序服务.下图显示了[Swagger UI](https://swagger.io/tools/swagger-ui/)上的API内容.
 
