@@ -169,6 +169,74 @@ If you want to see more details, you can check [the release on GitHub](https://g
 
 ## What's New with ABP Commercial 6.0?
 
+### LeptonX Theme on Startup Templates
+
+With this version, startup templates (`app-pro`, `app-nolayers-pro` and `microservice-pro` templates) use the **LeptonX Theme** as the default theme. However, it's still possible to create a project with **Lepton Theme** and **Basic Theme**, either using the **ABP CLI** or **Suite**.
+
+#### via ABP CLI
+
+To create a new project with **Lepton Theme** or **Basic Theme**, you can use the `--theme` option as below:
+
+```bash
+abp new Acme.BookStore --theme lepton --preview
+```
+
+> For "Basic Theme" specify the theme name as `--theme basic`.
+
+#### via Suite
+
+Also, you can create a new project with **Lepton Theme** or **Basic Theme** from Suite.
+
+![](suite-create-new-solution.png)
+
+### Switching to OpenIddict for the Startup Templates
+
+We've also switched to the **OpenIddict** for the startup templates for ABP Commercial as explained above.
+
+### New MAUI Application as Mobile Option for Application Startup Template
+
+![](maui-mobile-option.gif)
+
+ABP Commercial provides a MAUI application as mobile option for the Application Template. 
+
+To create an Application Template with the MAUI application, you can use the command below:
+
+```bash
+abp new Acme.BookStore -t app-pro --mobile maui
+```
+
+### GDPR: Cookie Consent
+
+//TODO: add screenshot!!!
+
+With this version, **Cookie Consent** feature has been added to the **GDPR** module. It's enabled by default for the startup templates and also there are two pages in the templates: "Cookie Policy" page and "Privacy Policy" page. You can change the content of these pages by your needs.
+
+> If you want to use the Cookie Consent feature of GDPR module, please see the [GDPR Module](https://docs.abp.io/en/commercial/6.0/modules/gdpr) documentation.
+
+### Improvements/Developments on CMS Kit Poll System
+
+Some improvements/developments have been made on the Poll System of CMS Kit module as listed briefly below:
+
+* Some improvements have been made on the Widget rendering and Admin side for the Blazor UI.
+* Widget can be picked from the editor with this version as seen in the image below.
+
+![](poll-add-widget.png)
+
+### Blazor UI for the Chat Module
+
+Chat Module now also available for the Blazor UI.
+
+![](blazor-chat-module-1.png)
+![](blazor-chat-module-2.png)
+
+### Blazor Admin UI for CMS Kit Module
+
+All admin side **CMS Kit** and **Cms Kit Pro** features have been implemented for the Blazor UI.
+
+### Suite: Excel/CSV Export
+
+### Suite: Optional PWA Support
+
 ## Community News
 
 ### New ABP Community Posts
@@ -179,8 +247,8 @@ If you want to see more details, you can check [the release on GitHub](https://g
 * [Kirti Kulkarni](https://twitter.com/kirtimkulkarni) has created three new community articles. You can use the links below to read the articles:
     * [Integrating the file management module with ABP Commercial application](https://community.abp.io/posts/integrating-the-file-management-module-with-abp-commercial-application-qd6v4dsr)
     * [Work with PDF's in ABP Commercial Project using PDFTron](https://community.abp.io/posts/work-with-pdfs-in-abp-commercial-project-using-pdftron-tjw0hlgu)
-    * [https://community.abp.io/posts/create-a-custom-login-page-in-abp-commercial-angular-app-r2huidx7](https://community.abp.io/posts/create-a-custom-login-page-in-abp-commercial-angular-app-r2huidx7)
-* [Don Boutwell](https://community.abp.io/members/dboutwell) has created his first ABP Community article that shows to [Password Required Redis with ABP Framework and Docker](https://community.abp.io/posts/password-required-redis-with-abp-framework-and-docker-94old5rm).
+    * [Create a custom login page in ABP Commercial Angular app](https://community.abp.io/posts/create-a-custom-login-page-in-abp-commercial-angular-app-r2huidx7)
+* [Don Boutwell](https://community.abp.io/members/dboutwell) has created his first ABP Community article. You can read it from [here](https://community.abp.io/posts/password-required-redis-with-abp-framework-and-docker-94old5rm).
 
 ### Volosoft Has Attended the DNF Summit 2022
 
