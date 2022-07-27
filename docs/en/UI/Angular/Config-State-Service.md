@@ -122,8 +122,8 @@ You can get the application configuration response and set the `ConfigStateServi
 ```js
 import {ApplicationConfigurationService, ConfigStateService} from '@abp/ng.core';
 
-constructor(private applicationConfigurationService: ApplicationConfigurationService, private config: ConfigStateService) {
-  this.applicationConfigurationService.getConfiguration().subscribe(config => {
+constructor(private abpApplicationConfigurationService: AbpApplicationConfigurationService, private config: ConfigStateService) {
+  this.abpApplicationConfigurationService.get().subscribe(config => {
     this.config.setState(config);
   })
 }

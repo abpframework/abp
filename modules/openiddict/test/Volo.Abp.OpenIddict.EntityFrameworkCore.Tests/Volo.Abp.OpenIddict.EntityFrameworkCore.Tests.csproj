@@ -15,4 +15,8 @@
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Volo\Abp\OpenIddict" />
+  </ItemGroup>
+
 </Project>

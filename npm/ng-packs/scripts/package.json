@@ -8,7 +8,8 @@
     "build:prod": "ts-node -r tsconfig-paths/register prod-build.ts",
     "build:schematics": "ts-node -r tsconfig-paths/register build-schematics.ts",
     "publish-packages": "ts-node -r tsconfig-paths/register publish.ts",
-    "replace-with-tilde": "ts-node -r tsconfig-paths/register replace-with-tilde.ts"
+    "replace-with-tilde": "ts-node -r tsconfig-paths/register replace-with-tilde.ts",
+    "copy-to-templates": "ts-node -r tsconfig-paths/register copy-packages-to-templates.ts"
   },
   "author": "",
   "dependencies": {

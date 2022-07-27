@@ -6,6 +6,8 @@ $(function () {
     var $slug = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-page-create');
 
+    var widgetModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Contents/AddWidgetModal", modalClass: "addWidgetModal" });
+
     var scriptEditor = CodeMirror.fromTextArea(document.getElementById("ViewModel_Script"), {
         mode: "javascript",
         lineNumbers: true
@@ -25,7 +27,7 @@ $(function () {
 
     $createForm.on('submit', function (e) {
         e.preventDefault();
-        
+
         if ($createForm.valid()) {
 
             abp.ui.setBusy();
@@ -87,21 +89,16 @@ $(function () {
     var fileUploadUri = "/api/cms-kit-admin/media/page";
     var fileUriPrefix = "/api/cms-kit/media/";
 
-    initAllEditors();
-
-    function initAllEditors() {
-        $('.content-editor').each(function (i, item) {
-            initEditor(item);
-        });
-    }
-
-    function initEditor(element) {
-        var $editorContainer = $(element);
+    initEditor();
+    
+    var editor;
+    function initEditor() {
+        var $editorContainer = $("#ContentEditor");
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
 
-        var editor = new toastui.Editor({
+        editor = new toastui.Editor({
             el: $editorContainer[0],
             usageStatistics: false,
             useCommandShortcut: true,
@@ -112,6 +109,19 @@ $(function () {
             minHeight: "25em",
             initialEditType: 'markdown',
             language: $editorContainer.data("language"),
+            toolbarItems: [
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'image', 'link'],
+                ['code', 'codeblock'],
+                // Using Option: Customize the last button
+                [{
+                    el: createAddWidgetButton(),
+                    command: 'bold',
+                    tooltip: 'Add Widget'
+                }]
+            ],
             hooks: {
                 addImageBlobHook: uploadFile,
             },
@@ -123,7 +133,7 @@ $(function () {
             }
         });
     }
-
+    
     function uploadFile(blob, callback, source) {
         var UPPY_OPTIONS = {
             endpoint: fileUploadUri,
@@ -154,5 +164,25 @@ $(function () {
                 callback(fileUrl, mediaDto.name);
             }
         });
+    }
+
+    $('#GeneratedWidgetText').on('change',function () {
+        var txt = $('#GeneratedWidgetText').val();
+        editor.insertText(txt);
+    });
+    
+    function createAddWidgetButton() {
+        const button = document.createElement('button');
+
+        button.className = 'toastui-editor-toolbar-icons last dropdown';
+        button.style.backgroundImage = 'none';
+        button.style.margin = '0';
+        button.innerHTML = `W`;
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            widgetModal.open();
+        });
+
+        return button;
     }
 });
