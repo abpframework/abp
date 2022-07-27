@@ -379,6 +379,6 @@
     "LeptonXLiteThemeInfo": " A modern and stylish Bootstrap UI theme. Ideal if you want to have a production ready UI theme. This is the newest theme and is the default.",
     "BasicThemeInfo": "Minimalist UI theme with plain Bootstrap colors and styles. Ideal if you will build your own UI theme.",
     "SeeDocumentation": "See <a href='{0}' target='_blank'>documentation</a>.",
-    "SeeFullScreen": "<a href='{0}' target='_blank'>🖼️ See full screen</a>"
+    "SeeFullScreen": "<a href='{0}' target='_blank'>🖼️ See the screenshot</a>"
   }
 }
