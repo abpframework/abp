@@ -43,6 +43,41 @@ There are some changes in this version that may effect your applications. Please
 
 ## What's New with ABP Framework 6.0?
 
+In this section, I will introduce some major features released with this version. Here is a brief list of titles explained in the next sections:
+
+* LeptonX Lite is now the default theme for startup templates
+* Theme Selection option added to the [*Get Started*](https://abp.io/get-started) page
+* Introducing the **OpenIddict Module** and Switching to OpenIddict for the startup templates
+* Introducing the `ITransientCachedServiceProvider` interface
+* Introducing the dynamic components for Blazor
+* Improvements on ABP CLI
+* Performance Improvements on the **Setting Management Module**
+* Introducing the `IApplicationConfigurationContributor`
+* Improvements on the **CMS Kit Module**
+* New **MAUI** Startup Template
+* Introducing the `Volo.Abp.RemoteServices` package
+* Create/Update User Account For External Logins
+* Sending test email in the setting page for MVC and Blazor UIs
+* Improvements on the **eShopOnAbp** Project
+* Other News
+
+### Improvements on the eShopOnAbp Project
+
+There are some developments on the [eShopOnAbp project](https://github.com/abpframework/eShopOnAbp) made in this version. You can see the brief descriptions of some of the improvements below:
+
+* Some improvements have been made on the Admin Application for Order Management (Angular UI). See [#110](https://github.com/abpframework/eShopOnAbp/pull/110).
+* SignalR error on Kubernetes & Docker Compose have been fixed. See [#113](https://github.com/abpframework/eShopOnAbp/pull/113).
+* eShopOnAbp project has been deployed to Azure (Aks). See [#114](https://github.com/abpframework/eShopOnAbp/pull/114). You can visit [https://eshoponabp.com/](https://eshoponabp.com/) to see it on live.
+* Configurations have been made for some services on `docker-compose.yml` file. See [#112](https://github.com/abpframework/eShopOnAbp/pull/112).
+* Gateway Redirect Loop problem on Kubernetes has been fixed. See [the commit](https://github.com/abpframework/eShopOnAbp/commit/6413ef15c91cd8a5309050b63bb4dbca23587607).
+
+
+### Other News 
+
+* Autofac library upgraded to **v6.4.0** in this version. Please see [#12816](https://github.com/abpframework/abp/pull/12816) for more info.
+
+If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/6.0.0-rc.1), which contains a list of all the issues and pull requests closed within this version.
+
 ## What's New with ABP Commercial 6.0?
 
 ## Community News
