@@ -46,20 +46,107 @@ There are some changes in this version that may effect your applications. Please
 In this section, I will introduce some major features released with this version. Here is a brief list of titles explained in the next sections:
 
 * LeptonX Lite is now the default theme for startup templates
-* Theme Selection option added to the [*Get Started*](https://abp.io/get-started) page
 * Introducing the **OpenIddict Module** and Switching to OpenIddict for the startup templates
-* Introducing the `ITransientCachedServiceProvider` interface
-* Introducing the dynamic components for Blazor
-* Improvements on ABP CLI
-* Performance Improvements on the **Setting Management Module**
-* Introducing the `IApplicationConfigurationContributor`
-* Improvements on the **CMS Kit Module**
 * New **MAUI** Startup Template
+* Introducing the `ITransientCachedServiceProvider` interface
+* Introducing the dynamic components for Blazor UI
+* Improvements on ABP CLI
 * Introducing the `Volo.Abp.RemoteServices` package
-* Create/Update User Account For External Logins
+* Create/Update User Accounts For External Logins
 * Sending test email in the setting page for MVC and Blazor UIs
 * Improvements on the **eShopOnAbp** Project
 * Other News
+
+### LeptonX Lite Theme on Startup Templates
+
+![](leptonx-lite-theme.png)
+
+With this version, startup templates (`app` and `app-nolayers` templates) use the **LeptonX Lite** as the default theme. However, it's still possible to create a project with **Basic Theme** either using the **ABP CLI** or downloading the project via [*Get Started*](https://abp.io/get-started) page on [abp.io](https://abp.io/) website.
+
+#### via ABP CLI
+
+To create a new project with **Basic Theme**, you can use the `--theme` option as below:
+
+```bash
+abp new Acme.BookStore --theme basic --preview
+```
+
+#### via Get Started page
+
+Also, you can create a new project with **LeptonX Lite** or **Basic Theme** on *Get Started* page.
+
+![](get-started-page.png)
+
+> Preview checkbox should be checked to be able to see the theme selection section on the *Get Started* page.
+
+### Introducing the **OpenIddict Module** and Switching to OpenIddict for the Startup Templates
+
+We have [announced the plan of replacing the IdentityServer with OpenIddict](https://github.com/abpframework/abp/issues/11989). 
+
+Therefore, we have created the `OpenIddict` module in this version and switched to **OpenIddict** for the startup templates. ABP Framework uses this module to add **OAuth** features into the applications. We created documentation for the **OpenIddict Module** and you can see it from [here](https://docs.abp.io/en/abp/6.0/Modules/OpenIddict) to learn overall knowledge about the **OpenIddict Module**.
+
+Currently, we are preparing migration guides for switching to OpenIddict. You can follow the [#13403](https://github.com/abpframework/abp/pull/13403) to see the progress on the documentations.
+
+> We will continue to ship IDS-related packages for a while but in the long term, you will need to replace it, because IDS support ends at the end of 2022. Please see the [announcement]((https://github.com/abpframework/abp/issues/11989)) for more info.
+
+### New MAUI Startup Template
+
+![](maui-template.png)
+
+ABP Framework provides MAUI startup templates with **v6.0**. You can create a new MAUI project with command below:
+
+```bash
+abp new Acme.BookStore -t maui
+```
+
+### Introducing the `ITransientCachedServiceProvider`
+
+ABP provides the `ICachedServiceProvider` interface to resolve the cached services within a new scope. However, in case of don't want to deal with creating scopes to resolve the cached services without creating a scope, we are introducing the `ITransientCachedServiceProvider` interface. It still resolved the all the cached services, but the service itself is **transient** rather that **scoped** like the `ICachedServiceProvider`. Please see the [#12918](https://github.com/abpframework/abp/issues/12918) for more info.
+
+### Introducing the dynamic layout components for Blazor UI
+
+ABP Framework provides different ways of customizing the UI and one of them is to use [Layout Hooks](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Layout-Hooks) for MVC. The **Layout Hook System** allows you to add code at some specific parts of the layout and all layouts of the themes that provided by ABP framework implement these hooks.
+
+However, BlazorUI doesn't have such a system yet and we are planning to implement [Layout Hooks for the Blazor UI](https://github.com/abpframework/abp/issues/6261) in version 7.0.
+
+We are introducing the dynamic layout components for the Blazor UI to allow to add components to the layout of Blazor applications. 
+
+You can configure the `AbpDynamicLayoutComponentOptions` to render your components in the layout, as below:
+
+```csharp
+Configure<AbpDynamicLayoutComponentOptions>(options =>
+{
+    options.Components.Add(typeof(MyBlazorComponent), null);
+});
+```
+
+### Improvements on ABP CLI
+
+There are some developments on the [ABP CLI](https://docs.abp.io/en/abp/6.0/CLI) made in this version. You can see the brief list of some of the improvements below:
+
+* You can list the all available templates by using the `abp list-templates` command with v6.0. See [#13083](https://github.com/abpframework/abp/pull/13083).
+* You can select the theme while creating a project by specifying the `--theme` option. You can see the *LeptonX Lite Theme on Startup Templates* section above for an example.
+* `abp update` command now updates all package versions inside the all solutions in the sub-folders with v6.0. See [#12735](https://github.com/abpframework/abp/pull/12738).
+
+### Introducing the `Volo.Abp.RemoteService` Package
+
+A new `Volo.Abp.RemoteService` package has been added to the framework. Some of the classes that related with the remote service configurations such as `AbpRemoteServiceOptions` class have been moved from `Volo.Abp.Http.Client` to the this package. In this way, it became more reusable for the further uses.
+
+### Create/Update User Accounts For External Logins
+
+If an external login have been made to a client application, for example from the **Keycloak Server** (or any other external provider), the user is redirected to the external provider (**Keycloak** in our example), user provides credentials (username and password) it's own and redirected back to the client application as logged in. So, it's possible to user's account is not available in the local database because our backend hasn't any knowledge about this process.
+
+To prevent this mismatch/problem, ABP Framework create this logged-in user as an external user in the database. Thanks to that, the user can bee seen in the *Users* page and set neccessary permissions for this user.
+
+> For more info, please see [the related issue](https://github.com/abpframework/abp/issues/12203).
+
+### Sending test email in the setting page for MVC and Blazor UIs
+
+"Sending Test Email" feature is added to the [Setting Management](https://docs.abp.io/en/abp/6.0/Modules/Setting-Management) module, that allows to check the email settings are configured properly and sending emails succesfully to the target email address. 
+
+![](setting-management-emailing.png)
+
+After configuring the email settings such as target email address, you can click the "Send" button to sending a test email to see everything went well.
 
 ### Improvements on the eShopOnAbp Project
 
@@ -75,6 +162,8 @@ There are some developments on the [eShopOnAbp project](https://github.com/abpfr
 ### Other News 
 
 * Autofac library upgraded to **v6.4.0** in this version. Please see [#12816](https://github.com/abpframework/abp/pull/12816) for more info.
+* Perfomance Improvements have been made in the **Settings Module** and tabs on the *Settings* page are lazy loading now.
+* Some improvements have been made in the CMS Kit Module. You can see the improvements from [here](https://github.com/abpframework/abp/issues/11965).
 
 If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/6.0.0-rc.1), which contains a list of all the issues and pull requests closed within this version.
 
@@ -97,9 +186,11 @@ If you want to see more details, you can check [the release on GitHub](https://g
 
 ![](dnf-summit.png)
 
-Core team members of ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) and [Alper Ebicoglu](https://twitter.com/alperebicoglu) have been attended the [DNF Summit](https://t.co/ngWnBLiAn5) on 20th of July. Halil Ibrahim Kalkan talked about the creation of the ABP Framework and Alper Ebicoglu showed how easy to create a project with ABP Framework within 15 minutes.
+Core team members of ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) and [Alper Ebicoglu](https://twitter.com/alperebicoglu) have been attended the [DNF Summit](https://t.co/ngWnBLiAn5) on 20th of July. 
 
-<!-- ![](dnf-summit-attendees.jpg) -->
+Halil Ibrahim Kalkan talked about the creation of the ABP Framework and Alper Ebicoglu showed how easy to create a project with ABP Framework within 15 minutes.
+
+![](dnf-summit-attendees.jpg)
 
 > You can watch the replay of the session from [here](https://www.youtube.com/embed/VL0ewZ-0ruo), if you haven't watched it yet!
 
