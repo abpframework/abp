@@ -1,8 +1,10 @@
 # Migration Identity Server to OpenIddict Guides
 
-The guide explains how to migration Identity Server to OpenIddict Guides.
+The startup template will use `OpenIddict` as the auth server by default since version 6.x.
 
-> From ABP Version `6.0`, the startup template uses openiddict as the auth server by default, If you're using a version `6.x` startup template, then you don't need to migrate.
+We are not removing IDS packages and will continue to release new versions of IDS related Nuget/NPM packages. That means you won't have an issue while upgrading to v6.0 (when it is released). We will continue to fix bugs in our packages for a while. ABP 7.0 will be based on .NET 7. If IDS continue to work with .NET 7, we will continue to ship nuget packages for our IDS integration.
+
+BTW, IDS itself is canceling support for the open source IDS in the end of this year. They are moved to Duende IDS you know. We won't migrate to Duende IDS.
 
 ## Steps
 
