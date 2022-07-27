@@ -1,8 +1,12 @@
 # Migration Identity Server to OpenIddict Guides
 
+The guide explains how to migration Identity Server to OpenIddict Guides.
+
+> From ABP Version `6.0`, the startup template uses openiddict as the auth server by default, If you're using a version `6.x` startup template, then you don't need to migrate.
+
 ## Steps
 
-* Create a new version of the project, with the same name as your existing project.
+* Update all `Volo's` packages to `6.x`.
 * Replace all `Volo's` `IdentityServer.*` packages with corresponding `OpenIddict.*` packages. eg `Volo.Abp.IdentityServer.Domain` to `Volo.Abp.OpenIddict.Domain`, `Volo.Abp.Account.Web.IdentityServer` to `Volo.Abp.Account.Web.OpenIddict`. 
 * Replace all `IdentityServer` modules with corresponding `OpenIddict` modules. eg `AbpIdentityServerDomainModule` to `AbpOpenIddictDomainModule`, `AbpAccountWebIdentityServerModule` to `AbpAccountWebOpenIddictModule`.
 * Rename the `ConfigureIdentityServer` to `ConfigureOpenIddict` in your `ProjectNameDbContext` class.
@@ -29,8 +33,8 @@ private void ConfigureAuthentication(ServiceConfigurationContext context)
     context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 }
 ```
-* Update all `Volo's` packages to `6.x`.
 * Remove the `IdentityServerDataSeedContributor` from the `Domain` project.
+* Create a new version of the project, with the same name as your existing project.
 * Copy the `ProjectName.Domain\OpenIddict\OpenIddictDataSeedContributor.cs` of new project into your project and update `appsettings.json` base on `ProjectName.DbMigrator\appsettings.json`, Be careful to change the port number.
 * Copy the `Index.cshtml.cs` and `Index.cs` of new project to your project if you're using `IClientRepository` in `IndexModel`.
 * Update the scope name from `role` to `roles` in `AddAbpOpenIdConnect` method.
