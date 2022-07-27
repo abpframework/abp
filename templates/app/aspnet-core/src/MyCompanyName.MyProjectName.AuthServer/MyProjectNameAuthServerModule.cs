@@ -196,7 +196,8 @@ public class MyProjectNameAuthServerModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-
+        app.UseAbpOpenIddictValidation();
+       
         if (MultiTenancyConsts.IsEnabled)
         {
             app.UseMultiTenancy();
