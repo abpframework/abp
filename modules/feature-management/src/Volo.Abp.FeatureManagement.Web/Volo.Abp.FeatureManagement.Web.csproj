@@ -37,8 +37,4 @@
     <ProjectReference Include="..\Volo.Abp.FeatureManagement.Application.Contracts\Volo.Abp.FeatureManagement.Application.Contracts.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\Components\FeatureSettingGroup\Default.cshtml" />
-  </ItemGroup>
-
 </Project>
