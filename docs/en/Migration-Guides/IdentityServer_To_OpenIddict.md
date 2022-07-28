@@ -1,13 +1,13 @@
 # Migration Identity Server to OpenIddict Guide
 
-This document explains how to migrate to [OpenIdDict](https://github.com/openiddict/openiddict-core) from Identity Server. From now on the ABP startup templates uses `OpenIdDict` as the auth server by default since version v6.0.0.
+This document explains how to migrate to [OpenIddict](https://github.com/openiddict/openiddict-core) from Identity Server. From now on the ABP startup templates uses `OpenIddict` as the auth server by default since version v6.0.0.
 
 ## History
 We are not removing Identity Server packages and we will continue to release new versions of Identity Server related NuGet/NPM packages. That means you won't have an issue while upgrading to v6.0 when the stable version releases. We will continue to fix bugs in our packages for a while. ABP 7.0 will be based on .NET 7. If Identity Server continues to work with .NET 7, we will also continue to ship NuGet packages for our IDS integration.
 
 On the other hand, Identity Server ends support for the open-source Identity Server in the end of 2022. The Identity Server team has decided to move to Duende IDS and ABP will not be migrated to the commercial Duende IDS. You can see the Duende Identity Server announcement from [this link](https://blog.duendesoftware.com/posts/20220111_fair_trade). 
 
-## OpenIdDict Migration Steps
+## OpenIddict Migration Steps
 
 * Update all `Volo's` packages to `6.x`.
 * Replace all `Volo's` `IdentityServer.*` packages with corresponding `OpenIddict.*` packages. eg `Volo.Abp.IdentityServer.Domain` to `Volo.Abp.OpenIddict.Domain`, `Volo.Abp.Account.Web.IdentityServer` to `Volo.Abp.Account.Web.OpenIddict`. 
@@ -74,5 +74,5 @@ private void ConfigureAuthentication(ServiceConfigurationContext context)
 
 * [Open source tiered & separate auth server application migrate Identity Server to OpenIddct](https://github.com/abpframework/abp-samples/tree/master/Ids2OpenId)
 * [Commercial tiered & separate auth server application migrate Identity Server to OpenIddct](https://abp.io/Account/Login?returnUrl=/api/download/samples/Ids2OpenId)
-* [OpenIdDict module document](https://docs.abp.io/en/abp/6.0/Modules/OpenIddict)
-* [OpenIdDict module source code](https://github.com/abpframework/abp/tree/rel-6.0/modules/openiddict)
+* [OpenIddict module document](https://docs.abp.io/en/abp/6.0/Modules/OpenIddict)
+* [OpenIddict module source code](https://github.com/abpframework/abp/tree/rel-6.0/modules/openiddict)
