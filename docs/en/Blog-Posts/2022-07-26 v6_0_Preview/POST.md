@@ -259,10 +259,12 @@ If you want to disable/hide the "Cookie Consent", you can simply open the startu
 context.Services.AddAbpCookieConsent(options =>
 {
     options.IsEnabled = false; //disabled    
+    options.CookiePolicyUrl = "/CookiePolicy";
+    options.PrivacyPolicyUrl = "/PrivacyPolicy";
 });
 ```
 
-> These pages are used to build up the cookie consent text and you can change the content of these pages by your needs.
+> These pages are used to build up the cookie consent text and you can change the content or url of these pages by your needs.
 
 If you want to use the Cookie Consent feature of the GDPR module in your existing project, please see the [GDPR Module](https://docs.abp.io/en/commercial/6.0/modules/gdpr) documentation for configurations.
 
@@ -290,8 +292,9 @@ Chat Module is now also available for the Blazor UI after the MVC and Angular UI
 
 All admin side **CMS Kit** and **CMS Kit Pro** features have been implemented for the Blazor UI. Blazor UI will only be available to ABP Commercial customers.
 
-//TODO: add some screenshots!!!
+![](cms-blog-blazor.png)
 
+![](cms-blog-post-blazor.png)
 
 
 ### Suite: Excel Export
