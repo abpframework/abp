@@ -223,6 +223,8 @@ git push
 
 4. Select *Azure App Service deployment* and click the **Apply** button
 
+![azdevops-7](../images/azdevops-7)
+
 5. Enter *[YourAppName]staging* in the *Stage name* field in the *Stage* winwow. Close window
 
 6. Click **+ Add an artifact** in the *Pipeline* tab
@@ -231,8 +233,42 @@ git push
 
 8. Select Build pipeline in the *Source (build pipeline)* dropdown and click the **Add** button
 
+![azdevops-8](../images/azdevops-8)
+
 9. Click on the **Continuous deployment trigger (thunderbolt icon)**
 
 10. Set the toggle to **Enabled** in the the *Continous deployment trigger* window
 
 11. Click **+ Add** in *No filters added*. Select **Include** in the *Type* dropdown. Select your branch in the *Build* branch dropdown and close the window
+
+![azdevops-9](../images/azdevops-9)
+
+12. Click on **the little red circle with the exclamation mark** in the *Tasks* tab menu
+
+13. Select your subscription in the *Azure subscription* dropdown.
+
+![azdevops-10](../images/azdevops-10)
+
+14. Click **Authorize** and enter your credentials in the next screens
+
+15. After Authorisation, select the **[YourAppName]API** in the *App service name* dropdown
+
+16. Click on the **Deploy Azure App Service** task
+
+17. Select **[YourAppName].HttpApi.Host.zip** in the *Package or folder* input field
+
+![azdevops-11](../images/azdevops-11)
+
+18. Click on the **Save** icon in the top menu and click **OK**
+
+19. Click **Create release** in the top menu. Click **Create**to create a release>
+
+20. Click on the *Pipeline* tab and wait until the Deployment succeeds
+
+![azdevops-12](../images/azdevops-12)
+
+21. Open a browser and navigate to the URL of your Web App
+
+```
+https://[YourAppName]api.azurewebsites.net
+```
