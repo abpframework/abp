@@ -143,7 +143,7 @@ git push
 
 7. Select GitHub in the Select your repository window
 
-![azdevops-1](images/azdevops-1)
+![azdevops-1](images/azdevops-1.png)
 
 8. Enter Connection name. [YourAppName]GitHubConnection and click on **Authorize using OAuth**
 
@@ -151,7 +151,7 @@ git push
 
 10. Search for **ASP.NET**  in the Select a template window
 
-![azdevops-2](images/azdevops-2)
+![azdevops-2](images/azdevops-2.png)
 
 11. Select the ASP.NET Core template and click the **Apply** button
 
@@ -159,7 +159,7 @@ git push
 
 13. Select **Feeds in my Nuget.config** and type **Nuget.config** in the text box
 
-![azdevops-3](images/azdevops-3)
+![azdevops-3](images/azdevops-3.png)
 
 14. Add below commands block to end of the pipeline
 
@@ -171,7 +171,7 @@ git push
         ArtifactName: '$(Parameters.ArtifactName)'
       condition: succeededOrFailed()
       ```
-![azdevops-4](images/azdevops-4)
+![azdevops-4](images/azdevops-4.png)
 
 15. Click on **Save & queue** in the top menu. Click on **Save & queue** again and click **Save an run** to run the Build pipeline
 
@@ -199,13 +199,13 @@ git push
 
 9. Select the same Region as in tthe SQL server you created in Part 3
 
-![azdevops-5](images/azdevops-5)
+![azdevops-5](images/azdevops-5.png)
 
 10. Click on **Create new** in thet Windows Plan. Name it [YourAppName]ApiWinPlan
 
 11. Click **Change size** in Sku and size. Go for the Dev/Test Free F1 version and click the **Apply** button
 
-![azdevops-6](images/azdevops-6)
+![azdevops-6](images/azdevops-6.png)
 
 12. Click the **Review + creat**e** button. Click **Create** button
 
@@ -223,7 +223,7 @@ git push
 
 4. Select *Azure App Service deployment* and click the **Apply** button
 
-![azdevops-7](images/azdevops-7)
+![azdevops-7](images/azdevops-7.png)
 
 5. Enter *[YourAppName]staging* in the *Stage name* field in the *Stage* winwow. Close window
 
@@ -233,7 +233,7 @@ git push
 
 8. Select Build pipeline in the *Source (build pipeline)* dropdown and click the **Add** button
 
-![azdevops-8](images/azdevops-8)
+![azdevops-8](images/azdevops-8.png)
 
 9. Click on the **Continuous deployment trigger (thunderbolt icon)**
 
@@ -241,13 +241,13 @@ git push
 
 11. Click **+ Add** in *No filters added*. Select **Include** in the *Type* dropdown. Select your branch in the *Build* branch dropdown and close the window
 
-![azdevops-9](images/azdevops-9)
+![azdevops-9](images/azdevops-9.png)
 
 12. Click on **the little red circle with the exclamation mark** in the *Tasks* tab menu
 
 13. Select your subscription in the *Azure subscription* dropdown.
 
-![azdevops-10](images/azdevops-10)
+![azdevops-10](images/azdevops-10.png)
 
 14. Click **Authorize** and enter your credentials in the next screens
 
@@ -257,7 +257,7 @@ git push
 
 17. Select **[YourAppName].HttpApi.Host.zip** in the *Package or folder* input field
 
-![azdevops-11](images/azdevops-11)
+![azdevops-11](images/azdevops-11.png)
 
 18. Click on the **Save** icon in the top menu and click **OK**
 
@@ -265,7 +265,7 @@ git push
 
 20. Click on the *Pipeline* tab and wait until the Deployment succeeds
 
-![azdevops-12](images/azdevops-12)
+![azdevops-12](images/azdevops-12.png)
 
 21. Open a browser and navigate to the URL of your Web App
 
