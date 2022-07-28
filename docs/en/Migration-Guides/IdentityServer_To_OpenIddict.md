@@ -15,7 +15,7 @@ On the other hand, Identity Server ends support for the open-source Identity Ser
 * Rename the `ConfigureIdentityServer` to `ConfigureOpenIddict` in your `ProjectNameDbContext` class.
 * Remove the `UseIdentityServer` and add `UseAbpOpenIddictValidation` after `UseAuthentication`.
 * Add follow code to your startup module.
-* 
+
 ```cs
 public override void PreConfigureServices(ServiceConfigurationContext context)
 {
