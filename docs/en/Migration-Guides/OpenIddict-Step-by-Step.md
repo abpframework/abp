@@ -1,8 +1,8 @@
-# Migration from IdentityServer to OpenIddict Guide
+# Migrating from IdentityServer to OpenIddict Step by Step Guide
 
 This guide provides layer-by-layer guidance for migrating your existing application to OpenIddict. Since OpenIddict is only available with ABP v6.0, you need to update your existing application and apply required migrations in order to apply OpenIddict changes.
 
-Use the `abp update` command to update your existing application. See [Upgrading docs](../Upgrading.md) for more info. Apply required migrations by following the [Migration Guides](./Index.md) based on your application version.
+Use the `abp update` command to update your existing application. See [Upgrading docs](../Upgrading.md) for more info. Apply required migrations by following the [Migration Guides](Index.md) based on your application version.
 
 ## Domain.Shared Layer
 
@@ -206,7 +206,11 @@ for creating the host builder.
 
 ## UI Layer
 
-- Angular
-- MVC/Razor
-- Blazor-Server
-- Blazor-Wasm
+- [Angular UI Migration](OpenIddict-Angular)
+- MVC/Razor UI Migration
+- Blazor-Server UI Migration
+- Blazor-Wasm UI Migration
+
+## See Also
+
+* [ABP Version 6.0 Migration Guide](Abp-6_0.md)
