@@ -46,6 +46,7 @@ There are some changes in this version that may effect your applications. Please
 In this section, I will introduce some major features released with this version. Here is a brief list of titles explained in the next sections:
 
 * LeptonX Lite is now the default theme for startup templates
+* Optional PWA option added to [*Get Started*](https://abp.io/get-started) page
 * Introducing the **OpenIddict Module** and Switching to OpenIddict for the startup templates
 * New **MAUI** Startup Template
 * Introducing the `ITransientCachedServiceProvider` interface
@@ -78,6 +79,14 @@ Also, you can create a new project with **LeptonX Lite** or **Basic Theme** on *
 ![](get-started-page.png)
 
 > Preview checkbox should be checked to be able to see the theme selection section on the *Get Started* page.
+
+### Optional PWA Option Added to Get Started Page
+
+We've introduced the PWA support for the startup templates for Angular & Blazor WASM UIs in **v5.3**. In this version, we also add this PWA option to the [*Get Started*](https://abp.io/get-started) page on [abp.io](https://abp.io/) website.
+
+![](pwa-support-get-started-page.png)
+
+If you checked the "Progressive Web Application" checkbox while creating an application, the all required configurations will be made for you and you will get the benefit of PWA features in your application.
 
 ### Introducing the **OpenIddict Module** and Switching to OpenIddict for the Startup Templates
 
@@ -207,11 +216,22 @@ abp new Acme.BookStore -t app-pro --mobile maui
 
 ### GDPR: Cookie Consent
 
-//TODO: add screenshot!!!
+![](cookie-banner.png)
 
-With this version, **Cookie Consent** feature has been added to the **GDPR** module. It's enabled by default for the startup templates and also there are two pages in the templates: "Cookie Policy" page and "Privacy Policy" page. You can change the content of these pages by your needs.
+With this version, **Cookie Consent** feature has been added to the **GDPR** module. It's enabled by default for the startup templates and also there are two pages in the templates: "Cookie Policy" page and "Privacy Policy" page. 
 
-> If you want to use the Cookie Consent feature of GDPR module, please see the [GDPR Module](https://docs.abp.io/en/commercial/6.0/modules/gdpr) documentation.
+If you want to disable/hide the "Cookie Consent", you can simply open your module class and set the *IsEnabled* property as **false** for **AddAbpCookieConsent** method as below:
+
+```csharp
+context.Services.AddAbpCookieConsent(options =>
+{
+    options.IsEnabled = false; //disabled
+});
+```
+
+> This pages are used to build up the cookie consent text and you can change the content of these pages by your needs.
+
+If you want to use the Cookie Consent feature of GDPR module in your existing project, please see the [GDPR Module](https://docs.abp.io/en/commercial/6.0/modules/gdpr) documentation for configurations.
 
 ### Improvements/Developments on CMS Kit Poll System
 
@@ -224,18 +244,57 @@ Some improvements/developments have been made on the Poll System of CMS Kit modu
 
 ### Blazor UI for the Chat Module
 
-Chat Module now also available for the Blazor UI.
+Chat Module is now also available for the Blazor UI after the MVC and Angular UIs. You can read the [Chat Module](https://docs.abp.io/en/commercial/6.0/modules/chat) documentation to get the overal knowledge about the module and add into your application.
+
+You can view the "Features" module that allows you to enable-disable Chat Module for the application and example of a conversation that made by using the Chat Module from the following images.
 
 ![](blazor-chat-module-1.png)
 ![](blazor-chat-module-2.png)
 
 ### Blazor Admin UI for CMS Kit Module
 
-All admin side **CMS Kit** and **Cms Kit Pro** features have been implemented for the Blazor UI.
+All admin side **CMS Kit** and **Cms Kit Pro** features have been implemented for the Blazor UI. Blazor UI will only be available to ABP Commercial customers.
 
-### Suite: Excel/CSV Export
+//TODO: add some screenshots!!!
+
+### Suite: Excel Export
+
+With v6.0, now it's possible to export the records as Excel for Blazor & MVC UIs. Angular UI is still in-progress, and we'll try to implement it until the v6.0 stable release.
+
+![](excel-export.png)
+
+While generating CRUD pages via Suite, if you checked the "Excel export" checkbox (as shown in the image above), "Excel Export" button will be added to the top of the datatable of the generated page.
+
+![](export-excel-page.png)
+
+Then, you can get the records in anytime you want in the .xlsx format just by clicking the "Excel Export" button. Also, before exporting records to Excel you can filter the records and get records by your needs.
 
 ### Suite: Optional PWA Support
+
+With this version, it's possible to add the [PWA (Progressive Web App)](https://web.dev/progressive-web-apps/?gclid=Cj0KCQjwxIOXBhCrARIsAL1QFCY0IB-W5k-lsXmRCbm00sl4nyBIYynAX3IdJkjyizyNUjuCE8zeu24aApxtEALw_wcB) support for Blazor & Angular UIs while creating the application via Suite. 
+
+![](suite-pwa-support.png)
+
+You just need to checked the "Progressive web application" checkbox, while creating the application. Then, Suite will add the PWA support into your application and you will be get the full benefit of PWA features such as offline support when you published your application.
+
+### Other News
+
+#### Explainer Videos
+
+We are creating explainer videos for the ABP Commercial Modules to provide overview to the developers. Within this milestone, we've created four new explainer videos and here they are:
+
+* [Audit Logging Module](https://www.youtube.com/watch?v=NzSuFBpqfsc)
+* [Identity Module](https://www.youtube.com/watch?v=W87jA_GBE54)
+* [SaaS Module](https://www.youtube.com/watch?v=xXlaaXP6qqQ)
+* [Forms Module](https://www.youtube.com/watch?v=MousWEPfrA8)
+
+You can subscribe to the [Volosoft's YouTube channel](https://www.youtube.com/channel/UCO3XKlpvq8CA5MQNVS6b3dQ) to be informed about future ABP events and videos.
+
+### Trial License
+
+![](pricing-page.png)
+
+If you are considering to use the ABP Commercial, you can start a [free-trial from commercial.abp.io website](https://commercial.abp.io/pricing) and try the ABP Commercial today!
 
 ## Community News
 
