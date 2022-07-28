@@ -10,7 +10,6 @@
     "ConnectionStrings": "Connection Strings",
     "DisplayName:DefaultConnectionString": "Connection String predeterminado",
     "DisplayName:UseSharedDatabase": "Usar la base de datos compartida",
-    "ManageHostFeatures": "Administrar funciones de host",
     "Permission:TenantManagement": "Gestión de tenants",
     "Permission:Create": "Crear",
     "Permission:Edit": "Editar",

@@ -11,6 +11,7 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web.Menus;
 using Microsoft.OpenApi.Models;
+using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
@@ -47,7 +48,7 @@ namespace MyCompanyName.MyProjectName.Web;
     typeof(AbpAutofacModule),
     typeof(AbpIdentityWebModule),
     typeof(AbpSettingManagementWebModule),
-    typeof(AbpAccountWebModule),
+    typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -68,6 +69,16 @@ public class MyProjectNameWebModule : AbpModule
                 typeof(MyProjectNameWebModule).Assembly
             );
         });
+        
+        PreConfigure<OpenIddictBuilder>(builder =>
+        {
+            builder.AddValidation(options =>
+            {
+                options.AddAudiences("MyProjectName");
+                options.UseLocalServer();
+                options.UseAspNetCore();
+            });
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -75,6 +86,7 @@ public class MyProjectNameWebModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureAuthentication(context);
         ConfigureUrls(configuration);
         ConfigureBundles();
         ConfigureAutoMapper();
@@ -83,6 +95,11 @@ public class MyProjectNameWebModule : AbpModule
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
+    }
+    
+    private void ConfigureAuthentication(ServiceConfigurationContext context)
+    {
+        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -106,7 +123,7 @@ public class MyProjectNameWebModule : AbpModule
             );
         });
     }
-
+    
     private void ConfigureAutoMapper()
     {
         Configure<AbpAutoMapperOptions>(options =>
@@ -130,7 +147,7 @@ public class MyProjectNameWebModule : AbpModule
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpPermissionManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}permission-management{0}src{0}Volo.Abp.PermissionManagement.Web", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpFeatureManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}feature-management{0}src{0}Volo.Abp.FeatureManagement.Web", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}identity{0}src{0}Volo.Abp.Identity.Web", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}account{0}src{0}Volo.Abp.Account.Web", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebOpenIddictModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}account{0}src{0}Volo.Abp.Account.Web.OpenIddict", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpTenantManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}tenant-management{0}src{0}Volo.Abp.TenantManagement.Web", Path.DirectorySeparatorChar)));
                 //</TEMPLATE-REMOVE>
                 options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Domain.Shared"));
@@ -218,6 +235,7 @@ public class MyProjectNameWebModule : AbpModule
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthentication();
+        app.UseAbpOpenIddictValidation();
 
         if (MultiTenancyConsts.IsEnabled)
         {
