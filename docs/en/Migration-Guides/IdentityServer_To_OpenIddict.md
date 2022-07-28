@@ -1,12 +1,13 @@
-# Migration Identity Server to OpenIddict Guides
+# Migration Identity Server to OpenIddict Guide
 
-The startup template will use `OpenIddict` as the auth server by default since version 6.x.
+This document explains how to migrate to [OpenIdDict](https://github.com/openiddict/openiddict-core) from Identity Server. From now on the ABP startup templates uses `OpenIdDict` as the auth server by default since version v6.0.0.
 
-We are not removing IDS packages and will continue to release new versions of IDS related Nuget/NPM packages. That means you won't have an issue while upgrading to v6.0 (when it is released). We will continue to fix bugs in our packages for a while. ABP 7.0 will be based on .NET 7. If IDS continue to work with .NET 7, we will continue to ship nuget packages for our IDS integration.
+## History
+We are not removing Identity Server packages and we will continue to release new versions of Identity Server related NuGet/NPM packages. That means you won't have an issue while upgrading to v6.0 when the stable version releases. We will continue to fix bugs in our packages for a while. ABP 7.0 will be based on .NET 7. If Identity Server continues to work with .NET 7, we will also continue to ship NuGet packages for our IDS integration.
 
-BTW, IDS itself is canceling support for the open source IDS in the end of this year. They are moved to Duende IDS you know. We won't migrate to Duende IDS.
+On the other hand, Identity Server ends support for the open-source Identity Server in the end of 2022. The Identity Server team has decided to move to Duende IDS and ABP will not be migrated to the commercial Duende IDS. You can see the Duende Identity Server announcement from [this link](https://blog.duendesoftware.com/posts/20220111_fair_trade). 
 
-## Steps
+## OpenIdDict Migration Steps
 
 * Update all `Volo's` packages to `6.x`.
 * Replace all `Volo's` `IdentityServer.*` packages with corresponding `OpenIddict.*` packages. eg `Volo.Abp.IdentityServer.Domain` to `Volo.Abp.OpenIddict.Domain`, `Volo.Abp.Account.Web.IdentityServer` to `Volo.Abp.Account.Web.OpenIddict`. 
@@ -14,6 +15,7 @@ BTW, IDS itself is canceling support for the open source IDS in the end of this 
 * Rename the `ConfigureIdentityServer` to `ConfigureOpenIddict` in your `ProjectNameDbContext` class.
 * Remove the `UseIdentityServer` and add `UseAbpOpenIddictValidation` after `UseAuthentication`.
 * Add follow code to your startup module.
+* 
 ```cs
 public override void PreConfigureServices(ServiceConfigurationContext context)
 {
@@ -28,13 +30,16 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
     });
 }
 ```
+
 * If your project is not separate AuthServer please also add `ForwardIdentityAuthenticationForBearer`
+
 ```cs
 private void ConfigureAuthentication(ServiceConfigurationContext context)
 {
     context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 }
 ```
+
 * Remove the `IdentityServerDataSeedContributor` from the `Domain` project.
 * Create a new version of the project, with the same name as your existing project.
 * Copy the `ProjectName.Domain\OpenIddict\OpenIddictDataSeedContributor.cs` of new project into your project and update `appsettings.json` base on `ProjectName.DbMigrator\appsettings.json`, Be careful to change the port number.
