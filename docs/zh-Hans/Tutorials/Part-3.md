@@ -1225,7 +1225,7 @@ delete(id: string) {
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1323,7 +1323,7 @@ delete(id: string) {
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1460,7 +1460,7 @@ namespace Acme.BookStore.Blazor
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType:{(int) context.Type}"]
+                        @L[$"Enum:BookType.{Enum.GetName(context.Type)}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -1512,7 +1512,7 @@ namespace Acme.BookStore.Blazor
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1565,7 +1565,7 @@ namespace Acme.BookStore.Blazor
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
                                 </SelectItem>
                             }
                         </Select>
