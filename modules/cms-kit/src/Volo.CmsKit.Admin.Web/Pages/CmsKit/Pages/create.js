@@ -176,9 +176,16 @@ $(function () {
 
             let content = editor.getMarkdown();
             localStorage.setItem('content', content);
-            
-            volo.cmsKit.contents.content.parseAsHtml(content).then(function (data) {
-                editor.setHTML(data);
+
+            $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
+
+                let style = styleEditor.getValue();
+
+                $('#editor-preview-style').remove();
+
+                $('head').append('<style id="editor-preview-style">' + style + '</style>');
+
+                editor.setHTML(result);
             });
         }
         else if ($(this).attr("aria-label") == 'Write'){

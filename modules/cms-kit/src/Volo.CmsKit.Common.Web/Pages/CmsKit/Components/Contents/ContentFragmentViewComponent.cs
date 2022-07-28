@@ -4,7 +4,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Web.Contents;
+namespace Volo.CmsKit.Web.Pages.CmsKit.Components.Contents;
 
 [ViewComponent(Name = "ContentFragment")]
 [Widget(
@@ -16,7 +16,6 @@ public class ContentFragmentViewComponent : AbpViewComponent
 
     public virtual async Task<IViewComponentResult> InvokeAsync(IContent contentDto)
     {
-        return View("~/Contents/ContentFragment.cshtml", new ContentFragmentViewComponent() { ContentDto = contentDto });
+        return View("~/Pages/CmsKit/Components/Contents/ContentFragment.cshtml", new ContentFragmentViewComponent() { ContentDto = contentDto });
     }
 }
-
