@@ -36,7 +36,7 @@ You can use any IDE that supports .NET 6.x, like **[Visual Studio 2022](https://
 
 ## Migration Guides
 
-There are some changes in this version that may effect your applications. Please see the following migration guides, if you are upgrading from v5.3.0:
+There are some changes in this version that may affect your applications. Please see the following migration guides, if you are upgrading from v5.3.0:
 
 * [ABP Framework 5.3 to 6.0 Migration Guide](//TODO: link!!!)
 * [ABP Commercial 5.3 to 6.0 Migration Guide](//TODO: link!!!)
@@ -62,7 +62,7 @@ In this section, I will introduce some major features released with this version
 
 ![](leptonx-lite-theme.png)
 
-With this version, startup templates (`app` and `app-nolayers` templates) use the **LeptonX Lite** as the default theme. However, it's still possible to create a project with **Basic Theme** either using the **ABP CLI** or downloading the project via [*Get Started*](https://abp.io/get-started) page on [abp.io](https://abp.io/) website.
+With this version, startup templates (`app` and `app-nolayers` templates) use the **LeptonX Lite** as the default theme. However, it's still possible to create a project with **Basic Theme** either using the **ABP CLI** or downloading the project via [*Get Started*](https://abp.io/get-started) page on the [abp.io](https://abp.io/) website.
 
 #### via ABP CLI
 
@@ -78,11 +78,11 @@ Also, you can create a new project with **LeptonX Lite** or **Basic Theme** on *
 
 ![](get-started-page.png)
 
-> Preview checkbox should be checked to be able to see the theme selection section on the *Get Started* page.
+> The "Preview" checkbox should be checked to be able to see the theme selection section on the *Get Started* page.
 
 ### Optional PWA Option Added to Get Started Page
 
-We've introduced the PWA support for the startup templates for Angular & Blazor WASM UIs in **v5.3**. In this version, we also add this PWA option to the [*Get Started*](https://abp.io/get-started) page on [abp.io](https://abp.io/) website.
+We've introduced the PWA support for the startup templates for Angular & Blazor WASM UIs in **v5.3**. In this version, we also add this PWA option to the [*Get Started*](https://abp.io/get-started) page on the [abp.io](https://abp.io/) website.
 
 ![](pwa-support-get-started-page.png)
 
@@ -94,7 +94,7 @@ We have [announced the plan of replacing the IdentityServer with OpenIddict](htt
 
 Therefore, we have created the `OpenIddict` module in this version and switched to **OpenIddict** for the startup templates. ABP Framework uses this module to add **OAuth** features into the applications. We created documentation for the **OpenIddict Module** and you can see it from [here](https://docs.abp.io/en/abp/6.0/Modules/OpenIddict) to learn overall knowledge about the **OpenIddict Module**.
 
-Currently, we are preparing migration guides for switching to OpenIddict. You can follow the [#13403](https://github.com/abpframework/abp/pull/13403) to see the progress on the documentations.
+Currently, we are preparing migration guides for switching to OpenIddict. You can follow [this PR](https://github.com/abpframework/abp/pull/13403) to see the progress on the documentations.
 
 > We will continue to ship IDS-related packages for a while but in the long term, you will need to replace it, because IDS support ends at the end of 2022. Please see the [announcement]((https://github.com/abpframework/abp/issues/11989)) for more info.
 
@@ -102,7 +102,7 @@ Currently, we are preparing migration guides for switching to OpenIddict. You ca
 
 ![](maui-template.png)
 
-ABP Framework provides MAUI startup templates with **v6.0**. You can create a new MAUI project with command below:
+ABP Framework provides MAUI startup templates with **v6.0**. You can create a new MAUI project with the command below:
 
 ```bash
 abp new Acme.BookStore -t maui
@@ -110,11 +110,11 @@ abp new Acme.BookStore -t maui
 
 ### Introducing the `ITransientCachedServiceProvider`
 
-ABP provides the `ICachedServiceProvider` interface to resolve the cached services within a new scope. However, in case of don't want to deal with creating scopes to resolve the cached services without creating a scope, we are introducing the `ITransientCachedServiceProvider` interface. It still resolved the all the cached services, but the service itself is **transient** rather that **scoped** like the `ICachedServiceProvider`. Please see the [#12918](https://github.com/abpframework/abp/issues/12918) for more info.
+ABP provides the `ICachedServiceProvider` interface to resolve the cached services within a new scope. However, in case of don't want to deal with creating scopes to resolve the cached services without creating a scope, we are introducing the `ITransientCachedServiceProvider` interface. It still resolved all the cached services, but the service itself is **transient** rather than **scoped** like the `ICachedServiceProvider`. Please see [this issue](https://github.com/abpframework/abp/issues/12918) for more info.
 
 ### Introducing the dynamic layout components for Blazor UI
 
-ABP Framework provides different ways of customizing the UI and one of them is to use [Layout Hooks](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Layout-Hooks) for MVC. The **Layout Hook System** allows you to add code at some specific parts of the layout and all layouts of the themes that provided by ABP framework implement these hooks.
+ABP Framework provides different ways of customizing the UI and one of them is to use [Layout Hooks](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Layout-Hooks) for MVC. The **Layout Hook System** allows you to add code to some specific parts of the layout and all layouts of the themes provided by the ABP Framework implement these hooks.
 
 However, BlazorUI doesn't have such a system yet and we are planning to implement [Layout Hooks for the Blazor UI](https://github.com/abpframework/abp/issues/6261) in version 7.0.
 
@@ -133,45 +133,45 @@ Configure<AbpDynamicLayoutComponentOptions>(options =>
 
 There are some developments on the [ABP CLI](https://docs.abp.io/en/abp/6.0/CLI) made in this version. You can see the brief list of some of the improvements below:
 
-* You can list the all available templates by using the `abp list-templates` command with v6.0. See [#13083](https://github.com/abpframework/abp/pull/13083).
-* You can select the theme while creating a project by specifying the `--theme` option. You can see the *LeptonX Lite Theme on Startup Templates* section above for an example.
-* `abp update` command now updates all package versions inside the all solutions in the sub-folders with v6.0. See [#12735](https://github.com/abpframework/abp/pull/12738).
+* You can list all available templates by using the `abp list-templates` command with v6.0. See [#13083](https://github.com/abpframework/abp/pull/13083).
+* You can select the theme while creating a project by specifying the `--theme` option. You can see the *LeptonX Lite Theme on the Startup Templates* section above for an example.
+* `abp update` command now updates all package versions inside all solutions in the sub-folders with v6.0. See [#12735](https://github.com/abpframework/abp/pull/12738).
 
 ### Introducing the `Volo.Abp.RemoteService` Package
 
-A new `Volo.Abp.RemoteService` package has been added to the framework. Some of the classes that related with the remote service configurations such as `AbpRemoteServiceOptions` class have been moved from `Volo.Abp.Http.Client` to the this package. In this way, it became more reusable for the further uses.
+A new `Volo.Abp.RemoteService` package has been added to the framework. Some of the classes that are related to the remote service configurations such as `AbpRemoteServiceOptions` class have been moved from `Volo.Abp.Http.Client` to this package. In this way, it became more reusable for further uses.
 
 ### Create/Update User Accounts For External Logins
 
-If an external login have been made to a client application, for example from the **Keycloak Server** (or any other external provider), the user is redirected to the external provider (**Keycloak** in our example), user provides credentials (username and password) it's own and redirected back to the client application as logged in. So, it's possible to user's account is not available in the local database because our backend hasn't any knowledge about this process.
+If an external login has been made to a client application, for example from the **Keycloak Server** (or any other external provider), the user is redirected to the external provider (**Keycloak** in our example), the user provides credentials (username and password) it's own and redirected back to the client application as logged in. So, it's possible to the user's account is not available in the local database because our backend hasn't any knowledge about this process.
 
-To prevent this mismatch/problem, ABP Framework create this logged-in user as an external user in the database. Thanks to that, the user can bee seen in the *Users* page and set neccessary permissions for this user.
+To prevent this mismatch/problem, ABP Framework creates this logged-in user as an external user in the database. Thanks to that, the user can be seen on the *Users* page and set necessary permissions for this user.
 
 > For more info, please see [the related issue](https://github.com/abpframework/abp/issues/12203).
 
 ### Sending test email in the setting page for MVC and Blazor UIs
 
-"Sending Test Email" feature is added to the [Setting Management](https://docs.abp.io/en/abp/6.0/Modules/Setting-Management) module, that allows to check the email settings are configured properly and sending emails succesfully to the target email address. 
+"Sending Test Email" feature is added to the [Setting Management](https://docs.abp.io/en/abp/6.0/Modules/Setting-Management) module, which allows checking the email settings are configured properly and sending emails successfully to the target email address. 
 
 ![](setting-management-emailing.png)
 
-After configuring the email settings such as target email address, you can click the "Send" button to sending a test email to see everything went well.
+After configuring the email settings such as the target email address, you can click the "Send" button to send a test email to see if everything went well.
 
 ### Improvements on the eShopOnAbp Project
 
 There are some developments on the [eShopOnAbp project](https://github.com/abpframework/eShopOnAbp) made in this version. You can see the brief descriptions of some of the improvements below:
 
 * Some improvements have been made on the Admin Application for Order Management (Angular UI). See [#110](https://github.com/abpframework/eShopOnAbp/pull/110).
-* SignalR error on Kubernetes & Docker Compose have been fixed. See [#113](https://github.com/abpframework/eShopOnAbp/pull/113).
+* SignalR error on Kubernetes & Docker Compose has been fixed. See [#113](https://github.com/abpframework/eShopOnAbp/pull/113).
 * eShopOnAbp project has been deployed to Azure (Aks). See [#114](https://github.com/abpframework/eShopOnAbp/pull/114). You can visit [https://eshoponabp.com/](https://eshoponabp.com/) to see it on live.
-* Configurations have been made for some services on `docker-compose.yml` file. See [#112](https://github.com/abpframework/eShopOnAbp/pull/112).
+* Configurations have been made for some services on the `docker-compose.yml` file. See [#112](https://github.com/abpframework/eShopOnAbp/pull/112).
 * Gateway Redirect Loop problem on Kubernetes has been fixed. See [the commit](https://github.com/abpframework/eShopOnAbp/commit/6413ef15c91cd8a5309050b63bb4dbca23587607).
 
 
 ### Other News 
 
 * Autofac library upgraded to **v6.4.0** in this version. Please see [#12816](https://github.com/abpframework/abp/pull/12816) for more info.
-* Perfomance Improvements have been made in the **Settings Module** and tabs on the *Settings* page are lazy loading now.
+* Performance Improvements have been made in the **Settings Module** and tabs on the *Settings* page are lazy loading now.
 * Some improvements have been made in the CMS Kit Module. You can see the improvements from [here](https://github.com/abpframework/abp/issues/11965).
 
 If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/6.0.0-rc.1), which contains a list of all the issues and pull requests closed within this version.
@@ -206,7 +206,7 @@ We've also switched to the **OpenIddict** for the startup templates for ABP Comm
 
 ![](maui-mobile-option.gif)
 
-ABP Commercial provides a MAUI application as mobile option for the Application Template. 
+ABP Commercial provides an MAUI application as a mobile option for the Application Template. 
 
 To create an Application Template with the MAUI application, you can use the command below:
 
@@ -218,9 +218,9 @@ abp new Acme.BookStore -t app-pro --mobile maui
 
 ![](cookie-banner.png)
 
-With this version, **Cookie Consent** feature has been added to the **GDPR** module. It's enabled by default for the startup templates and also there are two pages in the templates: "Cookie Policy" page and "Privacy Policy" page. 
+With this version, the **Cookie Consent** feature has been added to the **GDPR** module. It's enabled by default for the startup templates and also there are two pages in the templates: "Cookie Policy" page and "Privacy Policy" page. 
 
-If you want to disable/hide the "Cookie Consent", you can simply open your module class and set the *IsEnabled* property as **false** for **AddAbpCookieConsent** method as below:
+If you want to disable/hide the "Cookie Consent", you can simply open your module class and set the *IsEnabled* property as **false** for the **AddAbpCookieConsent** method as below:
 
 ```csharp
 context.Services.AddAbpCookieConsent(options =>
@@ -229,24 +229,24 @@ context.Services.AddAbpCookieConsent(options =>
 });
 ```
 
-> This pages are used to build up the cookie consent text and you can change the content of these pages by your needs.
+> These pages are used to build up the cookie consent text and you can change the content of these pages by your needs.
 
-If you want to use the Cookie Consent feature of GDPR module in your existing project, please see the [GDPR Module](https://docs.abp.io/en/commercial/6.0/modules/gdpr) documentation for configurations.
+If you want to use the Cookie Consent feature of the GDPR module in your existing project, please see the [GDPR Module](https://docs.abp.io/en/commercial/6.0/modules/gdpr) documentation for configurations.
 
 ### Improvements/Developments on CMS Kit Poll System
 
 Some improvements/developments have been made on the Poll System of CMS Kit module as listed briefly below:
 
 * Some improvements have been made on the Widget rendering and Admin side for the Blazor UI.
-* Widget can be picked from the editor with this version as seen in the image below.
+* A Widget can be picked from the editor with this version as seen in the image below.
 
 ![](poll-add-widget.png)
 
 ### Blazor UI for the Chat Module
 
-Chat Module is now also available for the Blazor UI after the MVC and Angular UIs. You can read the [Chat Module](https://docs.abp.io/en/commercial/6.0/modules/chat) documentation to get the overal knowledge about the module and add into your application.
+Chat Module is now also available for the Blazor UI after the MVC and Angular UIs. You can read the [Chat Module](https://docs.abp.io/en/commercial/6.0/modules/chat) documentation to get the overall knowledge about the module and add to your application.
 
-You can view the "Features" module that allows you to enable-disable Chat Module for the application and example of a conversation that made by using the Chat Module from the following images.
+*You can view the "Features" module that allows you to enable-disable Chat Module for the application and an example of a conversation that was made by using the Chat Module from the following images.*
 
 ![](blazor-chat-module-1.png)
 ![](blazor-chat-module-2.png)
@@ -263,11 +263,11 @@ With v6.0, now it's possible to export the records as Excel for Blazor & MVC UIs
 
 ![](excel-export.png)
 
-While generating CRUD pages via Suite, if you checked the "Excel export" checkbox (as shown in the image above), "Excel Export" button will be added to the top of the datatable of the generated page.
+While generating CRUD pages via Suite, if you checked the "Excel export" checkbox (as shown in the image above), the "Excel Export" button will be added to the top of the datatable of the generated page.
 
 ![](export-excel-page.png)
 
-Then, you can get the records in anytime you want in the .xlsx format just by clicking the "Excel Export" button. Also, before exporting records to Excel you can filter the records and get records by your needs.
+Then, you can get the records any time you want in the `.xlsx` format just by clicking the "Excel Export" button. Also, before exporting records to Excel you can filter the records and get records by your needs.
 
 ### Suite: Optional PWA Support
 
@@ -275,34 +275,34 @@ With this version, it's possible to add the [PWA (Progressive Web App)](https://
 
 ![](suite-pwa-support.png)
 
-You just need to checked the "Progressive web application" checkbox, while creating the application. Then, Suite will add the PWA support into your application and you will be get the full benefit of PWA features such as offline support when you published your application.
+You just need to checked the "Progressive web application" checkbox, while creating the application. Then, Suite will add the PWA support into your application and you will get the full benefit of PWA features such as offline support when you published your application.
 
 ### Other News
 
 #### Explainer Videos
 
-We are creating explainer videos for the ABP Commercial Modules to provide overview to the developers. Within this milestone, we've created four new explainer videos and here they are:
+We are creating explainer videos for the ABP Commercial Modules to provide an overview to the developers. Within this milestone, we've created four new explainer videos and here they are:
 
 * [Audit Logging Module](https://www.youtube.com/watch?v=NzSuFBpqfsc)
 * [Identity Module](https://www.youtube.com/watch?v=W87jA_GBE54)
 * [SaaS Module](https://www.youtube.com/watch?v=xXlaaXP6qqQ)
 * [Forms Module](https://www.youtube.com/watch?v=MousWEPfrA8)
 
-You can subscribe to the [Volosoft's YouTube channel](https://www.youtube.com/channel/UCO3XKlpvq8CA5MQNVS6b3dQ) to be informed about future ABP events and videos.
+You can subscribe to [Volosoft's YouTube channel](https://www.youtube.com/channel/UCO3XKlpvq8CA5MQNVS6b3dQ) to be informed about future ABP events and videos.
 
 ### Trial License
 
 ![](pricing-page.png)
 
-If you are considering to use the ABP Commercial, you can start a [free-trial from commercial.abp.io website](https://commercial.abp.io/pricing) and try the ABP Commercial today!
+If you are considering using the ABP Commercial, you can start a [free-trial from the commercial.abp.io website](https://commercial.abp.io/pricing) and try the ABP Commercial today!
 
 ## Community News
 
 ### New ABP Community Posts
 
-* [Alper Ebicoglu](https://twitter.com/alperebicoglu) has created a new community article to give a full overview about .NET MAUI. You can read it [here](https://community.abp.io/posts/all-about-.net-maui-gb4gkdg5).
-* [Anto Subash](https://twitter.com/antosubash) has created a new video-content to show "State Management in Blazor with Fluxor". You can read it [here](https://community.abp.io/posts/blazor-state-management-with-fluxor-raskpv19).
-* [Learn ABP Framework](https://community.abp.io/members/learnabp) has also created a new video-content to show "How to install LeptonX Lite Theme for ABP Framework 5.3 MVC UI". You can read it [here](https://community.abp.io/posts/how-to-install-leptonx-lite-theme-on-abp-framework-5.3-mvc-ui-epzng137).
+* [Alper Ebicoglu](https://twitter.com/alperebicoglu) has created a new community article to give a full overview of .NET MAUI. You can read it [here](https://community.abp.io/posts/all-about-.net-maui-gb4gkdg5).
+* [Anto Subash](https://twitter.com/antosubash) has created a new video content to show "State Management in Blazor with Fluxor". You can read it [here](https://community.abp.io/posts/blazor-state-management-with-fluxor-raskpv19).
+* [Learn ABP Framework](https://community.abp.io/members/learnabp) has also created a new video content to show "How to install LeptonX Lite Theme for ABP Framework 5.3 MVC UI". You can read it [here](https://community.abp.io/posts/how-to-install-leptonx-lite-theme-on-abp-framework-5.3-mvc-ui-epzng137).
 * [Kirti Kulkarni](https://twitter.com/kirtimkulkarni) has created three new community articles. You can use the links below to read the articles:
     * [Integrating the file management module with ABP Commercial application](https://community.abp.io/posts/integrating-the-file-management-module-with-abp-commercial-application-qd6v4dsr)
     * [Work with PDF's in ABP Commercial Project using PDFTron](https://community.abp.io/posts/work-with-pdfs-in-abp-commercial-project-using-pdftron-tjw0hlgu)
@@ -313,7 +313,7 @@ If you are considering to use the ABP Commercial, you can start a [free-trial fr
 
 ![](dnf-summit.png)
 
-Core team members of ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) and [Alper Ebicoglu](https://twitter.com/alperebicoglu) have been attended the [DNF Summit](https://t.co/ngWnBLiAn5) on 20th of July. 
+Core team members of ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) and [Alper Ebicoglu](https://twitter.com/alperebicoglu) have attended the [DNF Summit](https://t.co/ngWnBLiAn5) on the 20th of July. 
 
 Halil Ibrahim Kalkan talked about the creation of the ABP Framework and Alper Ebicoglu showed how easy to create a project with ABP Framework within 15 minutes.
 
@@ -323,6 +323,6 @@ Halil Ibrahim Kalkan talked about the creation of the ABP Framework and Alper Eb
 
 ## Conclusion 
 
-This version comes with some features and enhancements in the existing features. You can see the [Road Map](https://docs.abp.io/en/abp/6.0/Road-Map) documentation for learn about release schedule and planned features for next releases.
+This version comes with some features and enhancements to the existing features. You can see the [Road Map](https://docs.abp.io/en/abp/6.0/Road-Map) documentation to learn about the release schedule and planned features for the next releases.
 
-The planned release date for the [6.0.0 Stable](https://github.com/abpframework/abp/milestone/71) version is September 06, 2022. Please try the ABP v6.0 RC and provide feedbacks to have a more stable release.
+The planned release date for the [6.0.0 Stable](https://github.com/abpframework/abp/milestone/71) version is September 06, 2022. Please try the ABP v6.0 RC and provide feedback to have a more stable release.
