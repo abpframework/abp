@@ -30,20 +30,40 @@
   typeof(AbpAccountWebModule),
   ```
 
-- In **MyApplicationWebModule.cs** `ConfigureServices` method **remove authentication configuration**:
+- In **MyApplicationWebModule.cs** `ConfigureServices` method **update authentication configuration**:
 
   ```csharp
   ConfigureAuthentication(context, configuration);
   ```
 
-- In **MyApplicationWebModule.cs** `OnApplicationInitialization` method **remove IdentityServer and JwtToken midwares**:
+  with
+
+  ```csharp
+  ConfigureAuthentication(context);
+  ```
+
+  and update the `ConfigureAuthentication` private method to:
+
+  ```csharp
+  private void ConfigureAuthentication(ServiceConfigurationContext context)
+  {
+      context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+  }
+  ```
+
+- In **MyApplicationWebModule.cs** `OnApplicationInitialization` method **replace IdentityServer and JwtToken midwares**:
 
   ```csharp
   app.UseJwtTokenMiddleware();
   app.UseIdentityServer();
   ```
 
-- Delete `ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)` private method which is no longer needed.
+  with
+
+  ```csharp
+  app.UseAbpOpenIddictValidation();
+  ```
+
 
 ## Web Project (Tiered Solution)
 
@@ -123,6 +143,10 @@ This project is renamed to **AuthServer** after v6.0.0-rc1. You can also refacto
   ```csharp
   app.UseIdentityServer();
   ```
+
+- To use the new AuthServer page, replace **Index.cshtml.cs** with [AuthServer Index.cshtml.cs](https://github.com/abpframework/abp-samples/blob/master/Ids2OpenId/src/Ids2OpenId.IdentityServer/Pages/Index.cshtml) and **Index.cshtml** file with [AuthServer Index.cshtml](https://github.com/abpframework/abp-samples/blob/master/Ids2OpenId/src/Ids2OpenId.IdentityServer/Pages/Index.cshtml.cs) and rename **Ids2OpenId** with your application namespace.
+
+  > Note: It can be found under the *Pages* folder.
 
 ## Http.Api.Host
 
