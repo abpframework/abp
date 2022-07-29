@@ -164,4 +164,4 @@ This project is renamed to **MyApplication.AuthServer** after v6.0.0-rc1.
 
 ## See Also
 
-* [OpenIddict Step-by-Step Guide](./OpenIddict-Step-by-Step.md)
+* [OpenIddict Step-by-Step Guide](OpenIddict-Step-by-Step.md)
