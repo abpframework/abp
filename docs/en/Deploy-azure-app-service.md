@@ -272,3 +272,70 @@ git push
 ```
 https://[YourAppName]api.azurewebsites.net
 ```
+
+![azdevops-13](images/azdevops-13.png)
+
+
+
+## Create a Web App in the Azure Portal to deploy [YourAppName].Blazor project
+
+1. Login into the [Azure Portal](https://portal.azure.com/)
+
+2. Click on **Create a resouce**
+
+3. Search for *Web App* in the *Search the Marketplace* field
+
+4. Click the **Create** button in the *Web App* window
+
+5. Select *rg[YourAppName]* in the *Resource Group* dropdown
+
+6. Enter *[YourAppName]Blazor* in the *Name* input field
+
+7. Select *.NET Core 3.1 (LTS)* in the *Runtime stack* dropdown
+
+8. Select *Windows* as *Operating System*
+
+10. Select the same region as the SQL server you created in Part 3
+
+11. Select the [YourAppName]ApiWinPlan in the Windows Plan dropdown
+
+![azdevops-14](images/azdevops-14.png)
+
+12. Click the **Review + create** button. Click **Create** button
+
+13. Click on **Go to resource** when the Web App has been created
+
+16. Copy the URL of the Blazor Web App for later use
+
+```
+https://[YourAppName]blazor.azurewebsites.net
+```
+
+
+## Add an extra Stage in the Release pipeline in the AzureDevops to deploy [YourAppName].Blazor project
+
+1. Go to the *Release* pipeline in [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/) and click **Edit**
+
+2. Click the **+ Add** link and add a **New Stage**
+
+![azdevops-15](images/azdevops-15.png)
+
+3. Select *Azure App Service deployment* and click the **Apply** button
+
+4. Enter *BlazorDeployment* in the *Stage name* input field and close the *Stage* window
+
+5. Click on the **little red circle with the exclamation mark** in the BlazorDeployment stage
+
+6. Select your subscription in the *Azure subscription* dropdown
+
+7. Select your Blazor Web App in the *App service name* dropdown
+
+8. Click on the **Deploy Azure App Service task**
+
+9. Select *[YourAppName].Blazor.zip* in the *Package or folder* input field
+
+![azdevops-16](images/azdevops-16.png)
+
+10. Click **Save** in the top menu and click on the **OK** button after
+
+11. Click **Create release** in the top menu and click on the **Create** button
