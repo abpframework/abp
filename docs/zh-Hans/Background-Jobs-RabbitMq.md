@@ -126,25 +126,31 @@ Configure<AbpRabbitMqOptions>(options =>
 Configure<AbpRabbitMqBackgroundJobOptions>(options =>
 {
     options.DefaultQueueNamePrefix = "my_app_jobs.";
+    options.DefaultDelayedQueueNamePrefix = "my_app_jobs.delayed"
+    options.PrefetchCount = 1;
     options.JobQueues[typeof(EmailSendingArgs)] =
         new JobQueueConfiguration(
             typeof(EmailSendingArgs),
             queueName: "my_app_jobs.emails",
-            connectionName: "SecondConnection"
+            connectionName: "SecondConnection",
+            delayedQueueName:"my_app_jobs.emails.delayed"
         );
 });
 ```
 
-- 这个示例将默认的队列名前缀设置为 `my_app_jobs.`,如果多个项目都使用的同一个 RabbitMQ 服务,设置不同的前缀可以避免执行其他项目的后台作业.
+- 这个示例将默认的队列名前缀设置为 `my_app_jobs.`并且设置默认的延迟队列名为 `my_app_jobs.delayed`,如果多个项目都使用的同一个 RabbitMQ 服务,设置不同的前缀可以避免执行其他项目的后台作业.
+- 设置了预取数量, 用于所有队列.
 - 这里还设置了 `EmailSendingArgs` 绑定的 RabbitMQ 连接.
 
 `JobQueueConfiguration` 类的构造函数中,还有一些其他的可选参数.
 
 - `queueName`: 指定后台作业对应的队列名称(全名).
+* `DelayedQueueName`: 指定后台延迟执行的作业对于的队列名称(全名).
 - `connectionName`: 后台作业对应的 RabbitMQ 连接名称,默认是 `Default`.
 - `durable`: 可选参数,默认为 `true`.
 - `exclusive`: 可选参数,默认为 `false`.
 - `autoDelete`: 可选参数,默认为 `false`.
+* `PrefetchCount` (可选参数, 默认为: null)
 
 如果你想要更多地了解 `durable`,`exclusive`,`autoDelete` 的用法,请阅读 RabbitMQ 提供的文档.
 

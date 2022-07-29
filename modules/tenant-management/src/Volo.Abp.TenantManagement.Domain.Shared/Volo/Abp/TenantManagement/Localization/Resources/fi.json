@@ -10,7 +10,6 @@
     "ConnectionStrings": "Yhteysjonot",
     "DisplayName:DefaultConnectionString": "Oletusyhteysmerkkijono",
     "DisplayName:UseSharedDatabase": "Käytä jaettua tietokantaa",
-    "ManageHostFeatures": "Hallinnoi isäntäominaisuuksia",
     "Permission:TenantManagement": "Vuokralaisten hallinta",
     "Permission:Create": "Luoda",
     "Permission:Edit": "Muokata",

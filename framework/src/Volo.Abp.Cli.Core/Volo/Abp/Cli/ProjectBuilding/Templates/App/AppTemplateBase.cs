@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NuGet.Versioning;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
@@ -183,55 +185,76 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             return;
         }
-        
-        if (context.BuildArgs.Theme != Theme.LeptonXLite)
+
+        if (context.BuildArgs.Theme == Theme.LeptonX)
         {
-            steps.Add(new ChangeThemeStep());
-            RemoveLeptonXThemePackagesFromPackageJsonFiles(steps);
+            context.Symbols.Add("LEPTONX");
+            steps.Add(new ChangeThemeStyleStep());
         }
+
+        if (IsDefaultThemeForTemplate(context.BuildArgs.Theme.Value))
+        {
+            return;
+        }
+        
+        steps.Add(new ChangeThemeStep());
+        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro());
     }
 
-    private void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps)
+    private static bool IsDefaultThemeForTemplate(Theme theme)
     {
-        var packageJsonFilePaths = new List<string>() 
+        var defaultThemesForTemplates = new[] 
         {
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web/package.json",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package.json",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Mvc/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Mvc.Mongo/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Host/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Host.Mongo/package.json",
+            AppTemplate.DefaultTheme, AppProTemplate.DefaultTheme, 
+            AppNoLayersTemplate.DefaultTheme, AppNoLayersProTemplate.DefaultTheme
+        };
+        
+        return defaultThemesForTemplates.Any(defaultTheme => defaultTheme == theme);
+    }
+    
+    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate)
+    {
+        var packageJsonFilePaths = new List<string>
+        {
+            "/MyCompanyName.MyProjectName.Web/package.json",
+            "/MyCompanyName.MyProjectName.Web.Host/package.json",
+            "/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
+            "/MyCompanyName.MyProjectName.AuthServer/package.json",
+            "/MyCompanyName.MyProjectName/package.json",
+            "/MyCompanyName.MyProjectName.Host/package.json",
+            "/MyCompanyName.MyProjectName.Host.Mongo/package.json"
         };
 
-        var blazorServerPackageJsonFilePaths = new List<string>() 
+        var blazorServerPackageJsonFilePaths = new List<string>
         {
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/package.json",
-            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Blazor.Server/package.json",
-            "/aspnet-core/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
+            "/MyCompanyName.MyProjectName.Blazor.Server/package.json",
+            "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
+            "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
         };
 
-        var angularPackageJsonFilePaths = new List<string>() 
+        var angularPackageJsonFilePaths = new List<string> 
         {
             "/angular/package.json"
         };
 
+        var mvcUiPackageName = isProTemplate ? "@volo/abp.aspnetcore.mvc.ui.theme.leptonx" : "@abp/aspnetcore.mvc.ui.theme.leptonxlite";
+        var blazorServerUiPackageName = isProTemplate ? "@volo/aspnetcore.components.server.leptonxtheme" : "@abp/aspnetcore.components.server.leptonxlitetheme";
+        var ngUiPackageName = isProTemplate ? "@volosoft/abp.ng.theme.lepton-x" : "@abp/ng.theme.lepton-x";
+        
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, "@abp/aspnetcore.mvc.ui.theme.leptonxlite"));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
         }
 
         foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, "@abp/aspnetcore.mvc.ui.theme.leptonxlite"));
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, "@abp/aspnetcore.components.server.leptonxlitetheme"));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
         }
 
         foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "@abp/ng.theme.lepton-x"));
+            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
             steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
         }
     }
@@ -548,27 +571,41 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             case UiFramework.None:
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.Server.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/appsettings.json"));
                 steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
                 break;
             case UiFramework.Angular:
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.Server.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/appsettings.json"));
                 steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
                 break;
             case UiFramework.Blazor:
-            case UiFramework.BlazorServer:
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.Server.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
                 steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
                 break;
+            case UiFramework.BlazorServer:
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/appsettings.json"));
+                steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.Server.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
+                break;
             case UiFramework.NotSpecified:
             case UiFramework.Mvc:
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.Server.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/appsettings.json"));
                 steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
                 break;
         }

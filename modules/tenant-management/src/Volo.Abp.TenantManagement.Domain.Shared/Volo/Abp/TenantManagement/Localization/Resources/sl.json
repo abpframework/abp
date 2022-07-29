@@ -10,7 +10,6 @@
     "ConnectionStrings": "Connection Strings",
     "DisplayName:DefaultConnectionString": "Privzeti Connection String",
     "DisplayName:UseSharedDatabase": "Uporabi skupno bazo",
-    "ManageHostFeatures": "Upravljajte funkcije gostitelja",
     "Permission:TenantManagement": "Upravljanje najemnikov",
     "Permission:Create": "Ustvarjanje",
     "Permission:Edit": "Urejanje",
