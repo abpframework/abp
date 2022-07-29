@@ -61,8 +61,8 @@
   
       options.UsePkce = true; // Add this line
       options.SaveTokens = true;
-      options.GetClaimsFromUserInfoEndpoint = true; // Add this line
-      options.SignOutScheme = "Cookies";
+      options.GetClaimsFromUserInfoEndpoint = true;
+      options.SignOutScheme = "Cookies"; // Add this line
   
       options.Scope.Add("roles"); // Replace "role" with "roles"
       options.Scope.Add("email");
