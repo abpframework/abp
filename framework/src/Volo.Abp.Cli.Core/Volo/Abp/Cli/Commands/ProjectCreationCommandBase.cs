@@ -25,6 +25,7 @@ public abstract class ProjectCreationCommandBase
     public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
     public ICmdHelper CmdHelper { get; }
     public IInstallLibsService InstallLibsService { get; }
+    public CliService CliService { get; }
     public AngularPwaSupportAdder AngularPwaSupportAdder { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
@@ -33,18 +34,20 @@ public abstract class ProjectCreationCommandBase
         SolutionPackageVersionFinder solutionPackageVersionFinder, 
         ICmdHelper cmdHelper, 
         IInstallLibsService installLibsService,
+        CliService cliService,
         AngularPwaSupportAdder angularPwaSupportAdder)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
         InstallLibsService = installLibsService;
+        CliService = cliService;
         AngularPwaSupportAdder = angularPwaSupportAdder;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
 
-    protected ProjectBuildArgs GetProjectBuildArgs(CommandLineArgs commandLineArgs, string template, string projectName)
+    protected async Task<ProjectBuildArgs> GetProjectBuildArgsAsync(CommandLineArgs commandLineArgs, string template, string projectName)
     {
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
 
@@ -57,6 +60,15 @@ public abstract class ProjectCreationCommandBase
         if (preview)
         {
             Logger.LogInformation("Preview: yes");
+
+            var cliVersion = await CliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
+
+            if (!cliVersion.IsPrerelease)
+            {
+                throw new CliUsageException(
+                    "You can only create a new preview solution with preview CLI version." +
+                    " Update your ABP CLI to the preview version.");
+            }
         }
 
         var pwa = commandLineArgs.Options.ContainsKey(Options.ProgressiveWebApp.Short);

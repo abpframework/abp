@@ -31,9 +31,10 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         ConnectionStringProvider connectionStringProvider,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
+        CliService cliService,
         IInstallLibsService installLibsService,
         AngularPwaSupportAdder angularPwaSupportAdder)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService,  cliService, angularPwaSupportAdder)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
@@ -68,7 +69,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
             Logger.LogInformation("Tiered: yes");
         }
 
-        var projectArgs = GetProjectBuildArgs(commandLineArgs, template, projectName);
+        var projectArgs = await GetProjectBuildArgsAsync(commandLineArgs, template, projectName);
 
         var result = await TemplateProjectBuilder.BuildAsync(
             projectArgs
