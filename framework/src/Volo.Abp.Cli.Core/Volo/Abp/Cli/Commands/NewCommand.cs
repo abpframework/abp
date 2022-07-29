@@ -79,9 +79,15 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
         RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
-        await RunInstallLibsForWebTemplateAsync(projectArgs);
-        ConfigurePwaSupportForAngular(projectArgs);
 
+        var skipInstallLibs = commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Long) || commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Short);
+        if (!skipInstallLibs)
+        {
+            await RunInstallLibsForWebTemplateAsync(projectArgs);
+        }
+        
+        ConfigurePwaSupportForAngular(projectArgs);
+        
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }
 
@@ -111,6 +117,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         sb.AppendLine("--no-ui                                     (if supported by the template)");
         sb.AppendLine("--no-random-port                            (Use template's default ports)");
         sb.AppendLine("--separate-identity-server                  (if supported by the template)");
+        sb.AppendLine("-sib|--skip-installing-libs                 (skip installing client side packages)");
         sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
