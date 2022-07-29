@@ -32,7 +32,6 @@ public abstract class EntityChangeEvents_Tests<TStartupModule> : TestAppTestBase
     {
         var personName = Guid.NewGuid().ToString("N");
 
-        var creatingEventTriggered = false;
         var createdEventTriggered = false;
         var createdEtoTriggered = false;
 
@@ -40,7 +39,6 @@ public abstract class EntityChangeEvents_Tests<TStartupModule> : TestAppTestBase
         {
             LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
             {
-                creatingEventTriggered.ShouldBeTrue();
                 createdEventTriggered.ShouldBeFalse();
 
                 createdEventTriggered = true;
@@ -64,8 +62,7 @@ public abstract class EntityChangeEvents_Tests<TStartupModule> : TestAppTestBase
 
             await uow.CompleteAsync();
         }
-
-        creatingEventTriggered.ShouldBeTrue();
+        
         createdEventTriggered.ShouldBeTrue();
         createdEtoTriggered.ShouldBeTrue();
     }
