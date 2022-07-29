@@ -81,7 +81,7 @@
 
   with
 
-  ```
+  ```csharp
   app.UseAbpOpenIddictValidation();
   ```
 
@@ -95,6 +95,7 @@
       "RequireHttpsMetadata": "false",
       "SwaggerClientId": "MyApplication_Swagger"
   },
+  ```
 
 ## Http.Api.Host (Separated IdentityServer)
 
