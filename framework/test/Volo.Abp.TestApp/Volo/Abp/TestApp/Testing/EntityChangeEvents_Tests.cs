@@ -38,23 +38,6 @@ public abstract class EntityChangeEvents_Tests<TStartupModule> : TestAppTestBase
 
         using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
         {
-#pragma warning disable 618
-            LocalEventBus.Subscribe<EntityCreatingEventData<Person>>(data =>
-#pragma warning restore 618
-            {
-                creatingEventTriggered.ShouldBeFalse();
-                createdEventTriggered.ShouldBeFalse();
-
-                creatingEventTriggered = true;
-
-                data.Entity.Name.ShouldBe(personName);
-
-                    /* Want to change age from 15 to 18 */
-                data.Entity.Age.ShouldBe(15);
-                data.Entity.Age = 18;
-                return Task.CompletedTask;
-            });
-
             LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
             {
                 creatingEventTriggered.ShouldBeTrue();
@@ -62,7 +45,7 @@ public abstract class EntityChangeEvents_Tests<TStartupModule> : TestAppTestBase
 
                 createdEventTriggered = true;
 
-                data.Entity.Age.ShouldBe(18);
+                data.Entity.Age.ShouldBe(15);
                 data.Entity.Name.ShouldBe(personName);
 
                 return Task.CompletedTask;
