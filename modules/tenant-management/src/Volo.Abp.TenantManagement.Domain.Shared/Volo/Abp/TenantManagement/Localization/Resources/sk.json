@@ -10,7 +10,6 @@
     "ConnectionStrings": "Connection stringy",
     "DisplayName:DefaultConnectionString": "Predvolený connection string",
     "DisplayName:UseSharedDatabase": "Použiť zdieľanú databázu",
-    "ManageHostFeatures": "Spravovať funkcie poskytovateľa",
     "Permission:TenantManagement": "Správa tenantov",
     "Permission:Create": "Vytvoriť",
     "Permission:Edit": "Upraviť",

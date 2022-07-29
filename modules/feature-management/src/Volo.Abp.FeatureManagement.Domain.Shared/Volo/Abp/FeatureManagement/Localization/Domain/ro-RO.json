@@ -3,6 +3,7 @@
   "texts": {
     "Features": "Caracteristici",
     "NoFeatureFoundMessage": "Nu există nicio caracteristică disponibilă.",
+    "ManageHostFeatures": "Administraţi caracteristicile de host",
     "Permission:FeatureManagement": "Administrare caracteristici",
     "Permission:FeatureManagement.ManageHostFeatures": "Gestionare caracteristici gazdă",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Valoarea {0} a caracteristicii nu este validă!"

@@ -1,9 +1,5 @@
 ## ABP OpenIddict Modules
 
-## How to Install
-
-TODO:
-
 ## User Interface
 
 This module implements the domain logic and database integrations, but not provides any UI. Management UI is useful if you need to add applications and scopes on the fly. In this case, you may build the management UI yourself or consider to purchase the [ABP Commercial](https://commercial.abp.io/) which provides the management UI for this module.
