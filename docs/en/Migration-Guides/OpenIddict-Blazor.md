@@ -129,9 +129,9 @@
   },
   ```
 
-## MyApplication.IdentityServer
+## IdentityServer
 
-This project is renamed to **MyApplication.AuthServer** after v6.0.0-rc1. 
+This project is renamed to **AuthServer** after v6.0.0-rc1. You can also refactor and rename your project to *AuthServer* for easier updates in the future.
 
 - In **MyApplication.IdentityServer.csproj** replace **project references**:
 
@@ -179,6 +179,10 @@ This project is renamed to **MyApplication.AuthServer** after v6.0.0-rc1.
   ```csharp
   app.UseIdentityServer();
   ```
+
+- To use the new AuthServer page, replace **Index.cshtml.cs** with [AuthServer Index.cshtml.cs](https://github.com/abpframework/abp-samples/blob/master/Ids2OpenId/src/Ids2OpenId.IdentityServer/Pages/Index.cshtml) and **Index.cshtml** file with [AuthServer Index.cshtml](https://github.com/abpframework/abp-samples/blob/master/Ids2OpenId/src/Ids2OpenId.IdentityServer/Pages/Index.cshtml.cs) and rename **Ids2OpenId** with your application namespace.
+
+  > Note: It can be found under the *Pages* folder.
 
 ## See Also
 

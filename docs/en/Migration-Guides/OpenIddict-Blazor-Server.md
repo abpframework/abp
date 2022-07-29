@@ -166,6 +166,10 @@ This project is renamed to **AuthServer** after v6.0.0-rc1. You can also refacto
 },
 ```
 
+- To use the new AuthServer page, replace **Index.cshtml.cs** with [AuthServer Index.cshtml.cs](https://github.com/abpframework/abp-samples/blob/master/Ids2OpenId/src/Ids2OpenId.IdentityServer/Pages/Index.cshtml) and **Index.cshtml** file with [AuthServer Index.cshtml](https://github.com/abpframework/abp-samples/blob/master/Ids2OpenId/src/Ids2OpenId.IdentityServer/Pages/Index.cshtml.cs) and rename **Ids2OpenId** with your application namespace.
+
+  > Note: It can be found under the *Pages* folder.
+
 ## See Also
 
 * [OpenIddict Step-by-Step Guide](OpenIddict-Step-by-Step.md)
