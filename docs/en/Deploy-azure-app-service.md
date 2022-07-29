@@ -155,13 +155,24 @@ git push
 
 11. Select the ASP.NET Core template and click the **Apply** button
 
-12. Select **Settings** on the second task(Nugetcommand@2) in the pipeline
+12. Add below commands block as a first step in the pipeline
 
-13. Select **Feeds in my Nuget.config** and type **Nuget.config** in the text box
+    ```
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '6.0.106'
+    ```
+
+![azdevops-18](images/azdevops-18.png)
+
+13. Select **Settings** on the second task(Nugetcommand@2) in the pipeline
+
+14. Select **Feeds in my Nuget.config** and type **Nuget.config** in the text box
 
 ![azdevops-3](images/azdevops-3.png)
 
-14. Add below commands block to end of the pipeline
+15. Add below commands block to end of the pipeline
 
     ```
     - task: PublishBuildArtifacts@1
@@ -173,13 +184,13 @@ git push
       ```
 ![azdevops-4](images/azdevops-4.png)
 
-15. Click on **Save & queue** in the top menu. Click on **Save & queue** again and click **Save an run** to run the Build pipeline
+16. Click on **Save & queue** in the top menu. Click on **Save & queue** again and click **Save an run** to run the Build pipeline
 
-16. When the Build pipeline has finished. Click on **1 published; 1 consumed**
+17. When the Build pipeline has finished. Click on **1 published; 1 consumed**
 
 
 
-## Create a Web App in the Azure Portal to deploy [YourAppName] project
+## Create a Web App in the Azure Portal to deploy [YourAppName].HttpApi.Host project
 
 1. Search for Web App in the Search the Marketplace field
 
@@ -213,7 +224,7 @@ git push
 
 
 
-## Create a Release pipeline in the AzureDevops and deploy [YourAppName] project
+## Create a Release pipeline in the AzureDevops and deploy [YourAppName].HttpApi.Host project
 
 1. Sign in into [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/)
 
@@ -339,3 +350,6 @@ https://[YourAppName]blazor.azurewebsites.net
 10. Click **Save** in the top menu and click on the **OK** button after
 
 11. Click **Create release** in the top menu and click on the **Create** button
+
+![azdevops-17](images/azdevops-17.png)
+
