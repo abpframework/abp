@@ -20,7 +20,7 @@ LeptonX Lite is now being introduced and you can follow the guides below to migr
 
 ## Migrating to OpenIddict
 
-After the [announcement of plan to replace the IdentityServer](https://github.com/abpframework/abp/issues/11989), we have successfully implemented [Openiddict](https://github.com/openiddict/openiddict-core) as a replacement for IdentityServer4 as OpenID-Provider. You can follow the [Migrating Identity Server to OpenIddict guide](IdentityServer_To_OpenIddict.md) with a sample project and the [IdentityServer to OpenIddict Step by Step Guide](OpenIddict-Step-by-Step.md) for migrating your existing application in details.
+After the [announcement of plan to replace the IdentityServer](https://github.com/abpframework/abp/issues/11989), we have successfully implemented [Openiddict](https://github.com/openiddict/openiddict-core) as a replacement for IdentityServer4 as an OpenID-Provider. You can follow the [Migrating Identity Server to OpenIddict guide](IdentityServer_To_OpenIddict.md) with a sample project and the [IdentityServer to OpenIddict Step by Step Guide](OpenIddict-Step-by-Step.md) for migrating your existing application in detail.
 
 ## See Also
 
