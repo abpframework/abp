@@ -99,7 +99,7 @@
 
   with
 
-  ```
+  ```csharp
   app.UseAbpOpenIddictValidation();
   ```
 

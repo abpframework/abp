@@ -136,6 +136,7 @@ This project is renamed to **AuthServer** after v6.0.0-rc1. You can also refacto
       "RequireHttpsMetadata": "false",
       "SwaggerClientId": "MyApplication_Swagger"
   },
+  ```
 
 ## See Also
 

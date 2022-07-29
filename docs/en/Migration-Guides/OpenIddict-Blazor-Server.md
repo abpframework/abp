@@ -71,7 +71,7 @@
 
   with
 
-  ```
+  ```csharp
   app.UseAbpOpenIddictValidation();
   ```
 
@@ -158,12 +158,13 @@ This project is renamed to **AuthServer** after v6.0.0-rc1. You can also refacto
 
 - In `appsettings.json` delete **SwaggerClientSecret** from the *AuthServer* section like below:
 
-  ```json
-  "AuthServer": {
-      "Authority": "https://localhost:44345",
-      "RequireHttpsMetadata": "false",
-      "SwaggerClientId": "MyApplication_Swagger"
-  },
+```json
+"AuthServer": {
+  "Authority": "https://localhost:44345",
+  "RequireHttpsMetadata": "false",
+  "SwaggerClientId": "MyApplication_Swagger"
+},
+```
 
 ## See Also
 
