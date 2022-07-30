@@ -30,7 +30,7 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
     public Guid Create(SequentialGuidType guidType)
     {
         // We start with 16 bytes of cryptographically strong random data.
-        var randomBytes = new byte[10];
+        var randomBytes = new byte[8];
         RandomNumberGenerator.GetBytes(randomBytes);
 
         // An alternate method: use a normally-created GUID to get our initial
@@ -49,10 +49,17 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
         // being more specific than milliseconds, since DateTime.Now has
         // limited resolution.
 
+        // Old:
         // Using millisecond resolution for our 48-bit timestamp gives us
         // about 5900 years before the timestamp overflows and cycles.
         // Hopefully this should be sufficient for most purposes. :)
-        long timestamp = DateTime.UtcNow.Ticks / 10000L;
+        // long timestamp = DateTime.UtcNow.Ticks / 10000L;
+
+        // New: 
+        // the timestamp generated in the case of high concurrency may be the same, 
+        // resulting in the Guid generated at the same time not being sequential.
+        // See: https://github.com/abpframework/abp/issues/11453
+        long timestamp = DateTime.UtcNow.Ticks;
 
         // Then get the bytes
         byte[] timestampBytes = BitConverter.GetBytes(timestamp);
@@ -73,8 +80,8 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
 
                 // For string and byte-array version, we copy the timestamp first, followed
                 // by the random data.
-                Buffer.BlockCopy(timestampBytes, 2, guidBytes, 0, 6);
-                Buffer.BlockCopy(randomBytes, 0, guidBytes, 6, 10);
+                Buffer.BlockCopy(timestampBytes, 0, guidBytes, 0, 8);
+                Buffer.BlockCopy(randomBytes, 0, guidBytes, 8, 8);
 
                 // If formatting as a string, we have to compensate for the fact
                 // that .NET regards the Data1 and Data2 block as an Int32 and an Int16,
@@ -84,6 +91,7 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
                 {
                     Array.Reverse(guidBytes, 0, 4);
                     Array.Reverse(guidBytes, 4, 2);
+                    Array.Reverse(guidBytes, 6, 2);
                 }
 
                 break;
@@ -92,8 +100,8 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
 
                 // For sequential-at-the-end versions, we copy the random data first,
                 // followed by the timestamp.
-                Buffer.BlockCopy(randomBytes, 0, guidBytes, 0, 10);
-                Buffer.BlockCopy(timestampBytes, 2, guidBytes, 10, 6);
+                Buffer.BlockCopy(randomBytes, 0, guidBytes, 0, 8);
+                Buffer.BlockCopy(timestampBytes, 0, guidBytes, 8, 8);
                 break;
         }
 
