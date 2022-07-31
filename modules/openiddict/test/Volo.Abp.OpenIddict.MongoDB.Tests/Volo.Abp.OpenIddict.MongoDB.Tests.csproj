@@ -10,13 +10,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     <PackageReference Include="Mongo2Go" Version="$(Mongo2GoPackageVersion)" />
-    <ProjectReference Include="..\..\src\Volo.Abp.OpenIddict.MongoDB\Volo.Abp.OpenIddict.MongoDB.csproj" />
-    <ProjectReference Include="..\Volo.Abp.OpenIddict.TestBase\Volo.Abp.OpenIddict.TestBase.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.MongoDB\Volo.Abp.Identity.MongoDB.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Volo\Abp\OpenIddict" />
+    <ProjectReference Include="..\..\src\Volo.Abp.OpenIddict.MongoDB\Volo.Abp.OpenIddict.MongoDB.csproj" />
+    <ProjectReference Include="..\Volo.Abp.OpenIddict.TestBase\Volo.Abp.OpenIddict.TestBase.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.MongoDB\Volo.Abp.Identity.MongoDB.csproj" />
   </ItemGroup>
 
 </Project>
