@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     <PackageReference Include="NSubstitute" Version="$(NSubstitutePackageVersion)" />
     <PackageReference Include="Shouldly" Version="$(ShouldlyPackageVersion)" />
