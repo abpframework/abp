@@ -13,4 +13,9 @@ public class SimpleGuidGenerator : IGuidGenerator
     {
         return Guid.NewGuid();
     }
+
+    public virtual Guid Next()
+    {
+        return Guid.NewGuid();
+    }
 }

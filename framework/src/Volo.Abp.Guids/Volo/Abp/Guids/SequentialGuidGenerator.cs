@@ -114,7 +114,7 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
     }
 
     /// <summary>
-    /// Generate sequential Guids that conform to the RFC 4122 Version 4.
+    /// Generate a new <see cref="Guid"/> that conform to the RFC 4122 Version 4.
     /// </summary>
     /// <returns></returns>
     public virtual Guid Next()
@@ -123,7 +123,7 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
     }
 
     /// <summary>
-    /// Generate sequential Guids that conform to the RFC 4122 Version 4.
+    /// Generate a new <see cref="Guid"/> that conform to the RFC 4122 Version 4.
     /// </summary>
     /// <param name="guidType"></param>
     /// <returns></returns>
@@ -136,10 +136,10 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
         // - d = nibbles based on UTC date/time in ticks
         // - r = nibbles based on random bytes
 
-        byte version = (byte)4;
-        byte variant = (byte)8;
-        byte filterHighBit = (byte)0b00001111;
-        byte filterLowBit = (byte)0b11110000;
+        const byte version = (byte)4;
+        const byte variant = (byte)8;
+        const byte filterHighBit = (byte)0b00001111;
+        const byte filterLowBit = (byte)0b11110000;
 
         var randomBytes = new byte[8];
         RandomNumberGenerator.GetBytes(randomBytes);
