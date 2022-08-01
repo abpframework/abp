@@ -153,7 +153,6 @@ public class MyProjectNameWebModule : AbpModule
                 options.UsePkce = true;
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
-                options.SignOutScheme = "Cookies";
 
                 options.Scope.Add("roles");
                 options.Scope.Add("email");
