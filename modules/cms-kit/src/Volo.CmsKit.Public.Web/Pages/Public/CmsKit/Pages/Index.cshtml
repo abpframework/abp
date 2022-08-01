@@ -34,7 +34,7 @@
         {
             if (contentFragment.Type == ContentConsts.Markdown)
             {
-                @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
+                @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content"), allowHtmlTags: true, preventXSS: true))
             }
             else if (contentFragment.Type == ContentConsts.Widget)
             {

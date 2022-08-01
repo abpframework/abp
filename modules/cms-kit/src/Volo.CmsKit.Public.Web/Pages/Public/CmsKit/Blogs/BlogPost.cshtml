@@ -72,7 +72,7 @@
                             {
                                 if (contentFragment.Type == ContentConsts.Markdown)
                                 {
-                                    @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
+                                    @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content"), allowHtmlTags: true, preventXSS: true))
                                 }
                                 else if (contentFragment.Type == ContentConsts.Widget)
                                 {
@@ -92,13 +92,13 @@
                                 if (Model.TagsFeature?.IsEnabled == true)
                                 {
                                     @await Component.InvokeAsync(typeof(TagViewComponent), new
-                            {
-                            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                            entityId = Model.BlogPost.Id.ToString(),
-                            urlFormat = $"/blogs/{Model.BlogSlug}?tagId={{TagId}}"
-                            })
+                                    {
+                                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                                        entityId = Model.BlogPost.Id.ToString(),
+                                        urlFormat = $"/blogs/{Model.BlogSlug}?tagId={{TagId}}"
+                                    })
+                                }
                             }
-                        }
                     </div>
                 </abp-row>
 
