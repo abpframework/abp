@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Public.Web.Renderers;
+namespace Volo.CmsKit.Web.Renderers;
 
 public interface IMarkdownToHtmlRenderer
 {

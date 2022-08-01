@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
-using Volo.CmsKit.Contents;
 using Volo.CmsKit.Users;
 
-namespace Volo.CmsKit.Public.Blogs;
+namespace Volo.CmsKit.Contents;
 
 [Serializable]
-public class BlogPostPublicDto : AuditedEntityDto<Guid>
+public class BlogPostCommonDto : AuditedEntityDto<Guid>, IContent
 {
     public Guid BlogId { get; set; }
 
