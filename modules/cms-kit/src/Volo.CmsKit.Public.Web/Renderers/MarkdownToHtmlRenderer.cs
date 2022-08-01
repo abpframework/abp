@@ -6,37 +6,43 @@ using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp.DependencyInjection;
 using Ganss.XSS;
+using Microsoft.Extensions.Options;
 
 namespace Volo.CmsKit.Public.Web.Renderers;
 
 public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDependency
 {
     private readonly HtmlSanitizer _htmlSanitizer;
+
     protected MarkdownPipeline MarkdownPipeline { get; }
 
-    public MarkdownToHtmlRenderer(MarkdownPipeline markdownPipeline)
+    protected CmsKitRendererOptions RendererOptions { get; }
+
+    public MarkdownToHtmlRenderer(
+        MarkdownPipeline markdownPipeline,
+        IOptions<CmsKitRendererOptions> rendererOptions)
     {
-        MarkdownPipeline = markdownPipeline;
         _htmlSanitizer = new HtmlSanitizer();
+        MarkdownPipeline = markdownPipeline;
+        RendererOptions = rendererOptions.Value;
     }
 
     public async Task<string> RenderAsync(string rawMarkdown, bool preventXSS = false)
     {
-        if (preventXSS)
+        if (RendererOptions.EncodeHtmlTags)
         {
             rawMarkdown = EncodeHtmlTags(rawMarkdown, true);
         }
 
         var html = Markdown.ToHtml(rawMarkdown, MarkdownPipeline);
 
-        if (preventXSS)
+        if (RendererOptions.PreventXSS)
         {
             html = _htmlSanitizer.Sanitize(html);
         }
 
         return html;
     }
-
 
     private static List<CodeBlockIndexPair> GetCodeBlockIndices(string markdownText)
     {
