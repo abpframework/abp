@@ -81,8 +81,7 @@
   
       options.UsePkce = true; // Add this line
       options.SaveTokens = true;
-      options.GetClaimsFromUserInfoEndpoint = true;
-      options.SignOutScheme = "Cookies"; // Add this line
+      options.GetClaimsFromUserInfoEndpoint = true
   
       options.Scope.Add("roles"); // Replace "role" with "roles"
       options.Scope.Add("email");
@@ -90,8 +89,8 @@
       options.Scope.Add("MyApplication");
   });
   ```
-
-  Replace role scope to **roles** and add **UsePkce** and **SignoutScheme** options.
+  
+Replace role scope to **roles** and add **UsePkce** and **SignoutScheme** options.
 
 ## IdentityServer
 
