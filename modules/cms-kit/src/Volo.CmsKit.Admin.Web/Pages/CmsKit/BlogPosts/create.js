@@ -342,6 +342,9 @@ $(function () {
 
             $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
                 editor.setHTML(result);
+
+                var highllightedText = $('#ContentEditor').find('.toastui-editor-md-preview-highlight');
+                highllightedText.removeClass('toastui-editor-md-preview-highlight');
             });
         }
         else if ($(this).attr("aria-label") == 'Write') {

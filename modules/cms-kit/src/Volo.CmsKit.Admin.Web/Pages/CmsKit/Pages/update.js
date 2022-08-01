@@ -156,6 +156,9 @@ $(function () {
                 $('head').append('<style id="editor-preview-style">' + style + '</style>');
 
                 editor.setHTML(result);
+
+                var highllightedText = $('#ContentEditor').find('.toastui-editor-md-preview-highlight');
+                highllightedText.removeClass('toastui-editor-md-preview-highlight');
             });
         }
         else if ($(this).attr("aria-label") == 'Write') {
@@ -163,7 +166,7 @@ $(function () {
             editor.setMarkdown(retrievedObject);
         }
     });
-    
+
     function createAddWidgetButton() {
         const button = document.createElement('button');
 
