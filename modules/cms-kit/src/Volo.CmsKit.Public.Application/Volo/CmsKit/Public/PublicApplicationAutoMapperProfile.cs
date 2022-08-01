@@ -33,7 +33,7 @@ public class PublicApplicationAutoMapperProfile : Profile
         CreateMap<Page, PageDto>()
             .Ignore(x => x.ContentFragments);
 
-        CreateMap<BlogPost, BlogPostPublicDto>()
+        CreateMap<BlogPost, BlogPostCommonDto>()
             .Ignore(x => x.ContentFragments);
 
         CreateMap<MenuItem, MenuItemDto>();

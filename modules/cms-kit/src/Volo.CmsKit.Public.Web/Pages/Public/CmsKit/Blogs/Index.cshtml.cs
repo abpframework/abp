@@ -25,7 +25,7 @@ public class IndexModel : CmsKitPublicPageModelBase
     [BindProperty(SupportsGet = true)]
     public Guid? TagId { get; set; }
 
-    public PagedResultDto<BlogPostPublicDto> Blogs { get; private set; }
+    public PagedResultDto<BlogPostCommonDto> Blogs { get; private set; }
 
     public PagerModel PagerModel => new PagerModel(Blogs.TotalCount, Blogs.Items.Count, CurrentPage, PageSize, Request.Path.ToString());
 
