@@ -19,19 +19,15 @@ builder.Services.AddAuthentication(options =>
     .AddOpenIdConnect("oidc", options =>
     {
         options.Authority = "https://localhost:44301/";
+        options.RequireHttpsMetadata = true;
+        options.ResponseType = OidcConstants.ResponseTypes.Code;
 
         options.ClientId = "AbpApp";
         options.ClientSecret = "1q2w3e*";
 
-        options.RequireHttpsMetadata = true;
-        options.GetClaimsFromUserInfoEndpoint = true;
-        options.SaveTokens = true;
-
         options.UsePkce = true;
-
-        options.ResponseType = OidcConstants.ResponseTypes.Code;
-
-        options.SignOutScheme = "Cookies";
+        options.SaveTokens = true;
+        options.GetClaimsFromUserInfoEndpoint = true;
 
         options.Scope.Add("email");
         options.Scope.Add("roles");
