@@ -1,6 +1,6 @@
 # ABP CLI - New Solution Sample Commands 
 
-The `abp new` command creates an ABP solution or other artifacts based on an ABP template. [ABP CLI](CLI.md) has several parameters to create a new ABP solution. In this document we will show you some sample commands to create a new solution. All the project names are `Acme.BookStore`. Currently, the only available mobile project is a `React Native` mobile app. Available database providers are `Entity Framework Core` and `MongoDB`. All the commands starts with `abp new`.
+The `abp new` command creates an ABP solution or other artifacts based on an ABP template. [ABP CLI](CLI.md) has several parameters to create a new ABP solution. In this document we will show you some sample commands to create a new solution. All the project names are `Acme.BookStore`. Currently, the available mobile projects are `React Native` and `MAUI` mobile app. Available database providers are `Entity Framework Core` and `MongoDB`. All the commands starts with `abp new`.
 
 ## Angular
 

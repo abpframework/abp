@@ -5,6 +5,7 @@ using NuGet.Versioning;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Maui;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
@@ -159,6 +160,15 @@ public abstract class AppTemplateBase : TemplateInfo
         if (context.BuildArgs.MobileApp != MobileApp.ReactNative)
         {
             steps.Add(new RemoveFolderStep(MobileApp.ReactNative.GetFolderName().EnsureStartsWith('/')));
+        }
+
+        if (context.BuildArgs.MobileApp == MobileApp.Maui)
+        {
+            steps.Add(new MauiChangeApplicationIdGuidStep());
+        }
+        else
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Maui"));
         }
 
         if (!context.BuildArgs.PublicWebSite)

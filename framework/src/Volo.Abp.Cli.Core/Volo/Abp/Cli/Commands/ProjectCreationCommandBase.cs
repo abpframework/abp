@@ -493,6 +493,8 @@ public abstract class ProjectCreationCommandBase
                 return MobileApp.None;
             case "react-native":
                 return MobileApp.ReactNative;
+            case "maui":
+                return MobileApp.Maui;
             default:
                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Mobile App"));
         }
