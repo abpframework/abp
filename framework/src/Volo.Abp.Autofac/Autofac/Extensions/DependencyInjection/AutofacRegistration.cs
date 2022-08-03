@@ -94,22 +94,13 @@ public static class AutofacRegistration
             throw new ArgumentNullException(nameof(services));
         }
 
-        builder.RegisterType<AutofacServiceProvider>()
-            .As<IServiceProvider>()
-            .As<IServiceProviderIsService>()
-            .ExternallyOwned();
-
+        builder.RegisterType<AutofacServiceProvider>().As<IServiceProvider>().ExternallyOwned();
         var autofacServiceScopeFactory = typeof(AutofacServiceProvider).Assembly.GetType("Autofac.Extensions.DependencyInjection.AutofacServiceScopeFactory");
         if (autofacServiceScopeFactory == null)
         {
             throw new AbpException("Unable get type of Autofac.Extensions.DependencyInjection.AutofacServiceScopeFactory!");
         }
-
-        // Issue #83: IServiceScopeFactory must be a singleton and scopes must be flat, not hierarchical.
-        builder
-            .RegisterType(autofacServiceScopeFactory)
-            .As<IServiceScopeFactory>()
-            .SingleInstance();
+        builder.RegisterType(autofacServiceScopeFactory).As<IServiceScopeFactory>();
 
         Register(builder, services, lifetimeScopeTagForSingletons);
     }
