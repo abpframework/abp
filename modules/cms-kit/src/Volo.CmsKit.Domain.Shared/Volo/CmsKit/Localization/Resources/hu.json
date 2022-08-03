@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Biztosan törlöd ezt az oldalt?",
     "PageId": "oldal",
     "Pages": "Oldalak",
-    "PageSlugInformation": "A Slug az url-en használatos. Az Ön URL-je a következő lesz: „/pages/{{slug}}”.",
+    "PageSlugInformation": "A Slug az url-en használatos. Az Ön URL-je a következő lesz: „/{{slug}}”.",
     "Permission:BlogManagement": "Blogkezelés",
     "Permission:BlogManagement.Create": "Teremt",
     "Permission:BlogManagement.Delete": "Töröl",
