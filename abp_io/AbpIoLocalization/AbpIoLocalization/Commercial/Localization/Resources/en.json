@@ -735,6 +735,14 @@
     "ConfirmedEmailAddressRequiredToStartTrial": "You should have a confirmed email address in order to start a trial license.",
     "EmailVerificationMailNotSent": "Email verification mail couldn't send.",
     "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">Click here to get a confirmation email</a> if you haven't got it before.",
-    "WhichLicenseTypeYouAreInterestedIn": "Which license type you are interested in?"
+    "WhichLicenseTypeYouAreInterestedIn": "Which license type you are interested in?",
+    "DontTakeOurWordForIt": "Don't take our word for it...",
+    "ReadAbpCommercialUsersWantYouToKnow": "Read what ABP Commercial users want you to know",
+    "Testimonial_ShortDescription_1": "The modularity of ABP made it possible for the team to deliver in time.",
+    "Testimonial_ShortDescription_2": "Build new features faster than before.",
+    "Testimonial_ShortDescription_3": "We start from out-of-the-box features and just focus on what we really need to write.",
+    "Testimonial_ShortDescription_4": "ABP Commercial was the best fit for our needs.",
+    "OnlineReviewersOnAbpCommercial": "Online Reviews on ABP Commercial",
+    "SeeWhatToldAboutAbpCommercial": "See what has been told about ABP Commercial and write your thoughts if you want."
   }
 }

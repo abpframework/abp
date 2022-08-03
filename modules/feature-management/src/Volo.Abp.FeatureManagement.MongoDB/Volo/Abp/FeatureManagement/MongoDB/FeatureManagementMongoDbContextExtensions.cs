@@ -11,7 +11,7 @@ public static class FeatureManagementMongoDbContextExtensions
 
         builder.Entity<FeatureValue>(b =>
         {
-            b.CollectionName = FeatureManagementDbProperties.DbTablePrefix + "FeatureValues";
+            b.CollectionName = AbpFeatureManagementDbProperties.DbTablePrefix + "FeatureValues";
         });
     }
 }
