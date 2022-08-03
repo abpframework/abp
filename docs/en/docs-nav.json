@@ -1322,11 +1322,12 @@
         },
 		{
           "text": "OpenIddict",
-		  "items": [
-			{
-			  "text": "OpenIddict Migration Guide",
-			  "path": "Migration-Guides/OpenIddict-Step-by-Step.md"
-			}
+	  "items": [
+		{
+		 "text": "OpenIddict Migration Guide",
+		 "path": "Migration-Guides/OpenIddict-Step-by-Step.md"
+		}
+	   ],
           "path": "Modules/OpenIddict.md"
         },
         {
