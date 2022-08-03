@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -19,6 +20,6 @@ public class AbpAspNetCoreMvcClientModule : AbpModule
 
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        await context.ServiceProvider.GetRequiredService<MvcCachedApplicationConfigurationClient>().InitializeAsync();
+        await context.ServiceProvider.GetRequiredService<IClientScopeServiceProviderAccessor>().ServiceProvider.GetRequiredService<MvcCachedApplicationConfigurationClient>().InitializeAsync();
     }
 }
