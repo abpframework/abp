@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Public.Pages;

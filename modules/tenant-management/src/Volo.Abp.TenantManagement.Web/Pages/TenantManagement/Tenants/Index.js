@@ -113,12 +113,5 @@
             e.preventDefault();
             _createModal.open();
         });
-
-        _$wrapper.find('button[name=ManageHostFeatures]').click(function (e) {
-            e.preventDefault();
-            _featuresModal.open({
-                providerName: 'T'
-            });
-        });
     });
 })();

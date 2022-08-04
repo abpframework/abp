@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.CmsKit.Web.Contents;
+namespace Volo.CmsKit.Web.Pages.CmsKit.Components.Contents;
 
 public class PlainTextContentRenderer : IContentRenderer, ITransientDependency
 {

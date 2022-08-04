@@ -1,6 +1,6 @@
 ﻿namespace Volo.Docs
 {
-    public static class DocsDbProperties
+    public static class AbpDocsDbProperties
     {
         public static string DbTablePrefix { get; set; } = "Docs";
 

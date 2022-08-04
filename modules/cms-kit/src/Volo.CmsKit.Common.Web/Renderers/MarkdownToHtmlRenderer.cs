@@ -7,7 +7,7 @@ using System.Web;
 using Volo.Abp.DependencyInjection;
 using Ganss.XSS;
 
-namespace Volo.CmsKit.Public.Web.Renderers;
+namespace Volo.CmsKit.Web.Renderers;
 
 public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDependency
 {

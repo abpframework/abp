@@ -29,7 +29,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         StringLocalizerFactory = stringLocalizerFactory;
         Options = options.Value;
 
-        //TODO: Instead, use IHybridServiceScopeFactory and create a scope..?
+        //TODO: Instead, use IServiceScopeFactory and create a scope..?
 
         _lazyProviders = new Lazy<List<IFeatureManagementProvider>>(
             () => Options

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.Public.Pages;
 using Volo.CmsKit.Web.Pages;
 
@@ -12,9 +13,9 @@ public class IndexModel : CommonPageModel
 
     protected IPagePublicAppService PagePublicAppService { get; }
 
-    public PageDto PageDto{ get; private set; }
+    public PageDto PageDto { get; private set; }
 
-public IndexModel(IPagePublicAppService pagePublicAppService)
+    public IndexModel(IPagePublicAppService pagePublicAppService)
     {
         PagePublicAppService = pagePublicAppService;
     }
