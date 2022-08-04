@@ -157,4 +157,8 @@ $(function () {
         e.preventDefault();
         dataTable.ajax.reload();
     });
+
+    $("#AdvancedFilterSectionToggler").click(function (e) {
+        $("#AdvancedFilterSection").toggle();
+    });
 });
