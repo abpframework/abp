@@ -32,7 +32,7 @@
         <abp-card-header>
             <form autocomplete="off" id="FilterForm">
 
-                <div class="row">
+                <abp-row>
 
                     <div class="col-auto">
                         <div class="input-group mb-2">
@@ -56,27 +56,27 @@
                         </div>
                     </div>
 
-                    <div class="col-auto">
+                    <abp-column size="_2">
                         <div class="input-group mb-2">
                             <div class="input-group-text">@L["Version"].Value</div>
 
                             <input type="text"
                                id="Version"
                                name="Version"
-                               class="form-control me-sm-2">
+                               class="form-control">
                         </div>
-                    </div>
+                    </abp-column>
                         
-                    <div class="col-auto">
+                    <abp-column size="_3">
                         <div class="input-group mb-2">
                             <div class="input-group-text">@L["LanguageCode"].Value</div>
 
                             <input type="text"
                                id="LanguageCode"
                                name="LanguageCode"
-                               class="form-control me-sm-2">
+                               class="form-control">
                         </div>
-                    </div>
+                    </abp-column>
 
                     <abp-row class="mt-3 mb-3">
                         <abp-column size-md="_12">
@@ -85,16 +85,16 @@
                     </abp-row>
                     <abp-row id="AdvancedFilterSection" style="display: none;">
 
-                        <div class="col-auto">
+                        <abp-column size="_2">
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["Format"].Value</div>
 
                                 <input type="text"
                                    id="Format"
                                    name="Format"
-                                   class="form-control me-sm-2">
+                                   class="form-control">
                             </div>
-                        </div>
+                        </abp-column>
 
                         <div class="col-auto">
                             <div class="input-group mb-2">
@@ -179,7 +179,7 @@
                     <div class="col-auto">
                         <abp-button button-type="Primary" icon="search" id="SearchButton" style="line-height: 25px;" text="@L["Search"].Value"></abp-button>
                     </div>
-                </div>
+                </abp-row>
             </form>
         </abp-card-header>
         <abp-card-body>
