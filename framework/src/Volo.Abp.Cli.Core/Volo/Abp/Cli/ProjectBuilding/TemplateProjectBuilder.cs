@@ -221,7 +221,7 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
             return false;
         }
 
-        return semanticVersion >= new SemanticVersion(6, 0, 0);
+        return semanticVersion >= SemanticVersion.Parse("6.0.0-rc.1");
     }
 
     private void ConfigureThemeOptions(ProjectBuildArgs args, string templateVersion)
