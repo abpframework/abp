@@ -9,6 +9,7 @@ using Volo.Abp;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Tags;
+using Tag = Volo.CmsKit.Tags.Tag;
 
 namespace Volo.CmsKit.MongoDB.Tags;
 
@@ -51,5 +52,24 @@ public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext,
             .Select(q => q.EntityId);
 
         return await AsyncExecuter.ToListAsync(blogPostQueryable, GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<List<string>> GetEntityIdsFilteredByTagNameAsync(
+        [NotNull] string tagName,
+        [NotNull] string entityType,
+        [CanBeNull] Guid? tenantId=null,
+        CancellationToken cancellationToken = default)
+    {
+        var entityTagQueryable = await GetMongoQueryableAsync(GetCancellationToken(cancellationToken));
+        var tagQueryable = await GetMongoQueryableAsync<Tag>(GetCancellationToken(cancellationToken));
+        var resultQueryable = from et in entityTagQueryable
+            join t in tagQueryable on et.TagId equals t.Id
+            where t.Name == tagName 
+                  && t.EntityType == entityType 
+                  && et.TenantId == tenantId 
+                  && t.TenantId == tenantId
+                  && !t.IsDeleted
+            select et.EntityId;
+        return await AsyncExecuter.ToListAsync(resultQueryable, GetCancellationToken(cancellationToken));
     }
 }
