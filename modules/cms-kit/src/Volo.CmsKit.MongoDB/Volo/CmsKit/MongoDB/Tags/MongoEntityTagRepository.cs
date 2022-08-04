@@ -60,16 +60,23 @@ public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext,
         [CanBeNull] Guid? tenantId=null,
         CancellationToken cancellationToken = default)
     {
+        var dbContext = await GetDbContextAsync();
         var entityTagQueryable = await GetMongoQueryableAsync(GetCancellationToken(cancellationToken));
-        var tagQueryable = await GetMongoQueryableAsync<Tag>(GetCancellationToken(cancellationToken));
-        var resultQueryable = from et in entityTagQueryable
-            join t in tagQueryable on et.TagId equals t.Id
-            where t.Name == tagName 
-                  && t.EntityType == entityType 
-                  && et.TenantId == tenantId 
-                  && t.TenantId == tenantId
-                  && !t.IsDeleted
-            select et.EntityId;
+        var tagQueryable = dbContext.Tags.AsQueryable();
+
+        var resultQueryable = entityTagQueryable
+                                .Join(
+                                    tagQueryable,
+                                    o => o.TagId,
+                                    i => i.Id,
+                                    (entityTag, tag) => new { entityTag, tag })
+                                .Where(x => x.tag.EntityType == entityType
+                                    && x.entityTag.TenantId == tenantId
+                                    && x.tag.TenantId == tenantId
+                                    && x.tag.IsDeleted == false
+                                )
+                                .Select(s => s.entityTag.EntityId);
+ 
         return await AsyncExecuter.ToListAsync(resultQueryable, GetCancellationToken(cancellationToken));
     }
 }
