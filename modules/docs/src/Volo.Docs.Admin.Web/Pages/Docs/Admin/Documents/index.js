@@ -12,7 +12,6 @@ $(function () {
             name: $('#Name').val(),
             version: $('#Version').val(),
             languageCode: $('#LanguageCode').val(),
-            fileName: $('#FileName').val(),
             format: $('#Format').val(),
             creationTimeMin: getFormattedDate($('#CreationTimeMin')),
             creationTimeMax: getFormattedDate($('#CreationTimeMax')),
