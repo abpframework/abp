@@ -34,27 +34,27 @@
 
                 <abp-row>
 
-                    <div class="col-auto">
+                    <abp-column size="_4">
                         <div class="input-group mb-2">
                             <div class="input-group-text">@L["Project"].Value</div>
 
                             <input type="text"
                                id="ProjectId"
                                name="ProjectId"
-                               class="form-control me-sm-2">
+                               class="form-control">
                         </div>
-                    </div>
+                    </abp-column>
 
-                    <div class="col-auto">
+                    <abp-column size="_4">
                         <div class="input-group mb-2">
                             <div class="input-group-text">@L["Name"].Value</div>
 
                             <input type="text"
                                id="Name"
                                name="Name"
-                               class="form-control me-sm-2">
+                               class="form-control">
                         </div>
-                    </div>
+                    </abp-column>
 
                     <abp-column size="_2">
                         <div class="input-group mb-2">
@@ -85,67 +85,27 @@
                     </abp-row>
                     <abp-row id="AdvancedFilterSection" style="display: none;">
 
-                        <abp-column size="_2">
-                            <div class="input-group mb-2">
-                                <div class="input-group-text">@L["Format"].Value</div>
-
-                                <input type="text"
-                                   id="Format"
-                                   name="Format"
-                                   class="form-control">
-                            </div>
-                        </abp-column>
-
-                        <abp-column size="_1">
-                        </abp-column>
-                        
-                          <abp-column size="_5">
-                            <div class="input-group mb-2">
-                                <div class="input-group-text">@L["LastSignificantUpdateTime"].Value</div>
-
-                                <span>
-                                    <input type="date"
-                                       id="LastSignificantUpdateTimeMin"
-                                       name="LastSignificantUpdateTimeMin"
-                                       class="form-control datepicker"
-                                       placeholder="@L["StartDate"].Value">
-                                    <span>-</span>
-                                    <input type="date"
-                                       id="LastSignificantUpdateTimeMax"
-                                       name="LastSignificantUpdateTimeMax"
-                                       placeholder="@L["EndDate"].Value"
-                                       class="form-control datepicker">
-                                </span>
-                            </div>
-                        </abp-column>
-                        
-                        <abp-column size="_4">
-                        </abp-column>
-                        
                         <abp-column size="_4">
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["CreationTime"].Value</div>
 
-                                <span>
                                     <input type="date"
                                        id="CreationTimeMin"
                                        name="CreationTimeMin"
                                        class="form-control datepicker"
                                        placeholder="@L["StartDate"].Value">
-                                    <span>-</span>
+                                    
                                     <input type="date"
                                        id="CreationTimeMax"
                                        name="CreationTimeMax"
                                        placeholder="@L["EndDate"].Value"
                                        class="form-control datepicker">
-                                </span>
                             </div>
                         </abp-column>
 
                         <abp-column size="_4">
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["LastUpdateTime"].Value</div>
-                                <span>
                                     <input type="date"
                                        id="LastUpdatedTimeMin"
                                        name="LastUpdatedTimeMin"
@@ -157,7 +117,6 @@
                                        name="LastUpdatedTimeMax"
                                        placeholder="@L["EndDate"].Value"
                                        class="form-control datepicker">
-                                </span>
                             </div>
                         </abp-column>
 
@@ -165,21 +124,52 @@
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["LastCachedTime"].Value</div>
 
-                                <span>
                                     <input type="date"
                                        id="LastCachedTimeMin"
                                        name="LastCachedTimeMin"
                                        class="form-control datepicker"
                                        placeholder="@L["StartDate"].Value">
-                                    <span>-</span>
+                                       
                                     <input type="date"
                                        id="LastCachedTimeMax"
                                        name="LastCachedTimeMax"
                                        placeholder="@L["EndDate"].Value"
                                        class="form-control datepicker">
-                                </span>
                             </div>
                         </abp-column>
+                        
+                        <abp-column size="_2">
+                            <div class="input-group mb-2">
+                                <div class="input-group-text">@L["Format"].Value</div>
+
+                                <input type="text"
+                                   id="Format"
+                                   name="Format"
+                                   class="form-control">
+                            </div>
+                        </abp-column>
+
+                        <abp-column size="_2">
+                        </abp-column>
+                        
+                          <abp-column size="_5">
+                            <div class="input-group mb-2">
+                                <div class="input-group-text">@L["LastSignificantUpdateTime"].Value</div>
+
+                                    <input type="date"
+                                       id="LastSignificantUpdateTimeMin"
+                                       name="LastSignificantUpdateTimeMin"
+                                       class="form-control datepicker"
+                                       placeholder="@L["StartDate"].Value">
+                                       
+                                    <input type="date"
+                                       id="LastSignificantUpdateTimeMax"
+                                       name="LastSignificantUpdateTimeMax"
+                                       placeholder="@L["EndDate"].Value"
+                                       class="form-control datepicker">
+                            </div>
+                        </abp-column>
+                        
                     </abp-row>
 
                     <div class="col-auto">
