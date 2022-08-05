@@ -5,7 +5,7 @@
         var re = new RegExp(/^.*\//);
         var rootUrl = re.exec(window.location.href);
 
-        var pageHeader = $('#PostTitle').text();
+        var pageHeader = $('#PostTitle').text().trim();
         var blogName = $('#BlogFullName').attr('name');
 
         $('#TwitterShareLink').attr(

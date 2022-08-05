@@ -256,7 +256,7 @@
     "Surname": "姓",
     "CompanyName": "公司名",
     "DoYouAgreePrivacyPolicy": "我同意<a href=\"https://account.abp.io/Account/TermsConditions\">條款和條件</a>和<a href=\"https://account.abp.io/Account/Privacy \">隱私政策</a>。",
-    "Free": "自由",
+    "Free": "免費",
     "DDDEBook": "DDD電子書",
     "PracticalGuideForImplementingDDD": "本書是使用 ABP 框架實現領域驅動設計的實用指南。",
     "IntroducingDDD": "介紹領域驅動設計",

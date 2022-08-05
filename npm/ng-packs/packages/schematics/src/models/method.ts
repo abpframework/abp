@@ -4,6 +4,7 @@ import { getParamName } from '../utils/methods';
 import { ParameterInBody } from './api-definition';
 import { Property } from './model';
 import { Omissible } from './util';
+import {VOLO_REMOTE_STREAM_CONTENT} from "../constants";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const shouldQuote = require('should-quote');
 
@@ -39,6 +40,7 @@ export class Body {
   body?: string;
   method: string;
   params: string[] = [];
+  responseTypeWithNamespace: string;
   requestType = 'any';
   responseType: string;
   url: string;
@@ -77,6 +79,10 @@ export class Body {
     this.setUrlQuotes();
   }
 
+  isBlobMethod(){
+    return this.responseTypeWithNamespace === VOLO_REMOTE_STREAM_CONTENT
+  }
+
   private setUrlQuotes() {
     this.url = /{/.test(this.url) ? `\`/${this.url}\`` : `'/${this.url}'`;
   }
@@ -84,5 +90,5 @@ export class Body {
 
 export type BodyOptions = Omissible<
   Omit<Body, 'registerActionParameter'>,
-  'params' | 'requestType'
+  'params' | 'requestType' | 'isBlobMethod'
 >;

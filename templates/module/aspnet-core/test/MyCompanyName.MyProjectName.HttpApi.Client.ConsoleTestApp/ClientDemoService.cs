@@ -93,8 +93,6 @@ public class ClientDemoService : ITransientDependency
     }
 
     /* Shows how to use HttpClient to perform a request to the HTTP API.
-     * It obtains access token using IdentityServer's API. See its documentation:
-     * https://identityserver4.readthedocs.io/en/latest/quickstarts/2_resource_owner_passwords.html
      */
     private async Task TestAllManuallyAsync()
     {

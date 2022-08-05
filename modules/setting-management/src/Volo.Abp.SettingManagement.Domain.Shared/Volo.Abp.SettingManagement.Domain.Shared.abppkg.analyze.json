@@ -21,11 +21,11 @@
       "valueType": "ToggleStringValueType",
       "defaultValue": "false",
       "displayName": "Allow tenants to change email settings.",
-      "description": "AllowTenantsToChangeEmailSettingsDescription",
+      "description": "AllowChangingEmailSettingsDescription",
       "isAvailableToHost": false,
       "isVisibleToClients": true,
       "contentType": "feature",
-      "name": "SettingManagement.AllowTenantsToChangeEmailSettings"
+      "name": "SettingManagement.AllowChangingEmailSettings"
     }
   ]
 }
