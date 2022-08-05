@@ -164,6 +164,13 @@
     "Books": "Books",
     "ABPDiscordServer": "ABP Discord Server",
     "ABPCommunityTalks": "ABP Community Talks",
-    "ABPCommunityPosts": "ABP Community Posts"
+    "ABPCommunityPosts": "ABP Community Posts",
+    "BuyAndGetMonths": "BUY 12 MONTHS, <span class=\"text-info\">GET 14 MONTHS!</span>",
+    "GetYourDeal": "Get Your Deal",
+    "BuyOrRenewLicense": "Buy or Renew License Now and Get 2 Extra Months!",
+    "BuyOrRenewLicenseToGetExtra2Months": "Buy or Renew License Now and Get 2 Extra Months! HURRY UP! ⏰ Last Day: {0}",
+    "HurryUp": "HURRY UP!",
+    "LastDay": "Last Day: {0}",
+    "BuyNewLicenseBetweenDatesToGetBenefit": "Buy a new license between {0} and {1} to get benefit for extra 2 months!"
   }
 }

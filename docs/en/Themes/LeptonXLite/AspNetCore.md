@@ -7,6 +7,8 @@ LeptonX Lite has implementation for the ABP Framework Razor Pages. It's a simpli
 
 ## Installation
 
+This theme is **already installed** when you create a new solution using the startup templates. If you are using any other template, you can install this theme by following the steps below:
+
 - Add **Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite** package to your **Web** application.
 
 ```bash

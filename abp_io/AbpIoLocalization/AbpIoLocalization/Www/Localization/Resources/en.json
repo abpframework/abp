@@ -372,6 +372,20 @@
     "MasteringAbpFramework_Book_What_You_Will_Learn_8": "Write unit, integration, and UI tests using ABP Framework.",
     "MasteringAbpFramework_Book_WhoIsThisBookFor": "Who's this book for",
     "MasteringAbpFramework_Book_WhoIsThisBookFor_Description": "This book is for web developers who want to learn software architectures and best practices for building\n maintainable web-based solutions using Microsoft technologies and ABP Framework. Basic knowledge of C#\n and ASP.NET Core is necessary to get started with this book.",
-    "ComputersAndTechnology": "Computers & Technology"
+    "ComputersAndTechnology": "Computers & Technology",
+    "BuildingMicroserviceSolutions": "Building Microservice Solutions",
+    "MicroserviceBookPracticalGuide": "This book is a reference guide for developing and managing microservice-based applications using the ABP Framework. It references the <strong>.NET Microservice Sample Reference Application</strong>: eShopOnContainers and discusses the architectural design and implementation approaches using the ABP Framework. By the end of this book, you'll learn how ABP approaches the common microservice complexities such as authorization, distributed transactions, inter-microservice communications, deployment, etc.",
+    "IntroducingTheSolution": "Introducing the eShopOnAbp Solution",
+    "RunningTheSolution": "Running the Solution",
+    "UnderstandingTheAuthenticationSystem": "Understanding the Authentication System",
+    "Authors": "Authors",
+    "MicroserviceEBook": "Microservice E-Book",
+    "SelectUITheme": "Select UI Theme",
+    "LeptonXLiteTheme": "LeptonX Lite Theme",
+    "BasicTheme": "Basic Theme",
+    "LeptonXLiteThemeInfo": " A modern and stylish Bootstrap UI theme. Ideal if you want to have a production ready UI theme. This is the newest theme and is the default.",
+    "BasicThemeInfo": "Minimalist UI theme with plain Bootstrap colors and styles. Ideal if you will build your own UI theme.",
+    "SeeDocumentation": "See <a href='{0}' target='_blank'>documentation</a>.",
+    "SeeFullScreen": "<a href='{0}' target='_blank'>🖼️ See the screenshot</a>"
   }
 }

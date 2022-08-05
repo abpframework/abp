@@ -1,11 +1,7 @@
 using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Volo.CmsKit.EntityFrameworkCore;
-using Volo.CmsKit.MultiTenancy;
-using Volo.CmsKit.Web;
 using Microsoft.OpenApi.Models;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -19,8 +15,8 @@ using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
-using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
@@ -29,6 +25,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
@@ -38,15 +35,16 @@ using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
-using Volo.CmsKit.Public.Web;
-using System;
-using Volo.Abp.PermissionManagement.HttpApi;
-using Volo.CmsKit.Tags;
 using Volo.CmsKit.Comments;
-using Volo.CmsKit.MediaDescriptors;
-using Volo.CmsKit.Reactions;
-using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.EntityFrameworkCore;
+using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.MultiTenancy;
+using Volo.CmsKit.Public.Web;
+using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Tags;
+using Volo.CmsKit.Web;
 
 namespace Volo.CmsKit;
 
@@ -93,9 +91,8 @@ public class CmsKitWebUnifiedModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
-        var configuration = context.Services.GetConfiguration();
 
-        ConfigureCmsKit(context);
+        ConfigureCmsKit();
 
         Configure<AbpDbContextOptions>(options =>
         {
@@ -156,11 +153,11 @@ public class CmsKitWebUnifiedModule : AbpModule
 
         Configure<CmsKitContentWidgetOptions>(options =>
         {
-            options.AddWidget("ExComment", "CommentDate", "DecisionCommentDate");
+            options.AddWidget("Today", "CmsToday", "Format");
         });
     }
 
-    private void ConfigureCmsKit(ServiceConfigurationContext context)
+    private void ConfigureCmsKit()
     {
         Configure<CmsKitTagOptions>(options =>
         {

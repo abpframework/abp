@@ -2,16 +2,11 @@
 @addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 @using Volo.CmsKit.Contents
 @using System.Dynamic
-@using Volo.CmsKit.Public.Web.Renderers
 @using Volo.Abp.Data
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-@inject IMarkdownToHtmlRenderer MarkdownRenderer
-
-
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages.IndexModel
-
 
 @section styles{
     
@@ -30,18 +25,7 @@
 
 <abp-card>
     <abp-card-body>
-        @foreach (ContentFragment contentFragment in Model.PageDto.ContentFragments)
-        {
-            if (contentFragment.Type == ContentConsts.Markdown)
-            {
-                @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
-            }
-            else if (contentFragment.Type == ContentConsts.Widget)
-            {
-                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
-            }
-            
-        }
+        @await Component.InvokeAsync("ContentFragment", new { contentDto = Model.PageDto })
     </abp-card-body>
 </abp-card>
 

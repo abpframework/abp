@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using Shouldly;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
@@ -26,6 +27,16 @@ namespace Volo.Abp.Json
             testClass = JsonSerializer.Deserialize<TestClass>("{\"Day\": 1}", options);
             testClass.ShouldNotBeNull();
             testClass.Day.ShouldBe(DayOfWeek.Monday);
+
+            var dictionary = JsonSerializer.Deserialize<Dictionary<DayOfWeek, string>>("{\"Monday\":\"Mo\"}", options);
+            dictionary.ShouldNotBeNull();
+            dictionary.Keys.ShouldContain(DayOfWeek.Monday);
+            dictionary.Values.ShouldContain("Mo");
+
+            dictionary = JsonSerializer.Deserialize<Dictionary<DayOfWeek, string>>("{\"1\":\"Mo\"}", options);
+            dictionary.ShouldNotBeNull();
+            dictionary.Keys.ShouldContain(DayOfWeek.Monday);
+            dictionary.Values.ShouldContain("Mo");
         }
 
         [Fact]
@@ -45,6 +56,13 @@ namespace Volo.Abp.Json
             });
 
             testClassJson.ShouldBe("{\"Day\":1}");
+
+            testClassJson = JsonSerializer.Serialize(new Dictionary<DayOfWeek, string>
+            {
+                {DayOfWeek.Monday, "Mo"}
+            }, options);
+
+            testClassJson.ShouldBe("{\"Monday\":\"Mo\"}");
         }
 
         class TestClass

@@ -10,7 +10,6 @@
       "ConnectionStrings": "Kapcsolat beállítás",
       "DisplayName:DefaultConnectionString": "Alapértelmezettt kapcsolati beállítás",
       "DisplayName:UseSharedDatabase": "Használjon megosztott adatbázist",
-      "ManageHostFeatures": "Host funkciók kezelése",
       "Permission:TenantManagement": "Bérlő menedzsment",
       "Permission:Create": "Létrehozás",
       "Permission:Edit": "Szerkesztés",

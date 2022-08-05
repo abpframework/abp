@@ -10,7 +10,6 @@
     "ConnectionStrings": "Cadeia de Conexão",
     "DisplayName:DefaultConnectionString": "Cadeia de Conexão Padrão",
     "DisplayName:UseSharedDatabase": "Use o banco de dados compartilhado",
-    "ManageHostFeatures": "Gerenciar recursos do Host",
     "Permission:TenantManagement": "Inquilinos",
     "Permission:Create": "Criar",
     "Permission:Edit": "Editar",

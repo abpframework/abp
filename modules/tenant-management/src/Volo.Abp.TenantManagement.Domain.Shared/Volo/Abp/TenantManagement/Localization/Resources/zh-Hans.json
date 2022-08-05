@@ -10,7 +10,6 @@
     "ConnectionStrings": "连接字符串",
     "DisplayName:DefaultConnectionString": "默认连接字符串",
     "DisplayName:UseSharedDatabase": "使用共享数据库",
-    "ManageHostFeatures": "管理Host特性",
     "Permission:TenantManagement": "租户管理",
     "Permission:Create": "创建",
     "Permission:Edit": "编辑",

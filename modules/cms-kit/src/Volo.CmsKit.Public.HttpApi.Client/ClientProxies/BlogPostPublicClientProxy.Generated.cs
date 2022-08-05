@@ -2,11 +2,9 @@
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Http.Client;
-using Volo.Abp.Http.Modeling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.ClientProxying;
-using Volo.CmsKit.Public.Blogs;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.Users;
 
 // ReSharper disable once CheckNamespace
@@ -16,18 +14,18 @@ namespace Volo.CmsKit.Public.Blogs.ClientProxies;
 [ExposeServices(typeof(IBlogPostPublicAppService), typeof(BlogPostPublicClientProxy))]
 public partial class BlogPostPublicClientProxy : ClientProxyBase<IBlogPostPublicAppService>, IBlogPostPublicAppService
 {
-    public virtual async Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
+    public virtual async Task<BlogPostCommonDto> GetAsync(string blogSlug, string blogPostSlug)
     {
-        return await RequestAsync<BlogPostPublicDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<BlogPostCommonDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
             { typeof(string), blogSlug },
             { typeof(string), blogPostSlug }
         });
     }
 
-    public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, BlogPostGetListInput input)
+    public virtual async Task<PagedResultDto<BlogPostCommonDto>> GetListAsync(string blogSlug, BlogPostGetListInput input)
     {
-        return await RequestAsync<PagedResultDto<BlogPostPublicDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<PagedResultDto<BlogPostCommonDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
         {
             { typeof(string), blogSlug },
             { typeof(BlogPostGetListInput), input }

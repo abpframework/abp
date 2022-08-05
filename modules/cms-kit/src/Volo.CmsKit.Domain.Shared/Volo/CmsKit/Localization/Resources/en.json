@@ -184,6 +184,9 @@
     "CmsKit.BlogPost.ScrollIndex": "Quick navigation bar in blog posts",
     "Add": "Add",
     "AddWidget": "Add Widget",
-    "PleaseConfigureWidgets": "Please configure widgets"
+    "PleaseConfigureWidgets": "Please configure widgets",
+    "SelectAnAuthor":"Select an Author",
+    "InThisDocument":"In This Document",
+    "GoToTop":"Go To Top"
   }
 }

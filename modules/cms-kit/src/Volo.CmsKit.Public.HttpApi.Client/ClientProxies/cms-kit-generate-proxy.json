@@ -505,57 +505,6 @@
             }
           }
         },
-        "Volo.CmsKit.Public.Polls.PollViewComponentController": {
-          "controllerName": "PollViewComponent",
-          "controllerGroupName": "PollViewComponent",
-          "isRemoteService": true,
-          "apiVersion": null,
-          "type": "Volo.CmsKit.Public.Polls.PollViewComponentController",
-          "interfaces": [
-            {
-              "type": "Volo.CmsKit.Public.Polls.IPollViewComponentAppService"
-            }
-          ],
-          "actions": {
-            "ParseAsyncByContent": {
-              "uniqueName": "ParseAsyncByContent",
-              "name": "ParseAsync",
-              "httpMethod": "GET",
-              "url": "api/cms-kit-public/polls/{content}",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "content",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "content",
-                  "name": "content",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "System.Collections.Generic.List<Volo.CmsKit.Polls.ContentFragment>",
-                "typeSimple": "[Volo.CmsKit.Polls.ContentFragment]"
-              },
-              "allowAnonymous": null,
-              "implementFrom": "Volo.CmsKit.Public.Polls.IPollViewComponentAppService"
-            }
-          }
-        },
         "Volo.CmsKit.Public.Pages.PagesPublicController": {
           "controllerName": "PagesPublic",
           "controllerGroupName": "PagesPublic",
@@ -599,8 +548,8 @@
                 }
               ],
               "returnValue": {
-                "type": "Volo.CmsKit.Public.Pages.PageDto",
-                "typeSimple": "Volo.CmsKit.Public.Pages.PageDto"
+                "type": "Volo.CmsKit.Contents.PageDto",
+                "typeSimple": "Volo.CmsKit.Contents.PageDto"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Public.Pages.IPagePublicAppService"
@@ -985,8 +934,8 @@
                 }
               ],
               "returnValue": {
-                "type": "Volo.CmsKit.Public.Blogs.BlogPostPublicDto",
-                "typeSimple": "Volo.CmsKit.Public.Blogs.BlogPostPublicDto"
+                "type": "Volo.CmsKit.Contents.BlogPostCommonDto",
+                "typeSimple": "Volo.CmsKit.Contents.BlogPostCommonDto"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Public.Blogs.IBlogPostPublicAppService"
@@ -1090,8 +1039,8 @@
                 }
               ],
               "returnValue": {
-                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Public.Blogs.BlogPostPublicDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Public.Blogs.BlogPostPublicDto>"
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Contents.BlogPostCommonDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Contents.BlogPostCommonDto>"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Public.Blogs.IBlogPostPublicAppService"
