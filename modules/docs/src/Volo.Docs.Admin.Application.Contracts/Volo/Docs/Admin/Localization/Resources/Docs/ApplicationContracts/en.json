@@ -55,6 +55,7 @@
     "LanguageCode": "Language code",
     "FileName": "File name",
     "LastCachedTime": "Cache time",
-    "Project": "Project"
+    "Project": "Project",
+    "AdvancedFilters": "Advanced Filters"
   }
 }

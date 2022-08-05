@@ -55,6 +55,7 @@
     "LanguageCode": "Dil kodu",
     "FileName": "Dosya adı",
     "LastCachedTime": "Önbellek süresi",
-    "Project": "Proje"
+    "Project": "Proje",
+    "AdvancedFilters": "Gelişmiş Filtre"
   }
 }
