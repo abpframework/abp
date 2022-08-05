@@ -1,0 +1,8 @@
+﻿namespace Volo.Abp.Dapr;
+
+public class AbpDaprOptions
+{
+    public string HttpEndpoint { get; set; }
+
+    public string GrpcEndpoint { get; set; }
+}
