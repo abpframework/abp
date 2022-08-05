@@ -584,9 +584,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             .Replace(".csproj", "Module")
             .Replace(".", "");
 
-        fileName = ConvertProjectNameToModuleName(fileName);
-        
-        return context.Files.FirstOrDefault(f => f.Name.Contains(splittedProjectFileName.Last() + "/" + fileName));
+        return context.Files.FirstOrDefault(f => f.Name.Contains(splittedProjectFileName.Last() + "/" + fileName) && f.Name.EndsWith("Module.cs"));
     }
     
     private static string ConvertProjectNameToModuleName(string moduleName)
