@@ -37,7 +37,7 @@
     <abp-card-body>
         <div id="CmsKitCommentsWrapper">
             <form id="CmsKitCommentsFilterForm" method="post">
-                <abp-row>
+                <abp-row class="align-items-end">
                     <abp-column size-lg="_4" size-md="_12">
                         <abp-row class="input-daterange">
                             <abp-column size-lg="_6" size-md="_6">
@@ -58,11 +58,9 @@
                     </abp-column>
 
                     <abp-column size-lg="_2" size-md="_6">
-                        <div class="d-grid gap-2">
-                            <abp-button class="mt-md-4" button-type="Primary" type="submit" style="margin-top: 1.75rem !important;">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </abp-button>
-                        </div>
+                        <abp-button class="w-100 mb-3" button-type="Primary" type="submit">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </abp-button>
                     </abp-column>
                 </abp-row>
             </form>
