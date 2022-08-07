@@ -30,17 +30,16 @@ public static class AbpAspNetCoreApplicationBuilderExtensions
 
         return app.UseEndpoints(endpoints =>
         {
-            using (var scope = app.ApplicationServices.CreateScope())
+            using var scope = app.ApplicationServices.CreateScope();
+
+            var context = new EndpointRouteBuilderContext(endpoints, scope.ServiceProvider);
+
+            foreach (var configureAction in options.EndpointConfigureActions)
             {
-                var context = new EndpointRouteBuilderContext(endpoints, scope.ServiceProvider);
-
-                foreach (var configureAction in options.EndpointConfigureActions)
-                {
-                    configureAction(context);
-                }
-
-                additionalConfigurationAction?.Invoke(endpoints);
+                configureAction(context);
             }
+            
+            additionalConfigurationAction?.Invoke(endpoints);
         });
     }
 }
