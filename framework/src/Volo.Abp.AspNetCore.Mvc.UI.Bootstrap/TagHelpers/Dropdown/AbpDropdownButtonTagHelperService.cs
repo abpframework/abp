@@ -24,7 +24,7 @@ public class AbpDropdownButtonTagHelperService : AbpTagHelperService<AbpDropdown
         _serviceProvider = serviceProvider;
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var content = await output.GetChildContentAsync();
 
