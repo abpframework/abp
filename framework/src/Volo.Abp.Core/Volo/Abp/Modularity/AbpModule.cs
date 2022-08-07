@@ -15,9 +15,9 @@ public abstract class AbpModule :
     IPreConfigureServices,
     IPostConfigureServices
 {
-    protected internal bool SkipAutoServiceRegistration { get; protected set; }
+    internal protected bool SkipAutoServiceRegistration { get; protected set; }
 
-    protected internal ServiceConfigurationContext ServiceConfigurationContext {
+    internal protected ServiceConfigurationContext ServiceConfigurationContext {
         get {
             if (_serviceConfigurationContext == null)
             {

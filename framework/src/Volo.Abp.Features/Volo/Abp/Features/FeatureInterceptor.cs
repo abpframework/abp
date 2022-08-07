@@ -16,7 +16,7 @@ public class FeatureInterceptor : AbpInterceptor, ITransientDependency
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+    public async override Task InterceptAsync(IAbpMethodInvocation invocation)
     {
         if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.FeatureChecking))
         {

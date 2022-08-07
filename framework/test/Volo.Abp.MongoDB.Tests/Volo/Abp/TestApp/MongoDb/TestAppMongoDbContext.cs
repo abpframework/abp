@@ -24,7 +24,7 @@ public class TestAppMongoDbContext : AbpMongoDbContext, ITestAppMongoDbContext, 
 
     public IMongoCollection<FourthDbContextDummyEntity> FourthDummyEntities => Collection<FourthDbContextDummyEntity>();
 
-    protected internal override void CreateModel(IMongoModelBuilder modelBuilder)
+    internal protected override void CreateModel(IMongoModelBuilder modelBuilder)
     {
         base.CreateModel(modelBuilder);
 

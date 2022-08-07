@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Volo.Abp.EventBus.Local;
 
-public sealed class NullLocalEventBus : ILocalEventBus
+sealed public class NullLocalEventBus : ILocalEventBus
 {
     public static NullLocalEventBus Instance { get; } = new NullLocalEventBus();
 

@@ -2,7 +2,7 @@ using System;
 
 namespace Volo.Abp;
 
-public sealed class NullDisposable : IDisposable
+sealed public class NullDisposable : IDisposable
 {
     public static NullDisposable Instance { get; } = new NullDisposable();
 

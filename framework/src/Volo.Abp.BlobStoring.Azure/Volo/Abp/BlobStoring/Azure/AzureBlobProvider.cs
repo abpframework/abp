@@ -19,7 +19,7 @@ public class AzureBlobProvider : BlobProviderBase, ITransientDependency
         BlobNormalizeNamingService = blobNormalizeNamingService;
     }
 
-    public override async Task SaveAsync(BlobProviderSaveArgs args)
+    public async override Task SaveAsync(BlobProviderSaveArgs args)
     {
         var blobName = AzureBlobNameCalculator.Calculate(args);
         var configuration = args.Configuration.GetAzureConfiguration();
@@ -37,7 +37,7 @@ public class AzureBlobProvider : BlobProviderBase, ITransientDependency
         await GetBlobClient(args, blobName).UploadAsync(args.BlobStream, true);
     }
 
-    public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+    public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
     {
         var blobName = AzureBlobNameCalculator.Calculate(args);
 
@@ -49,14 +49,14 @@ public class AzureBlobProvider : BlobProviderBase, ITransientDependency
         return false;
     }
 
-    public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+    public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
     {
         var blobName = AzureBlobNameCalculator.Calculate(args);
 
         return await BlobExistsAsync(args, blobName);
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var blobName = AzureBlobNameCalculator.Calculate(args);
 

@@ -29,7 +29,7 @@ public static class CliHttpClientExtensions
         }
     }
 
-    public static async Task<HttpResponseMessage> GetHttpResponseMessageWithRetryAsync<T>
+    public async static Task<HttpResponseMessage> GetHttpResponseMessageWithRetryAsync<T>
     (
         this HttpClient httpClient,
         string url,

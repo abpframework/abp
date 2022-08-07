@@ -9,7 +9,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse;
 
 public class AbpAccordionItemTagHelperService : AbpTagHelperService<AbpAccordionItemTagHelper>
 {
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         SetRandomIdIfNotProvided();
 

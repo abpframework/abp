@@ -6,7 +6,7 @@ namespace Microsoft.AspNetCore.Authorization;
 
 public static class AuthorizationOptionsExtensions
 {
-    private static readonly PropertyInfo PolicyMapProperty = typeof(AuthorizationOptions)
+    private readonly static PropertyInfo PolicyMapProperty = typeof(AuthorizationOptions)
         .GetProperty("PolicyMap", BindingFlags.Instance | BindingFlags.NonPublic);
 
     /// <summary>

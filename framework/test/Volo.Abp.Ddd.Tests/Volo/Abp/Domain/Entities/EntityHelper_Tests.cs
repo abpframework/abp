@@ -66,7 +66,7 @@ public class EntityHelper_Tests
 
     public class NewIdEntity : Entity<Guid>
     {
-        public new Guid Id {
+        new public Guid Id {
             get => base.Id;
             set => base.Id = value;
         }

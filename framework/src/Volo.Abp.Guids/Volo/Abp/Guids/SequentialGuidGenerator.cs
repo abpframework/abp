@@ -15,7 +15,7 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
 {
     public AbpSequentialGuidGeneratorOptions Options { get; }
 
-    private static readonly RandomNumberGenerator RandomNumberGenerator = RandomNumberGenerator.Create();
+    private readonly static RandomNumberGenerator RandomNumberGenerator = RandomNumberGenerator.Create();
 
     public SequentialGuidGenerator(IOptions<AbpSequentialGuidGeneratorOptions> options)
     {

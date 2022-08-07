@@ -15,18 +15,18 @@ namespace Volo.Abp.Caching.StackExchangeRedis;
 [DisableConventionalRegistration]
 public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
 {
-    protected static readonly string SetScript;
-    protected static readonly string AbsoluteExpirationKey;
-    protected static readonly string SlidingExpirationKey;
-    protected static readonly string DataKey;
-    protected static readonly long NotPresent;
+    protected readonly static string SetScript;
+    protected readonly static string AbsoluteExpirationKey;
+    protected readonly static string SlidingExpirationKey;
+    protected readonly static string DataKey;
+    protected readonly static long NotPresent;
 
-    private static readonly FieldInfo RedisDatabaseField;
-    private static readonly MethodInfo ConnectMethod;
-    private static readonly MethodInfo ConnectAsyncMethod;
-    private static readonly MethodInfo MapMetadataMethod;
-    private static readonly MethodInfo GetAbsoluteExpirationMethod;
-    private static readonly MethodInfo GetExpirationInSecondsMethod;
+    private readonly static FieldInfo RedisDatabaseField;
+    private readonly static MethodInfo ConnectMethod;
+    private readonly static MethodInfo ConnectAsyncMethod;
+    private readonly static MethodInfo MapMetadataMethod;
+    private readonly static MethodInfo GetAbsoluteExpirationMethod;
+    private readonly static MethodInfo GetExpirationInSecondsMethod;
 
     protected IDatabase RedisDatabase => GetRedisDatabase();
     private IDatabase _redisDatabase;

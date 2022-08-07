@@ -40,7 +40,7 @@ public class AbpDbContextConfigurationContext : IServiceProviderAccessor
 public class AbpDbContextConfigurationContext<TDbContext> : AbpDbContextConfigurationContext
     where TDbContext : AbpDbContext<TDbContext>
 {
-    public new DbContextOptionsBuilder<TDbContext> DbContextOptions => (DbContextOptionsBuilder<TDbContext>)base.DbContextOptions;
+    new public DbContextOptionsBuilder<TDbContext> DbContextOptions => (DbContextOptionsBuilder<TDbContext>)base.DbContextOptions;
 
     public AbpDbContextConfigurationContext(
         string connectionString,

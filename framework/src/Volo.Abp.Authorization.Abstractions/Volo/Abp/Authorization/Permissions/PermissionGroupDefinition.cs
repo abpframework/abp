@@ -43,7 +43,7 @@ public class PermissionGroupDefinition //TODO: Consider to make possible a group
         set => Properties[name] = value;
     }
 
-    protected internal PermissionGroupDefinition(
+    internal protected PermissionGroupDefinition(
         string name,
         ILocalizableString displayName = null,
         MultiTenancySides multiTenancySide = MultiTenancySides.Both)

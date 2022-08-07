@@ -6,7 +6,7 @@ namespace Volo.Abp.DependencyInjection;
 
 public static class ExposedServiceExplorer
 {
-    private static readonly ExposeServicesAttribute DefaultExposeServicesAttribute =
+    private readonly static ExposeServicesAttribute DefaultExposeServicesAttribute =
         new ExposeServicesAttribute
         {
             IncludeDefaults = true,

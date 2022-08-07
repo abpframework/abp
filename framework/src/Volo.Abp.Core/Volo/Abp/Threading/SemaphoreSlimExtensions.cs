@@ -6,37 +6,37 @@ namespace Volo.Abp.Threading;
 
 public static class SemaphoreSlimExtensions
 {
-    public static async Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim)
+    public async static Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim)
     {
         await semaphoreSlim.WaitAsync();
         return GetDispose(semaphoreSlim);
     }
 
-    public static async Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, CancellationToken cancellationToken)
+    public async static Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, CancellationToken cancellationToken)
     {
         await semaphoreSlim.WaitAsync(cancellationToken);
         return GetDispose(semaphoreSlim);
     }
 
-    public static async Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, int millisecondsTimeout)
+    public async static Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, int millisecondsTimeout)
     {
         await semaphoreSlim.WaitAsync(millisecondsTimeout);
         return GetDispose(semaphoreSlim);
     }
 
-    public static async Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, int millisecondsTimeout, CancellationToken cancellationToken)
+    public async static Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, int millisecondsTimeout, CancellationToken cancellationToken)
     {
         await semaphoreSlim.WaitAsync(millisecondsTimeout, cancellationToken);
         return GetDispose(semaphoreSlim);
     }
 
-    public static async Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, TimeSpan timeout)
+    public async static Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, TimeSpan timeout)
     {
         await semaphoreSlim.WaitAsync(timeout);
         return GetDispose(semaphoreSlim);
     }
 
-    public static async Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, TimeSpan timeout, CancellationToken cancellationToken)
+    public async static Task<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, TimeSpan timeout, CancellationToken cancellationToken)
     {
         await semaphoreSlim.WaitAsync(timeout, cancellationToken);
         return GetDispose(semaphoreSlim);

@@ -16,7 +16,7 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
         FilePathCalculator = filePathCalculator;
     }
 
-    public override async Task SaveAsync(BlobProviderSaveArgs args)
+    public async override Task SaveAsync(BlobProviderSaveArgs args)
     {
         var filePath = FilePathCalculator.Calculate(args);
 
@@ -59,7 +59,7 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
         return ExistsAsync(filePath);
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var filePath = FilePathCalculator.Calculate(args);
 

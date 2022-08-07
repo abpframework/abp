@@ -6,7 +6,7 @@ namespace Volo.Abp.Cli.NuGet;
 
 internal static class CommercialPackages
 {
-    private static readonly HashSet<string> Packages = new()
+    private readonly static HashSet<string> Packages = new()
     {
         "volo.abp.suite"
         //other PRO packages can be added to this list...

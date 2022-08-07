@@ -106,14 +106,14 @@ public class NpmPackagesUpdater : ITransientDependency
         }
     }
 
-    private static async Task DeleteNpmrcFileAsync(string directoryName)
+    private async static Task DeleteNpmrcFileAsync(string directoryName)
     {
         FileHelper.DeleteIfExists(Path.Combine(directoryName, ".npmrc"));
 
         await Task.CompletedTask;
     }
 
-    private static async Task<bool> NpmrcFileExistAsync(string directoryName)
+    private async static Task<bool> NpmrcFileExistAsync(string directoryName)
     {
         return await Task.FromResult(File.Exists(Path.Combine(directoryName, ".npmrc")));
     }

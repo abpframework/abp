@@ -12,14 +12,14 @@ namespace Volo.Abp.Reflection;
 
 public static class TypeHelper
 {
-    private static readonly HashSet<Type> FloatingTypes = new HashSet<Type>
+    private readonly static HashSet<Type> FloatingTypes = new HashSet<Type>
         {
             typeof(float),
             typeof(double),
             typeof(decimal)
         };
 
-    private static readonly HashSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
+    private readonly static HashSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
         {
             typeof(byte),
             typeof(short),

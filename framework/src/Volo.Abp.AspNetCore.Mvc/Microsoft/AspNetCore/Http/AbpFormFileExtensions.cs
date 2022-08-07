@@ -13,7 +13,7 @@ public static class AbpFormFileExtensions
         }
     }
 
-    public static async Task<byte[]> GetAllBytesAsync(this IFormFile file)
+    public async static Task<byte[]> GetAllBytesAsync(this IFormFile file)
     {
         using (var stream = file.OpenReadStream())
         {

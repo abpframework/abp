@@ -11,7 +11,7 @@ namespace Volo.Abp.Json.Newtonsoft;
 
 public class AbpNewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
 {
-    private static readonly CamelCaseExceptDictionaryKeysResolver SharedCamelCaseExceptDictionaryKeysResolver =
+    private readonly static CamelCaseExceptDictionaryKeysResolver SharedCamelCaseExceptDictionaryKeysResolver =
         new CamelCaseExceptDictionaryKeysResolver();
 
     protected List<JsonConverter> Converters { get; }

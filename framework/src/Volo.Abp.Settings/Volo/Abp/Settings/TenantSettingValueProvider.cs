@@ -19,12 +19,12 @@ public class TenantSettingValueProvider : SettingValueProvider
         CurrentTenant = currentTenant;
     }
 
-    public override async Task<string> GetOrNullAsync(SettingDefinition setting)
+    public async override Task<string> GetOrNullAsync(SettingDefinition setting)
     {
         return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentTenant.Id?.ToString());
     }
 
-    public override async Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
+    public async override Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
     {
         return await SettingStore.GetAllAsync(settings.Select(x => x.Name).ToArray(), Name, CurrentTenant.Id?.ToString());
     }

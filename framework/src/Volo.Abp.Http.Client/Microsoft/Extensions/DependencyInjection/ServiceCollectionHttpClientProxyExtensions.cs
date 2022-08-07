@@ -14,7 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionHttpClientProxyExtensions
 {
-    private static readonly ProxyGenerator ProxyGeneratorInstance = new ProxyGenerator();
+    private readonly static ProxyGenerator ProxyGeneratorInstance = new ProxyGenerator();
 
     /// <summary>
     /// Registers Static HTTP Client Proxies for all public interfaces

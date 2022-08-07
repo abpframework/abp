@@ -12,7 +12,7 @@ public class RequirePermissionsSimpleBatchStateChecker<TState> : SimpleBatchStat
     where TState : IHasSimpleStateCheckers<TState>
 {
     public static RequirePermissionsSimpleBatchStateChecker<TState> Current => _current.Value;
-    private static readonly AsyncLocal<RequirePermissionsSimpleBatchStateChecker<TState>> _current = new AsyncLocal<RequirePermissionsSimpleBatchStateChecker<TState>>();
+    private readonly static AsyncLocal<RequirePermissionsSimpleBatchStateChecker<TState>> _current = new AsyncLocal<RequirePermissionsSimpleBatchStateChecker<TState>>();
 
     private readonly List<RequirePermissionsSimpleBatchStateCheckerModel<TState>> _models;
 
@@ -41,7 +41,7 @@ public class RequirePermissionsSimpleBatchStateChecker<TState> : SimpleBatchStat
         return new DisposeAction(() => _current.Value = previousValue);
     }
 
-    public override async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(SimpleBatchStateCheckerContext<TState> context)
+    public async override Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(SimpleBatchStateCheckerContext<TState> context)
     {
         var permissionChecker = context.ServiceProvider.GetRequiredService<IPermissionChecker>();
 

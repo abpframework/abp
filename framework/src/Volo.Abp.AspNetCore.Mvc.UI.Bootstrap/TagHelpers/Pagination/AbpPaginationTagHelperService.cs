@@ -32,7 +32,7 @@ public class AbpPaginationTagHelperService : AbpTagHelperService<AbpPaginationTa
         _stringLocalizerFactory = stringLocalizerFactory;
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         if (TagHelper.Model.ShownItemsCount <= 0)
         {

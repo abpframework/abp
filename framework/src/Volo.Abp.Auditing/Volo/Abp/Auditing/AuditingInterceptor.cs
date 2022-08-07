@@ -21,7 +21,7 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+    public async override Task InterceptAsync(IAbpMethodInvocation invocation)
     {
         using (var serviceScope = _serviceScopeFactory.CreateScope())
         {
@@ -70,7 +70,7 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         return true;
     }
 
-    private static async Task ProceedByLoggingAsync(
+    private async static Task ProceedByLoggingAsync(
         IAbpMethodInvocation invocation,
         IAuditingHelper auditingHelper,
         IAuditLogScope auditLogScope)

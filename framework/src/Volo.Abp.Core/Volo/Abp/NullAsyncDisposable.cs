@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Volo.Abp;
 
-public sealed class NullAsyncDisposable : IAsyncDisposable
+sealed public class NullAsyncDisposable : IAsyncDisposable
 {
     public static NullAsyncDisposable Instance { get; } = new NullAsyncDisposable();
 

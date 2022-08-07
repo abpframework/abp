@@ -16,7 +16,7 @@ public abstract class AbpBundleItemTagHelperService<TTagHelper, TService> : AbpT
         ResourceService = resourceService;
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var tagHelperItems = context.Items.GetOrDefault(AbpTagHelperConsts.ContextBundleItemListKey) as List<BundleTagHelperItem>;
         if (tagHelperItems != null)

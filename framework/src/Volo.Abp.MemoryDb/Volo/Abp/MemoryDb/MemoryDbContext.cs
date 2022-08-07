@@ -6,7 +6,7 @@ namespace Volo.Abp.MemoryDb;
 
 public abstract class MemoryDbContext : ISingletonDependency
 {
-    private static readonly Type[] EmptyTypeList = new Type[0];
+    private readonly static Type[] EmptyTypeList = new Type[0];
 
     public virtual IReadOnlyList<Type> GetEntityTypes()
     {

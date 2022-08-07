@@ -39,12 +39,12 @@ public class AsyncHelper_Tests
         ).IsAsync().ShouldBe(false);
     }
 
-    private static async Task MyTaskWithoutReturnValueAsync()
+    private async static Task MyTaskWithoutReturnValueAsync()
     {
         await Task.Delay(1);
     }
 
-    private static async Task<int> MyTaskWithReturnValueAsync(int aNumber)
+    private async static Task<int> MyTaskWithReturnValueAsync(int aNumber)
     {
         await Task.Delay(1);
         return aNumber;

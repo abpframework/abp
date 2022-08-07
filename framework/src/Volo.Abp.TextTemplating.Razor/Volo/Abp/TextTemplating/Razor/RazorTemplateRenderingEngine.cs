@@ -32,7 +32,7 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
         AbpCompiledViewProvider = abpCompiledViewProvider;
     }
 
-    public override async Task<string> RenderAsync(
+    public async override Task<string> RenderAsync(
         [NotNull] string templateName,
         [CanBeNull] object model = null,
         [CanBeNull] string cultureName = null,

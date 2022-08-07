@@ -34,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Mvc;
     )]
 public class AbpAspNetCoreMvcTestModule : AbpModule
 {
-    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+    private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {

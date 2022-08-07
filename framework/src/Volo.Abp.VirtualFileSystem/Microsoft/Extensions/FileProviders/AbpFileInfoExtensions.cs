@@ -45,7 +45,7 @@ public static class AbpFileInfoExtensions
     /// <summary>
     /// Reads file content as string using the given <paramref name="encoding"/>.
     /// </summary>
-    public static async Task<string> ReadAsStringAsync([NotNull] this IFileInfo fileInfo, Encoding encoding)
+    public async static Task<string> ReadAsStringAsync([NotNull] this IFileInfo fileInfo, Encoding encoding)
     {
         Check.NotNull(fileInfo, nameof(fileInfo));
 
@@ -74,7 +74,7 @@ public static class AbpFileInfoExtensions
     /// <summary>
     /// Reads file content as byte[].
     /// </summary>
-    public static async Task<byte[]> ReadBytesAsync([NotNull] this IFileInfo fileInfo)
+    public async static Task<byte[]> ReadBytesAsync([NotNull] this IFileInfo fileInfo)
     {
         Check.NotNull(fileInfo, nameof(fileInfo));
 

@@ -13,7 +13,7 @@ public class SimpleResultCacheTestInterceptor : AbpInterceptor
         _cache = new ConcurrentDictionary<MethodInfo, object>();
     }
 
-    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+    public async override Task InterceptAsync(IAbpMethodInvocation invocation)
     {
         if (_cache.ContainsKey(invocation.Method))
         {

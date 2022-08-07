@@ -8,8 +8,8 @@ namespace Volo.Abp.Validation;
 
 public class DynamicRangeAttribute : RangeAttribute
 {
-    private static readonly FieldInfo MaximumField;
-    private static readonly FieldInfo MinimumField;
+    private readonly static FieldInfo MaximumField;
+    private readonly static FieldInfo MinimumField;
 
     static DynamicRangeAttribute()
     {

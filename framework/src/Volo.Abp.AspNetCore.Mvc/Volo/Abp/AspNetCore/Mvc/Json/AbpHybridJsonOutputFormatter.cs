@@ -24,7 +24,7 @@ public class AbpHybridJsonOutputFormatter : TextOutputFormatter
         SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationAnyJsonSyntax);
     }
 
-    public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
+    public async override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
     {
         await GetTextInputFormatter(context).WriteResponseBodyAsync(context, selectedEncoding);
     }

@@ -8,7 +8,7 @@ namespace Volo.Abp.Validation;
 
 public class DynamicMaxLengthAttribute : MaxLengthAttribute
 {
-    private static readonly FieldInfo MaximumLengthField;
+    private readonly static FieldInfo MaximumLengthField;
 
     static DynamicMaxLengthAttribute()
     {

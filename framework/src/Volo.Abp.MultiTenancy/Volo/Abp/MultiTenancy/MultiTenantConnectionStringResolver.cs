@@ -24,7 +24,7 @@ public class MultiTenantConnectionStringResolver : DefaultConnectionStringResolv
         _serviceProvider = serviceProvider;
     }
 
-    public override async Task<string> ResolveAsync(string connectionStringName = null)
+    public async override Task<string> ResolveAsync(string connectionStringName = null)
     {
         if (_currentTenant.Id == null)
         {

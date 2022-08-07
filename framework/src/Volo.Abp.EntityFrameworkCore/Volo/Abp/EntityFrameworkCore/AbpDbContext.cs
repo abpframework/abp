@@ -68,21 +68,21 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     public ILogger<AbpDbContext<TDbContext>> Logger => LazyServiceProvider.LazyGetService<ILogger<AbpDbContext<TDbContext>>>(NullLogger<AbpDbContext<TDbContext>>.Instance);
 
-    private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
+    private readonly static MethodInfo ConfigureBasePropertiesMethodInfo
         = typeof(AbpDbContext<TDbContext>)
             .GetMethod(
                 nameof(ConfigureBaseProperties),
                 BindingFlags.Instance | BindingFlags.NonPublic
             );
 
-    private static readonly MethodInfo ConfigureValueConverterMethodInfo
+    private readonly static MethodInfo ConfigureValueConverterMethodInfo
         = typeof(AbpDbContext<TDbContext>)
             .GetMethod(
                 nameof(ConfigureValueConverter),
                 BindingFlags.Instance | BindingFlags.NonPublic
             );
 
-    private static readonly MethodInfo ConfigureValueGeneratedMethodInfo
+    private readonly static MethodInfo ConfigureValueGeneratedMethodInfo
         = typeof(AbpDbContext<TDbContext>)
             .GetMethod(
                 nameof(ConfigureValueGenerated),
@@ -151,7 +151,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
     }
 
-    public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    public async override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
         try
         {

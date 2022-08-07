@@ -7,7 +7,7 @@ namespace Volo.Abp.BlobStoring;
 
 public static class BlobContainerExtensions
 {
-    public static async Task SaveAsync(
+    public async static Task SaveAsync(
         this IBlobContainer container,
         string name,
         byte[] bytes,
@@ -26,7 +26,7 @@ public static class BlobContainerExtensions
         }
     }
 
-    public static async Task<byte[]> GetAllBytesAsync(
+    public async static Task<byte[]> GetAllBytesAsync(
         this IBlobContainer container,
         string name,
         CancellationToken cancellationToken = default)
@@ -37,7 +37,7 @@ public static class BlobContainerExtensions
         }
     }
 
-    public static async Task<byte[]> GetAllBytesOrNullAsync(
+    public async static Task<byte[]> GetAllBytesOrNullAsync(
         this IBlobContainer container,
         string name,
         CancellationToken cancellationToken = default)

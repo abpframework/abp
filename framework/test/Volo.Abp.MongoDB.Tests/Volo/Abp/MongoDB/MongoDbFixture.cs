@@ -5,8 +5,8 @@ namespace Volo.Abp.MongoDB;
 
 public class MongoDbFixture : IDisposable
 {
-    private static readonly MongoDbRunner MongoDbRunner;
-    public static readonly string ConnectionString;
+    private readonly static MongoDbRunner MongoDbRunner;
+    public readonly static string ConnectionString;
 
     static MongoDbFixture()
     {

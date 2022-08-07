@@ -28,7 +28,7 @@ public class MailKitSmtpEmailSender : EmailSenderBase, IMailKitSmtpEmailSender
         SmtpConfiguration = smtpConfiguration;
     }
 
-    protected override async Task SendEmailAsync(MailMessage mail)
+    protected async override Task SendEmailAsync(MailMessage mail)
     {
         using (var client = await BuildClientAsync())
         {

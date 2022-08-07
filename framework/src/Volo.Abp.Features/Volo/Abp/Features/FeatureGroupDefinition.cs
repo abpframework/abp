@@ -36,7 +36,7 @@ public class FeatureGroupDefinition
         set => Properties[name] = value;
     }
 
-    protected internal FeatureGroupDefinition(
+    internal protected FeatureGroupDefinition(
         string name,
         ILocalizableString displayName = null)
     {

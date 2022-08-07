@@ -19,7 +19,7 @@ public class JsonNetAuditSerializer : IAuditSerializer, ITransientDependency
         return JsonConvert.SerializeObject(obj, GetSharedJsonSerializerSettings());
     }
 
-    private static readonly object SyncObj = new object();
+    private readonly static object SyncObj = new object();
     private static JsonSerializerSettings _sharedJsonSerializerSettings;
 
     private JsonSerializerSettings GetSharedJsonSerializerSettings()

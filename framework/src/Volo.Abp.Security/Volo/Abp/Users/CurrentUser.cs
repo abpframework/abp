@@ -9,7 +9,7 @@ namespace Volo.Abp.Users;
 
 public class CurrentUser : ICurrentUser, ITransientDependency
 {
-    private static readonly Claim[] EmptyClaimsArray = new Claim[0];
+    private readonly static Claim[] EmptyClaimsArray = new Claim[0];
 
     public virtual bool IsAuthenticated => Id.HasValue;
 

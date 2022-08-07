@@ -9,7 +9,7 @@ namespace Volo.Abp.ObjectExtending;
 
 public static class ObjectExtensionPropertyInfoBlazorExtensions
 {
-    private static readonly Type[] DateTimeTypes =
+    private readonly static Type[] DateTimeTypes =
     {
             typeof(DateTime),
             typeof(DateTime?),

@@ -12,7 +12,7 @@ public static class RepositoryAsyncExtensions
 {
     #region Contains
 
-    public static async Task<bool> ContainsAsync<T>(
+    public async static Task<bool> ContainsAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] T item,
         CancellationToken cancellationToken = default)
@@ -26,7 +26,7 @@ public static class RepositoryAsyncExtensions
 
     #region Any/All
 
-    public static async Task<bool> AnyAsync<T>(
+    public async static Task<bool> AnyAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -35,7 +35,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.AnyAsync(queryable, cancellationToken);
     }
 
-    public static async Task<bool> AnyAsync<T>(
+    public async static Task<bool> AnyAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -45,7 +45,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.AnyAsync(queryable, predicate, cancellationToken);
     }
 
-    public static async Task<bool> AllAsync<T>(
+    public async static Task<bool> AllAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -59,7 +59,7 @@ public static class RepositoryAsyncExtensions
 
     #region Count/LongCount
 
-    public static async Task<int> CountAsync<T>(
+    public async static Task<int> CountAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -68,7 +68,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.CountAsync(queryable, cancellationToken);
     }
 
-    public static async Task<int> CountAsync<T>(
+    public async static Task<int> CountAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -78,7 +78,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.CountAsync(queryable, predicate, cancellationToken);
     }
 
-    public static async Task<long> LongCountAsync<T>(
+    public async static Task<long> LongCountAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -87,7 +87,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.LongCountAsync(queryable, cancellationToken);
     }
 
-    public static async Task<long> LongCountAsync<T>(
+    public async static Task<long> LongCountAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -101,7 +101,7 @@ public static class RepositoryAsyncExtensions
 
     #region First/FirstOrDefault
 
-    public static async Task<T> FirstAsync<T>(
+    public async static Task<T> FirstAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -110,7 +110,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.FirstAsync(queryable, cancellationToken);
     }
 
-    public static async Task<T> FirstAsync<T>(
+    public async static Task<T> FirstAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -120,7 +120,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.FirstAsync(queryable, predicate, cancellationToken);
     }
 
-    public static async Task<T> FirstOrDefaultAsync<T>(
+    public async static Task<T> FirstOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -129,7 +129,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.FirstOrDefaultAsync(queryable, cancellationToken);
     }
 
-    public static async Task<T> FirstOrDefaultAsync<T>(
+    public async static Task<T> FirstOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -143,7 +143,7 @@ public static class RepositoryAsyncExtensions
 
     #region Last/LastOrDefault
 
-    public static async Task<T> LastAsync<T>(
+    public async static Task<T> LastAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -152,7 +152,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.LastAsync(queryable, cancellationToken);
     }
 
-    public static async Task<T> LastAsync<T>(
+    public async static Task<T> LastAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -162,7 +162,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.LastAsync(queryable, predicate, cancellationToken);
     }
 
-    public static async Task<T> LastOrDefaultAsync<T>(
+    public async static Task<T> LastOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -171,7 +171,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.LastOrDefaultAsync(queryable, cancellationToken);
     }
 
-    public static async Task<T> LastOrDefaultAsync<T>(
+    public async static Task<T> LastOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -185,7 +185,7 @@ public static class RepositoryAsyncExtensions
 
     #region Single/SingleOrDefault
 
-    public static async Task<T> SingleAsync<T>(
+    public async static Task<T> SingleAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -194,7 +194,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SingleAsync(queryable, cancellationToken);
     }
 
-    public static async Task<T> SingleAsync<T>(
+    public async static Task<T> SingleAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -204,7 +204,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SingleAsync(queryable, predicate, cancellationToken);
     }
 
-    public static async Task<T> SingleOrDefaultAsync<T>(
+    public async static Task<T> SingleOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -213,7 +213,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SingleOrDefaultAsync(queryable, cancellationToken);
     }
 
-    public static async Task<T> SingleOrDefaultAsync<T>(
+    public async static Task<T> SingleOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -227,7 +227,7 @@ public static class RepositoryAsyncExtensions
 
     #region Min
 
-    public static async Task<T> MinAsync<T>(
+    public async static Task<T> MinAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -236,7 +236,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.MinAsync(queryable, cancellationToken);
     }
 
-    public static async Task<TResult> MinAsync<T, TResult>(
+    public async static Task<TResult> MinAsync<T, TResult>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, TResult>> selector,
         CancellationToken cancellationToken = default)
@@ -250,7 +250,7 @@ public static class RepositoryAsyncExtensions
 
     #region Max
 
-    public static async Task<T> MaxAsync<T>(
+    public async static Task<T> MaxAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -259,7 +259,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.MaxAsync(queryable, cancellationToken);
     }
 
-    public static async Task<TResult> MaxAsync<T, TResult>(
+    public async static Task<TResult> MaxAsync<T, TResult>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, TResult>> selector,
         CancellationToken cancellationToken = default)
@@ -273,7 +273,7 @@ public static class RepositoryAsyncExtensions
 
     #region Sum
 
-    public static async Task<decimal> SumAsync<T>(
+    public async static Task<decimal> SumAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, decimal>> selector,
         CancellationToken cancellationToken = default)
@@ -283,7 +283,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SumAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<decimal?> SumAsync<T>(
+    public async static Task<decimal?> SumAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, decimal?>> selector,
         CancellationToken cancellationToken = default)
@@ -293,7 +293,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SumAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<int> SumAsync<T>(
+    public async static Task<int> SumAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, int>> selector,
         CancellationToken cancellationToken = default)
@@ -303,7 +303,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SumAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<int?> SumAsync<T>(
+    public async static Task<int?> SumAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, int?>> selector,
         CancellationToken cancellationToken = default)
@@ -313,7 +313,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SumAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<long> SumAsync<T>(
+    public async static Task<long> SumAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, long>> selector,
         CancellationToken cancellationToken = default)
@@ -323,7 +323,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SumAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<long?> SumAsync<T>(
+    public async static Task<long?> SumAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, long?>> selector,
         CancellationToken cancellationToken = default)
@@ -333,7 +333,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SumAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<double> SumAsync<T>(
+    public async static Task<double> SumAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, double>> selector,
         CancellationToken cancellationToken = default)
@@ -343,7 +343,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SumAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<double?> SumAsync<T>(
+    public async static Task<double?> SumAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, double?>> selector,
         CancellationToken cancellationToken = default)
@@ -353,7 +353,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SumAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<float> SumAsync<T>(
+    public async static Task<float> SumAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, float>> selector,
         CancellationToken cancellationToken = default)
@@ -363,7 +363,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SumAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<float?> SumAsync<T>(
+    public async static Task<float?> SumAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, float?>> selector,
         CancellationToken cancellationToken = default)
@@ -377,7 +377,7 @@ public static class RepositoryAsyncExtensions
 
     #region Average
 
-    public static async Task<decimal> AverageAsync<T>(
+    public async static Task<decimal> AverageAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, decimal>> selector,
         CancellationToken cancellationToken = default)
@@ -387,7 +387,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.AverageAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<decimal?> AverageAsync<T>(
+    public async static Task<decimal?> AverageAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, decimal?>> selector,
         CancellationToken cancellationToken = default)
@@ -397,7 +397,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.AverageAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<double> AverageAsync<T>(
+    public async static Task<double> AverageAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, int>> selector,
         CancellationToken cancellationToken = default)
@@ -407,7 +407,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.AverageAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<double?> AverageAsync<T>(
+    public async static Task<double?> AverageAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, int?>> selector,
         CancellationToken cancellationToken = default)
@@ -417,7 +417,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.AverageAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<double> AverageAsync<T>(
+    public async static Task<double> AverageAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, long>> selector,
         CancellationToken cancellationToken = default)
@@ -427,7 +427,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.AverageAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<double?> AverageAsync<T>(
+    public async static Task<double?> AverageAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, long?>> selector,
         CancellationToken cancellationToken = default)
@@ -437,7 +437,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.AverageAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<double> AverageAsync<T>(
+    public async static Task<double> AverageAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, double>> selector,
         CancellationToken cancellationToken = default)
@@ -447,7 +447,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.AverageAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<double?> AverageAsync<T>(
+    public async static Task<double?> AverageAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, double?>> selector,
         CancellationToken cancellationToken = default)
@@ -457,7 +457,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.AverageAsync(queryable, selector, cancellationToken);
     }
 
-    public static async Task<float?> AverageAsync<T>(
+    public async static Task<float?> AverageAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, float?>> selector,
         CancellationToken cancellationToken = default)
@@ -471,7 +471,7 @@ public static class RepositoryAsyncExtensions
 
     #region ToList/Array
 
-    public static async Task<List<T>> ToListAsync<T>(
+    public async static Task<List<T>> ToListAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -480,7 +480,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.ToListAsync(queryable, cancellationToken);
     }
 
-    public static async Task<T[]> ToArrayAsync<T>(
+    public async static Task<T[]> ToArrayAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity

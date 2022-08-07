@@ -9,7 +9,7 @@ namespace Volo.Abp.Cli;
 
 public class Program
 {
-    private static async Task Main(string[] args)
+    private async static Task Main(string[] args)
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 

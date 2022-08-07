@@ -61,7 +61,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         return ApplyDataFilters(Collection.AsQueryable());
     }
 
-    public override async Task<IQueryable<TEntity>> GetQueryableAsync()
+    public async override Task<IQueryable<TEntity>> GetQueryableAsync()
     {
         return ApplyDataFilters((await GetCollectionAsync()).AsQueryable());
     }
@@ -187,7 +187,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         TriggerDomainEvents(entity);
     }
 
-    public override async Task<TEntity> FindAsync(
+    public async override Task<TEntity> FindAsync(
         Expression<Func<TEntity, bool>> predicate,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
@@ -195,7 +195,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         return (await GetQueryableAsync()).Where(predicate).SingleOrDefault();
     }
 
-    public override async Task DeleteAsync(
+    public async override Task DeleteAsync(
         Expression<Func<TEntity, bool>> predicate,
         bool autoSave = false,
         CancellationToken cancellationToken = default)
@@ -205,7 +205,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         await DeleteManyAsync(entities, autoSave, cancellationToken);
     }
 
-    public override async Task<TEntity> InsertAsync(
+    public async override Task<TEntity> InsertAsync(
         TEntity entity,
         bool autoSave = false,
         CancellationToken cancellationToken = default)
@@ -217,7 +217,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         return entity;
     }
 
-    public override async Task<TEntity> UpdateAsync(
+    public async override Task<TEntity> UpdateAsync(
         TEntity entity,
         bool autoSave = false,
         CancellationToken cancellationToken = default)
@@ -241,7 +241,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         return entity;
     }
 
-    public override async Task DeleteAsync(
+    public async override Task DeleteAsync(
         TEntity entity,
         bool autoSave = false,
         CancellationToken cancellationToken = default)
@@ -259,22 +259,22 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         }
     }
 
-    public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+    public async override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         return (await GetQueryableAsync()).ToList();
     }
 
-    public override async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = false, CancellationToken cancellationToken = default)
+    public async override Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         return (await GetQueryableAsync()).Where(predicate).ToList();
     }
 
-    public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+    public async override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
     {
         return (await GetQueryableAsync()).LongCount();
     }
 
-    public override async Task<List<TEntity>> GetPagedListAsync(
+    public async override Task<List<TEntity>> GetPagedListAsync(
         int skipCount,
         int maxResultCount,
         string sorting,
@@ -297,7 +297,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity, TKey> : MemoryDbRepos
     {
     }
 
-    public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+    public async override Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
     {
         await SetIdIfNeededAsync(entity);
         return await base.InsertAsync(entity, autoSave, cancellationToken);

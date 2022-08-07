@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoService, ISingletonDependency
 {
     protected IExtensionPropertyAttributeDtoFactory ExtensionPropertyAttributeDtoFactory { get; }
-    protected volatile ObjectExtensionsDto CachedValue;
+    volatile protected ObjectExtensionsDto CachedValue;
     protected readonly object SyncLock = new object();
 
     public CachedObjectExtensionsDtoService(IExtensionPropertyAttributeDtoFactory extensionPropertyAttributeDtoFactory)

@@ -19,7 +19,7 @@ public class UserSettingValueProvider : SettingValueProvider
         CurrentUser = currentUser;
     }
 
-    public override async Task<string> GetOrNullAsync(SettingDefinition setting)
+    public async override Task<string> GetOrNullAsync(SettingDefinition setting)
     {
         if (CurrentUser.Id == null)
         {
@@ -29,7 +29,7 @@ public class UserSettingValueProvider : SettingValueProvider
         return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentUser.Id.ToString());
     }
 
-    public override async Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
+    public async override Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
     {
         if (CurrentUser.Id == null)
         {

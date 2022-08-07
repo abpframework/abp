@@ -10,7 +10,7 @@ namespace Volo.Abp.ObjectExtending;
     )]
 public class AbpObjectExtendingTestModule : AbpModule
 {
-    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+    private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {

@@ -6,7 +6,7 @@ namespace Volo.Abp.ObjectExtending;
 
 public static class ObjectExtensionPropertyInfoAspNetCoreMvcExtensions
 {
-    private static readonly Type[] DateTimeTypes =
+    private readonly static Type[] DateTimeTypes =
     {
             typeof(DateTime),
             typeof(DateTime?),

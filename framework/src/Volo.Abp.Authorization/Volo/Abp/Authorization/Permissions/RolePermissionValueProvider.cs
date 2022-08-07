@@ -17,7 +17,7 @@ public class RolePermissionValueProvider : PermissionValueProvider
 
     }
 
-    public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
+    public async override Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
     {
         var roles = context.Principal?.FindAll(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
 
@@ -37,7 +37,7 @@ public class RolePermissionValueProvider : PermissionValueProvider
         return PermissionGrantResult.Undefined;
     }
 
-    public override async Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
+    public async override Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
     {
         var permissionNames = context.Permissions.Select(x => x.Name).Distinct().ToList();
         Check.NotNullOrEmpty(permissionNames, nameof(permissionNames));

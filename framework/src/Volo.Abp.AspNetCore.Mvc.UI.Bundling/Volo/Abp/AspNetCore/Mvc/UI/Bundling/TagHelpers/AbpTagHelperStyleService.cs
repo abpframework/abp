@@ -32,7 +32,7 @@ public class AbpTagHelperStyleService : AbpTagHelperResourceService
         );
     }
 
-    protected override async Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
+    protected async override Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
     {
         return await BundleManager.GetStyleBundleFilesAsync(bundleName);
     }

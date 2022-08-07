@@ -7,7 +7,7 @@ namespace Volo.Abp.TextTemplating.Razor;
 
 internal class EmptyProjectFileSystem : RazorProjectFileSystem
 {
-    internal static readonly RazorProjectFileSystem Empty = new EmptyProjectFileSystem();
+    internal readonly static RazorProjectFileSystem Empty = new EmptyProjectFileSystem();
 
     public override IEnumerable<RazorProjectItem> EnumerateItems(string basePath)
     {

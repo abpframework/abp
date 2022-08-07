@@ -36,7 +36,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         _localizer = localizer;
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var list = InitilizeFormGroupContentsContext(context, output);
 

@@ -26,7 +26,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         _tagHelperLocalizer = tagHelperLocalizer;
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var (innerHtml, isCheckBox) = await GetFormInputGroupAsHtmlAsync(context, output);
 

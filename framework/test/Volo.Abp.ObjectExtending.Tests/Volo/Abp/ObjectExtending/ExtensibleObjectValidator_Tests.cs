@@ -9,7 +9,7 @@ namespace Volo.Abp.ObjectExtending;
 
 public class ExtensibleObjectValidator_Tests
 {
-    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+    private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     static ExtensibleObjectValidator_Tests()
     {

@@ -6,7 +6,7 @@ namespace Volo.Abp.Cli.Utils;
 
 public static class ProjectNameValidator
 {
-    private static readonly string[] IllegalProjectNames = new[]
+    private readonly static string[] IllegalProjectNames = new[]
     {
             "MyCompanyName.MyProjectName",
             "MyProjectName",
@@ -17,7 +17,7 @@ public static class ProjectNameValidator
             "LPT2"
         };
 
-    private static readonly string[] IllegalKeywords = new[]
+    private readonly static string[] IllegalKeywords = new[]
     {
             "Blazor"
         };

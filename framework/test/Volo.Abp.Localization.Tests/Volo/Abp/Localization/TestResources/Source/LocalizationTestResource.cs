@@ -7,7 +7,7 @@ namespace Volo.Abp.Localization.TestResources.Source;
     typeof(LocalizationTestValidationResource),
     typeof(LocalizationTestCountryNamesResource)
     )]
-public sealed class LocalizationTestResource
+sealed public class LocalizationTestResource
 {
 
 }

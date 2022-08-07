@@ -37,7 +37,7 @@ public class BackgroundJobWorker : AsyncPeriodicBackgroundWorkerBase, IBackgroun
         Timer.Period = WorkerOptions.JobPollPeriod;
     }
 
-    protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
+    protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
     {
         await using (var handler = await DistributedLock.TryAcquireAsync(DistributedLockName, cancellationToken: StoppingToken))
         {

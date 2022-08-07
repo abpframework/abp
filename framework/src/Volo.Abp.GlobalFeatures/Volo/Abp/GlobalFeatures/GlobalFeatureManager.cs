@@ -18,7 +18,7 @@ public class GlobalFeatureManager
 
     protected HashSet<string> EnabledFeatures { get; }
 
-    protected internal GlobalFeatureManager()
+    internal protected GlobalFeatureManager()
     {
         EnabledFeatures = new HashSet<string>();
         Configuration = new Dictionary<object, object>();

@@ -12,7 +12,7 @@ namespace Volo.Abp.Validation;
 /// </summary>
 public class DynamicStringLengthAttribute : StringLengthAttribute
 {
-    private static readonly FieldInfo MaximumLengthField;
+    private readonly static FieldInfo MaximumLengthField;
 
     static DynamicStringLengthAttribute()
     {

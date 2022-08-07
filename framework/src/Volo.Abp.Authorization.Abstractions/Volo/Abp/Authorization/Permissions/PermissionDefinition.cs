@@ -74,7 +74,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
         set => Properties[name] = value;
     }
 
-    protected internal PermissionDefinition(
+    internal protected PermissionDefinition(
         [NotNull] string name,
         ILocalizableString displayName = null,
         MultiTenancySides multiTenancySide = MultiTenancySides.Both,

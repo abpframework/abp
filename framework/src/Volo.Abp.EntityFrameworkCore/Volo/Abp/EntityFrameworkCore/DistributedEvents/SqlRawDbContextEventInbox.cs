@@ -20,7 +20,7 @@ public class SqlRawDbContextEventInbox<TDbContext> : DbContextEventInbox<TDbCont
     }
 
     [UnitOfWork]
-    public override async Task MarkAsProcessedAsync(Guid id)
+    public async override Task MarkAsProcessedAsync(Guid id)
     {
         var dbContext = await DbContextProvider.GetDbContextAsync();
         var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();
@@ -30,7 +30,7 @@ public class SqlRawDbContextEventInbox<TDbContext> : DbContextEventInbox<TDbCont
     }
 
     [UnitOfWork]
-    public override async Task DeleteOldEventsAsync()
+    public async override Task DeleteOldEventsAsync()
     {
         var dbContext = await DbContextProvider.GetDbContextAsync();
         var tableName = dbContext.IncomingEvents.EntityType.GetSchemaQualifiedTableName();

@@ -9,7 +9,7 @@ namespace Volo.Abp.EntityFrameworkCore.Domain;
 
 public static class TestEntityExtensionConfigurator
 {
-    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+    private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     public static void Configure()
     {

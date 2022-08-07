@@ -25,13 +25,13 @@ public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
         Timer.Elapsed += Timer_Elapsed;
     }
 
-    public override async Task StartAsync(CancellationToken cancellationToken = default)
+    public async override Task StartAsync(CancellationToken cancellationToken = default)
     {
         await base.StartAsync(cancellationToken);
         Timer.Start(cancellationToken);
     }
 
-    public override async Task StopAsync(CancellationToken cancellationToken = default)
+    public async override Task StopAsync(CancellationToken cancellationToken = default)
     {
         Timer.Stop(cancellationToken);
         await base.StopAsync(cancellationToken);

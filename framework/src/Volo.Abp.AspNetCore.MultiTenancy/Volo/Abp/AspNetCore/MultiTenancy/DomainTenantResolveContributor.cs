@@ -14,7 +14,7 @@ public class DomainTenantResolveContributor : HttpTenantResolveContributorBase
 
     public override string Name => ContributorName;
 
-    private static readonly string[] ProtocolPrefixes = { "http://", "https://" };
+    private readonly static string[] ProtocolPrefixes = { "http://", "https://" };
 
     private readonly string _domainFormat;
 

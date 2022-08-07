@@ -8,7 +8,7 @@ namespace Volo.Abp.Threading;
 /// </summary>
 public class OneTimeRunner
 {
-    private volatile bool _runBefore;
+    volatile private bool _runBefore;
 
     public void Run(Action action)
     {

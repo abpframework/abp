@@ -24,7 +24,7 @@ public static class JsonLocalizationDictionaryBuilder
         }
     }
 
-    private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions
+    private readonly static JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions
     {
         PropertyNameCaseInsensitive = true,
         DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,

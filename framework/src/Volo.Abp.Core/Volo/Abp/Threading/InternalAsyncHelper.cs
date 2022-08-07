@@ -9,7 +9,7 @@ namespace Volo.Abp.Threading;
 //TODO: Cache GetMethod reflection!
 public static class InternalAsyncHelper
 {
-    public static async Task AwaitTaskWithFinally(Task actualReturnValue, Action<Exception> finalAction)
+    public async static Task AwaitTaskWithFinally(Task actualReturnValue, Action<Exception> finalAction)
     {
         Exception exception = null;
 
@@ -28,7 +28,7 @@ public static class InternalAsyncHelper
         }
     }
 
-    public static async Task AwaitTaskWithPostActionAndFinally(Task actualReturnValue, Func<Task> postAction, Action<Exception> finalAction)
+    public async static Task AwaitTaskWithPostActionAndFinally(Task actualReturnValue, Func<Task> postAction, Action<Exception> finalAction)
     {
         Exception exception = null;
 
@@ -48,7 +48,7 @@ public static class InternalAsyncHelper
         }
     }
 
-    public static async Task AwaitTaskWithPreActionAndPostActionAndFinally(Func<Task> actualReturnValue, Func<Task> preAction = null, Func<Task> postAction = null, Action<Exception> finalAction = null)
+    public async static Task AwaitTaskWithPreActionAndPostActionAndFinally(Func<Task> actualReturnValue, Func<Task> preAction = null, Func<Task> postAction = null, Action<Exception> finalAction = null)
     {
         Exception exception = null;
 
@@ -80,7 +80,7 @@ public static class InternalAsyncHelper
         }
     }
 
-    public static async Task<T> AwaitTaskWithFinallyAndGetResult<T>(Task<T> actualReturnValue, Action<Exception> finalAction)
+    public async static Task<T> AwaitTaskWithFinallyAndGetResult<T>(Task<T> actualReturnValue, Action<Exception> finalAction)
     {
         Exception exception = null;
 
@@ -108,7 +108,7 @@ public static class InternalAsyncHelper
             .Invoke(null, new object[] { actualReturnValue, finalAction });
     }
 
-    public static async Task<T> AwaitTaskWithPostActionAndFinallyAndGetResult<T>(Task<T> actualReturnValue, Func<Task> postAction, Action<Exception> finalAction)
+    public async static Task<T> AwaitTaskWithPostActionAndFinallyAndGetResult<T>(Task<T> actualReturnValue, Func<Task> postAction, Action<Exception> finalAction)
     {
         Exception exception = null;
 
@@ -138,7 +138,7 @@ public static class InternalAsyncHelper
             .Invoke(null, new object[] { actualReturnValue, action, finalAction });
     }
 
-    public static async Task<T> AwaitTaskWithPreActionAndPostActionAndFinallyAndGetResult<T>(Func<Task<T>> actualReturnValue, Func<Task> preAction = null, Func<Task> postAction = null, Action<Exception> finalAction = null)
+    public async static Task<T> AwaitTaskWithPreActionAndPostActionAndFinallyAndGetResult<T>(Func<Task<T>> actualReturnValue, Func<Task> preAction = null, Func<Task> postAction = null, Action<Exception> finalAction = null)
     {
         Exception exception = null;
 

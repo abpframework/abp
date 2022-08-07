@@ -11,7 +11,7 @@ namespace Volo.Abp.Localization;
 
 public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLocalizerFactoryWithDefaultResourceSupport
 {
-    protected internal AbpLocalizationOptions AbpLocalizationOptions { get; }
+    internal protected AbpLocalizationOptions AbpLocalizationOptions { get; }
     protected ResourceManagerStringLocalizerFactory InnerFactory { get; }
     protected IServiceProvider ServiceProvider { get; }
     protected ConcurrentDictionary<Type, StringLocalizerCacheItem> LocalizerCache { get; }

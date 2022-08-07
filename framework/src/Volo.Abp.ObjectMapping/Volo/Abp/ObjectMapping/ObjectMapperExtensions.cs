@@ -5,8 +5,8 @@ namespace Volo.Abp.ObjectMapping;
 
 public static class ObjectMapperExtensions
 {
-    private static readonly MethodInfo MapToNewObjectMethod;
-    private static readonly MethodInfo MapToExistingObjectMethod;
+    private readonly static MethodInfo MapToNewObjectMethod;
+    private readonly static MethodInfo MapToExistingObjectMethod;
 
     static ObjectMapperExtensions()
     {

@@ -16,7 +16,7 @@ public class ObjectExtensionManager
 
     protected ConcurrentDictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
 
-    protected internal ObjectExtensionManager()
+    internal protected ObjectExtensionManager()
     {
         ObjectsExtensions = new ConcurrentDictionary<Type, ObjectExtensionInfo>();
         Configuration = new ConcurrentDictionary<object, object>();

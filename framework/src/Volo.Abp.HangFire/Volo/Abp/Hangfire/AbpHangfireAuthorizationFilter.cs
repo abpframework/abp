@@ -45,7 +45,7 @@ public class AbpHangfireAuthorizationFilter : IDashboardAsyncAuthorizationFilter
         return currentUser.IsAuthenticated;
     }
 
-    private static async Task<bool> IsPermissionGrantedAsync(DashboardContext context, string requiredPermissionName)
+    private async static Task<bool> IsPermissionGrantedAsync(DashboardContext context, string requiredPermissionName)
     {
         var permissionChecker = context.GetHttpContext().RequestServices.GetRequiredService<IPermissionChecker>();
         return await permissionChecker.IsGrantedAsync(requiredPermissionName);

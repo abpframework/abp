@@ -51,7 +51,7 @@ public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModul
     }
 
     [Fact]
-    public override async Task InsertAsync()
+    public async override Task InsertAsync()
     {
         var person = new Person(Guid.NewGuid(), "New Person", 35);
         person.Phones.Add(new Phone(person.Id, "1234567890"));

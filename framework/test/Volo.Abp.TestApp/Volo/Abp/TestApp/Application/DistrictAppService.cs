@@ -15,12 +15,12 @@ public class DistrictAppService : AbstractKeyCrudAppService<District, DistrictDt
     {
     }
 
-    protected override async Task DeleteByIdAsync(DistrictKey id)
+    protected async override Task DeleteByIdAsync(DistrictKey id)
     {
         await Repository.DeleteAsync(d => d.CityId == id.CityId && d.Name == id.Name);
     }
 
-    protected override async Task<District> GetEntityByIdAsync(DistrictKey id)
+    protected async override Task<District> GetEntityByIdAsync(DistrictKey id)
     {
         return await AsyncExecuter.FirstOrDefaultAsync(
              (await Repository.GetQueryableAsync()).Where(d => d.CityId == id.CityId && d.Name == id.Name)

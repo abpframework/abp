@@ -7,7 +7,7 @@ namespace Microsoft.AspNetCore.Authorization;
 
 public static class AbpAuthorizationServiceExtensions
 {
-    public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, string policyName)
+    public async static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, string policyName)
     {
         return await AuthorizeAsync(
             authorizationService,
@@ -16,7 +16,7 @@ public static class AbpAuthorizationServiceExtensions
         );
     }
 
-    public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
+    public async static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
     {
         return await authorizationService.AuthorizeAsync(
             authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
@@ -25,7 +25,7 @@ public static class AbpAuthorizationServiceExtensions
         );
     }
 
-    public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, AuthorizationPolicy policy)
+    public async static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, AuthorizationPolicy policy)
     {
         return await authorizationService.AuthorizeAsync(
             authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
@@ -34,7 +34,7 @@ public static class AbpAuthorizationServiceExtensions
         );
     }
 
-    public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
+    public async static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
     {
         return await AuthorizeAsync(
             authorizationService,
@@ -43,7 +43,7 @@ public static class AbpAuthorizationServiceExtensions
         );
     }
 
-    public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, IEnumerable<IAuthorizationRequirement> requirements)
+    public async static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, IEnumerable<IAuthorizationRequirement> requirements)
     {
         return await authorizationService.AuthorizeAsync(
             authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
@@ -52,7 +52,7 @@ public static class AbpAuthorizationServiceExtensions
         );
     }
 
-    public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, string policyName)
+    public async static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, string policyName)
     {
         return await authorizationService.AuthorizeAsync(
             authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
@@ -61,12 +61,12 @@ public static class AbpAuthorizationServiceExtensions
         );
     }
 
-    public static async Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, string policyName)
+    public async static Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, string policyName)
     {
         return (await authorizationService.AuthorizeAsync(policyName)).Succeeded;
     }
 
-    public static async Task<bool> IsGrantedAnyAsync(
+    public async static Task<bool> IsGrantedAnyAsync(
         this IAuthorizationService authorizationService,
         params string[] policyNames)
     {
@@ -83,32 +83,32 @@ public static class AbpAuthorizationServiceExtensions
         return false;
     }
 
-    public static async Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
+    public async static Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
     {
         return (await authorizationService.AuthorizeAsync(resource, requirement)).Succeeded;
     }
 
-    public static async Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, AuthorizationPolicy policy)
+    public async static Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, AuthorizationPolicy policy)
     {
         return (await authorizationService.AuthorizeAsync(resource, policy)).Succeeded;
     }
 
-    public static async Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
+    public async static Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
     {
         return (await authorizationService.AuthorizeAsync(policy)).Succeeded;
     }
 
-    public static async Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, IEnumerable<IAuthorizationRequirement> requirements)
+    public async static Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, IEnumerable<IAuthorizationRequirement> requirements)
     {
         return (await authorizationService.AuthorizeAsync(resource, requirements)).Succeeded;
     }
 
-    public static async Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, string policyName)
+    public async static Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, string policyName)
     {
         return (await authorizationService.AuthorizeAsync(resource, policyName)).Succeeded;
     }
 
-    public static async Task CheckAsync(this IAuthorizationService authorizationService, string policyName)
+    public async static Task CheckAsync(this IAuthorizationService authorizationService, string policyName)
     {
         if (!await authorizationService.IsGrantedAsync(policyName))
         {
@@ -117,7 +117,7 @@ public static class AbpAuthorizationServiceExtensions
         }
     }
 
-    public static async Task CheckAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
+    public async static Task CheckAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
     {
         if (!await authorizationService.IsGrantedAsync(resource, requirement))
         {
@@ -126,7 +126,7 @@ public static class AbpAuthorizationServiceExtensions
         }
     }
 
-    public static async Task CheckAsync(this IAuthorizationService authorizationService, object resource, AuthorizationPolicy policy)
+    public async static Task CheckAsync(this IAuthorizationService authorizationService, object resource, AuthorizationPolicy policy)
     {
         if (!await authorizationService.IsGrantedAsync(resource, policy))
         {
@@ -135,7 +135,7 @@ public static class AbpAuthorizationServiceExtensions
         }
     }
 
-    public static async Task CheckAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
+    public async static Task CheckAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
     {
         if (!await authorizationService.IsGrantedAsync(policy))
         {
@@ -143,7 +143,7 @@ public static class AbpAuthorizationServiceExtensions
         }
     }
 
-    public static async Task CheckAsync(this IAuthorizationService authorizationService, object resource, IEnumerable<IAuthorizationRequirement> requirements)
+    public async static Task CheckAsync(this IAuthorizationService authorizationService, object resource, IEnumerable<IAuthorizationRequirement> requirements)
     {
         if (!await authorizationService.IsGrantedAsync(resource, requirements))
         {
@@ -152,7 +152,7 @@ public static class AbpAuthorizationServiceExtensions
         }
     }
 
-    public static async Task CheckAsync(this IAuthorizationService authorizationService, object resource, string policyName)
+    public async static Task CheckAsync(this IAuthorizationService authorizationService, object resource, string policyName)
     {
         if (!await authorizationService.IsGrantedAsync(resource, policyName))
         {

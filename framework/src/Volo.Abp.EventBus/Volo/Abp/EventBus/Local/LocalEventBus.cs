@@ -120,7 +120,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
     }
 
-    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         await PublishAsync(new LocalEventMessage(Guid.NewGuid(), eventData, eventType));
     }

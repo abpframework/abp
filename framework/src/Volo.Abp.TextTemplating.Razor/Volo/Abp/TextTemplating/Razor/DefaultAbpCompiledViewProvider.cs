@@ -14,7 +14,7 @@ namespace Volo.Abp.TextTemplating.Razor;
 
 public class DefaultAbpCompiledViewProvider : IAbpCompiledViewProvider, ITransientDependency
 {
-    private static readonly ConcurrentDictionary<string, Assembly> CachedAssembles = new ConcurrentDictionary<string, Assembly>();
+    private readonly static ConcurrentDictionary<string, Assembly> CachedAssembles = new ConcurrentDictionary<string, Assembly>();
 
     private readonly AbpCompiledViewProviderOptions _options;
     private readonly AbpRazorTemplateCSharpCompiler _razorTemplateCSharpCompiler;

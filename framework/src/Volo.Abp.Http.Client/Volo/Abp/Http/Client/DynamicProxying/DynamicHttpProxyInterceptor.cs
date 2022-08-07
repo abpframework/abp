@@ -50,7 +50,7 @@ public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientD
         Logger = NullLogger<DynamicHttpProxyInterceptor<TService>>.Instance;
     }
 
-    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+    public async override Task InterceptAsync(IAbpMethodInvocation invocation)
     {
         var context = new ClientProxyRequestContext(
             await GetActionApiDescriptionModel(invocation),

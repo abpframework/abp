@@ -106,7 +106,7 @@ public static class ObjectExtensionManagerExtensions
             .GetPropertyOrNull(propertyName);
     }
 
-    private static readonly ImmutableList<ObjectExtensionPropertyInfo> EmptyPropertyList
+    private readonly static ImmutableList<ObjectExtensionPropertyInfo> EmptyPropertyList
         = new List<ObjectExtensionPropertyInfo>().ToImmutableList();
 
     public static ImmutableList<ObjectExtensionPropertyInfo> GetProperties<TObject>(

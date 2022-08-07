@@ -16,7 +16,7 @@ public abstract class AbpMongoDbContext : IAbpMongoDbContext, ITransientDependen
 
     public IClientSessionHandle SessionHandle { get; private set; }
 
-    protected internal virtual void CreateModel(IMongoModelBuilder modelBuilder)
+    internal protected virtual void CreateModel(IMongoModelBuilder modelBuilder)
     {
 
     }

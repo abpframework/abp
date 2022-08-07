@@ -6,7 +6,7 @@ namespace Volo.Abp.Settings;
 
 public static class SettingProviderExtensions
 {
-    public static async Task<bool> IsTrueAsync([NotNull] this ISettingProvider settingProvider, [NotNull] string name)
+    public async static Task<bool> IsTrueAsync([NotNull] this ISettingProvider settingProvider, [NotNull] string name)
     {
         Check.NotNull(settingProvider, nameof(settingProvider));
         Check.NotNull(name, nameof(name));
@@ -18,7 +18,7 @@ public static class SettingProviderExtensions
         );
     }
 
-    public static async Task<T> GetAsync<T>([NotNull] this ISettingProvider settingProvider, [NotNull] string name, T defaultValue = default)
+    public async static Task<T> GetAsync<T>([NotNull] this ISettingProvider settingProvider, [NotNull] string name, T defaultValue = default)
         where T : struct
     {
         Check.NotNull(settingProvider, nameof(settingProvider));

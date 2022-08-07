@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem;
 /* Inspired from the Microsoft.Extensions.FileProviders.Physical package. */
 internal static class PathUtils
 {
-    private static readonly char[] PathSeparators = { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
+    private readonly static char[] PathSeparators = { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
 
     public static bool PathNavigatesAboveRoot(string path)
     {

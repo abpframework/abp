@@ -16,7 +16,7 @@ public abstract class AbpBundleTagHelperService<TTagHelper, TService> : AbpTagHe
         ResourceService = resourceService;
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         await ResourceService.ProcessAsync(
             TagHelper.ViewContext,

@@ -124,7 +124,7 @@ public class ChannelPool : IChannelPool, ISingletonDependency
             get => _isInUse;
             private set => _isInUse = value;
         }
-        private volatile bool _isInUse;
+        volatile private bool _isInUse;
 
         public ChannelPoolItem(IModel channel)
         {

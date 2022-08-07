@@ -19,7 +19,7 @@ public class CastleAbpMethodInvocationAdapterWithReturnValue<TResult> : CastleAb
         Proceed = proceed;
     }
 
-    public override async Task ProceedAsync()
+    public async override Task ProceedAsync()
     {
         ReturnValue = await Proceed(Invocation, ProceedInfo);
     }

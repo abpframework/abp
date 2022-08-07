@@ -8,7 +8,7 @@ namespace Volo.Abp.Features;
 
 public static class FeatureCheckerExtensions
 {
-    public static async Task<T> GetAsync<T>(
+    public async static Task<T> GetAsync<T>(
         [NotNull] this IFeatureChecker featureChecker,
         [NotNull] string name,
         T defaultValue = default)
@@ -21,7 +21,7 @@ public static class FeatureCheckerExtensions
         return value?.To<T>() ?? defaultValue;
     }
 
-    public static async Task<bool> IsEnabledAsync(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
+    public async static Task<bool> IsEnabledAsync(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
     {
         if (featureNames.IsNullOrEmpty())
         {
@@ -52,7 +52,7 @@ public static class FeatureCheckerExtensions
         return false;
     }
 
-    public static async Task CheckEnabledAsync(this IFeatureChecker featureChecker, string featureName)
+    public async static Task CheckEnabledAsync(this IFeatureChecker featureChecker, string featureName)
     {
         if (!(await featureChecker.IsEnabledAsync(featureName)))
         {
@@ -61,7 +61,7 @@ public static class FeatureCheckerExtensions
         }
     }
 
-    public static async Task CheckEnabledAsync(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
+    public async static Task CheckEnabledAsync(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
     {
         if (featureNames.IsNullOrEmpty())
         {

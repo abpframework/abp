@@ -28,7 +28,7 @@ public class JavaScriptServiceProxyGenerator : ServiceProxyGeneratorBase<JavaScr
         _jQueryProxyScriptGenerator = jQueryProxyScriptGenerator;
     }
 
-    public override async Task GenerateProxyAsync(GenerateProxyArgs args)
+    public async override Task GenerateProxyAsync(GenerateProxyArgs args)
     {
         CheckWorkDirectory(args.WorkDirectory);
 

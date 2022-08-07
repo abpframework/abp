@@ -41,7 +41,7 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
         return JsonSerializer.Serialize(copyDictionary);
     }
 
-    private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
+    private readonly static JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
     {
         Converters =
         {

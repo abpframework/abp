@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 public static class TagHelperExtensions
 {
-    public static async Task<TagHelperOutput> ProcessAndGetOutputAsync(
+    public async static Task<TagHelperOutput> ProcessAndGetOutputAsync(
         this TagHelper tagHelper,
         TagHelperAttributeList attributeList,
         TagHelperContext context,
@@ -35,7 +35,7 @@ public static class TagHelperExtensions
         return innerOutput;
     }
 
-    public static async Task<string> RenderAsync(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
+    public async static Task<string> RenderAsync(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
     {
         var innerOutput = await tagHelper.ProcessAndGetOutputAsync(attributeList, context, tagName, tagMode);
 

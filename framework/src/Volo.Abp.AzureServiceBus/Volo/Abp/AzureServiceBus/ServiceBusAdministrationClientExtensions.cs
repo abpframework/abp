@@ -5,7 +5,7 @@ namespace Volo.Abp.AzureServiceBus;
 
 public static class ServiceBusAdministrationClientExtensions
 {
-    public static async Task SetupTopicAsync(this ServiceBusAdministrationClient client, string topicName)
+    public async static Task SetupTopicAsync(this ServiceBusAdministrationClient client, string topicName)
     {
         if (!await client.TopicExistsAsync(topicName))
         {
@@ -13,7 +13,7 @@ public static class ServiceBusAdministrationClientExtensions
         }
     }
 
-    public static async Task SetupSubscriptionAsync(this ServiceBusAdministrationClient client, string topicName, string subscriptionName)
+    public async static Task SetupSubscriptionAsync(this ServiceBusAdministrationClient client, string topicName, string subscriptionName)
     {
         await client.SetupTopicAsync(topicName);
         if (!await client.SubscriptionExistsAsync(topicName, subscriptionName))

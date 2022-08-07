@@ -18,7 +18,7 @@ public static class AbpStreamExtensions
         }
     }
 
-    public static async Task<byte[]> GetAllBytesAsync(this Stream stream, CancellationToken cancellationToken = default)
+    public async static Task<byte[]> GetAllBytesAsync(this Stream stream, CancellationToken cancellationToken = default)
     {
         using (var memoryStream = new MemoryStream())
         {

@@ -11,7 +11,7 @@ namespace Volo.Abp;
 /// </summary>
 public static class RandomHelper
 {
-    private static readonly Random Rnd = new Random();
+    private readonly static Random Rnd = new Random();
 
     /// <summary>
     /// Returns a random number within a specified range.

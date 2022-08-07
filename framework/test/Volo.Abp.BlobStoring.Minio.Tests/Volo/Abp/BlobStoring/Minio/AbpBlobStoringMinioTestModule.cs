@@ -59,7 +59,7 @@ public class AbpBlobStoringMinioTestModule : AbpModule
         });
     }
 
-    public override async void OnApplicationShutdown(ApplicationShutdownContext context)
+    public async override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
         var minioClient = new MinioClient(_endPoint, _accessKey, _secretKey);
         if (await minioClient.BucketExistsAsync(_randomContainerName))

@@ -8,7 +8,7 @@ namespace Volo.Abp.Specifications;
 /// in any circumstance.
 /// </summary>
 /// <typeparam name="T">The type of the object to which the specification is applied.</typeparam>
-public sealed class AnySpecification<T> : Specification<T>
+sealed public class AnySpecification<T> : Specification<T>
 {
     /// <summary>
     /// Gets the LINQ expression which represents the current specification.

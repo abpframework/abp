@@ -6,7 +6,7 @@ namespace Volo.Abp.Cli.Bundling.Styles;
 
 internal static class CssRelativePathAdjuster
 {
-    private static readonly Regex _rxUrl = new Regex(@"url\s*\(\s*([""']?)([^:)]+)\1\s*\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private readonly static Regex _rxUrl = new Regex(@"url\s*\(\s*([""']?)([^:)]+)\1\s*\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     public static string Adjust(
         string cssFileContents,
@@ -55,7 +55,7 @@ internal static class CssRelativePathAdjuster
         return Path.GetFullPath(Path.Combine(cssFilePath, pathOnly));
     }
 
-    private static readonly string _protocol = "file:///";
+    private readonly static string _protocol = "file:///";
     private static string MakeRelative(string baseFile, string file)
     {
         if (string.IsNullOrEmpty(file))

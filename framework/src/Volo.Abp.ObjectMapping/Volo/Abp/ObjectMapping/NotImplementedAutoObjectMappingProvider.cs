@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.ObjectMapping;
 
-public sealed class NotImplementedAutoObjectMappingProvider : IAutoObjectMappingProvider, ISingletonDependency
+sealed public class NotImplementedAutoObjectMappingProvider : IAutoObjectMappingProvider, ISingletonDependency
 {
     public TDestination Map<TSource, TDestination>(object source)
     {

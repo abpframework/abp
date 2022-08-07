@@ -60,7 +60,7 @@ public partial class EntityAction<TItem> : ComponentBase
         ParentActions.AddAction(this);
     }
 
-    protected internal virtual async Task ActionClickedAsync()
+    internal protected virtual async Task ActionClickedAsync()
     {
         if (ConfirmationMessage != null)
         {

@@ -24,7 +24,7 @@ public class AbpRequestLocalizationOptionsManager : AbpDynamicOptionsManager<Req
         return _options ?? base.Get(name);
     }
 
-    protected override async Task OverrideOptionsAsync(string name, RequestLocalizationOptions options)
+    protected async override Task OverrideOptionsAsync(string name, RequestLocalizationOptions options)
     {
         _options = await _abpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync();
     }

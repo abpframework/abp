@@ -7,7 +7,7 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection;
 public class DbContextCreationContext
 {
     public static DbContextCreationContext Current => _current.Value;
-    private static readonly AsyncLocal<DbContextCreationContext> _current = new AsyncLocal<DbContextCreationContext>();
+    private readonly static AsyncLocal<DbContextCreationContext> _current = new AsyncLocal<DbContextCreationContext>();
 
     public string ConnectionStringName { get; }
 

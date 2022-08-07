@@ -28,7 +28,7 @@ public static class AbpRedisExtensions
         return results;
     }
 
-    public static async Task<RedisValue[][]> HashMemberGetManyAsync(
+    public async static Task<RedisValue[][]> HashMemberGetManyAsync(
         this IDatabase cache,
         string[] keys,
         params string[] members)

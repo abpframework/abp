@@ -33,8 +33,8 @@ public class AbpTimer : ITransientDependency
     public IExceptionNotifier ExceptionNotifier { get; set; }
 
     private readonly Timer _taskTimer;
-    private volatile bool _performingTasks;
-    private volatile bool _isRunning;
+    volatile private bool _performingTasks;
+    volatile private bool _isRunning;
 
     public AbpTimer()
     {

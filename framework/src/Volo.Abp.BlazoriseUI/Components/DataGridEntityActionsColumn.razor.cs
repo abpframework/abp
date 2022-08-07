@@ -12,7 +12,7 @@ public partial class DataGridEntityActionsColumn<TItem> : DataGridColumn<TItem>
     [Inject]
     public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         await SetDefaultValuesAsync();

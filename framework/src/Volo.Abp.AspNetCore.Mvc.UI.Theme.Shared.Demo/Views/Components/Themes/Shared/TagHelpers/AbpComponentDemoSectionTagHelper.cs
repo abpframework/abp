@@ -28,7 +28,7 @@ public class AbpComponentDemoSectionTagHelper : AbpTagHelper
         _guidGenerator = guidGenerator;
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.TagName = null;
 
