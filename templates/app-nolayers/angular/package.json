@@ -19,7 +19,7 @@
     "@abp/ng.setting-management": "~6.0.0-rc.1",
     "@abp/ng.tenant-management": "~6.0.0-rc.1",
     "@abp/ng.theme.shared": "~6.0.0-rc.1",
-    "@abp/ng.theme.lepton-x": "~1.0.0-rc.1",
+    "@abp/ng.theme.lepton-x": "~1.0.0-rc.3",
     "@angular/animations": "~13.1.1",
     "@angular/common": "~13.1.1",
     "@angular/compiler": "~13.1.1",
