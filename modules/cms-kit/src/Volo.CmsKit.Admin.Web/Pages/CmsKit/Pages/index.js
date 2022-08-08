@@ -49,7 +49,7 @@ $(function (){
                         },
                         {
                             text: l('SetAsHomePage'),
-                            visible: abp.auth.isGranted('CmsKit.Pages.Delete'),
+                            visible: abp.auth.isGranted('CmsKit.Pages.SetAsHomePage'),
                             action: function (data) {
                                 pagesService
                                     .setAsHomePage(data.record.id)
