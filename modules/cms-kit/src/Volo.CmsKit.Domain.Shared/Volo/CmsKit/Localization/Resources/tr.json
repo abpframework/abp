@@ -112,6 +112,7 @@
     "Permission:PageManagement:Create": "Oluşturmak",
     "Permission:PageManagement:Delete": "Silmek",
     "Permission:PageManagement:Update": "Güncelleme",
+    "Permission:PageManagement:SetAsHomePage": "Anasayfa Olarak Ayarla",
     "Permission:TagManagement": "Etiket Yönetimi",
     "Permission:TagManagement.Create": "Etiket Oluşturma",
     "Permission:TagManagement.Delete": "Etiket Silme",
@@ -163,8 +164,6 @@
     "YourReply": "Cevabınız",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> destekler.",
     "GlobalResources": "Global Kaynaklar",
-    "Script": "Script",
-    "Style": "Style",
     "SavedSuccessfully": "Başarıyla kaydedildi",
     "CmsKit.BlogPost.Status.0": "Taslak",
     "CmsKit.BlogPost.Status.1": "Yayınlandı",
@@ -190,6 +189,8 @@
     "CmsKit.BlogPost.ScrollIndex": "Blog yazılarında hızlı gezinme çubuğu",
     "Add": "Ekle",
     "AddWidget": "Widget Ekle",
-    "PleaseConfigureWidgets": "Lütfen widget'leri yapılandırın"
+    "PleaseConfigureWidgets": "Lütfen widget'leri yapılandırın",
+    "SetAsHomePage": "Anasayfa Olarak Ayarla",
+    "CompletedSettingAsHomePage": "Anasayfa olarak ayarlandı"
   }
 }

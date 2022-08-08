@@ -112,6 +112,7 @@
     "Permission:PageManagement:Create": "Create",
     "Permission:PageManagement:Delete": "Delete",
     "Permission:PageManagement:Update": "Update",
+    "Permission:PageManagement:SetAsHomePage": "Set As Home Page",
     "Permission:TagManagement": "Tag Management",
     "Permission:TagManagement.Create": "Create",
     "Permission:TagManagement.Delete": "Delete",
@@ -185,8 +186,10 @@
     "Add": "Add",
     "AddWidget": "Add Widget",
     "PleaseConfigureWidgets": "Please configure widgets",
-    "SelectAnAuthor":"Select an Author",
-    "InThisDocument":"In This Document",
-    "GoToTop":"Go To Top"
+    "SelectAnAuthor": "Select an Author",
+    "InThisDocument": "In This Document",
+    "GoToTop": "Go To Top",
+    "SetAsHomePage": "Set As Home Page",
+    "CompletedSettingAsHomePage": "Set as home page"
   }
 }

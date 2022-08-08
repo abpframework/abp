@@ -54,7 +54,7 @@ $(function (){
                                 pagesService
                                     .setAsHomePage(data.record.id)
                                     .then(function () {
-                                        abp.notify.success(l('SetAsHomePage'));
+                                        abp.notify.success(l('CompletedSettingAsHomePage'));
                                     });
                             }
                         }
