@@ -63,4 +63,9 @@ public class EfCorePageRepository : EfCoreRepository<ICmsKitDbContext, Page, Gui
         Check.NotNullOrEmpty(slug, nameof(slug));
         return await (await GetDbSetAsync()).AnyAsync(x => x.Slug == slug, GetCancellationToken(cancellationToken));
     }
+
+    public virtual Task<Page> FindByIsHomePageAsync(bool isHomePage, CancellationToken cancellationToken = default)
+    {
+        return FindAsync(x => x.IsHomePage == isHomePage, cancellationToken: GetCancellationToken(cancellationToken));
+    }
 }

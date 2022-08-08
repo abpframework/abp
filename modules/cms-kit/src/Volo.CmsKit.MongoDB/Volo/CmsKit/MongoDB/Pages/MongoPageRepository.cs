@@ -71,4 +71,9 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
         return await (await GetMongoQueryableAsync(cancellationToken)).AnyAsync(x => x.Slug == slug,
             GetCancellationToken(cancellationToken));
     }
+
+    public virtual Task<Page> FindByIsHomePageAsync(bool isHomePage, CancellationToken cancellationToken = default)
+    {
+        return FindAsync(x => x.IsHomePage == isHomePage, cancellationToken: GetCancellationToken(cancellationToken));
+    }
 }

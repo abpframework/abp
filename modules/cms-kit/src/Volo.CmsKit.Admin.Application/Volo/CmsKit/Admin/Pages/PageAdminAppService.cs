@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Permissions;
@@ -84,5 +82,14 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     public virtual async Task DeleteAsync(Guid id)
     {
         await PageRepository.DeleteAsync(id);
+    }
+
+    public virtual async Task SetAsHomePageAsync(Guid id)
+    {
+        await PageManager.SetHomePageAsFalseAsync(true);
+
+        var page = await PageRepository.GetAsync(id);
+        page.IsHomePage = true;
+        await PageRepository.UpdateAsync(page);
     }
 }

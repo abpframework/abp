@@ -136,6 +136,14 @@
       }, ajaxParams));
     };
 
+    volo.cmsKit.admin.pages.pageAdmin.setAsHomePage = function(id, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/pages/setashomepage/' + id + '',
+        type: 'GET',
+        dataType: null
+      }, ajaxParams));
+    };
+
   })();
 
   // controller volo.cmsKit.admin.menus.menuItemAdmin

@@ -22,4 +22,6 @@ public interface IPageRepository : IBasicRepository<Page, Guid>
     Task<Page> FindBySlugAsync(string slug, CancellationToken cancellationToken = default);
 
     Task<bool> ExistsAsync(string slug, CancellationToken cancellationToken = default);
+
+    Task<Page> FindByIsHomePageAsync(bool isHomePage, CancellationToken cancellationToken = default);
 }

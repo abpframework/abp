@@ -46,6 +46,17 @@ $(function (){
                                         abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
+                        },
+                        {
+                            text: l('SetAsHomePage'),
+                            visible: abp.auth.isGranted('CmsKit.Pages.Delete'),
+                            action: function (data) {
+                                pagesService
+                                    .setAsHomePage(data.record.id)
+                                    .then(function () {
+                                        abp.notify.success(l('SetAsHomePage'));
+                                    });
+                            }
                         }
                     ]
                 }

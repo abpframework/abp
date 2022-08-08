@@ -45,6 +45,16 @@ public class PageManager : DomainService
         }
     }
 
+    public virtual async Task SetHomePageAsFalseAsync(bool isHomePage)
+    {
+        var page = await PageRepository.FindByIsHomePageAsync(isHomePage);
+        if (page is not null)
+        {
+            page.IsHomePage = false;
+            await PageRepository.UpdateAsync(page);
+        }
+    }
+
     protected virtual async Task CheckPageSlugAsync(string slug)
     {
         if (await PageRepository.ExistsAsync(slug))

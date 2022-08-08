@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
@@ -59,5 +58,12 @@ public class PageAdminController : CmsKitAdminController, IPageAdminAppService
     public virtual Task DeleteAsync(Guid id)
     {
         return PageAdminAppService.DeleteAsync(id);
+    }
+
+    [HttpGet]
+    [Route("setashomepage/{id}")]
+    public virtual Task SetAsHomePageAsync(Guid id)
+    {
+        return PageAdminAppService.SetAsHomePageAsync(id);
     }
 }
