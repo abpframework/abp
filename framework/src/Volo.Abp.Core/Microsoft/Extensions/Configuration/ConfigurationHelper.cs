@@ -9,7 +9,7 @@ public static class ConfigurationHelper
         AbpConfigurationBuilderOptions options = null,
         Action<IConfigurationBuilder> builderAction = null)
     {
-        options = options ?? new AbpConfigurationBuilderOptions();
+        options ??= new AbpConfigurationBuilderOptions();
 
         if (options.BasePath.IsNullOrEmpty())
         {

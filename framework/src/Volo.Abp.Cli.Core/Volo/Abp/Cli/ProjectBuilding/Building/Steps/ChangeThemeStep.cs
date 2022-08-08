@@ -141,6 +141,13 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "AbpAspNetCoreComponentsWebAssemblyLeptonThemeModule"
         );
 
+        ChangeNamespace(
+            context,
+            "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
+            "Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXTheme",
+            "Volo.Abp.AspNetCore.Components.WebAssembly.LeptonTheme"
+        );
+
         #endregion
 
         #region MyCompanyName.MyProjectName.Blazor.Server && MyCompanyName.MyProjectName.Blazor.Server.Tiered 
@@ -210,7 +217,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             }
             
             AddProjectReference(file, $@"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.{projectName}\Volo.Abp.LeptonTheme.Management.{projectName}.csproj");
-            AddModuleDependency(moduleFile, $"LeptonThemeManagement{ConvertProjectNameToModuleName($"{projectName}")}Module");
+            AddModuleDependency(moduleFile, projectName, $"LeptonThemeManagement{ConvertProjectNameToModuleName($"{projectName}")}Module");
         }
     }
 
@@ -325,21 +332,22 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             
         AddProjectReference(projectFile, reference);
 
-        AddModuleDependency(moduleFile, $"LeptonThemeManagement{ConvertProjectNameToModuleName(projectInfo.Key)}Module",
+        AddModuleDependency(moduleFile, projectInfo.Key, $"LeptonThemeManagement{ConvertProjectNameToModuleName(projectInfo.Key)}Module",
             underManagementFolder: projectInfo.Key != "HttpApi");
     }
 
-    private void AddModuleDependency(FileEntry moduleFile, string dependency, bool underManagementFolder = true)
+    private void AddModuleDependency(FileEntry moduleFile, string projectName, string dependency, bool underManagementFolder = true)
     {
-        var lines = moduleFile.GetLines();
+        var projectNames = new[] { "Blazor", "Blazor.Server", "Blazor.WebAssembly" };
 
+        var lines = moduleFile.GetLines();
         for (var i = 0; i < lines.Length; i++)
         {
             if (lines[i].Contains("namespace MyCompanyName.MyProjectName"))
             {
-                lines[i - 1] = lines[i - 1] + "using Volo.Abp.LeptonTheme" + (underManagementFolder ? ".Management" : "").EnsureEndsWith(';') + Environment.NewLine;
+                lines[i - 1] = lines[i - 1] + ("using Volo.Abp.LeptonTheme" + (underManagementFolder ? ".Management." : ".") + (projectNames.Any(p => p == projectName) ? projectName : "")).TrimEnd('.').EnsureEndsWith(';') + Environment.NewLine;
             }
-            
+
             if (lines[i].Contains("public class MyProjectName") && lines[i-1].Contains(")]"))
             {
                 lines[i - 2] = lines[i - 2] + "," + Environment.NewLine + $"\ttypeof({dependency})";
@@ -584,9 +592,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             .Replace(".csproj", "Module")
             .Replace(".", "");
 
-        fileName = ConvertProjectNameToModuleName(fileName);
-        
-        return context.Files.FirstOrDefault(f => f.Name.Contains(splittedProjectFileName.Last() + "/" + fileName));
+        return context.Files.FirstOrDefault(f => f.Name.Contains(splittedProjectFileName.Last() + "/" + fileName) && f.Name.EndsWith("Module.cs"));
     }
     
     private static string ConvertProjectNameToModuleName(string moduleName)
@@ -795,6 +801,12 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 "Volo.Abp.AspNetCore.Components.Server.LeptonTheme.Bundling",
                 "BlazorLeptonXThemeBundles.Scripts.Global",
                 "BlazorLeptonThemeBundles.Scripts.Global"
+            );
+
+            RemoveLinesByStatement(
+                context,
+                $"/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
+                "Volo.Abp.LeptonX.Shared;"
             );
         }
     }
