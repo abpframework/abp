@@ -51,9 +51,11 @@
     "CreationTime": "oluşturma zamanı",
     "LastUpdateTime": "Son Güncelleme",
     "LastSignificantUpdateTime": "Son önemli güncelleme",
-    "Version": "sürüm",
+    "Version": "Sürüm",
     "LanguageCode": "Dil kodu",
     "FileName": "Dosya adı",
-    "LastCachedTime": "Önbellek süresi"
+    "LastCachedTime": "Önbellek süresi",
+    "Project": "Proje",
+    "AdvancedFilters": "Gelişmiş Filtre"
   }
 }

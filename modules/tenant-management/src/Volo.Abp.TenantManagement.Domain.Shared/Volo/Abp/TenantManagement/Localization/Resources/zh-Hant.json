@@ -10,7 +10,6 @@
     "ConnectionStrings": "資料庫連線字串",
     "DisplayName:DefaultConnectionString": "預設資料庫連線字串",
     "DisplayName:UseSharedDatabase": "使用共用資料庫",
-    "ManageHostFeatures": "管理Host功能",
     "Permission:TenantManagement": "租戶管理",
     "Permission:Create": "新增",
     "Permission:Edit": "編輯",
