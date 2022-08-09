@@ -323,6 +323,18 @@ https://[YourAppName]blazor.azurewebsites.net
 ```
 
 
+## Change the Web App configuration for the Azure App Service
+
+Copy the URL of the Api Host and Blazor Web App. Change appsettings.json files in the Web App as follows images.
+
+![azdevops-19](images/azdevops-19.png)
+
+![azdevops-20](images/azdevops-20.png)
+
+![azdevops-21](images/azdevops-21.png)
+
+
+
 ## Add an extra Stage in the Release pipeline in the AzureDevops to deploy [YourAppName].Blazor project
 
 1. Go to the *Release* pipeline in [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/) and click **Edit**
@@ -353,3 +365,4 @@ https://[YourAppName]blazor.azurewebsites.net
 
 ![azdevops-17](images/azdevops-17.png)
 
+![azdevops-22](images/azdevops-22.png)
