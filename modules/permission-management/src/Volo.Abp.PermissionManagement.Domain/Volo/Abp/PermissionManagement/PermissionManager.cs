@@ -62,18 +62,32 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
 
     public virtual async Task<PermissionWithGrantedProviders> GetAsync(string permissionName, string providerName, string providerKey)
     {
-        return await GetInternalAsync(PermissionDefinitionManager.Get(permissionName), providerName, providerKey);
+        return await GetInternalAsync(
+            await PermissionDefinitionManager.GetAsync(permissionName),
+            providerName,
+            providerKey
+        );
     }
 
     public virtual async Task<MultiplePermissionWithGrantedProviders> GetAsync(string[] permissionNames, string providerName, string providerKey)
     {
-        var permissionDefinitions = permissionNames.Select(x => PermissionDefinitionManager.Get(x)).ToArray();
-        return await GetInternalAsync(permissionDefinitions, providerName, providerKey);
+        var permissionDefinitions = new PermissionDefinition[permissionNames.Length];
+
+        for (var i = 0; i < permissionNames.Length; i++)
+        {
+            permissionDefinitions[i] = await PermissionDefinitionManager.GetAsync(permissionNames[i]);
+        }
+
+        return await GetInternalAsync(
+            permissionDefinitions,
+            providerName,
+            providerKey
+        );
     }
 
     public virtual async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
     {
-        var permissionDefinitions = PermissionDefinitionManager.GetPermissions().ToArray();
+        var permissionDefinitions = (await PermissionDefinitionManager.GetPermissionsAsync()).ToArray();
 
         var multiplePermissionWithGrantedProviders = await GetInternalAsync(permissionDefinitions, providerName, providerKey);
 
@@ -83,7 +97,7 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
 
     public virtual async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
     {
-        var permission = PermissionDefinitionManager.Get(permissionName);
+        var permission = await PermissionDefinitionManager.GetAsync(permissionName);
 
         if (!permission.IsEnabled || !await SimpleStateCheckerManager.IsEnabledAsync(permission))
         {

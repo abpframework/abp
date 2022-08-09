@@ -43,8 +43,8 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
     {
         Check.NotNull(name, nameof(name));
 
-        var permission = PermissionDefinitionManager.Get(name);
-
+        var permission = await PermissionDefinitionManager.GetAsync(name);
+    
         if (!permission.IsEnabled)
         {
             return false;
@@ -108,7 +108,7 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
         var permissionDefinitions = new List<PermissionDefinition>();
         foreach (var name in names)
         {
-            var permission = PermissionDefinitionManager.Get(name);
+            var permission = await PermissionDefinitionManager.GetAsync(name);
 
             result.Result.Add(name, PermissionGrantResult.Undefined);
 

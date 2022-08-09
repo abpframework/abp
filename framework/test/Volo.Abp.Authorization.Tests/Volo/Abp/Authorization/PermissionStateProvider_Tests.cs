@@ -29,7 +29,7 @@ public class SpecifyPermissionStateProvider : PermissionStateProvider_Tests
     [Fact]
     public async Task PermissionState_Test()
     {
-        var myPermission1 = PermissionDefinitionManager.Get("MyPermission1");
+        var myPermission1 = await PermissionDefinitionManager.GetAsync("MyPermission1");
         myPermission1.StateCheckers.ShouldContain(x => x.GetType() == typeof(TestRequireEditionPermissionSimpleStateChecker));
 
         (await StateCheckerManager.IsEnabledAsync(myPermission1)).ShouldBeFalse();
@@ -54,7 +54,7 @@ public class GlobalPermissionStateProvider : PermissionStateProvider_Tests
     [Fact]
     public async Task Global_PermissionState_Test()
     {
-        var myPermission2 = PermissionDefinitionManager.Get("MyPermission2");
+        var myPermission2 = await PermissionDefinitionManager.GetAsync("MyPermission2");
 
         (await StateCheckerManager.IsEnabledAsync(myPermission2)).ShouldBeFalse();
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -38,9 +39,9 @@ public class PermissionDefinitionManager : IPermissionDefinitionManager, ISingle
         );
     }
 
-    public virtual PermissionDefinition Get(string name)
+    public virtual async Task<PermissionDefinition> GetAsync(string name)
     {
-        var permission = GetOrNull(name);
+        var permission = await GetOrNullAsync(name);
 
         if (permission == null)
         {
@@ -50,21 +51,25 @@ public class PermissionDefinitionManager : IPermissionDefinitionManager, ISingle
         return permission;
     }
 
-    public virtual PermissionDefinition GetOrNull(string name)
+    public virtual Task<PermissionDefinition> GetOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
-        return PermissionDefinitions.GetOrDefault(name);
+        return Task.FromResult(PermissionDefinitions.GetOrDefault(name));
     }
 
-    public virtual IReadOnlyList<PermissionDefinition> GetPermissions()
+    public virtual Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
     {
-        return PermissionDefinitions.Values.ToImmutableList();
+        return Task.FromResult<IReadOnlyList<PermissionDefinition>>(
+            PermissionDefinitions.Values.ToImmutableList()
+        );
     }
 
-    public IReadOnlyList<PermissionGroupDefinition> GetGroups()
+    public Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
     {
-        return PermissionGroupDefinitions.Values.ToImmutableList();
+        return Task.FromResult<IReadOnlyList<PermissionGroupDefinition>>(
+            PermissionGroupDefinitions.Values.ToImmutableList()
+        );
     }
 
     protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()

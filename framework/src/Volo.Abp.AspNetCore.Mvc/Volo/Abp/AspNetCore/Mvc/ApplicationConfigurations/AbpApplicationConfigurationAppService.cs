@@ -171,7 +171,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         foreach (var policyName in policyNames)
         {
-            if (await _defaultAuthorizationPolicyProvider.GetPolicyAsync(policyName) == null && _permissionDefinitionManager.GetOrNull(policyName) != null)
+            if (await _defaultAuthorizationPolicyProvider.GetPolicyAsync(policyName) == null && _permissionDefinitionManager.GetOrNullAsync(policyName) != null)
             {
                 abpPolicyNames.Add(policyName);
             }

@@ -43,7 +43,7 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
 
         var multiTenancySide = CurrentTenant.GetMultiTenancySide();
 
-        foreach (var group in PermissionDefinitionManager.GetGroups())
+        foreach (var group in await PermissionDefinitionManager.GetGroupsAsync())
         {
             var groupDto = new PermissionGroupDto
             {
