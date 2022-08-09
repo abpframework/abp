@@ -1,4 +1,4 @@
-$(function (){
+$(function () {
     var l = abp.localization.getResource("CmsKit");
 
     var pagesService = volo.cmsKit.admin.pages.pageAdmin;
@@ -51,12 +51,18 @@ $(function (){
                             text: l('SetAsHomePage'),
                             visible: abp.auth.isGranted('CmsKit.Pages.SetAsHomePage'),
                             action: function (data) {
-                                pagesService
-                                    .setAsHomePage(data.record.id)
-                                    .then(function () {
-                                        abp.notify.success(l('CompletedSettingAsHomePage'));
-                                        _dataTable.ajax.reload();
-                                    });
+                                if (data.record.isHomePage === false) {
+                                    pagesService
+                                        .setAsHomePage(data.record.id)
+                                        .then(function () {
+
+                                            _dataTable.ajax.reload();
+                                            abp.notify.success(l('CompletedSettingAsHomePage'));
+                                        });
+                                }
+                                else {
+                                    abp.notify.warn(l('AlreadyHomePage'));
+                                }
                             }
                         }
                     ]

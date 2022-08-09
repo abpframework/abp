@@ -192,6 +192,7 @@
     "PleaseConfigureWidgets": "Lütfen widget'leri yapılandırın",
     "SetAsHomePage": "Ana sayfa Olarak Ayarla",
     "CompletedSettingAsHomePage": "Ana sayfa olarak ayarlandı",
-    "IsHomePage": "Ana Sayfa Mı"
+    "IsHomePage": "Ana Sayfa Mı",
+    "AlreadyHomePage": "Önceden ana sayfa olarak ayarlı"
   }
 }

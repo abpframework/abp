@@ -191,6 +191,7 @@
     "GoToTop": "Go To Top",
     "SetAsHomePage": "Set As Home Page",
     "CompletedSettingAsHomePage": "Set as home page",
-    "IsHomePage": "Is Home Page"
+    "IsHomePage": "Is Home Page",
+    "AlreadyHomePage": "Already set as home page"
   }
 }
