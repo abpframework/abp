@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Dapr;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Dapr;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EventBus.Dapr;
@@ -9,4 +10,11 @@ namespace Volo.Abp.EventBus.Dapr;
     )]
 public class AbpEventBusDaprModule : AbpModule
 {
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        context
+            .ServiceProvider
+            .GetRequiredService<DaprDistributedEventBus>()
+            .Initialize();
+    }
 }

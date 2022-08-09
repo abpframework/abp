@@ -23,8 +23,12 @@ public class AbpDaprClientFactory : ITransientDependency
     public virtual async Task<DaprClient> CreateAsync()
     {
         var builder = new DaprClientBuilder()
-            .UseHttpEndpoint(Options.HttpEndpoint)
             .UseJsonSerializationOptions(await CreateJsonSerializerOptions());
+
+        if (!Options.HttpEndpoint.IsNullOrWhiteSpace())
+        {
+            builder.UseHttpEndpoint(Options.HttpEndpoint);
+        }
 
         if (!Options.GrpcEndpoint.IsNullOrWhiteSpace())
         {
