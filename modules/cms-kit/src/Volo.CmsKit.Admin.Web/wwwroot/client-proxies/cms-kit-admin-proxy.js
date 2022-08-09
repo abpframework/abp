@@ -139,7 +139,7 @@
     volo.cmsKit.admin.pages.pageAdmin.setAsHomePage = function(id, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/cms-kit-admin/pages/setashomepage/' + id + '',
-        type: 'GET',
+        type: 'PUT',
         dataType: null
       }, ajaxParams));
     };

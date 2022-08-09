@@ -679,7 +679,7 @@
             "SetAsHomePageAsyncById": {
               "uniqueName": "SetAsHomePageAsyncById",
               "name": "SetAsHomePageAsync",
-              "httpMethod": "GET",
+              "httpMethod": "PUT",
               "url": "api/cms-kit-admin/pages/setashomepage/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [

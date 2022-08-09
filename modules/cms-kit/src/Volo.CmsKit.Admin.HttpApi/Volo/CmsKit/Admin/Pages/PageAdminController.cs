@@ -60,10 +60,10 @@ public class PageAdminController : CmsKitAdminController, IPageAdminAppService
         return PageAdminAppService.DeleteAsync(id);
     }
 
-    [HttpGet]
+    [HttpPut]
     [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]
     [Route("setashomepage/{id}")]
-    public virtual Task SetAsHomePageAsync(Guid id)
+    public virtual Task SetAsHomePageAsync([FromRoute] Guid id)
     {
         return PageAdminAppService.SetAsHomePageAsync(id);
     }
