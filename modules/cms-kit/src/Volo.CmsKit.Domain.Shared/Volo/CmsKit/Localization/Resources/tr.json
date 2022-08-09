@@ -190,7 +190,8 @@
     "Add": "Ekle",
     "AddWidget": "Widget Ekle",
     "PleaseConfigureWidgets": "Lütfen widget'leri yapılandırın",
-    "SetAsHomePage": "Anasayfa Olarak Ayarla",
-    "CompletedSettingAsHomePage": "Anasayfa olarak ayarlandı"
+    "SetAsHomePage": "Ana sayfa Olarak Ayarla",
+    "CompletedSettingAsHomePage": "Ana sayfa olarak ayarlandı",
+    "IsHomePage": "Ana Sayfa Mı"
   }
 }

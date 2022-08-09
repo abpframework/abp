@@ -17,7 +17,7 @@ $(function (){
         scrollCollapse: true,
         scrollX: true,
         ordering: true,
-        order: [[3, "desc"]],
+        order: [[4, "desc"]],
         ajax: abp.libs.datatables.createAjax(pagesService.getList, getFilter),
         columnDefs: [
             {
@@ -55,6 +55,7 @@ $(function (){
                                     .setAsHomePage(data.record.id)
                                     .then(function () {
                                         abp.notify.success(l('CompletedSettingAsHomePage'));
+                                        _dataTable.ajax.reload();
                                     });
                             }
                         }
@@ -70,6 +71,11 @@ $(function (){
                 title: l("Slug"),
                 orderable: true,
                 data: "slug"
+            },
+            {
+                title: l("IsHomePage"),
+                orderable: true,
+                data: "isHomePage"
             },
             {
                 title: l("CreationTime"),
