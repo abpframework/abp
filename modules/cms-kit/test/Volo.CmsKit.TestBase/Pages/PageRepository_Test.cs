@@ -91,4 +91,12 @@ public abstract class PageRepository_Test<TStartupModule> : CmsKitTestBase<TStar
 
         page.ShouldBeFalse();
     }
+
+    [Fact]
+    public async Task ShouldNotBeFindByIsHomePageAsync()
+    {
+        var page = await _pageRepository.FindByIsHomePageAsync(true);
+        
+        page.ShouldBeNull();
+    }
 }

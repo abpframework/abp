@@ -67,4 +67,31 @@ public class PageManager_Test : CmsKitDomainTestBase
 
         exception.ShouldNotBeNull();
     }
+
+    [Fact]
+    public async Task SetHomePageAsFalseAsync_ShouldWorkProperly_IfExistHomePage()
+    {
+        var page = await pageRepository.GetAsync(testData.Page_1_Id);
+        page.IsHomePage = true;
+        await pageRepository.UpdateAsync(page);
+        
+        await pageManager.SetHomePageAsFalseAsync(true);
+        
+        page.IsHomePage.ShouldBeTrue();
+        
+        var pageSetAsHomePageAsFalse = await pageRepository.GetAsync(testData.Page_2_Id);
+        pageSetAsHomePageAsFalse.IsHomePage.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task SetHomePageAsFalseAsync_ShouldWorkProperly_IfNotExistHomePage()
+    {
+        var page = await pageRepository.GetAsync(testData.Page_1_Id);
+        page.IsHomePage = true;
+        await pageManager.SetHomePageAsFalseAsync(true);
+        page.IsHomePage.ShouldBeTrue();
+
+        var pageSetAsHomePageAsFalse = await pageRepository.GetAsync(testData.Page_2_Id);
+        pageSetAsHomePageAsFalse.IsHomePage.ShouldBeFalse();
+    }
 }
