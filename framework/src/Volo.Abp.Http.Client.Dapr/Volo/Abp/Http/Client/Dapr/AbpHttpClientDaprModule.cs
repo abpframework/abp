@@ -12,14 +12,13 @@ public class AbpHttpClientDaprModule : AbpModule
 { 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var daprOptions = context.Services.ExecutePreConfiguredActions<AbpDaprOptions>();
         var daprClientOptions = context.Services.ExecutePreConfiguredActions<AbpDaprClientOptions>();
 
         PreConfigure<AbpHttpClientBuilderOptions>(options =>
         {
             options.ProxyClientBuildActions.Add((_, clientBuilder) =>
             {
-                daprClientOptions.DaprHttpClientBuilderAction(_, clientBuilder, daprOptions.HttpEndpoint);
+                daprClientOptions.DaprHttpClientBuilderAction(_, clientBuilder);
             });
         });
     }
