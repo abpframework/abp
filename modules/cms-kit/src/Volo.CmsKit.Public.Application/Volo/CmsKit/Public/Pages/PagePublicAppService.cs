@@ -31,4 +31,17 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
         pageDto.ContentFragments = await ContentParser.ParseAsync(page.Content);
         return pageDto;
     }
+
+    public virtual async Task<PageDto> FindDefaultHomePageAsync()
+    {
+        var page = await PageRepository.FindByIsHomePageAsync(true);
+
+        if (page == null)
+        {
+            return null;
+        }
+
+        var pageDto = ObjectMapper.Map<Page, PageDto>(page);
+        return pageDto;
+    }
 }
