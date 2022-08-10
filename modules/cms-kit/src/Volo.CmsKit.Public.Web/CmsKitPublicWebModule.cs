@@ -1,6 +1,7 @@
 ﻿using Markdig;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 using Volo.Abp.AutoMapper;
@@ -88,21 +89,27 @@ public class CmsKitPublicWebModule : AbpModule
                 options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/BlogPost", @"/blogs/{blogSlug}/{blogPostSlug:minlength(1)}");
             });
         }
-        
+
         if (GlobalFeatureManager.Instance.IsEnabled<GlobalResourcesFeature>())
         {
             Configure<AbpLayoutHookOptions>(options =>
             {
                 options.Add(
-                    LayoutHooks.Head.Last, 
-                    typeof(GlobalStyleViewComponent) 
+                    LayoutHooks.Head.Last,
+                    typeof(GlobalStyleViewComponent)
                 );
                 options.Add(
-                    LayoutHooks.Body.Last, 
-                    typeof(GlobalScriptViewComponent) 
+                    LayoutHooks.Body.Last,
+                    typeof(GlobalScriptViewComponent)
                 );
             });
         }
 
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        app.UseHomePageDefaultMiddleware();
     }
 }
