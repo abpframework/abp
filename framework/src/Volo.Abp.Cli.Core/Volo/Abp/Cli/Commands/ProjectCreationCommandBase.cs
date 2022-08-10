@@ -518,6 +518,12 @@ public abstract class ProjectCreationCommandBase
             public const string Long = "create-solution-folder";
         }
 
+        public static class SkipInstallingLibs
+        {
+            public const string Short = "sib";
+            public const string Long = "skip-installing-libs";
+        }
+
         public static class Tiered
         {
             public const string Long = "tiered";
