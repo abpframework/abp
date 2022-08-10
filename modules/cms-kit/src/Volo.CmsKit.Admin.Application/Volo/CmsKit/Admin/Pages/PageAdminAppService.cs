@@ -87,10 +87,15 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]
     public virtual async Task SetAsHomePageAsync(Guid id)
     {
-        await PageManager.SetHomePageAsFalseAsync(true);
-
         var page = await PageRepository.GetAsync(id);
-        page.IsHomePage = true;
+        if (!page.IsHomePage)
+        {
+            await PageManager.SetHomePageAsFalseAsync(true);
+            page = await PageRepository.GetAsync(id);
+        }
+
+        page.IsHomePage = !page.IsHomePage; ;
+
         await PageRepository.UpdateAsync(page);
     }
 }

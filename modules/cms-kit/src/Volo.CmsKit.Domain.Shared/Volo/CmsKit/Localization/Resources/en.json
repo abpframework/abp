@@ -189,9 +189,9 @@
     "SelectAnAuthor": "Select an Author",
     "InThisDocument": "In This Document",
     "GoToTop": "Go To Top",
-    "SetAsHomePage": "Set As Home Page",
+    "SetAsHomePage": "Change Home Page Status",
     "CompletedSettingAsHomePage": "Set as home page",
     "IsHomePage": "Is Home Page",
-    "AlreadyHomePage": "Already set as home page"
+    "RemovedSettingAsHomePage": "Removed setting the home page"
   }
 }

@@ -51,18 +51,15 @@ $(function () {
                             text: l('SetAsHomePage'),
                             visible: abp.auth.isGranted('CmsKit.Pages.SetAsHomePage'),
                             action: function (data) {
-                                if (data.record.isHomePage === false) {
-                                    pagesService
-                                        .setAsHomePage(data.record.id)
-                                        .then(function () {
+                                pagesService
+                                    .setAsHomePage(data.record.id)
+                                    .then(function () {
 
-                                            _dataTable.ajax.reload();
-                                            abp.notify.success(l('CompletedSettingAsHomePage'));
-                                        });
-                                }
-                                else {
-                                    abp.notify.warn(l('AlreadyHomePage'));
-                                }
+                                        _dataTable.ajax.reload();
+                                        data.record.isHomePage ?
+                                            abp.notify.warn(l('RemovedSettingAsHomePage'))
+                                            : abp.notify.success(l('CompletedSettingAsHomePage'));
+                                    });
                             }
                         }
                     ]
