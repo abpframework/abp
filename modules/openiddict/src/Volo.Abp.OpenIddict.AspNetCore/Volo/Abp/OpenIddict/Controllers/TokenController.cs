@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -9,6 +8,7 @@ using Volo.Abp.OpenIddict.ExtensionGrantTypes;
 namespace Volo.Abp.OpenIddict.Controllers;
 
 [Route("connect/token")]
+[IgnoreAntiforgeryToken]
 [ApiExplorerSettings(IgnoreApi = true)]
 public partial class TokenController : AbpOpenIdDictControllerBase
 {

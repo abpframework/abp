@@ -560,10 +560,11 @@ public abstract class ProjectCreationCommandBase
         }
 
         var themeStyle = commandLineArgs.Options.GetOrNull(Options.ThemeStyle.Long)?.ToLower();
+        
         return themeStyle switch 
         {
-            // null => ThemeStyle.NotSpecified, TODO: remove it!!!
-            "dim" or null => ThemeStyle.Dim,
+            "system" or null => ThemeStyle.System,
+            "dim" => ThemeStyle.Dim,
             "light" => ThemeStyle.Light,
             "dark" => ThemeStyle.Dark,
             _ => null
