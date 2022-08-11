@@ -31,12 +31,18 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
 permissions:
   contents: read
 
 jobs:
   build-test:
     runs-on: windows-latest
+    if: ${{ !github.event.pull_request.draft }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-dotnet@master
