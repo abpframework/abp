@@ -165,12 +165,11 @@ public class AbpApplication_Initialize_Tests
         using (var application = await AbpApplicationFactory.CreateAsync<IndependentEmptyModule>())
         {
             await application.InitializeAsync();
-            
+
             application
                 .ServiceProvider
-                .GetRequiredService<IRootServiceProviderAccessor>()
-                .ServiceProvider
-                .ShouldBeSameAs(application.ServiceProvider);
+                .GetRequiredService<IRootServiceProvider>()
+                .ShouldNotBeNull();
         }
     }
 }
