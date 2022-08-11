@@ -21,6 +21,7 @@ public class AbpAccountApplicationModule : AbpModule
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<AbpAccountApplicationModule>();
+            // test
         });
 
         Configure<AbpAutoMapperOptions>(options =>
