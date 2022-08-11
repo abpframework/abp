@@ -62,27 +62,57 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
 
     public virtual async Task<PermissionWithGrantedProviders> GetAsync(string permissionName, string providerName, string providerKey)
     {
+        var permission = await PermissionDefinitionManager.GetOrNullAsync(permissionName);
+        if (permission == null)
+        {
+            return new PermissionWithGrantedProviders(permissionName, false);
+        }
+        
         return await GetInternalAsync(
-            await PermissionDefinitionManager.GetAsync(permissionName),
+            permission,
             providerName,
             providerKey
         );
     }
 
-    public virtual async Task<MultiplePermissionWithGrantedProviders> GetAsync(string[] permissionNames, string providerName, string providerKey)
+    public virtual async Task<MultiplePermissionWithGrantedProviders> GetAsync(
+        string[] permissionNames, 
+        string providerName,
+        string providerKey)
     {
-        var permissionDefinitions = new PermissionDefinition[permissionNames.Length];
+        var permissions = new List<PermissionDefinition>();
+        var undefinedPermissions = new List<string>();
 
-        for (var i = 0; i < permissionNames.Length; i++)
+        foreach (var permissionName in permissionNames)
         {
-            permissionDefinitions[i] = await PermissionDefinitionManager.GetAsync(permissionNames[i]);
+            var permission = await PermissionDefinitionManager.GetOrNullAsync(permissionName);
+            if (permission != null)
+            {
+                permissions.Add(permission);
+            }
+            else
+            {
+                undefinedPermissions.Add(permissionName);
+            }
         }
 
-        return await GetInternalAsync(
-            permissionDefinitions,
+        if (!permissions.Any())
+        {
+            return new MultiplePermissionWithGrantedProviders(undefinedPermissions.ToArray());
+        }
+
+        var result = await GetInternalAsync(
+            permissions.ToArray(),
             providerName,
             providerKey
         );
+
+        foreach (var undefinedPermission in undefinedPermissions)
+        {
+            result.Result.Add(new PermissionWithGrantedProviders(undefinedPermission, false));
+        }
+
+        return result;
     }
 
     public virtual async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
@@ -97,7 +127,13 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
 
     public virtual async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
     {
-        var permission = await PermissionDefinitionManager.GetAsync(permissionName);
+        var permission = await PermissionDefinitionManager.GetOrNullAsync(permissionName);
+        if (permission == null)
+        {
+            /* Silently ignore undefined permissions,
+               maybe they were removed from dynamic permission definition store */
+            return;
+        }
 
         if (!permission.IsEnabled || !await SimpleStateCheckerManager.IsEnabledAsync(permission))
         {
@@ -160,14 +196,24 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
         }
     }
 
-    protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permission, string providerName, string providerKey)
+    protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(
+        PermissionDefinition permission,
+        string providerName,
+        string providerKey)
     {
-        var multiplePermissionWithGrantedProviders = await GetInternalAsync(new PermissionDefinition[] { permission }, providerName, providerKey);
+        var multiplePermissionWithGrantedProviders = await GetInternalAsync(
+            new[] { permission },
+            providerName,
+            providerKey
+        );
 
         return multiplePermissionWithGrantedProviders.Result.First();
     }
 
-    protected virtual async Task<MultiplePermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition[] permissions, string providerName, string providerKey)
+    protected virtual async Task<MultiplePermissionWithGrantedProviders> GetInternalAsync(
+        PermissionDefinition[] permissions,
+        string providerName,
+        string providerKey)
     {
         var permissionNames = permissions.Select(x => x.Name).ToArray();
         var multiplePermissionWithGrantedProviders = new MultiplePermissionWithGrantedProviders(permissionNames);
