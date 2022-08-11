@@ -17,4 +17,17 @@ public class PermissionGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExt
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
     }
+    
+    public PermissionGroupDefinitionRecord(
+        Guid id,
+        string name,
+        string displayName)
+        : base(id)
+    {
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name), PermissionGroupDefinitionRecordConsts.MaxNameLength);
+        DisplayName =  Check.NotNullOrWhiteSpace(displayName, nameof(displayName), PermissionGroupDefinitionRecordConsts.MaxDisplayNameLength);;
+
+        ExtraProperties = new ExtraPropertyDictionary();
+        this.SetDefaultsForExtraProperties();
+    }
 }

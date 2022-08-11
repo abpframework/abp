@@ -48,4 +48,29 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
     }
+    
+    public PermissionDefinitionRecord(
+        Guid id,
+        string groupName,
+        string name,
+        string parentName,
+        string displayName,
+        bool isEnabled = true,
+        MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+        string providers = null,
+        string stateCheckers = null)
+        : base(id)
+    {
+        GroupName = Check.NotNullOrWhiteSpace(groupName, nameof(groupName), PermissionGroupDefinitionRecordConsts.MaxNameLength);
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name), PermissionDefinitionRecordConsts.MaxNameLength);
+        ParentName = Check.NotNullOrWhiteSpace(parentName, nameof(parentName), PermissionDefinitionRecordConsts.MaxNameLength);
+        DisplayName =  Check.NotNullOrWhiteSpace(displayName, nameof(displayName), PermissionDefinitionRecordConsts.MaxDisplayNameLength);
+        IsEnabled = isEnabled;
+        MultiTenancySide = multiTenancySide;
+        Providers = providers;
+        StateCheckers = stateCheckers;
+
+        ExtraProperties = new ExtraPropertyDictionary();
+        this.SetDefaultsForExtraProperties();
+    }
 }
