@@ -43,7 +43,11 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
     {
         Check.NotNull(name, nameof(name));
 
-        var permission = await PermissionDefinitionManager.GetAsync(name);
+        var permission = await PermissionDefinitionManager.GetOrNullAsync(name);
+        if (permission == null)
+        {
+            return false;
+        }
     
         if (!permission.IsEnabled)
         {
@@ -97,18 +101,24 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
     {
         Check.NotNull(names, nameof(names));
 
-        var multiTenancySide = claimsPrincipal?.GetMultiTenancySide() ?? CurrentTenant.GetMultiTenancySide();
-
         var result = new MultiplePermissionGrantResult();
         if (!names.Any())
         {
             return result;
         }
 
+        var multiTenancySide = claimsPrincipal?.GetMultiTenancySide() ??
+                               CurrentTenant.GetMultiTenancySide();
+
         var permissionDefinitions = new List<PermissionDefinition>();
         foreach (var name in names)
         {
-            var permission = await PermissionDefinitionManager.GetAsync(name);
+            var permission = await PermissionDefinitionManager.GetOrNullAsync(name);
+            if (permission == null)
+            {
+                result.Result.Add(name, PermissionGrantResult.Prohibited);
+                continue;
+            }
 
             result.Result.Add(name, PermissionGrantResult.Undefined);
 
