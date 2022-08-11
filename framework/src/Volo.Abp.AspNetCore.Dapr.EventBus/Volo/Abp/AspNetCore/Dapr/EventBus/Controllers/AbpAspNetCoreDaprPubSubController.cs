@@ -11,26 +11,19 @@ namespace Volo.Abp.AspNetCore.Dapr.Controllers;
 
 [Area("abp")]
 [RemoteService(Name = "abp")]
-public class DaprController : AbpController
+public class AbpAspNetCoreDaprPubSubController : AbpController
 {
-    protected AbpDaprPubSubProvider DaprPubSubProvider { get; }
-
-    public DaprController(AbpDaprPubSubProvider daprPubSubProvider)
+    [HttpGet(AbpAspNetCoreDaprPubSubConsts.DaprSubscribeUrl)]
+    public virtual async Task<List<AbpAspNetCoreDaprSubscriptionDefinition>> SubscribeAsync()
     {
-        DaprPubSubProvider = daprPubSubProvider;
+        return await HttpContext.RequestServices.GetRequiredService<AbpAspNetCoreDaprPubSubProvider>().GetSubscriptionsAsync();
     }
 
-    [HttpGet(AbpAspNetCoreDaprConsts.DaprSubscribeUrl)]
-    public virtual async Task<List<DaprSubscriptionDefinition>> SubscribeAsync()
-    {
-        return await DaprPubSubProvider.GetSubscriptionsAsync();
-    }
-
-    [HttpPost(AbpAspNetCoreDaprConsts.DaprEventCallbackUrl)]
+    [HttpPost(AbpAspNetCoreDaprPubSubConsts.DaprEventCallbackUrl)]
     public virtual async Task<IActionResult> EventsAsync()
     {
         var bodyJsonDocument = await JsonDocument.ParseAsync(HttpContext.Request.Body);
-        var request = JsonSerializer.Deserialize<DaprSubscriptionRequest>(bodyJsonDocument.RootElement.GetRawText(),
+        var request = JsonSerializer.Deserialize<AbpAspNetCoreDaprSubscriptionRequest>(bodyJsonDocument.RootElement.GetRawText(),
             HttpContext.RequestServices.GetRequiredService<IOptions<JsonOptions>>().Value.JsonSerializerOptions);
 
         var distributedEventBus = HttpContext.RequestServices.GetRequiredService<DaprDistributedEventBus>();

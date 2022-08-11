@@ -100,6 +100,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Authentication.OpenIdConnect",
     "framework/src/Volo.Abp.AspNetCore",
     "framework/src/Volo.Abp.AspNetCore.Dapr",
+    "framework/src/Volo.Abp.AspNetCore.Dapr.EventBus",
     "framework/src/Volo.Abp.AspNetCore.Components",
     "framework/src/Volo.Abp.AspNetCore.Components.Server",
     "framework/src/Volo.Abp.AspNetCore.Components.Web",

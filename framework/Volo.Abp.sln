@@ -417,6 +417,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Http.Client.Dapr",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Dapr", "src\Volo.Abp.AspNetCore.Dapr\Volo.Abp.AspNetCore.Dapr.csproj", "{5EED625D-8D86-492A-BCB8-F6C8CD8D4AA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Dapr.EventBus", "src\Volo.Abp.AspNetCore.Dapr.EventBus\Volo.Abp.AspNetCore.Dapr.EventBus.csproj", "{B02EF042-C39E-45C4-A92D-BF7554E1889D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1243,6 +1245,10 @@ Global
 		{5EED625D-8D86-492A-BCB8-F6C8CD8D4AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EED625D-8D86-492A-BCB8-F6C8CD8D4AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EED625D-8D86-492A-BCB8-F6C8CD8D4AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B02EF042-C39E-45C4-A92D-BF7554E1889D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B02EF042-C39E-45C4-A92D-BF7554E1889D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B02EF042-C39E-45C4-A92D-BF7554E1889D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B02EF042-C39E-45C4-A92D-BF7554E1889D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1453,6 +1459,7 @@ Global
 		{DCC41E99-EBC7-4F19-BA0D-A6F770D8E431} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{18B796D2-D45D-41AE-9A42-75C9B14B20DF} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{5EED625D-8D86-492A-BCB8-F6C8CD8D4AA1} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{B02EF042-C39E-45C4-A92D-BF7554E1889D} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

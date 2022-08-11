@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.AspNetCore.Dapr.SystemTextJson;
 
-public class AbpAspNetCoreDaprJsonNamingPolicy : JsonNamingPolicy
+public class AbpAspNetCoreDaprPubSubJsonNamingPolicy : JsonNamingPolicy
 {
     public override string ConvertName(string name)
     {

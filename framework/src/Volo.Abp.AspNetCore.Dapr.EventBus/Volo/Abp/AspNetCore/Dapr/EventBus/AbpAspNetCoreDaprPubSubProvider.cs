@@ -8,28 +8,28 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.Abp.AspNetCore.Dapr;
 
-public class AbpDaprPubSubProvider : ITransientDependency
+public class AbpAspNetCoreDaprPubSubProvider : ITransientDependency
 {
     protected IServiceProvider ServiceProvider { get; }
-    protected AbpAspNetCoreDaprOptions Options { get; }
-    protected AbpDaprEventBusOptions EventBusOptions { get; }
+    protected AbpAspNetCoreDaprEventBusOptions AspNetCoreDaprEventBusOptions { get; }
+    protected AbpDaprEventBusOptions DaprEventBusOptions { get; }
     protected AbpDistributedEventBusOptions DistributedEventBusOptions { get; }
 
-    public AbpDaprPubSubProvider(
+    public AbpAspNetCoreDaprPubSubProvider(
         IServiceProvider serviceProvider,
-        IOptions<AbpAspNetCoreDaprOptions> options,
-        IOptions<AbpDaprEventBusOptions> eventBusOptions,
+        IOptions<AbpAspNetCoreDaprEventBusOptions> aspNetCoreDaprEventBusOptions,
+        IOptions<AbpDaprEventBusOptions> daprEventBusOptions,
         IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions)
     {
         ServiceProvider = serviceProvider;
-        EventBusOptions = eventBusOptions.Value;
-        Options = options.Value;
+        AspNetCoreDaprEventBusOptions = aspNetCoreDaprEventBusOptions.Value;
+        DaprEventBusOptions = daprEventBusOptions.Value;
         DistributedEventBusOptions = distributedEventBusOptions.Value;
     }
 
-    public virtual async Task<List<DaprSubscriptionDefinition>> GetSubscriptionsAsync()
+    public virtual async Task<List<AbpAspNetCoreDaprSubscriptionDefinition>> GetSubscriptionsAsync()
     {
-        var subscriptions = new List<DaprSubscriptionDefinition>();
+        var subscriptions = new List<AbpAspNetCoreDaprSubscriptionDefinition>();
         foreach (var handler in DistributedEventBusOptions.Handlers)
         {
             foreach (var @interface in handler.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDistributedEventHandler<>)))
@@ -37,21 +37,21 @@ public class AbpDaprPubSubProvider : ITransientDependency
                 var eventType = @interface.GetGenericArguments()[0];
                 var eventName = EventNameAttribute.GetNameOrDefault(eventType);
 
-                subscriptions.Add(new DaprSubscriptionDefinition()
+                subscriptions.Add(new AbpAspNetCoreDaprSubscriptionDefinition()
                 {
-                    PubSubName = EventBusOptions.PubSubName,
+                    PubSubName = DaprEventBusOptions.PubSubName,
                     Topic = eventName,
-                    Route = AbpAspNetCoreDaprConsts.DaprEventCallbackUrl
+                    Route = AbpAspNetCoreDaprPubSubConsts.DaprEventCallbackUrl
                 });
             }
         }
 
-        if (Options.Contributors.Any())
+        if (AspNetCoreDaprEventBusOptions.Contributors.Any())
         {
             using (var scope = ServiceProvider.CreateScope())
             {
-                var context = new AbpDaprPubSubProviderContributorContext(scope.ServiceProvider, subscriptions);
-                foreach (var contributor in Options.Contributors)
+                var context = new AbpAspNetCoreDaprPubSubProviderContributorContext(scope.ServiceProvider, subscriptions);
+                foreach (var contributor in AspNetCoreDaprEventBusOptions.Contributors)
                 {
                     await contributor.ContributeAsync(context);
                 }

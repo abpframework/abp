@@ -11,11 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
-        <ProjectReference Include="..\Volo.Abp.Dapr\Volo.Abp.Dapr.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Dapr.AspNetCore" Version="1.8.0" />
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.Dapr\Volo.Abp.AspNetCore.Dapr.csproj" />
+        <ProjectReference Include="..\Volo.Abp.EventBus.Dapr\Volo.Abp.EventBus.Dapr.csproj" />
     </ItemGroup>
 </Project>
