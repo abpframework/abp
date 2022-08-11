@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -7,10 +9,14 @@ namespace Volo.Abp.Authorization.Permissions;
 public class PermissionDefinitionManager : IPermissionDefinitionManager, ISingletonDependency
 {
     private readonly IStaticPermissionDefinitionStore _staticStore;
+    private readonly IDynamicPermissionDefinitionStore _dynamicStore;
 
-    public PermissionDefinitionManager(IStaticPermissionDefinitionStore staticStore)
+    public PermissionDefinitionManager(
+        IStaticPermissionDefinitionStore staticStore,
+        IDynamicPermissionDefinitionStore dynamicStore)
     {
         _staticStore = staticStore;
+        _dynamicStore = dynamicStore;
     }
 
     public virtual async Task<PermissionDefinition> GetAsync(string name)
@@ -28,16 +34,37 @@ public class PermissionDefinitionManager : IPermissionDefinitionManager, ISingle
     {
         Check.NotNull(name, nameof(name));
 
-        return _staticStore.GetOrNullAsync(name);
+        return _staticStore.GetOrNullAsync(name) ?? 
+               _dynamicStore.GetOrNullAsync(name);
     }
 
-    public virtual Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
+    public virtual async Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
     {
-        return _staticStore.GetPermissionsAsync();
+        var staticPermissions = await _staticStore.GetPermissionsAsync();
+        var staticPermissionNames = staticPermissions
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
+        
+        var dynamicPermissions = await _dynamicStore.GetPermissionsAsync();
+
+        /* We prefer static permissions over dynamics */
+        return staticPermissions.Concat(
+            dynamicPermissions.Where(d => !staticPermissionNames.Contains(d.Name))
+        ).ToImmutableList();
     }
 
-    public Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
+    public async Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
     {
-        return _staticStore.GetGroupsAsync();
+        var staticGroups = await _staticStore.GetGroupsAsync();
+        var staticGroupNames = staticGroups
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
+        
+        var dynamicGroups = await _dynamicStore.GetGroupsAsync();
+
+        /* We prefer static groups over dynamics */
+        return staticGroups.Concat(
+            dynamicGroups.Where(d => !staticGroupNames.Contains(d.Name))
+        ).ToImmutableList();
     }
 }
