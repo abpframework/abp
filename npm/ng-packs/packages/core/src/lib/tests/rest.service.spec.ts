@@ -120,4 +120,17 @@ describe('HttpClient testing', () => {
     const req = spectator.expectOne(api + '/test', HttpMethod.GET);
     spectator.flushAll([req], [throwError('Testing error')]);
   });
+
+  test('should remove the duplicate slashes', () => {
+    spectator.service
+      .request({ method: HttpMethod.GET, url: '//test', params: { id: 1 } })
+      .subscribe();
+    spectator.expectOne(api + '/test?id=1', HttpMethod.GET);
+  });
+  test('should remove the duplicate slashes multiple', () => {
+    spectator.service
+      .request({ method: HttpMethod.GET, url: '//test//my//endpoint', params: { id: 1 } })
+      .subscribe();
+    spectator.expectOne(api + '/test/my/endpoint?id=1', HttpMethod.GET);
+  });
 });

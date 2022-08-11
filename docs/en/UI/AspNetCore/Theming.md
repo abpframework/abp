@@ -16,10 +16,12 @@ In order to accomplish these goals, ABP Framework;
 
 ### Current Themes
 
-Currently, two themes are **officially provided**:
+Currently, four themes are **officially provided**:
 
 * The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
+* The [LeptonX Lite Theme](../../Themes/LeptonXLite/AspNetCore.md) is modern and stylish Bootstrap UI theme. It is ideal if you want to have a production ready UI theme. It is also **open source and free**.
 * The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
+* The [LeptonX Theme](https://docs.abp.io/en/commercial/6.0/themes/leptonx) is also a **commercial** theme developed by the core ABP theme and is a part of the [ABP Commercial](https://commercial.abp.io/) license. This is the default theme after ABP v6.0.0.
 
 There are also some community-driven themes for the ABP Framework (you can search on the web).
 

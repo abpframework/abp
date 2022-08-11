@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
@@ -29,7 +27,7 @@ public class AbpSettingManagementWebModule : AbpModule
         {
             options.AddAssemblyResource(typeof(AbpSettingManagementResource), typeof(AbpSettingManagementWebModule).Assembly);
         });
-        
+
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
             mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpSettingManagementWebModule).Assembly);
@@ -54,21 +52,11 @@ public class AbpSettingManagementWebModule : AbpModule
             options.FileSets.AddEmbedded<AbpSettingManagementWebModule>();
         });
 
-        Configure<AbpBundlingOptions>(options =>
-        {
-            options.ScriptBundles
-                .Configure(typeof(IndexModel).FullName,
-                    configuration =>
-                    {
-                        configuration.AddFiles("/Pages/SettingManagement/Components/EmailSettingGroup/Default.js");
-                    });
-        });
-
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {
             options.DisableModule(SettingManagementRemoteServiceConsts.ModuleName);
         });
-        
+
         context.Services.AddAutoMapperObjectMapper<AbpSettingManagementWebModule>();
         Configure<AbpAutoMapperOptions>(options =>
         {

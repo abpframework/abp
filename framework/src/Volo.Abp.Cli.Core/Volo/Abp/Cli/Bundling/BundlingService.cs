@@ -229,7 +229,7 @@ public class BundlingService : IBundlingService, ITransientDependency
     {
         var bundleContributors = module.Assembly
             .GetTypes()
-            .Where(t => t.IsAssignableTo<IBundleContributor>())
+            .Where(t => !t.IsAbstract && !t.IsInterface && t.IsAssignableTo<IBundleContributor>())
             .ToList();
 
         if (bundleContributors.Count > 1)

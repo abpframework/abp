@@ -7,7 +7,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building;
 public enum MobileApp
 {
     None,
-    ReactNative
+    ReactNative,
+    Maui
 }
 
 public static class MobileAppExtensions
@@ -18,6 +19,8 @@ public static class MobileAppExtensions
         {
             case MobileApp.ReactNative:
                 return "react-native";
+            case MobileApp.Maui:
+                return "MAUI";
         }
 
         throw new Exception("Mobile app folder name is not set!");

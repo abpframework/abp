@@ -164,8 +164,6 @@
     "YourReply": "Your reply",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> supported.",
     "GlobalResources": "Global Resources",
-    "Script": "Script",
-    "Style": "Style",
     "SavedSuccessfully": "Saved successfully",
     "CmsKit.BlogPost.Status.0": "Draft",
     "CmsKit.BlogPost.Status.1": "Published",
@@ -183,6 +181,12 @@
     "HasBlogPostWaitingForReviewMessage": "You have a blog post waiting for review. Click to list.",
     "SelectAStatus": "Select a status",
     "Status": "Status",
-    "CmsKit.BlogPost.ScrollIndex": "Quick navigation bar in blog posts"
+    "CmsKit.BlogPost.ScrollIndex": "Quick navigation bar in blog posts",
+    "Add": "Add",
+    "AddWidget": "Add Widget",
+    "PleaseConfigureWidgets": "Please configure widgets",
+    "SelectAnAuthor":"Select an Author",
+    "InThisDocument":"In This Document",
+    "GoToTop":"Go To Top"
   }
 }
