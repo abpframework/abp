@@ -63,6 +63,4 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
   },
 ]);
 
-export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS.filter(
-  prop => prop.name !== 'password',
-);
+export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS

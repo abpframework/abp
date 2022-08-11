@@ -505,6 +505,57 @@
             }
           }
         },
+        "Volo.CmsKit.Public.Polls.PollViewComponentController": {
+          "controllerName": "PollViewComponent",
+          "controllerGroupName": "PollViewComponent",
+          "isRemoteService": true,
+          "apiVersion": null,
+          "type": "Volo.CmsKit.Public.Polls.PollViewComponentController",
+          "interfaces": [
+            {
+              "type": "Volo.CmsKit.Public.Polls.IPollViewComponentAppService"
+            }
+          ],
+          "actions": {
+            "ParseAsyncByContent": {
+              "uniqueName": "ParseAsyncByContent",
+              "name": "ParseAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit-public/polls/{content}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "content",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "content",
+                  "name": "content",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.CmsKit.Polls.ContentFragment>",
+                "typeSimple": "[Volo.CmsKit.Polls.ContentFragment]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.CmsKit.Public.Polls.IPollViewComponentAppService"
+            }
+          }
+        },
         "Volo.CmsKit.Public.Pages.PagesPublicController": {
           "controllerName": "PagesPublic",
           "controllerGroupName": "PagesPublic",
@@ -980,6 +1031,18 @@
                 {
                   "nameOnMethod": "input",
                   "name": "AuthorId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "TagId",
                   "jsonName": null,
                   "type": "System.Guid?",
                   "typeSimple": "string?",

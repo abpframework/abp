@@ -15,7 +15,7 @@ The Basic Theme is a theme implementation for the Blazor UI. It is a minimalist 
 
 ## Installation
 
-**This theme is already installed** when you create a new solution using the [startup templates](../../Startup-Templates/Index.md). If you need to manually install it, follow the steps below:
+If you need to manually this theme, follow the steps below:
 
 {{if UI == "Blazor"}}
 

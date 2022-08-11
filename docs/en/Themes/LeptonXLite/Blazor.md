@@ -15,8 +15,11 @@ LeptonX Lite has implementation for the ABP Framework Blazor WebAssembly & Blazo
 
 ## Installation
 
+This theme is **already installed** when you create a new solution using the startup templates. If you are using any other template, you can install this theme by following the steps below:
+
 {{if UI == "Blazor"}}
-- Complete the [MVC Razor Pages Installation](AspNetCore.md#installation) for the **HttpApi.Host** application first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and if identity server is separated, install to the **IdentityServer**_.
+- Complete the [MVC Razor Pages Installation](AspNetCore.md#installation) for the **HttpApi.Host** application first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and if identity server is separated, install to the **OpenIddict**_.
+
 
 - Add **Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme** package to your **Blazor WebAssembly** application with the following command:
 
@@ -52,7 +55,7 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
 
 {{if UI == "BlazorServer"}}
 
-- Complete the [MVC Razor Pages Installation](AspNetCore.md#installation) first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and **IdentityServer**_.
+- Complete the [MVC Razor Pages Installation](AspNetCore.md#installation) first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and **AuthServer**_.
 
 - Add **Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme** package to your **Blazor server** application with the following command:
 

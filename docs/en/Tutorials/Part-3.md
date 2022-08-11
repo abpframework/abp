@@ -1224,7 +1224,7 @@ Open the `Books.razor` and add the following code to the end of the page:
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1322,7 +1322,7 @@ We can now define a modal to edit the book. Add the following code to the end of
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1459,7 +1459,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType:{(int) context.Type}"]
+                        @L[$"Enum:BookType.{Enum.GetName(context.Type)}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -1511,7 +1511,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1564,7 +1564,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
                                 </SelectItem>
                             }
                         </Select>

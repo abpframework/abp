@@ -247,6 +247,21 @@
 
   })();
 
+  // controller volo.cmsKit.admin.contents.contentAdmin
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.admin.contents.contentAdmin');
+
+    volo.cmsKit.admin.contents.contentAdmin.getWidgets = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/contents',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+  })();
+
   // controller volo.cmsKit.admin.comments.commentAdmin
 
   (function(){
@@ -378,7 +393,7 @@
 
     volo.cmsKit.admin.blogs.blogPostAdmin.getList = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'blogId', value: input.blogId }, { name: 'authorId', value: input.authorId }, { name: 'status', value: input.status }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        url: abp.appPath + 'api/cms-kit-admin/blogs/blog-posts' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'blogId', value: input.blogId }, { name: 'authorId', value: input.authorId }, { name: 'tagId', value: input.tagId }, { name: 'status', value: input.status }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
         type: 'GET'
       }, ajaxParams));
     };

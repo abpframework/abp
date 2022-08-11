@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Einstellungsverwaltung",
     "Feature:SettingManagementEnable": "Einstellungsverwaltung aktivieren",
     "Feature:SettingManagementEnableDescription": "Aktivieren Sie das Einstellungsverwaltungssystem in der Anwendung.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Erlauben Sie Mietern, E-Mail-Einstellungen zu ändern.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Erlauben Sie Mietern, E-Mail-Einstellungen zu ändern."
+    "Feature:AllowChangingEmailSettings": "Änderung der E-Mail-Einstellungen zulassen.",
+    "Feature:AllowChangingEmailSettingsDescription": "Änderung der E-Mail-Einstellungen zulassen."
   }
 }

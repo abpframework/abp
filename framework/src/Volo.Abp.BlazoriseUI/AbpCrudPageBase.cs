@@ -224,10 +224,10 @@ public abstract class AbpCrudPageBase<
     {
         if (firstRender)
         {
-            await base.OnAfterRenderAsync(firstRender);
             await SetToolbarItemsAsync();
             await SetBreadcrumbItemsAsync();
         }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
 

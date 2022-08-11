@@ -1,0 +1,6 @@
+{
+  "culture": "el",
+  "texts": {
+    "Volo.GlobalFeature:010001": "Η υπηρεσία '{ServiceName}' απαιτεί την ενεργοποίηση της λειτουργίας '{GlobalFeatureName}'"
+  }
+}
