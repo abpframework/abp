@@ -28,7 +28,7 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
     {
         if (timeout == default)
         {
-            timeout = TimeSpan.FromSeconds(30);
+            timeout = DistributedLockDaprOptions.DefaultTimeout;
         }
         
         var daprClient = await DaprClientFactory.CreateAsync();
@@ -37,7 +37,7 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
             DistributedLockDaprOptions.StoreName, 
             name, 
             DaprOptions.AppId,
-            timeout.Seconds,
+            (int)timeout.TotalSeconds,
             cancellationToken);
 
         if (lockResponse == null || !lockResponse.Success)
