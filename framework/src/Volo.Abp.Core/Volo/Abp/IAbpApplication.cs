@@ -25,6 +25,13 @@ public interface IAbpApplication : IModuleContainer, IDisposable
     IServiceProvider ServiceProvider { get; }
     
     /// <summary>
+    /// Name of the application.
+    /// This is useful for systems with multiple applications, to distinguish
+    /// resources of the applications located together.
+    /// </summary>
+    string ApplicationName { get; }
+    
+    /// <summary>
     /// Calls the Pre/Post/ConfigureServicesAsync methods of the modules.
     /// If you use this method, you must have set the <see cref="AbpApplicationCreationOptions.SkipConfigureServices"/>
     /// option to true before.

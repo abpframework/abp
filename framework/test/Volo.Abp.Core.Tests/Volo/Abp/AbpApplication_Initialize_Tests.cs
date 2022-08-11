@@ -142,4 +142,19 @@ public class AbpApplication_Initialize_Tests
             plugInModule.OnApplicationShutdownIsCalled.ShouldBeTrue();
         }
     }
+
+    [Fact]
+    public void Should_Set_And_Get_ApplicationName()
+    {
+        const string applicationName = "MyApplication";
+        
+        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>(options =>
+               {
+                   options.ApplicationName = applicationName;
+               }))
+        {
+            application.ApplicationName.ShouldBe(applicationName);
+            application.Services.GetApplicationName().ShouldBe(applicationName);
+        }
+    }
 }
