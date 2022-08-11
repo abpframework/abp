@@ -489,6 +489,7 @@ public class SolutionModuleAdder : ITransientDependency
         args.Options.Add("t", newProTemplate ? ModuleProTemplate.TemplateName : ModuleTemplate.TemplateName);
         args.Options.Add("v", version);
         args.Options.Add("o", Path.Combine(modulesFolderInSolution, module.Name));
+        args.Options.Add("sib", true.ToString());
 
         await NewCommand.ExecuteAsync(args);
     }
