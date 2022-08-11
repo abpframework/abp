@@ -13,6 +13,8 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
     
     public string ParentName { get; set; }
     
+    public string DisplayName { get; set; }
+
     public bool IsEnabled { get; set; }
     
     public MultiTenancySides MultiTenancySide { get; set; }
@@ -22,22 +24,8 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
     /// </summary>
     public string Providers { get; set; }
 
-    public string DisplayName { get; set; }
-
     /// <summary>
-    /// A JSON array containing feature checkers data.
-    ///
-    /// Example:
-    ///   [
-    ///    {
-    ///      "type": "RequireFeatures",
-    ///      "featureNames": [ "FeatureA", "FeatureB" ]
-    ///    },
-    ///    {
-    ///      "type": "RequireGlobalFeatures",
-    ///      "featureNames": [ "GlobalFeatureA", "GlobalFeatureB" ]
-    ///    }
-    ///   ]
+    /// Serialized string to store info about the state checkers.
     /// </summary>
     public string StateCheckers { get; set; }
     
