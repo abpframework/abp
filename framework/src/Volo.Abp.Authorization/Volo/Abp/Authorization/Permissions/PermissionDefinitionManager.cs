@@ -6,7 +6,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Authorization.Permissions;
 
-public class PermissionDefinitionManager : IPermissionDefinitionManager, ISingletonDependency
+public class PermissionDefinitionManager : IPermissionDefinitionManager, ITransientDependency
 {
     private readonly IStaticPermissionDefinitionStore _staticStore;
     private readonly IDynamicPermissionDefinitionStore _dynamicStore;
