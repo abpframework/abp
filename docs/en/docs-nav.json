@@ -44,6 +44,10 @@
           "path": "Startup-Templates/WPF.md"
         },
         {
+          "text": "MAUI",
+          "path": "Startup-Templates/MAUI.md"
+        },
+        {
           "text": "Empty Web Project",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
