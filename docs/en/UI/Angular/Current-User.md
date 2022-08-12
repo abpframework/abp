@@ -1,6 +1,6 @@
 # Angular UI: Current User
 
-The current user information store in Config State.
+The current user information stored in Config State.
 
 ### How to Get a Current User Information Configuration
 
