@@ -33,15 +33,9 @@ public class SimpleStateCheckerSerializer :
     }
 
     [CanBeNull]
-    public ISimpleStateChecker<TState> Deserialize<TState>(string value)
+    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject)
         where TState : IHasSimpleStateCheckers<TState>
     {
-        var jsonObject = JsonNode.Parse(value) as JsonObject;
-        if (jsonObject == null)
-        {
-            throw new AbpException("The value is not a JSON object: " + value);
-        }
-        
         foreach (var contributor in _contributors)
         {
             var result = contributor.Deserialize<TState>(jsonObject);

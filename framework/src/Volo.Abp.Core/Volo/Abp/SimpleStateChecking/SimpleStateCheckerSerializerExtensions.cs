@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 
 namespace Volo.Abp.SimpleStateChecking;
 
@@ -34,5 +36,47 @@ public static class SimpleStateCheckerSerializerExtensions
         
                 return stringBuilder.ToString();
         }
+    }
+
+    public static ISimpleStateChecker<TState>[] DeserializeArray<TState>(
+        this ISimpleStateCheckerSerializer serializer,
+        string value)
+        where TState : IHasSimpleStateCheckers<TState>
+    {
+        if (value.IsNullOrWhiteSpace())
+        {
+            return Array.Empty<ISimpleStateChecker<TState>>();
+        }
+        
+        var array = JsonNode.Parse(value) as JsonArray;
+        if (array == null || array.Count == 0)
+        {
+            return Array.Empty<ISimpleStateChecker<TState>>();
+        }
+        
+        if (array.Count == 1)
+        {
+            var jsonObject = array[0] as JsonObject;
+            if (jsonObject == null)
+            {
+                throw new AbpException("JSON value is not an array of objects: " + value);
+            }
+
+            return new[] { serializer.Deserialize<TState>(jsonObject) };
+        }
+
+        var checkers = new ISimpleStateChecker<TState>[array.Count];
+
+        for (var i = 0; i < array.Count; i++)
+        {
+            if (array[i] is not JsonObject jsonObject)
+            {
+                throw new AbpException("JSON value is not an array of objects: " + value);
+            }
+
+            checkers[i] = serializer.Deserialize<TState>(jsonObject);
+        }
+
+        return checkers;
     }
 }

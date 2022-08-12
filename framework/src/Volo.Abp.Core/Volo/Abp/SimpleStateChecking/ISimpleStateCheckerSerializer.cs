@@ -1,3 +1,5 @@
+using System.Text.Json.Nodes;
+
 namespace Volo.Abp.SimpleStateChecking;
 
 public interface ISimpleStateCheckerSerializer
@@ -5,6 +7,6 @@ public interface ISimpleStateCheckerSerializer
     public string Serialize<TState>(ISimpleStateChecker<TState> checker)
         where TState : IHasSimpleStateCheckers<TState>;
 
-    public ISimpleStateChecker<TState> Deserialize<TState>(string value)
+    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject)
         where TState : IHasSimpleStateCheckers<TState>;
 }
