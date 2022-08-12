@@ -26,7 +26,7 @@ public class TenantManager_Tests : AbpTenantManagementDomainTestBase
     [Fact]
     public async Task Create_Tenant_Name_Can_Not_Duplicate()
     {
-        await Assert.ThrowsAsync<UserFriendlyException>(async () => await _tenantManager.CreateAsync("volosoft"));
+        await Assert.ThrowsAsync<BusinessException>(async () => await _tenantManager.CreateAsync("volosoft"));
     }
 
     [Fact]
@@ -46,6 +46,6 @@ public class TenantManager_Tests : AbpTenantManagementDomainTestBase
         var tenant = await _tenantRepository.FindByNameAsync("acme");
         tenant.ShouldNotBeNull();
 
-        await Assert.ThrowsAsync<UserFriendlyException>(async () => await _tenantManager.ChangeNameAsync(tenant, "volosoft"));
+        await Assert.ThrowsAsync<BusinessException>(async () => await _tenantManager.ChangeNameAsync(tenant, "volosoft"));
     }
 }
