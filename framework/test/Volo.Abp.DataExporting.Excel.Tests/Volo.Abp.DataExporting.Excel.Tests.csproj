@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.test.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace />
+		<UserSecretsId>9f0d2c00-80c1-435b-bfab-2c39c8249091</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+		<ProjectReference Include="..\..\src\Volo.Abp.DataExporting.Excel.ClosedXML\Volo.Abp.DataExporting.Excel.ClosedXML.csproj" />
+		<ProjectReference Include="..\..\src\Volo.Abp.DataExporting.Excel.EpPlus\Volo.Abp.DataExporting.Excel.EpPlus.csproj" />
+		<ProjectReference Include="..\..\src\Volo.Abp.DataExporting.Excel.Npoi\Volo.Abp.DataExporting.Excel.Npoi.csproj" />
+		<ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
+		<ProjectReference Include="..\Volo.Abp.Settings.Tests\Volo.Abp.Settings.Tests.csproj" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+	</ItemGroup>
+
+</Project>
