@@ -64,7 +64,21 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
 
     public Task<PermissionGroupDefinitionRecord> SerializeAsync(PermissionGroupDefinition permissionGroup)
     {
-        throw new System.NotImplementedException();
+        using (CultureHelper.Use(CultureInfo.InvariantCulture))
+        {
+            var permissionGroupRecord = new PermissionGroupDefinitionRecord(
+                GuidGenerator.Create(),
+                permissionGroup.Name,
+                permissionGroup.DisplayName.Localize(StringLocalizerFactory)
+            );
+
+            foreach (var property in permissionGroup.Properties)
+            {
+                permissionGroupRecord.SetProperty(property.Key, property.Value);
+            }
+            
+            return Task.FromResult(permissionGroupRecord);
+        }
     }
 
     public Task<PermissionGroupDefinition> DeserializeAsync(PermissionGroupDefinitionRecord permissionGroupRecord)
