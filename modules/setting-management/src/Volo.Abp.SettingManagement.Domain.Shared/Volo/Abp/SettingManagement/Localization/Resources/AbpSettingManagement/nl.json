@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Instellingsbeheer",
     "Feature:SettingManagementEnable": "Instellingenbeheer inschakelen",
     "Feature:SettingManagementEnableDescription": "Schakel het instellingsbeheersysteem in de toepassing in.",
-    "Feature:AllowChangingEmailSettings": "Toestaan om e-mailinstellingen te wijzigen.",
+    "Feature:AllowChangingEmailSettings": "Toestaan om e-mailinstellingen te wijzigen",
     "Feature:AllowChangingEmailSettingsDescription": "Toestaan om e-mailinstellingen te wijzigen."
   }
 }

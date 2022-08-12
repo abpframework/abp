@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Upravljanje nastavitev",
     "Feature:SettingManagementEnable": "Omogoči upravljanje nastavitev",
     "Feature:SettingManagementEnableDescription": "Omogočite nastavitev sistema upravljanja v aplikaciji.",
-    "Feature:AllowChangingEmailSettings": "Dovoli spreminjanje e-poštnih nastavitev.",
+    "Feature:AllowChangingEmailSettings": "Dovoli spreminjanje e-poštnih nastavitev",
     "Feature:AllowChangingEmailSettingsDescription": "Dovoli spreminjanje e-poštnih nastavitev."
   }
 }
