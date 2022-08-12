@@ -120,7 +120,6 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
         * `--tiered`: The Identity Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
-      * `maui`: .NET MAUI. A minimalist .NET MAUI application will be created if you specify this option.
       * `none`: Without UI. No front-end layer will be created. There are some additional options for this template:
         * `--separate-auth-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
     * `--mobile` or `-m`: Specifies the mobile application framework. If not specified, no mobile application will be created. Available options:
@@ -146,7 +145,8 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
         * `mongodb`: MongoDB.
     * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
         * `leptonx-lite`: [LeptonX Lite Theme](/Themes/LeptonXLite/mvc.md).
-        * `basic`: [Basic Theme](/UI/AspNetCore/Basic-Theme.md).        
+        * `basic`: [Basic Theme](/UI/AspNetCore/Basic-Theme.md).    
+  * `maui`: .NET MAUI. A minimalist .NET MAUI application will be created if you specify this option.
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
 * `--preview`: Use latest preview version.
