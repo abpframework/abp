@@ -18,24 +18,24 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
     }
     
     [Fact]
-    public async Task Serialize_Permission_Definitions()
+    public async Task Serialize_Complex_Permission_Definition()
     {
         // Arrange
         
         var context = new PermissionDefinitionContext(null);
         var group1 = CreatePermissionGroup1(context);
         var permission1 = group1.AddPermission(
-            "Permission1",
-            new FixedLocalizableString("Permission one"),
-            MultiTenancySides.Tenant
-        );
-        
-        permission1["CustomProperty2"] = "CustomValue2";
+                "Permission1",
+                new FixedLocalizableString("Permission one"),
+                MultiTenancySides.Tenant
+            )
+            .WithProviders("ProviderA", "ProviderB")
+            .WithProperty("CustomProperty2", "CustomValue2");
 
         // Act
         
         var permissionRecord = await _serializer.SerializeAsync(
-            group1.GetPermissionOrNull("Permission1"),
+            permission1,
             group1
         );
         
@@ -45,6 +45,8 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
         permissionRecord.GroupName.ShouldBe("Group1");
         permissionRecord.DisplayName.ShouldBe("Permission one");
         permissionRecord.GetProperty("CustomProperty2").ShouldBe("CustomValue2");
+        permissionRecord.Providers.ShouldBe("ProviderA,ProviderB");
+        permissionRecord.MultiTenancySide.ShouldBe(MultiTenancySides.Tenant);
     }
 
     private static PermissionGroupDefinition CreatePermissionGroup1(
