@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Authorization;
 using Volo.Abp.Caching;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
@@ -16,5 +18,30 @@ namespace Volo.Abp.PermissionManagement;
 [DependsOn(typeof(AbpJsonModule))]
 public class AbpPermissionManagementDomainModule : AbpModule
 {
-
+    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        Task.Run(async () =>
+        {
+            using var scope = context
+                .ServiceProvider
+                .GetRequiredService<IRootServiceProvider>()
+                .CreateScope();
+            
+            try
+            {
+                await scope
+                    .ServiceProvider
+                    .GetRequiredService<IStaticPermissionSaver>()
+                    .SaveAsync();
+            }
+            catch (Exception ex)
+            {
+                //TODO: We should retry until it's successful!
+                
+                scope.ServiceProvider
+                    .GetService<ILogger<AbpPermissionManagementDomainModule>>()
+                    .LogException(ex);
+            }
+        });
+    }
 }
