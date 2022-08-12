@@ -66,7 +66,7 @@ public class TenantAppService_Tests : AbpTenantManagementApplicationTestBase
     [Fact]
     public async Task CreateAsync_Should_Not_Allow_Duplicate_Names()
     {
-        await Assert.ThrowsAsync<UserFriendlyException>(async () =>
+        await Assert.ThrowsAsync<BusinessException>(async () =>
         {
             await _tenantAppService.CreateAsync(new TenantCreateDto { Name = "acme", AdminEmailAddress = "admin@admin.com", AdminPassword = "123456" });
         });
@@ -90,7 +90,7 @@ public class TenantAppService_Tests : AbpTenantManagementApplicationTestBase
     {
         var acme = UsingDbContext(dbContext => dbContext.Tenants.Single(t => t.Name == "acme"));
 
-        await Assert.ThrowsAsync<UserFriendlyException>(async () =>
+        await Assert.ThrowsAsync<BusinessException>(async () =>
         {
             await _tenantAppService.UpdateAsync(acme.Id, new TenantUpdateDto { Name = "volosoft" });
         });
