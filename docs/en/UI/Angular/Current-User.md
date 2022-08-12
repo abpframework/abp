@@ -7,7 +7,7 @@ The current user information stored in Config State.
 You can use the `getOne` or `getOne$` method of `ConfigStateService` to get a specific configuration property. For that, the property name should be passed to the method as parameter.
 
 ```js
-// this.config is instance of ConfigStateService
+// this.config is an instance of ConfigStateService
 
 const currentUser = this.config.getOne("currentUser");
 
