@@ -2,6 +2,8 @@
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
+using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Xunit;
@@ -30,7 +32,8 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
                 MultiTenancySides.Tenant
             )
             .WithProviders("ProviderA", "ProviderB")
-            .WithProperty("CustomProperty2", "CustomValue2");
+            .WithProperty("CustomProperty2", "CustomValue2")
+            .RequireGlobalFeatures("GlobalFeature1", "GlobalFeature2");
 
         // Act
         
@@ -47,6 +50,7 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
         permissionRecord.GetProperty("CustomProperty2").ShouldBe("CustomValue2");
         permissionRecord.Providers.ShouldBe("ProviderA,ProviderB");
         permissionRecord.MultiTenancySide.ShouldBe(MultiTenancySides.Tenant);
+        permissionRecord.StateCheckers.ShouldBe("[{\"T\":\"GF\",\"A\":true,\"N\":[\"GlobalFeature1\",\"GlobalFeature2\"]}]");
     }
 
     private static PermissionGroupDefinition CreatePermissionGroup1(

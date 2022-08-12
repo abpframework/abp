@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Authorization.Permissions;
@@ -14,13 +15,16 @@ namespace Volo.Abp.PermissionManagement;
 
 public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, ITransientDependency
 {
+    protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IStringLocalizerFactory StringLocalizerFactory { get; }
 
     public PermissionDefinitionSerializer(
         IGuidGenerator guidGenerator,
-        IStringLocalizerFactory stringLocalizerFactory)
+        IStringLocalizerFactory stringLocalizerFactory,
+        ISimpleStateCheckerSerializer stateCheckerSerializer)
     {
+        StateCheckerSerializer = stateCheckerSerializer;
         GuidGenerator = guidGenerator;
         StringLocalizerFactory = stringLocalizerFactory;
     }
@@ -52,7 +56,8 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         }
     }
 
-    public Task<PermissionDefinition> DeserializeAsync(PermissionDefinitionRecord permissionRecord)
+    public Task<PermissionDefinition> DeserializeAsync(
+        PermissionDefinitionRecord permissionRecord)
     {
         throw new System.NotImplementedException();
     }
@@ -67,16 +72,9 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         throw new System.NotImplementedException();
     }
     
-    protected virtual string SerializeStateCheckers(IEnumerable<ISimpleStateChecker<PermissionDefinition>> stateCheckers)
+    protected virtual string SerializeStateCheckers(List<ISimpleStateChecker<PermissionDefinition>> stateCheckers)
     {
-        //TODO: Serialize state checker
-        
-        if(!stateCheckers.Any())
-        {
-            return null;
-        }
-        
-        return null;
+        return StateCheckerSerializer.Serialize(stateCheckers);
     }
 
     protected virtual string SerializeProviders(ICollection<string> providers)
