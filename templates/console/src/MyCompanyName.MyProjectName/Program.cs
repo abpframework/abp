@@ -36,10 +36,9 @@ public class Program
                 services.AddApplicationAsync<MyProjectNameModule>(options =>
                 {
                     options.Services.ReplaceConfiguration(services.GetConfiguration());
-                    options.UseAutofac();
                     options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
                 });
-            }).UseConsoleLifetime();
+            }).UseAutofac().UseConsoleLifetime();
 
             var host = builder.Build();
             await host.Services.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().InitializeAsync(host.Services);
