@@ -7,7 +7,7 @@ namespace Volo.Abp.SimpleStateChecking;
 
 public class SimpleStateCheckerSerializer : 
     ISimpleStateCheckerSerializer,
-    ITransientDependency
+    ISingletonDependency
 {
     private readonly IEnumerable<ISimpleStateCheckerSerializerContributor> _contributors;
 

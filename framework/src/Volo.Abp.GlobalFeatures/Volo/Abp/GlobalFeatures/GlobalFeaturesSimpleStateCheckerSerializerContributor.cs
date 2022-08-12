@@ -7,7 +7,7 @@ namespace Volo.Abp.GlobalFeatures;
 
 public class GlobalFeaturesSimpleStateCheckerSerializerContributor :
     ISimpleStateCheckerSerializerContributor,
-    ITransientDependency
+    ISingletonDependency
 {
     public string SerializeToJson<TState>(ISimpleStateChecker<TState> checker)
         where TState : IHasSimpleStateCheckers<TState>
