@@ -17,12 +17,6 @@ public class CmsKitFeatureDefinitionProvider : FeatureDefinitionProvider
             L("Feature:BlogEnableDescription"),
             new ToggleStringValueType());
 
-        group.AddFeature(CmsKitFeatures.BlogPostEnable,
-            "true",
-            L("Feature:BlogPostEnable"),
-            L("Feature:BlogPostEnableDescription"),
-            new ToggleStringValueType());
-
         group.AddFeature(CmsKitFeatures.CommentEnable,
             "true",
             L("Feature:CommentEnable"),

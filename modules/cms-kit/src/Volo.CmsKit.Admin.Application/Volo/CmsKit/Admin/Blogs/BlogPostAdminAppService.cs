@@ -16,7 +16,7 @@ using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Admin.Blogs;
 
-[RequiresFeature(CmsKitFeatures.BlogPostEnable)]
+[RequiresFeature(CmsKitFeatures.BlogEnable)]
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
 public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppService

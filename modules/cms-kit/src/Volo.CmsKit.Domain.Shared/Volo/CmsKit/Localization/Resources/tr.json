@@ -194,8 +194,6 @@
     "Feature:CmsKitGroup": "Cms Kit",
     "Feature:BlogEnable": "Blog sayfasını etkinleştirin",
     "Feature:BlogEnableDescription": "Uygulamınızdaki blog sayfasını etkinleştirir.",
-    "Feature:BlogPostEnable": "Blogpost sayfasını etkinleştirin",
-    "Feature:BlogPostEnableDescription": "Uygulamınızdaki blogpost sayfasını etkinleştirir.",
     "Feature:CommentEnable": "Yorum özelliğini etkinleştirin",
     "Feature:CommentEnableDescription": "Uygulamınızdaki yorum özelliğini etkinleştirir.",
     "Feature:GlobalResourceEnable": "Blog global kaynakları etkinleştirin",

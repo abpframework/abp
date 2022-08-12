@@ -13,7 +13,7 @@ using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Blogs;
 
-[RequiresFeature(CmsKitFeatures.BlogPostEnable)]
+[RequiresFeature(CmsKitFeatures.BlogEnable)]
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPublicAppService
 {

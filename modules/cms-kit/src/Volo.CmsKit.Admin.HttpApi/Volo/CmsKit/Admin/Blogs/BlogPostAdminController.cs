@@ -12,7 +12,7 @@ using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Blogs;
 
-[RequiresFeature(CmsKitFeatures.BlogPostEnable)]
+[RequiresFeature(CmsKitFeatures.BlogEnable)]
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]

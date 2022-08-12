@@ -191,8 +191,6 @@
     "Feature:CmsKitGroup": "Cms Kit",
     "Feature:BlogEnable": "Enabled blog page",
     "Feature:BlogEnableDescription": "Enable blog page in the application.",
-    "Feature:BlogPostEnable": "Enabled blogpost page",
-    "Feature:BlogPostEnableDescription": "Enable blogpost page in the application.",
     "Feature:CommentEnable": "Enabled commenting",
     "Feature:CommentEnableDescription": "Enable comment in the application.",
     "Feature:GlobalResourceEnable": "Enabled global resourcing",
