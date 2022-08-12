@@ -1,6 +1,7 @@
 {
   "culture": "pt-BR",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "O nome do ambiente já existe: {Name}",
     "Menu:TenantManagement": "Gerencimento de Inquilinos",
     "Tenants": "Inquilinos",
     "NewTenant": "Novo Inquilino",

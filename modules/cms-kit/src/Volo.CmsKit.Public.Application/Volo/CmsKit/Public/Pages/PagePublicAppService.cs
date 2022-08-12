@@ -1,11 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Public.Pages;
 
+[RequiresFeature(CmsKitFeatures.PageEnable)]
 [RequiresGlobalFeature(typeof(PagesFeature))]
 public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppService
 {

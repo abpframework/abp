@@ -123,6 +123,7 @@ abp new Acme.BookStore
   * `module`: [Module template](Startup-Templates/Module.md). 其他选项:
     * `--no-ui`: 不包含UI.仅创建服务模块(也称为微服务 - 没有UI).
   * **`console`**: [Console template](Startup-Templates/Console.md).
+  * **`maui`**: [Maui template](Startup-Templates/MAUI.md).
   * **`app-nolayers`**: 应用程序单层模板
   * `--ui` 或者 `-u`: 指定ui框架.默认`mvc`框架.其他选项:
     * `mvc`: ASP.NET Core MVC.
