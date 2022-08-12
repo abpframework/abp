@@ -597,13 +597,11 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     private void TriggerEntityCreateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityCreatingEvent(entity);
         EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
     }
 
     protected virtual void TriggerEntityUpdateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityUpdatingEvent(entity);
         EntityChangeEventHelper.PublishEntityUpdatedEvent(entity);
     }
 
@@ -616,7 +614,6 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     protected virtual void TriggerEntityDeleteEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityDeletingEvent(entity);
         EntityChangeEventHelper.PublishEntityDeletedEvent(entity);
     }
 

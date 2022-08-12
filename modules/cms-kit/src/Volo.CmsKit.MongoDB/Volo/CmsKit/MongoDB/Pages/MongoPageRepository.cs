@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using JetBrains.Annotations;
-using MongoDB.Driver;
-using Volo.Abp;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Pages;
@@ -30,7 +30,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
             .WhereIf<Page, IMongoQueryable<Page>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Title.Contains(filter)
+                    u.Title.ToLower().Contains(filter) || u.Slug.Contains(filter)
             ).CountAsync(cancellation);
     }
 
@@ -46,9 +46,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
         return await (await GetMongoQueryableAsync(cancellation))
             .WhereIf<Page, IMongoQueryable<Page>>(
                 !filter.IsNullOrWhiteSpace(),
-                u =>
-                    u.Title.Contains(filter)
-            )
+                u => u.Title.ToLower().Contains(filter) || u.Slug.Contains(filter))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(Page.Title) : sorting)
             .As<IMongoQueryable<Page>>()
             .PageBy<Page, IMongoQueryable<Page>>(skipCount, maxResultCount)

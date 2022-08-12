@@ -565,7 +565,7 @@
     "PrePayment_IyzicoRedirectionInfo": "您将被重定向到 Iyzico 支付网关以安全地完成您的购买。",
     "PrePayment_IyzicoAcceptVisaAndMasterCard": "Iyzico 接受 Visa 和 MasterCard。",
     "Purchase": "购买",
-    "AcceptTermsAndConditions": "我已阅读、理解并接受<a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">隐私政策</a>， <a href=\"{1}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">条款和条件</a>和<a href=\"{ 2}\" target=\"_blank\" class=\"text-primary\"> EULA。</a>",
+    "AcceptTermsAndConditions": "我已阅读、理解并接受<a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">隐私政策</a>， <a href=\"{1}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">条款和条件</a>和<a href=\"{2}\" target=\"_blank\" class=\"text-primary\"> EULA。</a>",
     "AcceptTermsAndConditionsWarningMessage": "请接受隐私政策和条款和条件",
     "SelectGatewayToContinue": "请选择一个网关以继续！",
     "GatewaySelection_SelectGateway": "选择支付网关",

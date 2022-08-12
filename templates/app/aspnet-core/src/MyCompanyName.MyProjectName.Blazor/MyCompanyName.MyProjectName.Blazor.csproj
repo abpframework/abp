@@ -3,7 +3,7 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
     <!-- <TEMPLATE-REMOVE IF-NOT='PWA'> -->
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
@@ -13,8 +13,8 @@
   <ItemGroup>
     <PackageReference Include="Blazorise.Bootstrap5" Version="1.0.4" />
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.0-preview.7.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.0-preview.7.*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,7 +23,7 @@
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client.IdentityModel.WebAssembly\Volo.Abp.Http.Client.IdentityModel.WebAssembly.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Web.Theming\Volo.Abp.AspNetCore.Components.Web.Theming.csproj" />
     <!-- </TEMPLATE-REMOVE> -->
-    <PackageReference Include="Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme" Version="1.0.0-rc.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme" Version="1.0.0-rc.*" />
   </ItemGroup>
 
   <ItemGroup>

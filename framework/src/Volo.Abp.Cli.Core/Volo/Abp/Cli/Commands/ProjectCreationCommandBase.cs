@@ -103,18 +103,6 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("UI Framework: " + uiFramework);
         }
 
-        var theme = uiFramework == UiFramework.None ? (Theme?)null : GetThemeByTemplateOrNull(commandLineArgs, template);
-        if (theme.HasValue)
-        {
-            Logger.LogInformation("Theme: " + theme);
-        }
-
-        var themeStyle = theme.HasValue ? GetThemeStyleOrNull(commandLineArgs, theme.Value) : (ThemeStyle?)null;
-        if(themeStyle.HasValue) 
-        {
-            Logger.LogInformation("Theme Style: " + themeStyle);
-        }
-
         var publicWebSite = uiFramework != UiFramework.None && commandLineArgs.Options.ContainsKey(Options.PublicWebSite.Long);
         if (publicWebSite)
         {
@@ -210,6 +198,9 @@ public abstract class ProjectCreationCommandBase
         }
 
         commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
+        
+        var theme = uiFramework == UiFramework.None ? (Theme?)null : GetThemeByTemplateOrNull(commandLineArgs, template);
+        var themeStyle = theme.HasValue ? GetThemeStyleOrNull(commandLineArgs, theme.Value) : (ThemeStyle?)null;
 
         return new ProjectBuildArgs(
             solutionName,
@@ -493,6 +484,8 @@ public abstract class ProjectCreationCommandBase
                 return MobileApp.None;
             case "react-native":
                 return MobileApp.ReactNative;
+            case "maui":
+                return MobileApp.Maui;
             default:
                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Mobile App"));
         }
@@ -567,10 +560,11 @@ public abstract class ProjectCreationCommandBase
         }
 
         var themeStyle = commandLineArgs.Options.GetOrNull(Options.ThemeStyle.Long)?.ToLower();
+        
         return themeStyle switch 
         {
-            // null => ThemeStyle.NotSpecified, TODO: remove it!!!
-            "dim" or null => ThemeStyle.Dim,
+            "system" or null => ThemeStyle.System,
+            "dim" => ThemeStyle.Dim,
             "light" => ThemeStyle.Light,
             "dark" => ThemeStyle.Dark,
             _ => null

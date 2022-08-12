@@ -11,6 +11,7 @@ using Volo.Abp.Security.Claims;
 namespace Volo.Abp.OpenIddict.Controllers;
 
 [Route("connect/userinfo")]
+[IgnoreAntiforgeryToken]
 [Authorize(AuthenticationSchemes = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)]
 [ApiExplorerSettings(IgnoreApi = true)]
 public class UserInfoController : AbpOpenIdDictControllerBase

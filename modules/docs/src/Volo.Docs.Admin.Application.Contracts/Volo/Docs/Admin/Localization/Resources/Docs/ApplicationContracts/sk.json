@@ -54,6 +54,7 @@
     "Version": "Verzia",
     "LanguageCode": "Kód jazyka",
     "FileName": "Názov súboru",
-    "LastCachedTime": "Čas vyrovnávacej pamäte"
+    "LastCachedTime": "Čas vyrovnávacej pamäte",
+    "Project": "Projekt"
   }
 }
