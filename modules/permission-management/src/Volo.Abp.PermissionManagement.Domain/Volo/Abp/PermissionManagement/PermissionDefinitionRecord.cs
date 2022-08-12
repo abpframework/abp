@@ -51,7 +51,7 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
     {
         GroupName = Check.NotNullOrWhiteSpace(groupName, nameof(groupName), PermissionGroupDefinitionRecordConsts.MaxNameLength);
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), PermissionDefinitionRecordConsts.MaxNameLength);
-        ParentName = Check.NotNullOrWhiteSpace(parentName, nameof(parentName), PermissionDefinitionRecordConsts.MaxNameLength);
+        ParentName = Check.Length(parentName, nameof(parentName), PermissionDefinitionRecordConsts.MaxNameLength);
         DisplayName =  Check.NotNullOrWhiteSpace(displayName, nameof(displayName), PermissionDefinitionRecordConsts.MaxDisplayNameLength);
         IsEnabled = isEnabled;
         MultiTenancySide = multiTenancySide;
