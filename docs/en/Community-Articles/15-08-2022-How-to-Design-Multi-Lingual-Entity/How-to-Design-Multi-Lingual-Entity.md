@@ -4,7 +4,6 @@
 
 If you want to open up to the global market these days, end-to-end localization is a must. ABP provides an already established infrastructure for static texts. However, this may not be sufficient for many applications. You may need to fully customize your app for a particular language and region.
 
-
 Let's take a look at a few quotes from Christian Arno's article "[How Foreign-Language Internet Strategies Boost Sales](https://www.mediapost.com/publications/article/155250/how-foreign-language-internet-strategies-boost-sal.html)" to better understand the impact of this:
 
 - 82% of European consumers are less likely to buy online if the site is not in their native tongue ([Eurobarometer survey](http://europa.eu/rapid/pressReleasesAction.do?reference=IP/11/556)).
@@ -28,11 +27,11 @@ At the end of this article, we will have created an application same as in the g
 
 ## Development
 
-In order to be free of unnecessary information in the article, we will try to make the Book entity in the application Multi-Lingual, which is the result of the "[Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF)" in the documents of the ABP framework. If you do not want to finish this tutorial, you can find the resulting application [here](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore).
+In order to be free of unnecessary information in the article, we will try to make the Book entity in the application multi-lingual, which is the result of the "[Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF)" in the documents of the ABP framework. If you do not want to finish this tutorial, you can find the resulting application [here](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore).
 
 ### Determining the data model
 
-We need a robust, maintainable, and efficient database model to store content in multiple languages.
+We need a robust, maintainable, and efficient data model to store content in multiple languages.
 
 >  I read many articles to determine the data model correctly, and as a result, I decided to use one of the many approaches that suits us.
 >  However, as in everything, there is a trade-off here. If you are wondering about the advantages and disadvantages of the model we will implement compared to other models, I recommend you to read [this article](https://vertabelo.com/blog/data-modeling-for-multiple-languages-how-to-design-a-localization-ready-system/).
