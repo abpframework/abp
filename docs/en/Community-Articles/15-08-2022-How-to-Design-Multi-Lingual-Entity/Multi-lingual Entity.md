@@ -9,7 +9,7 @@ Let's take a look at a few quotes from Christian Arno's article "[How Foreign-La
 
 - 82% of European consumers are less likely to buy online if the site is not in their native tongue ([Eurobarometer survey](http://europa.eu/rapid/pressReleasesAction.do?reference=IP/11/556)).
 - 72.4% of global consumers are more likely to buy a product if the information is available in their own language ([Common Sense Advisory](http://www.commonsenseadvisory.com/)).
-- The English language currently only accounts for 31% of all online use, and more than half of all searches are in languages other than English.ss
+- The English language currently only accounts for 31% of all online use, and more than half of all searches are in languages other than English.
 - Today, 42% of all Internet users are in Asia, while almost one-quarter are in Europe and just over 10% are in Latin America.
 
 - Foreign languages have experienced exponential growth in online usage in the past decade -- with Chinese now officially the [second-most-prominent-language](http://english.peopledaily.com.cn/90001/90776/90882/7438489.html) on the Web. [Arabic](http://www.internetworldstats.com/stats7.htm) has increased by a whopping 2500%, while English has only risen by 204%
@@ -219,7 +219,7 @@ Now we can use `WithDetailsAsync` without any parameters on `BookAppService` kno
 
 #### Acme.BookStore.Application.Contracts
 
-Implement `IObjectTranslation` in the `BookDto` class in the `Books` folder as follows.
+Implement `IObjectTranslation` in the `BookDto` class as follows.
 
 ```csharp
 public class BookDto : AuditedEntityDto<Guid>, IObjectTranslation
@@ -456,7 +456,7 @@ public class MultiLingualBookObjectMapper : IObjectMapper<Book, BookDto>, ITrans
 }
 ```
 
-To map the multilingual `Book` entity to `BookDto`, we implement custom mapping using the `IObjectMapper<TSource, TDestination>` interface. If no translation is found, default values are returned.
+To map the multi-lingual `Book` entity to `BookDto`, we implement custom mapping using the `IObjectMapper<TSource, TDestination>` interface. If no translation is found, default values are returned.
 
 So far we have created the entire infrastructure. We don't need to change anything in the UI, if there is a translation according to the language chosen by the user, the list view will change. However, I want to create a simple modal where we can add new translations to an existing book in order to see what we have done.
 
@@ -508,7 +508,7 @@ public class AddTranslationModal : BookStorePageModel
     private readonly IBookAppService _bookAppService;
     private readonly ILanguageProvider _languageProvider;
 
-    public AddTranslationModalModel(
+    public AddTranslationModal(
         IBookAppService bookAppService,
         ILanguageProvider languageProvider)
     {
@@ -556,7 +556,13 @@ public class AddTranslationModal : BookStorePageModel
 }
 ```
 
-Finally, change the content of `index.js` in the `Books` folder as follows for `Add Translation` action.
+Then, we can open the `BookStoreWebAutoMapperProfile` class and define the required mapping as follows:
+
+```csharp
+CreateMap<AddTranslationModal.BookTranslationViewModel, AddBookTranslationDto>();
+```
+
+Finally, change the content of `index.js` in the `Books` folder as follows.
 
 ```javascript
 $(function () {
@@ -674,12 +680,6 @@ $(function () {
         createModal.open();
     });
 });
-```
-
-Then, we can open the `BookStoreWebAutoMapperProfile class and define the required mapping as follows:
-
-```csharp
-CreateMap<AddTranslationModal.BookTranslationViewModel, AddBookTranslationDto>();
 ```
 
 ## Conclusion
