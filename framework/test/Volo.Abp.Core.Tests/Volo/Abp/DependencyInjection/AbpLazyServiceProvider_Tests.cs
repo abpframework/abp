@@ -9,7 +9,7 @@ namespace Volo.Abp.DependencyInjection;
 public class AbpLazyServiceProvider_Tests
 {
     [Fact]
-    public void CachedServiceProvider_Should_Cache_Services()
+    public void LazyServiceProvider_Should_Cache_Services()
     {
         using (var application = AbpApplicationFactory.Create<TestModule>())
         {
