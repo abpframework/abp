@@ -6,7 +6,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions;
 
-public class PermissionGroupDefinition
+public class PermissionGroupDefinition : ICanAddChildPermission
 {
     /// <summary>
     /// Unique name of the group.
@@ -49,7 +49,7 @@ public class PermissionGroupDefinition
     }
 
     public virtual PermissionDefinition AddPermission(
-        string name,
+        [NotNull] string name,
         ILocalizableString displayName = null,
         MultiTenancySides multiTenancySide = MultiTenancySides.Both,
         bool isEnabled = true)
