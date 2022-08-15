@@ -71,43 +71,43 @@ git push
 
 ## Create an SQL Database on Azure and change connection string in appsettings.json files
 
-1. Login into the [Azure Portal](https://portal.azure.com/)
+* Login into the [Azure Portal](https://portal.azure.com/)
 
-2. Click on **Create a resouce**
+* Click on **Create a resouce**
 
-3. Search for *SQL Database*
+* Search for *SQL Database*
 
-4. Click the **Create** button in the *SQL Database window*
+* Click the **Create** button in the *SQL Database window*
 
-5. Create a new resource group. Name it *rg[YourAppName]*
+* Create a new resource group. Name it *rg[YourAppName]*
 
-6. Enter *[YourAppName]Db* as database name
+* Enter *[YourAppName]Db* as database name
 
-7. Create a new Server and name it *[yourappname]server*
+* Create a new Server and name it *[yourappname]server*
 
-8. Enter a serveradmin login and passwords. Click the **OK** button
+* Enter a serveradmin login and passwords. Click the **OK** button
 
-9. Select your *Location*
+* Select your *Location*
 
-10. Check *Allow Azure services to access server*
+* Check *Allow Azure services to access server*
 
-11. Click on **Configure database**. Go for the *Basic* version and click the **Apply** button
+* Click on **Configure database**. Go for the *Basic* version and click the **Apply** button
 
-12. Click on the **Review + create** button. Click **Create**
+* Click on the **Review + create** button. Click **Create**
 
-13. Click on **Go to resource** and click on **SQL server** when the SQL Database is created
+* Click on **Go to resource** and click on **SQL server** when the SQL Database is created
 
-14. Click on **Networking** under Security left side menu 
+* Click on **Networking** under Security left side menu 
 
-15. Select **Selected networks** and click on **Add your client IP$ address** at Firewall rules
+* Select **Selected networks** and click on **Add your client IP$ address** at Firewall rules
 
-16. Select **Allow Azure and resources to access this seerver** and save
+* Select **Allow Azure and resources to access this seerver** and save
 
-17. Go to your **SQL database**, click on **Connection strings** and copy the connection string
+* Go to your **SQL database**, click on **Connection strings** and copy the connection string
 
-18. Copy/paste the appsettings.json files of the [YourAppName].HttpApi.Host and the [YourAppName].DbMigrator project
+* Copy/paste the appsettings.json files of the [YourAppName].HttpApi.Host and the [YourAppName].DbMigrator project
 
-19. Do not forget to replace {your_password} with the correct server password you entered in Azure SQL Database
+* Do not forget to replace {your_password} with the correct server password you entered in Azure SQL Database
 
 Open a command prompt in the [YourAppName].DbMigrator project again and enter the command below to apply the database migrations
 
@@ -132,33 +132,33 @@ git push
 
 ## Set up the Build pipeline in AzureDevops and publish the Build Artifacts
 
-1. Sign in into Azure DevOps
+* Sign in into Azure DevOps
 
-2. Click on **New organization** and follow the steps to create a new organisation. Name it [YourAppName]org
+* Click on **New organization** and follow the steps to create a new organisation. Name it [YourAppName]org
 
-3. Enter [YourAppName]Proj as project name in the Create a project to get started window
+* Enter [YourAppName]Proj as project name in the Create a project to get started window
 
-4. Select **Public visibility** and click the **Create project** button
+* Select **Public visibility** and click the **Create project** button
 
-5. Click on the Pipelines button to continue
+* Click on the Pipelines button to continue
 
-6. Click on the **Create Pipeline** button
+* Click on the **Create Pipeline** button
 
-7. Select GitHub in the Select your repository window
+ Select GitHub in the Select your repository window
 
 ![azdevops-1](images/azdevops-1.png)
 
-8. Enter Connection name. [YourAppName]GitHubConnection and click on **Authorize using OAuth**
+* Enter Connection name. [YourAppName]GitHubConnection and click on **Authorize using OAuth**
 
-9. Select your **GitHub** [YourAppName]repo and click Continue
+* Select your **GitHub** [YourAppName]repo and click Continue
 
-10. Search for **ASP.NET**  in the Select a template window
+* Search for **ASP.NET**  in the Select a template window
 
 ![azdevops-2](images/azdevops-2.png)
 
-11. Select the ASP.NET Core template and click the **Apply** button
+* Select the ASP.NET Core template and click the **Apply** button
 
-12. Add below commands block as a first step in the pipeline
+* Add below commands block as a first step in the pipeline
 
     ```
     - task: UseDotNet@2
@@ -169,13 +169,13 @@ git push
 
 ![azdevops-18](images/azdevops-18.png)
 
-13. Select **Settings** on the second task(Nugetcommand@2) in the pipeline
+* Select **Settings** on the second task(Nugetcommand@2) in the pipeline
 
-14. Select **Feeds in my Nuget.config** and type **Nuget.config** in the text box
+* Select **Feeds in my Nuget.config** and type **Nuget.config** in the text box
 
 ![azdevops-3](images/azdevops-3.png)
 
-15. Add below commands block to end of the pipeline
+* Add below commands block to end of the pipeline
 
     ```
     - task: PublishBuildArtifacts@1
@@ -187,101 +187,101 @@ git push
       ```
 ![azdevops-4](images/azdevops-4.png)
 
-16. Click on **Save & queue** in the top menu. Click on **Save & queue** again and click **Save an run** to run the Build pipeline
+* Click on **Save & queue** in the top menu. Click on **Save & queue** again and click **Save an run** to run the Build pipeline
 
-17. When the Build pipeline has finished. Click on **1 published; 1 consumed**
+* When the Build pipeline has finished. Click on **1 published; 1 consumed**
 
 
 
 ## Create a Web App in the Azure Portal to deploy [YourAppName].HttpApi.Host project
 
-1. Search for Web App in the Search the Marketplace field
+* Search for Web App in the Search the Marketplace field
 
-2. Click the **Create** button in the Web App window
+* Click the **Create** button in the Web App window
 
-3. Select rg[YourAppName] in the Resource Group dropdown
+* Select rg[YourAppName] in the Resource Group dropdown
 
-4. Enter [YourAppName]API in the Name input field
+* Enter [YourAppName]API in the Name input field
 
-5. Select code, .NET Core 3.1 (LTS) and windows as Operating System
+* Select code, .NET Core 3.1 (LTS) and windows as Operating System
 
-6. Enter [YourAppName]API in the Name input field
+* Enter [YourAppName]API in the Name input field
 
-7. Select .NET Core 3.1 (LTS) in the Runtime stack dropdown
+* Select .NET Core 3.1 (LTS) in the Runtime stack dropdown
 
-8. Select Windows as Operating System
+* Select Windows as Operating System
 
-9. Select the same Region as in tthe SQL server you created in Part 3
+* Select the same Region as in tthe SQL server you created in Part 3
 
 ![azdevops-5](images/azdevops-5.png)
 
-10. Click on **Create new** in thet Windows Plan. Name it [YourAppName]ApiWinPlan
+* Click on **Create new** in thet Windows Plan. Name it [YourAppName]ApiWinPlan
 
-11. Click **Change size** in Sku and size. Go for the Dev/Test Free F1 version and click the **Apply** button
+* Click **Change size** in Sku and size. Go for the Dev/Test Free F1 version and click the **Apply** button
 
 ![azdevops-6](images/azdevops-6.png)
 
-12. Click the **Review + creat**e** button. Click **Create** button
+* Click the **Review + creat**e** button. Click **Create** button
 
-13. Click on **Go to resource** when the Web App has been created
+* Click on **Go to resource** when the Web App has been created
 
 
 
 ## Create a Release pipeline in the AzureDevops and deploy [YourAppName].HttpApi.Host project
 
-1. Sign in into [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/)
+* Sign in into [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/)
 
-2. Click on [YourAppName]Proj and click on **Releases** in the *Pipelines* menu
+* Click on [YourAppName]Proj and click on **Releases** in the *Pipelines* menu
 
-3. Click on the **New pipeline** button in the *No release pipelines found* window
+* Click on the **New pipeline** button in the *No release pipelines found* window
 
-4. Select *Azure App Service deployment* and click the **Apply** button
+* Select *Azure App Service deployment* and click the **Apply** button
 
 ![azdevops-7](images/azdevops-7.png)
 
-5. Enter *[YourAppName]staging* in the *Stage name* field in the *Stage* winwow. Close window
+* Enter *[YourAppName]staging* in the *Stage name* field in the *Stage* winwow. Close window
 
-6. Click **+ Add an artifact** in the *Pipeline* tab
+* Click **+ Add an artifact** in the *Pipeline* tab
 
-7. Select the **Build** icon as *Source type* in the *Add an artifact* window
+* Select the **Build** icon as *Source type* in the *Add an artifact* window
 
-8. Select Build pipeline in the *Source (build pipeline)* dropdown and click the **Add** button
+* Select Build pipeline in the *Source (build pipeline)* dropdown and click the **Add** button
 
 ![azdevops-8](images/azdevops-8.png)
 
-9. Click on the **Continuous deployment trigger (thunderbolt icon)**
+* Click on the **Continuous deployment trigger (thunderbolt icon)**
 
-10. Set the toggle to **Enabled** in the the *Continous deployment trigger* window
+* Set the toggle to **Enabled** in the the *Continous deployment trigger* window
 
-11. Click **+ Add** in *No filters added*. Select **Include** in the *Type* dropdown. Select your branch in the *Build* branch dropdown and close the window
+* Click **+ Add** in *No filters added*. Select **Include** in the *Type* dropdown. Select your branch in the *Build* branch dropdown and close the window
 
 ![azdevops-9](images/azdevops-9.png)
 
-12. Click on **the little red circle with the exclamation mark** in the *Tasks* tab menu
+* Click on **the little red circle with the exclamation mark** in the *Tasks* tab menu
 
-13. Select your subscription in the *Azure subscription* dropdown.
+* Select your subscription in the *Azure subscription* dropdown.
 
 ![azdevops-10](images/azdevops-10.png)
 
-14. Click **Authorize** and enter your credentials in the next screens
+* Click **Authorize** and enter your credentials in the next screens
 
-15. After Authorisation, select the **[YourAppName]API** in the *App service name* dropdown
+* After Authorisation, select the **[YourAppName]API** in the *App service name* dropdown
 
-16. Click on the **Deploy Azure App Service** task
+* Click on the **Deploy Azure App Service** task
 
-17. Select **[YourAppName].HttpApi.Host.zip** in the *Package or folder* input field
+* Select **[YourAppName].HttpApi.Host.zip** in the *Package or folder* input field
 
 ![azdevops-11](images/azdevops-11.png)
 
-18. Click on the **Save** icon in the top menu and click **OK**
+* Click on the **Save** icon in the top menu and click **OK**
 
-19. Click **Create release** in the top menu. Click **Create**to create a release>
+* Click **Create release** in the top menu. Click **Create**to create a release>
 
-20. Click on the *Pipeline* tab and wait until the Deployment succeeds
+* Click on the *Pipeline* tab and wait until the Deployment succeeds
 
 ![azdevops-12](images/azdevops-12.png)
 
-21. Open a browser and navigate to the URL of your Web App
+* Open a browser and navigate to the URL of your Web App
 
 ```
 https://[YourAppName]api.azurewebsites.net
@@ -293,33 +293,33 @@ https://[YourAppName]api.azurewebsites.net
 
 ## Create a Web App in the Azure Portal to deploy [YourAppName].Blazor project
 
-1. Login into the [Azure Portal](https://portal.azure.com/)
+* Login into the [Azure Portal](https://portal.azure.com/)
 
-2. Click on **Create a resouce**
+* Click on **Create a resouce**
 
-3. Search for *Web App* in the *Search the Marketplace* field
+* Search for *Web App* in the *Search the Marketplace* field
 
-4. Click the **Create** button in the *Web App* window
+* Click the **Create** button in the *Web App* window
 
-5. Select *rg[YourAppName]* in the *Resource Group* dropdown
+* Select *rg[YourAppName]* in the *Resource Group* dropdown
 
-6. Enter *[YourAppName]Blazor* in the *Name* input field
+* Enter *[YourAppName]Blazor* in the *Name* input field
 
-7. Select *.NET Core 3.1 (LTS)* in the *Runtime stack* dropdown
+* Select *.NET Core 3.1 (LTS)* in the *Runtime stack* dropdown
 
-8. Select *Windows* as *Operating System*
+* Select *Windows* as *Operating System*
 
-10. Select the same region as the SQL server you created in Part 3
+* Select the same region as the SQL server you created in Part 3
 
-11. Select the [YourAppName]ApiWinPlan in the Windows Plan dropdown
+* Select the [YourAppName]ApiWinPlan in the Windows Plan dropdown
 
 ![azdevops-14](images/azdevops-14.png)
 
-12. Click the **Review + create** button. Click **Create** button
+* Click the **Review + create** button. Click **Create** button
 
-13. Click on **Go to resource** when the Web App has been created
+* Click on **Go to resource** when the Web App has been created
 
-16. Copy the URL of the Blazor Web App for later use
+* Copy the URL of the Blazor Web App for later use
 
 ```
 https://[YourAppName]blazor.azurewebsites.net
@@ -340,31 +340,31 @@ Copy the URL of the Api Host and Blazor Web App. Change appsettings.json files i
 
 ## Add an extra Stage in the Release pipeline in the AzureDevops to deploy [YourAppName].Blazor project
 
-1. Go to the *Release* pipeline in [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/) and click **Edit**
+* Go to the *Release* pipeline in [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/) and click **Edit**
 
-2. Click the **+ Add** link and add a **New Stage**
+* Click the **+ Add** link and add a **New Stage**
 
 ![azdevops-15](images/azdevops-15.png)
 
-3. Select *Azure App Service deployment* and click the **Apply** button
+* Select *Azure App Service deployment* and click the **Apply** button
 
-4. Enter *BlazorDeployment* in the *Stage name* input field and close the *Stage* window
+* Enter *BlazorDeployment* in the *Stage name* input field and close the *Stage* window
 
-5. Click on the **little red circle with the exclamation mark** in the BlazorDeployment stage
+* Click on the **little red circle with the exclamation mark** in the BlazorDeployment stage
 
-6. Select your subscription in the *Azure subscription* dropdown
+* Select your subscription in the *Azure subscription* dropdown
 
-7. Select your Blazor Web App in the *App service name* dropdown
+* Select your Blazor Web App in the *App service name* dropdown
 
-8. Click on the **Deploy Azure App Service task**
+* Click on the **Deploy Azure App Service task**
 
-9. Select *[YourAppName].Blazor.zip* in the *Package or folder* input field
+* Select *[YourAppName].Blazor.zip* in the *Package or folder* input field
 
 ![azdevops-16](images/azdevops-16.png)
 
-10. Click **Save** in the top menu and click on the **OK** button after
+* Click **Save** in the top menu and click on the **OK** button after
 
-11. Click **Create release** in the top menu and click on the **Create** button
+* Click **Create release** in the top menu and click on the **Create** button
 
 ![azdevops-17](images/azdevops-17.png)
 
