@@ -27,13 +27,13 @@ At the end of this article, we will have created an application same as in the g
 
 ## Development
 
-In order to be free of unnecessary information in the article, we will try to make the Book entity in the application multi-lingual, which is the result of the "[Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF)" in the documents of the ABP framework. If you do not want to finish this tutorial, you can find the resulting application [here](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore).
+In order to keep the article short and get rid of unrelated information in the article (like defining entities etc.), we'll be using the [BookStore](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore) example, which is used in the "[Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF)" documentation of ABP Framework and we will make the Book entity as multi-lingual. If you do not want to finish this tutorial, you can find the application [here](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore).
 
 ### Determining the data model
 
 We need a robust, maintainable, and efficient data model to store content in multiple languages.
 
->  I read many articles to determine the data model correctly, and as a result, I decided to use one of the many approaches that suits us.
+>  I read many articles to determine the data model correctly, and as a result, I decided to use one of the many approaches that suit us.
 >  However, as in everything, there is a trade-off here. If you are wondering about the advantages and disadvantages of the model we will implement compared to other models, I recommend you to read [this article](https://vertabelo.com/blog/data-modeling-for-multiple-languages-how-to-design-a-localization-ready-system/).
 
 ![data-model](./data-model.png)
@@ -46,7 +46,7 @@ As a result of the tutorial, we already have the `Book` and `Author` entities, a
 
 Create a folder named `MultiLingualObjects` and create the following interfaces in its contents. 
 
-We will use the `IObjectTranslation` interface to mark the translation of a multi-lingual entity.
+We will use the `IObjectTranslation` interface to mark the translation of a multi-lingual entity:
 
 ```csharp
 public interface IObjectTranslation
@@ -55,7 +55,7 @@ public interface IObjectTranslation
 }
 ```
 
-We will use the `IMultiLingualObject<TTranslation>` interface to mark multi-lingual entities.
+We will use the `IMultiLingualObject<TTranslation>` interface to mark multi-lingual entities:
 
 ```csharp
 public interface IMultiLingualObject<TTranslation>
@@ -67,7 +67,7 @@ public interface IMultiLingualObject<TTranslation>
 
 #### Acme.BookStore.Domain
 
-In the `Books` folder, create the `BookTranslation` class as follows.
+In the `Books` folder, create the `BookTranslation` class as follows:
 
 ```csharp
 public class BookTranslation : Entity, IObjectTranslation
@@ -87,7 +87,7 @@ public class BookTranslation : Entity, IObjectTranslation
 
 `BookTranslation` contains the `Language` property, which contains a language code for translation and a reference to the multi-lingual entity. We also have the `BookId` foreign key to help us know which book is translated.
 
-Implement `IMultiLingualObject` in the `Book` class as follows.
+Implement `IMultiLingualObject` in the `Book` class as follows:
 
 ```csharp
 public class Book : AuditedAggregateRoot<Guid>, IMultiLingualObject<BookTranslation>
@@ -106,7 +106,7 @@ public class Book : AuditedAggregateRoot<Guid>, IMultiLingualObject<BookTranslat
 }
 ```
 
-Create a folder named `MultiLingualObjects` and create the following class inside.
+Create a folder named `MultiLingualObjects` and add the following class inside of this folder:
 
 ```csharp
 public class MultiLingualObjectManager : ITransientDependency
@@ -174,7 +174,7 @@ With `MultiLingualObjectManager`'s `FindTranslationAsync` method, we get the tra
 
 #### Acme.BookStore.EntityFrameworkCore
 
-In the `OnModelCreating` method of the `BookStoreDbContext` class, configure the `BookTranslation` as follows.
+In the `OnModelCreating` method of the `BookStoreDbContext` class, configure the `BookTranslation` as follows:
 
 ```csharp
 builder.Entity<BookTranslation>(b =>
@@ -202,7 +202,7 @@ This will add a new migration class to your project. You can then run the follow
 dotnet ef database update
 ```
 
-Add the following code to the `ConfigureServices` method of the `BookStoreEntityFrameworkCoreModule`.
+Add the following code to the `ConfigureServices` method of the `BookStoreEntityFrameworkCoreModule`:
 
 ```csharp
  Configure<AbpEntityOptions>(options =>
@@ -218,7 +218,7 @@ Now we can use `WithDetailsAsync` without any parameters on `BookAppService` kno
 
 #### Acme.BookStore.Application.Contracts
 
-Implement `IObjectTranslation` in the `BookDto` class as follows.
+Implement `IObjectTranslation` in the `BookDto` class as follows:
 
 ```csharp
 public class BookDto : AuditedEntityDto<Guid>, IObjectTranslation
@@ -241,7 +241,7 @@ public class BookDto : AuditedEntityDto<Guid>, IObjectTranslation
 
 `Language` property is required to understand which language the translated book name belongs to in the UI.
 
-Create the `AddBookTranslationDto` class in `Books` folder as follows.
+Create the `AddBookTranslationDto` class in the `Books` folder as follows:
 
 ```csharp
 public class AddBookTranslationDto : IObjectTranslation
@@ -254,7 +254,7 @@ public class AddBookTranslationDto : IObjectTranslation
 }
 ```
 
-Add the `AddTranslationsAsync` method to `IBookAppService` as follows.
+Add the `AddTranslationsAsync` method to the `IBookAppService` as follows:
 
 ```csharp
 public interface IBookAppService :
@@ -272,7 +272,7 @@ public interface IBookAppService :
 
 #### Acme.BookStore.Application
 
-Now we need to implement the `AddTranslationsAsync` method in `BookAppService` and include `Translations` in the `Book` entity, for this you can change the `BookAppService` as follows.
+Now, we need to implement the `AddTranslationsAsync` method in `BookAppService` and include `Translations` in the `Book` entity, for this you can change the `BookAppService` as follows:
 
 ```csharp
 [Authorize(BookStorePermissions.Books.Default)]
@@ -410,7 +410,7 @@ public class BookAppService :
 }
 ```
 
-Create the `MultiLingualBookObjectMapper` class as follows.
+Create the `MultiLingualBookObjectMapper` class as follows:
 
 ```csharp
 public class MultiLingualBookObjectMapper : IObjectMapper<Book, BookDto>, ITransientDependency
@@ -561,7 +561,7 @@ Then, we can open the `BookStoreWebAutoMapperProfile` class and define the requi
 CreateMap<AddTranslationModal.BookTranslationViewModel, AddBookTranslationDto>();
 ```
 
-Finally, change the content of `index.js` in the `Books` folder as follows.
+Finally, change the content of `index.js` in the `Books` folder as follows:
 
 ```javascript
 $(function () {
@@ -687,4 +687,4 @@ With a multi-lingual application, you can expand your market share, but if not d
 
 ### Source Code
 
-You can find source of the example solution used in this article [here](https://github.com/abpframework/abp-samples/tree/master/AcmeBookStoreMultiLingual).
+You can find source code of the example solution used in this article [here](https://github.com/abpframework/abp-samples/tree/master/AcmeBookStoreMultiLingual).
