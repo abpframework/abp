@@ -39,7 +39,7 @@
       ><div class="text-center"><i class="fa fa-pulse fa-spinner"></i></div
     ></ng-template>
 
-    <form *ngIf="form; else loaderRef" [formGroup]="form" (ngSubmit)="save()">
+    <form *ngIf="form; else loaderRef" [blueprints]="blueprints" [formGroup]="form" (ngSubmit)="save()">
       <ul ngbNav #nav="ngbNav" class="nav-tabs">
         <li ngbNavItem>
           <a ngbNavLink>{{ 'AbpIdentity::UserInformations' | abpLocalization }}</a>
