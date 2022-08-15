@@ -81,7 +81,7 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         }
     }
 
-    public async Task<(List<PermissionGroupDefinitionRecord>, List<PermissionDefinitionRecord>)> 
+    public async Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])> 
         SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups)
     {
         var permissionGroupRecords = new List<PermissionGroupDefinitionRecord>();
@@ -97,7 +97,7 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
             }
         }
 
-        return (permissionGroupRecords, permissionRecords);
+        return (permissionGroupRecords.ToArray(), permissionRecords.ToArray());
     }
 
     public Task<PermissionGroupDefinition> DeserializeAsync(PermissionGroupDefinitionRecord permissionGroupRecord)

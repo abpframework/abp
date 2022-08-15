@@ -73,41 +73,6 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
         permissionRecord.MultiTenancySide.ShouldBe(MultiTenancySides.Tenant);
         permissionRecord.StateCheckers.ShouldBe("[{\"T\":\"GF\",\"A\":true,\"N\":[\"GlobalFeature1\",\"GlobalFeature2\"]}]");
     }
-    
-    [Fact(Skip = "Not implemented yet")]
-    public async Task Deserialize_Complex_Permission_Definition()
-    {
-        // Arrange
-      
-        var permissionRecord = new PermissionDefinitionRecord
-        {
-            Name = "Permission1",
-            GroupName = "Group1",
-            DisplayName = "Permission one",
-            Providers = "ProviderA,ProviderB",
-            IsEnabled = true,
-            MultiTenancySide = MultiTenancySides.Tenant,
-            StateCheckers = "[{\"T\":\"GF\",\"A\":true,\"N\":[\"GlobalFeature1\",\"GlobalFeature2\"]}]"
-        };
-
-        // Act
-
-        var permission = await _serializer.DeserializeAsync(permissionRecord);
-       
-        //Assert
-
-        permission.Name.ShouldBe("Permission1");
-        permission.DisplayName.ShouldBeOfType<FixedLocalizableString>();
-        permission.DisplayName.As<FixedLocalizableString>().Value.ShouldBe("Permission one");
-        permission.Parent.ShouldBeNull();
-        permission.MultiTenancySide.ShouldBe(MultiTenancySides.Tenant);
-        permission.IsEnabled.ShouldBe(true);
-        permission.Providers.Count.ShouldBe(2);
-        permission.Providers.ShouldContain("ProviderA");
-        permission.Providers.ShouldContain("ProviderB");
-        permission.StateCheckers.Count.ShouldBe(1);
-        permission.StateCheckers[0].ShouldBeOfType<RequireGlobalFeaturesSimpleStateChecker<PermissionDefinition>>();
-    }
 
     private static PermissionGroupDefinition CreatePermissionGroup1(
         IPermissionDefinitionContext context)
