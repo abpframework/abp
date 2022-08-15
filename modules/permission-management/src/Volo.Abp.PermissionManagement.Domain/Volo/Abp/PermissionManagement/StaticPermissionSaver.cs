@@ -78,7 +78,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             return;
         }
 
-        await UpdateChangedGroupsAsync(permissionGroupRecords);
+        await UpdateChangedPermissionGroupsAsync(permissionGroupRecords);
+        await UpdateChangedPermissionsAsync(permissionRecords);
 
         await Cache.SetStringAsync(
             cacheKey,
@@ -89,7 +90,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         );
     }
 
-    private async Task UpdateChangedGroupsAsync(PermissionGroupDefinitionRecord[] permissionGroupRecords)
+    private async Task UpdateChangedPermissionGroupsAsync(IEnumerable<PermissionGroupDefinitionRecord> permissionGroupRecords)
     {
         var newRecords = new List<PermissionGroupDefinitionRecord>();
         var changedRecords = new List<PermissionGroupDefinitionRecord>();
@@ -126,6 +127,45 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         await PermissionGroupRepository.InsertManyAsync(newRecords);
         await PermissionGroupRepository.UpdateManyAsync(changedRecords);
         await PermissionGroupRepository.DeleteManyAsync(deletedRecords);
+    }
+    
+    private async Task UpdateChangedPermissionsAsync(IEnumerable<PermissionDefinitionRecord> permissionRecords)
+    {
+        var newRecords = new List<PermissionDefinitionRecord>();
+        var changedRecords = new List<PermissionDefinitionRecord>();
+
+        var permissionRecordsInDatabase = (await PermissionRepository.GetListAsync())
+            .ToDictionary(x => x.Name);
+
+        foreach (var permissionRecord in permissionRecords)
+        {
+            var permissionRecordInDatabase = permissionRecordsInDatabase.GetOrDefault(permissionRecord.Name);
+            if (permissionRecordInDatabase == null)
+            {
+                /* New group */
+                newRecords.Add(permissionRecord);
+                continue;
+            }
+
+            if (permissionRecord.HasSameData(permissionRecordInDatabase))
+            {
+                /* Not changed */
+                continue;
+            }
+
+            /* Changed */
+            permissionRecordInDatabase.Patch(permissionRecord);
+            changedRecords.Add(permissionRecordInDatabase);
+        }
+        
+        /* Deleted */
+        var deletedRecords = permissionRecordsInDatabase.Values
+            .Where(x => PermissionManagementOptions.DeletedPermissions.Contains(x.Name))
+            .ToArray();
+
+        await PermissionRepository.InsertManyAsync(newRecords);
+        await PermissionRepository.UpdateManyAsync(changedRecords);
+        await PermissionRepository.DeleteManyAsync(deletedRecords);
     }
 
     private string GetDistributedLockKey()

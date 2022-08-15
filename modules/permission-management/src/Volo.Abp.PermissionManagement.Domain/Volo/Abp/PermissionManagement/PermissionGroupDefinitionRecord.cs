@@ -51,23 +51,23 @@ public class PermissionGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExt
         return true;
     }
 
-    public void Patch(PermissionGroupDefinitionRecord record)
+    public void Patch(PermissionGroupDefinitionRecord otherRecord)
     {
-        if (Name != record.Name)
+        if (Name != otherRecord.Name)
         {
-            Name = record.Name;
+            Name = otherRecord.Name;
         }
 
-        if (DisplayName != record.DisplayName)
+        if (DisplayName != otherRecord.DisplayName)
         {
-            DisplayName = record.DisplayName;
+            DisplayName = otherRecord.DisplayName;
         }
         
-        if (!this.HasSameExtraProperties(record))
+        if (!this.HasSameExtraProperties(otherRecord))
         {
             this.ExtraProperties.Clear();
             
-            foreach (var property in record.ExtraProperties)
+            foreach (var property in otherRecord.ExtraProperties)
             {
                 this.ExtraProperties.Add(property.Key, property.Value);
             }
