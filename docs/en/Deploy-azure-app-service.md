@@ -57,7 +57,8 @@ Navigate to the *applicationUrl* specified in the *launchSettings.json* file
 
 Stop both the *API* and the *Blazor* project by pressing **CTRL+C**
 
-Before the github commit, you have to delete "**/wwwroot/libs/*" at .gitignore file.
+Before the github commit, you have to delete "**/wwwroot/libs/*" at *.gitignore* file.
+
 ![azdevops-23](images/azdevops-23.png)
 
 Open a command prompt in the root folder of your project and *add, commit and push* all your changes to your GitHub repository
