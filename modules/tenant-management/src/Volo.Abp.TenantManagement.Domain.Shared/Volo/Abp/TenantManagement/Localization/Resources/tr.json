@@ -1,6 +1,7 @@
 {
   "culture": "tr",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Müşteri ismi zaten mevcut: {Name}",
     "Menu:TenantManagement": "Müşteri yönetimi",
     "Tenants": "Müşteriler",
     "NewTenant": "Yeni müşteri",

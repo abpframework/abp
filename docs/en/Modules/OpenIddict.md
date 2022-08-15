@@ -216,7 +216,7 @@ https://documentation.openiddict.com/guides/index.html#events-model
 
 ## Migrating Guide
 
-[Migrating from IdentityServer to OpenIddict Step by Step Guide ](Migration-Guides/OpenIddict-Step-by-Step.md)
+[Migrating from IdentityServer to OpenIddict Step by Step Guide ](../Migration-Guides/OpenIddict-Step-by-Step.md)
 
 ## Sponsor
 

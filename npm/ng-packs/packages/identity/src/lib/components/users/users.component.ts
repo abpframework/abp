@@ -61,6 +61,9 @@ export class UsersComponent implements OnInit {
 
   entityDisplayName: string;
 
+  blueprints = { pattern: 'AbpIdentity::Volo.Abp.Identity:InvalidUserName[{{ actualValue }}]' };
+
+
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   onVisiblePermissionChange = event => {
