@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
@@ -28,20 +29,17 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     public virtual async Task SaveAsync()
     {
         // TODO: Save only changed permissions & groups
-        /* - get all groups
+        /* + get all groups & perms
          * - compare and update or insert groups
          * - get all permissions
          * - compare and update or insert permissions
          * - set in-memory cache using the latest group and permission data
          */
+
+        var (permissionGroupRecords, permissionRecords) = await PermissionSerializer.SerializeAsync(
+            await StaticStore.GetGroupsAsync()
+        );
         
-        var permissionGroups = await StaticStore.GetGroupsAsync();
-        foreach (var permissionGroup in permissionGroups)
-        {
-            foreach (var permission in permissionGroup.GetPermissionsWithChildren())
-            {
-                
-            }
-        }
+        
     }
 }

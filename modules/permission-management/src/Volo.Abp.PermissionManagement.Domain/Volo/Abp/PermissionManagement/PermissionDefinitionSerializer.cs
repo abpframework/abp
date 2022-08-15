@@ -81,6 +81,25 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         }
     }
 
+    public async Task<(List<PermissionGroupDefinitionRecord>, List<PermissionDefinitionRecord>)> 
+        SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups)
+    {
+        var permissionGroupRecords = new List<PermissionGroupDefinitionRecord>();
+        var permissionRecords = new List<PermissionDefinitionRecord>();
+        
+        foreach (var permissionGroup in permissionGroups)
+        {
+            permissionGroupRecords.Add(await SerializeAsync(permissionGroup));
+            
+            foreach (var permission in permissionGroup.GetPermissionsWithChildren())
+            {
+                permissionRecords.Add(await SerializeAsync(permission, permissionGroup));
+            }
+        }
+
+        return (permissionGroupRecords, permissionRecords);
+    }
+
     public Task<PermissionGroupDefinition> DeserializeAsync(PermissionGroupDefinitionRecord permissionGroupRecord)
     {
         throw new System.NotImplementedException();

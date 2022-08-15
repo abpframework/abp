@@ -31,41 +31,16 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
             return null;
         }
 
-        return await PermissionDefinitionSerializer.DeserializeAsync(permissionRecord);
+        throw new NotImplementedException();
     }
 
     public virtual async Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
     {
-        var permissionRecords = await PermissionRepository.GetListAsync();
-        if (permissionRecords.Count == 0)
-        {
-            return Array.Empty<PermissionDefinition>();
-        }
-
-        var permissionDefinitions = new PermissionDefinition[permissionRecords.Count];
-        for (var i = 0; i < permissionRecords.Count; i++)
-        {
-            permissionDefinitions[i] = await PermissionDefinitionSerializer.DeserializeAsync(permissionRecords[i]);
-        }
-
-        return permissionDefinitions;
+        throw new NotImplementedException();
     }
 
     public virtual async Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
     {
-        var permissionGroupRecords = await PermissionGroupRepository.GetListAsync();
-        if (permissionGroupRecords.Count == 0)
-        {
-            return Array.Empty<PermissionGroupDefinition>();
-        }
-
-        var permissionGroupDefinitions = new PermissionGroupDefinition[permissionGroupRecords.Count];
-        for (var i = 0; i < permissionGroupRecords.Count; i++)
-        {
-            permissionGroupDefinitions[i] =
-                await PermissionDefinitionSerializer.DeserializeAsync(permissionGroupRecords[i]);
-        }
-
-        return permissionGroupDefinitions;
+        throw new NotImplementedException();
     }
 }
