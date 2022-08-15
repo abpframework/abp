@@ -3,6 +3,12 @@
   *abpPermission="prop.permission; runChangeDetection: false"
   [ngSwitch]="getComponent(prop)"
 >
+
+  <ng-template ngSwitchCase="template">
+    <ng-container *ngComponentOutlet="prop.template;injector:injectorForCustomComponent" >
+    </ng-container>
+  </ng-template>
+
   <ng-template ngSwitchCase="input">
     <ng-template [ngTemplateOutlet]="label"></ng-template>
     <input

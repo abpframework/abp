@@ -33,6 +33,7 @@ export abstract class Prop<R = any> {
     public readonly permission: string,
     public readonly visible: PropPredicate<R> = _ => true,
     public readonly isExtra = false,
+    public readonly template? : Type<any>
   ) {
     this.displayName = this.displayName || this.name;
   }
