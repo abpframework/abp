@@ -43,6 +43,6 @@ public static class ServiceCollectionApplicationExtensions
     [CanBeNull]
     public static string GetApplicationName(this IServiceCollection services)
     {
-        return services.GetSingletonInstance<IAbpApplication>().ApplicationName;
+        return services.GetSingletonInstance<IApplicationNameAccessor>().ApplicationName;
     }
 }

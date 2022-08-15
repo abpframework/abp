@@ -156,6 +156,13 @@ public class AbpApplication_Initialize_Tests
         {
             application.ApplicationName.ShouldBe(applicationName);
             application.Services.GetApplicationName().ShouldBe(applicationName);
+            
+            application.Initialize();
+            
+            application.ServiceProvider
+                .GetRequiredService<IApplicationNameAccessor>()
+                .ApplicationName
+                .ShouldBe(applicationName);
         }
     }
     

@@ -47,6 +47,7 @@ public abstract class AbpApplicationBase : IAbpApplication
         ApplicationName = options.ApplicationName;
 
         services.AddSingleton<IAbpApplication>(this);
+        services.AddSingleton<IApplicationNameAccessor>(this);
         services.AddSingleton<IModuleContainer>(this);
 
         services.AddCoreServices();
