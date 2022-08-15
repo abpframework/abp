@@ -9,6 +9,7 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.PermissionManagement;
 
+//TODO: Extract interface
 public class DynamicPermissionDefinitionStoreCache : ISingletonDependency
 {
     public string CacheStamp { get; set; }
@@ -25,7 +26,7 @@ public class DynamicPermissionDefinitionStoreCache : ISingletonDependency
         PermissionDefinitions = new Dictionary<string, PermissionDefinition>();
     }
 
-    public async Task FillAsync(
+    public Task FillAsync(
         List<PermissionGroupDefinitionRecord> permissionGroupRecords,
         List<PermissionDefinitionRecord> permissionRecords)
     {
@@ -35,7 +36,7 @@ public class DynamicPermissionDefinitionStoreCache : ISingletonDependency
         {
             var permissionGroup = context.AddGroup(
                 permissionGroupRecord.Name,
-                new FixedLocalizableString(permissionGroupRecord.DisplayName)
+                new FixedLocalizableString(permissionGroupRecord.DisplayName) //TODO: Consider localization
             );
 
             foreach (var property in permissionGroupRecord.ExtraProperties)
@@ -43,40 +44,54 @@ public class DynamicPermissionDefinitionStoreCache : ISingletonDependency
                 permissionGroup[property.Key] = property.Value;
             }
 
-            var permissionRecordsInThisGroup = permissionRecords.Where(p => p.GroupName == permissionGroup.Name);
+            var permissionRecordsInThisGroup = permissionRecords
+                .Where(p => p.GroupName == permissionGroup.Name);
+            
             foreach (var permissionRecord in permissionRecordsInThisGroup)
             {
-                var permission = permissionGroup.AddPermission(
-                    permissionRecord.Name,
-                    new FixedLocalizableString(permissionRecord.DisplayName),
-                    permissionRecord.MultiTenancySide,
-                    permissionRecord.IsEnabled
-                );
-                
-                if (!permissionRecord.Providers.IsNullOrWhiteSpace())
-                {
-                    permission.Providers.AddRange(permissionRecord.Providers.Split(','));
-                }
-                
-                if (!permissionRecord.StateCheckers.IsNullOrWhiteSpace())
-                {
-                    var checkers = StateCheckerSerializer
-                        .DeserializeArray<PermissionDefinition>(
-                            permissionRecord.StateCheckers
-                        );
-                    permission.StateCheckers.AddRange(checkers);
-                }
-                
-                foreach (var property in permissionRecord.ExtraProperties)
-                {
-                    permission[property.Key] = property.Value;
-                }
-                
-                //TODO: Child permissions! (with parent name setting)
+                AddPermissionRecursively(permissionGroup, permissionRecord, permissionRecords);
             }
         }
+        
+        return Task.CompletedTask;
     }
-    
+
+    private void AddPermissionRecursively(ICanAddChildPermission permissionContainer,
+        PermissionDefinitionRecord permissionRecord,
+        List<PermissionDefinitionRecord> allPermissionRecords)
+    {
+        var permission = permissionContainer.AddPermission(
+            permissionRecord.Name,
+            new FixedLocalizableString(permissionRecord.DisplayName),
+            permissionRecord.MultiTenancySide,
+            permissionRecord.IsEnabled
+        );
+
+        if (!permissionRecord.Providers.IsNullOrWhiteSpace())
+        {
+            permission.Providers.AddRange(permissionRecord.Providers.Split(','));
+        }
+
+        if (!permissionRecord.StateCheckers.IsNullOrWhiteSpace())
+        {
+            var checkers = StateCheckerSerializer
+                .DeserializeArray<PermissionDefinition>(
+                    permissionRecord.StateCheckers
+                );
+            permission.StateCheckers.AddRange(checkers);
+        }
+
+        foreach (var property in permissionRecord.ExtraProperties)
+        {
+            permission[property.Key] = property.Value;
+        }
+
+        foreach (var subPermission in allPermissionRecords.Where(p => p.ParentName == permissionRecord.Name))
+        {
+            AddPermissionRecursively(permission, subPermission, allPermissionRecords);
+        }
+    }
+
     protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()
     {
         var permissions = new Dictionary<string, PermissionDefinition>();
