@@ -58,6 +58,11 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             /* Another instance already did it */
             return;
         }
+        
+        /* NOTE: This can be further optimized by using 4 cache values for:
+         * Groups, permissions, deleted groups and deleted permissions.
+         * But the code would be more complex.
+         */
 
         var cacheKey = GetCacheKey();
         var cachedHash = await Cache.GetStringAsync(cacheKey);
@@ -77,7 +82,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         {
             return;
         }
-
+        
         await UpdateChangedPermissionGroupsAsync(permissionGroupRecords);
         await UpdateChangedPermissionsAsync(permissionRecords);
 
@@ -85,7 +90,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             cacheKey,
             currentHash,
             new DistributedCacheEntryOptions {
-                SlidingExpiration = TimeSpan.FromDays(2)
+                SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
             }
         );
     }
@@ -120,13 +125,26 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         }
         
         /* Deleted */
-        var deletedRecords = permissionGroupRecordsInDatabase.Values
-            .Where(x => PermissionManagementOptions.DeletedPermissionGroups.Contains(x.Name))
-            .ToArray();
+        var deletedRecords = PermissionManagementOptions.DeletedPermissionGroups.Any()
+            ? permissionGroupRecordsInDatabase.Values
+                .Where(x => PermissionManagementOptions.DeletedPermissionGroups.Contains(x.Name))
+                .ToArray()
+            : Array.Empty<PermissionGroupDefinitionRecord>();
 
-        await PermissionGroupRepository.InsertManyAsync(newRecords);
-        await PermissionGroupRepository.UpdateManyAsync(changedRecords);
-        await PermissionGroupRepository.DeleteManyAsync(deletedRecords);
+        if (newRecords.Any())
+        {
+            await PermissionGroupRepository.InsertManyAsync(newRecords);
+        }
+
+        if (changedRecords.Any())
+        {
+            await PermissionGroupRepository.UpdateManyAsync(changedRecords);
+        }
+
+        if (deletedRecords.Any())
+        {
+            await PermissionGroupRepository.DeleteManyAsync(deletedRecords);
+        }
     }
     
     private async Task UpdateChangedPermissionsAsync(IEnumerable<PermissionDefinitionRecord> permissionRecords)
@@ -159,13 +177,26 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         }
         
         /* Deleted */
-        var deletedRecords = permissionRecordsInDatabase.Values
-            .Where(x => PermissionManagementOptions.DeletedPermissions.Contains(x.Name))
-            .ToArray();
+        var deletedRecords = PermissionManagementOptions.DeletedPermissions.Any()
+            ? permissionRecordsInDatabase.Values
+                .Where(x => PermissionManagementOptions.DeletedPermissions.Contains(x.Name))
+                .ToArray()
+            : Array.Empty<PermissionDefinitionRecord>();
 
-        await PermissionRepository.InsertManyAsync(newRecords);
-        await PermissionRepository.UpdateManyAsync(changedRecords);
-        await PermissionRepository.DeleteManyAsync(deletedRecords);
+        if (newRecords.Any())
+        {
+            await PermissionRepository.InsertManyAsync(newRecords);
+        }
+
+        if (changedRecords.Any())
+        {
+            await PermissionRepository.UpdateManyAsync(changedRecords);
+        }
+
+        if (deletedRecords.Any())
+        {
+            await PermissionRepository.DeleteManyAsync(deletedRecords);
+        }
     }
 
     private string GetDistributedLockKey()
