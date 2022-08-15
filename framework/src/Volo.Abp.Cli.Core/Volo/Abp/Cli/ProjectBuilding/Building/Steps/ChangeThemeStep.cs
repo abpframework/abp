@@ -285,14 +285,12 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             {"Domain.Shared", "MyCompanyName.MyProjectName.Domain.Shared.csproj"},
             {"Application", "MyCompanyName.MyProjectName.Application.csproj"},
             {"Application.Contracts", "MyCompanyName.MyProjectName.Application.Contracts.csproj"},
-            {"Blazor.WebAssembly", "MyCompanyName.MyProjectName.Blazor.csproj"},
-            {"Blazor.Server", "MyCompanyName.MyProjectName.Blazor.Server.csproj"},
             {"HttpApi", "MyCompanyName.MyProjectName.HttpApi.csproj"},
-            {"HttpApi.Client", "MyCompanyName.MyProjectName.HttpApi.Client.csproj"},
-            {"Web.Host", "MyCompanyName.MyProjectName.Web.Host.csproj"},
-            {"Web", "MyCompanyName.MyProjectName.Web.csproj"},
+            {"HttpApi.Client", "MyCompanyName.MyProjectName.HttpApi.Client.csproj"}
         };
-
+        
+        AddUiProjectToProjects(projects, context);
+        
         foreach (var project in projects)
         {
             AddLeptonThemeManagementReference(context, project);
@@ -312,6 +310,28 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         foreach (var microserviceServiceProject in microserviceServiceProjects)
         {
             AddLeptonThemeManagementReference(context, microserviceServiceProject);
+        }
+    }
+
+    private void AddUiProjectToProjects(Dictionary<string, string> projects, ProjectBuildContext context)
+    {
+        if (projects.IsNullOrEmpty())
+        {
+            return;
+        }
+        
+        switch (context.BuildArgs.UiFramework)
+        {
+            case UiFramework.Mvc:
+                projects["Web.Host"] = "MyCompanyName.MyProjectName.Web.Host.csproj";
+                projects["Web"] = "MyCompanyName.MyProjectName.Web.csproj";
+                break;
+            case UiFramework.Blazor:
+                projects["Blazor.WebAssembly"] = "MyCompanyName.MyProjectName.Blazor.csproj";
+                break;
+            case UiFramework.BlazorServer:
+                projects["Blazor.Server"] = "MyCompanyName.MyProjectName.Blazor.csproj";
+                break;
         }
     }
     
