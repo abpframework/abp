@@ -55,7 +55,7 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
             var permissionRecordsInThisGroup = permissionRecords
                 .Where(p => p.GroupName == permissionGroup.Name);
             
-            foreach (var permissionRecord in permissionRecordsInThisGroup)
+            foreach (var permissionRecord in permissionRecordsInThisGroup.Where(x => x.ParentName == null))
             {
                 AddPermissionRecursively(permissionGroup, permissionRecord, permissionRecords);
             }
