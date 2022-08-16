@@ -3,7 +3,7 @@ import {FORM_PROP_DATA_STREAM, FormProp} from "@abp/ng.theme.shared/extensions";
 import {ControlContainer, FormGroup, FormGroupDirective} from "@angular/forms";
 
 @Component({
-  selector: 'abp-half-row',
+  selector: 'abp-personal-settings-half-row',
   template: `
     <div class="w-50 d-inline">
       <div class="mb-3 form-group"  >
@@ -18,7 +18,7 @@ import {ControlContainer, FormGroup, FormGroupDirective} from "@angular/forms";
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
 
 })
-export class HalfRowComponent {
+export class PersonalSettingsHalfRowComponent {
   public displayName: string;
   public name: string;
   public id: string;
