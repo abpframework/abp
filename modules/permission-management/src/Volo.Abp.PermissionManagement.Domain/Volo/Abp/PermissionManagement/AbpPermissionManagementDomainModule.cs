@@ -19,7 +19,7 @@ namespace Volo.Abp.PermissionManagement;
 [DependsOn(typeof(AbpJsonModule))]
 public class AbpPermissionManagementDomainModule : AbpModule
 {
-    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    public override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         if (context
             .ServiceProvider
@@ -29,6 +29,8 @@ public class AbpPermissionManagementDomainModule : AbpModule
         {
             SaveStaticPermissionsToDatabase(context);
         }
+        
+        return Task.CompletedTask;
     }
 
     private static void SaveStaticPermissionsToDatabase(ApplicationInitializationContext context)
