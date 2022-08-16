@@ -53,11 +53,10 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     {
         /* TODO: We may double check and lock for optimization 
          */
-        await using var handle = await DistributedLock.TryAcquireAsync(GetDistributedLockKey());
-
-        if (handle == null)
+        await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(GetApplicationDistributedLockKey());
+        if (applicationLockHandle == null)
         {
-            /* Another instance already did it */
+            /* Another application instance is already doing it */
             return;
         }
         
@@ -84,9 +83,30 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         {
             return;
         }
-        
-        await UpdateChangedPermissionGroupsAsync(permissionGroupRecords);
-        await UpdateChangedPermissionsAsync(permissionRecords);
+
+        await using (var commonLockHandle = await DistributedLock
+                         .TryAcquireAsync(GetCommonDistributedLockKey(), TimeSpan.FromMinutes(5)))
+        {
+            if (commonLockHandle == null)
+            {
+                /* It will re-try */
+                throw new AbpException("Could not acquire distributed lock for saving static permissions!");
+            }
+
+            var hasChangesInGroups = await UpdateChangedPermissionGroupsAsync(permissionGroupRecords);
+            var hasChangesInPermissions = await UpdateChangedPermissionsAsync(permissionRecords);
+
+            if (hasChangesInGroups ||hasChangesInPermissions)
+            {
+                await Cache.SetStringAsync(
+                    GetCommonStampCacheKey(),
+                    Guid.NewGuid().ToString(),
+                    new DistributedCacheEntryOptions {
+                        SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
+                    }
+                );
+            }
+        }
 
         await Cache.SetStringAsync(
             cacheKey,
@@ -95,17 +115,9 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
                 SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
             }
         );
-
-        await Cache.SetStringAsync(
-            GetCommonStampCacheKey(),
-            Guid.NewGuid().ToString(),
-            new DistributedCacheEntryOptions {
-                SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-            }
-        );
     }
 
-    private async Task UpdateChangedPermissionGroupsAsync(
+    private async Task<bool> UpdateChangedPermissionGroupsAsync(
         IEnumerable<PermissionGroupDefinitionRecord> permissionGroupRecords)
     {
         var newRecords = new List<PermissionGroupDefinitionRecord>();
@@ -156,9 +168,11 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         {
             await PermissionGroupRepository.DeleteManyAsync(deletedRecords);
         }
+        
+        return newRecords.Any() || changedRecords.Any() || deletedRecords.Any();
     }
     
-    private async Task UpdateChangedPermissionsAsync(
+    private async Task<bool> UpdateChangedPermissionsAsync(
         IEnumerable<PermissionDefinitionRecord> permissionRecords)
     {
         var newRecords = new List<PermissionDefinitionRecord>();
@@ -221,11 +235,18 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         {
             await PermissionRepository.DeleteManyAsync(deletedRecords);
         }
+        
+        return newRecords.Any() || changedRecords.Any() || deletedRecords.Any();
     }
 
-    private string GetDistributedLockKey()
+    private string GetApplicationDistributedLockKey()
     {
-        return $"{ApplicationNameAccessor.ApplicationName}_AbpPermissionUpdateLock";
+        return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpPermissionUpdateLock";
+    }
+
+    private string GetCommonDistributedLockKey()
+    {
+        return $"{CacheOptions.KeyPrefix}_Common_AbpPermissionUpdateLock";
     }
 
     private string GetApplicationHashCacheKey()
