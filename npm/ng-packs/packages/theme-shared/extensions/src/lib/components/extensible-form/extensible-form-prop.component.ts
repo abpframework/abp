@@ -77,8 +77,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
 
   setTypeaheadValue(selectedOption: ABP.Option<string>) {
-    this.typeaheadModel = selectedOption || { key: null, value: null };
-    const { key, value } = this.typeaheadModel;
+    this.typeaheadModel = selectedOption || {key: null, value: null};
+    const {key, value} = this.typeaheadModel;
     const [keyControl, valueControl] = this.getTypeaheadControls();
     if (valueControl?.value && !value) valueControl.markAsDirty();
     keyControl?.setValue(key);
@@ -88,10 +88,10 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   search = (text$: Observable<string>) =>
     text$
       ? text$.pipe(
-          debounceTime(300),
-          distinctUntilChanged(),
-          switchMap(text => this.prop.options(this.data, text)),
-        )
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(text => this.prop.options(this.data, text)),
+      )
       : of([]);
 
   typeaheadFormatter = (option: ABP.Option<any>) => option.key;
@@ -190,7 +190,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
           {
             provide: FORM_PROP_DATA_STREAM,
             useValue: currentProp
-          }
+          },
+
         ],
         parent: this.injector,
       });
@@ -209,7 +210,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
     const [keyControl, valueControl] = this.getTypeaheadControls();
     if (keyControl && valueControl)
-      this.typeaheadModel = { key: keyControl.value, value: valueControl.value };
+      this.typeaheadModel = {key: keyControl.value, value: valueControl.value};
   }
 }
 

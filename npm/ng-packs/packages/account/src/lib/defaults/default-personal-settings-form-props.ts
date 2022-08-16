@@ -1,15 +1,45 @@
 import {ePropType, FormProp} from "@abp/ng.theme.shared/extensions";
 import {UpdateProfileDto} from "@abp/ng.account.core/proxy";
 import {Validators} from "@angular/forms";
-import {HelloComponent} from "../components/hello/hello.component";
+ import {NameSurnameComponent} from "../components/personal-settings/name-surname/name-surname.component";
 
+const { maxLength, required, email } = Validators;
 export const DEFAULT_PERSONAL_SETTINGS_UPDATE_FORM_PROPS = FormProp.createMany<UpdateProfileDto>([
   {
     type: ePropType.String,
     name: 'userName',
-    displayName: 'Account::UserName',
-    id: 'user-name',
-    validators: () => [Validators.required, Validators.maxLength(256)],
-    template: HelloComponent
+    displayName: 'AbpIdentity::DisplayName:UserName',
+    id: 'username',
+    validators: () => [required,maxLength(256)],
+  },
+  {
+    type: ePropType.String,
+    name: 'name',
+    displayName: 'AbpIdentity::DisplayName:Name',
+    id: 'name',
+    validators: () => [maxLength(64),required],
+    template:NameSurnameComponent
+  },
+  {
+    type: ePropType.String,
+    name: 'surname',
+    displayName: 'AbpIdentity::DisplayName:Surname',
+    id: 'surname',
+    validators: () => [maxLength(64),required],
+    visible:() => false
+  },
+  {
+    type: ePropType.String,
+    name: 'email',
+    displayName: 'AbpIdentity::DisplayName:Email',
+    id: 'email-address',
+    validators: () =>  [required, email, maxLength(256)],
+  },
+  {
+    type: ePropType.String,
+    name: 'phoneNumber',
+    displayName: 'AbpIdentity::DisplayName:PhoneNumber',
+    id: 'phone-number',
+    validators: () => [maxLength(16)],
   },
 ])

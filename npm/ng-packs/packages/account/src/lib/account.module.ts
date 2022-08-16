@@ -15,11 +15,11 @@ import { accountConfigOptionsFactory } from './utils/factory-utils';
 import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
-import { ExtensiblePersonalSettingsComponent } from './components/extensible-personal-settings/extensible-personal-settings.component';
 import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
 import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS } from './tokens/extensions.token';
 import { AccountExtensionsGuard } from './guards/extensions.guard';
-import { HelloComponent } from './components/hello/hello.component';
+import { HalfRowComponent } from './components/personal-settings/half-row/half-row.component';
+import { NameSurnameComponent } from './components/personal-settings/name-surname/name-surname.component';
 
 const declarations = [
   LoginComponent,
@@ -29,10 +29,12 @@ const declarations = [
   PersonalSettingsComponent,
   ForgotPasswordComponent,
   ResetPasswordComponent,
+  HalfRowComponent,
+  NameSurnameComponent
 ];
 
 @NgModule({
-  declarations: [...declarations, ExtensiblePersonalSettingsComponent, HelloComponent],
+  declarations: [...declarations],
   imports: [
     CoreModule,
     AccountRoutingModule,

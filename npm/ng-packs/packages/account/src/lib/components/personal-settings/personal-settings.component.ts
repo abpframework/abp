@@ -1,17 +1,24 @@
-import { ProfileService } from '@abp/ng.account.core/proxy';
-import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { finalize } from 'rxjs/operators';
-import { Account } from '../../models/account';
-import { ManageProfileStateService } from '../../services/manage-profile.state.service';
+import {ProfileDto, ProfileService} from '@abp/ng.account.core/proxy';
+import {ToasterService} from '@abp/ng.theme.shared';
+import {Component, Injector, OnInit, ViewEncapsulation} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {finalize} from 'rxjs/operators';
+import {Account} from '../../models/account';
+import {ManageProfileStateService} from '../../services/manage-profile.state.service';
+import {EXTENSIONS_IDENTIFIER, FormPropData, generateFormFromProps} from "@abp/ng.theme.shared/extensions";
+import {eAccountComponents} from "../../enums";
 
-const { maxLength, required, email } = Validators;
 
 @Component({
   selector: 'abp-personal-settings-form',
   templateUrl: './personal-settings.component.html',
   exportAs: 'abpPersonalSettingsForm',
+  providers:[
+    {
+      provide: EXTENSIONS_IDENTIFIER,
+      useValue: eAccountComponents.PersonalSettings,
+    },
+  ]
 })
 export class PersonalSettingsComponent
   implements
@@ -19,6 +26,8 @@ export class PersonalSettingsComponent
     Account.PersonalSettingsComponentInputs,
     Account.PersonalSettingsComponentOutputs
 {
+  selected:ProfileDto
+
   form: FormGroup;
 
   inProgress: boolean;
@@ -28,21 +37,21 @@ export class PersonalSettingsComponent
     private toasterService: ToasterService,
     private profileService: ProfileService,
     private manageProfileState: ManageProfileStateService,
+    protected injector: Injector,
   ) {}
 
-  ngOnInit() {
-    this.buildForm();
-  }
 
   buildForm() {
-    const profile = this.manageProfileState.getProfile();
-    this.form = this.fb.group({
-      userName: [profile.userName, [required, maxLength(256)]],
-      email: [profile.email, [required, email, maxLength(256)]],
-      name: [profile.name || '', [maxLength(64)]],
-      surname: [profile.surname || '', [maxLength(64)]],
-      phoneNumber: [profile.phoneNumber || '', [maxLength(16)]],
-    });
+    this.selected = this.manageProfileState.getProfile();
+    if(!this.selected){
+      return
+    }
+    const data = new FormPropData(this.injector, this.selected);
+    this.form = generateFormFromProps(data);
+  }
+
+  ngOnInit(): void {
+    this.buildForm()
   }
 
   submit() {
