@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -17,6 +18,7 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
     protected IPermissionDefinitionSerializer PermissionDefinitionSerializer { get; }
     protected IDynamicPermissionDefinitionStoreInMemoryCache StoreCache { get; }
     protected IDistributedCache DistributedCache { get; }
+    public PermissionManagementOptions PermissionManagementOptions { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
     
     public DynamicPermissionDefinitionStore(
@@ -25,30 +27,47 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
         IPermissionDefinitionSerializer permissionDefinitionSerializer,
         IDynamicPermissionDefinitionStoreInMemoryCache storeCache,
         IDistributedCache distributedCache,
-        IOptions<AbpDistributedCacheOptions> cacheOptions)
+        IOptions<AbpDistributedCacheOptions> cacheOptions,
+        IOptions<PermissionManagementOptions> permissionManagementOptions)
     {
         PermissionGroupRepository = permissionGroupRepository;
         PermissionRepository = permissionRepository;
         PermissionDefinitionSerializer = permissionDefinitionSerializer;
         StoreCache = storeCache;
         DistributedCache = distributedCache;
+        PermissionManagementOptions = permissionManagementOptions.Value;
         CacheOptions = cacheOptions.Value;
     }
 
     public virtual async Task<PermissionDefinition> GetOrNullAsync(string name)
     {
+        if (!PermissionManagementOptions.IsDynamicPermissionStoreEnabled)
+        {
+            return null;
+        }
+        
         await EnsureCacheIsUptoDateAsync();
         return StoreCache.GetPermissionOrNull(name);
     }
 
     public virtual async Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
     {
+        if (!PermissionManagementOptions.IsDynamicPermissionStoreEnabled)
+        {
+            return Array.Empty<PermissionDefinition>();
+        }
+        
         await EnsureCacheIsUptoDateAsync();
         return StoreCache.GetPermissions();
     }
 
     public virtual async Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
     {
+        if (!PermissionManagementOptions.IsDynamicPermissionStoreEnabled)
+        {
+            return Array.Empty<PermissionGroupDefinition>();
+        }
+        
         await EnsureCacheIsUptoDateAsync();
         return StoreCache.GetGroups();
     }
