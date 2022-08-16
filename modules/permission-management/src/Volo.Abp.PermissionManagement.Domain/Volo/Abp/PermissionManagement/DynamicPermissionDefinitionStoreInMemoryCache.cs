@@ -20,14 +20,14 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
     protected IDictionary<string, PermissionDefinition> PermissionDefinitions { get; }
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
 
+    public SemaphoreSlim SyncSemaphore { get; } = new(1, 1);
+
     public DynamicPermissionDefinitionStoreInMemoryCache(ISimpleStateCheckerSerializer stateCheckerSerializer)
     {
         StateCheckerSerializer = stateCheckerSerializer;
         PermissionGroupDefinitions = new Dictionary<string, PermissionGroupDefinition>();
         PermissionDefinitions = new Dictionary<string, PermissionDefinition>();
     }
-
-    public SemaphoreSlim SyncSemaphore { get; } = new(1, 1);
 
     public Task FillAsync(
         List<PermissionGroupDefinitionRecord> permissionGroupRecords,
