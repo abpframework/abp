@@ -64,4 +64,3 @@ export class ExtensibleFormComponent<R = any> {
 }
 
 
-export const ExtensibleFormViewProvider = { provide: ControlContainer, useExisting: FormGroupDirective }

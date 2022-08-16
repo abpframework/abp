@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
-import {FORM_PROP_DATA_STREAM, FormProp} from "@abp/ng.theme.shared/extensions";
-import {ControlContainer, FormGroup, FormGroupDirective} from "@angular/forms";
+import {FORM_PROP_DATA_STREAM, FormProp, EXTENSIBLE_FORM_VIEW_PROVIDER} from "@abp/ng.theme.shared/extensions";
+import {FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'abp-personal-settings-half-row',
@@ -15,8 +15,7 @@ import {ControlContainer, FormGroup, FormGroupDirective} from "@angular/forms";
       </div>
     </div>`,
   styles: [],
-  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
-
+  viewProviders: [EXTENSIBLE_FORM_VIEW_PROVIDER]
 })
 export class PersonalSettingsHalfRowComponent {
   public displayName: string;
