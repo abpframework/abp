@@ -105,7 +105,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         );
     }
 
-    private async Task UpdateChangedPermissionGroupsAsync(IEnumerable<PermissionGroupDefinitionRecord> permissionGroupRecords)
+    private async Task UpdateChangedPermissionGroupsAsync(
+        IEnumerable<PermissionGroupDefinitionRecord> permissionGroupRecords)
     {
         var newRecords = new List<PermissionGroupDefinitionRecord>();
         var changedRecords = new List<PermissionGroupDefinitionRecord>();
@@ -157,7 +158,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         }
     }
     
-    private async Task UpdateChangedPermissionsAsync(IEnumerable<PermissionDefinitionRecord> permissionRecords)
+    private async Task UpdateChangedPermissionsAsync(
+        IEnumerable<PermissionDefinitionRecord> permissionRecords)
     {
         var newRecords = new List<PermissionDefinitionRecord>();
         var changedRecords = new List<PermissionDefinitionRecord>();
@@ -187,11 +189,23 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         }
         
         /* Deleted */
-        var deletedRecords = PermissionManagementOptions.DeletedPermissions.Any()
-            ? permissionRecordsInDatabase.Values
-                .Where(x => PermissionManagementOptions.DeletedPermissions.Contains(x.Name))
-                .ToArray()
-            : Array.Empty<PermissionDefinitionRecord>();
+        var deletedRecords = new List<PermissionDefinitionRecord>();
+        
+        if (PermissionManagementOptions.DeletedPermissions.Any())
+        {
+            deletedRecords.AddRange(
+                permissionRecordsInDatabase.Values
+                    .Where(x => PermissionManagementOptions.DeletedPermissions.Contains(x.Name))
+            );
+        }
+
+        if (PermissionManagementOptions.DeletedPermissionGroups.Any())
+        {
+            deletedRecords.AddIfNotContains(
+                permissionRecordsInDatabase.Values
+                    .Where(x => PermissionManagementOptions.DeletedPermissionGroups.Contains(x.GroupName))
+            );
+        }
 
         if (newRecords.Any())
         {
