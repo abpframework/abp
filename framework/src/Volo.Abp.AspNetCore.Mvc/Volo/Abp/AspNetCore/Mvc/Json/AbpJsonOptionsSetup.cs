@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
 
 namespace Volo.Abp.AspNetCore.Mvc.Json;
@@ -29,5 +30,7 @@ public class AbpJsonOptionsSetup : IConfigureOptions<JsonOptions>
         options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
 
         options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
+
+        options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(ServiceProvider.GetRequiredService<IOptions<AbpSystemTextJsonSerializerModifiersOptions>>());
     }
 }

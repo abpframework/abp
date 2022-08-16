@@ -28,5 +28,7 @@ public class AbpSystemTextJsonSerializerOptionsSetup : IConfigureOptions<AbpSyst
 
         // If the user hasn't explicitly configured the encoder, use the less strict encoder that does not encode all non-ASCII characters.
         options.JsonSerializerOptions.Encoder ??= JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+
+        options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(ServiceProvider.GetRequiredService<IOptions<AbpSystemTextJsonSerializerModifiersOptions>>());
     }
 }

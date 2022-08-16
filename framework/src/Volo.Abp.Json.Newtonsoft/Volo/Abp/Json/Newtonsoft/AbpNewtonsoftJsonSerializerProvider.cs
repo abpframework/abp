@@ -1,25 +1,23 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
-
 namespace Volo.Abp.Json.Newtonsoft;
 
 public class AbpNewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
 {
-    private static readonly CamelCaseExceptDictionaryKeysResolver SharedCamelCaseExceptDictionaryKeysResolver =
-        new CamelCaseExceptDictionaryKeysResolver();
-
+    protected IServiceProvider ServiceProvider{ get; }
     protected List<JsonConverter> Converters { get; }
 
     public AbpNewtonsoftJsonSerializerProvider(
-        IOptions<AbpNewtonsoftJsonSerializerOptions> options,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        IOptions<AbpNewtonsoftJsonSerializerOptions> options)
     {
+        ServiceProvider = serviceProvider;
         Converters = options.Value
             .Converters
             .Select(c => (JsonConverter)serviceProvider.GetRequiredService(c))
@@ -33,47 +31,44 @@ public class AbpNewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITra
 
     public string Serialize(object obj, bool camelCase = true, bool indented = false)
     {
-        return JsonConvert.SerializeObject(obj, CreateSerializerSettings(camelCase, indented));
+        return JsonConvert.SerializeObject(obj, CreateJsonSerializerOptions(camelCase, indented));
     }
 
     public T Deserialize<T>(string jsonString, bool camelCase = true)
     {
-        return JsonConvert.DeserializeObject<T>(jsonString, CreateSerializerSettings(camelCase));
+        return JsonConvert.DeserializeObject<T>(jsonString, CreateJsonSerializerOptions(camelCase));
     }
 
     public object Deserialize(Type type, string jsonString, bool camelCase = true)
     {
-        return JsonConvert.DeserializeObject(jsonString, type, CreateSerializerSettings(camelCase));
+        return JsonConvert.DeserializeObject(jsonString, type, CreateJsonSerializerOptions(camelCase));
     }
 
-    protected virtual JsonSerializerSettings CreateSerializerSettings(bool camelCase = true, bool indented = false)
+    private readonly static ConcurrentDictionary<object, JsonSerializerSettings> JsonSerializerOptionsCache = new ConcurrentDictionary<object, JsonSerializerSettings>();
+
+    protected virtual JsonSerializerSettings CreateJsonSerializerOptions(bool camelCase = true, bool indented = false)
     {
-        var settings = new JsonSerializerSettings();
-
-        settings.Converters.InsertRange(0, Converters);
-
-        if (camelCase)
+        return JsonSerializerOptionsCache.GetOrAdd(new
         {
-            settings.ContractResolver = SharedCamelCaseExceptDictionaryKeysResolver;
-        }
-
-        if (indented)
+            camelCase,
+            indented
+        }, _ =>
         {
-            settings.Formatting = Formatting.Indented;
-        }
+            var settings = new JsonSerializerSettings();
 
-        return settings;
-    }
+            settings.Converters.InsertRange(0, Converters);
 
-    private class CamelCaseExceptDictionaryKeysResolver : CamelCasePropertyNamesContractResolver
-    {
-        protected override JsonDictionaryContract CreateDictionaryContract(Type objectType)
-        {
-            var contract = base.CreateDictionaryContract(objectType);
+            if (camelCase)
+            {
+                settings.ContractResolver = ServiceProvider.GetRequiredService<AbpCamelCasePropertyNamesContractResolver>();
+            }
 
-            contract.DictionaryKeyResolver = propertyName => propertyName;
+            if (indented)
+            {
+                settings.Formatting = Formatting.Indented;
+            }
 
-            return contract;
-        }
+            return settings;
+        });
     }
 }

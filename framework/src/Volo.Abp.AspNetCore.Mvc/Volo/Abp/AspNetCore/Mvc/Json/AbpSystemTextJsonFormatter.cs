@@ -13,22 +13,23 @@ namespace Volo.Abp.AspNetCore.Mvc.Json;
 
 public class AbpSystemTextJsonFormatter : IAbpHybridJsonInputFormatter, IAbpHybridJsonOutputFormatter, ITransientDependency
 {
-    private readonly AbpSystemTextJsonUnsupportedTypeMatcher _unsupportedTypeMatcher;
     private readonly IOptions<JsonOptions> _jsonOptions;
+    private readonly IOptions<AbpSystemTextJsonSerializerOptions> _systemTextJsonSerializerOptions;
     private readonly ILoggerFactory _loggerFactory;
 
-    public AbpSystemTextJsonFormatter(AbpSystemTextJsonUnsupportedTypeMatcher unsupportedTypeMatcher,
+    public AbpSystemTextJsonFormatter(
         IOptions<JsonOptions> jsonOptions,
+        IOptions<AbpSystemTextJsonSerializerOptions> systemTextJsonSerializerOptions,
         ILoggerFactory loggerFactory)
     {
-        _unsupportedTypeMatcher = unsupportedTypeMatcher;
         _jsonOptions = jsonOptions;
+        _systemTextJsonSerializerOptions = systemTextJsonSerializerOptions;
         _loggerFactory = loggerFactory;
     }
 
     Task<bool> IAbpHybridJsonInputFormatter.CanHandleAsync(Type type)
     {
-        return Task.FromResult(!_unsupportedTypeMatcher.Match(type));
+        return Task.FromResult(!_systemTextJsonSerializerOptions.Value.UnsupportedTypes.Contains(type));
     }
 
     public virtual Task<TextInputFormatter> GetTextInputFormatterAsync()
@@ -40,7 +41,7 @@ public class AbpSystemTextJsonFormatter : IAbpHybridJsonInputFormatter, IAbpHybr
 
     Task<bool> IAbpHybridJsonOutputFormatter.CanHandleAsync(Type type)
     {
-        return Task.FromResult(!_unsupportedTypeMatcher.Match(type));
+        return Task.FromResult(!_systemTextJsonSerializerOptions.Value.UnsupportedTypes.Contains(type));
     }
 
     public Task<TextOutputFormatter> GetTextOutputFormatterAsync()

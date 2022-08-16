@@ -4,17 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.AspNetCore.Mvc.NewtonsoftJson;
+namespace Volo.Abp.Json.Newtonsoft;
 
-public class AbpNewtonsoftJsonContractResolver : DefaultContractResolver, ITransientDependency
+public class AbpCamelCasePropertyNamesContractResolver : CamelCasePropertyNamesContractResolver, ITransientDependency
 {
     private readonly Lazy<AbpJsonIsoDateTimeConverter> _dateTimeConverter;
 
-    public AbpNewtonsoftJsonContractResolver(IServiceProvider serviceProvider)
+    public AbpCamelCasePropertyNamesContractResolver(IServiceProvider serviceProvider)
     {
         _dateTimeConverter = new Lazy<AbpJsonIsoDateTimeConverter>(
             serviceProvider.GetRequiredService<AbpJsonIsoDateTimeConverter>,
@@ -35,7 +34,8 @@ public class AbpNewtonsoftJsonContractResolver : DefaultContractResolver, ITrans
 
     protected virtual void ModifyProperty(MemberInfo member, JsonProperty property)
     {
-        if (property.PropertyType != typeof(DateTime) && property.PropertyType != typeof(DateTime?))
+        if (property.PropertyType != typeof(DateTime) &&
+            property.PropertyType != typeof(DateTime?))
         {
             return;
         }
@@ -44,5 +44,14 @@ public class AbpNewtonsoftJsonContractResolver : DefaultContractResolver, ITrans
         {
             property.Converter = _dateTimeConverter.Value;
         }
+    }
+
+    protected override JsonDictionaryContract CreateDictionaryContract(Type objectType)
+    {
+        var contract = base.CreateDictionaryContract(objectType);
+
+        contract.DictionaryKeyResolver = propertyName => propertyName;
+
+        return contract;
     }
 }

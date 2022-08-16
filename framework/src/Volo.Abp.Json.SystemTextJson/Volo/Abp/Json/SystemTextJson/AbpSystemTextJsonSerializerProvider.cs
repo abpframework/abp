@@ -10,19 +10,14 @@ public class AbpSystemTextJsonSerializerProvider : IJsonSerializerProvider, ITra
 {
     protected AbpSystemTextJsonSerializerOptions Options { get; }
 
-    protected AbpSystemTextJsonUnsupportedTypeMatcher AbpSystemTextJsonUnsupportedTypeMatcher { get; }
-
-    public AbpSystemTextJsonSerializerProvider(
-        IOptions<AbpSystemTextJsonSerializerOptions> options,
-        AbpSystemTextJsonUnsupportedTypeMatcher abpSystemTextJsonUnsupportedTypeMatcher)
+    public AbpSystemTextJsonSerializerProvider(IOptions<AbpSystemTextJsonSerializerOptions> options)
     {
-        AbpSystemTextJsonUnsupportedTypeMatcher = abpSystemTextJsonUnsupportedTypeMatcher;
         Options = options.Value;
     }
 
     public bool CanHandle(Type type)
     {
-        return !AbpSystemTextJsonUnsupportedTypeMatcher.Match(type);
+        return !Options.UnsupportedTypes.Contains(type);
     }
 
     public string Serialize(object obj, bool camelCase = true, bool indented = false)
