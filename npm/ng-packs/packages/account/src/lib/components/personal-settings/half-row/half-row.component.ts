@@ -5,12 +5,11 @@ import {ControlContainer, FormGroup, FormGroupDirective} from "@angular/forms";
 @Component({
   selector: 'abp-half-row',
   template: `
-    <div class="col col-md-6">
+    <div class="w-50 d-inline">
       <div class="mb-3 form-group"  >
-        <label for="surname" class="form-label">{{
+        <label [attr.for]="name" class="form-label">{{
           displayName | abpLocalization
           }}
-          {{name}}
         </label>
         <input type="text" [attr.id]="id" class="form-control"  [attr.name]="name" [formControlName]="name"/>
       </div>

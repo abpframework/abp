@@ -19,8 +19,6 @@ import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
 import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS } from './tokens/extensions.token';
 import { AccountExtensionsGuard } from './guards/extensions.guard';
 import { HalfRowComponent } from './components/personal-settings/half-row/half-row.component';
-import { NameSurnameComponent } from './components/personal-settings/name-surname/name-surname.component';
-
 const declarations = [
   LoginComponent,
   RegisterComponent,
@@ -30,7 +28,6 @@ const declarations = [
   ForgotPasswordComponent,
   ResetPasswordComponent,
   HalfRowComponent,
-  NameSurnameComponent
 ];
 
 @NgModule({

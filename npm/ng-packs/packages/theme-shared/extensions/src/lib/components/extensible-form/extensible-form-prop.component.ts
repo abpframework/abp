@@ -191,7 +191,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
             provide: FORM_PROP_DATA_STREAM,
             useValue: currentProp
           },
-
+          { provide: ControlContainer, useExisting: FormGroupDirective }
         ],
         parent: this.injector,
       });

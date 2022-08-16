@@ -3,7 +3,6 @@
 
   <ng-template ngSwitchCase="template">
     <ng-container
-       [formControlName]="prop.name"
       *ngComponentOutlet="prop.template;injector:injectorForCustomComponent">
     </ng-container>
   </ng-template>

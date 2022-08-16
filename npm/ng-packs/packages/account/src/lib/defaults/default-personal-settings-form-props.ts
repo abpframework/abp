@@ -1,7 +1,7 @@
 import {ePropType, FormProp} from "@abp/ng.theme.shared/extensions";
 import {UpdateProfileDto} from "@abp/ng.account.core/proxy";
 import {Validators} from "@angular/forms";
- import {NameSurnameComponent} from "../components/personal-settings/name-surname/name-surname.component";
+ import {HalfRowComponent} from "../components/personal-settings/half-row/half-row.component";
 
 const { maxLength, required, email } = Validators;
 export const DEFAULT_PERSONAL_SETTINGS_UPDATE_FORM_PROPS = FormProp.createMany<UpdateProfileDto>([
@@ -17,16 +17,18 @@ export const DEFAULT_PERSONAL_SETTINGS_UPDATE_FORM_PROPS = FormProp.createMany<U
     name: 'name',
     displayName: 'AbpIdentity::DisplayName:Name',
     id: 'name',
-    validators: () => [maxLength(64),required],
-    template:NameSurnameComponent
+    validators: () => [maxLength(64)],
+    template:HalfRowComponent,
+    className:"d-inline-block w-50"
   },
   {
     type: ePropType.String,
     name: 'surname',
     displayName: 'AbpIdentity::DisplayName:Surname',
     id: 'surname',
-    validators: () => [maxLength(64),required],
-    visible:() => false
+    validators: () => [maxLength(64)],
+    className:"d-inline-block w-50 ps-4",
+    template:HalfRowComponent
   },
   {
     type: ePropType.String,
