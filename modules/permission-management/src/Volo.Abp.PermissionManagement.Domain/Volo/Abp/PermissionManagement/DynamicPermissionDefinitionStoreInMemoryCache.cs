@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
@@ -9,27 +10,32 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.PermissionManagement;
 
-//TODO: Extract interface
-public class DynamicPermissionDefinitionStoreCache : ISingletonDependency
+public class DynamicPermissionDefinitionStoreInMemoryCache : 
+    IDynamicPermissionDefinitionStoreInMemoryCache,
+    ISingletonDependency
 {
     public string CacheStamp { get; set; }
     
     protected IDictionary<string, PermissionGroupDefinition> PermissionGroupDefinitions { get; }
-
     protected IDictionary<string, PermissionDefinition> PermissionDefinitions { get; }
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
 
-    public DynamicPermissionDefinitionStoreCache(ISimpleStateCheckerSerializer stateCheckerSerializer)
+    public DynamicPermissionDefinitionStoreInMemoryCache(ISimpleStateCheckerSerializer stateCheckerSerializer)
     {
         StateCheckerSerializer = stateCheckerSerializer;
         PermissionGroupDefinitions = new Dictionary<string, PermissionGroupDefinition>();
         PermissionDefinitions = new Dictionary<string, PermissionDefinition>();
     }
 
+    public SemaphoreSlim SyncSemaphore { get; } = new(1, 1);
+
     public Task FillAsync(
         List<PermissionGroupDefinitionRecord> permissionGroupRecords,
         List<PermissionDefinitionRecord> permissionRecords)
     {
+        PermissionGroupDefinitions.Clear();
+        PermissionDefinitions.Clear();
+        
         var context = new PermissionDefinitionContext(null);
         
         foreach (var permissionGroupRecord in permissionGroupRecords)
@@ -38,6 +44,8 @@ public class DynamicPermissionDefinitionStoreCache : ISingletonDependency
                 permissionGroupRecord.Name,
                 new FixedLocalizableString(permissionGroupRecord.DisplayName) //TODO: Consider localization
             );
+            
+            PermissionGroupDefinitions[permissionGroup.Name] = permissionGroup;
 
             foreach (var property in permissionGroupRecord.ExtraProperties)
             {
@@ -52,8 +60,23 @@ public class DynamicPermissionDefinitionStoreCache : ISingletonDependency
                 AddPermissionRecursively(permissionGroup, permissionRecord, permissionRecords);
             }
         }
-        
+
         return Task.CompletedTask;
+    }
+
+    public PermissionDefinition GetPermissionOrNull(string name)
+    {
+        return PermissionDefinitions.GetOrDefault(name);
+    }
+
+    public IReadOnlyList<PermissionDefinition> GetPermissions()
+    {
+        return PermissionDefinitions.Values.ToList();
+    }
+
+    public IReadOnlyList<PermissionGroupDefinition> GetGroups()
+    {
+        return PermissionGroupDefinitions.Values.ToList();
     }
 
     private void AddPermissionRecursively(ICanAddChildPermission permissionContainer,
@@ -66,6 +89,8 @@ public class DynamicPermissionDefinitionStoreCache : ISingletonDependency
             permissionRecord.MultiTenancySide,
             permissionRecord.IsEnabled
         );
+        
+        PermissionDefinitions[permission.Name] = permission;
 
         if (!permissionRecord.Providers.IsNullOrWhiteSpace())
         {
@@ -89,38 +114,6 @@ public class DynamicPermissionDefinitionStoreCache : ISingletonDependency
         foreach (var subPermission in allPermissionRecords.Where(p => p.ParentName == permissionRecord.Name))
         {
             AddPermissionRecursively(permission, subPermission, allPermissionRecords);
-        }
-    }
-
-    protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()
-    {
-        var permissions = new Dictionary<string, PermissionDefinition>();
-
-        foreach (var groupDefinition in PermissionGroupDefinitions.Values)
-        {
-            foreach (var permission in groupDefinition.Permissions)
-            {
-                AddPermissionToDictionaryRecursively(permissions, permission);
-            }
-        }
-
-        return permissions;
-    }
-    
-    protected virtual void AddPermissionToDictionaryRecursively(
-        Dictionary<string, PermissionDefinition> permissions,
-        PermissionDefinition permission)
-    {
-        if (permissions.ContainsKey(permission.Name))
-        {
-            throw new AbpException("Duplicate permission name: " + permission.Name);
-        }
-
-        permissions[permission.Name] = permission;
-
-        foreach (var child in permission.Children)
-        {
-            AddPermissionToDictionaryRecursively(permissions, child);
         }
     }
 }

@@ -22,8 +22,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     protected IPermissionDefinitionSerializer PermissionSerializer { get; }
     protected IDistributedCache Cache { get; }
     protected IApplicationNameAccessor ApplicationNameAccessor { get; }
-    public IAbpDistributedLock DistributedLock { get; }
-    public PermissionManagementOptions PermissionManagementOptions { get; }
+    protected IAbpDistributedLock DistributedLock { get; }
+    protected PermissionManagementOptions PermissionManagementOptions { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
     
     public StaticPermissionSaver(
@@ -51,6 +51,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     [UnitOfWork]
     public virtual async Task SaveAsync()
     {
+        /* TODO: We may double check and lock for optimization 
+         */
         await using var handle = await DistributedLock.TryAcquireAsync(GetDistributedLockKey());
 
         if (handle == null)
@@ -64,7 +66,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
          * But the code would be more complex.
          */
 
-        var cacheKey = GetCacheKey();
+        var cacheKey = GetApplicationHashCacheKey();
         var cachedHash = await Cache.GetStringAsync(cacheKey);
 
         var (permissionGroupRecords, permissionRecords) = await PermissionSerializer.SerializeAsync(
@@ -89,6 +91,14 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         await Cache.SetStringAsync(
             cacheKey,
             currentHash,
+            new DistributedCacheEntryOptions {
+                SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
+            }
+        );
+
+        await Cache.SetStringAsync(
+            GetCommonStampCacheKey(),
+            Guid.NewGuid().ToString(),
             new DistributedCacheEntryOptions {
                 SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
             }
@@ -204,9 +214,14 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         return $"{ApplicationNameAccessor.ApplicationName}_AbpPermissionUpdateLock";
     }
 
-    private string GetCacheKey()
+    private string GetApplicationHashCacheKey()
     {
         return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpPermissionsHash";
+    }
+    
+    private string GetCommonStampCacheKey()
+    {
+        return $"{CacheOptions.KeyPrefix}_AbpInMemoryPermissionCacheStamp";
     }
 
     private static string CalculateHash(
