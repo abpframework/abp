@@ -8,7 +8,7 @@ There is only one **standard toolbar** named "Main" (defined as a constant: `Sta
 
 In the screenshot above, there are two items added to the main toolbar: Language switch component & user menu. You can add your own items here.
 
-Also, LeptonXLite has 2 different toolbars for desktop and mobile views which defined as constant: `LeptonXLiteToolbars.Main`, `LeptonXLiteToolbars.MainMobile`.
+Also, [LeptonX Lite Theme](../../Themes/LeptonXLite/Blazor.md) has 2 different toolbars for desktop and mobile views which defined as constants: `LeptonXLiteToolbars.Main`, `LeptonXLiteToolbars.MainMobile`.
 
 | LeptonXLiteToolbars.Main | LeptonXLiteToolbars.MainMobile |
 | :---: | :---: |
