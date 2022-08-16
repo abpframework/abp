@@ -8,6 +8,13 @@ There is only one **standard toolbar** named "Main" (defined as a constant: `Sta
 
 In the screenshot above, there are two items added to the main toolbar: Language switch component & user menu. You can add your own items here.
 
+
+Also, LeptonXLite has 2 different toolbars for desktop and mobile views which defined as constant: `LeptonXLiteToolbars.Main`, `LeptonXLiteToolbars.MainMobile`.
+
+| LeptonXLiteToolbars.Main | LeptonXLiteToolbars.MainMobile |
+| :---: | :---: |
+| ![leptonx](../../images/leptonxlite-toolbar-main-example.png) | ![leptonx](../../images/leptonxlite-toolbar-mainmobile-example.png) |
+
 ## Example: Add a Notification Icon
 
 In this example, we will add a **notification (bell) icon** to the left of the language switch item. A item in the toolbar should be a **view component**. So, first, create a new view component in your project:
