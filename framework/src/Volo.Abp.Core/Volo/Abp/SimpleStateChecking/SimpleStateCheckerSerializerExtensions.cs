@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json.Nodes;
 
 namespace Volo.Abp.SimpleStateChecking;
@@ -18,23 +17,25 @@ public static class SimpleStateCheckerSerializerExtensions
             case 0:
                 return null;
             case 1:
-                return $"[{serializer.Serialize(stateCheckers.Single())}]";
+                var serializedChecker = serializer.Serialize(stateCheckers.Single());
+                return serializedChecker != null
+                    ? $"[{serializedChecker}]"
+                    : null;
             default:
-                var stringBuilder = new StringBuilder("[");
+                var serializedCheckers = new List<string>(stateCheckers.Count);
                 
-                for (var i = 0; i < stateCheckers.Count; i++)
+                foreach (var stateChecker in stateCheckers)
                 {
-                    if (i > 0)
+                    var serialized = serializer.Serialize(stateChecker);
+                    if (serialized != null)
                     {
-                        stringBuilder.Append(",");
+                        serializedCheckers.Add(serialized);
                     }
-            
-                    stringBuilder.Append(serializer.Serialize(stateCheckers[i]));
                 }
 
-                stringBuilder.Append("]");
-        
-                return stringBuilder.ToString();
+                return serializedCheckers.Any()
+                    ? $"[{serializedCheckers.JoinAsString(",")}]"
+                    : null;
         }
     }
 
@@ -62,10 +63,16 @@ public static class SimpleStateCheckerSerializerExtensions
                 throw new AbpException("JSON value is not an array of objects: " + value);
             }
 
-            return new[] { serializer.Deserialize<TState>(jsonObject) };
+            var checker = serializer.Deserialize<TState>(jsonObject);
+            if (checker == null)
+            {
+                return Array.Empty<ISimpleStateChecker<TState>>();
+            }
+            
+            return new[] { checker };
         }
 
-        var checkers = new ISimpleStateChecker<TState>[array.Count];
+        var checkers = new List<ISimpleStateChecker<TState>>();
 
         for (var i = 0; i < array.Count; i++)
         {
@@ -77,6 +84,6 @@ public static class SimpleStateCheckerSerializerExtensions
             checkers[i] = serializer.Deserialize<TState>(jsonObject);
         }
 
-        return checkers;
+        return checkers.Where(x => x != null).ToArray();
     }
 }
