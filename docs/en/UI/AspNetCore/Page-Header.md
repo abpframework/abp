@@ -23,6 +23,8 @@ Page Title can be set as shown in the example below:
 ### Breadcrumb
 
 > **The [Basic Theme](Basic-Theme.md) currently doesn't implement the breadcrumbs.**
+> 
+> The [LeptonX Lite Theme](../../Themes/LeptonXLite/AspNetCore.md) supports breadcrumbs.
 
 Breadcrumb items can be added to the `PageLayout.Content.BreadCrumb`.
 
@@ -48,11 +50,13 @@ Any item that you add is inserted between Home and Current Page items. You can a
 ### The Selected Menu Item
 
 > **The [Basic Theme](Basic-Theme.md) currently doesn't implement the selected menu item since it is not applicable to the top menu which is the only option for the Basic Theme for now.**
+>
+> The [LeptonX Lite Theme](../../Themes/LeptonXLite/AspNetCore.md) supports selected menu item.
 
 You can set the Menu Item name related to this page:
 
-````csharp
+```csharp
 PageLayout.Content.MenuItemName = "BookStore.Books";
-````
+```
 
 Menu item name should match a unique menu item name defined using the [Navigation / Menu](Navigation-Menu.md) system. In this case, it is expected from the theme to make the menu item "active" in the main menu.
