@@ -30,12 +30,12 @@ public class PermissionDefinitionManager : IPermissionDefinitionManager, ITransi
         return permission;
     }
 
-    public virtual Task<PermissionDefinition> GetOrNullAsync(string name)
+    public virtual async Task<PermissionDefinition> GetOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
-        return _staticStore.GetOrNullAsync(name) ?? 
-               _dynamicStore.GetOrNullAsync(name);
+        return await _staticStore.GetOrNullAsync(name) ?? 
+               await _dynamicStore.GetOrNullAsync(name);
     }
 
     public virtual async Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
