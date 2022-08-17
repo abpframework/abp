@@ -40,7 +40,7 @@ public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> : AbpTestBaseWit
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<TStartup>();
-                webBuilder.UseTestServer();
+                webBuilder.UseAbpTestServer();
             })
             .UseAutofac()
             .ConfigureServices(ConfigureServices);
