@@ -4,6 +4,7 @@ import { ExtensionsService } from '../services/extensions.service';
 import { Observable } from 'rxjs';
 import { ePropType } from '../enums/props.enum';
  import {FormProp} from "../models/form-props";
+import { PropData } from '../models/props';
 
 export const EXTENSIONS_IDENTIFIER = new InjectionToken<string>('EXTENSIONS_IDENTIFIER');
 export type ActionKeys = Extract<'entityActions' | 'toolbarActions', keyof ExtensionsService>;
@@ -26,4 +27,5 @@ export const ENTITY_PROP_TYPE_CLASSES = new InjectionToken<EntityPropTypeClass>(
   },
 );
 
-export const FORM_PROP_DATA_STREAM = new InjectionToken<FormProp>('FORM_PROP_DATA_STREAM');
+export const EXTENSIONS_FORM_PROP = new InjectionToken<FormProp>('EXTENSIONS_FORM_PROP');
+export const EXTENSIONS_FORM_PROP_DATA = new InjectionToken<unknown>('EXTENSIONS_FORM_PROP_DATA');
