@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.PermissionManagement;
@@ -18,6 +19,7 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
     protected IPermissionDefinitionSerializer PermissionDefinitionSerializer { get; }
     protected IDynamicPermissionDefinitionStoreInMemoryCache StoreCache { get; }
     protected IDistributedCache DistributedCache { get; }
+    protected IAbpDistributedLock DistributedLock { get; }
     public PermissionManagementOptions PermissionManagementOptions { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
     
@@ -28,13 +30,15 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
         IDynamicPermissionDefinitionStoreInMemoryCache storeCache,
         IDistributedCache distributedCache,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
-        IOptions<PermissionManagementOptions> permissionManagementOptions)
+        IOptions<PermissionManagementOptions> permissionManagementOptions,
+        IAbpDistributedLock distributedLock)
     {
         PermissionGroupRepository = permissionGroupRepository;
         PermissionRepository = permissionRepository;
         PermissionDefinitionSerializer = permissionDefinitionSerializer;
         StoreCache = storeCache;
         DistributedCache = distributedCache;
+        DistributedLock = distributedLock;
         PermissionManagementOptions = permissionManagementOptions.Value;
         CacheOptions = cacheOptions.Value;
     }
@@ -80,26 +84,76 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
         
         using (await StoreCache.SyncSemaphore.LockAsync())
         {
-            var cacheKey = GetCacheKey();
-        
-            var stampInDistributedCache = await DistributedCache.GetStringAsync(cacheKey);
-        
-            if (StoreCache.CacheStamp == stampInDistributedCache)
+            var stampInDistributedCache = await GetOrSetStampInDistributedCache();
+            
+            if (stampInDistributedCache == StoreCache.CacheStamp)
             {
                 return;
             }
 
-            var permissionGroupRecords = await PermissionGroupRepository.GetListAsync();
-            var permissionRecords = await PermissionRepository.GetListAsync();
-
-            await StoreCache.FillAsync(permissionGroupRecords, permissionRecords);
+            await UpdateInMemoryStoreCache();
 
             StoreCache.CacheStamp = stampInDistributedCache;
         }
     }
 
-    private string GetCacheKey()
+    private async Task UpdateInMemoryStoreCache()
+    {
+        var permissionGroupRecords = await PermissionGroupRepository.GetListAsync();
+        var permissionRecords = await PermissionRepository.GetListAsync();
+
+        await StoreCache.FillAsync(permissionGroupRecords, permissionRecords);
+    }
+
+    private async Task<string> GetOrSetStampInDistributedCache()
+    {
+        var cacheKey = GetCommonStampCacheKey();
+
+        var stampInDistributedCache = await DistributedCache.GetStringAsync(cacheKey);
+        if (stampInDistributedCache != null)
+        {
+            return stampInDistributedCache;
+        }
+
+        await using (var commonLockHandle = await DistributedLock
+                         .TryAcquireAsync(GetCommonDistributedLockKey(), TimeSpan.FromMinutes(2)))
+        {
+            if (commonLockHandle == null)
+            {
+                /* This request will fail */
+                throw new AbpException(
+                    "Could not acquire distributed lock for permission definition common stamp check!"
+                );
+            }
+
+            stampInDistributedCache = await DistributedCache.GetStringAsync(cacheKey);
+            if (stampInDistributedCache != null)
+            {
+                return stampInDistributedCache;
+            }
+
+            stampInDistributedCache = Guid.NewGuid().ToString();
+            
+            await DistributedCache.SetStringAsync(
+                cacheKey,
+                stampInDistributedCache,
+                new DistributedCacheEntryOptions
+                {
+                    SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
+                }
+            );
+        }
+
+        return stampInDistributedCache;
+    }
+
+    private string GetCommonStampCacheKey()
     {
         return $"{CacheOptions.KeyPrefix}_AbpInMemoryPermissionCacheStamp";
+    }
+    
+    private string GetCommonDistributedLockKey()
+    {
+        return $"{CacheOptions.KeyPrefix}_Common_AbpPermissionUpdateLock";
     }
 }
