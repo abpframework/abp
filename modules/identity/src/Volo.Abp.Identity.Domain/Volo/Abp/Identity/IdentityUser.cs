@@ -153,7 +153,7 @@ namespace Volo.Abp.Identity
             NormalizedUserName = userName.ToUpperInvariant();
             Email = email;
             NormalizedEmail = email.ToUpperInvariant();
-            ConcurrencyStamp = Guid.NewGuid().ToString();
+            ConcurrencyStamp = Guid.NewGuid().ToString("N");
             SecurityStamp = Guid.NewGuid().ToString();
 
             Roles = new Collection<IdentityUserRole>();
