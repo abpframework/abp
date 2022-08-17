@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
@@ -7,6 +8,13 @@ namespace Volo.Abp.PermissionManagement;
 
 public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
+    /* Ignoring Id because it is different whenever we create an instance of
+     * this class, and we are using Json Serialize, than Hash to understand
+     * if permission definitions have changed (in StaticPermissionSaver.CalculateHash()).
+     */
+    [JsonIgnore]
+    public override Guid Id { get; protected set; }
+    
     public string GroupName { get; set; }
     
     public string Name { get; set; }
