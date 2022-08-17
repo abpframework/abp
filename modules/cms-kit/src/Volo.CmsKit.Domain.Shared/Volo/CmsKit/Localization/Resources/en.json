@@ -206,6 +206,7 @@
     "Feature:ReactionEnable": "Enabled reaction",
     "Feature:ReactionEnableDescription": "Enable reaction in the application.",
     "Feature:TagEnable": "Enabled taging",
-    "Feature:TagEnableDescription": "Enable taging in the application."
+    "Feature:TagEnableDescription": "Enable taging in the application.",
+    "MaxTagLengthExceptionMessage": "{0} length must be equal to or lower than {1}. {2}"
   }
 }

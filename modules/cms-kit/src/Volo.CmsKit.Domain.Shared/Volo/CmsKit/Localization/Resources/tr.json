@@ -209,6 +209,7 @@
     "Feature:ReactionEnable": "Reaksiyonları etkinleştirin",
     "Feature:ReactionEnableDescription": "Uygulamınızdaki reaksiyonları etkinleştirir.",
     "Feature:TagEnable": "Etkiketleri etkinleştirin",
-    "Feature:TagEnableDescription": "Uygulamınızdaki etiketleri etkinleştirir."
+    "Feature:TagEnableDescription": "Uygulamınızdaki etiketleri etkinleştirir.",
+    "MaxTagLengthExceptionMessage": "{0} uzunluğu {1} den küçük veya eşit olmalı. {2}"
   }
 }
