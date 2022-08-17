@@ -4,6 +4,14 @@
 
 This module implements the domain logic and database integrations, but not provides any UI. Management UI is useful if you need to add applications and scopes on the fly. In this case, you may build the management UI yourself or consider to purchase the [ABP Commercial](https://commercial.abp.io/) which provides the management UI for this module.
 
+## How to Install
+
+This module comes as pre-installed (as NuGet/NPM packages) when you [create a new solution](https://abp.io/get-started) with the ABP Framework. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+
+### The Source Code
+
+The source code of this module can be accessed [here](https://github.com/abpframework/abp/tree/dev/modules/openiddict). The source code is licensed with [MIT](https://choosealicense.com/licenses/mit/), so you can freely use and customize it.
+
 ## Relations to Other Modules
 
 This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) with the [Account Module](Account.md).
@@ -205,6 +213,10 @@ If you need to customize OpenIddict, you need to replace/delete/add new handlers
 
 Please refer to:
 https://documentation.openiddict.com/guides/index.html#events-model
+
+## Migrating Guide
+
+[Migrating from IdentityServer to OpenIddict Step by Step Guide ](../Migration-Guides/OpenIddict-Step-by-Step.md)
 
 ## Sponsor
 

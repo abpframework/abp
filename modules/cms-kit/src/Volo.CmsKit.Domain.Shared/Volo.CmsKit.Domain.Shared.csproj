@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.GlobalFeatures\Volo.Abp.GlobalFeatures.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Features\Volo.Abp.Features.csproj" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
   </ItemGroup>
 

@@ -20,9 +20,9 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
         _htmlSanitizer = new HtmlSanitizer();
     }
 
-    public async Task<string> RenderAsync(string rawMarkdown, bool preventXSS = false)
+    public async Task<string> RenderAsync(string rawMarkdown, bool allowHtmlTags = true, bool preventXSS = true)
     {
-        if (preventXSS)
+        if (!allowHtmlTags)
         {
             rawMarkdown = EncodeHtmlTags(rawMarkdown, true);
         }

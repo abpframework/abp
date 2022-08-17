@@ -71,6 +71,8 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
             args.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long)
         );
 
+        ConfigureThemeOptions(args, templateFile.Version);
+
         DeveloperApiKeyResult apiKeyResult = null;
 
 #if DEBUG
@@ -205,6 +207,39 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
         else
         {
             return TemplateInfoProvider.Get(args.TemplateName);
+        }
+    }
+
+    private bool IsThemeOptionEnabled(ProjectBuildArgs args, string templateVersion)
+    {
+        var version = string.IsNullOrWhiteSpace(args.Version)
+            ? templateVersion
+            : args.Version;
+
+        if (!SemanticVersion.TryParse(version, out var semanticVersion))
+        {
+            return false;
+        }
+
+        return semanticVersion >= SemanticVersion.Parse("6.0.0-rc.1");
+    }
+
+    private void ConfigureThemeOptions(ProjectBuildArgs args, string templateVersion)
+    {
+        if (!IsThemeOptionEnabled(args, templateVersion))
+        {
+            args.Theme = null;
+            args.ThemeStyle = null;
+        }
+        
+        if (args.Theme.HasValue)
+        {
+            Logger.LogInformation("Theme: " + args.Theme);
+        }
+
+        if(args.ThemeStyle.HasValue) 
+        {
+            Logger.LogInformation("Theme Style: " + args.ThemeStyle);
         }
     }
 }

@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.UI.Navigation;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Permissions;
@@ -36,6 +38,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 l["Pages"].Value,
                 "/Cms/Pages",
                 "fa fa-file-alt")
+            .RequireFeatures(CmsKitFeatures.PageEnable)
             .RequireGlobalFeatures(typeof(PagesFeature))
             .RequirePermissions(CmsKitAdminPermissions.Pages.Default));
 
@@ -44,6 +47,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 l["Blogs"],
                 "/Cms/Blogs",
                 "fa fa-blog")
+            .RequireFeatures(CmsKitFeatures.BlogEnable)
             .RequireGlobalFeatures(typeof(BlogsFeature))
             .RequirePermissions(CmsKitAdminPermissions.Blogs.Default));
 
@@ -52,6 +56,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 l["BlogPosts"],
                 "/Cms/BlogPosts",
                 "fa fa-file-signature")
+            .RequireFeatures(CmsKitFeatures.BlogEnable)
             .RequireGlobalFeatures(typeof(BlogsFeature))
             .RequirePermissions(CmsKitAdminPermissions.BlogPosts.Default));
 
@@ -60,6 +65,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 l["Tags"].Value,
                 "/Cms/Tags",
                 "fa fa-tags")
+            .RequireFeatures(CmsKitFeatures.TagEnable)
             .RequireGlobalFeatures(typeof(TagsFeature))
             .RequirePermissions(CmsKitAdminPermissions.Tags.Default));
 
@@ -68,6 +74,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 l["Comments"].Value,
                 "/Cms/Comments",
                 "fa fa-comments")
+            .RequireFeatures(CmsKitFeatures.CommentEnable)
             .RequireGlobalFeatures(typeof(CommentsFeature))
             .RequirePermissions(CmsKitAdminPermissions.Comments.Default));
 
@@ -76,6 +83,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 l["Menus"],
                 "/Cms/Menus/Items",
                 "fa fa-stream")
+            .RequireFeatures(CmsKitFeatures.MenuEnable)
             .RequireGlobalFeatures(typeof(MenuFeature))
             .RequirePermissions(CmsKitAdminPermissions.Menus.Default));
 
@@ -84,6 +92,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 l["GlobalResources"],
                 "/Cms/GlobalResources",
                 "fa fa-newspaper")
+            .RequireFeatures(CmsKitFeatures.GlobalResourceEnable)
             .RequireGlobalFeatures(typeof(GlobalResourcesFeature))
             .RequirePermissions(CmsKitAdminPermissions.GlobalResources.Default));
 

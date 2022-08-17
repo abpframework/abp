@@ -44,6 +44,10 @@
           "path": "Startup-Templates/WPF.md"
         },
         {
+          "text": "MAUI",
+          "path": "Startup-Templates/MAUI.md"
+        },
+        {
           "text": "Empty Web Project",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
@@ -1322,6 +1326,12 @@
         },
 		{
           "text": "OpenIddict",
+	  "items": [
+		{
+		 "text": "OpenIddict Migration Guide",
+		 "path": "Migration-Guides/OpenIddict-Step-by-Step.md"
+		}
+	   ],
           "path": "Modules/OpenIddict.md"
         },
         {

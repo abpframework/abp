@@ -12,7 +12,6 @@ $(function () {
             name: $('#Name').val(),
             version: $('#Version').val(),
             languageCode: $('#LanguageCode').val(),
-            fileName: $('#FileName').val(),
             format: $('#Format').val(),
             creationTimeMin: getFormattedDate($('#CreationTimeMin')),
             creationTimeMax: getFormattedDate($('#CreationTimeMax')),
@@ -157,5 +156,9 @@ $(function () {
     $('#SearchButton').click(function (e) {
         e.preventDefault();
         dataTable.ajax.reload();
+    });
+
+    $("#AdvancedFilterSectionToggler").click(function (e) {
+        $("#AdvancedFilterSection").toggle();
     });
 });

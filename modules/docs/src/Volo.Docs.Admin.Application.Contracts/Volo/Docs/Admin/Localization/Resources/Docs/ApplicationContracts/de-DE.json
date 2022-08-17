@@ -54,6 +54,7 @@
     "Version": "Version",
     "LanguageCode": "Sprachcode",
     "FileName": "Dateiname",
-    "LastCachedTime": "Cache-Zeit"
+    "LastCachedTime": "Cache-Zeit",
+    "Project": "Projekt"
   }
 }

@@ -21,4 +21,10 @@ public interface IEntityTagRepository : IBasicRepository<EntityTag>
         [NotNull] Guid tagId,
         [CanBeNull] Guid? tenantId,
         CancellationToken cancellationToken = default);
+
+    Task<List<string>> GetEntityIdsFilteredByTagNameAsync(
+        [NotNull] string tagName,
+        [NotNull] string entityType,
+        [CanBeNull] Guid? tenantId=null,
+        CancellationToken cancellationToken=default);
 }

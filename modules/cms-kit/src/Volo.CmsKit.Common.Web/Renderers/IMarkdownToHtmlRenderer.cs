@@ -4,5 +4,5 @@ namespace Volo.CmsKit.Web.Renderers;
 
 public interface IMarkdownToHtmlRenderer
 {
-    Task<string> RenderAsync(string rawMarkdown, bool preventXSS = true);
+    Task<string> RenderAsync(string rawMarkdown, bool allowHtmlTags = true, bool preventXSS = true);
 }
