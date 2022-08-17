@@ -59,7 +59,7 @@ Stop both the *API* and the *Blazor* project by pressing **CTRL+C**
 
 Before the github commit, you have to delete "**/wwwroot/libs/*" at *.gitignore* file.
 
-![azdevops-23](images/azdevops-23.png)
+![azdevops-23](../images/azdevops-23.png)
 
 Open the command prompt in the root folder of your project and *add, commit and push* all your changes to your GitHub repository
 
@@ -147,7 +147,7 @@ git push
 
  Select GitHub in the Select your repository window
 
-![azdevops-1](images/azdevops-1.png)
+![azdevops-1](../images/azdevops-1.png)
 
 * Enter the Connection name. [YourAppName]GitHubConnection and click **Authorize using OAuth**
 
@@ -155,7 +155,7 @@ git push
 
 * Search for **ASP.NET**  in the ***Select a template*** window
 
-![azdevops-2](images/azdevops-2.png)
+![azdevops-2](../images/azdevops-2.png)
 
 * Select the ASP.NET Core template and click the **Apply** button
 
@@ -168,13 +168,13 @@ git push
         version: '6.0.106'
     ```
 
-![azdevops-18](images/azdevops-18.png)
+![azdevops-18](../images/azdevops-18.png)
 
 * Select **Settings** on the second task(Nugetcommand@2) in the pipeline
 
 * Select **Feeds in my Nuget.config** and type **Nuget.config** in the text box
 
-![azdevops-3](images/azdevops-3.png)
+![azdevops-3](../images/azdevops-3.png)
 
 * Add the below commands block to the end of the pipeline
 
@@ -186,7 +186,7 @@ git push
         ArtifactName: '$(Parameters.ArtifactName)'
       condition: succeededOrFailed()
     ```
-![azdevops-4](images/azdevops-4.png)
+![azdevops-4](../images/azdevops-4.png)
 
 ```
 # ASP.NET
@@ -267,13 +267,13 @@ steps:
 
 * Select the same *Region* as in the SQL server you created in Part 3
 
-![azdevops-5](images/azdevops-5.png)
+![azdevops-5](../images/azdevops-5.png)
 
 * Click **Create new** in the Windows Plan. Name it [YourAppName]ApiWinPlan
 
 * Click **Change size** in Sku and size. Go to the Dev/Test Free F1 version and click the **Apply** button
 
-![azdevops-6](images/azdevops-6.png)
+![azdevops-6](../images/azdevops-6.png)
 
 * Click the **Review + create** button. Click the **Create** button
 
@@ -291,7 +291,7 @@ steps:
 
 * Select *Azure App Service deployment* and click the **Apply** button
 
-![azdevops-7](images/azdevops-7.png)
+![azdevops-7](../images/azdevops-7.png)
 
 * Enter *[YourAppName]staging* in the *Stage name* field in the *Stage* window. And close the window
 
@@ -301,7 +301,7 @@ steps:
 
 * Select Build pipeline in the *Source (build pipeline)* dropdown and click the **Add** button
 
-![azdevops-8](images/azdevops-8.png)
+![azdevops-8](../images/azdevops-8.png)
 
 * Click the **Continuous deployment trigger (thunderbolt icon)**
 
@@ -309,13 +309,13 @@ steps:
 
 * Click **+ Add** in *No filters added*. Select **Include** in the *Type* dropdown. Select your branch in the *Build branch* dropdown and close the window
 
-![azdevops-9](images/azdevops-9.png)
+![azdevops-9](../images/azdevops-9.png)
 
 * Click **the little red circle with the exclamation mark** in the *Tasks* tab menu
 
 * Select your subscription in the *Azure subscription* dropdown.
 
-![azdevops-10](images/azdevops-10.png)
+![azdevops-10](../images/azdevops-10.png)
 
 * Click **Authorize** and enter your credentials in the next screens
 
@@ -325,7 +325,7 @@ steps:
 
 * Select **[YourAppName].HttpApi.Host.zip** in the *Package or folder* input field
 
-![azdevops-11](images/azdevops-11.png)
+![azdevops-11](../images/azdevops-11.png)
 
 * Click the **Save** icon in the top menu and click **OK**
 
@@ -333,7 +333,7 @@ steps:
 
 * Click the *Pipeline* tab and wait until the Deployment succeeds
 
-![azdevops-12](images/azdevops-12.png)
+![azdevops-12](../images/azdevops-12.png)
 
 * Open a browser and navigate to the URL of your Web App
 
@@ -341,7 +341,7 @@ steps:
 https://[YourAppName]api.azurewebsites.net
 ```
 
-![azdevops-13](images/azdevops-13.png)
+![azdevops-13](../images/azdevops-13.png)
 
 
 
@@ -367,7 +367,7 @@ https://[YourAppName]api.azurewebsites.net
 
 * Select the [YourAppName]ApiWinPlan in the *Windows Plan* dropdown
 
-![azdevops-14](images/azdevops-14.png)
+![azdevops-14](../images/azdevops-14.png)
 
 * Click the **Review + create** button. Click **Create** button
 
@@ -384,11 +384,11 @@ https://[YourAppName]blazor.azurewebsites.net
 
 Copy the URL of the Api Host and Blazor Web App. Change appsettings.json files in the Web App as follows images.
 
-![azdevops-19](images/azdevops-19.png)
+![azdevops-19](../images/azdevops-19.png)
 
-![azdevops-20](images/azdevops-20.png)
+![azdevops-20](../images/azdevops-20.png)
 
-![azdevops-21](images/azdevops-21.png)
+![azdevops-21](../images/azdevops-21.png)
 
 
 
@@ -398,7 +398,7 @@ Copy the URL of the Api Host and Blazor Web App. Change appsettings.json files i
 
 * Click the **+ Add** link and add a **New Stage**
 
-![azdevops-15](images/azdevops-15.png)
+![azdevops-15](../images/azdevops-15.png)
 
 * Select *Azure App Service deployment* and click the **Apply** button
 
@@ -414,12 +414,12 @@ Copy the URL of the Api Host and Blazor Web App. Change appsettings.json files i
 
 * Select *[YourAppName].Blazor.zip* in the *Package or folder* input field
 
-![azdevops-16](images/azdevops-16.png)
+![azdevops-16](../images/azdevops-16.png)
 
 * Click **Save** in the top menu and click the **OK** button after
 
 * Click **Create release** in the top menu and click the **Create** button
 
-![azdevops-17](images/azdevops-17.png)
+![azdevops-17](../images/azdevops-17.png)
 
-![azdevops-22](images/azdevops-22.png)
+![azdevops-22](../images/azdevops-22.png)
