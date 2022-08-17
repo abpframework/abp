@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.Validation.Localization;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Tags;
 
@@ -20,7 +21,7 @@ public class EntityTagSetDto : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        var l = validationContext.GetRequiredService<IStringLocalizer<CmsKitResource>>();
+        var l = validationContext.GetRequiredService<IStringLocalizer<AbpValidationResource>>();
 
         foreach (var tag in Tags)
         {
@@ -28,10 +29,8 @@ public class EntityTagSetDto : IValidatableObject
             {
                 yield return new ValidationResult(
                     l[
-                        "MaxTagLengthExceptionMessage",
-                        tag,
-                        TagConsts.MaxNameLength,
-                        typeof(EntityTagSetDto).FullName
+                        "ThisFieldMustBeAStringWithAMaximumLengthOf{0}",
+                        TagConsts.MaxNameLength
                     ],
                     new[] { nameof(Tags) }
                 );
