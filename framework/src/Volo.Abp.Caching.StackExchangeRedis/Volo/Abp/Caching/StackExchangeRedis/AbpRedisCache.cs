@@ -15,7 +15,6 @@ namespace Volo.Abp.Caching.StackExchangeRedis;
 [DisableConventionalRegistration]
 public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
 {
-    protected static string SetScript;
     protected static readonly string AbsoluteExpirationKey;
     protected static readonly string SlidingExpirationKey;
     protected static readonly string DataKey;
@@ -71,7 +70,6 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         : base(optionsAccessor)
     {
         Instance = optionsAccessor.Value.InstanceName ?? string.Empty;
-        Connect();
     }
 
     protected virtual void Connect()
@@ -82,7 +80,6 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         }
 
         ConnectMethod.Invoke(this, Array.Empty<object>());
-        SetSetScript();
     }
 
     protected virtual async Task ConnectAsync(CancellationToken token = default)
@@ -93,7 +90,6 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         }
 
         await (Task)ConnectAsyncMethod.Invoke(this, new object[] { token });
-        SetSetScript();
     }
 
     public byte[][] GetMany(
@@ -286,7 +282,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
 
         for (var i = 0; i < itemArray.Length; i++)
         {
-            tasks[i] = RedisDatabase.ScriptEvaluateAsync(SetScript, new RedisKey[] { Instance + itemArray[i].Key },
+            tasks[i] = RedisDatabase.ScriptEvaluateAsync(GetSetScript(), new RedisKey[] { Instance + itemArray[i].Key },
                 new RedisValue[]
                 {
                         absoluteExpiration?.Ticks ?? NotPresent,
@@ -337,8 +333,8 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         return _redisDatabase;
     }
 
-    private void SetSetScript()
+    private string GetSetScript()
     {
-        SetScript = SetScriptField?.GetValue(this).ToString();
+        return SetScriptField?.GetValue(this).ToString();
     }
 }
