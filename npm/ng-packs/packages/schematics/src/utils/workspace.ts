@@ -3,9 +3,11 @@ import { strings, workspaces } from '@angular-devkit/core';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { Exception } from '../enums';
 import { Project } from '../models';
-import { getWorkspace, getWorkspaceSchema, ProjectType, WorkspaceSchema } from './angular';
+import { getWorkspace, ProjectType, WorkspaceSchema } from './angular';
 import { findEnvironmentExpression } from './ast';
 import { readFileInTree } from './common';
+import { NOT_FOUND_VALUE } from '../constants/symbols';
+import { parseJson } from '@angular/cli/utilities/json-file';
 
 export function isLibrary(project: workspaces.ProjectDefinition): boolean {
   return project.extensions['projectType'] === ProjectType.Library;
@@ -33,8 +35,11 @@ export function readWorkspaceSchema(tree: Tree) {
 
   return workspaceSchema;
 }
-
-export async function resolveProject(tree: Tree, name: string): Promise<Project> {
+export async function resolveProject<T = any>(
+  tree: Tree,
+  name: string,
+  notFoundValue: T = NOT_FOUND_VALUE as unknown as any,
+): Promise<Project | T> {
   name = name || readWorkspaceSchema(tree).defaultProject!;
   const workspace = await getWorkspace(tree);
   let definition: Project['definition'] | undefined;
@@ -61,7 +66,30 @@ export async function resolveProject(tree: Tree, name: string): Promise<Project>
       definition = workspace.projects.get(name);
     } catch (_) {}
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  if (!definition && notFoundValue !== NOT_FOUND_VALUE) {
+    return notFoundValue;
+  }
   if (!definition) throw new SchematicsException(Exception.NoProject);
 
   return { name, definition };
+}
+
+export function getWorkspaceSchema(host: Tree): WorkspaceSchema {
+  const path = getWorkspacePath(host);
+  const configBuffer = host.read(path);
+  if (configBuffer === null) {
+    throw new SchematicsException(`Could not find (${path})`);
+  }
+  const content = configBuffer.toString();
+
+  return parseJson(content) as Record<string, any> as WorkspaceSchema;
+}
+
+export function getWorkspacePath(host: Tree): string {
+  const possibleFiles = ['/angular.json', '/.angular.json'];
+  const path = possibleFiles.filter(path => host.exists(path))[0];
+
+  return path;
 }
