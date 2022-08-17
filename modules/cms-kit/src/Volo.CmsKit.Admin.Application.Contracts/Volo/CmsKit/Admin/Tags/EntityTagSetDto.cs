@@ -29,7 +29,7 @@ public class EntityTagSetDto : IValidatableObject
                 yield return new ValidationResult(
                     l[
                         "MaxTagLengthExceptionMessage",
-                        nameof(tag),
+                        tag,
                         TagConsts.MaxNameLength,
                         typeof(EntityTagSetDto).FullName
                     ],
