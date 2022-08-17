@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shouldly;
 using Volo.Abp.Http;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Timing;
 using Xunit;
 
@@ -17,15 +16,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding;
 public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
 {
     protected DateTimeKind Kind { get; set; }
-
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-    {
-        services.Configure<AbpSystemTextJsonSerializerOptions>(options =>
-        {
-            options.UnsupportedTypes.Add<GetDateTimeKindModel>();
-            options.UnsupportedTypes.Add<GetDateTimeKindModel.GetDateTimeKindInnerModel>();
-        });
-    }
 
     [Fact]
     public async Task DateTimeKind_Test()

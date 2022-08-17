@@ -12,10 +12,5 @@ public class AbpJsonNewtonsoftModule : AbpModule
         {
             options.Providers.Add<AbpNewtonsoftJsonSerializerProvider>();
         });
-
-        Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
-        {
-            options.Converters.Add<AbpJsonIsoDateTimeConverter>();
-        });
     }
 }
