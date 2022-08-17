@@ -85,7 +85,13 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         ConfigureNpmPackagesForTheme(projectArgs);
         await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
-        await RunInstallLibsForWebTemplateAsync(projectArgs);
+        
+        var skipInstallLibs = commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Long) || commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Short);
+        if (!skipInstallLibs)
+        {
+            await RunInstallLibsForWebTemplateAsync(projectArgs);
+        }
+        
         await ConfigurePwaSupportForAngular(projectArgs);
 
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);

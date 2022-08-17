@@ -34,7 +34,9 @@
     "dev:schematics": "tsc -p packages/schematics/tsconfig.json -w",
     "ci": "yarn affected:lint && yarn affected:build && yarn affected:test",
     "lerna": "lerna",
-    "migrate-nx": "yarn nx migrate --run-migrations"
+    "migrate-nx": "yarn nx migrate --run-migrations",
+    "mock:schematics": "cd scripts/mock-schematic && yarn && yarn start",
+    "debug:schematics": "./node_modules/.bin/ng g ./packages/schematics/src/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url http://localhost:4300"
   },
   "private": true,
   "devDependencies": {

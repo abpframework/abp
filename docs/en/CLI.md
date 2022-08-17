@@ -124,7 +124,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
         * `--separate-auth-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
     * `--mobile` or `-m`: Specifies the mobile application framework. If not specified, no mobile application will be created. Available options:
       * `react-native`: React Native.
-      * `maui`: MAUI.
+      * `maui`: MAUI. This mobile option is only available for ABP Commercial.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
@@ -145,7 +145,8 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
         * `mongodb`: MongoDB.
     * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
         * `leptonx-lite`: [LeptonX Lite Theme](/Themes/LeptonXLite/mvc.md).
-        * `basic`: [Basic Theme](/UI/AspNetCore/Basic-Theme.md).        
+        * `basic`: [Basic Theme](/UI/AspNetCore/Basic-Theme.md).    
+  * **`maui`**: .NET MAUI. A minimalist .NET MAUI application will be created if you specify this option.
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
 * `--preview`: Use latest preview version.
@@ -161,6 +162,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
   * `PostgreSQL`
 * `--local-framework-ref --abp-path`: Uses local projects references to the ABP framework instead of using the NuGet packages. This can be useful if you download the ABP Framework source code and have a local reference to the framework from your application.
 * `--no-random-port`: Uses template's default ports.
+* `--skip-installing-libs` or `-sib`: Skip installing client side packages.
 
 See some [examples for the new command](CLI-New-Command-Samples.md) here.
 
@@ -244,7 +246,7 @@ It can also create a new module for your solution and add it to your solution. S
 
 > A business module generally consists of several packages (because of layering, different database provider options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
 
-Usage
+Usage:
 
 ````bash
 abp add-module <module-name> [options]
@@ -278,7 +280,7 @@ abp add-module ProductManagement --new --add-to-solution-file
 
 Lists names of open-source application modules.
 
-Usage
+Usage:
 
 ````bash
 abp list-modules [options]
@@ -294,11 +296,21 @@ abp list-modules
 
 * `--include-pro-modules`: Includes commercial (pro) modules in the output.
 
+### list-templates
+
+Lists all available templates to create a solution.
+
+Usage:
+
+```bash
+abp list-templates
+```
+
 ### get-source
 
 Downloads the source code of a module to your computer.
 
-Usage
+Usage:
 
 ````bash
 abp get-source <module-name> [options]

@@ -130,6 +130,8 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                 steps.Add(new RemoveFolderStep("/apps/blazor"));
                 steps.Add(new RemoveProjectFromTyeStep("blazor"));
                 steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
+                
+                context.Symbols.Add("ui:angular");
                 break;
 
             case UiFramework.Blazor:
@@ -147,7 +149,8 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                     null,
                     "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
-
+                
+                context.Symbols.Add("ui:blazor");
                 break;
 
             case UiFramework.BlazorServer:
@@ -169,7 +172,8 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                 steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server",
                     "MyCompanyName.MyProjectName.Blazor"));
                 steps.Add(new RenameProjectInTyeStep("blazor-server", "blazor"));
-
+                
+                context.Symbols.Add("ui:blazor-server");
                 break;
 
             case UiFramework.Mvc:
@@ -186,6 +190,8 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                 steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
 
                 steps.Add(new RemoveFolderStep("/apps/angular"));
+                
+                context.Symbols.Add("ui:mvc");
                 break;
         }
 
