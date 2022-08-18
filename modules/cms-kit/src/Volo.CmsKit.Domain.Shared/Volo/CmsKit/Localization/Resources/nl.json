@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Weet u zeker dat u deze pagina wilt verwijderen?",
     "PageId": "Bladzijde",
     "Pages": "Pagina's",
-    "PageSlugInformation": "Slug wordt gebruikt voor de url. Uw url wordt '/pages/{{slug}}'.",
+    "PageSlugInformation": "Slug wordt gebruikt voor de url. Uw url wordt '/{{slug}}'.",
     "Permission:BlogManagement": "Blogbeheer",
     "Permission:BlogManagement.Create": "Toevoegen",
     "Permission:BlogManagement.Delete": "Verwijderen",
