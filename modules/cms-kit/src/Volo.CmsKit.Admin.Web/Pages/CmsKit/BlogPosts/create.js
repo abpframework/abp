@@ -334,6 +334,25 @@ $(function () {
         editor.insertText(txt);
     });
 
+    $('.tab-item').on('click', function () {
+        if ($(this).attr("aria-label") == 'Preview' && editor.isMarkdownMode()) {
+
+            let content = editor.getMarkdown();
+            localStorage.setItem('content', content);
+
+            $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
+                editor.setHTML(result);
+
+                var highllightedText = $('#ContentEditor').find('.toastui-editor-md-preview-highlight');
+                highllightedText.removeClass('toastui-editor-md-preview-highlight');
+            });
+        }
+        else if ($(this).attr("aria-label") == 'Write') {
+            var retrievedObject = localStorage.getItem('content');
+            editor.setMarkdown(retrievedObject);
+        }
+    });
+
     function createAddWidgetButton() {
         const button = document.createElement('button');
 

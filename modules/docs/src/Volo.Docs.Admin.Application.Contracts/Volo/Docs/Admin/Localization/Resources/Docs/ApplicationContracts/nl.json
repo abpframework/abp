@@ -54,6 +54,7 @@
     "Version": "Versie",
     "LanguageCode": "Taalcode",
     "FileName": "Bestandsnaam",
-    "LastCachedTime": "Cache tijd"
+    "LastCachedTime": "Cache tijd",
+    "Project": "Project"
   }
 }

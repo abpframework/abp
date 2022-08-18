@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Public.Blogs;
 
@@ -15,7 +16,7 @@ public class BlogPostModel : CmsKitPublicPageModelBase
     [BindProperty(SupportsGet = true)]
     public string BlogPostSlug { get; set; }
 
-    public BlogPostPublicDto BlogPost { get; private set; }
+    public BlogPostCommonDto BlogPost { get; private set; }
 
     public BlogFeatureDto CommentsFeature { get; private set; }
 

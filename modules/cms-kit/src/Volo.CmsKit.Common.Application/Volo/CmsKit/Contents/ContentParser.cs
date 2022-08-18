@@ -28,10 +28,10 @@ public class ContentParser : ITransientDependency
             });
         }
 
-        var parsedList = new List<string>();
+        List<string> parsedList = new();
         ParseContent(content, parsedList);
 
-        var contentFragments = new List<ContentFragment>();
+        List<ContentFragment> contentFragments = new();
         FillContentFragment(content, parsedList, contentFragments);
 
         return Task.FromResult(contentFragments);
