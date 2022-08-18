@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Polly;
 using Volo.Abp.Authorization;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
@@ -35,28 +36,40 @@ public class AbpPermissionManagementDomainModule : AbpModule
 
     private static void SaveStaticPermissionsToDatabase(ApplicationInitializationContext context)
     {
+        var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
+
         Task.Run(async () =>
         {
-            using var scope = context
-                .ServiceProvider
-                .GetRequiredService<IRootServiceProvider>()
-                .CreateScope();
+            using var scope = rootServiceProvider.CreateScope();
 
             try
             {
-                await scope
-                    .ServiceProvider
-                    .GetRequiredService<IStaticPermissionSaver>()
-                    .SaveAsync();
+                await Policy
+                    .Handle<Exception>()
+                    .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) * 10))
+                    .ExecuteAsync(async () =>
+                    {
+                        try
+                        {
+                            // ReSharper disable once AccessToDisposedClosure
+                            await scope
+                                .ServiceProvider
+                                .GetRequiredService<IStaticPermissionSaver>()
+                                .SaveAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            // ReSharper disable once AccessToDisposedClosure
+                            scope.ServiceProvider
+                                .GetService<ILogger<AbpPermissionManagementDomainModule>>()?
+                                .LogException(ex);
+                            
+                            throw; // Polly will catch it
+                        }
+                    });
             }
-            catch (Exception ex)
-            {
-                //TODO: We should retry until it's successful!
-
-                scope.ServiceProvider
-                    .GetService<ILogger<AbpPermissionManagementDomainModule>>()
-                    .LogException(ex);
-            }
+            // ReSharper disable once EmptyGeneralCatchClause (No need to log since it is logged above)
+            catch { }
         });
     }
 }
