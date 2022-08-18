@@ -8,6 +8,8 @@ public class AuthenticatedSimpleStateCheckerSerializerContributor :
     ISimpleStateCheckerSerializerContributor,
     ISingletonDependency
 {
+    public const string CheckerShortName = "A";
+    
     public string SerializeToJson<TState>(ISimpleStateChecker<TState> checker) 
         where TState : IHasSimpleStateCheckers<TState>
     {
@@ -17,7 +19,7 @@ public class AuthenticatedSimpleStateCheckerSerializerContributor :
         }
 
         var jsonObject = new JsonObject {
-            ["T"] = "A"
+            ["T"] = CheckerShortName
         };
 
         return jsonObject.ToJsonString();
@@ -26,7 +28,7 @@ public class AuthenticatedSimpleStateCheckerSerializerContributor :
     public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject)
         where TState : IHasSimpleStateCheckers<TState>
     {
-        if (jsonObject["T"]?.ToString() != "A")
+        if (jsonObject["T"]?.ToString() != CheckerShortName)
         {
             return null;
         }

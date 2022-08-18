@@ -3,31 +3,31 @@ using System.Text.Json.Nodes;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
 
-namespace Volo.Abp.GlobalFeatures;
+namespace Volo.Abp.Features;
 
-public class GlobalFeaturesSimpleStateCheckerSerializerContributor :
+public class FeaturesSimpleStateCheckerSerializerContributor :
     ISimpleStateCheckerSerializerContributor,
     ISingletonDependency
 {
-    public const string CheckerShortName = "G";
-
+    public const string CheckerShortName = "F";
+    
     public string SerializeToJson<TState>(ISimpleStateChecker<TState> checker)
         where TState : IHasSimpleStateCheckers<TState>
     {
-        if (checker is not RequireGlobalFeaturesSimpleStateChecker<TState> globalFeaturesSimpleStateChecker)
+        if (checker is not RequireFeaturesSimpleStateChecker<TState> featuresSimpleStateChecker)
         {
             return null;
         }
 
         var jsonObject = new JsonObject {
             ["T"] = CheckerShortName,
-            ["A"] = globalFeaturesSimpleStateChecker.RequiresAll
+            ["A"] = featuresSimpleStateChecker.RequiresAll
         };
 
         var nameArray = new JsonArray();
-        foreach (var globalFeatureName in globalFeaturesSimpleStateChecker.GlobalFeatureNames)
+        foreach (var featureName in featuresSimpleStateChecker.FeatureNames)
         {
-            nameArray.Add(globalFeatureName);
+            nameArray.Add(featureName);
         }
 
         jsonObject["N"] = nameArray;
@@ -48,7 +48,7 @@ public class GlobalFeaturesSimpleStateCheckerSerializerContributor :
             throw new AbpException("'N' is not an array in the serialized state checker! JsonObject: " + jsonObject.ToJsonString());
         }
 
-        return new RequireGlobalFeaturesSimpleStateChecker<TState>(
+        return new RequireFeaturesSimpleStateChecker<TState>(
             (bool?)jsonObject["A"] ?? false,
             nameArray.Select(x => x.ToString()).ToArray()
         );
