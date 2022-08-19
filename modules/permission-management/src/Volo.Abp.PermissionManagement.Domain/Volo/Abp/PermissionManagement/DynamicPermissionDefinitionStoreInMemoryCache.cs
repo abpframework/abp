@@ -21,6 +21,8 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
 
     public SemaphoreSlim SyncSemaphore { get; } = new(1, 1);
+    
+    public DateTime? LastCheckTime { get; set; }
 
     public DynamicPermissionDefinitionStoreInMemoryCache(ISimpleStateCheckerSerializer stateCheckerSerializer)
     {

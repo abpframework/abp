@@ -78,22 +78,27 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
 
     private async Task EnsureCacheIsUptoDateAsync()
     {
-        /* TODO: Optimization note: May not check for a few seconds
-         * It is acceptable to get changes a few seconds after the last time the cache was updated.
-         */
-        
         using (await StoreCache.SyncSemaphore.LockAsync())
         {
+            if (StoreCache.LastCheckTime.HasValue &&
+                DateTime.Now.Subtract(StoreCache.LastCheckTime.Value).TotalSeconds < 30)
+            {
+                /* We get the latest permission with a small delay for optimization */
+                return;
+            }
+            
             var stampInDistributedCache = await GetOrSetStampInDistributedCache();
             
             if (stampInDistributedCache == StoreCache.CacheStamp)
             {
+                StoreCache.LastCheckTime = DateTime.Now;
                 return;
             }
 
             await UpdateInMemoryStoreCache();
 
             StoreCache.CacheStamp = stampInDistributedCache;
+            StoreCache.LastCheckTime = DateTime.Now;
         }
     }
 
