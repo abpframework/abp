@@ -52,7 +52,7 @@ public class AbpPermissionManagementDomainModule : AbpModule
                 {
                     await Policy
                         .Handle<Exception>()
-                        .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) * 10))
+                        .WaitAndRetryAsync(8, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) * 10))
                         .ExecuteAsync(async _ =>
                         {
                             try
