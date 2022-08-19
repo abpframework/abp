@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Opravdu chcete smazat tuto stránku?",
     "PageId": "Strana",
     "Pages": "stránky",
-    "PageSlugInformation": "Na adrese URL je použit Slug. Vaše adresa URL bude '/pages/{{slug}}'.",
+    "PageSlugInformation": "Na adrese URL je použit Slug. Vaše adresa URL bude '/{{slug}}'.",
     "Permission:BlogManagement": "Správa blogu",
     "Permission:BlogManagement.Create": "Vytvořit",
     "Permission:BlogManagement.Delete": "Vymazat",

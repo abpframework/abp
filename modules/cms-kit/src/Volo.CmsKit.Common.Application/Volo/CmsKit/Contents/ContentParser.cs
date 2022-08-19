@@ -20,11 +20,11 @@ public class ContentParser : ITransientDependency
 
     public Task<List<ContentFragment>> ParseAsync(string content)
     {
-        if (!_options.WidgetConfigs.Any())
+        if (!_options.WidgetConfigs.Any() || content is null)
         {
             return Task.FromResult(new List<ContentFragment>
             {
-                new ContentFragment { Type = Markdown }.SetProperty(Content, content),
+                new ContentFragment { Type = Markdown }.SetProperty(Content, content ?? string.Empty),
             });
         }
 

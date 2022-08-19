@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Bu sayfayı silmek istediğinize emin misiniz?",
     "PageId": "Sayfa",
     "Pages": "Sayfalar",
-    "PageSlugInformation": "Etiket URL'de kullanılır. Url şöyle görünür: '/pages/{{slug}}'.",
+    "PageSlugInformation": "Etiket URL'de kullanılır. Url şöyle görünür: '/{{slug}}'.",
     "Permission:BlogManagement": "Blog Yönetimi",
     "Permission:BlogManagement.Create": "Oluşturma",
     "Permission:BlogManagement.Delete": "Silme",
