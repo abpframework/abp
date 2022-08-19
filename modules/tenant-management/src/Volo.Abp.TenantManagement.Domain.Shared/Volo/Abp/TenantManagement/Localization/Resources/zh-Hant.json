@@ -1,6 +1,7 @@
 {
   "culture": "zh-Hant",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "租戶名稱已存在: {Name}",
     "Menu:TenantManagement": "租戶管理",
     "Tenants": "租戶",
     "NewTenant": "新租戶",
