@@ -12,7 +12,7 @@ public class LocalizableString : ILocalizableString
     [NotNull]
     public string Name { get; }
 
-    public LocalizableString(Type resourceType, [NotNull] string name)
+    public LocalizableString([CanBeNull] Type resourceType, [NotNull] string name)
     {
         Name = Check.NotNullOrEmpty(name, nameof(name));
         ResourceType = resourceType;
