@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {FORM_PROP_DATA_STREAM, FormProp, EXTENSIBLE_FORM_VIEW_PROVIDER} from "@abp/ng.theme.shared/extensions";
+import {EXTENSIONS_FORM_PROP, FormProp, EXTENSIBLE_FORM_VIEW_PROVIDER} from "@abp/ng.theme.shared/extensions";
 import {FormGroup} from "@angular/forms";
 
 @Component({
@@ -23,7 +23,7 @@ export class PersonalSettingsHalfRowComponent {
   public id: string;
   public formGroup: FormGroup
 
-  constructor(@Inject(FORM_PROP_DATA_STREAM) private propData: FormProp) {
+  constructor(@Inject(EXTENSIONS_FORM_PROP) private propData: FormProp) {
     this.displayName = propData.displayName
     this.name = propData.name
     this.id = propData.id

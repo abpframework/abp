@@ -1,4 +1,4 @@
-import { FORM_PROP, FORM_PROP_DATA } from './../../tokens/extensions.token';
+import { EXTENSIONS_FORM_PROP_DATA, EXTENSIONS_FORM_PROP } from './../../tokens/extensions.token';
 import {ABP, AbpValidators, ConfigStateService, TrackByService} from '@abp/ng.core';
 import {
   AfterViewInit,
@@ -31,7 +31,7 @@ import {FormProp} from '../../models/form-props';
 import {PropData} from '../../models/props';
 import {selfFactory} from '../../utils/factory.util';
 import {addTypeaheadTextSuffix} from '../../utils/typeahead.util';
- 
+
 @Component({
   selector: 'abp-extensible-form-prop',
   templateUrl: './extensible-form-prop.component.html',
@@ -188,12 +188,12 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
       this.injectorForCustomComponent = Injector.create({
         providers: [
           {
-            provide: FORM_PROP,
+            provide: EXTENSIONS_FORM_PROP,
             useValue: currentProp
           },
           {
-            provide: FORM_PROP_DATA,
-            useValue: (data?.currentValue as PropData)?.record 
+            provide: EXTENSIONS_FORM_PROP_DATA,
+            useValue: (data?.currentValue as PropData)?.record
           },
           { provide: ControlContainer, useExisting: FormGroupDirective }
         ],
