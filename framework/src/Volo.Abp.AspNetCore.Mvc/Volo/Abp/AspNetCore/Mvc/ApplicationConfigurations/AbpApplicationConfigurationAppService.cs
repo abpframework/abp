@@ -214,9 +214,9 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         {
             var dictionary = new Dictionary<string, string>();
 
-            var localizer = _serviceProvider.GetRequiredService(
+            var localizer = (IStringLocalizer) _serviceProvider.GetRequiredService(
                 typeof(IStringLocalizer<>).MakeGenericType(resource.ResourceType)
-            ) as IStringLocalizer;
+            );
 
             foreach (var localizedString in localizer.GetAllStrings())
             {
