@@ -56,7 +56,8 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
             .WithProperty("CustomProperty2", "CustomValue2")
             .RequireAuthenticated() //For for testing, not so meaningful
             .RequireGlobalFeatures("GlobalFeature1", "GlobalFeature2")
-            .RequireFeatures("Feature1", "Feature2");
+            .RequireFeatures("Feature1", "Feature2")
+            .RequirePermissions(requiresAll: false, batchCheck: false,"Permission2", "Permission3");
 
         // Act
         
@@ -73,7 +74,7 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
         permissionRecord.GetProperty("CustomProperty2").ShouldBe("CustomValue2");
         permissionRecord.Providers.ShouldBe("ProviderA,ProviderB");
         permissionRecord.MultiTenancySide.ShouldBe(MultiTenancySides.Tenant);
-        permissionRecord.StateCheckers.ShouldBe("[{\"T\":\"A\"},{\"T\":\"G\",\"A\":true,\"N\":[\"GlobalFeature1\",\"GlobalFeature2\"]},{\"T\":\"F\",\"A\":true,\"N\":[\"Feature1\",\"Feature2\"]}]");
+        permissionRecord.StateCheckers.ShouldBe("[{\"T\":\"A\"},{\"T\":\"G\",\"A\":true,\"N\":[\"GlobalFeature1\",\"GlobalFeature2\"]},{\"T\":\"F\",\"A\":true,\"N\":[\"Feature1\",\"Feature2\"]},{\"T\":\"P\",\"A\":false,\"N\":[\"Permission2\",\"Permission3\"]}]");
     }
 
     private static PermissionGroupDefinition CreatePermissionGroup1(
