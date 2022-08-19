@@ -10,6 +10,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
+using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.PermissionManagement;
@@ -24,6 +25,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     protected IApplicationNameAccessor ApplicationNameAccessor { get; }
     protected IAbpDistributedLock DistributedLock { get; }
     protected PermissionManagementOptions PermissionManagementOptions { get; }
+    protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
     
     public StaticPermissionSaver(
@@ -35,7 +37,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         IOptions<AbpDistributedCacheOptions> cacheOptions,
         IApplicationNameAccessor applicationNameAccessor,
         IAbpDistributedLock distributedLock,
-        IOptions<PermissionManagementOptions> permissionManagementOptions)
+        IOptions<PermissionManagementOptions> permissionManagementOptions,
+        ICancellationTokenProvider cancellationTokenProvider)
     {
         StaticStore = staticStore;
         PermissionGroupRepository = permissionGroupRepository;
@@ -44,6 +47,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         Cache = cache;
         ApplicationNameAccessor = applicationNameAccessor;
         DistributedLock = distributedLock;
+        CancellationTokenProvider = cancellationTokenProvider;
         PermissionManagementOptions = permissionManagementOptions.Value;
         CacheOptions = cacheOptions.Value;
     }
@@ -53,7 +57,10 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     {
         /* TODO: We may double check and lock for optimization 
          */
-        await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(GetApplicationDistributedLockKey());
+        await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
+            GetApplicationDistributedLockKey()
+        );
+        
         if (applicationLockHandle == null)
         {
             /* Another application instance is already doing it */
@@ -66,7 +73,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
          */
 
         var cacheKey = GetApplicationHashCacheKey();
-        var cachedHash = await Cache.GetStringAsync(cacheKey);
+        var cachedHash = await Cache.GetStringAsync(cacheKey, CancellationTokenProvider.Token);
 
         var (permissionGroupRecords, permissionRecords) = await PermissionSerializer.SerializeAsync(
             await StaticStore.GetGroupsAsync()
@@ -84,8 +91,9 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             return;
         }
 
-        await using (var commonLockHandle = await DistributedLock
-                         .TryAcquireAsync(GetCommonDistributedLockKey(), TimeSpan.FromMinutes(5)))
+        await using (var commonLockHandle = await DistributedLock.TryAcquireAsync(
+                         GetCommonDistributedLockKey(),
+                         TimeSpan.FromMinutes(5)))
         {
             if (commonLockHandle == null)
             {
@@ -103,7 +111,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
                     Guid.NewGuid().ToString(),
                     new DistributedCacheEntryOptions {
                         SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-                    }
+                    },
+                    CancellationTokenProvider.Token
                 );
             }
         }
@@ -113,7 +122,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             currentHash,
             new DistributedCacheEntryOptions {
                 SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-            }
+            },
+            CancellationTokenProvider.Token
         );
     }
 
