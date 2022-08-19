@@ -23,11 +23,11 @@ export class AccountExtensionsGuard implements CanActivate {
       this.injector.get(ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, null) || {};
 
     const configState = this.injector.get(ConfigStateService);
-    return getObjectExtensionEntitiesFromStore(configState, 'Account').pipe(
+    return getObjectExtensionEntitiesFromStore(configState, 'Identity').pipe(
       map(entities => ({
-        [eAccountComponents.PersonalSettings]: entities.PersonalSettings,
+        [eAccountComponents.PersonalSettings]: entities.User,
        })),
-      mapEntitiesToContributors(configState, 'AbpAccount'),
+      mapEntitiesToContributors(configState, 'AbpIdentity'),
       tap(objectExtensionContributors => {
         mergeWithDefaultProps(
           extensions.editFormProps,

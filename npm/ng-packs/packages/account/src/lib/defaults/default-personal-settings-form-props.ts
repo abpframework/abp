@@ -1,7 +1,7 @@
 import {ePropType, FormProp} from "@abp/ng.theme.shared/extensions";
 import {UpdateProfileDto} from "@abp/ng.account.core/proxy";
 import {Validators} from "@angular/forms";
- import {PersonalSettingsHalfRowComponent} from "../components/personal-settings/personal-settings-half-row.component";
+import {PersonalSettingsHalfRowComponent} from "../components/personal-settings/personal-settings-half-row.component";
 
 const { maxLength, required, email } = Validators;
 export const DEFAULT_PERSONAL_SETTINGS_UPDATE_FORM_PROPS = FormProp.createMany<UpdateProfileDto>([
