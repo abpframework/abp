@@ -88,22 +88,21 @@ namespace Volo.Docs.Documents
         {
 
             return await
-                ApplyFilterForGetAll(
+                (await ApplyFilterForGetAll(
                         await GetMongoQueryableAsync(cancellationToken),
                         projectId: projectId,
                         name: name,
                         version: version,
                         languageCode: languageCode,
-                        format: format,
                         fileName: fileName,
+                        format: format,
                         creationTimeMin: creationTimeMin,
                         creationTimeMax: creationTimeMax,
                         lastUpdatedTimeMin: lastUpdatedTimeMin,
                         lastUpdatedTimeMax: lastUpdatedTimeMax,
                         lastSignificantUpdateTimeMin: lastSignificantUpdateTimeMin,
                         lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
-                        lastCachedTimeMin: lastCachedTimeMin,
-                        lastCachedTimeMax: lastCachedTimeMax)
+                        lastCachedTimeMin: lastCachedTimeMin, lastCachedTimeMax: lastCachedTimeMax))
                     .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting).As<IMongoQueryable<DocumentWithoutContent>>()
                     .PageBy<DocumentWithoutContent, IMongoQueryable<DocumentWithoutContent>>(skipCount, maxResultCount)
                     .ToListAsync(GetCancellationToken(cancellationToken));
@@ -132,22 +131,21 @@ namespace Volo.Docs.Documents
 
 
             return await
-                ApplyFilterForGetAll(
+                (await ApplyFilterForGetAll(
                         await GetMongoQueryableAsync(cancellationToken),
                         projectId: projectId,
                         name: name,
                         version: version,
                         languageCode: languageCode,
-                        format: format,
                         fileName: fileName,
+                        format: format,
                         creationTimeMin: creationTimeMin,
                         creationTimeMax: creationTimeMax,
                         lastUpdatedTimeMin: lastUpdatedTimeMin,
                         lastUpdatedTimeMax: lastUpdatedTimeMax,
                         lastSignificantUpdateTimeMin: lastSignificantUpdateTimeMin,
                         lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
-                        lastCachedTimeMin: lastCachedTimeMin,
-                        lastCachedTimeMax: lastCachedTimeMax)
+                        lastCachedTimeMin: lastCachedTimeMin, lastCachedTimeMax: lastCachedTimeMax))
                     .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting).As<IMongoQueryable<Document>>()
                     .PageBy<Document, IMongoQueryable<Document>>(skipCount, maxResultCount)
                     .LongCountAsync(GetCancellationToken(cancellationToken));
@@ -158,7 +156,7 @@ namespace Volo.Docs.Documents
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id == id).SingleAsync(GetCancellationToken(cancellationToken));
         }
 
-        protected virtual IMongoQueryable<DocumentWithoutContent> ApplyFilterForGetAll(
+        protected virtual async Task<IMongoQueryable<DocumentWithoutContent>> ApplyFilterForGetAll(
             IMongoQueryable<Document> query,
             Guid? projectId,
             string name,
@@ -240,20 +238,25 @@ namespace Volo.Docs.Documents
             {
                 query = query.Where(d => d.LastCachedTime.Date <= lastCachedTimeMax.Value.Date);
             }
-
-            return query.Select(x => new DocumentWithoutContent
+            var join = query.Join(
+                (await GetDbContextAsync(cancellationToken)).Projects,
+                d => d.ProjectId,
+                p => p.Id,
+                (d, p) => new { Document = d, Project = p });
+            return join.Select(x => new DocumentWithoutContent
             {
-                Id = x.Id,
-                ProjectId = x.ProjectId,
-                Name = x.Name,
-                Version = x.Version,
-                LanguageCode = x.LanguageCode,
-                FileName = x.FileName,
-                Format = x.Format,
-                CreationTime = x.CreationTime,
-                LastUpdatedTime = x.LastUpdatedTime,
-                LastSignificantUpdateTime = x.LastSignificantUpdateTime,
-                LastCachedTime = x.LastCachedTime
+                Id = x.Document.Id,
+                ProjectId = x.Document.ProjectId,
+                ProjectName = x.Project.Name,
+                Name = x.Document.Name,
+                Version = x.Document.Version,
+                LanguageCode = x.Document.LanguageCode,
+                FileName = x.Document.FileName,
+                Format = x.Document.Format,
+                CreationTime = x.Document.CreationTime,
+                LastUpdatedTime = x.Document.LastUpdatedTime,
+                LastSignificantUpdateTime = x.Document.LastSignificantUpdateTime,
+                LastCachedTime = x.Document.LastCachedTime
             });
         }
     }

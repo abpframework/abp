@@ -80,6 +80,10 @@ $(function () {
                     },
                 },
                 {
+                    target: 0,
+                    data: 'projectName',
+                },
+                {
                     target: 1,
                     data: 'name',
                 },
