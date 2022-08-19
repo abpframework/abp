@@ -8,6 +8,10 @@ namespace Volo.Abp.Authorization.Permissions;
 public class RequirePermissionsSimpleStateChecker<TState> : ISimpleStateChecker<TState>
     where TState : IHasSimpleStateCheckers<TState>
 {
+    public bool RequiresAll => _model.RequiresAll;
+
+    public string[] PermissionNames => _model.Permissions;
+    
     private readonly RequirePermissionsSimpleBatchStateCheckerModel<TState> _model;
 
     public RequirePermissionsSimpleStateChecker(RequirePermissionsSimpleBatchStateCheckerModel<TState> model)

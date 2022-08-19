@@ -41,7 +41,8 @@ public static class SimpleStateCheckerSerializerExtensions
 
     public static ISimpleStateChecker<TState>[] DeserializeArray<TState>(
         this ISimpleStateCheckerSerializer serializer,
-        string value)
+        string value,
+        TState state)
         where TState : IHasSimpleStateCheckers<TState>
     {
         if (value.IsNullOrWhiteSpace())
@@ -63,7 +64,7 @@ public static class SimpleStateCheckerSerializerExtensions
                 throw new AbpException("JSON value is not an array of objects: " + value);
             }
 
-            var checker = serializer.Deserialize<TState>(jsonObject);
+            var checker = serializer.Deserialize(jsonObject, state);
             if (checker == null)
             {
                 return Array.Empty<ISimpleStateChecker<TState>>();
@@ -81,7 +82,7 @@ public static class SimpleStateCheckerSerializerExtensions
                 throw new AbpException("JSON value is not an array of objects: " + value);
             }
 
-            checkers[i] = serializer.Deserialize<TState>(jsonObject);
+            checkers[i] = serializer.Deserialize(jsonObject, state);
         }
 
         return checkers.Where(x => x != null).ToArray();

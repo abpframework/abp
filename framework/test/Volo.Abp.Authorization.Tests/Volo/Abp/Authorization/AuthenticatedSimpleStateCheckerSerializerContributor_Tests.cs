@@ -27,7 +27,7 @@ public class AuthenticatedSimpleStateCheckerSerializerContributor_Tests
         var serializer = new AuthenticatedSimpleStateCheckerSerializerContributor();
 
         var jsonObject = (JsonObject)JsonNode.Parse("{\"T\":\"A\"}");
-        var checker = serializer.Deserialize<MyState>(jsonObject);
+        var checker = serializer.Deserialize(jsonObject, new MyState());
         
         checker.ShouldBeOfType<RequireAuthenticatedSimpleStateChecker<MyState>>();
         var globalFeaturesSimpleStateChecker = checker as RequireAuthenticatedSimpleStateChecker<MyState>;

@@ -10,6 +10,6 @@ public interface ISimpleStateCheckerSerializerContributor
         where TState : IHasSimpleStateCheckers<TState>;
 
     [CanBeNull]
-    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject)
+    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject, TState state)
         where TState : IHasSimpleStateCheckers<TState>;
 }

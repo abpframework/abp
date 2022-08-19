@@ -13,7 +13,7 @@ public class AuthenticatedSimpleStateCheckerSerializerContributor :
     public string SerializeToJson<TState>(ISimpleStateChecker<TState> checker) 
         where TState : IHasSimpleStateCheckers<TState>
     {
-        if (checker is not RequireAuthenticatedSimpleStateChecker<TState> requireAuthenticatedSimpleStateChecker)
+        if (checker is not RequireAuthenticatedSimpleStateChecker<TState>)
         {
             return null;
         }
@@ -25,7 +25,7 @@ public class AuthenticatedSimpleStateCheckerSerializerContributor :
         return jsonObject.ToJsonString();
     }
 
-    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject)
+    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject, TState state)
         where TState : IHasSimpleStateCheckers<TState>
     {
         if (jsonObject["T"]?.ToString() != CheckerShortName)

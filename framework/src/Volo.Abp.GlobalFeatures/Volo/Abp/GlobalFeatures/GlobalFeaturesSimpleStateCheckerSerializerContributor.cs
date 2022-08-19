@@ -34,7 +34,7 @@ public class GlobalFeaturesSimpleStateCheckerSerializerContributor :
         return jsonObject.ToJsonString();
     }
 
-    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject)
+    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject, TState state)
         where TState : IHasSimpleStateCheckers<TState>
     {
         if (jsonObject["T"]?.ToString() != CheckerShortName)

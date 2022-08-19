@@ -29,7 +29,7 @@ public class GlobalFeaturesSimpleStateCheckerSerializerContributor_Tests
         var serializer = new GlobalFeaturesSimpleStateCheckerSerializerContributor();
 
         var jsonObject = (JsonObject)JsonNode.Parse("{\"T\":\"G\",\"A\":true,\"N\":[\"FeatureA\",\"FeatureB\"]}");
-        var checker = serializer.Deserialize<MyState>(jsonObject);
+        var checker = serializer.Deserialize<MyState>(jsonObject, new MyState());
         
         checker.ShouldBeOfType<RequireGlobalFeaturesSimpleStateChecker<MyState>>();
         var globalFeaturesSimpleStateChecker = checker as RequireGlobalFeaturesSimpleStateChecker<MyState>;

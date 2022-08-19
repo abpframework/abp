@@ -100,8 +100,9 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
         if (!permissionRecord.StateCheckers.IsNullOrWhiteSpace())
         {
             var checkers = StateCheckerSerializer
-                .DeserializeArray<PermissionDefinition>(
-                    permissionRecord.StateCheckers
+                .DeserializeArray(
+                    permissionRecord.StateCheckers,
+                    permission
                 );
             permission.StateCheckers.AddRange(checkers);
         }

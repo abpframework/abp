@@ -33,12 +33,12 @@ public class SimpleStateCheckerSerializer :
     }
 
     [CanBeNull]
-    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject)
+    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject, TState state)
         where TState : IHasSimpleStateCheckers<TState>
     {
         foreach (var contributor in _contributors)
         {
-            var result = contributor.Deserialize<TState>(jsonObject);
+            var result = contributor.Deserialize(jsonObject, state);
             if (result != null)
             {
                 return result;

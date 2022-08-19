@@ -1,40 +1,43 @@
 ﻿using System.Linq;
 using System.Text.Json.Nodes;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
 
-namespace Volo.Abp.Features;
+namespace Volo.Abp.GlobalFeatures;
 
-public class FeaturesSimpleStateCheckerSerializerContributor :
+public class PermissionsSimpleStateCheckerSerializerContributor :
     ISimpleStateCheckerSerializerContributor,
     ISingletonDependency
 {
-    public const string CheckerShortName = "F";
-    
+    public const string CheckerShortName = "P";
+
     public string SerializeToJson<TState>(ISimpleStateChecker<TState> checker)
         where TState : IHasSimpleStateCheckers<TState>
     {
-        if (checker is not RequireFeaturesSimpleStateChecker<TState> featuresSimpleStateChecker)
+        if (checker is not RequirePermissionsSimpleStateChecker<TState> permissionsSimpleStateChecker)
         {
             return null;
         }
 
         var jsonObject = new JsonObject {
             ["T"] = CheckerShortName,
-            ["A"] = featuresSimpleStateChecker.RequiresAll
+            ["A"] = permissionsSimpleStateChecker.RequiresAll
         };
 
         var nameArray = new JsonArray();
-        foreach (var featureName in featuresSimpleStateChecker.FeatureNames)
+        foreach (var permissionName in permissionsSimpleStateChecker.PermissionNames)
         {
-            nameArray.Add(featureName);
+            nameArray.Add(permissionName);
         }
 
         jsonObject["N"] = nameArray;
         return jsonObject.ToJsonString();
     }
 
-    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject, TState state)
+    public ISimpleStateChecker<TState> Deserialize<TState>(
+        JsonObject jsonObject,
+        TState state)
         where TState : IHasSimpleStateCheckers<TState>
     {
         if (jsonObject["T"]?.ToString() != CheckerShortName)
@@ -48,9 +51,12 @@ public class FeaturesSimpleStateCheckerSerializerContributor :
             throw new AbpException("'N' is not an array in the serialized state checker! JsonObject: " + jsonObject.ToJsonString());
         }
 
-        return new RequireFeaturesSimpleStateChecker<TState>(
-            (bool?)jsonObject["A"] ?? false,
-            nameArray.Select(x => x.ToString()).ToArray()
+        return new RequirePermissionsSimpleStateChecker<TState>(
+            new RequirePermissionsSimpleBatchStateCheckerModel<TState>(
+                state,
+                nameArray.Select(x => x.ToString()).ToArray(),
+                (bool?)jsonObject["A"] ?? false
+            )
         );
     }
 }
