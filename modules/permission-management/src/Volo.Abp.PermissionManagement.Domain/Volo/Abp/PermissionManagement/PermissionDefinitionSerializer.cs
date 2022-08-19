@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Authorization.Permissions;
@@ -56,12 +55,6 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         }
     }
 
-    public Task<PermissionDefinition> DeserializeAsync(
-        PermissionDefinitionRecord permissionRecord)
-    {
-        throw new System.NotImplementedException();
-    }
-
     public Task<PermissionGroupDefinitionRecord> SerializeAsync(PermissionGroupDefinition permissionGroup)
     {
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
@@ -100,11 +93,6 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         return (permissionGroupRecords.ToArray(), permissionRecords.ToArray());
     }
 
-    public Task<PermissionGroupDefinition> DeserializeAsync(PermissionGroupDefinitionRecord permissionGroupRecord)
-    {
-        throw new System.NotImplementedException();
-    }
-    
     protected virtual string SerializeStateCheckers(List<ISimpleStateChecker<PermissionDefinition>> stateCheckers)
     {
         return StateCheckerSerializer.Serialize(stateCheckers);
