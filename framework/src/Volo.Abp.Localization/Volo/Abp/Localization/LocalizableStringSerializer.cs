@@ -51,6 +51,11 @@ public class LocalizableStringSerializer : ILocalizableStringSerializer, ITransi
                 
                 var resourceName = value.Substring(2, commaPosition - 2);
                 var name = value.Substring(commaPosition + 1);
+                if (name.IsNullOrWhiteSpace())
+                {
+                    throw new AbpException("Invalid LocalizableString value: " + value);
+                }
+                
                 var resourceType = LocalizationOptions.Resources.GetOrNull(resourceName)?.ResourceType;
                     
                 return new LocalizableString(
