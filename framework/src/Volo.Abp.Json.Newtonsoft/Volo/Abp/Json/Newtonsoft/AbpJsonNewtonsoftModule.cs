@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Modularity;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Modularity;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json.Newtonsoft;
@@ -12,5 +13,11 @@ public class AbpJsonNewtonsoftModule : AbpModule
         {
             options.Providers.Add<AbpNewtonsoftJsonSerializerProvider>();
         });
+
+        context.Services.AddOptions<AbpNewtonsoftJsonSerializerOptions>()
+            .Configure<AbpCamelCasePropertyNamesContractResolver>((options, contractResolver) =>
+            {
+                options.JsonSerializerSettings.ContractResolver = contractResolver;
+            });
     }
 }

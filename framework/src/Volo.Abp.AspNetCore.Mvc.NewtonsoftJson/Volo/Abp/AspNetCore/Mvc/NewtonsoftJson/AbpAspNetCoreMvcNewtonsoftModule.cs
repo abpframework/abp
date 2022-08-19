@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Volo.Abp.AspNetCore.Mvc.Json;
+using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.NewtonsoftJson;
@@ -14,29 +18,30 @@ public class AbpAspNetCoreMvcNewtonsoftModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var options = context.Services.ExecutePreConfiguredActions<AbpAspNetCoreMvcNewtonsoftOptions>();
+        context.Services.TryAddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
 
-        if (options.UseHybridSerializer)
+        Configure<MvcOptions>(mvcOptions =>
         {
-            context.Services.TryAddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+            mvcOptions.InputFormatters.RemoveType<NewtonsoftJsonInputFormatter>();
+            mvcOptions.OutputFormatters.RemoveType<NewtonsoftJsonOutputFormatter>();
+        });
 
-            Configure<MvcOptions>(mvcOptions =>
-            {
-                mvcOptions.InputFormatters.RemoveType<NewtonsoftJsonInputFormatter>();
-                mvcOptions.OutputFormatters.RemoveType<NewtonsoftJsonOutputFormatter>();
-            });
-
-            Configure<AbpHybridJsonFormatterOptions>(formatterOptions =>
-            {
-                formatterOptions.TextInputFormatters.Add<AbpNewtonsoftJsonFormatter>();
-                formatterOptions.TextOutputFormatters.Add<AbpNewtonsoftJsonFormatter>();
-            });
-        }
-        else
+        Configure<AbpHybridJsonFormatterOptions>(formatterOptions =>
         {
-            context.Services.AddMvcCore().AddNewtonsoftJson();
-        }
+            formatterOptions.TextInputFormatters.Add<AbpNewtonsoftJsonFormatter>();
+            formatterOptions.TextOutputFormatters.Add<AbpNewtonsoftJsonFormatter>();
+        });
 
-        context.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcNewtonsoftJsonOptions>, AbpMvcNewtonsoftJsonOptionsSetup>());
+        context.Services.AddOptions<MvcNewtonsoftJsonOptions>()
+            .Configure<IServiceProvider>((options, serviceProvider) =>
+            {
+                options.SerializerSettings.ContractResolver = serviceProvider.GetRequiredService<AbpCamelCasePropertyNamesContractResolver>();
+
+                var converters = serviceProvider.GetRequiredService<IOptions<AbpNewtonsoftJsonSerializerOptions>>().Value
+                    .Converters.Select(converterType => serviceProvider.GetRequiredService(converterType).As<JsonConverter>())
+                    .ToList();
+
+                options.SerializerSettings.Converters.InsertRange(0, converters);
+            });
     }
 }
