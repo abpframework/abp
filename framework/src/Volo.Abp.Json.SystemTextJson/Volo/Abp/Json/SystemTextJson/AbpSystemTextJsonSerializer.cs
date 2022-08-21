@@ -6,18 +6,13 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Json.SystemTextJson;
 
-public class AbpSystemTextJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
+public class AbpSystemTextJsonSerializer : IJsonSerializer, ITransientDependency
 {
     protected AbpSystemTextJsonSerializerOptions Options { get; }
 
-    public AbpSystemTextJsonSerializerProvider(IOptions<AbpSystemTextJsonSerializerOptions> options)
+    public AbpSystemTextJsonSerializer(IOptions<AbpSystemTextJsonSerializerOptions> options)
     {
         Options = options.Value;
-    }
-
-    public bool CanHandle(Type type)
-    {
-        return !Options.UnsupportedTypes.Contains(type);
     }
 
     public string Serialize(object obj, bool camelCase = true, bool indented = false)
@@ -35,7 +30,8 @@ public class AbpSystemTextJsonSerializerProvider : IJsonSerializerProvider, ITra
         return JsonSerializer.Deserialize(jsonString, type, CreateJsonSerializerOptions(camelCase));
     }
 
-    private readonly static ConcurrentDictionary<object, JsonSerializerOptions> JsonSerializerOptionsCache = new ConcurrentDictionary<object, JsonSerializerOptions>();
+    private static readonly ConcurrentDictionary<object, JsonSerializerOptions> JsonSerializerOptionsCache =
+        new ConcurrentDictionary<object, JsonSerializerOptions>();
 
     protected virtual JsonSerializerOptions CreateJsonSerializerOptions(bool camelCase = true, bool indented = false)
     {

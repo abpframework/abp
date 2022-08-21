@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
 namespace Volo.Abp.Auditing;
 
-public class JsonNetAuditSerializer_Test : AbpAuditingTestBase
+public class JsonAuditSerializer_Test : AbpAuditingTestBase
 {
-    private readonly JsonNetAuditSerializer _jsonNetAuditSerializer;
+    private readonly JsonAuditSerializer _jsonAuditSerializer;
 
-    public JsonNetAuditSerializer_Test()
+    public JsonAuditSerializer_Test()
     {
-        _jsonNetAuditSerializer = GetRequiredService<JsonNetAuditSerializer>();
+        _jsonAuditSerializer = GetRequiredService<JsonAuditSerializer>();
     }
 
     protected override void AfterAddApplication(IServiceCollection services)
@@ -34,7 +35,7 @@ public class JsonNetAuditSerializer_Test : AbpAuditingTestBase
                 {"input2", new Input2Dto {UserName = "admin", Password = "1q2w3E*", Birthday = DateTime.Now}}
             };
 
-        var str = _jsonNetAuditSerializer.Serialize(arguments);
+        var str = _jsonAuditSerializer.Serialize(arguments);
 
         str.ShouldNotContain("IdCard");
         str.ShouldNotContain("1q2w3E*");
@@ -58,7 +59,7 @@ public class JsonNetAuditSerializer_Test : AbpAuditingTestBase
         [DisableAuditing]
         public string Password { get; set; }
 
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public string PrivateEmail { get; set; }
 
         public DateTime Birthday { get; set; }

@@ -1,23 +1,22 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Volo.Abp.DependencyInjection;
+
 namespace Volo.Abp.Json.Newtonsoft;
 
-public class AbpNewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
+[Dependency(ReplaceServices = true)]
+public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
 {
+    protected IServiceProvider ServiceProvider { get; }
     protected IOptions<AbpNewtonsoftJsonSerializerOptions> Options { get; }
 
-    public AbpNewtonsoftJsonSerializerProvider(IOptions<AbpNewtonsoftJsonSerializerOptions> options)
+    public AbpNewtonsoftJsonSerializer(IServiceProvider serviceProvider, IOptions<AbpNewtonsoftJsonSerializerOptions> options)
     {
+        ServiceProvider = serviceProvider;
         Options = options;
-    }
-
-    public bool CanHandle(Type type)
-    {
-        return true;
     }
 
     public string Serialize(object obj, bool camelCase = true, bool indented = false)
@@ -35,8 +34,8 @@ public class AbpNewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITra
         return JsonConvert.DeserializeObject(jsonString, type, CreateJsonSerializerOptions(camelCase));
     }
 
-    private readonly static ConcurrentDictionary<object, JsonSerializerSettings> JsonSerializerOptionsCache = new ConcurrentDictionary<object, JsonSerializerSettings>();
-
+    private static readonly ConcurrentDictionary<object, JsonSerializerSettings> JsonSerializerOptionsCache =
+        new ConcurrentDictionary<object, JsonSerializerSettings>();
 
     protected virtual JsonSerializerSettings CreateJsonSerializerOptions(bool camelCase = true, bool indented = false)
     {
@@ -46,8 +45,10 @@ public class AbpNewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITra
             indented
         }, _ =>
         {
-            var settings = new JsonSerializerSettings {
-                Binder = Options.Value.JsonSerializerSettings.Binder, CheckAdditionalContent = Options.Value.JsonSerializerSettings.CheckAdditionalContent,
+            var settings = new JsonSerializerSettings
+            {
+                Binder = Options.Value.JsonSerializerSettings.Binder,
+                CheckAdditionalContent = Options.Value.JsonSerializerSettings.CheckAdditionalContent,
                 Context = Options.Value.JsonSerializerSettings.Context,
                 ContractResolver = Options.Value.JsonSerializerSettings.ContractResolver,
                 ConstructorHandling = Options.Value.JsonSerializerSettings.ConstructorHandling,
@@ -80,11 +81,9 @@ public class AbpNewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITra
                 TypeNameAssemblyFormatHandling = Options.Value.JsonSerializerSettings.TypeNameAssemblyFormatHandling
             };
 
-
-            // if (camelCase)
-            // {
-            //     settings.ContractResolver = ServiceProvider.GetRequiredService<AbpCamelCasePropertyNamesContractResolver>();
-            // }
+            settings.ContractResolver = camelCase
+                ? ServiceProvider.GetRequiredService<AbpCamelCasePropertyNamesContractResolver>()
+                : ServiceProvider.GetRequiredService<AbpDefaultContractResolver>();
 
             if (indented)
             {

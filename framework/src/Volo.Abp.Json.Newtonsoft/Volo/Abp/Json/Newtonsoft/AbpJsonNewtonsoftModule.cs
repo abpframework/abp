@@ -4,16 +4,11 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json.Newtonsoft;
 
-[DependsOn(typeof(AbpJsonCoreModule), typeof(AbpTimingModule))]
+[DependsOn(typeof(AbpJsonAbstractionsModule), typeof(AbpTimingModule))]
 public class AbpJsonNewtonsoftModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpJsonOptions>(options =>
-        {
-            options.Providers.Add<AbpNewtonsoftJsonSerializerProvider>();
-        });
-
         context.Services.AddOptions<AbpNewtonsoftJsonSerializerOptions>()
             .Configure<AbpCamelCasePropertyNamesContractResolver>((options, contractResolver) =>
             {

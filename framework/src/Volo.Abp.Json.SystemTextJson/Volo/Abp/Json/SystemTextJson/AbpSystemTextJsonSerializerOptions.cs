@@ -7,8 +7,6 @@ public class AbpSystemTextJsonSerializerOptions
 {
     public JsonSerializerOptions JsonSerializerOptions { get; }
 
-    public ITypeList UnsupportedTypes { get; }
-
     public AbpSystemTextJsonSerializerOptions()
     {
         JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
@@ -16,7 +14,5 @@ public class AbpSystemTextJsonSerializerOptions
             ReadCommentHandling = JsonCommentHandling.Skip,
             AllowTrailingCommas = true
         };
-
-        UnsupportedTypes = new TypeList();
     }
 }

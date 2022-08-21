@@ -11,11 +11,11 @@ namespace Volo.Abp.Json;
 
 public abstract class AbpSystemTextJsonSerializerProvider_TestBase : AbpJsonTestBase
 {
-    protected AbpSystemTextJsonSerializerProvider JsonSerializer;
+    protected AbpSystemTextJsonSerializer JsonSerializer;
 
     public AbpSystemTextJsonSerializerProvider_TestBase()
     {
-        JsonSerializer = GetRequiredService<AbpSystemTextJsonSerializerProvider>();
+        JsonSerializer = GetRequiredService<AbpSystemTextJsonSerializer>();
     }
 
     public class TestExtensibleObjectClass : ExtensibleObject

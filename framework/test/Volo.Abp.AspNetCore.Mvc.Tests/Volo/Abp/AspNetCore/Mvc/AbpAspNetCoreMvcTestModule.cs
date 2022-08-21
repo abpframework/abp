@@ -7,11 +7,9 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
-using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
-using Volo.Abp.AspNetCore.Mvc.NewtonsoftJson;
 using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Authorization;
@@ -30,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc;
 [DependsOn(
     typeof(AbpAspNetCoreTestBaseModule),
     typeof(AbpMemoryDbTestModule),
-    typeof(AbpAspNetCoreMvcNewtonsoftModule),
+    typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAutofacModule)
     )]
 public class AbpAspNetCoreMvcTestModule : AbpModule

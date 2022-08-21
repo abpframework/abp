@@ -10,7 +10,7 @@ public class ExtensibleObjectModifiers_Tests : AbpJsonTestBase
     [Fact]
     public void Should_Modify_Object()
     {
-        var jsonSerializer = GetRequiredService<AbpSystemTextJsonSerializerProvider>();
+        var jsonSerializer = GetRequiredService<AbpSystemTextJsonSerializer>();
 
         var extensibleObject = jsonSerializer.Deserialize<ExtensibleObject>("{\"ExtraProperties\": {\"Test-Key\":\"Test-Value\"}}");
 

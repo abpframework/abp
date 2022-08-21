@@ -9,16 +9,11 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json.SystemTextJson;
 
-[DependsOn(typeof(AbpJsonCoreModule), typeof(AbpTimingModule))]
+[DependsOn(typeof(AbpJsonAbstractionsModule), typeof(AbpTimingModule))]
 public class AbpJsonSystemTextJsonModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpJsonOptions>(options =>
-        {
-            options.Providers.Add<AbpSystemTextJsonSerializerProvider>();
-        });
-
         context.Services.AddOptions<AbpSystemTextJsonSerializerOptions>()
             .Configure<IServiceProvider>((options, serviceProvider) =>
             {

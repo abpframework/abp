@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -7,21 +7,16 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Json.Newtonsoft;
 
-public class AbpCamelCasePropertyNamesContractResolver : CamelCasePropertyNamesContractResolver, ITransientDependency
+public class AbpDefaultContractResolver : DefaultContractResolver, ITransientDependency
 {
     private readonly Lazy<AbpJsonIsoDateTimeConverter> _dateTimeConverter;
 
-    public AbpCamelCasePropertyNamesContractResolver(IServiceProvider serviceProvider)
+    public AbpDefaultContractResolver(IServiceProvider serviceProvider)
     {
         _dateTimeConverter = new Lazy<AbpJsonIsoDateTimeConverter>(
             serviceProvider.GetRequiredService<AbpJsonIsoDateTimeConverter>,
             true
         );
-
-        NamingStrategy = new CamelCaseNamingStrategy
-        {
-            ProcessDictionaryKeys = false
-        };
     }
 
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)

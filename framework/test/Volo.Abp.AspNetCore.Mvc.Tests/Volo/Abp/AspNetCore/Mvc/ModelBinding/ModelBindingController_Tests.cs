@@ -108,7 +108,7 @@ public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
     }
 }
 
-public abstract class ModelBindingController_Utc_Tests : ModelBindingController_Tests
+public class ModelBindingController_Utc_Tests : ModelBindingController_Tests
 {
     protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
     {
@@ -119,55 +119,12 @@ public abstract class ModelBindingController_Utc_Tests : ModelBindingController_
     }
 }
 
-public abstract class ModelBindingController_Local_Tests : ModelBindingController_Tests
+public class ModelBindingController_Local_Tests : ModelBindingController_Tests
 {
     protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
     {
         Kind = DateTimeKind.Local;
         services.Configure<AbpClockOptions>(x => x.Kind = Kind);
-
-        base.ConfigureServices(context, services);
-    }
-}
-
-public class SystemTextJson_ModelBindingController_Utc_Tests : ModelBindingController_Utc_Tests
-{
-
-}
-
-public class SystemTextJson_ModelBindingController_Local_Tests : ModelBindingController_Local_Tests
-{
-
-}
-
-public class Newtonsoft_ModelBindingController_Utc_Tests : ModelBindingController_Utc_Tests
-{
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-    {
-        services.Configure<AbpSystemTextJsonSerializerOptions>(options =>
-        {
-            options.UnsupportedTypes.Add<GetDateTimeKindModel>();
-            options.UnsupportedTypes.Add<GetDateTimeKindModel.GetDateTimeKindInnerModel>();
-        });
-
-        services.Configure<IOptions<Newtonsoft_ModelBindingController_Utc_Tests>>(x =>
-        {
-
-        });
-
-        base.ConfigureServices(context, services);
-    }
-}
-
-public class Newtonsoft_ModelBindingController_Local_Tests : ModelBindingController_Local_Tests
-{
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-    {
-        services.Configure<AbpSystemTextJsonSerializerOptions>(options =>
-        {
-            options.UnsupportedTypes.Add<GetDateTimeKindModel>();
-            options.UnsupportedTypes.Add<GetDateTimeKindModel.GetDateTimeKindInnerModel>();
-        });
 
         base.ConfigureServices(context, services);
     }

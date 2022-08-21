@@ -1,8 +1,11 @@
 using System;
+using System.Reflection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json.Newtonsoft;
@@ -42,5 +45,16 @@ public class AbpJsonIsoDateTimeConverter : IsoDateTimeConverter, ITransientDepen
     {
         var date = value as DateTime?;
         base.WriteJson(writer, date.HasValue ? _clock.Normalize(date.Value) : value, serializer);
+    }
+
+    internal static bool ShouldNormalize(MemberInfo member, JsonProperty property)
+    {
+        if (property.PropertyType != typeof(DateTime) &&
+            property.PropertyType != typeof(DateTime?))
+        {
+            return false;
+        }
+
+        return ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(member) == null;
     }
 }

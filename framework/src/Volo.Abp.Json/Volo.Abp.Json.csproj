@@ -15,7 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Json.Newtonsoft\Volo.Abp.Json.Newtonsoft.csproj" />
     <ProjectReference Include="..\Volo.Abp.Json.SystemTextJson\Volo.Abp.Json.SystemTextJson.csproj" />
   </ItemGroup>
 

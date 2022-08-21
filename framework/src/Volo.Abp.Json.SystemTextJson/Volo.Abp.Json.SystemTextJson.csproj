@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.Json.Core\Volo.Abp.Json.Core.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Json.Abstractions\Volo.Abp.Json.Abstractions.csproj" />
         <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
         <PackageReference Include="System.Text.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
     </ItemGroup>

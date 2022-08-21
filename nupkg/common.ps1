@@ -192,7 +192,7 @@ $projects = (
     "framework/src/Volo.Abp.Http",
     "framework/src/Volo.Abp.IdentityModel",
     "framework/src/Volo.Abp.Json",
-    "framework/src/Volo.Abp.Json.Core",
+    "framework/src/Volo.Abp.Json.Abstractions",
     "framework/src/Volo.Abp.Json.Newtonsoft",
     "framework/src/Volo.Abp.Json.SystemTextJson",
     "framework/src/Volo.Abp.Ldap",

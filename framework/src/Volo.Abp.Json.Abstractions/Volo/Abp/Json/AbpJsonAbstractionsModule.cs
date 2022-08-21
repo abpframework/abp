@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Json;
 
-public class AbpJsonCoreModule : AbpModule
+public class AbpJsonAbstractionsModule : AbpModule
 {
 
 }
