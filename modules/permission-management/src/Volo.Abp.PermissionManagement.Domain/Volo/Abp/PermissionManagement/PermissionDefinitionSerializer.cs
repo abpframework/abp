@@ -27,6 +27,44 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         GuidGenerator = guidGenerator;
         StringLocalizerFactory = stringLocalizerFactory;
     }
+
+    public async Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])> 
+        SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups)
+    {
+        var permissionGroupRecords = new List<PermissionGroupDefinitionRecord>();
+        var permissionRecords = new List<PermissionDefinitionRecord>();
+        
+        foreach (var permissionGroup in permissionGroups)
+        {
+            permissionGroupRecords.Add(await SerializeAsync(permissionGroup));
+            
+            foreach (var permission in permissionGroup.GetPermissionsWithChildren())
+            {
+                permissionRecords.Add(await SerializeAsync(permission, permissionGroup));
+            }
+        }
+
+        return (permissionGroupRecords.ToArray(), permissionRecords.ToArray());
+    }
+    
+    public Task<PermissionGroupDefinitionRecord> SerializeAsync(PermissionGroupDefinition permissionGroup)
+    {
+        using (CultureHelper.Use(CultureInfo.InvariantCulture))
+        {
+            var permissionGroupRecord = new PermissionGroupDefinitionRecord(
+                GuidGenerator.Create(),
+                permissionGroup.Name,
+                permissionGroup.DisplayName.Localize(StringLocalizerFactory)
+            );
+
+            foreach (var property in permissionGroup.Properties)
+            {
+                permissionGroupRecord.SetProperty(property.Key, property.Value);
+            }
+            
+            return Task.FromResult(permissionGroupRecord);
+        }
+    }
     
     public Task<PermissionDefinitionRecord> SerializeAsync(
         PermissionDefinition permission,
@@ -54,54 +92,16 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
             return Task.FromResult(permissionRecord);
         }
     }
-
-    public Task<PermissionGroupDefinitionRecord> SerializeAsync(PermissionGroupDefinition permissionGroup)
-    {
-        using (CultureHelper.Use(CultureInfo.InvariantCulture))
-        {
-            var permissionGroupRecord = new PermissionGroupDefinitionRecord(
-                GuidGenerator.Create(),
-                permissionGroup.Name,
-                permissionGroup.DisplayName.Localize(StringLocalizerFactory)
-            );
-
-            foreach (var property in permissionGroup.Properties)
-            {
-                permissionGroupRecord.SetProperty(property.Key, property.Value);
-            }
-            
-            return Task.FromResult(permissionGroupRecord);
-        }
-    }
-
-    public async Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])> 
-        SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups)
-    {
-        var permissionGroupRecords = new List<PermissionGroupDefinitionRecord>();
-        var permissionRecords = new List<PermissionDefinitionRecord>();
-        
-        foreach (var permissionGroup in permissionGroups)
-        {
-            permissionGroupRecords.Add(await SerializeAsync(permissionGroup));
-            
-            foreach (var permission in permissionGroup.GetPermissionsWithChildren())
-            {
-                permissionRecords.Add(await SerializeAsync(permission, permissionGroup));
-            }
-        }
-
-        return (permissionGroupRecords.ToArray(), permissionRecords.ToArray());
-    }
-
-    protected virtual string SerializeStateCheckers(List<ISimpleStateChecker<PermissionDefinition>> stateCheckers)
-    {
-        return StateCheckerSerializer.Serialize(stateCheckers);
-    }
-
+    
     protected virtual string SerializeProviders(ICollection<string> providers)
     {
         return providers.Any()
             ? providers.JoinAsString(",")
             : null;
+    }
+
+    protected virtual string SerializeStateCheckers(List<ISimpleStateChecker<PermissionDefinition>> stateCheckers)
+    {
+        return StateCheckerSerializer.Serialize(stateCheckers);
     }
 }
