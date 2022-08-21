@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -39,7 +40,8 @@ public class AbpPermissionManagementDomainModule : AbpModule
     private static void SaveStaticPermissionsToDatabase(ApplicationInitializationContext context)
     {
         var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
-        var hostApplicationLifetime = context.ServiceProvider.GetRequiredService<IHostApplicationLifetime>();
+        var hostApplicationLifetime = context.ServiceProvider.GetService<IHostApplicationLifetime>();
+        var cancellationToken = hostApplicationLifetime?.ApplicationStopping ?? CancellationToken.None;
 
         Task.Run(async () =>
         {
@@ -48,7 +50,7 @@ public class AbpPermissionManagementDomainModule : AbpModule
 
             try
             {
-                using (cancellationTokenProvider.Use(hostApplicationLifetime.ApplicationStopping))
+                using (cancellationTokenProvider.Use(cancellationToken))
                 {
                     await Policy
                         .Handle<Exception>()
