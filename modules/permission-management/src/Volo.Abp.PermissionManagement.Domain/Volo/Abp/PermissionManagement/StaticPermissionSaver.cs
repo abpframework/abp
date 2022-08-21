@@ -55,8 +55,6 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     [UnitOfWork]
     public virtual async Task SaveAsync()
     {
-        /* TODO: We may double check and lock for optimization 
-         */
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
             GetApplicationDistributedLockKey()
         );
@@ -69,7 +67,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         
         /* NOTE: This can be further optimized by using 4 cache values for:
          * Groups, permissions, deleted groups and deleted permissions.
-         * But the code would be more complex.
+         * But the code would be more complex. This is enough for now.
          */
 
         var cacheKey = GetApplicationHashCacheKey();
