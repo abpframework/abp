@@ -1,23 +1,24 @@
 Prism.languages.editorconfig = {
-	// https://editorconfig-specification.readthedocs.io/en/latest/
+	// https://editorconfig-specification.readthedocs.io
 	'comment': /[;#].*/,
 	'section': {
-		pattern: /(^[ \t]*)\[.+]/m,
+		pattern: /(^[ \t]*)\[.+\]/m,
 		lookbehind: true,
-		alias: 'keyword',
+		alias: 'selector',
 		inside: {
 			'regex': /\\\\[\[\]{},!?.*]/, // Escape special characters with '\\'
 			'operator': /[!?]|\.\.|\*{1,2}/,
 			'punctuation': /[\[\]{},]/
 		}
 	},
-	'property': {
+	'key': {
 		pattern: /(^[ \t]*)[^\s=]+(?=[ \t]*=)/m,
-		lookbehind: true
+		lookbehind: true,
+		alias: 'attr-name'
 	},
 	'value': {
 		pattern: /=.*/,
-		alias: 'string',
+		alias: 'attr-value',
 		inside: {
 			'punctuation': /^=/
 		}

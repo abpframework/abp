@@ -1,6 +1,7 @@
 {
   "culture": "sl",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Ime najemnika že obstaja: {Name}",
     "Menu:TenantManagement": "Upravljanje najemnikov",
     "Tenants": "Najemniki",
     "NewTenant": "Nov najemnik",
@@ -10,7 +11,6 @@
     "ConnectionStrings": "Connection Strings",
     "DisplayName:DefaultConnectionString": "Privzeti Connection String",
     "DisplayName:UseSharedDatabase": "Uporabi skupno bazo",
-    "ManageHostFeatures": "Upravljajte funkcije gostitelja",
     "Permission:TenantManagement": "Upravljanje najemnikov",
     "Permission:Create": "Ustvarjanje",
     "Permission:Edit": "Urejanje",

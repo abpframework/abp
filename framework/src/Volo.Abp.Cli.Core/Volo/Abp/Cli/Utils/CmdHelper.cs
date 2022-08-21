@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Utils;
@@ -9,6 +11,13 @@ public class CmdHelper : ICmdHelper, ITransientDependency
 {
     private const int SuccessfulExitCode = 0;
 
+    protected AbpCliOptions CliOptions { get; }
+    
+    public CmdHelper(IOptionsSnapshot<AbpCliOptions> cliOptions)
+    {
+        CliOptions = cliOptions.Value;
+    }
+    
     public void OpenWebPage(string url)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -26,10 +35,15 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         }
     }
 
-
     public void Run(string file, string arguments)
     {
         var procStartInfo = new ProcessStartInfo(file, arguments);
+
+        if (CliOptions.AlwaysHideExternalCommandOutput)
+        {
+            HideNewCommandWindow(procStartInfo);
+        }
+        
         Process.Start(procStartInfo)?.WaitForExit();
     }
 
@@ -45,6 +59,11 @@ public class CmdHelper : ICmdHelper, ITransientDependency
             GetArguments(command)
         );
 
+        if (CliOptions.AlwaysHideExternalCommandOutput)
+        {
+            HideNewCommandWindow(procStartInfo);
+        }
+
         if (!string.IsNullOrEmpty(workingDirectory))
         {
             procStartInfo.WorkingDirectory = workingDirectory;
@@ -56,6 +75,26 @@ public class CmdHelper : ICmdHelper, ITransientDependency
 
             exitCode = process.ExitCode;
         }
+    }
+
+    public Process RunCmdAndGetProcess(string command, string workingDirectory = null)
+    {
+        var procStartInfo = new ProcessStartInfo(
+            GetFileName(),
+            GetArguments(command)
+        );
+
+        if (CliOptions.AlwaysHideExternalCommandOutput)
+        {
+            HideNewCommandWindow(procStartInfo);
+        }
+
+        if (!string.IsNullOrEmpty(workingDirectory))
+        {
+            procStartInfo.WorkingDirectory = workingDirectory;
+        }
+
+        return Process.Start(procStartInfo);
     }
 
     public string RunCmdAndGetOutput(string command, string workingDirectory = null)
@@ -81,6 +120,7 @@ public class CmdHelper : ICmdHelper, ITransientDependency
                 Arguments = GetArguments(command),
                 UseShellExecute = false,
                 CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
@@ -109,15 +149,36 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         return output.Trim();
     }
 
-    public string GetArguments(string command)
+    public void RunCmdAndExit(string command, string workingDirectory = null, int? delaySeconds = null)
+    {
+        var procStartInfo = new ProcessStartInfo(
+            GetFileName(),
+            GetArguments(command, delaySeconds)
+        );
+
+        if (!string.IsNullOrEmpty(workingDirectory))
+        {
+            procStartInfo.WorkingDirectory = workingDirectory;
+        }
+        
+        if (CliOptions.AlwaysHideExternalCommandOutput)
+        {
+            HideNewCommandWindow(procStartInfo);
+        }
+
+        Process.Start(procStartInfo);
+        Environment.Exit(0);
+    }
+
+    public string GetArguments(string command, int? delaySeconds = null)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            return "-c \"" + command + "\"";
+            return delaySeconds == null ? "-c \"" + command + "\"" : "-c \"" + $"sleep {delaySeconds}s > /dev/null && " + command + "\"";
         }
 
         //Windows default.
-        return "/C \"" + command + "\"";
+        return delaySeconds == null ? "/C \"" + command + "\"" : "/C \"" + $"timeout /nobreak /t {delaySeconds} >null && " + command + "\"";
     }
 
     public string GetFileName()
@@ -144,5 +205,11 @@ public class CmdHelper : ICmdHelper, ITransientDependency
                                $"OS Architecture: {System.Runtime.InteropServices.RuntimeInformation.OSArchitecture} | " +
                                $"Framework: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription} | " +
                                $"Process Architecture{System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture}");
+    }
+
+    private void HideNewCommandWindow(ProcessStartInfo procStartInfo)
+    {
+        procStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        procStartInfo.CreateNoWindow = true;
     }
 }

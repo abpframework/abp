@@ -49,6 +49,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[AddPackageCommand.Name] = typeof(AddPackageCommand);
             options.Commands[AddModuleCommand.Name] = typeof(AddModuleCommand);
             options.Commands[ListModulesCommand.Name] = typeof(ListModulesCommand);
+            options.Commands[ListTemplatesCommand.Name] = typeof(ListTemplatesCommand);
             options.Commands[LoginCommand.Name] = typeof(LoginCommand);
             options.Commands[LoginInfoCommand.Name] = typeof(LoginInfoCommand);
             options.Commands[LogoutCommand.Name] = typeof(LogoutCommand);
@@ -64,6 +65,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[CreateMigrationAndRunMigratorCommand.Name] = typeof(CreateMigrationAndRunMigratorCommand);
             options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
+            options.Commands[CliCommand.Name] = typeof(CliCommand);
         });
 
         Configure<AbpCliServiceProxyOptions>(options =>

@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Account.Blazor", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Account.Installer", "src\Volo.Abp.Account.Installer\Volo.Abp.Account.Installer.csproj", "{EAAB416C-9113-486D-9B54-4DCF78FDC6AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Account.Web.OpenIddict", "src\Volo.Abp.Account.Web.OpenIddict\Volo.Abp.Account.Web.OpenIddict.csproj", "{53DA9051-4C76-4264-A1E1-2810DC685CB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{EAAB416C-9113-486D-9B54-4DCF78FDC6AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAAB416C-9113-486D-9B54-4DCF78FDC6AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAAB416C-9113-486D-9B54-4DCF78FDC6AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53DA9051-4C76-4264-A1E1-2810DC685CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53DA9051-4C76-4264-A1E1-2810DC685CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53DA9051-4C76-4264-A1E1-2810DC685CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53DA9051-4C76-4264-A1E1-2810DC685CB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{356EAC51-5D55-4852-A8A5-2F90EAC8DAE3} = {12FAE513-7575-4235-89DF-277BA1A3B098}
 		{EE8858B3-A638-481B-8EB9-74F5E7D43D80} = {B5881429-EFF7-4F30-8C0B-0AC41E36B74E}
 		{EAAB416C-9113-486D-9B54-4DCF78FDC6AB} = {B5881429-EFF7-4F30-8C0B-0AC41E36B74E}
+		{53DA9051-4C76-4264-A1E1-2810DC685CB2} = {B5881429-EFF7-4F30-8C0B-0AC41E36B74E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B054393-D2B2-4EA8-8A15-D60CBCF3E7A9}

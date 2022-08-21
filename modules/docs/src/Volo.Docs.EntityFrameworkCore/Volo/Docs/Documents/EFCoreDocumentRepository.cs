@@ -29,13 +29,13 @@ namespace Volo.Docs.Documents
                     LanguageCode = x.LanguageCode,
                     Format = x.Format,
                 })
-                .ToListAsync(cancellationToken: cancellationToken);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<Document>> GetListByProjectId(Guid projectId,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetDbSetAsync()).Where(d => d.ProjectId == projectId).ToListAsync(cancellationToken: cancellationToken);
+            return await (await GetDbSetAsync()).Where(d => d.ProjectId == projectId).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<Document>> GetListAsync(Guid? projectId, string version, string name, CancellationToken cancellationToken = default)
@@ -44,7 +44,7 @@ namespace Volo.Docs.Documents
                 .WhereIf(version != null, x => x.Version == version)
                 .WhereIf(name != null, x => x.Name == name)
                 .WhereIf(projectId.HasValue, x => x.ProjectId == projectId)
-                .ToListAsync(cancellationToken: cancellationToken);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<DocumentWithoutContent>> GetAllAsync(
@@ -86,7 +86,7 @@ namespace Volo.Docs.Documents
             );
 
             query = query.OrderBy(string.IsNullOrWhiteSpace(sorting) ? nameof(Document.Name) : sorting);
-            return await query.PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
+            return await query.PageBy(skipCount, maxResultCount).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<long> GetAllCountAsync(
@@ -138,19 +138,19 @@ namespace Volo.Docs.Documents
                 .FirstOrDefaultAsync(x =>
                     x.ProjectId == projectId && x.Name == name && x.LanguageCode == languageCode &&
                     x.Version == version,
-                cancellationToken);
+                GetCancellationToken(cancellationToken));
         }
 
-        public async Task DeleteAsync(Guid projectId, string name, string languageCode, string version, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(Guid projectId, string name, string languageCode, string version, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             await DeleteAsync(x =>
                 x.ProjectId == projectId && x.Name == name && x.LanguageCode == languageCode &&
-                x.Version == version, cancellationToken: cancellationToken);
+                x.Version == version, autoSave, cancellationToken: cancellationToken);
         }
 
         public async Task<Document> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await (await GetDbSetAsync()).Where(x => x.Id == id).SingleAsync(cancellationToken: cancellationToken);
+            return await (await GetDbSetAsync()).Where(x => x.Id == id).SingleAsync(cancellationToken: GetCancellationToken(cancellationToken));
         }
 
         protected virtual IQueryable<DocumentWithoutContent> ApplyFilterForGetAll(

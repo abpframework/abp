@@ -3,6 +3,7 @@ using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -14,7 +15,7 @@ using Tag = Volo.CmsKit.Tags.Tag;
 
 namespace Volo.CmsKit.MongoDB;
 
-[ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
+[ConnectionStringName(AbpCmsKitDbProperties.ConnectionStringName)]
 public class CmsKitMongoDbContext : AbpMongoDbContext, ICmsKitMongoDbContext
 {
     public IMongoCollection<Comment> Comments => Collection<Comment>();
@@ -40,6 +41,8 @@ public class CmsKitMongoDbContext : AbpMongoDbContext, ICmsKitMongoDbContext
     public IMongoCollection<MediaDescriptor> MediaDescriptors => Collection<MediaDescriptor>();
 
     public IMongoCollection<MenuItem> MenuItems => Collection<MenuItem>();
+
+    public IMongoCollection<GlobalResource> GlobalResources => Collection<GlobalResource>();
 
     protected override void CreateModel(IMongoModelBuilder modelBuilder)
     {

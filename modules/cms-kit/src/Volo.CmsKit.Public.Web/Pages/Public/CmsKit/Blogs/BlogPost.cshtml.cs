@@ -1,13 +1,8 @@
-﻿using Markdig;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Public.Blogs;
 
@@ -21,7 +16,7 @@ public class BlogPostModel : CmsKitPublicPageModelBase
     [BindProperty(SupportsGet = true)]
     public string BlogPostSlug { get; set; }
 
-    public BlogPostPublicDto BlogPost { get; private set; }
+    public BlogPostCommonDto BlogPost { get; private set; }
 
     public BlogFeatureDto CommentsFeature { get; private set; }
 
@@ -30,6 +25,8 @@ public class BlogPostModel : CmsKitPublicPageModelBase
     public BlogFeatureDto RatingsFeature { get; private set; }
 
     public BlogFeatureDto TagsFeature { get; private set; }
+    
+    public BlogFeatureDto BlogPostScrollIndexFeature { get; private set; }
 
     protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
 
@@ -65,6 +62,11 @@ public class BlogPostModel : CmsKitPublicPageModelBase
         if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
         {
             TagsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.TagsFeature.Name);
+        }
+
+        if (GlobalFeatureManager.Instance.IsEnabled<BlogPostScrollIndexFeature>())
+        {
+            BlogPostScrollIndexFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.BlogPostScrollIndexFeature.Name);
         }
     }
 }

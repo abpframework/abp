@@ -4,14 +4,14 @@
 (function (Prism) {
 
 	Prism.languages.django = {
-		'comment': /^{#[\s\S]*?#}$/,
+		'comment': /^\{#[\s\S]*?#\}$/,
 		'tag': {
-			pattern: /(^{%[+-]?\s*)\w+/,
+			pattern: /(^\{%[+-]?\s*)\w+/,
 			lookbehind: true,
 			alias: 'keyword'
 		},
 		'delimiter': {
-			pattern: /^{[{%][+-]?|[+-]?[}%]}$/,
+			pattern: /^\{[{%][+-]?|[+-]?[}%]\}$/,
 			alias: 'punctuation'
 		},
 		'string': {
@@ -30,15 +30,15 @@
 		},
 		'function': /\b[a-z_]\w+(?=\s*\()/i,
 		'keyword': /\b(?:and|as|by|else|for|if|import|in|is|loop|not|or|recursive|with|without)\b/,
-		'operator': /[-+*/%=]=?|!=|\*\*?=?|\/\/?=?|<[<=>]?|>[=>]?|[&|^~]/,
+		'operator': /[-+%=]=?|!=|\*\*?=?|\/\/?=?|<[<=>]?|>[=>]?|[&|^~]/,
 		'number': /\b\d+(?:\.\d+)?\b/,
-		'boolean': /[Tt]rue|[Ff]alse|[Nn]one/,
-		'variable': /\b\w+?\b/,
+		'boolean': /[Ff]alse|[Nn]one|[Tt]rue/,
+		'variable': /\b\w+\b/,
 		'punctuation': /[{}[\](),.:;]/
 	};
 
 
-	var pattern = /{{[\s\S]*?}}|{%[\s\S]*?%}|{#[\s\S]*?#}/g;
+	var pattern = /\{\{[\s\S]*?\}\}|\{%[\s\S]*?%\}|\{#[\s\S]*?#\}/g;
 	var markupTemplating = Prism.languages['markup-templating'];
 
 	Prism.hooks.add('before-tokenize', function (env) {
@@ -57,4 +57,4 @@
 		markupTemplating.tokenizePlaceholders(env, 'jinja2');
 	});
 
-})(Prism);
+}(Prism));

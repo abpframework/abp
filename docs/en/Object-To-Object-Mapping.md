@@ -12,7 +12,7 @@ public class UserAppService : ApplicationService
         _userRepository = userRepository;
     }
 
-    public void CreateUser(CreateUserInput input)
+    public async Task CreateUser(CreateUserInput input)
     {
         //Manually creating a User object from the CreateUserInput object
         var user = new User
@@ -23,7 +23,7 @@ public class UserAppService : ApplicationService
             Password = input.Password
         };
 
-        _userRepository.Insert(user);
+        await _userRepository.InsertAsync(user);
     }
 }
 ```
@@ -46,12 +46,12 @@ public class UserAppService : ApplicationService
         _userRepository = userRepository;
     }
 
-    public void CreateUser(CreateUserInput input)
+    public async Task CreateUser(CreateUserInput input)
     {
         //Automatically creating a new User object using the CreateUserInput object
         var user = ObjectMapper.Map<CreateUserInput, User>(input);
 
-        _userRepository.Insert(user);
+        await _userRepository.InsertAsync(user);
     }
 }
 ````

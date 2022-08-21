@@ -165,9 +165,14 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
                 arguments: Queue.Arguments
             );
 
+            if (Queue.PrefetchCount.HasValue)
+            {
+                Channel.BasicQos(0, Queue.PrefetchCount.Value, false);
+            }
+            
             var consumer = new AsyncEventingBasicConsumer(Channel);
             consumer.Received += HandleIncomingMessageAsync;
-
+            
             Channel.BasicConsume(
                 queue: Queue.QueueName,
                 autoAck: false,
@@ -176,14 +181,6 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
         }
         catch (Exception ex)
         {
-            if (ex is OperationInterruptedException operationInterruptedException &&
-                operationInterruptedException.ShutdownReason.ReplyCode == 406 &&
-                operationInterruptedException.Message.Contains("arg 'x-dead-letter-exchange'"))
-            {
-                Logger.LogException(ex, LogLevel.Warning);
-                await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
-            }
-
             Logger.LogException(ex, LogLevel.Warning);
             await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
         }

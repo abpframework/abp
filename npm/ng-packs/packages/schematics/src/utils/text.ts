@@ -55,3 +55,6 @@ function isUpperCase(str = '') {
 function toLowerCase(str = '') {
   return str.toLowerCase();
 }
+export function camelizeHyphen(str: string) {
+  return str.replace(/-([a-z])/g, g => g[1].toUpperCase());
+}

@@ -2,11 +2,13 @@
 using Volo.Abp.AutoMapper;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Contents;
+using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Public.Blogs;
 using Volo.CmsKit.Public.Comments;
-using Volo.CmsKit.Public.Pages;
+using Volo.CmsKit.Public.GlobalResources;
 using Volo.CmsKit.Public.Ratings;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Users;
@@ -28,10 +30,14 @@ public class PublicApplicationAutoMapperProfile : Profile
 
         CreateMap<Rating, RatingDto>();
 
-        CreateMap<Page, PageDto>();
+        CreateMap<Page, PageDto>()
+            .Ignore(x => x.ContentFragments);
 
-        CreateMap<BlogPost, BlogPostPublicDto>(MemberList.None);
+        CreateMap<BlogPost, BlogPostCommonDto>()
+            .Ignore(x => x.ContentFragments);
 
         CreateMap<MenuItem, MenuItemDto>();
+
+        CreateMap<GlobalResource, GlobalResourceDto>();
     }
 }

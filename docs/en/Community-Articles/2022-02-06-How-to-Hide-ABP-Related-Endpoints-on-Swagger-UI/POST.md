@@ -108,7 +108,7 @@ public class SwaggerSettingConsts
 
 We've created a class with a constant variable to avoid using the magic strings. This variable will be our setting name.
 
-ABP provides us a [Settings System](https://docs.abp.io/en/abp/latest/Setting) to easily define settings for our applications. We only need to create a class that derives from the `SettingDefinitionProvider` class, but we don't even need to do this because the ABP startup templates come with a pre-defined setting provider class.
+ABP provides us a [Settings System](https://docs.abp.io/en/abp/latest/Settings) to easily define settings for our applications. We only need to create a class that derives from the `SettingDefinitionProvider` class, but we don't even need to do this because the ABP startup templates come with a pre-defined setting provider class.
 
 * So open the setting definition provider class (`SwaggerSettingsDemoSettingDefinitionProvider` in our case, it's under the /Settings folder of your domain layer) and update the class:
 
@@ -424,5 +424,27 @@ If the setting value is true, we can simply remove the paths that start with the
 That's it. Now we can open the Setting Management page and enable/disable the swagger option by selecting the checkbox and show/hide ABP-related endpoints on runtime.
 
 ![](./swagger-hide-endpoints.gif)
+
+--- 
+
+## July 2022 Update
+
+With ABP v5.2+, there is a built-in option to hide/show ABP related endpoints on runtime. To hide ABP's default endpoints, call the `HideAbpEndpoints` method in your Swagger configuration as below:
+
+```csharp
+services.AddAbpSwaggerGen(
+    options => 
+    {
+        //... other options
+        
+        //Hides ABP Related endpoints on Swagger UI
+        options.HideAbpEndpoints();
+    }
+)
+```
+
+> For more info, please see the [Swagger Integration](https://docs.abp.io/en/abp/latest/API/Swagger-Integration#hide-abp-endpoints-on-swagger-ui) docs.
+
+---
 
 Thanks for reading.

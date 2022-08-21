@@ -69,7 +69,7 @@ public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
             }
             finally
             {
-                if (ShouldWriteAuditLog(context, hasError))
+                if (await ShouldWriteAuditLogAsync(_auditingManager.Current.Log, context, hasError))
                 {
                     if (UnitOfWorkManager.Current != null)
                     {
@@ -98,8 +98,16 @@ public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
                AspNetCoreAuditingOptions.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x));
     }
 
-    private bool ShouldWriteAuditLog(HttpContext httpContext, bool hasError)
+    private async Task<bool> ShouldWriteAuditLogAsync(AuditLogInfo auditLogInfo, HttpContext httpContext, bool hasError)
     {
+        foreach (var selector in AuditingOptions.AlwaysLogSelectors)
+        {
+            if (await selector(auditLogInfo))
+            {
+                return true;
+            }
+        }
+
         if (AuditingOptions.AlwaysLogOnException && hasError)
         {
             return true;

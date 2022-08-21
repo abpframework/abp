@@ -8,7 +8,7 @@ namespace Volo.Abp.Swashbuckle;
 
 public class AbpSwashbuckleDocumentFilter : IDocumentFilter
 {
-    protected string[] ActionUrlPrefixes = new[] {"Volo.Abp"};
+    protected string[] ActionUrlPrefixes = new[] {"Volo."};
     
     public virtual void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
     {

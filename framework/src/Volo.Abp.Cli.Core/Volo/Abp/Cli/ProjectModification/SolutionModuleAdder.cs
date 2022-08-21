@@ -100,7 +100,7 @@ public class SolutionModuleAdder : ITransientDependency
         Check.NotNull(solutionFile, nameof(solutionFile));
         Check.NotNull(moduleName, nameof(moduleName));
 
-        await PublishEventAsync(1, "Retriving module info...");
+        await PublishEventAsync(1, "Retrieving module info...");
         var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
 
 
@@ -427,11 +427,6 @@ public class SolutionModuleAdder : ITransientDependency
 
         await PublishEventAsync(9, $"Adding angular source code");
 
-        if (newTemplate)
-        {
-            MoveAngularFolderInNewTemplate(modulesFolderInSolution, moduleName);
-        }
-
         await AngularSourceCodeAdder.AddFromModuleAsync(solutionFilePath, angularPath);
     }
 
@@ -446,30 +441,6 @@ public class SolutionModuleAdder : ITransientDependency
             {
                 Directory.Delete(angDir, true);
             }
-        }
-    }
-
-    private static void MoveAngularFolderInNewTemplate(string modulesFolderInSolution, string moduleName)
-    {
-        var moduleAngularFolder = Path.Combine(modulesFolderInSolution, moduleName, "angular");
-
-        if (!Directory.Exists(moduleAngularFolder))
-        {
-            return;
-        }
-
-        var files = Directory.GetFiles(moduleAngularFolder);
-        var folders = Directory.GetDirectories(moduleAngularFolder);
-
-        Directory.CreateDirectory(Path.Combine(moduleAngularFolder, moduleName));
-
-        foreach (var file in files)
-        {
-            File.Move(file, Path.Combine(moduleAngularFolder, moduleName, Path.GetFileName(file)));
-        }
-        foreach (var folder in folders)
-        {
-            Directory.Move(folder, Path.Combine(moduleAngularFolder, moduleName, Path.GetFileName(folder)));
         }
     }
 
@@ -518,6 +489,7 @@ public class SolutionModuleAdder : ITransientDependency
         args.Options.Add("t", newProTemplate ? ModuleProTemplate.TemplateName : ModuleTemplate.TemplateName);
         args.Options.Add("v", version);
         args.Options.Add("o", Path.Combine(modulesFolderInSolution, module.Name));
+        args.Options.Add("sib", true.ToString());
 
         await NewCommand.ExecuteAsync(args);
     }
@@ -679,7 +651,7 @@ public class SolutionModuleAdder : ITransientDependency
 
         if (!string.IsNullOrEmpty(dbMigratorProject))
         {
-            CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProject) + "\" && dotnet run", out int exitCode);
+            CmdHelper.RunCmd($"dotnet run", out int exitCode, workingDirectory: Path.GetDirectoryName(dbMigratorProject));
         }
     }
 
@@ -804,6 +776,6 @@ public class SolutionModuleAdder : ITransientDependency
         return projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
             .Any(p => p.EndsWith(".HttpApi.Host"))
             && projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
-            .Any(p => p.EndsWith(".IdentityServer"));
+            .Any(p => p.EndsWith(".IdentityServer") || p.EndsWith(".AuthServer"));
     }
 }

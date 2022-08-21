@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -85,6 +86,11 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         OutboxConfig outboxConfig
     );
 
+    public abstract Task PublishManyFromOutboxAsync(
+        IEnumerable<OutgoingEventInfo> outgoingEvents,
+        OutboxConfig outboxConfig
+    );
+
     public abstract Task ProcessFromInboxAsync(
         IncomingEventInfo incomingEvent,
         InboxConfig inboxConfig);
@@ -97,11 +103,12 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             return false;
         }
 
-        foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes.Values)
+        foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes.Values.OrderBy(x => x.Selector is null))
         {
             if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
             {
-                var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
+                var eventOutbox =
+                    (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
                 var eventName = EventNameAttribute.GetNameOrDefault(eventType);
                 await eventOutbox.EnqueueAsync(
                     new OutgoingEventInfo(
@@ -131,11 +138,12 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
 
         using (var scope = ServiceScopeFactory.CreateScope())
         {
-            foreach (var inboxConfig in AbpDistributedEventBusOptions.Inboxes.Values)
+            foreach (var inboxConfig in AbpDistributedEventBusOptions.Inboxes.Values.OrderBy(x => x.EventSelector is null))
             {
                 if (inboxConfig.EventSelector == null || inboxConfig.EventSelector(eventType))
                 {
-                    var eventInbox = (IEventInbox)scope.ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
+                    var eventInbox =
+                        (IEventInbox)scope.ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
 
                     if (!messageId.IsNullOrEmpty())
                     {

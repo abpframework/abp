@@ -227,7 +227,7 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
             abpEllipsis="210px"
             [abpEllipsisEnabled]="!smallScreen"
             role="button"
-            class="btn d-block text-left dropdown-toggle"
+            class="btn d-block text-start dropdown-toggle"
           >
             <i class="fa fa-id-card-o"></i>
             {%{{{ 'AbpIdentity::Menu:IdentityManagement' | abpLocalization }}}%}
@@ -264,7 +264,7 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
             abpEllipsis="210px"
             [abpEllipsisEnabled]="!smallScreen"
             role="button"
-            class="btn d-block text-left dropdown-toggle"
+            class="btn d-block text-start dropdown-toggle"
           >
             <i class="fa fa-users"></i>
             {%{{{ 'AbpTenantManagement::Menu:TenantManagement' | abpLocalization }}}%}

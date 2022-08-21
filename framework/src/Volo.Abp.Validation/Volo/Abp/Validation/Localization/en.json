@@ -24,6 +24,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "This field must be a string or array type with a minimum length of '{0}'.",
     "ThisFieldIsNotAValidPhoneNumber.": "This field is not a valid phone number.",
     "ThisFieldMustBeBetween{0}And{1}": "This field must be between {0} and {1}.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}":"This field must be greater than or equal to {0}.",
+    "ThisFieldMustBeLessOrEqual{0}":"This field must be less than or equal to {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "This field must match the regular expression '{0}'.",
     "ThisFieldIsRequired.": "This field is required.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "This field must be a string with a maximum length of {0}.",

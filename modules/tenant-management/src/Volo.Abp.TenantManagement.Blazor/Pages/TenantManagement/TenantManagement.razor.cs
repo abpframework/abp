@@ -8,6 +8,7 @@ using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
 using Volo.Abp.BlazoriseUI;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.Blazor.Components;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.TenantManagement.Localization;
@@ -53,10 +54,6 @@ public partial class TenantManagement
 
     protected override ValueTask SetToolbarItemsAsync()
     {
-        Toolbar.AddButton(L["ManageHostFeatures"],
-            async () => await FeatureManagementModal.OpenAsync(FeatureProviderName),
-            "fa fa-cog");
-
         Toolbar.AddButton(L["NewTenant"],
             OpenCreateModalAsync,
             IconName.Add,
@@ -107,11 +104,12 @@ public partial class TenantManagement
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = EntityActions.Get<TenantManagement>()
+                        Actions = EntityActions.Get<TenantManagement>(),
                     },
                     new TableColumn
                     {
                         Title = L["TenantName"],
+                        Sortable = true,
                         Data = nameof(TenantDto.Name),
                     },
             });

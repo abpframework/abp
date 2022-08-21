@@ -20,8 +20,8 @@ public class AbpFeatureManagementDomainModule : AbpModule
             options.Providers.Add<DefaultValueFeatureManagementProvider>();
             options.Providers.Add<EditionFeatureManagementProvider>();
 
-                //TODO: Should be moved to the Tenant Management module
-                options.Providers.Add<TenantFeatureManagementProvider>();
+            //TODO: Should be moved to the Tenant Management module
+            options.Providers.Add<TenantFeatureManagementProvider>();
             options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = "AbpTenantManagement.Tenants.ManageFeatures";
         });
 

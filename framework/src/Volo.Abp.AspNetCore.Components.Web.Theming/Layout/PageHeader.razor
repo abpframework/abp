@@ -13,7 +13,7 @@
 
     @if (Options.Value.RenderBreadcrumbs &&  PageLayout.BreadcrumbItems.Any())
     {
-        <Column ColumnSize="ColumnSize.IsAuto.OnWidescreen" Padding="Padding.Is0.FromLeft.OnWidescreen">
+        <Column ColumnSize="ColumnSize.IsAuto.OnWidescreen" Padding="Padding.Is0.FromStart.OnWidescreen">
             <Breadcrumb Mode="@(BreadcrumbShowCurrent ? BreadcrumbMode.Auto : BreadcrumbMode.None)">
                 @if (BreadcrumbShowHome)
                 {

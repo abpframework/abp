@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Content;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Contents;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Blogs;
 
+[RequiresFeature(CmsKitFeatures.BlogEnable)]
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
@@ -24,15 +28,29 @@ public class BlogPostPublicController : CmsKitPublicControllerBase, IBlogPostPub
 
     [HttpGet]
     [Route("{blogSlug}/{blogPostSlug}")]
-    public virtual Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
+    public virtual Task<BlogPostCommonDto> GetAsync(string blogSlug, string blogPostSlug)
     {
         return BlogPostPublicAppService.GetAsync(blogSlug, blogPostSlug);
     }
 
     [HttpGet]
     [Route("{blogSlug}")]
-    public virtual Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
+    public virtual Task<PagedResultDto<BlogPostCommonDto>> GetListAsync(string blogSlug, BlogPostGetListInput input)
     {
         return BlogPostPublicAppService.GetListAsync(blogSlug, input);
+    }
+
+    [HttpGet]
+    [Route("authors")]
+    public Task<PagedResultDto<CmsUserDto>> GetAuthorsHasBlogPostsAsync(BlogPostFilteredPagedAndSortedResultRequestDto input)
+    {
+        return BlogPostPublicAppService.GetAuthorsHasBlogPostsAsync(input);
+    }
+
+    [HttpGet]
+    [Route("authors/{id}")]
+    public Task<CmsUserDto> GetAuthorHasBlogPostAsync(Guid id)
+    {
+        return BlogPostPublicAppService.GetAuthorHasBlogPostAsync(id);
     }
 }

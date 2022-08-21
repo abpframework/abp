@@ -423,7 +423,7 @@ namespace MyProject.Issues
 
 ## Integration Tests
 
-> You can follow the [web application development tutorial](Tutorials/Part-1.md) to learn developing a full stack application, including the integration tests.
+> You can also follow the [web application development tutorial](Tutorials/Part-1.md) to learn developing a full stack application, including the integration tests.
 
 ### The Integration Test Infrastructure
 
@@ -442,7 +442,7 @@ Using in-memory SQLite database has two main advantages;
 
 ### The Seed Data
 
-Writing tests against an empty database is not practical. In most cases, you need to some initial data in the database. For example, if you write a test class that query, update and delete the Products, it would be helpful to have a few products in the database before executing the test case.
+Writing tests against an empty database is not practical. In most cases, you need to some initial data in the database. For example, if you write a test class that query, update and delete the products, it would be helpful to have a few products in the database before executing the test case.
 
 ABP's [Data Seeding](Data-Seeding.md) system is a powerful way to seed the initial data. The application startup template has a *YourProject*TestDataSeedContributor class in the `.TestBase` project. You can fill it to have an initial data that you can use for each test method.
 
@@ -648,6 +648,101 @@ namespace MyProject.Issues
 ````
 
 It's that simple. This test method tests everything, including the application service, EF Core mapping, object to object mapping and the repository implementation. In this way, you can fully test the Application Layer and the Domain Layer of your solution.
+
+### Dealing with Unit of Work in Integration Tests
+
+ABP's [unit of work](Unit-Of-Work.md) system controls the database connection and transaction management in your application. It seamlessly works while you writing your application code, so you may not aware of it.
+
+In the ABP Framework, all the database operations must be performed inside a unit of work scope. When you test an [application service](Application-Services.md) method, the unit of work scope will be the scope of your application service method. If you are testing a [repository](Repositories.md) method, the unit of work scope will be the scope of your repository method.
+
+In some cases, you may need to manually control the unit of work scope. Consider the following test method:
+
+````csharp
+public class IssueRepository_Tests : MyProjectDomainTestBase
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueRepository_Tests()
+    {
+        _issueRepository = GetRequiredService<IRepository<Issue, Guid>>();
+    }
+
+    public async Task Should_Query_By_Title()
+    {
+        IQueryable<Issue> queryable = await _issueRepository.GetQueryableAsync();
+        var issue = queryable.FirstOrDefaultAsync(i => i.Title == "My issue title");
+        issue.ShouldNotBeNull();
+    }
+}
+````
+
+We are using `_issueRepository.GetQueryableAsync` to obtain an `IQueryable<Issue>` object. Then, we are using the `FirstOrDefaultAsync` method to query an issue by its title. The database query is executed at this point, and you get an exception indicating that there is no active unit of work.
+
+To make that test properly working, you should manually start a unit of work scope as shown in the following example:
+
+````csharp
+public class IssueRepository_Tests : MyProjectDomainTestBase
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+    private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+    public IssueRepository_Tests()
+    {
+        _issueRepository = GetRequiredService<IRepository<Issue, Guid>>();
+        _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+    }
+
+    public async Task Should_Query_By_Title()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            IQueryable<Issue> queryable = await _issueRepository.GetQueryableAsync();
+            var issue = queryable.FirstOrDefaultAsync(i => i.Title == "My issue title");
+            issue.ShouldNotBeNull();
+            await uow.CompleteAsync();
+        }
+    }
+}
+````
+
+We've used the `IUnitOfWorkManager` service to create a unit of work scope, then called the `FirstOrDefaultAsync` method inside that scope, so we don't have the problem anymore.
+
+> Note that we've tested the `FirstOrDefaultAsync` to demonstrate the unit of work problem. Normally, as a good principle, you should write tests only your own code.
+
+### Working with DbContext
+
+In some cases, you may want to directory work with the Entity Framework's `DbContext` object to perform database operations in your test methods. In this case, you can use `IDbContextProvider<T>`service to obtain a `DbContext` instance inside a unit of work.
+
+The following example shows how you can create a `DbContext` object in a test method:
+
+````csharp
+public class MyDbContext_Tests : MyProjectDomainTestBase
+{
+    private readonly IDbContextProvider<MyProjectDbContext> _dbContextProvider;
+    private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+    public IssueRepository_Tests()
+    {
+        _dbContextProvider = GetRequiredService<IDbContextProvider<MyProjectDbContext>>();
+        _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+    }
+
+    public async Task Should_Query_By_Title()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var dbContext = await _dbContextProvider.GetDbContextAsync();
+            var issue = await dbContext.Issues.FirstOrDefaultAsync(i => i.Title == "My issue title");
+            issue.ShouldNotBeNull();
+            await uow.CompleteAsync();
+        }
+    }
+}
+````
+
+Just like we've done in the *Dealing with Unit of Work in Integration Tests* section, we should perform `DbContext` operations inside an active unit of work.
+
+For [MongoDB](MongoDB.md), you can use the `IMongoDbContextProvider<T>` service to obtain a `DbContext` object and directly use MongoDB APIs in your test methods.
 
 ## UI Tests
 

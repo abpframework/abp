@@ -2,12 +2,51 @@
     var l = abp.localization.getResource('AbpIdentity');
 
     var _identityUserAppService = volo.abp.identity.identityUser;
-    var _editModal = new abp.ModalManager(
-        abp.appPath + 'Identity/Users/EditModal'
-    );
-    var _createModal = new abp.ModalManager(
-        abp.appPath + 'Identity/Users/CreateModal'
-    );
+
+    var togglePasswordVisibility = function () {
+        $("#PasswordVisibilityButton").click(function (e) {
+            var button = $(this);
+            var passwordInput = button.parent().find("input");
+            if(!passwordInput) {
+                return;
+            }
+
+            if(passwordInput.attr("type") === "password") {
+                passwordInput.attr("type", "text");
+            }
+            else {
+                passwordInput.attr("type", "password");
+            }
+
+            var icon = button.find("i");
+            if(icon) {
+                icon.toggleClass("fa-eye-slash").toggleClass("fa-eye");
+            }
+        });
+    }
+    
+    abp.modals.createUser = function () {
+        var initModal = function (publicApi, args) {
+            togglePasswordVisibility();
+        };
+        return { initModal: initModal };
+    }
+    
+    abp.modals.editUser = function () {
+        var initModal = function (publicApi, args) {
+            togglePasswordVisibility();
+        };
+        return { initModal: initModal };
+    }
+    
+    var _editModal = new abp.ModalManager({
+        viewUrl: abp.appPath + 'Identity/Users/EditModal',
+        modalClass: "editUser"
+    });
+    var _createModal = new abp.ModalManager({
+        viewUrl: abp.appPath + 'Identity/Users/CreateModal',
+        modalClass: "createUser"
+    });
     var _permissionsModal = new abp.ModalManager(
         abp.appPath + 'AbpPermissionManagement/PermissionManagementModal'
     );
@@ -44,9 +83,9 @@
                     },
                     {
                         text: l('Delete'),
-                        visible: abp.auth.isGranted(
-                            'AbpIdentity.Users.Delete'
-                        ),
+                        visible: function(data) {
+                            return abp.auth.isGranted('AbpIdentity.Users.Delete') && abp.currentUser.id !== data.id;
+                        },
                         confirmMessage: function (data) {
                             return l(
                                 'UserDeletionConfirmationMessage',

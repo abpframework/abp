@@ -8,6 +8,12 @@ There is only one **standard toolbar** named "Main" (defined as a constant: `Sta
 
 In the screenshot above, there are two items added to the main toolbar: Language switch component & user menu. You can add your own items here.
 
+Also, [LeptonX Lite Theme](../../Themes/LeptonXLite/Blazor.md) has 2 different toolbars for desktop and mobile views which defined as constants: `LeptonXLiteToolbars.Main`, `LeptonXLiteToolbars.MainMobile`.
+
+| LeptonXLiteToolbars.Main | LeptonXLiteToolbars.MainMobile |
+| :---: | :---: |
+| ![leptonx](../../images/leptonxlite-toolbar-main-example.png) | ![leptonx](../../images/leptonxlite-toolbar-mainmobile-example.png) |
+
 ## Example: Add a Notification Icon
 
 In this example, we will add a **notification (bell) icon** to the left of the language switch item. A item in the toolbar should be a **Razor Component**. So, first, create a new razor component in your project (the location of the component doesn't matter):
@@ -34,23 +40,16 @@ This sample simply shows a message. In real life, you probably want to call an H
 Now, we can create a class implementing the `IToolbarContributor` interface:
 
 ````csharp
-using System.Threading.Tasks;
-using MyCompanyName.MyProjectName.Blazor.Components;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Toolbars;
-
-namespace MyCompanyName.MyProjectName.Blazor
+public class MyToolbarContributor : IToolbarContributor
 {
-    public class MyToolbarContributor : IToolbarContributor
+    public Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
     {
-        public Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
+        if (context.Toolbar.Name == StandardToolbars.Main)
         {
-            if (context.Toolbar.Name == StandardToolbars.Main)
-            {
-                context.Toolbar.Items.Insert(0, new ToolbarItem(typeof(Notification)));
-            }
-
-            return Task.CompletedTask;
+            context.Toolbar.Items.Insert(0, new ToolbarItem(typeof(Notification)));
         }
+
+        return Task.CompletedTask;
     }
 }
 ````

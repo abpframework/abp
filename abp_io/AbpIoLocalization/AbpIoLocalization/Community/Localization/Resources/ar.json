@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "لإنشاء منشور فعال ، أضف صورة غلاف. قم بتحميل صور بنسبة عرض إلى ارتفاع تبلغ 16: 9 للحصول على أفضل عرض. الحد الأقصى لحجم الملف: 1 ميغا بايت.",
     "ThankYouForContribution": "شكرًا لك على المساهمة في مجتمع ABP.",
     "GithubPost": "المادة جيثب",
-    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\"> 1. </span> اكتب مقالة في أي مستودع GitHub عام بتنسيق Markdown. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Posts/2020-12-04-Event-Organizer/Post.md\"> مثال </a>",
+    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\"> 1. </span> اكتب مقالة في أي مستودع GitHub عام بتنسيق Markdown. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\"> مثال </a>",
     "GithubPostSubmitStepTwo": "<span class=\"font-weight-bold\"> 2. </span> أرسل عنوان URL لمقالتك باستخدام النموذج.",
     "GithubPostSubmitStepThree": "<span class=\"font-weight-bold\"> 3. </span> سيتم عرض مقالتك في موقع الويب هذا.",
     "YoutubeVideo": "فيديو يوتيوب",

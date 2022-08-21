@@ -79,6 +79,7 @@ $solutions = (
     "modules/feature-management",
     "modules/identity",
     "modules/identityserver",
+    "modules/openiddict",
     "modules/permission-management",
     "modules/setting-management",
     "modules/tenant-management",
@@ -177,6 +178,7 @@ $projects = (
     "framework/src/Volo.Abp.ExceptionHandling",
     "framework/src/Volo.Abp.Features",
     "framework/src/Volo.Abp.FluentValidation",
+    "framework/src/Volo.Abp.Gdpr.Abstractions",
     "framework/src/Volo.Abp.GlobalFeatures",
     "framework/src/Volo.Abp.Guids",
     "framework/src/Volo.Abp.HangFire",
@@ -201,6 +203,7 @@ $projects = (
     "framework/src/Volo.Abp.ObjectMapping",
     "framework/src/Volo.Abp.Quartz",
     "framework/src/Volo.Abp.RabbitMQ",
+    "framework/src/Volo.Abp.RemoteServices",
     "framework/src/Volo.Abp.Security",
     "framework/src/Volo.Abp.Serialization",
     "framework/src/Volo.Abp.Settings",
@@ -230,6 +233,7 @@ $projects = (
     "modules/account/src/Volo.Abp.Account.HttpApi",
     "modules/account/src/Volo.Abp.Account.Web",
     "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
+    "modules/account/src/Volo.Abp.Account.Web.OpenIddict",
     "modules/account/src/Volo.Abp.Account.Blazor",
     "modules/account/src/Volo.Abp.Account.Installer",
     "studio/source-codes/Volo.Abp.Account.SourceCode",
@@ -339,6 +343,14 @@ $projects = (
     "modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer",
     "modules/identityserver/src/Volo.Abp.IdentityServer.Installer",
     "studio/source-codes/Volo.Abp.IdentityServer.SourceCode",
+
+    # modules/openiddict
+    "modules/openiddict/src/Volo.Abp.OpenIddict.AspNetCore",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.Domain",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.Domain.Shared",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.EntityFrameworkCore",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.MongoDB",
+    "modules/openiddict/src/Volo.Abp.PermissionManagement.Domain.OpenIddict",
 
     # modules/permission-management
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application.Contracts",

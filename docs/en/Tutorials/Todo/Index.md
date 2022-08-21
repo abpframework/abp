@@ -17,6 +17,7 @@ You can find the source code of the completed application [here](https://github.
 ## Pre-Requirements
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 6.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* [Node v14.x](https://nodejs.org/)
 
 {{if DB=="Mongo"}}
 
@@ -24,21 +25,17 @@ You can find the source code of the completed application [here](https://github.
 
 {{end}}
 
-{{if UI=="NG"}}
+## Install ABP CLI Tool
 
-* [Node v14.x](https://nodejs.org/)
-
-{{end}}
-
-## Creating a New Solution
-
-We will use the [ABP CLI](../../CLI.md) to create new solutions with the ABP Framework. You can run the following command in a command-line terminal to install it:
+We will use the [ABP CLI](../../CLI.md) to create new ABP solutions. You can run the following command on a terminal window to install this dotnet tool:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
 ````
 
-Then create an empty folder, open a command-line terminal and execute the following command in the terminal:
+## Create Your ABP Solution
+
+Create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
 ````bash
 abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{else if UI=="NG"}} -u angular{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
@@ -96,13 +93,7 @@ Ensure that the `TodoApp.HttpApi.Host` project is the startup project, then run 
 
 You can explore and test your HTTP API with this UI. If it works, we can run the Angular client application.
 
-First, run the following command to restore the NPM packages;
-
-````bash
-npm install
-````
-
-It will take some time to install all the packages. Then you can run the application using the following command:
+You can run the application using the following command:
 
 ````bash
 npm start

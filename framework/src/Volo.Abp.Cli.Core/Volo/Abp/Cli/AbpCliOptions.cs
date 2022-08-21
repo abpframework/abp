@@ -16,6 +16,8 @@ public class AbpCliOptions
     /// Default value: "CLI".
     /// </summary>
     public string ToolName { get; set; } = "CLI";
+    
+    public bool AlwaysHideExternalCommandOutput { get; set; }
 
     public AbpCliOptions()
     {

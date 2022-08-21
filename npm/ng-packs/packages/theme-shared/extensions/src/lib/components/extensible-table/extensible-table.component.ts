@@ -30,7 +30,12 @@ import { EntityActionList } from '../../models/entity-actions';
 import { EntityProp, EntityPropList } from '../../models/entity-props';
 import { PropData } from '../../models/props';
 import { ExtensionsService } from '../../services/extensions.service';
-import { EXTENSIONS_IDENTIFIER, PROP_DATA_STREAM } from '../../tokens/extensions.token';
+import {
+  ENTITY_PROP_TYPE_CLASSES,
+  EntityPropTypeClass,
+  EXTENSIONS_IDENTIFIER,
+  PROP_DATA_STREAM,
+} from '../../tokens/extensions.token';
 
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
@@ -62,6 +67,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   hasAtLeastOnePermittedAction: boolean;
 
+  entityPropTypeClasses: EntityPropTypeClass;
+
   readonly columnWidths: number[];
 
   readonly propList: EntityPropList<R>;
@@ -75,6 +82,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     private config: ConfigStateService,
     private injector: Injector,
   ) {
+    this.entityPropTypeClasses = injector.get(ENTITY_PROP_TYPE_CLASSES);
     this.getInjected = injector.get.bind(injector);
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);
@@ -104,8 +112,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   private getIcon(value: boolean) {
     return value
-      ? '<div class="text-center text-success"><i class="fa fa-check"></i></div>'
-      : '<div class="text-center text-danger"><i class="fa fa-times"></i></div>';
+      ? '<div class="text-success"><i class="fa fa-check"></i></div>'
+      : '<div class="text-danger"><i class="fa fa-times"></i></div>';
   }
 
   private getEnum(rowValue: any, list: Array<ABP.Option<any>>) {

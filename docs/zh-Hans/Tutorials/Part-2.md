@@ -10,7 +10,7 @@
 
 在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-* **{{DB_Text}}** 做为ORM提供程序.
+* **{{DB_Value}}** 做为ORM提供程序.
 * **{{UI_Value}}** 做为UI框架.
 
 本教程分为以下部分:
@@ -135,15 +135,15 @@ successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
     "CreationTime": "Creation time",
     "AreYouSure": "Are you sure?",
     "AreYouSureToDelete": "Are you sure you want to delete this item?",
-    "Enum:BookType:0": "Undefined",
-    "Enum:BookType:1": "Adventure",
-    "Enum:BookType:2": "Biography",
-    "Enum:BookType:3": "Dystopia",
-    "Enum:BookType:4": "Fantastic",
-    "Enum:BookType:5": "Horror",
-    "Enum:BookType:6": "Science",
-    "Enum:BookType:7": "Science fiction",
-    "Enum:BookType:8": "Poetry"
+    "Enum:BookType.Undefined": "Undefined",
+    "Enum:BookType.Adventure": "Adventure",
+    "Enum:BookType.Biography": "Biography",
+    "Enum:BookType.Dystopia": "Dystopia",
+    "Enum:BookType.Fantastic": "Fantastic",
+    "Enum:BookType.Horror": "Horror",
+    "Enum:BookType.Science": "Science",
+    "Enum:BookType.ScienceFiction": "Science fiction",
+    "Enum:BookType.Poetry": "Poetry"
   }
 }
 ````
@@ -152,7 +152,7 @@ successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
 
 * 本地化关键字名称是任意的. 你可以设置任何名称. 对于特定的文本类型,我们更喜欢遵循一些约定:
   * 为按钮项添加 `Menu:` 前缀.
-  * 使用 `Enum:<enum-type>:<enum-value>` 命名约定来本地化枚举成员. 当您这样做时ABP可以在某些适当的情况下自动将枚举本地化.
+  * 使用 `Enum:<enum-type>:<enum-name>` 或 `<enum-type>.<enum-name>` 或 `<enum-name>` 命名约定来本地化枚举成员. 当您这样做时ABP可以在某些适当的情况下自动将枚举本地化.
 
 如果未在本地化文件中定义文本,则文本将**回退**到本地化键(ASP.NET Core的标准行为).
 
@@ -334,7 +334,7 @@ $(function () {
 
 这是一个可以正常工作的,服务端分页,排序和本地化的图书列表.
 
-{{if UI == "NG"}}
+{{else if UI == "NG"}}
 
 ## 安装NPM包
 
@@ -514,7 +514,7 @@ export class BookComponent implements OnInit {
           {%{{{ '::Menu:Books' | abpLocalization }}}%}
         </h5>
       </div>
-      <div class="text-right col col-md-6"></div>
+      <div class="text-end col col-md-6"></div>
     </div>
   </div>
   <div class="card-body">
@@ -626,7 +626,7 @@ ABP提供了一个通用的基类,`AbpCrudPageBase<...>`,用来创建CRUD风格�
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType:{(int)context.Type}"]
+                        @L[$"Enum:BookType.{Enum.GetName(context.Type)}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"

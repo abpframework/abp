@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "Ak chcete vytvoriť efektívny príspevok, pridajte titulnú fotografiu. Pre optimálne zobrazenie nahrávajte obrázky s pomerom strán 16:9. Maximálna veľkosť súboru: 1 MB.",
     "ThankYouForContribution": "Ďakujeme, že ste prispeli do ABP komunity.",
     "GithubPost": "Článok na Githube",
-    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Napíšte článok v ľubovoľnom verejnom repozitári GitHub vo formáte Markdown. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Posts/2020-12-04-Event-Organizer/Post.md\">príklad</a>",
+    "GithubPostSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Napíšte článok v ľubovoľnom verejnom repozitári GitHub vo formáte Markdown. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\">príklad</a>",
     "GithubPostSubmitStepTwo": "<span class=\"font-weight-bold\">2.</span> Odoslať URL adresu článku pomocou formulára.",
     "GithubPostSubmitStepThree": "<span class=\"font-weight-bold\">3.</span> Váš článok sa zobrazí na tejto webovej stránke.",
     "YoutubeVideo": "Video na YouTube",

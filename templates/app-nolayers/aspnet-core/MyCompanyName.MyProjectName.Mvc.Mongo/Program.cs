@@ -19,14 +19,12 @@ public class Program
             .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .WriteTo.Async(c => c.File("Logs/logs.txt"))
-#if DEBUG
             .WriteTo.Async(c => c.Console());
-#endif
+
         if (IsMigrateDatabase(args))
         {
             loggerConfiguration.MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning);
             loggerConfiguration.MinimumLevel.Override("Microsoft", LogEventLevel.Warning);
-            loggerConfiguration.MinimumLevel.Override("IdentityServer4.Startup", LogEventLevel.Warning);
         }
 
         Log.Logger = loggerConfiguration.CreateLogger();

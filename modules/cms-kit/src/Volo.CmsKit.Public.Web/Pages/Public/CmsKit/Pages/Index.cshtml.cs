@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.Public.Pages;
 using Volo.CmsKit.Web.Pages;
 
@@ -12,7 +13,7 @@ public class IndexModel : CommonPageModel
 
     protected IPagePublicAppService PagePublicAppService { get; }
 
-    public PageDto Page;
+    public PageDto PageDto { get; private set; }
 
     public IndexModel(IPagePublicAppService pagePublicAppService)
     {
@@ -21,9 +22,9 @@ public class IndexModel : CommonPageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
-        Page = await PagePublicAppService.FindBySlugAsync(Slug);
+        PageDto = await PagePublicAppService.FindBySlugAsync(Slug);
 
-        if (Page == null)
+        if (PageDto == null)
         {
             return NotFound();
         }

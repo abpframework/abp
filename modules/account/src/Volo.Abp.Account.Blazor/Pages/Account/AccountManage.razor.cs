@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.Identity;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Account.Blazor.Pages.Account;
 
@@ -53,10 +54,12 @@ public partial class AccountManage
             NewPassword = ChangePasswordModel.NewPassword
         });
 
+        ChangePasswordModel.Clear();
+
         await UiMessageService.Success(L["PasswordChanged"]);
     }
 
-    protected async Task UpdatePersonalInfoAsync()
+    protected virtual async Task UpdatePersonalInfoAsync()
     {
         await ProfileAppService.UpdateAsync(
             ObjectMapper.Map<PersonalInfoModel, UpdateProfileDto>(PersonalInfoModel)
@@ -75,9 +78,16 @@ public class ChangePasswordModel
     public string NewPasswordConfirm { get; set; }
 
     public bool HideOldPasswordInput { get; set; }
+
+    public void Clear()
+    {
+        CurrentPassword = string.Empty;
+        NewPassword = string.Empty;
+        NewPasswordConfirm = string.Empty;
+    }
 }
 
-public class PersonalInfoModel
+public class PersonalInfoModel : ExtensibleObject
 {
     public string UserName { get; set; }
 
@@ -92,4 +102,6 @@ public class PersonalInfoModel
     public bool PhoneNumberConfirmed { get; set; }
 
     public bool EmailConfirmed { get; set; }
+
+    public string ConcurrencyStamp { get; set; }
 }

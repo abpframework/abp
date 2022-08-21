@@ -12,7 +12,7 @@
 
 #### 添加NuGet包
 
-添加[Microsoft.AspNetCore.Authentication.Facebook]包到你的项目. 基于你的架构,可能是 `.Web`,`.IdentityServer`(对于分层启动)或 `.Host` 项目.
+添加[Microsoft.AspNetCore.Authentication.Facebook]包到你的项目. 基于你的架构,可能是 `.Web`,`.AuthServer`(对于分层启动)或 `.Host` 项目.
 
 #### 配置提供程序
 
