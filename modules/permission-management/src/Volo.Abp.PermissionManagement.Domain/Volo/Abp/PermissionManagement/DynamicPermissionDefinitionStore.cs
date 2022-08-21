@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
@@ -49,9 +50,12 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
         {
             return null;
         }
-        
-        await EnsureCacheIsUptoDateAsync();
-        return StoreCache.GetPermissionOrNull(name);
+
+        using (await StoreCache.SyncSemaphore.LockAsync())
+        {
+            await EnsureCacheIsUptoDateAsync();
+            return StoreCache.GetPermissionOrNull(name);
+        }
     }
 
     public virtual async Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
@@ -60,9 +64,12 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
         {
             return Array.Empty<PermissionDefinition>();
         }
-        
-        await EnsureCacheIsUptoDateAsync();
-        return StoreCache.GetPermissions();
+
+        using (await StoreCache.SyncSemaphore.LockAsync())
+        {
+            await EnsureCacheIsUptoDateAsync();
+            return StoreCache.GetPermissions().ToImmutableList();
+        }
     }
 
     public virtual async Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
@@ -71,38 +78,38 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
         {
             return Array.Empty<PermissionGroupDefinition>();
         }
-        
-        await EnsureCacheIsUptoDateAsync();
-        return StoreCache.GetGroups();
-    }
 
-    private async Task EnsureCacheIsUptoDateAsync()
-    {
         using (await StoreCache.SyncSemaphore.LockAsync())
         {
-            if (StoreCache.LastCheckTime.HasValue &&
-                DateTime.Now.Subtract(StoreCache.LastCheckTime.Value).TotalSeconds < 30)
-            {
-                /* We get the latest permission with a small delay for optimization */
-                return;
-            }
-            
-            var stampInDistributedCache = await GetOrSetStampInDistributedCache();
-            
-            if (stampInDistributedCache == StoreCache.CacheStamp)
-            {
-                StoreCache.LastCheckTime = DateTime.Now;
-                return;
-            }
-
-            await UpdateInMemoryStoreCache();
-
-            StoreCache.CacheStamp = stampInDistributedCache;
-            StoreCache.LastCheckTime = DateTime.Now;
+            await EnsureCacheIsUptoDateAsync();
+            return StoreCache.GetGroups().ToImmutableList();
         }
     }
 
-    private async Task UpdateInMemoryStoreCache()
+    protected virtual async Task EnsureCacheIsUptoDateAsync()
+    {
+        if (StoreCache.LastCheckTime.HasValue &&
+            DateTime.Now.Subtract(StoreCache.LastCheckTime.Value).TotalSeconds < 30)
+        {
+            /* We get the latest permission with a small delay for optimization */
+            return;
+        }
+        
+        var stampInDistributedCache = await GetOrSetStampInDistributedCache();
+        
+        if (stampInDistributedCache == StoreCache.CacheStamp)
+        {
+            StoreCache.LastCheckTime = DateTime.Now;
+            return;
+        }
+
+        await UpdateInMemoryStoreCache();
+
+        StoreCache.CacheStamp = stampInDistributedCache;
+        StoreCache.LastCheckTime = DateTime.Now;
+    }
+
+    protected virtual async Task UpdateInMemoryStoreCache()
     {
         var permissionGroupRecords = await PermissionGroupRepository.GetListAsync();
         var permissionRecords = await PermissionRepository.GetListAsync();
@@ -110,7 +117,7 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
         await StoreCache.FillAsync(permissionGroupRecords, permissionRecords);
     }
 
-    private async Task<string> GetOrSetStampInDistributedCache()
+    protected virtual async Task<string> GetOrSetStampInDistributedCache()
     {
         var cacheKey = GetCommonStampCacheKey();
 
@@ -152,12 +159,12 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
         return stampInDistributedCache;
     }
 
-    private string GetCommonStampCacheKey()
+    protected virtual string GetCommonStampCacheKey()
     {
         return $"{CacheOptions.KeyPrefix}_AbpInMemoryPermissionCacheStamp";
     }
     
-    private string GetCommonDistributedLockKey()
+    protected virtual string GetCommonDistributedLockKey()
     {
         return $"{CacheOptions.KeyPrefix}_Common_AbpPermissionUpdateLock";
     }
