@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -16,16 +15,16 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
 {
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
     protected IGuidGenerator GuidGenerator { get; }
-    protected IStringLocalizerFactory StringLocalizerFactory { get; }
+    protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
     public PermissionDefinitionSerializer(
         IGuidGenerator guidGenerator,
-        IStringLocalizerFactory stringLocalizerFactory,
-        ISimpleStateCheckerSerializer stateCheckerSerializer)
+        ISimpleStateCheckerSerializer stateCheckerSerializer, 
+        ILocalizableStringSerializer localizableStringSerializer)
     {
         StateCheckerSerializer = stateCheckerSerializer;
+        LocalizableStringSerializer = localizableStringSerializer;
         GuidGenerator = guidGenerator;
-        StringLocalizerFactory = stringLocalizerFactory;
     }
 
     public async Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])> 
@@ -54,7 +53,7 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
             var permissionGroupRecord = new PermissionGroupDefinitionRecord(
                 GuidGenerator.Create(),
                 permissionGroup.Name,
-                permissionGroup.DisplayName.Localize(StringLocalizerFactory)
+                LocalizableStringSerializer.Serialize(permissionGroup.DisplayName)
             );
 
             foreach (var property in permissionGroup.Properties)
@@ -77,7 +76,7 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
                 permissionGroup?.Name,
                 permission.Name,
                 permission.Parent?.Name,
-                permission.DisplayName.Localize(StringLocalizerFactory),
+                LocalizableStringSerializer.Serialize(permission.DisplayName),
                 permission.IsEnabled,
                 permission.MultiTenancySide,
                 SerializeProviders(permission.Providers),

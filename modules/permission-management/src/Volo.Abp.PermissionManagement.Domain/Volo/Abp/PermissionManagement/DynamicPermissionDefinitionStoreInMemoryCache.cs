@@ -19,14 +19,19 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
     protected IDictionary<string, PermissionGroupDefinition> PermissionGroupDefinitions { get; }
     protected IDictionary<string, PermissionDefinition> PermissionDefinitions { get; }
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
+    protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
     public SemaphoreSlim SyncSemaphore { get; } = new(1, 1);
     
     public DateTime? LastCheckTime { get; set; }
 
-    public DynamicPermissionDefinitionStoreInMemoryCache(ISimpleStateCheckerSerializer stateCheckerSerializer)
+    public DynamicPermissionDefinitionStoreInMemoryCache(
+        ISimpleStateCheckerSerializer stateCheckerSerializer, 
+        ILocalizableStringSerializer localizableStringSerializer)
     {
         StateCheckerSerializer = stateCheckerSerializer;
+        LocalizableStringSerializer = localizableStringSerializer;
+        
         PermissionGroupDefinitions = new Dictionary<string, PermissionGroupDefinition>();
         PermissionDefinitions = new Dictionary<string, PermissionDefinition>();
     }
@@ -44,7 +49,7 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
         {
             var permissionGroup = context.AddGroup(
                 permissionGroupRecord.Name,
-                new FixedLocalizableString(permissionGroupRecord.DisplayName) //TODO: Consider localization
+                LocalizableStringSerializer.Deserialize(permissionGroupRecord.DisplayName)
             );
             
             PermissionGroupDefinitions[permissionGroup.Name] = permissionGroup;
@@ -87,7 +92,7 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
     {
         var permission = permissionContainer.AddPermission(
             permissionRecord.Name,
-            new FixedLocalizableString(permissionRecord.DisplayName),
+            LocalizableStringSerializer.Deserialize(permissionRecord.DisplayName),
             permissionRecord.MultiTenancySide,
             permissionRecord.IsEnabled
         );

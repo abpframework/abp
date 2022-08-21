@@ -8,6 +8,7 @@ using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.PermissionManagement.Localization;
 using Xunit;
 
 namespace Volo.Abp.PermissionManagement;
@@ -36,7 +37,7 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
         //Assert
 
         permissionGroupRecord.Name.ShouldBe("Group1");
-        permissionGroupRecord.DisplayName.ShouldBe("Group one");
+        permissionGroupRecord.DisplayName.ShouldBe("F:Group one");
         permissionGroupRecord.GetProperty("CustomProperty1").ShouldBe("CustomValue1");
     }
     
@@ -49,7 +50,7 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
         var group1 = CreatePermissionGroup1(context);
         var permission1 = group1.AddPermission(
                 "Permission1",
-                new FixedLocalizableString("Permission one"),
+                new LocalizableString(typeof(AbpPermissionManagementResource), "Permission1"),
                 MultiTenancySides.Tenant
             )
             .WithProviders("ProviderA", "ProviderB")
@@ -70,7 +71,7 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
         
         permissionRecord.Name.ShouldBe("Permission1");
         permissionRecord.GroupName.ShouldBe("Group1");
-        permissionRecord.DisplayName.ShouldBe("Permission one");
+        permissionRecord.DisplayName.ShouldBe("L:AbpPermissionManagement,Permission1");
         permissionRecord.GetProperty("CustomProperty2").ShouldBe("CustomValue2");
         permissionRecord.Providers.ShouldBe("ProviderA,ProviderB");
         permissionRecord.MultiTenancySide.ShouldBe(MultiTenancySides.Tenant);
