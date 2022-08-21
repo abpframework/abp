@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Components.Web.Configuration;
+using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement.Localization;
 
 namespace Volo.Abp.PermissionManagement.Blazor.Components;
@@ -14,6 +16,8 @@ public partial class PermissionManagementModal
     [Inject] protected IPermissionAppService PermissionAppService { get; set; }
     [Inject] protected ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
+    [Inject] protected IOptions<AbpLocalizationOptions> LocalizationOptions { get; set; }
+    
     protected Modal _modal;
 
     protected string _providerName;
@@ -79,6 +83,8 @@ public partial class PermissionManagementModal
             _providerKey = providerKey;
 
             var result = await PermissionAppService.GetAsync(_providerName, _providerKey);
+
+            UpdateLocalizations(result);
 
             _entityDisplayName = entityDisplayName ?? result.EntityDisplayName;
             _groups = result.Groups;
@@ -245,5 +251,48 @@ public partial class PermissionManagementModal
     {
         eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         return Task.CompletedTask;
+    }
+    
+    protected virtual void UpdateLocalizations(GetPermissionListResultDto result)
+    {
+        foreach (var group in result.Groups)
+        {
+            group.DisplayName = Localize(
+                group.DisplayNameKey,
+                group.DisplayNameResource,
+                group.DisplayName
+            );
+
+            foreach (var permission in group.Permissions)
+            {
+                permission.DisplayName = Localize(
+                    permission.DisplayNameKey,
+                    permission.DisplayNameResource,
+                    permission.DisplayName
+                );
+            }
+        }
+    }
+
+    protected virtual string Localize(string key, string resourceName, string fallbackValue)
+    {
+        if (key.IsNullOrEmpty() || resourceName.IsNullOrEmpty())
+        {
+            return fallbackValue;
+        }
+
+        var resource = LocalizationOptions.Value.Resources.GetOrNull(resourceName);
+        if (resource == null)
+        {
+            return fallbackValue;
+        }
+
+        var result = new LocalizableString(resource.ResourceType, key).Localize(StringLocalizerFactory);
+        if (result.ResourceNotFound)
+        {
+            return fallbackValue;
+        }
+
+        return result.Value;
     }
 }
