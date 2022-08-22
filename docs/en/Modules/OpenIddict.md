@@ -1,20 +1,125 @@
 ## ABP OpenIddict Modules
 
-## User Interface
-
-This module implements the domain logic and database integrations, but not provides any UI. Management UI is useful if you need to add applications and scopes on the fly. In this case, you may build the management UI yourself or consider to purchase the [ABP Commercial](https://commercial.abp.io/) which provides the management UI for this module.
+OpenIddict module provides an integration with the [OpenIddict](https://github.com/openiddict/openiddict-core) which provides advanced authentication features like single sign-on, single log-out, and API access control. This module persists applications, scopes, and other OpenIddict-related objects to the database.
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages) when you [create a new solution](https://abp.io/get-started) with the ABP Framework. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages) when you [create a new solution](https://abp.io/get-started) with the ABP Framework. You can continue to use it as a package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
 
 ### The Source Code
 
-The source code of this module can be accessed [here](https://github.com/abpframework/abp/tree/dev/modules/openiddict). The source code is licensed with [MIT](https://choosealicense.com/licenses/mit/), so you can freely use and customize it.
+The source code of this module can be accessed [here](https://github.com/abpframework/abp/tree/dev/modules/openiddict). The source code is licensed by [MIT](https://choosealicense.com/licenses/mit/), so you can freely use and customize it.
+
+## User Interface
+
+This module implements the domain logic and database integrations but does not provide any UI. Management UI is useful if you need to add applications and scopes on the fly. In this case, you may build the management UI yourself or consider purchasing the [ABP Commercial](https://commercial.abp.io/) which provides the management UI for this module.
 
 ## Relations to Other Modules
 
-This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) with the [Account Module](Account.md).
+This module is based on the [Identity Module](Identity.md) and has an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) with the [Account Module](Account.md).
+
+## Options
+
+### OpenIddictBuilder
+
+`OpenIddictBuilder` can be configured in the `PreConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
+
+Example:
+
+```csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+	PreConfigure<OpenIddictBuilder>(builder =>
+	{
+    	//Set options here...		
+	});
+}
+```
+
+`OpenIddictBuilder` contains various extension methods to configure the OpenIddict services:
+
+- `AddServer()` registers the OpenIddict token server services in the DI container. Contains `OpenIddictServerBuilder` configurations.
+- `AddCore()` registers the OpenIddict core services in the DI container. Contains `OpenIddictCoreBuilder` configurations.
+- `AddValidation()` registers the OpenIddict token validation services in the DI container. Contains `OpenIddictValidationBuilder` configurations.
+
+### OpenIddictCoreBuilder
+
+`OpenIddictCoreBuilder` contains extension methods to configure the OpenIddict core services. 
+
+Example:
+
+```csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+	PreConfigure<OpenIddictCoreBuilder>(builder =>
+	{
+    	//Set options here...		
+	});
+}
+```
+
+These services contain:
+
+- Adding `ApplicationStore`, `AuthorizationStore`, `ScopeStore`, `TokenStore`.
+- Replacing `ApplicationManager`, `AuthorizationManager`, `ScopeManager`, `TokenManager`.
+- Replacing `ApplicationStoreResolver`, `AuthorizationStoreResolver`, `ScopeStoreResolver`, `TokenStoreResolver`.
+- Setting `DefaultApplicationEntity`, `DefaultAuthorizationEntity`, `DefaultScopeEntity`, `DefaultTokenEntity`.
+
+### OpenIddictServerBuilder
+
+`OpenIddictServerBuilder` contains extension methods to configure OpenIddict server services.
+
+Example:
+
+```csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+	PreConfigure<OpenIddictServerBuilder>(builder =>
+	{
+    	//Set options here...		
+	});
+}
+```
+
+These services contain:
+
+- Registering claims, scopes.
+- Setting the `Issuer` URI that is used as the base address for the endpoint URIs returned from the discovery endpoint.
+- Adding development signing keys, encryption/signing keys, credentials, and certificates.
+- Adding/removing event handlers.
+- Enabling/disabling grant types.
+- Setting authentication server endpoint URIs.
+
+### OpenIddictValidationBuilder
+
+`OpenIddictValidationBuilder` contains extension methods to configure OpenIddict validation services.
+
+Example:
+
+```csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+	PreConfigure<OpenIddictValidationBuilder>(builder =>
+	{
+    	//Set options here...		
+	});
+}
+```
+
+These services contain:
+
+- `AddAudiances()` for resource servers.
+- `SetIssuer()` URI that is used to determine the actual location of the OAuth 2.0/OpenID Connect configuration document when using provider discovery.
+- `SetConfiguration()` to configure `OpenIdConnectConfiguration`.
+- `UseIntrospection()` to use introspection instead of local/direct validation.
+- Adding encryption key, credentials, and certificates.
+- Adding/removing event handlers.
+- `SetClientId() ` to set the client identifier `client_id ` when communicating with the remote authorization server (e.g for introspection).
+- `SetClientSecret()` to set the identifier `client_secret` when communicating with the remote authorization server (e.g for introspection).
+- `EnableAuthorizationEntryValidation()` to enable authorization validation to ensure the `access token` is still valid by making a database call for each API request. *Note:* This may have a negative impact on performance and can only be used with an OpenIddict-based authorization server.
+- `EnableTokenEntryValidation()` to enable authorization validation to ensure the `access token` is still valid by making a database call for each API request. *Note:* This may have a negative impact on performance and it is required when the OpenIddict server is configured to use reference tokens.
+- `UseLocalServer()` to register the OpenIddict validation/server integration services.
+- `UseAspNetCore()` to register the OpenIddict validation services for ASP.NET Core in the DI container.
 
 ## The module
 
@@ -217,7 +322,3 @@ https://documentation.openiddict.com/guides/index.html#events-model
 ## Migrating Guide
 
 [Migrating from IdentityServer to OpenIddict Step by Step Guide ](../Migration-Guides/OpenIddict-Step-by-Step.md)
-
-## Sponsor
-
-Please consider sponsoring this project: https://github.com/sponsors/kevinchalet
