@@ -11,7 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.AspNetCore.Dapr\Volo.Abp.AspNetCore.Dapr.csproj" />
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Dapr\Volo.Abp.AspNetCore.Mvc.Dapr.csproj" />
         <ProjectReference Include="..\Volo.Abp.EventBus.Dapr\Volo.Abp.EventBus.Dapr.csproj" />
     </ItemGroup>
+
 </Project>

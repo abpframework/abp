@@ -18,4 +18,5 @@
     <ItemGroup>
       <PackageReference Include="Dapr.AspNetCore" Version="1.8.0" />
     </ItemGroup>
+
 </Project>

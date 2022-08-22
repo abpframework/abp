@@ -415,9 +415,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Dapr", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Http.Client.Dapr", "src\Volo.Abp.Http.Client.Dapr\Volo.Abp.Http.Client.Dapr.csproj", "{18B796D2-D45D-41AE-9A42-75C9B14B20DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Dapr", "src\Volo.Abp.AspNetCore.Dapr\Volo.Abp.AspNetCore.Dapr.csproj", "{5EED625D-8D86-492A-BCB8-F6C8CD8D4AA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.Dapr", "src\Volo.Abp.AspNetCore.Mvc.Dapr\Volo.Abp.AspNetCore.Mvc.Dapr.csproj", "{5EED625D-8D86-492A-BCB8-F6C8CD8D4AA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Dapr.EventBus", "src\Volo.Abp.AspNetCore.Dapr.EventBus\Volo.Abp.AspNetCore.Dapr.EventBus.csproj", "{B02EF042-C39E-45C4-A92D-BF7554E1889D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.Dapr.EventBus", "src\Volo.Abp.AspNetCore.Mvc.Dapr.EventBus\Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.csproj", "{B02EF042-C39E-45C4-A92D-BF7554E1889D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.DistributedLocking.Dapr", "src\Volo.Abp.DistributedLocking.Dapr\Volo.Abp.DistributedLocking.Dapr.csproj", "{CAE48068-233C-47A9-BEAB-DDF521730E7A}"
 EndProject

@@ -1,6 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Dapr.Models;
+﻿namespace Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.Models;
 
-public class AbpAspNetCoreDaprSubscriptionDefinition
+public class AbpAspNetCoreMvcDaprSubscriptionDefinition
 {
     public string PubSubName { get; set; }
 

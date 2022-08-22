@@ -1,6 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Dapr;
+﻿namespace Volo.Abp.AspNetCore.Mvc.Dapr.EventBus;
 
-public class AbpAspNetCoreDaprPubSubConsts
+public class AbpAspNetCoreMvcDaprPubSubConsts
 {
     public const string DaprSubscribeUrl = "dapr/subscribe";
 
