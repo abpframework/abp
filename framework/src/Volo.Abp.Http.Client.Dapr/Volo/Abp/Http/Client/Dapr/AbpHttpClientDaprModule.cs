@@ -9,16 +9,14 @@ namespace Volo.Abp.Http.Client.Dapr;
     typeof(AbpDaprModule)
 )]
 public class AbpHttpClientDaprModule : AbpModule
-{ 
-    public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        var daprClientOptions = context.Services.ExecutePreConfiguredActions<AbpDaprClientOptions>();
-
         PreConfigure<AbpHttpClientBuilderOptions>(options =>
         {
             options.ProxyClientBuildActions.Add((_, clientBuilder) =>
             {
-                daprClientOptions.DaprHttpClientBuilderAction(_, clientBuilder);
+                clientBuilder.AddHttpMessageHandler<AbpInvocationHandler>();
             });
         });
     }
