@@ -210,7 +210,7 @@ public class BundlingService : IBundlingService, ITransientDependency
             builder.Append($"    <script src=\"{script.Source}\"");
             foreach (var additionalProperty in script.AdditionalProperties)
             {
-                builder.Append($"{additionalProperty.Key}={additionalProperty.Value} ");
+                builder.Append($" {additionalProperty.Key}={additionalProperty.Value} ");
             }
 
             builder.AppendLine("></script>");
