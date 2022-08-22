@@ -3,13 +3,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Blogs;
 
+[RequiresFeature(CmsKitFeatures.BlogEnable)]
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]

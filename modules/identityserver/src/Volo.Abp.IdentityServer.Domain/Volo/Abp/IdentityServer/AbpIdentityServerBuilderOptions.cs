@@ -27,4 +27,10 @@ public class AbpIdentityServerBuilderOptions
     /// Set false to suppress AddDeveloperSigningCredential() call on the IIdentityServerBuilder.
     /// </summary>
     public bool AddDeveloperSigningCredential { get; set; } = true;
+
+    /// <summary>
+    /// Adds the default cookie handlers and corresponding configuration
+    /// Default: true, Set false to suppress AddCookieAuthentication() call on the IIdentityServerBuilder.
+    /// </summary>
+    public bool AddIdentityServerCookieAuthentication { get; set; } = true;
 }

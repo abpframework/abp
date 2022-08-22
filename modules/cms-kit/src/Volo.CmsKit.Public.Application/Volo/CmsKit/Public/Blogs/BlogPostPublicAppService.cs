@@ -1,16 +1,19 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Blogs;
 
+[RequiresFeature(CmsKitFeatures.BlogEnable)]
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPublicAppService
 {
@@ -38,7 +41,7 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
 
         var blogPostDto = ObjectMapper.Map<BlogPost, BlogPostCommonDto>(blogPost);
         blogPostDto.ContentFragments = await ContentParser.ParseAsync(blogPost.Content);
-        
+
         return blogPostDto;
     }
 

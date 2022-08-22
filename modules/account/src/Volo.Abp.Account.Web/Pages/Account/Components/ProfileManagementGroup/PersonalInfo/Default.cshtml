@@ -1,13 +1,24 @@
 ﻿@using Volo.Abp.Account.Localization
 @using Volo.Abp.Users
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.Data
 @using Volo.Abp.Identity.Settings
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
 @using Volo.Abp.Settings
 @inject IHtmlLocalizer<AccountResource> L
 @inject ICurrentUser CurrentUser
 @inject ISettingProvider SettingManager
 @inject IThemeManager ThemeManager
+@inject IStringLocalizerFactory StringLocalizerFactory
 @model Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo.AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel
 @{
     var isUserNameUpdateEnabled = string.Equals(await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled), "true",
@@ -19,8 +30,8 @@
 
 <h4>@L["PersonalSettings"]</h4><hr/>
 <form method="post" id="PersonalSettingsForm">
-    
-    <input asp-for="ConcurrencyStamp" />
+
+    <input asp-for="ConcurrencyStamp"/>
 
     <abp-input asp-for="UserName" readonly="!isUserNameUpdateEnabled"/>
 
@@ -36,6 +47,40 @@
     <abp-input asp-for="Email" readonly="!isEmailUpdateEnabled"/>
 
     <abp-input asp-for="PhoneNumber"/>
+
+    @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel>())
+    {
+        if (!propertyInfo.Name.EndsWith("_Text"))
+        {
+            if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+            {
+                if (propertyInfo.Type.IsEnum)
+                {
+                    Model.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
+                }
+                <abp-select asp-for="ExtraProperties[propertyInfo.Name]"
+                            name="ExtraProperties.@propertyInfo.Name"
+                            label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                            autocomplete-api-url="@propertyInfo.Lookup.Url"
+                            autocomplete-selected-item-name="@Model.GetProperty(propertyInfo.Name + "_Text")"
+                            autocomplete-selected-item-value="@Model.GetProperty(propertyInfo.Name)"
+                            autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
+                            autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                            autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                            autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName">
+                </abp-select>
+            }
+            else
+            {
+                <abp-input type="@propertyInfo.GetInputType()"
+                           asp-for="ExtraProperties[propertyInfo.Name]"
+                           name="ExtraProperties.@propertyInfo.Name"
+                           label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                           asp-format="@propertyInfo.GetInputFormatOrNull()"
+                           value="@propertyInfo.GetInputValueOrNull(Model.GetProperty(propertyInfo.Name))"/>
+            }
+        }
+    }
 
     <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value"/>
 </form>

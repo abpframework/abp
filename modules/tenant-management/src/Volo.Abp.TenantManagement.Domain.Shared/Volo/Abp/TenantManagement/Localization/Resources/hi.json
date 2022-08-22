@@ -1,6 +1,7 @@
 {
   "culture": "hi",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "किरायेदार नाम पहले से मौजूद है: {Name}",
     "Menu:TenantManagement": "किरायेदार प्रबंधन",
     "Tenants": "किरायेदारों",
     "NewTenant": "नया किरायेदार",
