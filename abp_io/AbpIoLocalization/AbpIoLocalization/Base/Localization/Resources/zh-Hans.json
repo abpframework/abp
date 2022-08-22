@@ -170,6 +170,10 @@
     "BuyOrRenewLicenseToGetExtra2Months": "立即购买或续订 ABP 商业许可证（适用于所有版本）并额外获得 2 个月！",
     "HurryUp": "赶快下单!",
     "LastDay": "活动截止日期: {0}",
-    "BuyNewLicenseBetweenDatesToGetBenefit": "在 {0} 和 {1} 之间购买一个新的许可证以获得额外 2 个月的收益！"
+    "BuyNewLicenseBetweenDatesToGetBenefit": "在 {0} 和 {1} 之间购买一个新的许可证以获得额外 2 个月的收益！",
+    "CheckAllCommunityTalks": "检查所有社区帖子",
+    "ReadMore": "阅读更多",
+    "Post": "邮政",
+    "ExploreTheContentsCreatedByTheCoreABPTeamAndTheABPCommunity": "探索核心 ABP 团队和 ABP 社区创建的内容。"
   }
 }

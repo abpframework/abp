@@ -9,11 +9,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.OpenIddict.Scopes;
 
-public class AbpOpenIddictScopeCacheAbpOpenIddictAuthorizationCache : AbpOpenIddictCacheBase<OpenIddictScope, OpenIddictScopeModel, IOpenIddictScopeStore<OpenIddictScopeModel>>,
+public class AbpOpenIddictScopeCache : AbpOpenIddictCacheBase<OpenIddictScope, OpenIddictScopeModel, IOpenIddictScopeStore<OpenIddictScopeModel>>,
     IOpenIddictScopeCache<OpenIddictScopeModel>,
     ITransientDependency
 {
-    public AbpOpenIddictScopeCacheAbpOpenIddictAuthorizationCache(
+    public AbpOpenIddictScopeCache(
         IDistributedCache<OpenIddictScopeModel> cache,
         IDistributedCache<OpenIddictScopeModel[]> arrayCache,
         IOpenIddictScopeStore<OpenIddictScopeModel> store)
