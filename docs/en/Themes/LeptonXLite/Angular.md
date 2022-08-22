@@ -79,6 +79,21 @@ To change the logos and brand color of `LeptonX`, simply add the following CSS t
 - `--lpx-logo-icon` is a square icon used when the menu is collapsed. 
 - `--lpx-brand` is a color used throughout the application, especially on active elements. 
 
+### The Application Layout
+![Application-Layout](../../images/lepton-x-lite-side-menu-application-layout.png)
+Application Layout implements the following parts, in addition to the common parts mentioned above;
+
+- Branding
+- Main Menu
+- Main Toolbar with Language Selection & User Menu
+
+### The Account Layout
+![Account-Layout](../../images/lepton-x-lite-account-layout.png)
+
+### Empty Layout
+Empty layout is empty, as its name stands for. However, it implements the common parts mentioned above.
+
+
 ### Server Side
 
 In order to migrate to LeptonX on your server side projects (Host and/or AuthServer projects), please follow the [Server Side Migration](AspNetCore.md) document.
