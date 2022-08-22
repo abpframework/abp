@@ -7,6 +7,7 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Docs.Admin.Documents;
+using Volo.Docs.Documents.Filter;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Docs.Admin.ClientProxies;
@@ -61,5 +62,10 @@ public partial class DocumentsAdminClientProxy : ClientProxyBase<IDocumentAdminA
         {
             { typeof(Guid), documentId }
         });
+    }
+
+    public Task<FilterItems> GetFilterItemsAsync()
+    {
+        throw new NotImplementedException();
     }
 }

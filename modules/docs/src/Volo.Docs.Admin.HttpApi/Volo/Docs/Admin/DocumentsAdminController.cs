@@ -6,6 +6,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Docs.Admin.Documents;
+using Volo.Docs.Documents.Filter;
 
 namespace Volo.Docs.Admin
 {
@@ -62,6 +63,13 @@ namespace Volo.Docs.Admin
         public async Task ReindexAsync(Guid documentId)
         {
             await _documentAdminAppService.ReindexAsync(documentId);
+        }
+
+        [HttpGet]
+        [Route("GetFilterItems")]
+        public Task<FilterItems> GetFilterItemsAsync()
+        {
+            return _documentAdminAppService.GetFilterItemsAsync();
         }
     }
 }

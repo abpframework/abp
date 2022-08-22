@@ -11,6 +11,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Docs.Caching;
 using Volo.Docs.Documents;
+using Volo.Docs.Documents.Filter;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Localization;
 using Volo.Docs.Projects;
@@ -215,6 +216,42 @@ namespace Volo.Docs.Admin.Documents
             await _elasticSearchService.DeleteAsync(documentId);
             var document = await _documentRepository.GetAsync(documentId);
             await _elasticSearchService.AddOrUpdateAsync(document);
+        }
+
+        public Task<FilterItems> GetFilterItemsAsync()
+        {
+            // return _filterItemsCache.GetAsync(
+            //     CacheKeyGenerator.GenerateFilterItemsCacheKey(),
+            //     async () =>
+            //     {
+            //         var filterItems = new FilterItems();
+            //         var projects = await _projectRepository.GetListAsync();
+            //         foreach (var project in projects)
+            //         {
+            //             var projectFilterItems = new FilterItems();
+            //             var documents = await _documentRepository.GetListByProjectId(project.Id);
+            //             foreach (var document in documents)
+            //             {
+            //                 projectFilterItems.Add(new FilterItem
+            //                 {
+            //                     Name = document.Name,
+            //                     Value = document.Name
+            //                 });
+            //             }
+            //
+            //             filterItems.Add(new FilterItem
+            //             {
+            //                 Name = project.Name,
+            //                 Value = project.Name,
+            //                 Items = projectFilterItems
+            //             });
+            //         }
+            //
+            //         return filterItems;
+            //     }
+            // );
+            
+            return _documentRepository.GetFilterItemsAsync();
         }
 
         private async Task UpdateDocumentUpdateInfoCache(Document document)

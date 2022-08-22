@@ -38,10 +38,16 @@
                         <div class="input-group mb-2">
                             <div class="input-group-text">@L["Project"].Value</div>
 
-                            <input type="text"
-                               id="ProjectId"
-                               name="ProjectId"
-                               class="form-control">
+                            <select
+                                id="ProjectId"
+                                name="ProjectId"
+                                class="form-select">
+                                <option></option>
+                                @foreach (var project in Model.FilterItems.Projects)
+                                {
+                                    <option value="@project.Id">@project.Name</option>
+                                }
+                            </select>
                         </div>
                     </abp-column>
 
@@ -49,10 +55,16 @@
                         <div class="input-group mb-2">
                             <div class="input-group-text">@L["Version"].Value</div>
 
-                            <input type="text"
-                               id="Version"
-                               name="Version"
-                               class="form-control">
+                            <select
+                                id="Version"
+                                name="Version"
+                                class="form-select">
+                                <option></option>
+                                @foreach (var version in Model.FilterItems.Versions)
+                                {
+                                    <option value="@version.Version" data-version="@Model.ToJson(version)">@version.Version</option>
+                                }
+                            </select>
                         </div>
                     </abp-column>
                     
@@ -71,10 +83,16 @@
                         <div class="input-group mb-2">
                             <div class="input-group-text">@L["LanguageCode"].Value</div>
 
-                            <input type="text"
-                                   id="LanguageCode"
-                                   name="LanguageCode"
-                                   class="form-control">
+                            <select
+                                id="LanguageCode"
+                                name="LanguageCode"
+                                class="form-select">
+                                <option></option>
+                                @foreach (var language in Model.FilterItems.Languages)
+                                {
+                                    <option value="@language.Code" data-language="@Model.ToJson(language)">@language.Code</option>
+                                }
+                            </select>
                         </div>
                     </abp-column>
                     <abp-column size="Auto">
@@ -143,10 +161,16 @@
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["Format"].Value</div>
 
-                                <input type="text"
-                                   id="Format"
-                                   name="Format"
-                                   class="form-control">
+                                <select
+                                    id="Format"
+                                    name="Format"
+                                    class="form-select">
+                                    <option></option>
+                                    @foreach (var format in Model.FilterItems.Formats)
+                                    {
+                                        <option value="@format">@format</option>
+                                    }
+                                </select>
                             </div>
                         </abp-column>
 

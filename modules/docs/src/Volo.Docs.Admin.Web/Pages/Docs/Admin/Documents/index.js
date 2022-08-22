@@ -5,7 +5,73 @@ $(function () {
     var getFormattedDate = function ($datePicker) {
         return $datePicker.data().datepicker.getFormattedDate('yyyy-mm-dd');
     };
+    
+    var $projectId = $('#ProjectId');
+    var $version = $('#Version');
+    var $languageCode = $('#LanguageCode');
 
+    function $getOptions($select){
+        var select = $select.get(0);
+        return $(select.options)
+    }
+
+    function showLanguages(){
+        var selectedProjectId = $projectId.val();
+        var selectedVersion = $version.val();
+        var languages = $getOptions($languageCode);
+        languages.each(function(){
+            var language = $(this);
+            var languageCodeDto = language.attr('data-language');
+            if(!languageCodeDto) return;
+            languageCodeDto = JSON.parse(languageCodeDto);
+            if((!selectedVersion || languageCodeDto.Versions.includes(selectedVersion)) 
+                && (!selectedProjectId || languageCodeDto.ProjectIds.includes(selectedProjectId)))
+            {
+                language.show();
+            }
+            else{
+                language.hide();
+                if(language.is(':selected')){
+                    $languageCode.val('');
+                }
+            }
+        });
+    }
+    function showVersions(){
+        var selectedProjectId = $projectId.val();
+        var selectedLanguageCode = $languageCode.val();
+        var versions = $getOptions($version);
+        versions.each(function(){
+            var version = $(this);
+            var verisonDto = version.attr('data-version');
+            if(!verisonDto) return;
+            verisonDto = JSON.parse(verisonDto);
+            if((!selectedLanguageCode || verisonDto.Languages.includes(selectedLanguageCode)) 
+                && (!selectedProjectId || verisonDto.ProjectIds.includes(selectedProjectId)))
+            {
+                version.show();
+            }
+            else{
+                version.hide();
+                if(version.is(':selected')){
+                    $version.val('');
+                }
+            }
+        });
+    }
+    $projectId.on('change', function () {
+        showVersions();
+        showLanguages();
+    });
+
+    $version.on('change', function () {
+        showLanguages();
+    });
+    
+    $languageCode.on('change', function () {
+        showVersions();
+    });
+    
     var getFilter = function () {
         return {
             projectId: $('#ProjectId').val(),

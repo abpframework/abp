@@ -8,6 +8,7 @@ using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using MongoDB.Driver.Linq;
 using MongoDB.Driver;
+using Volo.Docs.Documents.Filter;
 using Volo.Docs.MongoDB;
 
 
@@ -154,6 +155,11 @@ namespace Volo.Docs.Documents
         public async Task<Document> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id == id).SingleAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public Task<FilterItems> GetFilterItemsAsync(CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
 
         protected virtual async Task<IMongoQueryable<DocumentWithoutContent>> ApplyFilterForGetAll(

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Docs.Documents.Filter;
 using Volo.Docs.EntityFrameworkCore;
 
 namespace Volo.Docs.Documents
@@ -215,6 +216,48 @@ namespace Volo.Docs.Documents
                     LastSignificantUpdateTime = x.d.LastSignificantUpdateTime,
                     LastCachedTime = x.d.LastCachedTime
                 });
+        }
+        public async Task<FilterItems> GetFilterItemsAsync(CancellationToken cancellationToken = default)
+        {
+            var dbContext = await GetDbContextAsync();
+            
+            var filterItems = new FilterItems();
+            
+            filterItems.Formats = await dbContext.Documents.Select(x => x.Format).Distinct().ToListAsync(cancellationToken);
+
+            filterItems.Projects = await dbContext.Projects
+                .Select(x=>new FilterProjectItem() 
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                })
+                .OrderBy(x=>x.Name)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+
+            filterItems.Versions = await dbContext.Documents
+                .GroupBy(x => x.Version)
+                .Select(x => new FilterVersionItem 
+                {
+                    ProjectIds = x.Select(x2 => x2.ProjectId).Distinct(),
+                    Version = x.Key,
+                    Languages = x.Select(x2 => x2.LanguageCode).Distinct()
+                })
+                .OrderByDescending(x => x.Version)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+
+            filterItems.Languages = await dbContext.Documents
+                .GroupBy(x => x.LanguageCode)
+                .Select(x => new FilterLanguageCodeItem 
+                {
+                    ProjectIds = x.Select(x2 => x2.ProjectId).Distinct(),
+                    Code = x.Key,
+                    Versions = x.Select(x2 => x2.Version).Distinct()
+                })
+                .OrderBy(x=>x.Code)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+
+
+            return filterItems;
         }
     }
 }

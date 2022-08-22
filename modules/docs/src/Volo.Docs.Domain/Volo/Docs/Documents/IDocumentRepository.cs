@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
+using Volo.Docs.Documents.Filter;
+using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
 {
@@ -73,5 +75,6 @@ namespace Volo.Docs.Documents
             CancellationToken cancellationToken = default);
 
         Task<Document> GetAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<FilterItems> GetFilterItemsAsync(CancellationToken cancellationToken = default);
     }
 }
