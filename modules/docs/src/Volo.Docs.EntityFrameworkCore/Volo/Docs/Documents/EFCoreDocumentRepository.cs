@@ -219,33 +219,40 @@ namespace Volo.Docs.Documents
         }
         public async Task<FilterItems> GetFilterItemsAsync(CancellationToken cancellationToken = default)
         {
-            var dbContext = await GetDbContextAsync();
-            
             var filterItems = new FilterItems();
             
-            filterItems.Formats = await dbContext.Documents.Select(x => x.Format).Distinct().ToListAsync(cancellationToken);
+            filterItems.Formats = await GetFormats(cancellationToken);
 
-            filterItems.Projects = await dbContext.Projects
-                .Select(x=>new FilterProjectItem() 
+            filterItems.Projects = await GetFilterProjectItems(cancellationToken);
+
+            filterItems.Versions = await GetFilterVersionItems(cancellationToken);
+
+            filterItems.Languages = await GetFilterLanguageCodeItems(cancellationToken);
+            
+            return filterItems;
+        }
+
+        private async Task<List<string>> GetFormats(CancellationToken cancellationToken)
+        {
+            return await (await GetDbSetAsync()).Select(x => x.Format).Distinct().ToListAsync(cancellationToken);
+        }
+
+        private async Task<List<FilterProjectItem>> GetFilterProjectItems(CancellationToken cancellationToken)
+        {
+            return await (await GetDbContextAsync())
+                .Projects
+                .Select(x=>new FilterProjectItem
                 {
                     Id = x.Id,
                     Name = x.Name
                 })
                 .OrderBy(x=>x.Name)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+        }
 
-            filterItems.Versions = await dbContext.Documents
-                .GroupBy(x => x.Version)
-                .Select(x => new FilterVersionItem 
-                {
-                    ProjectIds = x.Select(x2 => x2.ProjectId).Distinct(),
-                    Version = x.Key,
-                    Languages = x.Select(x2 => x2.LanguageCode).Distinct()
-                })
-                .OrderByDescending(x => x.Version)
-                .ToListAsync(GetCancellationToken(cancellationToken));
-
-            filterItems.Languages = await dbContext.Documents
+        private async Task<List<FilterLanguageCodeItem>> GetFilterLanguageCodeItems(CancellationToken cancellationToken)
+        {
+            return await (await GetDbSetAsync())
                 .GroupBy(x => x.LanguageCode)
                 .Select(x => new FilterLanguageCodeItem 
                 {
@@ -255,9 +262,20 @@ namespace Volo.Docs.Documents
                 })
                 .OrderBy(x=>x.Code)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+        }
 
-
-            return filterItems;
+        private async Task<List<FilterVersionItem>> GetFilterVersionItems(CancellationToken cancellationToken)
+        {
+            return await (await GetDbSetAsync())
+                .GroupBy(x => x.Version)
+                .Select(x => new FilterVersionItem 
+                {
+                    ProjectIds = x.Select(x2 => x2.ProjectId).Distinct(),
+                    Version = x.Key,
+                    Languages = x.Select(x2 => x2.LanguageCode).Distinct()
+                })
+                .OrderByDescending(x => x.Version)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

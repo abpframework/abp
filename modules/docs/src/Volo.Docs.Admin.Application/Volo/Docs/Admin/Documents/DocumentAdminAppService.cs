@@ -220,37 +220,6 @@ namespace Volo.Docs.Admin.Documents
 
         public Task<FilterItems> GetFilterItemsAsync()
         {
-            // return _filterItemsCache.GetAsync(
-            //     CacheKeyGenerator.GenerateFilterItemsCacheKey(),
-            //     async () =>
-            //     {
-            //         var filterItems = new FilterItems();
-            //         var projects = await _projectRepository.GetListAsync();
-            //         foreach (var project in projects)
-            //         {
-            //             var projectFilterItems = new FilterItems();
-            //             var documents = await _documentRepository.GetListByProjectId(project.Id);
-            //             foreach (var document in documents)
-            //             {
-            //                 projectFilterItems.Add(new FilterItem
-            //                 {
-            //                     Name = document.Name,
-            //                     Value = document.Name
-            //                 });
-            //             }
-            //
-            //             filterItems.Add(new FilterItem
-            //             {
-            //                 Name = project.Name,
-            //                 Value = project.Name,
-            //                 Items = projectFilterItems
-            //             });
-            //         }
-            //
-            //         return filterItems;
-            //     }
-            // );
-            
             return _documentRepository.GetFilterItemsAsync();
         }
 

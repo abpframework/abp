@@ -63,9 +63,9 @@ public partial class DocumentsAdminClientProxy : ClientProxyBase<IDocumentAdminA
             { typeof(Guid), documentId }
         });
     }
-
-    public Task<FilterItems> GetFilterItemsAsync()
+    
+    public async Task<FilterItems> GetFilterItemsAsync()
     {
-        throw new NotImplementedException();
+        return await RequestAsync<FilterItems>(nameof(GetFilterItemsAsync));
     }
 }

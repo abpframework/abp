@@ -9,8 +9,5 @@ namespace Volo.Docs.Admin.ClientProxies;
 
 public partial class ProjectsAdminClientProxy
 {
-    public async Task<FilterComboboxValuesDto> GetFilterComboboxAsync()
-    {
-        return await this.RequestAsync<FilterComboboxValuesDto>(nameof(GetFilterComboboxAsync));
-    }
+    
 }
