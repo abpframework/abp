@@ -3,7 +3,7 @@ import { strings, workspaces } from '@angular-devkit/core';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { Exception } from '../enums';
 import { Project } from '../models';
-import { getWorkspace, ProjectType, WorkspaceSchema } from './angular';
+import { buildDefaultPath, getWorkspace, ProjectType, WorkspaceSchema } from './angular';
 import { findEnvironmentExpression } from './ast';
 import { readFileInTree } from './common';
 import { NOT_FOUND_VALUE } from '../constants/symbols';
@@ -92,4 +92,19 @@ export function getWorkspacePath(host: Tree): string {
   const path = possibleFiles.filter(path => host.exists(path))[0];
 
   return path;
+}
+
+/**
+ * Build a default project path for generating.
+ * @param project The project which will have its default path generated.
+ * @param entryPoint The secondary-entry-point.
+ */
+export function buildTargetPath(
+  project: workspaces.ProjectDefinition,
+  entryPoint?: string,
+): string {
+  if (entryPoint) {
+    return `${project.root}/${entryPoint}/src`;
+  }
+  return buildDefaultPath(project);
 }

@@ -25,11 +25,6 @@ export interface GenerateProxySchema {
   url?: string;
 
   /**
-   * Create a lib for proxy generation
-   */
-  createTarget?: boolean;
-
-  /**
    * Secondary entrypoint for proxy generation
    */
   entryPoint?: string;
