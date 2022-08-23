@@ -1,4 +1,4 @@
-import { EXTENSIONS_FORM_PROP_DATA, EXTENSIONS_FORM_PROP } from './../../tokens/extensions.token';
+import {EXTENSIONS_FORM_PROP_DATA, EXTENSIONS_FORM_PROP} from './../../tokens/extensions.token';
 import {ABP, AbpValidators, ConfigStateService, TrackByService} from '@abp/ng.core';
 import {
   AfterViewInit,
@@ -181,7 +181,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  ngOnChanges({prop,data}: SimpleChanges) {
+  ngOnChanges({prop, data}: SimpleChanges) {
     const currentProp = prop?.currentValue as FormProp;
     const {options, readonly, disabled, validators, template} = currentProp || {};
     if (template) {
@@ -195,7 +195,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
             provide: EXTENSIONS_FORM_PROP_DATA,
             useValue: (data?.currentValue as PropData)?.record
           },
-          { provide: ControlContainer, useExisting: FormGroupDirective }
+          {provide: ControlContainer, useExisting: FormGroupDirective}
         ],
         parent: this.injector,
       });
@@ -219,5 +219,5 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 }
 
 function isRequired(validator: ValidatorFn) {
-  return validator === Validators.required || validator === AbpValidators.required;
+   return validator === Validators.required || validator === AbpValidators.required || validator.name === 'required';
 }
