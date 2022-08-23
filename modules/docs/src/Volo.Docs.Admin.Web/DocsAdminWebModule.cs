@@ -12,6 +12,7 @@ using Volo.Docs.Localization;
 namespace Volo.Docs.Admin
 {
     [DependsOn(
+        typeof(DocsAdminHttpApiModule),
         typeof(DocsAdminApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule)
         )]

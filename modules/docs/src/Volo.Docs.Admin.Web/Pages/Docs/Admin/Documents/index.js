@@ -57,7 +57,7 @@ $(function () {
                                             abp.notify.success(l('RemovedFromCache'));
                                             dataTable.ajax.reload();
                                         });
-                                },
+                                }
                             },
                             {
                                 text: l('ReIndex'),
@@ -74,30 +74,30 @@ $(function () {
                                             abp.message.success(l('ReindexCompleted'));
                                             dataTable.ajax.reload();
                                         });
-                                },
+                                }
                             }
-                        ],
-                    },
+                        ]
+                    }
                 },
                 {
                     target: 1,
-                    data: 'name',
+                    data: 'name'
                 },
                 {
                     target: 2,
-                    data: 'version',
+                    data: 'version'
                 },
                 {
                     target: 3,
-                    data: 'languageCode',
+                    data: 'languageCode'
                 },
                 {
                     target: 4,
-                    data: 'fileName',
+                    data: 'fileName'
                 },
                 {
                     target: 5,
-                    data: 'format',
+                    data: 'format'
                 },
                 {
                     target: 6,
@@ -108,7 +108,7 @@ $(function () {
                         }
 
                         return parseDateToLocaleDateString(creationTime);
-                    },
+                    }
                 },
                 {
                     target: 7,
@@ -119,7 +119,7 @@ $(function () {
                         }
 
                         return parseDateToLocaleDateString(lastUpdatedTime);
-                    },
+                    }
                 },
                 {
                     target: 8,
@@ -130,7 +130,7 @@ $(function () {
                         }
 
                         return parseDateToLocaleDateString(lastSignificantUpdateTime);
-                    },
+                    }
                 },
                 {
                     target: 9,
@@ -141,9 +141,9 @@ $(function () {
                         }
 
                         return parseDateToLocaleDateString(lastCachedTime);
-                    },
-                },
-            ],
+                    }
+                }
+            ]
         })
     );
 

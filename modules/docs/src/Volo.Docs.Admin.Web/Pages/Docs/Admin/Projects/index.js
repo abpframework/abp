@@ -40,9 +40,9 @@ $(function () {
                                 ),
                                 action: function (data) {
                                     _editModal.open({
-                                        Id: data.record.id,
+                                        Id: data.record.id
                                     });
-                                },
+                                }
                             },
                             {
                                 text: l('Delete'),
@@ -59,7 +59,7 @@ $(function () {
                                             _dataTable.ajax.reload();
                                             abp.notify.success(l('SuccessfullyDeleted'));
                                         });
-                                },
+                                }
                             },
                             {
                                 text: l('Pull'),
@@ -68,9 +68,9 @@ $(function () {
                                 ),
                                 action: function (data) {
                                     _pullModal.open({
-                                        Id: data.record.id,
+                                        Id: data.record.id
                                     });
-                                },
+                                }
                             },
                             {
                                 text: l('ClearCache'),
@@ -86,12 +86,12 @@ $(function () {
                                 action: function (data) {
                                     volo.docs.admin.documentsAdmin
                                         .clearCache({
-                                            projectId: data.record.id,
+                                            projectId: data.record.id
                                         })
                                         .then(function () {
                                             _dataTable.ajax.reload();
                                         });
-                                },
+                                }
                             },
                             {
                                 text: l('ReIndexProject'),
@@ -108,29 +108,24 @@ $(function () {
                                     volo.docs.admin.projectsAdmin
                                         .reindex({ projectId: data.record.id })
                                         .then(function () {
-                                            abp.message.success(
-                                                l(
-                                                    'SuccessfullyReIndexProject',
-                                                    data.record.name
-                                                )
-                                            );
+                                            abp.notify.info(l('ReindexStarted'));
                                         });
-                                },
-                            },
-                        ],
-                    },
+                                }
+                            }
+                        ]
+                    }
                 },
                 {
                     target: 1,
-                    data: 'name',
+                    data: 'name'
                 },
                 {
                     target: 2,
-                    data: 'shortName',
+                    data: 'shortName'
                 },
                 {
                     target: 3,
-                    data: 'documentStoreType',
+                    data: 'documentStoreType'
                 },
                 {
                     target: 4,
@@ -141,9 +136,9 @@ $(function () {
                         }
 
                         return data;
-                    },
-                },
-            ],
+                    }
+                }
+            ]
         })
     );
 
@@ -159,9 +154,7 @@ $(function () {
                 if (accepted) {
                     volo.docs.admin.projectsAdmin.reindexAll()
                         .then(function () {
-                            abp.message.success(
-                                l('SuccessfullyReIndexAllProject')
-                            );
+                            abp.notify.info(l('ReindexStarted'));
                         });
                 }
             });

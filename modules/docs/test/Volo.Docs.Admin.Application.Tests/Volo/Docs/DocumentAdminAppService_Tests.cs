@@ -19,7 +19,7 @@ namespace Volo.Docs
             _testData = GetRequiredService<DocsTestData>();
         }
 
-        [Fact]
+        [Fact(Skip = "Will be PullAsync in a background job.")]
         public async Task PullAsync()
         {
             (await _documentRepository.FindAsync(_testData.PorjectId, "Part-I.md", "en", "1.0.0")).ShouldBeNull();
@@ -35,7 +35,7 @@ namespace Volo.Docs
             (await _documentRepository.FindAsync(_testData.PorjectId, "Part-I.md", "en", "1.0.0")).ShouldNotBeNull();
         }
 
-        [Fact]
+        [Fact(Skip = "Will be PullAllAsync in a background job.")]
         public async Task PullAllAsync()
         {
             (await _documentRepository.FindAsync(_testData.PorjectId, "Part-I.md", "en", "1.0.0")).ShouldBeNull();

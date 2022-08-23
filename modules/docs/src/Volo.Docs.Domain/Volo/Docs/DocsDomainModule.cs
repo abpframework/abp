@@ -23,7 +23,7 @@ namespace Volo.Docs
         typeof(DocsDomainSharedModule),
         typeof(AbpDddDomainModule),
         typeof(AbpAutoMapperModule)
-        )]
+    )]
     public class DocsDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -64,6 +64,7 @@ namespace Volo.Docs
             {
                 client.Timeout = TimeSpan.FromMilliseconds(15000);
             });
+
         }
 
         public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
