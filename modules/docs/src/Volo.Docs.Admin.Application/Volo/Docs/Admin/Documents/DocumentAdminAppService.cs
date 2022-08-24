@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
-using Volo.Abp.Uow;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Docs.Caching;
 using Volo.Docs.Documents;
-using Volo.Docs.Documents.Filter;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Localization;
 using Volo.Docs.Projects;
@@ -218,9 +216,9 @@ namespace Volo.Docs.Admin.Documents
             await _elasticSearchService.AddOrUpdateAsync(document);
         }
 
-        public async Task<List<DocumentInfoDto>> GetUniqueListWithoutDetails()
+        public async Task<List<DocumentInfoDto>> GetFilterItemsAsync()
         {
-            var documents = await _documentRepository.GetUniqueListWithoutDetails();
+            var documents = await _documentRepository.GetUniqueListDocumentInfoAsync();
             return ObjectMapper.Map<List<DocumentInfo>, List<DocumentInfoDto>>(documents);
         }
 

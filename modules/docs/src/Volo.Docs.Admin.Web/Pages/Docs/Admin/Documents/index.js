@@ -6,16 +6,7 @@ $(function () {
         return $datePicker.data().datepicker.getFormattedDate('yyyy-mm-dd');
     };
     
-    var comboboxItems = [];
-    abp.ajax({
-        url: abp.appPath + 'api/docs/admin/documents/GetUniqueListDocumentWithoutDetails',
-        type: 'GET',
-        dataType: 'json',
-        success: function (data) {
-            comboboxItems = data;
-            fillOptions();
-        }
-    });
+    var comboboxItems = service.getFilterItems();
     
     
     var $projectId = $('#ProjectId');

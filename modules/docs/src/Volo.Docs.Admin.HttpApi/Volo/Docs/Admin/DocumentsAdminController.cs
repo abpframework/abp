@@ -6,7 +6,6 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Docs.Admin.Documents;
-using Volo.Docs.Documents.Filter;
 
 namespace Volo.Docs.Admin
 {
@@ -67,9 +66,9 @@ namespace Volo.Docs.Admin
 
         [HttpGet]
         [Route("GetUniqueListDocumentWithoutDetails")]
-        public Task<List<DocumentInfoDto>> GetUniqueListWithoutDetails()
+        public async Task<List<DocumentInfoDto>> GetFilterItemsAsync()
         {
-            return _documentAdminAppService.GetUniqueListWithoutDetails();
+            return await _documentAdminAppService.GetFilterItemsAsync();
         }
     }
 }

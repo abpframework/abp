@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Docs.Admin.Projects;
-using Volo.Docs.Documents.Filter;
 
 namespace Volo.Docs.Admin.Documents
 {
@@ -22,6 +20,6 @@ namespace Volo.Docs.Admin.Documents
 
         Task ReindexAsync(Guid documentId);
 
-        Task<List<DocumentInfoDto>> GetUniqueListWithoutDetails();
+        Task<List<DocumentInfoDto>> GetFilterItemsAsync();
     }
 }

@@ -8,9 +8,7 @@ using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using MongoDB.Driver.Linq;
 using MongoDB.Driver;
-using Volo.Docs.Documents.Filter;
 using Volo.Docs.MongoDB;
-using Volo.Docs.Projects;
 
 
 namespace Volo.Docs.Documents
@@ -36,9 +34,18 @@ namespace Volo.Docs.Documents
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public Task<List<DocumentWithoutDetails>> GetUniqueListWithoutDetails(CancellationToken cancellationToken = default)
+        public async Task<List<DocumentInfo>> GetUniqueListDocumentInfoAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .Select(x=> new DocumentInfo {
+                    ProjectId = x.ProjectId,
+                    Version = x.Version,
+                    LanguageCode = x.LanguageCode,
+                    Format = x.Format
+                })
+                .Distinct()
+                .OrderByDescending(x=>x.Version)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<Document>> GetListByProjectId(Guid projectId, CancellationToken cancellationToken = default)

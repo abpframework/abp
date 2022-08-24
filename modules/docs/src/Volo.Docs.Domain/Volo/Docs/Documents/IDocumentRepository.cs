@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
-using Volo.Docs.Documents.Filter;
-using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
 {
     public interface IDocumentRepository : IBasicRepository<Document>
     {
         Task<List<DocumentWithoutDetails>> GetListWithoutDetailsByProjectId(Guid projectId, CancellationToken cancellationToken = default);
-        Task<List<DocumentInfo>> GetUniqueListWithoutDetails(CancellationToken cancellationToken = default);
+        Task<List<DocumentInfo>> GetUniqueListDocumentInfoAsync(CancellationToken cancellationToken = default);
 
         Task<List<Document>> GetListByProjectId(Guid projectId, CancellationToken cancellationToken = default);
 

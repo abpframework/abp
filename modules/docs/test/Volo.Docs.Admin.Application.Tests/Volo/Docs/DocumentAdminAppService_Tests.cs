@@ -57,14 +57,12 @@ namespace Volo.Docs
         public async Task GetFilterItemsAsync()
         {
             var filterItems = await _documentAdminAppService.GetFilterItemsAsync();
-            filterItems.Projects.ShouldNotBeEmpty();
-            filterItems.Languages.ShouldNotBeEmpty();
-            filterItems.Versions.ShouldNotBeEmpty();
+            filterItems.ShouldNotBeEmpty();
 
-            filterItems.Projects.ShouldContain(p => p.Id == _testData.PorjectId);
-            filterItems.Versions.ShouldContain(p => p.Version == "2.0.0" && p.ProjectId == _testData.PorjectId);
-            filterItems.Languages.ShouldContain(p => p.LanguageCode == "en" && p.ProjectId == _testData.PorjectId);
-            filterItems.Formats.ShouldContain(p => p == "md");
+            filterItems.ShouldContain(p => p.ProjectId == _testData.PorjectId);
+            filterItems.ShouldContain(p => p.Version == "2.0.0" && p.ProjectId == _testData.PorjectId);
+            filterItems.ShouldContain(p => p.LanguageCode == "en" && p.ProjectId == _testData.PorjectId);
+            filterItems.ShouldContain(p => p.Format == "md");
             
         }
     }

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Docs.Documents.Filter;
 using Volo.Docs.EntityFrameworkCore;
 
 namespace Volo.Docs.Documents
@@ -33,9 +32,9 @@ namespace Volo.Docs.Documents
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<DocumentInfo>> GetUniqueListWithoutDetails(CancellationToken cancellationToken = default)
+        public async Task<List<DocumentInfo>> GetUniqueListDocumentInfoAsync(CancellationToken cancellationToken = default)
         {
-            // Todo : add project id to query
+            
             return await (await GetDbSetAsync())
                 .Select(x=> new DocumentInfo
                 {
