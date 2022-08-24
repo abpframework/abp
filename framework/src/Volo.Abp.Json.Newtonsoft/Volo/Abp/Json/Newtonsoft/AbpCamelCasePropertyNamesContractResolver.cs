@@ -9,12 +9,12 @@ namespace Volo.Abp.Json.Newtonsoft;
 
 public class AbpCamelCasePropertyNamesContractResolver : CamelCasePropertyNamesContractResolver, ITransientDependency
 {
-    private readonly Lazy<AbpJsonIsoDateTimeConverter> _dateTimeConverter;
+    private readonly Lazy<AbpDateTimeConverter> _dateTimeConverter;
 
     public AbpCamelCasePropertyNamesContractResolver(IServiceProvider serviceProvider)
     {
-        _dateTimeConverter = new Lazy<AbpJsonIsoDateTimeConverter>(
-            serviceProvider.GetRequiredService<AbpJsonIsoDateTimeConverter>,
+        _dateTimeConverter = new Lazy<AbpDateTimeConverter>(
+            serviceProvider.GetRequiredService<AbpDateTimeConverter>,
             true
         );
 
@@ -28,7 +28,7 @@ public class AbpCamelCasePropertyNamesContractResolver : CamelCasePropertyNamesC
     {
         var property = base.CreateProperty(member, memberSerialization);
 
-        if (AbpJsonIsoDateTimeConverter.ShouldNormalize(member, property))
+        if (AbpDateTimeConverter.ShouldNormalize(member, property))
         {
             property.Converter = _dateTimeConverter.Value;
         }

@@ -1,9 +1,21 @@
-﻿namespace Volo.Abp.Json;
+﻿using System.Collections.Generic;
+
+namespace Volo.Abp.Json;
 
 public class AbpJsonOptions
 {
     /// <summary>
-    /// Used to set default value for the DateTimeFormat.
+    /// Formats of input JSON date, Empty string means default format.
     /// </summary>
-    public string DefaultDateTimeFormat { get; set; }
+    public List<string> InputDateTimeFormats { get; set; }
+
+    /// <summary>
+    /// Format of output json date, Null or empty string means default format.
+    /// </summary>
+    public string OutputDateTimeFormat { get; set; }
+
+    public AbpJsonOptions()
+    {
+        InputDateTimeFormats = new List<string>();
+    }
 }

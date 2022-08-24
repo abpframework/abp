@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
@@ -21,20 +22,23 @@ public class AbpNullableDateTimeConverter : JsonConverter<DateTime?>, ITransient
 
     public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (!_options.DefaultDateTimeFormat.IsNullOrWhiteSpace())
+        if (_options.InputDateTimeFormats.Any())
         {
             if (reader.TokenType == JsonTokenType.String)
             {
-                var s = reader.GetString();
-                if (DateTime.TryParseExact(s, _options.DefaultDateTimeFormat, CultureInfo.CurrentUICulture, DateTimeStyles.None, out var d1))
+                foreach (var format in _options.InputDateTimeFormats)
                 {
-                    return _clock.Normalize(d1);
+                    var s = reader.GetString();
+                    if (DateTime.TryParseExact(s, format, CultureInfo.CurrentUICulture, DateTimeStyles.None, out var d1))
+                    {
+                        return _clock.Normalize(d1);
+                    }
                 }
-
-                throw new JsonException($"'{s}' can't parse to DateTime({_options.DefaultDateTimeFormat})!");
             }
-
-            throw new JsonException("Reader's TokenType is not String!");
+            else
+            {
+                throw new JsonException("Reader's TokenType is not String!");
+            }
         }
 
         if (reader.TryGetDateTime(out var d2))
@@ -53,13 +57,13 @@ public class AbpNullableDateTimeConverter : JsonConverter<DateTime?>, ITransient
         }
         else
         {
-            if (_options.DefaultDateTimeFormat.IsNullOrWhiteSpace())
+            if (_options.OutputDateTimeFormat.IsNullOrWhiteSpace())
             {
                 writer.WriteStringValue(_clock.Normalize(value.Value));
             }
             else
             {
-                writer.WriteStringValue(_clock.Normalize(value.Value).ToString(_options.DefaultDateTimeFormat, CultureInfo.CurrentUICulture));
+                writer.WriteStringValue(_clock.Normalize(value.Value).ToString(_options.OutputDateTimeFormat, CultureInfo.CurrentUICulture));
             }
         }
     }
