@@ -36,6 +36,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity.Blazor.Server;
 using Volo.Abp.Localization;
@@ -54,6 +55,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered;
 [DependsOn(
     typeof(MyProjectNameHttpApiClientModule),
     typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpDistributedLockingModule),
     typeof(AbpAspNetCoreMvcClientModule),
     typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
     typeof(AbpHttpClientIdentityModelWebModule),
