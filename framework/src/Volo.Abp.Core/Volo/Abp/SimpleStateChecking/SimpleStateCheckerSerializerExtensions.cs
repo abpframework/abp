@@ -82,7 +82,7 @@ public static class SimpleStateCheckerSerializerExtensions
                 throw new AbpException("JSON value is not an array of objects: " + value);
             }
 
-            checkers[i] = serializer.Deserialize(jsonObject, state);
+            checkers.Add(serializer.Deserialize(jsonObject, state));
         }
 
         return checkers.Where(x => x != null).ToArray();
