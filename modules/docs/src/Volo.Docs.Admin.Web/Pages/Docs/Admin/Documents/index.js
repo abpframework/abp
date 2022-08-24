@@ -6,7 +6,15 @@ $(function () {
         return $datePicker.data().datepicker.getFormattedDate('yyyy-mm-dd');
     };
     
-    var comboboxItems = service.getFilterItems();
+    var comboboxItems = [];
+    service.getFilterItems()
+        .then(function (result) {
+        comboboxItems = result;
+        fillOptions();
+        }).catch(function (error) {
+            abp.message.error(error);
+        });
+    
     
     
     var $projectId = $('#ProjectId');

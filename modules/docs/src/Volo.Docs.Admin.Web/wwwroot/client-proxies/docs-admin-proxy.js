@@ -63,7 +63,7 @@
 
     volo.docs.admin.documentsAdmin.getFilterItems = function(ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/admin/documents/GetUniqueListDocumentWithoutDetails',
+        url: abp.appPath + 'api/docs/admin/documents/GetFilterItems',
         type: 'GET'
       }, ajaxParams));
     };

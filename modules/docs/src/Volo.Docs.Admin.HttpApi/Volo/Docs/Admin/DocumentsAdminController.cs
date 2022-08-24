@@ -65,7 +65,7 @@ namespace Volo.Docs.Admin
         }
 
         [HttpGet]
-        [Route("GetUniqueListDocumentWithoutDetails")]
+        [Route("GetFilterItems")]
         public async Task<List<DocumentInfoDto>> GetFilterItemsAsync()
         {
             return await _documentAdminAppService.GetFilterItemsAsync();

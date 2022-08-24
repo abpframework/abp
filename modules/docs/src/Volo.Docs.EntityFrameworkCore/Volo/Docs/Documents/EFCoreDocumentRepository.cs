@@ -233,14 +233,5 @@ namespace Volo.Docs.Documents
                     LastCachedTime = x.d.LastCachedTime
                 });
         }
-
-        // private async Task<List<FilterVersionItem>> GetFilterVersionItems(CancellationToken cancellationToken)
-        // {
-        //     var q =  (await GetDbSetAsync());
-        //    return await q.Select(x => new FilterVersionItem { Version  = x.Version, ProjectId  = x.ProjectId, LanguageCode = x.LanguageCode , Format = x.Format })
-        //         .Distinct()
-        //         .OrderByDescending(x=>x.Version)
-        //         .ToListAsync(GetCancellationToken(cancellationToken));
-        // }
     }
 }

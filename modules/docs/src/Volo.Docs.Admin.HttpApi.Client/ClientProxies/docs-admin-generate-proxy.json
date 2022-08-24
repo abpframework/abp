@@ -434,7 +434,7 @@
               "uniqueName": "GetFilterItemsAsync",
               "name": "GetFilterItemsAsync",
               "httpMethod": "GET",
-              "url": "api/docs/admin/documents/GetUniqueListDocumentWithoutDetails",
+              "url": "api/docs/admin/documents/GetFilterItems",
               "supportedVersions": [],
               "parametersOnMethod": [],
               "parameters": [],
