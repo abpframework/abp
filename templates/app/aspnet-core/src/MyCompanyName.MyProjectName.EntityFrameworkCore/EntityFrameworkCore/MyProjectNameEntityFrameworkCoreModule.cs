@@ -55,7 +55,7 @@ public class MyProjectNameEntityFrameworkCoreModule : AbpModule
             options.UseSqlServer();
         });
 
-        //<TEMPLATE-REMOVE IF-NOT='dbms:sqlite'>
+        //<TEMPLATE-REMOVE IF-NOT='dbms:SQLite'>
         Configure<AbpUnitOfWorkDefaultOptions>(options =>
         {
             options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
