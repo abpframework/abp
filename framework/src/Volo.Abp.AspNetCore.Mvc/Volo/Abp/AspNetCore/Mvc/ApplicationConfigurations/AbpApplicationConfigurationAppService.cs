@@ -43,7 +43,6 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     private readonly ITimezoneProvider _timezoneProvider;
     private readonly AbpClockOptions _abpClockOptions;
     private readonly ICachedObjectExtensionsDtoService _cachedObjectExtensionsDtoService;
-    private readonly IDistributedLocalizationStore _distributedLocalizationStore;
     private readonly AbpDistributedLocalizationOptions _distributedLocalizationOptions;
     private readonly AbpApplicationConfigurationOptions _options;
 
@@ -65,7 +64,6 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         IOptions<AbpClockOptions> abpClockOptions,
         ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService,
         IOptions<AbpApplicationConfigurationOptions> options,
-        IDistributedLocalizationStore distributedLocalizationStore,
         IOptions<AbpDistributedLocalizationOptions> distributedLocalizationOptions)
     {
         _serviceProvider = serviceProvider;
@@ -82,7 +80,6 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         _timezoneProvider = timezoneProvider;
         _abpClockOptions = abpClockOptions.Value;
         _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
-        _distributedLocalizationStore = distributedLocalizationStore;
         _distributedLocalizationOptions = distributedLocalizationOptions.Value;
         _options = options.Value;
         _localizationOptions = localizationOptions.Value;
@@ -236,7 +233,10 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         if (_distributedLocalizationOptions.GetFromDistributedStore)
         {
-            var distributedLocalizationData = await _distributedLocalizationStore.GetAsync();
+            var distributedLocalizationData = await this
+                .LazyServiceProvider
+                .LazyGetRequiredService<IDistributedLocalizationStore>()
+                .GetAsync();
         
             foreach (var resource in distributedLocalizationData.Resources)
             {
