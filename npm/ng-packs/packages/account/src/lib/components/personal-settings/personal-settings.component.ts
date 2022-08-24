@@ -1,24 +1,27 @@
-import {ProfileDto, ProfileService} from '@abp/ng.account.core/proxy';
-import {ToasterService} from '@abp/ng.theme.shared';
-import {Component, Injector, OnInit, ViewEncapsulation} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {finalize} from 'rxjs/operators';
-import {Account} from '../../models/account';
-import {ManageProfileStateService} from '../../services/manage-profile.state.service';
-import {EXTENSIONS_IDENTIFIER, FormPropData, generateFormFromProps} from "@abp/ng.theme.shared/extensions";
-import {eAccountComponents} from "../../enums";
-
+import { ProfileDto, ProfileService } from '@abp/ng.account.core/proxy';
+import { ToasterService } from '@abp/ng.theme.shared';
+import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
+import { Account } from '../../models/account';
+import { ManageProfileStateService } from '../../services/manage-profile.state.service';
+import {
+  EXTENSIONS_IDENTIFIER,
+  FormPropData,
+  generateFormFromProps,
+} from '@abp/ng.theme.shared/extensions';
+import { eAccountComponents } from '../../enums';
 
 @Component({
   selector: 'abp-personal-settings-form',
   templateUrl: './personal-settings.component.html',
   exportAs: 'abpPersonalSettingsForm',
-  providers:[
+  providers: [
     {
       provide: EXTENSIONS_IDENTIFIER,
       useValue: eAccountComponents.PersonalSettings,
     },
-  ]
+  ],
 })
 export class PersonalSettingsComponent
   implements
@@ -26,7 +29,7 @@ export class PersonalSettingsComponent
     Account.PersonalSettingsComponentInputs,
     Account.PersonalSettingsComponentOutputs
 {
-  selected:ProfileDto
+  selected: ProfileDto;
 
   form: FormGroup;
 
@@ -40,18 +43,17 @@ export class PersonalSettingsComponent
     protected injector: Injector,
   ) {}
 
-
   buildForm() {
     this.selected = this.manageProfileState.getProfile();
-    if(!this.selected){
-      return
+    if (!this.selected) {
+      return;
     }
     const data = new FormPropData(this.injector, this.selected);
     this.form = generateFormFromProps(data);
   }
 
   ngOnInit(): void {
-    this.buildForm()
+    this.buildForm();
   }
 
   submit() {
