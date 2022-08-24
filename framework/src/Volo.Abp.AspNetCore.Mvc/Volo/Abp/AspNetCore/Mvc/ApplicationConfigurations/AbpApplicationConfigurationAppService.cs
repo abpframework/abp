@@ -44,6 +44,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     private readonly AbpClockOptions _abpClockOptions;
     private readonly ICachedObjectExtensionsDtoService _cachedObjectExtensionsDtoService;
     private readonly IDistributedLocalizationStore _distributedLocalizationStore;
+    private readonly AbpDistributedLocalizationOptions _distributedLocalizationOptions;
     private readonly AbpApplicationConfigurationOptions _options;
 
     public AbpApplicationConfigurationAppService(
@@ -64,7 +65,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         IOptions<AbpClockOptions> abpClockOptions,
         ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService,
         IOptions<AbpApplicationConfigurationOptions> options,
-        IDistributedLocalizationStore distributedLocalizationStore)
+        IDistributedLocalizationStore distributedLocalizationStore,
+        IOptions<AbpDistributedLocalizationOptions> distributedLocalizationOptions)
     {
         _serviceProvider = serviceProvider;
         _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
@@ -81,6 +83,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         _abpClockOptions = abpClockOptions.Value;
         _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
         _distributedLocalizationStore = distributedLocalizationStore;
+        _distributedLocalizationOptions = distributedLocalizationOptions.Value;
         _options = options.Value;
         _localizationOptions = localizationOptions.Value;
         _multiTenancyOptions = multiTenancyOptions.Value;
@@ -231,11 +234,14 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             localizationConfig.Values[resource.ResourceName] = dictionary;
         }
 
-        var distributedLocalizationData = await _distributedLocalizationStore.GetAsync();
-        
-        foreach (var resource in distributedLocalizationData.Resources)
+        if (_distributedLocalizationOptions.GetFromDistributedStore)
         {
-            localizationConfig.Values[resource.ResourceName] = resource.Texts;
+            var distributedLocalizationData = await _distributedLocalizationStore.GetAsync();
+        
+            foreach (var resource in distributedLocalizationData.Resources)
+            {
+                localizationConfig.Values[resource.ResourceName] = resource.Texts;
+            }
         }
 
         localizationConfig.CurrentCulture = GetCurrentCultureInfo();
