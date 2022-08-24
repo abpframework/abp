@@ -36,6 +36,11 @@ namespace Volo.Docs.Documents
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public Task<List<DocumentWithoutDetails>> GetUniqueListWithoutDetails(CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<Document>> GetListByProjectId(Guid projectId, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId).ToListAsync(GetCancellationToken(cancellationToken));
@@ -157,67 +162,7 @@ namespace Volo.Docs.Documents
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id == id).SingleAsync(GetCancellationToken(cancellationToken));
         }
-
-        public async Task<FilterItems> GetFilterItemsAsync(CancellationToken cancellationToken = default)
-        {
-            var filterItems = new FilterItems();
-            
-            filterItems.Formats = await GetFormats(cancellationToken);
-
-            filterItems.Projects = await GetFilterProjectItems(cancellationToken);
-
-            filterItems.Versions = await GetFilterVersionItems(cancellationToken);
-
-            filterItems.Languages = await GetFilterLanguageCodeItems(cancellationToken);
-            
-            return filterItems;
-        }
-
-        private async Task<List<string>> GetFormats(CancellationToken cancellationToken)
-        {
-            return await (await GetMongoQueryableAsync(cancellationToken)).Select(x => x.Format).Distinct().ToListAsync(cancellationToken);
-        }
-
-        private async Task<List<FilterProjectItem>> GetFilterProjectItems(CancellationToken cancellationToken)
-        {
-            return await (await GetMongoQueryableAsync<Project>(cancellationToken))
-                .Select(x=>new FilterProjectItem
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                })
-                .OrderBy(x=>x.Name)
-                .ToListAsync(GetCancellationToken(cancellationToken));
-        }
-
-        private async Task<List<FilterLanguageCodeItem>> GetFilterLanguageCodeItems(CancellationToken cancellationToken)
-        {
-            return await (await GetMongoQueryableAsync(cancellationToken))
-                .GroupBy(x => x.LanguageCode)
-                .Select(x => new FilterLanguageCodeItem 
-                {
-                    ProjectIds = x.Select(x2 => x2.ProjectId).Distinct(),
-                    Code = x.Key,
-                    Versions = x.Select(x2 => x2.Version).Distinct()
-                })
-                .OrderBy(x=>x.Code)
-                .ToListAsync(GetCancellationToken(cancellationToken));
-        }
-
-        private async Task<List<FilterVersionItem>> GetFilterVersionItems(CancellationToken cancellationToken)
-        {
-            return await (await GetMongoQueryableAsync(cancellationToken))
-                .GroupBy(x => x.Version)
-                .Select(x => new FilterVersionItem 
-                {
-                    ProjectIds = x.Select(x2 => x2.ProjectId).Distinct(),
-                    Version = x.Key,
-                    Languages = x.Select(x2 => x2.LanguageCode).Distinct()
-                })
-                .OrderByDescending(x => x.Version)
-                .ToListAsync(GetCancellationToken(cancellationToken));
-        }
-
+        
         protected virtual async Task<IMongoQueryable<DocumentWithoutContent>> ApplyFilterForGetAll(
             IMongoQueryable<Document> query,
             Guid? projectId,

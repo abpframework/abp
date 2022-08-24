@@ -21,6 +21,7 @@ namespace Volo.Docs.Admin.Documents
         Task RemoveFromCacheAsync(Guid documentId);
 
         Task ReindexAsync(Guid documentId);
-        Task<FilterItems> GetFilterItemsAsync();
+
+        Task<List<DocumentInfoDto>> GetUniqueListWithoutDetails();
     }
 }

@@ -218,10 +218,12 @@ namespace Volo.Docs.Admin.Documents
             await _elasticSearchService.AddOrUpdateAsync(document);
         }
 
-        public Task<FilterItems> GetFilterItemsAsync()
+        public async Task<List<DocumentInfoDto>> GetUniqueListWithoutDetails()
         {
-            return _documentRepository.GetFilterItemsAsync();
+            var documents = await _documentRepository.GetUniqueListWithoutDetails();
+            return ObjectMapper.Map<List<DocumentInfo>, List<DocumentInfoDto>>(documents);
         }
+
 
         private async Task UpdateDocumentUpdateInfoCache(Document document)
         {

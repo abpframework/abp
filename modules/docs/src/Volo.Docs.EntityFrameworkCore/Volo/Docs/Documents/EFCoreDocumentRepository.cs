@@ -33,6 +33,23 @@ namespace Volo.Docs.Documents
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<List<DocumentInfo>> GetUniqueListWithoutDetails(CancellationToken cancellationToken = default)
+        {
+            // Todo : add project id to query
+            return await (await GetDbSetAsync())
+                .Select(x=> new DocumentInfo
+                {
+                    ProjectId = x.ProjectId,
+                    Version = x.Version,
+                    LanguageCode = x.LanguageCode,
+                    Format = x.Format,
+                })
+                .Distinct()
+                .OrderByDescending(x=>x.Version)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+
         public async Task<List<Document>> GetListByProjectId(Guid projectId,
             CancellationToken cancellationToken = default)
         {
@@ -217,65 +234,14 @@ namespace Volo.Docs.Documents
                     LastCachedTime = x.d.LastCachedTime
                 });
         }
-        public async Task<FilterItems> GetFilterItemsAsync(CancellationToken cancellationToken = default)
-        {
-            var filterItems = new FilterItems();
-            
-            filterItems.Formats = await GetFormats(cancellationToken);
 
-            filterItems.Projects = await GetFilterProjectItems(cancellationToken);
-
-            filterItems.Versions = await GetFilterVersionItems(cancellationToken);
-
-            filterItems.Languages = await GetFilterLanguageCodeItems(cancellationToken);
-            
-            return filterItems;
-        }
-
-        private async Task<List<string>> GetFormats(CancellationToken cancellationToken)
-        {
-            return await (await GetDbSetAsync()).Select(x => x.Format).Distinct().ToListAsync(cancellationToken);
-        }
-
-        private async Task<List<FilterProjectItem>> GetFilterProjectItems(CancellationToken cancellationToken)
-        {
-            return await (await GetDbContextAsync())
-                .Projects
-                .Select(x=>new FilterProjectItem
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                })
-                .OrderBy(x=>x.Name)
-                .ToListAsync(GetCancellationToken(cancellationToken));
-        }
-
-        private async Task<List<FilterLanguageCodeItem>> GetFilterLanguageCodeItems(CancellationToken cancellationToken)
-        {
-            return await (await GetDbSetAsync())
-                .GroupBy(x => x.LanguageCode)
-                .Select(x => new FilterLanguageCodeItem 
-                {
-                    ProjectIds = x.Select(x2 => x2.ProjectId).Distinct(),
-                    Code = x.Key,
-                    Versions = x.Select(x2 => x2.Version).Distinct()
-                })
-                .OrderBy(x=>x.Code)
-                .ToListAsync(GetCancellationToken(cancellationToken));
-        }
-
-        private async Task<List<FilterVersionItem>> GetFilterVersionItems(CancellationToken cancellationToken)
-        {
-            return await (await GetDbSetAsync())
-                .GroupBy(x => x.Version)
-                .Select(x => new FilterVersionItem 
-                {
-                    ProjectIds = x.Select(x2 => x2.ProjectId).Distinct(),
-                    Version = x.Key,
-                    Languages = x.Select(x2 => x2.LanguageCode).Distinct()
-                })
-                .OrderByDescending(x => x.Version)
-                .ToListAsync(GetCancellationToken(cancellationToken));
-        }
+        // private async Task<List<FilterVersionItem>> GetFilterVersionItems(CancellationToken cancellationToken)
+        // {
+        //     var q =  (await GetDbSetAsync());
+        //    return await q.Select(x => new FilterVersionItem { Version  = x.Version, ProjectId  = x.ProjectId, LanguageCode = x.LanguageCode , Format = x.Format })
+        //         .Distinct()
+        //         .OrderByDescending(x=>x.Version)
+        //         .ToListAsync(GetCancellationToken(cancellationToken));
+        // }
     }
 }

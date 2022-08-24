@@ -14,6 +14,8 @@ namespace Volo.Docs.Admin
             CreateMap<Project, ProjectDto>();
             CreateMap<Document, DocumentDto>().Ignore(x => x.ProjectName);
             CreateMap<DocumentWithoutContent, DocumentDto>();
+            CreateMap<ProjectWithoutDetails, ProjectWithoutDetailsDto>();
+            CreateMap<DocumentInfo, DocumentInfoDto>();
         }
     }
 }

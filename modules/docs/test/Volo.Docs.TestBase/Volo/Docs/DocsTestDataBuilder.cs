@@ -49,6 +49,52 @@ namespace Volo.Docs
                 "https://github.com/abpframework/abp/tree/2.0.0/docs/",
                 "https://raw.githubusercontent.com/abpframework/abp/2.0.0/docs/en/", "", DateTime.Now, DateTime.Now,
                 DateTime.Now));
+            
+            
+            var project2 = new Project(
+                _testData.PorjectId2,
+                "ABP vNext2",
+                "ABP2",
+                GithubDocumentSource.Type,
+                "md",
+                "index2",
+                "docs-nav.json",
+                "docs-params.json"
+            );
+
+            project2
+                .SetProperty("GitHubRootUrl", "https://github.com/abpframework/abp/tree/{version}/docs/en/")
+                .SetProperty("GitHubAccessToken", "123456")
+                .SetProperty("GitHubUserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+
+            await _projectRepository.InsertAsync(project2);
+
+            await _documentRepository.InsertAsync(new Document(Guid.NewGuid(), project2.Id, "CLI.md", "4.0.0", "en", "CLI.md",
+                "this is abp cli", "md", "https://github.com/abpframework/abp/blob/2.0.0/docs/en/CLI.md",
+                "https://github.com/abpframework/abp/tree/2.0.0/docs/",
+                "https://raw.githubusercontent.com/abpframework/abp/2.0.0/docs/en/", "", DateTime.Now, DateTime.Now,
+                DateTime.Now));
+            
+            
+            await _documentRepository.InsertAsync(new Document(Guid.NewGuid(), project2.Id, "CLI.md", "4.0.0", "tr", "CLI.md",
+                "this is abp cli", "md", "https://github.com/abpframework/abp/blob/2.0.0/docs/en/CLI.md",
+                "https://github.com/abpframework/abp/tree/2.0.0/docs/",
+                "https://raw.githubusercontent.com/abpframework/abp/2.0.0/docs/en/", "", DateTime.Now, DateTime.Now,
+                DateTime.Now));
+            
+            await _documentRepository.InsertAsync(new Document(Guid.NewGuid(), project2.Id, "CLI.md", "4.0.0", "en", "CLI2.md",
+                "this is abp cli", "md", "https://github.com/abpframework/abp/blob/2.0.0/docs/en/CLI.md",
+                "https://github.com/abpframework/abp/tree/2.0.0/docs/",
+                "https://raw.githubusercontent.com/abpframework/abp/2.0.0/docs/en/", "", DateTime.Now, DateTime.Now,
+                DateTime.Now));
+            
+            
+            await _documentRepository.InsertAsync(new Document(Guid.NewGuid(), project2.Id, "CLI.md", "4.1.0", "en", "CLI.md",
+                "this is abp cli", "md", "https://github.com/abpframework/abp/blob/2.0.0/docs/en/CLI.md",
+                "https://github.com/abpframework/abp/tree/2.0.0/docs/",
+                "https://raw.githubusercontent.com/abpframework/abp/2.0.0/docs/en/", "", DateTime.Now, DateTime.Now,
+                DateTime.Now));
+            
         }
     }
 }

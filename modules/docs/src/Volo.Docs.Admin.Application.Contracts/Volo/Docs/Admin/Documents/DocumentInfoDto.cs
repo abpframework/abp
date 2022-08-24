@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Volo.Docs.Documents.Filter;
+namespace Volo.Docs.Admin.Documents;
 
-public class FilterVersionItem
+public class DocumentInfoDto
 {
     public string Version { get; set; }
     public string Format { get; set; }

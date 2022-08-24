@@ -1,35 +1,24 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Volo.Docs.Admin.Documents;
 using Volo.Docs.Admin.Projects;
-using Volo.Docs.Documents.Filter;
 
 namespace Volo.Docs.Admin.Pages.Docs.Admin.Documents;
 
 [Authorize(DocsAdminPermissions.Projects.Default)]
 public class IndexModel : DocsAdminPageModel
 {
-    private readonly IDocumentAdminAppService _documentAdminAppService;
-    public FilterItems FilterItems { get; set; }
+    private readonly IProjectAdminAppService _projectAdminAppService;
+    public List<ProjectWithoutDetailsDto> Projects { get; set; }
 
-    public IndexModel(IDocumentAdminAppService documentAdminAppService)
+    public IndexModel(IProjectAdminAppService projectAdminAppService)
     {
-        _documentAdminAppService = documentAdminAppService;
-    }
-    
-
-    public string ToJson(object obj)
-    {
-        return JsonConvert.SerializeObject(obj);
+        _projectAdminAppService = projectAdminAppService;
     }
     public virtual async Task<IActionResult> OnGet()
     {
-        FilterItems = await _documentAdminAppService.GetFilterItemsAsync();
+        Projects = await _projectAdminAppService.GetListWithoutDetailsAsync();
         return Page();
     }
 }

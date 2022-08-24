@@ -6,70 +6,120 @@ $(function () {
         return $datePicker.data().datepicker.getFormattedDate('yyyy-mm-dd');
     };
     
+    var comboboxItems = [];
+    abp.ajax({
+        url: abp.appPath + 'api/docs/admin/documents/GetUniqueListDocumentWithoutDetails',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            comboboxItems = data;
+            fillOptions();
+        }
+    });
+    
+    
     var $projectId = $('#ProjectId');
     var $version = $('#Version');
     var $languageCode = $('#LanguageCode');
-
-    function $getOptions($select){
-        var select = $select.get(0);
-        return $(select.options)
-    }
-
-    function showLanguages(){
-        var selectedProjectId = $projectId.val();
+    var $format = $('#Format');
+    
+    function fillOptions() {
         var selectedVersion = $version.val();
-        var languages = $getOptions($languageCode);
-        languages.each(function(){
-            var language = $(this);
-            var languageCodeDto = language.attr('data-language');
-            if(!languageCodeDto) return;
-            languageCodeDto = JSON.parse(languageCodeDto);
-            if((!selectedVersion || languageCodeDto.Versions.includes(selectedVersion)) 
-                && (!selectedProjectId || languageCodeDto.ProjectIds.includes(selectedProjectId)))
-            {
-                language.show();
-            }
-            else{
-                language.hide();
-                if(language.is(':selected')){
-                    $languageCode.val('');
-                }
-            }
-        });
-    }
-    function showVersions(){
-        var selectedProjectId = $projectId.val();
         var selectedLanguageCode = $languageCode.val();
-        var versions = $getOptions($version);
-        versions.each(function(){
-            var version = $(this);
-            var verisonDto = version.attr('data-version');
-            if(!verisonDto) return;
-            verisonDto = JSON.parse(verisonDto);
-            if((!selectedLanguageCode || verisonDto.Languages.includes(selectedLanguageCode)) 
-                && (!selectedProjectId || verisonDto.ProjectIds.includes(selectedProjectId)))
-            {
-                version.show();
-            }
-            else{
-                version.hide();
-                if(version.is(':selected')){
-                    $version.val('');
-                }
+        var selectedFormat = $format.val();
+        var selectedProjectId = $projectId.val();
+
+        $version.empty();
+        $languageCode.empty();
+        $format.empty();
+        
+        $version.append($('<option/>').val(''));
+        $languageCode.append($('<option/>').val(''));
+        $format.append($('<option/>').val(''));
+
+        
+        comboboxItems.forEach(function (item) {
+            if (!selectedProjectId || item.projectId === selectedProjectId) {
+                appendVersion(item,selectedVersion,selectedLanguageCode,selectedFormat);
+                appendLanguageCode(item,selectedLanguageCode,selectedVersion,selectedFormat);
+                appendFormat(item,selectedFormat,selectedVersion,selectedLanguageCode);
             }
         });
+        
     }
-    $projectId.on('change', function () {
-        showVersions();
-        showLanguages();
-    });
+    function appendFormat(item,selectedFormat,selectedVersion,selectedLanguageCode) {
+        if(selectedVersion && selectedVersion !== item.version) {
+            return;
+        }
+        if(selectedLanguageCode && selectedLanguageCode !== item.languageCode) {
+            return;
+        }
 
+        if($format.find('option[value="' + item.format + '"]').length === 0) {
+            var formatOption = $('<option>',{
+                value: item.format,
+                text: item.format
+            });
+            if(selectedFormat === item.format) {
+                formatOption.attr('selected', 'selected');
+            }
+            $format.append(formatOption);
+        }
+    }
+    
+    function appendLanguageCode(item,selectedLanguageCode,selectedVersion,selectedFormat) {
+        if(selectedVersion && selectedVersion !== item.version) {
+            return;
+        }
+        if(selectedFormat && selectedFormat !== item.format) {
+            return;
+        }
+        
+        if($languageCode.find('option[value="' + item.languageCode + '"]').length === 0) {
+            var languageCodeOption = $('<option>',{
+                value: item.languageCode,
+                text: item.languageCode
+            });
+            if(selectedLanguageCode === item.languageCode) {
+                languageCodeOption.attr('selected', 'selected');
+            }
+            $languageCode.append(languageCodeOption);
+        }
+    }
+    function appendVersion(item,selectedVersion,selectedLanguageCode,selectedFormat) {
+        if(selectedLanguageCode && item.languageCode !== selectedLanguageCode) {
+            return;
+        }
+        if(selectedFormat && selectedFormat !== item.format) {
+            return;
+        }
+        
+        if($version.find('option[value="' + item.version + '"]').length === 0) {
+            var versionOption = $('<option>', {
+                value: item.version,
+                text: item.version
+            })
+            if(selectedVersion === item.version) {
+                versionOption.attr('selected', 'selected');
+            }
+            $version.append(versionOption);
+        }
+    }
+
+    $projectId.on('change', function () {
+        fillOptions();
+    });
+    
     $version.on('change', function () {
-        showLanguages();
+        fillOptions();
     });
     
     $languageCode.on('change', function () {
-        showVersions();
+        fillOptions();
+    });
+    
+    $format.on('change', function () {
+        fillOptions();
     });
     
     var getFilter = function () {

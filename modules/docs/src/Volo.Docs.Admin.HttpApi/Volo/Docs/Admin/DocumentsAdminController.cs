@@ -66,10 +66,10 @@ namespace Volo.Docs.Admin
         }
 
         [HttpGet]
-        [Route("GetFilterItems")]
-        public Task<FilterItems> GetFilterItemsAsync()
+        [Route("GetUniqueListDocumentWithoutDetails")]
+        public Task<List<DocumentInfoDto>> GetUniqueListWithoutDetails()
         {
-            return _documentAdminAppService.GetFilterItemsAsync();
+            return _documentAdminAppService.GetUniqueListWithoutDetails();
         }
     }
 }

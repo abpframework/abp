@@ -5,7 +5,6 @@ namespace Volo.Docs.Documents.Filter;
 
 public class FilterLanguageCodeItem
 {
-    public string Code { get; set; }
-    public IEnumerable<Guid> ProjectIds { get; set; }
-    public IEnumerable<string> Versions { get; set; }
+    public string LanguageCode { get; set; }
+    public Guid ProjectId { get; set; }
 }
