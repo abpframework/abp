@@ -72,12 +72,12 @@ public class PermissionManager_Tests : PermissionTestBase
     }
 
     [Fact]
-    public async Task Get_Should_Exception_When_Permission_Undefined()
+    public async Task Get_Should_Return_Not_Granted_When_Permission_Undefined()
     {
-        await Assert.ThrowsAsync<AbpException>(async () => await _permissionManager.GetAsync(
-            "MyPermission1NotExist",
-            "Test",
-            "Test"));
+        var result = await _permissionManager.GetAsync("MyPermission1NotExist", "Test", "Test");
+        result.Name.ShouldBe("MyPermission1NotExist");
+        result.Providers.ShouldBeEmpty();
+        result.IsGranted.ShouldBeFalse();
     }
 
     [Fact]
@@ -126,13 +126,13 @@ public class PermissionManager_Tests : PermissionTestBase
     }
 
     [Fact]
-    public async Task Set_Should_Exception_When_Permission_Undefined()
+    public async Task Set_Should_Silently_Ignore_When_Permission_Undefined()
     {
-        await Assert.ThrowsAsync<AbpException>(async () => await _permissionManager.SetAsync(
+        await _permissionManager.SetAsync(
             "MyPermission1NotExist",
             "Test",
             "Test",
-            true));
+            true);
     }
 
     [Fact]
