@@ -12,6 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Features\Volo.Abp.Features.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.GlobalFeatures\Volo.Abp.GlobalFeatures.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.PermissionManagement.EntityFrameworkCore\Volo.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Volo.Abp.PermissionManagement.TestBase\Volo.Abp.PermissionManagement.TestBase.csproj" />
   </ItemGroup>
