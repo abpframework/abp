@@ -3,6 +3,7 @@
   "texts": {
     "Features": "ominaisuudet",
     "NoFeatureFoundMessage": "Ei ole mitään käytettävissä olevaa ominaisuutta.",
+    "ManageHostFeatures": "Hallinnoi isäntäominaisuuksia",
     "Permission:FeatureManagement": "Ominaisuuden hallinta",
     "Permission:FeatureManagement.ManageHostFeatures": "Hallinnoi isäntäominaisuuksia",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Ominaisuuden {0} arvo ei kelpaa!"

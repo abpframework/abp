@@ -3,6 +3,7 @@
   "texts": {
     "Features": "ویژگی ها",
     "NoFeatureFoundMessage": "هیچ ویژگی ای در دسترس نمی باشد.",
+    "ManageHostFeatures": "مدیریت ویژگی های میزبان",
     "Permission:FeatureManagement": "مدیریت ویژگی ها",
     "Permission:FeatureManagement.ManageHostFeatures": "مدیریت ویژگی های میزبان",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} مقدار ویژگی صحیح نمی باشد!"

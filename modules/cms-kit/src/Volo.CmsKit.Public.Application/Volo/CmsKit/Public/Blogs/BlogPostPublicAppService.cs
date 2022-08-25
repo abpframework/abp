@@ -1,16 +1,19 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Blogs;
 
+[RequiresFeature(CmsKitFeatures.BlogEnable)]
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPublicAppService
 {
@@ -29,20 +32,20 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
         ContentParser = contentParser;
     }
 
-    public virtual async Task<BlogPostPublicDto> GetAsync(
+    public virtual async Task<BlogPostCommonDto> GetAsync(
         [NotNull] string blogSlug, [NotNull] string blogPostSlug)
     {
         var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
         var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
 
-        var blogPostDto = ObjectMapper.Map<BlogPost, BlogPostPublicDto>(blogPost);
+        var blogPostDto = ObjectMapper.Map<BlogPost, BlogPostCommonDto>(blogPost);
         blogPostDto.ContentFragments = await ContentParser.ParseAsync(blogPost.Content);
-        
+
         return blogPostDto;
     }
 
-    public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync([NotNull] string blogSlug, BlogPostGetListInput input)
+    public virtual async Task<PagedResultDto<BlogPostCommonDto>> GetListAsync([NotNull] string blogSlug, BlogPostGetListInput input)
     {
         var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
@@ -50,10 +53,10 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
             BlogPostStatus.Published, input.MaxResultCount,
             input.SkipCount, input.Sorting);
 
-        return new PagedResultDto<BlogPostPublicDto>(
+        return new PagedResultDto<BlogPostCommonDto>(
             await BlogPostRepository.GetCountAsync(blogId: blog.Id, tagId: input.TagId,
                 statusFilter: BlogPostStatus.Published, authorId: input.AuthorId),
-            ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
+            ObjectMapper.Map<List<BlogPost>, List<BlogPostCommonDto>>(blogPosts));
     }
 
     public virtual async Task<PagedResultDto<CmsUserDto>> GetAuthorsHasBlogPostsAsync(BlogPostFilteredPagedAndSortedResultRequestDto input)
