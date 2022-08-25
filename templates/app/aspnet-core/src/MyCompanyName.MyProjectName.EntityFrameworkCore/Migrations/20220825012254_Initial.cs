@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
     public partial class Initial : Migration
     {
@@ -41,6 +41,27 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpAuditLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpBackgroundJobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    JobArgs = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: false),
+                    TryCount = table.Column<short>(type: "smallint", nullable: false, defaultValue: (short)0),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NextTryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastTryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsAbandoned = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    Priority = table.Column<byte>(type: "tinyint", nullable: false, defaultValue: (byte)15),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBackgroundJobs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -135,6 +156,40 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpPermissionGrants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpPermissionGroups",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpPermissionGroups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpPermissions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GroupName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ParentName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    IsEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    MultiTenancySide = table.Column<byte>(type: "tinyint", nullable: false),
+                    Providers = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    StateCheckers = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpPermissions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -664,6 +719,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                 columns: new[] { "TenantId", "UserId", "ExecutionTime" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AbpBackgroundJobs_IsAbandoned_NextTryTime",
+                table: "AbpBackgroundJobs",
+                columns: new[] { "IsAbandoned", "NextTryTime" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
                 table: "AbpEntityChanges",
                 column: "AuditLogId");
@@ -713,6 +773,23 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                 columns: new[] { "TenantId", "Name", "ProviderName", "ProviderKey" },
                 unique: true,
                 filter: "[TenantId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpPermissionGroups_Name",
+                table: "AbpPermissionGroups",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpPermissions_GroupName",
+                table: "AbpPermissions",
+                column: "GroupName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpPermissions_Name",
+                table: "AbpPermissions",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpRoleClaims_RoleId",
@@ -833,6 +910,9 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                 name: "AbpAuditLogActions");
 
             migrationBuilder.DropTable(
+                name: "AbpBackgroundJobs");
+
+            migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
 
             migrationBuilder.DropTable(
@@ -849,6 +929,12 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpPermissionGrants");
+
+            migrationBuilder.DropTable(
+                name: "AbpPermissionGroups");
+
+            migrationBuilder.DropTable(
+                name: "AbpPermissions");
 
             migrationBuilder.DropTable(
                 name: "AbpRoleClaims");
