@@ -38,8 +38,8 @@ export class FormProp<R = any> extends Prop<R> {
   readonly defaultValue: boolean | number | string | Date;
   readonly options: PropCallback<R, Observable<ABP.Option<any>[]>> | undefined;
   readonly id: string | undefined;
-  readonly template? : Type<any>
-  readonly className?:string;
+  readonly template?: Type<any>;
+  readonly className?: string;
 
   constructor(options: FormPropOptions<R>) {
     super(
@@ -50,7 +50,7 @@ export class FormProp<R = any> extends Prop<R> {
       options.visible,
       options.isExtra,
       options.template,
-      options.className
+      options.className,
     );
 
     this.asyncValidators = options.asyncValidators || (_ => []);

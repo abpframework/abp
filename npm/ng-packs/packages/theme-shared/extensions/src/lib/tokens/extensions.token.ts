@@ -3,8 +3,7 @@ import { ActionCallback, ReadonlyActionData as ActionData } from '../models/acti
 import { ExtensionsService } from '../services/extensions.service';
 import { Observable } from 'rxjs';
 import { ePropType } from '../enums/props.enum';
- import {FormProp} from "../models/form-props";
-import { PropData } from '../models/props';
+import { FormProp } from '../models/form-props';
 
 export const EXTENSIONS_IDENTIFIER = new InjectionToken<string>('EXTENSIONS_IDENTIFIER');
 export type ActionKeys = Extract<'entityActions' | 'toolbarActions', keyof ExtensionsService>;

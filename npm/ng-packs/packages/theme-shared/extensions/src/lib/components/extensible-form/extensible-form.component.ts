@@ -10,7 +10,7 @@ import {
   SkipSelf,
   ViewChildren,
 } from '@angular/core';
-import {ControlContainer, FormGroup, FormGroupDirective} from '@angular/forms';
+import { ControlContainer, FormGroup } from '@angular/forms';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
 import { FormPropList } from '../../models/form-props';
 import { ExtensionsService } from '../../services/extensions.service';
@@ -62,5 +62,3 @@ export class ExtensibleFormComponent<R = any> {
     @Inject(EXTENSIONS_IDENTIFIER) private identifier: string,
   ) {}
 }
-
-
