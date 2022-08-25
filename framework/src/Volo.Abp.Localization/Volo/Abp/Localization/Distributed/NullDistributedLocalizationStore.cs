@@ -1,9 +1,10 @@
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Localization.Distributed;
 
-public class NUllDistributedLocalizationStore : IDistributedLocalizationStore, ISingletonDependency
+public class NullDistributedLocalizationStore : IDistributedLocalizationStore, ISingletonDependency
 {
     private readonly DistributedLocalizationData _data = new();
     
@@ -15,5 +16,10 @@ public class NUllDistributedLocalizationStore : IDistributedLocalizationStore, I
     public Task<DistributedLocalizationData> GetAsync()
     {
         return Task.FromResult(_data);
+    }
+
+    public Task<string[]> GetResourceNames()
+    {
+        return Task.FromResult(Array.Empty<string>());
     }
 }

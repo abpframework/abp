@@ -7,4 +7,6 @@ public interface IDistributedLocalizationStore
     Task SaveAsync();
     
     Task<DistributedLocalizationData> GetAsync();
+
+    Task<string[]> GetResourceNames();
 }
