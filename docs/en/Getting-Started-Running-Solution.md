@@ -163,6 +163,8 @@ You can see the application APIs and test them here. Get [more info](https://swa
 
 ### Running the Blazor Application (Client Side)
 
+Go to the Blazor project folder, open a command line terminal, type the `abp bundle -f` command (If the project was created by ABP Cli tool, you don't need to do this).
+
 Ensure that the `.Blazor` project is the startup project and run the application.
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
