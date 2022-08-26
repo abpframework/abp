@@ -31,4 +31,13 @@ public class AbpStringLocalizerFactory_Tests : AbpIntegratedTest<AbpLocalization
             localizer["CarPlural"].Value.ShouldBe("Cars");
         }
     }
+    
+    
+    [Fact]
+    public void Should_Throw_Exception_For_Unknown_Resource_Names()
+    {
+        Assert.Throws<AbpException>(
+            () => _factory.CreateByResourceName("UnknownResourceName")
+        );
+    }
 }

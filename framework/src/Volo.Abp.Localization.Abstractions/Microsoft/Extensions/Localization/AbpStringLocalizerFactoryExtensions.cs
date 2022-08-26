@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Extensions.Localization;
+﻿using Volo.Abp;
+
+namespace Microsoft.Extensions.Localization;
 
 public static class AbpStringLocalizerFactoryExtensions
 {
@@ -14,5 +16,18 @@ public static class AbpStringLocalizerFactoryExtensions
     {
         return (localizerFactory as IAbpStringLocalizerFactory)
             ?.CreateByResourceNameOrNull(resourceName);
+    }
+    
+    public static IStringLocalizer CreateByResourceName(
+        this IStringLocalizerFactory localizerFactory,
+        string resourceName)
+    {
+        var localizer = localizerFactory.CreateByResourceNameOrNull(resourceName);
+        if (localizer == null)
+        {
+            throw new AbpException("Couldn't find a localizer with given resource name: " + resourceName);
+        }
+        
+        return localizer;
     }
 }
