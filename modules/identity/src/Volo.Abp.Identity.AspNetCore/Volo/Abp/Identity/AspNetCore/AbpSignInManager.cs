@@ -77,6 +77,11 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
     }
 
+    public virtual async Task<SignInResult> PreSignInCheckAsync(IdentityUser user)
+    {
+        return await PreSignInCheck(user);
+    }
+
     protected override async Task<SignInResult> PreSignInCheck(IdentityUser user)
     {
         if (!user.IsActive)
