@@ -14,17 +14,13 @@ public class LocalizationResource : LocalizationResourceBase
         [NotNull] Type resourceType,
         [CanBeNull] string defaultCultureName = null,
         [CanBeNull] ILocalizationResourceContributor initialContributor = null)
-        : base(LocalizationResourceNameAttribute.GetName(resourceType))
+        : base(
+            LocalizationResourceNameAttribute.GetName(resourceType),
+            defaultCultureName,
+            initialContributor)
     {
         ResourceType = Check.NotNull(resourceType, nameof(resourceType));
-        DefaultCultureName = defaultCultureName;
-
         AddBaseResourceTypes();
-        
-        if (initialContributor != null)
-        {
-            Contributors.Add(initialContributor);
-        }
     }
 
     protected virtual void AddBaseResourceTypes()

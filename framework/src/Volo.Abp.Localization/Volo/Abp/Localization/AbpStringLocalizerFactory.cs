@@ -34,7 +34,7 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
 
     public virtual IStringLocalizer Create(Type resourceType)
     {
-        var resource = AbpLocalizationOptions.Resources.GetOrDefault(resourceType);
+        var resource = AbpLocalizationOptions.Resources.GetOrNull(resourceType);
         if (resource == null)
         {
             return InnerFactory.Create(resourceType);
@@ -45,7 +45,7 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
     
     public IStringLocalizer CreateByResourceNameOrNull(string resourceName)
     {
-        var resource = AbpLocalizationOptions.Resources.GetOrNull(resourceName);
+        var resource = AbpLocalizationOptions.Resources.GetOrDefault(resourceName);
         if (resource == null)
         {
             resource = ExternalLocalizationStore.GetResourceOrNull(resourceName);
@@ -58,7 +58,7 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         return CreateInternal(resourceName, resource);
     }
     
-    private IStringLocalizer CreateInternal(string resourceName, LocalizationResource resource)
+    private IStringLocalizer CreateInternal(string resourceName, LocalizationResourceBase resource)
     {
         if (LocalizerCache.TryGetValue(resourceName, out var cacheItem))
         {
@@ -74,7 +74,7 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         }
     }
 
-    private StringLocalizerCacheItem CreateStringLocalizerCacheItem(LocalizationResource resource)
+    private StringLocalizerCacheItem CreateStringLocalizerCacheItem(LocalizationResourceBase resource)
     {
         foreach (var globalContributorType in AbpLocalizationOptions.GlobalContributors)
         {

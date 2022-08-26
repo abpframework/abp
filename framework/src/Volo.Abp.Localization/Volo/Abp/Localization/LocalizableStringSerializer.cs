@@ -56,7 +56,7 @@ public class LocalizableStringSerializer : ILocalizableStringSerializer, ITransi
                     throw new AbpException("Invalid LocalizableString value: " + value);
                 }
 
-                if (!LocalizationOptions.Resources.ContainsResource(resourceName))
+                if (!LocalizationOptions.Resources.ContainsKey(resourceName))
                 {
                     resourceName = null;
                 }

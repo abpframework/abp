@@ -10,7 +10,7 @@ namespace Volo.Abp.Localization;
 
 public class AbpDictionaryBasedStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
 {
-    public LocalizationResource Resource { get; }
+    public LocalizationResourceBase Resource { get; }
 
     public List<IStringLocalizer> BaseLocalizers { get; }
 
@@ -21,7 +21,7 @@ public class AbpDictionaryBasedStringLocalizer : IStringLocalizer, IStringLocali
     public virtual LocalizedString this[string name, params object[] arguments] => GetLocalizedStringFormatted(name, arguments);
 
     public AbpDictionaryBasedStringLocalizer(
-        LocalizationResource resource,
+        LocalizationResourceBase resource,
         List<IStringLocalizer> baseLocalizers,
         AbpLocalizationOptions abpLocalizationOptions)
     {
