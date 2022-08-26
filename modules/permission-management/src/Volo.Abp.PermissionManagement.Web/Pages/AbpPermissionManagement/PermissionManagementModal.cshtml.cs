@@ -114,13 +114,13 @@ public class PermissionManagementModal : AbpPageModel
             return fallbackValue;
         }
 
-        var resource = LocalizationOptions.Resources.GetOrNull(resourceName);
+        var resource = LocalizationOptions.Resources.GetOrDefault(resourceName);
         if (resource == null)
         {
             return fallbackValue;
         }
 
-        var result = new LocalizableString(resource.ResourceType, key).Localize(StringLocalizerFactory);
+        var result = new LocalizableString(key, resourceName).Localize(StringLocalizerFactory);
         if (result.ResourceNotFound)
         {
             return fallbackValue;
