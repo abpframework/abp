@@ -1,6 +1,6 @@
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Localization;
+namespace Volo.Abp.Localization.External;
 
 public class NullExternalLocalizationStore : IExternalLocalizationStore, ISingletonDependency
 {

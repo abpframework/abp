@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Localization;
+namespace Volo.Abp.Localization.External;
 
 public interface IExternalLocalizationStore
 {
