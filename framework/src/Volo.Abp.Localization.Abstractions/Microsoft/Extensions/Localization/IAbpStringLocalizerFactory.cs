@@ -2,8 +2,11 @@
 
 namespace Microsoft.Extensions.Localization;
 
-public interface IAbpStringLocalizerFactoryWithDefaultResourceSupport
+public interface IAbpStringLocalizerFactory
 {
     [CanBeNull]
     IStringLocalizer CreateDefaultOrNull();
+
+    [CanBeNull]
+    IStringLocalizer CreateByResourceNameOrNull([NotNull] string resourceName);
 }

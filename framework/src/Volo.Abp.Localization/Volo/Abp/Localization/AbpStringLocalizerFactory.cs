@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Volo.Abp.Localization;
 
-public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLocalizerFactoryWithDefaultResourceSupport
+public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLocalizerFactory
 {
     protected internal AbpLocalizationOptions AbpLocalizationOptions { get; }
     protected ResourceManagerStringLocalizerFactory InnerFactory { get; }
@@ -37,6 +37,22 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
             return InnerFactory.Create(resourceType);
         }
 
+        return CreateInternal(resourceType, resource);
+    }
+    
+    public IStringLocalizer CreateByResourceNameOrNull(string resourceName)
+    {
+        var resource = AbpLocalizationOptions.Resources.GetOrNull(resourceName);
+        if (resource == null)
+        {
+            return null;
+        }
+
+        return CreateInternal(resource.ResourceType, resource);
+    }
+    
+    private IStringLocalizer CreateInternal(Type resourceType, LocalizationResource resource)
+    {
         if (LocalizerCache.TryGetValue(resourceType, out var cacheItem))
         {
             return cacheItem.Localizer;
