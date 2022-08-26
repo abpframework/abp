@@ -5,5 +5,5 @@ namespace Volo.Abp.Localization;
 public interface IExternalLocalizationStore
 {
     [CanBeNull] 
-    LocalizationResource GetResourceOrNull([NotNull] string resourceName);
+    LocalizationResourceBase GetResourceOrNull([NotNull] string resourceName);
 }
