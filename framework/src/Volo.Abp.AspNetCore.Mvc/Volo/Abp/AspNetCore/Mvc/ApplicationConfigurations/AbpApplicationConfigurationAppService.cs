@@ -215,10 +215,21 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         localizationConfig.Languages.AddRange(await _languageProvider.GetLanguagesAsync());
 
-        foreach (var resource in _localizationOptions.Resources.Values)
+        var resourceNames = _localizationOptions.Resources.Values.Select(x => x.ResourceName);
+
+        if (_externalLocalizationOptions.GetFromExternalStore)
+        {
+            var externalResourceNames = await LazyServiceProvider
+                .LazyGetRequiredService<IExternalLocalizationStore>()
+                .GetResourceNamesAsync();
+            resourceNames = resourceNames.Union(externalResourceNames);
+        }
+
+        foreach (var resourceName in resourceNames)
         {
             var dictionary = new Dictionary<string, string>();
-            var localizer = StringLocalizerFactory.CreateByResourceNameOrNull(resource.ResourceName);
+            
+            var localizer = StringLocalizerFactory.CreateByResourceNameOrNull(resourceName);
             if (localizer != null)
             {
                 foreach (var localizedString in localizer.GetAllStrings())
@@ -227,20 +238,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
                 }
             }
 
-            localizationConfig.Values[resource.ResourceName] = dictionary;
-        }
-
-        if (_externalLocalizationOptions.GetFromExternalStore)
-        {
-            var distributedLocalizationData = await this
-                .LazyServiceProvider
-                .LazyGetRequiredService<IExternalLocalizationStore>()
-                .GetAsync();
-        
-            foreach (var resource in distributedLocalizationData.Resources)
-            {
-                localizationConfig.Values[resource.ResourceName] = resource.Texts;
-            }
+            localizationConfig.Values[resourceName] = dictionary;
         }
 
         localizationConfig.CurrentCulture = GetCurrentCultureInfo();

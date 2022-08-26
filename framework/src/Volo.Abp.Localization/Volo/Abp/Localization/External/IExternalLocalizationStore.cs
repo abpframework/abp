@@ -10,7 +10,5 @@ public interface IExternalLocalizationStore
     [CanBeNull] 
     LocalizationResourceBase GetResourceOrNull([NotNull] string resourceName);
     
-    Task<ExternalLocalizationData> GetAsync();
-    
-    Task<string[]> GetResourceNames();
+    Task<string[]> GetResourceNamesAsync();
 }
