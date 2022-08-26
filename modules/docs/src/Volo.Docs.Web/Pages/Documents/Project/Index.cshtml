@@ -53,13 +53,13 @@
         <div class="docs-page" data-spy="scroll" data-bs-target="#docs-sticky-index">
             <div class="row">
                 <div class="col-md-2">
-                    <div class="docs-sidebar-wrapper docs-sidebar dark-sidebar">
+                    <div class="docs-sidebar-wrapper docs-sidebar dark-sidebar p-2">
 
                         <div class="docs-top">
                             <nav class="navbar navbar-logo">
                                 @if (!Model.Project.Name.IsNullOrWhiteSpace())
                                 {
-                                    <a class="navbar-brand w-100" href="@Model.CreateVersionLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())">
+                                    <a class="navbar-brand" href="@Model.CreateVersionLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())">
                                         <span id="ProjectName">@Model.Project.Name</span><br>
                                         <strong class="display-block">
                                             @L["Documents"]
@@ -71,7 +71,6 @@
                                 {
                                     <a href="@Model.Document.Project.MainWebsiteUrl" class="go-back-site" id="GoToMainWebSite">
                                         <i class="fa fa-chevron-left"></i>
-                                        @L["BackToWebsite"]
                                     </a>
                                 }
 
@@ -86,9 +85,10 @@
                         </div>
 
                         <div class="docs-tree-list">
-                            <div class="px-3">
-                                <div class="row mx-0 mb-2 ">
-                                    <div class="col-md-6 pe-1 ps-0">
+                            <div class="px-4">
+                                <div class="row mx-0 mb-1 ">
+                                    
+                                    <div class="col-12 px-0 mb-1">
                                         @if (Model.ShowProjectsCombobox && Model.ProjectSelectItems.Count > 1)
                                             {
                                                 <div class="docs-version">
@@ -108,11 +108,11 @@
                                                 </div>
                                             }
                                     </div>
-                                    <div class="col-md-6 pe-0 ps-1">
-                                        <div class="row">
+
+                                    <div class="col-12 px-0 mb-1">
                                             @if (Model.VersionSelectItems.Any())
                                             {
-                                                <div class="col @(Model.LanguageSelectListItems.Count > 1?"pe-0":"")">
+                                                <div class="@(Model.LanguageSelectListItems.Count > 1?"pe-0":"")">
                                                     <div class="docs-version @(Model.LanguageSelectListItems.Count > 1?"pe-1":"")">
                                                         <span>Version</span>
                                                         <div class="version-select">
@@ -132,28 +132,32 @@
                                                     </div>
                                                 </div>
                                             }
+                                    </div>
 
-                                            @if (Model.LanguageSelectListItems.Count > 1)
-                                            {
-                                                <div class="@(Model.VersionSelectItems.Any()? "ps-0 col-5" : "col")">
-                                                    <div class="docs-version docs-language @(Model.VersionSelectItems.Any() ? "ps-1" : "")">
-                                                        <span>Language</span>
-                                                        <div class="version-select">
-                                                            <div class="input-group">
-                                                                @*<span class="input-group-text">
-                                                                    <i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Language"]"></i>
-                                                                    </span>*@
-                                                                <select asp-items="Model.LanguageSelectListItems"
-                                                                class="form-select"
-                                                                onchange="window.location.replace(this.value)">
-                                                                </select>
-                                                            </div>
-                                                        </div>
+
+                                <div class="col-12 px-0 mb-1">
+
+                                    @if (Model.LanguageSelectListItems.Count > 1)
+                                    {
+                                        <div class="@(Model.VersionSelectItems.Any()? "ps-0 col-5" : "col")">
+                                            <div class="docs-version docs-language @(Model.VersionSelectItems.Any() ? "ps-1" : "")">
+                                                <span>Language</span>
+                                                <div class="version-select">
+                                                    <div class="input-group">
+                                                        @*<span class="input-group-text">
+                                                            <i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Language"]"></i>
+                                                            </span>*@
+                                                        <select asp-items="Model.LanguageSelectListItems"
+                                                        class="form-select"
+                                                        onchange="window.location.replace(this.value)">
+                                                        </select>
                                                     </div>
                                                 </div>
-                                            }
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
+                                </div>
+
                                 </div>
 
                                 <div class="docs-version">
@@ -170,6 +174,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             @if (Model.Navigation == null || !Model.Navigation.HasChildItems)
                             {
                                 <div class="text-muted p-3">
@@ -239,41 +244,45 @@
                                         </div>
                                     }
                                 </div>
-                                <div class="col-auto">
-                                    <div class="cont-container">
+                                <div class="col-auto text-end">
+                                    <div class="cont-container d-flex align-items-center justify-content-end h-100">
                                         @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
                                         {
-                                            <span class="for-desktop me-3">
-                                                @(L["Contributors"].Value)
-                                            </span>
-                                            @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c => c.CommitCount).ToList())
-                                            {
-                                                <a href="@contributor.UserProfileUrl" target="_blank" class="cont-avatar">
-                                                    <img src="@contributor.AvatarUrl"
-                                        class="rounded-circle"
-                                        alt="Avatar"
-                                        height="21"
-                                        width="21"
-                                        title="@contributor.Username" />
-                                                </a>
-                                            }
+                                                <div class="me-4">
+                                                    <span class="for-desktop w-100 contributors-text">
+                                                       @(L["Contributors"].Value):
+                                                   </span>
+
+                                                     @if (string.IsNullOrEmpty(Model.Document.EditLink))
+                                                        {
+                                                            <a href="@Model.Document.EditLink" target="_blank">
+                                                                <i class="fa fa-edit"></i>
+                                                                @(L["Edit"])
+                                                                <span class="for-desktop text-muted">@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString()</span>
+                                                            </a>
+                                                        }
+                                                </div>
+                                                <div class="">
+                                                  @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c => c.CommitCount).ToList())
+                                                    {
+                                                        <a href="@contributor.UserProfileUrl" target="_blank" class="cont-avatar">
+                                                            <img src="@contributor.AvatarUrl"
+                                                                class="rounded-circle"
+                                                                alt="Avatar"
+                                                                height="21"
+                                                                width="21"
+                                                                title="@contributor.Username" />
+                                                        </a>
+                                                    }
+                                                </div>
                                         }
+                                 
                                     </div>
-                                </div>
-                                <div class="col-auto">
-                                    @if (!string.IsNullOrEmpty(Model.Document.EditLink))
-                                    {
-                                        <a href="@Model.Document.EditLink" target="_blank">
-                                            <i class="fa fa-edit"></i>
-                                            @(L["Edit"])
-                                            <span class="for-desktop text-muted">@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString()</span>
-                                        </a>
-                                    }
+
+                               
 
                                 </div>
                             </div>
-
-
                         </div>
 
                     
@@ -295,7 +304,7 @@
                                             <abp-row>
                                                 @foreach (var parameter in Model.DocumentPreferences.Parameters)
                                                 {
-                                                    <abp-column size="_6">
+                                                    <abp-column size="_4">
                                                         <div class="custom-input-group">
                                                             <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
                                                             <select class="doc-section-combobox form-select"
@@ -356,7 +365,7 @@
                                     <nav id="docs-sticky-index" class="navbar index-scroll">
                                     </nav>
                                     <div class="row">
-                                        <div class="col p-0 py-3">
+                                        <div class="col p-0">
                                             <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> @L["GoToTop"]</a>
                                         </div>
                                     </div>
