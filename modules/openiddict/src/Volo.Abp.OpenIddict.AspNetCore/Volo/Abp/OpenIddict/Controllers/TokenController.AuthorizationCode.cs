@@ -33,7 +33,8 @@ public partial class TokenController
             }
 
             // Ensure the user is still allowed to sign in.
-            if (!await SignInManager.CanSignInAsync(user))
+            var error = await SignInManager.PreSignInCheckAsync(user);
+            if (error != null)
             {
                 return Forbid(
                     authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
