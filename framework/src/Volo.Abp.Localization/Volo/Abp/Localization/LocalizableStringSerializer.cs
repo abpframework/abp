@@ -55,13 +55,13 @@ public class LocalizableStringSerializer : ILocalizableStringSerializer, ITransi
                 {
                     throw new AbpException("Invalid LocalizableString value: " + value);
                 }
+
+                if (!LocalizationOptions.Resources.ContainsResource(resourceName))
+                {
+                    resourceName = null;
+                }
                 
-                var resourceType = LocalizationOptions.Resources.GetOrNull(resourceName)?.ResourceType;
-                    
-                return new LocalizableString(
-                    resourceType,
-                    name
-                );
+                return LocalizableString.Create(name, resourceName);
             default:
                 return new FixedLocalizableString(value);
         }

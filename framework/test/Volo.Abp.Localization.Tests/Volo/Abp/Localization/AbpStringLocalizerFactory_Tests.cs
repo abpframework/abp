@@ -32,7 +32,6 @@ public class AbpStringLocalizerFactory_Tests : AbpIntegratedTest<AbpLocalization
         }
     }
     
-    
     [Fact]
     public void Should_Throw_Exception_For_Unknown_Resource_Names()
     {

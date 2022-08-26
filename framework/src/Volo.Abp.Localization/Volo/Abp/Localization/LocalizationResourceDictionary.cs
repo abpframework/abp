@@ -56,4 +56,9 @@ public class LocalizationResourceDictionary : Dictionary<Type, LocalizationResou
     {
         return _resourcesByNames.GetOrDefault(resourceName);
     }
+    
+    public bool ContainsResource(string resourceName)
+    {
+        return _resourcesByNames.ContainsKey(resourceName);
+    }
 }

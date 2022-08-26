@@ -14,19 +14,22 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
     protected internal AbpLocalizationOptions AbpLocalizationOptions { get; }
     protected ResourceManagerStringLocalizerFactory InnerFactory { get; }
     protected IServiceProvider ServiceProvider { get; }
-    protected ConcurrentDictionary<Type, StringLocalizerCacheItem> LocalizerCache { get; }
+    protected IExternalLocalizationStore ExternalLocalizationStore { get; }
+    protected ConcurrentDictionary<string, StringLocalizerCacheItem> LocalizerCache { get; }
 
     //TODO: It's better to use decorator pattern for IStringLocalizerFactory instead of getting ResourceManagerStringLocalizerFactory as a dependency.
     public AbpStringLocalizerFactory(
         ResourceManagerStringLocalizerFactory innerFactory,
         IOptions<AbpLocalizationOptions> abpLocalizationOptions,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        IExternalLocalizationStore externalLocalizationStore)
     {
         InnerFactory = innerFactory;
         ServiceProvider = serviceProvider;
+        ExternalLocalizationStore = externalLocalizationStore;
         AbpLocalizationOptions = abpLocalizationOptions.Value;
 
-        LocalizerCache = new ConcurrentDictionary<Type, StringLocalizerCacheItem>();
+        LocalizerCache = new ConcurrentDictionary<string, StringLocalizerCacheItem>();
     }
 
     public virtual IStringLocalizer Create(Type resourceType)
@@ -37,7 +40,7 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
             return InnerFactory.Create(resourceType);
         }
 
-        return CreateInternal(resourceType, resource);
+        return CreateInternal(resource.ResourceName, resource);
     }
     
     public IStringLocalizer CreateByResourceNameOrNull(string resourceName)
@@ -45,15 +48,19 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         var resource = AbpLocalizationOptions.Resources.GetOrNull(resourceName);
         if (resource == null)
         {
-            return null;
+            resource = ExternalLocalizationStore.GetResourceOrNull(resourceName);
+            if (resource == null)
+            {
+                return null;
+            }
         }
 
-        return CreateInternal(resource.ResourceType, resource);
+        return CreateInternal(resourceName, resource);
     }
     
-    private IStringLocalizer CreateInternal(Type resourceType, LocalizationResource resource)
+    private IStringLocalizer CreateInternal(string resourceName, LocalizationResource resource)
     {
-        if (LocalizerCache.TryGetValue(resourceType, out var cacheItem))
+        if (LocalizerCache.TryGetValue(resourceName, out var cacheItem))
         {
             return cacheItem.Localizer;
         }
@@ -61,7 +68,7 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         lock (LocalizerCache)
         {
             return LocalizerCache.GetOrAdd(
-                resourceType,
+                resourceName,
                 _ => CreateStringLocalizerCacheItem(resource)
             ).Localizer;
         }
@@ -69,9 +76,13 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
 
     private StringLocalizerCacheItem CreateStringLocalizerCacheItem(LocalizationResource resource)
     {
-        foreach (var globalContributor in AbpLocalizationOptions.GlobalContributors)
+        foreach (var globalContributorType in AbpLocalizationOptions.GlobalContributors)
         {
-            resource.Contributors.Add((ILocalizationResourceContributor)Activator.CreateInstance(globalContributor));
+            resource.Contributors.Add(
+                Activator
+                    .CreateInstance(globalContributorType)
+                    .As<ILocalizationResourceContributor>()
+            );
         }
 
         var context = new LocalizationResourceInitializationContext(resource, ServiceProvider);
@@ -84,7 +95,11 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         return new StringLocalizerCacheItem(
             new AbpDictionaryBasedStringLocalizer(
                 resource,
-                resource.BaseResourceTypes.Select(Create).ToList(),
+                resource
+                    .BaseResourceNames
+                    .Select(CreateByResourceNameOrNull)
+                    .Where(x => x != null)
+                    .ToList(),
                 AbpLocalizationOptions
             )
         );

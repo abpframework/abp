@@ -218,14 +218,13 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         foreach (var resource in _localizationOptions.Resources.Values)
         {
             var dictionary = new Dictionary<string, string>();
-
-            var localizer = (IStringLocalizer) _serviceProvider.GetRequiredService(
-                typeof(IStringLocalizer<>).MakeGenericType(resource.ResourceType)
-            );
-
-            foreach (var localizedString in localizer.GetAllStrings())
+            var localizer = StringLocalizerFactory.CreateByResourceNameOrNull(resource.ResourceName);
+            if (localizer != null)
             {
-                dictionary[localizedString.Name] = localizedString.Value;
+                foreach (var localizedString in localizer.GetAllStrings())
+                {
+                    dictionary[localizedString.Name] = localizedString.Value;
+                }
             }
 
             localizationConfig.Values[resource.ResourceName] = dictionary;

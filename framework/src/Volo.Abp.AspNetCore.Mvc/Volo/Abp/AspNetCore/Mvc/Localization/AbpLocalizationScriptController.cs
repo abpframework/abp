@@ -34,8 +34,8 @@ public class AbpLocalizationScriptController
         {
             foreach (var resource in LocalizationOptions.Resources.Values)
             {
-                var localizer = StringLocalizerFactory.Create(resource.ResourceType);
-                localizer.GetAllStrings();
+                var localizer = StringLocalizerFactory.CreateByResourceNameOrNull(resource.ResourceName);
+                localizer?.GetAllStrings();
             }
         }
     }

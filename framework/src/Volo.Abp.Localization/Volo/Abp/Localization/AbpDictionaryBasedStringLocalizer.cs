@@ -20,7 +20,10 @@ public class AbpDictionaryBasedStringLocalizer : IStringLocalizer, IStringLocali
 
     public virtual LocalizedString this[string name, params object[] arguments] => GetLocalizedStringFormatted(name, arguments);
 
-    public AbpDictionaryBasedStringLocalizer(LocalizationResource resource, List<IStringLocalizer> baseLocalizers, AbpLocalizationOptions abpLocalizationOptions)
+    public AbpDictionaryBasedStringLocalizer(
+        LocalizationResource resource,
+        List<IStringLocalizer> baseLocalizers,
+        AbpLocalizationOptions abpLocalizationOptions)
     {
         Resource = resource;
         BaseLocalizers = baseLocalizers;

@@ -1,15 +1,18 @@
-﻿using Volo.Abp;
+﻿using JetBrains.Annotations;
+using Volo.Abp;
 
 namespace Microsoft.Extensions.Localization;
 
 public static class AbpStringLocalizerFactoryExtensions
 {
+    [CanBeNull]
     public static IStringLocalizer CreateDefaultOrNull(this IStringLocalizerFactory localizerFactory)
     {
         return (localizerFactory as IAbpStringLocalizerFactory)
             ?.CreateDefaultOrNull();
     }
 
+    [CanBeNull]
     public static IStringLocalizer CreateByResourceNameOrNull(
         this IStringLocalizerFactory localizerFactory,
         string resourceName)
@@ -18,6 +21,7 @@ public static class AbpStringLocalizerFactoryExtensions
             ?.CreateByResourceNameOrNull(resourceName);
     }
     
+    [NotNull]
     public static IStringLocalizer CreateByResourceName(
         this IStringLocalizerFactory localizerFactory,
         string resourceName)
