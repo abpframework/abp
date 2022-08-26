@@ -1,4 +1,4 @@
-namespace Volo.Abp.Localization.Distributed;
+namespace Volo.Abp.Localization.External;
 
 public class AbpExternalLocalizationOptions
 {

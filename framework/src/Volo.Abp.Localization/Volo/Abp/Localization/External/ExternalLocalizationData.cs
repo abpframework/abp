@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Volo.Abp.Localization.Distributed;
+namespace Volo.Abp.Localization.External;
 
 public class ExternalLocalizationData
 {

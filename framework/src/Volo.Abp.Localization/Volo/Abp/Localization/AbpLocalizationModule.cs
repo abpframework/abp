@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Localization.Distributed;
 using Volo.Abp.Localization.External;
 using Volo.Abp.Localization.Resources.AbpLocalization;
 using Volo.Abp.Modularity;

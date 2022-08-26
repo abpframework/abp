@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Volo.Abp.Localization.Distributed;
 
 namespace Volo.Abp.Localization.External;
 

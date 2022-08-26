@@ -17,7 +17,6 @@ using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Distributed;
 using Volo.Abp.Localization.External;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
