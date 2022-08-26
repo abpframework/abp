@@ -5,8 +5,6 @@ namespace Volo.Abp.Localization.External;
 
 public interface IExternalLocalizationStore
 {
-    Task SaveAsync();
-
     [CanBeNull] 
     LocalizationResourceBase GetResourceOrNull([NotNull] string resourceName);
     
