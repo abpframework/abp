@@ -22,7 +22,10 @@ public class AbpIncludeNonPublicPropertiesModifiers<TClass, TProperty>
         if (jsonTypeInfo.Type == typeof(TClass))
         {
             var propertyName = _propertySelector.Body.As<MemberExpression>().Member.Name;
-            var propertyJsonInfo = jsonTypeInfo.Properties.FirstOrDefault(x => x.Name == propertyName && x.Set == null);
+            var propertyJsonInfo = jsonTypeInfo.Properties.FirstOrDefault(x =>
+                x.AttributeProvider is MemberInfo memberInfo &&
+                memberInfo.Name == propertyName &&
+                x.Set == null);
             if (propertyJsonInfo != null)
             {
                 var propertyInfo = typeof(TClass).GetProperty(propertyName, BindingFlags.NonPublic);

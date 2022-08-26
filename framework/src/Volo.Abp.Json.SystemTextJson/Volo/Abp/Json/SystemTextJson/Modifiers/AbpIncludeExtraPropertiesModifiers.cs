@@ -12,7 +12,7 @@ public static class AbpIncludeExtraPropertiesModifiers
     public static void Modify(JsonTypeInfo jsonTypeInfo)
     {
         var propertyJsonInfo = jsonTypeInfo.Properties
-            .Where(x => x.AttributeProvider != null && x.AttributeProvider is MemberInfo)
+            .Where(x => x.AttributeProvider is MemberInfo)
             .FirstOrDefault(x =>
                 x.PropertyType == typeof(ExtraPropertyDictionary) &&
                 x.AttributeProvider.As<MemberInfo>().Name == nameof(ExtensibleObject.ExtraProperties) &&
