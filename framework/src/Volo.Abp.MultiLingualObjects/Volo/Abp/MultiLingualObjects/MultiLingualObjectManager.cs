@@ -19,22 +19,21 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
     {
         SettingProvider = settingProvider;
     }
-
-    public virtual async Task<TTranslation> GetTranslationAsync<TMultiLingual, TTranslation>(
-        TMultiLingual multiLingual,
-        string culture = null,
-        bool fallbackToParentCultures = true)
-        where TMultiLingual : IMultiLingualObject<TTranslation>
+    public virtual async Task<TTranslation> GetTranslationAsync<TTranslation>(
+        ICollection<TTranslation> translations,
+        string culture,
+        bool fallbackToParentCultures)
         where TTranslation : class, IObjectTranslation
+
     {
         culture ??= CultureInfo.CurrentUICulture.Name;
 
-        if (multiLingual.Translations.IsNullOrEmpty())
+        if (translations.IsNullOrEmpty())
         {
             return null;
         }
 
-        var translation = multiLingual.Translations.FirstOrDefault(pt => pt.Language == culture);
+        var translation = translations.FirstOrDefault(pt => pt.Language == culture);
         if (translation != null)
         {
             return translation;
@@ -44,7 +43,7 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
         {
             translation = GetTranslationBasedOnCulturalRecursive(
                 CultureInfo.CurrentUICulture.Parent,
-                multiLingual.Translations,
+                translations,
                 0
             );
 
@@ -56,14 +55,24 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
 
         var defaultLanguage = await SettingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
 
-        translation = multiLingual.Translations.FirstOrDefault(pt => pt.Language == defaultLanguage);
+        translation = translations.FirstOrDefault(pt => pt.Language == defaultLanguage);
         if (translation != null)
         {
             return translation;
         }
 
-        translation = multiLingual.Translations.FirstOrDefault();
+        translation = translations.FirstOrDefault();
         return translation;
+    }
+
+    public virtual Task<TTranslation> GetTranslationAsync<TMultiLingual, TTranslation>(
+        TMultiLingual multiLingual,
+        string culture = null,
+        bool fallbackToParentCultures = true)
+        where TMultiLingual : IMultiLingualObject<TTranslation>
+        where TTranslation : class, IObjectTranslation
+    {
+        return GetTranslationAsync(multiLingual.Translations, culture: culture, fallbackToParentCultures: fallbackToParentCultures);
     }
 
     protected virtual TTranslation GetTranslationBasedOnCulturalRecursive<TTranslation>(

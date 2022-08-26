@@ -27,6 +27,7 @@ dotnet tool update -g Volo.Abp.Cli
 这里是所有可用的命令列表:
 
 * **`help`**: 展示ABP CLI的用法帮助信息.
+* **`cli`**: 更新或删除ABP CLI.
 * **`new`**：生成基于ABP的[启动模板](Startup-Templates/Index.md).
 * **`update`**：自动更新的ABP解决方案ABP相关的NuGet和NPM包.
 * **`clean`**: 删除当前目录下所有的 `BIN` 和 `OBJ` 子目录.
@@ -60,6 +61,25 @@ abp help        # Shows a general help.
 abp help new    # Shows help about the "new" command.
 ````
 
+### cli
+
+更新或删除ABP CLI
+
+用法:
+
+````bash
+abp cli [command-name]
+````
+
+示例:
+
+````bash
+abp cli update
+abp cli update --preview
+abp cli update --version 5.0.0
+abp cli remove
+````
+
 ### new
 
 生成基于ABP[启动模板](Startup-Templates/Index.md)的新解决方案.
@@ -79,6 +99,8 @@ abp new Acme.BookStore
 * Acme.BookStore是解决方案的名称.
 * 常见的命名方式类似于 *YourCompany.YourProject*. 不过你可以使用自己喜欢的方式,如 *YourProject* (单级命名空间) 或 *YourCompany.YourProduct.YourModule* (三级命名空间).
 
+参阅[ABP CLI 创建新解决方案示例](CLI-New-Command-Samples.md)查看更多示例.
+
 #### Options
 
 * `--template` 或者 `-t`: 指定模板. 默认的模板是 `app`,会生成web项目.可用的模板有:
@@ -87,11 +109,11 @@ abp new Acme.BookStore
       * `mvc`: ASP.NET Core MVC.此模板的其他选项:
         * `--tiered`: 创建分层解决方案,Web和Http Api层在物理上是分开的.如果未指定会创建一个分层的解决方案,此解决方案没有那么复杂,适合大多数场景.
       * `angular`: Angular. 这个模板还有一些额外的选项:
-        * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `blazor`: Blazor. 这个模板还有一些额外的选项:
-        * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `none`: 无UI. 这个模板还有一些额外的选项:
-        * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
     * `--mobile` 或者 `-m`: 指定移动应用程序框架. 如果未指定,则不会创建任何移动应用程序,其他选项:
       * `none`: 不包含移动应用程序.
       * `react-native`: React Native.
@@ -101,6 +123,7 @@ abp new Acme.BookStore
   * `module`: [Module template](Startup-Templates/Module.md). 其他选项:
     * `--no-ui`: 不包含UI.仅创建服务模块(也称为微服务 - 没有UI).
   * **`console`**: [Console template](Startup-Templates/Console.md).
+  * **`maui`**: [Maui template](Startup-Templates/MAUI.md).
   * **`app-nolayers`**: 应用程序单层模板
   * `--ui` 或者 `-u`: 指定ui框架.默认`mvc`框架.其他选项:
     * `mvc`: ASP.NET Core MVC.

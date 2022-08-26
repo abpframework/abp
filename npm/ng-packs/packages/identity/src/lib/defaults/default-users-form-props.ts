@@ -3,13 +3,15 @@ import { getPasswordValidators } from '@abp/ng.theme.shared';
 import { ePropType, FormProp } from '@abp/ng.theme.shared/extensions';
 import { Validators } from '@angular/forms';
 
+const onlyLetterAndNumberRegex = /^[a-zA-Z0-9]+$/;
+
 export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserDto>([
   {
     type: ePropType.String,
     name: 'userName',
     displayName: 'AbpIdentity::UserName',
     id: 'user-name',
-    validators: () => [Validators.required, Validators.maxLength(256)],
+    validators: () => [Validators.required, Validators.maxLength(256), Validators.pattern(onlyLetterAndNumberRegex)],
   },
   {
     type: ePropType.Password,
@@ -63,6 +65,12 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
   },
 ]);
 
-export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS.filter(
-  prop => prop.name !== 'password',
-);
+export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS.map(prop => {
+  if (prop.name === 'password') {
+    return {
+      ...prop,
+      validators: data => [...getPasswordValidators({ get: data.getInjected })],
+    };
+  }
+  return prop;
+});

@@ -1,24 +1,23 @@
 var abp = abp || {};
 
-(function () {
+(function() {
 
-    abp.SwaggerUIBundle = function (configObject) {
+    abp.SwaggerUIBundle = function(configObject) {
 
         var excludeUrl = ["swagger.json", "connect/token"]
         var firstRequest = true;
         abp.appPath = configObject.baseUrl || abp.appPath;
 
         var requestInterceptor = configObject.requestInterceptor;
-        
-        configObject.requestInterceptor = async function (request) {
 
-            if(request.url.includes(excludeUrl[1])){
+        configObject.requestInterceptor = async function(request) {
+
+            if (request.url.includes(excludeUrl[1])) {
                 firstRequest = true;
             }
 
-            if(firstRequest && !excludeUrl.some(url => request.url.includes(url)))
-            {
-                await fetch(`${abp.appPath}abp/Swashbuckle/SetCsrfCookie`,{
+            if (firstRequest && !excludeUrl.some(url => request.url.includes(url))) {
+                await fetch(`${abp.appPath}abp/Swashbuckle/SetCsrfCookie`, {
                     headers: request.headers
                 });
                 firstRequest = false;
@@ -28,8 +27,12 @@ var abp = abp || {};
             if (antiForgeryToken) {
                 request.headers[abp.security.antiForgery.tokenHeaderName] = antiForgeryToken;
             }
-            
-            if(requestInterceptor){
+
+            if (!request.headers["X-Requested-With"]) {
+                request.headers["X-Requested-With"] = "XMLHttpRequest";
+            }
+
+            if (requestInterceptor) {
                 requestInterceptor(request);
             }
             return request;

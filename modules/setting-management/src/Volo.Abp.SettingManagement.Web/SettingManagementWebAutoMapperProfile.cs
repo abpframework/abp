@@ -8,5 +8,7 @@ public class SettingManagementWebAutoMapperProfile : Profile
     public SettingManagementWebAutoMapperProfile()
     {
         CreateMap<EmailSettingsDto, EmailSettingGroupViewComponent.UpdateEmailSettingsViewModel>();
+        
+        CreateMap<SendTestEmailModal.SendTestEmailViewModel, SendTestEmailInput>();
     }
 }
