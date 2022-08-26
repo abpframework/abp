@@ -1,5 +1,5 @@
 <div
-  class="mb-3 form-group"
+  [ngClass]="containerClassName"
   *abpPermission="prop.permission; runChangeDetection: false"
   [ngSwitch]="getComponent(prop)"
 >

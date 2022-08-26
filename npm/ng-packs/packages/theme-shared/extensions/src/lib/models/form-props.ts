@@ -67,6 +67,7 @@ export class FormProp<R = any> extends Prop<R> {
   readonly options: PropCallback<R, Observable<ABP.Option<any>[]>> | undefined;
   readonly id: string | undefined;
   readonly group?: FormPropGroup | undefined;
+  readonly className?: string;
 
   constructor(options: FormPropOptions<R>) {
     super(
@@ -78,6 +79,7 @@ export class FormProp<R = any> extends Prop<R> {
       options.isExtra,
     );
     this.group = options.group;
+    this.className = options.className;
 
     this.asyncValidators = options.asyncValidators || (_ => []);
     this.validators = options.validators || (_ => []);

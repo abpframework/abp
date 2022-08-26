@@ -55,6 +55,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
   asterisk = '';
+  
+  containerClassName = 'mb-3 form-group'
 
   options$: Observable<ABP.Option<any>[]> = of([]);
 
@@ -175,7 +177,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges({ prop }: SimpleChanges) {
     const currentProp = prop?.currentValue;
-    const { options, readonly, disabled, validators } = currentProp || {};
+    const { options, readonly, disabled, validators , className } = currentProp || {};
 
     if (options) this.options$ = options(this.data);
     if (readonly) this.readonly = readonly(this.data);
@@ -186,6 +188,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     if (validators) {
       this.validators = validators(this.data);
       this.setAsterisk();
+    }
+    if(className !== undefined){
+      this.containerClassName = className;
     }
 
     const [keyControl, valueControl] = this.getTypeaheadControls();
