@@ -1,23 +1,42 @@
 <ng-container *ngIf="form">
-  <ng-container *abpPropData="let data; fromList: propList; withRecord: record">
-    <ng-container *ngFor="let prop of propList; let first = first; trackBy: track.by('name')">
-      <ng-container *ngIf="prop.visible(data)">
-        <ng-container
-          [formGroupName]="extraPropertiesKey"
-          *ngIf="extraProperties.controls[prop.name]; else tempDefault"
-        >
-          <abp-extensible-form-prop [prop]="prop" [data]="data"></abp-extensible-form-prop>
-        </ng-container>
 
-        <ng-template #tempDefault>
-          <abp-extensible-form-prop
-            *ngIf="form.get(prop.name)"
-            [prop]="prop"
-            [data]="data"
-            [first]="first"
-          ></abp-extensible-form-prop>
-        </ng-template>
-      </ng-container>
+  <ng-container *ngFor="let g of groupedPropList.items">
+    <ng-container *abpPropData="let data; fromList: g.formPropList; withRecord: record">
+
+      <div *ngIf="g.group?.className; else withoutClassName"
+           [class]="g.group?.className" [attr.data-name]="g.group?.className">
+        <ng-container [ngTemplateOutlet]="propListTemplate" [ngTemplateOutletContext]="{g:g,data:data}">
+        </ng-container>
+      </div>
+
+      <ng-template #withoutClassName>
+        <ng-container [ngTemplateOutlet]="propListTemplate" [ngTemplateOutletContext]="{g:g,data:data}">
+        </ng-container>
+      </ng-template>
     </ng-container>
+
   </ng-container>
 </ng-container>
+
+
+<ng-template let-g="g" let-data="data" #propListTemplate>
+  <ng-container *ngFor="let prop of g.formPropList; let first = first; trackBy: track.by('name')">
+    <ng-container *ngIf="prop.visible(data)">
+      <ng-container
+        [formGroupName]="extraPropertiesKey"
+        *ngIf="extraProperties.controls[prop.name]; else tempDefault"
+      >
+        <abp-extensible-form-prop [prop]="prop" [data]="data"></abp-extensible-form-prop>
+      </ng-container>
+
+      <ng-template #tempDefault>
+        <abp-extensible-form-prop
+          *ngIf="form.get(prop.name)"
+          [prop]="prop"
+          [data]="data"
+          [first]="first"
+        ></abp-extensible-form-prop>
+      </ng-template>
+    </ng-container>
+  </ng-container>
+</ng-template>
