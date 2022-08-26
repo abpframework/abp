@@ -1,14 +1,14 @@
 namespace Volo.Abp.Localization.Distributed;
 
-public class AbpDistributedLocalizationOptions
+public class AbpExternalLocalizationOptions
 {
     /// <summary>
     /// Default: true.
     /// </summary>
-    public bool SaveToDistributedStore { get; set; } = true;
+    public bool SaveToExternalStore { get; set; } = true;
     
     /// <summary>
     /// Default: false.
     /// </summary>
-    public bool GetFromDistributedStore { get; set; }
+    public bool GetFromExternalStore { get; set; }
 }

@@ -18,6 +18,7 @@ using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Distributed;
+using Volo.Abp.Localization.External;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;
@@ -43,7 +44,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     private readonly ITimezoneProvider _timezoneProvider;
     private readonly AbpClockOptions _abpClockOptions;
     private readonly ICachedObjectExtensionsDtoService _cachedObjectExtensionsDtoService;
-    private readonly AbpDistributedLocalizationOptions _distributedLocalizationOptions;
+    private readonly AbpExternalLocalizationOptions _externalLocalizationOptions;
     private readonly AbpApplicationConfigurationOptions _options;
 
     public AbpApplicationConfigurationAppService(
@@ -64,7 +65,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         IOptions<AbpClockOptions> abpClockOptions,
         ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService,
         IOptions<AbpApplicationConfigurationOptions> options,
-        IOptions<AbpDistributedLocalizationOptions> distributedLocalizationOptions)
+        IOptions<AbpExternalLocalizationOptions> distributedLocalizationOptions)
     {
         _serviceProvider = serviceProvider;
         _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
@@ -80,7 +81,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         _timezoneProvider = timezoneProvider;
         _abpClockOptions = abpClockOptions.Value;
         _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
-        _distributedLocalizationOptions = distributedLocalizationOptions.Value;
+        _externalLocalizationOptions = distributedLocalizationOptions.Value;
         _options = options.Value;
         _localizationOptions = localizationOptions.Value;
         _multiTenancyOptions = multiTenancyOptions.Value;
@@ -230,11 +231,11 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             localizationConfig.Values[resource.ResourceName] = dictionary;
         }
 
-        if (_distributedLocalizationOptions.GetFromDistributedStore)
+        if (_externalLocalizationOptions.GetFromExternalStore)
         {
             var distributedLocalizationData = await this
                 .LazyServiceProvider
-                .LazyGetRequiredService<IDistributedLocalizationStore>()
+                .LazyGetRequiredService<IExternalLocalizationStore>()
                 .GetAsync();
         
             foreach (var resource in distributedLocalizationData.Resources)

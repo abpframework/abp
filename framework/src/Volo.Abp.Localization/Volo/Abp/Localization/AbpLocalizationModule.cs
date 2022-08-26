@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Polly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization.Distributed;
+using Volo.Abp.Localization.External;
 using Volo.Abp.Localization.Resources.AbpLocalization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
@@ -63,10 +64,10 @@ public class AbpLocalizationModule : AbpModule
     {
         var options = context
             .ServiceProvider
-            .GetRequiredService<IOptions<AbpDistributedLocalizationOptions>>()
+            .GetRequiredService<IOptions<AbpExternalLocalizationOptions>>()
             .Value;
 
-        if (!options.SaveToDistributedStore)
+        if (!options.SaveToExternalStore)
         {
             return;
         }   
@@ -99,7 +100,7 @@ public class AbpLocalizationModule : AbpModule
                                 // ReSharper disable once AccessToDisposedClosure
                                 await scope
                                     .ServiceProvider
-                                    .GetRequiredService<IDistributedLocalizationStore>()
+                                    .GetRequiredService<IExternalLocalizationStore>()
                                     .SaveAsync();
                             }
                             catch (Exception ex)
