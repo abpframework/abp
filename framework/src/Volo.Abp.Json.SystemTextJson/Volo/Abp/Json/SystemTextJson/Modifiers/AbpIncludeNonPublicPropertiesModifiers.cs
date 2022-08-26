@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text.Json.Serialization.Metadata;
 
 namespace Volo.Abp.Json.SystemTextJson.Modifiers;
 
-public class IncludeNonPublicPropertiesModifiers<TClass, TProperty>
+public class AbpIncludeNonPublicPropertiesModifiers<TClass, TProperty>
     where TClass : class
 {
-    private string _propertyName;
+    private Expression<Func<TClass, TProperty>> _propertySelector;
 
-    public Action<JsonTypeInfo> CreateModifyAction(string propertyName)
+    public Action<JsonTypeInfo> CreateModifyAction(Expression<Func<TClass, TProperty>> propertySelector)
     {
-        _propertyName = propertyName;
+        _propertySelector = propertySelector;
         return Modify;
     }
 
@@ -19,10 +21,11 @@ public class IncludeNonPublicPropertiesModifiers<TClass, TProperty>
     {
         if (jsonTypeInfo.Type == typeof(TClass))
         {
-            var propertyJsonInfo = jsonTypeInfo.Properties.FirstOrDefault(x => x.Name.Equals(_propertyName, StringComparison.OrdinalIgnoreCase) && x.Set == null);
+            var propertyName = _propertySelector.Body.As<MemberExpression>().Member.Name;
+            var propertyJsonInfo = jsonTypeInfo.Properties.FirstOrDefault(x => x.Name == propertyName && x.Set == null);
             if (propertyJsonInfo != null)
             {
-                var propertyInfo = typeof(TClass).GetProperty(_propertyName);
+                var propertyInfo = typeof(TClass).GetProperty(propertyName, BindingFlags.NonPublic);
                 if (propertyInfo != null)
                 {
                     var jsonPropertyInfo = jsonTypeInfo.CreateJsonPropertyInfo(typeof(TProperty), propertyJsonInfo.Name);

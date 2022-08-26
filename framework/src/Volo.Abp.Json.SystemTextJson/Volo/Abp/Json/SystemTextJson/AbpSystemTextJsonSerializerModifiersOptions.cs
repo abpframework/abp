@@ -14,7 +14,7 @@ public class AbpSystemTextJsonSerializerModifiersOptions
     {
         Modifiers = new List<Action<JsonTypeInfo>>
         {
-            IncludeExtraPropertiesModifiers.Modify,
+            AbpIncludeExtraPropertiesModifiers.Modify,
         };
     }
 }
