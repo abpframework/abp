@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Json\Volo.Abp.Json.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Polly" Version="$(PollyPackageVersion)" />
+  </ItemGroup>
+
 </Project>

@@ -109,10 +109,7 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
         }
 
-        if (context.BuildArgs.DatabaseManagementSystem == DatabaseManagementSystem.PostgreSQL)
-        {
-            context.Symbols.Add("dbms:PostgreSQL");
-        }
+        context.Symbols.Add($"dbms:{context.BuildArgs.DatabaseManagementSystem}");
     }
 
     protected void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)

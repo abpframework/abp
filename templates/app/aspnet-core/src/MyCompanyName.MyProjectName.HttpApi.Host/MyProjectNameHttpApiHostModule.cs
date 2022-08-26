@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Medallion.Threading;
+using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -21,6 +23,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
@@ -32,6 +35,7 @@ namespace MyCompanyName.MyProjectName;
     typeof(MyProjectNameHttpApiModule),
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpDistributedLockingModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(MyProjectNameApplicationModule),
     typeof(MyProjectNameEntityFrameworkCoreModule),
@@ -51,6 +55,7 @@ public class MyProjectNameHttpApiHostModule : AbpModule
         ConfigureCache(configuration);
         ConfigureVirtualFileSystem(context);
         ConfigureDataProtection(context, configuration, hostingEnvironment);
+        ConfigureDistributedLocking(context, configuration);
         ConfigureCors(context, configuration);
         ConfigureSwaggerServices(context, configuration);
     }
@@ -157,6 +162,18 @@ public class MyProjectNameHttpApiHostModule : AbpModule
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
             dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
         }
+    }
+    
+    private void ConfigureDistributedLocking(
+        ServiceConfigurationContext context,
+        IConfiguration configuration)
+    {
+        context.Services.AddSingleton<IDistributedLockProvider>(sp =>
+        {
+            var connection = ConnectionMultiplexer
+                .Connect(configuration["Redis:Configuration"]);
+            return new RedisDistributedSynchronizationProvider(connection.GetDatabase());
+        });
     }
 
     private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)

@@ -10,6 +10,7 @@ using NuGet.Versioning;
 using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -25,6 +26,7 @@ namespace Volo.Abp.Cli.Commands;
 
 public abstract class ProjectCreationCommandBase
 {
+    private readonly IBundlingService _bundlingService;
     public ConnectionStringProvider ConnectionStringProvider { get; }
     public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
     public ICmdHelper CmdHelper { get; }
@@ -44,8 +46,10 @@ public abstract class ProjectCreationCommandBase
         AngularPwaSupportAdder angularPwaSupportAdder,
         InitialMigrationCreator initialMigrationCreator,
         ThemePackageAdder themePackageAdder,
-        ILocalEventBus eventBus)
+        ILocalEventBus eventBus,
+        IBundlingService bundlingService)
     {
+        _bundlingService = bundlingService;
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
@@ -389,6 +393,25 @@ public abstract class ProjectCreationCommandBase
             }, false);
 
             await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
+        }
+    }
+
+    protected async Task RunBundleForBlazorWasmTemplateAsync(ProjectBuildArgs projectArgs)
+    {
+        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) && projectArgs.UiFramework == UiFramework.Blazor)
+        {
+            Logger.LogInformation("Generating bundles for Blazor Wasm...");
+
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent
+            {
+                Message = "Generating bundles for Blazor Wasm"
+            }, false);
+
+            var directory = Path.GetDirectoryName(
+                Directory.GetFiles(projectArgs.OutputFolder, "*.Blazor.csproj", SearchOption.AllDirectories).First()
+                );
+            
+            await _bundlingService.BundleAsync(directory, true);
         }
     }
 

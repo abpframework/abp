@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -36,8 +37,9 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         AngularPwaSupportAdder angularPwaSupportAdder,
         InitialMigrationCreator initialMigrationCreator,
         ThemePackageAdder themePackageAdder,
-        ILocalEventBus eventBus)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder, initialMigrationCreator, themePackageAdder, eventBus)
+        ILocalEventBus eventBus,
+        IBundlingService bundlingService)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder, initialMigrationCreator, themePackageAdder, eventBus, bundlingService)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
@@ -92,6 +94,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
             await RunInstallLibsForWebTemplateAsync(projectArgs);
         }
         
+        await RunBundleForBlazorWasmTemplateAsync(projectArgs);
+            
         await ConfigurePwaSupportForAngular(projectArgs);
 
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);

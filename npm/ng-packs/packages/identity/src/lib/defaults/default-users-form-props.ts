@@ -65,4 +65,12 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
   },
 ]);
 
-export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS
+export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS.map(prop => {
+  if (prop.name === 'password') {
+    return {
+      ...prop,
+      validators: data => [...getPasswordValidators({ get: data.getInjected })],
+    };
+  }
+  return prop;
+});
