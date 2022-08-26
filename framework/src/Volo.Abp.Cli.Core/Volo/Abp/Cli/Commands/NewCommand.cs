@@ -27,25 +27,35 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
     
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
-
-    public NewCommand(TemplateProjectBuilder templateProjectBuilder
-        , ITemplateInfoProvider templateInfoProvider,
-        ConnectionStringProvider connectionStringProvider,
+    
+    public NewCommand(
+        ConnectionStringProvider connectionStringProvider, 
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
+        IInstallLibsService installLibsService, 
         CliService cliService,
-        IInstallLibsService installLibsService,
-        AngularPwaSupportAdder angularPwaSupportAdder,
+        AngularPwaSupportAdder angularPwaSupportAdder, 
         InitialMigrationCreator initialMigrationCreator,
-        ThemePackageAdder themePackageAdder,
-        ILocalEventBus eventBus,
-        IBundlingService bundlingService)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder, initialMigrationCreator, themePackageAdder, eventBus, bundlingService)
+        ThemePackageAdder themePackageAdder, 
+        ILocalEventBus eventBus, 
+        IBundlingService bundlingService,
+        ITemplateInfoProvider templateInfoProvider, 
+        TemplateProjectBuilder templateProjectBuilder) :
+        base(connectionStringProvider,
+            solutionPackageVersionFinder, 
+            cmdHelper, 
+            installLibsService, 
+            cliService, 
+            angularPwaSupportAdder,
+            initialMigrationCreator,
+            themePackageAdder, 
+            eventBus, 
+            bundlingService)
     {
-        TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
+        TemplateProjectBuilder = templateProjectBuilder;
     }
-
+    
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
         var projectName = NamespaceHelper.NormalizeNamespace(commandLineArgs.Target);
@@ -160,5 +170,4 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
     {
         return "Generate a new solution based on the ABP startup templates.";
     }
-
 }
