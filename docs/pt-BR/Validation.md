@@ -1,23 +1,23 @@
 # Validação
 
-O sistema de validação é utilizado para validar a entrada do usuário o a requisição do cliente para uma ação da controller ou por um serviço. 
+O sistema de validação é utilizado para validar a entrada do usuário ou a requisição do cliente para uma ação de um controller ou por um serviço. 
 
-ABP é compatível com o sistema de Validação de Modelos do ASP.NET Core e tudo escrito na [sua documentação](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation) já é válido para aplicações baseadas no ABP. Logo, esse documento foca nas funcionalidades do ABP ao invés de repetir a documentação da Microsoft.
+O ABP é compatível com o sistema de Validação de Modelos do ASP.NET Core e tudo escrito na [sua documentação](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation) é válido para aplicações baseadas no ABP. Logo, esse documento foca nas funcionalidades do ABP ao invés de repetir a documentação da Microsoft.
 
-Em adição, o ABP adiciona os seguintes benefícios: 
+Além disso, o ABP adiciona os seguintes benefícios: 
 
-* Define `IValidationEnabled` para adicionar validação automática para uma classe arbitrária. Já que todos [application services](Application-Services.md) herdados o implementam, eles também são validados automáticamente.
-* Automáticamente traduz os erros de validação para os atributos do data annotation.
-* Provê serviços extensívels para validar a chamado de um método ou o estado de um objeto.
+* Define `IValidationEnabled` para adicionar validação automática para uma classe qualquer. Como todos os [serviços de aplicação](Application-Services.md) já o implementam, eles também são validados automaticamente.
+* Automaticamente traduz os erros de validação para os atributos de anotação de dados.
+* Provê serviços extensíveis para validar a chamada de um método ou o estado de um objeto.
 * Provê integração com o [FluentValidation](https://fluentvalidation.net/)
 
 ## Validando DTOs
 
 Essa seção introduz brevemente o sistema de validação. Para mais detalhes, veja a [Documentação da Validação de Modelo em ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation).
 
-### Atributos Data Nottation
+### Atributos de anotação de dados
 
-Utilizar data annotations é uma maneira simples de implementar uma validação formar para um [DTO](Data-Transfer-Objects.md) de uma forma declarativa. Exemplo:
+Utilizar anotações de dados é uma maneira simples de implementar uma validação formal para um [DTO](Data-Transfer-Objects.md) de uma forma declarativa. Exemplo:
 
 ````csharp
 public class CreateBookDto
@@ -34,11 +34,11 @@ public class CreateBookDto
     public decimal Price { get; set; }
 }
 ````
-Quando você utilzar essa classe como parâmetro para um [application service](Application-Services.md) ou um controller, ele será automáticamente validado e a validação localizada será lançada ([e tratada](Exception-Handling.md) pelo ABP framework).
+Quando você utilizar essa classe como parâmetro para um [serviço da aplicação](Application-Services.md) ou um controller, ele será automaticamente validado e a validação traduzida será lançada ([e tratada](Exception-Handling.md) pelo ABP framework).
 
 ### IValidatableObject
 
-`IValidatavleObject` pode ser implementado por um DTO para executar uma lógica customizada de validação. `CreateBookDto` no exemplo a seguir implementa essa interface e verifica se o `Name` é igual a `Description` e retorna um erro de validação nesse caso.
+`IValidatableObject` pode ser implementado por um DTO para executar uma lógica customizada de validação. O `CreateBookDto` no exemplo a seguir implementa essa interface e verifica se o `Name` é igual a `Description` e retorna um erro de validação nesse caso.
 
 ````csharp
 using System.Collections.Generic;
@@ -76,21 +76,21 @@ namespace Acme.BookStore
 
 #### Resolvendo um serviço.
 
-Se você precisa resolver um serviço do [sistema de injeção de dependências](Dependency-Injection.md), você pode utilizar o objeto `ValidationContext`.
+Se você precisar resolver um serviço do [sistema de injeção de dependências](Dependency-Injection.md), você pode utilizar o objeto `ValidationContext`.
 
 ````csharp
 var myService = validationContext.GetRequiredService<IMyService>();
 ````
 
-> Enquando resolver os serviços no método `Validate` permite qualquer possibilidade, não é um boa prática implementar sua lógica de validação do domínios no DTOs. Matenha os DTOs simples. Seu propósito é transferir dados (DTO: Data Transfer Object, ou Objeto de Transferência de Dados).
+> Enquanto resolver os serviços no método `Validate` permite várias possibilidades, não é um boa prática implementar sua lógica de validação do domínio nos DTOs. Mantenha os DTOs simples. Seu propósito é transferir dados (DTO: Data Transfer Object, ou Objeto de Transferência de Dados).
 
 ## Infraestrutura de Validação.
 
-Essa seção explica alguns serviços adicionais providos pelo ABP Framework. 
+Essa seção explica alguns serviços adicionais fornecidos pelo ABP Framework. 
 
 ### Interface IValidationEnabled
 
-`IValidationEnabled` é um marcado vazio de interface que pode ser implementado por qualquer classe (registrada e resolvida do [DI](Dependency-Injection.md)) e deixe o ABP framework realizar o sistema de validação para os métodos da classe. Por exemplo: 
+`IValidationEnabled` é um marcador vazio de interface que pode ser implementado por qualquer classe (registrada e resolvida a partir do [DI](Dependency-Injection.md)) para permitir que o ABP framework realize o sistema de validação para os métodos da classe. Por exemplo: 
 
 ````csharp
 using System.Threading.Tasks;
@@ -109,11 +109,11 @@ namespace Acme.BookStore
 }
 ````
 
-> O ABP framework utiliza o sistema de [dynamic proxying / interception](Dynamic-Proxying-Interceptors.md) para realizar a validação. Para o fazer funcionar, seu métido deve ser **virtual** ou seu serivço deve ser injetado e utilizado através de uma **interface** (como `IMyService`).
+> O ABP framework utiliza o sistema de [Proxying Dinâmico / Interceptadores](Dynamic-Proxying-Interceptors.md) para realizar a validação. Para fazê-lo funcionar, seu método deve ser **virtual** ou seu serviço deve ser injetado e utilizado através de uma **interface** (como `IMyService`).
 
 #### Habilitando e Desabilitando Validações
 
-Você pode utilizar o `[DisableValidation]` para desabilitar para métodos, classes e propriedades.
+Você pode utilizar o `[DisableValidation]` e desabilitar a validação para métodos, classes e propriedades.
 
 ````csharp
 [DisableValidation]
@@ -139,8 +139,8 @@ public class InputClass
 Uma vez que o ABP determina um erro de validação, é lançada uma validação do tipo `AbpValidationException`. O código da sua aplicação poderá lançar o `AbpValidationException`, mas na maioria das vezes não será necessário.
 
 * A propriedade `ValidationErrors` do `AbpValidationException` contem a lista com os erros de validação.
-* O nível de log do `AbpValidationException` é definido como `Warning`. Todos são erros de validação são logados no [Sistema de Logging](Logging.md).
-* `AbpValidationException` é tratado automáticamente pelo ABP framework e é convertido para um erro utilizável com o status code HTTP 400. Veja a documentação de [Manipulação de Exceção](Exception-Handling.md) para mais informações.
+* O nível de log do `AbpValidationException` é definido como `Warning`. Todos os erros de validação são logados no [Sistema de Logging](Logging.md).
+* `AbpValidationException` é tratado automaticamente pelo ABP framework e é convertido em um erro utilizável com o código de status HTTP 400. Veja a documentação de [Manipulação de Exceção](Exception-Handling.md) para mais informações.
 
 ## Tópicos Avançados
 
@@ -152,7 +152,7 @@ Além da validação automática, você pode querer validar um objeto manualment
 
 * `GetErrorsAsync` não lança uma exceção, somente retorna os erros de validação.
 
-`IObjectValidator` é implementado pelo `ObjectValidator` por padrão. `ObjectValidator` é estensível; você pode implementar a interface `IObjectValidationContributor` para contribuir com uma lógica customizada. Exemplo:
+`IObjectValidator` é implementado pelo `ObjectValidator` por padrão. `ObjectValidator` é extensível; você pode implementar a interface `IObjectValidationContributor` para contribuir com uma lógica customizada. Exemplo:
 
 ````csharp
 public class MyObjectValidationContributor
@@ -170,14 +170,13 @@ public class MyObjectValidationContributor
 }
 ````
 
-* Lembre-se de registrar sua classe no [DI](Dependency-Injection.md) (Implementando )
-* Remember to register your class to the [DI](Dependency-Injection.md) (implementar `ITransientDependency` é exatamente como nesse exemplo)
-* ABP vai automáticamente descobrir sua classe e utilizá-la em qualquer tipo de validação de objetos (incluindo chamadas de métodos de validação atumáticas).
+* Lembre-se de registrar sua classe no [DI](Dependency-Injection.md) (implementar `ITransientDependency` faz isso no exemplo anterior)
+* ABP vai automaticamente descobrir sua classe e utilizá-la em qualquer tipo de validação de objetos (incluindo chamadas de métodos de validação automáticas).
 
 ### IMethodInvocationValidator
 
-`IMethodInvocationValidator` é utilizado para validar a chamada de um método. Ele utiliza internamente o `IObjectValidator` para validar os objetos passados para na chamada do método. Você normalmente não precisa desse serivço já que ele é utilizado automáticamente pelo framework, mas você pode querer reutilziar ou substituir na sua aplicação em alguns casos raros.
+`IMethodInvocationValidator` é utilizado para validar a chamada de um método. Ele utiliza internamente o `IObjectValidator` para validar os objetos passados na chamada do método. Você normalmente não precisa deste serviço, já que ele é utilizado automaticamente pelo framework, mas você pode querer reutilizar ou substituir na sua aplicação em alguns casos raros.
 
 ## Integração com FluentValidation
 
-O pacote Volo.Abp.FluentValidation integra a biblioteca FluentValidation com o sistema de validaçõa (implementando o `IObjectValidationContributor`). Veja o [documento de Integração com o FluentValidation](FluentValidation.md) para mais informações.
+O pacote Volo.Abp.FluentValidation integra a biblioteca FluentValidation com o sistema de validação (implementando o `IObjectValidationContributor`). Veja o [documento de Integração com o FluentValidation](FluentValidation.md) para mais informações.
