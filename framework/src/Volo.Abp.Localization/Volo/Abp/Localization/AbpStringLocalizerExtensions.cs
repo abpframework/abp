@@ -42,7 +42,7 @@ public static class AbpStringLocalizerExtensions
         bool includeBaseLocalizers)
     {
         var internalLocalizer = (ProxyHelper.UnProxy(stringLocalizer) as IStringLocalizer).GetInternalLocalizer();
-        if (internalLocalizer is IStringLocalizerSupportsInheritance stringLocalizerSupportsInheritance)
+        if (internalLocalizer is IAbpStringLocalizer stringLocalizerSupportsInheritance)
         {
             return stringLocalizerSupportsInheritance.GetAllStrings(
                 includeParentCultures,

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization;
 
-public class AbpDictionaryBasedStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
+public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
 {
     public LocalizationResourceBase Resource { get; }
 
@@ -184,7 +184,7 @@ public class AbpDictionaryBasedStringLocalizer : IStringLocalizer, IStringLocali
         return allStrings.Values.ToImmutableList();
     }
 
-    public class CultureWrapperStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
+    public class CultureWrapperStringLocalizer : IAbpStringLocalizer
     {
         private readonly string _cultureName;
         private readonly AbpDictionaryBasedStringLocalizer _innerLocalizer;
