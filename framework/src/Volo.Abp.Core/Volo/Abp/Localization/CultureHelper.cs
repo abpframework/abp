@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization;
@@ -58,5 +59,32 @@ public static class CultureHelper
     public static string GetBaseCultureName(string cultureName)
     {
         return new CultureInfo(cultureName).Parent.Name;
+    }
+    
+    public static bool IsCompatibleCulture(
+        string sourceCultureName,
+        string targetCultureName)
+    {
+        if (sourceCultureName == targetCultureName)
+        {
+            return true;
+        }
+
+        if (sourceCultureName.Contains("-"))
+        {
+            return false;
+        }
+
+        if (!targetCultureName.Contains("-"))
+        {
+            return false;
+        }
+
+        if (sourceCultureName == GetBaseCultureName(targetCultureName))
+        {
+            return true;
+        }
+
+        return false;
     }
 }
