@@ -359,4 +359,11 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
             );
         }
     }
+
+    [Fact]
+    public void Should_Get_Supported_Cultures()
+    {
+        var cultures = _localizer.GetSupportedCultures();
+        cultures.Count().ShouldBeGreaterThan(0);
+    }
 }
