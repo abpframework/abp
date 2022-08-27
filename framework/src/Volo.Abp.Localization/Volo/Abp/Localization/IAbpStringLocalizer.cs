@@ -9,4 +9,6 @@ public interface IAbpStringLocalizer : IStringLocalizer
         bool includeParentCultures,
         bool includeBaseLocalizers
     );
+
+    IEnumerable<string> GetSupportedCultures();
 }

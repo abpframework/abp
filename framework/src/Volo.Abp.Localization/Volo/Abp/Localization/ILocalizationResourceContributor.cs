@@ -10,4 +10,6 @@ public interface ILocalizationResourceContributor
     LocalizedString GetOrNull(string cultureName, string name);
 
     void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary);
+    
+    IEnumerable<string> GetSupportedCultures();
 }

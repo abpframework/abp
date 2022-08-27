@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -50,6 +51,13 @@ public class RemoteLocalizationContributor : ILocalizationResourceContributor
         {
             dictionary[keyValue.Key] = new LocalizedString(keyValue.Key, keyValue.Value);
         }
+    }
+
+    public IEnumerable<string> GetSupportedCultures()
+    {
+        /* This contributor does not know all the supported cultures by the
+         remote localization resource, and it is not needed on the client side */
+        return Array.Empty<string>();
     }
 
     private Dictionary<string, string> GetResourceOrNull()

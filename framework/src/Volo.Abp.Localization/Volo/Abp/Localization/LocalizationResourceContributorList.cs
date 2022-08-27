@@ -27,4 +27,9 @@ public class LocalizationResourceContributorList : List<ILocalizationResourceCon
             contributor.Fill(cultureName, dictionary);
         }
     }
+
+    internal IEnumerable<string> GetSupportedCultures()
+    {
+        return this.SelectMany(c => c.GetSupportedCultures()).Distinct();
+    }
 }

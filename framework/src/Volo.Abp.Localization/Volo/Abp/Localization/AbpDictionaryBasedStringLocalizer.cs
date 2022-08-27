@@ -47,6 +47,11 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
         );
     }
 
+    public IEnumerable<string> GetSupportedCultures()
+    {
+        return Resource.Contributors.GetSupportedCultures();
+    }
+
     protected virtual LocalizedString GetLocalizedStringFormatted(string name, params object[] arguments)
     {
         return GetLocalizedStringFormatted(name, CultureInfo.CurrentUICulture.Name, arguments);
@@ -207,6 +212,11 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
         {
             return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures, includeBaseLocalizers);
+        }
+
+        public IEnumerable<string> GetSupportedCultures()
+        {
+            return _innerLocalizer.GetSupportedCultures();
         }
     }
 }

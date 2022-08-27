@@ -37,6 +37,11 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
         GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
     }
 
+    public IEnumerable<string> GetSupportedCultures()
+    {
+        return GetDictionaries().Keys;
+    }
+
     private Dictionary<string, ILocalizationDictionary> GetDictionaries()
     {
         var dictionaries = _dictionaries;

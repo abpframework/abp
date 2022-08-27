@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
@@ -41,10 +42,10 @@ public static class AbpStringLocalizerExtensions
         bool includeParentCultures,
         bool includeBaseLocalizers)
     {
-        var internalLocalizer = (ProxyHelper.UnProxy(stringLocalizer) as IStringLocalizer).GetInternalLocalizer();
-        if (internalLocalizer is IAbpStringLocalizer stringLocalizerSupportsInheritance)
+        var internalLocalizer = ((IStringLocalizer)ProxyHelper.UnProxy(stringLocalizer)).GetInternalLocalizer();
+        if (internalLocalizer is IAbpStringLocalizer abpStringLocalizer)
         {
-            return stringLocalizerSupportsInheritance.GetAllStrings(
+            return abpStringLocalizer.GetAllStrings(
                 includeParentCultures,
                 includeBaseLocalizers
             );
@@ -53,5 +54,16 @@ public static class AbpStringLocalizerExtensions
         return stringLocalizer.GetAllStrings(
             includeParentCultures
         );
+    }
+
+    public static IEnumerable<string> GetSupportedCultures(this IStringLocalizer localizer)
+    {
+        var internalLocalizer = ((IStringLocalizer)ProxyHelper.UnProxy(localizer)).GetInternalLocalizer();
+        if (internalLocalizer is IAbpStringLocalizer abpStringLocalizer)
+        {
+            return abpStringLocalizer.GetSupportedCultures();
+        }
+
+        return Array.Empty<string>();
     }
 }
