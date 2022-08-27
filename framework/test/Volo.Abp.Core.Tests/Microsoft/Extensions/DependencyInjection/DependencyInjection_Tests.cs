@@ -63,6 +63,24 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
     }
 
     [Fact]
+    public void Should_Not_Inject_Services_As_Properties_When_Disabled()
+    {
+        GetRequiredService<ServiceWithPropertyInjectDisabled>().ProperyInjectedService.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Should_Not_Inject_Services_As_Properties_For_Generic_Classes_When_Disabled()
+    {
+        GetRequiredService<GenericServiceWithPropertyInjectDisabled<int>>().ProperyInjectedService.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Should_Not_Inject_Services_As_Properties_For_Generic_Concrete_Classes_When_Disabled()
+    {
+        GetRequiredService<ConcreteGenericServiceWithPropertyInjectDisabled>().ProperyInjectedService.ShouldBeNull();
+    }
+
+    [Fact]
     public void Singletons_Exposing_Multiple_Services_Should_Returns_The_Same_Instance()
     {
         var objectByInterfaceRef = GetRequiredService<IMySingletonExposingMultipleServices>();
@@ -145,7 +163,7 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
             context.Services.AddType<ServiceWithPropertyInject>();
             context.Services.AddType<MySingletonExposingMultipleServices>();
             context.Services.AddTransient(typeof(GenericServiceWithPropertyInject<>));
-            context.Services.AddTransient(typeof(ConcreteGenericServiceWithPropertyInject));
+            context.Services.AddTransient(typeof(GenericServiceWithPropertyInjectDisabled<>));
         }
     }
 
@@ -162,6 +180,25 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
     }
 
     public class ConcreteGenericServiceWithPropertyInject : GenericServiceWithPropertyInject<string>
+    {
+
+    }
+
+    [DisablePropertyInjection]
+    public class ServiceWithPropertyInjectDisabled : ITransientDependency
+    {
+        public MyEmptyTransientService ProperyInjectedService { get; set; }
+    }
+
+    [DisablePropertyInjection]
+    public class GenericServiceWithPropertyInjectDisabled<T> : ITransientDependency
+    {
+        public MyEmptyTransientService ProperyInjectedService { get; set; }
+
+        public T Value { get; set; }
+    }
+
+    public class ConcreteGenericServiceWithPropertyInjectDisabled : GenericServiceWithPropertyInjectDisabled<string>
     {
 
     }
