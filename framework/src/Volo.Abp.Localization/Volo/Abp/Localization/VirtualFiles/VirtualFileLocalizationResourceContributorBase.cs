@@ -11,6 +11,8 @@ namespace Volo.Abp.Localization.VirtualFiles;
 
 public abstract class VirtualFileLocalizationResourceContributorBase : ILocalizationResourceContributor
 {
+    public bool IsDynamic => false;
+
     private readonly string _virtualPath;
     private IVirtualFileProvider _virtualFileProvider;
     private Dictionary<string, ILocalizationDictionary> _dictionaries;

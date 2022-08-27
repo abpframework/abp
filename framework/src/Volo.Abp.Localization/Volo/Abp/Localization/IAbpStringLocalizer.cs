@@ -7,7 +7,8 @@ public interface IAbpStringLocalizer : IStringLocalizer
 {
     IEnumerable<LocalizedString> GetAllStrings(
         bool includeParentCultures,
-        bool includeBaseLocalizers
+        bool includeBaseLocalizers,
+        bool includeDynamicContributors
     );
 
     IEnumerable<string> GetSupportedCultures();

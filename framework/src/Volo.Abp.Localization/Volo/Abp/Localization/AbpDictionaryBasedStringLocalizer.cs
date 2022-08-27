@@ -38,12 +38,16 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
         );
     }
 
-    public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
+    public IEnumerable<LocalizedString> GetAllStrings(
+        bool includeParentCultures,
+        bool includeBaseLocalizers,
+        bool includeDynamicContributors)
     {
         return GetAllStrings(
             CultureInfo.CurrentUICulture.Name,
             includeParentCultures,
-            includeBaseLocalizers
+            includeBaseLocalizers,
+            includeDynamicContributors
         );
     }
 
@@ -139,7 +143,8 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
     protected virtual IReadOnlyList<LocalizedString> GetAllStrings(
         string cultureName,
         bool includeParentCultures = true,
-        bool includeBaseLocalizers = true)
+        bool includeBaseLocalizers = true,
+        bool includeDynamicContributors = true)
     {
         //TODO: Can be optimized (example: if it's already default dictionary, skip overriding)
 
@@ -154,7 +159,12 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
                     //TODO: Try/catch is a workaround here!
                     try
                     {
-                        var baseLocalizedString = baseLocalizer.GetAllStrings(includeParentCultures);
+                        var baseLocalizedString = baseLocalizer.GetAllStrings(
+                            includeParentCultures,
+                            includeBaseLocalizers, // Always true, I know!
+                            includeDynamicContributors
+                        );
+                        
                         foreach (var localizedString in baseLocalizedString)
                         {
                             allStrings[localizedString.Name] = localizedString;
@@ -173,18 +183,18 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
             //Fill all strings from default culture
             if (!Resource.DefaultCultureName.IsNullOrEmpty())
             {
-                Resource.Contributors.Fill(Resource.DefaultCultureName, allStrings);
+                Resource.Contributors.Fill(Resource.DefaultCultureName, allStrings, includeDynamicContributors);
             }
 
             //Overwrite all strings from the language based on country culture
             if (cultureName.Contains("-"))
             {
-                Resource.Contributors.Fill(CultureHelper.GetBaseCultureName(cultureName), allStrings);
+                Resource.Contributors.Fill(CultureHelper.GetBaseCultureName(cultureName), allStrings, includeDynamicContributors);
             }
         }
 
         //Overwrite all strings from the original culture
-        Resource.Contributors.Fill(cultureName, allStrings);
+        Resource.Contributors.Fill(cultureName, allStrings, includeDynamicContributors);
 
         return allStrings.Values.ToImmutableList();
     }
@@ -209,9 +219,9 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
             return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures);
         }
 
-        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
+        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers, bool includeDynamicContributors)
         {
-            return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures, includeBaseLocalizers);
+            return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures, includeBaseLocalizers, includeDynamicContributors);
         }
 
         public IEnumerable<string> GetSupportedCultures()

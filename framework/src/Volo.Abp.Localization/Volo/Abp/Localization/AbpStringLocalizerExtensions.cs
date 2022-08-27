@@ -40,14 +40,16 @@ public static class AbpStringLocalizerExtensions
     public static IEnumerable<LocalizedString> GetAllStrings(
         this IStringLocalizer stringLocalizer,
         bool includeParentCultures,
-        bool includeBaseLocalizers)
+        bool includeBaseLocalizers,
+        bool includeDynamicContributors)
     {
         var internalLocalizer = ((IStringLocalizer)ProxyHelper.UnProxy(stringLocalizer)).GetInternalLocalizer();
         if (internalLocalizer is IAbpStringLocalizer abpStringLocalizer)
         {
             return abpStringLocalizer.GetAllStrings(
                 includeParentCultures,
-                includeBaseLocalizers
+                includeBaseLocalizers,
+                includeDynamicContributors
             );
         }
 

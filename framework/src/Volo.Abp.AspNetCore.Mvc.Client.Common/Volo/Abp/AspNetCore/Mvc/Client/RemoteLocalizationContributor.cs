@@ -10,6 +10,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Client;
 
 public class RemoteLocalizationContributor : ILocalizationResourceContributor
 {
+    public bool IsDynamic => true;
+
     private LocalizationResourceBase _resource;
     private ICachedApplicationConfigurationClient _applicationConfigurationClient;
     private ILogger<RemoteLocalizationContributor> _logger;

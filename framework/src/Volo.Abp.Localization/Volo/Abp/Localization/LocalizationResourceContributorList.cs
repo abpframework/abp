@@ -6,10 +6,18 @@ namespace Volo.Abp.Localization;
 
 public class LocalizationResourceContributorList : List<ILocalizationResourceContributor>
 {
-    public LocalizedString GetOrNull(string cultureName, string name)
+    public LocalizedString GetOrNull(
+        string cultureName,
+        string name,
+        bool includeDynamicContributors = true)
     {
         foreach (var contributor in this.Select(x => x).Reverse())
         {
+            if (!includeDynamicContributors && contributor.IsDynamic)
+            {
+                continue;
+            }
+            
             var localString = contributor.GetOrNull(cultureName, name);
             if (localString != null)
             {
@@ -20,10 +28,18 @@ public class LocalizationResourceContributorList : List<ILocalizationResourceCon
         return null;
     }
 
-    public void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
+    public void Fill(
+        string cultureName, 
+        Dictionary<string, LocalizedString> dictionary,
+        bool includeDynamicContributors = true)
     {
         foreach (var contributor in this)
         {
+            if (!includeDynamicContributors && contributor.IsDynamic)
+            {
+                continue;
+            }
+            
             contributor.Fill(cultureName, dictionary);
         }
     }
