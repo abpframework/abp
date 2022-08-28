@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac.Core;
 using Autofac.Extras.DynamicProxy;
+using Volo.Abp.Autofac;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
@@ -71,8 +72,7 @@ public static class AbpRegistrationBuilderExtensions
         if (moduleContainer.Modules.Any(m => m.Assembly == implementationType.Assembly) &&
             implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
         {
-            registrationBuilder = registrationBuilder.PropertiesAutowired((propertyInfo, _) =>
-                propertyInfo.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty());
+            registrationBuilder = registrationBuilder.PropertiesAutowired(new AbpPropertySelector(false));
         }
 
         return registrationBuilder;
