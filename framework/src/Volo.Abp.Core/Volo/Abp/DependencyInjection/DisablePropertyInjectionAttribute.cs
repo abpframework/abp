@@ -2,7 +2,8 @@
 
 namespace Volo.Abp.DependencyInjection;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
 public class DisablePropertyInjectionAttribute : Attribute
 {
+
 }

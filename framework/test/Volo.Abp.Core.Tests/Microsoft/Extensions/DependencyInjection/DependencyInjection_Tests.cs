@@ -47,37 +47,36 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
     [Fact]
     public void Should_Inject_Services_As_Properties()
     {
-        GetRequiredService<ServiceWithPropertyInject>().ProperyInjectedService.ShouldNotBeNull();
+        GetRequiredService<ServiceWithPropertyInject>().PropertyInjectedService.ShouldNotBeNull();
     }
 
     [Fact]
     public void Should_Inject_Services_As_Properties_For_Generic_Classes()
     {
-        GetRequiredService<GenericServiceWithPropertyInject<int>>().ProperyInjectedService.ShouldNotBeNull();
+        GetRequiredService<GenericServiceWithPropertyInject<int>>().PropertyInjectedService.ShouldNotBeNull();
     }
 
     [Fact]
     public void Should_Inject_Services_As_Properties_For_Generic_Concrete_Classes()
     {
-        GetRequiredService<ConcreteGenericServiceWithPropertyInject>().ProperyInjectedService.ShouldNotBeNull();
+        GetRequiredService<ConcreteGenericServiceWithPropertyInject>().PropertyInjectedService.ShouldNotBeNull();
     }
 
     [Fact]
-    public void Should_Not_Inject_Services_As_Properties_When_Disabled()
+    public void Should_Not_Inject_Services_As_Properties_When_Class_With_DisablePropertyInjection()
     {
-        GetRequiredService<ServiceWithPropertyInjectDisabled>().ProperyInjectedService.ShouldBeNull();
+        GetRequiredService<DisablePropertyInjectionOnClass>().PropertyInjectedService.ShouldBeNull();
+        GetRequiredService<GenericServiceWithDisablePropertyInjectionOnClass<string>>().PropertyInjectedService.ShouldBeNull();
     }
 
     [Fact]
-    public void Should_Not_Inject_Services_As_Properties_For_Generic_Classes_When_Disabled()
+    public void Should_Not_Inject_Services_As_Properties_When_Property_With_DisablePropertyInjection()
     {
-        GetRequiredService<GenericServiceWithPropertyInjectDisabled<int>>().ProperyInjectedService.ShouldBeNull();
-    }
+        GetRequiredService<DisablePropertyInjectionOnProperty>().PropertyInjectedService.ShouldNotBeNull();
+        GetRequiredService<DisablePropertyInjectionOnProperty>().DisablePropertyInjectionService.ShouldBeNull();
 
-    [Fact]
-    public void Should_Not_Inject_Services_As_Properties_For_Generic_Concrete_Classes_When_Disabled()
-    {
-        GetRequiredService<ConcreteGenericServiceWithPropertyInjectDisabled>().ProperyInjectedService.ShouldBeNull();
+        GetRequiredService<GenericServiceWithDisablePropertyInjectionOnProperty<string>>().PropertyInjectedService.ShouldNotBeNull();
+        GetRequiredService<GenericServiceWithDisablePropertyInjectionOnProperty<string>>().DisablePropertyInjectionService.ShouldBeNull();
     }
 
     [Fact]
@@ -163,18 +162,19 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
             context.Services.AddType<ServiceWithPropertyInject>();
             context.Services.AddType<MySingletonExposingMultipleServices>();
             context.Services.AddTransient(typeof(GenericServiceWithPropertyInject<>));
-            context.Services.AddTransient(typeof(GenericServiceWithPropertyInjectDisabled<>));
+            context.Services.AddTransient(typeof(GenericServiceWithDisablePropertyInjectionOnClass<>));
+            context.Services.AddTransient(typeof(GenericServiceWithDisablePropertyInjectionOnProperty<>));
         }
     }
 
     public class ServiceWithPropertyInject : ITransientDependency
     {
-        public MyEmptyTransientService ProperyInjectedService { get; set; }
+        public MyEmptyTransientService PropertyInjectedService { get; set; }
     }
 
     public class GenericServiceWithPropertyInject<T> : ITransientDependency
     {
-        public MyEmptyTransientService ProperyInjectedService { get; set; }
+        public MyEmptyTransientService PropertyInjectedService { get; set; }
 
         public T Value { get; set; }
     }
@@ -185,21 +185,34 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
     }
 
     [DisablePropertyInjection]
-    public class ServiceWithPropertyInjectDisabled : ITransientDependency
+    public class DisablePropertyInjectionOnClass : ITransientDependency
     {
-        public MyEmptyTransientService ProperyInjectedService { get; set; }
+        public MyEmptyTransientService PropertyInjectedService { get; set; }
+    }
+
+    public class DisablePropertyInjectionOnProperty : ITransientDependency
+    {
+        public MyEmptyTransientService PropertyInjectedService { get; set; }
+
+        [DisablePropertyInjection]
+        public MyEmptyTransientService DisablePropertyInjectionService { get; set; }
     }
 
     [DisablePropertyInjection]
-    public class GenericServiceWithPropertyInjectDisabled<T> : ITransientDependency
+    public class GenericServiceWithDisablePropertyInjectionOnClass<T> : ITransientDependency
     {
-        public MyEmptyTransientService ProperyInjectedService { get; set; }
+        public MyEmptyTransientService PropertyInjectedService { get; set; }
 
         public T Value { get; set; }
     }
 
-    public class ConcreteGenericServiceWithPropertyInjectDisabled : GenericServiceWithPropertyInjectDisabled<string>
+    public class GenericServiceWithDisablePropertyInjectionOnProperty<T> : ITransientDependency
     {
+        public MyEmptyTransientService PropertyInjectedService { get; set; }
 
+        [DisablePropertyInjection]
+        public MyEmptyTransientService DisablePropertyInjectionService { get; set; }
+
+        public T Value { get; set; }
     }
 }
