@@ -13,6 +13,7 @@
     "@abp/aspnetcore.mvc.ui": "~6.0.0-rc.3",
     "@abp/bootstrap": "~6.0.0-rc.3",
     "@abp/bootstrap-datepicker": "~6.0.0-rc.3",
+    "@abp/bootstrap-daterangepicker": "file:../bootstrap-daterangepicker",
     "@abp/datatables.net-bs5": "~6.0.0-rc.3",
     "@abp/font-awesome": "~6.0.0-rc.3",
     "@abp/jquery-form": "~6.0.0-rc.3",

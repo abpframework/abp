@@ -1,16 +1,16 @@
 {
   "version": "6.0.0-rc.3",
-  "name": "@abp/aspnetcore.mvc.ui.theme.basic",
+  "name": "@abp/bootstrap-daterangepicker",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git",
-    "directory": "npm/packs/aspnetcore.mvc.ui.theme.basic"
+    "directory": "npm/packs/bootstrap-daterangepicker"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "file:../aspnetcore.mvc.ui.theme.shared"
+    "bootstrap-daterangepicker": "^3.1.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
