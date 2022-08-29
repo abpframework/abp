@@ -5,122 +5,107 @@ $(function () {
     var getFormattedDate = function ($datePicker) {
         return $datePicker.data().datepicker.getFormattedDate('yyyy-mm-dd');
     };
-    
+
     var comboboxItems = [];
+    
     service.getFilterItems()
         .then(function (result) {
-        comboboxItems = result;
-        fillOptions();
+            comboboxItems = result;
+            fillOptions();
         }).catch(function (error) {
-            abp.message.error(error);
-        });
-    
-    
-    
+        abp.message.error(error);
+    });
+
+
     var $projectId = $('#ProjectId');
-    var $version = $('#Version');
-    var $languageCode = $('#LanguageCode');
-    var $format = $('#Format');
-    
-    function fillOptions() {
-        var selectedVersion = $version.val();
-        var selectedLanguageCode = $languageCode.val();
-        var selectedFormat = $format.val();
-        var selectedProjectId = $projectId.val();
-
-        $version.empty();
-        $languageCode.empty();
-        $format.empty();
-        
-        $version.append($('<option/>').val(''));
-        $languageCode.append($('<option/>').val(''));
-        $format.append($('<option/>').val(''));
-
-        
-        comboboxItems.forEach(function (item) {
-            if (!selectedProjectId || item.projectId === selectedProjectId) {
-                appendVersion(item,selectedVersion,selectedLanguageCode,selectedFormat);
-                appendLanguageCode(item,selectedLanguageCode,selectedVersion,selectedFormat);
-                appendFormat(item,selectedFormat,selectedVersion,selectedLanguageCode);
-            }
-        });
-        
-    }
-    function appendFormat(item,selectedFormat,selectedVersion,selectedLanguageCode) {
-        if(selectedVersion && selectedVersion !== item.version) {
-            return;
-        }
-        if(selectedLanguageCode && selectedLanguageCode !== item.languageCode) {
-            return;
-        }
-
-        if($format.find('option[value="' + item.format + '"]').length === 0) {
-            var formatOption = $('<option>',{
-                value: item.format,
-                text: item.format
-            });
-            if(selectedFormat === item.format) {
-                formatOption.attr('selected', 'selected');
-            }
-            $format.append(formatOption);
-        }
-    }
-    
-    function appendLanguageCode(item,selectedLanguageCode,selectedVersion,selectedFormat) {
-        if(selectedVersion && selectedVersion !== item.version) {
-            return;
-        }
-        if(selectedFormat && selectedFormat !== item.format) {
-            return;
-        }
-        
-        if($languageCode.find('option[value="' + item.languageCode + '"]').length === 0) {
-            var languageCodeOption = $('<option>',{
-                value: item.languageCode,
-                text: item.languageCode
-            });
-            if(selectedLanguageCode === item.languageCode) {
-                languageCodeOption.attr('selected', 'selected');
-            }
-            $languageCode.append(languageCodeOption);
-        }
-    }
-    function appendVersion(item,selectedVersion,selectedLanguageCode,selectedFormat) {
-        if(selectedLanguageCode && item.languageCode !== selectedLanguageCode) {
-            return;
-        }
-        if(selectedFormat && selectedFormat !== item.format) {
-            return;
-        }
-        
-        if($version.find('option[value="' + item.version + '"]').length === 0) {
-            var versionOption = $('<option>', {
-                value: item.version,
-                text: item.version
-            })
-            if(selectedVersion === item.version) {
-                versionOption.attr('selected', 'selected');
-            }
-            $version.append(versionOption);
-        }
-    }
 
     $projectId.on('change', function () {
         fillOptions();
     });
     
-    $version.on('change', function () {
-        fillOptions();
-    });
+    var comboboxs = {
+        version: $('#Version'),
+        languageCode: $('#LanguageCode'),
+        format: $('#Format')
+    };
     
-    $languageCode.on('change', function () {
-        fillOptions();
-    });
+    for (var key in comboboxs) {
+        comboboxs[key].on('change', function () {
+            fillOptions();
+        });
+    }
+
+
+    var selectedItem = getSelectedItem();
+
+    function emptyComboboxs() {
+        for (var key in comboboxs) {
+            comboboxs[key].empty();
+        }
+    }
     
-    $format.on('change', function () {
-        fillOptions();
-    });
+    function getSelectedItem() {
+        var item = {};
+        for (var key in comboboxs) {
+            item[key] = comboboxs[key].val();
+        }
+        return item;
+    }
     
+    function SetComboboxsValues(item) {
+        for (var key in comboboxs) {
+            comboboxs[key].val(item[key]);
+        }
+    }
+    
+    function addComboboxsEmptyItem() {
+        for (var key in comboboxs) {
+            comboboxs[key].append($('<option/>').val('').text(''));
+        }
+    }
+
+    function fillOptions() {
+        
+        selectedItem = getSelectedItem();
+        
+        var selectedProjectId = $projectId.val();
+
+        emptyComboboxs();
+        
+        addComboboxsEmptyItem();
+
+        var selectedProjectItems = comboboxItems.filter((item) => !selectedProjectId || item.projectId === selectedProjectId);
+        
+        for (var key in selectedItem) {
+            var item = selectedProjectItems.find((item) => item[key] === selectedItem[key]);
+            if (item) {
+                selectedItem[key] = item[key];
+            }else {
+                selectedItem[key] = '';
+            }
+        }
+        
+
+        selectedProjectItems.forEach(function (item) {
+            for (var key in comboboxs) {
+                appendComboboxItem(comboboxs[key], item, key);
+            }
+        });
+        
+        SetComboboxsValues(selectedItem);
+    }
+    function appendComboboxItem($combobox, item , key) {
+        $.each(item, function (index, value) {
+            if(index !== key) {
+                if(selectedItem[index] && selectedItem[index] !== value) {
+                    return ;
+                }}
+        });
+        if($combobox.find('option[value="' + item[key] + '"]').length === 0){
+            $combobox.append($('<option/>').val(item[key]).text(item[key]));
+        }
+    }
+
     var getFilter = function () {
         return {
             projectId: $('#ProjectId').val(),
