@@ -66,6 +66,13 @@ public partial class UserManagement
         }
     }
 
+    protected override ValueTask SetBreadcrumbItemsAsync()
+    {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Users"].Value));
+        return base.SetBreadcrumbItemsAsync();
+    }
+
     protected virtual async Task OnSearchTextChanged(string value)
     {
         GetListInput.Filter = value;
