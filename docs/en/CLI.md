@@ -470,10 +470,10 @@ abp translate -c <culture> [options]
 Example:
 
 ````bash
-abp translate -c de-DE
+abp translate -c de
 ````
 
-This command created the unified translation file for the `de-DE` (German) culture.
+This command created the unified translation file for the `de` (German) culture.
 
 ##### Additional Options
 

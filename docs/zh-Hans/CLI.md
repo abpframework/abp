@@ -373,7 +373,7 @@ abp translate -c <culture> [options]
 示例:
 
 ````bash
-abp translate -c de-DE
+abp translate -c de
 ````
 
 该命令为 `de-DE` (德语)文化创建了统一的翻译文件.
