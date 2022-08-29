@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using AutoMapper;
 using Volo.Abp.Application.Dtos;
+using Volo.CmsKit.Contents;
+using Volo.CmsKit.Public.Blogs;
 using Volo.CmsKit.Users;
 
-namespace Volo.CmsKit.Public.Blogs;
+namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs;
 
-[Serializable]
-public class BlogPostPublicDto : AuditedEntityDto<Guid>
+[AutoMap(typeof(BlogPostPublicDto), ReverseMap = true)]
+public class BlogPostViewModel : AuditedEntityDto<Guid>
 {
     public Guid BlogId { get; set; }
 
@@ -16,6 +20,8 @@ public class BlogPostPublicDto : AuditedEntityDto<Guid>
     public string ShortDescription { get; set; }
 
     public string Content { get; set; }
+
+    public List<ContentFragment> ContentFragments { get; set; }
 
     public Guid? CoverImageMediaId { get; set; }
 
