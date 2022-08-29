@@ -1,3 +1,4 @@
+import { EXTENSIONS_FORM_PROP_DATA, EXTENSIONS_FORM_PROP } from './../../tokens/extensions.token';
 import { ABP, AbpValidators, ConfigStateService, TrackByService } from '@abp/ng.core';
 import {
   AfterViewInit,
@@ -5,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Injector,
   Input,
   OnChanges,
   Optional,
@@ -54,6 +56,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
+  public injectorForCustomComponent: Injector;
+
   asterisk = '';
 
   options$: Observable<ABP.Option<any>[]> = of([]);
@@ -62,15 +66,15 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   readonly!: boolean;
 
-  disabledFn = (data:PropData) => false;
-  
-  get disabled() {
-      return this.disabledFn(this.data)
-  }
+  typeaheadModel: any;
 
   private readonly form: FormGroup;
 
-  typeaheadModel: any;
+  disabledFn = (data: PropData) => false;
+
+  get disabled() {
+    return this.disabledFn(this.data);
+  }
 
   setTypeaheadValue(selectedOption: ABP.Option<string>) {
     this.typeaheadModel = selectedOption || { key: null, value: null };
@@ -108,6 +112,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     public readonly track: TrackByService,
     protected configState: ConfigStateService,
     groupDirective: FormGroupDirective,
+    private injector: Injector,
   ) {
     this.form = groupDirective.form;
   }
@@ -133,6 +138,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   }
 
   getComponent(prop: FormProp): string {
+    if (prop.template) {
+      return 'template';
+    }
     switch (prop.type) {
       case ePropType.Boolean:
         return 'checkbox';
@@ -173,13 +181,29 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  ngOnChanges({ prop }: SimpleChanges) {
-    const currentProp = prop?.currentValue;
-    const { options, readonly, disabled, validators } = currentProp || {};
+  ngOnChanges({ prop, data }: SimpleChanges) {
+    const currentProp = prop?.currentValue as FormProp;
+    const { options, readonly, disabled, validators, template } = currentProp || {};
+    if (template) {
+      this.injectorForCustomComponent = Injector.create({
+        providers: [
+          {
+            provide: EXTENSIONS_FORM_PROP,
+            useValue: currentProp,
+          },
+          {
+            provide: EXTENSIONS_FORM_PROP_DATA,
+            useValue: (data?.currentValue as PropData)?.record,
+          },
+          { provide: ControlContainer, useExisting: FormGroupDirective },
+        ],
+        parent: this.injector,
+      });
+    }
 
     if (options) this.options$ = options(this.data);
     if (readonly) this.readonly = readonly(this.data);
-     
+
     if (disabled) {
       this.disabledFn = disabled;
     }
@@ -195,5 +219,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 }
 
 function isRequired(validator: ValidatorFn) {
-  return validator === Validators.required || validator === AbpValidators.required;
+  return (
+    validator === Validators.required ||
+    validator === AbpValidators.required ||
+    validator.name === 'required'
+  );
 }
