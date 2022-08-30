@@ -56,6 +56,20 @@ public class RemoteLocalizationContributor : ILocalizationResourceContributor
         }
     }
 
+    public async Task FillAsync(string cultureName, Dictionary<string, LocalizedString> dictionary)
+    {
+        var resource = await GetResourceOrNullAsync();
+        if (resource == null)
+        {
+            return;
+        }
+
+        foreach (var keyValue in resource)
+        {
+            dictionary[keyValue.Key] = new LocalizedString(keyValue.Key, keyValue.Value);
+        }
+    }
+
     public Task<IEnumerable<string>> GetSupportedCulturesAsync()
     {
         /* This contributor does not know all the supported cultures by the
@@ -66,6 +80,22 @@ public class RemoteLocalizationContributor : ILocalizationResourceContributor
     private Dictionary<string, string> GetResourceOrNull()
     {
         var applicationConfigurationDto = _applicationConfigurationClient.Get();
+
+        var resource = applicationConfigurationDto
+            .Localization.Values
+            .GetOrDefault(_resource.ResourceName);
+
+        if (resource == null)
+        {
+            _logger.LogWarning($"Could not find the localization resource {_resource.ResourceName} on the remote server!");
+        }
+
+        return resource;
+    }
+    
+    private async Task<Dictionary<string, string>> GetResourceOrNullAsync()
+    {
+        var applicationConfigurationDto = await _applicationConfigurationClient.GetAsync();
 
         var resource = applicationConfigurationDto
             .Localization.Values

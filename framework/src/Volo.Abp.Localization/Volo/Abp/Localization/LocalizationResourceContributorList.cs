@@ -44,6 +44,22 @@ public class LocalizationResourceContributorList : List<ILocalizationResourceCon
             contributor.Fill(cultureName, dictionary);
         }
     }
+    
+    public async Task FillAsync(
+        string cultureName, 
+        Dictionary<string, LocalizedString> dictionary,
+        bool includeDynamicContributors = true)
+    {
+        foreach (var contributor in this)
+        {
+            if (!includeDynamicContributors && contributor.IsDynamic)
+            {
+                continue;
+            }
+            
+            await contributor.FillAsync(cultureName, dictionary);
+        }
+    }
 
     internal async Task<IEnumerable<string>> GetSupportedCulturesAsync()
     {

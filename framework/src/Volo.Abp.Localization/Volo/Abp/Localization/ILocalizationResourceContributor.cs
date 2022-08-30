@@ -13,6 +13,8 @@ public interface ILocalizationResourceContributor
     LocalizedString GetOrNull(string cultureName, string name);
 
     void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary);
-    
+
+    Task FillAsync(string cultureName, Dictionary<string, LocalizedString> dictionary);
+
     Task<IEnumerable<string>> GetSupportedCulturesAsync();
 }

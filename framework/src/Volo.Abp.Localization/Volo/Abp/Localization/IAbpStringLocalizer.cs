@@ -12,5 +12,15 @@ public interface IAbpStringLocalizer : IStringLocalizer
         bool includeDynamicContributors
     );
 
+    Task<IEnumerable<LocalizedString>> GetAllStringsAsync(
+        bool includeParentCultures
+    );
+    
+    Task<IEnumerable<LocalizedString>> GetAllStringsAsync(
+        bool includeParentCultures,
+        bool includeBaseLocalizers,
+        bool includeDynamicContributors
+    );
+
     Task<IEnumerable<string>> GetSupportedCulturesAsync();
 }

@@ -40,6 +40,12 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
         GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
     }
 
+    public Task FillAsync(string cultureName, Dictionary<string, LocalizedString> dictionary)
+    {
+        Fill(cultureName, dictionary);
+        return Task.CompletedTask;
+    }
+
     public Task<IEnumerable<string>> GetSupportedCulturesAsync()
     {
         return Task.FromResult((IEnumerable<string>)GetDictionaries().Keys);
