@@ -18,7 +18,6 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
     protected IExternalLocalizationStore ExternalLocalizationStore { get; }
     protected ConcurrentDictionary<string, StringLocalizerCacheItem> LocalizerCache { get; }
 
-    //TODO: It's better to use decorator pattern for IStringLocalizerFactory instead of getting ResourceManagerStringLocalizerFactory as a dependency.
     public AbpStringLocalizerFactory(
         ResourceManagerStringLocalizerFactory innerFactory,
         IOptions<AbpLocalizationOptions> abpLocalizationOptions,
@@ -108,8 +107,6 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
 
     public virtual IStringLocalizer Create(string baseName, string location)
     {
-        //TODO: Investigate when this is called?
-
         return InnerFactory.Create(baseName, location);
     }
 
