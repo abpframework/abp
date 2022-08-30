@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -29,14 +30,6 @@ public class AbpLocalizationScriptController
     [Route("{culture}")]
     public async Task GetAsync(string culture)
     {
-        // TODO: Should not get dynamic overloads, but how? What if we do? (Can be switched to host?)
-        using (CultureHelper.Use(culture))
-        {
-            foreach (var resource in LocalizationOptions.Resources.Values)
-            {
-                var localizer = StringLocalizerFactory.CreateByResourceNameOrNull(resource.ResourceName);
-                localizer?.GetAllStrings();
-            }
-        }
+        throw new NotImplementedException();
     }
 }
