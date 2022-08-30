@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization;
@@ -44,8 +45,15 @@ public class LocalizationResourceContributorList : List<ILocalizationResourceCon
         }
     }
 
-    internal IEnumerable<string> GetSupportedCultures()
+    internal async Task<IEnumerable<string>> GetSupportedCulturesAsync()
     {
-        return this.SelectMany(c => c.GetSupportedCultures()).Distinct();
+        var cultures = new List<string>();
+
+        foreach (var contributor in this)
+        {
+            cultures.AddRange(await contributor.GetSupportedCulturesAsync());
+        }
+
+        return cultures;
     }
 }

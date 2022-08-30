@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Resources;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization;
@@ -51,9 +52,9 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
         );
     }
 
-    public IEnumerable<string> GetSupportedCultures()
+    public Task<IEnumerable<string>> GetSupportedCulturesAsync()
     {
-        return Resource.Contributors.GetSupportedCultures();
+        return Resource.Contributors.GetSupportedCulturesAsync();
     }
 
     protected virtual LocalizedString GetLocalizedStringFormatted(string name, params object[] arguments)
@@ -224,9 +225,9 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
             return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures, includeBaseLocalizers, includeDynamicContributors);
         }
 
-        public IEnumerable<string> GetSupportedCultures()
+        public Task<IEnumerable<string>> GetSupportedCulturesAsync()
         {
-            return _innerLocalizer.GetSupportedCultures();
+            return _innerLocalizer.GetSupportedCulturesAsync();
         }
     }
 }

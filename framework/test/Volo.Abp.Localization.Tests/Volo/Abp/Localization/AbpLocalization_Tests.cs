@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.Localization.TestResources.Source;
@@ -361,9 +362,9 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
     }
 
     [Fact]
-    public void Should_Get_Supported_Cultures()
+    public async Task Should_Get_Supported_Cultures()
     {
-        var cultures = _localizer.GetSupportedCultures();
+        var cultures = await _localizer.GetSupportedCulturesAsync();
         cultures.Count().ShouldBeGreaterThan(0);
     }
 }

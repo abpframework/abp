@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DynamicProxy;
@@ -58,12 +59,12 @@ public static class AbpStringLocalizerExtensions
         );
     }
 
-    public static IEnumerable<string> GetSupportedCultures(this IStringLocalizer localizer)
+    public static async Task<IEnumerable<string>> GetSupportedCulturesAsync(this IStringLocalizer localizer)
     {
         var internalLocalizer = ((IStringLocalizer)ProxyHelper.UnProxy(localizer)).GetInternalLocalizer();
         if (internalLocalizer is IAbpStringLocalizer abpStringLocalizer)
         {
-            return abpStringLocalizer.GetSupportedCultures();
+            return await abpStringLocalizer.GetSupportedCulturesAsync();
         }
 
         return Array.Empty<string>();

@@ -32,9 +32,4 @@ public abstract class LocalizationResourceBase
             Contributors.Add(initialContributor);
         }
     }
-
-    internal IEnumerable<string> GetSupportedCultures()
-    {
-        return Contributors.GetSupportedCultures();
-    }
 }

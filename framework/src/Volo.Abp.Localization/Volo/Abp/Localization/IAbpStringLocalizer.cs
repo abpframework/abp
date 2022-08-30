@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization;
@@ -11,5 +12,5 @@ public interface IAbpStringLocalizer : IStringLocalizer
         bool includeDynamicContributors
     );
 
-    IEnumerable<string> GetSupportedCultures();
+    Task<IEnumerable<string>> GetSupportedCulturesAsync();
 }

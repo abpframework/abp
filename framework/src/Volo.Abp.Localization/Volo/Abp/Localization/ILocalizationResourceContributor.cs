@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization;
@@ -13,5 +14,5 @@ public interface ILocalizationResourceContributor
 
     void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary);
     
-    IEnumerable<string> GetSupportedCultures();
+    Task<IEnumerable<string>> GetSupportedCulturesAsync();
 }

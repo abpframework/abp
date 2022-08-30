@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
@@ -39,9 +40,9 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
         GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
     }
 
-    public IEnumerable<string> GetSupportedCultures()
+    public Task<IEnumerable<string>> GetSupportedCulturesAsync()
     {
-        return GetDictionaries().Keys;
+        return Task.FromResult((IEnumerable<string>)GetDictionaries().Keys);
     }
 
     private Dictionary<string, ILocalizationDictionary> GetDictionaries()
