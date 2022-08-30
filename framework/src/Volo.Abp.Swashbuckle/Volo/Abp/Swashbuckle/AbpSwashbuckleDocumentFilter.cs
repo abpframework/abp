@@ -9,6 +9,7 @@ namespace Volo.Abp.Swashbuckle;
 public class AbpSwashbuckleDocumentFilter : IDocumentFilter
 {
     protected string[] ActionUrlPrefixes = new[] {"Volo."};
+    protected string[] SchemaNamespaces = new[] {"Volo."};
     
     public virtual void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
     {
@@ -24,5 +25,7 @@ public class AbpSwashbuckleDocumentFilter : IDocumentFilter
         swaggerDoc
             .Paths
             .RemoveAll(path => !actionUrls.Contains(path.Key));
+
+        swaggerDoc.Components.Schemas.RemoveAll(schema => SchemaNamespaces.Any(s => schema.Key.StartsWith(s)));
     }
 }
