@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization;
 
-public class LocalizableString : ILocalizableString
+public class LocalizableString : ILocalizableString, IAsyncLocalizableString
 {
     [CanBeNull]
     public string ResourceName { get; }
@@ -54,6 +55,29 @@ public class LocalizableString : ILocalizableString
 
         return result;
     }
+    
+    public async Task<LocalizedString> LocalizeAsync(IStringLocalizerFactory stringLocalizerFactory)
+    {
+        var localizer = await CreateStringLocalizerOrNullAsync(stringLocalizerFactory);
+        if (localizer == null)
+        {
+            throw new AbpException($"Set {nameof(ResourceName)} or configure the default localization resource type (in the AbpLocalizationOptions)!");
+        }
+        
+        var result = localizer[Name];
+        
+        if (result.ResourceNotFound && ResourceName != null)
+        {
+            /* Search in the default resource if not found in the provided resource */
+            localizer = stringLocalizerFactory.CreateDefaultOrNull();
+            if (localizer != null)
+            {
+                result = localizer[Name];
+            }
+        }
+
+        return result;
+    }
 
     private IStringLocalizer CreateStringLocalizerOrNull(IStringLocalizerFactory stringLocalizerFactory)
     {
@@ -65,6 +89,25 @@ public class LocalizableString : ILocalizableString
         if (ResourceName != null)
         {
             var localizerByName = stringLocalizerFactory.CreateByResourceNameOrNull(ResourceName);
+            if (localizerByName != null)
+            {
+                return localizerByName;
+            }
+        }
+
+        return stringLocalizerFactory.CreateDefaultOrNull();
+    }
+    
+    private async Task<IStringLocalizer> CreateStringLocalizerOrNullAsync(IStringLocalizerFactory stringLocalizerFactory)
+    {
+        if (ResourceType != null)
+        {
+            return stringLocalizerFactory.Create(ResourceType);
+        }
+        
+        if (ResourceName != null)
+        {
+            var localizerByName = await stringLocalizerFactory.CreateByResourceNameOrNullAsync(ResourceName);
             if (localizerByName != null)
             {
                 return localizerByName;

@@ -8,5 +8,8 @@ public interface IExternalLocalizationStore
     [CanBeNull] 
     LocalizationResourceBase GetResourceOrNull([NotNull] string resourceName);
     
+    [ItemCanBeNull] 
+    Task<LocalizationResourceBase> GetResourceOrNullAsync([NotNull] string resourceName);
+    
     Task<string[]> GetResourceNamesAsync();
 }

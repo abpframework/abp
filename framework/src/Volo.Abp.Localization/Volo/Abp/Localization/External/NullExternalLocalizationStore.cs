@@ -11,6 +11,11 @@ public class NullExternalLocalizationStore : IExternalLocalizationStore, ISingle
         return null;
     }
 
+    public Task<LocalizationResourceBase> GetResourceOrNullAsync(string resourceName)
+    {
+        return Task.FromResult<LocalizationResourceBase>(null);
+    }
+
     public Task<string[]> GetResourceNamesAsync()
     {
         return Task.FromResult(Array.Empty<string>());

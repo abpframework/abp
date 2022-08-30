@@ -229,7 +229,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         {
             var dictionary = new Dictionary<string, string>();
             
-            var localizer = StringLocalizerFactory.CreateByResourceNameOrNull(resourceName);
+            var localizer = await StringLocalizerFactory.CreateByResourceNameOrNullAsync(resourceName);
             if (localizer != null)
             {
                 foreach (var localizedString in await localizer.GetAllStringsAsync())
