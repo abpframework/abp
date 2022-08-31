@@ -3,8 +3,32 @@ $(function () {
     var service = window.volo.docs.admin.documentsAdmin;
 
     var getFormattedDate = function ($datePicker) {
-        return $datePicker.data().datepicker.getFormattedDate('yyyy-mm-dd');
+        var date = moment($datePicker.val());
+        if (!date.isValid()) {
+            return null;
+        }
+        return date.toISOString();
     };
+
+    $('.daterangesinglepicker').daterangepicker({
+        "singleDatePicker": true,
+        "showDropdowns": true,
+        "autoUpdateInput": false,
+        "autoApply": true,
+        "opens": "center",
+        "drops": "auto"
+    });
+
+
+    $('.daterangesinglepicker').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('l'));
+    });
+    $('.daterangesinglepicker').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
+    $('.daterangesinglepicker').on('hide.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
 
     var getFilter = function () {
         return {
