@@ -61,7 +61,7 @@ public class AbpApplicationLocalizationAppService :
                 localizationConfig.Resources[resource.ResourceName] =
                     new ApplicationLocalizationResourceDto {
                         Texts = dictionary,
-                        BaseResources = resource.BaseResourceNames
+                        BaseResources = resource.BaseResourceNames.ToArray()
                     };
             }
 
