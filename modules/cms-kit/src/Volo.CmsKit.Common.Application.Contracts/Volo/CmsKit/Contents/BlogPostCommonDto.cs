@@ -5,7 +5,7 @@ using Volo.CmsKit.Users;
 namespace Volo.CmsKit.Contents;
 
 [Serializable]
-public class BlogPostCommonDto : AuditedEntityDto<Guid>, IContent
+public class BlogPostCommonDto : AuditedEntityDto<Guid>
 {
     public Guid BlogId { get; set; }
 
