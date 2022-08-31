@@ -5,27 +5,39 @@
 @using Volo.Abp.Data
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-
+@using Volo.CmsKit.Web.Renderers
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages.IndexModel
+
+@inject IMarkdownToHtmlRenderer MarkdownRenderer
 
 @section styles{
     
     <abp-style src="/Pages/Public/CmsKit/Pages/index.css" />
 
     <style>
-        @Html.Raw(Model.PageDto.Style)
+        @Html.Raw(Model.ViewModel.Style)
     </style>
 }
 
 @section scripts{
     <script>
-        @Html.Raw(Model.PageDto.Script)
+        @Html.Raw(Model.ViewModel.Script)
     </script>
 }
 
 <abp-card>
     <abp-card-body>
-        @await Component.InvokeAsync("ContentFragment", new { contentDto = Model.PageDto })
+        @foreach (ContentFragment contentFragment in Model.ViewModel.ContentFragments)
+        {
+            if (contentFragment.Type == ContentConsts.Markdown)
+            {
+                @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content"), allowHtmlTags: true, preventXSS: true))
+            }
+            else if (contentFragment.Type == ContentConsts.Widget)
+            {
+                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
+            }
+        }
     </abp-card-body>
 </abp-card>
 
