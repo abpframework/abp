@@ -118,7 +118,10 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
         return value;
     }
 
-    protected virtual LocalizedString GetLocalizedStringOrNull(string name, string cultureName, bool tryDefaults = true)
+    protected virtual LocalizedString GetLocalizedStringOrNull(
+        string name,
+        string cultureName,
+        bool tryDefaults = true)
     {
         //Try to get from original dictionary (with country code)
         var strOriginal = Resource.Contributors.GetOrNull(cultureName, name);

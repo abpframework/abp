@@ -43,7 +43,6 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     private readonly ITimezoneProvider _timezoneProvider;
     private readonly AbpClockOptions _abpClockOptions;
     private readonly ICachedObjectExtensionsDtoService _cachedObjectExtensionsDtoService;
-    private readonly AbpExternalLocalizationOptions _externalLocalizationOptions;
     private readonly AbpApplicationConfigurationOptions _options;
 
     public AbpApplicationConfigurationAppService(
@@ -63,8 +62,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         ITimezoneProvider timezoneProvider,
         IOptions<AbpClockOptions> abpClockOptions,
         ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService,
-        IOptions<AbpApplicationConfigurationOptions> options,
-        IOptions<AbpExternalLocalizationOptions> distributedLocalizationOptions)
+        IOptions<AbpApplicationConfigurationOptions> options)
     {
         _serviceProvider = serviceProvider;
         _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
@@ -80,13 +78,12 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         _timezoneProvider = timezoneProvider;
         _abpClockOptions = abpClockOptions.Value;
         _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
-        _externalLocalizationOptions = distributedLocalizationOptions.Value;
         _options = options.Value;
         _localizationOptions = localizationOptions.Value;
         _multiTenancyOptions = multiTenancyOptions.Value;
     }
 
-    public virtual async Task<ApplicationConfigurationDto> GetAsync()
+    public virtual async Task<ApplicationConfigurationDto> GetAsync(ApplicationConfigurationRequestOptions options)
     {
         //TODO: Optimize & cache..?
 
@@ -97,7 +94,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             Auth = await GetAuthConfigAsync(),
             Features = await GetFeaturesConfigAsync(),
             GlobalFeatures = await GetGlobalFeaturesConfigAsync(),
-            Localization = await GetLocalizationConfigAsync(),
+            Localization = await GetLocalizationConfigAsync(options),
             CurrentUser = GetCurrentUser(),
             Setting = await GetSettingConfigAsync(),
             MultiTenancy = GetMultiTenancy(),
@@ -209,36 +206,42 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         return authConfig;
     }
 
-    protected virtual async Task<ApplicationLocalizationConfigurationDto> GetLocalizationConfigAsync()
+    protected virtual async Task<ApplicationLocalizationConfigurationDto> GetLocalizationConfigAsync(
+        ApplicationConfigurationRequestOptions options)
     {
         var localizationConfig = new ApplicationLocalizationConfigurationDto();
 
         localizationConfig.Languages.AddRange(await _languageProvider.GetLanguagesAsync());
 
-        var externalResourceNames = await LazyServiceProvider
-            .LazyGetRequiredService<IExternalLocalizationStore>()
-            .GetResourceNamesAsync();
-        
-        var resourceNames = _localizationOptions
-            .Resources
-            .Values
-            .Select(x => x.ResourceName)
-            .Union(externalResourceNames);
-
-        foreach (var resourceName in resourceNames)
+        if (options.IncludeLocalizationResources)
         {
-            var dictionary = new Dictionary<string, string>();
-            
-            var localizer = await StringLocalizerFactory.CreateByResourceNameOrNullAsync(resourceName);
-            if (localizer != null)
-            {
-                foreach (var localizedString in await localizer.GetAllStringsAsync())
-                {
-                    dictionary[localizedString.Name] = localizedString.Value;
-                }
-            }
+            var resourceNames = _localizationOptions
+                .Resources
+                .Values
+                .Select(x => x.ResourceName)
+                .Union(
+                    await LazyServiceProvider
+                        .LazyGetRequiredService<IExternalLocalizationStore>()
+                        .GetResourceNamesAsync()
+                );
 
-            localizationConfig.Values[resourceName] = dictionary;
+            foreach (var resourceName in resourceNames)
+            {
+                var dictionary = new Dictionary<string, string>();
+            
+                var localizer = await StringLocalizerFactory
+                    .CreateByResourceNameOrNullAsync(resourceName);
+            
+                if (localizer != null)
+                {
+                    foreach (var localizedString in await localizer.GetAllStringsAsync())
+                    {
+                        dictionary[localizedString.Name] = localizedString.Value;
+                    }
+                }
+
+                localizationConfig.Values[resourceName] = dictionary;
+            }
         }
 
         localizationConfig.CurrentCulture = GetCurrentCultureInfo();

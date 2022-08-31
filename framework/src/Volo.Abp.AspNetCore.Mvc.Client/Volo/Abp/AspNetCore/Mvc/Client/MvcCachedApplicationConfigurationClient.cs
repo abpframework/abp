@@ -48,7 +48,11 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
 
         configuration = await Cache.GetOrAddAsync(
             cacheKey,
-            async () => await ApplicationConfigurationAppService.GetAsync(),
+            async () => await ApplicationConfigurationAppService.GetAsync(
+                new ApplicationConfigurationRequestOptions
+                {
+                    IncludeLocalizationResources = false
+                }),
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(300) //TODO: Should be configurable.
