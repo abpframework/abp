@@ -23,34 +23,34 @@ namespace Volo.Docs
         [Fact]
         public async Task PullAsync()
         {
-            (await _documentRepository.FindAsync(_testData.PorjectId, "Part-I.md", "en", "1.0.0")).ShouldBeNull();
+            (await _documentRepository.FindAsync(_testData.ProjectId, "Part-I.md", "en", "1.0.0")).ShouldBeNull();
 
             await _documentAdminAppService.PullAsync(new PullDocumentInput
             {
-                ProjectId = _testData.PorjectId,
+                ProjectId = _testData.ProjectId,
                 Name = "Part-I.md",
                 LanguageCode = "en",
                 Version = "1.0.0"
             });
 
-            (await _documentRepository.FindAsync(_testData.PorjectId, "Part-I.md", "en", "1.0.0")).ShouldNotBeNull();
+            (await _documentRepository.FindAsync(_testData.ProjectId, "Part-I.md", "en", "1.0.0")).ShouldNotBeNull();
         }
 
         [Fact]
         public async Task PullAllAsync()
         {
-            (await _documentRepository.FindAsync(_testData.PorjectId, "Part-I.md", "en", "1.0.0")).ShouldBeNull();
-            (await _documentRepository.FindAsync(_testData.PorjectId, "Part-II.md", "en", "1.0.0")).ShouldBeNull();
+            (await _documentRepository.FindAsync(_testData.ProjectId, "Part-I.md", "en", "1.0.0")).ShouldBeNull();
+            (await _documentRepository.FindAsync(_testData.ProjectId, "Part-II.md", "en", "1.0.0")).ShouldBeNull();
 
             await _documentAdminAppService.PullAllAsync(new PullAllDocumentInput
             {
-                ProjectId = _testData.PorjectId,
+                ProjectId = _testData.ProjectId,
                 LanguageCode = "en",
                 Version = "1.0.0"
             });
 
-            (await _documentRepository.FindAsync(_testData.PorjectId, "Part-I.md", "en", "1.0.0")).ShouldNotBeNull();
-            (await _documentRepository.FindAsync(_testData.PorjectId, "Part-II.md", "en", "1.0.0")).ShouldNotBeNull();
+            (await _documentRepository.FindAsync(_testData.ProjectId, "Part-I.md", "en", "1.0.0")).ShouldNotBeNull();
+            (await _documentRepository.FindAsync(_testData.ProjectId, "Part-II.md", "en", "1.0.0")).ShouldNotBeNull();
         }
 
         [Fact]
