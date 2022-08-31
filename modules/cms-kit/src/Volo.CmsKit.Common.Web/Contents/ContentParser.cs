@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.CmsKit.Contents;
 using static Volo.CmsKit.Contents.ContentConsts;
 
-namespace Volo.CmsKit.Contents;
+namespace Volo.CmsKit.Web.Contents;
 
 public class ContentParser : ITransientDependency
 {
@@ -28,10 +29,10 @@ public class ContentParser : ITransientDependency
             });
         }
 
-        var parsedList = new List<string>();
+        List<string> parsedList = new();
         ParseContent(content, parsedList);
 
-        var contentFragments = new List<ContentFragment>();
+        List<ContentFragment> contentFragments = new();
         FillContentFragment(content, parsedList, contentFragments);
 
         return Task.FromResult(contentFragments);

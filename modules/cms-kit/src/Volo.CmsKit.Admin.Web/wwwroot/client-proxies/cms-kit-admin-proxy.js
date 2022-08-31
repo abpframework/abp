@@ -247,21 +247,6 @@
 
   })();
 
-  // controller volo.cmsKit.admin.contents.contentAdmin
-
-  (function(){
-
-    abp.utils.createNamespace(window, 'volo.cmsKit.admin.contents.contentAdmin');
-
-    volo.cmsKit.admin.contents.contentAdmin.getWidgets = function(ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/contents',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-  })();
-
   // controller volo.cmsKit.admin.comments.commentAdmin
 
   (function(){

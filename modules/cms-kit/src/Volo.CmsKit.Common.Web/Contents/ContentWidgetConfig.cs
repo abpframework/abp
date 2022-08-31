@@ -1,4 +1,4 @@
-﻿namespace Volo.CmsKit.Contents;
+﻿namespace Volo.CmsKit.Web.Contents;
 
 public class ContentWidgetConfig
 {

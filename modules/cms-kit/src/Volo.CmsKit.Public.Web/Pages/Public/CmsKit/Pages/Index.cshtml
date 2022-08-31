@@ -18,19 +18,19 @@
     <abp-style src="/Pages/Public/CmsKit/Pages/index.css" />
 
     <style>
-        @Html.Raw(Model.PageDto.Style)
+        @Html.Raw(Model.ViewModel.Style)
     </style>
 }
 
 @section scripts{
     <script>
-        @Html.Raw(Model.PageDto.Script)
+        @Html.Raw(Model.ViewModel.Script)
     </script>
 }
 
 <abp-card>
     <abp-card-body>
-        @foreach (ContentFragment contentFragment in Model.PageDto.ContentFragments)
+        @foreach (ContentFragment contentFragment in Model.ViewModel.ContentFragments)
         {
             if (contentFragment.Type == ContentConsts.Markdown)
             {
@@ -40,7 +40,6 @@
             {
                 @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
             }
-            
         }
     </abp-card-body>
 </abp-card>
