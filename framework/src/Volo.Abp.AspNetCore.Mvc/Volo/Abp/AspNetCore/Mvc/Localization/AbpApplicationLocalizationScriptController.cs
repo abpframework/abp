@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -6,7 +7,9 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.Auditing;
 using Volo.Abp.Http;
+using Volo.Abp.Json;
 using Volo.Abp.Localization;
+using Volo.Abp.Minify.Scripts;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization;
 
@@ -17,19 +20,51 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AbpApplicationLocalizationScriptController : AbpController
 {
-   protected IAbpApplicationLocalizationAppService LocalizationAppService { get; }
+    protected IAbpApplicationLocalizationAppService LocalizationAppService { get; }
+    protected AbpAspNetCoreMvcOptions Options { get; }
+    protected IJsonSerializer JsonSerializer { get; }
+    protected IJavascriptMinifier JavascriptMinifier { get; }
 
     public AbpApplicationLocalizationScriptController(
-        IAbpApplicationLocalizationAppService localizationAppService)
+        IAbpApplicationLocalizationAppService localizationAppService,
+        IOptions<AbpAspNetCoreMvcOptions> options,
+        IJsonSerializer jsonSerializer,
+        IJavascriptMinifier javascriptMinifier)
     {
         LocalizationAppService = localizationAppService;
+        JsonSerializer = jsonSerializer;
+        JavascriptMinifier = javascriptMinifier;
+        Options = options.Value;
     }
-    
+
     [HttpGet]
     [Route("{culture}")]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
-    public async Task GetAsync(string culture)
+    public async Task<ActionResult> GetAsync(string culture)
     {
-        throw new NotImplementedException();
+        var script = CreateScript(
+            await LocalizationAppService.GetAsync(culture)
+        );
+
+        return Content(
+            Options.MinifyGeneratedScript == true
+                ? JavascriptMinifier.Minify(script)
+                : script,
+            MimeTypes.Application.Javascript
+        );
+    }
+
+    private string CreateScript(ApplicationLocalizationDto localizationDto)
+    {
+        var script = new StringBuilder();
+
+        script.AppendLine("(function(){");
+        script.AppendLine();
+        script.AppendLine(
+            $"$.extend(true, abp.localization, {JsonSerializer.Serialize(localizationDto, indented: true)})");
+        script.AppendLine();
+        script.Append("})();");
+
+        return script.ToString();
     }
 }

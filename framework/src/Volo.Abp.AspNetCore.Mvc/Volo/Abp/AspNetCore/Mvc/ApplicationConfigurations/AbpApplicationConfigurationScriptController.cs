@@ -41,11 +41,13 @@ public class AbpApplicationConfigurationScriptController : AbpController
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
     public async Task<ActionResult> Get()
     {
-        var script = CreateAbpExtendScript(await _configurationAppService.GetAsync(
-            new ApplicationConfigurationRequestOptions {
-                IncludeLocalizationResources = false
-            }
-        ));
+        var script = CreateAbpExtendScript(
+            await _configurationAppService.GetAsync(
+                new ApplicationConfigurationRequestOptions {
+                    IncludeLocalizationResources = false
+                }
+            )
+        );
 
         _antiForgeryManager.SetCookie();
 

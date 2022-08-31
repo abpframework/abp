@@ -48,8 +48,8 @@ public class AbpApplicationLocalizationAppService :
                 {
                     var localizedStrings = await localizer.GetAllStringsAsync(
                         includeParentCultures: true,
-                        includeBaseLocalizers: true, //TODO: Test this!
-                        includeDynamicContributors: false
+                        includeBaseLocalizers: false,
+                        includeDynamicContributors: true
                     );
 
                     foreach (var localizedString in localizedStrings)

@@ -27,7 +27,11 @@ public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicatio
 
     public virtual async Task InitializeAsync()
     {
-        var configurationDto = await ApplicationConfigurationAppService.GetAsync();
+        var configurationDto = await ApplicationConfigurationAppService.GetAsync(
+            new ApplicationConfigurationRequestOptions {
+                IncludeLocalizationResources = false
+            }
+        );
 
         Cache.Set(configurationDto);
 
