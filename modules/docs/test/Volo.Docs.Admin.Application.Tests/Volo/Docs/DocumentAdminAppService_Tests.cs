@@ -59,9 +59,9 @@ namespace Volo.Docs
             var filterItems = await _documentAdminAppService.GetFilterItemsAsync();
             filterItems.ShouldNotBeEmpty();
 
-            filterItems.ShouldContain(p => p.ProjectId == _testData.PorjectId);
-            filterItems.ShouldContain(p => p.Version == "2.0.0" && p.ProjectId == _testData.PorjectId);
-            filterItems.ShouldContain(p => p.LanguageCode == "en" && p.ProjectId == _testData.PorjectId);
+            filterItems.ShouldContain(p => p.ProjectId == _testData.ProjectId);
+            filterItems.ShouldContain(p => p.Version == "2.0.0" && p.ProjectId == _testData.ProjectId);
+            filterItems.ShouldContain(p => p.LanguageCode == "en" && p.ProjectId == _testData.ProjectId);
             filterItems.ShouldContain(p => p.Format == "md");
             
         }
