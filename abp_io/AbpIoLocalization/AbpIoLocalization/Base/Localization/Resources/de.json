@@ -2,7 +2,7 @@
   "culture": "de",
   "texts": {
     "Volo.AbpIo.Domain:010004": "Maximale Mitgliederanzahl erreicht!",
-    "Volo.AbpIo.Domain:010005": "Miximale Besizeranzahl erreicht!",
+    "Volo.AbpIo.Domain:010005": "Maximale Besitzeranzahl erreicht!",
     "Volo.AbpIo.Domain:010006": "Dieser Benutzer ist bereits ein Besitzer in dieser Organisation!",
     "Volo.AbpIo.Domain:010007": "Dieser Benutzer ist bereits ein Entwickler in dieser Organisation!",
     "Volo.AbpIo.Domain:010008": "Die zulässige Entwickleranzahl darf nicht geringer sein als die aktuelle Entwickleranzahl!",
