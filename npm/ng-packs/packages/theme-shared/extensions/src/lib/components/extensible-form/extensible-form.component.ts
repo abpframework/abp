@@ -10,7 +10,7 @@ import {
   SkipSelf,
   ViewChildren,
 } from '@angular/core';
-import { ControlContainer, FormGroup } from '@angular/forms';
+import { ControlContainer, UntypedFormGroup } from '@angular/forms';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
 import { FormPropList } from '../../models/form-props';
 import { ExtensionsService } from '../../services/extensions.service';
@@ -46,12 +46,12 @@ export class ExtensibleFormComponent<R = any> {
   propList!: FormPropList<R>;
   record!: R;
 
-  get form(): FormGroup {
-    return (this.container ? this.container.control : { controls: {} }) as FormGroup;
+  get form(): UntypedFormGroup {
+    return (this.container ? this.container.control : { controls: {} }) as UntypedFormGroup;
   }
 
-  get extraProperties(): FormGroup {
-    return (this.form.controls.extraProperties || { controls: {} }) as FormGroup;
+  get extraProperties(): UntypedFormGroup {
+    return (this.form.controls.extraProperties || { controls: {} }) as UntypedFormGroup;
   }
 
   constructor(

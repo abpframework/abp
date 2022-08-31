@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import {
   ControlContainer,
-  FormGroup,
+  UntypedFormGroup,
   FormGroupDirective,
   ValidatorFn,
   Validators,
@@ -68,7 +68,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   typeaheadModel: any;
 
-  private readonly form: FormGroup;
+  private readonly form: UntypedFormGroup;
 
   disabledFn = (data: PropData) => false;
 
