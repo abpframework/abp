@@ -215,15 +215,15 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         localizationConfig.Languages.AddRange(await _languageProvider.GetLanguagesAsync());
 
-        var resourceNames = _localizationOptions.Resources.Values.Select(x => x.ResourceName);
-
-        if (_externalLocalizationOptions.GetFromExternalStore)
-        {
-            var externalResourceNames = await LazyServiceProvider
-                .LazyGetRequiredService<IExternalLocalizationStore>()
-                .GetResourceNamesAsync();
-            resourceNames = resourceNames.Union(externalResourceNames);
-        }
+        var externalResourceNames = await LazyServiceProvider
+            .LazyGetRequiredService<IExternalLocalizationStore>()
+            .GetResourceNamesAsync();
+        
+        var resourceNames = _localizationOptions
+            .Resources
+            .Values
+            .Select(x => x.ResourceName)
+            .Union(externalResourceNames);
 
         foreach (var resourceName in resourceNames)
         {
