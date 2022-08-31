@@ -28,14 +28,16 @@ public class AbpApplicationLocalizationAppService :
     {
         using (CultureHelper.Use(culture))
         {
-            var localizationConfig = new ApplicationLocalizationDto();
-        
             var resources = LocalizationOptions
                 .Resources
                 .Values
                 .Union(
                     await ExternalLocalizationStore.GetResourcesAsync()
-                );
+                ).ToArray();
+
+            var localizationConfig = new ApplicationLocalizationDto {
+                Resources = new Dictionary<string, ApplicationLocalizationResourceDto>(resources.Length)
+            };
 
             foreach (var resource in resources)
             {
@@ -46,7 +48,7 @@ public class AbpApplicationLocalizationAppService :
                 {
                     var localizedStrings = await localizer.GetAllStringsAsync(
                         includeParentCultures: true,
-                        includeBaseLocalizers: false, //TODO: Test this!
+                        includeBaseLocalizers: true, //TODO: Test this!
                         includeDynamicContributors: false
                     );
 
