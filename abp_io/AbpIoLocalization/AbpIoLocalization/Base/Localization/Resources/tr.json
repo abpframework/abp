@@ -39,6 +39,8 @@
     "TrialLicensePeriodHasExpired": "Deneme lisansınızın süresi {0} gün önce sona erdi.",
     "TrialLicensePeriodWillExpire": "Deneme lisansınızın süresi {0} gün içinde dolacak.",
     "TrialLicensePeriodExpireToday": "Deneme lisans süreniz bugün sona erecek.",
-    "PurchaseNow": "Şimdi satın al!"
+    "PurchaseNow": "Şimdi satın al!",
+    "WelcomeFallCampaign": "Hoş Geldin Sonbahar Kampanyası!",
+    "GiveAwayForNewPurchases": "Yeni alımlar için Uygulama Geliştirme Sınıfı Eğitimi hediye edilecektir!"
   }
 }

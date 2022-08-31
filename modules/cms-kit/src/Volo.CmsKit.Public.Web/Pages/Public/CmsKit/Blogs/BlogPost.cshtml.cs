@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.ObjectMapping;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Public.Blogs;
 using Volo.CmsKit.Web.Contents;

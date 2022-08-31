@@ -171,7 +171,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         foreach (var policyName in policyNames)
         {
-            if (await _defaultAuthorizationPolicyProvider.GetPolicyAsync(policyName) == null && _permissionDefinitionManager.GetOrNull(policyName) != null)
+            if (await _defaultAuthorizationPolicyProvider.GetPolicyAsync(policyName) == null &&
+                await _permissionDefinitionManager.GetOrNullAsync(policyName) != null)
             {
                 abpPolicyNames.Add(policyName);
             }
@@ -214,9 +215,9 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         {
             var dictionary = new Dictionary<string, string>();
 
-            var localizer = _serviceProvider.GetRequiredService(
+            var localizer = (IStringLocalizer) _serviceProvider.GetRequiredService(
                 typeof(IStringLocalizer<>).MakeGenericType(resource.ResourceType)
-            ) as IStringLocalizer;
+            );
 
             foreach (var localizedString in localizer.GetAllStrings())
             {
