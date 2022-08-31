@@ -9,5 +9,4 @@ namespace Volo.Abp.DistributedLocking;
     )]
 public class AbpDistributedLockingModule : AbpModule
 {
-
 }

@@ -6,6 +6,106 @@ $(function () {
         return $datePicker.data().datepicker.getFormattedDate('yyyy-mm-dd');
     };
 
+    var comboboxItems = [];
+    
+    service.getFilterItems()
+        .then(function (result) {
+            comboboxItems = result;
+            fillOptions();
+        }).catch(function (error) {
+        abp.message.error(error);
+    });
+
+
+    var $projectId = $('#ProjectId');
+
+    $projectId.on('change', function () {
+        fillOptions();
+    });
+    
+    var comboboxs = {
+        version: $('#Version'),
+        languageCode: $('#LanguageCode'),
+        format: $('#Format')
+    };
+    
+    for (var key in comboboxs) {
+        comboboxs[key].on('change', function () {
+            fillOptions();
+        });
+    }
+
+
+    var selectedItem = getSelectedItem();
+
+    function emptyComboboxs() {
+        for (var key in comboboxs) {
+            comboboxs[key].empty();
+        }
+    }
+    
+    function getSelectedItem() {
+        var item = {};
+        for (var key in comboboxs) {
+            item[key] = comboboxs[key].val();
+        }
+        return item;
+    }
+    
+    function SetComboboxsValues(item) {
+        for (var key in comboboxs) {
+            comboboxs[key].val(item[key]);
+        }
+    }
+    
+    function addComboboxsEmptyItem() {
+        for (var key in comboboxs) {
+            comboboxs[key].append($('<option/>').val('').text(''));
+        }
+    }
+
+    function fillOptions() {
+        
+        selectedItem = getSelectedItem();
+        
+        var selectedProjectId = $projectId.val();
+
+        emptyComboboxs();
+        
+        addComboboxsEmptyItem();
+
+        var selectedProjectItems = comboboxItems.filter((item) => !selectedProjectId || item.projectId === selectedProjectId);
+        
+        for (var key in selectedItem) {
+            var item = selectedProjectItems.find((item) => item[key] === selectedItem[key]);
+            if (item) {
+                selectedItem[key] = item[key];
+            }else {
+                selectedItem[key] = '';
+            }
+        }
+        
+
+        selectedProjectItems.forEach(function (item) {
+            for (var key in comboboxs) {
+                appendComboboxItem(comboboxs[key], item, key);
+            }
+        });
+        
+        SetComboboxsValues(selectedItem);
+    }
+    function appendComboboxItem($combobox, item , key) {
+        $.each(item, function (index, value) {
+            if(index !== key) {
+                if(selectedItem[index] && selectedItem[index] !== value) {
+                    return ;
+                }}
+        });
+        if($combobox.find('option[value="' + item[key] + '"]').length === 0){
+            $combobox.append($('<option/>').val(item[key]).text(item[key]));
+        }
+    }
+
     var getFilter = function () {
         return {
             projectId: $('#ProjectId').val(),
@@ -78,6 +178,10 @@ $(function () {
                             }
                         ],
                     },
+                },
+                {
+                    target: 0,
+                    data: 'projectName',
                 },
                 {
                     target: 1,

@@ -6,21 +6,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Web.Contents;
 
 namespace Volo.CmsKit.Web.Pages.CmsKit.Components.ContentPreview;
 
 public class ContentPreviewViewComponent : AbpViewComponent
 {
-    protected IContentAppService ContentAppService { get; }
+    protected ContentParser ContentParser { get; }
 
-    public ContentPreviewViewComponent(IContentAppService contentAppService)
+    public ContentPreviewViewComponent(ContentParser contentParser)
     {
-        ContentAppService = contentAppService;
+        ContentParser = contentParser;
     }
 
     public virtual async Task<IViewComponentResult> InvokeAsync(string content)
     {
-        var fragments = await ContentAppService.ParseAsync(content);
+        var fragments = await ContentParser.ParseAsync(content);
 
         return View("~/Pages/CmsKit/Components/ContentPreview/Default.cshtml", new DefaultContentDto
         {

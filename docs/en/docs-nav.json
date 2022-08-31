@@ -982,6 +982,10 @@
                   "path": "UI/Angular/Authorization.md"
                 },
                 {
+                  "text": "Current User",
+                  "path": "UI/Angular/Current-User.md"
+                },
+                {
                   "text": "HTTP Requests",
                   "path": "UI/Angular/HTTP-Requests.md"
                 },
@@ -1282,10 +1286,6 @@
         {
           "text": "Deploying to a Clustered Environment",
           "path": "Deployment/Clustered-Environment.md"
-        },
-        {
-          "text": "Deploy Abp Webapp to Azure App Service",
-          "path": "Deployment/Deploy-Azure-App-Service.md"
         }
       ]
     },

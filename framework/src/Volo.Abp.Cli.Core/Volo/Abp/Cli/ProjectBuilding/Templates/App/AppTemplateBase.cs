@@ -37,6 +37,7 @@ public abstract class AppTemplateBase : TemplateInfo
         ConfigureTieredArchitecture(context, steps);
         ConfigurePublicWebSite(context, steps);
         ConfigureTheme(context, steps);
+        ConfigureVersion(context, steps);
         RemoveUnnecessaryPorts(context, steps);
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
@@ -109,10 +110,7 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
         }
 
-        if (context.BuildArgs.DatabaseManagementSystem == DatabaseManagementSystem.PostgreSQL)
-        {
-            context.Symbols.Add("dbms:PostgreSQL");
-        }
+        context.Symbols.Add($"dbms:{context.BuildArgs.DatabaseManagementSystem}");
     }
 
     protected void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
@@ -490,6 +488,14 @@ public abstract class AppTemplateBase : TemplateInfo
     protected void RemoveUnnecessaryPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveUnnecessaryPortsStep());
+    }
+
+    protected void ConfigureVersion(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        if (context.BuildArgs.Version == null || SemanticVersion.Parse(context.BuildArgs.Version) >= SemanticVersion.Parse("6.0.0-rc.1"))
+        {
+            context.Symbols.Add("newer-than-6.0");
+        }
     }
 
     protected void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)

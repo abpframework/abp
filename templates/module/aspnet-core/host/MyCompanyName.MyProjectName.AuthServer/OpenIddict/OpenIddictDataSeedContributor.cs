@@ -250,6 +250,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
                     application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Revocation);
+                    application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Introspection);
                 }
 
                 if (grantType == OpenIddictConstants.GrantTypes.ClientCredentials)
@@ -270,6 +271,12 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 if (grantType == OpenIddictConstants.GrantTypes.RefreshToken)
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.RefreshToken);
+                }
+
+                if (grantType == OpenIddictConstants.GrantTypes.DeviceCode)
+                {
+                    application.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.DeviceCode);
+                    application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Device);
                 }
 
                 if (grantType == OpenIddictConstants.GrantTypes.Implicit)
