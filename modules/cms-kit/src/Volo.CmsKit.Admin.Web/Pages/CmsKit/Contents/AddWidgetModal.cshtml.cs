@@ -27,7 +27,7 @@ public class AddWidgetModal : AbpPageModel
         _options = options.Value;
     }
 
-    public async Task OnGetAsync()
+    public Task OnGetAsync()
     {
         var widgets = _options.WidgetConfigs
                 .Select(n =>
@@ -47,6 +47,8 @@ public class AddWidgetModal : AbpPageModel
         Widgets.AddRange(widgets
             .Select(w => new SelectListItem(w.Key, w.Details.Name))
             .ToList());
+
+        return Task.CompletedTask;
     }
 
     public class ContentViewModel

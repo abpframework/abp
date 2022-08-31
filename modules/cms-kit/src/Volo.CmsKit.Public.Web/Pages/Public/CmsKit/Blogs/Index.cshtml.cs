@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.Public.Blogs;
 using Volo.CmsKit.Users;
 
@@ -27,7 +25,7 @@ public class IndexModel : CmsKitPublicPageModelBase
     [BindProperty(SupportsGet = true)]
     public Guid? TagId { get; set; }
 
-    public PagedResultDto<BlogPostPublicDto> Blogs { get; private set; }
+    public PagedResultDto<BlogPostCommonDto> Blogs { get; private set; }
 
     public PagerModel PagerModel => new PagerModel(Blogs.TotalCount, Blogs.Items.Count, CurrentPage, PageSize, Request.Path.ToString());
 

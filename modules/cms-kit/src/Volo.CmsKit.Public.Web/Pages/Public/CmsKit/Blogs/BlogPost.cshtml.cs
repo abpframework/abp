@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.GlobalFeatures;
-using Volo.Abp.ObjectMapping;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Public.Blogs;
 using Volo.CmsKit.Web.Contents;
@@ -48,12 +48,12 @@ public class BlogPostModel : CmsKitPublicPageModelBase
     public virtual async Task<IActionResult> OnGetAsync()
     {
         var blogPostPublicDto = await BlogPostPublicAppService.GetAsync(BlogSlug, BlogPostSlug);
-        ViewModel = ObjectMapper.Map<BlogPostPublicDto, BlogPostViewModel>(blogPostPublicDto);
+        ViewModel = ObjectMapper.Map<BlogPostCommonDto, BlogPostViewModel>(blogPostPublicDto);
         if (ViewModel == null)
         {
             return NotFound();
         }
-        
+
         ViewModel.ContentFragments = await ContentParser.ParseAsync(blogPostPublicDto.Content);
 
         if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())

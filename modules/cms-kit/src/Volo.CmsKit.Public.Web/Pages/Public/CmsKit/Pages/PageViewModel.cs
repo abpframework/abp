@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Volo.CmsKit.Contents;
-using Volo.CmsKit.Public.Pages;
 
 namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages;
 
 [AutoMap(typeof(PageDto), ReverseMap = true)]
-public class PageViewModel
+public class PageViewModel : IContent
 {
     public Guid Id { get; set; }
 

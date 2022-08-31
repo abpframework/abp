@@ -9,15 +9,12 @@
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
-@using Volo.CmsKit.Public.Web.Renderers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
 @using Volo.CmsKit.Contents
 
 @inherits CmsKitPublicPageBase
 
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs.BlogPostModel
-
-@inject IMarkdownToHtmlRenderer MarkdownRenderer
 
 
 @{
@@ -32,13 +29,14 @@
             <abp-style src="/Pages/Public/CmsKit/Blogs/bootstrap-toc.css" />
         </abp-abp-style-bundle>
     }
+    
     <abp-abp-style-bundle>
         <abp-style src="/Pages/Public/CmsKit/Blogs/blogPost.css" />
         <abp-style type="typeof(HighlightJsStyleContributor)" />
     </abp-abp-style-bundle>
 }
 
-    @section scripts{
+@section scripts{
     @if (isScrollIndexEnabled)
     {
         <abp-script-bundle>
@@ -52,7 +50,6 @@
         <abp-script src="/Pages/Public/CmsKit/highlightOnLoad.js" />
     </abp-script-bundle>
 }
-
 
     <div class="row">
         <div @Html.Raw(isScrollIndexEnabled ? "class=\"col-md-10 col-sm-12\"" : "class=\"col-md-12\"")>
@@ -68,17 +65,7 @@
                                 </a>
                                 <small style="opacity:.65;">@Model.ViewModel.CreationTime</small>
                             </p>
-                            @foreach (var contentFragment in Model.ViewModel.ContentFragments)
-                            {
-                                if (contentFragment.Type == ContentConsts.Markdown)
-                                {
-                                    @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content"), allowHtmlTags: true, preventXSS: true))
-                                }
-                                else if (contentFragment.Type == ContentConsts.Widget)
-                                {
-                                    @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
-                                }
-                            }
+                            @await Component.InvokeAsync("ContentFragment", new { contentDto = Model.ViewModel })
                             <p class="mb-3">
                                 @if (Model.ViewModel.LastModificationTime != null)
                                 {
@@ -109,10 +96,10 @@
                             if (Model.ReactionsFeature?.IsEnabled == true)
                             {
                                 @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
-                        {
-                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                        entityId = Model.ViewModel.Id.ToString()
-                        })
+                                {
+                                    entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                                    entityId = Model.ViewModel.Id.ToString()
+                                })
                             }
                         }
                     </abp-column>
@@ -122,10 +109,10 @@
                             if (Model.RatingsFeature?.IsEnabled == true)
                             {
                                 @await Component.InvokeAsync(typeof(RatingViewComponent), new
-                        {
-                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                        entityId = Model.ViewModel.Id.ToString()
-                        })
+                                {
+                                    entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                                    entityId = Model.ViewModel.Id.ToString()
+                                })
                             }
                         }
                     </abp-column>
@@ -133,6 +120,7 @@
             </abp-card-body>
         </abp-card>
     </div>
+    
     @if (isScrollIndexEnabled)
     {
         <div class="col-md-2 d-sm-none d-md-block">
@@ -140,7 +128,7 @@
                 <h5>@L["InThisDocument"]</h5>
                 <nav id="blog-post-sticky-index" class="navbar index-scroll pt-0">
                 </nav>
-
+    
                 <div class="row">
                     <div class="col p-0 py-3">
                         <a href="#" class="scroll-top-btn">

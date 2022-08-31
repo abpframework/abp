@@ -73,6 +73,7 @@
     "DeveloperFocused": "以开发者为中心",
     "ShareYourExperiences": "分享您使用 ABP 框架的经验",
     "LatestPosts": "最新的帖子",
+    "LatestVideos": "最新的视频",
     "Views": "意见",
     "LearnLatestNewsAboutABPFramework": "获取有关 ABP 的最新相关信息，例如新版本、免费资源、帖子等。",
     "DeveloperTools": "开发者工具",
@@ -98,6 +99,7 @@
     "Logout": "登出",
     "Home": "主页",
     "Posts": "帖子",
+    "Videos": "视频",
     "JoinTheABPCommunity": "加入 ABP 社区",
     "SubmitYourPost": "提交您的帖子",
     "Modules": "模块",
@@ -161,6 +163,19 @@
     "Error_Page_500_Title": "好像出了什么问题！",
     "Error_Page_500_Description_1": "我们会自动跟踪这些错误，但如果问题仍然存在，请随时 <br /> 联系我们。 与此同时，尝试刷新。",
     "Error_Page_500_Description_2": "通过 <a href=\"mailto:info@abp.io\" target=\"_blank\">info@abp.io</a> 与我们联系。",
-    "Books": "书籍"
+    "Books": "书籍",
+    "BuyAndGetMonths": "购买 12 个月，<span class=\"text-info\">获得 14 个月!</span>",
+    "GetYourDeal": "得到你的交易",
+    "BuyOrRenewLicense": "立即购买或续订许可证并额外获得 2 个月！",
+    "BuyOrRenewLicenseToGetExtra2Months": "立即购买或续订 ABP 商业许可证（适用于所有版本）并额外获得 2 个月！",
+    "HurryUp": "赶快下单!",
+    "LastDay": "活动截止日期: {0}",
+    "BuyNewLicenseBetweenDatesToGetBenefit": "在 {0} 和 {1} 之间购买一个新的许可证以获得额外 2 个月的收益！",
+    "CheckAllCommunityTalks": "检查所有社区帖子",
+    "ReadMore": "阅读更多",
+    "Post": "邮政",
+    "ExploreTheContentsCreatedByTheCoreABPTeamAndTheABPCommunity": "探索核心 ABP 团队和 ABP 社区创建的内容。",
+    "WelcomeFallCampaign": "欢迎秋季活动！",
+    "GiveAwayForNewPurchases": "新购买将赠送应用程序开发课堂培训！"
   }
 }

@@ -37,7 +37,7 @@
     "Edit": "Editar",
     "BLOG": "BLOG",
     "CommentDeletionWarningMessage": "O comentário será excluído.",
-    "PostDeletionWarningMessage": "O post será excluído.",
+    "PostDeletionWarningMessage": "A postagem será excluída.",
     "BlogDeletionWarningMessage": "O Blog será excluído.",
     "AreYouSure": "Você tem certeza?",
     "CommentWithCount": "{0} comentários",
@@ -54,8 +54,10 @@
     "Blogs": "Blogs",
     "Tags": "Etiquetas",
     "ShareOn": "Compartilhar no",
-    "TitleLengthWarning": "Mantenha o tamanho do título abaixo de 60 caracteres para ser SEO amigável!",
+    "TitleLengthWarning": "Mantenha o tamanho do título abaixo de 60 caracteres para ser amigável ao SEO!",
     "ClearCache": "Limpar cache",
-    "ClearCacheConfirmationMessage": "Tem certeza de que deseja limpar o cache?"
+    "ClearCacheConfirmationMessage": "Tem certeza de que deseja limpar o cache?",
+    "MarkdownSupported": "Markdown é suportado",
+    "FileUploadInfo": "Arrastar, soltar, ou colar uma imagem copiada."
   }
 }
