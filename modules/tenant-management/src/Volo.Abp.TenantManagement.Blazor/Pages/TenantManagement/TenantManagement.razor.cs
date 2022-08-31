@@ -40,6 +40,13 @@ public partial class TenantManagement
         ManageFeaturesPolicyName = TenantManagementPermissions.Tenants.ManageFeatures;
     }
 
+    protected override ValueTask SetBreadcrumbItemsAsync()
+    {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:TenantManagement"]));
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Tenants"]));
+        return base.SetBreadcrumbItemsAsync();
+    }
+
     protected override async Task SetPermissionsAsync()
     {
         await base.SetPermissionsAsync();

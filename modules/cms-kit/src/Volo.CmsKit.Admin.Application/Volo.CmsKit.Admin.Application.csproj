@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Volo.CmsKit.Common.Application\Volo.CmsKit.Common.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Volo\CmsKit\Admin\Contents\" />
+  </ItemGroup>
+
 </Project>
