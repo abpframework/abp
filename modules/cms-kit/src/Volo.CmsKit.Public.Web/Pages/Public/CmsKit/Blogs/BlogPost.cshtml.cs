@@ -49,7 +49,7 @@ public class BlogPostModel : CmsKitPublicPageModelBase
     public virtual async Task<IActionResult> OnGetAsync()
     {
         var blogPostPublicDto = await BlogPostPublicAppService.GetAsync(BlogSlug, BlogPostSlug);
-        ViewModel = ObjectMapper.Map<BlogPostPublicDto, BlogPostViewModel>(blogPostPublicDto);
+        ViewModel = ObjectMapper.Map<BlogPostCommonDto, BlogPostViewModel>(blogPostPublicDto);
         if (ViewModel == null)
         {
             return NotFound();

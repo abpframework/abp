@@ -37,7 +37,7 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
 
         var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
 
-        return ObjectMapper.Map<BlogPost, BlogPostPublicDto>(blogPost);
+        return ObjectMapper.Map<BlogPost, BlogPostCommonDto>(blogPost);
     }
 
     public virtual async Task<PagedResultDto<BlogPostCommonDto>> GetListAsync([NotNull] string blogSlug, BlogPostGetListInput input)
