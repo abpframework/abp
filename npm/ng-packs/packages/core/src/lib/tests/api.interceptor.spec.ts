@@ -36,7 +36,7 @@ describe('ApiInterceptor', () => {
     sessionState.getTenant.andReturn({ id: 'Volosoft', name: 'Volosoft' });
 
     const request = new HttpRequest('GET', 'https://abp.io');
-    const handleRes$ = new Subject();
+    const handleRes$ = new Subject<void>();
 
     const handler = {
       handle: (req: HttpRequest<any>) => {
@@ -59,7 +59,7 @@ describe('ApiInterceptor', () => {
     const spyDeleteRequest = jest.spyOn(httpWaitService, 'deleteRequest');
 
     const request = new HttpRequest('GET', 'https://abp.io');
-    const handleRes$ = new Subject();
+    const handleRes$ = new Subject<void>();
 
     const handler = {
       handle: (req: HttpRequest<any>) => {

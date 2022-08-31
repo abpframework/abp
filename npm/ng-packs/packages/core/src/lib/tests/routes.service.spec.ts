@@ -4,7 +4,7 @@ import { RoutesService } from '../services';
 import { DummyInjector } from './utils/common.utils';
 import { mockPermissionService } from './utils/permission-service.spec.utils';
 
-const updateStream$ = new Subject();
+const updateStream$ = new Subject<void>();
 
 export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }) => {
   const injector = new DummyInjector({
