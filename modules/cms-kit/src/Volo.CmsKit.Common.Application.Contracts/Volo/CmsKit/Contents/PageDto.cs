@@ -5,7 +5,7 @@ using Volo.Abp.Application.Dtos;
 namespace Volo.CmsKit.Contents;
 
 [Serializable]
-public class PageDto : EntityDto<Guid>
+public class PageDto : EntityDto<Guid>, IContent
 {
     public string Title { get; set; }
 
