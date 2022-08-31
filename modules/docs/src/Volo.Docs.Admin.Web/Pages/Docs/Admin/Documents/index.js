@@ -27,9 +27,6 @@ $(function () {
     $('.daterangesinglepicker').on('cancel.daterangepicker', function (ev, picker) {
         $(this).val('');
     });
-    $('.daterangesinglepicker').on('hide.daterangepicker', function (ev, picker) {
-        $(this).val('');
-    });
 
 
     var comboboxItems = [];
