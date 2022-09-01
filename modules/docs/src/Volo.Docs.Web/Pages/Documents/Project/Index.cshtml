@@ -51,9 +51,8 @@
 @if (Model.LoadSuccess)
 {
         <div class="docs-page" data-spy="scroll" data-bs-target="#docs-sticky-index">
-            <div class="row">
-                <div class="col-md-2">
-                    <div class="docs-sidebar-wrapper docs-sidebar dark-sidebar p-2">
+         
+                    <div class="docs-sidebar-wrapper docs-sidebar dark-sidebar">
 
                         <div class="docs-top">
                             <nav class="navbar navbar-logo">
@@ -85,12 +84,12 @@
                         </div>
 
                         <div class="docs-tree-list">
-                            <div class="px-4">
-                                <div class="row mx-0 mb-1 ">
-                                    
-                                    <div class="col-12 px-0 mb-1">
-                                        @if (Model.ShowProjectsCombobox && Model.ProjectSelectItems.Count > 1)
+                            <div class="">
+                                <div class="row gx-2 mb-2 ">
+                                     @if (Model.ShowProjectsCombobox && Model.ProjectSelectItems.Count > 1)
                                             {
+                                    <div class="col-12 mb-2">
+                                       
                                                 <div class="docs-version">
                                                     <span>Project</span>
                                                     <div class="version-select">
@@ -106,12 +105,13 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            }
+                                           
                                     </div>
-
-                                    <div class="col-12 px-0 mb-1">
-                                            @if (Model.VersionSelectItems.Any())
+ } 
+ @if (Model.VersionSelectItems.Any())
                                             {
+                                    <div class="col">
+                                           
                                                 <div class="@(Model.LanguageSelectListItems.Count > 1?"pe-0":"")">
                                                     <div class="docs-version @(Model.LanguageSelectListItems.Count > 1?"pe-1":"")">
                                                         <span>Version</span>
@@ -131,15 +131,15 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            }
+                                           
                                     </div>
-
-
-                                <div class="col-12 px-0 mb-1">
-
-                                    @if (Model.LanguageSelectListItems.Count > 1)
+ }
+  @if (Model.LanguageSelectListItems.Count > 1)
                                     {
-                                        <div class="@(Model.VersionSelectItems.Any()? "ps-0 col-5" : "col")">
+                                <div class="col">
+
+                                  
+                                        <div class="@(Model.VersionSelectItems.Any()? "" : "")">
                                             <div class="docs-version docs-language @(Model.VersionSelectItems.Any() ? "ps-1" : "")">
                                                 <span>Language</span>
                                                 <div class="version-select">
@@ -155,9 +155,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    }
+                                   
                                 </div>
-
+                                 }
                                 </div>
 
                                 <div class="docs-version">
@@ -195,33 +195,36 @@
                         </div>
 
                     </div>
-                </div>
 
                 @if (Model.Document != null)
                 {
-                    <div class="col docs-content bg-white">
-                        <div class="top-container mb-3">
-                            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#"> ABP Framework</a></li>
-                                    <li class="breadcrumb-item"><a href="#"> Documents</a></li>
-                                    <li class="breadcrumb-item"><a href="#"> Infrastructure</a></li>
-                                    <li class="breadcrumb-item"><a href="#"> Background Jobs</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">RabbitMQ Integration</li>
-                                </ol>
-                            </nav>
-
-                            <div class="doc-social-btns">
-                                <small> @(L["ShareOn"].Value + " :")</small>
-                                <a href="#" target="_blank" class="share-button twitter" id="TwitterShareLink" title="Twitter">
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                                <a href="#" target="_blank" class="share-button linkedin" id="LinkedinShareLink" title="LinkedIn">
-                                    <i class="fa fa-linkedin"></i>
-                                </a>
-                                <a href="#" target="_blank" class="share-button email" id="EmailShareLink" title="E-mail">
-                                    <i class="fa fa-envelope-square"></i>
-                                </a>
+                    <div class="docs-content">
+                        <div class="top-container align-items-center mb-3">
+                            <div class="row w-100 mx-0">
+                                <div class="col-12 col-lg-9 px-0">
+                                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="#"> ABP Framework</a></li>
+                                            <li class="breadcrumb-item"><a href="#"> Documents</a></li>
+                                            <li class="breadcrumb-item"><a href="#"> Infrastructure</a></li>
+                                            <li class="breadcrumb-item"><a href="#"> Background Jobs</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">RabbitMQ Integration</li>
+                                        </ol>
+                                    </nav>
+                                </div>
+                                <div class="col-12 col-lg-3 text-lg-end px-0">
+                                    <div class="doc-social-btns">
+                                        <a href="#" target="_blank" class="share-button twitter" id="TwitterShareLink" title="Twitter">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                        <a href="#" target="_blank" class="share-button linkedin" id="LinkedinShareLink" title="LinkedIn">
+                                            <i class="fa fa-linkedin"></i>
+                                        </a>
+                                        <a href="#" target="_blank" class="share-button email" id="EmailShareLink" title="E-mail">
+                                            <i class="fa fa-envelope-square"></i>
+                                        </a>
+                                    </div>
+                                </div>   
                             </div>
                         </div>
 
@@ -248,9 +251,9 @@
                                     <div class="cont-container d-flex align-items-center justify-content-end h-100">
                                         @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
                                         {
-                                                <div class="me-4">
-                                                    <span class="for-desktop w-100 contributors-text">
-                                                       @(L["Contributors"].Value):
+                                                <div class="me-4 d-flex flex-column">
+                                                    <span class="for-desktop contributors-text">
+                                                       @(L["Contributors"].Value)
                                                    </span>
 
                                                      @if (string.IsNullOrEmpty(Model.Document.EditLink))
@@ -258,7 +261,7 @@
                                                             <a href="@Model.Document.EditLink" target="_blank">
                                                                 <i class="fa fa-edit"></i>
                                                                 @(L["Edit"])
-                                                                <span class="for-desktop text-muted">@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString()</span>
+                                                                <span class="for-desktop text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title='@L["LastEditTime"]'>(@Model.Document.LastUpdatedTime.ToShortDateString())</span>
                                                             </a>
                                                         }
                                                 </div>
@@ -271,7 +274,10 @@
                                                                 alt="Avatar"
                                                                 height="21"
                                                                 width="21"
-                                                                title="@contributor.Username" />
+                                                                title="@contributor.Username" 
+                                                                data-bs-toggle="tooltip"
+                                                                 data-bs-placement="top"
+                                                                />
                                                         </a>
                                                     }
                                                 </div>
@@ -301,10 +307,10 @@
                                                     </p>
                                                 </abp-column>
                                             </abp-row>
-                                            <abp-row>
+                                            <abp-row class="gx-2">
                                                 @foreach (var parameter in Model.DocumentPreferences.Parameters)
                                                 {
-                                                    <abp-column size="_4">
+                                                    <div class="col">
                                                         <div class="custom-input-group">
                                                             <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
                                                             <select class="doc-section-combobox form-select"
@@ -323,7 +329,7 @@
                                                                 }
                                                             </select>
                                                         </div>
-                                                    </abp-column>
+                                                    </div>
                                                 }
                                             </abp-row>
                                         </div>
@@ -354,23 +360,23 @@
                     </div>
 
                     <!-- Right Bar -->
-                    <div class="col-md-2 docs-page-index position-relative">
-                    
-                        <div class="card docs-inner-anchors">
-                            <div class="card-header">
-                                <h5>@L["InThisDocument"]</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="scroll-index" class="mt-2">
-                                    <nav id="docs-sticky-index" class="navbar index-scroll">
-                                    </nav>
-                                    <div class="row">
-                                        <div class="col p-0">
-                                            <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> @L["GoToTop"]</a>
+                    <div class=" docs-page-index">
+                        <div class=" docs-inner-anchors">
+                            <div class="card for-desktop">
+                                <div class="card-body">
+                                    <h5 class="card-title">@L["InThisDocument"]</h5>
+
+                                    <div id="scroll-index" class="mt-2">
+                                        <nav id="docs-sticky-index" class="navbar index-scroll">
+                                        </nav>
+                                        <div class="row">
+                                            <div class="col p-0">
+                                                <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> @L["GoToTop"]</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -386,7 +392,6 @@
                         </a>
                     </div>
                 }
-            </div>
         </div>
 }
 else

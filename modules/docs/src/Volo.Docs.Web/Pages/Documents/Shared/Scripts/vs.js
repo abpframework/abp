@@ -155,7 +155,7 @@
     };
 
     function docsCriteria() {
-        var docsContentWidth = $('.docs-content').width() - 20;
+        var docsContentWidth = $('.docs-content').width() - 90;
         $('.alert-criteria').width(docsContentWidth);
     }
     $(document).ready(function () {

@@ -461,6 +461,13 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
             }
 
+            Document.Contributors = new List<DocumentContributorDto>
+            {
+                new DocumentContributorDto { Username = "hikalkan", UserProfileUrl = "https://github.com/hikalkan", AvatarUrl = "https://avatars.githubusercontent.com/u/1210527?v=4", CommitCount = 1 },
+                new DocumentContributorDto { Username = "armgnunlu", UserProfileUrl = "https://github.com/armgnunlu", AvatarUrl = "https://avatars.githubusercontent.com/u/36102404?v=4", CommitCount = 1 },
+                new DocumentContributorDto { Username = "engincanV", UserProfileUrl = "https://github.com/engincanV", AvatarUrl = "https://avatars.githubusercontent.com/u/43685404?v=4", CommitCount = 1 },
+                new DocumentContributorDto { Username = "halimekarayay", UserProfileUrl = "https://github.com/halimekarayay", AvatarUrl = "https://avatars.githubusercontent.com/u/86843575?v=4", CommitCount = 1 },
+            };
             await ConvertDocumentContentToHtmlAsync();
         }
 
