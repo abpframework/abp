@@ -35,7 +35,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
             Groups = new List<FeatureGroupDto>()
         };
 
-        foreach (var group in FeatureDefinitionManager.GetGroups())
+        foreach (var group in await FeatureDefinitionManager.GetGroupsAsync())
         {
             var groupDto = new FeatureGroupDto
             {

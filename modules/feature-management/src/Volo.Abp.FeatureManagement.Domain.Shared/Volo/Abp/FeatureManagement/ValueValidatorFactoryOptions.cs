@@ -4,13 +4,13 @@ using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.FeatureManagement;
 
-public class AbpFeatureManagementApplicationContractsOptions
+public class ValueValidatorFactoryOptions
 {
     public HashSet<IValueValidatorFactory> ValueValidatorFactory { get; }
-    
-    public AbpFeatureManagementApplicationContractsOptions()
+
+    public ValueValidatorFactoryOptions()
     {
-        ValueValidatorFactory = new HashSet<IValueValidatorFactory> 
+        ValueValidatorFactory = new HashSet<IValueValidatorFactory>
         {
             new ValueValidatorFactory<AlwaysValidValueValidator>("NULL"),
             new ValueValidatorFactory<BooleanValueValidator>("BOOLEAN"),

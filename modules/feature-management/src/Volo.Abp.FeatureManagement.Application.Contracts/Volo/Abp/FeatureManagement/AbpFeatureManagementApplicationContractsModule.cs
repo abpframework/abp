@@ -26,8 +26,8 @@ public class AbpFeatureManagementApplicationContractsModule : AbpModule
             options.FileSets.AddEmbedded<AbpFeatureManagementApplicationContractsModule>();
         });
 
-        var contractsOptionsActions = context.Services.GetPreConfigureActions<AbpFeatureManagementApplicationContractsOptions>();
-        Configure<AbpFeatureManagementApplicationContractsOptions>(options =>
+        var contractsOptionsActions = context.Services.GetPreConfigureActions<ValueValidatorFactoryOptions>();
+        Configure<ValueValidatorFactoryOptions>(options =>
         {
             contractsOptionsActions.Configure(options);
         });

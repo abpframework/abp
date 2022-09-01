@@ -1,12 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore;
 
 [DependsOn(
     typeof(AbpFeatureManagementDomainModule),
-    typeof(AbpEntityFrameworkCoreModule)
+    typeof(AbpEntityFrameworkCoreModule),
+    typeof(AbpJsonModule)
 )]
 public class AbpFeatureManagementEntityFrameworkCoreModule : AbpModule
 {
@@ -14,6 +16,8 @@ public class AbpFeatureManagementEntityFrameworkCoreModule : AbpModule
     {
         context.Services.AddAbpDbContext<FeatureManagementDbContext>(options =>
         {
+            options.AddRepository<FeatureGroupDefinitionRecord, EfCoreFeatureGroupDefinitionRecordRepository>();
+            options.AddRepository<FeatureDefinitionRecord, EfCoreFeatureDefinitionRecordRepository>();
             options.AddDefaultRepositories<IFeatureManagementDbContext>();
 
             options.AddRepository<FeatureValue, EfCoreFeatureValueRepository>();
