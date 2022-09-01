@@ -98,7 +98,7 @@ LeptonX Lite built on the [Abp Framework](https://abp.io/), so you can **easily*
 
 The **brand component** is a simple component that can be used to display your brand. It contains a **logo** and a **company name**.
 
-<img src="Images/brand-component.png">
+![Brand component](../../images/leptonxlite-brand-component.png) 
 
 ### How to override Brand Component in LeptonX Lite Mvc
 
@@ -110,7 +110,7 @@ The **brand component** is a simple component that can be used to display your b
 
 On websites that have a lot of pages, **breadcrumb navigation** can greatly **enhance the way users find their way** around. In terms of **usability**, breadcrumbs reduce the number of actions a website **visitor** needs to take in order to get to a **higher-level page**, and they **improve** the **findability** of **website sections** and **pages**.
 
-<img src="Images/breadcrumb-component.png">
+![Breadcrumb component](../../images/leptonxlite-breadcrumb-component.png) 
 
 ### How to override Breadcrumb Component in LeptonX Lite Mvc
 
@@ -122,7 +122,7 @@ On websites that have a lot of pages, **breadcrumb navigation** can greatly **en
 
 Sidebar menus have been used as **a directory for Related Pages** to a **Service** offering, **Navigation** items to a **specific service** or topic and even just as **Links** the user may be interested in.
 
-<img src="Images/sidebar-menu-component.png">
+![Sidebar menu component](../../images/leptonxlite-sidebar-menu-component.png) 
 
 ### How to override Sidebar Menu Component in LeptonX Lite Mvc
 
@@ -136,7 +136,7 @@ Sidebar menus have been used as **a directory for Related Pages** to a **Service
 
 Provide contextual **feedback messages** for typical user actions with the handful of **available** and **flexible** **alert messages**. Alerts are available for any length of text, as well as an **optional dismiss button**. 
 
-<img src="Images/page-alerts-component.png">
+![Page alerts component](../../images/leptonxlite-page-alerts-component.png) 
 
 ### How to override Page Alerts Component in LeptonX Lite Mvc
 
@@ -170,7 +170,7 @@ You can find the toolbar components below:
 
 Think about a **multi-lingual** website and the first thing that could **hit your mind** is **the language switch component**. A **navigation bar** is a **great place** to **embed a language switch**. By embedding the language switch in the navigation bar of your website, you would **make it simpler** for users to **find it** and **easily** switch the **language**  <u>**without trying to locate it across the website.**</u>
 
-<img src="Images/language-switch-component.png">
+![Language switch component](../../images/leptonxlite-language-switch-component.png) 
 
 ### How to override Language Switch Component in LeptonX Lite Mvc
 
@@ -182,7 +182,7 @@ Think about a **multi-lingual** website and the first thing that could **hit you
 
 The **mobile** **language switch component** is used to switch the language of the website **on mobile devices**. The mobile language switch component is a **dropdown menu** that **contains all the languages** of the website.
 
-<img src="Images/mobile-language-switch-component.png">
+![Mobil language switch component](../../images/leptonxlite-mobile-language-switch-component.png) 
 
 ### How to override Mobile Language Switch Component in LeptonX Lite Mvc
 
@@ -194,7 +194,7 @@ The **mobile** **language switch component** is used to switch the language of t
 
 The **User Menu** is the **menu** that **drops down** when you **click your name** or **profile picture** in the **upper right corner** of your page (**in the toolbar**). It drops down options such as **Settings**, **Logout**, etc.
 
-<img src="Images/user-menu-component.png">
+![User menu component](../../images/leptonxlite-user-menu-component.png) 
 
 ### How to override User Menu Component in LeptonX Lite Mvc
 
@@ -206,7 +206,7 @@ The **User Menu** is the **menu** that **drops down** when you **click your name
 
 The **mobile user menu component** is used to display the **user menu on mobile devices**. The mobile user menu component is a **dropdown menu** that contains all the **options** of the **user menu**.
 
-<img src="Images/mobile-user-menu-component.png">
+![Mobile user menu component](../../images/leptonxlite-mobile-user-menu-component.png) 
 
 ### How to override Mobile User Menu Component in LeptonX Lite Mvc
 
