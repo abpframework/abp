@@ -104,7 +104,7 @@
     "just-compare": "^1.4.0",
     "lerna": "^4.0.0",
     "ng-packagr": "14.1.0",
-    "ng-zorro-antd": "^13.0.0",
+    "ng-zorro-antd": "^14.0.0",
     "@popperjs/core": "~2.11.2",
     "postcss": "^8.3.9",
     "postcss-import": "14.1.0",
