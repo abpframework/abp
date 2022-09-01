@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Pages.Abp.MultiTenancy.ClientProxies;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.Authorization;
@@ -7,6 +9,7 @@ using Volo.Abp.Features;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client;
@@ -40,5 +43,23 @@ public class AbpAspNetCoreMvcClientCommonModule : AbpModule
 
         context.Services.AddTransient<AbpApplicationConfigurationClientProxy>();
         context.Services.AddTransient<AbpTenantClientProxy>();
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMvcClientCommonOptions>>().Value;
+        if (options.GetApplicationConfigurationOnModuleInitialization)
+        {
+            AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
+        }
+    }
+
+    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMvcClientCommonOptions>>().Value;
+        if (options.GetApplicationConfigurationOnModuleInitialization)
+        {
+            await context.ServiceProvider.GetRequiredService<ICachedApplicationConfigurationClient>().GetAsync();
+        }
     }
 }

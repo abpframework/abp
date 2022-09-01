@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Components.Web.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 
@@ -14,7 +15,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 public static class AbpWebAssemblyHostBuilderExtensions
 {
-    public async static Task<IAbpApplicationWithExternalServiceProvider> AddApplicationAsync<TStartupModule>(
+    public static async Task<IAbpApplicationWithExternalServiceProvider> AddApplicationAsync<TStartupModule>(
         [NotNull] this WebAssemblyHostBuilder builder,
         Action<AbpWebAssemblyApplicationCreationOptions> options)
         where TStartupModule : IAbpModule
@@ -29,6 +30,11 @@ public static class AbpWebAssemblyHostBuilderExtensions
 
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
         builder.Services.AddSingleton(builder);
+
+        builder.Services.Configure<AbpAspNetCoreMvcClientCommonOptions>(commonOptions =>
+        {
+            commonOptions.GetApplicationConfigurationOnModuleInitialization = true;
+        });
 
         var application = await builder.Services.AddApplicationAsync<TStartupModule>(opts =>
         {
@@ -54,6 +60,11 @@ public static class AbpWebAssemblyHostBuilderExtensions
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
         builder.Services.AddSingleton(builder);
 
+        builder.Services.Configure<AbpAspNetCoreMvcClientCommonOptions>(commonOptions =>
+        {
+            commonOptions.GetApplicationConfigurationOnModuleInitialization = true;
+        });
+
         var application = builder.Services.AddApplication<TStartupModule>(opts =>
         {
             options?.Invoke(new AbpWebAssemblyApplicationCreationOptions(builder, opts));
@@ -62,7 +73,7 @@ public static class AbpWebAssemblyHostBuilderExtensions
         return application;
     }
 
-    public async static Task InitializeApplicationAsync(
+    public static async Task InitializeApplicationAsync(
         [NotNull] this IAbpApplicationWithExternalServiceProvider application,
         [NotNull] IServiceProvider serviceProvider)
     {
