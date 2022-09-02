@@ -519,9 +519,28 @@ a {
 .docs-page .docs-page-index .scroll-top-btn.showup {
   display: block;
 }
-@media (max-width: 1200px) {
+@media (min-width: 768px) and (max-width: 1200px) {
   .docs-page .docs-page-index {
-    display: none;
+    position: relative;
+    width: calc(100% - 300px);
+    margin-left: 300px;
+    padding: 0 1rem 1rem;
+  }
+  .docs-page .docs-page-index .docs-inner-anchors {
+    position: relative;
+    top: auto;
+    padding: 0 1.75em;
+  }
+}
+@media (max-width: 767px) {
+  .docs-page .docs-page-index {
+    position: relative;
+    width: 100%;
+    padding: 0 1.75em 1.75em;
+  }
+  .docs-page .docs-page-index .docs-inner-anchors {
+    position: relative;
+    top: auto;
   }
 }
 .docs-page .card {
@@ -547,6 +566,11 @@ a {
   padding: 0;
   background-color: transparent;
   border: none;
+}
+@media (max-width: 1200px) {
+  .docs-page .card {
+    width: 100%;
+  }
 }
 .docs-page .top-container {
   display: flex;
@@ -798,13 +822,6 @@ a {
   .docs-page .docs-content .docs-text-field {
     padding: 1rem 1.5rem;
   }
-  .docs-page .docs-page-index {
-    display: block;
-  }
-  .docs-page .docs-page-index .docs-inner-anchors {
-    position: relative;
-    top: auto;
-  }
 }
 .for-mobile {
   display: none;
@@ -845,6 +862,10 @@ pre .token.class-name {
 :not(pre) > code[class*=language-],
 pre[class*=language-] {
   background: #211e1e !important;
+}
+
+div.code-toolbar > .toolbar {
+  z-index: 7;
 }
 
 div.code-toolbar > .toolbar span {
@@ -918,7 +939,6 @@ div.code-toolbar > .toolbar a {
 @media screen and (max-width: 767px) {
   .scrolledMore .alert-criteria {
     top: 72px;
-    margin-left: -36px;
   }
 }
 .scrolledMore .alert-criteria p.alert-p {
