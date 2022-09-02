@@ -3,29 +3,26 @@ $(function () {
     var service = window.volo.docs.admin.documentsAdmin;
 
     var getFormattedDate = function ($datePicker) {
-        var date = moment($datePicker.val());
-        if (!date.isValid()) {
-            return null;
-        }
-        return date.toISOString();
+        return $datePicker.data('date');
     };
 
 
-    $('.daterangesinglepicker').daterangepicker({
+    $('.singleDatePicker').daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,
         "autoUpdateInput": false,
         "autoApply": true,
         "opens": "center",
-        "drops": "auto"
+        "drops": "auto",
+        "minYear": 1901,
+        "maxYear": 2199,
     });
 
+    $('.singleDatePicker').attr('autocomplete', 'off');
 
-    $('.daterangesinglepicker').on('apply.daterangepicker', function (ev, picker) {
+    $('.singleDatePicker').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
-    });
-    $('.daterangesinglepicker').on('cancel.daterangepicker', function (ev, picker) {
-        $(this).val('');
+        $(this).data('date', picker.startDate.locale('en').format('YYYY-MM-DD'));
     });
 
 
