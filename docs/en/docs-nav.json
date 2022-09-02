@@ -852,6 +852,10 @@
                   "path": "UI/Blazor/Page-Header.md"
                 },
                 {
+                  "text": "Page Layout",
+                  "path": "UI/Blazor/Page-Layout.md"
+                },
+                {
                   "text": "Toolbars",
                   "path": "UI/Blazor/Toolbars.md"
                 }
