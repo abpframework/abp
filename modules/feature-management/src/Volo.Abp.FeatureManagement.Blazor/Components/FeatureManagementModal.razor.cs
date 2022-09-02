@@ -50,9 +50,11 @@ public partial class FeatureManagementModal
             ToggleValues = new Dictionary<string, bool>();
             SelectionStringValues = new Dictionary<string, string>();
 
-            Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey))?.Groups;
+            var result = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
 
-            Groups ??= new List<FeatureGroupDto>();
+            UpdateLocalizations(result);
+
+            Groups = result?.Groups ?? new List<FeatureGroupDto>();
 
             if (Groups.Any())
             {
@@ -203,5 +205,54 @@ public partial class FeatureManagementModal
         eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
 
         return Task.CompletedTask;
+    }
+
+    private void UpdateLocalizations(GetFeatureListResultDto result)
+    {
+        foreach (var group in result.Groups)
+        {
+            group.DisplayName = Localize(
+                group.DisplayNameKey,
+                group.DisplayNameResource,
+                group.DisplayName
+            );
+
+            foreach (var feature in group.Features)
+            {
+                feature.DisplayName = Localize(
+                    feature.DisplayNameKey,
+                    feature.DisplayNameResource,
+                    feature.DisplayName
+                );
+
+                feature.Description = Localize(
+                    feature.DescriptionKey,
+                    feature.DescriptionResource,
+                    feature.Description
+                );
+            }
+        }
+    }
+
+    private string Localize(string key, string resourceName, string fallbackValue)
+    {
+        if (key.IsNullOrEmpty() || resourceName.IsNullOrEmpty())
+        {
+            return fallbackValue;
+        }
+
+        var resource = LocalizationOptions.Value.Resources.GetOrNull(resourceName);
+        if (resource == null)
+        {
+            return fallbackValue;
+        }
+
+        var result = new LocalizableString(resource.ResourceType, key).Localize(StringLocalizerFactory);
+        if (result.ResourceNotFound)
+        {
+            return fallbackValue;
+        }
+
+        return result.Value;
     }
 }
