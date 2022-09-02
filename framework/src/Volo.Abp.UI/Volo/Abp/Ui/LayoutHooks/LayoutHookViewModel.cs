@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
+﻿namespace Volo.Abp.Ui.LayoutHooks;
 
 public class LayoutHookViewModel
 {
