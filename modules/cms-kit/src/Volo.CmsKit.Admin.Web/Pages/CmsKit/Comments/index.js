@@ -5,41 +5,40 @@ $(function (){
 
     var detailsModal = new abp.ModalManager(abp.appPath + "CmsKit/Comments/DetailsModal");
     
-    $(".input-daterange")
-        .datepicker({
-            todayBtn: "linked",
-            autoclose: true,
-            language: abp.localization.currentCulture.cultureName,
-        })
-        .on("hide", function (e) {
-            e.stopPropagation();
-        });
+    var getFormattedDate = function ($datePicker) {
+        return $datePicker.data('date');
+    };
+
+
+    $('.singleDatePicker').daterangepicker({
+        "singleDatePicker": true,
+        "showDropdowns": true,
+        "autoUpdateInput": false,
+        "autoApply": true,
+        "opens": "center",
+        "drops": "auto",
+        "minYear": 1901,
+        "maxYear": 2199,
+    });
+
+    $('.singleDatePicker').attr('autocomplete', 'off');
+
+    $('.singleDatePicker').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('l'));
+        $(this).data('date', picker.startDate.locale('en').format('YYYY-MM-DD'));
+    });
     
     var filterForm = $('#CmsKitCommentsFilterForm');
     
     var getFilter = function () {
         var filterObj = filterForm.serializeFormToObject();
 
-        var startDate = luxon.DateTime.fromFormat(
-            filterObj.creationStartDate,
-            abp.localization.currentCulture.dateTimeFormat.shortDatePattern,
-            { locale: abp.localization.currentCulture.cultureName }
-        );
-        if (!startDate.invalid) {
-            filterObj.creationStartDate = startDate.toFormat("yyyy-MM-dd");
-        }
-
-        var endDate = luxon.DateTime.fromFormat(
-            filterObj.creationEndDate,
-            abp.localization.currentCulture.dateTimeFormat.shortDatePattern,
-            { locale: abp.localization.currentCulture.cultureName }
-        );
-        if (!endDate.invalid) {
-            filterObj.creationEndDate = endDate.toFormat("yyyy-MM-dd");
-        }
+        filterObj.creationStartDate = getFormattedDate($('#creationStartDate'));
+        filterObj.creationEndDate = getFormattedDate($('#creationEndDate'));
         
         return filterObj;
     };
+  
     
     var _dataTable = $('#CommentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
