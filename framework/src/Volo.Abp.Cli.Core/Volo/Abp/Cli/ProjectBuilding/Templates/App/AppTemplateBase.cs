@@ -194,12 +194,16 @@ public abstract class AppTemplateBase : TemplateInfo
             return;
         }
 
-        if (context.BuildArgs.Theme == Theme.LeptonX)
+        if (context.BuildArgs.Theme != Theme.NotSpecified)
         {
-            context.Symbols.Add("LEPTONX");
-            steps.Add(new ChangeThemeStyleStep());
+            context.Symbols.Add(context.BuildArgs.Theme.Value.ToString().ToUpper());
         }
 
+        if (context.BuildArgs.Theme == Theme.LeptonX)
+        {
+            steps.Add(new ChangeThemeStyleStep());
+        }
+        
         if (IsDefaultThemeForTemplate(context.BuildArgs.Theme.Value))
         {
             return;
