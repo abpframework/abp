@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Features;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.FeatureManagement;
 
@@ -37,12 +37,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 
         foreach (var group in await FeatureDefinitionManager.GetGroupsAsync())
         {
-            var groupDto = new FeatureGroupDto
-            {
-                Name = group.Name,
-                DisplayName = group.DisplayName.Localize(StringLocalizerFactory),
-                Features = new List<FeatureDto>()
-            };
+            var groupDto = CreateFeatureGroupDto(group);
 
             foreach (var featureDefinition in group.GetFeaturesWithChildren())
             {
@@ -55,20 +50,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
                 }
 
                 var feature = await FeatureManager.GetOrNullWithProviderAsync(featureDefinition.Name, providerName, providerKey);
-                groupDto.Features.Add(new FeatureDto
-                {
-                    Name = featureDefinition.Name,
-                    DisplayName = featureDefinition.DisplayName?.Localize(StringLocalizerFactory),
-                    ValueType = featureDefinition.ValueType,
-                    Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
-                    ParentName = featureDefinition.Parent?.Name,
-                    Value = feature.Value,
-                    Provider = new FeatureProviderDto
-                    {
-                        Name = feature.Provider?.Name,
-                        Key = feature.Provider?.Key
-                    }
-                });
+                groupDto.Features.Add(CreateFeatureDto(feature, featureDefinition));
             }
 
             SetFeatureDepth(groupDto.Features, providerName, providerKey);
@@ -80,6 +62,54 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         }
 
         return result;
+    }
+
+    private FeatureGroupDto CreateFeatureGroupDto(FeatureGroupDefinition groupDefinition)
+    {
+        var localizableDisplayName = groupDefinition.DisplayName as LocalizableString;
+
+        return new FeatureGroupDto
+        {
+            Name = groupDefinition.Name,
+            DisplayName = groupDefinition.DisplayName.Localize(StringLocalizerFactory),
+            DisplayNameKey = localizableDisplayName?.Name,
+            DisplayNameResource = localizableDisplayName?.ResourceType != null
+                ? LocalizationResourceNameAttribute.GetName(localizableDisplayName.ResourceType)
+                : null,
+            Features = new List<FeatureDto>()
+        };
+    }
+
+    private FeatureDto CreateFeatureDto(FeatureNameValueWithGrantedProvider featureNameValueWithGrantedProvider, FeatureDefinition featureDefinition)
+    {
+        var localizableDisplayName = featureDefinition.DisplayName as LocalizableString;
+        var localizableDescription = featureDefinition.Description as LocalizableString;
+
+        return new FeatureDto
+        {
+            Name = featureDefinition.Name,
+            DisplayName = featureDefinition.DisplayName.Localize(StringLocalizerFactory),
+            DisplayNameKey = localizableDisplayName?.Name,
+            DisplayNameResource = localizableDisplayName?.ResourceType != null
+                ? LocalizationResourceNameAttribute.GetName(localizableDisplayName.ResourceType)
+                : null,
+
+            Description = featureDefinition.Description.Localize(StringLocalizerFactory),
+            DescriptionKey = localizableDescription?.Name,
+            DescriptionResource = localizableDescription?.ResourceType != null
+                ? LocalizationResourceNameAttribute.GetName(localizableDescription.ResourceType)
+                : null,
+
+            ValueType = featureDefinition.ValueType,
+
+            ParentName = featureDefinition.Parent?.Name,
+            Value = featureNameValueWithGrantedProvider.Value,
+            Provider = new FeatureProviderDto
+            {
+                Name = featureNameValueWithGrantedProvider.Provider?.Name,
+                Key = featureNameValueWithGrantedProvider.Provider?.Key
+            }
+        };
     }
 
     public virtual async Task UpdateAsync([NotNull] string providerName, string providerKey, UpdateFeaturesDto input)
