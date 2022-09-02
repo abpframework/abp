@@ -13,7 +13,7 @@ public class MomentScriptContributor : BundleContributor
 
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddIfNotContains("/libs/moment/moment.js");
+        context.Files.AddIfNotContains("/libs/moment/moment.min.js");
     }
 
     public override void ConfigureDynamicResources(BundleConfigurationContext context)
