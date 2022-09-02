@@ -19,9 +19,9 @@
 </nav>
 <div class="container">
     <PageAlert />
-    <LayoutHook Name="@LayoutHooks.Body.First" Layout="@StandardLayouts.Main" />
+    <LayoutHook Name="@LayoutHooks.Body.First" Layout="@StandardLayouts.Application" />
     @Body
-    <LayoutHook Name="@LayoutHooks.Body.Last" Layout="@StandardLayouts.Main"/>
+    <LayoutHook Name="@LayoutHooks.Body.Last" Layout="@StandardLayouts.Application" />
     <DynamicLayoutComponent />
     <UiMessageAlert />
     <UiNotificationAlert />

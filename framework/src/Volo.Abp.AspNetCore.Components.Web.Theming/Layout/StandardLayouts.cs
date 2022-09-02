@@ -2,7 +2,5 @@
 
 public static class StandardLayouts
 {
-    public const string Main = "Main";
-    public const string TopMenu = "TopMenu";
-    public const string SideMenu = "SideMenu";
+    public const string Application = "Application";
 }
