@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
+namespace Volo.Abp.Ui.LayoutHooks;
 
 public class LayoutHookInfo
 {
     /// <summary>
-    /// ViewComponent type.
+    /// Component type.
     /// </summary>
     public Type ComponentType { get; }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
+namespace Volo.Abp.Ui.LayoutHooks;
 
 public class AbpLayoutHookOptions
 {
