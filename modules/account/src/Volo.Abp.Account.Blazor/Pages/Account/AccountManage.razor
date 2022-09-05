@@ -1,5 +1,9 @@
 ﻿@page "/account/manage-profile"
 @using Microsoft.AspNetCore.Components.Forms 
+@using Volo.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Components.Web
+@using Volo.Abp.BlazoriseUI.Components.ObjectExtending
+@inject AbpBlazorMessageLocalizerHelper<AccountResource> LH
 @inherits AbpAccountComponentBase
 
 <Row>
@@ -58,6 +62,7 @@
                                 <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
                                 <TextEdit @bind-Text="@PersonalInfoModel.PhoneNumber"/>
                             </Field>
+                            <ExtensionProperties TEntityType="PersonalInfoModel" TResourceType="AccountResource" Entity="@PersonalInfoModel" LH="@LH"/>
                             <Field>
                                 <SubmitButton Form="UpdatePersonalInfoForm" Clicked="@UpdatePersonalInfoAsync" />
                             </Field>

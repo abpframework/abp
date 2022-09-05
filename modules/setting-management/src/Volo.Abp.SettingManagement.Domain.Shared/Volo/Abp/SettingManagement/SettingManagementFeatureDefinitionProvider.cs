@@ -20,10 +20,10 @@ public class SettingManagementFeatureDefinitionProvider : FeatureDefinitionProvi
             new ToggleStringValueType());
 
         settingEnableFeature.CreateChild(
-            SettingManagementFeatures.AllowTenantsToChangeEmailSettings,
+            SettingManagementFeatures.AllowChangingEmailSettings,
             "false",
-            L("Feature:AllowTenantsToChangeEmailSettings"),
-            L("AllowTenantsToChangeEmailSettingsDescription"),
+            L("Feature:AllowChangingEmailSettings"),
+            null,
             new ToggleStringValueType(),
             isAvailableToHost: false);
     }

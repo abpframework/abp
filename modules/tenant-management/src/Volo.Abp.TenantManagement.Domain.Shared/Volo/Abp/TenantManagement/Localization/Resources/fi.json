@@ -1,6 +1,7 @@
 {
   "culture": "fi",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Vuokralaisen nimi on jo olemassa: {Name}",
     "Menu:TenantManagement": "Vuokralaisten hallinta",
     "Tenants": "Vuokralaiset",
     "NewTenant": "Uusi vuokralainen",
@@ -10,7 +11,6 @@
     "ConnectionStrings": "Yhteysjonot",
     "DisplayName:DefaultConnectionString": "Oletusyhteysmerkkijono",
     "DisplayName:UseSharedDatabase": "Käytä jaettua tietokantaa",
-    "ManageHostFeatures": "Hallinnoi isäntäominaisuuksia",
     "Permission:TenantManagement": "Vuokralaisten hallinta",
     "Permission:Create": "Luoda",
     "Permission:Edit": "Muokata",

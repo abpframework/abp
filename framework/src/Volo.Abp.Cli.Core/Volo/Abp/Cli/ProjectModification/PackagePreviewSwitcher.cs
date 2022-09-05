@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,114 +30,113 @@ public class PackagePreviewSwitcher : ITransientDependency
 
     public async Task SwitchToPreview(CommandLineArgs commandLineArgs)
     {
-        var solutionPath = GetSolutionPath(commandLineArgs);
-        var solutionFolder = GetSolutionFolder(commandLineArgs);
-        var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
+        var solutionPaths = GetSolutionPaths(commandLineArgs);
 
-        await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
-            solutionPath,
-            includeReleaseCandidates: true);
-
-        await _npmPackagesUpdater.Update(
-            solutionFolder,
-            false,
-            true);
-
-        if (solutionAngularFolder != null)
+        foreach (var solutionPath in solutionPaths)
         {
+            var solutionFolder = Path.GetDirectoryName(solutionPath);
+            var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
+
+            await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
+                solutionPath,
+                includeReleaseCandidates: true);
+
             await _npmPackagesUpdater.Update(
-                solutionAngularFolder,
+                solutionFolder,
                 false,
                 true);
+
+            if (solutionAngularFolder != null)
+            {
+                await _npmPackagesUpdater.Update(
+                    solutionAngularFolder,
+                    false,
+                    true);
+            }
         }
     }
 
     public async Task SwitchToNightlyPreview(CommandLineArgs commandLineArgs)
     {
-        var solutionPath = GetSolutionPath(commandLineArgs);
-        var solutionFolder = GetSolutionFolder(commandLineArgs);
-        var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
+        var solutionPaths = GetSolutionPaths(commandLineArgs);
 
-        _packageSourceManager.Add(solutionFolder, "ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
-
-        if (solutionPath != null)
+        foreach (var solutionPath in solutionPaths)
         {
-            await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
-                solutionPath,
-                true);
-        }
+            var solutionFolder = Path.GetDirectoryName(solutionPath);
+            var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
 
-        await _npmPackagesUpdater.Update(
-            solutionFolder,
-            true);
+            _packageSourceManager.Add(solutionFolder, "ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
 
-        if (solutionAngularFolder != null)
-        {
+            if (solutionPath != null)
+            {
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
+                    solutionPath,
+                    true);
+            }
+
             await _npmPackagesUpdater.Update(
-                solutionAngularFolder,
+                solutionFolder,
                 true);
+
+            if (solutionAngularFolder != null)
+            {
+                await _npmPackagesUpdater.Update(
+                    solutionAngularFolder,
+                    true);
+            }
         }
     }
 
     public async Task SwitchToStable(CommandLineArgs commandLineArgs)
     {
-        var solutionPath = GetSolutionPath(commandLineArgs);
-        var solutionFolder = GetSolutionFolder(commandLineArgs);
-        var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
+        var solutionPaths = GetSolutionPaths(commandLineArgs);
 
-        _packageSourceManager.Remove(solutionFolder, "ABP Nightly");
-
-        if (solutionPath != null)
+        foreach (var solutionPath in solutionPaths)
         {
-            await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
-                solutionPath,
-                false,
-                false,
-                true);
-        }
+            var solutionFolder = Path.GetDirectoryName(solutionPath);
+            var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
 
-        await _npmPackagesUpdater.Update(
-            solutionFolder,
-            false,
-            false,
-            true);
+            _packageSourceManager.Remove(solutionFolder, "ABP Nightly");
 
-        if (solutionAngularFolder != null)
-        {
+            if (solutionPath != null)
+            {
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
+                    solutionPath,
+                    false,
+                    false,
+                    true);
+            }
+
             await _npmPackagesUpdater.Update(
-                solutionAngularFolder,
+                solutionFolder,
                 false,
                 false,
                 true);
+
+            if (solutionAngularFolder != null)
+            {
+                await _npmPackagesUpdater.Update(
+                    solutionAngularFolder,
+                    false,
+                    false,
+                    true);
+            }
         }
     }
 
-    private string GetSolutionPath(CommandLineArgs commandLineArgs)
+    private List<string> GetSolutionPaths(CommandLineArgs commandLineArgs)
     {
         var directory = commandLineArgs.Options.GetOrNull(Options.SolutionDirectory.Short, Options.SolutionDirectory.Long)
                         ?? Directory.GetCurrentDirectory();
 
-        var solutionPath = Directory.GetFiles(directory, "*.sln").FirstOrDefault();
+        var solutionPaths = Directory.GetFiles(directory, "*.sln", SearchOption.AllDirectories);
 
-        if (solutionPath == null)
+        if (!solutionPaths.Any())
         {
-            var subDirectories = Directory.GetDirectories(directory);
-
-            foreach (var subDirectory in subDirectories)
-            {
-                var slnInSubDirectory = Directory.GetFiles(subDirectory, "*.sln").FirstOrDefault();
-
-                if (slnInSubDirectory != null)
-                {
-                    return Path.Combine(subDirectory, slnInSubDirectory);
-                }
-            }
-
-            Logger.LogWarning("There is no solution or more that one solution in current directory.");
-            return null;
+            Logger.LogWarning("No solution (.sln) found to change version.");
         }
 
-        return solutionPath;
+        return solutionPaths.ToList();
     }
 
     private string GetSolutionFolder(CommandLineArgs commandLineArgs)

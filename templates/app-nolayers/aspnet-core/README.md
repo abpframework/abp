@@ -4,7 +4,7 @@ This is a minimalist, non-layered startup solution with the ABP Framework. All t
 
 ## How to run
 
-The application needs to a database. Run the following command in the `MyCompanyName.MyProjectName` directory:
+The application needs to connect to a database. Run the following command in the `MyCompanyName.MyProjectName` directory:
 
 ````bash
 dotnet run --migrate-database

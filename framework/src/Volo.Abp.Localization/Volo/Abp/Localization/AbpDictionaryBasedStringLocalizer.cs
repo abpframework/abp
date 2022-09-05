@@ -14,14 +14,17 @@ public class AbpDictionaryBasedStringLocalizer : IStringLocalizer, IStringLocali
 
     public List<IStringLocalizer> BaseLocalizers { get; }
 
+    public AbpLocalizationOptions AbpLocalizationOptions { get; }
+
     public virtual LocalizedString this[string name] => GetLocalizedString(name);
 
     public virtual LocalizedString this[string name, params object[] arguments] => GetLocalizedStringFormatted(name, arguments);
 
-    public AbpDictionaryBasedStringLocalizer(LocalizationResource resource, List<IStringLocalizer> baseLocalizers)
+    public AbpDictionaryBasedStringLocalizer(LocalizationResource resource, List<IStringLocalizer> baseLocalizers, AbpLocalizationOptions abpLocalizationOptions)
     {
         Resource = resource;
         BaseLocalizers = baseLocalizers;
+        AbpLocalizationOptions = abpLocalizationOptions;
     }
 
     public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
@@ -95,23 +98,29 @@ public class AbpDictionaryBasedStringLocalizer : IStringLocalizer, IStringLocali
             return null;
         }
 
-        //Try to get from same language dictionary (without country code)
-        if (cultureName.Contains("-")) //Example: "tr-TR" (length=5)
+        if (AbpLocalizationOptions.TryToGetFromBaseCulture)
         {
-            var strLang = Resource.Contributors.GetOrNull(CultureHelper.GetBaseCultureName(cultureName), name);
-            if (strLang != null)
+            //Try to get from same language dictionary (without country code)
+            if (cultureName.Contains("-")) //Example: "tr-TR" (length=5)
             {
-                return strLang;
+                var strLang = Resource.Contributors.GetOrNull(CultureHelper.GetBaseCultureName(cultureName), name);
+                if (strLang != null)
+                {
+                    return strLang;
+                }
             }
         }
 
-        //Try to get from default language
-        if (!Resource.DefaultCultureName.IsNullOrEmpty())
+        if (AbpLocalizationOptions.TryToGetFromDefaultCulture)
         {
-            var strDefault = Resource.Contributors.GetOrNull(Resource.DefaultCultureName, name);
-            if (strDefault != null)
+            //Try to get from default language
+            if (!Resource.DefaultCultureName.IsNullOrEmpty())
             {
-                return strDefault;
+                var strDefault = Resource.Contributors.GetOrNull(Resource.DefaultCultureName, name);
+                if (strDefault != null)
+                {
+                    return strDefault;
+                }
             }
         }
 

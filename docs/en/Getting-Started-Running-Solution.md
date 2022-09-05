@@ -15,7 +15,7 @@
 
 ### Connection String
 
-Check the **connection string** in the `appsettings.json` file under the {{if Tiered == "Yes"}}`.IdentityServer` and `.HttpApi.Host` projects{{else}}{{if UI=="MVC"}}`.Web` project{{else if UI=="BlazorServer"}}`.Blazor` project{{else}}`.HttpApi.Host` project{{end}}{{end}}.
+Check the **connection string** in the `appsettings.json` file under the {{if Tiered == "Yes"}}`.AuthServer` and `.HttpApi.Host` projects{{else}}{{if UI=="MVC"}}`.Web` project{{else if UI=="BlazorServer"}}`.Blazor` project{{else}}`.HttpApi.Host` project{{end}}{{end}}.
 
 {{ if DB == "EF" }}
 
@@ -91,15 +91,15 @@ Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
 ## Run the Application
 
-> Please execute the `abp install-libs` command to restore the libs required by the web project before running the application.
-
 {{ if UI == "MVC" || UI == "BlazorServer" }}
+
+> Before starting the application, run `abp install-libs` command in your Web directory to restore the client-side libraries. This will populate the `libs` folder.
 
 {{ if Tiered == "Yes" }}
 
 > Tiered solutions use **Redis** as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
 
-1. Ensure that the `.IdentityServer` project is the startup project. Run this application that will open a **login** page in your browser.
+1. Ensure that the `.AuthServer` project is the startup project. Run this application that will open a **login** page in your browser.
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
 
@@ -137,7 +137,7 @@ Ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the st
 
 > Tiered solutions use Redis as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
 
-Ensure that the `.IdentityServer` project is the startup project. Run the application which will open a **login** page in your browser.
+Ensure that the `.AuthServer` project is the startup project. Run the application which will open a **login** page in your browser.
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
 
@@ -162,6 +162,8 @@ You can see the application APIs and test them here. Get [more info](https://swa
 {{ if UI == "Blazor" }}
 
 ### Running the Blazor Application (Client Side)
+
+Go to the Blazor project folder, open a command line terminal, type the `abp bundle -f` command (If the project was created by ABP Cli tool, you don't need to do this).
 
 Ensure that the `.Blazor` project is the startup project and run the application.
 

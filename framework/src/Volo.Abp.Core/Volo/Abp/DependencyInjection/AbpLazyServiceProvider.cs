@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.DependencyInjection;
 
-public class AbpLazyServiceProvider : IAbpLazyServiceProvider, ITransientDependency
+[ExposeServices(typeof(IAbpLazyServiceProvider))]
+public class AbpLazyServiceProvider : CachedServiceProviderBase, IAbpLazyServiceProvider, ITransientDependency
 {
-    protected IDictionary<Type, object> CachedServices { get; set; }
-
-    protected IServiceProvider ServiceProvider { get; set; }
-
     public AbpLazyServiceProvider(IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
-        ServiceProvider = serviceProvider;
-        CachedServices = new Dictionary<Type, object>();
     }
 
     public virtual T LazyGetRequiredService<T>()
@@ -23,7 +17,7 @@ public class AbpLazyServiceProvider : IAbpLazyServiceProvider, ITransientDepende
 
     public virtual object LazyGetRequiredService(Type serviceType)
     {
-        return CachedServices.GetOrAdd(serviceType, () => ServiceProvider.GetRequiredService(serviceType));
+        return GetService(serviceType);
     }
 
     public virtual T LazyGetService<T>()
@@ -33,7 +27,7 @@ public class AbpLazyServiceProvider : IAbpLazyServiceProvider, ITransientDepende
 
     public virtual object LazyGetService(Type serviceType)
     {
-        return CachedServices.GetOrAdd(serviceType, () => ServiceProvider.GetService(serviceType));
+        return GetService(serviceType);
     }
 
     public virtual T LazyGetService<T>(T defaultValue)
@@ -53,6 +47,9 @@ public class AbpLazyServiceProvider : IAbpLazyServiceProvider, ITransientDepende
 
     public virtual object LazyGetService(Type serviceType, Func<IServiceProvider, object> factory)
     {
-        return CachedServices.GetOrAdd(serviceType, () => factory(ServiceProvider));
+        return CachedServices.GetOrAdd(
+            serviceType,
+            _ => new Lazy<object>(() => factory(ServiceProvider))
+        ).Value;
     }
 }

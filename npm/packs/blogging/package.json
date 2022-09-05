@@ -1,14 +1,14 @@
 {
-  "version": "5.2.1",
+  "version": "6.0.0-rc.3",
   "name": "@abp/blogging",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "~5.2.1",
-    "@abp/owl.carousel": "~5.2.1",
-    "@abp/prismjs": "~5.2.1",
-    "@abp/tui-editor": "~5.2.1"
+    "@abp/aspnetcore.mvc.ui.theme.shared": "~6.0.0-rc.3",
+    "@abp/owl.carousel": "~6.0.0-rc.3",
+    "@abp/prismjs": "~6.0.0-rc.3",
+    "@abp/tui-editor": "~6.0.0-rc.3"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

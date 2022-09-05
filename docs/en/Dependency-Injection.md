@@ -131,7 +131,7 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 If you do not specify which services to expose, ABP expose services by convention. So taking the ``TaxCalculator`` defined above:
 
 * The class itself is exposed by default. That means you can inject it by ``TaxCalculator`` class.
-* Default interfaces are exposed by default. Default interfaces are determined by naming convention. In this example, ``ICalculator`` and ``ITaxCalculator`` are default interfaces of ``TaxCalculator``, but ``ICanCalculate`` is not.
+* Default interfaces are exposed by default. Default interfaces are determined by naming convention. In this example, ``ICalculator`` and ``ITaxCalculator`` are default interfaces of ``TaxCalculator``, but ``ICanCalculate`` is not. A generic interface (e.g. `ICalculator<string>`) is also considered as a default interface if the naming convention is satisfied.
 
 ### Combining All Together
 
@@ -244,6 +244,27 @@ One restriction of property injection is that you cannot use the dependency in y
 
 Property injection is also useful when you want to design a base class that has some common services injected by default. If you're going to use constructor injection, all derived classes should also inject depended services into their own constructors which makes development harder. However, be very careful using property injection for non-optional services as it makes it harder to clearly see the requirements of a class.
 
+#### DisablePropertyInjectionAttribute
+
+You can use `[DisablePropertyInjection]` attribute on class or properties to disable property injection for the whole class or some specific properties.
+
+````C#
+[DisablePropertyInjection]
+public class MyService : ITransientDependency
+{
+    public ITaxCalculator TaxCalculator { get; set; }
+}
+
+public class MyService : ITransientDependency
+{
+    public ILogger<MyService> Logger { get; set; }
+
+    [DisablePropertyInjection]
+    public ITaxCalculator TaxCalculator { get; set; }
+}
+
+````
+
 ### Resolve Service from IServiceProvider
 
 You may want to resolve a service directly from ``IServiceProvider``. In that case, you can inject IServiceProvider into your class and use ``GetService`` method as shown below:
@@ -251,18 +272,7 @@ You may want to resolve a service directly from ``IServiceProvider``. In that ca
 ````C#
 public class MyService : ITransientDependency
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public MyService(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
-
-    public void DoSomething()
-    {
-        var taxCalculator = _serviceProvider.GetService<ITaxCalculator>();
-        //...
-    }
+    public ILogger<MyService> Logger { get; set; }
 }
 ````
 

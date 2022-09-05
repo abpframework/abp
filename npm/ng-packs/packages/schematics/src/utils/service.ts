@@ -20,6 +20,9 @@ import {
   createTypesToImportsReducer,
   removeTypeModifiers,
 } from './type';
+import { eBindingSourceId } from '../enums';
+import { camelizeHyphen } from './text';
+import {VOLO_REMOTE_STREAM_CONTENT} from "../constants";
 
 export function serializeParameters(parameters: Property[]) {
   return parameters.map(p => p.name + p.optional + ': ' + p.type + p.default, '').join(', ');
@@ -36,7 +39,8 @@ export function createControllerToServiceMapper({
     const name = controller.controllerName;
     const namespace = parseNamespace(solution, controller.type);
     const actions = Object.values(controller.actions);
-    const imports = actions.reduce(createActionToImportsReducer(solution, types, namespace), []);
+    const typeWithoutIRemoteStreamContent =  getTypesWithoutIRemoteStreamContent(types)
+    const imports = actions.reduce(createActionToImportsReducer(solution, typeWithoutIRemoteStreamContent, namespace), []);
     imports.push(new Import({ path: '@abp/ng.core', specifiers: ['RestService'] }));
     imports.push(new Import({ path: '@angular/core', specifiers: ['Injectable'] }));
     sortImports(imports);
@@ -46,6 +50,11 @@ export function createControllerToServiceMapper({
   };
 }
 
+function getTypesWithoutIRemoteStreamContent(types: Record<string, Type>) {
+  const newType = {...types}
+  delete newType[VOLO_REMOTE_STREAM_CONTENT]
+  return newType
+}
 function sortMethods(methods: Method[]) {
   methods.sort((a, b) => (a.signature.name > b.signature.name ? 1 : -1));
 }
@@ -66,7 +75,8 @@ export function createActionToBodyMapper() {
 
   return ({ httpMethod, parameters, returnValue, url }: Action) => {
     const responseType = adaptType(returnValue.typeSimple);
-    const body = new Body({ method: httpMethod, responseType, url });
+    const responseTypeWithNamespace = returnValue.typeSimple;
+    const body = new Body({ method: httpMethod, responseType, url ,responseTypeWithNamespace});
 
     parameters.forEach(body.registerActionParameter);
 
@@ -79,8 +89,12 @@ export function createActionToSignatureMapper() {
 
   return (action: Action) => {
     const signature = new Signature({ name: getMethodNameFromAction(action) });
-
-    signature.parameters = action.parametersOnMethod.map(p => {
+    const versionParameter = getVersionParameter(action);
+    const parameters = [
+      ...action.parametersOnMethod,
+      ...(versionParameter ? [versionParameter] : []),
+    ];
+    signature.parameters = parameters.map(p => {
       const type = adaptType(p.typeSimple);
       const parameter = new Property({ name: p.name, type });
       parameter.setDefault(p.defaultValue);
@@ -94,6 +108,40 @@ export function createActionToSignatureMapper() {
 
 function getMethodNameFromAction(action: Action): string {
   return action.uniqueName.split('Async')[0];
+}
+
+function getVersionParameter(action: Action) {
+  const versionParameter = action.parameters.find(
+    p =>
+      (p.name == 'apiVersion' && p.bindingSourceId == eBindingSourceId.Path) ||
+      (p.name == 'api-version' && p.bindingSourceId == eBindingSourceId.Query),
+  );
+  const bestVersion = findBestApiVersion(action);
+  return versionParameter && bestVersion
+    ? {
+        ...versionParameter,
+        name: camelizeHyphen(versionParameter.name),
+        defaultValue: `"${bestVersion}"`,
+      }
+    : null;
+}
+
+// Implementation of https://github.com/abpframework/abp/commit/c3f77c1229508279015054a9b4f5586404a88a14#diff-a4dbf6be9a1aa21d8294f11047774949363ee6b601980bf3225e8046c0748c9eR101
+function findBestApiVersion(action: Action) {
+  /*
+  TODO: Implement  configuredVersion when js proxies implemented
+  let configuredVersion = null;
+   if (action.supportedVersions.includes(configuredVersion)) {
+    return configuredVersion;
+  }
+  */
+
+  if (!action.supportedVersions?.length) {
+    // TODO: return configuredVersion if exists or '1.0'
+    return '1.0';
+  }
+  //TODO: Ensure to get the latest version!
+  return action.supportedVersions[action.supportedVersions.length - 1];
 }
 
 function createActionToImportsReducer(

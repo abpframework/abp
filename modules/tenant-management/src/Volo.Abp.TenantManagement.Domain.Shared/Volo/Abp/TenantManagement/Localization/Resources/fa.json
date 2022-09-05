@@ -1,0 +1,22 @@
+{
+  "culture": "fa",
+  "texts": {
+    "Menu:TenantManagement": "مدیریت تننت",
+    "Tenants": "تننت ها",
+    "NewTenant": "ایجاد تننت جدید",
+    "TenantName": "نام تننت",
+    "DisplayName:TenantName": "نام تننت",
+    "TenantDeletionConfirmationMessage": "آیا با حذف تننت {0} موافق هستید؟",
+    "ConnectionStrings": "کانکشن استرینگها",
+    "DisplayName:DefaultConnectionString": "کانکشن استرینگ پیش فرض",
+    "DisplayName:UseSharedDatabase": "استفاده از پایگاه داده مشترک",
+    "Permission:TenantManagement": "مدیریت تننت",
+    "Permission:Create": "ایجاد",
+    "Permission:Edit": "ویرایش",
+    "Permission:Delete": "حذف",
+    "Permission:ManageConnectionStrings": "مدیریت کانکشن استرینگها",
+    "Permission:ManageFeatures": "مدیریت ویژگی ها",
+    "DisplayName:AdminEmailAddress": "آدرس ایمیل مدیر",
+    "DisplayName:AdminPassword": "گذرواژه مدیریت"
+  }
+}

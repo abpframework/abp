@@ -21,9 +21,9 @@ The following code prepares a constant named `identityToolbarActionContributors`
 
 import {
   eIdentityComponents,
-  IdentityToolbarActionContributors,
-  IdentityUserDto,
+  IdentityToolbarActionContributors
 } from '@abp/ng.identity';
+import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { ToolbarAction, ToolbarActionList } from '@abp/ng.theme.shared/extensions';
 
 const logUserNames = new ToolbarAction<IdentityUserDto[]>({
@@ -93,7 +93,7 @@ We need to have a component before we can pass it to the toolbar action contribu
 ```js
 // src/app/click-me-button.component.ts
 
-import { IdentityUserDto } from '@abp/ng.identity';
+import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { ActionData, EXTENSIONS_ACTION_DATA } from '@abp/ng.theme.shared/extensions';
 import { Component, Inject } from '@angular/core';
 
@@ -127,9 +127,9 @@ The following code prepares a constant named `identityToolbarActionContributors`
 
 import {
   eIdentityComponents,
-  IdentityToolbarActionContributors,
-  IdentityUserDto,
+  IdentityToolbarActionContributors
 } from '@abp/ng.identity';
+import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { ToolbarActionList, ToolbarComponent } from '@abp/ng.theme.shared/extensions';
 import { ClickMeButtonComponent } from './click-me-button.component';
 
@@ -362,7 +362,7 @@ export function reorderUserContributors(
 ) {
   // drop "New User" button
   const newUserActionNode = actionList.dropByValue(
-    'AbpIdentity::NewUser',
+   'AbpIdentity::NewUser',
     (action, text) => action['text'] === text,
   );
 

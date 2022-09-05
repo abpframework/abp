@@ -11,11 +11,6 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client;
 
-[ExposeServices(
-    typeof(MvcCachedApplicationConfigurationClient),
-    typeof(ICachedApplicationConfigurationClient),
-    typeof(IAsyncInitialize)
-    )]
 public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
 {
     protected IHttpContextAccessor HttpContextAccessor { get; }
@@ -35,11 +30,6 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         Cache = cache;
     }
 
-    public async Task InitializeAsync()
-    {
-        await GetAsync();
-    }
-
     public async Task<ApplicationConfigurationDto> GetAsync()
     {
         var cacheKey = CreateCacheKey();
@@ -49,7 +39,6 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         {
             return configuration;
         }
-
 
         configuration = await Cache.GetOrAddAsync(
             cacheKey,

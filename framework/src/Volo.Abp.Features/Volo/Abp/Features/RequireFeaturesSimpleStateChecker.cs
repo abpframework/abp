@@ -7,8 +7,8 @@ namespace Volo.Abp.Features;
 public class RequireFeaturesSimpleStateChecker<TState> : ISimpleStateChecker<TState>
     where TState : IHasSimpleStateCheckers<TState>
 {
-    private readonly string[] _featureNames;
-    private readonly bool _requiresAll;
+    public string[] FeatureNames { get; }
+    public bool RequiresAll { get; }
 
     public RequireFeaturesSimpleStateChecker(params string[] featureNames)
         : this(true, featureNames)
@@ -19,13 +19,13 @@ public class RequireFeaturesSimpleStateChecker<TState> : ISimpleStateChecker<TSt
     {
         Check.NotNullOrEmpty(featureNames, nameof(featureNames));
 
-        _requiresAll = requiresAll;
-        _featureNames = featureNames;
+        RequiresAll = requiresAll;
+        FeatureNames = featureNames;
     }
 
     public async Task<bool> IsEnabledAsync(SimpleStateCheckerContext<TState> context)
     {
         var featureChecker = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
-        return await featureChecker.IsEnabledAsync(_requiresAll, _featureNames);
+        return await featureChecker.IsEnabledAsync(RequiresAll, FeatureNames);
     }
 }

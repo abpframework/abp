@@ -1,6 +1,7 @@
 @page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.Localization
 @using Volo.Abp.PermissionManagement.Localization
 @using Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 @model PermissionManagementModal
@@ -43,7 +44,7 @@
                                                disabled="@permission.IsDisabled(Model.ProviderName)"
                                                group-data-permission-name="@permission.Name"
                                                group-data-parent-name="@(permission.ParentName ?? "")"
-                                               group-style="margin-left: @(permission.Depth * 20)px"/>
+                                               group-style="margin-inline-start: @(permission.Depth * 20)px"/>
                                     <input asp-for="@permission.Name" abp-id-name="@Model.Groups[i].Permissions[j].Name"/>
                                 }
                             </div>

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -12,14 +13,18 @@ namespace Volo.Abp.Cli.Commands;
 
 public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientDependency
 {
+    private readonly InitialMigrationCreator _initialMigrationCreator;
     public const string Name = "create-migration-and-run-migrator";
 
     public ICmdHelper CmdHelper { get; }
+    public DotnetEfToolManager DotnetEfToolManager { get; }
     public ILogger<CreateMigrationAndRunMigratorCommand> Logger { get; set; }
 
-    public CreateMigrationAndRunMigratorCommand(ICmdHelper cmdHelper)
+    public CreateMigrationAndRunMigratorCommand(ICmdHelper cmdHelper, InitialMigrationCreator initialMigrationCreator, DotnetEfToolManager dotnetEfToolManager)
     {
+        _initialMigrationCreator = initialMigrationCreator;
         CmdHelper = cmdHelper;
+        DotnetEfToolManager = dotnetEfToolManager;
         Logger = NullLogger<CreateMigrationAndRunMigratorCommand>.Instance;
     }
 
@@ -39,110 +44,31 @@ public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientD
             throw new Exception("DbMigrator is not found!");
         }
 
-        if (!IsDotNetEfToolInstalled())
-        {
-            InstallDotnetEfTool();
-        }
+        await DotnetEfToolManager.BeSureInstalledAsync();
 
-        var tenantDbContextName = FindTenantDbContextName(dbMigrationsFolder);
-        var dbContextName = tenantDbContextName != null ?
-            FindDbContextName(dbMigrationsFolder)
-            : null;
+        var migrationsCreatedSuccessfully = await _initialMigrationCreator.CreateAsync(commandLineArgs.Target, !nolayers);
 
-        var migrationOutput = AddMigrationAndGetOutput(dbMigrationsFolder, dbContextName, "Migrations");
-        var tenantMigrationOutput = tenantDbContextName != null ?
-            AddMigrationAndGetOutput(dbMigrationsFolder, tenantDbContextName, "TenantMigrations")
-            : null;
-
-        if (CheckMigrationOutput(migrationOutput) && CheckMigrationOutput(tenantMigrationOutput))
+        if (migrationsCreatedSuccessfully)
         {
             if (nolayers)
             {
-                // Migration added successfully
-                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(Path.Combine(dbMigrationsFolder, "MyCompanyName.MyProjectName")) + "\" && dotnet run --migrate-database");
+                CmdHelper.RunCmd("dotnet run --migrate-database", Path.GetDirectoryName(Path.Combine(dbMigrationsFolder, "MyCompanyName.MyProjectName")));
             }
             else
             {
-                // Migration added successfully
-                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProjectPath) + "\" && dotnet run");
+                CmdHelper.RunCmd("dotnet run",  Path.GetDirectoryName(dbMigratorProjectPath));
             }
             await Task.CompletedTask;
         }
         else
         {
-            var exceptionMsg = "Migrations failed! A migration command didn't run successfully:" +
-                               Environment.NewLine +
-                               Environment.NewLine + migrationOutput +
-                               Environment.NewLine +
-                               Environment.NewLine + tenantMigrationOutput;
+            var exceptionMsg = "Migrations failed! A migration command didn't run successfully.";
 
             Logger.LogError(exceptionMsg);
             throw new Exception(exceptionMsg);
         }
     }
-
-    private string FindTenantDbContextName(string dbMigrationsFolder)
-    {
-        var tenantDbContext = Directory.GetFiles(dbMigrationsFolder, "*TenantMigrationsDbContext.cs", SearchOption.AllDirectories)
-                                  .FirstOrDefault() ??
-                              Directory.GetFiles(dbMigrationsFolder, "*TenantDbContext.cs", SearchOption.AllDirectories)
-                                  .FirstOrDefault();
-
-        if (tenantDbContext == null)
-        {
-            return null;
-        }
-
-        return Path.GetFileName(tenantDbContext).RemovePostFix(".cs");
-    }
-
-    private string FindDbContextName(string dbMigrationsFolder)
-    {
-        var dbContext = Directory.GetFiles(dbMigrationsFolder, "*MigrationsDbContext.cs", SearchOption.AllDirectories)
-                            .FirstOrDefault(fp => !fp.EndsWith("TenantMigrationsDbContext.cs")) ??
-                        Directory.GetFiles(dbMigrationsFolder, "*DbContext.cs", SearchOption.AllDirectories)
-                            .FirstOrDefault(fp => !fp.EndsWith("TenantDbContext.cs"));
-
-        if (dbContext == null)
-        {
-            return null;
-        }
-
-        return Path.GetFileName(dbContext).RemovePostFix(".cs");
-    }
-
-    private string AddMigrationAndGetOutput(string dbMigrationsFolder, string dbContext, string outputDirectory)
-    {
-        var dbContextOption = string.IsNullOrWhiteSpace(dbContext)
-            ? string.Empty
-            : $"--context {dbContext}";
-
-        var addMigrationCmd = $"cd \"{dbMigrationsFolder}\" && " +
-                              $"dotnet ef migrations add Initial --output-dir {outputDirectory} {dbContextOption}";
-
-        return CmdHelper.RunCmdAndGetOutput(addMigrationCmd, out int exitCode);
-    }
-
-    private bool IsDotNetEfToolInstalled()
-    {
-        var output = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g", out int exitCode);
-        return output.Contains("dotnet-ef");
-    }
-
-    private static bool CheckMigrationOutput(string output)
-    {
-        return output == null || (output.Contains("Done.") &&
-                       output.Contains("To undo this action") &&
-                       output.Contains("ef migrations remove"));
-    }
-
-    private void InstallDotnetEfTool()
-    {
-        Logger.LogInformation("Installing dotnet-ef tool...");
-        CmdHelper.RunCmd("dotnet tool install --global dotnet-ef");
-        Logger.LogInformation("dotnet-ef tool is installed.");
-    }
-
+    
     private static string GetDbMigratorProjectPath(string dbMigrationsFolderPath)
     {
         var srcFolder = Directory.GetParent(dbMigrationsFolderPath);

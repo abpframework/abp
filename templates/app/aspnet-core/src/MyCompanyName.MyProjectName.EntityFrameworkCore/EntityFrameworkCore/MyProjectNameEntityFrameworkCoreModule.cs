@@ -1,13 +1,14 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Uow;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
-using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
@@ -17,7 +18,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
 [DependsOn(
     typeof(MyProjectNameDomainModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
-    typeof(AbpIdentityServerEntityFrameworkCoreModule),
+    typeof(AbpOpenIddictEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreSqlServerModule),
@@ -53,5 +54,12 @@ public class MyProjectNameEntityFrameworkCoreModule : AbpModule
                  * See also MyProjectNameMigrationsDbContextFactory for EF Core tooling. */
             options.UseSqlServer();
         });
+
+        //<TEMPLATE-REMOVE IF-NOT='dbms:SQLite'>
+        Configure<AbpUnitOfWorkDefaultOptions>(options =>
+        {
+            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+        });
+        //</TEMPLATE-REMOVE>
     }
 }

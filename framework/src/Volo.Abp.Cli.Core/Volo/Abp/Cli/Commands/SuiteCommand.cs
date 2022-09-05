@@ -116,6 +116,18 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
             return;
         }
 
+        var IsSolutionBuiltResponse = await client.GetAsync(
+            $"{AbpSuiteHost}/api/abpSuite/solutions/{solutionId.ToString()}/is-built"
+        );
+        
+        var IsSolutionBuilt = Convert.ToBoolean(await IsSolutionBuiltResponse.Content.ReadAsStringAsync());
+
+        if (!IsSolutionBuilt)
+        {
+            Logger.LogInformation("Building the solution...");
+            CmdHelper.RunCmd("dotnet build", Path.GetDirectoryName(solutionFile));
+        }
+
         var entityContent = new StringContent(
             File.ReadAllText(entityFile),
             Encoding.UTF8,
@@ -132,6 +144,11 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         if (!response.IsNullOrWhiteSpace())
         {
             Logger.LogError(response);
+
+            if (response.Contains("Commercial.SuiteTemplates.dll"))
+            {
+                Logger.LogInformation("The solution should be built before generating an entity! Use `dotnet build` to build your solution.");
+            }
         }
         else
         {

@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Stillingar",
     "Feature:SettingManagementEnable": "Virkja stillingar",
     "Feature:SettingManagementEnableDescription": "Virkja stillingar í forritinu.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Leyfa tenentum að breyta tölvupóststillingum.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Leyfa tenentum að breyta tölvupóststillingum."
+    "Feature:AllowChangingEmailSettings": "Leyfa að breyta stillingum tölvupósts.",
+    "Feature:AllowChangingEmailSettingsDescription": "Leyfa að breyta stillingum tölvupósts."
   }
 }

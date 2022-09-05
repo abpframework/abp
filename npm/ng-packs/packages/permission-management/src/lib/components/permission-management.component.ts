@@ -60,6 +60,9 @@ export class PermissionManagementComponent
   protected _visible = false;
 
   @Input()
+  entityDisplayName: string | undefined;
+
+  @Input()
   get visible(): boolean {
     return this._visible;
   }

@@ -71,6 +71,10 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     private async Task ProcessEventAsync(ServiceBusReceivedMessage message)
     {
         var eventName = message.Subject;
+        if (eventName == null)
+        {
+            return;
+        }
         var eventType = _eventTypes.GetOrDefault(eventName);
         if (eventType == null)
         {
@@ -87,12 +91,41 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await TriggerHandlersAsync(eventType, eventData);
     }
 
-    public override async Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
+    public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
         await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id);
     }
 
-    public override async Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
+    public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    {
+        var outgoingEventArray =  outgoingEvents.ToArray();
+
+        var publisher = await _publisherPool.GetAsync(
+            _options.TopicName,
+            _options.ConnectionName);
+
+        using var messageBatch = await publisher.CreateMessageBatchAsync();
+
+        foreach (var outgoingEvent in outgoingEventArray)
+        {
+            var message = new ServiceBusMessage(outgoingEvent.EventData) { Subject = outgoingEvent.EventName };
+
+            if (message.MessageId.IsNullOrWhiteSpace())
+            {
+                message.MessageId = outgoingEvent.Id.ToString();
+            }
+
+            if (!messageBatch.TryAddMessage(message))
+            {
+                throw new AbpException(
+                    "The message is too large to fit in the batch. Set AbpEventBusBoxesOptions.OutboxWaitingEventMaxCount to reduce the number");
+            }
+        }
+
+        await publisher.SendMessagesAsync(messageBatch);
+    }
+
+    public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
     {
         var eventType = _eventTypes.GetOrDefault(incomingEvent.EventName);
         if (eventType == null)
@@ -180,7 +213,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             .Locking(factories => factories.Clear());
     }
 
-    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         await PublishAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData);
     }

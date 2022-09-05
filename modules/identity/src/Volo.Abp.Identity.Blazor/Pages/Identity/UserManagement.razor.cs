@@ -66,6 +66,13 @@ public partial class UserManagement
         }
     }
 
+    protected override ValueTask SetBreadcrumbItemsAsync()
+    {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Users"].Value));
+        return base.SetBreadcrumbItemsAsync();
+    }
+
     protected virtual async Task OnSearchTextChanged(string value)
     {
         GetListInput.Filter = value;
@@ -182,22 +189,25 @@ public partial class UserManagement
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = EntityActions.Get<UserManagement>()
+                        Actions = EntityActions.Get<UserManagement>(),
                     },
                     new TableColumn
                     {
                         Title = L["UserName"],
                         Data = nameof(IdentityUserDto.UserName),
+                        Sortable = true,
                     },
                     new TableColumn
                     {
                         Title = L["EmailAddress"],
                         Data = nameof(IdentityUserDto.Email),
+                        Sortable = true,
                     },
                     new TableColumn
                     {
                         Title = L["PhoneNumber"],
                         Data = nameof(IdentityUserDto.PhoneNumber),
+                        Sortable = true,
                     }
             });
 

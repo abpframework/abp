@@ -27,4 +27,10 @@ public class EmailSettingsController : AbpControllerBase, IEmailSettingsAppServi
     {
         return _emailSettingsAppService.UpdateAsync(input);
     }
+
+    [HttpPost("send-test-email")]
+    public Task SendTestEmailAsync(SendTestEmailInput input)
+    {
+        return _emailSettingsAppService.SendTestEmailAsync(input);
+    }
 }

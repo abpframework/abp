@@ -49,7 +49,7 @@ public class BlogModule : AbpModule
     }
 }
 ````
-有关配置系统的更多信息,请参阅配置（TODO:link）文档.
+有关配置系统的更多信息,请参阅[配置](Configuration.md)文档.
 
 ##### 配置服务前和后
 

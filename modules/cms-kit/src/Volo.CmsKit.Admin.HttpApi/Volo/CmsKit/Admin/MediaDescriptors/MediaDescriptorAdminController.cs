@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
-using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.MediaDescriptors;
 
+[RequiresFeature(CmsKitFeatures.MediaEnable)]
 [RequiresGlobalFeature(typeof(MediaFeature))]
 [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]

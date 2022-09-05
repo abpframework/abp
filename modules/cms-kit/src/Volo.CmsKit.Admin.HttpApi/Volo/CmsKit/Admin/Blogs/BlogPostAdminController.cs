@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Blogs;
 
+[RequiresFeature(CmsKitFeatures.BlogEnable)]
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
@@ -61,7 +64,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     {
         return BlogPostAdminAppService.UpdateAsync(id, input);
     }
-    
+
     [HttpPost]
     [Route("{id}/publish")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
@@ -69,7 +72,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     {
         return BlogPostAdminAppService.PublishAsync(id);
     }
-    
+
     [HttpPost]
     [Route("{id}/draft")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
@@ -86,7 +89,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     {
         return BlogPostAdminAppService.CreateAndPublishAsync(input);
     }
-    
+
     [HttpPost]
     [Route("{id}/send-to-review")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
@@ -94,7 +97,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     {
         return BlogPostAdminAppService.SendToReviewAsync(id);
     }
-    
+
     [HttpPost]
     [Route("create-and-send-to-review")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
@@ -102,7 +105,7 @@ public class BlogPostAdminController : CmsKitAdminController, IBlogPostAdminAppS
     {
         return BlogPostAdminAppService.CreateAndSendToReviewAsync(input);
     }
-    
+
     [HttpGet]
     [Route("has-blogpost-waiting-for-review")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]

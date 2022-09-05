@@ -6,11 +6,11 @@
           [formGroupName]="extraPropertiesKey"
           *ngIf="extraProperties.controls[prop.name]; else tempDefault"
         >
-          <abp-extensible-form-prop [prop]="prop" [data]="data"></abp-extensible-form-prop>
+          <abp-extensible-form-prop [class]="prop.className" [prop]="prop" [data]="data"></abp-extensible-form-prop>
         </ng-container>
 
         <ng-template #tempDefault>
-          <abp-extensible-form-prop
+          <abp-extensible-form-prop [class]="prop.className"
             *ngIf="form.get(prop.name)"
             [prop]="prop"
             [data]="data"
