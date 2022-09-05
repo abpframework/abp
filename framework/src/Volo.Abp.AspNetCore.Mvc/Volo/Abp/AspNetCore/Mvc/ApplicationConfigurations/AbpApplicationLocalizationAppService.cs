@@ -24,9 +24,9 @@ public class AbpApplicationLocalizationAppService :
         LocalizationOptions = localizationOptions.Value;
     }
     
-    public async Task<ApplicationLocalizationDto> GetAsync(string culture)
+    public async Task<ApplicationLocalizationDto> GetAsync(ApplicationLocalizationRequestDto input)
     {
-        using (CultureHelper.Use(culture))
+        using (CultureHelper.Use(input.Culture))
         {
             var resources = LocalizationOptions
                 .Resources

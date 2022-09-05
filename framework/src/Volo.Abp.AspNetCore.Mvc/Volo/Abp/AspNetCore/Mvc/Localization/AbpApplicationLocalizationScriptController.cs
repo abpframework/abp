@@ -40,10 +40,10 @@ public class AbpApplicationLocalizationScriptController : AbpController
     [HttpGet]
     [Route("{culture}")]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
-    public async Task<ActionResult> GetAsync(string culture)
+    public async Task<ActionResult> GetAsync(ApplicationLocalizationRequestDto input)
     {
         var script = CreateScript(
-            await LocalizationAppService.GetAsync(culture)
+            await LocalizationAppService.GetAsync(input)
         );
 
         return Content(

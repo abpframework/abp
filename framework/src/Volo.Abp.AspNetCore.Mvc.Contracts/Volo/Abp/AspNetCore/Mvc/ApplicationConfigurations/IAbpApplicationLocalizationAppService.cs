@@ -5,5 +5,5 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 public interface IAbpApplicationLocalizationAppService : IApplicationService
 {
-    Task<ApplicationLocalizationDto> GetAsync(string culture);
+    Task<ApplicationLocalizationDto> GetAsync(ApplicationLocalizationRequestDto input);
 }

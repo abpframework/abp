@@ -15,11 +15,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 [ExposeServices(typeof(IAbpApplicationLocalizationAppService), typeof(AbpApplicationLocalizationClientProxy))]
 public partial class AbpApplicationLocalizationClientProxy : ClientProxyBase<IAbpApplicationLocalizationAppService>, IAbpApplicationLocalizationAppService
 {
-    public virtual async Task<ApplicationLocalizationDto> GetAsync(string culture)
+    public virtual async Task<ApplicationLocalizationDto> GetAsync(ApplicationLocalizationRequestDto input)
     {
         return await RequestAsync<ApplicationLocalizationDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            { typeof(string), culture }
+            { typeof(ApplicationLocalizationRequestDto), input }
         });
     }
 }
