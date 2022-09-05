@@ -155,26 +155,26 @@
             }
           ],
           "actions": {
-            "GetAsyncByCulture": {
-              "uniqueName": "GetAsyncByCulture",
+            "GetAsyncByInput": {
+              "uniqueName": "GetAsyncByInput",
               "name": "GetAsync",
               "httpMethod": "GET",
               "url": "api/abp/application-localization/{culture}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
-                  "name": "culture",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
-                  "typeSimple": "string",
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ApplicationLocalizationRequestDto, Volo.Abp.AspNetCore.Mvc.Contracts",
+                  "type": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ApplicationLocalizationRequestDto",
+                  "typeSimple": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ApplicationLocalizationRequestDto",
                   "isOptional": false,
                   "defaultValue": null
                 }
               ],
               "parameters": [
                 {
-                  "nameOnMethod": "culture",
-                  "name": "culture",
+                  "nameOnMethod": "input",
+                  "name": "Culture",
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
@@ -182,7 +182,19 @@
                   "defaultValue": null,
                   "constraintTypes": [],
                   "bindingSourceId": "Path",
-                  "descriptorName": ""
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OnlyDynamics",
+                  "jsonName": null,
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
                 }
               ],
               "returnValue": {
