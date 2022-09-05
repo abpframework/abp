@@ -52,7 +52,7 @@ public class AbpApplicationLocalizationAppService :
                         staticLocalizedStrings = (await localizer.GetAllStringsAsync(
                             includeParentCultures: true,
                             includeBaseLocalizers: false,
-                            dynamicLocalizationPreference: DynamicLocalizationPreference.Exclude
+                            includeDynamicContributors: false
                         )).ToDictionary(x => x.Name);
                     }
                     
