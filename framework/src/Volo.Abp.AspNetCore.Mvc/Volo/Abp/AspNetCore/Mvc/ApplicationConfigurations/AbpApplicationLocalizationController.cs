@@ -16,7 +16,6 @@ public class AbpApplicationLocalizationController: AbpControllerBase, IAbpApplic
     }
     
     [HttpGet]
-    [Route("{culture}")]
     public virtual async Task<ApplicationLocalizationDto> GetAsync(ApplicationLocalizationRequestDto input)
     {
         return await _localizationAppService.GetAsync(input);

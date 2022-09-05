@@ -159,7 +159,7 @@
               "uniqueName": "GetAsyncByInput",
               "name": "GetAsync",
               "httpMethod": "GET",
-              "url": "api/abp/application-localization/{culture}",
+              "url": "api/abp/application-localization",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -180,8 +180,8 @@
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
                   "descriptorName": "input"
                 },
                 {

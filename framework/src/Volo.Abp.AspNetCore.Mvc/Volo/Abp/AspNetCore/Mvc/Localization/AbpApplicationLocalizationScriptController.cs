@@ -38,7 +38,6 @@ public class AbpApplicationLocalizationScriptController : AbpController
     }
 
     [HttpGet]
-    [Route("{culture}")]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
     public async Task<ActionResult> GetAsync(ApplicationLocalizationRequestDto input)
     {
