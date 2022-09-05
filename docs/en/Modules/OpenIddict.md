@@ -330,7 +330,19 @@ public class MyClaimDestinationsProvider : IAbpOpenIddictClaimDestinationsProvid
 {
     public virtual Task SetDestinationsAsync(AbpOpenIddictClaimDestinationsProviderContext context)
     {
-		// ...
+        foreach (var claim in context.Claims)
+        {
+            if (claim.Type == MyClaims.MyClaimsType)
+            {
+                claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
+            }
+	    
+	    if (claim.Type == MyClaims.MyClaimsType2)
+            {
+                claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);
+            }
+        }
+
         return Task.CompletedTask;
     }
 }

@@ -23,13 +23,13 @@ https://github.com/abpframework/abp/tree/master/modules/docs
 
 You can download the VoloDocs release from the following links:
 
-http://apps.abp.io/VoloDocs/VoloDocs.win-x64.zip - **Windows 64 bit**
+https://apps.abp.io/VoloDocs/VoloDocs.win-x64.zip - **Windows 64 bit**
 
-http://apps.abp.io/VoloDocs/VoloDocs.win-x86.zip - **Windows 32 bit**
+https://apps.abp.io/VoloDocs/VoloDocs.win-x86.zip - **Windows 32 bit**
 
-http://apps.abp.io/VoloDocs/VoloDocs.osx-x64.zip - **MacOS**
+https://apps.abp.io/VoloDocs/VoloDocs.osx-x64.zip - **MacOS**
 
-http://apps.abp.io/VoloDocs/VoloDocs.linux-x64.zip - **Linux**
+https://apps.abp.io/VoloDocs/VoloDocs.linux-x64.zip - **Linux**
 
 Notice that, all installations are self-contained deployments. It means all the required third-party dependencies along with the version of .NET Core is included. So you don't need to install any .NET Core SDK / Runtime.
 

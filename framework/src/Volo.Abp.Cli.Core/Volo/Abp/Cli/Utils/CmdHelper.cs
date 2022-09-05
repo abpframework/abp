@@ -18,20 +18,20 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         CliOptions = cliOptions.Value;
     }
     
-    public void OpenWebPage(string url)
+    public void Open(string pathOrUrl)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            url = url.Replace("&", "^&");
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            pathOrUrl = pathOrUrl.Replace("&", "^&");
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {pathOrUrl}") { CreateNoWindow = true });
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            Process.Start("xdg-open", url);
+            Process.Start("xdg-open", pathOrUrl);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            Process.Start("open", url);
+            Process.Start("open", pathOrUrl);
         }
     }
 

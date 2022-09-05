@@ -1,4 +1,5 @@
-﻿@using Volo.Abp.AspNetCore.Components.Web.Theming.Components;
+﻿@using Volo.Abp.Ui.LayoutHooks
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
 @inherits LayoutComponentBase
 <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4" id="main-navbar" style="min-height: 4rem;">
     <div class="container">
@@ -18,7 +19,9 @@
 </nav>
 <div class="container">
     <PageAlert />
+    <LayoutHook Name="@LayoutHooks.Body.First" Layout="@StandardLayouts.Application" />
     @Body
+    <LayoutHook Name="@LayoutHooks.Body.Last" Layout="@StandardLayouts.Application" />
     <DynamicLayoutComponent />
     <UiMessageAlert />
     <UiNotificationAlert />

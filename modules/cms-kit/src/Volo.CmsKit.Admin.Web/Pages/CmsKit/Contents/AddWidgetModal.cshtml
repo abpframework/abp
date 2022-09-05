@@ -14,34 +14,39 @@
 @section scripts {
     <abp-script src="/Pages/CmsKit/Contents/addWidgetModal.js" />
 }
+@{
+    bool isDefinedWidget = Model.Widgets.Count() > 1;
+}
+<abp-modal size="Large" id="addWidgetModal">
+    <abp-modal-header title="@L["AddWidget"].Value"></abp-modal-header>
+    <abp-modal-body>
+        <div class="container">
+            @if (isDefinedWidget)
+            {
+                <abp-select asp-for="ViewModel.Widget" />
 
-    <abp-modal size="Large" id="addWidgetModal">
-        <abp-modal-header title="@L["AddWidget"].Value"></abp-modal-header>
-        <abp-modal-body>
-            <div class="container">
-                @if (Model.Widgets.Count() > 1)
+                foreach (var item in Model.ViewModel.Details)
                 {
-                    <abp-select asp-for="ViewModel.Widget" />
-
-                    foreach (var item in Model.ViewModel.Details)
+                    if (item.EditorComponentName is not null)
                     {
-                        if (item.EditorComponentName is not null)
-                        {
-                            <div hidden id="editor-@item.Name">
-                                <form data-check-form-on-close="false">
-                                    @await Component.InvokeAsync(@item.EditorComponentName)
-                                </form>
-                            </div>
-                        }
+                        <div hidden id="editor-@item.Name">
+                            <form data-check-form-on-close="false">
+                                @await Component.InvokeAsync(@item.EditorComponentName)
+                            </form>
+                        </div>
                     }
                 }
-                else
-                {
-                    <p>@L["PleaseConfigureWidgets"].Value</p>
-                }
+            }
+            else
+            {
+                <p>@L["PleaseConfigureWidgets"].Value</p>
+            }
         </div>
     </abp-modal-body>
     <abp-modal-footer>
-        <button class="btn btn-primary float-end save-changes" type="submit">@L["Add"]</button>
+        @if (isDefinedWidget)
+        {
+            <button class="btn btn-primary float-end save-changes" type="submit">@L["Add"]</button>
+        }
     </abp-modal-footer>
 </abp-modal>

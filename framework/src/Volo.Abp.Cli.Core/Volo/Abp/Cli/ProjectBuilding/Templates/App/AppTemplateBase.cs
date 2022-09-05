@@ -37,6 +37,7 @@ public abstract class AppTemplateBase : TemplateInfo
         ConfigureTieredArchitecture(context, steps);
         ConfigurePublicWebSite(context, steps);
         ConfigureTheme(context, steps);
+        ConfigureVersion(context, steps);
         RemoveUnnecessaryPorts(context, steps);
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
@@ -193,12 +194,16 @@ public abstract class AppTemplateBase : TemplateInfo
             return;
         }
 
-        if (context.BuildArgs.Theme == Theme.LeptonX)
+        if (context.BuildArgs.Theme != Theme.NotSpecified)
         {
-            context.Symbols.Add("LEPTONX");
-            steps.Add(new ChangeThemeStyleStep());
+            context.Symbols.Add(context.BuildArgs.Theme.Value.ToString().ToUpper());
         }
 
+        if (context.BuildArgs.Theme == Theme.LeptonX)
+        {
+            steps.Add(new ChangeThemeStyleStep());
+        }
+        
         if (IsDefaultThemeForTemplate(context.BuildArgs.Theme.Value))
         {
             return;
@@ -487,6 +492,14 @@ public abstract class AppTemplateBase : TemplateInfo
     protected void RemoveUnnecessaryPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveUnnecessaryPortsStep());
+    }
+
+    protected void ConfigureVersion(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        if (context.BuildArgs.Version == null || SemanticVersion.Parse(context.BuildArgs.Version) >= SemanticVersion.Parse("6.0.0-rc.1"))
+        {
+            context.Symbols.Add("newer-than-6.0");
+        }
     }
 
     protected void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)

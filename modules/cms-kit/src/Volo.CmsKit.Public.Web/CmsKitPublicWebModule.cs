@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
+using Volo.Abp.Ui.LayoutHooks;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;

@@ -86,8 +86,7 @@ $solutions = (
     "modules/users",
     "modules/virtual-file-explorer",
     "modules/blob-storing-database",
-    "modules/cms-kit",
-    "studio"
+    "modules/cms-kit"
 )
 
 # List of projects
@@ -458,12 +457,5 @@ $projects = (
     "modules/cms-kit/src/Volo.CmsKit.Public.Web",
     "modules/cms-kit/src/Volo.CmsKit.Web",
     "modules/cms-kit/src/Volo.CmsKit.Installer",
-    "studio/source-codes/Volo.CmsKit.SourceCode",
-	
-    # abp/studio
-    "studio/src/Volo.Abp.Studio.Analyzing.Abstractions",
-    "studio/src/Volo.Abp.Studio.Domain.CommonServices",
-    "studio/src/Volo.Abp.Studio.Domain.Shared",
-    "studio/src/Volo.Abp.Studio.ModuleInstaller.Abstractions",
-    "studio/src/Volo.Abp.Studio.ModuleInstaller"
+    "studio/source-codes/Volo.CmsKit.SourceCode"
 )

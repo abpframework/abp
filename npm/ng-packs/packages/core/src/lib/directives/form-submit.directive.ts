@@ -14,7 +14,9 @@ import { debounceTime, filter } from 'rxjs/operators';
 import { SubscriptionService } from '../services/subscription.service';
 
 type Controls = { [key: string]: FormControl } | FormGroup[];
-
+/**
+ * @deprecated FormSubmitDirective will be removed in V7.0.0. Use `ngSubmit` instead.
+ */
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'form[ngSubmit][formGroup]',
@@ -43,6 +45,7 @@ export class FormSubmitDirective implements OnInit {
 
   ngOnInit() {
     this.subscription.addOne(this.formGroupDirective.ngSubmit, () => {
+
       if (this.markAsDirtyWhenSubmit) {
         this.markAsDirty();
       }
