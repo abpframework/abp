@@ -49,7 +49,7 @@ public class AbpApplicationLocalizationAppService :
                     var localizedStrings = await localizer.GetAllStringsAsync(
                         includeParentCultures: true,
                         includeBaseLocalizers: false,
-                        includeDynamicContributors: true
+                        dynamicLocalizationPreference: DynamicLocalizationPreference.Include
                     );
 
                     foreach (var localizedString in localizedStrings)

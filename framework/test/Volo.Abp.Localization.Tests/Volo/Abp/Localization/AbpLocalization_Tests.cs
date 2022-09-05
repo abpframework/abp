@@ -311,7 +311,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
         using (CultureHelper.Use("tr"))
         {
             var localizedStrings = _localizer
-                .GetAllStrings(true, includeBaseLocalizers: true, includeDynamicContributors: true)
+                .GetAllStrings(true, includeBaseLocalizers: true, dynamicLocalizationPreference: DynamicLocalizationPreference.Include)
                 .ToList();
 
             localizedStrings.ShouldContain(
@@ -340,7 +340,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
         using (CultureHelper.Use("tr"))
         {
             var localizedStrings = _localizer
-                .GetAllStrings(true, includeBaseLocalizers: false, includeDynamicContributors: true)
+                .GetAllStrings(true, includeBaseLocalizers: false, dynamicLocalizationPreference: DynamicLocalizationPreference.Include)
                 .ToList();
 
             localizedStrings.ShouldNotContain(

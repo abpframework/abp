@@ -9,7 +9,7 @@ public interface IAbpStringLocalizer : IStringLocalizer
     IEnumerable<LocalizedString> GetAllStrings(
         bool includeParentCultures,
         bool includeBaseLocalizers,
-        bool includeDynamicContributors
+        DynamicLocalizationPreference dynamicLocalizationPreference
     );
 
     Task<IEnumerable<LocalizedString>> GetAllStringsAsync(
@@ -19,7 +19,7 @@ public interface IAbpStringLocalizer : IStringLocalizer
     Task<IEnumerable<LocalizedString>> GetAllStringsAsync(
         bool includeParentCultures,
         bool includeBaseLocalizers,
-        bool includeDynamicContributors
+        DynamicLocalizationPreference dynamicLocalizationPreference
     );
 
     Task<IEnumerable<string>> GetSupportedCulturesAsync();

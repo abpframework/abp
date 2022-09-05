@@ -32,11 +32,11 @@ public class LocalizationResourceContributorList : List<ILocalizationResourceCon
     public void Fill(
         string cultureName, 
         Dictionary<string, LocalizedString> dictionary,
-        bool includeDynamicContributors = true)
+        DynamicLocalizationPreference dynamicLocalizationPreference = DynamicLocalizationPreference.Include)
     {
         foreach (var contributor in this)
         {
-            if (!includeDynamicContributors && contributor.IsDynamic)
+            if (dynamicLocalizationPreference == DynamicLocalizationPreference.Exclude && contributor.IsDynamic)
             {
                 continue;
             }
@@ -48,11 +48,11 @@ public class LocalizationResourceContributorList : List<ILocalizationResourceCon
     public async Task FillAsync(
         string cultureName, 
         Dictionary<string, LocalizedString> dictionary,
-        bool includeDynamicContributors = true)
+        DynamicLocalizationPreference dynamicLocalizationPreference = DynamicLocalizationPreference.Include)
     {
         foreach (var contributor in this)
         {
-            if (!includeDynamicContributors && contributor.IsDynamic)
+            if (dynamicLocalizationPreference == DynamicLocalizationPreference.Exclude && contributor.IsDynamic)
             {
                 continue;
             }
