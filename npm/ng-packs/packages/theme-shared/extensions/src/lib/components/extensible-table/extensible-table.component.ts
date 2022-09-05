@@ -158,15 +158,16 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
           value,
         };
         if (prop.value.component) {
-          const injector = Injector.create(
-            [
+
+          const injector = Injector.create({
+            providers: [
               {
                 provide: PROP_DATA_STREAM,
                 useValue: value,
               },
             ],
-            this.injector,
-          );
+            parent: this.injector,
+          });
           record[propKey].injector = injector;
           record[propKey].component = prop.value.component;
         }

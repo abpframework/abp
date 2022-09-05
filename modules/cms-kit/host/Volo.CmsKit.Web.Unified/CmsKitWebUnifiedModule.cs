@@ -36,7 +36,6 @@ using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
 using Volo.CmsKit.Comments;
-using Volo.CmsKit.Contents;
 using Volo.CmsKit.EntityFrameworkCore;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.MultiTenancy;
@@ -45,6 +44,7 @@ using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Web;
+using Volo.CmsKit.Web.Contents;
 
 namespace Volo.CmsKit;
 

@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.CmsKit.Contents;
 using static Volo.CmsKit.Contents.ContentConsts;
 
-namespace Volo.CmsKit.Contents;
+namespace Volo.CmsKit.Web.Contents;
 
 public class ContentParser : ITransientDependency
 {

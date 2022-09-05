@@ -76,6 +76,8 @@ Use the `abp update` command to update your existing application. See [Upgrading
 - Create a folder named *OpenIddict* under the Domain project and copy the [OpenIddictDataSeedContributor.cs](https://github.com/abpframework/abp-samples/blob/master/Ids2OpenId/src/Ids2OpenId.Domain/OpenIddict/OpenIddictDataSeedContributor.cs) under this folder. Rename all the `Ids2OpenId` with your project name.
 - Delete *IdentityServer* folder that contains `IdentityServerDataSeedContributor.cs` which is no longer needed.
 
+You can also create a project with the same name and copy the `OpenIddict` folder of the new project into your project.
+
 ### EntityFrameworkCore Layer
 
 If you are using MongoDB, skip this step and check the *MongoDB* layer section.

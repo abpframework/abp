@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.CmsKit.Contents;
+namespace Volo.CmsKit.Web.Contents;
 
 public class CmsKitContentWidgetOptions
 {

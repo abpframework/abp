@@ -30,11 +30,6 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         Cache = cache;
     }
 
-    public async Task InitializeAsync()
-    {
-        await GetAsync();
-    }
-
     public async Task<ApplicationConfigurationDto> GetAsync()
     {
         var cacheKey = CreateCacheKey();
@@ -44,7 +39,6 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         {
             return configuration;
         }
-
 
         configuration = await Cache.GetOrAddAsync(
             cacheKey,

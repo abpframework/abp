@@ -35,10 +35,14 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
         {
             return;
         }
+        
+        if (context.BuildArgs.Theme != Theme.NotSpecified)
+        {
+            context.Symbols.Add(context.BuildArgs.Theme.Value.ToString().ToUpper());
+        }
 
         if (context.BuildArgs.Theme == Theme.LeptonX)
         {
-            context.Symbols.Add("LEPTONX");
             steps.Add(new ChangeThemeStyleStep());
             return;
         }

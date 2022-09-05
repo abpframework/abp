@@ -34,18 +34,36 @@
 
                 <abp-row>
 
-                    <abp-column size="_4">
+                    <abp-column size="Auto">
                         <div class="input-group mb-2">
                             <div class="input-group-text">@L["Project"].Value</div>
 
-                            <input type="text"
-                               id="ProjectId"
-                               name="ProjectId"
-                               class="form-control">
+                            <select
+                                id="ProjectId"
+                                name="ProjectId"
+                                class="form-select">
+                                <option></option>
+                                @foreach (var project in Model.Projects)
+                                {
+                                    <option value="@project.Id">@project.Name</option>
+                                }
+                            </select>
                         </div>
                     </abp-column>
 
-                    <abp-column size="_4">
+                    <abp-column size="Auto">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">@L["Version"].Value</div>
+
+                            <select
+                                id="Version"
+                                name="Version"
+                                class="form-select">
+                            </select>
+                        </div>
+                    </abp-column>
+                    
+                    <abp-column size="Auto">
                         <div class="input-group mb-2">
                             <div class="input-group-text">@L["Name"].Value</div>
 
@@ -56,28 +74,20 @@
                         </div>
                     </abp-column>
 
-                    <abp-column size="_2">
-                        <div class="input-group mb-2">
-                            <div class="input-group-text">@L["Version"].Value</div>
-
-                            <input type="text"
-                               id="Version"
-                               name="Version"
-                               class="form-control">
-                        </div>
-                    </abp-column>
-                        
-                    <abp-column size="_3">
+                    <abp-column size="Auto">
                         <div class="input-group mb-2">
                             <div class="input-group-text">@L["LanguageCode"].Value</div>
 
-                            <input type="text"
-                               id="LanguageCode"
-                               name="LanguageCode"
-                               class="form-control">
+                            <select
+                                id="LanguageCode"
+                                name="LanguageCode"
+                                class="form-select">
+                            </select>
                         </div>
                     </abp-column>
-
+                    <abp-column size="Auto">
+                        <abp-button button-type="Primary" icon="search" id="SearchButton" style="line-height: 25px;" text="@L["Search"].Value"></abp-button>
+                    </abp-column>
                     <abp-row class="mt-3 mb-3">
                         <abp-column size-md="_12">
                             <a href="javascript:;" id="AdvancedFilterSectionToggler" class="text-decoration-none">@L["AdvancedFilters"]</a>
@@ -85,7 +95,7 @@
                     </abp-row>
                     <abp-row id="AdvancedFilterSection" style="display: none;">
 
-                        <abp-column size="_4">
+                        <abp-column size="Auto">
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["CreationTime"].Value</div>
 
@@ -103,7 +113,7 @@
                             </div>
                         </abp-column>
 
-                        <abp-column size="_4">
+                        <abp-column size="Auto">
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["LastUpdateTime"].Value</div>
                                     <input type="date"
@@ -111,7 +121,6 @@
                                        name="LastUpdatedTimeMin"
                                        class="form-control datepicker"
                                        placeholder="@L["StartDate"].Value">
-                                    <span>-</span>
                                     <input type="date"
                                        id="LastUpdatedTimeMax"
                                        name="LastUpdatedTimeMax"
@@ -120,7 +129,7 @@
                             </div>
                         </abp-column>
 
-                        <abp-column size="_4">
+                        <abp-column size="Auto">
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["LastCachedTime"].Value</div>
 
@@ -138,21 +147,22 @@
                             </div>
                         </abp-column>
                         
-                        <abp-column size="_2">
+                        <abp-column size="Auto">
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["Format"].Value</div>
 
-                                <input type="text"
-                                   id="Format"
-                                   name="Format"
-                                   class="form-control">
+                                <select
+                                    id="Format"
+                                    name="Format"
+                                    class="form-select">
+                                </select>
                             </div>
                         </abp-column>
 
-                        <abp-column size="_2">
+                        <abp-column size="Auto">
                         </abp-column>
                         
-                          <abp-column size="_5">
+                          <abp-column size="Auto">
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["LastSignificantUpdateTime"].Value</div>
 
@@ -171,10 +181,6 @@
                         </abp-column>
                         
                     </abp-row>
-
-                    <div class="col-auto">
-                        <abp-button button-type="Primary" icon="search" id="SearchButton" style="line-height: 25px;" text="@L["Search"].Value"></abp-button>
-                    </div>
                 </abp-row>
             </form>
         </abp-card-header>
@@ -183,6 +189,7 @@
                 <thead>
                     <tr>
                         <th>@L["Actions"]</th>
+                        <th>@L["ProjectName"]</th>
                         <th>@L["Name"]</th>
                         <th>@L["Version"]</th>
                         <th>@L["LanguageCode"]</th>

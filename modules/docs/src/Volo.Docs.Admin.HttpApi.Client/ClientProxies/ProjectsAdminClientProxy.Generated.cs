@@ -7,6 +7,7 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Docs.Admin.Projects;
+using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Docs.Admin.ClientProxies;
@@ -59,6 +60,11 @@ public partial class ProjectsAdminClientProxy : ClientProxyBase<IProjectAdminApp
     public virtual async Task ReindexAllAsync()
     {
         await RequestAsync(nameof(ReindexAllAsync));
+    }
+
+    public virtual async Task<List<ProjectWithoutDetailsDto>> GetListWithoutDetailsAsync()
+    {
+        return await RequestAsync<List<ProjectWithoutDetailsDto>>(nameof(GetListWithoutDetailsAsync));
     }
 
     public virtual async Task ReindexAsync(ReindexInput input)
