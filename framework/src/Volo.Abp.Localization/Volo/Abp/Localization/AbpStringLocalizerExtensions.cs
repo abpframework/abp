@@ -42,7 +42,7 @@ public static class AbpStringLocalizerExtensions
         this IStringLocalizer stringLocalizer,
         bool includeParentCultures,
         bool includeBaseLocalizers,
-        DynamicLocalizationPreference dynamicLocalizationPreference)
+        bool includeDynamicContributors)
     {
         var internalLocalizer = ((IStringLocalizer)ProxyHelper.UnProxy(stringLocalizer)).GetInternalLocalizer();
         if (internalLocalizer is IAbpStringLocalizer abpStringLocalizer)
@@ -50,7 +50,7 @@ public static class AbpStringLocalizerExtensions
             return abpStringLocalizer.GetAllStrings(
                 includeParentCultures,
                 includeBaseLocalizers,
-                dynamicLocalizationPreference
+                includeDynamicContributors
             );
         }
 
@@ -63,7 +63,7 @@ public static class AbpStringLocalizerExtensions
         this IStringLocalizer stringLocalizer,
         bool includeParentCultures,
         bool includeBaseLocalizers,
-        DynamicLocalizationPreference dynamicLocalizationPreference)
+        bool includeDynamicContributors)
     {
         var internalLocalizer = ((IStringLocalizer)ProxyHelper.UnProxy(stringLocalizer)).GetInternalLocalizer();
         if (internalLocalizer is IAbpStringLocalizer abpStringLocalizer)
@@ -71,7 +71,7 @@ public static class AbpStringLocalizerExtensions
             return await abpStringLocalizer.GetAllStringsAsync(
                 includeParentCultures,
                 includeBaseLocalizers,
-                dynamicLocalizationPreference
+                includeDynamicContributors
             );
         }
 
