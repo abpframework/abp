@@ -17,6 +17,8 @@
     <ItemGroup>
       <None Remove="..\..\Volo.Abp.Account.abpmdl.json" />
       <EmbeddedResource Include="..\..\Volo.Abp.Account.abpmdl.json" />
+      <None Remove="..\..\**\*.abppkg*.json" />
+      <EmbeddedResource Include="..\..\**\*.abppkg*.json" />
     </ItemGroup>
 
 </Project>
