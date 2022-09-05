@@ -8,7 +8,7 @@ namespace Volo.Abp.Localization;
 public class LocalizationResource : LocalizationResourceBase
 {
     [NotNull]
-    private Type ResourceType { get; }
+    public Type ResourceType { get; }
 
     public LocalizationResource(
         [NotNull] Type resourceType,
