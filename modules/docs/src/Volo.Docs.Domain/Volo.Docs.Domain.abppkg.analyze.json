@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Domain",
-  "hash": "4d8e34c525b142b8afff3b212951f70e",
+  "hash": "f162d16971e9084446f20fc58b84586d",
   "contents": [
     {
       "namespace": "Volo.Docs",
@@ -54,7 +54,7 @@
     {
       "namespace": "Volo.Docs.Projects",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Docs.Projects",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -69,7 +69,7 @@
     {
       "namespace": "Volo.Docs.Documents",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Docs.Documents",
         "primaryKeyType": "Guid",
         "summary": null,

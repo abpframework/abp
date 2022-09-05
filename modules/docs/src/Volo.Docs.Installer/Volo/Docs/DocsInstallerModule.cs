@@ -2,19 +2,19 @@
 using Volo.Abp.Studio;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Blogging;
+namespace Volo.Docs;
 
 [DependsOn(
     typeof(AbpStudioModuleInstallerModule),
     typeof(AbpVirtualFileSystemModule)
     )]
-public class BloggingInstallerModule : AbpModule
+public class DocsInstallerModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<BloggingInstallerModule>();
+            options.FileSets.AddEmbedded<DocsInstallerModule>();
         });
     }
 }
