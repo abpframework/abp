@@ -42,18 +42,38 @@ public class AbpApplicationLocalizationAppService :
             foreach (var resource in resources)
             {
                 var dictionary = new Dictionary<string, string>();
-            
                 var localizer = await StringLocalizerFactory.CreateByResourceNameOrNullAsync(resource.ResourceName);
                 if (localizer != null)
                 {
-                    var localizedStrings = await localizer.GetAllStringsAsync(
+                    Dictionary<string, LocalizedString> staticLocalizedStrings = null;
+                    
+                    if (input.OnlyDynamics)
+                    {
+                        staticLocalizedStrings = (await localizer.GetAllStringsAsync(
+                            includeParentCultures: true,
+                            includeBaseLocalizers: false,
+                            dynamicLocalizationPreference: DynamicLocalizationPreference.Exclude
+                        )).ToDictionary(x => x.Name);
+                    }
+                    
+                    var localizedStringsWithDynamics = await localizer.GetAllStringsAsync(
                         includeParentCultures: true,
                         includeBaseLocalizers: false,
                         dynamicLocalizationPreference: DynamicLocalizationPreference.Include
                     );
 
-                    foreach (var localizedString in localizedStrings)
+                    foreach (var localizedString in localizedStringsWithDynamics)
                     {
+                        if (input.OnlyDynamics)
+                        {
+                            var staticLocalizedString = staticLocalizedStrings.GetOrDefault(localizedString.Name);
+                            if (staticLocalizedString != null &&
+                                localizedString.Value == staticLocalizedString.Value)
+                            {
+                                continue;
+                            }
+                        }
+
                         dictionary[localizedString.Name] = localizedString.Value;
                     }
                 }
