@@ -37,7 +37,11 @@ public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicatio
             }
         );
 
-        var localizationDto = await ApplicationLocalizationClientProxy.GetAsync(configurationDto.Localization.CurrentCulture.Name);
+        var localizationDto = await ApplicationLocalizationClientProxy.GetAsync(
+            new ApplicationLocalizationRequestDto {
+                Culture = configurationDto.Localization.CurrentCulture.Name
+            }
+        );
 
         configurationDto.Localization.Resources = localizationDto.Resources;
         
