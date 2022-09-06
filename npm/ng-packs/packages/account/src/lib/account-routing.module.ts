@@ -13,6 +13,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { eAccountComponents } from './enums/components';
 import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
+import { AccountExtensionsGuard } from './guards';
+
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -68,7 +70,7 @@ const routes: Routes = [
       {
         path: 'manage',
         component: ReplaceableRouteContainerComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, AccountExtensionsGuard],
         data: {
           replaceableComponent: {
             key: eAccountComponents.ManageProfile,

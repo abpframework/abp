@@ -13,8 +13,6 @@ public class PageDto : EntityDto<Guid>
     public string Slug { get; set; }
 
     public string Content { get; set; }
-    
-    public List<ContentFragment> ContentFragments { get; set; }
 
     public string Script { get; set; }
 

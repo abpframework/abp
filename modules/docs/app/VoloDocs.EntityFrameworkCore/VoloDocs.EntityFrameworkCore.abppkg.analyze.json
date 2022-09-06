@@ -1,0 +1,18 @@
+{
+  "name": "VoloDocs.EntityFrameworkCore",
+  "hash": "8ac808bc478d207d2d1ed672d5f16244",
+  "contents": [
+    {
+      "namespace": "VoloDocs.EntityFrameworkCore",
+      "contentType": "abpModule",
+      "name": "VoloDocsEntityFrameworkCoreModule"
+    },
+    {
+      "namespace": "VoloDocs.EntityFrameworkCore",
+      "connectionStringName": null,
+      "databaseTables": [],
+      "contentType": "efCoreDbContext",
+      "name": "VoloDocsDbContext"
+    }
+  ]
+}

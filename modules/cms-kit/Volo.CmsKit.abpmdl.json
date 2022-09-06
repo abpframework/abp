@@ -146,10 +146,6 @@
     "Volo.CmsKit.Common.HttpApi.Client": {
       "path": "src/Volo.CmsKit.Common.HttpApi.Client/Volo.CmsKit.Common.HttpApi.Client.abppkg.json",
       "folder": "src"
-    },
-    "Volo.CmsKit.Installer": {
-      "path": "src/Volo.CmsKit.Installer/Volo.CmsKit.Installer.abppkg.json",
-      "folder": "src"
     }
   }
 }

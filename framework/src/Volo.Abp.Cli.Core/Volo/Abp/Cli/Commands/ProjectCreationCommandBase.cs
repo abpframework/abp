@@ -10,6 +10,7 @@ using NuGet.Versioning;
 using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -25,10 +26,12 @@ namespace Volo.Abp.Cli.Commands;
 
 public abstract class ProjectCreationCommandBase
 {
+    private readonly IBundlingService _bundlingService;
     public ConnectionStringProvider ConnectionStringProvider { get; }
     public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
     public ICmdHelper CmdHelper { get; }
     public IInstallLibsService InstallLibsService { get; }
+    public CliService CliService { get; }
     public AngularPwaSupportAdder AngularPwaSupportAdder { get; }
     public InitialMigrationCreator InitialMigrationCreator { get; }
     public ILocalEventBus EventBus { get; }
@@ -41,15 +44,19 @@ public abstract class ProjectCreationCommandBase
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
         IInstallLibsService installLibsService,
+        CliService cliService,
         AngularPwaSupportAdder angularPwaSupportAdder,
         InitialMigrationCreator initialMigrationCreator,
         ThemePackageAdder themePackageAdder,
-        ILocalEventBus eventBus)
+        ILocalEventBus eventBus,
+        IBundlingService bundlingService)
     {
+        _bundlingService = bundlingService;
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
         InstallLibsService = installLibsService;
+        CliService = cliService;
         AngularPwaSupportAdder = angularPwaSupportAdder;
         InitialMigrationCreator = initialMigrationCreator;
         EventBus = eventBus;
@@ -58,7 +65,7 @@ public abstract class ProjectCreationCommandBase
         Logger = NullLogger<NewCommand>.Instance;
     }
 
-    protected ProjectBuildArgs GetProjectBuildArgs(CommandLineArgs commandLineArgs, string template, string projectName)
+    protected async Task<ProjectBuildArgs> GetProjectBuildArgsAsync(CommandLineArgs commandLineArgs, string template, string projectName)
     {
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
 
@@ -71,6 +78,15 @@ public abstract class ProjectCreationCommandBase
         if (preview)
         {
             Logger.LogInformation("Preview: yes");
+
+            var cliVersion = await CliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
+
+            if (!cliVersion.IsPrerelease)
+            {
+                throw new CliUsageException(
+                    "You can only create a new preview solution with preview CLI version." +
+                    " Update your ABP CLI to the preview version.");
+            }
         }
 
         var pwa = commandLineArgs.Options.ContainsKey(Options.ProgressiveWebApp.Short);
@@ -389,6 +405,25 @@ public abstract class ProjectCreationCommandBase
             }, false);
 
             await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
+        }
+    }
+
+    protected async Task RunBundleForBlazorWasmTemplateAsync(ProjectBuildArgs projectArgs)
+    {
+        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) && projectArgs.UiFramework == UiFramework.Blazor)
+        {
+            Logger.LogInformation("Generating bundles for Blazor Wasm...");
+
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent
+            {
+                Message = "Generating bundles for Blazor Wasm"
+            }, false);
+
+            var directory = Path.GetDirectoryName(
+                Directory.GetFiles(projectArgs.OutputFolder, "*.Blazor.csproj", SearchOption.AllDirectories).First()
+                );
+            
+            await _bundlingService.BundleAsync(directory, true);
         }
     }
 
