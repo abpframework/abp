@@ -210,7 +210,7 @@ public abstract class AppTemplateBase : TemplateInfo
         }
         
         steps.Add(new ChangeThemeStep());
-        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro());
+        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework);
     }
 
     private static bool IsDefaultThemeForTemplate(Theme theme)
@@ -224,50 +224,55 @@ public abstract class AppTemplateBase : TemplateInfo
         return defaultThemesForTemplates.Any(defaultTheme => defaultTheme == theme);
     }
     
-    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate)
+    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate, UiFramework uiFramework)
     {
+        var mvcUiPackageName = isProTemplate ? "@volo/abp.aspnetcore.mvc.ui.theme.leptonx" : "@abp/aspnetcore.mvc.ui.theme.leptonxlite";
         var packageJsonFilePaths = new List<string>
         {
             "/MyCompanyName.MyProjectName.Web/package.json",
             "/MyCompanyName.MyProjectName.Web.Host/package.json",
             "/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
+            "/MyCompanyName.MyProjectName.HttpApi.Host/package.json",
             "/MyCompanyName.MyProjectName.AuthServer/package.json",
             "/MyCompanyName.MyProjectName/package.json",
             "/MyCompanyName.MyProjectName.Host/package.json",
             "/MyCompanyName.MyProjectName.Host.Mongo/package.json"
         };
-
-        var blazorServerPackageJsonFilePaths = new List<string>
-        {
-            "/MyCompanyName.MyProjectName.Blazor.Server/package.json",
-            "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
-            "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
-        };
-
-        var angularPackageJsonFilePaths = new List<string> 
-        {
-            "/angular/package.json"
-        };
-
-        var mvcUiPackageName = isProTemplate ? "@volo/abp.aspnetcore.mvc.ui.theme.leptonx" : "@abp/aspnetcore.mvc.ui.theme.leptonxlite";
-        var blazorServerUiPackageName = isProTemplate ? "@volo/aspnetcore.components.server.leptonxtheme" : "@abp/aspnetcore.components.server.leptonxlitetheme";
-        var ngUiPackageName = isProTemplate ? "@volosoft/abp.ng.theme.lepton-x" : "@abp/ng.theme.lepton-x";
         
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
             steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
         }
 
-        foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
+        if (uiFramework == UiFramework.BlazorServer)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
+            var blazorServerUiPackageName = isProTemplate ? "@volo/aspnetcore.components.server.leptonxtheme" : "@abp/aspnetcore.components.server.leptonxlitetheme";
+            var blazorServerPackageJsonFilePaths = new List<string>
+            {
+                "/MyCompanyName.MyProjectName.Blazor/package.json",
+                "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
+                "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
+            };
+            
+            foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
+            }
         }
-
-        foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
+        else if (uiFramework == UiFramework.Angular)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+            var ngUiPackageName = isProTemplate ? "@volosoft/abp.ng.theme.lepton-x" : "@abp/ng.theme.lepton-x";
+            var angularPackageJsonFilePaths = new List<string> 
+            {
+                "/angular/package.json"
+            };
+            
+            foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+            }
         }
     }
 
