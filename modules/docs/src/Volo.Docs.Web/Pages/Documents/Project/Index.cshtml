@@ -52,7 +52,7 @@
 {
         <div class="docs-page" data-spy="scroll" data-bs-target="#docs-sticky-index">
          
-                    <div class="docs-sidebar-wrapper docs-sidebar dark-sidebar">
+                    <div class="docs-sidebar-wrapper docs-sidebar">
 
                         <div class="docs-top">
                             <nav class="navbar navbar-logo">
@@ -84,7 +84,6 @@
                         </div>
 
                         <div class="docs-tree-list">
-                            <div class="">
                                 <div class="row gx-2 mb-2 ">
                                      @if (Model.ShowProjectsCombobox && Model.ProjectSelectItems.Count > 1)
                                             {
@@ -173,7 +172,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
                             @if (Model.Navigation == null || !Model.Navigation.HasChildItems)
                             {
@@ -199,7 +197,7 @@
                 @if (Model.Document != null)
                 {
                     <div class="docs-content">
-                        <div class="top-container align-items-center mb-3">
+                        <div class="top-container mb-3">
                             <div class="row w-100 mx-0">
                                 <div class="col-12 col-lg-9 px-0">
                                     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -291,8 +289,6 @@
                             </div>
                         </div>
 
-                    
-
                         <div class="docs-content-field">
                             <div class="docs-text-field">
                                 <div class="position-relative">
@@ -360,7 +356,7 @@
                     </div>
 
                     <!-- Right Bar -->
-                    <div class=" docs-page-index">
+                    <div class="docs-page-index">
                         <div class=" docs-inner-anchors">
                             <div class="card">
                                 <div class="card-body">
