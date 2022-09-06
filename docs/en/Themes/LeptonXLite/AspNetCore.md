@@ -9,22 +9,22 @@ LeptonX Lite has implementation for the ABP Framework Razor Pages. It's a simpli
 
 This theme is **already installed** when you create a new solution using the startup templates. If you are using any other template, you can install this theme by following the steps below:
 
-- Add **Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite** package to your **Web** application.
+- Add the **Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite** package to your **Web** application.
 
 ```bash
 dotnet add package Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite --prerelease
 ```
 
-- Remove **Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic** reference from the project since it's not necessary after switching to LeptonX Lite.
+- Remove the **Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic** reference from the project since it's not necessary after switching to LeptonX Lite.
 
 - Make sure the old theme is removed and LeptonX is added in your Module class.
 
 ```diff
 [DependsOn(
-     // Remove BasicTheme module from DependsOn attribute
+     // Remove the BasicTheme module from DependsOn attribute
 -    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
      
-     // Add LeptonX Lite module to DependsOn attribute
+     // Add the LeptonX Lite module to DependsOn attribute
 +    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
 )]
 ```
@@ -35,9 +35,9 @@ dotnet add package Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite --prerelease
 Configure<AbpBundlingOptions>(options =>
 {
     options.StyleBundles.Configure(
-        // Remove following line
+        // Remove the following line
 -       BasicThemeBundles.Styles.Global,
-        // Add following line instead
+        // Add the following line instead
 +       LeptonXLiteThemeBundles.Styles.Global
         bundle =>
         {
@@ -53,7 +53,7 @@ Configure<AbpBundlingOptions>(options =>
 
 LeptonX Lite Mvc provides **layouts** for your **user interface** based [ABP Framework Theming](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Theming). You can use **layouts** to **organize your user interface**. 
 
-The main responsibility of a theme is to **provide** the layouts. There are **three pre-defined layouts must be implemented by all the themes:**
+The main responsibility of a theme is to **provide** the layouts. There are **three pre-defined layouts that must be implemented by all the themes:**
 
 * **Application:** The **default** layout which is used by the **main** application pages.
   
@@ -63,7 +63,7 @@ The main responsibility of a theme is to **provide** the layouts. There are **th
 
 **Layout names** are **constants** defined in the `LeptonXLiteTheme` class in the **Mvc** project **root**.
 
-> The layout pages define under `Themes/LeptonXLite/Layouts` folder and you can **override it** by creating a file with the **same name** and **under** the **same folder**. 
+> The layout pages define under the `Themes/LeptonXLite/Layouts` folder and you can **override it** by creating a file with the **same name** and **under** the **same folder**. 
 
 ### Toolbars
 LeptonX Lite includes separeted toolbars for desktop & mobile. You can manage toolbars independently. Toolbar names can be accessible in the **LeptonXLiteToolbars** class.
@@ -92,7 +92,7 @@ public class MyProjectNameMainToolbarContributor : IToolbarContributor
 
 Abp **helps** you make **highly customizable UI**. You can easily **customize** your themes to fit your needs. **The Virtual File System** makes it possible to **manage files** that **do not physically** exist on the **file system** (disk). It's mainly used to embed **(js, css, image..)** files into assemblies and **use them like** physical files at runtime. An application (or another module) can **override** a **virtual file of a module** just like placing a file with the **same name** and **extension** into the **same folder** of the **virtual file**.
 
-LeptonX Lite built on the [Abp Framework](https://abp.io/), so you can **easily** customize your Asp.Net Core Mvc user interface by following [Abp Mvc UI Customization](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Customization-xUser-Interface).
+LeptonX Lite is built on the [Abp Framework](https://abp.io/), so you can **easily** customize your Asp.Net Core Mvc user interface by following [Abp Mvc UI Customization](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Customization-xUser-Interface).
 
 ## Brand Component
 
@@ -100,11 +100,11 @@ The **brand component** is a simple component that can be used to display your b
 
 ![Brand component](../../images/leptonxlite-brand-component.png) 
 
-### How to override Brand Component in LeptonX Lite Mvc
+### How to override the Brand Component in LeptonX Lite Mvc
 
-* The **brand component page (.cshtml file)** defines a `Themes/LeptonXLite/Components/Brand/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.  
+* The **brand component page (.cshtml file)** is defined in the `Themes/LeptonXLite/Components/Brand/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.  
 
-* The **brand component (C# file)** defines `Themes/LeptonXLite/Components/Brand/MainNavbarBrandViewComponent.cs` file and you can **override it** by creating a file with the **same name** and under the **same folder**.  
+* The **brand component (C# file)** is defined in the `Themes/LeptonXLite/Components/Brand/MainNavbarBrandViewComponent.cs` file and you can **override it** by creating a file with the **same name** and under the **same folder**.  
 
 ## Breadcrumb Component
 
@@ -112,11 +112,11 @@ On websites that have a lot of pages, **breadcrumb navigation** can greatly **en
 
 ![Breadcrumb component](../../images/leptonxlite-breadcrumb-component.png) 
 
-### How to override Breadcrumb Component in LeptonX Lite Mvc
+### How to override the Breadcrumb Component in LeptonX Lite Mvc
 
-* The **breadcrumb component page (.cshtml file)** defines `Themes/LeptonXLite/Components/Breadcrumbs/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.  
+* The **breadcrumb component page (.cshtml file)** is defined in the `Themes/LeptonXLite/Components/Breadcrumbs/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.  
 
-* The **breadcrumb component (C# file)** defines `Themes/LeptonXLite/Components/Breadcrumbs/BreadcrumbsViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**. 
+* The **breadcrumb component (C# file)** is defined in the `Themes/LeptonXLite/Components/Breadcrumbs/BreadcrumbsViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**. 
 
 ## Sidebar Menu Component
 
@@ -124,45 +124,45 @@ Sidebar menus have been used as **a directory for Related Pages** to a **Service
 
 ![Sidebar menu component](../../images/leptonxlite-sidebar-menu-component.png) 
 
-### How to override Sidebar Menu Component in LeptonX Lite Mvc
+### How to override the Sidebar Menu Component in LeptonX Lite Mvc
 
-* **Sidebar menu page (.cshtml)** defines in the `Themes/LeptonXLite/Components/Menu/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**. 
+* **Sidebar menu page (.cshtml)** is defined in the `Themes/LeptonXLite/Components/Menu/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**. 
 
-* If you want to **override menu component (C#)** you can override the `Themes/LeptonXLite/Components/Menu/MainMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**. 
+* If you want to **override the menu component (C#)** you can override the `Themes/LeptonXLite/Components/Menu/MainMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**. 
 
-> The **sidebar menu** renders menu items **dynamic**. The **menu item** is a **partial view** and defines in the `Themes/LeptonXLite/Components/Menu/_MenuItem.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**. 
+> The **sidebar menu** renders menu items **dynamically**. The **menu item** is a **partial view** and is defined in the `Themes/LeptonXLite/Components/Menu/_MenuItem.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**. 
 
 ## Page Alerts Component
 
-Provide contextual **feedback messages** for typical user actions with the handful of **available** and **flexible** **alert messages**. Alerts are available for any length of text, as well as an **optional dismiss button**. 
+Provides contextual **feedback messages** for typical user actions with the handful of **available** and **flexible** **alert messages**. Alerts are available for any length of text, as well as an **optional dismiss button**. 
 
 ![Page alerts component](../../images/leptonxlite-page-alerts-component.png) 
 
-### How to override Page Alerts Component in LeptonX Lite Mvc
+### How to override the Page Alerts Component in LeptonX Lite Mvc
 
-* The **page alerts component page (.cshtml file)** defines `Themes/LeptonXLite/Components/PageAlerts/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **page alerts component page (.cshtml file)** is defined in the `Themes/LeptonXLite/Components/PageAlerts/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-* The **page alerts component (C#)** defines `Themes/LeptonXLite/Components/PageAlerts/PageAlertsViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **page alerts component (C#)** is defined in the `Themes/LeptonXLite/Components/PageAlerts/PageAlertsViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
 ## Toolbar Component
 
 Toolbar items are used to add **extra functionality to the toolbar**. The toolbar is a **horizontal bar** that **contains** a group of **toolbar items**. 
 
-### How to override Toolbar Component in LeptonX Lite Mvc
+### How to override the Toolbar Component in LeptonX Lite Mvc
 
-* The **toolbar component page (.cshtml file)** defines `Themes/LeptonXLite/Components/Toolbar/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **toolbar component page (.cshtml file)** is defined in the `Themes/LeptonXLite/Components/Toolbar/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-* The **toolbar component (C#)** defines `Themes/LeptonXLite/Components/Toolbar/ToolbarViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **toolbar component (C#)** is defined in the `Themes/LeptonXLite/Components/Toolbar/ToolbarViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
 ## Toolbar Item Component
 
-Toolbar item is a **single item** that **contains** a **link**, an **icon**, a **label** etc..
+The toolbar item is a **single item** that **contains** a **link**, an **icon**, a **label** etc..
 
-### How to override Toolbar Item Component in LeptonX Lite Mvc
+### How to override the Toolbar Item Component in LeptonX Lite Mvc
 
-* The **toolbar item component page (.cshtml file)** defines `Themes/LeptonXLite/Components/ToolbarItems/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **toolbar item component page (.cshtml file)** is defined in the `Themes/LeptonXLite/Components/ToolbarItems/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-* The **toolbar item component (C#)** defines `Themes/LeptonXLite/Components/ToolbarItems/ToolbarItemsViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **toolbar item component (C#)** is defined in the `Themes/LeptonXLite/Components/ToolbarItems/ToolbarItemsViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
 You can find the toolbar components below:
 
@@ -172,11 +172,11 @@ Think about a **multi-lingual** website and the first thing that could **hit you
 
 ![Language switch component](../../images/leptonxlite-language-switch-component.png) 
 
-### How to override Language Switch Component in LeptonX Lite Mvc
+### How to override the Language Switch Component in LeptonX Lite Mvc
 
-* The **language switch component page (.cshtml file)** defines `Themes/LeptonXLite/Components/LanguageSwitch/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **language switch component page (.cshtml file)** is defined in the `Themes/LeptonXLite/Components/LanguageSwitch/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-* The **language switch component (C#)** defines `Themes/LeptonXLite/Components/LanguageSwitch/LanguageSwitchViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **language switch component (C#)** is defined in the `Themes/LeptonXLite/Components/LanguageSwitch/LanguageSwitchViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
 ## Mobile Language Switch Component
 
@@ -184,11 +184,11 @@ The **mobile** **language switch component** is used to switch the language of t
 
 ![Mobil language switch component](../../images/leptonxlite-mobile-language-switch-component.png) 
 
-### How to override Mobile Language Switch Component in LeptonX Lite Mvc
+### How to override the Mobile Language Switch Component in LeptonX Lite Mvc
 
-* The **mobile language switch component page (.cshtml file)** defines `Themes/LeptonXLite/Components/MobileLanguageSwitch/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **mobile language switch component page (.cshtml file)** is defined in the `Themes/LeptonXLite/Components/MobileLanguageSwitch/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-* The **mobile language switch component (C#)** defines `Themes/LeptonXLite/Components/MobileLanguageSwitch/MobileLanguageSwitchViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **mobile language switch component (C#)** is defined in the `Themes/LeptonXLite/Components/MobileLanguageSwitch/MobileLanguageSwitchViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
 ## User Menu Component
 
@@ -196,11 +196,11 @@ The **User Menu** is the **menu** that **drops down** when you **click your name
 
 ![User menu component](../../images/leptonxlite-user-menu-component.png) 
 
-### How to override User Menu Component in LeptonX Lite Mvc
+### How to override the User Menu Component in LeptonX Lite Mvc
 
-* The **user menu component page (.cshtml file)** defines `Themes/LeptonXLite/Components/UserMenu/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **user menu component page (.cshtml file)** is defined in the `Themes/LeptonXLite/Components/UserMenu/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-* The **user menu component (C#)** defines `Themes/LeptonXLite/Components/UserMenu/UserMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **user menu component (C#)** is defined in the `Themes/LeptonXLite/Components/UserMenu/UserMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
 ## Mobile User Menu Component
 
@@ -208,8 +208,8 @@ The **mobile user menu component** is used to display the **user menu on mobile 
 
 ![Mobile user menu component](../../images/leptonxlite-mobile-user-menu-component.png) 
 
-### How to override Mobile User Menu Component in LeptonX Lite Mvc
+### How to override the Mobile User Menu Component in LeptonX Lite Mvc
 
-* The **mobile user menu component page (.cshtml file)** defines the `Themes/LeptonXLite/Components/MobileUserMenu/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **mobile user menu component page (.cshtml file)** is defined in the `Themes/LeptonXLite/Components/MobileUserMenu/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-* The **mobile user menu component (C#)** defines the `Themes/LeptonLite/Components/MobileUserMenu/MobileUserMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **mobile user menu component (C#)** is defined in the `Themes/LeptonLite/Components/MobileUserMenu/MobileUserMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
