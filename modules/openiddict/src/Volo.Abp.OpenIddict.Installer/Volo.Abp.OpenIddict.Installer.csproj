@@ -11,7 +11,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\..\abp-studio\src\Volo.Abp.Studio.ModuleInstaller\Volo.Abp.Studio.ModuleInstaller.csproj" />
-        <ProjectReference Include="..\..\..\..\abp\framework\src\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
     </ItemGroup>
 
     <ItemGroup>
