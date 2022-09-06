@@ -38,7 +38,7 @@ public class LocalizableString : ILocalizableString, IAsyncLocalizableString
         var localizer = CreateStringLocalizerOrNull(stringLocalizerFactory);
         if (localizer == null)
         {
-            throw new AbpException($"Set {nameof(ResourceName)} or configure the default localization resource type (in the AbpLocalizationOptions)!");
+            return new LocalizedString(Name, Name, resourceNotFound: true);
         }
         
         var result = localizer[Name];
