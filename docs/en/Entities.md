@@ -112,6 +112,21 @@ For the example above, the composite key is composed of `UserId` and `RoleId`. F
 
 > Also note that Entities with Composite Primary Keys cannot utilize the `IRepository<TEntity, TKey>` interface since it requires a single Id property.  However, you can always use `IRepository<TEntity>`. See [repositories documentation](Repositories.md) for more.
 
+### EntityEquals
+
+`Entity.EntityEquals(...)` method is used to check if two Entity Objects are equals.
+
+Example:
+
+```csharp
+Book book1 = ...
+Book book2 = ...
+
+if (book1.EntityEquals(book2)) //Check equality
+{
+    ...
+}
+```
 
 ## AggregateRoot Class
 

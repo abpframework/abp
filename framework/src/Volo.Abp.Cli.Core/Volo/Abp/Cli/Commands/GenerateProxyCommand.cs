@@ -1,4 +1,5 @@
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.ServiceProxying;
 using Volo.Abp.DependencyInjection;
@@ -13,7 +14,7 @@ public class GenerateProxyCommand : ProxyCommandBase<GenerateProxyCommand>
 
     public GenerateProxyCommand(
         IOptions<AbpCliServiceProxyOptions> serviceProxyOptions,
-        IHybridServiceScopeFactory serviceScopeFactory)
+        IServiceScopeFactory serviceScopeFactory)
         : base(serviceProxyOptions, serviceScopeFactory)
     {
     }

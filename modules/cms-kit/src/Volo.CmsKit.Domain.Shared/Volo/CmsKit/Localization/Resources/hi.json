@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "क्या आप इस पृष्ठ को हटाना सुनिश्चित कर रहे हैं?",
     "PageId": "पृष्ठ",
     "Pages": "पृष्ठों",
-    "PageSlugInformation": "स्लग का उपयोग url पर किया जाता है। आपका url '/pages/{{slug}}' होगा।",
+    "PageSlugInformation": "स्लग का उपयोग url पर किया जाता है। आपका url '/{{slug}}' होगा।",
     "Permission:BlogManagement": "ब्लॉग प्रबंधन",
     "Permission:BlogManagement.Create": "सृजन करना",
     "Permission:BlogManagement.Delete": "हटाएं",

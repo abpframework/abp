@@ -1,8 +1,12 @@
 # How to Add Custom Properties to the User Entity
 
+> **Note:** If your application is greater than version 4.3.3, please follow [this article](../2022-07-19-How-To-Add-Custom-Property-To-The-User-Entity/How-To-Add-Custom-Property-To-The-User-Entity.md).
+
 ## Introduction
 
 In this step-by-step article, I will explain how you can customize the user entity class, which is available in every web application you create using the ABP framework, according to your needs. When you read this article, you will learn how to override the services of built-in modules, extend the entities, extend data transfer objects and customize the user interface in the applications you develop using the ABP framework. 
+
+> **Note:** This article is not about customizing the `Login` page. If you have such a need, please follow [this article](../2020-05-09-Customize-the-Login-Page-for-MVC-Razor-Page-Applications/POST.md).
 
 You can see the screenshots below which we will reach at the end of the article.
 

@@ -63,5 +63,12 @@ namespace Volo.Docs.Admin
         {
             await _documentAdminAppService.ReindexAsync(documentId);
         }
+
+        [HttpGet]
+        [Route("GetFilterItems")]
+        public async Task<List<DocumentInfoDto>> GetFilterItemsAsync()
+        {
+            return await _documentAdminAppService.GetFilterItemsAsync();
+        }
     }
 }
