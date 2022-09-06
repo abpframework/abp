@@ -210,6 +210,6 @@ The **mobile user menu component** is used to display the **user menu on mobile 
 
 ### How to override Mobile User Menu Component in LeptonX Lite Mvc
 
-* The **mobile user menu component page (.cshtml file)** defines `Themes/LeptonXLite/Components/MobileUserMenu/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **mobile user menu component page (.cshtml file)** defines the `Themes/LeptonXLite/Components/MobileUserMenu/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-* The **mobile user menu component (C#)** defines `Themes/LeptonLite/Components/MobileUserMenu/MobileUserMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
+* The **mobile user menu component (C#)** defines the `Themes/LeptonLite/Components/MobileUserMenu/MobileUserMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
