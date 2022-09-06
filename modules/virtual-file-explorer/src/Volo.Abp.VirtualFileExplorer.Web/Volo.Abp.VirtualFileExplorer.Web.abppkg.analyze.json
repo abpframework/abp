@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.VirtualFileExplorer.Web",
+  "hash": "f553dc666ba87cc5e2fdc5c22546b095",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.VirtualFileExplorer.Web",
+      "contentType": "abpModule",
+      "name": "AbpVirtualFileExplorerWebModule"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Volo.BloggingTestApp.MongoDB",
+  "hash": "fad6ecadd947f85cb1e3da6b87211432",
+  "contents": [
+    {
+      "namespace": "Volo.BloggingTestApp.MongoDB",
+      "contentType": "abpModule",
+      "name": "BloggingTestAppMongoDbModule"
+    }
+  ]
+}

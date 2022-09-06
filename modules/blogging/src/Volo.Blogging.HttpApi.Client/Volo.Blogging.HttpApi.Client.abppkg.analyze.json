@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Blogging.HttpApi.Client",
+  "hash": "81cf265f097ded223f74972a77367635",
+  "contents": [
+    {
+      "namespace": "Volo.Blogging",
+      "contentType": "abpModule",
+      "name": "BloggingHttpApiClientModule"
+    }
+  ]
+}

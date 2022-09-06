@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.Domain",
-  "hash": "51a7170cfa7f0a3ede0888bd0efa1588",
+  "hash": "32e61cdb91088ee3abe9501c380f3073",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity",
@@ -104,7 +104,7 @@
     {
       "namespace": "Volo.Abp.Identity",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.Identity",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -119,7 +119,7 @@
     {
       "namespace": "Volo.Abp.Identity",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.Identity",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -134,7 +134,7 @@
     {
       "namespace": "Volo.Abp.Identity",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.Identity",
         "primaryKeyType": "Guid",
         "summary": "Represents a role in the identity system",
@@ -151,7 +151,7 @@
     {
       "namespace": "Volo.Abp.Identity",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.Identity",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -166,7 +166,7 @@
     {
       "namespace": "Volo.Abp.Identity",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.Identity",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -187,7 +187,7 @@
     {
       "namespace": "Volo.Abp.Identity",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.Identity",
         "primaryKeyType": "Guid",
         "summary": "Represents an organization unit (OU).",

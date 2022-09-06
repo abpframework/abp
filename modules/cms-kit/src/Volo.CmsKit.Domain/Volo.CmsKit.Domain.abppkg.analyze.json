@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Domain",
-  "hash": "6e431ab37f61b3f7bb7ca8517a1543d6",
+  "hash": "1e318a63acb08c17193414845709b752",
   "contents": [
     {
       "namespace": "Volo.CmsKit",
@@ -69,6 +69,15 @@
       "navigationProperties": [],
       "contentType": "aggregateRoot",
       "name": "MediaDescriptor"
+    },
+    {
+      "namespace": "Volo.CmsKit.GlobalResources",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "GlobalResource"
     },
     {
       "namespace": "Volo.CmsKit.Comments",
@@ -151,6 +160,12 @@
       "name": "MediaDescriptorManager"
     },
     {
+      "namespace": "Volo.CmsKit.GlobalResources",
+      "summary": null,
+      "contentType": "domainService",
+      "name": "GlobalResourceManager"
+    },
+    {
       "namespace": "Volo.CmsKit.Comments",
       "summary": null,
       "contentType": "domainService",
@@ -177,7 +192,7 @@
     {
       "namespace": "Volo.CmsKit.Users",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Users",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -192,7 +207,7 @@
     {
       "namespace": "Volo.CmsKit.Tags",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Tags",
         "primaryKeyType": null,
         "summary": null,
@@ -207,7 +222,7 @@
     {
       "namespace": "Volo.CmsKit.Tags",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Tags",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -222,7 +237,7 @@
     {
       "namespace": "Volo.CmsKit.Reactions",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Reactions",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -237,7 +252,7 @@
     {
       "namespace": "Volo.CmsKit.Ratings",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Ratings",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -252,7 +267,7 @@
     {
       "namespace": "Volo.CmsKit.Pages",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Pages",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -267,7 +282,7 @@
     {
       "namespace": "Volo.CmsKit.Menus",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Menus",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -282,7 +297,7 @@
     {
       "namespace": "Volo.CmsKit.MediaDescriptors",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.MediaDescriptors",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -295,9 +310,24 @@
       "name": "IMediaDescriptorRepository"
     },
     {
+      "namespace": "Volo.CmsKit.GlobalResources",
+      "summary": null,
+      "entityAnalyzeModel": {
+        "namespace": "Volo.CmsKit.GlobalResources",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "GlobalResource"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IGlobalResourceRepository"
+    },
+    {
       "namespace": "Volo.CmsKit.Comments",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Comments",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -312,7 +342,7 @@
     {
       "namespace": "Volo.CmsKit.Blogs",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Blogs",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -327,7 +357,7 @@
     {
       "namespace": "Volo.CmsKit.Blogs",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Blogs",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -344,7 +374,7 @@
     {
       "namespace": "Volo.CmsKit.Blogs",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.Blogs",
         "primaryKeyType": "Guid",
         "summary": null,
