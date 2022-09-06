@@ -25,8 +25,5 @@
     <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
     <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Polly" Version="$(PollyPackageVersion)" />
-  </ItemGroup>
+  
 </Project>
