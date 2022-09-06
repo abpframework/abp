@@ -71,7 +71,7 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         
         var localizationDto = await ApplicationLocalizationClientProxy.GetAsync(
             new ApplicationLocalizationRequestDto {
-                Culture = config.Localization.CurrentCulture.Name,
+                CultureName = config.Localization.CurrentCulture.Name,
                 OnlyDynamics = true
             }
         );

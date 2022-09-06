@@ -174,7 +174,7 @@
               "parameters": [
                 {
                   "nameOnMethod": "input",
-                  "name": "Culture",
+                  "name": "CultureName",
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
