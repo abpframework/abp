@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+  "hash": "ce73ef1b1d433a5bd99fce51d9c76697",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+      "contentType": "abpModule",
+      "name": "AbpAspNetCoreMvcUiBasicThemeModule"
+    }
+  ]
+}
