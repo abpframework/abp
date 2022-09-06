@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Abp.OpenIddict.Domain.Shared",
+  "hash": "bc60e65998f3b40d6651cf0a0a08a84c",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.OpenIddict",
+      "contentType": "abpModule",
+      "name": "AbpOpenIddictDomainSharedModule"
+    }
+  ]
+}
