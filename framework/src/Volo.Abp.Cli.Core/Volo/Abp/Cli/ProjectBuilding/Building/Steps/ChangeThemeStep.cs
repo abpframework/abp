@@ -105,6 +105,24 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "node_modules/bootstrap-icons/font/bootstrap-icons.css"
         );
 
+        if(defaultThemeName == "LeptonX")
+        {
+            ReplaceMethodNames(
+                context,
+                "/angular/src/app/app.module.ts",
+                "HttpErrorComponent, ",
+                ""
+            );
+            
+            ChangeModuleImportBetweenStatements(
+                context,
+                "/angular/src/app/app.module.ts",
+                "ThemeSharedModule.forRoot",
+                "AccountAdminConfigModule.forRoot",
+                "ThemeSharedModule.forRoot(),"
+            );
+        }
+
         #endregion
     }
 
@@ -506,6 +524,41 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 lines[i] = null;
             }
         }
+
+        file.SetLines(lines.Where(x => x != null));
+    }
+
+    private void ChangeModuleImportBetweenStatements(
+        ProjectBuildContext context,        
+        string filePath,
+        string firstStatement,
+        string lastStatement,
+        string newStatement)
+    {
+        var file = context.Files.FirstOrDefault(x => x.Name.Contains(filePath));
+        if (file == null)
+        {
+            return;
+        }
+
+        file.NormalizeLineEndings();
+        
+        var lines = file.GetLines();
+        var firstLineIndex = lines.FindIndex(line => line.Contains(firstStatement));
+        var lastLineIndex = lines.FindIndex(line => line.Contains(lastStatement));
+
+        if(firstLineIndex == -1 || lastLineIndex == -1)
+        {
+            return;
+        }
+        
+        lines[firstLineIndex] = newStatement;
+
+        for (var i = firstLineIndex + 1; i <= lastLineIndex; i++)
+        {
+            lines[i] = null;
+        }
+
 
         file.SetLines(lines.Where(x => x != null));
     }
