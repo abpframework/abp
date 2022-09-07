@@ -25,20 +25,25 @@ public class DataSeeder : IDataSeeder, ITransientDependency
     {
         using (var scope = ServiceScopeFactory.CreateScope())
         {
-            var manager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-            foreach (var contributorType in Options.Contributors)
+            if (context.Properties.ContainsKey(nameof(DataSeederExtensions.SeedInSeparateUowAsync)))
             {
-                using (var uow = manager.Begin(
-                           requiresNew: context.Properties.ContainsKey(nameof(DataSeederExtensions.SeedInSeparateUowAsync)),
-                           isTransactional: true))
+                var manager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+                foreach (var contributorType in Options.Contributors)
                 {
-                    var contributor = (IDataSeedContributor)scope
-                        .ServiceProvider
-                        .GetRequiredService(contributorType);
-
+                    using (var uow = manager.Begin(requiresNew: true, isTransactional: true))
+                    {
+                        var contributor = (IDataSeedContributor)scope.ServiceProvider.GetRequiredService(contributorType);
+                        await contributor.SeedAsync(context);
+                        await uow.CompleteAsync();
+                    }
+                }
+            }
+            else
+            {
+                foreach (var contributorType in Options.Contributors)
+                {
+                    var contributor = (IDataSeedContributor)scope.ServiceProvider.GetRequiredService(contributorType);
                     await contributor.SeedAsync(context);
-
-                    await uow.CompleteAsync();
                 }
             }
         }
