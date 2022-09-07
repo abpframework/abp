@@ -221,7 +221,9 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error occured while getting the versions from {url} : {ex.Message}");
+            Logger.LogWarning($"Error occured while getting the versions from {url} : {ex.Message}");
+            // The remote service is currently unavailable, try to work offline.
+            return true;
         }
     }
 
