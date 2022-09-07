@@ -536,6 +536,7 @@
     "Pricing_Page_Testimonial_2": "Látjuk az ABP Commercial használatának értékét az egyedi fejlesztési projektek általános költségeinek csökkentésére. És a csapat képes egységesíteni a kódmintát a különböző projektfolyamokban. Több lehetőséget látunk a keretrendszerben arra, hogy a korábbinál gyorsabban építsünk új funkciókat. Bízunk benne, hogy folyamatosan látni fogjuk az ABP Commercial kihasználásának értékét.",
     "Pricing_Page_Testimonial_3": "Szeretjük az ABP-t. Nem kell mindent a nulláról írnunk. A beépített funkciókból indulunk ki, és csak arra koncentrálunk, amit valóban meg kell írnunk. Ezenkívül az ABP jól felépített, és a kód kiváló minőségű, kevesebb hibával. Ha magunknak kellene megírnunk mindent, amire szükségünk van, akkor lehet, hogy éveket kellene töltenünk. Még egyszer, amit szeretünk, az az, hogy az új verzió, a hibajavítás vagy a fejlesztés nagyon hamar, minden második héten megjelenik. Nem várunk túl sokáig.",
     "Pricing_Page_Testimonial_4": "Az ABP Commercial egy fantasztikus termék, amelyet ajánlunk. Kereskedelmi termékek, amelyeket ügyfeleink számára egyetlen konfigurálható platformon értékesíthetnek. Az ugrásszerű indítás, amelyet a keret és az eszközök biztosítanak bármely csapat számára, minden centet megér. Az ABP Commercial volt a legjobban megfelelő az igényeinknek.",
+    "Pricing_Page_Testimonial_5": "Az ABP Framework nem csak keretrendszer, hanem útmutató is a projektfejlesztéshez/menedzsmenthez, mert DDD, GenericRepository, DI, Microservice és Modularity képzést biztosít. Ha magát a keretrendszert nem is használja, fejlesztheti magát a docs.abp.io-val, amely jól és professzionálisan elkészített (OpenIddict, Redis, Quartz stb.) leírás. Mivel sok minden előre be van építve, jelentősen lerövidíti a projektfejlesztési időt (például bejelentkezési oldal, kivételkezelés, adatszűrés, aéapadatok, audit naplózás, lokalizáció, automatikus API vezérlő stb.). Alkalmazásunkból példaként a Helyi Event Bus-t használtam az állomány karbantartására. Így a rendelési mozgásokat eseményekkel tudom a készlethez igazítani. Csodálatos, hogy nem veszítünk időt a CreationTime-ra, a CreatorId-re. Automatikusan feltöltődnek.",
     "AbpBookDownloadArea_ClaimYourEBook": "Igényelje <span class='gradient-framework'>Mastering ABP Framework</span> e-könyvét",
     "AddMemberModal_Warning_1": "Ha a hozzáadni kívánt <strong>felhasználónév</strong> nem létezik a rendszerben, kérje meg csapattagját, hogy regisztráljon a <a href='{0}/Account/Register'>(z) {0}</a> webhelyen, és ossza meg fiókja felhasználónevét Önnel.",
     "MyOrganizations_Detail_WelcomeMessage": "Üdvözöljük szervezetében, {0}",
@@ -730,6 +731,18 @@
     "Welcome_Page_UseSameCredentialForCommercialWebsites": "Ugyanazokat a hitelesítési adatokat használja a <a href=\"https://commercial.abp.io\" class=\"text-primary\">commercial.abp.io</a> és a <a href=\"https://support.abp.io\" class=\"text-primary\">support.abp.io fájlokhoz</a> .",
     "WatchCrudPagesVideo": "Nézze meg a &quot;CRUD oldalak létrehozása az ABP Suite segítségével&quot; videót!",
     "WatchGeneratingFromDatabaseVideo": "Nézze meg az &quot;ABP Suite: CRUD-oldalak generálása meglévő adatbázistáblákból&quot; videót!",
-    "WatchTakeCloserLookVideo": "Tekintse meg a „Nézze meg közelebbről a kódgenerálást: ABP Suite” videót!"
+    "WatchTakeCloserLookVideo": "Tekintse meg a „Nézze meg közelebbről a kódgenerálást: ABP Suite” videót!",
+    "ConfirmedEmailAddressRequiredToStartTrial": "A próbalicenc elindításához rendelkeznie kell egy megerősített e-mail címmel.",
+    "EmailVerificationMailNotSent": "Nem sikerült elküldeni az ellenőrző e-mailt.",
+    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">Kattintson ide, ha megerősítő e-mailt szeretne kapni,</a> ha még nem kapta meg.",
+    "WhichLicenseTypeYouAreInterestedIn": "Melyik licenctípus érdekli?",
+    "DontTakeOurWordForIt": "Ne fogadd el a szavunkat...",
+    "ReadAbpCommercialUsersWantYouToKnow": "Olvassa el, hogy az ABP Commercial felhasználói mit szeretnének tudni",
+    "Testimonial_ShortDescription_1": "Az ABP modularitása lehetővé tette, hogy a csapat időben teljesítsen.",
+    "Testimonial_ShortDescription_2": "Építsen új funkciókat gyorsabban, mint korábban.",
+    "Testimonial_ShortDescription_3": "A beépített funkciókból indulunk ki, és csak arra koncentrálunk, amit valóban meg kell írnunk.",
+    "Testimonial_ShortDescription_4": "Az ABP Commercial volt a legjobban megfelelő az igényeinknek.",
+    "OnlineReviewersOnAbpCommercial": "Online vélemények az ABP Commercial-ról",
+    "SeeWhatToldAboutAbpCommercial": "Tekintse meg, mit mondtak az ABP Commercialról, és írja le gondolatait, ha akarja."
   }
 }

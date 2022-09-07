@@ -397,6 +397,8 @@
     "BookDiscountDeletionConfirmationMessage": "Biztosan törli ezt a könyvkedvezményt?",
     "CustomPaymentFlexSwitchDescription": "Licenszel",
     "AllowFeatureUpgradeOnLicenseExpire": "A funkció frissítésének engedélyezése a licensz lejártakor",
-    "Deleted{0}": "[Törölve {0}]"
+    "Deleted{0}": "[Törölve {0}]",
+    "Tags": "Címkék",
+    "SetTagsInfo": "A címkéket vesszővel kell elválasztani. Pl.: CSharp, Entity Framework"
   }
 }

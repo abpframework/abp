@@ -43,7 +43,6 @@
     "RemovedFromCache": "Távolítsa el a gyorsítótárból",
     "RemoveFromCacheConfirmation": "Biztosan eltávolítja ezt az elemet a gyorsítótárból?",
     "ReIndexDocumentConfirmation": "Biztosan újraindexeli ezt az elemet?",
-    "DeleteDocumentFromDbConfirmation": "Biztosan törli ezt az elemet az adatbázisból?",
     "DeleteFromDatabase": "Törlés az adatbázisból",
     "Deleted": "Törölt",
     "Search": "Keresés",
@@ -54,8 +53,9 @@
     "LastSignificantUpdateTime": "Utolsó jelentős frissítés",
     "Version": "Verzió",
     "LanguageCode": "Nyelv kódja",
-    "FileName": "File név",
+    "FileName": "Filenév",
     "LastCachedTime": "Cache idő",
-    "Project": "Projekt"
+    "Project": "Projekt",
+    "AdvancedFilters": "Speciális szűrők"
   }
 }
