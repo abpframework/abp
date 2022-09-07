@@ -61,7 +61,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ChangeNamespace(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
-            $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Themes.{defaultThemeName}",
+            $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Components",
             "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic"
         );
         
@@ -69,7 +69,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         #region Blazor.Server Projects
 
-        ChangeThemeToBasicForBlazorServerProjects(context, defaultThemeName);
+        ChangeThemeToBasicForBlazorProjects(context, defaultThemeName);
         
         #endregion
 
@@ -668,7 +668,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         }
     }
     
-    private void ChangeThemeToBasicForBlazorServerProjects(ProjectBuildContext context, string defaultThemeName)
+    private void ChangeThemeToBasicForBlazorProjects(ProjectBuildContext context, string defaultThemeName)
     {
         var projects = new Dictionary<string, string>
         {
@@ -733,7 +733,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             ChangeNamespaceAndKeyword(
                 context,
                 $"/MyCompanyName.MyProjectName.{project.Key}/Pages/_Host.cshtml",
-                $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Themes.{defaultThemeName}",
+                $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Components",
                 "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic",
                 $"Blazor{defaultThemeName}ThemeBundles.Styles.Global",
                 "BlazorBasicThemeBundles.Styles.Global"
