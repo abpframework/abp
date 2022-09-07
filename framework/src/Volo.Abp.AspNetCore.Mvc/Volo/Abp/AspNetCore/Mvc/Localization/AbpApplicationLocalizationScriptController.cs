@@ -20,13 +20,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AbpApplicationLocalizationScriptController : AbpController
 {
-    protected IAbpApplicationLocalizationAppService LocalizationAppService { get; }
+    protected AbpApplicationLocalizationAppService LocalizationAppService { get; }
     protected AbpAspNetCoreMvcOptions Options { get; }
     protected IJsonSerializer JsonSerializer { get; }
     protected IJavascriptMinifier JavascriptMinifier { get; }
 
     public AbpApplicationLocalizationScriptController(
-        IAbpApplicationLocalizationAppService localizationAppService,
+        AbpApplicationLocalizationAppService localizationAppService,
         IOptions<AbpAspNetCoreMvcOptions> options,
         IJsonSerializer jsonSerializer,
         IJavascriptMinifier javascriptMinifier)
