@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.EventBus.Local;
+using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement.Web.Utils;
 
 namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement;
@@ -37,15 +40,18 @@ public class PermissionManagementModal : AbpPageModel
     protected IPermissionAppService PermissionAppService { get; }
 
     protected ILocalEventBus LocalEventBus { get; }
+    public AbpLocalizationOptions LocalizationOptions { get; }
 
     public PermissionManagementModal(
-    IPermissionAppService permissionAppService,
-    ILocalEventBus localEventBus)
+        IPermissionAppService permissionAppService,
+        ILocalEventBus localEventBus,
+        IOptions<AbpLocalizationOptions> localizationOptions)
     {
         ObjectMapperContext = typeof(AbpPermissionManagementWebModule);
 
         PermissionAppService = permissionAppService;
         LocalEventBus = localEventBus;
+        LocalizationOptions = localizationOptions.Value;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
@@ -53,6 +59,8 @@ public class PermissionManagementModal : AbpPageModel
         ValidateModel();
 
         var result = await PermissionAppService.GetAsync(ProviderName, ProviderKey);
+
+        UpdateLocalizations(result);
 
         EntityDisplayName = !string.IsNullOrWhiteSpace(ProviderKeyDisplayName)
             ? ProviderKeyDisplayName
@@ -76,6 +84,49 @@ public class PermissionManagementModal : AbpPageModel
         SelectAllInAllTabs = Groups.All(g => g.IsAllPermissionsGranted);
 
         return Page();
+    }
+
+    private void UpdateLocalizations(GetPermissionListResultDto result)
+    {
+        foreach (var group in result.Groups)
+        {
+            group.DisplayName = Localize(
+                group.DisplayNameKey,
+                group.DisplayNameResource,
+                group.DisplayName
+            );
+
+            foreach (var permission in group.Permissions)
+            {
+                permission.DisplayName = Localize(
+                    permission.DisplayNameKey,
+                    permission.DisplayNameResource,
+                    permission.DisplayName
+                );
+            }
+        }
+    }
+
+    private string Localize(string key, string resourceName, string fallbackValue)
+    {
+        if (key.IsNullOrEmpty() || resourceName.IsNullOrEmpty())
+        {
+            return fallbackValue;
+        }
+
+        var resource = LocalizationOptions.Resources.GetOrNull(resourceName);
+        if (resource == null)
+        {
+            return fallbackValue;
+        }
+
+        var result = new LocalizableString(resource.ResourceType, key).Localize(StringLocalizerFactory);
+        if (result.ResourceNotFound)
+        {
+            return fallbackValue;
+        }
+
+        return result.Value;
     }
 
     public virtual async Task<IActionResult> OnPostAsync()

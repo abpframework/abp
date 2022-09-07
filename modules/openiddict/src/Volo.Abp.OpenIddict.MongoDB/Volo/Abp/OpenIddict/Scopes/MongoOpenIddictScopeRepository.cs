@@ -22,9 +22,10 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.DisplayName.Contains(filter))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Description.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => 
+                x.Name.Contains(filter) ||
+                x.DisplayName.Contains(filter) ||
+                x.Description.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictScope.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
             .As<IMongoQueryable<OpenIddictScope>>()
@@ -34,9 +35,10 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
     public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.DisplayName.Contains(filter))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Description.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => 
+                x.Name.Contains(filter) ||
+                x.DisplayName.Contains(filter) ||
+                x.Description.Contains(filter))
             .As<IMongoQueryable<OpenIddictScope>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }

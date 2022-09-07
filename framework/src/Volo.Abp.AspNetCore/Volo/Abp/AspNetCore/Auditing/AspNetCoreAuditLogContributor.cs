@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.WebClientInfo;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 
 namespace Volo.Abp.AspNetCore.Auditing;
 
@@ -57,28 +60,46 @@ public class AspNetCoreAuditLogContributor : AuditLogContributor, ITransientDepe
 
     public override void PostContribute(AuditLogContributionContext context)
     {
+        if (context.AuditInfo.HttpStatusCode != null)
+        {
+            return;
+        }
+
         var httpContext = context.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
         if (httpContext == null)
         {
             return;
         }
 
-        if (context.AuditInfo.HttpStatusCode == null)
+        if (context.AuditInfo.Exceptions.Any())
         {
-            context.AuditInfo.HttpStatusCode = httpContext.Response.StatusCode;
+            var httpExceptionStatusCodeFinder = context.ServiceProvider.GetRequiredService<IHttpExceptionStatusCodeFinder>();
+            foreach (var auditInfoException in context.AuditInfo.Exceptions)
+            {
+                var statusCode = httpExceptionStatusCodeFinder.GetStatusCode(httpContext, auditInfoException);
+                context.AuditInfo.HttpStatusCode = (int) statusCode;
+            }
+
+            if (context.AuditInfo.HttpStatusCode != null)
+            {
+                return;
+            }
         }
+
+        context.AuditInfo.HttpStatusCode = httpContext.Response.StatusCode;
     }
 
     protected virtual string BuildUrl(HttpContext httpContext)
     {
         //TODO: Add options to include/exclude query, schema and host
 
-        var uriBuilder = new UriBuilder();
-
-        uriBuilder.Scheme = httpContext.Request.Scheme;
-        uriBuilder.Host = httpContext.Request.Host.Host;
-        uriBuilder.Path = httpContext.Request.Path.ToString();
-        uriBuilder.Query = httpContext.Request.QueryString.ToString();
+        var uriBuilder = new UriBuilder
+        {
+            Scheme = httpContext.Request.Scheme,
+            Host = httpContext.Request.Host.Host,
+            Path = httpContext.Request.Path.ToString(),
+            Query = httpContext.Request.QueryString.ToString()
+        };
 
         return uriBuilder.Uri.AbsolutePath;
     }

@@ -6,7 +6,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore;
 
 [IgnoreMultiTenancy]
-[ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
+[ConnectionStringName(AbpFeatureManagementDbProperties.ConnectionStringName)]
 public class FeatureManagementDbContext : AbpDbContext<FeatureManagementDbContext>, IFeatureManagementDbContext
 {
     public DbSet<FeatureValue> FeatureValues { get; set; }

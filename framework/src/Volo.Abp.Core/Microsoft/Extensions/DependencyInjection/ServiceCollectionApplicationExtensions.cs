@@ -39,4 +39,10 @@ public static class ServiceCollectionApplicationExtensions
     {
         return await AbpApplicationFactory.CreateAsync(startupModuleType, services, optionsAction);
     }
+    
+    [CanBeNull]
+    public static string GetApplicationName(this IServiceCollection services)
+    {
+        return services.GetSingletonInstance<IApplicationNameAccessor>().ApplicationName;
+    }
 }

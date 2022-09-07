@@ -1,10 +1,12 @@
 $(function () {
     var l = abp.localization.getResource("CmsKit");
-
+    
     var $createForm = $('#form-page-create');
     var $title = $('#ViewModel_Title');
     var $slug = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-page-create');
+
+    var widgetModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Contents/AddWidgetModal", modalClass: "addWidgetModal" });
 
     var scriptEditor = CodeMirror.fromTextArea(document.getElementById("ViewModel_Script"), {
         mode: "javascript",
@@ -25,7 +27,7 @@ $(function () {
 
     $createForm.on('submit', function (e) {
         e.preventDefault();
-        
+
         if ($createForm.valid()) {
 
             abp.ui.setBusy();
@@ -87,21 +89,16 @@ $(function () {
     var fileUploadUri = "/api/cms-kit-admin/media/page";
     var fileUriPrefix = "/api/cms-kit/media/";
 
-    initAllEditors();
+    initEditor();
 
-    function initAllEditors() {
-        $('.content-editor').each(function (i, item) {
-            initEditor(item);
-        });
-    }
-
-    function initEditor(element) {
-        var $editorContainer = $(element);
+    var editor;
+    function initEditor() {
+        var $editorContainer = $("#ContentEditor");
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
 
-        var editor = new toastui.Editor({
+        editor = new toastui.Editor({
             el: $editorContainer[0],
             usageStatistics: false,
             useCommandShortcut: true,
@@ -112,6 +109,19 @@ $(function () {
             minHeight: "25em",
             initialEditType: 'markdown',
             language: $editorContainer.data("language"),
+            toolbarItems: [
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'image', 'link'],
+                ['code', 'codeblock'],
+                // Using Option: Customize the last button
+                [{
+                    el: createAddWidgetButton(),
+                    command: 'bold',
+                    tooltip: 'Add Widget'
+                }]
+            ],
             hooks: {
                 addImageBlobHook: uploadFile,
             },
@@ -154,5 +164,51 @@ $(function () {
                 callback(fileUrl, mediaDto.name);
             }
         });
+    }
+
+    $('#GeneratedWidgetText').on('change', function () {
+        var txt = $('#GeneratedWidgetText').val();
+        editor.insertText(txt);
+    });
+
+    $('.tab-item').on('click', function () {
+        if ($(this).attr("aria-label") == 'Preview' && editor.isMarkdownMode()) {
+
+            let content = editor.getMarkdown();
+            localStorage.setItem('content', content);
+
+            $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
+
+                let style = styleEditor.getValue();
+
+                $('#editor-preview-style').remove();
+
+                $('head').append('<style id="editor-preview-style">' + style + '</style>');
+
+                editor.setHTML(result);
+                
+                var highllightedText = $('#ContentEditor').find('.toastui-editor-md-preview-highlight');
+                highllightedText.removeClass('toastui-editor-md-preview-highlight');
+            });
+        }
+        else if ($(this).attr("aria-label") == 'Write'){
+            var retrievedObject = localStorage.getItem('content');
+            editor.setMarkdown(retrievedObject);
+        }
+    });
+
+    function createAddWidgetButton() {
+        const button = document.createElement('button');
+
+        button.className = 'toastui-editor-toolbar-icons last dropdown';
+        button.style.backgroundImage = 'none';
+        button.style.margin = '0';
+        button.innerHTML = `W`;
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            widgetModal.open();
+        });
+
+        return button;
     }
 });

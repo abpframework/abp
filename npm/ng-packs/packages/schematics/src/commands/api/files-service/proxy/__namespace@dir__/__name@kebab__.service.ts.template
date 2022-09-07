@@ -7,12 +7,18 @@
 export class <%= name %>Service {
   apiName = '<%= apiName %>';<%
   for (let {body, signature} of methods) { %>
+  <%
+    const isBlob = body.isBlobMethod() ;
+    const responseType =  isBlob ? "Blob":body.responseType;
+  %>
 
   <%= camel(signature.name) %> = (<%= serializeParameters(signature.parameters) %>) =>
-    this.restService.request<<%= body.requestType %>, <%= body.responseType %>>({
-      method: '<%= body.method %>',<% 
+    this.restService.request<<%= body.requestType %>, <%= responseType %>>({
+      method: '<%= body.method %>',<%
       if (body.responseType === 'string') { %>
-      responseType: 'text',<% } %>
+      responseType: 'text',<% } %><%
+      if (isBlob) { %>
+      responseType: 'blob',<% } %>
       url: <%= body.url %>,<%
       if (body.params.length) { %>
       params: { <%= body.params.join(', ') %> },<% }

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Domain",
-  "hash": "dc844bd57c080aeb4c391df420023816",
+  "hash": "6fe29d46ceb964bb16638d684318ef9a",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
@@ -19,7 +19,7 @@
     {
       "namespace": "Volo.Abp.FeatureManagement",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.FeatureManagement",
         "primaryKeyType": "Guid",
         "summary": null,

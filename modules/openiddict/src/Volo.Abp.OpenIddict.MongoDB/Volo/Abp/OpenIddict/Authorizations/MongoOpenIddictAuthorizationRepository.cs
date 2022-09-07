@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -67,12 +68,15 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
     public virtual async Task<List<OpenIddictAuthorization>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default)
     {
         var tokenQueryable = await GetMongoQueryableAsync<OpenIddictToken>(GetCancellationToken(cancellationToken));
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        
+        var authorizations = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.CreationDate < date)
             .Where(x => x.Status != OpenIddictConstants.Statuses.Valid ||
-                        (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && tokenQueryable.Any(t => t.AuthorizationId == x.Id)))
+                        (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc))
             .OrderBy(x => x.Id)
             .Take(count)
             .ToListAsync(GetCancellationToken(cancellationToken));
+        
+        return authorizations.Where(x => tokenQueryable.Any(t => t.AuthorizationId == x.Id)).ToList();
     }
 }

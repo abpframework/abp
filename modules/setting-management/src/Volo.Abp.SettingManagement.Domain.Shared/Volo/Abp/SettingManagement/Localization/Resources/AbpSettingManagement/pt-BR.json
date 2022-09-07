@@ -28,7 +28,7 @@
     "Feature:SettingManagementGroup": "Gestão de Cenários",
     "Feature:SettingManagementEnable": "Habilitar gerenciamento de configuração",
     "Feature:SettingManagementEnableDescription": "Habilite o sistema de gerenciamento de configuração no aplicativo.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Permitir que os inquilinos alterem as configurações de e-mail.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Permitir que os inquilinos alterem as configurações de e-mail."
+    "Feature:AllowChangingEmailSettings": "Permitir alterar as configurações de e-mail.",
+    "Feature:AllowChangingEmailSettingsDescription": "Permitir alterar as configurações de e-mail."
   }
 }

@@ -136,6 +136,7 @@ export class CoreModule {
     return {
       ngModule: RootCoreModule,
       providers: [
+        OAuthModule.forRoot().providers,
         LocaleProvider,
         CookieLanguageProvider,
         {
@@ -190,7 +191,6 @@ export class CoreModule {
           useValue: localizationContributor(options.localizations),
           deps: [LocalizationService],
         },
-        OAuthModule.forRoot().providers,
       ],
     };
   }

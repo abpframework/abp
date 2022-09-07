@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Features;
@@ -25,10 +24,8 @@ public class SettingManagementMainMenuContributor : IMenuContributor
             return;
         }
 
-        var settingManagementPageOptions = context.ServiceProvider.GetRequiredService<IOptions<SettingManagementPageOptions>>().Value;
-        var settingPageCreationContext = new SettingPageCreationContext(context.ServiceProvider);
-        if (!settingManagementPageOptions.Contributors.Any() ||
-            !(await CheckAnyOfPagePermissionsGranted(settingManagementPageOptions, settingPageCreationContext)))
+        var settingPageContributorManager = context.ServiceProvider.GetRequiredService<SettingPageContributorManager>();
+        if (!(await settingPageContributorManager.GetAvailableContributors()).Any())
         {
             return;
         }
@@ -45,19 +42,5 @@ public class SettingManagementMainMenuContributor : IMenuContributor
                     icon: "fa fa-cog"
                 ).RequireFeatures(SettingManagementFeatures.Enable)
             );
-    }
-
-    protected virtual async Task<bool> CheckAnyOfPagePermissionsGranted(
-        SettingManagementPageOptions settingManagementPageOptions,
-        SettingPageCreationContext settingPageCreationContext)
-    {
-        foreach (var contributor in settingManagementPageOptions.Contributors)
-        {
-            if (await contributor.CheckPermissionsAsync(settingPageCreationContext))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }

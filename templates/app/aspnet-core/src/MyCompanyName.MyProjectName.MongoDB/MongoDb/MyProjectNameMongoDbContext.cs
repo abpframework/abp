@@ -14,7 +14,7 @@ public class MyProjectNameMongoDbContext : AbpMongoDbContext
     {
         base.CreateModel(modelBuilder);
 
-        //builder.Entity<YourEntity>(b =>
+        //modelBuilder.Entity<YourEntity>(b =>
         //{
         //    //...
         //});

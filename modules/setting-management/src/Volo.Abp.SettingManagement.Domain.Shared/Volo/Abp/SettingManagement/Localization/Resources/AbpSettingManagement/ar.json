@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "إدارة الإعداد",
     "Feature:SettingManagementEnable": "تمكين إدارة الإعداد",
     "Feature:SettingManagementEnableDescription": "تفعيل إعداد نظام الإدارة في التطبيق.",
-    "Feature:AllowTenantsToChangeEmailSettings": "السماح للمستأجرين بتغيير إعدادات البريد الإلكتروني.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "السماح للمستأجرين بتغيير إعدادات البريد الإلكتروني."
+    "Feature:AllowChangingEmailSettings": "السماح لتغيير إعدادات البريد الإلكتروني.",
+    "Feature:AllowChangingEmailSettingsDescription": "السماح لتغيير إعدادات البريد الإلكتروني."
   }
 }

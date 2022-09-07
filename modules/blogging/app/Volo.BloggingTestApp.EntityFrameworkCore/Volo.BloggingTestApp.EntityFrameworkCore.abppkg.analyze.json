@@ -1,0 +1,18 @@
+{
+  "name": "Volo.BloggingTestApp.EntityFrameworkCore",
+  "hash": "9bca59fa99494d82517715624e8b4974",
+  "contents": [
+    {
+      "namespace": "Volo.BloggingTestApp.EntityFrameworkCore",
+      "contentType": "abpModule",
+      "name": "BloggingTestAppEntityFrameworkCoreModule"
+    },
+    {
+      "namespace": "Volo.BloggingTestApp.EntityFrameworkCore",
+      "connectionStringName": null,
+      "databaseTables": [],
+      "contentType": "efCoreDbContext",
+      "name": "BloggingTestAppDbContext"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 {
   "culture": "pt-BR",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "O nome do ambiente já existe: {Name}",
     "Menu:TenantManagement": "Gerencimento de Inquilinos",
     "Tenants": "Inquilinos",
     "NewTenant": "Novo Inquilino",
@@ -10,7 +11,6 @@
     "ConnectionStrings": "Cadeia de Conexão",
     "DisplayName:DefaultConnectionString": "Cadeia de Conexão Padrão",
     "DisplayName:UseSharedDatabase": "Use o banco de dados compartilhado",
-    "ManageHostFeatures": "Gerenciar recursos do Host",
     "Permission:TenantManagement": "Inquilinos",
     "Permission:Create": "Criar",
     "Permission:Edit": "Editar",
