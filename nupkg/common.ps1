@@ -69,7 +69,6 @@ function Read-File {
 # List of solutions
 $solutions = (
     "framework",
-	"../abp-studio",
     "modules/account",
     "modules/audit-logging",
     "modules/background-jobs",
@@ -225,13 +224,6 @@ $projects = (
     "framework/src/Volo.Abp.VirtualFileSystem",
     "framework/src/Volo.Abp.Kafka",
     "framework/src/Volo.Abp.Swashbuckle",
-
-	# studio
-	"../abp-studio/src/Volo.Abp.Studio.Domain.Shared",
-	"../abp-studio/src/Volo.Abp.Studio.Domain.CommonServices",
-	"../abp-studio/src/Volo.Abp.Studio.ModuleInstaller.Abstractions",
-	"../abp-studio/src/Volo.Abp.Studio.ModuleInstaller",
-	"../abp-studio/src/Volo.Abp.Studio.Analyzing.Abstractions",
 
     # modules/account
     "modules/account/src/Volo.Abp.Account.Application.Contracts",
