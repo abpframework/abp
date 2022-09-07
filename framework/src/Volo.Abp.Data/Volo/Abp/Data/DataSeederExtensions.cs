@@ -9,4 +9,9 @@ public static class DataSeederExtensions
     {
         return seeder.SeedAsync(new DataSeedContext(tenantId));
     }
+
+    public static Task SeedInSeparateUowAsync(this IDataSeeder seeder, Guid? tenantId = null)
+    {
+        return seeder.SeedAsync(new DataSeedContext(tenantId).WithProperty(nameof(DataSeederExtensions.SeedInSeparateUowAsync), true));
+    }
 }
