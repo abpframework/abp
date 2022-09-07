@@ -12,7 +12,7 @@ public class LocalizableString : ILocalizableString
     [NotNull]
     public string Name { get; }
 
-    public LocalizableString(Type resourceType, [NotNull] string name)
+    public LocalizableString([CanBeNull] Type resourceType, [NotNull] string name)
     {
         Name = Check.NotNullOrEmpty(name, nameof(name));
         ResourceType = resourceType;
@@ -20,7 +20,28 @@ public class LocalizableString : ILocalizableString
 
     public LocalizedString Localize(IStringLocalizerFactory stringLocalizerFactory)
     {
-        return stringLocalizerFactory.Create(ResourceType)[Name];
+        var localizer = ResourceType != null
+            ? stringLocalizerFactory.Create(ResourceType)
+            : stringLocalizerFactory.CreateDefaultOrNull();
+
+        if (localizer == null)
+        {
+            throw new AbpException($"Set {nameof(ResourceType)} or configure the default localization resource type (in the AbpLocalizationOptions)!");
+        }
+        
+        var result = localizer[Name];
+        
+        if (result.ResourceNotFound && ResourceType != null)
+        {
+            /* Search in the default resource if not found in the provided resource */
+            localizer = stringLocalizerFactory.CreateDefaultOrNull();
+            if (localizer != null)
+            {
+                result = localizer[Name];
+            }
+        }
+
+        return result;
     }
 
     public static LocalizableString Create<TResource>([NotNull] string name)

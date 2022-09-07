@@ -212,7 +212,7 @@ public static class ServiceCollectionHttpClientProxyExtensions
     }
 
     /// <summary>
-    /// Checks wether the type is suitable to use with the proxying.
+    /// Checks whether the type is suitable to use with the proxying.
     /// Currently the type is checked statically against some fixed conditions.
     /// </summary>
     /// <param name="type">Type to check</param>

@@ -10,7 +10,6 @@
     "ConnectionStrings": "Chuỗi kết nối",
     "DisplayName:DefaultConnectionString": "Chuỗi kết nối mặc định",
     "DisplayName:UseSharedDatabase": "Sử dụng cơ sở dữ liệu dùng chung",
-    "ManageHostFeatures": "Quản lý các tính năng của Máy chủ lưu trữ",
     "Permission:TenantManagement": "Quản lý khách thuê",
     "Permission:Create": "Tạo",
     "Permission:Edit": "Sửa",

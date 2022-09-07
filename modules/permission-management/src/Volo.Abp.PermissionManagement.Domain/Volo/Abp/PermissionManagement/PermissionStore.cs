@@ -67,7 +67,7 @@ public class PermissionStore : IPermissionStore, ITransientDependency
         string currentName,
         PermissionGrantCacheItem currentCacheItem)
     {
-        var permissions = PermissionDefinitionManager.GetPermissions();
+        var permissions = await PermissionDefinitionManager.GetPermissionsAsync();
 
         Logger.LogDebug($"Getting all granted permissions from the repository for this provider name,key: {providerName},{providerKey}");
 
@@ -169,7 +169,8 @@ public class PermissionStore : IPermissionStore, ITransientDependency
         string providerKey,
         List<string> notCacheKeys)
     {
-        var permissions = PermissionDefinitionManager.GetPermissions().Where(x => notCacheKeys.Any(k => GetPermissionNameFormCacheKeyOrNull(k) == x.Name)).ToList();
+        var permissions = (await PermissionDefinitionManager.GetPermissionsAsync())
+            .Where(x => notCacheKeys.Any(k => GetPermissionNameFormCacheKeyOrNull(k) == x.Name)).ToList();
 
         Logger.LogDebug($"Getting not cache granted permissions from the repository for this provider name,key: {providerName},{providerKey}");
 

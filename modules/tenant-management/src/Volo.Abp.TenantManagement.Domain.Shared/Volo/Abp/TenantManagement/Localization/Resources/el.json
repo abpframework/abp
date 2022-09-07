@@ -10,7 +10,6 @@
     "ConnectionStrings": "Συμβολοσειρές σύνδεσης",
     "DisplayName:DefaultConnectionString": "Προεπιλεγμένη συμβολοσειρά σύνδεσης",
     "DisplayName:UseSharedDatabase": "Χρησιμοποιήστε την Κοινόχρηστη βάση δεδομένων",
-    "ManageHostFeatures": "Διαχείριση δυνατοτήτων του Οικοδεσπότη",
     "Permission:TenantManagement": "Διαχείριση ενοικιαστών",
     "Permission:Create": "Δημιουργία",
     "Permission:Edit": "Επεξεργασία",
