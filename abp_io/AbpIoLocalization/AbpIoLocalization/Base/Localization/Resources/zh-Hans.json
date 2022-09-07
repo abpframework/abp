@@ -161,6 +161,9 @@
     "Error_Page_500_Title": "好像出了什么问题！",
     "Error_Page_500_Description_1": "我们会自动跟踪这些错误，但如果问题仍然存在，请随时 <br /> 联系我们。 与此同时，尝试刷新。",
     "Error_Page_500_Description_2": "通过 <a href=\"mailto:info@abp.io\" target=\"_blank\">info@abp.io</a> 与我们联系。",
-    "Books": "书籍"
+    "Books": "书籍",
+    "ABPDiscordServer": "ABP Discord 服务器",
+    "ABPCommunityTalks": "ABP社区讲话",
+    "ABPCommunityPosts": "ABP社区文章"
   }
 }
