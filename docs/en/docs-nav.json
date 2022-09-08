@@ -939,6 +939,10 @@
             {
               "text": "PWA Configuration",
               "path": "UI/Blazor/Pwa-Configuration.md"
+            },
+            {
+              "text": "Layout Hooks",
+              "path": "UI/Blazor/Layout-Hooks.md"
             }
           ]
         },
