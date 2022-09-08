@@ -12,6 +12,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- <TEMPLATE-REMOVE> -->
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <!-- </TEMPLATE-REMOVE> -->
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="1.0.0-rc.*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
@@ -50,10 +59,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.Featuremanagement.Application\Volo.Abp.Featuremanagement.Application.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.Featuremanagement.EntityFrameworkCore\Volo.Abp.Featuremanagement.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.Featuremanagement.HttpApi\Volo.Abp.Featuremanagement.HttpApi.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.Featuremanagement.Web\Volo.Abp.Featuremanagement.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.Application\Volo.Abp.FeatureManagement.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.EntityFrameworkCore\Volo.Abp.FeatureManagement.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.HttpApi\Volo.Abp.FeatureManagement.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.Web\Volo.Abp.FeatureManagement.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,10 +74,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.EntityFrameworkCore\Volo.Abp.AuditLogging.EntityFrameworkCore.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
   </ItemGroup>
 
   <ItemGroup>

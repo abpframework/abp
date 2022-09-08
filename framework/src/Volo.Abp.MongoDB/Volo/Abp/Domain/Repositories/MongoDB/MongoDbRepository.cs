@@ -294,7 +294,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
         {
-            ((ISoftDelete)entity).IsDeleted = true;
+            ObjectHelper.TrySetProperty(((ISoftDelete)entity), x => x.IsDeleted, () => true);
             ApplyAbpConceptsForDeletedEntity(entity);
 
             ReplaceOneResult result;
@@ -365,8 +365,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         {
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
             {
-                ((ISoftDelete)entity).IsDeleted = true;
-
+                ObjectHelper.TrySetProperty(((ISoftDelete)entity), x => x.IsDeleted, () => true);
                 softDeletedEntities.Add(entity, SetNewConcurrencyStamp(entity));
             }
             else
@@ -465,7 +464,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         cancellationToken = GetCancellationToken(cancellationToken);
 
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .OrderBy(sorting)
+            .OrderByIf<TEntity, IQueryable<TEntity>>(!sorting.IsNullOrWhiteSpace(), sorting)
             .As<IMongoQueryable<TEntity>>()
             .PageBy<TEntity, IMongoQueryable<TEntity>>(skipCount, maxResultCount)
             .ToListAsync(cancellationToken);
@@ -518,12 +517,12 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         );
     }
 
-    public virtual Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default)
+    public virtual Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
     {
-        return GetMongoQueryableAsync<TEntity>(cancellationToken);
+        return GetMongoQueryableAsync<TEntity>(cancellationToken, aggregateOptions);
     }
 
-    protected virtual async Task<IMongoQueryable<TOtherEntity>> GetMongoQueryableAsync<TOtherEntity>(CancellationToken cancellationToken = default)
+    protected virtual async Task<IMongoQueryable<TOtherEntity>> GetMongoQueryableAsync<TOtherEntity>(CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -532,12 +531,12 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
         return ApplyDataFilters<IMongoQueryable<TOtherEntity>, TOtherEntity>(
             dbContext.SessionHandle != null
-                ? collection.AsQueryable(dbContext.SessionHandle)
-                : collection.AsQueryable()
+                ? collection.AsQueryable(dbContext.SessionHandle, aggregateOptions)
+                : collection.AsQueryable(aggregateOptions)
         );
     }
 
-    public virtual async Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -545,8 +544,8 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         var collection = await GetCollectionAsync(cancellationToken);
 
         var aggregate = dbContext.SessionHandle != null
-                ? collection.Aggregate(dbContext.SessionHandle)
-                : collection.Aggregate();
+                ? collection.Aggregate(dbContext.SessionHandle, aggregateOptions)
+                : collection.Aggregate(aggregateOptions);
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<ISoftDelete>())
         {
@@ -598,13 +597,11 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     private void TriggerEntityCreateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityCreatingEvent(entity);
         EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
     }
 
     protected virtual void TriggerEntityUpdateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityUpdatingEvent(entity);
         EntityChangeEventHelper.PublishEntityUpdatedEvent(entity);
     }
 
@@ -617,7 +614,6 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     protected virtual void TriggerEntityDeleteEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityDeletingEvent(entity);
         EntityChangeEventHelper.PublishEntityDeletedEvent(entity);
     }
 

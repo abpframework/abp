@@ -161,7 +161,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
-            .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd > DateTimeOffset.UtcNow)
+            .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0)
             .WhereIf(notActive == true, x => !x.IsActive)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
             .PageBy(skipCount, maxResultCount)
@@ -225,7 +225,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
-            .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd > DateTimeOffset.UtcNow)
+            .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0)
             .WhereIf(notActive == true, x => !x.IsActive)
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }

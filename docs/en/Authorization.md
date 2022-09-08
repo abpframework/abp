@@ -4,7 +4,7 @@ Authorization is used to check if a user is allowed to perform some specific ope
 
 ABP extends [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing authorization system to be usable in the **[application services](Application-Services.md)** too.
 
-So, all the ASP.NET Core authorization features and the documentation are valid in an ABP based application. This document focuses on the features that added on top of ASP.NET Core authorization features.
+So, all the ASP.NET Core authorization features and the documentation are valid in an ABP based application. This document focuses on the features that are added on top of ASP.NET Core authorization features.
 
 ## Authorize Attribute
 
@@ -457,6 +457,15 @@ public static class CurrentUserExtensions
         return currentUser.FindClaimValue("SocialSecurityNumber");
     }
 }
+```
+
+> If you use Identity Server please add your claims to `RequestedClaims` of `AbpClaimsServiceOptions`.
+
+```csharp
+Configure<AbpClaimsServiceOptions>(options =>
+{
+    options.RequestedClaims.AddRange(new[]{ "SocialSecurityNumber" });
+});
 ```
 
 ## See Also

@@ -9,7 +9,7 @@
                 return false;
             }
 
-            var input = $('#PersonalSettingsForm').serializeFormToObject();
+            var input = $('#PersonalSettingsForm').serializeFormToObject(false);
 
             volo.abp.account.profile.update(input).then(function (result) {
                 abp.notify.success(l('PersonalSettingsSaved'));

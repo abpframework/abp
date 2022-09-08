@@ -1,7 +1,9 @@
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { getPasswordValidators } from '@abp/ng.theme.shared';
 import { ePropType, FormProp } from '@abp/ng.theme.shared/extensions';
-import { Validators } from '@angular/forms';
+import { Validators } from '@angular/forms'
+import { AbpValidators } from '@abp/ng.core';
+
 
 export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserDto>([
   {
@@ -9,7 +11,7 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
     name: 'userName',
     displayName: 'AbpIdentity::UserName',
     id: 'user-name',
-    validators: () => [Validators.required, Validators.maxLength(256)],
+    validators: () => [Validators.required, Validators.maxLength(256), AbpValidators.username()],
   },
   {
     type: ePropType.Password,
@@ -63,6 +65,12 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
   },
 ]);
 
-export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS.filter(
-  prop => prop.name !== 'password',
-);
+export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS.map(prop => {
+  if (prop.name === 'password') {
+    return {
+      ...prop,
+      validators: data => [...getPasswordValidators({ get: data.getInjected })],
+    };
+  }
+  return prop;
+});

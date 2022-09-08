@@ -6,5 +6,5 @@ public static class AbpOpenIddictDbProperties
 
     public static string DbSchema { get; set; } = null;
 
-    public const string ConnectionStringName = "OpenIddict";
+    public const string ConnectionStringName = "AbpOpenIddict";
 }

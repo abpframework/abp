@@ -947,4 +947,19 @@ public class DistributedCache_Tests : AbpIntegratedTest<AbpCachingTestModule>
         cacheValue[0].Value.ShouldBeNull();
         cacheValue[1].Value.ShouldBeNull();
     }
+
+    [Fact]
+    public async Task Should_Get_Same_Cache_Set_When_Resolve_With_Or_Without_Key()
+    {
+        var cache1 = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+        var cache2 = GetRequiredService<IDistributedCache<PersonCacheItem, string>>();
+        
+        await cache1.SetAsync("john", new PersonCacheItem("John Doe"));
+
+        var item1 = await cache1.GetAsync("john");
+        item1.Name.ShouldBe("John Doe");
+
+        var item2 = await cache2.GetAsync("john");
+        item2.Name.ShouldBe("John Doe");
+    }
 }

@@ -61,6 +61,10 @@
         {
           "text": "WPF",
           "path": "Startup-Templates/WPF.md"
+        },
+        {
+          "text": "MAUI",
+          "path": "Startup-Templates/MAUI.md"
         }
       ]
     },
@@ -167,7 +171,13 @@
         },
         {
           "text": "缓存",
-          "path": "Caching.md"
+          "path": "Caching.md",
+          "items": [
+            {
+              "text": "Redis 缓存",
+              "path": "Redis-Cache.md"
+            }
+          ]
         },
         {
           "text": "日志",

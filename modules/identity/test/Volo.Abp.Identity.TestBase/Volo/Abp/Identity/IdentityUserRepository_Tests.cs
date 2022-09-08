@@ -92,7 +92,7 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
     [Fact]
     public async Task GetListAsync()
     {
-        var users = await UserRepository.GetListAsync("UserName DESC", 5, 0, "n");
+        var users = await UserRepository.GetListAsync("UserName DESC", 5, 0, "n", isLockedOut: true);
 
         users.Count.ShouldBeGreaterThan(1);
         users.Count.ShouldBeLessThanOrEqualTo(5);

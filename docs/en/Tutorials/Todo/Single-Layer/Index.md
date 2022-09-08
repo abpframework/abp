@@ -74,7 +74,7 @@ It is good to run the application before starting the development. The solution 
 
 Firstly, run the `TodoApp` project in your favorite IDE (or run the `dotnet run` CLI command on your project directory) to see the server-side HTTP API on [Swagger UI](https://swagger.io/tools/swagger-ui/):
 
-![todo-swagger-ui-initial](../todo-swagger-ui-initial.png)
+![todo-swagger-ui-initial](./todo-single-layer-ui-initial.png)
 
 You can explore and test your HTTP API with this UI. If it works, then we can run the Angular client application.
 

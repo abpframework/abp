@@ -7,7 +7,9 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions;
 
-public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition>
+public class PermissionDefinition : 
+    IHasSimpleStateCheckers<PermissionDefinition>,
+    ICanAddChildPermission
 {
     /// <summary>
     /// Unique name of the permission.
@@ -30,7 +32,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
     /// A list of allowed providers to get/set value of this permission.
     /// An empty list indicates that all providers are allowed.
     /// </summary>
-    public List<string> Providers { get; } //TODO: Rename to AllowedProviders?
+    public List<string> Providers { get; }
 
     public List<ISimpleStateChecker<PermissionDefinition>> StateCheckers { get; }
 
@@ -110,6 +112,16 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
 
         return child;
     }
+    
+    PermissionDefinition ICanAddChildPermission.AddPermission(
+        string name,
+        ILocalizableString displayName = null,
+        MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+        bool isEnabled = true)
+    {
+        return this.AddChild(name, displayName, multiTenancySide, isEnabled);
+    }
+
 
     /// <summary>
     /// Sets a property in the <see cref="Properties"/> dictionary.
@@ -122,14 +134,14 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
     }
 
     /// <summary>
-    /// Set the <see cref="StateProviders"/> property.
+    /// Adds one or more providers to the <see cref="Providers"/> list.
     /// This is a shortcut for nested calls on this object.
     /// </summary>
     public virtual PermissionDefinition WithProviders(params string[] providers)
     {
         if (!providers.IsNullOrEmpty())
         {
-            Providers.AddRange(providers);
+            Providers.AddIfNotContains(providers);
         }
 
         return this;

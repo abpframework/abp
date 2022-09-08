@@ -40,6 +40,13 @@ public partial class TenantManagement
         ManageFeaturesPolicyName = TenantManagementPermissions.Tenants.ManageFeatures;
     }
 
+    protected override ValueTask SetBreadcrumbItemsAsync()
+    {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:TenantManagement"]));
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Tenants"]));
+        return base.SetBreadcrumbItemsAsync();
+    }
+
     protected override async Task SetPermissionsAsync()
     {
         await base.SetPermissionsAsync();
@@ -54,11 +61,6 @@ public partial class TenantManagement
 
     protected override ValueTask SetToolbarItemsAsync()
     {
-        Toolbar.AddButton(L["ManageHostFeatures"],
-            async () => await FeatureManagementModal.OpenAsync(FeatureProviderName),
-            "fa fa-cog",
-            requiredPolicyName: FeatureManagementPermissions.ManageHostFeatures);
-
         Toolbar.AddButton(L["NewTenant"],
             OpenCreateModalAsync,
             IconName.Add,

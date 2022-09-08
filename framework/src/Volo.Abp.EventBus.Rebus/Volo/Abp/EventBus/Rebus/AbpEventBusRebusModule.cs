@@ -41,11 +41,11 @@ public class AbpEventBusRebusModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        context.ServiceProvider.UseRebus();
-
         context
             .ServiceProvider
             .GetRequiredService<RebusDistributedEventBus>()
             .Initialize();
+            
+        context.ServiceProvider.UseRebus();
     }
 }

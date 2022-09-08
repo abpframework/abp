@@ -1,8 +1,10 @@
 {
   "culture": "fa",
   "texts": {
-    "Volo.Feature:010001": "ویژگی فعال نیست: {FeatureName}",
-    "Volo.Feature:010002": "ویژگی های مورد نیاز فعال نیستند. همه این ویژگی ها باید فعال باشند: {FeatureNames}",
-    "Volo.Feature:010003": "ویژگی های مورد نیاز فعال نیستند. حداقل یکی از این ویژگی ها باید فعال باشد: {FeatureNames}"
+    "Features": "ویژگی ها",
+    "NoFeatureFoundMessage": "هیچ ویژگی ای در دسترس نمی باشد.",
+    "Permission:FeatureManagement": "مدیریت ویژگی ها",
+    "Permission:FeatureManagement.ManageHostFeatures": "مدیریت ویژگی های میزبان",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} مقدار ویژگی صحیح نمی باشد!"
   }
 }

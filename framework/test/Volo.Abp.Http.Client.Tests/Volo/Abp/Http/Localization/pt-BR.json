@@ -1,6 +1,6 @@
 {
   "culture": "pt-BR",
   "texts": {
-    "Volo.Abp.Http.DynamicProxying:10001": "Exceção comercial com dados: {0}"
+    "Volo.Abp.Http.DynamicProxying:10001": "Exceção de negócio com dados: {0}"
   }
 }

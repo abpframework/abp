@@ -548,8 +548,8 @@
                 }
               ],
               "returnValue": {
-                "type": "Volo.CmsKit.Public.Pages.PageDto",
-                "typeSimple": "Volo.CmsKit.Public.Pages.PageDto"
+                "type": "Volo.CmsKit.Contents.PageDto",
+                "typeSimple": "Volo.CmsKit.Contents.PageDto"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Public.Pages.IPagePublicAppService"
@@ -934,8 +934,8 @@
                 }
               ],
               "returnValue": {
-                "type": "Volo.CmsKit.Public.Blogs.BlogPostPublicDto",
-                "typeSimple": "Volo.CmsKit.Public.Blogs.BlogPostPublicDto"
+                "type": "Volo.CmsKit.Contents.BlogPostCommonDto",
+                "typeSimple": "Volo.CmsKit.Contents.BlogPostCommonDto"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Public.Blogs.IBlogPostPublicAppService"
@@ -991,6 +991,18 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "TagId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "Sorting",
                   "jsonName": null,
                   "type": "System.String",
@@ -1027,8 +1039,8 @@
                 }
               ],
               "returnValue": {
-                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Public.Blogs.BlogPostPublicDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Public.Blogs.BlogPostPublicDto>"
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Contents.BlogPostCommonDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Contents.BlogPostCommonDto>"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Public.Blogs.IBlogPostPublicAppService"

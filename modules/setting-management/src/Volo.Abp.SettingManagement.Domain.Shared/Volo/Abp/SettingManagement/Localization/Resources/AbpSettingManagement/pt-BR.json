@@ -5,6 +5,16 @@
     "SuccessfullySaved": "Salvo com sucesso!",
     "Permission:SettingManagement": "Gestão de Cenários",
     "Permission:Emailing": "Enviando por e-mail",
+    "Permission:EmailingTest": "Teste de e-mail",
+    "SendTestEmail": "Enviar e-mail de teste",
+    "SenderEmailAddress": "E-mail remetente",
+    "TargetEmailAddress": "E-mail destinatário",
+    "Subject": "Título",
+    "Body": "Corpo",
+    "TestEmailSubject": "E-mail teste {0}",
+    "TestEmailBody": "Corpo de e-mail de teste aqui",
+    "SuccessfullySent": "Enviado com sucesso",
+    "Send": "Enviar",
     "Menu:Emailing": "Enviando por e-mail",
     "SmtpHost": "Hospedeiro",
     "SmtpPort": "Porta",
@@ -18,7 +28,7 @@
     "Feature:SettingManagementGroup": "Gestão de Cenários",
     "Feature:SettingManagementEnable": "Habilitar gerenciamento de configuração",
     "Feature:SettingManagementEnableDescription": "Habilite o sistema de gerenciamento de configuração no aplicativo.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Permitir que os inquilinos alterem as configurações de e-mail.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Permitir que os inquilinos alterem as configurações de e-mail."
+    "Feature:AllowChangingEmailSettings": "Permitir alterar as configurações de e-mail.",
+    "Feature:AllowChangingEmailSettingsDescription": "Permitir alterar as configurações de e-mail."
   }
 }

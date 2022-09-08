@@ -10,21 +10,12 @@ namespace Volo.Abp.OpenIddict.Controllers;
 public class LogoutController : AbpOpenIdDictControllerBase
 {
     [HttpGet]
-    public virtual Task<IActionResult> GetAsync()
+    public virtual async Task<IActionResult> GetAsync()
     {
-        return Task.FromResult<IActionResult>(View("Logout"));
-    }
-
-    [HttpPost]
-    public virtual async Task<IActionResult> PostAsync()
-    {
-        if (await HasFormValueAsync("accept"))
-        {
-            // Ask ASP.NET Core Identity to delete the local and external cookies created
-            // when the user agent is redirected from the external identity provider
-            // after a successful authentication flow (e.g Google or Facebook).
-            await SignInManager.SignOutAsync();
-        }
+        // Ask ASP.NET Core Identity to delete the local and external cookies created
+        // when the user agent is redirected from the external identity provider
+        // after a successful authentication flow (e.g Google or Facebook).
+        await SignInManager.SignOutAsync();
 
         // Returning a SignOutResult will ask OpenIddict to redirect the user agent
         // to the post_logout_redirect_uri specified by the client application or to

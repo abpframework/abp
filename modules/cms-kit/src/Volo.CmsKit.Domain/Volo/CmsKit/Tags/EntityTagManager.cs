@@ -1,9 +1,9 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Services;
 
 namespace Volo.CmsKit.Tags;
@@ -62,7 +62,7 @@ public class EntityTagManager : DomainService
         var deletedTags = existingTags.Where(x => !tags.Contains(x.Name)).ToList();
         var addedTags = tags.Where(x => !existingTags.Any(a => a.Name == x));
 
-        await EntityTagRepository.DeleteManyAsync(deletedTags.Select(s => s.Id).ToArray());
+        await EntityTagRepository.DeleteManyAsync(deletedTags.Select(s => s.Id).ToArray(), entityId);
 
         foreach (var addedTag in addedTags)
         {
@@ -78,5 +78,13 @@ public class EntityTagManager : DomainService
         CancellationToken cancellationToken = default)
     {
         return await EntityTagRepository.GetEntityIdsFilteredByTagAsync(tagId, tenantId, cancellationToken);
+    }
+    public async Task<List<string>> GetEntityIdsFilteredByTagNameAsync(
+        [NotNull] string tagName,
+        [NotNull] string entityType,
+        [CanBeNull] Guid? tenantId,
+        CancellationToken cancellationToken = default)
+    {
+        return await EntityTagRepository.GetEntityIdsFilteredByTagNameAsync(tagName, entityType, tenantId, cancellationToken);
     }
 }

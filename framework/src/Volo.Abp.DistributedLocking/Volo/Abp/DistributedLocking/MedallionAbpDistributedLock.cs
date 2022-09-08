@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Medallion.Threading;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.DistributedLocking;
 
@@ -10,10 +11,14 @@ namespace Volo.Abp.DistributedLocking;
 public class MedallionAbpDistributedLock : IAbpDistributedLock, ITransientDependency
 {
     protected IDistributedLockProvider DistributedLockProvider { get; }
+    protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-    public MedallionAbpDistributedLock(IDistributedLockProvider distributedLockProvider)
+    public MedallionAbpDistributedLock(
+        IDistributedLockProvider distributedLockProvider,
+        ICancellationTokenProvider cancellationTokenProvider)
     {
         DistributedLockProvider = distributedLockProvider;
+        CancellationTokenProvider = cancellationTokenProvider;
     }
 
     public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
@@ -23,7 +28,14 @@ public class MedallionAbpDistributedLock : IAbpDistributedLock, ITransientDepend
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
 
-        var handle = await DistributedLockProvider.TryAcquireLockAsync(name, timeout, cancellationToken);
+        CancellationTokenProvider.FallbackToProvider(cancellationToken);
+
+        var handle = await DistributedLockProvider.TryAcquireLockAsync(
+            name,
+            timeout,
+            CancellationTokenProvider.FallbackToProvider(cancellationToken)
+        );
+        
         if (handle == null)
         {
             return null;

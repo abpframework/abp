@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using Localization.Resources.AbpUi;
+using Medallion.Threading;
+using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -17,8 +19,8 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Auditing;
@@ -26,6 +28,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation.Urls;
@@ -37,10 +40,11 @@ namespace MyCompanyName.MyProjectName;
 [DependsOn(
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpDistributedLockingModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(MyProjectNameEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreSerilogModule)
     )]
@@ -91,12 +95,13 @@ public class MyProjectNameAuthServerModule : AbpModule
             options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
             options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
             options.Languages.Add(new LanguageInfo("es", "es", "Español", "es"));
+            options.Languages.Add(new LanguageInfo("el", "el", "Ελληνικά"));
         });
 
         Configure<AbpBundlingOptions>(options =>
         {
             options.StyleBundles.Configure(
-                BasicThemeBundles.Styles.Global,
+                LeptonXLiteThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
@@ -119,7 +124,6 @@ public class MyProjectNameAuthServerModule : AbpModule
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}basic-theme{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}account{0}src{0}Volo.Abp.Account.Web", Path.DirectorySeparatorChar)));
                 options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebOpenIddictModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}account{0}src{0}Volo.Abp.Account.Web.OpenIddict", Path.DirectorySeparatorChar)));
                 //</TEMPLATE-REMOVE>
@@ -153,6 +157,13 @@ public class MyProjectNameAuthServerModule : AbpModule
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
             dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
         }
+        
+        context.Services.AddSingleton<IDistributedLockProvider>(sp =>
+        {
+            var connection = ConnectionMultiplexer
+                .Connect(configuration["Redis:Configuration"]);
+            return new RedisDistributedSynchronizationProvider(connection.GetDatabase());
+        });
 
         context.Services.AddCors(options =>
         {
@@ -196,7 +207,8 @@ public class MyProjectNameAuthServerModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-
+        app.UseAbpOpenIddictValidation();
+       
         if (MultiTenancyConsts.IsEnabled)
         {
             app.UseMultiTenancy();

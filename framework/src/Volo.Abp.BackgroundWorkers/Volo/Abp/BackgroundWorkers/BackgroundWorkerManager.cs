@@ -26,13 +26,13 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         _backgroundWorkers = new List<IBackgroundWorker>();
     }
 
-    public virtual async Task AddAsync(IBackgroundWorker worker)
+    public virtual async Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
     {
         _backgroundWorkers.Add(worker);
 
         if (IsRunning)
         {
-            await worker.StartAsync();
+            await worker.StartAsync(cancellationToken);
         }
     }
 

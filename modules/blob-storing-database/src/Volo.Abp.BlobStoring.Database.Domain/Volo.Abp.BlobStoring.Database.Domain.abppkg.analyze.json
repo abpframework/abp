@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BlobStoring.Database.Domain",
-  "hash": "744c78df1c9addf5e9f6657295f0529c",
+  "hash": "35614e1fa8f4e0214b7f456228ba7565",
   "contents": [
     {
       "namespace": "Volo.Abp.BlobStoring.Database",
@@ -28,7 +28,7 @@
     {
       "namespace": "Volo.Abp.BlobStoring.Database",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.BlobStoring.Database",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -43,7 +43,7 @@
     {
       "namespace": "Volo.Abp.BlobStoring.Database",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.BlobStoring.Database",
         "primaryKeyType": "Guid",
         "summary": null,

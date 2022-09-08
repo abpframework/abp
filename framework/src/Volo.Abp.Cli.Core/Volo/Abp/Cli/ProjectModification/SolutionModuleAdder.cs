@@ -153,7 +153,7 @@ public class SolutionModuleAdder : ITransientDependency
         var documentationLink = module.GetFirstDocumentationLinkOrNull();
         if (documentationLink != null)
         {
-            CmdHelper.OpenWebPage(documentationLink);
+            CmdHelper.Open(documentationLink);
         }
 
         return module;
@@ -427,11 +427,6 @@ public class SolutionModuleAdder : ITransientDependency
 
         await PublishEventAsync(9, $"Adding angular source code");
 
-        if (newTemplate)
-        {
-            MoveAngularFolderInNewTemplate(modulesFolderInSolution, moduleName);
-        }
-
         await AngularSourceCodeAdder.AddFromModuleAsync(solutionFilePath, angularPath);
     }
 
@@ -446,30 +441,6 @@ public class SolutionModuleAdder : ITransientDependency
             {
                 Directory.Delete(angDir, true);
             }
-        }
-    }
-
-    private static void MoveAngularFolderInNewTemplate(string modulesFolderInSolution, string moduleName)
-    {
-        var moduleAngularFolder = Path.Combine(modulesFolderInSolution, moduleName, "angular");
-
-        if (!Directory.Exists(moduleAngularFolder))
-        {
-            return;
-        }
-
-        var files = Directory.GetFiles(moduleAngularFolder);
-        var folders = Directory.GetDirectories(moduleAngularFolder);
-
-        Directory.CreateDirectory(Path.Combine(moduleAngularFolder, moduleName));
-
-        foreach (var file in files)
-        {
-            File.Move(file, Path.Combine(moduleAngularFolder, moduleName, Path.GetFileName(file)));
-        }
-        foreach (var folder in folders)
-        {
-            Directory.Move(folder, Path.Combine(moduleAngularFolder, moduleName, Path.GetFileName(folder)));
         }
     }
 
@@ -518,6 +489,7 @@ public class SolutionModuleAdder : ITransientDependency
         args.Options.Add("t", newProTemplate ? ModuleProTemplate.TemplateName : ModuleTemplate.TemplateName);
         args.Options.Add("v", version);
         args.Options.Add("o", Path.Combine(modulesFolderInSolution, module.Name));
+        args.Options.Add("sib", true.ToString());
 
         await NewCommand.ExecuteAsync(args);
     }

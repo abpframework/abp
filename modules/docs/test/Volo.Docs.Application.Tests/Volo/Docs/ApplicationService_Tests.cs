@@ -22,7 +22,7 @@ namespace Volo.Docs
             var projects = await _projectAppService.GetListAsync();
             projects.ShouldNotBeNull();
             projects.Items.Count.ShouldBe(1);
-            projects.Items.ShouldContain(x => x.Id == _testData.PorjectId);
+            projects.Items.ShouldContain(x => x.Id == _testData.ProjectId);
         }
 
         [Fact]

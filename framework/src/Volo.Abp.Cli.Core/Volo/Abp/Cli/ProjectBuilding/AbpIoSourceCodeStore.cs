@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Maui;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
 using Volo.Abp.DependencyInjection;
@@ -220,7 +221,9 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error occured while getting the versions from {url} : {ex.Message}");
+            Logger.LogWarning($"Error occured while getting the versions from {url} : {ex.Message}");
+            // The remote service is currently unavailable, try to work offline.
+            return true;
         }
     }
 
@@ -278,7 +281,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
 
         var matches = Regex.Matches(stringBuilder.ToString(),
-            $"({AppTemplate.TemplateName}|{AppNoLayersProTemplate.TemplateName}|{AppNoLayersTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName}|{WpfTemplate.TemplateName})-(.+).zip");
+            $"({AppTemplate.TemplateName}|{AppNoLayersProTemplate.TemplateName}|{AppNoLayersTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName}|{WpfTemplate.TemplateName}|{MauiTemplate.TemplateName})-(.+).zip");
         foreach (Match match in matches)
         {
             templateList.Add((match.Groups[1].Value, match.Groups[2].Value));

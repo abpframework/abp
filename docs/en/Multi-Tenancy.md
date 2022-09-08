@@ -32,6 +32,25 @@ Configure<AbpMultiTenancyOptions>(options =>
 
 > Multi-Tenancy is disabled in the ABP Framework by default. However, it is **enabled by default** when you create a new solution using the [startup template](Startup-Templates/Application.md). `MultiTenancyConsts` class in the solution has a constant to control it in a single place.
 
+### AbpMultiTenancyOptions: Handle inactive and non-existent tenants.
+
+The `MultiTenancyMiddlewareErrorPageBuilder` of `AbpMultiTenancyOptions` is used to handle inactive and non-existent tenants.
+
+It will respond to an error page by default, you can change it if you want, eg: only output the error log and continue ASP NET Core's request pipeline.
+
+```csharp
+Configure<AbpMultiTenancyOptions>(options =>
+{
+    options.MultiTenancyMiddlewareErrorPageBuilder = async (context, exception) =>
+    {
+        // Handle the exception.
+
+        // Return true to stop the pipeline, false to continue.
+        return true;
+    };
+});
+```
+
 ### Database Architecture
 
 ABP Framework supports all the following approaches to store the tenant data in the database;
@@ -203,7 +222,6 @@ The following resolvers are provided and configured by default;
 
 * `CurrentUserTenantResolveContributor`: Gets the tenant id from claims of the current user, if the current user has logged in. **This should always be the first contributor for the security**.
 * `QueryStringTenantResolveContributor`: Tries to find current tenant id from query string parameters. The parameter name is `__tenant` by default.
-* `FormTenantResolveContributor`：Tries to find current tenant id from form parameters. The parameter name is `__tenant` by default.
 * `RouteTenantResolveContributor`: Tries to find current tenant id from route (URL path). The variable name is `__tenant` by default. If you defined a route with this variable, then it can determine the current tenant from the route.
 * `HeaderTenantResolveContributor`: Tries to find current tenant id from HTTP headers. The header name is `__tenant` by default.
 * `CookieTenantResolveContributor`: Tries to find current tenant id from cookie values. The cookie name is `__tenant` by default.

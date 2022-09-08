@@ -23,6 +23,8 @@ public abstract class AbpApplicationBase : IAbpApplication
     public IServiceCollection Services { get; }
 
     public IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
+    
+    public string ApplicationName { get; }
 
     private bool _configuredServices;
 
@@ -41,8 +43,11 @@ public abstract class AbpApplicationBase : IAbpApplication
 
         var options = new AbpApplicationCreationOptions(services);
         optionsAction?.Invoke(options);
+        
+        ApplicationName = options.ApplicationName;
 
         services.AddSingleton<IAbpApplication>(this);
+        services.AddSingleton<IApplicationNameAccessor>(this);
         services.AddSingleton<IModuleContainer>(this);
 
         services.AddCoreServices();
@@ -223,7 +228,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     {
         if (_configuredServices)
         {
-            throw new AbpInitializationException("Services have already been configured! If you call ConfigureServicesAsync method, you must have set AbpApplicationCreationOptions.SkipConfigureServices tu true before.");
+            throw new AbpInitializationException("Services have already been configured! If you call ConfigureServicesAsync method, you must have set AbpApplicationCreationOptions.SkipConfigureServices to true before.");
         }
     }
 
@@ -231,7 +236,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     public virtual void ConfigureServices()
     {
         CheckMultipleConfigureServices();
-        
+
         var context = new ServiceConfigurationContext(Services);
         Services.AddSingleton(context);
 

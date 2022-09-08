@@ -9,11 +9,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.OpenIddict.Scopes;
 
-public class AbpOpenIddictScopeCacheAbpOpenIddictAuthorizationCache : AbpOpenIddictCacheBase<OpenIddictScope, OpenIddictScopeModel, IOpenIddictScopeStore<OpenIddictScopeModel>>,
+public class AbpOpenIddictScopeCache : AbpOpenIddictCacheBase<OpenIddictScope, OpenIddictScopeModel, IOpenIddictScopeStore<OpenIddictScopeModel>>,
     IOpenIddictScopeCache<OpenIddictScopeModel>,
     ITransientDependency
 {
-    public AbpOpenIddictScopeCacheAbpOpenIddictAuthorizationCache(
+    public AbpOpenIddictScopeCache(
         IDistributedCache<OpenIddictScopeModel> cache,
         IDistributedCache<OpenIddictScopeModel[]> arrayCache,
         IOpenIddictScopeStore<OpenIddictScopeModel> store)
@@ -63,7 +63,12 @@ public class AbpOpenIddictScopeCacheAbpOpenIddictAuthorizationCache : AbpOpenIdd
 
     public virtual async IAsyncEnumerable<OpenIddictScopeModel> FindByNamesAsync(ImmutableArray<string> names, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(names, nameof(names));
+        Check.NotNull(names, nameof(names));
+
+        foreach (var name in names)
+        {
+            Check.NotNullOrEmpty(name, nameof(name));
+        }
 
         // Note: this method is only partially cached.
         await foreach (var scope in Store.FindByNamesAsync(names, cancellationToken))

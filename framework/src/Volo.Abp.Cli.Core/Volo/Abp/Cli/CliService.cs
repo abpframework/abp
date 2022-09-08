@@ -49,10 +49,10 @@ public class CliService : ITransientDependency
         var commandLineArgs = CommandLineArgumentParser.Parse(args);
 
 #if !DEBUG
-            if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
-            {
-                await CheckCliVersionAsync();
-            }
+        if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
+        {
+            await CheckCliVersionAsync();
+        }
 #endif
         try
         {
