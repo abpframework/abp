@@ -20,7 +20,7 @@
         );
 
         var scrollTopBtn = $('.scroll-top-btn');
-        var enoughHeight = $('.docs-sidebar-wrapper > .docs-top').height() + 60;
+        var enoughHeight = $('.docs-sidebar-wrapper > .docs-top').height();
         var enoughHeightPlus = 500;
 
         $(window).scroll(function () {
@@ -132,6 +132,12 @@
         $('#scroll-index').mCustomScrollbar({
             theme: 'minimal-dark',
             alwaysShowScrollbar: 0,
+        });
+
+        $('.mCustomScrollbar-1').mCustomScrollbar({
+            theme: 'minimal-dark',
+            alwaysShowScrollbar: 0,
+            horizontalScroll: true,
         });
     }
 

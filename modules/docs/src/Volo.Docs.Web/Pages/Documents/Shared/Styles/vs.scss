@@ -99,6 +99,8 @@ body {
         background: #211e1e;
         padding: 0.5rem $gap-x-size;
         width: 300px;
+        transition: top 0.3s;
+        -webkit-transition: top 0.3s;
 
         .docs-top {
             .navbar-logo {
@@ -373,34 +375,41 @@ body {
             align-items: center;
             border-bottom: 1px solid #eaeaea;
             margin: 0 $gap-x-size;
+            position: relative;
 
-            .breadcrumb {
-                margin-bottom: 0;
-                flex-wrap: nowrap;
-                overflow-x: scroll;
-                white-space: nowrap;
-                padding-bottom: 10px;
+            nav {
+                padding-right: 150px;
+                .breadcrumb {
+                    margin-bottom: 0;
+                    flex-wrap: nowrap;
+                    overflow-x: scroll;
+                    white-space: nowrap;
+                    padding-bottom: 10px;
 
-                .breadcrumb-item {
-                    color: #838690;
-                    font-size: 13px;
-                    font-weight: 500;
-                    padding: 0 9px 0 0px;
-                    display: flex;
-                    a {
+                    .breadcrumb-item {
                         color: #838690;
-                    }
-                    &.active {
-                        color: #c7c8c9;
-                        font-weight: 400;
+                        font-size: 13px;
+                        font-weight: 500;
+                        padding: 0 9px 0 0px;
+                        display: flex;
+                        a {
+                            color: #838690;
+                        }
+                        &.active {
+                            color: #c7c8c9;
+                            font-weight: 400;
+                        }
                     }
                 }
             }
+
             .doc-social-btns {
                 color: rgb(11 22 33 / 50%);
                 white-space: nowrap;
                 top: -2px;
-                position: relative;
+                position: absolute;
+                right: 0;
+
 
                 small {
                     font-size: 13px;
@@ -480,7 +489,7 @@ body {
                     }
                 }
 
-                &:hover {
+                .contributors:hover {
                     a.cont-avatar {
                         img {
                             margin-left: -8px;
@@ -631,6 +640,7 @@ body {
                 background: hsl(199deg 59% 84% / 82%);
                 -webkit-backdrop-filter: blur(10px);
                 backdrop-filter: blur(10px);
+                z-index: 3;
 
                 p.alert-p {
                     font-size: 0.96em;
@@ -660,9 +670,11 @@ body {
 
         .docs-inner-anchors {
             position: fixed;
-            z-index: 99;
+            z-index: 2;
             top: $gap-y-size;
             font-size: 0.9em;
+            transition: top 0.3s;
+            -webkit-transition: top 0.3s;
 
             .navbar {
                 .nav-pills {
@@ -735,6 +747,7 @@ body {
             border-radius: 12px;
             border: none;
             width: 300px;
+            margin-bottom: $gap-y-size;
             box-shadow: 0px 0px 19.9858px rgba(11, 15, 33, 0.05);
 
             .card-header {
@@ -753,6 +766,10 @@ body {
                 padding: 0;
                 background-color: transparent;
                 border: none;
+            }
+
+            .btn {
+                font-size: 12px;
             }
         }
     }
@@ -783,7 +800,7 @@ body {
 
         &.scrolledMore {
             .alert-criteria {
-                top: 72px;
+                top: 72px !important;
             }
         }
     }
@@ -958,6 +975,9 @@ body {
     .docs-page {
         .docs-content {
             .top-container {
+                nav{
+                    padding-right: 0;
+                }
                 .doc-social-btns {
                     display: none;
                 }

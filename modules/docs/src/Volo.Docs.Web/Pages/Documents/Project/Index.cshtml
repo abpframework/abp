@@ -106,8 +106,8 @@
                                                 </div>
                                            
                                     </div>
- } 
- @if (Model.VersionSelectItems.Any())
+                                    } 
+                                    @if (Model.VersionSelectItems.Any())
                                             {
                                     <div class="col">
                                            
@@ -132,8 +132,8 @@
                                                 </div>
                                            
                                     </div>
- }
-  @if (Model.LanguageSelectListItems.Count > 1)
+                            }
+                            @if (Model.LanguageSelectListItems.Count > 1)
                                     {
                                 <div class="col">
 
@@ -191,38 +191,39 @@
                             class="nav nav-list"></ul>
                             }
                         </div>
-
                     </div>
 
                 @if (Model.Document != null)
                 {
                     <div class="docs-content">
                         <div class="top-container mb-3">
-                            <div class="row w-100 mx-0">
-                                <div class="col-12 col-lg-9 px-0">
-                                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#"> ABP Framework</a></li>
-                                            <li class="breadcrumb-item"><a href="#"> Documents</a></li>
-                                            <li class="breadcrumb-item"><a href="#"> Infrastructure</a></li>
-                                            <li class="breadcrumb-item"><a href="#"> Background Jobs</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">RabbitMQ Integration</li>
-                                        </ol>
-                                    </nav>
+                            <div class="w-100">
+                                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mCustomScrollbar-1">
+                                    <ol class="breadcrumb ">
+                                        <li class="breadcrumb-item"><a href="#"> ABP Framework</a></li>
+                                        <li class="breadcrumb-item"><a href="#"> Documents</a></li>
+                                        <li class="breadcrumb-item"><a href="#"> Infrastructure</a></li>
+                                        <li class="breadcrumb-item"><a href="#"> Background Jobs</a></li>
+                                        <li class="breadcrumb-item"><a href="#"> Documents</a></li>
+                                        <li class="breadcrumb-item"><a href="#"> Infrastructure</a></li>
+                                        <li class="breadcrumb-item"><a href="#"> Background Jobs</a></li>
+                                        <li class="breadcrumb-item"><a href="#"> Documents</a></li>
+                                        <li class="breadcrumb-item"><a href="#"> Infrastructure</a></li>
+                                        <li class="breadcrumb-item"><a href="#"> Background Jobs</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">RabbitMQ Integration</li>
+                                    </ol>
+                                </nav>
+                                <div class="doc-social-btns">
+                                    <a href="#" target="_blank" class="share-button twitter" id="TwitterShareLink" title="Twitter">
+                                        <i class="fa fa-twitter"></i>
+                                    </a>
+                                    <a href="#" target="_blank" class="share-button linkedin" id="LinkedinShareLink" title="LinkedIn">
+                                        <i class="fa fa-linkedin"></i>
+                                    </a>
+                                    <a href="#" target="_blank" class="share-button email" id="EmailShareLink" title="E-mail">
+                                        <i class="fa fa-envelope-square"></i>
+                                    </a>
                                 </div>
-                                <div class="col-12 col-lg-3 text-lg-end px-0">
-                                    <div class="doc-social-btns">
-                                        <a href="#" target="_blank" class="share-button twitter" id="TwitterShareLink" title="Twitter">
-                                            <i class="fa fa-twitter"></i>
-                                        </a>
-                                        <a href="#" target="_blank" class="share-button linkedin" id="LinkedinShareLink" title="LinkedIn">
-                                            <i class="fa fa-linkedin"></i>
-                                        </a>
-                                        <a href="#" target="_blank" class="share-button email" id="EmailShareLink" title="E-mail">
-                                            <i class="fa fa-envelope-square"></i>
-                                        </a>
-                                    </div>
-                                </div>   
                             </div>
                         </div>
 
@@ -263,7 +264,7 @@
                                                             </a>
                                                         }
                                                 </div>
-                                                <div class="">
+                                                <div class="contributors">
                                                   @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c => c.CommitCount).ToList())
                                                     {
                                                         <a href="@contributor.UserProfileUrl" target="_blank" class="cont-avatar">
@@ -362,7 +363,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">@L["InThisDocument"]</h5>
 
-                                    <div id="scroll-index" class="mt-2">
+                                    <div id="scroll-index" class="">
                                         <nav id="docs-sticky-index" class="navbar index-scroll">
                                         </nav>
                                         <div class="row">
