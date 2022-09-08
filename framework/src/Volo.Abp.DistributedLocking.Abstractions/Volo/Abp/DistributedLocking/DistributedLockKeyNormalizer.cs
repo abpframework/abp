@@ -12,7 +12,7 @@ public class DistributedLockKeyNormalizer : IDistributedLockKeyNormalizer, ITran
         Options = options.Value;
     }
     
-    public string NormalizeKey(string name)
+    public virtual string NormalizeKey(string name)
     {
         return $"{Options.KeyPrefix}{name}";
     }
