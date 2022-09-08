@@ -4,7 +4,6 @@ using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Application.Services;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.Reflection;
@@ -81,10 +80,10 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
 
         if (actionModel.Controller.ControllerType.IsDefined(typeof(IntegrationServiceAttribute), true))
         {
-            return "integration-api";
+            return AbpAspNetCoreConsts.DefaultIntegrationServiceApiPrefix;
         }
 
-        return "api";
+        return AbpAspNetCoreConsts.DefaultApiPrefix;
     }
 
     protected virtual string NormalizeUrlActionName(string rootPath, string controllerName, ActionModel action,
