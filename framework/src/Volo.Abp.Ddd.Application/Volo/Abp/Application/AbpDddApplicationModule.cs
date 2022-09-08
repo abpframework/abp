@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Aspects;
+using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain;
 using Volo.Abp.Features;
@@ -36,7 +38,9 @@ public class AbpDddApplicationModule : AbpModule
             options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));
             options.IgnoredInterfaces.AddIfNotContains(typeof(IApplicationService));
             options.IgnoredInterfaces.AddIfNotContains(typeof(IUnitOfWorkEnabled));
-            //TODO: Should we add others, like IAuditingEnabled...?
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IAuditingEnabled));
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IValidationEnabled));
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IGlobalFeatureCheckingEnabled));
         });
     }
 }
