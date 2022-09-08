@@ -8,7 +8,7 @@ You can copy the theme code into your solution. In this case, you are completely
 
 The **Layout Hook System** allows you to **add code** at some specific parts of the layout. All layouts of all themes should implement these hooks. Finally, you can add a **razor component** into a hook point.
 
-## Example: Add Simple Announcement Alert
+## Example: Add a Simple Announcement Alert
 
 Assume that you need to add a simple banner to the layout (that will be available for all the pages) to make an announcement about your new product. First, **create a razor component** in your project:
 
@@ -82,7 +82,7 @@ Now, the `AnnouncementComponent` will be rendered in the `body` of the page as t
 
 ### Specifying the Layout
 
-The configuration above adds the `AnnouncementComponent` to all layouts. You may want to only add to a specific layout:
+The configuration above adds the `AnnouncementComponent` to all layouts. You may want to only add it to a specific layout:
 
 ````csharp
 Configure<AbpLayoutHookOptions>(options =>
@@ -99,7 +99,7 @@ See the *Layouts* section below to learn more about the layout system.
 
 ## Layout Hook Points
 
-There are some pre-defined layout hook points. The standard hook points are;
+There are some pre-defined layout hook points. The standard hook points are:
 
 * `LayoutHooks.Body.First`: Used to add a component as the first item in the HTML body tag.
 * `LayoutHooks.Body.Last`: Used to add a component as the last item in the HTML body tag.
@@ -108,17 +108,17 @@ There are some pre-defined layout hook points. The standard hook points are;
 
 ## Layouts
 
-The layout system allows themes to define the standard, named layouts and allows any page to select a proper layout for its purpose. There is one pre-defined layout:
+The layout system allows themes to define the standard named layouts and allows any page to select a proper layout for its purpose. There is one pre-defined layout:
 
-* "**Application**": The main (and the default) layout for an application. It typically contains header, menu (sidebar), footer, toolbar... etc. 
+* "**Application**": The main (and the default) layout for an application. It typically contains a header, menu (sidebar), footer, toolbar... etc. 
 
-This layout is defined in the `StandardLayouts` class as constants. You can definitely create your own layouts, but this layout name is the standard layout name and implemented by all the themes out of the box.
+This layout is defined in the `StandardLayouts` class as constants. You can definitely create your own layouts, but this layout is the standard layout and it's implemented by all the themes out of the box.
 
 > If you don't specify the layout, your razor component will be rendered in all of the layouts.
 
 ### Layout Location
 
-You can find the `MainLayout.razor` in [here](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Components.Web.BasicTheme/Themes/Basic/MainLayout.razor) for the basic theme. You can take it as a reference to build your own layouts or you can override it, if necessary.
+You can find the `MainLayout.razor` [here](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Components.Web.BasicTheme/Themes/Basic/MainLayout.razor) for the basic theme. You can take it as a reference to build your own layouts or you can override it, if necessary.
 
 ## See Also
 
