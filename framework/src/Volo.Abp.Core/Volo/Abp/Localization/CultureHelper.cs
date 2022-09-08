@@ -60,7 +60,7 @@ public static class CultureHelper
     {
         return new CultureInfo(cultureName).Parent.Name;
     }
-    
+
     public static bool IsCompatibleCulture(
         string sourceCultureName,
         string targetCultureName)
@@ -68,6 +68,20 @@ public static class CultureHelper
         if (sourceCultureName == targetCultureName)
         {
             return true;
+        }
+
+        if (sourceCultureName.StartsWith("zh") && targetCultureName.StartsWith("zh"))
+        {
+            var culture = new CultureInfo(targetCultureName);
+            do
+            {
+                if (culture.Name == sourceCultureName)
+                {
+                    return true;
+                }
+
+                culture = new CultureInfo(culture.Name).Parent;
+            } while (!culture.Equals(CultureInfo.InvariantCulture));
         }
 
         if (sourceCultureName.Contains("-"))
