@@ -103,7 +103,7 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
     {
         return new PermissionGrantInfoDto {
             Name = permission.Name,
-            DisplayName = permission.DisplayName.Localize(StringLocalizerFactory),
+            DisplayName = permission.DisplayName?.Localize(StringLocalizerFactory),
             ParentName = permission.Parent?.Name,
             AllowedProviders = permission.Providers,
             GrantedProviders = new List<ProviderInfoDto>()
@@ -117,7 +117,7 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
         return new PermissionGroupDto
         {
             Name = group.Name,
-            DisplayName = group.DisplayName.Localize(StringLocalizerFactory),
+            DisplayName = group.DisplayName?.Localize(StringLocalizerFactory),
             DisplayNameKey = localizableDisplayName?.Name,
             DisplayNameResource = localizableDisplayName?.ResourceType != null
                 ? LocalizationResourceNameAttribute.GetName(localizableDisplayName.ResourceType)

@@ -308,7 +308,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     {
         var result = new ApplicationFeatureConfigurationDto();
 
-        foreach (var featureDefinition in _featureDefinitionManager.GetAll())
+        foreach (var featureDefinition in await _featureDefinitionManager.GetAllAsync())
         {
             if (!featureDefinition.IsVisibleToClients)
             {

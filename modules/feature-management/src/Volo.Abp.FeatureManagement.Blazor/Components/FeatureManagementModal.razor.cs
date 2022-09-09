@@ -50,9 +50,9 @@ public partial class FeatureManagementModal
             ToggleValues = new Dictionary<string, bool>();
             SelectionStringValues = new Dictionary<string, string>();
 
-            Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey))?.Groups;
+            var result = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
 
-            Groups ??= new List<FeatureGroupDto>();
+            Groups = result?.Groups ?? new List<FeatureGroupDto>();
 
             if (Groups.Any())
             {

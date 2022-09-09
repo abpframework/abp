@@ -14,9 +14,9 @@ public class NewtonsoftStringValueTypeJsonConverter : JsonConverter, ITransientD
 {
     public override bool CanWrite => false;
 
-    protected readonly AbpFeatureManagementApplicationContractsOptions Options;
+    protected readonly ValueValidatorFactoryOptions Options;
 
-    public NewtonsoftStringValueTypeJsonConverter(IOptions<AbpFeatureManagementApplicationContractsOptions> options)
+    public NewtonsoftStringValueTypeJsonConverter(IOptions<ValueValidatorFactoryOptions> options)
     {
         Options = options.Value;
     }

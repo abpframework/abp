@@ -15,6 +15,11 @@ public class LocalizableStringSerializer : ILocalizableStringSerializer, ITransi
 
     public virtual string Serialize(ILocalizableString localizableString)
     {
+        if (localizableString == null)
+        {
+            return null;
+        }
+
         if (localizableString is LocalizableString realLocalizableString)
         {
             return $"L:{realLocalizableString.ResourceName},{realLocalizableString.Name}";
@@ -36,7 +41,7 @@ public class LocalizableStringSerializer : ILocalizableStringSerializer, ITransi
         {
             return new FixedLocalizableString(value);
         }
-        
+
         var type = value[0];
         switch (type)
         {
@@ -48,7 +53,7 @@ public class LocalizableStringSerializer : ILocalizableStringSerializer, ITransi
                 {
                     throw new AbpException("Invalid LocalizableString value: " + value);
                 }
-                
+
                 var resourceName = value.Substring(2, commaPosition - 2);
                 var name = value.Substring(commaPosition + 1);
                 if (name.IsNullOrWhiteSpace())

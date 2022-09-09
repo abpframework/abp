@@ -14,9 +14,9 @@ public class ValueValidatorJsonConverter : JsonConverter<IValueValidator>
 
     private JsonSerializerOptions _writeJsonSerializerOptions;
 
-    protected readonly AbpFeatureManagementApplicationContractsOptions Options;
+    protected readonly ValueValidatorFactoryOptions Options;
 
-    public ValueValidatorJsonConverter(AbpFeatureManagementApplicationContractsOptions options)
+    public ValueValidatorJsonConverter(ValueValidatorFactoryOptions options)
     {
         Options = options;
     }

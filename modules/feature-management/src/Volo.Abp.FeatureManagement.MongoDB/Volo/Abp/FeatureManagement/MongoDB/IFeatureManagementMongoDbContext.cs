@@ -9,5 +9,9 @@ namespace Volo.Abp.FeatureManagement.MongoDB;
 [ConnectionStringName(AbpFeatureManagementDbProperties.ConnectionStringName)]
 public interface IFeatureManagementMongoDbContext : IAbpMongoDbContext
 {
+    IMongoCollection<FeatureGroupDefinitionRecord> FeatureGroups { get; }
+
+    IMongoCollection<FeatureDefinitionRecord> Features { get; }
+
     IMongoCollection<FeatureValue> FeatureValues { get; }
 }

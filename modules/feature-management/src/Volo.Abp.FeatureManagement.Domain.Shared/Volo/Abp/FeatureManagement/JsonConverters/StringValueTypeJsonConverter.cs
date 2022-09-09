@@ -12,9 +12,9 @@ public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
 
     private JsonSerializerOptions _writeJsonSerializerOptions;
 
-    protected readonly AbpFeatureManagementApplicationContractsOptions Options;
+    protected readonly ValueValidatorFactoryOptions Options;
 
-    public StringValueTypeJsonConverter(AbpFeatureManagementApplicationContractsOptions options)
+    public StringValueTypeJsonConverter(ValueValidatorFactoryOptions options)
     {
         Options = options;
     }
