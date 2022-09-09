@@ -66,39 +66,21 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 
     private FeatureGroupDto CreateFeatureGroupDto(FeatureGroupDefinition groupDefinition)
     {
-        var localizableDisplayName = groupDefinition.DisplayName as LocalizableString;
-
         return new FeatureGroupDto
         {
             Name = groupDefinition.Name,
             DisplayName = groupDefinition.DisplayName.Localize(StringLocalizerFactory),
-            DisplayNameKey = localizableDisplayName?.Name,
-            DisplayNameResource = localizableDisplayName?.ResourceType != null
-                ? LocalizationResourceNameAttribute.GetName(localizableDisplayName.ResourceType)
-                : null,
             Features = new List<FeatureDto>()
         };
     }
 
     private FeatureDto CreateFeatureDto(FeatureNameValueWithGrantedProvider featureNameValueWithGrantedProvider, FeatureDefinition featureDefinition)
     {
-        var localizableDisplayName = featureDefinition.DisplayName as LocalizableString;
-        var localizableDescription = featureDefinition.Description as LocalizableString;
-
         return new FeatureDto
         {
             Name = featureDefinition.Name,
             DisplayName = featureDefinition.DisplayName.Localize(StringLocalizerFactory),
-            DisplayNameKey = localizableDisplayName?.Name,
-            DisplayNameResource = localizableDisplayName?.ResourceType != null
-                ? LocalizationResourceNameAttribute.GetName(localizableDisplayName.ResourceType)
-                : null,
-
             Description = featureDefinition.Description.Localize(StringLocalizerFactory),
-            DescriptionKey = localizableDescription?.Name,
-            DescriptionResource = localizableDescription?.ResourceType != null
-                ? LocalizationResourceNameAttribute.GetName(localizableDescription.ResourceType)
-                : null,
 
             ValueType = featureDefinition.ValueType,
 

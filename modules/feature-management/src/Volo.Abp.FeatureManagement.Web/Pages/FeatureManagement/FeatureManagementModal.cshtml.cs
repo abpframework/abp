@@ -54,58 +54,7 @@ public class FeatureManagementModal : AbpPageModel
 
         FeatureListResultDto = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
 
-        UpdateLocalizations(FeatureListResultDto);
-
         return Page();
-    }
-
-    private void UpdateLocalizations(GetFeatureListResultDto result)
-    {
-        foreach (var group in result.Groups)
-        {
-            group.DisplayName = Localize(
-                group.DisplayNameKey,
-                group.DisplayNameResource,
-                group.DisplayName
-            );
-
-            foreach (var feature in group.Features)
-            {
-                feature.DisplayName = Localize(
-                    feature.DisplayNameKey,
-                    feature.DisplayNameResource,
-                    feature.DisplayName
-                );
-
-                feature.Description = Localize(
-                    feature.DescriptionKey,
-                    feature.DescriptionResource,
-                    feature.Description
-                );
-            }
-        }
-    }
-
-    private string Localize(string key, string resourceName, string fallbackValue)
-    {
-        if (key.IsNullOrEmpty() || resourceName.IsNullOrEmpty())
-        {
-            return fallbackValue;
-        }
-
-        var resource = LocalizationOptions.Resources.GetOrNull(resourceName);
-        if (resource == null)
-        {
-            return fallbackValue;
-        }
-
-        var result = new LocalizableString(resource.ResourceType, key).Localize(StringLocalizerFactory);
-        if (result.ResourceNotFound)
-        {
-            return fallbackValue;
-        }
-
-        return result.Value;
     }
 
     public virtual async Task<IActionResult> OnPostAsync()

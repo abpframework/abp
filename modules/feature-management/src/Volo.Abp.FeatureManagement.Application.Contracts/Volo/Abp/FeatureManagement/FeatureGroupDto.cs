@@ -8,10 +8,6 @@ public class FeatureGroupDto
 
     public string DisplayName { get; set; }
 
-    public string DisplayNameKey { get; set; }
-
-    public string DisplayNameResource { get; set; }
-
     public List<FeatureDto> Features { get; set; }
 
     public string GetNormalizedGroupName()
