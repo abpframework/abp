@@ -192,6 +192,8 @@ The **brand component** is a simple component that can be used to display your b
 
 <img src="../../images/leptonxlite-brand-component.png">
 
+#### How to Override Branding Component
+
 * Create a razor page, like `MyBrandingComponent.razor`, in your blazor application as shown below:
 
 ```html
@@ -222,6 +224,8 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 On websites that have a lot of pages, **breadcrumb navigation** can greatly **enhance the way users find their way** around. In terms of **usability**, breadcrumbs reduce the number of actions a website **visitor** needs to take in order to get to a **higher-level page**, and they **improve** the **findability** of **website sections** and **pages**.
 
 <img src="../../images/leptonxlite-breadcrumb-component.png">
+
+#### How to Override BreadCrumb Component
 
 * Create a razor page, like `MyBreadcrumbsComponent.razor`, in your blazor application as shown below:
 
@@ -258,6 +262,8 @@ Sidebar menus have been used as **a directory for Related Pages** to a **Service
 
 <img src="../../images/leptonxlite-sidebar-menu-component.png">
 
+#### How to Override Main Menu Component
+
 * Create a razor page, like `MyMainMenuComponent.razor`, in your blazor application as shown below:
 
 ```html
@@ -292,6 +298,8 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 ### Toolbar Items Component
 
 Toolbar items are used to add **extra functionality to the toolbar**. The toolbar is a **horizontal bar** that **contains** a group of **toolbar items**. 
+
+#### How to Override Toolbar Items Component
 
 * Create a razor page, like `MyToolbarItemsComponent.razor`, in your blazor application as shown below:
 
@@ -328,6 +336,8 @@ Think about a **multi-lingual** website and the first thing that could **hit you
 
 <img src="../../images/leptonxlite-language-switch-component.png">
 
+#### How to Override Language Switch Component
+
 * Create a razor page, like `MyLanguageSwitchComponent.razor`, in your blazor application as shown below:
 
 ```html
@@ -362,6 +372,8 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 The **mobile** **language switch component** is used to switch the language of the website **on mobile devices**. The mobile language switch component is a **dropdown menu** that **contains all the languages** of the website.
 
 <img src="../../images/leptonxlite-mobile-language-switch-component.png">
+
+#### How to Override Mobile Language Switch Component
 
 * Create a razor page, like `MyMobilLanguageSwitchComponent.razor`, in your blazor application as shown below:
 
@@ -398,6 +410,8 @@ The **User Menu** is the **menu** that **drops down** when you **click your name
 
 <img src="../../images/leptonxlite-user-menu-component.png">
 
+#### How to Override User Menu Component
+
 * Create a razor page, like `MyUserMenuComponent.razor`, in your blazor application as shown below:
 
 ```html
@@ -432,6 +446,8 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 The **mobile user menu component** is used to display the **user menu on mobile devices**. The mobile user menu component is a **dropdown menu** that contains all the **options** of the **user menu**.
 
 <img src="../../images/leptonxlite-mobile-user-menu-component.png">
+
+#### How to override the Mobile User Menu Component
 
 * Create a razor page, like `MyMobileUserMenuComponent.razor`, in your blazor application as shown below:
 
