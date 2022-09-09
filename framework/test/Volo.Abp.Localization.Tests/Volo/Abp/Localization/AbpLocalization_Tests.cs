@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.Localization.TestResources.Source;
@@ -310,7 +311,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
         using (CultureHelper.Use("tr"))
         {
             var localizedStrings = _localizer
-                .GetAllStrings(true, includeBaseLocalizers: true)
+                .GetAllStrings(true, includeBaseLocalizers: true, includeDynamicContributors: true)
                 .ToList();
 
             localizedStrings.ShouldContain(
@@ -339,7 +340,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
         using (CultureHelper.Use("tr"))
         {
             var localizedStrings = _localizer
-                .GetAllStrings(true, includeBaseLocalizers: false)
+                .GetAllStrings(true, includeBaseLocalizers: false, includeDynamicContributors: true)
                 .ToList();
 
             localizedStrings.ShouldNotContain(
@@ -358,5 +359,12 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
                       ls.ResourceNotFound == false
             );
         }
+    }
+
+    [Fact]
+    public async Task Should_Get_Supported_Cultures()
+    {
+        var cultures = await _localizer.GetSupportedCulturesAsync();
+        cultures.Count().ShouldBeGreaterThan(0);
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.EntityFrameworkCore",
-  "hash": "f3bf7c7db2ab764d6421df0b88ea535b",
+  "hash": "47c087243281aea34d16f03acf5254cd",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs.EntityFrameworkCore",

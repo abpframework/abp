@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Public.Application",
-  "hash": "9b54d4165467908818b3fa241e9f273e",
+  "hash": "35fc84bf4ee895c703bdf1cf037afb14",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Public",
@@ -42,6 +42,15 @@
       ],
       "contentType": "applicationService",
       "name": "MenuItemPublicAppService"
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.GlobalResources",
+      "summary": null,
+      "implementingInterfaces": [
+        "Volo.CmsKit.Public.GlobalResources.IGlobalResourcePublicAppService"
+      ],
+      "contentType": "applicationService",
+      "name": "GlobalResourcePublicAppService"
     },
     {
       "namespace": "Volo.CmsKit.Public.Comments",

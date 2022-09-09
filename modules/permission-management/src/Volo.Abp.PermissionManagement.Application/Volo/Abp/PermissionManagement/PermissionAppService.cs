@@ -101,15 +101,9 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
 
     private PermissionGrantInfoDto CreatePermissionGrantInfoDto(PermissionDefinition permission)
     {
-        var localizableDisplayName = permission.DisplayName as LocalizableString;
-        
         return new PermissionGrantInfoDto {
             Name = permission.Name,
             DisplayName = permission.DisplayName.Localize(StringLocalizerFactory),
-            DisplayNameKey = localizableDisplayName?.Name,
-            DisplayNameResource = localizableDisplayName?.ResourceType != null
-                ? LocalizationResourceNameAttribute.GetName(localizableDisplayName.ResourceType)
-                : null,
             ParentName = permission.Parent?.Name,
             AllowedProviders = permission.Providers,
             GrantedProviders = new List<ProviderInfoDto>()
