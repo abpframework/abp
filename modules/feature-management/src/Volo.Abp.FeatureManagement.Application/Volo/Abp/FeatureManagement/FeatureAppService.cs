@@ -69,7 +69,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         return new FeatureGroupDto
         {
             Name = groupDefinition.Name,
-            DisplayName = groupDefinition.DisplayName.Localize(StringLocalizerFactory),
+            DisplayName = groupDefinition.DisplayName?.Localize(StringLocalizerFactory),
             Features = new List<FeatureDto>()
         };
     }
@@ -79,8 +79,8 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         return new FeatureDto
         {
             Name = featureDefinition.Name,
-            DisplayName = featureDefinition.DisplayName.Localize(StringLocalizerFactory),
-            Description = featureDefinition.Description.Localize(StringLocalizerFactory),
+            DisplayName = featureDefinition.DisplayName?.Localize(StringLocalizerFactory),
+            Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
 
             ValueType = featureDefinition.ValueType,
 
