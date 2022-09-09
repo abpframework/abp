@@ -9,8 +9,7 @@
   cursor: pointer; }
 
 .dataTable tbody tr td div.dropdown ul.dropdown-menu li {
-  cursor: pointer;
-  padding: 5px; }
+  cursor: pointer; }
   .dataTable tbody tr td div.dropdown ul.dropdown-menu li a {
     display: block; }
 
