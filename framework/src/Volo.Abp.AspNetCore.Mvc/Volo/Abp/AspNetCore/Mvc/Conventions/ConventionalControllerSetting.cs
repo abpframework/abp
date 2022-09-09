@@ -33,22 +33,6 @@ public class ConventionalControllerSetting
         }
     }
     private string _rootPath;
-    
-    /// <summary>
-    /// Default value: null.
-    /// If not set, it uses
-    ///     "api" for application services,
-    ///     "integration-api" for integration services.
-    /// </summary>
-    [CanBeNull]
-    public string ApiRoutePrefix {
-        get => _apiRoutePrefix;
-        set {
-            Check.NotNull(value, nameof(value));
-            _apiRoutePrefix = value;
-        }
-    }
-    private string _apiRoutePrefix;
 
     [NotNull]
     public string RemoteServiceName {

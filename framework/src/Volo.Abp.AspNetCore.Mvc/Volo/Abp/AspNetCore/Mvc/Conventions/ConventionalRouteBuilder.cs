@@ -73,11 +73,6 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
 
     protected virtual string GetApiRoutePrefix(ActionModel actionModel, ConventionalControllerSetting configuration)
     {
-        if (!configuration.ApiRoutePrefix.IsNullOrWhiteSpace())
-        {
-            return configuration.ApiRoutePrefix;
-        }
-
         if (actionModel.Controller.ControllerType.IsDefined(typeof(IntegrationServiceAttribute), true))
         {
             return AbpAspNetCoreConsts.DefaultIntegrationServiceApiPrefix;
