@@ -10,7 +10,3 @@
 
 .dataTable tbody tr td div.dropdown ul.dropdown-menu li {
   cursor: pointer; }
-
-.dataTable tbody tr td div.dropdown ul.dropdown-menu li:hover {
-  background: #f4f5f8; }
-
