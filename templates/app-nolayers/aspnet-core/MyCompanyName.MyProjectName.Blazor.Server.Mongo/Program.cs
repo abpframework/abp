@@ -2,6 +2,8 @@ using MyCompanyName.MyProjectName.Blazor.Server;
 using MyCompanyName.MyProjectName.Data;
 using Serilog;
 using Serilog.Events;
+using Volo.Abp.FeatureManagement;
+using Volo.Abp.PermissionManagement;
 
 namespace MyCompanyName.MyProjectName;
 
@@ -36,6 +38,20 @@ public class Program
                 .UseAutofac()
                 .UseSerilog();
             await builder.AddApplicationAsync<MyProjectNameModule>();
+            if (IsMigrateDatabase(args))
+            {
+                builder.Services.Configure<PermissionManagementOptions>(options =>
+                {
+                    options.IsDynamicPermissionStoreEnabled = false;
+                    options.SaveStaticPermissionsToDatabase = false;
+                });
+
+                builder.Services.Configure<FeatureManagementOptions>(options =>
+                {
+                    options.IsDynamicFeatureStoreEnabled = false;
+                    options.SaveStaticFeaturesToDatabase = false;
+                });
+            }
             var app = builder.Build();
             await app.InitializeApplicationAsync();
 
