@@ -12,13 +12,17 @@ public class MedallionAbpDistributedLock : IAbpDistributedLock, ITransientDepend
 {
     protected IDistributedLockProvider DistributedLockProvider { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    
+    protected IDistributedLockKeyNormalizer DistributedLockKeyNormalizer { get; }
 
     public MedallionAbpDistributedLock(
         IDistributedLockProvider distributedLockProvider,
-        ICancellationTokenProvider cancellationTokenProvider)
+        ICancellationTokenProvider cancellationTokenProvider,
+        IDistributedLockKeyNormalizer distributedLockKeyNormalizer)
     {
         DistributedLockProvider = distributedLockProvider;
         CancellationTokenProvider = cancellationTokenProvider;
+        DistributedLockKeyNormalizer = distributedLockKeyNormalizer;
     }
 
     public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
@@ -27,11 +31,12 @@ public class MedallionAbpDistributedLock : IAbpDistributedLock, ITransientDepend
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
-
+        var key = DistributedLockKeyNormalizer.NormalizeKey(name);
+        
         CancellationTokenProvider.FallbackToProvider(cancellationToken);
 
         var handle = await DistributedLockProvider.TryAcquireLockAsync(
-            name,
+            key,
             timeout,
             CancellationTokenProvider.FallbackToProvider(cancellationToken)
         );
