@@ -43,6 +43,11 @@ public class AbpFeatureManagementDomainModule : AbpModule
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
+    }
+
     public override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         InitializeDynamicFeatures(context);
