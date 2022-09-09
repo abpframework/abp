@@ -17,7 +17,7 @@ public class LocalizableStringSerializer : ILocalizableStringSerializer, ITransi
     {
         if (localizableString is LocalizableString realLocalizableString)
         {
-            return $"L:{LocalizationResourceNameAttribute.GetName(realLocalizableString.ResourceType)},{realLocalizableString.Name}";
+            return $"L:{realLocalizableString.ResourceName},{realLocalizableString.Name}";
         }
 
         if (localizableString is FixedLocalizableString fixedLocalizableString)
@@ -55,13 +55,8 @@ public class LocalizableStringSerializer : ILocalizableStringSerializer, ITransi
                 {
                     throw new AbpException("Invalid LocalizableString value: " + value);
                 }
-                
-                var resourceType = LocalizationOptions.Resources.GetOrNull(resourceName)?.ResourceType;
-                    
-                return new LocalizableString(
-                    resourceType,
-                    name
-                );
+
+                return LocalizableString.Create(name, resourceName);
             default:
                 return new FixedLocalizableString(value);
         }
