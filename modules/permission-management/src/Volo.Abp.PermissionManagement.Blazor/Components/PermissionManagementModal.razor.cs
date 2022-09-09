@@ -84,8 +84,6 @@ public partial class PermissionManagementModal
 
             var result = await PermissionAppService.GetAsync(_providerName, _providerKey);
 
-            UpdateLocalizations(result);
-
             _entityDisplayName = entityDisplayName ?? result.EntityDisplayName;
             _groups = result.Groups;
 
@@ -251,48 +249,5 @@ public partial class PermissionManagementModal
     {
         eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         return Task.CompletedTask;
-    }
-    
-    protected virtual void UpdateLocalizations(GetPermissionListResultDto result)
-    {
-        foreach (var group in result.Groups)
-        {
-            group.DisplayName = Localize(
-                group.DisplayNameKey,
-                group.DisplayNameResource,
-                group.DisplayName
-            );
-
-            foreach (var permission in group.Permissions)
-            {
-                permission.DisplayName = Localize(
-                    permission.DisplayNameKey,
-                    permission.DisplayNameResource,
-                    permission.DisplayName
-                );
-            }
-        }
-    }
-
-    protected virtual string Localize(string key, string resourceName, string fallbackValue)
-    {
-        if (key.IsNullOrEmpty() || resourceName.IsNullOrEmpty())
-        {
-            return fallbackValue;
-        }
-
-        var resource = LocalizationOptions.Value.Resources.GetOrNull(resourceName);
-        if (resource == null)
-        {
-            return fallbackValue;
-        }
-
-        var result = new LocalizableString(resource.ResourceType, key).Localize(StringLocalizerFactory);
-        if (result.ResourceNotFound)
-        {
-            return fallbackValue;
-        }
-
-        return result.Value;
     }
 }
