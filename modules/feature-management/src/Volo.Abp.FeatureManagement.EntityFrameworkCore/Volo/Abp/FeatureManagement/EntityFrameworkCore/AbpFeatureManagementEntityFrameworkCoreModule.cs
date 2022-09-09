@@ -1,14 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore;
 
 [DependsOn(
     typeof(AbpFeatureManagementDomainModule),
-    typeof(AbpEntityFrameworkCoreModule),
-    typeof(AbpJsonModule)
+    typeof(AbpEntityFrameworkCoreModule)
 )]
 public class AbpFeatureManagementEntityFrameworkCoreModule : AbpModule
 {
