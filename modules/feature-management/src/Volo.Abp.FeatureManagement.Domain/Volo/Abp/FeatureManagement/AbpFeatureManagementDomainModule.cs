@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Features;
@@ -62,6 +63,11 @@ public class AbpFeatureManagementDomainModule : AbpModule
 
     private void InitializeDynamicFeatures(ApplicationInitializationContext context)
     {
+        if (context.ServiceProvider.IsMigrationEnvironment())
+        {
+            return;
+        }
+
         var options = context
             .ServiceProvider
             .GetRequiredService<IOptions<FeatureManagementOptions>>()

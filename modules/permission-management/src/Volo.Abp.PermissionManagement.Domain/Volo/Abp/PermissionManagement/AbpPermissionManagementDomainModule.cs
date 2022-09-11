@@ -9,6 +9,7 @@ using Polly;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain;
 using Volo.Abp.Json;
@@ -45,6 +46,11 @@ public class AbpPermissionManagementDomainModule : AbpModule
 
     private void InitializeDynamicPermissions(ApplicationInitializationContext context)
     {
+        if (context.ServiceProvider.IsMigrationEnvironment())
+        {
+            return;
+        }
+
         var options = context
             .ServiceProvider
             .GetRequiredService<IOptions<PermissionManagementOptions>>()

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.Data;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
@@ -19,10 +20,10 @@ namespace Volo.Abp.BackgroundJobs;
     )]
 public class AbpBackgroundJobsModule : AbpModule
 {
-    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
-        if (options.IsJobExecutionEnabled)
+        if (!context.ServiceProvider.IsMigrationEnvironment() &&
+            context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value.IsJobExecutionEnabled)
         {
             await context.AddBackgroundWorkerAsync<IBackgroundJobWorker>();
         }
