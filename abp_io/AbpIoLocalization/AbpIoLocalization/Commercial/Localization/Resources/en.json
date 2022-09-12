@@ -548,7 +548,7 @@
     "MyOrganizations_Detail_OwnerRightInfo": "You are using {0} of your {1} owners rights.",
     "MyOrganizations_Detail_CopyApiKey": "Copy the Key",
     "MyOrganizations_Detail_ApiKeyDescription": "The API Key is the token of PRO packages hosted on <a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">{1}.</a>",
-    "MyOrganizations_Detail_YourPrivateNugetSource": "Your private NuGet source is <a href=\"{0}\" arget=\"_blank\" class=\"text-primary\" rel=\"noopener\">{0}</a>",
+    "MyOrganizations_Detail_YourPrivateNugetSource": "Your private NuGet source is <a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">{0}</a>",
     "MyOrganizations_Detail_PrivateNugetSourceWarning": "This is automatically added as a feed to your NuGet.Config in your ABP solution. Do not share your private key with unauthorized users!",
     "MyOrganizations_Detail_DeveloperSeatInfo": "You are using {0} of your {1} developer seats.",
     "NeedMoreSeatsForYourTeam": "Need more seats for your team?",
