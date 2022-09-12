@@ -535,7 +535,7 @@
     "MyOrganizations_Detail_OwnerRightInfo": "您正在使用您的 {1} 所有者权利中的 {0}。",
     "MyOrganizations_Detail_CopyApiKey": "复制密钥",
     "MyOrganizations_Detail_ApiKeyDescription": "API 密钥是托管在 <a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">{1} 上的 PRO 包的令牌。 </a>",
-    "MyOrganizations_Detail_YourPrivateNugetSource": "您的私有 NuGet 源是 <a href=\"{0}\" arget=\"_blank\" class=\"text-primary\" rel=\"noopener\">{0}</a>",
+    "MyOrganizations_Detail_YourPrivateNugetSource": "您的私有 NuGet 源是 <a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">{0}</a>",
     "MyOrganizations_Detail_PrivateNugetSourceWarning": "这将自动添加一个源到您的 ABP 解决方案中的 NuGet.Config。 不要与未经授权的用户共享您的私钥！",
     "MyOrganizations_Detail_DeveloperSeatInfo": "您正在使用您的 {1} 个开发者席位中的 {0} 个。",
     "NeedMoreSeatsForYourTeam": "您的团队需要更多席位吗？",
