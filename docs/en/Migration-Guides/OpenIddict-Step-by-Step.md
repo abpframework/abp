@@ -7,6 +7,11 @@ We are not removing Identity Server packages and we will continue to release new
 
 On the other hand, Identity Server ends support for the open-source Identity Server at the end of 2022. The Identity Server team has decided to move to Duende IDS and ABP will not be migrated to the commercial Duende IDS. You can see the Duende Identity Server announcement from [this link](https://blog.duendesoftware.com/posts/20220111_fair_trade). 
 
+## Commercial Template
+
+If you are using a commercial template, please check [Migrating from IdentityServer to OpenIddict for the Commercial Templates](https://docs.abp.io/en/commercial/6.0/migration-guides/openIddict-step-by-step) guide.
+If you are using the microservice template, please check [Migrating the Microservice Template from IdentityServer to OpenIddict](https://docs.abp.io/en/commercial/6.0/migration-guides/openIddict-microservice) guide.
+
 ## OpenIddict Migration Steps
 
 Use the `abp update` command to update your existing application. See [Upgrading docs](../Upgrading.md) for more info. Apply required migrations by following the [Migration Guides](Index.md) based on your application version.
@@ -212,6 +217,30 @@ for creating the host builder.
   ```
 
   Replace **MyApplication** with your application name.
+
+### Test Project
+
+- In **MyApplicationTestBaseModule.cs** **remove** the IdentityServer related using and PreConfigurations:
+
+  ```csharp
+  using Volo.Abp.IdentityServer;
+  ```
+
+  and
+
+  ```csharp
+  PreConfigure<AbpIdentityServerBuilderOptions>(options =>
+          {
+              options.AddDeveloperSigningCredential = false;
+          });
+  
+          PreConfigure<IIdentityServerBuilder>(identityServerBuilder =>
+          {
+              identityServerBuilder.AddDeveloperSigningCredential(false, System.Guid.NewGuid().ToString());
+          });
+  ```
+
+  from `PreConfigureServices`.
 
 ### UI Layer
 
