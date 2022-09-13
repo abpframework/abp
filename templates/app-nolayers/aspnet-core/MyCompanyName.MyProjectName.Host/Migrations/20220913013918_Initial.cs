@@ -91,7 +91,7 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     IsVisibleToClients = table.Column<bool>(type: "bit", nullable: false),
                     IsAvailableToHost = table.Column<bool>(type: "bit", nullable: false),
                     AllowedProviders = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ValueType = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ValueType = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
