@@ -38,7 +38,7 @@ public class Program
             await builder.AddApplicationAsync<MyProjectNameModule>();
             if (IsMigrateDatabase(args))
             {
-                builder.Services.AddMigrationEnvironment();
+                builder.Services.AddDataMigrationEnvironment();
             }
             var app = builder.Build();
             await app.InitializeApplicationAsync();

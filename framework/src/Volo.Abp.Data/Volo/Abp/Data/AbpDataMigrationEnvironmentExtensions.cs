@@ -6,33 +6,33 @@ namespace Volo.Abp.Data;
 
 public static class AbpDataMigrationEnvironmentExtensions
 {
-    public static void AddMigrationEnvironment(this AbpApplicationCreationOptions options, AbpDataMigrationEnvironment environment = null)
+    public static void AddDataMigrationEnvironment(this AbpApplicationCreationOptions options, AbpDataMigrationEnvironment environment = null)
     {
-        options.Services.AddMigrationEnvironment(environment ?? new AbpDataMigrationEnvironment());
+        options.Services.AddDataMigrationEnvironment(environment ?? new AbpDataMigrationEnvironment());
     }
 
-    public static void AddMigrationEnvironment(this IServiceCollection services, AbpDataMigrationEnvironment environment = null)
+    public static void AddDataMigrationEnvironment(this IServiceCollection services, AbpDataMigrationEnvironment environment = null)
     {
         services.AddObjectAccessor<AbpDataMigrationEnvironment>(environment ?? new AbpDataMigrationEnvironment());
     }
 
-    public static AbpDataMigrationEnvironment GetMigrationEnvironment(this IServiceCollection services)
+    public static AbpDataMigrationEnvironment GetDataMigrationEnvironment(this IServiceCollection services)
     {
         return services.GetObjectOrNull<IObjectAccessor<AbpDataMigrationEnvironment>>()?.Value;
     }
 
     public static bool IsMigrationEnvironment(this IServiceCollection services)
     {
-        return services.GetMigrationEnvironment() != null;
+        return services.GetDataMigrationEnvironment() != null;
     }
 
-    public static AbpDataMigrationEnvironment GetMigrationEnvironment(this IServiceProvider serviceProvider)
+    public static AbpDataMigrationEnvironment GetDataMigrationEnvironment(this IServiceProvider serviceProvider)
     {
         return serviceProvider.GetService<IObjectAccessor<AbpDataMigrationEnvironment>>()?.Value;
     }
 
     public static bool IsMigrationEnvironment(this IServiceProvider serviceProvider)
     {
-        return serviceProvider.GetMigrationEnvironment() != null;
+        return serviceProvider.GetDataMigrationEnvironment() != null;
     }
 }
