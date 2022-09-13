@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCompanyName.MyProjectName.Data;
+using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Mvc.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
-    [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20220909024056_Initial")]
+    [DbContext(typeof(AuthServerDbContext))]
+    [Migration("20220913013849_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -336,8 +336,8 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ValueType")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.HasKey("Id");
 

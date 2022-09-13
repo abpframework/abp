@@ -12,5 +12,5 @@ public static class FeatureDefinitionRecordConsts
 
     public static int MaxAllowedProvidersLength { get; set; } = 256;
 
-    public static int MaxValueTypeLength { get; set; } = 256;
+    public static int MaxValueTypeLength { get; set; } = 2048;
 }
