@@ -21,7 +21,7 @@ public static class AbpDataMigrationEnvironmentExtensions
         return services.GetObjectOrNull<IObjectAccessor<AbpDataMigrationEnvironment>>()?.Value;
     }
 
-    public static bool IsMigrationEnvironment(this IServiceCollection services)
+    public static bool IsDataMigrationEnvironment(this IServiceCollection services)
     {
         return services.GetDataMigrationEnvironment() != null;
     }
@@ -31,7 +31,7 @@ public static class AbpDataMigrationEnvironmentExtensions
         return serviceProvider.GetService<IObjectAccessor<AbpDataMigrationEnvironment>>()?.Value;
     }
 
-    public static bool IsMigrationEnvironment(this IServiceProvider serviceProvider)
+    public static bool IsDataMigrationEnvironment(this IServiceProvider serviceProvider)
     {
         return serviceProvider.GetDataMigrationEnvironment() != null;
     }

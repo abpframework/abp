@@ -22,7 +22,7 @@ public class AbpBackgroundJobsModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        if (context.Services.IsMigrationEnvironment())
+        if (context.Services.IsDataMigrationEnvironment())
         {
             Configure<AbpBackgroundJobOptions>(options =>
             {

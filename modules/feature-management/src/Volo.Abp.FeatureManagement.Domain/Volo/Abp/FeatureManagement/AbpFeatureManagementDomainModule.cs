@@ -41,7 +41,7 @@ public class AbpFeatureManagementDomainModule : AbpModule
             options.MapCodeNamespace("AbpFeatureManagement", typeof(AbpFeatureManagementResource));
         });
 
-        if (context.Services.IsMigrationEnvironment())
+        if (context.Services.IsDataMigrationEnvironment())
         {
             Configure<FeatureManagementOptions>(options =>
             {
