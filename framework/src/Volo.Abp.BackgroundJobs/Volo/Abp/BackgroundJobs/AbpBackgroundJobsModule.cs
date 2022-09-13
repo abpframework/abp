@@ -20,10 +20,20 @@ namespace Volo.Abp.BackgroundJobs;
     )]
 public class AbpBackgroundJobsModule : AbpModule
 {
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        if (context.Services.IsMigrationEnvironment())
+        {
+            Configure<AbpBackgroundJobOptions>(options =>
+            {
+                options.IsJobExecutionEnabled = false;
+            });
+        }
+    }
+
     public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        if (!context.ServiceProvider.IsMigrationEnvironment() &&
-            context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value.IsJobExecutionEnabled)
+        if (context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value.IsJobExecutionEnabled)
         {
             await context.AddBackgroundWorkerAsync<IBackgroundJobWorker>();
         }

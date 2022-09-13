@@ -40,6 +40,15 @@ public class AbpFeatureManagementDomainModule : AbpModule
         {
             options.MapCodeNamespace("AbpFeatureManagement", typeof(AbpFeatureManagementResource));
         });
+
+        if (context.Services.IsMigrationEnvironment())
+        {
+            Configure<FeatureManagementOptions>(options =>
+            {
+                options.SaveStaticFeaturesToDatabase = false;
+                options.IsDynamicFeatureStoreEnabled = false;
+            });
+        }
     }
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
@@ -63,11 +72,6 @@ public class AbpFeatureManagementDomainModule : AbpModule
 
     private void InitializeDynamicFeatures(ApplicationInitializationContext context)
     {
-        if (context.ServiceProvider.IsMigrationEnvironment())
-        {
-            return;
-        }
-
         var options = context
             .ServiceProvider
             .GetRequiredService<IOptions<FeatureManagementOptions>>()

@@ -27,6 +27,18 @@ public class AbpPermissionManagementDomainModule : AbpModule
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        if (context.Services.IsMigrationEnvironment())
+        {
+            Configure<PermissionManagementOptions>(options =>
+            {
+                options.SaveStaticPermissionsToDatabase = false;
+                options.IsDynamicPermissionStoreEnabled = false;
+            });
+        }
+    }
+
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
@@ -46,11 +58,6 @@ public class AbpPermissionManagementDomainModule : AbpModule
 
     private void InitializeDynamicPermissions(ApplicationInitializationContext context)
     {
-        if (context.ServiceProvider.IsMigrationEnvironment())
-        {
-            return;
-        }
-
         var options = context
             .ServiceProvider
             .GetRequiredService<IOptions<PermissionManagementOptions>>()
