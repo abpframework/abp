@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Features;
@@ -39,6 +40,15 @@ public class AbpFeatureManagementDomainModule : AbpModule
         {
             options.MapCodeNamespace("AbpFeatureManagement", typeof(AbpFeatureManagementResource));
         });
+
+        if (context.Services.IsDataMigrationEnvironment())
+        {
+            Configure<FeatureManagementOptions>(options =>
+            {
+                options.SaveStaticFeaturesToDatabase = false;
+                options.IsDynamicFeatureStoreEnabled = false;
+            });
+        }
     }
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
