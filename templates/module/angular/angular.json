@@ -66,8 +66,14 @@
             "polyfills": "projects/dev-app/src/polyfills.ts",
             "tsConfig": "projects/dev-app/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
-            "assets": ["projects/dev-app/src/favicon.ico", "projects/dev-app/src/assets"],
+            "allowedCommonJsDependencies": [
+              "chart.js",
+              "js-sha256"
+            ],
+            "assets": [
+              "projects/dev-app/src/favicon.ico",
+              "projects/dev-app/src/assets"
+            ],
             "styles": [
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -167,7 +173,10 @@
             "tsConfig": "projects/dev-app/tsconfig.spec.json",
             "karmaConfig": "projects/dev-app/karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": ["projects/dev-app/src/favicon.ico", "projects/dev-app/src/assets"],
+            "assets": [
+              "projects/dev-app/src/favicon.ico",
+              "projects/dev-app/src/assets"
+            ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -183,11 +192,13 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/dev-app/**/*.ts", "projects/dev-app/**/*.html"]
+            "lintFilePatterns": [
+              "projects/dev-app/**/*.ts",
+              "projects/dev-app/**/*.html"
+            ]
           }
         }
       }
     }
-  },
-  "defaultProject": "dev-app"
+  }
 }
