@@ -100,7 +100,7 @@ public class MyService
 
 ## C# API Client Proxies Integration
 
-ABP can [dynamically](../API/Dynamic-CSharp-API-Clients.md) or [statically](../API/Static-CSharp-API-Clients.md) generate proxy classes to invoke your HTTP APIs from a Dotnet client application. It makes dead simple to consume HTTP APIs in a distributed system. [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) package configures the client-side proxies system, so it uses Dapr for the communication between your applications.
+ABP can [dynamically](../API/Dynamic-CSharp-API-Clients.md) or [statically](../API/Static-CSharp-API-Clients.md) generate proxy classes to invoke your HTTP APIs from a Dotnet client application. It makes dead simple to consume HTTP APIs in a distributed system. [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) package configures the client-side proxies system, so it uses Dapr's service invocation building block for the communication between your applications.
 
 ### Installation
 
@@ -114,7 +114,7 @@ If you want to do it manually, install the [Volo.Abp.Http.Client.Dapr](https://w
 
 ### Configuration
 
-One you install the [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) NuGet package, all you need to do it to configure ABP's remote services option either in `appsettings.json` or using the `AbpRemoteServiceOptions` [options class]().
+One you install the [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) NuGet package, all you need to do it to configure ABP's remote services option either in `appsettings.json` or using the `AbpRemoteServiceOptions` [options class](../Options.md).
 
 **Example:**
 
@@ -134,5 +134,60 @@ The remove service name (`Default` in this example) should match the remote serv
 
 > See the [dynamic](../API/Dynamic-CSharp-API-Clients.md) and [static](../API/Static-CSharp-API-Clients.md) client proxy documents for details about the ABP's client proxy system.
 
+## Distributed Event Bus Integration
 
+[ABP's distributed event bus](../Distributed-Event-Bus.md) system provides a convenient abstraction to allow application communicate asynchronously via events. ABP has integration packages with various distributed messaging systems, like RabbitMQ, Kafka, and Azure. Dapr also has a [publish & subscribe building block](https://docs.dapr.io/developing-applications/building-blocks/pubsub/pubsub-overview/) for the same purpose: distributed messaging / events.
 
+ABP's [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) and [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) packages make possible to use the Dapr infrastructure for ABP's distributed event bus.
+
+The [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) package can be used by any type of application (e.g., a Console or ASP.NET Core application) to publish events through Dapr. To be able to receive messages (by subscribing events), you need to have the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) package installed, and your application should be an ASP.NET Core application.
+
+### Installation
+
+If your application is an ASP.NET Core application and you want to send and receive events, you need to install the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) package as describe below:
+
+You can use the ABP CLI to add [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) NuGet package to your project (to the client side):
+
+* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.AspNetCore.Mvc.Dapr.EventBus` package.
+* Run `abp add-package Volo.Abp.AspNetCore.Mvc.Dapr.EventBus` command.
+
+If you want to do it manually, install the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) NuGet package to your project and add `[DependsOn(typeof(AbpAspNetCoreMvcDaprEventBusModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
+
+> **If you install the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) package, you don't need to install the [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) package, because the first one already has a reference to the latter one.**
+
+If your application is not an ASP.NET Core application, you can't receive events from Dapr, at least with ABP's integration packages (see [Dapr's document](https://docs.dapr.io/developing-applications/building-blocks/pubsub/howto-publish-subscribe/) if you want to receive events in a different type of application). However, you can still publish messages using the [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) package. In this case, follow the steps below to install that package to your project:
+
+* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.EventBus.Dapr` package.
+* Run `abp add-package Volo.Abp.EventBus.Dapr` command.
+
+If you want to do it manually, install the [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) NuGet package to your project and add `[DependsOn(typeof(AbpEventBusDaprModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
+
+### Configuration
+
+You can configure the `AbpDaprEventBusOptions` [options class](../Options.md) for Dapr configuration:
+
+````csharp
+Configure<AbpDaprEventBusOptions>(options =>
+{
+    options.PubSubName = "test-pubsub";
+});
+````
+
+Available properties of the `AbpDaprEventBusOptions` class:
+
+* `PubSubName` (optional): The `pubsubName` parameter while publishing messages through `DaprClient.PublishEventAsync` method. Default value: `pubsub`.
+
+### Usage
+
+You can follow [ABP's distributed event bus documentation](../Distributed-Event-Bus.md) to learn how to publish and subscribe to events in the ABP way. No change required in your application code to use Dapr pub-sub.
+
+In addition to ABP's standard distributed event bus system, you can also use Dapr's API to publish events. In that case, just use the `IAbpDaprClientFactory` service to create a `DaprClient` object (or create it yourself by following Dapr's documentation) and use its `PublishEventAsync` method as [documented by Dapr](https://docs.microsoft.com/en-us/dotnet/architecture/dapr-for-net-developers/publish-subscribe).
+
+> If you directly use the Dapr API to publish events, you can not benefit from ABP's standard distributed event bus features, like the outbox/inbox pattern implementation.
+
+## See Also
+
+* [Dapr for .NET Developers](https://docs.microsoft.com/en-us/dotnet/architecture/dapr-for-net-developers/)
+* [The Official Dapr Documentation](https://docs.dapr.io/)
