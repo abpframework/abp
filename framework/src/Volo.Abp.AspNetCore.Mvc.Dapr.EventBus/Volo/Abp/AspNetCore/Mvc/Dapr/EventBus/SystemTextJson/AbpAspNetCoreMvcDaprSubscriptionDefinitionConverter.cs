@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.SystemTextJson;
 
 public class AbpAspNetCoreMvcDaprSubscriptionDefinitionConverter : JsonConverter<AbpAspNetCoreMvcDaprSubscriptionDefinition>
 {
-    private JsonSerializerOptions _writeJsonSerializerOptions;
+    private JsonSerializerOptions? _writeJsonSerializerOptions;
 
     public override AbpAspNetCoreMvcDaprSubscriptionDefinition Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
