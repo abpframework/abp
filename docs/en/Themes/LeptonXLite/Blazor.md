@@ -137,7 +137,7 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
 @Name
 ``` 
 
-* If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyMainLayout.razor.cs`, in your blazor application as shown below: see below:
+* If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyMainLayout.razor.cs`, in your blazor application as shown below:
 
 ```csharp	
 [ExposeServices(typeof(MainLayout))]
@@ -151,7 +151,7 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 }
 ```	
 
-> Don't forget to repeated same attributes from the razor page!
+> Don't forget to remove the repeated attributes from the razor page!
 
 ### Toolbars
 LeptonX Lite includes separeted toolbars for desktop & mobile. You can manage toolbars independently. Toolbar names can be accessible in the **LeptonXLiteToolbars** class.
@@ -184,7 +184,7 @@ public async Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
 
 ## Components
 
-LeptonX Blazor built on the basis of components. You can use the components in your application as you wish, or you can customize components with overriding the components. If you want to override a component please follow the steps.
+LeptonX Blazor is built on the basis of components. You can use the components in your application as you wish, or you can customize the components by overriding them. If you want to override a component please follow the steps.
 
 ### Branding Component
 
@@ -207,7 +207,7 @@ The **brand component** is a simple component that can be used to display your b
 @Name
 ``` 
 
-* If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyBrandingComponent.razor.cs`, in your blazor application as shown below: see below:
+* If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyBrandingComponent.razor.cs`, in your blazor application as shown below:
 
 ```csharp	
 namespace LeptonXLite.DemoApp.Blazor.MyComponents
@@ -225,7 +225,7 @@ On websites that have a lot of pages, **breadcrumb navigation** can greatly **en
 
 <img src="../../images/leptonxlite-breadcrumb-component.png">
 
-#### How to Override BreadCrumb Component
+#### How to Override the BreadCrumb Component
 
 * Create a razor page, like `MyBreadcrumbsComponent.razor`, in your blazor application as shown below:
 
@@ -258,11 +258,11 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 
 ### Main Menu Component
 
-Sidebar menus have been used as **a directory for Related Pages** to a **Service** offering, **Navigation** items to a **specific service** or topic and even just as **Links** the user may be interested in.
+Sidebar menus have been used as **a directory for Related Pages** for a **Service** offering, **Navigation** items for a **specific service** or topic and even just as **Links** the user may be interested in.
 
 <img src="../../images/leptonxlite-sidebar-menu-component.png">
 
-#### How to Override Main Menu Component
+#### How to Override the Main Menu Component
 
 * Create a razor page, like `MyMainMenuComponent.razor`, in your blazor application as shown below:
 
@@ -293,13 +293,13 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 }
 ```	
 
-> The **main menu** renders menu items **dynamic**. The **menu item** is a **razor component** named `MainMenuItem.razor.cs` in the same namespace with **main menu** and you can **override it** like main menu. 
+> The **main menu** renders the menu items **dynamically**. The **menu item** is a **razor component** named `MainMenuItem.razor.cs` in the same namespace with **main menu** and you can **override it** like the main menu. 
 
 ### Toolbar Items Component
 
 Toolbar items are used to add **extra functionality to the toolbar**. The toolbar is a **horizontal bar** that **contains** a group of **toolbar items**. 
 
-#### How to Override Toolbar Items Component
+#### How to Override the Toolbar Items Component
 
 * Create a razor page, like `MyToolbarItemsComponent.razor`, in your blazor application as shown below:
 
@@ -336,7 +336,7 @@ Think about a **multi-lingual** website and the first thing that could **hit you
 
 <img src="../../images/leptonxlite-language-switch-component.png">
 
-#### How to Override Language Switch Component
+#### How to Override the Language Switch Component
 
 * Create a razor page, like `MyLanguageSwitchComponent.razor`, in your blazor application as shown below:
 
@@ -373,7 +373,7 @@ The **mobile** **language switch component** is used to switch the language of t
 
 <img src="../../images/leptonxlite-mobile-language-switch-component.png">
 
-#### How to Override Mobile Language Switch Component
+#### How to Override the Mobile Language Switch Component
 
 * Create a razor page, like `MyMobilLanguageSwitchComponent.razor`, in your blazor application as shown below:
 
@@ -399,7 +399,7 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
     [Dependency(ReplaceServices = true)]
     public partial class MyMobilLanguageSwitchComponent
     {
-        public string Name = "My Mobil Language Switch Component";
+        public string Name = "My Mobile Language Switch Component";
     }
 }
 ```	
@@ -410,7 +410,7 @@ The **User Menu** is the **menu** that **drops down** when you **click your name
 
 <img src="../../images/leptonxlite-user-menu-component.png">
 
-#### How to Override User Menu Component
+#### How to Override the User Menu Component
 
 * Create a razor page, like `MyUserMenuComponent.razor`, in your blazor application as shown below:
 
