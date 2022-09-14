@@ -24,7 +24,7 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
         return new JsonSerializerOptions(systemTextJsonSerializerOptions.JsonSerializerOptions);
     }
 
-    public virtual Task<DaprClient> CreateAsync()
+    public virtual Task<DaprClient> CreateAsync(Action<DaprClientBuilder>? builderAction = null)
     {
         var builder = new DaprClientBuilder()
             .UseJsonSerializationOptions(JsonSerializerOptions);
@@ -39,6 +39,19 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
             builder.UseGrpcEndpoint(DaprOptions.GrpcEndpoint);
         }
 
+        builderAction?.Invoke(builder);
+
         return Task.FromResult(builder.Build());
+    }
+
+    public Task<HttpClient> CreateHttpClientAsync(string? appId = null, string? daprEndpoint = null, string? daprApiToken = null)
+    {
+        if(daprEndpoint.IsNullOrWhiteSpace() &&
+           !DaprOptions.HttpEndpoint.IsNullOrWhiteSpace())
+        {
+            daprEndpoint = DaprOptions.HttpEndpoint;
+        }
+        
+        return Task.FromResult(DaprClient.CreateInvokeHttpClient(appId, daprEndpoint, daprApiToken));
     }
 }

@@ -7,13 +7,13 @@ namespace Volo.Abp.DistributedLocking.Dapr;
 [Dependency(ReplaceServices = true)]
 public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
 {
-    protected AbpDaprClientFactory DaprClientFactory { get; }
+    protected IAbpDaprClientFactory DaprClientFactory { get; }
     protected AbpDistributedLockDaprOptions DistributedLockDaprOptions { get; }
     protected AbpDaprOptions DaprOptions { get; }
     protected IDistributedLockKeyNormalizer DistributedLockKeyNormalizer { get; }
     
     public DaprAbpDistributedLock(
-        AbpDaprClientFactory daprClientFactory,
+        IAbpDaprClientFactory daprClientFactory,
         IOptions<AbpDistributedLockDaprOptions> distributedLockDaprOptions,
         IOptions<AbpDaprOptions> daprOptions, 
         IDistributedLockKeyNormalizer distributedLockKeyNormalizer)
