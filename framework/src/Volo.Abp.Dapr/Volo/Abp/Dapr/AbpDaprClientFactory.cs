@@ -7,10 +7,11 @@ using Volo.Abp.Json.SystemTextJson;
 
 namespace Volo.Abp.Dapr;
 
-public class AbpDaprClientFactory : ITransientDependency
+public class AbpDaprClientFactory : ITransientDependency, IAbpDaprClientFactory
 {
     protected AbpDaprOptions Options { get; }
     protected AbpSystemTextJsonSerializerOptions SystemTextJsonSerializerOptions { get; }
+    private readonly static ConcurrentDictionary<string, JsonSerializerOptions> JsonSerializerOptionsCache = new();
 
     public AbpDaprClientFactory(
         IOptions<AbpDaprOptions> options,
@@ -37,8 +38,6 @@ public class AbpDaprClientFactory : ITransientDependency
 
         return builder.Build();
     }
-
-    private readonly static ConcurrentDictionary<string, JsonSerializerOptions> JsonSerializerOptionsCache = new ConcurrentDictionary<string, JsonSerializerOptions>();
 
     protected virtual Task<JsonSerializerOptions> CreateJsonSerializerOptions()
     {
