@@ -9,6 +9,9 @@ public class AbpInvocationHandler : InvocationHandler, ITransientDependency
 {
     public AbpInvocationHandler(IOptions<AbpDaprOptions> daprOptions)
     {
-        DaprEndpoint = daprOptions.Value.HttpEndpoint;
+        if (!daprOptions.Value.HttpEndpoint.IsNullOrWhiteSpace())
+        {
+            DaprEndpoint = daprOptions.Value.HttpEndpoint;
+        }
     }
 }
