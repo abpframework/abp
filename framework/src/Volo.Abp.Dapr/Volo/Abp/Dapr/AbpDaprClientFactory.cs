@@ -44,7 +44,10 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
         return Task.FromResult(builder.Build());
     }
 
-    public Task<HttpClient> CreateHttpClientAsync(string? appId = null, string? daprEndpoint = null, string? daprApiToken = null)
+    public Task<HttpClient> CreateHttpClientAsync(
+        string? appId = null,
+        string? daprEndpoint = null,
+        string? daprApiToken = null)
     {
         if(daprEndpoint.IsNullOrWhiteSpace() &&
            !DaprOptions.HttpEndpoint.IsNullOrWhiteSpace())

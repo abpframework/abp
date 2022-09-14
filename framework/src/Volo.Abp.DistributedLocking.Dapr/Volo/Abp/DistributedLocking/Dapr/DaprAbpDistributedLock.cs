@@ -9,22 +9,19 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
 {
     protected IAbpDaprClientFactory DaprClientFactory { get; }
     protected AbpDistributedLockDaprOptions DistributedLockDaprOptions { get; }
-    protected AbpDaprOptions DaprOptions { get; }
     protected IDistributedLockKeyNormalizer DistributedLockKeyNormalizer { get; }
     
     public DaprAbpDistributedLock(
         IAbpDaprClientFactory daprClientFactory,
         IOptions<AbpDistributedLockDaprOptions> distributedLockDaprOptions,
-        IOptions<AbpDaprOptions> daprOptions, 
         IDistributedLockKeyNormalizer distributedLockKeyNormalizer)
     {
         DaprClientFactory = daprClientFactory;
         DistributedLockKeyNormalizer = distributedLockKeyNormalizer;
-        DaprOptions = daprOptions.Value;
         DistributedLockDaprOptions = distributedLockDaprOptions.Value;
     }
     
-    public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
+    public async Task<IAbpDistributedLockHandle?> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default)
@@ -34,13 +31,13 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
             timeout = DistributedLockDaprOptions.DefaultTimeout;
         }
         
-        var daprClient = await DaprClientFactory.CreateAsync();
-        var key = DistributedLockKeyNormalizer.NormalizeKey(name);
+        name = DistributedLockKeyNormalizer.NormalizeKey(name);
 
+        var daprClient = await DaprClientFactory.CreateAsync();
         var lockResponse = await daprClient.Lock(
             DistributedLockDaprOptions.StoreName, 
-            key, 
-            DaprOptions.AppId,
+            name, 
+            DistributedLockDaprOptions.Owner ?? Guid.NewGuid().ToString(),
             (int)timeout.TotalSeconds,
             cancellationToken);
 

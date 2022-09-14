@@ -4,6 +4,8 @@ public class AbpDistributedLockDaprOptions
 {
     public string StoreName { get; set; }
     
+    public string? Owner { get; set; }
+    
     public TimeSpan DefaultTimeout { get; set; }
 
     public AbpDistributedLockDaprOptions()
