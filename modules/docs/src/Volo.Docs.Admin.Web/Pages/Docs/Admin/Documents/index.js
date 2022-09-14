@@ -7,7 +7,7 @@ $(function () {
     };
 
 
-    $('.singleDatePicker').daterangepicker({
+    $('.singledatepicker').daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,
         "autoUpdateInput": false,
@@ -18,9 +18,9 @@ $(function () {
         "maxYear": 2199,
     });
 
-    $('.singleDatePicker').attr('autocomplete', 'off');
+    $('.singledatepicker').attr('autocomplete', 'off');
 
-    $('.singleDatePicker').on('apply.daterangepicker', function (ev, picker) {
+    $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
         $(this).data('date', picker.startDate.locale('en').format('YYYY-MM-DD'));
     });
