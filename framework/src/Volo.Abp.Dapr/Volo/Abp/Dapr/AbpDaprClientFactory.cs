@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Dapr.Client;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -7,41 +6,39 @@ using Volo.Abp.Json.SystemTextJson;
 
 namespace Volo.Abp.Dapr;
 
-public class AbpDaprClientFactory : ITransientDependency, IAbpDaprClientFactory
+public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
 {
-    protected AbpDaprOptions Options { get; }
-    protected AbpSystemTextJsonSerializerOptions SystemTextJsonSerializerOptions { get; }
-    private readonly static ConcurrentDictionary<string, JsonSerializerOptions> JsonSerializerOptionsCache = new();
+    protected AbpDaprOptions DaprOptions { get; }
+    protected JsonSerializerOptions JsonSerializerOptions { get; }
 
     public AbpDaprClientFactory(
         IOptions<AbpDaprOptions> options,
         IOptions<AbpSystemTextJsonSerializerOptions> systemTextJsonSerializerOptions)
     {
-        Options = options.Value;
-        SystemTextJsonSerializerOptions = systemTextJsonSerializerOptions.Value;
+        DaprOptions = options.Value;
+        JsonSerializerOptions = CreateJsonSerializerOptions(systemTextJsonSerializerOptions.Value);
     }
 
-    public virtual async Task<DaprClient> CreateAsync()
+    protected virtual JsonSerializerOptions CreateJsonSerializerOptions(AbpSystemTextJsonSerializerOptions systemTextJsonSerializerOptions)
+    {
+        return new JsonSerializerOptions(systemTextJsonSerializerOptions.JsonSerializerOptions);
+    }
+
+    public virtual Task<DaprClient> CreateAsync()
     {
         var builder = new DaprClientBuilder()
-            .UseJsonSerializationOptions(await CreateJsonSerializerOptions());
+            .UseJsonSerializationOptions(JsonSerializerOptions);
 
-        if (!Options.HttpEndpoint.IsNullOrWhiteSpace())
+        if (!DaprOptions.HttpEndpoint.IsNullOrWhiteSpace())
         {
-            builder.UseHttpEndpoint(Options.HttpEndpoint);
+            builder.UseHttpEndpoint(DaprOptions.HttpEndpoint);
         }
 
-        if (!Options.GrpcEndpoint.IsNullOrWhiteSpace())
+        if (!DaprOptions.GrpcEndpoint.IsNullOrWhiteSpace())
         {
-            builder.UseGrpcEndpoint(Options.GrpcEndpoint);
+            builder.UseGrpcEndpoint(DaprOptions.GrpcEndpoint);
         }
 
-        return builder.Build();
-    }
-
-    protected virtual Task<JsonSerializerOptions> CreateJsonSerializerOptions()
-    {
-        return Task.FromResult(JsonSerializerOptionsCache.GetOrAdd(nameof(AbpDaprClientFactory),
-            _ => new JsonSerializerOptions(SystemTextJsonSerializerOptions.JsonSerializerOptions)));
+        return Task.FromResult(builder.Build());
     }
 }
