@@ -1,0 +1,39 @@
+{
+  "name": "Volo.Abp.OpenIddict.EntityFrameworkCore",
+  "hash": "437e716bcba4d2364e711dac86cda9f6",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.OpenIddict.EntityFrameworkCore",
+      "contentType": "abpModule",
+      "name": "AbpOpenIddictEntityFrameworkCoreModule"
+    },
+    {
+      "namespace": "Volo.Abp.OpenIddict.EntityFrameworkCore",
+      "connectionStringName": "AbpOpenIddict",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Applications.OpenIddictApplication",
+          "contentType": "databaseTable",
+          "name": "OpenIddictApplications"
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization",
+          "contentType": "databaseTable",
+          "name": "OpenIddictAuthorizations"
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Scopes.OpenIddictScope",
+          "contentType": "databaseTable",
+          "name": "OpenIddictScopes"
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
+          "contentType": "databaseTable",
+          "name": "OpenIddictTokens"
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "OpenIddictDbContext"
+    }
+  ]
+}

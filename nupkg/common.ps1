@@ -252,8 +252,8 @@ $projects = (
     "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain.Shared",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.EntityFrameworkCore",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.MongoDB",
-    "modules/audit-logging/src/Volo.Abp.AuditLogging.Installer",
-    "studio/source-codes/Volo.Abp.AuditLogging.SourceCode",
+    # "modules/audit-logging/src/Volo.Abp.AuditLogging.Installer",
+    # "studio/source-codes/Volo.Abp.AuditLogging.SourceCode",
 
     # modules/background-jobs
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain",
@@ -287,6 +287,7 @@ $projects = (
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi",
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi.Client",
     "modules/blogging/src/Volo.Blogging.Admin.Web",
+    "modules/blogging/src/Volo.Blogging.Installer",
     "studio/source-codes/Volo.Blogging.SourceCode",
 
     # modules/client-simulation
@@ -308,6 +309,7 @@ $projects = (
     "modules/docs/src/Volo.Docs.HttpApi",
     "modules/docs/src/Volo.Docs.MongoDB",
     "modules/docs/src/Volo.Docs.Web",
+    "modules/docs/src/Volo.Docs.Installer",
     "studio/source-codes/Volo.Docs.SourceCode",
 
     # modules/feature-management
@@ -360,6 +362,8 @@ $projects = (
     "modules/openiddict/src/Volo.Abp.OpenIddict.EntityFrameworkCore",
     "modules/openiddict/src/Volo.Abp.OpenIddict.MongoDB",
     "modules/openiddict/src/Volo.Abp.PermissionManagement.Domain.OpenIddict",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.Installer",
+    "studio/source-codes/Volo.Abp.OpenIddict.SourceCode",
 
     # modules/permission-management
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application.Contracts",

@@ -59,7 +59,7 @@ public class LocalizableStringSerializer_Tests : AbpIntegratedTest<AbpLocalizati
         var localizableString = _serializer
             .Deserialize("L:Test,Car")
             .ShouldBeOfType<LocalizableString>();
-        localizableString.ResourceType.ShouldBe(typeof(LocalizationTestResource));
+        localizableString.ResourceName.ShouldBe("Test");
         localizableString.Name.ShouldBe("Car");
 
         Assert.Throws<AbpException>(() =>
