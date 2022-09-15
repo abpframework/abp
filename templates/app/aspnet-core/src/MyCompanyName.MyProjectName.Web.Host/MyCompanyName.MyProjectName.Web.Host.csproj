@@ -18,7 +18,7 @@
     <PackageReference Include="DistributedLock.Redis" Version="1.0.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.0-preview.7.*" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.0-rc.*" />
   </ItemGroup>
 
   <ItemGroup>

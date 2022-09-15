@@ -13,8 +13,8 @@
   <ItemGroup>
     <PackageReference Include="Blazorise.Bootstrap5" Version="1.0.4" />
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.0-preview.7.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.0-preview.7.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.0-rc.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.0-rc.*" />
   </ItemGroup>
 
   <ItemGroup>

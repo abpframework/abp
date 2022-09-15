@@ -34,7 +34,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-	    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0-preview.7.*" />
+	    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0-rc.*" />
 	</ItemGroup>
 
 	<ItemGroup>
