@@ -18,7 +18,7 @@ public static class AbpDataMigrationEnvironmentExtensions
 
     public static AbpDataMigrationEnvironment GetDataMigrationEnvironment(this IServiceCollection services)
     {
-        return services.GetObjectOrNull<IObjectAccessor<AbpDataMigrationEnvironment>>()?.Value;
+        return services.GetObjectOrNull<AbpDataMigrationEnvironment>();
     }
 
     public static bool IsDataMigrationEnvironment(this IServiceCollection services)
