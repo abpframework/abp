@@ -2,5 +2,6 @@ namespace Volo.Abp.Dapr;
 
 public interface IDaprApiTokenProvider
 {
-    string Get();
+    string GetDaprApiToken();
+    string GetAppApiToken();
 }

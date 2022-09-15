@@ -5,15 +5,20 @@ namespace Volo.Abp.Dapr;
 
 public class DaprApiTokenProvider : IDaprApiTokenProvider, ISingletonDependency
 {
-    public AbpDaprOptions Options { get; }
+    protected AbpDaprOptions Options { get; }
 
     public DaprApiTokenProvider(IOptions<AbpDaprOptions> options)
     {
         Options = options.Value;
     }
     
-    public virtual string Get()
+    public virtual string GetDaprApiToken()
     {
         return Options.DaprApiToken;
+    }
+
+    public virtual string GetAppApiToken()
+    {
+        return Options.AppApiToken;
     }
 }

@@ -7,4 +7,6 @@ public class AbpDaprOptions
     public string GrpcEndpoint { get; set; }
     
     public string DaprApiToken { get; set; }
+    
+    public string AppApiToken { get; set; }
 }

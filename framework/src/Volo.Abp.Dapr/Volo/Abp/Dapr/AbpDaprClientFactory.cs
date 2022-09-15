@@ -37,7 +37,7 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
             builder.UseGrpcEndpoint(DaprOptions.GrpcEndpoint);
         }
 
-        var apiToken = DaprApiTokenProvider.Get();
+        var apiToken = DaprApiTokenProvider.GetDaprApiToken();
         if (!apiToken.IsNullOrWhiteSpace())
         {
             builder.UseDaprApiToken(apiToken);
@@ -62,7 +62,7 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
         return DaprClient.CreateInvokeHttpClient(
             appId,
             daprEndpoint,
-            daprApiToken ?? DaprApiTokenProvider.Get()
+            daprApiToken ?? DaprApiTokenProvider.GetDaprApiToken()
         );
     }
     
