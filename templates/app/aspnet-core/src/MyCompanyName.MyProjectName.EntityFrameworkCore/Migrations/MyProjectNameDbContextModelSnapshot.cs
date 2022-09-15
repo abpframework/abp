@@ -392,8 +392,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ValueType")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.HasKey("Id");
 
