@@ -1284,6 +1284,10 @@
       ]
     },
     {
+      "text": "Dapr Integration",
+      "path": "Dapr/Index.md"
+    },
+    {
       "text": "Testing",
       "path": "Testing.md"
     },

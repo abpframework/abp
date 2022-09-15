@@ -21,6 +21,8 @@ public class AbpAspNetCoreMvcDaprPubSubController : AbpController
     [HttpPost(AbpAspNetCoreMvcDaprPubSubConsts.DaprEventCallbackUrl)]
     public virtual async Task<IActionResult> EventsAsync()
     {
+        this.HttpContext.ValidateDaprAppApiToken();
+        
         var bodyJsonDocument = await JsonDocument.ParseAsync(HttpContext.Request.Body);
         var request = JsonSerializer.Deserialize<AbpAspNetCoreMvcDaprSubscriptionRequest>(bodyJsonDocument.RootElement.GetRawText(),
             HttpContext.RequestServices.GetRequiredService<IOptions<JsonOptions>>().Value.JsonSerializerOptions);
