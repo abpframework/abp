@@ -397,6 +397,8 @@
     "BookDiscountDeletionConfirmationMessage": "Are you sure you want to delete this book discount?",
     "CustomPaymentFlexSwitchDescription": "With license",
     "AllowFeatureUpgradeOnLicenseExpire": "Allow feature upgrade on license expire",
-    "Deleted{0}": "[Deleted {0}]"
+    "Deleted{0}": "[Deleted {0}]",
+    "Tags": "Tags",
+    "SetTagsInfo": "Tags should be comma-separated. Eg: CSharp, Entity Framework"
   }
 }
