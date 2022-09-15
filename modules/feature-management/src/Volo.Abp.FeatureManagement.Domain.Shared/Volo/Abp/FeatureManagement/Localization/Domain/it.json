@@ -6,6 +6,7 @@
     "ManageHostFeatures": "Gestisci le funzionalità dell'host",
     "Permission:FeatureManagement": "Gestione funzionalità",
     "Permission:FeatureManagement.ManageHostFeatures": "Gestisci le funzionalità dell'host",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Il valore dell'elemento {0} non è valido!"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Il valore dell'elemento {0} non è valido!",
+		"Menu:FeatureManagement": "Gestione delle funzionalità"
   }
 }

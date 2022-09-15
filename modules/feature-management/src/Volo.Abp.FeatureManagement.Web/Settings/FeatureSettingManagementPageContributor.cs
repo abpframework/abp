@@ -20,7 +20,7 @@ public class FeatureSettingManagementPageContributor : SettingPageContributorBas
         context.Groups.Add(
             new SettingPageGroup(
                 "Volo.Abp.FeatureManagement",
-                l["Permission:FeatureManagement"],
+                l["Menu:FeatureManagement"],
                 typeof(FeatureSettingGroupViewComponent)
             )
         );
