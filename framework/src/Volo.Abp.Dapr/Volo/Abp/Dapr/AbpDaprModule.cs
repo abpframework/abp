@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 
@@ -11,5 +12,11 @@ public class AbpDaprModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
         Configure<AbpDaprOptions>(configuration.GetSection("Dapr"));
+
+        context.Services.TryAddSingleton(
+            serviceProvider => serviceProvider
+                .GetRequiredService<IAbpDaprClientFactory>()
+                .Create()
+        );
     }
 }

@@ -4,9 +4,9 @@ namespace Volo.Abp.Dapr;
 
 public interface IAbpDaprClientFactory
 {
-    Task<DaprClient> CreateAsync(Action<DaprClientBuilder>? builderAction = null);
+    DaprClient Create(Action<DaprClientBuilder>? builderAction = null);
 
-    Task<HttpClient> CreateHttpClientAsync(
+    HttpClient CreateHttpClient(
         string? appId = null,
         string? daprEndpoint = null,
         string? daprApiToken = null

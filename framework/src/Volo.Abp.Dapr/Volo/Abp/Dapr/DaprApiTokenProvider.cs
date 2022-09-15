@@ -12,8 +12,8 @@ public class DaprApiTokenProvider : IDaprApiTokenProvider, ISingletonDependency
         Options = options.Value;
     }
     
-    public virtual Task<string> GetAsync()
+    public virtual string Get()
     {
-        return Task.FromResult(Options.DaprApiToken);
+        return Options.DaprApiToken;
     }
 }
