@@ -10,21 +10,19 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
 {
     protected AbpDaprOptions DaprOptions { get; }
     protected JsonSerializerOptions JsonSerializerOptions { get; }
+    protected IDaprApiTokenProvider DaprApiTokenProvider { get; }
 
     public AbpDaprClientFactory(
         IOptions<AbpDaprOptions> options,
-        IOptions<AbpSystemTextJsonSerializerOptions> systemTextJsonSerializerOptions)
+        IOptions<AbpSystemTextJsonSerializerOptions> systemTextJsonSerializerOptions,
+        IDaprApiTokenProvider daprApiTokenProvider)
     {
+        DaprApiTokenProvider = daprApiTokenProvider;
         DaprOptions = options.Value;
         JsonSerializerOptions = CreateJsonSerializerOptions(systemTextJsonSerializerOptions.Value);
     }
 
-    protected virtual JsonSerializerOptions CreateJsonSerializerOptions(AbpSystemTextJsonSerializerOptions systemTextJsonSerializerOptions)
-    {
-        return new JsonSerializerOptions(systemTextJsonSerializerOptions.JsonSerializerOptions);
-    }
-
-    public virtual Task<DaprClient> CreateAsync(Action<DaprClientBuilder>? builderAction = null)
+    public virtual async Task<DaprClient> CreateAsync(Action<DaprClientBuilder>? builderAction = null)
     {
         var builder = new DaprClientBuilder()
             .UseJsonSerializationOptions(JsonSerializerOptions);
@@ -39,12 +37,18 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
             builder.UseGrpcEndpoint(DaprOptions.GrpcEndpoint);
         }
 
+        var apiToken = await DaprApiTokenProvider.GetAsync();
+        if (!apiToken.IsNullOrWhiteSpace())
+        {
+            builder.UseDaprApiToken(apiToken);
+        }
+
         builderAction?.Invoke(builder);
 
-        return Task.FromResult(builder.Build());
+        return builder.Build();
     }
 
-    public Task<HttpClient> CreateHttpClientAsync(
+    public virtual async Task<HttpClient> CreateHttpClientAsync(
         string? appId = null,
         string? daprEndpoint = null,
         string? daprApiToken = null)
@@ -54,7 +58,16 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
         {
             daprEndpoint = DaprOptions.HttpEndpoint;
         }
-        
-        return Task.FromResult(DaprClient.CreateInvokeHttpClient(appId, daprEndpoint, daprApiToken));
+
+        return DaprClient.CreateInvokeHttpClient(
+            appId,
+            daprEndpoint,
+            daprApiToken ?? await DaprApiTokenProvider.GetAsync()
+        );
+    }
+    
+    protected virtual JsonSerializerOptions CreateJsonSerializerOptions(AbpSystemTextJsonSerializerOptions systemTextJsonSerializerOptions)
+    {
+        return new JsonSerializerOptions(systemTextJsonSerializerOptions.JsonSerializerOptions);
     }
 }
