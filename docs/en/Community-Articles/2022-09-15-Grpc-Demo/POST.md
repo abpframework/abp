@@ -174,5 +174,69 @@ The server-side configuration is done. It is ready to receive gRPC requests. Now
 
 ## Implementing the Client Side
 
-TODO
+The ABP startup solution template comes with a console application to test consuming your HTTP APIs. For this example, the project is named as `ProductManagement.HttpApi.Client.ConsoleTestApp` and located under the `test` folder in the solution.
 
+First, add the [Grpc.Net.Client](https://www.nuget.org/packages/Grpc.Net.Client) and the [protobuf-net.Grpc](https://www.nuget.org/packages/protobuf-net.Grpc) NuGet packages to the `ProductManagement.HttpApi.Client.ConsoleTestApp` project.
+
+````xml
+<PackageReference Include="Grpc.Net.Client" Version="2.49.0-pre1" />
+<PackageReference Include="protobuf-net.Grpc" Version="1.0.177" />
+````
+
+Now, open the `ClientDemoService.cs` file under the `ProductManagement.HttpApi.Client.ConsoleTestApp` project and change its contents with the following code block:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Grpc.Net.Client;
+using ProductManagement.Products;
+using ProtoBuf.Grpc.Client;
+using Volo.Abp.DependencyInjection;
+
+namespace ProductManagement.HttpApi.Client.ConsoleTestApp;
+
+public class ClientDemoService : ITransientDependency
+{
+    public async Task RunAsync()
+    {
+        using (var channel = GrpcChannel.ForAddress("https://localhost:10042"))
+        {
+            var productAppService = channel.CreateGrpcService<IProductAppService>();
+            var productDtos = await productAppService.GetListAsync();
+
+            foreach (var productDto in productDtos)
+            {
+                Console.WriteLine($"[Product] Id = {productDto.Id}, Name = {productDto.Name}");
+            }
+        }
+    }
+}
+````
+
+We are simply creating a gRPC channel, then creating a client proxy for the `IProductAppService` service. Then we can call its method just like local method calls. You can run the applications to test it.
+
+## Run the Applications
+
+First run the `ProductManagement.HttpApi.Host` application. It should show a Swagger UI as shown below:
+
+![swagger](swagger.png)
+
+If you see that page, it means your server-side is up and running. Now, you can run the `ProductManagement.HttpApi.Client.ConsoleTestApp` console application to call the gRPC service defined on the server.
+
+Test console application should produce an output like shown below:
+
+![client-application](client-application.png)
+
+As you see, products are returned from the server. That's all, you've done it!
+
+## Conclusion
+
+In this article, I've used the [code-first approach](https://docs.microsoft.com/en-us/aspnet/core/grpc/code-first) to implement a gRPC server and consume it in a client application. Code-first approach is very practical if both of your client and server applications are built with .NET. By the help of ABP's layered solution structure, we even didn't add any gRPC dependency into our server-side and contracts. We've just configured gRPC in the hosting side, with a small amount of code.
+
+gRPC on .NET has different approaches, features, configurations and more details. I suggest you to read [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/grpc) to learn more about it. All the approaches can work with the ABP Framework. Enjoy coding!
+
+## The Source Code
+
+* You can find the completed source code here: https://github.com/abpframework/abp-samples/tree/master/GrpcDemo2
+
+* You can also see all the changes I've done in this article here: https://github.com/abpframework/abp-samples/pull/200/files
