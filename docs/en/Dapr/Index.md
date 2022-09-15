@@ -194,7 +194,7 @@ You can configure the `AbpDaprEventBusOptions` [options class](../Options.md) fo
 ````csharp
 Configure<AbpDaprEventBusOptions>(options =>
 {
-    options.PubSubName = "test-pubsub";
+    options.PubSubName = "pubsub";
 });
 ````
 
@@ -202,11 +202,22 @@ Available properties of the `AbpDaprEventBusOptions` class:
 
 * `PubSubName` (optional): The `pubsubName` parameter while publishing messages through `DaprClient.PublishEventAsync` method. Default value: `pubsub`.
 
+### The ABP Subscription Endpoints
+
+ABP provides the following endpoints to receive events from Dapr:
+
+* `dapr/subscribe`: Dapr uses this endpoint to get a list of subscriptions from the application. ABP automatically returns all the subscriptions for your distributed event handler classes and custom controller actions with the `Topic` attribute.
+* `api/abp/dapr/event`: The unified endpoint to receive all the events from Dapr. ABP dispatches the events to your event handlers based on the topic name.
+
+> **Since ABP provides the standard `dapr/subscribe` endpoint, you should not manually call the `app.MapSubscribeHandler()` method of Dapr.** You can use the `app.UseCloudEvents()` middleware in your ASP.NET Core pipeline if you want to support the [CloudEvents](https://cloudevents.io/) standard.
+
 ### Usage
 
 #### The ABP Way
 
 You can follow [ABP's distributed event bus documentation](../Distributed-Event-Bus.md) to learn how to publish and subscribe to events in the ABP way. No change required in your application code to use Dapr pub-sub. ABP will automatically subscribe to Dapr for your event handler classes (those implement the `IDistributedEventHandler` interface).
+
+ABP provides `api/abp/dapr/event`
 
 **Example: Publish an event using the `IDistributedEventBus` service**
 
@@ -380,7 +391,7 @@ Or you can set it in your `appsettings.json` file:
 }
 ````
 
-Once
+If you need that value in your application, you can inject `IDaprApiTokenProvider` and use its `GetAppApiToken()` method.
 
 ## See Also
 
