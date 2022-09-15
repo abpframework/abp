@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.SettingManagement.Domain.Shared",
-  "hash": "53d686ce13a1571ce5f87cbc6b6ac477",
+  "hash": "02864f881f165fef01949fce1324f4ea",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement",
@@ -20,8 +20,8 @@
     {
       "valueType": "ToggleStringValueType",
       "defaultValue": "false",
-      "displayName": "Allow tenants to change email settings.",
-      "description": "AllowChangingEmailSettingsDescription",
+      "displayName": "Allow changing email settings.",
+      "description": null,
       "isAvailableToHost": false,
       "isVisibleToClients": true,
       "contentType": "feature",

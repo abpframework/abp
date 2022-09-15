@@ -1,5 +1,4 @@
-﻿using Volo.Abp.Localization.TestResources.Base.CountryNames;
-using Volo.Abp.Localization.TestResources.Base.Validation;
+﻿using Volo.Abp.Localization.TestResources.Base.Validation;
 using Volo.Abp.Localization.TestResources.Source;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -24,12 +23,13 @@ public class AbpLocalizationTestModule : AbpModule
                 .AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/Validation");
 
             options.Resources
-                .Add<LocalizationTestCountryNamesResource>("en")
+                .Add("LocalizationTestCountryNames")
                 .AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/CountryNames");
 
             options.Resources
                 .Add<LocalizationTestResource>("en")
-                .AddVirtualJson("/Volo/Abp/Localization/TestResources/Source");
+                .AddVirtualJson("/Volo/Abp/Localization/TestResources/Source")
+                .AddBaseResources("LocalizationTestCountryNames");
 
             options.Resources
                 .Get<LocalizationTestResource>()

@@ -24,20 +24,20 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     protected IDistributedCache Cache { get; }
     protected IApplicationNameAccessor ApplicationNameAccessor { get; }
     protected IAbpDistributedLock DistributedLock { get; }
-    protected PermissionManagementOptions PermissionManagementOptions { get; }
+    protected AbpPermissionOptions PermissionOptions { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
-    
+
     public StaticPermissionSaver(
         IStaticPermissionDefinitionStore staticStore,
         IPermissionGroupDefinitionRecordRepository permissionGroupRepository,
         IPermissionDefinitionRecordRepository permissionRepository,
         IPermissionDefinitionSerializer permissionSerializer,
-        IDistributedCache cache, 
+        IDistributedCache cache,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
         IApplicationNameAccessor applicationNameAccessor,
         IAbpDistributedLock distributedLock,
-        IOptions<PermissionManagementOptions> permissionManagementOptions,
+        IOptions<AbpPermissionOptions> permissionOptions,
         ICancellationTokenProvider cancellationTokenProvider)
     {
         StaticStore = staticStore;
@@ -48,23 +48,23 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         ApplicationNameAccessor = applicationNameAccessor;
         DistributedLock = distributedLock;
         CancellationTokenProvider = cancellationTokenProvider;
-        PermissionManagementOptions = permissionManagementOptions.Value;
+        PermissionOptions = permissionOptions.Value;
         CacheOptions = cacheOptions.Value;
     }
-    
+
     [UnitOfWork]
     public virtual async Task SaveAsync()
     {
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
             GetApplicationDistributedLockKey()
         );
-        
+
         if (applicationLockHandle == null)
         {
             /* Another application instance is already doing it */
             return;
         }
-        
+
         /* NOTE: This can be further optimized by using 4 cache values for:
          * Groups, permissions, deleted groups and deleted permissions.
          * But the code would be more complex. This is enough for now.
@@ -80,10 +80,10 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         var currentHash = CalculateHash(
             permissionGroupRecords,
             permissionRecords,
-            PermissionManagementOptions.DeletedPermissionGroups,
-            PermissionManagementOptions.DeletedPermissions
+            PermissionOptions.DeletedPermissionGroups,
+            PermissionOptions.DeletedPermissions
         );
-        
+
         if (cachedHash == currentHash)
         {
             return;
@@ -154,11 +154,11 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             permissionGroupRecordInDatabase.Patch(permissionGroupRecord);
             changedRecords.Add(permissionGroupRecordInDatabase);
         }
-        
+
         /* Deleted */
-        var deletedRecords = PermissionManagementOptions.DeletedPermissionGroups.Any()
+        var deletedRecords = PermissionOptions.DeletedPermissionGroups.Any()
             ? permissionGroupRecordsInDatabase.Values
-                .Where(x => PermissionManagementOptions.DeletedPermissionGroups.Contains(x.Name))
+                .Where(x => PermissionOptions.DeletedPermissionGroups.Contains(x.Name))
                 .ToArray()
             : Array.Empty<PermissionGroupDefinitionRecord>();
 
@@ -176,10 +176,10 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         {
             await PermissionGroupRepository.DeleteManyAsync(deletedRecords);
         }
-        
+
         return newRecords.Any() || changedRecords.Any() || deletedRecords.Any();
     }
-    
+
     private async Task<bool> UpdateChangedPermissionsAsync(
         IEnumerable<PermissionDefinitionRecord> permissionRecords)
     {
@@ -209,23 +209,23 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             permissionRecordInDatabase.Patch(permissionRecord);
             changedRecords.Add(permissionRecordInDatabase);
         }
-        
+
         /* Deleted */
         var deletedRecords = new List<PermissionDefinitionRecord>();
-        
-        if (PermissionManagementOptions.DeletedPermissions.Any())
+
+        if (PermissionOptions.DeletedPermissions.Any())
         {
             deletedRecords.AddRange(
                 permissionRecordsInDatabase.Values
-                    .Where(x => PermissionManagementOptions.DeletedPermissions.Contains(x.Name))
+                    .Where(x => PermissionOptions.DeletedPermissions.Contains(x.Name))
             );
         }
 
-        if (PermissionManagementOptions.DeletedPermissionGroups.Any())
+        if (PermissionOptions.DeletedPermissionGroups.Any())
         {
             deletedRecords.AddIfNotContains(
                 permissionRecordsInDatabase.Values
-                    .Where(x => PermissionManagementOptions.DeletedPermissionGroups.Contains(x.GroupName))
+                    .Where(x => PermissionOptions.DeletedPermissionGroups.Contains(x.GroupName))
             );
         }
 
@@ -243,7 +243,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         {
             await PermissionRepository.DeleteManyAsync(deletedRecords);
         }
-        
+
         return newRecords.Any() || changedRecords.Any() || deletedRecords.Any();
     }
 
@@ -261,7 +261,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     {
         return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpPermissionsHash";
     }
-    
+
     private string GetCommonStampCacheKey()
     {
         return $"{CacheOptions.KeyPrefix}_AbpInMemoryPermissionCacheStamp";
@@ -274,19 +274,19 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         IEnumerable<string> deletedPermissions)
     {
         var stringBuilder = new StringBuilder();
-        
+
         stringBuilder.Append("PermissionGroupRecords:");
         stringBuilder.AppendLine(JsonSerializer.Serialize(permissionGroupRecords));
-        
+
         stringBuilder.Append("PermissionRecords:");
         stringBuilder.AppendLine(JsonSerializer.Serialize(permissionRecords));
-        
+
         stringBuilder.Append("DeletedPermissionGroups:");
         stringBuilder.AppendLine(deletedPermissionGroups.JoinAsString(","));
-        
+
         stringBuilder.Append("DeletedPermission:");
         stringBuilder.Append(deletedPermissions.JoinAsString(","));
-        
+
         return stringBuilder
             .ToString()
             .ToMd5();

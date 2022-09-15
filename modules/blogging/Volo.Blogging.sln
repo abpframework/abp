@@ -63,6 +63,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{9FAD5B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Application.Contracts.Shared", "src\Volo.Blogging.Application.Contracts.Shared\Volo.Blogging.Application.Contracts.Shared.csproj", "{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Installer", "src\Volo.Blogging.Installer\Volo.Blogging.Installer.csproj", "{C5EAF1A4-F1DE-44B4-9F8F-3602EC2575B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,10 @@ Global
 		{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5EAF1A4-F1DE-44B4-9F8F-3602EC2575B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5EAF1A4-F1DE-44B4-9F8F-3602EC2575B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5EAF1A4-F1DE-44B4-9F8F-3602EC2575B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5EAF1A4-F1DE-44B4-9F8F-3602EC2575B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,6 +199,7 @@ Global
 		{DB75CA32-96A5-4D10-8DD0-E62A3D0DDBCB} = {BE2A423C-271E-469A-AD90-5640DEBEE9C1}
 		{9FAD5B78-0577-4500-92D5-DC86E05F773C} = {42BF26EF-B8C7-42DC-9FFB-3653109B7776}
 		{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4} = {9FAD5B78-0577-4500-92D5-DC86E05F773C}
+		{C5EAF1A4-F1DE-44B4-9F8F-3602EC2575B5} = {9FAD5B78-0577-4500-92D5-DC86E05F773C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2BAE819-78D4-407A-9201-22473B2850B0}

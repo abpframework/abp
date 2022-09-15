@@ -17,8 +17,7 @@ public class RemoveDependencyFromPackageJsonFileStep : ProjectBuildPipelineStep
 
     public override void Execute(ProjectBuildContext context)
     {
-        var packageJsonFile = context.Files.FirstOrDefault(f => f.Name.Contains(_packageJsonFilePath));
-
+        var packageJsonFile = context.Files.FirstOrDefault(f => f.Name.Contains(_packageJsonFilePath) && !f.Name.Contains("node_modules"));
         if (packageJsonFile == null)
         {
             return;

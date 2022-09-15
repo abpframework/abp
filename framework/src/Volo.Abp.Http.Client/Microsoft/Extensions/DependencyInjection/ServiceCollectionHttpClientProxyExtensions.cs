@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using Castle.DynamicProxy;
 using JetBrains.Annotations;
@@ -196,6 +197,16 @@ public static class ServiceCollectionHttpClientProxyExtensions
             {
                 clientBuildAction(remoteServiceConfigurationName, provider, client);
             }
+        }).ConfigurePrimaryHttpMessageHandler((provider) =>
+        {
+            var handler = new HttpClientHandler { UseCookies = false };
+            
+            foreach (var handlerAction in preOptions.ProxyClientHandlerActions)
+            {
+                handlerAction(remoteServiceConfigurationName, provider, handler);
+            }
+
+            return handler;
         });
 
         foreach (var clientBuildAction in preOptions.ProxyClientBuildActions)

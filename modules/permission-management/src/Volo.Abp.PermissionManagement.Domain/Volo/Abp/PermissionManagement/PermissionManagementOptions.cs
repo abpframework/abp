@@ -8,11 +8,7 @@ public class PermissionManagementOptions
     public ITypeList<IPermissionManagementProvider> ManagementProviders { get; }
 
     public Dictionary<string, string> ProviderPolicies { get; }
-    
-    public HashSet<string> DeletedPermissions { get; }
-    
-    public HashSet<string> DeletedPermissionGroups { get; }
-    
+
     /// <summary>
     /// Default: true.
     /// </summary>
@@ -27,8 +23,5 @@ public class PermissionManagementOptions
     {
         ManagementProviders = new TypeList<IPermissionManagementProvider>();
         ProviderPolicies = new Dictionary<string, string>();
-
-        DeletedPermissions = new HashSet<string>();
-        DeletedPermissionGroups = new HashSet<string>();
     }
 }

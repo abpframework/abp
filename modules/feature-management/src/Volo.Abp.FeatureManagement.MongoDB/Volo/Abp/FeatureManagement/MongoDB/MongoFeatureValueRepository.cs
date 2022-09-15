@@ -9,7 +9,9 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.FeatureManagement.MongoDB;
 
-public class MongoFeatureValueRepository : MongoDbRepository<IFeatureManagementMongoDbContext, FeatureValue, Guid>, IFeatureValueRepository
+public class MongoFeatureValueRepository :
+    MongoDbRepository<IFeatureManagementMongoDbContext, FeatureValue, Guid>,
+    IFeatureValueRepository
 {
     public MongoFeatureValueRepository(IMongoDbContextProvider<IFeatureManagementMongoDbContext> dbContextProvider)
         : base(dbContextProvider)

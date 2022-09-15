@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.Domain",
-  "hash": "a04c90c3913af092e8990a27cb72e208",
+  "hash": "bf1806736d7d435af015acb0aac2eab2",
   "contents": [
     {
       "namespace": "Volo.Blogging",
@@ -57,7 +57,7 @@
     {
       "namespace": "Volo.Blogging.Users",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Blogging.Users",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -72,7 +72,7 @@
     {
       "namespace": "Volo.Blogging.Tagging",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Blogging.Tagging",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -87,7 +87,7 @@
     {
       "namespace": "Volo.Blogging.Posts",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Blogging.Posts",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -104,7 +104,7 @@
     {
       "namespace": "Volo.Blogging.Comments",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Blogging.Comments",
         "primaryKeyType": "Guid",
         "summary": null,
@@ -119,7 +119,7 @@
     {
       "namespace": "Volo.Blogging.Blogs",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Blogging.Blogs",
         "primaryKeyType": "Guid",
         "summary": null,

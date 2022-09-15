@@ -75,7 +75,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
     {
         Check.NotNull(providerName, nameof(providerName));
 
-        var featureDefinitions = FeatureDefinitionManager.GetAll();
+        var featureDefinitions = await FeatureDefinitionManager.GetAllAsync();
         var providers = Enumerable.Reverse(Providers).SkipWhile(c => c.Name != providerName);
 
         if (!fallback)
@@ -130,7 +130,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         Check.NotNull(name, nameof(name));
         Check.NotNull(providerName, nameof(providerName));
 
-        var feature = FeatureDefinitionManager.Get(name);
+        var feature = await FeatureDefinitionManager.GetAsync(name);
 
         if (feature.ValueType?.Validator.IsValid(value) == false)
         {
@@ -186,7 +186,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         string providerKey,
         bool fallback = true) //TODO: Fallback is not used
     {
-        var feature = FeatureDefinitionManager.Get(name);
+        var feature = await FeatureDefinitionManager.GetAsync(name);
         var providers = Enumerable
             .Reverse(Providers);
 
