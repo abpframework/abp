@@ -314,6 +314,76 @@ public class MyController : AbpController
 
 See the [Dapr documentation](https://docs.microsoft.com/en-us/dotnet/architecture/dapr-for-net-developers/publish-subscribe) to learn the details of sending & receiving events with Dapr API.
 
+## Distributed Lock
+
+> Dapr's distributed lock feature currently in Alpha stage and may not be stable yet. It is not suggested to replace ABP's distributed lock with Dapr in that point.
+
+ABP provides a [Distributed Locking](../Distributed-Locking.md) abstraction to control access to a shared resource by multiple applications. Dapr also has a [distributed lock building block](https://docs.dapr.io/developing-applications/building-blocks/distributed-lock/). [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr) package makes ABP using Dapr's distributed locking system.
+
+### Installation
+
+Use the ABP CLI to add [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr) NuGet package to your project (to the client side):
+
+* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.DistributedLocking.Dapr` package.
+* Run `abp add-package Volo.Abp.DistributedLocking.Dapr` command.
+
+If you want to do it manually, install the [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr) NuGet package to your project and add `[DependsOn(typeof(AbpDistributedLockingDaprModule))]` to the [ABP module](../Module-Development-Basics.md) class inside your project.
+
+### Configuration
+
+You can use the `AbpDistributedLockDaprOptions` options class in the `ConfigureServices` method of [your module](../Module-Development-Basics.md) to configure the Dapr distributed lock:
+
+````csharp
+Configure<AbpDistributedLockDaprOptions>(options =>
+{
+    options.StoreName = "mystore";
+});
+````
+
+The following options are available:
+
+* **`StoreName`** (required): The store name used by Dapr. Lock key names are scoped in the same store. That means different applications can acquire the same lock name in different stores. Use the same store name for the same resources you want to control access.
+* `Owner` (optional): The `owner` value used by `DaprClient.Lock` method. If you don't specify, ABP uses a random value, which is fine in general.
+* `DefaultExpirationTimeout` (optional): Default value of the time after which the lock gets expired. Default value: 2 minutes.
+
+### Usage
+
+You can inject and use the `IAbpDistributedLock` service, just like explained in the [Distributed Locking document](../Distributed-Locking.md).
+
+**Example:**
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly IAbpDistributedLock _distributedLock;
+    
+    public MyService(IAbpDistributedLock distributedLock)
+    {
+        _distributedLock = distributedLock;
+    }
+    
+    public async Task MyMethodAsync()
+    {
+        await using (var handle = 
+                     await _distributedLock.TryAcquireAsync("MyLockName"))
+        {
+            if (handle != null)
+            {
+                // your code that access the shared resource
+            }
+        }   
+    }
+}
+````
+
+There are two points we should mention about the `TryAcquireAsync` method, as different from the ABP's standard usage:
+
+* `timeout` parameter currently not used (even if you specify it), because Dapr doesn't support to wait to obtain the lock.
+* Dapr uses expiration timeout system (that means the lock is automatically released after that timeout even if you don't release the lock by disposing the handler). However, ABP's `TryAcquireAsync` method has no such a parameter. Currently, you can set `AbpDistributedLockDaprOptions.DefaultExpirationTimeout` as a global value in your application.
+
+As mentioned first, Dapr's distributed lock feature currently in Alpha stage and its API is candidate to change. You should use it as is if you want, but be ready for the changes in the future. For now, we are recommending to use the [DistributedLock](https://github.com/madelson/DistributedLock) library as explained in ABP's [Distributed Locking document](../Distributed-Locking.md).
+
 ## Security
 
 If you are using Dapr, most or all the incoming and outgoing requests in your application pass through Dapr. Dapr uses two kinds of API tokens to secure the communication between your application and Dapr.
