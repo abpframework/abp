@@ -153,15 +153,21 @@ export class PermissionManagementComponent
       this.permissions = this.permissions.map(per => {
         if (clickedPermission.name === per.name) {
           return { ...per, isGranted: !per.isGranted };
-        } else if (clickedPermission.name === per.parentName && clickedPermission.isGranted) {
-          return { ...per, isGranted: false };
+        } else if (clickedPermission.name === per.parentName) {
+          return { ...per, isGranted: !clickedPermission.isGranted };
         } else if (clickedPermission.parentName === per.name && !clickedPermission.isGranted) {
           return { ...per, isGranted: true };
         }
 
         return per;
+      }).map((per,index,permissions) => {
+        const childrens = permissions
+          .filter(p => p.parentName === per.name);
+          if(childrens.length > 0 && childrens.every(x => !x.isGranted)){
+            return { ...per, isGranted: false };
+          }
+        return  per
       });
-
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
     }, 0);
