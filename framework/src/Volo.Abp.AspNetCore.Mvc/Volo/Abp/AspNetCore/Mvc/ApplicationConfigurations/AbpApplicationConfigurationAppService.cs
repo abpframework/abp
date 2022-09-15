@@ -185,8 +185,6 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         foreach (var policyName in otherPolicyNames)
         {
-            authConfig.Policies[policyName] = true;
-
             if (await _authorizationService.IsGrantedAsync(policyName))
             {
                 authConfig.GrantedPolicies[policyName] = true;
@@ -196,7 +194,6 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         var result = await _permissionChecker.IsGrantedAsync(abpPolicyNames.ToArray());
         foreach (var (key, value) in result.Result)
         {
-            authConfig.Policies[key] = true;
             if (value == PermissionGrantResult.Granted)
             {
                 authConfig.GrantedPolicies[key] = true;
@@ -228,10 +225,10 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             foreach (var resourceName in resourceNames)
             {
                 var dictionary = new Dictionary<string, string>();
-            
+
                 var localizer = await StringLocalizerFactory
                     .CreateByResourceNameOrNullAsync(resourceName);
-            
+
                 if (localizer != null)
                 {
                     foreach (var localizedString in await localizer.GetAllStringsAsync())
