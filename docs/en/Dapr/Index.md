@@ -49,6 +49,8 @@ Available properties of the `AbpDaprOptions` class:
 
 * `HttpEndpoint` (optional): HTTP endpoint that is used while creating a `DaprClient` object. If you don't specify, the default value is used.
 * `GrpcEndpoint` (optional): The gRPC endpoint that is used while creating a `DaprClient` object. If you don't specify, the default value is used.
+* `DaprApiToken` (optional): The [Dapr API token](https://docs.dapr.io/operations/security/api-token/) that is used while sending requests from the application to Dapr. It is filled from the `DAPR_API_TOKEN` environment variable by default (which is set by Dapr once it is configured). See the *Security* section in this document for details.
+* `AppApiToken` (optional): The [App API token](https://docs.dapr.io/operations/security/app-api-token/) that is used to validate requests coming from Dapr. It is filled from the `APP_API_TOKEN` environment variable by default (which is set by Dapr once it is configured). See the *Security* section in this document for details.
 
 Alternatively, you can configure the options in the `Dapr` section of your `appsettings.json` file. Example:
 
@@ -274,9 +276,88 @@ public class MyController : AbpController
 }
 ````
 
-`HttpContext.ValidateDaprAppApiToken()` extension method is provided by ABP to check if the request is coming from Dapr. This is optional. You should configure Dapr to send App API token to your application if you want to enable the validation. If not configured, `ValidateDaprAppApiToken()` does nothing. See [Dapr's App API Token document](https://docs.dapr.io/operations/security/app-api-token/) for more information. Also see the *AbpDaprOptions* section in this document.
+`HttpContext.ValidateDaprAppApiToken()` extension method is provided by ABP to check if the request is coming from Dapr. This is optional. You should configure Dapr to send App API token to your application if you want to enable the validation. If not configured, `ValidateDaprAppApiToken()` does nothing. See [Dapr's App API Token document](https://docs.dapr.io/operations/security/app-api-token/) for more information. Also see the *AbpDaprOptions* and *Security* sections in this document.
 
 See the [Dapr documentation](https://docs.microsoft.com/en-us/dotnet/architecture/dapr-for-net-developers/publish-subscribe) to learn the details of sending & receiving events with Dapr API.
+
+## Security
+
+If you are using Dapr, most or all the incoming and outgoing requests in your application pass through Dapr. Dapr uses two kinds of API tokens to secure the communication between your application and Dapr.
+
+### Dapr API Token
+
+> This token is automatically set by default and generally you don't care about it.
+
+The [Enable API token authentication in Dapr](https://docs.dapr.io/operations/security/api-token/) document describes what the Dapr API token is and how it is configured. Please read that document if you want to enable it for your application.
+
+If you enabled the Dapr API token, you should send that token in every request to Dapr from your application. `AbpDaprOptions` defines a `DaprApiToken` property as a central point to configure the Dapr API token in your application.
+
+The default value of the `DaprApiToken` property is set from the `DAPR_API_TOKEN` environment variable and that environment variable is set by Dapr when it runs. So, most of the times, you don't need to configure `AbpDaprOptions.DaprApiToken` in your application. However, if you need to configure (or override) it, you can do in the `ConfigureServices` method of your module class as shown in the following code block:
+
+````csharp
+Configure<AbpDaprOptions>(options =>
+{
+    options.DaprApiToken = "...";
+});
+````
+
+Or you can set it in your `appsettings.json` file:
+
+````json
+"Dapr": {
+  "DaprApiToken": "..."
+}
+````
+
+Once you set it, it is used when you inject `DaprClient` or use `IAbpDaprClientFactory`. If you need that value in your application, you can inject `IDaprApiTokenProvider` and use its `GetDaprApiToken()` method.
+
+### App API Token
+
+> Enabling App API token validation is strongly recommended. Otherwise, for example, any client can directly call your event subscription endpoint, and your application acts like an event has occurred (if there is no other security policy in your event subscription endpoint).
+
+The [Authenticate requests from Dapr using token authentication](https://docs.dapr.io/operations/security/app-api-token/) document describes what the App API token is and how it is configured. Please read that document if you want to enable it for your application.
+
+If you enabled the App API token, you can validate it to ensure that the request is coming from Dapr. ABP provides useful shortcuts to validate it.
+
+**Example: Validate the App API token in an event handling HTTP API**
+
+````csharp
+public class MyController : AbpController
+{
+    [HttpPost("/stock-changed")]
+    [Topic("pubsub", "StockChanged")]
+    public async Task<IActionResult> TestRouteAsync(
+        [FromBody] StockCountChangedEto model)
+    {
+        // Validate the App API token!
+        HttpContext.ValidateDaprAppApiToken();
+        
+        // Do something with the event
+        return Ok();
+    }
+}
+````
+
+`HttpContext.ValidateDaprAppApiToken()` is an extension method provided by the ABP Framework. It throws an `AbpAuthorizationException` if the token was missing or wrong in the HTTP header (the header name is `dapr-api-token`). You can also inject `IDaprAppApiTokenValidator` and use its methods to validate the token in any service (not only in a controller class).
+
+You can configure `AbpDaprOptions.AppApiToken` if you want to set (or override) the App API token value. The default value is set by the `APP_API_TOKEN` environment variable. You can change it in the `ConfigureServices` method of your module class as shown in the following code block:
+
+````csharp
+Configure<AbpDaprOptions>(options =>
+{
+    options.AppApiToken = "...";
+});
+````
+
+Or you can set it in your `appsettings.json` file:
+
+````json
+"Dapr": {
+  "AppApiToken": "..."
+}
+````
+
+Once
 
 ## See Also
 

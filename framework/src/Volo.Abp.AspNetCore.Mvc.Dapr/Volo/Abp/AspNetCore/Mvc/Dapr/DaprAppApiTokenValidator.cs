@@ -19,7 +19,7 @@ public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDep
     
     public virtual void CheckDaprAppApiToken()
     {
-        var expectedAppApiToken = GetConfiguredAppApiToken();
+        var expectedAppApiToken = GetConfiguredAppApiTokenOrNull();
         if (expectedAppApiToken.IsNullOrWhiteSpace())
         {
             return;
@@ -39,7 +39,7 @@ public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDep
 
     public virtual bool IsValidDaprAppApiToken()
     {
-        var expectedAppApiToken = GetConfiguredAppApiToken();
+        var expectedAppApiToken = GetConfiguredAppApiTokenOrNull();
         if (expectedAppApiToken.IsNullOrWhiteSpace())
         {
             return true;
@@ -60,7 +60,7 @@ public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDep
         return apiTokenHeader;
     }
     
-    protected virtual string GetConfiguredAppApiToken()
+    protected virtual string? GetConfiguredAppApiTokenOrNull()
     {
         return HttpContext
             .RequestServices
