@@ -26,11 +26,6 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default)
     {
-        if (timeout == default)
-        {
-            timeout = DistributedLockDaprOptions.DefaultTimeout;
-        }
-        
         name = DistributedLockKeyNormalizer.NormalizeKey(name);
 
         var daprClient = DaprClientFactory.Create();
@@ -38,7 +33,7 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
             DistributedLockDaprOptions.StoreName, 
             name, 
             DistributedLockDaprOptions.Owner ?? Guid.NewGuid().ToString(),
-            (int)timeout.TotalSeconds,
+            (int)DistributedLockDaprOptions.DefaultExpirationTimeout.TotalSeconds,
             cancellationToken);
 
         if (lockResponse == null || !lockResponse.Success)
