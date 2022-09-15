@@ -65,7 +65,7 @@ Alternatively, you can configure the options in the `Dapr` section of your `apps
 **Example usages:**
 
 ````csharp
-public class MyService
+public class MyService : ITransientDependency
 {
     private readonly IAbpDaprClientFactory _daprClientFactory;
 
@@ -136,7 +136,7 @@ The remove service name (`Default` in this example) should match the remote serv
 
 ## Distributed Event Bus Integration
 
-[ABP's distributed event bus](../Distributed-Event-Bus.md) system provides a convenient abstraction to allow application communicate asynchronously via events. ABP has integration packages with various distributed messaging systems, like RabbitMQ, Kafka, and Azure. Dapr also has a [publish & subscribe building block](https://docs.dapr.io/developing-applications/building-blocks/pubsub/pubsub-overview/) for the same purpose: distributed messaging / events.
+[ABP's distributed event bus](../Distributed-Event-Bus.md) system provides a convenient abstraction to allow applications communicate asynchronously via events. ABP has integration packages with various distributed messaging systems, like RabbitMQ, Kafka, and Azure. Dapr also has a [publish & subscribe building block](https://docs.dapr.io/developing-applications/building-blocks/pubsub/pubsub-overview/) for the same purpose: distributed messaging / events.
 
 ABP's [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) and [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) packages make possible to use the Dapr infrastructure for ABP's distributed event bus.
 
@@ -145,8 +145,6 @@ The [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Da
 ### Installation
 
 If your application is an ASP.NET Core application and you want to send and receive events, you need to install the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) package as describe below:
-
-You can use the ABP CLI to add [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) NuGet package to your project (to the client side):
 
 * Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.AspNetCore.Mvc.Dapr.EventBus` package.
@@ -181,11 +179,104 @@ Available properties of the `AbpDaprEventBusOptions` class:
 
 ### Usage
 
-You can follow [ABP's distributed event bus documentation](../Distributed-Event-Bus.md) to learn how to publish and subscribe to events in the ABP way. No change required in your application code to use Dapr pub-sub.
+#### The ABP Way
 
-In addition to ABP's standard distributed event bus system, you can also use Dapr's API to publish events. In that case, just use the `IAbpDaprClientFactory` service to create a `DaprClient` object (or create it yourself by following Dapr's documentation) and use its `PublishEventAsync` method as [documented by Dapr](https://docs.microsoft.com/en-us/dotnet/architecture/dapr-for-net-developers/publish-subscribe).
+You can follow [ABP's distributed event bus documentation](../Distributed-Event-Bus.md) to learn how to publish and subscribe to events in the ABP way. No change required in your application code to use Dapr pub-sub. ABP will automatically subscribe to Dapr for your event handler classes (those implement the `IDistributedEventHandler` interface).
 
-> If you directly use the Dapr API to publish events, you can not benefit from ABP's standard distributed event bus features, like the outbox/inbox pattern implementation.
+**Example: Publish an event using the `IDistributedEventBus` service**
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly IDistributedEventBus _distributedEventBus;
+
+    public MyService(IDistributedEventBus distributedEventBus)
+    {
+        _distributedEventBus = distributedEventBus;
+    }
+
+    public async Task DoItAsync()
+    {
+        await _distributedEventBus.PublishAsync(new StockCountChangedEto
+        {
+            ProductCode = "AT837234",
+            NewStockCount = 42 
+        });
+    }
+}
+````
+
+**Example: Subscribe to an event by implementing the `IDistributedEventHandler` interface**
+
+````csharp
+public class MyHandler : 
+    IDistributedEventHandler<StockCountChangedEto>,
+    ITransientDependency
+{
+    public async Task HandleEventAsync(StockCountChangedEto eventData)
+    {
+        var productCode = eventData.ProductCode;
+        // ...
+    }
+}
+````
+
+See [ABP's distributed event bus documentation](../Distributed-Event-Bus.md) to learn the details.
+
+#### Using the Dapr API
+
+In addition to ABP's standard distributed event bus system, you can also use Dapr's API to publish events. 
+
+> If you directly use the Dapr API to publish events, you may not benefit from ABP's standard distributed event bus features, like the outbox/inbox pattern implementation.
+
+**Example: Publish an event using `DaprClient`**
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly DaprClient _daprClient;
+
+    public MyService(DaprClient daprClient)
+    {
+        _daprClient = daprClient;
+    }
+
+    public async Task DoItAsync()
+    {
+        await _daprClient.PublishEventAsync(
+            "pubsub", // pubsub name
+            "StockChanged", // topic name 
+            new StockCountChangedEto // event data
+            {
+                ProductCode = "AT837234",
+                NewStockCount = 42
+            }
+        );
+    }
+}
+````
+
+**Example: Subscribe to an event by creating an ASP.NET Core controller**
+
+````csharp
+public class MyController : AbpController
+{
+    [HttpPost("/stock-changed")]
+    [Topic("pubsub", "StockChanged")]
+    public async Task<IActionResult> TestRouteAsync(
+        [FromBody] StockCountChangedEto model)
+    {
+        HttpContext.ValidateDaprAppApiToken();
+        
+        // Do something with the event
+        return Ok();
+    }
+}
+````
+
+`HttpContext.ValidateDaprAppApiToken()` extension method is provided by ABP to check if the request is coming from Dapr. This is optional. You should configure Dapr to send App API token to your application if you want to enable the validation. If not configured, `ValidateDaprAppApiToken()` does nothing. See [Dapr's App API Token document](https://docs.dapr.io/operations/security/app-api-token/) for more information. Also see the *AbpDaprOptions* section in this document.
+
+See the [Dapr documentation](https://docs.microsoft.com/en-us/dotnet/architecture/dapr-for-net-developers/publish-subscribe) to learn the details of sending & receiving events with Dapr API.
 
 ## See Also
 
