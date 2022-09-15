@@ -10,7 +10,7 @@ public static class DaprHttpContextExtensions
         httpContext
             .RequestServices
             .GetRequiredService<IDaprAppApiTokenValidator>()
-            .CheckDaprAppApiToken(httpContext);
+            .CheckDaprAppApiToken();
     }
     
     public static bool IsValidDaprAppApiToken(this HttpContext httpContext)
@@ -18,7 +18,7 @@ public static class DaprHttpContextExtensions
         return httpContext
             .RequestServices
             .GetRequiredService<IDaprAppApiTokenValidator>()
-            .IsValidDaprAppApiToken(httpContext);
+            .IsValidDaprAppApiToken();
     }
     
     public static string? GetDaprAppApiTokenOrNull(HttpContext httpContext)
@@ -26,6 +26,6 @@ public static class DaprHttpContextExtensions
         return httpContext
             .RequestServices
             .GetRequiredService<IDaprAppApiTokenValidator>()
-            .GetDaprAppApiTokenOrNull(httpContext);
+            .GetDaprAppApiTokenOrNull();
     }
 }
