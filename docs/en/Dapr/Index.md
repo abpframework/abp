@@ -60,9 +60,32 @@ Alternatively, you can configure the options in the `Dapr` section of your `apps
 }
 ````
 
+### Injecting DaprClient
+
+ABP registers the `DaprClient` class to the [dependency injection](../Dependency-Injection.md) system. So, you can inject and use it whenever you need:
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly DaprClient _daprClient;
+
+    public MyService(DaprClient daprClient)
+    {
+        _daprClient = daprClient;
+    }
+
+    public async Task DoItAsync()
+    {
+        // TODO: Use the injected _daprClient object
+    }
+}
+````
+
+Injecting `DaprClient` is the recommended way of using it in your application code. When you inject it, the `IAbpDaprClientFactory` service is used to create it, which is explained in the next section.
+
 ### IAbpDaprClientFactory
 
-`IAbpDaprClientFactory` is used to create `DaprClient` or `HttpClient` objects to perform operations on Dapr. It uses `AbpDaprOptions`, so you can configure the settings in a central place.
+`IAbpDaprClientFactory` can be used to create `DaprClient` or `HttpClient` objects to perform operations on Dapr. It uses `AbpDaprOptions`, so you can configure the settings in a central place.
 
 **Example usages:**
 
