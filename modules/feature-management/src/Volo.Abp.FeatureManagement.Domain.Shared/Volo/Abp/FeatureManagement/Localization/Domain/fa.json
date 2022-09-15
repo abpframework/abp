@@ -6,6 +6,7 @@
     "ManageHostFeatures": "مدیریت ویژگی های میزبان",
     "Permission:FeatureManagement": "مدیریت ویژگی ها",
     "Permission:FeatureManagement.ManageHostFeatures": "مدیریت ویژگی های میزبان",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} مقدار ویژگی صحیح نمی باشد!"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} مقدار ویژگی صحیح نمی باشد!",
+		"Menu:FeatureManagement": "مدیریت ویژگی ها"
   }
 }
