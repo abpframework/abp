@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -60,8 +59,6 @@ public class PermissionManagementModal : AbpPageModel
 
         var result = await PermissionAppService.GetAsync(ProviderName, ProviderKey);
 
-        UpdateLocalizations(result);
-
         EntityDisplayName = !string.IsNullOrWhiteSpace(ProviderKeyDisplayName)
             ? ProviderKeyDisplayName
             : result.EntityDisplayName;
@@ -84,49 +81,6 @@ public class PermissionManagementModal : AbpPageModel
         SelectAllInAllTabs = Groups.All(g => g.IsAllPermissionsGranted);
 
         return Page();
-    }
-
-    private void UpdateLocalizations(GetPermissionListResultDto result)
-    {
-        foreach (var group in result.Groups)
-        {
-            group.DisplayName = Localize(
-                group.DisplayNameKey,
-                group.DisplayNameResource,
-                group.DisplayName
-            );
-
-            foreach (var permission in group.Permissions)
-            {
-                permission.DisplayName = Localize(
-                    permission.DisplayNameKey,
-                    permission.DisplayNameResource,
-                    permission.DisplayName
-                );
-            }
-        }
-    }
-
-    private string Localize(string key, string resourceName, string fallbackValue)
-    {
-        if (key.IsNullOrEmpty() || resourceName.IsNullOrEmpty())
-        {
-            return fallbackValue;
-        }
-
-        var resource = LocalizationOptions.Resources.GetOrNull(resourceName);
-        if (resource == null)
-        {
-            return fallbackValue;
-        }
-
-        var result = new LocalizableString(resource.ResourceType, key).Localize(StringLocalizerFactory);
-        if (result.ResourceNotFound)
-        {
-            return fallbackValue;
-        }
-
-        return result.Value;
     }
 
     public virtual async Task<IActionResult> OnPostAsync()

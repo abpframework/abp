@@ -9,6 +9,7 @@ using Polly;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain;
 using Volo.Abp.Json;
@@ -25,7 +26,24 @@ namespace Volo.Abp.PermissionManagement;
 public class AbpPermissionManagementDomainModule : AbpModule
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
-    
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        if (context.Services.IsDataMigrationEnvironment())
+        {
+            Configure<PermissionManagementOptions>(options =>
+            {
+                options.SaveStaticPermissionsToDatabase = false;
+                options.IsDynamicPermissionStoreEnabled = false;
+            });
+        }
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
+    }
+
     public override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         InitializeDynamicPermissions(context);
@@ -44,12 +62,12 @@ public class AbpPermissionManagementDomainModule : AbpModule
             .ServiceProvider
             .GetRequiredService<IOptions<PermissionManagementOptions>>()
             .Value;
-        
+
         if (!options.SaveStaticPermissionsToDatabase && !options.IsDynamicPermissionStoreEnabled)
         {
             return;
         }
-        
+
         var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
 
         Task.Run(async () =>
@@ -58,7 +76,7 @@ public class AbpPermissionManagementDomainModule : AbpModule
             var applicationLifetime = scope.ServiceProvider.GetService<IHostApplicationLifetime>();
             var cancellationTokenProvider = scope.ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
             var cancellationToken = applicationLifetime?.ApplicationStopping ?? _cancellationTokenSource.Token;
-            
+
             try
             {
                 using (cancellationTokenProvider.Use(cancellationToken))
@@ -67,7 +85,7 @@ public class AbpPermissionManagementDomainModule : AbpModule
                     {
                         return;
                     }
-                    
+
                     await SaveStaticPermissionsToDatabaseAsync(options, scope, cancellationTokenProvider);
 
                     if (cancellationTokenProvider.Token.IsCancellationRequested)
@@ -127,7 +145,7 @@ public class AbpPermissionManagementDomainModule : AbpModule
 
         try
         {
-            // Pre-cache permissions, so first request doesn't wait 
+            // Pre-cache permissions, so first request doesn't wait
             await scope
                 .ServiceProvider
                 .GetRequiredService<IDynamicPermissionDefinitionStore>()

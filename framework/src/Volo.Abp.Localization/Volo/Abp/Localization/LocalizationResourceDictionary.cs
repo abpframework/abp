@@ -4,9 +4,9 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization;
 
-public class LocalizationResourceDictionary : Dictionary<Type, LocalizationResource>
+public class LocalizationResourceDictionary : Dictionary<string, LocalizationResourceBase>
 {
-    private readonly Dictionary<string, LocalizationResource> _resourcesByNames = new();
+    private readonly Dictionary<Type, LocalizationResourceBase> _resourcesByTypes = new();
 
     public LocalizationResource Add<TResouce>([CanBeNull] string defaultCultureName = null)
     {
@@ -15,24 +15,41 @@ public class LocalizationResourceDictionary : Dictionary<Type, LocalizationResou
 
     public LocalizationResource Add(Type resourceType, [CanBeNull] string defaultCultureName = null)
     {
-        if (ContainsKey(resourceType))
+        var resourceName = LocalizationResourceNameAttribute.GetName(resourceType);
+        if (ContainsKey(resourceName))
         {
             throw new AbpException("This resource is already added before: " + resourceType.AssemblyQualifiedName);
         }
 
         var resource = new LocalizationResource(resourceType, defaultCultureName);
 
-        this[resourceType] = resource;
-        _resourcesByNames[resource.ResourceName] = resource;
+        this[resourceName] = resource;
+        _resourcesByTypes[resourceType] = resource;
+
+        return resource;
+    }
+    
+    public NonTypedLocalizationResource Add([NotNull] string resourceName, [CanBeNull] string defaultCultureName = null)
+    {
+        Check.NotNullOrWhiteSpace(resourceName, nameof(resourceName));
+        
+        if (ContainsKey(resourceName))
+        {
+            throw new AbpException("This resource is already added before: " + resourceName);
+        }
+
+        var resource = new NonTypedLocalizationResource(resourceName, defaultCultureName);
+
+        this[resourceName] = resource;
 
         return resource;
     }
 
-    public LocalizationResource Get<TResource>()
+    public LocalizationResourceBase Get<TResource>()
     {
         var resourceType = typeof(TResource);
 
-        var resource = this.GetOrDefault(resourceType);
+        var resource = _resourcesByTypes.GetOrDefault(resourceType);
         if (resource == null)
         {
             throw new AbpException("Can not find a resource with given type: " + resourceType.AssemblyQualifiedName);
@@ -41,9 +58,9 @@ public class LocalizationResourceDictionary : Dictionary<Type, LocalizationResou
         return resource;
     }
 
-    public LocalizationResource Get(string resourceName)
+    public LocalizationResourceBase Get(string resourceName)
     {
-        var resource = GetOrNull(resourceName);
+        var resource = this.GetOrDefault(resourceName);
         if (resource == null)
         {
             throw new AbpException("Can not find a resource with given name: " + resourceName);
@@ -51,9 +68,25 @@ public class LocalizationResourceDictionary : Dictionary<Type, LocalizationResou
 
         return resource;
     }
-
-    public LocalizationResource GetOrNull(string resourceName)
+    
+    public LocalizationResourceBase Get(Type resourceType)
     {
-        return _resourcesByNames.GetOrDefault(resourceName);
+        var resource = GetOrNull(resourceType);
+        if (resource == null)
+        {
+            throw new AbpException("Can not find a resource with given type: " + resourceType);
+        }
+
+        return resource;
+    }
+
+    public LocalizationResourceBase GetOrNull(Type resourceType)
+    {
+        return _resourcesByTypes.GetOrDefault(resourceType);
+    }
+    
+    public bool ContainsResource(Type resourceType)
+    {
+        return _resourcesByTypes.ContainsKey(resourceType);
     }
 }

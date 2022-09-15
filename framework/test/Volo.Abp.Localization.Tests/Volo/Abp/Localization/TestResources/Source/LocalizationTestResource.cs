@@ -1,11 +1,9 @@
-﻿using Volo.Abp.Localization.TestResources.Base.CountryNames;
-using Volo.Abp.Localization.TestResources.Base.Validation;
+﻿using Volo.Abp.Localization.TestResources.Base.Validation;
 
 namespace Volo.Abp.Localization.TestResources.Source;
 
 [InheritResource(
-    typeof(LocalizationTestValidationResource),
-    typeof(LocalizationTestCountryNamesResource)
+    typeof(LocalizationTestValidationResource)
     )]
 [LocalizationResourceName("Test")]
 public sealed class LocalizationTestResource

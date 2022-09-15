@@ -11,14 +11,16 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components.FeatureSettingGroup;
 public partial class FeatureSettingManagementComponent : AbpComponentBase
 {
     [Inject]
-    protected IStringLocalizer<AbpFeatureManagementResource> L { get; set; }
-    
-    [Inject]
     protected PermissionChecker PermissionChecker { get; set; }
     
     protected FeatureManagementModal FeatureManagementModal;
     
     protected FeatureSettingViewModel Settings;
+
+    public FeatureSettingManagementComponent()
+    {
+        LocalizationResource = typeof(AbpFeatureManagementResource);
+    }
 
     protected async override Task OnInitializedAsync()
     {
@@ -32,9 +34,4 @@ public partial class FeatureSettingManagementComponent : AbpComponentBase
     {
        await FeatureManagementModal.OpenAsync(TenantFeatureValueProvider.ProviderName);
     }
-}
-
-public class FeatureSettingViewModel
-{
-    public bool HasManageHostFeaturesPermission { get; set; }
 }

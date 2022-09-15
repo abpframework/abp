@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Volo.Abp.FeatureManagement.Domain.Shared\Volo.Abp.FeatureManagement.Domain.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Polly" Version="$(PollyPackageVersion)" />
+  </ItemGroup>
+
 </Project>

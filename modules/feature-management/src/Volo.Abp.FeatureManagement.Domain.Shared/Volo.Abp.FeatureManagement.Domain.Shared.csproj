@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Json\Volo.Abp.Json.csproj" />
   </ItemGroup>
 
   <ItemGroup>

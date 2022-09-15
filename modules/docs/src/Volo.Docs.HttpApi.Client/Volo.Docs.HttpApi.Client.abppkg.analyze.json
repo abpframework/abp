@@ -1,0 +1,11 @@
+{
+  "name": "Volo.Docs.HttpApi.Client",
+  "hash": "50c3210eb30ae0ec2be506452e76e304",
+  "contents": [
+    {
+      "namespace": "Volo.Docs",
+      "contentType": "abpModule",
+      "name": "DocsHttpApiClientModule"
+    }
+  ]
+}

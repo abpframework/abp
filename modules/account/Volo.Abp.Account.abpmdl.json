@@ -38,8 +38,8 @@
       "path": "src/Volo.Abp.Account.Blazor/Volo.Abp.Account.Blazor.abppkg.json",
       "folder": "src"
     },
-    "Volo.Abp.Account.Installer": {
-      "path": "src/Volo.Abp.Account.Installer/Volo.Abp.Account.Installer.abppkg.json",
+    "Volo.Abp.Account.Web.OpenIddict": {
+      "path": "src/Volo.Abp.Account.Web.OpenIddict/Volo.Abp.Account.Web.OpenIddict.abppkg.json",
       "folder": "src"
     }
   }

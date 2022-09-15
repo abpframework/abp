@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.MongoDB",
-  "hash": "56f2712fd206ad7dee9f2a2116935af1",
+  "hash": "7baac61b4f919f381459d4d7e606c7b9",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.MongoDB",
