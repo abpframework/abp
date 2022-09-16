@@ -106,10 +106,10 @@ var abp = abp || {};
         var value = resource.texts[key];
         if (value === undefined) {            
             for (var i = 0; i < resource.baseResources.length; i++){
-                var basedArgument = Array.prototype.slice.call(arguments, 0);
-                basedArgument[1] = resource.baseResources[i];
+                var basedArguments = Array.prototype.slice.call(arguments, 0);
+                basedArguments[1] = resource.baseResources[i];
 
-                var result = abp.localization.internal.localize.apply(this, basedArgument);
+                var result = abp.localization.internal.localize.apply(this, basedArguments);
                 if (result.found){
                     return result;
                 }
