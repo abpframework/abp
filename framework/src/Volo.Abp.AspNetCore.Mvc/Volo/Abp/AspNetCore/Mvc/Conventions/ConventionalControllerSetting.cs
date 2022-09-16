@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Volo.Abp.Reflection;
@@ -16,7 +17,7 @@ public class ConventionalControllerSetting
     public Assembly Assembly { get; }
 
     [NotNull]
-    public HashSet<Type> ControllerTypes { get; } //TODO: Internal?
+    internal HashSet<Type> ControllerTypes { get; }
 
     /// <summary>
     /// Set true to use the old style URL path style.
@@ -83,6 +84,11 @@ public class ConventionalControllerSetting
         {
             ControllerTypes.Add(type);
         }
+    }
+
+    public IReadOnlyList<Type> GetControllerTypes()
+    {
+        return ControllerTypes.ToImmutableList();
     }
 
     private static bool IsRemoteService(Type type)
