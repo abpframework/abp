@@ -93,10 +93,11 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
         ActionDescriptor actionDescriptor)
     {
         if (!abpAuditingOptions.IsEnabledForIntegrationServices &&
-            actionDescriptor
-            .AsControllerActionDescriptor()
-            .ControllerTypeInfo
-            .IsDefined(typeof(IntegrationServiceAttribute), true))
+            IntegrationServiceAttribute.IsDefinedOrInherited(
+                actionDescriptor
+                    .AsControllerActionDescriptor()
+                    .ControllerTypeInfo)
+            )
         {
             return false;
         }

@@ -122,12 +122,12 @@ public class ConventionalControllerSetting
     {
         if (ApplicationServiceTypes == ApplicationServiceTypes.ApplicationServices)
         {
-            return !type.IsDefined(typeof(IntegrationServiceAttribute));
+            return !IntegrationServiceAttribute.IsDefinedOrInherited(type);
         }
         
         if (ApplicationServiceTypes == ApplicationServiceTypes.IntegrationServices)
         {
-            return type.IsDefined(typeof(IntegrationServiceAttribute));
+            return IntegrationServiceAttribute.IsDefinedOrInherited(type);
         }
 
         return true;

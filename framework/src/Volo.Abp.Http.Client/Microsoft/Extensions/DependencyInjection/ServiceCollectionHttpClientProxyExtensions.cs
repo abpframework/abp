@@ -258,12 +258,12 @@ public static class ServiceCollectionHttpClientProxyExtensions
 
         if (applicationServiceTypes == ApplicationServiceTypes.ApplicationServices)
         {
-            return !type.IsDefined(typeof(IntegrationServiceAttribute));
+            return !IntegrationServiceAttribute.IsDefinedOrInherited(type);
         }
         
         if (applicationServiceTypes == ApplicationServiceTypes.IntegrationServices)
         {
-            return type.IsDefined(typeof(IntegrationServiceAttribute));
+            return IntegrationServiceAttribute.IsDefinedOrInherited(type);
         }
 
         return true;
