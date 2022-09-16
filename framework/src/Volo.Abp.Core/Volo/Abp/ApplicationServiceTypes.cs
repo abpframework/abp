@@ -1,6 +1,6 @@
 using System;
 
-namespace Volo.Abp.Application.Services;
+namespace Volo.Abp;
 
 [Flags]
 public enum ApplicationServiceTypes : byte

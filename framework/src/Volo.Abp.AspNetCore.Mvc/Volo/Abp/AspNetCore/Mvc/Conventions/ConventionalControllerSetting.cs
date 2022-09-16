@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Conventions;
@@ -121,11 +120,6 @@ public class ConventionalControllerSetting
     
     private bool IsPreferredApplicationServiceType(Type type)
     {
-        if (ApplicationServiceTypes == ApplicationServiceTypes.All)
-        {
-            return true;
-        }
-
         if (ApplicationServiceTypes == ApplicationServiceTypes.ApplicationServices)
         {
             return !type.IsDefined(typeof(IntegrationServiceAttribute));
