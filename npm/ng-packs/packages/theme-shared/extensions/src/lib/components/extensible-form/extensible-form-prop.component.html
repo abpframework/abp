@@ -1,5 +1,5 @@
 <ng-container [ngSwitch]="getComponent(prop)"
-              [ngClass]="containerClassName"
+
               *abpPermission="prop.permission; runChangeDetection: false">
 
   <ng-template ngSwitchCase="template">
@@ -9,9 +9,9 @@
   </ng-template>
 
   <div
+    [ngClass]="containerClassName"
     class="mb-3 form-group"
   >
-
     <ng-template ngSwitchCase="input">
       <ng-template [ngTemplateOutlet]="label"></ng-template>
       <input
