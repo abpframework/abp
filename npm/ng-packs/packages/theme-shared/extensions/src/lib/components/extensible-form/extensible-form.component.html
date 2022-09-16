@@ -1,16 +1,16 @@
 <ng-container *ngIf="form">
 
-  <ng-container *ngFor="let g of groupedPropList.items">
-    <ng-container *abpPropData="let data; fromList: g.formPropList; withRecord: record">
+  <ng-container *ngFor="let groupedProp of groupedPropList.items">
+    <ng-container *abpPropData="let data; fromList: groupedProp.formPropList; withRecord: record">
 
-      <div *ngIf="g.group?.className; else withoutClassName"
-           [class]="g.group?.className" [attr.data-name]="g.group?.className">
-        <ng-container [ngTemplateOutlet]="propListTemplate" [ngTemplateOutletContext]="{g:g,data:data}">
+      <div *ngIf="groupedProp.group?.className; else withoutClassName"
+           [class]="groupedProp.group?.className" [attr.data-name]="groupedProp.group?.className">
+        <ng-container [ngTemplateOutlet]="propListTemplate" [ngTemplateOutletContext]="{groupedProp:groupedProp,data:data}">
         </ng-container>
       </div>
 
       <ng-template #withoutClassName>
-        <ng-container [ngTemplateOutlet]="propListTemplate" [ngTemplateOutletContext]="{g:g,data:data}">
+        <ng-container [ngTemplateOutlet]="propListTemplate" [ngTemplateOutletContext]="{groupedProp:groupedProp,data:data}">
         </ng-container>
       </ng-template>
     </ng-container>
@@ -19,8 +19,8 @@
 </ng-container>
 
 
-<ng-template let-g="g" let-data="data" #propListTemplate>
-  <ng-container *ngFor="let prop of g.formPropList; let first = first; trackBy: track.by('name')">
+<ng-template let-groupedProp="groupedProp" let-data="data" #propListTemplate>
+  <ng-container *ngFor="let prop of groupedProp.formPropList; let first = first; trackBy: track.by('name')">
     <ng-container *ngIf="prop.visible(data)">
       <ng-container
         [formGroupName]="extraPropertiesKey"
