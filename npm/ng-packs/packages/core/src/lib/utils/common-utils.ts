@@ -11,6 +11,10 @@ export function isNullOrUndefined(obj) {
   return obj === null || obj === undefined;
 }
 
+export function isNullOrEmpty(obj){
+  return obj === null || obj === undefined || obj === '';
+}
+
 export function exists(obj) {
   return !isNullOrUndefined(obj);
 }

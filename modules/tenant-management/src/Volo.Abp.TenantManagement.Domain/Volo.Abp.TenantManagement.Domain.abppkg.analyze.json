@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.Domain",
-  "hash": "d955af240e89637de32065b2e7512ba6",
+  "hash": "544cd2646fa5aefb1b053044cb6f05ac",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
@@ -27,7 +27,7 @@
     {
       "namespace": "Volo.Abp.TenantManagement",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.TenantManagement",
         "primaryKeyType": "Guid",
         "summary": null,

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.Domain",
-  "hash": "6aed5a285610c53b3714ba717d73d675",
+  "hash": "db626b114b15f02f09d50652c81d3bb8",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement",
@@ -10,7 +10,7 @@
     {
       "namespace": "Volo.Abp.PermissionManagement",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.PermissionManagement",
         "primaryKeyType": "Guid",
         "summary": null,

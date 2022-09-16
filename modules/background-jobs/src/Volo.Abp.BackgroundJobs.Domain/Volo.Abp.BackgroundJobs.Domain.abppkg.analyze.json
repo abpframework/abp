@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.Domain",
-  "hash": "1398bbe3f228b2bfd0baec6a64c03b43",
+  "hash": "edcb98cb920b6d3805b6ff82d280b1bd",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs",
@@ -19,7 +19,7 @@
     {
       "namespace": "Volo.Abp.BackgroundJobs",
       "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.BackgroundJobs",
         "primaryKeyType": "Guid",
         "summary": null,
