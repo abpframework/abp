@@ -161,11 +161,11 @@ ABP可以[动态](../API/Dynamic-CSharp-API-Clients.md)或[静态](../API/Static
 
 ## 分布式事件总线集成
 
-[ABP的分布式事件总线](../Distributed-Event-Bus.md)系统提供了一个方便的抽象,允许应用程序通过事件异步通信.ABP与各种分布式消息系统(如RabbitMQ,Kafka和Azure)的集成包.Dapr也有一个[发布和订阅构建块](https://docs.dapr.io/developing-applications/building-blocks/pubsub/pubsub-overview/),用于相同的目的:分布式消息/事件.
+[ABP的分布式事件总线](../Distributed-Event-Bus.md)系统提供了一个方便的抽象,允许应用程序通过事件异步通信.ABP提供了各种分布式消息系统(如RabbitMQ,Kafka和Azure)的集成包.Dapr也有一个[发布和订阅构建块](https://docs.dapr.io/developing-applications/building-blocks/pubsub/pubsub-overview/),用于相同的目的:分布式消息/事件.
 
 ABP的[Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr)和[Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus)包可以使用Dapr基础设施来实现ABP的分布式事件总线.
 
-[Volo.Abp.EventBus.Dapr]包可以被任何类型的应用程序(例如,控制台或ASP.NET Core应用程序)通过Dapr发布事件.为了能够接收消息(通过订阅事件),你需要安装[Volo.Abp.AspNetCore.Mvc.Dapr.EventBus]包,并且你的应用程序应该是ASP.NET Core应用程序.
+任何类型的应用程序(例如,控制台或ASP.NET Core应用程序)都可以使用[Volo.Abp.EventBus.Dapr]包通过Dapr发布事件.为了能够接收消息(通过订阅事件),你需要安装[Volo.Abp.AspNetCore.Mvc.Dapr.EventBus]包,并且你的应用程序应该是ASP.NET Core应用程序.
 
 ### 安装
 
@@ -322,7 +322,7 @@ ABP提供了一个[分布式锁](../Distributed-Locking.md)抽象来控制多个
 
 ### 安装
 
-使用ABP CLI将[Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Vol
+使用ABP CLI将[Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr)NuGet包添加到项目(客户端):
 
 * 安装[ABP CLI](https://docs.abp.io/en/abp/latest/CLI)如果你之前没有安装过.
 * 在你想要添加`Volo.Abp.DistributedLocking.Dapr`包的`.csproj`文件所在的目录中打开命令行(终端).
