@@ -52,7 +52,8 @@ public static class AuditingInterceptorRegistrar
 
         if (typeof(IAuditingEnabled).IsAssignableFrom(type))
         {
-            if (ignoreIntegrationServiceAttribute || !type.IsDefined(typeof(IntegrationServiceAttribute), true))
+            if (ignoreIntegrationServiceAttribute || 
+                !IntegrationServiceAttribute.IsDefinedOrInherited(type))
             {
                 return true;
             }
