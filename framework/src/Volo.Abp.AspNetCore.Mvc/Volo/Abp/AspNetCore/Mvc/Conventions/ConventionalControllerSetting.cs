@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Conventions;
@@ -48,6 +49,11 @@ public class ConventionalControllerSetting
     [CanBeNull]
     public Func<Type, bool> TypePredicate { get; set; }
 
+    /// <summary>
+    /// Default value: All.
+    /// </summary>
+    public ApplicationServiceTypes ApplicationServiceTypes { get; set; } = ApplicationServiceTypes.All;
+
     [CanBeNull]
     public Action<ControllerModel> ControllerModelConfigurer { get; set; }
 
@@ -78,6 +84,7 @@ public class ConventionalControllerSetting
     {
         var types = Assembly.GetTypes()
             .Where(IsRemoteService)
+            .Where(IsPreferredApplicationServiceType)
             .WhereIf(TypePredicate != null, TypePredicate);
 
         foreach (var type in types)
@@ -85,7 +92,7 @@ public class ConventionalControllerSetting
             ControllerTypes.Add(type);
         }
     }
-
+    
     public IReadOnlyList<Type> GetControllerTypes()
     {
         return ControllerTypes.ToImmutableList();
@@ -110,5 +117,25 @@ public class ConventionalControllerSetting
         }
 
         return false;
+    }
+    
+    private bool IsPreferredApplicationServiceType(Type type)
+    {
+        if (ApplicationServiceTypes == ApplicationServiceTypes.All)
+        {
+            return true;
+        }
+
+        if (ApplicationServiceTypes == ApplicationServiceTypes.ApplicationServices)
+        {
+            return !type.IsDefined(typeof(IntegrationServiceAttribute));
+        }
+        
+        if (ApplicationServiceTypes == ApplicationServiceTypes.IntegrationServices)
+        {
+            return type.IsDefined(typeof(IntegrationServiceAttribute));
+        }
+
+        return true;
     }
 }
