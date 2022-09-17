@@ -32,7 +32,7 @@ public abstract class EntityCacheBase<TEntity, TEntityCacheItem, TKey> :
     {
         return await Cache.GetOrAddAsync(
             id,
-            async () => MapToCacheItem(await Repository.FindAsync(id))
+            async () => MapToCacheItem(await Repository.GetAsync(id))
         );
     }
 
