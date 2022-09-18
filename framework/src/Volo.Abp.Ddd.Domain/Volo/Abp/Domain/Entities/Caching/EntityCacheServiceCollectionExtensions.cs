@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Volo.Abp.Domain.Entities.Caching;
 
@@ -8,11 +9,12 @@ public static class EntityCacheServiceCollectionExtensions
         this IServiceCollection services) 
         where TEntity : Entity<TKey>
     {
-        return services
-            .AddTransient<
+        services
+            .TryAddTransient<
                 IEntityCache<TEntity, TKey>,
                 EntityCacheWithoutCacheItem<TEntity, TKey>
             >();
+        return services;
     }
     
     public static IServiceCollection AddEntityCache<TEntity, TEntityCacheItem, TKey>(
@@ -20,11 +22,12 @@ public static class EntityCacheServiceCollectionExtensions
         where TEntity : Entity<TKey>
         where TEntityCacheItem : class
     {
-        return services
-            .AddTransient<
+        services
+            .TryAddTransient<
                 IEntityCache<TEntityCacheItem, TKey>,
                 EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey>
             >();
+        return services;
     }
 
     public static IServiceCollection AddEntityCache<TObjectMapperContext, TEntity, TEntityCacheItem, TKey>(
@@ -32,10 +35,11 @@ public static class EntityCacheServiceCollectionExtensions
         where TEntity : Entity<TKey>
         where TEntityCacheItem : class
     {
-        return services
-            .AddTransient<
+        services
+            .TryAddTransient<
                 IEntityCache<TEntityCacheItem, TKey>,
                 EntityCacheWithObjectMapperContext<TObjectMapperContext, TEntity, TEntityCacheItem, TKey>
             >();
+        return services;
     }
 }
