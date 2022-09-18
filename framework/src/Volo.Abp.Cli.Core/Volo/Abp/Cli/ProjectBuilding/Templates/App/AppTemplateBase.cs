@@ -219,12 +219,12 @@ public abstract class AppTemplateBase : TemplateInfo
     {
         if (context.BuildArgs.Theme is not Theme.Lepton && IsPro())
         {
-            steps.Add(new RemoveFoldersStep("/wwwroot/images/logo/lepton"));
+            steps.Add(new RemoveFilesStep("/wwwroot/images/logo/lepton"));
         }
         
         if (context.BuildArgs.Theme is not Theme.LeptonX or Theme.LeptonXLite)
         {
-            steps.Add(new RemoveFoldersStep("/wwwroot/images/logo/leptonx"));
+            steps.Add(new RemoveFilesStep("/wwwroot/images/logo/leptonx"));
         }
     }
 
