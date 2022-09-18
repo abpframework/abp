@@ -4,7 +4,7 @@
 
 In this second part, I will show how to consume the gRPC service from the Blazor WebAssembly application, using the gRPC-Web technology.
 
-This will be a short article, based on Microsoft's [gRPC-Web in ASP.NET Core gRPC apps](https://learn.microsoft.com/en-us/aspnet/core/grpc/grpcweb) and [Code-first gRPC services and clients with .NET](https://learn.microsoft.com/en-us/aspnet/core/grpc/code-first) documents. For more information, I suggest to check these documents. Let's get start...
+This will be a short article, based on Microsoft's [gRPC-Web in ASP.NET Core gRPC apps](https://learn.microsoft.com/en-us/aspnet/core/grpc/grpcweb) and [Code-first gRPC services and clients with .NET](https://learn.microsoft.com/en-us/aspnet/core/grpc/code-first) documents. For more information, I suggest to check these documents. Let's get started...
 
 ## Configuring the Server Side
 
@@ -53,5 +53,69 @@ Anyway, that's all on the server-side. We can work on he client now.
 
 ### Add Client-side Nuget Packages
 
-Add [Grpc.Net.Client](https://www.nuget.org/packages/Grpc.Net.Client), [Grpc.Net.Client.Web](https://www.nuget.org/packages/Grpc.Net.Client.Web) and [protobuf-net.Grpc](https://www.nuget.org/packages/protobuf-net.Grpc) NuGet packages to the `ProductManagement.Blazor` project.
+Add [Grpc.Net.Client](https://www.nuget.org/packages/Grpc.Net.Client), [Grpc.Net.Client.Web](https://www.nuget.org/packages/Grpc.Net.Client.Web) and [protobuf-net.Grpc](https://www.nuget.org/packages/protobuf-net.Grpc) NuGet packages to the `ProductManagement.Blazor` project. We are ready to consume the gRPC services.
 
+### Consume the Product Service
+
+Change the `Pages/Index.razor.cs` file's content with the following code block:
+
+````csharp
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Grpc.Net.Client;
+using Grpc.Net.Client.Web;
+using ProductManagement.Products;
+using ProtoBuf.Grpc.Client;
+
+namespace ProductManagement.Blazor.Pages;
+
+public partial class Index
+{
+    private List<ProductDto> Products { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var channel = GrpcChannel.ForAddress("https://localhost:10042", new GrpcChannelOptions
+        {
+            HttpHandler = new GrpcWebHandler(new HttpClientHandler())
+        });
+
+        var productAppService = channel.CreateGrpcService<IProductAppService>();
+        Products = await productAppService.GetListAsync();
+    }
+}
+````
+
+* We've created a gRPC channel for the server-side endpoint (surely, you get the address from a configuration) with channel options by specifying that we will use the `GrpcWebHandler`.
+* We've created a service proxy object using the `CreateGrpcService` extension method that is defined by the [protobuf-net.Grpc](https://www.nuget.org/packages/protobuf-net.Grpc) NuGet package.
+* We've used the service proxy object, `productAppService`, to consume remote endpoint just like a local service.
+
+That's all. If we want to show the products on the page, we can add the following markup into the `Pages/Index.razor` view:
+
+````xml
+<h2>A list of products:</h2>
+
+<ul class="list-group">
+    @foreach(var product in Products)
+    {
+        <li class="list-group-item">
+            @product.Name <br/>
+            <small>@product.Id.ToString()</small>
+        </li>
+    }
+</ul>
+````
+
+Run the applications (first run the `ProductManagement.HttpApi.Host` project, then run the `ProductManagement.Blazor` project in the solution) to see it in action:
+
+![blazor-product-list](blazor-product-list.png)
+
+## Conclusion
+
+In the first part of this article, I'd demonstrated how to implement a gRPC service and consume it in a client application, using the [code-first approach](https://docs.microsoft.com/en-us/aspnet/core/grpc/code-first). In this article, I've demonstrated how to consume the same gRPC service from a Blazor WebAssembly application, using the [gRPC-Web](https://learn.microsoft.com/en-us/aspnet/core/grpc/grpcweb) technology. As you see in these two articles, using gRPC with the ABP Framework is straightforward.
+
+## The Source Code 
+
+- You can find the completed source code here: https://github.com/abpframework/abp-samples/tree/master/GrpcDemo2
+- You can also see all the changes I've done in this article here: https://github.com/abpframework/abp-samples/pull/201/files
