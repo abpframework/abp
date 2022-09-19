@@ -13,6 +13,7 @@
     "SelfRegistrationDisabledMessage": "Tự đăng ký người dùng bị vô hiệu hóa cho ứng dụng này. Liên hệ với quản trị viên ứng dụng để đăng ký người dùng mới.",
     "LocalLoginDisabledMessage": "Đăng nhập cục bộ bị vô hiệu hóa cho ứng dụng này.",
     "Login": "Đăng nhập",
+    "Cancel": "Hủy bỏ",
     "Register": "Đăng ký",
     "AreYouANewUser": "Bạn có phải là người dùng mới?",
     "AlreadyRegistered": "Đã đăng ký?",

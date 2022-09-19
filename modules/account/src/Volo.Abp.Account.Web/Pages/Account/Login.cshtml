@@ -39,6 +39,10 @@
                 </abp-row>
                 <div class="d-grid gap-2">
                     <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
+                    @if (Model.ShowCancelButton)
+                    {
+                        <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
+                    }
                 </div>
             </form>
         }

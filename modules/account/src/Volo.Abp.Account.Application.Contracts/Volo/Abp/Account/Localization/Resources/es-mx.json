@@ -12,6 +12,7 @@
     "LoginIsNotAllowed": "¡No está permitido iniciar sesión! Su cuenta está inactiva o necesita confirmar su correo electrónico/número de teléfono.",
     "SelfRegistrationDisabledMessage": "El autoregistro de usuario está deshabilitado para esta aplicación. Póngase en contacto con el administrador de la aplicación para registrar un nuevo usuario.",
     "Login": "Iniciar sesión",
+    "Cancel": "Cancelar",
     "Register": "Registrar",
     "InvalidLoginRequest": "Solicitud de inicio de sesión no válido",
     "ThereAreNoLoginSchemesConfiguredForThisClient": "No hay ningún inicio de sesión esquemas configurado para este cliente.",

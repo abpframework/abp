@@ -14,6 +14,7 @@
     "SelfRegistrationDisabledMessage": "L'auto-registrazione è disabilitata per questa applicazione. Contatta l'amministratore dell'applicazione per richiedere la registrazione.",
     "LocalLoginDisabledMessage": "L'accesso locale è disabilitato per questa applicazione.",
     "Login": "Accedi",
+    "Cancel": "Annulla",
     "Register": "Registrati",
     "AreYouANewUser": "Sei un nuovo utente?",
     "AlreadyRegistered": "Già registrato?",

@@ -13,6 +13,7 @@
     "SelfRegistrationDisabledMessage": "Înregistrarea personală este dezactivată pentru această aplicaţie. Vă rugăm să contactaţi administratorul aplicaţiei pentru a înregistra un nou utilizator.",
     "LocalLoginDisabledMessage": "Autentificarea locală este dezactivată pentru această aplicaţie.",
     "Login": "Autentificare",
+    "Cancel": "Anulează",
     "Register": "Înregistrare",
     "AreYouANewUser": "Sunteţi un utilizator nou?",
     "AlreadyRegistered": "Deja înregistrat?",

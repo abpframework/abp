@@ -14,6 +14,7 @@
     "SelfRegistrationDisabledMessage": "L'auto-inscription est désactivée pour cette application. Veuillez contacter l'administrateur de l'application pour enregistrer un nouvel utilisateur.",
     "LocalLoginDisabledMessage": "La connexion locale est désactivée pour cette application.",
     "Login": "Connectez-vous",
+    "Cancel": "Annuler",
     "Register": "S'inscrire",
     "AreYouANewUser": "Êtes-vous un nouvel utilisateur?",
     "AlreadyRegistered": "Déjà inscrit?",

@@ -13,6 +13,7 @@
     "SelfRegistrationDisabledMessage": "Rejestracja użytkowników jest wyłączona dla tej aplikacji. Skontaktuj się z administratorem aplikacji w celu rejestracji nowego użytkownika.",
     "LocalLoginDisabledMessage": "Logowanie lokalne jest wyłączone dla tej aplikacji.",
     "Login": "Zaloguj",
+    "Cancel": "Anuluj",
     "Register": "Zarejestruj",
     "AreYouANewUser": "Czy jesteś nowym użytkownikiem?",
     "AlreadyRegistered": "Już zarejestrowany?",

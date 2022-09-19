@@ -54,6 +54,8 @@ public class IdentityServerSupportedLoginModel : LoginModel
 
         if (context != null)
         {
+            ShowCancelButton = true;
+
             LoginInput.UserNameOrEmailAddress = context.LoginHint;
 
             //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
@@ -102,6 +104,20 @@ public class IdentityServerSupportedLoginModel : LoginModel
     public override async Task<IActionResult> OnPostAsync(string action)
     {
         var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
+        if (action == "Cancel")
+        {
+            if (context == null)
+            {
+                return Redirect("~/");
+            }
+
+            await Interaction.GrantConsentAsync(context, new ConsentResponse()
+            {
+                Error = AuthorizationError.AccessDenied
+            });
+
+            return Redirect(ReturnUrl);
+        }
 
         await CheckLocalLoginAsync();
 

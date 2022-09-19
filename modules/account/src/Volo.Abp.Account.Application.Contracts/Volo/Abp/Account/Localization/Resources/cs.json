@@ -13,6 +13,7 @@
     "SelfRegistrationDisabledMessage": "Vlastní registrace uživatele není povolena. K vytvoření účtu kontaktujte správce.",
     "LocalLoginDisabledMessage": "Místní přihlášení je pro tuto aplikaci zakázáno.",
     "Login": "Přihlásit",
+    "Cancel": "Zrušit",
     "Register": "Registrovat",
     "AreYouANewUser": "Jste nový uživatel?",
     "AlreadyRegistered": "Jste už zaregistrovaní?",

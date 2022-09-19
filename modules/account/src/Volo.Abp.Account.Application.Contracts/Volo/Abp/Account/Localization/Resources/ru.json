@@ -13,6 +13,7 @@
     "SelfRegistrationDisabledMessage": "Самостоятельная регистрация не предусмотрена. Пожалуйста, свяжитесь с администраром для получения доступа.",
     "LocalLoginDisabledMessage": "Локальный вход отключен.",
     "Login": "Войти",
+    "Cancel": "Отмена",
     "Register": "Регистрация",
     "AreYouANewUser": "Новый пользователь?",
     "AlreadyRegistered": "Уже зарегистрированы?",

@@ -14,6 +14,7 @@
     "SelfRegistrationDisabledMessage": "应用程序未开放注册,请联系管理员添加新用户.",
     "LocalLoginDisabledMessage": "应用程序未开放本地账户登录.",
     "Login": "登录",
+    "Cancel": "取消",
     "Register": "注册",
     "AreYouANewUser": "你是新用户吗?",
     "AlreadyRegistered": "已经注册过了?",

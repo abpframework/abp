@@ -14,6 +14,7 @@
     "SelfRegistrationDisabledMessage": "El autoregistro de usuario está deshabilitado para esta aplicación. Póngase en contacto con el administrador de la aplicación para registrar un nuevo usuario.",
     "LocalLoginDisabledMessage": "Inicio de sesión local ha sido deshabilitado para esta aplicación",
     "Login": "Iniciar sesión",
+    "Cancel": "Cancelar",
     "Register": "Registrarse",
     "AreYouANewUser": "¿Eres un usuario nuevo?",
     "AlreadyRegistered": "¿Ya esta registrado?",

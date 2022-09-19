@@ -53,6 +53,8 @@ public class LoginModel : AccountPageModel
     protected AbpAccountOptions AccountOptions { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
 
+    public bool ShowCancelButton { get; set; }
+
     public LoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions,
