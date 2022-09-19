@@ -8,7 +8,7 @@ In this article, I will show you how to create a gRPC service and consume it fro
 
 ## Creating the Application
 
-> I will use the ABP version 6.0 for this article. I am using the 6.0.0-rc.4 version since the stable version hasn't been published at the time I am writing this article. If it is released while you're reading this, do not specify the `--version` and `--preview` parameters in the following commands.
+> I will use ABP version 6.0 for this article. I am using the 6.0.0-rc.4 version since the stable version hasn't been published at the time I am writing this article. If it is released while you're reading this, do not specify the `--version` and `--preview` parameters in the following commands.
 
 Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed it yet:
 
@@ -16,7 +16,7 @@ Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't inst
 dotnet tool install -g Volo.Abp.Cli --version 6.0.0-rc.4
 ````
 
-or update to the version 6.0.0-rc.4 if you've already installed a previous version:
+or update to version 6.0.0-rc.4 if you've already installed a previous version:
 
 ````bash
 dotnet tool update Volo.Abp.Cli -g --version 6.0.0-rc.4
@@ -40,7 +40,7 @@ Run the `ProductManagement.DbMigrator` project (a console application) to create
 
 ## Defining the Service Contract
 
-We are starting by defining the service contract and DTO classes those will be shared between the server and the client applications.
+We are starting by defining the service contract and DTO classes that will be shared between the server and the client applications.
 
 Create a `Products` folder in the `ProductManagement.Application.Contracts` project and add a new interface named `IProductAppService`:
 
@@ -67,7 +67,7 @@ Your IDE will complain about the `[ServiceContract]` attribute, but it is necess
 
 Or you can use your IDE to find and add that NuGet package, it is up to you.
 
-I've also used `ProductDto` class, but not defined yet. Create a new class in the same folder with the `IProductAppService` file:
+I've also used the `ProductDto` class, but haven't defined it yet. Create a new class in the same folder with the `IProductAppService` file:
 
 ````csharp
 using System;
@@ -86,13 +86,13 @@ public class ProductDto
 }
 ````
 
-`[DataContract]` and `[DataMember]` properties are needed for serialization. In gRPC, property serialization orders are important, because property names are not transferred to the target application, to keep the serialized data small.
+The `[DataContract]` and `[DataMember]` properties are needed for serialization. In gRPC, property serialization orders are important, because property names are not transferred to the target application, to keep the serialized data small.
 
-After adding these classes, `ProductManagement.Application.Contracts` project should look like in the following figure:
+After adding these classes, the `ProductManagement.Application.Contracts` project should look as in the following figure:
 
 ![contracts](contracts.png)
 
-Contracts part is over. We actually didn't have any dependency to gRPC at that point. Our service and DTOs are pretty plain classes, except a few standard attributes, which are already defined in the .NET Core framework. Now, we can implement the `IProductAppService`.
+The contracts part is over. We actually didn't have any dependency to gRPC at that point. Our service and DTOs are pretty plain classes, except a few standard attributes, which are already defined in the .NET Core framework. Now, we can implement the `IProductAppService`.
 
 ## Implementing the Service
 
@@ -118,11 +118,11 @@ public class ProductAppService : ProductManagementAppService, IProductAppService
 }
 ````
 
-This is a pretty standard, plain [application service ](https://docs.abp.io/en/abp/latest/Application-Services)class. All the ABP application service features (validation, audit logging, unit of work, etc.) are available. You can inject [repositories](https://docs.abp.io/en/abp/latest/Repositories) and perform database queries. To keep this article simple, I am returning a hard-coded data from here.
+This is a pretty standard, plain [application service ](https://docs.abp.io/en/abp/latest/Application-Services)class. All the ABP application service features (validation, audit logging, unit of work, etc.) are available. You can inject [repositories](https://docs.abp.io/en/abp/latest/Repositories) and perform database queries. To keep this article simple, I am returning hard-coded data from here.
 
 > `ProductManagementAppService` is a base class coming in the ABP startup template. While you don't have to inherit from it, it provides useful base properties and methods you typically need in an application service.
 
-Application service part is over. Again, we didn't write any gRPC specific code. Don't worry, we will write in the next section.
+The application service part is over. Again, we didn't write any gRPC specific code. Don't worry, we will write in the next section.
 
 ## Configuring the gRPC Server
 
@@ -153,7 +153,7 @@ We've configured the `IProductAppService` to handle gRPC requests to that servic
 
 ![host-changes-1](host-changes-1.png)
 
-gRPC handles request with the HTTP/2 protocol and should listen an endpoint other than the default HTTP endpoint used by the application. We can easily configure the Kestrel server to listen two endpoints, one for our HTTP APIs, the other one for gRPC services. Add the following configuration inside the `appsettings.json` file of the `ProductManagement.HttpApi.Host` project:
+gRPC handles requests with the HTTP/2 protocol and should listen an endpoint other than the default HTTP endpoint used by the application. We can easily configure the Kestrel server to listen two endpoints, one for our HTTP APIs, the other one for gRPC services. Add the following configuration inside the `appsettings.json` file of the `ProductManagement.HttpApi.Host` project:
 
 ````json
 "Kestrel": {
@@ -223,7 +223,7 @@ First run the `ProductManagement.HttpApi.Host` application. It should show a Swa
 
 If you see that page, it means your server-side is up and running. Now, you can run the `ProductManagement.HttpApi.Client.ConsoleTestApp` console application to call the gRPC service defined on the server.
 
-Test console application should produce an output like shown below:
+The test console application should produce an output as shown below:
 
 ![client-application](client-application.png)
 
