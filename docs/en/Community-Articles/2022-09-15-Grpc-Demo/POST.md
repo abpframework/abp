@@ -170,6 +170,8 @@ gRPC handles requests with the HTTP/2 protocol and should listen an endpoint oth
 }
 ````
 
+Note that `https://localhost:44388` may be different for your case, since ABP CLI assignes a random port while you're creating a new solution. You can check your port by running the `ProductManagement.HttpApi.Host` project and looking at the address bar on your browser.
+
 The server-side configuration is done. It is ready to receive gRPC requests. Now, we can change the client to consume the gRPC service we've created.
 
 ## Implementing the Client Side
