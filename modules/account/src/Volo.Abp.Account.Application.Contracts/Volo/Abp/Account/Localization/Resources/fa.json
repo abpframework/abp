@@ -14,7 +14,6 @@
     "SelfRegistrationDisabledMessage": "ثبت نام خودکار برای این برنامه غیرفعال است. لطفاً برای ثبت نام کاربر جدید با سرپرست برنامه تماس بگیرید.",
     "LocalLoginDisabledMessage": "ورود محلی برای این برنامه غیرفعال است.",
     "Login": "ورود کاربران",
-    "Cancel": "لغو",
     "Register": "ثبت نام",
     "AreYouANewUser": "قبلا ثبت نام نکرده اید؟",
     "AlreadyRegistered": "قبلاً ثبت نام کرده اید؟",

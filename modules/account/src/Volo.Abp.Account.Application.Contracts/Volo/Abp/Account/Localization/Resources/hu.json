@@ -13,7 +13,6 @@
     "SelfRegistrationDisabledMessage": "Ennél az alkalmazásnál az önregisztráció le van tiltva. Új felhasználó regisztrálásához vegye fel a kapcsolatot az alkalmazás rendszergazdájával.",
     "LocalLoginDisabledMessage": "A helyi bejelentkezés le van tiltva ennél az alkalmazásnál.",
     "Login": "Bejelntkezés",
-    "Cancel": "Mégsem",
     "Register": "Regisztráció",
     "AreYouANewUser": "Őn új felhasználó?",
     "AlreadyRegistered": "Már regisztrált?",

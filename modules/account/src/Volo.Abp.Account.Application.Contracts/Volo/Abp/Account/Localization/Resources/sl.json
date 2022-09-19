@@ -14,7 +14,6 @@
     "SelfRegistrationDisabledMessage": "Možnost lastne registracije uporabnika je onemogočena za to aplikacijo. Kontaktirajte skrbnika aplikacije, da registrirate novega uporabnika.",
     "LocalLoginDisabledMessage": "Lokalna prijava za to aplikacijo je onemogočena.",
     "Login": "Prijava",
-    "Cancel": "Prekliči",
     "Register": "Registracija",
     "AreYouANewUser": "Ste nov uporabnik?",
     "AlreadyRegistered": "Ste že registrirani?",

@@ -13,7 +13,6 @@
     "SelfRegistrationDisabledMessage": "Sjálfsskráning er óvirk fyrir þetta forrit. Vinsamlegast hafðu samband við umsjónarmann hugbúnaðarins til að skrá nýjan notanda.",
     "LocalLoginDisabledMessage": "Staðbundin innskráning er óvirk fyrir þetta forrit.",
     "Login": "Skrá inn",
-    "Cancel": "Hætta við",
     "Register": "Skráðu þig",
     "AreYouANewUser": "Ertu nýr notandi?",
     "AlreadyRegistered": "Nú þegar skráð?",

@@ -14,7 +14,6 @@
     "SelfRegistrationDisabledMessage": "Itserekisteröinti on poistettu käytöstä tälle sovellukselle. Rekisteröi uusi käyttäjä ottamalla yhteyttä sovelluksen järjestelmänvalvojaan.",
     "LocalLoginDisabledMessage": "Paikallinen sisäänkirjautuminen on poistettu käytöstä tälle sovellukselle.",
     "Login": "Kirjaudu sisään",
-    "Cancel": "Peruuttaa",
     "Register": "Rekisteröidy",
     "AreYouANewUser": "Oletko uusi käyttäjä?",
     "AlreadyRegistered": "Jo rekisteröity?",

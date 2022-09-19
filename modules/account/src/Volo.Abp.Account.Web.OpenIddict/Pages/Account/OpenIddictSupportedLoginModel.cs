@@ -34,8 +34,6 @@ public class OpenIddictSupportedLoginModel : LoginModel
         var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
         if (request?.ClientId != null)
         {
-            ShowCancelButton = true;
-
             LoginInput.UserNameOrEmailAddress = request.LoginHint;
 
             //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
@@ -52,25 +50,6 @@ public class OpenIddictSupportedLoginModel : LoginModel
 
     public async override Task<IActionResult> OnPostAsync(string action)
     {
-        if (action == "Cancel")
-        {
-            var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
-
-            var transaction = HttpContext.GetOpenIddictServerTransaction();
-            if (request?.ClientId != null && transaction != null)
-            {
-                transaction.EndpointType = OpenIddictServerEndpointType.Authorization;
-                transaction.Request = request;
-
-                var notification = new OpenIddictServerEvents.ValidateAuthorizationRequestContext(transaction);
-                transaction.SetProperty(typeof(OpenIddictServerEvents.ValidateAuthorizationRequestContext).FullName!, notification);
-
-                return Forbid(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-            }
-
-            return Redirect("~/");
-        }
-
         return await base.OnPostAsync(action);
     }
 

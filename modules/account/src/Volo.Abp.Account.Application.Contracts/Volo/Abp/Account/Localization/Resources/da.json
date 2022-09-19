@@ -13,7 +13,6 @@
     "SelfRegistrationDisabledMessage": "Selvregistrering er deaktiveret for denne applikation. Kontakt venligst applikationens administrator for at registrere en ny bruger.",
     "LocalLoginDisabledMessage": "Lokalt login er deaktiveret for denne appliaktion.",
     "Login": "Login",
-    "Cancel": "Annullér",
     "Register": "Registrér",
     "AreYouANewUser": "Er du ny bruger?",
     "AlreadyRegistered": "Allerede registreret?",

@@ -14,7 +14,6 @@
     "SelfRegistrationDisabledMessage": "Bu uygulama için kullanıcıların kendi kendilerine kaydolmaları engellenmiştir. Yeni bir kullanıcı kaydetmek için lütfen uygulama yöneticisi ile iletişime geçin.",
     "LocalLoginDisabledMessage": "Bu uygulama için local login devre dışı bırakılmıştır.",
     "Login": "Giriş yap",
-    "Cancel": "İptal",
     "Register": "Kayıt ol",
     "AreYouANewUser": "Yeni bir kullanıcı mısınız?",
     "AlreadyRegistered": "Zaten kayıtlı mı?",

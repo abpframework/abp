@@ -14,7 +14,6 @@
     "SelfRegistrationDisabledMessage": "Die Selbstregistrierung ist für diese Anwendung deaktiviert. Bitte wenden Sie sich an den Anwendungsadministrator, um einen neuen Benutzer zu registrieren.",
     "LocalLoginDisabledMessage": "Die lokale Anmeldung ist für diese Anwendung deaktiviert.",
     "Login": "Anmelden",
-    "Cancel": "Abbrechen",
     "Register": "Registrieren",
     "AreYouANewUser": "Sind Sie ein neuer Benutzer",
     "AlreadyRegistered": "Bereits registriert?",

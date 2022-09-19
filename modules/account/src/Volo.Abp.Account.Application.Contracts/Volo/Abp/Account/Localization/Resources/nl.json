@@ -13,7 +13,6 @@
     "SelfRegistrationDisabledMessage": "Zelfregistratie is uitgeschakeld voor deze applicatie. Neem contact op met de applicatiebeheerder om een nieuwe gebruiker te registreren.",
     "LocalLoginDisabledMessage": "Lokale aanmelding is uitgeschakeld voor deze applicatie.",
     "Login": "Log in",
-    "Cancel": "Annuleer",
     "Register": "Registreer",
     "AreYouANewUser": "Bent u een nieuwe gebruiker?",
     "AlreadyRegistered": "Al geregistreerd?",

@@ -14,7 +14,6 @@
     "SelfRegistrationDisabledMessage": "تم تعطيل التسجيل الذاتي لهذا التطبيق. يرجى الاتصال بمسؤول التطبيق لتسجيل مستخدم جديد.",
     "LocalLoginDisabledMessage": "تسجيل الدخول المحلي معطّل لهذا التطبيق.",
     "Login": "دخول",
-    "Cancel": "إلغاء",
     "Register": "تسجيل",
     "AreYouANewUser": "هل أنت مستخدم جديد?",
     "AlreadyRegistered": "مسجل بالفعل?",
