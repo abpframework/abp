@@ -60,6 +60,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   asterisk = '';
 
+  containerClassName = 'mb-3 form-group'
+
   options$: Observable<ABP.Option<any>[]> = of([]);
 
   validators: ValidatorFn[] = [];
@@ -183,7 +185,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges({ prop, data }: SimpleChanges) {
     const currentProp = prop?.currentValue as FormProp;
-    const { options, readonly, disabled, validators, template } = currentProp || {};
+    const { options, readonly, disabled, validators, className, template } = currentProp || {};
     if (template) {
       this.injectorForCustomComponent = Injector.create({
         providers: [
@@ -210,6 +212,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     if (validators) {
       this.validators = validators(this.data);
       this.setAsterisk();
+    }
+    if(className !== undefined){
+      this.containerClassName = className;
     }
 
     const [keyControl, valueControl] = this.getTypeaheadControls();

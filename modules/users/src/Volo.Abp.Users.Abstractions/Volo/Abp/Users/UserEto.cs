@@ -1,11 +1,12 @@
 ﻿using System;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Users;
 
 [EventName("Volo.Abp.Users.User")]
-public class UserEto : IUserData, IHasExtraProperties
+public class UserEto : IUserData, IHasExtraProperties, IMultiTenant
 {
     public Guid Id { get; set; }
 

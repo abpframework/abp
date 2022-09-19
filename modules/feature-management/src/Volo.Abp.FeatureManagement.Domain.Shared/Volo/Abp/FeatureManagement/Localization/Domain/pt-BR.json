@@ -6,6 +6,7 @@
     "ManageHostFeatures": "Gerenciar recursos do Host",
     "Permission:FeatureManagement": "Gerenciamento de recursos",
     "Permission:FeatureManagement.ManageHostFeatures": "Gerenciar recursos do Host",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "O valor do recurso {0} não é válido!"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "O valor do recurso {0} não é válido!",
+		"Menu:FeatureManagement": "Gerenciamento de recursos"
   }
 }

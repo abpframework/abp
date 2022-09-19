@@ -735,6 +735,8 @@
     "ConfirmedEmailAddressRequiredToStartTrial": "你应该有一个确认的电子邮件地址，以便开始试用许可证。",
     "EmailVerificationMailNotSent": "电子邮件验证邮件不能发送。",
     "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">点击这里获取确认邮件</a> 如果你还没有收到。",
-    "WhichLicenseTypeYouAreInterestedIn": "你感兴趣的许可证类型是什么？"
+    "WhichLicenseTypeYouAreInterestedIn": "你感兴趣的许可证类型是什么？",
+    "BlazoriseLicense": "我们是否需要购买Blazorise许可证？",
+    "BlazoriseLicenseExplanation": "我公司Volosoft和公司Megabit之间有合作协议，根据此协议，购买将同时包含了Blazorise许可证与ABP商业产品，因此我们的客户不需要再额外购买Blazorise许可证。"
   }
 }
