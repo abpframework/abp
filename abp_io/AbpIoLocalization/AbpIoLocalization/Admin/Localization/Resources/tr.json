@@ -357,7 +357,7 @@
     "LicensePrice": "Lisans ücreti",
     "FirstName": "Adı",
     "Activate": "Aktif",
-    "ActivateTrialLicenseWarningMessage": " Bir deneme lisansını etkinleştirdiğinizde, kullanıcıya bir karşılama e-postası gönderilecektir. Etkinleştirmek istiyor musunuz?",
+    "ActivateTrialLicenseWarningMessage": "Bir deneme lisansını etkinleştirdiğinizde, kullanıcıya bir karşılama e-postası gönderilecektir. Etkinleştirmek istiyor musunuz?",
     "ActivateTrialLicenseSuccessMessage": "Deneme lisansı başarıyla etkinleştirildi!",
     "PaymentRequestId": "Ödeme talep kimliği",
     "PurchaseDate": "Satın alma tarihi",
