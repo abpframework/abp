@@ -14,8 +14,6 @@ public class AbpFeatureManagementEntityFrameworkCoreModule : AbpModule
     {
         context.Services.AddAbpDbContext<FeatureManagementDbContext>(options =>
         {
-            options.AddRepository<FeatureGroupDefinitionRecord, EfCoreFeatureGroupDefinitionRecordRepository>();
-            options.AddRepository<FeatureDefinitionRecord, EfCoreFeatureDefinitionRecordRepository>();
             options.AddDefaultRepositories<IFeatureManagementDbContext>();
 
             options.AddRepository<FeatureValue, EfCoreFeatureValueRepository>();

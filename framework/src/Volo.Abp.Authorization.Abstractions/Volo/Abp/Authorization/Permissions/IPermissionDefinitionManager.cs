@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Authorization.Permissions;
 
 public interface IPermissionDefinitionManager
 {
-    [ItemNotNull]
-    Task<PermissionDefinition> GetAsync([NotNull] string name);
+    [NotNull]
+    PermissionDefinition Get([NotNull] string name);
 
-    [ItemCanBeNull]
-    Task<PermissionDefinition> GetOrNullAsync([NotNull] string name);
+    [CanBeNull]
+    PermissionDefinition GetOrNull([NotNull] string name);
 
-    Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync();
+    IReadOnlyList<PermissionDefinition> GetPermissions();
 
-    Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync();
+    IReadOnlyList<PermissionGroupDefinition> GetGroups();
 }

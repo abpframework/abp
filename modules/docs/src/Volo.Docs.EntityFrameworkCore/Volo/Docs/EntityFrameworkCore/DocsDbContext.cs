@@ -8,7 +8,7 @@ using Volo.Docs.Projects;
 namespace Volo.Docs.EntityFrameworkCore
 {
     [IgnoreMultiTenancy]
-    [ConnectionStringName(AbpDocsDbProperties.ConnectionStringName)]
+    [ConnectionStringName(DocsDbProperties.ConnectionStringName)]
     public class DocsDbContext: AbpDbContext<DocsDbContext>, IDocsDbContext
     {
         public DbSet<Project> Projects { get; set; }

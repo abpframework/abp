@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using IdentityServer4.Configuration;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
@@ -72,7 +71,13 @@ public class AbpIdentityServerDomainModule : AbpModule
         var configuration = services.GetConfiguration();
         var builderOptions = services.ExecutePreConfiguredActions<AbpIdentityServerBuilderOptions>();
 
-        var identityServerBuilder = AddIdentityServer(services, builderOptions);
+        var identityServerBuilder = services.AddIdentityServer(options =>
+        {
+            options.Events.RaiseErrorEvents = true;
+            options.Events.RaiseInformationEvents = true;
+            options.Events.RaiseFailureEvents = true;
+            options.Events.RaiseSuccessEvents = true;
+        });
 
         if (builderOptions.AddDeveloperSigningCredential)
         {
@@ -103,37 +108,6 @@ public class AbpIdentityServerDomainModule : AbpModule
             identityServerBuilder.AddInMemoryApiResources(configuration.GetSection("IdentityServer:ApiResources"));
             identityServerBuilder.AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"));
         }
-    }
-
-    private static IIdentityServerBuilder AddIdentityServer(IServiceCollection services, AbpIdentityServerBuilderOptions abpIdentityServerBuilderOptions)
-    {
-        services.Configure<IdentityServerOptions>(options =>
-        {
-            options.Events.RaiseErrorEvents = true;
-            options.Events.RaiseInformationEvents = true;
-            options.Events.RaiseFailureEvents = true;
-            options.Events.RaiseSuccessEvents = true;
-        });
-
-        var identityServerBuilder = services.AddIdentityServerBuilder()
-            .AddRequiredPlatformServices()
-            .AddCoreServices()
-            .AddDefaultEndpoints()
-            .AddPluggableServices()
-            .AddValidators()
-            .AddResponseGenerators()
-            .AddDefaultSecretParsers()
-            .AddDefaultSecretValidators();
-
-        if (abpIdentityServerBuilderOptions.AddIdentityServerCookieAuthentication)
-        {
-            identityServerBuilder.AddCookieAuthentication();
-        }
-
-        // provide default in-memory implementation, not suitable for most production scenarios
-        identityServerBuilder.AddInMemoryPersistedGrants();
-
-        return identityServerBuilder;
     }
 
     public override void PostConfigureServices(ServiceConfigurationContext context)

@@ -6,7 +6,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions;
 
-public class PermissionGroupDefinition : ICanAddChildPermission
+public class PermissionGroupDefinition //TODO: Consider to make possible a group have sub groups
 {
     /// <summary>
     /// Unique name of the group.
@@ -20,6 +20,12 @@ public class PermissionGroupDefinition : ICanAddChildPermission
         set => _displayName = Check.NotNull(value, nameof(value));
     }
     private ILocalizableString _displayName;
+
+    /// <summary>
+    /// MultiTenancy side.
+    /// Default: <see cref="MultiTenancySides.Both"/>
+    /// </summary>
+    public MultiTenancySides MultiTenancySide { get; set; }
 
     public IReadOnlyList<PermissionDefinition> Permissions => _permissions.ToImmutableList();
     private readonly List<PermissionDefinition> _permissions;
@@ -39,17 +45,19 @@ public class PermissionGroupDefinition : ICanAddChildPermission
 
     protected internal PermissionGroupDefinition(
         string name,
-        ILocalizableString displayName = null)
+        ILocalizableString displayName = null,
+        MultiTenancySides multiTenancySide = MultiTenancySides.Both)
     {
         Name = name;
         DisplayName = displayName ?? new FixedLocalizableString(Name);
+        MultiTenancySide = multiTenancySide;
 
         Properties = new Dictionary<string, object>();
         _permissions = new List<PermissionDefinition>();
     }
 
     public virtual PermissionDefinition AddPermission(
-        [NotNull] string name,
+        string name,
         ILocalizableString displayName = null,
         MultiTenancySides multiTenancySide = MultiTenancySides.Both,
         bool isEnabled = true)

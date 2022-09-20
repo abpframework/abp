@@ -13,8 +13,6 @@ public class AbpRabbitMqEventBusOptions
     public string ExchangeName { get; set; }
 
     public string ExchangeType { get; set; }
-    
-    public ushort? PrefetchCount { get; set; }
 
     public string GetExchangeTypeOrDefault()
     {

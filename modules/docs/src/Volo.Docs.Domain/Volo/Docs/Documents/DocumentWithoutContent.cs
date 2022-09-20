@@ -7,8 +7,6 @@ namespace Volo.Docs.Documents
         public Guid Id { get; set; }
         
         public virtual Guid ProjectId { get; set; }
-        
-        public virtual string ProjectName { get; set; }
 
         public virtual string Name { get; set; }
 

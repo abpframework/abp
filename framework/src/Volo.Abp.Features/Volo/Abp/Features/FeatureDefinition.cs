@@ -7,7 +7,7 @@ using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.Features;
 
-public class FeatureDefinition : ICanCreateChildFeature
+public class FeatureDefinition
 {
     /// <summary>
     /// Unique name of the feature.
@@ -176,17 +176,6 @@ public class FeatureDefinition : ICanCreateChildFeature
 
         featureToRemove.Parent = null;
         _children.Remove(featureToRemove);
-    }
-
-    public FeatureDefinition CreateChildFeature(string name,
-        string defaultValue = null,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
-        IStringValueType valueType = null,
-        bool isVisibleToClients = true,
-        bool isAvailableToHost = true)
-    {
-        return this.CreateChild(name, defaultValue, displayName, description, valueType, isVisibleToClients, isAvailableToHost);
     }
 
     public override string ToString()

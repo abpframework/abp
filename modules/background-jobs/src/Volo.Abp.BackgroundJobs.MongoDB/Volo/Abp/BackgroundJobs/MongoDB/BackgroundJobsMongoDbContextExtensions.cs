@@ -11,7 +11,7 @@ public static class BackgroundJobsMongoDbContextExtensions
 
         builder.Entity<BackgroundJobRecord>(b =>
         {
-            b.CollectionName = AbpBackgroundJobsDbProperties.DbTablePrefix + "BackgroundJobs";
+            b.CollectionName = BackgroundJobsDbProperties.DbTablePrefix + "BackgroundJobs";
         });
     }
 }

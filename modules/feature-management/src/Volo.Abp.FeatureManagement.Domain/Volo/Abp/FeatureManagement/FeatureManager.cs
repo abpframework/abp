@@ -29,7 +29,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         StringLocalizerFactory = stringLocalizerFactory;
         Options = options.Value;
 
-        //TODO: Instead, use IServiceScopeFactory and create a scope..?
+        //TODO: Instead, use IHybridServiceScopeFactory and create a scope..?
 
         _lazyProviders = new Lazy<List<IFeatureManagementProvider>>(
             () => Options
@@ -75,7 +75,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
     {
         Check.NotNull(providerName, nameof(providerName));
 
-        var featureDefinitions = await FeatureDefinitionManager.GetAllAsync();
+        var featureDefinitions = FeatureDefinitionManager.GetAll();
         var providers = Enumerable.Reverse(Providers).SkipWhile(c => c.Name != providerName);
 
         if (!fallback)
@@ -130,7 +130,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         Check.NotNull(name, nameof(name));
         Check.NotNull(providerName, nameof(providerName));
 
-        var feature = await FeatureDefinitionManager.GetAsync(name);
+        var feature = FeatureDefinitionManager.Get(name);
 
         if (feature.ValueType?.Validator.IsValid(value) == false)
         {
@@ -186,7 +186,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         string providerKey,
         bool fallback = true) //TODO: Fallback is not used
     {
-        var feature = await FeatureDefinitionManager.GetAsync(name);
+        var feature = FeatureDefinitionManager.Get(name);
         var providers = Enumerable
             .Reverse(Providers);
 

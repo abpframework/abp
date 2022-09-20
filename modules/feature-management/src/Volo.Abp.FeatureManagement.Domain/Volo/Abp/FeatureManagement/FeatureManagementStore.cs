@@ -87,7 +87,7 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
         string currentName,
         FeatureValueCacheItem currentCacheItem)
     {
-        var featureDefinitions = await FeatureDefinitionManager.GetAllAsync();
+        var featureDefinitions = FeatureDefinitionManager.GetAll();
         var featuresDictionary = (await FeatureValueRepository.GetListAsync(providerName, providerKey))
             .ToDictionary(s => s.Name, s => s.Value);
 

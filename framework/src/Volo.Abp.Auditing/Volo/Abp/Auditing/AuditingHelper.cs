@@ -52,7 +52,7 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
         CorrelationIdProvider = correlationIdProvider;
     }
 
-    public virtual bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false, bool ignoreIntegrationServiceAttribute = false)
+    public virtual bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false)
     {
         if (methodInfo == null)
         {
@@ -77,7 +77,7 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
         var classType = methodInfo.DeclaringType;
         if (classType != null)
         {
-            var shouldAudit = AuditingInterceptorRegistrar.ShouldAuditTypeByDefaultOrNull(classType, ignoreIntegrationServiceAttribute);
+            var shouldAudit = AuditingInterceptorRegistrar.ShouldAuditTypeByDefaultOrNull(classType);
             if (shouldAudit != null)
             {
                 return shouldAudit.Value;

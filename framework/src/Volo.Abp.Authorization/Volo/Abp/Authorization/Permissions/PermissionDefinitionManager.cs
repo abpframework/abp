@@ -1,27 +1,47 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Authorization.Permissions;
 
-public class PermissionDefinitionManager : IPermissionDefinitionManager, ITransientDependency
+public class PermissionDefinitionManager : IPermissionDefinitionManager, ISingletonDependency
 {
-    private readonly IStaticPermissionDefinitionStore _staticStore;
-    private readonly IDynamicPermissionDefinitionStore _dynamicStore;
+    protected IDictionary<string, PermissionGroupDefinition> PermissionGroupDefinitions => _lazyPermissionGroupDefinitions.Value;
+    private readonly Lazy<Dictionary<string, PermissionGroupDefinition>> _lazyPermissionGroupDefinitions;
+
+    protected IDictionary<string, PermissionDefinition> PermissionDefinitions => _lazyPermissionDefinitions.Value;
+    private readonly Lazy<Dictionary<string, PermissionDefinition>> _lazyPermissionDefinitions;
+
+    protected AbpPermissionOptions Options { get; }
+
+    private readonly IServiceProvider _serviceProvider;
 
     public PermissionDefinitionManager(
-        IStaticPermissionDefinitionStore staticStore,
-        IDynamicPermissionDefinitionStore dynamicStore)
+        IOptions<AbpPermissionOptions> options,
+        IServiceProvider serviceProvider)
     {
-        _staticStore = staticStore;
-        _dynamicStore = dynamicStore;
+        _serviceProvider = serviceProvider;
+        Options = options.Value;
+
+        _lazyPermissionDefinitions = new Lazy<Dictionary<string, PermissionDefinition>>(
+            CreatePermissionDefinitions,
+            isThreadSafe: true
+        );
+
+        _lazyPermissionGroupDefinitions = new Lazy<Dictionary<string, PermissionGroupDefinition>>(
+            CreatePermissionGroupDefinitions,
+            isThreadSafe: true
+        );
     }
 
-    public virtual async Task<PermissionDefinition> GetAsync(string name)
+    public virtual PermissionDefinition Get(string name)
     {
-        var permission = await GetOrNullAsync(name);
+        var permission = GetOrNull(name);
+
         if (permission == null)
         {
             throw new AbpException("Undefined permission: " + name);
@@ -30,41 +50,82 @@ public class PermissionDefinitionManager : IPermissionDefinitionManager, ITransi
         return permission;
     }
 
-    public virtual async Task<PermissionDefinition> GetOrNullAsync(string name)
+    public virtual PermissionDefinition GetOrNull(string name)
     {
         Check.NotNull(name, nameof(name));
 
-        return await _staticStore.GetOrNullAsync(name) ?? 
-               await _dynamicStore.GetOrNullAsync(name);
+        return PermissionDefinitions.GetOrDefault(name);
     }
 
-    public virtual async Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
+    public virtual IReadOnlyList<PermissionDefinition> GetPermissions()
     {
-        var staticPermissions = await _staticStore.GetPermissionsAsync();
-        var staticPermissionNames = staticPermissions
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
-        
-        var dynamicPermissions = await _dynamicStore.GetPermissionsAsync();
-
-        /* We prefer static permissions over dynamics */
-        return staticPermissions.Concat(
-            dynamicPermissions.Where(d => !staticPermissionNames.Contains(d.Name))
-        ).ToImmutableList();
+        return PermissionDefinitions.Values.ToImmutableList();
     }
 
-    public async Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
+    public IReadOnlyList<PermissionGroupDefinition> GetGroups()
     {
-        var staticGroups = await _staticStore.GetGroupsAsync();
-        var staticGroupNames = staticGroups
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
-        
-        var dynamicGroups = await _dynamicStore.GetGroupsAsync();
+        return PermissionGroupDefinitions.Values.ToImmutableList();
+    }
 
-        /* We prefer static groups over dynamics */
-        return staticGroups.Concat(
-            dynamicGroups.Where(d => !staticGroupNames.Contains(d.Name))
-        ).ToImmutableList();
+    protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()
+    {
+        var permissions = new Dictionary<string, PermissionDefinition>();
+
+        foreach (var groupDefinition in PermissionGroupDefinitions.Values)
+        {
+            foreach (var permission in groupDefinition.Permissions)
+            {
+                AddPermissionToDictionaryRecursively(permissions, permission);
+            }
+        }
+
+        return permissions;
+    }
+
+    protected virtual void AddPermissionToDictionaryRecursively(
+        Dictionary<string, PermissionDefinition> permissions,
+        PermissionDefinition permission)
+    {
+        if (permissions.ContainsKey(permission.Name))
+        {
+            throw new AbpException("Duplicate permission name: " + permission.Name);
+        }
+
+        permissions[permission.Name] = permission;
+
+        foreach (var child in permission.Children)
+        {
+            AddPermissionToDictionaryRecursively(permissions, child);
+        }
+    }
+
+    protected virtual Dictionary<string, PermissionGroupDefinition> CreatePermissionGroupDefinitions()
+    {
+        using (var scope = _serviceProvider.CreateScope())
+        {
+            var context = new PermissionDefinitionContext(scope.ServiceProvider);
+
+            var providers = Options
+                    .DefinitionProviders
+                    .Select(p => scope.ServiceProvider.GetRequiredService(p) as IPermissionDefinitionProvider)
+                    .ToList();
+
+            foreach (var provider in providers)
+            {
+                provider.PreDefine(context);
+            }
+
+            foreach (var provider in providers)
+            {
+                provider.Define(context);
+            }
+
+            foreach (var provider in providers)
+            {
+                provider.PostDefine(context);
+            }
+
+            return context.Groups;
+        }
     }
 }

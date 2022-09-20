@@ -99,7 +99,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
     {
         if (targetObject is IHasModificationTime objectWithModificationTime)
         {
-            ObjectHelper.TrySetProperty(objectWithModificationTime, x => x.LastModificationTime, () => Clock.Now);
+            objectWithModificationTime.LastModificationTime = Clock.Now;
         }
     }
 
@@ -112,7 +112,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
 
         if (!CurrentUser.Id.HasValue)
         {
-            ObjectHelper.TrySetProperty(modificationAuditedObject, x => x.LastModifierId, () => null);
+            modificationAuditedObject.LastModifierId = null;
             return;
         }
 
@@ -120,7 +120,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         {
             if (multiTenantEntity.TenantId != CurrentUser.TenantId)
             {
-                ObjectHelper.TrySetProperty(modificationAuditedObject, x => x.LastModifierId, () => null);
+                modificationAuditedObject.LastModifierId = null;
                 return;
             }
         }
@@ -134,7 +134,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         }
          */
 
-        ObjectHelper.TrySetProperty(modificationAuditedObject, x => x.LastModifierId, () => CurrentUser.Id);
+        modificationAuditedObject.LastModifierId = CurrentUser.Id;
     }
 
     protected virtual void SetDeletionTime(object targetObject)
@@ -143,7 +143,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         {
             if (objectWithDeletionTime.DeletionTime == null)
             {
-                ObjectHelper.TrySetProperty(objectWithDeletionTime, x => x.DeletionTime, () => Clock.Now);
+                objectWithDeletionTime.DeletionTime = Clock.Now;
             }
         }
     }
@@ -162,7 +162,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
 
         if (!CurrentUser.Id.HasValue)
         {
-            ObjectHelper.TrySetProperty(deletionAuditedObject, x => x.DeleterId, () => null);
+            deletionAuditedObject.DeleterId = null;
             return;
         }
 
@@ -170,11 +170,11 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         {
             if (multiTenantEntity.TenantId != CurrentUser.TenantId)
             {
-                ObjectHelper.TrySetProperty(deletionAuditedObject, x => x.DeleterId, () => null);
+                deletionAuditedObject.DeleterId = null;
                 return;
             }
         }
 
-        ObjectHelper.TrySetProperty(deletionAuditedObject, x => x.DeleterId, () => CurrentUser.Id);
+        deletionAuditedObject.DeleterId = CurrentUser.Id;
     }
 }

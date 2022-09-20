@@ -94,23 +94,8 @@ public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
 
     private bool IsIgnoredUrl(HttpContext context)
     {
-        if (context.Request.Path.Value == null)
-        {
-            return false;
-        }
-        
-        if (!AuditingOptions.IsEnabledForIntegrationServices && 
-            context.Request.Path.Value.StartsWith($"/{AbpAspNetCoreConsts.DefaultIntegrationServiceApiPrefix}/"))
-        {
-            return true;
-        }
-        
-        if (AspNetCoreAuditingOptions.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x)))
-        {
-            return true;
-        }
-
-        return false;
+        return context.Request.Path.Value != null &&
+               AspNetCoreAuditingOptions.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x));
     }
 
     private async Task<bool> ShouldWriteAuditLogAsync(AuditLogInfo auditLogInfo, HttpContext httpContext, bool hasError)

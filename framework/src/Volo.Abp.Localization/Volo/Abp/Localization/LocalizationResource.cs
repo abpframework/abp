@@ -5,21 +5,39 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization;
 
-public class LocalizationResource : LocalizationResourceBase
+public class LocalizationResource
 {
     [NotNull]
     public Type ResourceType { get; }
+
+    [NotNull]
+    public string ResourceName => LocalizationResourceNameAttribute.GetName(ResourceType);
+
+    [CanBeNull]
+    public string DefaultCultureName { get; set; }
+
+    [NotNull]
+    public LocalizationResourceContributorList Contributors { get; }
+
+    [NotNull]
+    public List<Type> BaseResourceTypes { get; }
 
     public LocalizationResource(
         [NotNull] Type resourceType,
         [CanBeNull] string defaultCultureName = null,
         [CanBeNull] ILocalizationResourceContributor initialContributor = null)
-        : base(
-            LocalizationResourceNameAttribute.GetName(resourceType),
-            defaultCultureName,
-            initialContributor)
     {
         ResourceType = Check.NotNull(resourceType, nameof(resourceType));
+        DefaultCultureName = defaultCultureName;
+
+        BaseResourceTypes = new List<Type>();
+        Contributors = new LocalizationResourceContributorList();
+
+        if (initialContributor != null)
+        {
+            Contributors.Add(initialContributor);
+        }
+
         AddBaseResourceTypes();
     }
 
@@ -33,7 +51,7 @@ public class LocalizationResource : LocalizationResourceBase
         {
             foreach (var baseResourceType in descriptor.GetInheritedResourceTypes())
             {
-                BaseResourceNames.AddIfNotContains(LocalizationResourceNameAttribute.GetName(baseResourceType));
+                BaseResourceTypes.AddIfNotContains(baseResourceType);
             }
         }
     }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
@@ -14,11 +13,11 @@ namespace Volo.Abp.UI.Navigation;
 public class MenuManager : IMenuManager, ITransientDependency
 {
     protected AbpNavigationOptions Options { get; }
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
     protected ISimpleStateCheckerManager<ApplicationMenuItem> SimpleStateCheckerManager { get; }
     public MenuManager(
         IOptions<AbpNavigationOptions> options,
-        IServiceScopeFactory serviceScopeFactory,
+        IHybridServiceScopeFactory serviceScopeFactory,
         ISimpleStateCheckerManager<ApplicationMenuItem> simpleStateCheckerManager)
     {
         Options = options.Value;

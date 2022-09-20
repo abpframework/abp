@@ -11,6 +11,7 @@
     "ConnectionStrings": "Строки подключения",
     "DisplayName:DefaultConnectionString": "Строка подключения по умолчанию",
     "DisplayName:UseSharedDatabase": "Использование общей базы данных",
+    "ManageHostFeatures": "Управление функциями хоста",
     "Permission:TenantManagement": "Управление арендаторами",
     "Permission:Create": "Создать",
     "Permission:Edit": "Редактировать",

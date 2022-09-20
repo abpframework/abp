@@ -14,12 +14,12 @@ namespace Volo.Docs.MongoDB
 
             builder.Entity<Project>(b =>
             {
-                b.CollectionName = AbpDocsDbProperties.DbTablePrefix + "Projects";
+                b.CollectionName = DocsDbProperties.DbTablePrefix + "Projects";
             });
 
             builder.Entity<Document>(b =>
             {
-                b.CollectionName = AbpDocsDbProperties.DbTablePrefix + "DocumentS";
+                b.CollectionName = DocsDbProperties.DbTablePrefix + "DocumentS";
             });
         }
     }

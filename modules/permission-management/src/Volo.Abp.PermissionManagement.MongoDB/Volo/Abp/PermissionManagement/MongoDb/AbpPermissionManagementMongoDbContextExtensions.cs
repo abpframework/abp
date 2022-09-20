@@ -9,16 +9,6 @@ public static class AbpPermissionManagementMongoDbContextExtensions
     {
         Check.NotNull(builder, nameof(builder));
 
-        builder.Entity<PermissionGroupDefinitionRecord>(b =>
-        {
-            b.CollectionName = AbpPermissionManagementDbProperties.DbTablePrefix + "PermissionGroups";
-        });
-        
-        builder.Entity<PermissionDefinitionRecord>(b =>
-        {
-            b.CollectionName = AbpPermissionManagementDbProperties.DbTablePrefix + "Permissions";
-        });
-        
         builder.Entity<PermissionGrant>(b =>
         {
             b.CollectionName = AbpPermissionManagementDbProperties.DbTablePrefix + "PermissionGrants";

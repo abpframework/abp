@@ -22,7 +22,7 @@ namespace Volo.Abp.OpenIddict.Controllers;
 
 public partial class TokenController
 {
-    protected IServiceScopeFactory ServiceScopeFactory => LazyServiceProvider.LazyGetRequiredService<IServiceScopeFactory>();
+    protected IHybridServiceScopeFactory ServiceScopeFactory => LazyServiceProvider.LazyGetRequiredService<IHybridServiceScopeFactory>();
     protected ITenantConfigurationProvider TenantConfigurationProvider=> LazyServiceProvider.LazyGetRequiredService<ITenantConfigurationProvider>();
     protected IOptions<AbpIdentityOptions> AbpIdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpIdentityOptions>>();
     protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();

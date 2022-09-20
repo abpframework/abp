@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Shouldly;
+﻿using Shouldly;
 using Xunit;
 
 namespace Volo.Abp.Features;
@@ -14,22 +13,22 @@ public class FeatureDefinitionManager_Tests : FeatureTestBase
     }
 
     [Fact]
-    public async Task Should_Get_Defined_Features()
+    public void Should_Get_Defined_Features()
     {
-        await _featureDefinitionManager.GetOrNullAsync("BooleanTestFeature1").ShouldNotBeNull();
-        (await _featureDefinitionManager.GetAsync("BooleanTestFeature1")).Name.ShouldBe("BooleanTestFeature1");
+        _featureDefinitionManager.GetOrNull("BooleanTestFeature1").ShouldNotBeNull();
+        _featureDefinitionManager.Get("BooleanTestFeature1").Name.ShouldBe("BooleanTestFeature1");
 
-        await _featureDefinitionManager.GetOrNullAsync("IntegerTestFeature1").ShouldNotBeNull();
-        (await _featureDefinitionManager.GetAsync("IntegerTestFeature1")).Name.ShouldBe("IntegerTestFeature1");
+        _featureDefinitionManager.GetOrNull("IntegerTestFeature1").ShouldNotBeNull();
+        _featureDefinitionManager.Get("IntegerTestFeature1").Name.ShouldBe("IntegerTestFeature1");
     }
 
     [Fact]
-    public async Task Should_Not_Get_Undefined_Features()
+    public void Should_Not_Get_Undefined_Features()
     {
-        (await _featureDefinitionManager.GetOrNullAsync("UndefinedFeature")).ShouldBeNull();
-        await Assert.ThrowsAsync<AbpException>(async () =>
+        _featureDefinitionManager.GetOrNull("UndefinedFeature").ShouldBeNull();
+        Assert.Throws<AbpException>(() =>
         {
-            await _featureDefinitionManager.GetAsync("UndefinedFeature");
+            _featureDefinitionManager.Get("UndefinedFeature");
         });
     }
 }

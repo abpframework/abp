@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -11,11 +10,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 public class PageToolbarManager : IPageToolbarManager, ITransientDependency
 {
     protected AbpPageToolbarOptions Options { get; }
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
     public PageToolbarManager(
         IOptions<AbpPageToolbarOptions> options,
-        IServiceScopeFactory serviceScopeFactory)
+        IHybridServiceScopeFactory serviceScopeFactory)
     {
         Options = options.Value;
         ServiceScopeFactory = serviceScopeFactory;

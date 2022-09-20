@@ -50,9 +50,9 @@ public partial class FeatureManagementModal
             ToggleValues = new Dictionary<string, bool>();
             SelectionStringValues = new Dictionary<string, string>();
 
-            var result = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
+            Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey))?.Groups;
 
-            Groups = result?.Groups ?? new List<FeatureGroupDto>();
+            Groups ??= new List<FeatureGroupDto>();
 
             if (Groups.Any())
             {
@@ -194,8 +194,8 @@ public partial class FeatureManagementModal
 
     protected virtual IStringLocalizer CreateStringLocalizer(string resourceName)
     {
-        return StringLocalizerFactory.CreateByResourceNameOrNull(resourceName) ??
-               StringLocalizerFactory.CreateDefaultOrNull();
+        var resource = LocalizationOptions.Value.Resources.Values.FirstOrDefault(x => x.ResourceName == resourceName);
+        return HtmlLocalizerFactory.Create(resource != null ? resource.ResourceType : LocalizationOptions.Value.DefaultResourceType);
     }
 
     protected virtual Task ClosingModal(ModalClosingEventArgs eventArgs)

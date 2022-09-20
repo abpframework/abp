@@ -10,9 +10,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.PermissionManagement.MongoDB;
 
-public class MongoPermissionGrantRepository :
-    MongoDbRepository<IPermissionManagementMongoDbContext, PermissionGrant, Guid>,
-    IPermissionGrantRepository
+public class MongoPermissionGrantRepository : MongoDbRepository<IPermissionManagementMongoDbContext, PermissionGrant, Guid>, IPermissionGrantRepository
 {
     public MongoPermissionGrantRepository(IMongoDbContextProvider<IPermissionManagementMongoDbContext> dbContextProvider)
         : base(dbContextProvider)

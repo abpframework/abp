@@ -1,15 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Features;
-using Volo.Abp.Localization;
 using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement;
@@ -34,18 +31,14 @@ public class FeatureManagementModal : AbpPageModel
 
     protected ILocalEventBus LocalEventBus { get; }
 
-    public AbpLocalizationOptions LocalizationOptions { get; }
-
     public FeatureManagementModal(
         IFeatureAppService featureAppService,
-        ILocalEventBus localEventBus,
-        IOptions<AbpLocalizationOptions> localizationOptions)
+        ILocalEventBus localEventBus)
     {
         ObjectMapperContext = typeof(AbpFeatureManagementWebModule);
 
         FeatureAppService = featureAppService;
         LocalEventBus = localEventBus;
-        LocalizationOptions = localizationOptions.Value;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()

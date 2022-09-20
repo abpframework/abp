@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.PermissionManagement.EntityFrameworkCore\Volo.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\Volo.Abp.PermissionManagement.Domain.Tests\Volo.Abp.PermissionManagement.Domain.Tests.csproj" />
     <ProjectReference Include="..\Volo.Abp.PermissionManagement.TestBase\Volo.Abp.PermissionManagement.TestBase.csproj" />
   </ItemGroup>
 

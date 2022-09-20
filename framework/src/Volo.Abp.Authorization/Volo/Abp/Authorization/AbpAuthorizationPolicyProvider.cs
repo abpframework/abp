@@ -31,7 +31,7 @@ public class AbpAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
             return policy;
         }
 
-        var permission = await _permissionDefinitionManager.GetOrNullAsync(policyName);
+        var permission = _permissionDefinitionManager.GetOrNull(policyName);
         if (permission != null)
         {
             //TODO: Optimize & Cache!
@@ -43,14 +43,16 @@ public class AbpAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
         return null;
     }
 
-    public async Task<List<string>> GetPoliciesNamesAsync()
+    public Task<List<string>> GetPoliciesNamesAsync()
     {
-        return _options.GetPoliciesNames()
-            .Union(
-                (await _permissionDefinitionManager
-                    .GetPermissionsAsync())
-                .Select(p => p.Name)
-            )
-            .ToList();
+        return Task.FromResult(
+            _options.GetPoliciesNames()
+                .Union(
+                    _permissionDefinitionManager
+                        .GetPermissions()
+                        .Select(p => p.Name)
+                )
+                .ToList()
+        );
     }
 }

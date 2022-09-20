@@ -54,7 +54,6 @@
     "Version": "Wersja",
     "LanguageCode": "Kod języka",
     "FileName": "Nazwa pliku",
-    "LastCachedTime": "Czas w pamięci podręcznej",
-    "Project": "Projekt"
+    "LastCachedTime": "Czas w pamięci podręcznej"
   }
 }

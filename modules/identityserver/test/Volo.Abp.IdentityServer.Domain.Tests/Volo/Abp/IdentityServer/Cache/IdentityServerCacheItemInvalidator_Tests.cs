@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
@@ -29,7 +28,6 @@ public class IdentityServerCacheItemInvalidator_Tests : AbpIdentityServerTestBas
 
     private readonly IDistributedCache<Client> _clientCache;
     private readonly IDistributedCache<IdentityResource> _identityResourceCache;
-    private readonly IDistributedCache<IEnumerable<ApiResource>> _apiResourcesCache;
     private readonly IDistributedCache<ApiResource> _apiResourceCache;
     private readonly IDistributedCache<ApiScope> _apiScopeCache;
     private readonly IDistributedCache<Resources> _resourceCache;
@@ -48,7 +46,6 @@ public class IdentityServerCacheItemInvalidator_Tests : AbpIdentityServerTestBas
 
         _clientCache = GetRequiredService<IDistributedCache<Client>>();
         _identityResourceCache = GetRequiredService<IDistributedCache<IdentityResource>>();
-        _apiResourcesCache = GetRequiredService<IDistributedCache<IEnumerable<ApiResource>>>();
         _apiResourceCache = GetRequiredService<IDistributedCache<ApiResource>>();
         _apiScopeCache = GetRequiredService<IDistributedCache<ApiScope>>();
         _resourceCache = GetRequiredService<IDistributedCache<Resources>>();
@@ -96,9 +93,9 @@ public class IdentityServerCacheItemInvalidator_Tests : AbpIdentityServerTestBas
         (await _apiResourceCache.GetAsync(newApiResource2)).ShouldBeNull();
 
         //FindApiResourcesByScopeNameAsync
-        (await _apiResourcesCache.GetAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + testApiResourceApiScopeName1)).ShouldBeNull();
+        (await _apiResourceCache.GetAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + testApiResourceApiScopeName1)).ShouldBeNull();
         await _resourceStore.FindApiResourcesByScopeNameAsync(new[] { testApiResourceApiScopeName1 });
-        (await _apiResourcesCache.GetAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + testApiResourceApiScopeName1)).ShouldNotBeNull();
+        (await _apiResourceCache.GetAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + testApiResourceApiScopeName1)).ShouldNotBeNull();
 
         var testApiResource1 = await _apiResourceRepository.FindByNameAsync(testApiResourceName1);
         await _apiResourceRepository.DeleteAsync(testApiResource1);

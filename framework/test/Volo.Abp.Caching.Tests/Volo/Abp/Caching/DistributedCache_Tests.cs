@@ -953,9 +953,7 @@ public class DistributedCache_Tests : AbpIntegratedTest<AbpCachingTestModule>
     {
         var cache1 = GetRequiredService<IDistributedCache<PersonCacheItem>>();
         var cache2 = GetRequiredService<IDistributedCache<PersonCacheItem, string>>();
-
-        cache1.InternalCache.ShouldBe(cache2);
-
+        
         await cache1.SetAsync("john", new PersonCacheItem("John Doe"));
 
         var item1 = await cache1.GetAsync("john");

@@ -34,19 +34,7 @@ public class DistributedCache_ConfigureOptions_Test : AbpIntegratedTest<AbpCachi
     }
     private static DistributedCacheEntryOptions GetDefaultCachingOptions(object instance)
     {
-        var internalCacheProperty = instance
-            .GetType()
-            .GetProperty("InternalCache", BindingFlags.Instance | BindingFlags.Public);
-
-        if (internalCacheProperty != null)
-        {
-            instance = internalCacheProperty.GetValue(instance);
-        }
-        
-        var defaultOptionsField = instance
-            .GetType()
-            .GetField("DefaultCacheOptions", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        var defaultOptionsField = instance.GetType().GetTypeInfo().GetField("DefaultCacheOptions", BindingFlags.Instance | BindingFlags.NonPublic);
         return (DistributedCacheEntryOptions)defaultOptionsField.GetValue(instance);
     }
 }

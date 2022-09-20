@@ -1,10 +1,9 @@
 ﻿using System;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity;
 
 [Serializable]
-public class IdentityRoleEto : IMultiTenant
+public class IdentityRoleEto
 {
     public Guid Id { get; set; }
 

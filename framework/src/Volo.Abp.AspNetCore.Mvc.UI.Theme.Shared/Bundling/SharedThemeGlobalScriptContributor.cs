@@ -1,7 +1,6 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker;
-using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDaterangepicker;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs5;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryForm;
@@ -30,8 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
     typeof(MalihuCustomScrollbarPluginScriptBundleContributor),
     typeof(LuxonScriptContributor),
     typeof(TimeagoScriptContributor),
-    typeof(BootstrapDatepickerScriptContributor),
-    typeof(BootstrapDaterangepickerScriptContributor)
+    typeof(BootstrapDatepickerScriptContributor)
     )]
 public class SharedThemeGlobalScriptContributor : BundleContributor
 {

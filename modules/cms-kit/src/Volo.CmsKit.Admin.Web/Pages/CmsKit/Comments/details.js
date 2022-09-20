@@ -5,37 +5,38 @@ $(function (){
 
     var detailsModal = new abp.ModalManager(abp.appPath + "CmsKit/Comments/DetailsModal");
     
-
-    var getFormattedDate = function ($datePicker) {
-        return $datePicker.data('date');
-    };
-
-
-    $('.singledatepicker').daterangepicker({
-        "singleDatePicker": true,
-        "showDropdowns": true,
-        "autoUpdateInput": false,
-        "autoApply": true,
-        "opens": "center",
-        "drops": "auto",
-        "minYear": 1901,
-        "maxYear": 2199,
-    });
-
-    $('.singledatepicker').attr('autocomplete', 'off');
-
-    $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
-        $(this).val(picker.startDate.format('l'));
-        $(this).data('date', picker.startDate.locale('en').format('YYYY-MM-DD'));
-    });
+    $(".input-daterange")
+        .datepicker({
+            todayBtn: "linked",
+            autoclose: true,
+            language: abp.localization.currentCulture.cultureName,
+        })
+        .on("hide", function (e) {
+            e.stopPropagation();
+        });
     
     var filterForm = $('#CmsKitCommentsFilterForm');
     
     var getFilter = function () {
         var filterObj = filterForm.serializeFormToObject();
 
-        filterObj.creationStartDate = getFormattedDate($('#creationStartDate'));
-        filterObj.creationEndDate = getFormattedDate($('#creationEndDate'));
+        var startDate = luxon.DateTime.fromFormat(
+            filterObj.creationStartDate,
+            abp.localization.currentCulture.dateTimeFormat.shortDatePattern,
+            { locale: abp.localization.currentCulture.cultureName }
+        );
+        if (!startDate.invalid) {
+            filterObj.creationStartDate = startDate.toFormat("yyyy-MM-dd");
+        }
+
+        var endDate = luxon.DateTime.fromFormat(
+            filterObj.creationEndDate,
+            abp.localization.currentCulture.dateTimeFormat.shortDatePattern,
+            { locale: abp.localization.currentCulture.cultureName }
+        );
+        if (!endDate.invalid) {
+            filterObj.creationEndDate = endDate.toFormat("yyyy-MM-dd");
+        }
         
         return filterObj;
     };

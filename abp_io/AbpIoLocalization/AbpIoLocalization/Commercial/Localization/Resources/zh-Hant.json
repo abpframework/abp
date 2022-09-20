@@ -380,8 +380,6 @@
     "TrialLicenseExpireMessage": "您正在使用試用許可證，您的試用許可證將於 {0}到期。",
     "TryForFree": "免費試用",
     "TrialLicenseExpiredInfo": "您的試用許可期限已過！",
-    "CommercialNewsletterConfirmationMessage": "我同意<a href=\"https://commercial.abp.io/TermsConditions\">條款和條件</a>和<a href=\"https://commercial.abp.io/Privacy\">隱私政策</a>。",
-    "BlazoriseLicense": "我们是否需要购买Blazorise许可证？",
-    "BlazoriseLicenseExplanation": "我公司Volosoft和公司Megabit之间有合作协议，根据此协议，购买将同时包含了Blazorise许可证与ABP商业产品，因此我们的客户不需要再额外购买Blazorise许可证。"
+    "CommercialNewsletterConfirmationMessage": "我同意<a href=\"https://commercial.abp.io/TermsConditions\">條款和條件</a>和<a href=\"https://commercial.abp.io/Privacy\">隱私政策</a>。"
   }
 }

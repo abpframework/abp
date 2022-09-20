@@ -32,7 +32,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
     protected ILogger<ResourceOwnerPasswordValidator<IdentityUser>> Logger { get; }
     protected IStringLocalizer<AbpIdentityServerResource> Localizer { get; }
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
     protected AbpIdentityOptions AbpIdentityOptions { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
 
@@ -43,7 +43,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
         IStringLocalizer<AbpIdentityServerResource> localizer,
         IOptions<AbpIdentityOptions> abpIdentityOptions,
-        IServiceScopeFactory serviceScopeFactory,
+        IHybridServiceScopeFactory serviceScopeFactory,
         IOptions<IdentityOptions> identityOptions)
     {
         UserManager = userManager;

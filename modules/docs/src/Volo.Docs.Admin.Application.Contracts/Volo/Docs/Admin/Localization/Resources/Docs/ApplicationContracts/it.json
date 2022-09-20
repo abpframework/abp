@@ -54,7 +54,6 @@
     "Version": "Versione",
     "LanguageCode": "Codice della lingua",
     "FileName": "Nome del file",
-    "LastCachedTime": "Tempo di cache",
-    "Project": "Progetto"
+    "LastCachedTime": "Tempo di cache"
   }
 }

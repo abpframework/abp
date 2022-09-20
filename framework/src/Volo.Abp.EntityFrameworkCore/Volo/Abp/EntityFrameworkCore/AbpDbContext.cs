@@ -292,6 +292,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         {
             case EntityState.Added:
                 ApplyAbpConceptsForAddedEntity(entry);
+                EntityChangeEventHelper.PublishEntityCreatingEvent(entry.Entity);
                 EntityChangeEventHelper.PublishEntityCreatedEvent(entry.Entity);
                 break;
             case EntityState.Modified:
@@ -300,10 +301,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 {
                     if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
                     {
+                        EntityChangeEventHelper.PublishEntityDeletingEvent(entry.Entity);
                         EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                     }
                     else
                     {
+                        EntityChangeEventHelper.PublishEntityUpdatingEvent(entry.Entity);
                         EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
                     }
                 }
@@ -311,6 +314,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 break;
             case EntityState.Deleted:
                 ApplyAbpConceptsForDeletedEntity(entry);
+                EntityChangeEventHelper.PublishEntityDeletingEvent(entry.Entity);
                 EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                 break;
         }
@@ -481,7 +485,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
 
         entry.Reload();
-        ObjectHelper.TrySetProperty(entry.Entity.As<ISoftDelete>(), x => x.IsDeleted, () => true);
+        entry.Entity.As<ISoftDelete>().IsDeleted = true;
         SetDeletionAuditProperties(entry);
     }
 

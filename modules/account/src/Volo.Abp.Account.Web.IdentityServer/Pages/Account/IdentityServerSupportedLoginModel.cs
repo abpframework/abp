@@ -54,8 +54,7 @@ public class IdentityServerSupportedLoginModel : LoginModel
 
         if (context != null)
         {
-            // TODO: Find a proper cancel way.
-            // ShowCancelButton = true;
+            ShowCancelButton = true;
 
             LoginInput.UserNameOrEmailAddress = context.LoginHint;
 

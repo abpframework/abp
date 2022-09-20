@@ -1,10 +1,10 @@
 {
   "culture": "pt-BR",
   "texts": {
-    "Languages": "Idiomas",
+    "Languages": "línguas",
     "AreYouSure": "Você tem certeza?",
     "Cancel": "Cancelar",
-    "Clear": "Limpar",
+    "Clear": "Claro",
     "Yes": "Sim",
     "No": "Não",
     "Ok": "OK",
@@ -16,7 +16,7 @@
     "SuccessfullyDeleted": "Excluído com sucesso",
     "Edit": "Editar",
     "Refresh": "Atualizar",
-    "Language": "Idioma",
+    "Language": "Língua",
     "LoadMore": "Carregar mais",
     "ProcessingWithThreeDot": "Processando...",
     "LoadingWithThreeDot": "Carregando...",

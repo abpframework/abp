@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac.Core;
 using Autofac.Extras.DynamicProxy;
-using Volo.Abp.Autofac;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
@@ -68,11 +67,10 @@ public static class AbpRegistrationBuilderExtensions
             Type implementationType)
         where TActivatorData : ReflectionActivatorData
     {
-        // Enable Property Injection only for types in an assembly containing an AbpModule and without a DisablePropertyInjection attribute on class or properties.
-        if (moduleContainer.Modules.Any(m => m.Assembly == implementationType.Assembly) &&
-            implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
+        //Enable Property Injection only for types in an assembly containing an AbpModule
+        if (moduleContainer.Modules.Any(m => m.Assembly == implementationType.Assembly))
         {
-            registrationBuilder = registrationBuilder.PropertiesAutowired(new AbpPropertySelector(false));
+            registrationBuilder = registrationBuilder.PropertiesAutowired();
         }
 
         return registrationBuilder;

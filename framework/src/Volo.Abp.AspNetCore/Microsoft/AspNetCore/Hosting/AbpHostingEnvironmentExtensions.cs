@@ -9,7 +9,7 @@ public static class AbpHostingEnvironmentExtensions
         this IWebHostEnvironment env,
         AbpConfigurationBuilderOptions options = null)
     {
-        options ??= new AbpConfigurationBuilderOptions();
+        options = options ?? new AbpConfigurationBuilderOptions();
 
         if (options.BasePath.IsNullOrEmpty())
         {

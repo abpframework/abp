@@ -15,7 +15,6 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
 {
     protected IHttpContextAccessor HttpContextAccessor { get; }
     protected AbpApplicationConfigurationClientProxy ApplicationConfigurationAppService { get; }
-    protected AbpApplicationLocalizationClientProxy ApplicationLocalizationClientProxy { get; }
     protected ICurrentUser CurrentUser { get; }
     protected IDistributedCache<ApplicationConfigurationDto> Cache { get; }
 
@@ -23,13 +22,11 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         IDistributedCache<ApplicationConfigurationDto> cache,
         AbpApplicationConfigurationClientProxy applicationConfigurationAppService,
         ICurrentUser currentUser,
-        IHttpContextAccessor httpContextAccessor, 
-        AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy)
+        IHttpContextAccessor httpContextAccessor)
     {
         ApplicationConfigurationAppService = applicationConfigurationAppService;
         CurrentUser = currentUser;
         HttpContextAccessor = httpContextAccessor;
-        ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
         Cache = cache;
     }
 
@@ -45,7 +42,7 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
 
         configuration = await Cache.GetOrAddAsync(
             cacheKey,
-            async () => await GetRemoteConfigurationAsync(),
+            async () => await ApplicationConfigurationAppService.GetAsync(),
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(300) //TODO: Should be configurable.
@@ -58,27 +55,6 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         }
 
         return configuration;
-    }
-
-    private async Task<ApplicationConfigurationDto> GetRemoteConfigurationAsync()
-    {
-        var config = await ApplicationConfigurationAppService.GetAsync(
-            new ApplicationConfigurationRequestOptions
-            {
-                IncludeLocalizationResources = false
-            }
-        );
-        
-        var localizationDto = await ApplicationLocalizationClientProxy.GetAsync(
-            new ApplicationLocalizationRequestDto {
-                CultureName = config.Localization.CurrentCulture.Name,
-                OnlyDynamics = true
-            }
-        );
-
-        config.Localization.Resources = localizationDto.Resources;
-        
-        return config;
     }
 
     public ApplicationConfigurationDto Get()

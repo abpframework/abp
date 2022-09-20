@@ -2,21 +2,18 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
-using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.GlobalResources;
 
-[RequiresFeature(CmsKitFeatures.GlobalResourceEnable)]
 [RequiresGlobalFeature(typeof(GlobalResourcesFeature))]
 [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
 [Authorize(CmsKitAdminPermissions.Menus.Default)]
 [Route("api/cms-kit-admin/global-resources")]
-public class GlobalResourceAdminController : CmsKitAdminController, IGlobalResourceAdminAppService
+public class GlobalResourceAdminController: CmsKitAdminController, IGlobalResourceAdminAppService
 {
     private readonly IGlobalResourceAdminAppService _globalResourceAdminAppService;
 
@@ -24,7 +21,7 @@ public class GlobalResourceAdminController : CmsKitAdminController, IGlobalResou
     {
         _globalResourceAdminAppService = globalResourceAdminAppService;
     }
-
+    
     [HttpGet]
     public Task<GlobalResourcesDto> GetAsync()
     {

@@ -11,12 +11,12 @@ public static class BlobStoringMongoDbContextExtensions
 
         builder.Entity<DatabaseBlobContainer>(b =>
         {
-            b.CollectionName = AbpBlobStoringDatabaseDbProperties.DbTablePrefix + "BlobContainers";
+            b.CollectionName = BlobStoringDatabaseDbProperties.DbTablePrefix + "BlobContainers";
         });
 
         builder.Entity<DatabaseBlob>(b =>
         {
-            b.CollectionName = AbpBlobStoringDatabaseDbProperties.DbTablePrefix + "Blobs";
+            b.CollectionName = BlobStoringDatabaseDbProperties.DbTablePrefix + "Blobs";
         });
     }
 }

@@ -156,11 +156,5 @@ namespace Volo.Docs.Admin.Projects
                 await ReindexProjectAsync(project.Id);
             }
         }
-        
-        public async Task<List<ProjectWithoutDetailsDto>> GetListWithoutDetailsAsync()
-        {
-            var projects = await _projectRepository.GetListWithoutDetailsAsync();
-            return ObjectMapper.Map<List<ProjectWithoutDetails>, List<ProjectWithoutDetailsDto>>(projects);
-        }
     }
 }

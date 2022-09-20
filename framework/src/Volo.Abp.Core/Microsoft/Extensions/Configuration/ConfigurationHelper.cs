@@ -9,7 +9,7 @@ public static class ConfigurationHelper
         AbpConfigurationBuilderOptions options = null,
         Action<IConfigurationBuilder> builderAction = null)
     {
-        options ??= new AbpConfigurationBuilderOptions();
+        options = options ?? new AbpConfigurationBuilderOptions();
 
         if (options.BasePath.IsNullOrEmpty())
         {
@@ -18,11 +18,11 @@ public static class ConfigurationHelper
 
         var builder = new ConfigurationBuilder()
             .SetBasePath(options.BasePath)
-            .AddJsonFile(options.FileName + ".json", optional: options.Optional, reloadOnChange: options.ReloadOnChange);
+            .AddJsonFile(options.FileName + ".json", optional: true, reloadOnChange: true);
 
         if (!options.EnvironmentName.IsNullOrEmpty())
         {
-            builder = builder.AddJsonFile($"{options.FileName}.{options.EnvironmentName}.json", optional: options.Optional, reloadOnChange: options.ReloadOnChange);
+            builder = builder.AddJsonFile($"{options.FileName}.{options.EnvironmentName}.json", optional: true, reloadOnChange: true);
         }
 
         if (options.EnvironmentName == "Development")

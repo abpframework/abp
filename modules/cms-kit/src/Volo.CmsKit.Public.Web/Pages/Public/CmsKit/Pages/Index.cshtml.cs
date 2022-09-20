@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.CmsKit.Contents;
 using Volo.CmsKit.Public.Pages;
 using Volo.CmsKit.Web.Contents;
 using Volo.CmsKit.Web.Pages;

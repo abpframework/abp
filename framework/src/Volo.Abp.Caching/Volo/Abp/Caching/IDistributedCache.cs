@@ -14,7 +14,6 @@ namespace Volo.Abp.Caching;
 public interface IDistributedCache<TCacheItem> : IDistributedCache<TCacheItem, string>
     where TCacheItem : class
 {
-    IDistributedCache<TCacheItem, string> InternalCache { get; }
 }
 
 /// <summary>

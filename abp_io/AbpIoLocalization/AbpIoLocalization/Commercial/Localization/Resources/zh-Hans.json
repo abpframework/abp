@@ -548,7 +548,7 @@
     "MyOrganizations_Detail_OwnerRightInfo": "您正在使用您的 {1} 所有者权利中的 {0}。",
     "MyOrganizations_Detail_CopyApiKey": "复制密钥",
     "MyOrganizations_Detail_ApiKeyDescription": "API 密钥是托管在 <a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">{1} 上的 PRO 包的令牌。 </a>",
-    "MyOrganizations_Detail_YourPrivateNugetSource": "您的私有 NuGet 源是 <a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">{0}</a>",
+    "MyOrganizations_Detail_YourPrivateNugetSource": "您的私有 NuGet 源是 <a href=\"{0}\" arget=\"_blank\" class=\"text-primary\" rel=\"noopener\">{0}</a>",
     "MyOrganizations_Detail_PrivateNugetSourceWarning": "这将自动添加一个源到您的 ABP 解决方案中的 NuGet.Config。 不要与未经授权的用户共享您的私钥！",
     "MyOrganizations_Detail_DeveloperSeatInfo": "您正在使用您的 {1} 个开发者席位中的 {0} 个。",
     "NeedMoreSeatsForYourTeam": "您的团队需要更多席位吗？",
@@ -578,7 +578,7 @@
     "PrePayment_IyzicoRedirectionInfo": "您将被重定向到 Iyzico 支付网关以安全地完成您的购买。",
     "PrePayment_IyzicoAcceptVisaAndMasterCard": "Iyzico 接受 Visa 和 MasterCard。",
     "Purchase": "购买",
-    "AcceptTermsAndConditions": "我已阅读、理解并接受<a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">隐私政策</a>， <a href=\"{1}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">条款和条件</a>和<a href=\"{2}\" target=\"_blank\" class=\"text-primary\"> EULA。</a>",
+    "AcceptTermsAndConditions": "我已阅读、理解并接受<a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">隐私政策</a>， <a href=\"{1}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">条款和条件</a>和<a href=\"{ 2}\" target=\"_blank\" class=\"text-primary\"> EULA。</a>",
     "AcceptTermsAndConditionsWarningMessage": "请接受隐私政策和条款和条件",
     "SelectGatewayToContinue": "请选择一个网关以继续！",
     "GatewaySelection_SelectGateway": "选择支付网关",
@@ -735,8 +735,6 @@
     "ConfirmedEmailAddressRequiredToStartTrial": "你应该有一个确认的电子邮件地址，以便开始试用许可证。",
     "EmailVerificationMailNotSent": "电子邮件验证邮件不能发送。",
     "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">点击这里获取确认邮件</a> 如果你还没有收到。",
-    "WhichLicenseTypeYouAreInterestedIn": "你感兴趣的许可证类型是什么？",
-    "BlazoriseLicense": "我们是否需要购买Blazorise许可证？",
-    "BlazoriseLicenseExplanation": "我公司Volosoft和公司Megabit之间有合作协议，根据此协议，购买将同时包含了Blazorise许可证与ABP商业产品，因此我们的客户不需要再额外购买Blazorise许可证。"
+    "WhichLicenseTypeYouAreInterestedIn": "你感兴趣的许可证类型是什么？"
   }
 }

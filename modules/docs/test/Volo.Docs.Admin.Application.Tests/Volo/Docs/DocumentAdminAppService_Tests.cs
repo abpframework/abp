@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Shouldly;
 using Volo.Docs.Admin.Documents;
 using Volo.Docs.Documents;
@@ -51,19 +50,6 @@ namespace Volo.Docs
 
             (await _documentRepository.FindAsync(_testData.ProjectId, "Part-I.md", "en", "1.0.0")).ShouldNotBeNull();
             (await _documentRepository.FindAsync(_testData.ProjectId, "Part-II.md", "en", "1.0.0")).ShouldNotBeNull();
-        }
-
-        [Fact]
-        public async Task GetFilterItemsAsync()
-        {
-            var filterItems = await _documentAdminAppService.GetFilterItemsAsync();
-            filterItems.ShouldNotBeEmpty();
-
-            filterItems.ShouldContain(p => p.ProjectId == _testData.ProjectId);
-            filterItems.ShouldContain(p => p.Version == "2.0.0" && p.ProjectId == _testData.ProjectId);
-            filterItems.ShouldContain(p => p.LanguageCode == "en" && p.ProjectId == _testData.ProjectId);
-            filterItems.ShouldContain(p => p.Format == "md");
-            
         }
     }
 }

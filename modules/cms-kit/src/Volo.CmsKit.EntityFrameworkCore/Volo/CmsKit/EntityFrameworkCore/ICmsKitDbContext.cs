@@ -14,7 +14,7 @@ using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.EntityFrameworkCore;
 
-[ConnectionStringName(AbpCmsKitDbProperties.ConnectionStringName)]
+[ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
 public interface ICmsKitDbContext : IEfCoreDbContext
 {
     DbSet<Comment> Comments { get; }

@@ -32,7 +32,6 @@
     "DisplayName:GitHubUserAgent": "GitHub-Benutzer-Agent",
     "DisplayName:All": "Pull all",
     "DisplayName:LanguageCode": "Sprachcode",
-    "DisplayName:Version": "Version",
-    "Project": "Projekt"
+    "DisplayName:Version": "Version"
   }
 }

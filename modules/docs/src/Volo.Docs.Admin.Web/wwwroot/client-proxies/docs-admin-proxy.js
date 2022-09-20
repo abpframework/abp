@@ -61,13 +61,6 @@
       }, ajaxParams));
     };
 
-    volo.docs.admin.documentsAdmin.getFilterItems = function(ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/admin/documents/GetFilterItems',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
   })();
 
   // controller volo.docs.admin.projectsAdmin
@@ -119,13 +112,6 @@
         url: abp.appPath + 'api/docs/admin/projects/ReindexAll',
         type: 'POST',
         dataType: null
-      }, ajaxParams));
-    };
-
-    volo.docs.admin.projectsAdmin.getListWithoutDetails = function(ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/admin/projects/GetListProjectWithoutDetailsAsync',
-        type: 'GET'
       }, ajaxParams));
     };
 

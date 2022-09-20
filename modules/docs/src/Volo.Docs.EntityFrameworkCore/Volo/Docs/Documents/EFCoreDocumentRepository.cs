@@ -32,23 +32,6 @@ namespace Volo.Docs.Documents
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<DocumentInfo>> GetUniqueListDocumentInfoAsync(CancellationToken cancellationToken = default)
-        {
-            
-            return await (await GetDbSetAsync())
-                .Select(x=> new DocumentInfo
-                {
-                    ProjectId = x.ProjectId,
-                    Version = x.Version,
-                    LanguageCode = x.LanguageCode,
-                    Format = x.Format,
-                })
-                .Distinct()
-                .OrderByDescending(x=>x.Version)
-                .ToListAsync(GetCancellationToken(cancellationToken));
-        }
-
-
         public async Task<List<Document>> GetListByProjectId(Guid projectId,
             CancellationToken cancellationToken = default)
         {
@@ -84,21 +67,23 @@ namespace Volo.Docs.Documents
             int skipCount = 0,
             CancellationToken cancellationToken = default)
         {
-            var query =await ApplyFilterForGetAll(
+            var query = ApplyFilterForGetAll(
                 await GetDbSetAsync(),
                 projectId: projectId,
                 name: name,
                 version: version,
                 languageCode: languageCode,
-                fileName: fileName,
                 format: format,
+                fileName: fileName,
                 creationTimeMin: creationTimeMin,
                 creationTimeMax: creationTimeMax,
                 lastUpdatedTimeMin: lastUpdatedTimeMin,
                 lastUpdatedTimeMax: lastUpdatedTimeMax,
                 lastSignificantUpdateTimeMin: lastSignificantUpdateTimeMin,
                 lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
-                lastCachedTimeMin: lastCachedTimeMin, lastCachedTimeMax: lastCachedTimeMax);
+                lastCachedTimeMin: lastCachedTimeMin,
+                lastCachedTimeMax: lastCachedTimeMax
+            );
 
             query = query.OrderBy(string.IsNullOrWhiteSpace(sorting) ? nameof(Document.Name) : sorting);
             return await query.PageBy(skipCount, maxResultCount).ToListAsync(GetCancellationToken(cancellationToken));
@@ -124,21 +109,23 @@ namespace Volo.Docs.Documents
             int skipCount = 0,
             CancellationToken cancellationToken = default)
         {
-            var query = await ApplyFilterForGetAll(
+            var query = ApplyFilterForGetAll(
                 await GetDbSetAsync(),
                 projectId: projectId,
                 name: name,
                 version: version,
                 languageCode: languageCode,
-                fileName: fileName,
                 format: format,
+                fileName: fileName,
                 creationTimeMin: creationTimeMin,
                 creationTimeMax: creationTimeMax,
                 lastUpdatedTimeMin: lastUpdatedTimeMin,
                 lastUpdatedTimeMax: lastUpdatedTimeMax,
                 lastSignificantUpdateTimeMin: lastSignificantUpdateTimeMin,
                 lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
-                lastCachedTimeMin: lastCachedTimeMin, lastCachedTimeMax: lastCachedTimeMax);
+                lastCachedTimeMin: lastCachedTimeMin,
+                lastCachedTimeMax: lastCachedTimeMax
+            );
 
             return await query.LongCountAsync(GetCancellationToken(cancellationToken));
         }
@@ -166,7 +153,7 @@ namespace Volo.Docs.Documents
             return await (await GetDbSetAsync()).Where(x => x.Id == id).SingleAsync(cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        protected virtual async Task<IQueryable<DocumentWithoutContent>> ApplyFilterForGetAll(
+        protected virtual IQueryable<DocumentWithoutContent> ApplyFilterForGetAll(
             IQueryable<Document> query,
             Guid? projectId,
             string name,
@@ -213,24 +200,19 @@ namespace Volo.Docs.Documents
                     d => d.LastCachedTime.Date >= lastCachedTimeMin.Value.Date)
                 .WhereIf(lastCachedTimeMax.HasValue,
                     d => d.LastCachedTime.Date <= lastCachedTimeMax.Value.Date)
-                .Join( (await GetDbContextAsync()).Projects,
-                    d => d.ProjectId,
-                    p => p.Id,
-                    (d, p) => new { d, p })
                 .Select(x => new DocumentWithoutContent
                 {
-                    Id = x.d.Id,
-                    ProjectId = x.d.ProjectId,
-                    ProjectName = x.p.Name,
-                    Name = x.d.Name,
-                    Version = x.d.Version,
-                    LanguageCode = x.d.LanguageCode,
-                    FileName = x.d.FileName,
-                    Format = x.d.Format,
-                    CreationTime = x.d.CreationTime,
-                    LastUpdatedTime = x.d.LastUpdatedTime,
-                    LastSignificantUpdateTime = x.d.LastSignificantUpdateTime,
-                    LastCachedTime = x.d.LastCachedTime
+                    Id = x.Id,
+                    ProjectId = x.ProjectId,
+                    Name = x.Name,
+                    Version = x.Version,
+                    LanguageCode = x.LanguageCode,
+                    FileName = x.FileName,
+                    Format = x.Format,
+                    CreationTime = x.CreationTime,
+                    LastUpdatedTime = x.LastUpdatedTime,
+                    LastSignificantUpdateTime = x.LastSignificantUpdateTime,
+                    LastCachedTime = x.LastCachedTime
                 });
         }
     }

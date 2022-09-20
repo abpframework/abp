@@ -1,7 +1,6 @@
 ﻿using Volo.Abp.Localization.Resources.AbpLocalization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
-using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Localization;
@@ -9,8 +8,7 @@ namespace Volo.Abp.Localization;
 [DependsOn(
     typeof(AbpVirtualFileSystemModule),
     typeof(AbpSettingsModule),
-    typeof(AbpLocalizationAbstractionsModule),
-    typeof(AbpThreadingModule)
+    typeof(AbpLocalizationAbstractionsModule)
     )]
 public class AbpLocalizationModule : AbpModule
 {

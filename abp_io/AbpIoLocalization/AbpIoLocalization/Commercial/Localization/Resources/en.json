@@ -548,7 +548,7 @@
     "MyOrganizations_Detail_OwnerRightInfo": "You are using {0} of your {1} owners rights.",
     "MyOrganizations_Detail_CopyApiKey": "Copy the Key",
     "MyOrganizations_Detail_ApiKeyDescription": "The API Key is the token of PRO packages hosted on <a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">{1}.</a>",
-    "MyOrganizations_Detail_YourPrivateNugetSource": "Your private NuGet source is <a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">{0}</a>",
+    "MyOrganizations_Detail_YourPrivateNugetSource": "Your private NuGet source is <a href=\"{0}\" arget=\"_blank\" class=\"text-primary\" rel=\"noopener\">{0}</a>",
     "MyOrganizations_Detail_PrivateNugetSourceWarning": "This is automatically added as a feed to your NuGet.Config in your ABP solution. Do not share your private key with unauthorized users!",
     "MyOrganizations_Detail_DeveloperSeatInfo": "You are using {0} of your {1} developer seats.",
     "NeedMoreSeatsForYourTeam": "Need more seats for your team?",
@@ -735,16 +735,6 @@
     "ConfirmedEmailAddressRequiredToStartTrial": "You should have a confirmed email address in order to start a trial license.",
     "EmailVerificationMailNotSent": "Email verification mail couldn't send.",
     "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">Click here to get a confirmation email</a> if you haven't got it before.",
-    "WhichLicenseTypeYouAreInterestedIn": "Which license type you are interested in?",
-    "DontTakeOurWordForIt": "Don't take our word for it...",
-    "ReadAbpCommercialUsersWantYouToKnow": "Read what ABP Commercial users want you to know",
-    "Testimonial_ShortDescription_1": "The modularity of ABP made it possible for the team to deliver in time.",
-    "Testimonial_ShortDescription_2": "Build new features faster than before.",
-    "Testimonial_ShortDescription_3": "We start from out-of-the-box features and just focus on what we really need to write.",
-    "Testimonial_ShortDescription_4": "ABP Commercial was the best fit for our needs.",
-    "OnlineReviewersOnAbpCommercial": "Online Reviews on ABP Commercial",
-    "SeeWhatToldAboutAbpCommercial": "See what has been told about ABP Commercial and write your thoughts if you want.",
-    "BlazoriseLicense": "Do we need to buy Blazorise license?",
-    "BlazoriseLicenseExplanation": "We have an agreement between Volosoft and Megabit, with this agreement Blazorise license is bundled with ABP Commercial products therefore our customers do not need to purchase an extra Blazorise license."
+    "WhichLicenseTypeYouAreInterestedIn": "Which license type you are interested in?"
   }
 }

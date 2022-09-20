@@ -62,9 +62,7 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             return false;
         }
 
-        if (!auditingHelper.ShouldSaveAudit(
-                invocation.Method,
-                ignoreIntegrationServiceAttribute: options.IsEnabledForIntegrationServices))
+        if (!auditingHelper.ShouldSaveAudit(invocation.Method))
         {
             return false;
         }

@@ -1,7 +1,7 @@
+using System;
 using MyCompanyName.MyProjectName.Data;
 using Serilog;
 using Serilog.Events;
-using Volo.Abp.Data;
 
 namespace MyCompanyName.MyProjectName;
 
@@ -41,10 +41,6 @@ public class Program
                 .UseAutofac()
                 .UseSerilog();
             await builder.AddApplicationAsync<MyProjectNameModule>();
-            if (IsMigrateDatabase(args))
-            {
-                builder.Services.AddDataMigrationEnvironment();
-            }
             var app = builder.Build();
             await app.InitializeApplicationAsync();
 

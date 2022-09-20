@@ -141,14 +141,13 @@ Configure<AbpRabbitMqOptions>(options =>
 });
 ````
 
-**示例: 配置客户端,交换机名称和预取数量**
+**示例: 配置客户端和交换机名称**
 
 ````csharp
 Configure<AbpRabbitMqEventBusOptions>(options =>
 {
     options.ClientName = "TestApp1";
     options.ExchangeName = "TestMessages";
-    options.PrefetchCount = 1;
 });
 ````
 

@@ -51,9 +51,9 @@ public class IdentityResourceStore_Tests : AbpIdentityServerTestBase
             })).ToList();
 
         //Assert
-        apiResources.ShouldNotBeNull();
+        apiResources.ShouldNotBe(null);
 
-        apiResources.ShouldContain(x => x.Scopes.Contains("Test-ApiResource-ApiScope-Name-1"));
+        apiResources[0].Scopes.Count.ShouldBe(4);
     }
 
     [Fact]

@@ -3,7 +3,6 @@
   "texts": {
     "Features": "Funktionen",
     "NoFeatureFoundMessage": "Es ist keine Funktion verfügbar.",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Der {0} -Feature-Wert ist ungültig!",
-    "Menu:FeatureManagement": "Feature Verwaltung"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Der {0} -Feature-Wert ist ungültig!"
   }
 }

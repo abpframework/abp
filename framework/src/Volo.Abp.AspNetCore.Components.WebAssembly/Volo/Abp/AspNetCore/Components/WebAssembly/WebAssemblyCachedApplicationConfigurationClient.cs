@@ -9,43 +9,26 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly;
 
 public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
 {
-    protected AbpApplicationConfigurationClientProxy ApplicationConfigurationClientProxy { get; }
-    
-    protected AbpApplicationLocalizationClientProxy ApplicationLocalizationClientProxy { get; }
+    protected AbpApplicationConfigurationClientProxy ApplicationConfigurationAppService { get; }
 
     protected ApplicationConfigurationCache Cache { get; }
 
     protected ICurrentTenantAccessor CurrentTenantAccessor { get; }
 
     public WebAssemblyCachedApplicationConfigurationClient(
-        AbpApplicationConfigurationClientProxy applicationConfigurationClientProxy,
+        AbpApplicationConfigurationClientProxy applicationConfigurationAppService,
         ApplicationConfigurationCache cache,
-        ICurrentTenantAccessor currentTenantAccessor, 
-        AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy)
+        ICurrentTenantAccessor currentTenantAccessor)
     {
-        ApplicationConfigurationClientProxy = applicationConfigurationClientProxy;
+        ApplicationConfigurationAppService = applicationConfigurationAppService;
         Cache = cache;
         CurrentTenantAccessor = currentTenantAccessor;
-        ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
     }
 
     public virtual async Task InitializeAsync()
     {
-        var configurationDto = await ApplicationConfigurationClientProxy.GetAsync(
-            new ApplicationConfigurationRequestOptions {
-                IncludeLocalizationResources = false
-            }
-        );
+        var configurationDto = await ApplicationConfigurationAppService.GetAsync();
 
-        var localizationDto = await ApplicationLocalizationClientProxy.GetAsync(
-            new ApplicationLocalizationRequestDto {
-                CultureName = configurationDto.Localization.CurrentCulture.Name,
-                OnlyDynamics = true
-            }
-        );
-
-        configurationDto.Localization.Resources = localizationDto.Resources;
-        
         Cache.Set(configurationDto);
 
         CurrentTenantAccessor.Current = new BasicTenantInfo(

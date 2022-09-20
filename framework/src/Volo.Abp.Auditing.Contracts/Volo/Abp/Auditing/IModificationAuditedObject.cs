@@ -10,7 +10,7 @@ public interface IModificationAuditedObject : IHasModificationTime
     /// <summary>
     /// Last modifier user for this entity.
     /// </summary>
-    Guid? LastModifierId { get; }
+    Guid? LastModifierId { get; set; }
 }
 
 /// <summary>
@@ -22,5 +22,5 @@ public interface IModificationAuditedObject<TUser> : IModificationAuditedObject
     /// <summary>
     /// Reference to the last modifier user of this entity.
     /// </summary>
-    TUser LastModifier { get; }
+    TUser LastModifier { get; set; }
 }

@@ -333,14 +333,14 @@ public abstract class ProjectCreationCommandBase
         var tieredYesNo = tiered ? "yes" : "no";
         var url = $"https://{urlPrefix}.abp.io/project-created-success?ui={uiFramework:g}&db={databaseProvider:g}&tiered={tieredYesNo}";
 
-        CmdHelper.Open(url);
+        CmdHelper.OpenWebPage(url);
     }
 
     protected void OpenMicroserviceDocumentPage()
     {
         var url = "https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index";
 
-        CmdHelper.Open(url);
+        CmdHelper.OpenWebPage(url);
     }
 
     protected bool GetCreateSolutionFolderPreference(CommandLineArgs commandLineArgs)

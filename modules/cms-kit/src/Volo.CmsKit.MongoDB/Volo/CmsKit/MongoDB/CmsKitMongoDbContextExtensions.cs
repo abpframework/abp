@@ -22,67 +22,67 @@ public static class CmsKitMongoDbContextExtensions
 
         builder.Entity<CmsUser>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "Users";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Users";
         });
 
         builder.Entity<UserReaction>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "UserReactions";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "UserReactions";
         });
 
         builder.Entity<Comment>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "Comments";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Comments";
         });
 
         builder.Entity<Rating>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "Ratings";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Ratings";
         });
 
         builder.Entity<Tag>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "Tags";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Tags";
         });
 
         builder.Entity<EntityTag>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "EntityTags";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "EntityTags";
         });
 
         builder.Entity<Page>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "Pages";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Pages";
         });
 
         builder.Entity<Blog>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "Blogs";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Blogs";
         });
 
         builder.Entity<BlogPost>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "BlogPosts";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "BlogPosts";
         });
 
         builder.Entity<BlogFeature>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "BlogFeatures";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "BlogFeatures";
         });
 
         builder.Entity<MediaDescriptor>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "MediaDescriptors";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MediaDescriptors";
         });
 
         builder.Entity<MenuItem>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "MenuItems";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MenuItems";
         });
 
         builder.Entity<GlobalResource>(x =>
         {
-            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "GlobalResources";
+            x.CollectionName = CmsKitDbProperties.DbTablePrefix + "GlobalResources";
         });
     }
 }

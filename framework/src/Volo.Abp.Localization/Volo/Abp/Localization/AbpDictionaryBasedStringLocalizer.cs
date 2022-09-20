@@ -4,14 +4,13 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization;
 
-public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
+public class AbpDictionaryBasedStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
 {
-    public LocalizationResourceBase Resource { get; }
+    public LocalizationResource Resource { get; }
 
     public List<IStringLocalizer> BaseLocalizers { get; }
 
@@ -21,10 +20,7 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
 
     public virtual LocalizedString this[string name, params object[] arguments] => GetLocalizedStringFormatted(name, arguments);
 
-    public AbpDictionaryBasedStringLocalizer(
-        LocalizationResourceBase resource,
-        List<IStringLocalizer> baseLocalizers,
-        AbpLocalizationOptions abpLocalizationOptions)
+    public AbpDictionaryBasedStringLocalizer(LocalizationResource resource, List<IStringLocalizer> baseLocalizers, AbpLocalizationOptions abpLocalizationOptions)
     {
         Resource = resource;
         BaseLocalizers = baseLocalizers;
@@ -38,44 +34,14 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
             includeParentCultures
         );
     }
-    
-    public async Task<IEnumerable<LocalizedString>> GetAllStringsAsync(bool includeParentCultures)
-    {
-        return await GetAllStringsAsync(
-            CultureInfo.CurrentUICulture.Name,
-            includeParentCultures
-        );
-    }
 
-    public IEnumerable<LocalizedString> GetAllStrings(
-        bool includeParentCultures,
-        bool includeBaseLocalizers,
-        bool includeDynamicContributors)
+    public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
     {
         return GetAllStrings(
             CultureInfo.CurrentUICulture.Name,
             includeParentCultures,
-            includeBaseLocalizers,
-            includeDynamicContributors
+            includeBaseLocalizers
         );
-    }
-
-    public async Task<IEnumerable<LocalizedString>> GetAllStringsAsync(
-        bool includeParentCultures, 
-        bool includeBaseLocalizers,
-        bool includeDynamicContributors)
-    {
-        return await GetAllStringsAsync(
-            CultureInfo.CurrentUICulture.Name,
-            includeParentCultures,
-            includeBaseLocalizers,
-            includeDynamicContributors
-        );
-    }
-
-    public Task<IEnumerable<string>> GetSupportedCulturesAsync()
-    {
-        return Resource.Contributors.GetSupportedCulturesAsync();
     }
 
     protected virtual LocalizedString GetLocalizedStringFormatted(string name, params object[] arguments)
@@ -118,10 +84,7 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
         return value;
     }
 
-    protected virtual LocalizedString GetLocalizedStringOrNull(
-        string name,
-        string cultureName,
-        bool tryDefaults = true)
+    protected virtual LocalizedString GetLocalizedStringOrNull(string name, string cultureName, bool tryDefaults = true)
     {
         //Try to get from original dictionary (with country code)
         var strOriginal = Resource.Contributors.GetOrNull(cultureName, name);
@@ -168,8 +131,7 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
     protected virtual IReadOnlyList<LocalizedString> GetAllStrings(
         string cultureName,
         bool includeParentCultures = true,
-        bool includeBaseLocalizers = true,
-        bool includeDynamicContributors = true)
+        bool includeBaseLocalizers = true)
     {
         //TODO: Can be optimized (example: if it's already default dictionary, skip overriding)
 
@@ -184,12 +146,7 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
                     //TODO: Try/catch is a workaround here!
                     try
                     {
-                        var baseLocalizedString = baseLocalizer.GetAllStrings(
-                            includeParentCultures,
-                            includeBaseLocalizers, // Always true, I know!
-                            includeDynamicContributors
-                        );
-                        
+                        var baseLocalizedString = baseLocalizer.GetAllStrings(includeParentCultures);
                         foreach (var localizedString in baseLocalizedString)
                         {
                             allStrings[localizedString.Name] = localizedString;
@@ -208,94 +165,23 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
             //Fill all strings from default culture
             if (!Resource.DefaultCultureName.IsNullOrEmpty())
             {
-                Resource.Contributors.Fill(Resource.DefaultCultureName, allStrings, includeDynamicContributors);
+                Resource.Contributors.Fill(Resource.DefaultCultureName, allStrings);
             }
 
             //Overwrite all strings from the language based on country culture
             if (cultureName.Contains("-"))
             {
-                Resource.Contributors.Fill(CultureHelper.GetBaseCultureName(cultureName), allStrings, includeDynamicContributors);
+                Resource.Contributors.Fill(CultureHelper.GetBaseCultureName(cultureName), allStrings);
             }
         }
 
         //Overwrite all strings from the original culture
-        Resource.Contributors.Fill(cultureName, allStrings, includeDynamicContributors);
+        Resource.Contributors.Fill(cultureName, allStrings);
 
         return allStrings.Values.ToImmutableList();
     }
 
-    protected virtual async Task<IReadOnlyList<LocalizedString>> GetAllStringsAsync(
-        string cultureName,
-        bool includeParentCultures = true,
-        bool includeBaseLocalizers = true,
-        bool includeDynamicContributors = true)
-    {
-        //TODO: Can be optimized (example: if it's already default dictionary, skip overriding)
-
-        var allStrings = new Dictionary<string, LocalizedString>();
-
-        if (includeBaseLocalizers)
-        {
-            foreach (var baseLocalizer in BaseLocalizers.Select(l => l))
-            {
-                using (CultureHelper.Use(CultureInfo.GetCultureInfo(cultureName)))
-                {
-                    //TODO: Try/catch is a workaround here!
-                    try
-                    {
-                        var baseLocalizedString = await baseLocalizer.GetAllStringsAsync(
-                            includeParentCultures,
-                            includeBaseLocalizers, // Always true, I know!
-                            includeDynamicContributors
-                        );
-                        
-                        foreach (var localizedString in baseLocalizedString)
-                        {
-                            allStrings[localizedString.Name] = localizedString;
-                        }
-                    }
-                    catch (MissingManifestResourceException)
-                    {
-
-                    }
-                }
-            }
-        }
-
-        if (includeParentCultures)
-        {
-            //Fill all strings from default culture
-            if (!Resource.DefaultCultureName.IsNullOrEmpty())
-            {
-                await Resource.Contributors.FillAsync(
-                    Resource.DefaultCultureName,
-                    allStrings,
-                    includeDynamicContributors
-                );
-            }
-
-            //Overwrite all strings from the language based on country culture
-            if (cultureName.Contains("-"))
-            {
-                await Resource.Contributors.FillAsync(
-                    CultureHelper.GetBaseCultureName(cultureName),
-                    allStrings,
-                    includeDynamicContributors
-                );
-            }
-        }
-
-        //Overwrite all strings from the original culture
-        await Resource.Contributors.FillAsync(
-            cultureName,
-            allStrings,
-            includeDynamicContributors
-        );
-
-        return allStrings.Values.ToImmutableList();
-    }
-
-    public class CultureWrapperStringLocalizer : IAbpStringLocalizer
+    public class CultureWrapperStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
     {
         private readonly string _cultureName;
         private readonly AbpDictionaryBasedStringLocalizer _innerLocalizer;
@@ -315,28 +201,9 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
             return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures);
         }
 
-        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers, bool includeDynamicContributors)
+        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
         {
-            return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures, includeBaseLocalizers, includeDynamicContributors);
-        }
-
-        public Task<IEnumerable<LocalizedString>> GetAllStringsAsync(bool includeParentCultures)
-        {
-            return _innerLocalizer.GetAllStringsAsync(includeParentCultures);
-        }
-
-        public Task<IEnumerable<LocalizedString>> GetAllStringsAsync(bool includeParentCultures, bool includeBaseLocalizers, bool includeDynamicContributors)
-        {
-            return _innerLocalizer.GetAllStringsAsync(
-                includeParentCultures,
-                includeBaseLocalizers,
-                includeDynamicContributors
-            );
-        }
-
-        public Task<IEnumerable<string>> GetSupportedCulturesAsync()
-        {
-            return _innerLocalizer.GetSupportedCulturesAsync();
+            return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures, includeBaseLocalizers);
         }
     }
 }

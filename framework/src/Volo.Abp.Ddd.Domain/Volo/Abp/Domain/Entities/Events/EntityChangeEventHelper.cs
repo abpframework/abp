@@ -42,6 +42,18 @@ public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDepen
         Logger = NullLogger<EntityChangeEventHelper>.Instance;
     }
 
+    public virtual void PublishEntityCreatingEvent(object entity)
+    {
+        TriggerEventWithEntity(
+            LocalEventBus,
+#pragma warning disable 618
+                typeof(EntityCreatingEventData<>),
+#pragma warning restore 618
+                entity,
+            entity
+        );
+    }
+
     public virtual void PublishEntityCreatedEvent(object entity)
     {
         TriggerEventWithEntity(
@@ -77,6 +89,18 @@ public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDepen
             );
     }
 
+    public virtual void PublishEntityUpdatingEvent(object entity)
+    {
+        TriggerEventWithEntity(
+            LocalEventBus,
+#pragma warning disable 618
+                typeof(EntityUpdatingEventData<>),
+#pragma warning restore 618
+                entity,
+            entity
+        );
+    }
+
     public virtual void PublishEntityUpdatedEvent(object entity)
     {
         TriggerEventWithEntity(
@@ -99,6 +123,18 @@ public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDepen
                 );
             }
         }
+    }
+
+    public virtual void PublishEntityDeletingEvent(object entity)
+    {
+        TriggerEventWithEntity(
+            LocalEventBus,
+#pragma warning disable 618
+                typeof(EntityDeletingEventData<>),
+#pragma warning restore 618
+                entity,
+            entity
+        );
     }
 
     public virtual void PublishEntityDeletedEvent(object entity)

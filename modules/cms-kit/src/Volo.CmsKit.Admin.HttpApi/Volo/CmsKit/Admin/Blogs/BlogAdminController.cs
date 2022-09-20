@@ -1,18 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Blogs;
 
-[RequiresFeature(CmsKitFeatures.BlogEnable)]
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]

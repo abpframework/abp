@@ -2,70 +2,120 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Features;
 
 public class FeatureDefinitionManager : IFeatureDefinitionManager, ISingletonDependency
 {
-    protected IStaticFeatureDefinitionStore StaticStore;
-    protected IDynamicFeatureDefinitionStore DynamicStore;
+    protected IDictionary<string, FeatureGroupDefinition> FeatureGroupDefinitions => _lazyFeatureGroupDefinitions.Value;
+    private readonly Lazy<Dictionary<string, FeatureGroupDefinition>> _lazyFeatureGroupDefinitions;
+
+    protected IDictionary<string, FeatureDefinition> FeatureDefinitions => _lazyFeatureDefinitions.Value;
+    private readonly Lazy<Dictionary<string, FeatureDefinition>> _lazyFeatureDefinitions;
+
+    protected AbpFeatureOptions Options { get; }
+
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
     public FeatureDefinitionManager(
-        IStaticFeatureDefinitionStore staticStore,
-        IDynamicFeatureDefinitionStore dynamicStore)
+        IOptions<AbpFeatureOptions> options,
+        IServiceScopeFactory serviceScopeFactory)
     {
-        StaticStore = staticStore;
-        DynamicStore = dynamicStore;
+        _serviceScopeFactory = serviceScopeFactory;
+        Options = options.Value;
+
+        _lazyFeatureDefinitions = new Lazy<Dictionary<string, FeatureDefinition>>(
+            CreateFeatureDefinitions,
+            isThreadSafe: true
+        );
+
+        _lazyFeatureGroupDefinitions = new Lazy<Dictionary<string, FeatureGroupDefinition>>(
+            CreateFeatureGroupDefinitions,
+            isThreadSafe: true
+        );
     }
 
-    public virtual async Task<FeatureDefinition> GetAsync(string name)
+    public virtual FeatureDefinition Get(string name)
     {
-        var permission = await GetOrNullAsync(name);
-        if (permission == null)
+        Check.NotNull(name, nameof(name));
+
+        var feature = GetOrNull(name);
+
+        if (feature == null)
         {
             throw new AbpException("Undefined feature: " + name);
         }
 
-        return permission;
+        return feature;
     }
 
-    public virtual async Task<FeatureDefinition> GetOrNullAsync(string name)
+    public virtual IReadOnlyList<FeatureDefinition> GetAll()
     {
-        Check.NotNull(name, nameof(name));
-
-        return await StaticStore.GetOrNullAsync(name) ??
-               await DynamicStore.GetOrNullAsync(name);
+        return FeatureDefinitions.Values.ToImmutableList();
     }
 
-    public virtual async Task<IReadOnlyList<FeatureDefinition>> GetAllAsync()
+    public virtual FeatureDefinition GetOrNull(string name)
     {
-        var staticFeatures = await StaticStore.GetFeaturesAsync();
-        var staticFeatureNames = staticFeatures
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
-
-        var dynamicFeatures = await DynamicStore.GetFeaturesAsync();
-
-        /* We prefer static features over dynamics */
-        return staticFeatures.Concat(
-            dynamicFeatures.Where(d => !staticFeatureNames.Contains(d.Name))
-        ).ToImmutableList();
+        return FeatureDefinitions.GetOrDefault(name);
     }
 
-    public virtual async Task<IReadOnlyList<FeatureGroupDefinition>> GetGroupsAsync()
+    public IReadOnlyList<FeatureGroupDefinition> GetGroups()
     {
-        var staticGroups = await StaticStore.GetGroupsAsync();
-        var staticGroupNames = staticGroups
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
+        return FeatureGroupDefinitions.Values.ToImmutableList();
+    }
 
-        var dynamicGroups = await DynamicStore.GetGroupsAsync();
+    protected virtual Dictionary<string, FeatureDefinition> CreateFeatureDefinitions()
+    {
+        var features = new Dictionary<string, FeatureDefinition>();
 
-        /* We prefer static groups over dynamics */
-        return staticGroups.Concat(
-            dynamicGroups.Where(d => !staticGroupNames.Contains(d.Name))
-        ).ToImmutableList();
+        foreach (var groupDefinition in FeatureGroupDefinitions.Values)
+        {
+            foreach (var feature in groupDefinition.Features)
+            {
+                AddFeatureToDictionaryRecursively(features, feature);
+            }
+        }
+
+        return features;
+    }
+
+    protected virtual void AddFeatureToDictionaryRecursively(
+        Dictionary<string, FeatureDefinition> features,
+        FeatureDefinition feature)
+    {
+        if (features.ContainsKey(feature.Name))
+        {
+            throw new AbpException("Duplicate feature name: " + feature.Name);
+        }
+
+        features[feature.Name] = feature;
+
+        foreach (var child in feature.Children)
+        {
+            AddFeatureToDictionaryRecursively(features, child);
+        }
+    }
+
+    protected virtual Dictionary<string, FeatureGroupDefinition> CreateFeatureGroupDefinitions()
+    {
+        var context = new FeatureDefinitionContext();
+
+        using (var scope = _serviceScopeFactory.CreateScope())
+        {
+            var providers = Options
+                .DefinitionProviders
+                .Select(p => scope.ServiceProvider.GetRequiredService(p) as IFeatureDefinitionProvider)
+                .ToList();
+
+            foreach (var provider in providers)
+            {
+                provider.Define(context);
+            }
+        }
+
+        return context.Groups;
     }
 }

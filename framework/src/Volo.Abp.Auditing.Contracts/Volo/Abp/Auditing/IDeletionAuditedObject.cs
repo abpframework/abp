@@ -10,7 +10,7 @@ public interface IDeletionAuditedObject : IHasDeletionTime
     /// <summary>
     /// Id of the deleter user.
     /// </summary>
-    Guid? DeleterId { get; }
+    Guid? DeleterId { get; set; }
 }
 
 /// <summary>
@@ -22,5 +22,5 @@ public interface IDeletionAuditedObject<TUser> : IDeletionAuditedObject
     /// <summary>
     /// Reference to the deleter user.
     /// </summary>
-    TUser Deleter { get; }
+    TUser Deleter { get; set; }
 }

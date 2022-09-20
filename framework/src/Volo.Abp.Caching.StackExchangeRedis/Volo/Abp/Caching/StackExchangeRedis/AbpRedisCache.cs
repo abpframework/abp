@@ -15,18 +15,18 @@ namespace Volo.Abp.Caching.StackExchangeRedis;
 [DisableConventionalRegistration]
 public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
 {
+    protected static readonly string SetScript;
     protected static readonly string AbsoluteExpirationKey;
     protected static readonly string SlidingExpirationKey;
     protected static readonly string DataKey;
     protected static readonly long NotPresent;
 
-    private readonly static FieldInfo SetScriptField;
-    private readonly static FieldInfo RedisDatabaseField;
-    private readonly static MethodInfo ConnectMethod;
-    private readonly static MethodInfo ConnectAsyncMethod;
-    private readonly static MethodInfo MapMetadataMethod;
-    private readonly static MethodInfo GetAbsoluteExpirationMethod;
-    private readonly static MethodInfo GetExpirationInSecondsMethod;
+    private static readonly FieldInfo RedisDatabaseField;
+    private static readonly MethodInfo ConnectMethod;
+    private static readonly MethodInfo ConnectAsyncMethod;
+    private static readonly MethodInfo MapMetadataMethod;
+    private static readonly MethodInfo GetAbsoluteExpirationMethod;
+    private static readonly MethodInfo GetExpirationInSecondsMethod;
 
     protected IDatabase RedisDatabase => GetRedisDatabase();
     private IDatabase _redisDatabase;
@@ -36,10 +36,8 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
     static AbpRedisCache()
     {
         var type = typeof(RedisCache);
-        
-        RedisDatabaseField = type.GetField("_cache", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        SetScriptField = type.GetField("_setScript", BindingFlags.Instance | BindingFlags.NonPublic);
+        RedisDatabaseField = type.GetField("_cache", BindingFlags.Instance | BindingFlags.NonPublic);
 
         ConnectMethod = type.GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -52,6 +50,9 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
 
         GetExpirationInSecondsMethod =
             type.GetMethod("GetExpirationInSeconds", BindingFlags.Static | BindingFlags.NonPublic);
+
+        SetScript = type.GetField("SetScript", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null)
+            .ToString();
 
         AbsoluteExpirationKey = type.GetField("AbsoluteExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)
             ?.GetValue(null).ToString();
@@ -82,14 +83,14 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         ConnectMethod.Invoke(this, Array.Empty<object>());
     }
 
-    protected virtual async Task ConnectAsync(CancellationToken token = default)
+    protected virtual Task ConnectAsync(CancellationToken token = default)
     {
         if (GetRedisDatabase() != null)
         {
-            return;
+            return Task.CompletedTask;
         }
 
-        await (Task)ConnectAsyncMethod.Invoke(this, new object[] { token });
+        return (Task)ConnectAsyncMethod.Invoke(this, new object[] { token });
     }
 
     public byte[][] GetMany(
@@ -282,7 +283,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
 
         for (var i = 0; i < itemArray.Length; i++)
         {
-            tasks[i] = RedisDatabase.ScriptEvaluateAsync(GetSetScript(), new RedisKey[] { Instance + itemArray[i].Key },
+            tasks[i] = RedisDatabase.ScriptEvaluateAsync(SetScript, new RedisKey[] { Instance + itemArray[i].Key },
                 new RedisValue[]
                 {
                         absoluteExpiration?.Ticks ?? NotPresent,
@@ -331,10 +332,5 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         }
 
         return _redisDatabase;
-    }
-
-    private string GetSetScript()
-    {
-        return SetScriptField?.GetValue(this).ToString();
     }
 }

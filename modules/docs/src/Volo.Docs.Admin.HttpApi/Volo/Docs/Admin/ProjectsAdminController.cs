@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -60,13 +59,6 @@ namespace Volo.Docs.Admin
         public Task ReindexAllAsync()
         {
             return _projectAppService.ReindexAllAsync();
-        }
-
-        [HttpGet]
-        [Route("GetListProjectWithoutDetailsAsync")]
-        public Task<List<ProjectWithoutDetailsDto>> GetListWithoutDetailsAsync()
-        {
-            return _projectAppService.GetListWithoutDetailsAsync();
         }
 
         [HttpPost]

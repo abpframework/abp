@@ -8,7 +8,7 @@ using Volo.Docs.Projects;
 namespace Volo.Docs.MongoDB
 {
     [IgnoreMultiTenancy]
-    [ConnectionStringName(AbpDocsDbProperties.ConnectionStringName)]
+    [ConnectionStringName(DocsDbProperties.ConnectionStringName)]
     public interface IDocsMongoDbContext : IAbpMongoDbContext
     {
         IMongoCollection<Project> Projects { get; }

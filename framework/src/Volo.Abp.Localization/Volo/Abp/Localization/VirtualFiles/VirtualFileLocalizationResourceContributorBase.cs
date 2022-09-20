@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
@@ -12,8 +11,6 @@ namespace Volo.Abp.Localization.VirtualFiles;
 
 public abstract class VirtualFileLocalizationResourceContributorBase : ILocalizationResourceContributor
 {
-    public bool IsDynamic => false;
-
     private readonly string _virtualPath;
     private IVirtualFileProvider _virtualFileProvider;
     private Dictionary<string, ILocalizationDictionary> _dictionaries;
@@ -38,17 +35,6 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     public virtual void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
     {
         GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
-    }
-
-    public Task FillAsync(string cultureName, Dictionary<string, LocalizedString> dictionary)
-    {
-        Fill(cultureName, dictionary);
-        return Task.CompletedTask;
-    }
-
-    public Task<IEnumerable<string>> GetSupportedCulturesAsync()
-    {
-        return Task.FromResult((IEnumerable<string>)GetDictionaries().Keys);
     }
 
     private Dictionary<string, ILocalizationDictionary> GetDictionaries()

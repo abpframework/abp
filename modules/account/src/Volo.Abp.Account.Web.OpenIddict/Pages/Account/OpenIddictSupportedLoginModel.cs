@@ -34,8 +34,7 @@ public class OpenIddictSupportedLoginModel : LoginModel
         var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
         if (request?.ClientId != null)
         {
-            // TODO: Find a proper cancel way.
-            // ShowCancelButton = true;
+            ShowCancelButton = true;
 
             LoginInput.UserNameOrEmailAddress = request.LoginHint;
 

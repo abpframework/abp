@@ -48,14 +48,12 @@
     "Search": "Arama",
     "StartDate": "Başlangıç tarihi",
     "EndDate": "Bitiş tarihi",
-    "CreationTime": "Oluşturma Zamanı",
+    "CreationTime": "oluşturma zamanı",
     "LastUpdateTime": "Son Güncelleme",
     "LastSignificantUpdateTime": "Son önemli güncelleme",
-    "Version": "Sürüm",
+    "Version": "sürüm",
     "LanguageCode": "Dil kodu",
     "FileName": "Dosya adı",
-    "LastCachedTime": "Önbellek süresi",
-    "Project": "Proje",
-    "AdvancedFilters": "Gelişmiş Filtre"
+    "LastCachedTime": "Önbellek süresi"
   }
 }

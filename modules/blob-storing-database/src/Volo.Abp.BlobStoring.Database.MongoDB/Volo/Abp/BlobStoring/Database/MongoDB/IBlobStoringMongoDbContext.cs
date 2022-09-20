@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BlobStoring.Database.MongoDB;
 
-[ConnectionStringName(AbpBlobStoringDatabaseDbProperties.ConnectionStringName)]
+[ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
 public interface IBlobStoringMongoDbContext : IAbpMongoDbContext
 {
     IMongoCollection<DatabaseBlobContainer> BlobContainers { get; }

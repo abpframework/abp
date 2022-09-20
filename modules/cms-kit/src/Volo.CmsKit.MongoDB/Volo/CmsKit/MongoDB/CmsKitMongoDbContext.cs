@@ -15,7 +15,7 @@ using Tag = Volo.CmsKit.Tags.Tag;
 
 namespace Volo.CmsKit.MongoDB;
 
-[ConnectionStringName(AbpCmsKitDbProperties.ConnectionStringName)]
+[ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
 public class CmsKitMongoDbContext : AbpMongoDbContext, ICmsKitMongoDbContext
 {
     public IMongoCollection<Comment> Comments => Collection<Comment>();

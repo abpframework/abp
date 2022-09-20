@@ -141,14 +141,13 @@ Configure<AbpRabbitMqOptions>(options =>
 });
 ````
 
-**Example: Configure the client, exchange names and prefetchCount**
+**Example: Configure the client and exchange names**
 
 ````csharp
 Configure<AbpRabbitMqEventBusOptions>(options =>
 {
     options.ClientName = "TestApp1";
     options.ExchangeName = "TestMessages";
-    options.PrefetchCount = 1;
 });
 ````
 

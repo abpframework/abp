@@ -70,6 +70,13 @@ public class AbpTenantManagementWebModule : AbpModule
                 toolbar =>
                 {
                     toolbar.AddButton(
+                        LocalizableString.Create<AbpTenantManagementResource>("ManageHostFeatures"),
+                        icon: "cog",
+                        name: "ManageHostFeatures",
+                        requiredPolicyName: FeatureManagementPermissions.ManageHostFeatures
+                    );
+
+                    toolbar.AddButton(
                         LocalizableString.Create<AbpTenantManagementResource>("NewTenant"),
                         icon: "plus",
                         name: "CreateTenant",

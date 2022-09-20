@@ -11,7 +11,7 @@ using Volo.Blogging.Users;
 namespace Volo.Blogging.EntityFrameworkCore
 {
     [IgnoreMultiTenancy]
-    [ConnectionStringName(AbpBloggingDbProperties.ConnectionStringName)]
+    [ConnectionStringName(BloggingDbProperties.ConnectionStringName)]
     public interface IBloggingDbContext : IEfCoreDbContext
     {
         DbSet<BlogUser> Users { get; }

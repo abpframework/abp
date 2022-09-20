@@ -9,19 +9,19 @@ public class EntityPropertyChangeInfo
     /// Maximum length of <see cref="PropertyName"/> property.
     /// Value: 96.
     /// </summary>
-    public static int MaxPropertyNameLength = 96;
+    public const int MaxPropertyNameLength = 96;
 
     /// <summary>
     /// Maximum length of <see cref="NewValue"/> and <see cref="OriginalValue"/> properties.
     /// Value: 512.
     /// </summary>
-    public static int MaxValueLength = 512;
+    public const int MaxValueLength = 512;
 
     /// <summary>
     /// Maximum length of <see cref="PropertyTypeFullName"/> property.
     /// Value: 512.
     /// </summary>
-    public static int MaxPropertyTypeFullNameLength = 192;
+    public const int MaxPropertyTypeFullNameLength = 192;
 
     public virtual string NewValue { get; set; }
 

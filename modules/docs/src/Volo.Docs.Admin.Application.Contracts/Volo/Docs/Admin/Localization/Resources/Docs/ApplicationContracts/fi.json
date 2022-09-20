@@ -54,7 +54,6 @@
     "Version": "Versio",
     "LanguageCode": "Kielikoodi",
     "FileName": "Tiedoston nimi",
-    "LastCachedTime": "Välimuistin aika",
-    "Project": "Projekti"
+    "LastCachedTime": "Välimuistin aika"
   }
 }

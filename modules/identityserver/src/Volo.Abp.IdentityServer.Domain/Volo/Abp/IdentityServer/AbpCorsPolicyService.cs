@@ -17,13 +17,13 @@ namespace Volo.Abp.IdentityServer;
 public class AbpCorsPolicyService : ICorsPolicyService
 {
     public ILogger<AbpCorsPolicyService> Logger { get; set; }
-    protected IServiceScopeFactory HybridServiceScopeFactory { get; }
+    protected IHybridServiceScopeFactory HybridServiceScopeFactory { get; }
     protected IDistributedCache<AllowedCorsOriginsCacheItem> Cache { get; }
     protected IdentityServerOptions Options { get; }
 
     public AbpCorsPolicyService(
         IDistributedCache<AllowedCorsOriginsCacheItem> cache,
-        IServiceScopeFactory hybridServiceScopeFactory,
+        IHybridServiceScopeFactory hybridServiceScopeFactory,
         IOptions<IdentityServerOptions> options)
     {
         Cache = cache;

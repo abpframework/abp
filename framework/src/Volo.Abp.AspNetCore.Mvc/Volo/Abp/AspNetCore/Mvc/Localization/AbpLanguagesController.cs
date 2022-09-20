@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.RequestLocalization;
-using Volo.Abp.Auditing;
 using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization;
 
 [Area("Abp")]
 [Route("Abp/Languages/[action]")]
-[DisableAuditing]
 [RemoteService(false)]
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AbpLanguagesController : AbpController

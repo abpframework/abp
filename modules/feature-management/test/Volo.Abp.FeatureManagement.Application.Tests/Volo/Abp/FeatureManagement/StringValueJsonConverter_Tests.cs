@@ -20,7 +20,7 @@ public abstract class StringValueJsonConverter_Tests : FeatureManagementApplicat
 
     protected override void BeforeAddApplication(IServiceCollection services)
     {
-        services.PreConfigure<ValueValidatorFactoryOptions>(options =>
+        services.PreConfigure<AbpFeatureManagementApplicationContractsOptions>(options =>
         {
             options.ValueValidatorFactory.Add(new ValueValidatorFactory<UrlValueValidator>("URL"));
         });

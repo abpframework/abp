@@ -12,7 +12,7 @@ public class ApplicationConfigurationBuilder_Tests : AspNetCoreMvcTestBase
     {
         var applicationConfigurationBuilder = GetRequiredService<IAbpApplicationConfigurationAppService>();
 
-        var config = await applicationConfigurationBuilder.GetAsync(new ApplicationConfigurationRequestOptions());
+        var config = await applicationConfigurationBuilder.GetAsync();
 
         config.Auth.ShouldNotBeNull();
         config.Localization.ShouldNotBeNull();

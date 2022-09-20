@@ -5,11 +5,9 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity;
 
@@ -37,17 +35,6 @@ public class AbpIdentityDomainTestModule : AbpModule
             options.Resources
                 .Get<IdentityResource>()
                 .AddVirtualJson("/Volo/Abp/Identity/LocalizationExtensions");
-        });
-
-        Configure<PermissionManagementOptions>(options =>
-        {
-            options.IsDynamicPermissionStoreEnabled = false;
-            options.SaveStaticPermissionsToDatabase = false;
-        });
-
-        Configure<AbpUnitOfWorkDefaultOptions>(options =>
-        {
-            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
         });
     }
 

@@ -20,7 +20,8 @@ public class PermissionDefinitionContext : IPermissionDefinitionContext
 
     public virtual PermissionGroupDefinition AddGroup(
         string name,
-        ILocalizableString displayName = null)
+        ILocalizableString displayName = null,
+        MultiTenancySides multiTenancySide = MultiTenancySides.Both)
     {
         Check.NotNull(name, nameof(name));
 
@@ -29,7 +30,7 @@ public class PermissionDefinitionContext : IPermissionDefinitionContext
             throw new AbpException($"There is already an existing permission group with name: {name}");
         }
 
-        return Groups[name] = new PermissionGroupDefinition(name, displayName);
+        return Groups[name] = new PermissionGroupDefinition(name, displayName, multiTenancySide);
     }
 
     [NotNull]

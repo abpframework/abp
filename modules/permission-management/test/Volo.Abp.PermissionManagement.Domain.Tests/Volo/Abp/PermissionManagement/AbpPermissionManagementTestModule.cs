@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Features;
-using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Uow;
@@ -12,10 +10,7 @@ namespace Volo.Abp.PermissionManagement;
 
 [DependsOn(
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-    typeof(AbpPermissionManagementTestBaseModule),
-    typeof(AbpFeaturesModule),
-    typeof(AbpGlobalFeaturesModule)
-    )]
+    typeof(AbpPermissionManagementTestBaseModule))]
 public class AbpPermissionManagementTestModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

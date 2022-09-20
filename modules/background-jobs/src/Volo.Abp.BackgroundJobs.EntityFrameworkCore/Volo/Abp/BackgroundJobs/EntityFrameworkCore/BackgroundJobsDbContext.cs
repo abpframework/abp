@@ -6,7 +6,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 
 [IgnoreMultiTenancy]
-[ConnectionStringName(AbpBackgroundJobsDbProperties.ConnectionStringName)]
+[ConnectionStringName(BackgroundJobsDbProperties.ConnectionStringName)]
 public class BackgroundJobsDbContext : AbpDbContext<BackgroundJobsDbContext>, IBackgroundJobsDbContext
 {
     public DbSet<BackgroundJobRecord> BackgroundJobs { get; set; }

@@ -16,8 +16,6 @@ public class AbpFeatureManagementMongoDbModule : AbpModule
         {
             options.AddDefaultRepositories<IFeatureManagementMongoDbContext>();
 
-            options.AddRepository<FeatureGroupDefinitionRecord, MongoFeatureGroupDefinitionRecordRepository>();
-            options.AddRepository<FeatureDefinitionRecord, MongoFeatureDefinitionRecordRepository>();
             options.AddRepository<FeatureValue, MongoFeatureValueRepository>();
         });
     }

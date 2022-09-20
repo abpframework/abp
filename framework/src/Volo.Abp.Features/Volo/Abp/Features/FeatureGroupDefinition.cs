@@ -5,7 +5,7 @@ using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.Features;
 
-public class FeatureGroupDefinition : ICanCreateChildFeature
+public class FeatureGroupDefinition
 {
     /// <summary>
     /// Unique name of the group.
@@ -69,16 +69,6 @@ public class FeatureGroupDefinition : ICanCreateChildFeature
         return feature;
     }
 
-    public FeatureDefinition CreateChildFeature(string name,
-        string defaultValue = null,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
-        IStringValueType valueType = null,
-        bool isVisibleToClients = true,
-        bool isAvailableToHost = true)
-    {
-        return AddFeature(name, defaultValue, displayName, description, valueType, isVisibleToClients);
-    }
     public virtual List<FeatureDefinition> GetFeaturesWithChildren()
     {
         var features = new List<FeatureDefinition>();

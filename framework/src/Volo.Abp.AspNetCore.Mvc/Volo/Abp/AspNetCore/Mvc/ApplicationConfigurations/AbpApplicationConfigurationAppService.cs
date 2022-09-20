@@ -17,7 +17,6 @@ using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.External;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;
@@ -83,7 +82,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         _multiTenancyOptions = multiTenancyOptions.Value;
     }
 
-    public virtual async Task<ApplicationConfigurationDto> GetAsync(ApplicationConfigurationRequestOptions options)
+    public virtual async Task<ApplicationConfigurationDto> GetAsync()
     {
         //TODO: Optimize & cache..?
 
@@ -94,7 +93,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             Auth = await GetAuthConfigAsync(),
             Features = await GetFeaturesConfigAsync(),
             GlobalFeatures = await GetGlobalFeaturesConfigAsync(),
-            Localization = await GetLocalizationConfigAsync(options),
+            Localization = await GetLocalizationConfigAsync(),
             CurrentUser = GetCurrentUser(),
             Setting = await GetSettingConfigAsync(),
             MultiTenancy = GetMultiTenancy(),
@@ -172,8 +171,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         foreach (var policyName in policyNames)
         {
-            if (await _defaultAuthorizationPolicyProvider.GetPolicyAsync(policyName) == null &&
-                await _permissionDefinitionManager.GetOrNullAsync(policyName) != null)
+            if (await _defaultAuthorizationPolicyProvider.GetPolicyAsync(policyName) == null && _permissionDefinitionManager.GetOrNull(policyName) != null)
             {
                 abpPolicyNames.Add(policyName);
             }
@@ -206,42 +204,26 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         return authConfig;
     }
 
-    protected virtual async Task<ApplicationLocalizationConfigurationDto> GetLocalizationConfigAsync(
-        ApplicationConfigurationRequestOptions options)
+    protected virtual async Task<ApplicationLocalizationConfigurationDto> GetLocalizationConfigAsync()
     {
         var localizationConfig = new ApplicationLocalizationConfigurationDto();
 
         localizationConfig.Languages.AddRange(await _languageProvider.GetLanguagesAsync());
 
-        if (options.IncludeLocalizationResources)
+        foreach (var resource in _localizationOptions.Resources.Values)
         {
-            var resourceNames = _localizationOptions
-                .Resources
-                .Values
-                .Select(x => x.ResourceName)
-                .Union(
-                    await LazyServiceProvider
-                        .LazyGetRequiredService<IExternalLocalizationStore>()
-                        .GetResourceNamesAsync()
-                );
+            var dictionary = new Dictionary<string, string>();
 
-            foreach (var resourceName in resourceNames)
+            var localizer = _serviceProvider.GetRequiredService(
+                typeof(IStringLocalizer<>).MakeGenericType(resource.ResourceType)
+            ) as IStringLocalizer;
+
+            foreach (var localizedString in localizer.GetAllStrings())
             {
-                var dictionary = new Dictionary<string, string>();
-            
-                var localizer = await StringLocalizerFactory
-                    .CreateByResourceNameOrNullAsync(resourceName);
-            
-                if (localizer != null)
-                {
-                    foreach (var localizedString in await localizer.GetAllStringsAsync())
-                    {
-                        dictionary[localizedString.Name] = localizedString.Value;
-                    }
-                }
-
-                localizationConfig.Values[resourceName] = dictionary;
+                dictionary[localizedString.Name] = localizedString.Value;
             }
+
+            localizationConfig.Values[resource.ResourceName] = dictionary;
         }
 
         localizationConfig.CurrentCulture = GetCurrentCultureInfo();
@@ -308,7 +290,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     {
         var result = new ApplicationFeatureConfigurationDto();
 
-        foreach (var featureDefinition in await _featureDefinitionManager.GetAllAsync())
+        foreach (var featureDefinition in _featureDefinitionManager.GetAll())
         {
             if (!featureDefinition.IsVisibleToClients)
             {

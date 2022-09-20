@@ -1,7 +1,6 @@
 {
   "culture": "hu",
   "texts": {
-    "Menu:Account": "Fiók",
     "UserName": "Felhasználónév",
     "EmailAddress": "Email cím",
     "UserNameOrEmailAddress": "Felhasználónév és email cím",

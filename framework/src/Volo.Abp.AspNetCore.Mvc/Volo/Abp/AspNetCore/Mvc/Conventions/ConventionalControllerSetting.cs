@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Volo.Abp.Reflection;
@@ -17,7 +16,7 @@ public class ConventionalControllerSetting
     public Assembly Assembly { get; }
 
     [NotNull]
-    internal HashSet<Type> ControllerTypes { get; }
+    public HashSet<Type> ControllerTypes { get; } //TODO: Internal?
 
     /// <summary>
     /// Set true to use the old style URL path style.
@@ -47,11 +46,6 @@ public class ConventionalControllerSetting
 
     [CanBeNull]
     public Func<Type, bool> TypePredicate { get; set; }
-
-    /// <summary>
-    /// Default value: All.
-    /// </summary>
-    public ApplicationServiceTypes ApplicationServiceTypes { get; set; } = ApplicationServiceTypes.All;
 
     [CanBeNull]
     public Action<ControllerModel> ControllerModelConfigurer { get; set; }
@@ -83,18 +77,12 @@ public class ConventionalControllerSetting
     {
         var types = Assembly.GetTypes()
             .Where(IsRemoteService)
-            .Where(IsPreferredApplicationServiceType)
             .WhereIf(TypePredicate != null, TypePredicate);
 
         foreach (var type in types)
         {
             ControllerTypes.Add(type);
         }
-    }
-    
-    public IReadOnlyList<Type> GetControllerTypes()
-    {
-        return ControllerTypes.ToImmutableList();
     }
 
     private static bool IsRemoteService(Type type)
@@ -116,20 +104,5 @@ public class ConventionalControllerSetting
         }
 
         return false;
-    }
-    
-    private bool IsPreferredApplicationServiceType(Type type)
-    {
-        if (ApplicationServiceTypes == ApplicationServiceTypes.ApplicationServices)
-        {
-            return !IntegrationServiceAttribute.IsDefinedOrInherited(type);
-        }
-        
-        if (ApplicationServiceTypes == ApplicationServiceTypes.IntegrationServices)
-        {
-            return IntegrationServiceAttribute.IsDefinedOrInherited(type);
-        }
-
-        return true;
     }
 }

@@ -54,7 +54,6 @@
     "Version": "Verze",
     "LanguageCode": "Kód jazyka",
     "FileName": "Název souboru",
-    "LastCachedTime": "Čas uložení v mezipaměti",
-    "Project": "Projekt"
+    "LastCachedTime": "Čas uložení v mezipaměti"
   }
 }

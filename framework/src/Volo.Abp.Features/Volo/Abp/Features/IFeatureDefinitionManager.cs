@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Features;
@@ -7,11 +6,11 @@ namespace Volo.Abp.Features;
 public interface IFeatureDefinitionManager
 {
     [NotNull]
-    Task<FeatureDefinition> GetAsync([NotNull] string name);
+    FeatureDefinition Get([NotNull] string name);
 
-    Task<IReadOnlyList<FeatureDefinition>> GetAllAsync();
+    IReadOnlyList<FeatureDefinition> GetAll();
 
-    Task<FeatureDefinition> GetOrNullAsync(string name);
+    FeatureDefinition GetOrNull(string name);
 
-    Task<IReadOnlyList<FeatureGroupDefinition>> GetGroupsAsync();
+    IReadOnlyList<FeatureGroupDefinition> GetGroups();
 }

@@ -5,5 +5,5 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 public interface IAbpApplicationConfigurationAppService : IApplicationService
 {
-    Task<ApplicationConfigurationDto> GetAsync(ApplicationConfigurationRequestOptions options);
+    Task<ApplicationConfigurationDto> GetAsync();
 }

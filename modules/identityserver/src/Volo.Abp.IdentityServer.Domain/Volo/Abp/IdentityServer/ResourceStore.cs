@@ -31,7 +31,6 @@ public class ResourceStore : IResourceStore
     protected IDistributedCache<IdentityServer4.Models.IdentityResource> IdentityResourceCache { get; }
     protected IDistributedCache<IdentityServer4.Models.ApiScope> ApiScopeCache { get; }
     protected IDistributedCache<IdentityServer4.Models.ApiResource> ApiResourceCache { get; }
-    protected IDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>> ApiResourcesCache { get; }
     protected IDistributedCache<IdentityServer4.Models.Resources> ResourcesCache { get; }
     protected IdentityServerOptions Options { get; }
 
@@ -43,7 +42,6 @@ public class ResourceStore : IResourceStore
         IDistributedCache<IdentityServer4.Models.IdentityResource> identityResourceCache,
         IDistributedCache<IdentityServer4.Models.ApiScope> apiScopeCache,
         IDistributedCache<IdentityServer4.Models.ApiResource> apiResourceCache,
-        IDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>> apiResourcesCache,
         IDistributedCache<Resources> resourcesCache,
         IOptions<IdentityServerOptions> options)
     {
@@ -54,7 +52,6 @@ public class ResourceStore : IResourceStore
         IdentityResourceCache = identityResourceCache;
         ApiScopeCache = apiScopeCache;
         ApiResourceCache = apiResourceCache;
-        ApiResourcesCache = apiResourcesCache;
         ResourcesCache = resourcesCache;
         Options = options.Value;
     }
@@ -94,22 +91,16 @@ public class ResourceStore : IResourceStore
     /// </summary>
     public virtual async Task<IEnumerable<IdentityServer4.Models.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
     {
-        var cacheItems = await ApiResourcesCache.GetManyAsync(AddCachePrefix(scopeNames, ApiResourceScopeNameCacheKeyPrefix));
-        if (cacheItems.All(x => x.Value != null))
-        {
-            return cacheItems.SelectMany(x => x.Value).DistinctBy(x => x.Name);
-        }
-
-        var otherKeys = RemoveCachePrefix(cacheItems.Where(x => x.Value == null).Select(x => x.Key), ApiResourceScopeNameCacheKeyPrefix).ToArray();
-        var otherModels = ObjectMapper.Map<List<ApiResource>, List<IdentityServer4.Models.ApiResource>>(await ApiResourceRepository.GetListByScopesAsync(otherKeys, includeDetails: true));
-
-        var otherCacheItems = otherKeys.Select(otherKey => new KeyValuePair<string, IEnumerable<IdentityServer4.Models.ApiResource>>(AddCachePrefix(otherKey, ApiResourceScopeNameCacheKeyPrefix), otherModels)).ToList();
-        await ApiResourcesCache.SetManyAsync(otherCacheItems, new DistributedCacheEntryOptions
-        {
-            AbsoluteExpirationRelativeToNow = Options.Caching.ClientStoreExpiration
-        });
-
-        return cacheItems.Where(x => x.Value != null).SelectMany(x => x.Value).Concat(otherModels).DistinctBy(x => x.Name);
+        return (await GetCacheItemsAsync(
+            ApiResourceCache,
+            scopeNames,
+            async keys => await ApiResourceRepository.GetListByScopesAsync(keys, includeDetails: true),
+            (models, cacheKeyPrefix) =>
+            {
+                return models
+                    .Select(model => model.Scopes.Select(scope => new KeyValuePair<string, IdentityServer4.Models.ApiResource>(AddCachePrefix(scope, cacheKeyPrefix), model)).ToList())
+                    .Where(scopes => scopes.Any()).Cast<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiResource>>>().ToList();
+            }, ApiResourceScopeNameCacheKeyPrefix)).DistinctBy(x => x.Name);
     }
 
     /// <summary>

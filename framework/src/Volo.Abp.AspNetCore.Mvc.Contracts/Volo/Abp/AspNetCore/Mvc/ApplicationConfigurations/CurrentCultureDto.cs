@@ -1,8 +1,5 @@
-﻿using System;
+﻿namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
-
-[Serializable]
 public class CurrentCultureDto
 {
     public string DisplayName { get; set; }

@@ -20,14 +20,12 @@ public class JobQueueConfiguration : QueueDeclareConfiguration
         string connectionName = null,
         bool durable = true,
         bool exclusive = false,
-        bool autoDelete = false,
-        ushort? prefetchCount = null)
+        bool autoDelete = false)
         : base(
             queueName,
             durable,
             exclusive,
-            autoDelete,
-            prefetchCount)
+            autoDelete)
     {
         JobArgsType = jobArgsType;
         ConnectionName = connectionName;

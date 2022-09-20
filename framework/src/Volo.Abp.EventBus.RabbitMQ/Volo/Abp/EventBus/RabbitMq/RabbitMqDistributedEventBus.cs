@@ -78,8 +78,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
                 AbpRabbitMqEventBusOptions.ClientName,
                 durable: true,
                 exclusive: false,
-                autoDelete: false,
-                prefetchCount: AbpRabbitMqEventBusOptions.PrefetchCount
+                autoDelete: false
             ),
             AbpRabbitMqEventBusOptions.ConnectionName
         );

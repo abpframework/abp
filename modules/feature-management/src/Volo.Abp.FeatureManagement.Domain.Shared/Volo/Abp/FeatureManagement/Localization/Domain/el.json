@@ -3,10 +3,8 @@
   "texts": {
     "Features": "Χαρακτηριστικά",
     "NoFeatureFoundMessage": "Δεν διατίθεται καποιο χαρακτηριστικο.",
-    "ManageHostFeatures": "Διαχείριση δυνατοτήτων του Οικοδεσπότη",
     "Permission:FeatureManagement": "Διαχείριση χαρακτηριστικών",
     "Permission:FeatureManagement.ManageHostFeatures": "Διαχείριση Χαρακτηριστικών Εξυπηρετήτη",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Η τιμή χαρακτηριστικού {0} δεν ειναι έγκυρη!",
-		"Menu:FeatureManagement": "Διαχείριση λειτουργιών"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Η τιμή χαρακτηριστικού {0} δεν ειναι έγκυρη!"
   }
 }

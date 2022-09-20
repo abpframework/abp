@@ -37,12 +37,6 @@ public class AbpAuditingOptions
     /// Default: true.
     /// </summary>
     public bool AlwaysLogOnException { get; set; }
-    
-    /// <summary>
-    /// Disables/enables audit logging for integration services.
-    /// Default: false.
-    /// </summary>
-    public bool IsEnabledForIntegrationServices { get; set; }
 
     public List<Func<AuditLogInfo, Task<bool>>> AlwaysLogSelectors { get; }
 

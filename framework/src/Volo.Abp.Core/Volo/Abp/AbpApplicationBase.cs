@@ -23,8 +23,6 @@ public abstract class AbpApplicationBase : IAbpApplication
     public IServiceCollection Services { get; }
 
     public IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
-    
-    public string ApplicationName { get; }
 
     private bool _configuredServices;
 
@@ -43,11 +41,8 @@ public abstract class AbpApplicationBase : IAbpApplication
 
         var options = new AbpApplicationCreationOptions(services);
         optionsAction?.Invoke(options);
-        
-        ApplicationName = options.ApplicationName;
 
         services.AddSingleton<IAbpApplication>(this);
-        services.AddSingleton<IApplicationNameAccessor>(this);
         services.AddSingleton<IModuleContainer>(this);
 
         services.AddCoreServices();

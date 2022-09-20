@@ -6,7 +6,7 @@ namespace Volo.Abp.MultiTenancy;
 /// Represents sides in a multi tenancy application.
 /// </summary>
 [Flags]
-public enum MultiTenancySides : byte
+public enum MultiTenancySides
 {
     /// <summary>
     /// Tenant side.

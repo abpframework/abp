@@ -1,14 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Tags;
 
-[RequiresFeature(CmsKitFeatures.TagEnable)]
 [RequiresGlobalFeature(typeof(TagsFeature))]
 [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitAdminRemoteServiceConsts.ModuleName)]
