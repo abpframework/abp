@@ -66,14 +66,8 @@
             "polyfills": "projects/dev-app/src/polyfills.ts",
             "tsConfig": "projects/dev-app/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "allowedCommonJsDependencies": [
-              "chart.js",
-              "js-sha256"
-            ],
-            "assets": [
-              "projects/dev-app/src/favicon.ico",
-              "projects/dev-app/src/assets"
-            ],
+            "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
+            "assets": ["projects/dev-app/src/favicon.ico", "projects/dev-app/src/assets"],
             "styles": [
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -101,14 +95,24 @@
                 "bundleName": "ngx-datatable-material"
               },
               {
-                "input": "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.css",
                 "inject": false,
-                "bundleName": "bootstrap-rtl.min"
+                "bundleName": "bootstrap-dim"
               },
               {
-                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "inject": true,
-                "bundleName": "bootstrap-ltr.min"
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.css",
+                "inject": false,
+                "bundleName": "ng-bundle"
+              },
+              {
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/side-menu/layout-bundle.css",
+                "inject": false,
+                "bundleName": "layout-bundle"
+              },
+              {
+                "input": "node_modules/@abp/ng.theme.lepton-x/assets/css/abp-bundle.css",
+                "inject": false,
+                "bundleName": "abp-bundle"
               },
               "projects/dev-app/src/styles.scss"
             ],
@@ -173,10 +177,7 @@
             "tsConfig": "projects/dev-app/tsconfig.spec.json",
             "karmaConfig": "projects/dev-app/karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "projects/dev-app/src/favicon.ico",
-              "projects/dev-app/src/assets"
-            ],
+            "assets": ["projects/dev-app/src/favicon.ico", "projects/dev-app/src/assets"],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -192,10 +193,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "projects/dev-app/**/*.ts",
-              "projects/dev-app/**/*.html"
-            ]
+            "lintFilePatterns": ["projects/dev-app/**/*.ts", "projects/dev-app/**/*.html"]
           }
         }
       }

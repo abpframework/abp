@@ -2,9 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
     "analytics": false,
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ]
+    "schematicCollections": ["@angular-eslint/schematics"]
   },
   "version": 1,
   "newProjectRoot": "projects",
@@ -29,14 +27,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "allowedCommonJsDependencies": [
-              "chart.js",
-              "js-sha256"
-            ],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -64,14 +56,24 @@
                 "bundleName": "ngx-datatable-material"
               },
               {
-                "input": "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.css",
                 "inject": false,
-                "bundleName": "bootstrap-rtl.min"
+                "bundleName": "bootstrap-dim"
               },
               {
-                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "inject": true,
-                "bundleName": "bootstrap-ltr.min"
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.css",
+                "inject": false,
+                "bundleName": "ng-bundle"
+              },
+              {
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/side-menu/layout-bundle.css",
+                "inject": false,
+                "bundleName": "layout-bundle"
+              },
+              {
+                "input": "node_modules/@abp/ng.theme.lepton-x/assets/css/abp-bundle.css",
+                "inject": false,
+                "bundleName": "abp-bundle"
               },
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/styles.scss"
@@ -137,23 +139,15 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }

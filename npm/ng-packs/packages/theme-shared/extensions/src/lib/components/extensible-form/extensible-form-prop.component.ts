@@ -1,4 +1,4 @@
-import { EXTENSIONS_FORM_PROP_DATA, EXTENSIONS_FORM_PROP } from './../../tokens/extensions.token';
+import { EXTENSIONS_FORM_PROP, EXTENSIONS_FORM_PROP_DATA } from './../../tokens/extensions.token';
 import { ABP, AbpValidators, ConfigStateService, TrackByService } from '@abp/ng.core';
 import {
   AfterViewInit,
@@ -16,8 +16,8 @@ import {
 } from '@angular/core';
 import {
   ControlContainer,
-  UntypedFormGroup,
   FormGroupDirective,
+  UntypedFormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
