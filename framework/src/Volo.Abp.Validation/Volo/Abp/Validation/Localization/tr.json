@@ -29,6 +29,8 @@
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Bu alan en fazla {0} uzunluğunda bir metin olmalıdır.",
     "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "Bu alan en az {1}, en fazla {0} uzunluğunda bir metin olmalıdır.",
     "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "Bu alan geçerli bir http, https, ya da ftp adresi olmalıdır.",
-    "ThisFieldIsInvalid.": "Bu alan geçerli değil."
+    "ThisFieldIsInvalid.": "Bu alan geçerli değil.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "Bu alan {0}'dan büyük veya eşit olmalıdır.",
+    "ThisFieldMustBeLessOrEqual{0}": "Bu alan {0}'dan küçük veya eşit olmalıdır."
   }
 }
