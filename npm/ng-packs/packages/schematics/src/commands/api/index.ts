@@ -13,7 +13,7 @@ import { Exception } from '../../enums';
 import { GenerateProxySchema, ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
-  buildDefaultPath,
+  buildTargetPath,
   createControllerToServiceMapper,
   createImportRefsToModelReducer,
   createImportRefToEnumMapper,
@@ -42,7 +42,7 @@ export default function (schema: GenerateProxySchema) {
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const target = await resolveProject(tree, params.target!);
-      const targetPath = buildDefaultPath(target.definition);
+      const targetPath = buildTargetPath(target.definition, params.entryPoint);
       const readProxyConfig = createProxyConfigReader(targetPath);
       const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
       const data = readProxyConfig(tree);

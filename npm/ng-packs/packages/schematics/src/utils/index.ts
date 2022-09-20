@@ -7,6 +7,7 @@ export * from './enum';
 export * from './file';
 export * from './generics';
 export * from './import';
+export * from './lib';
 export * from './methods';
 export * from './model';
 export * from './namespace';
