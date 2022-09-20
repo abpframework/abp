@@ -1,15 +1,14 @@
-﻿using JetBrains.Annotations;
-using MongoDB.Driver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using MongoDB.Driver;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Tags;
-using Tag = Volo.CmsKit.Tags.Tag;
 
 namespace Volo.CmsKit.MongoDB.Tags;
 
@@ -20,12 +19,19 @@ public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext,
     {
     }
 
-    public virtual async Task DeleteManyAsync(Guid[] tagIds, CancellationToken cancellationToken = default)
+    public virtual async Task DeleteManyAsync(Guid[] tagIds, string entityId, CancellationToken cancellationToken = default)
     {
         var token = GetCancellationToken(cancellationToken);
 
         var collection = await GetCollectionAsync(token);
-        await collection.DeleteManyAsync(Builders<EntityTag>.Filter.In(x => x.TagId, tagIds), token);
+
+        var builder = Builders<EntityTag>.Filter;
+        var filter = builder.And(
+                builder.In(x => x.TagId, tagIds),
+                builder.Eq(x => x.EntityId, entityId)
+           );
+
+        await collection.DeleteManyAsync(filter, token);
     }
 
     public virtual Task<EntityTag> FindAsync(
@@ -57,7 +63,7 @@ public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext,
     public async Task<List<string>> GetEntityIdsFilteredByTagNameAsync(
         [NotNull] string tagName,
         [NotNull] string entityType,
-        [CanBeNull] Guid? tenantId=null,
+        [CanBeNull] Guid? tenantId = null,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
@@ -76,7 +82,7 @@ public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext,
                                     && x.tag.IsDeleted == false
                                 )
                                 .Select(s => s.entityTag.EntityId);
- 
+
         return await AsyncExecuter.ToListAsync(resultQueryable, GetCancellationToken(cancellationToken));
     }
 }

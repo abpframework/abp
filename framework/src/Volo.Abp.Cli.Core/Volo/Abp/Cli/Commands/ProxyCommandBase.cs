@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -19,11 +20,11 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
 
     protected AbpCliServiceProxyOptions ServiceProxyOptions { get; }
 
-    protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     public ProxyCommandBase(
         IOptions<AbpCliServiceProxyOptions> serviceProxyOptions,
-        IHybridServiceScopeFactory serviceScopeFactory)
+        IServiceScopeFactory serviceScopeFactory)
     {
         ServiceScopeFactory = serviceScopeFactory;
         ServiceProxyOptions = serviceProxyOptions.Value;

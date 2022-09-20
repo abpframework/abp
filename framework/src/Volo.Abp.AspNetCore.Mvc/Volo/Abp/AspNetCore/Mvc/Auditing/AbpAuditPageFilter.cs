@@ -75,7 +75,7 @@ public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
         }
 
         var auditingHelper = context.GetRequiredService<IAuditingHelper>();
-        if (!auditingHelper.ShouldSaveAudit(context.HandlerMethod.MethodInfo, true))
+        if (!auditingHelper.ShouldSaveAudit(context.HandlerMethod.MethodInfo, defaultValue: true))
         {
             return false;
         }

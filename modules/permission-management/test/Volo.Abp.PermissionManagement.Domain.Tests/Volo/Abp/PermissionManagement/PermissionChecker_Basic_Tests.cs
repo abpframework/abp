@@ -15,11 +15,9 @@ public class PermissionChecker_Basic_Tests : PermissionTestBase
     }
 
     [Fact]
-    public async Task Should_Throw_Exception_If_Permission_Is_Not_Defined()
+    public async Task Should_Return_Prohibited_If_Permission_Is_Not_Defined()
     {
-        await Assert.ThrowsAsync<AbpException>(async () =>
-            await _permissionChecker.IsGrantedAsync("UndefinedPermissionName")
-        );
+        (await _permissionChecker.IsGrantedAsync("UndefinedPermissionName")).ShouldBeFalse();
     }
 
     [Fact]

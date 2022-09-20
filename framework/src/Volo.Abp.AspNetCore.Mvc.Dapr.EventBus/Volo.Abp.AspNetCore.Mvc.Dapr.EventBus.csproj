@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\configureawait.props" />
+    <Import Project="..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Dapr\Volo.Abp.AspNetCore.Mvc.Dapr.csproj" />
+        <ProjectReference Include="..\Volo.Abp.EventBus.Dapr\Volo.Abp.EventBus.Dapr.csproj" />
+    </ItemGroup>
+
+</Project>

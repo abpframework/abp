@@ -74,9 +74,9 @@ public class AuthService : IAuthService, ITransientDependency
     {
         var configuration = new IdentityClientConfiguration(
             CliUrls.AccountAbpIo,
-            "role email abpio abpio_www abpio_commercial offline_access",
+            "abpio offline_access",
             "abp-cli",
-            "1q2w3e*",
+            null,
             OidcConstants.GrantTypes.Password,
             userName,
             password
@@ -96,9 +96,9 @@ public class AuthService : IAuthService, ITransientDependency
     {
         var configuration = new IdentityClientConfiguration(
             CliUrls.AccountAbpIo,
-            "role email abpio abpio_www abpio_commercial openid offline_access",
+            "abpio offline_access",
             "abp-cli",
-            "1q2w3e*",
+            null,
             OidcConstants.GrantTypes.DeviceCode
         );
 
