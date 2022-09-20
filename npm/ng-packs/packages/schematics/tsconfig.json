@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "tsconfig",
-    "lib": ["es2018", "dom"],
+    "lib": ["es2019", "dom"],
     "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",

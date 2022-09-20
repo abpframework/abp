@@ -7,7 +7,7 @@ import { buildDefaultPath, getWorkspace, ProjectType, WorkspaceSchema } from './
 import { findEnvironmentExpression } from './ast';
 import { readFileInTree } from './common';
 import { NOT_FOUND_VALUE } from '../constants/symbols';
-import { parseJson } from '@angular/cli/utilities/json-file';
+import { parseJson } from '@angular/cli/src/utilities/json-file';
 
 export function isLibrary(project: workspaces.ProjectDefinition): boolean {
   return project.extensions['projectType'] === ProjectType.Library;

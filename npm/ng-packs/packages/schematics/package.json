@@ -10,6 +10,7 @@
   "schematics": "./collection.json",
   "dependencies": {
     "@angular-devkit/core": "~14.2.1",
+    "@angular/cli": "~14.2.1",
     "@angular-devkit/schematics": "~14.2.1",
     "got": "^11.5.2",
     "jsonc-parser": "^2.3.0",
