@@ -16,6 +16,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     private Dictionary<string, ILocalizationDictionary> _dictionaries;
     private bool _subscribedForChanges;
     private readonly object _syncObj = new object();
+    private LocalizationResourceBase _resource;
 
     protected VirtualFileLocalizationResourceContributorBase(string virtualPath)
     {
@@ -24,6 +25,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     public virtual void Initialize(LocalizationResourceInitializationContext context)
     {
+        _resource = context.Resource;
         _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
     }
 
@@ -84,7 +86,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
             var dictionary = CreateDictionaryFromFile(file);
             if (dictionaries.ContainsKey(dictionary.CultureName))
             {
-                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
+                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined! Localization resource: {_resource.ResourceName}");
             }
 
             dictionaries[dictionary.CultureName] = dictionary;
