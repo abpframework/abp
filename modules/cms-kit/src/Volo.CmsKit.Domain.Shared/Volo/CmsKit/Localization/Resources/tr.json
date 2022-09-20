@@ -126,7 +126,6 @@
     "ReplyTo": "Cevap",
     "SamplePageMessage": "Pro modulünden örnek bir sayfa",
     "SaveChanges": "Değişiklikleri Kaydet",
-    "Script": "Script Kodları",
     "SelectAll": "Hepsini seç",
     "Send": "Gönder",
     "SendMessage": "Mesajı Gönder",
@@ -137,7 +136,6 @@
     "SourceUrl": "Kaynak Link",
     "Star": "Yıldız",
     "StartDate": "Başlangıç Tarihi",
-    "Style": "Stil Kodları",
     "Subject": "Konu",
     "SubjectPlaceholder": "Lütfen bir konu yazınız",
     "Submit": "Kaydet",
@@ -190,6 +188,7 @@
     "CmsKit.BlogPost.ScrollIndex": "Blog yazılarında hızlı gezinme çubuğu",
     "Add": "Ekle",
     "AddWidget": "Widget Ekle",
-    "PleaseConfigureWidgets": "Lütfen widget'leri yapılandırın"
+    "PleaseConfigureWidgets": "Lütfen widget'leri yapılandırın",
+    "Permission:GlobalResources": "Global Kaynaklar"
   }
 }
