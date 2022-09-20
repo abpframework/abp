@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Castle.DynamicProxy;
 using JetBrains.Annotations;
 using Volo.Abp;
@@ -213,9 +214,14 @@ public static class ServiceCollectionHttpClientProxyExtensions
             {
                 clientBuildAction(remoteServiceConfigurationName, provider, client);
             }
-        }).ConfigurePrimaryHttpMessageHandler((provider) =>
+        }).ConfigurePrimaryHttpMessageHandler(provider =>
         {
-            var handler = new HttpClientHandler { UseCookies = false };
+            var handler = new HttpClientHandler();
+            
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Create("BROWSER")))
+            {
+                handler.UseCookies = false;
+            }
             
             foreach (var handlerAction in preOptions.ProxyClientHandlerActions)
             {
@@ -243,6 +249,7 @@ public static class ServiceCollectionHttpClientProxyExtensions
     /// Currently the type is checked statically against some fixed conditions.
     /// </summary>
     /// <param name="type">Type to check</param>
+    /// <param name="applicationServiceTypes">Option to filter application service types</param>
     /// <returns>True, if the type is suitable for proxying. Otherwise false.</returns>
     private static bool IsSuitableForClientProxying(
         Type type,
