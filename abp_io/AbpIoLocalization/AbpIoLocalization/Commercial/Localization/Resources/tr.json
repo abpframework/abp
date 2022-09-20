@@ -637,6 +637,9 @@
     "ProjectCreatedSuccess_Page_Description": "ABP projeniz başarıyla oluşturuldu!",
     "Suite_Page_Title": "ABP Suite - CRUD Sayfaları Oluşturun",
     "Suite_Page_Description": "ABP Commercial, geliştirici verimliliğini artırmak için hızlı uygulama geliştirme araçları sağlar. ABP Suite, CRUD sayfalarını kolayca oluşturmanızı sağlar.",
-    
+    "Themes_Page_Title": "Modern ve İşlevsel Kullanıcı Arayüzü Temaları",
+    "Themes_Page_Description": "ABP Commercial birden fazla profesyonel, modern kullanıcı arayüzü teması sunar. Kullanıcı arayüzünün neye benzediğini hızlıca görmek için ücretsiz bir demo oluşturun.",
+    "Tools_Page_Title": "Hızlı Uygulama Geliştirme Araçları"
+
   }
 }
