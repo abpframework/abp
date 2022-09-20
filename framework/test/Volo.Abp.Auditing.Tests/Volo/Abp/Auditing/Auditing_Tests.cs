@@ -55,6 +55,16 @@ public class Auditing_Tests : AbpAuditingTestBase
 
         await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
     }
+    
+    [Fact]
+    public async Task Should_Not_Write_AuditLog_For_Classes_With_IntegrationService_Attribute()
+    {
+        var myAuditedObject1 = GetRequiredService<MyNotAuditedIntegrationService1>();
+
+        await myAuditedObject1.DoItAsync(new InputObject { Value1 = "forty-two", Value2 = 42 });
+
+        await _auditingStore.DidNotReceive().SaveAsync(Arg.Any<AuditLogInfo>());
+    }
 
     public interface IMyAuditedObject : ITransientDependency, IAuditingEnabled
     {
@@ -62,6 +72,20 @@ public class Auditing_Tests : AbpAuditingTestBase
     }
 
     public class MyAuditedObject1 : IMyAuditedObject
+    {
+        public virtual Task<ResultObject> DoItAsync(InputObject inputObject)
+        {
+            return Task.FromResult(new ResultObject
+            {
+                Value1 = inputObject.Value1 + "-result",
+                Value2 = inputObject.Value2 + 1
+            });
+        }
+    }
+    
+    /* Integration services should not be audited by default */
+    [IntegrationService]
+    public class MyNotAuditedIntegrationService1 : IMyAuditedObject
     {
         public virtual Task<ResultObject> DoItAsync(InputObject inputObject)
         {

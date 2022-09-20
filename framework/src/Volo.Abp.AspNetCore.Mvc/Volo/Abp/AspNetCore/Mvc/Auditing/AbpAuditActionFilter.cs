@@ -70,7 +70,9 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
         }
 
         var auditingHelper = context.GetRequiredService<IAuditingHelper>();
-        if (!auditingHelper.ShouldSaveAudit(context.ActionDescriptor.GetMethodInfo(), true))
+        if (!auditingHelper.ShouldSaveAudit(
+                context.ActionDescriptor.GetMethodInfo(),
+                defaultValue: GetDefaultAuditBehavior(options, context.ActionDescriptor)))
         {
             return false;
         }
@@ -82,6 +84,23 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
             context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
             context.ActionArguments
         );
+
+        return true;
+    }
+
+    private static bool GetDefaultAuditBehavior(
+        AbpAuditingOptions abpAuditingOptions,
+        ActionDescriptor actionDescriptor)
+    {
+        if (!abpAuditingOptions.IsEnabledForIntegrationServices &&
+            IntegrationServiceAttribute.IsDefinedOrInherited(
+                actionDescriptor
+                    .AsControllerActionDescriptor()
+                    .ControllerTypeInfo)
+            )
+        {
+            return false;
+        }
 
         return true;
     }

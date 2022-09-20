@@ -279,6 +279,7 @@
     "SubscribeToNewsletter": "ABP.IO Platform'u ile ilgili yeni haberler, makaleler, teklifler ve daha fazlası gibi gelişmeler hakkında bilgi almak için bültene abone olun.",
     "FirstEdition": "İlk Baskı",
     "ThankYou": "Teşekkürler!",
-    "CheckboxMandatory": "Devam etmek için bunu kontrol etmeniz gerekiyor!"
+    "CheckboxMandatory": "Devam etmek için bunu kontrol etmeniz gerekiyor!",
+    "ThisBookIsInDraftStageAndIsNotCompletedYet": "Bu kitap taslak aşamasındadır ve henüz tamamlanmamıştır."
   }
 }

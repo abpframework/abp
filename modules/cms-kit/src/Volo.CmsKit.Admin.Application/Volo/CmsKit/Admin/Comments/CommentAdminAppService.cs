@@ -3,14 +3,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Admin.Comments;
 
+[RequiresFeature(CmsKitFeatures.CommentEnable)]
 [RequiresGlobalFeature(typeof(CommentsFeature))]
 [Authorize(CmsKitAdminPermissions.Comments.Default)]
 public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAppService
