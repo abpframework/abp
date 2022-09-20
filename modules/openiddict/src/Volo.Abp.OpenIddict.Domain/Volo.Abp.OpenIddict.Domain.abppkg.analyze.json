@@ -1,0 +1,107 @@
+{
+  "name": "Volo.Abp.OpenIddict.Domain",
+  "hash": "8822f98b8a1deca68b33f69126bbc669",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.OpenIddict",
+      "contentType": "abpModule",
+      "name": "AbpOpenIddictDomainModule"
+    },
+    {
+      "namespace": "Volo.Abp.OpenIddict.Tokens",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "OpenIddictToken"
+    },
+    {
+      "namespace": "Volo.Abp.OpenIddict.Scopes",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "OpenIddictScope"
+    },
+    {
+      "namespace": "Volo.Abp.OpenIddict.Authorizations",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "OpenIddictAuthorization"
+    },
+    {
+      "namespace": "Volo.Abp.OpenIddict.Applications",
+      "primaryKeyType": "Guid",
+      "summary": null,
+      "collectionProperties": [],
+      "navigationProperties": [],
+      "contentType": "aggregateRoot",
+      "name": "OpenIddictApplication"
+    },
+    {
+      "namespace": "Volo.Abp.OpenIddict.Tokens",
+      "summary": null,
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.OpenIddict.Tokens",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "OpenIddictToken"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IOpenIddictTokenRepository"
+    },
+    {
+      "namespace": "Volo.Abp.OpenIddict.Scopes",
+      "summary": null,
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.OpenIddict.Scopes",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "OpenIddictScope"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IOpenIddictScopeRepository"
+    },
+    {
+      "namespace": "Volo.Abp.OpenIddict.Authorizations",
+      "summary": null,
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.OpenIddict.Authorizations",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "OpenIddictAuthorization"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IOpenIddictAuthorizationRepository"
+    },
+    {
+      "namespace": "Volo.Abp.OpenIddict.Applications",
+      "summary": null,
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.OpenIddict.Applications",
+        "primaryKeyType": "Guid",
+        "summary": null,
+        "collectionProperties": [],
+        "navigationProperties": [],
+        "contentType": "entity",
+        "name": "OpenIddictApplication"
+      },
+      "contentType": "repositoryInterface",
+      "name": "IOpenIddictApplicationRepository"
+    }
+  ]
+}
