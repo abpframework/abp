@@ -385,6 +385,12 @@ body {
                     overflow-x: scroll;
                     white-space: nowrap;
                     padding-bottom: 10px;
+                    -ms-overflow-style: none;  
+                    scrollbar-width: none; 
+
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
 
                     .breadcrumb-item {
                         color: #838690;
@@ -409,7 +415,6 @@ body {
                 top: -2px;
                 position: absolute;
                 right: 0;
-
 
                 small {
                     font-size: 13px;
@@ -975,7 +980,7 @@ body {
     .docs-page {
         .docs-content {
             .top-container {
-                nav{
+                nav {
                     padding-right: 0;
                 }
                 .doc-social-btns {

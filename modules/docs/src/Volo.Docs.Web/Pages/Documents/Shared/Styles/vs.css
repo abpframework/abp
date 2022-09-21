@@ -310,6 +310,11 @@ body.scrolledMore .alert-criteria p.alert-p {
   overflow-x: scroll;
   white-space: nowrap;
   padding-bottom: 10px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.docs-page .docs-content .top-container nav .breadcrumb::-webkit-scrollbar {
+  display: none;
 }
 .docs-page .docs-content .top-container nav .breadcrumb .breadcrumb-item {
   color: #838690;
