@@ -368,6 +368,10 @@ body {
         width: calc(100% - 600px);
         margin-left: 300px;
         padding: $gap-y-size $gap-y-size;
+        
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         .top-container {
             display: flex;
@@ -385,8 +389,6 @@ body {
                     overflow-x: scroll;
                     white-space: nowrap;
                     padding-bottom: 10px;
-                    -ms-overflow-style: none;  
-                    scrollbar-width: none; 
 
                     &::-webkit-scrollbar {
                         display: none;
