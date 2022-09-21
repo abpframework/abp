@@ -268,7 +268,7 @@
                 for (let i = 0; i < selectedTreeItems.length; i++)
                 {
                     var anchorItem = $(selectedTreeItems[i]).find("a");
-                    documentNodeNames.append('<li class="breadcrumb-item"><a href="' + anchorItem.attr("href") + '">' + anchorItem.html() + '</a></li>');
+                    documentNodeNames.append('<li class="breadcrumb-item ' + (i === selectedTreeItems.length - 1 ? "active": "") + '"><a href="' + anchorItem.attr("href") + '">' + anchorItem.html() + '</a></li>');
                 }
             }
         };
