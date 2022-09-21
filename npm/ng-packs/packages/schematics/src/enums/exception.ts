@@ -13,4 +13,5 @@ export const enum Exception {
   NoEnvironment = '[Environment Not Found] An environment file cannot be located in "{0}" project.',
   NoApiUrl = '[API URL Not Found] Cannot resolve API URL for "{1}" remote service name from "{0}" project.',
   NoRootNamespace = '[Root Namespace Not Found] Cannot resolve root namespace for "{1}" api from "{0}" project.',
+  LibraryAlreadyExists = '[Library Already Exists] "{0}" already exists. Use --override to override.',
 }

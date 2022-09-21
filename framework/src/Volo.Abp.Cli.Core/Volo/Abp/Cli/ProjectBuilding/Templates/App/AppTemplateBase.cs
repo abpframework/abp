@@ -204,6 +204,8 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new ChangeThemeStyleStep());
         }
         
+        RemoveThemeLogoFolders(context, steps);
+        
         if (IsDefaultThemeForTemplate(context.BuildArgs.Theme.Value))
         {
             return;
@@ -211,6 +213,19 @@ public abstract class AppTemplateBase : TemplateInfo
         
         steps.Add(new ChangeThemeStep());
         RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework);
+    }
+
+    private void RemoveThemeLogoFolders(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        if (context.BuildArgs.Theme is not Theme.Lepton && IsPro())
+        {
+            steps.Add(new RemoveFilesStep("/wwwroot/images/logo/lepton"));
+        }
+        
+        if (context.BuildArgs.Theme is not Theme.LeptonX or Theme.LeptonXLite)
+        {
+            steps.Add(new RemoveFilesStep("/wwwroot/images/logo/leptonx"));
+        }
     }
 
     private static bool IsDefaultThemeForTemplate(Theme theme)

@@ -372,6 +372,7 @@
     "MasteringAbpFramework_Book_What_You_Will_Learn_8": "ABP Çerçevesini kullanarak birim, entegrasyon ve UI testleri yazın.",
     "MasteringAbpFramework_Book_WhoIsThisBookFor": "Bu kitap kimler için?",
     "MasteringAbpFramework_Book_WhoIsThisBookFor_Description": "Bu kitap, Microsoft teknolojilerini ve ABP Çerçevesini kullanarak sürdürülebilir web tabanlı çözümler\n oluşturmak için yazılım mimarilerini ve en iyi uygulamaları öğrenmek isteyen web geliştiricileri içindir.\n Bu kitaba başlamak için temel C# ve ASP.NET Core bilgisi gereklidir.",
-    "ComputersAndTechnology": "Bilgisayar ve Teknoloji"
+    "ComputersAndTechnology": "Bilgisayar ve Teknoloji",
+    "ThisBookIsInDraftStageAndIsNotCompletedYet": "Bu kitap taslak aşamasındadır ve henüz tamamlanmamıştır."
   }
 }

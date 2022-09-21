@@ -9,7 +9,8 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.PermissionManagement.EntityFrameworkCore;
 
-public class EfCorePermissionGrantRepository : EfCoreRepository<IPermissionManagementDbContext, PermissionGrant, Guid>,
+public class EfCorePermissionGrantRepository :
+    EfCoreRepository<IPermissionManagementDbContext, PermissionGrant, Guid>,
     IPermissionGrantRepository
 {
     public EfCorePermissionGrantRepository(IDbContextProvider<IPermissionManagementDbContext> dbContextProvider)

@@ -20,6 +20,9 @@ public class AbpApplicationCreationOptions
     public AbpConfigurationBuilderOptions Configuration { get; }
 
     public bool SkipConfigureServices { get; set; }
+    
+    [CanBeNull]
+    public string ApplicationName { get; set; }
 
     public AbpApplicationCreationOptions([NotNull] IServiceCollection services)
     {

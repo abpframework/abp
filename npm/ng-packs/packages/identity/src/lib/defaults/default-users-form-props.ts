@@ -1,9 +1,7 @@
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { getPasswordValidators } from '@abp/ng.theme.shared';
 import { ePropType, FormProp } from '@abp/ng.theme.shared/extensions';
-import { Validators } from '@angular/forms'
-import { AbpValidators } from '@abp/ng.core';
-
+import { Validators } from '@angular/forms';
 
 export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserDto>([
   {
@@ -11,7 +9,7 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
     name: 'userName',
     displayName: 'AbpIdentity::UserName',
     id: 'user-name',
-    validators: () => [Validators.required, Validators.maxLength(256), AbpValidators.username()],
+    validators: () => [Validators.required, Validators.maxLength(256)],
   },
   {
     type: ePropType.Password,

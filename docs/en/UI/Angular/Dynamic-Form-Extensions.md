@@ -235,9 +235,34 @@ const options: FormPropOptions<IdentityUserDto> = {
   },
   autocomplete: 'off',
   isExtra: true,
+  template: undefined | Type<any> // Custom angular component
 };
 
 const prop = new FormProp(options);
+```
+FormProp has template option since version 6.0. it can accept custom angular component.
+The component can access PropData and Prop. 
+Example custom prop component.
+```js
+import {
+  EXTENSIBLE_FORM_VIEW_PROVIDER,
+  EXTENSIONS_FORM_PROP,
+  EXTENSIONS_FORM_PROP_DATA,
+} from '@abp/ng.theme.shared/extensions';
+
+
+@Component({
+  selector: 'my-custom-custom-prop',
+  templateUrl: './my-custom-custom-prop.component.html',
+  viewProviders: [EXTENSIBLE_FORM_VIEW_PROVIDER], //you should add this, otherwise form-group doesn't work.
+})
+export class MyCustomPropComponent {
+  constructor(
+    @Inject(EXTENSIONS_FORM_PROP) private formProp: FormProp,
+    @Inject(EXTENSIONS_FORM_PROP_DATA) private propData: ProfileDto,
+    ...)
+  ...
+}
 ```
 
 It also has two static methods to create its instances:
