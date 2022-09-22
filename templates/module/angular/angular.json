@@ -198,5 +198,6 @@
         }
       }
     }
-  }
+  },
+  "defaultProject": "dev-app"
 }

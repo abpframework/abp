@@ -152,5 +152,6 @@
         }
       }
     }
-  }
+  },
+  "defaultProject": "MyProjectName"
 }
