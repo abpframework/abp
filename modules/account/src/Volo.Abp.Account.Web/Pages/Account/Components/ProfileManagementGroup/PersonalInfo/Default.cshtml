@@ -51,9 +51,9 @@
 
     @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel>())
     {
-        var isAllowed = propertyInfo.Configuration.GetOrDefault("AllowUserToEdit");
+        var isAllowed = propertyInfo.Configuration.GetOrDefault(IdentityModuleExtensionConsts.ConfigurationNames.AllowUserToEdit);
 
-        if(isAllowed == null || !isAllowed.Equals(true))
+        if (isAllowed == null || !isAllowed.Equals(true))
         {
             continue;
         }
@@ -67,25 +67,25 @@
                     Model.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
                 }
                 <abp-select asp-for="ExtraProperties[propertyInfo.Name]"
-                name="ExtraProperties.@propertyInfo.Name"
-                label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
-                autocomplete-api-url="@propertyInfo.Lookup.Url"
-                autocomplete-selected-item-name="@Model.GetProperty(propertyInfo.Name + "_Text")"
-                autocomplete-selected-item-value="@Model.GetProperty(propertyInfo.Name)"
-                autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
-                autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
-                autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
-                autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName">
+                    name="ExtraProperties.@propertyInfo.Name"
+                    label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                    autocomplete-api-url="@propertyInfo.Lookup.Url"
+                    autocomplete-selected-item-name="@Model.GetProperty(propertyInfo.Name + "_Text")"
+                    autocomplete-selected-item-value="@Model.GetProperty(propertyInfo.Name)"
+                    autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
+                    autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                    autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                    autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName">
                 </abp-select>
             }
             else
             {
                 <abp-input type="@propertyInfo.GetInputType()"
-               asp-for="ExtraProperties[propertyInfo.Name]"
-               name="ExtraProperties.@propertyInfo.Name"
-               label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
-               asp-format="@propertyInfo.GetInputFormatOrNull()"
-               value="@propertyInfo.GetInputValueOrNull(Model.GetProperty(propertyInfo.Name))" />
+                   asp-for="ExtraProperties[propertyInfo.Name]"
+                   name="ExtraProperties.@propertyInfo.Name"
+                   label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                   asp-format="@propertyInfo.GetInputFormatOrNull()"
+                   value="@propertyInfo.GetInputValueOrNull(Model.GetProperty(propertyInfo.Name))" />
             }
         }
     }
