@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.PermissionManagement.HttpApi",
-  "hash": "2eac8fbb963e8043e3a860f91b2299d9",
+  "hash": "0acf2c2ba79d7741453d05889640f8ac",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.HttpApi",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Application.Contracts",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
+          "namespace": "Volo.Abp.AspNetCore.Mvc",
+          "name": "AbpAspNetCoreMvcModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpPermissionManagementHttpApiModule"
+      "name": "AbpPermissionManagementHttpApiModule",
+      "summary": null
     }
   ]
 }

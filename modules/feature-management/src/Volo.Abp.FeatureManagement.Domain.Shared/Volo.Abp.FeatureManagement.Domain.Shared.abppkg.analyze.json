@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.FeatureManagement.Domain.Shared",
-  "hash": "5a921dc2b9bbd17f772d55246647db55",
+  "hash": "dc0328e54715158fd1ca962affd3b8df",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Json",
+          "namespace": "Volo.Abp.Json",
+          "name": "AbpJsonModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpFeatureManagementDomainSharedModule"
+      "name": "AbpFeatureManagementDomainSharedModule",
+      "summary": null
     }
   ]
 }
