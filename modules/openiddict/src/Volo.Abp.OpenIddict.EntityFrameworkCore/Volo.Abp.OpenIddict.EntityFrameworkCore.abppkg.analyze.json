@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.OpenIddict.EntityFrameworkCore",
-  "hash": "437e716bcba4d2364e711dac86cda9f6",
+  "hash": "e3299c9881979d3707173d06a9ebc886",
   "contents": [
     {
       "namespace": "Volo.Abp.OpenIddict.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.OpenIddict.Domain",
+          "namespace": "Volo.Abp.OpenIddict",
+          "name": "AbpOpenIddictDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "name": "AbpEntityFrameworkCoreModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpOpenIddictEntityFrameworkCoreModule"
+      "name": "AbpOpenIddictEntityFrameworkCoreModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.OpenIddict.EntityFrameworkCore",
@@ -14,26 +27,31 @@
         {
           "entityFullName": "Volo.Abp.OpenIddict.Applications.OpenIddictApplication",
           "contentType": "databaseTable",
-          "name": "OpenIddictApplications"
+          "name": "OpenIddictApplications",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization",
           "contentType": "databaseTable",
-          "name": "OpenIddictAuthorizations"
+          "name": "OpenIddictAuthorizations",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.OpenIddict.Scopes.OpenIddictScope",
           "contentType": "databaseTable",
-          "name": "OpenIddictScopes"
+          "name": "OpenIddictScopes",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
           "contentType": "databaseTable",
-          "name": "OpenIddictTokens"
+          "name": "OpenIddictTokens",
+          "summary": null
         }
       ],
       "contentType": "efCoreDbContext",
-      "name": "OpenIddictDbContext"
+      "name": "OpenIddictDbContext",
+      "summary": null
     }
   ]
 }
