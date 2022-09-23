@@ -1,5 +1,5 @@
 (function ($) {
-    $(function () {
+    $(function () {        
         var initNavigationFilter = function (navigationContainerId) {
             var $navigation = $('#' + navigationContainerId);
 
@@ -254,6 +254,25 @@
             setQueryString();
         };
 
+        var initDocumentNodeBreadcrumb = function (){
+            var selectedTreeRoot = $("li.nav-header.selected-tree")[0];
+            if(selectedTreeRoot)
+            {
+                var $selectedTreeRoot = $(selectedTreeRoot);
+                var firstAnchor = $selectedTreeRoot.find("a");
+
+                var documentNodeNames = $("#document-node-wrapper");
+                documentNodeNames.append('<li class="breadcrumb-item"><a href="' + firstAnchor.attr("href") + '">' + firstAnchor.html() + '</a></li>');
+
+                var selectedTreeItems = $selectedTreeRoot.find("ul.nav-list > li.selected-tree");
+                for (let i = 0; i < selectedTreeItems.length; i++)
+                {
+                    var anchorItem = $(selectedTreeItems[i]).find("a");
+                    documentNodeNames.append('<li class="breadcrumb-item ' + (i === selectedTreeItems.length - 1 ? "active": "") + '"><a href="' + anchorItem.attr("href") + '">' + anchorItem.html() + '</a></li>');
+                }
+            }
+        };
+        
         initNavigationFilter('sidebar-scroll');
 
         initAnchorTags('.docs-page .docs-body');
@@ -261,5 +280,7 @@
         initSocialShareLinks();
 
         initSections();
+
+        initDocumentNodeBreadcrumb();
     });
 })(jQuery);

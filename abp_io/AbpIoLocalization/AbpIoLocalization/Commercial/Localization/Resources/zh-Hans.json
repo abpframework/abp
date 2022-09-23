@@ -660,7 +660,7 @@
     "Landing_Page_PreBuiltApplicationModules": "预建应用程序模块，其中包括最常见的 Web 应用程序要求。",
     "Landing_Page_ChatModule": "聊天",
     "Landing_Page_DocsModule": "文档",
-    "Landing_Page_FileManagementModule": "文档",
+    "Landing_Page_FileManagementModule": "文件管理",
     "Landing_Page_CustomerStory_1": "ABP 商业版 允许 SC Ventures 在 9 个月内交付银行级多租户silo数据库 SaaS 平台，以支持来自多个集成锚点的大额发票的应收账款/应付账款供应链融资。 ABP 的模块化使团队能够在创纪录的时间内交付，通过所有 VAPT，并通过完整的 CI/CD 和管道将容器化的微服务码部署到生产中。",
     "Landing_Page_CustomerStory_2": "我们看到了使用 ABP 商业版 来减少定制开发项目开销的价值。 并且团队能够在不同的项目流中统一代码模式。 我们在框架中看到了比以前更快地构建新功能的更多潜力。 我们相信我们将不断看到使用 ABP 商业版 的价值。",
     "Landing_Page_CustomerStory_3": "我们很爱 ABP。 我们不必从头开始编写所有内容。 我们从\"开箱即用\"的功能开始，只关注我们真正需要编写的内容。 此外，ABP 架构良好，代码质量高，错误少。 如果我们必须自己编写所需的一切，我们可能需要花费数年时间。 另一件事是我们喜欢的是新版本、问题修复或改进每隔一周就很快会出现\n。 我们不会等太久。",
@@ -735,6 +735,8 @@
     "ConfirmedEmailAddressRequiredToStartTrial": "你应该有一个确认的电子邮件地址，以便开始试用许可证。",
     "EmailVerificationMailNotSent": "电子邮件验证邮件不能发送。",
     "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">点击这里获取确认邮件</a> 如果你还没有收到。",
-    "WhichLicenseTypeYouAreInterestedIn": "你感兴趣的许可证类型是什么？"
+    "WhichLicenseTypeYouAreInterestedIn": "你感兴趣的许可证类型是什么？",
+    "BlazoriseLicense": "我们是否需要购买Blazorise许可证？",
+    "BlazoriseLicenseExplanation": "我公司Volosoft和公司Megabit之间有合作协议，根据此协议，购买将同时包含了Blazorise许可证与ABP商业产品，因此我们的客户不需要再额外购买Blazorise许可证。"
   }
 }

@@ -6,6 +6,7 @@
     "ManageHostFeatures": "Host özelliklerini yönetin",
     "Permission:FeatureManagement": "Özellik yönetimi",
     "Permission:FeatureManagement.ManageHostFeatures": "Host özelliklerini düzenle",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "{0} özellik değeri geçerli değil!"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "{0} özellik değeri geçerli değil!",
+		"Menu:FeatureManagement": "Özellik Yönetimi"
   }
 }

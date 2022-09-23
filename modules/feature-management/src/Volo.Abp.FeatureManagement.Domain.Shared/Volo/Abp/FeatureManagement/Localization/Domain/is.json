@@ -6,6 +6,7 @@
     "ManageHostFeatures": "Stjórna Gestgjafa Eiginleikum",
     "Permission:FeatureManagement": "Eiginleika stjórnun",
     "Permission:FeatureManagement.ManageHostFeatures": "Stjórna Gestgjafa Eiginleikum",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "eiginleikagildið {0} er ekki gilt"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "eiginleikagildið {0} er ekki gilt",
+		"Menu:FeatureManagement": "Eiginleikastjórnun"
   }
 }
