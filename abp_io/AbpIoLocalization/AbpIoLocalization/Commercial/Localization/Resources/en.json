@@ -548,7 +548,7 @@
     "MyOrganizations_Detail_OwnerRightInfo": "You are using {0} of your {1} owners rights.",
     "MyOrganizations_Detail_CopyApiKey": "Copy the Key",
     "MyOrganizations_Detail_ApiKeyDescription": "The API Key is the token of PRO packages hosted on <a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">{1}.</a>",
-    "MyOrganizations_Detail_YourPrivateNugetSource": "Your private NuGet source is <a href=\"{0}\" arget=\"_blank\" class=\"text-primary\" rel=\"noopener\">{0}</a>",
+    "MyOrganizations_Detail_YourPrivateNugetSource": "Your private NuGet source is <a href=\"{0}\" target=\"_blank\" class=\"text-primary\" rel=\"noopener\">{0}</a>",
     "MyOrganizations_Detail_PrivateNugetSourceWarning": "This is automatically added as a feed to your NuGet.Config in your ABP solution. Do not share your private key with unauthorized users!",
     "MyOrganizations_Detail_DeveloperSeatInfo": "You are using {0} of your {1} developer seats.",
     "NeedMoreSeatsForYourTeam": "Need more seats for your team?",
@@ -660,7 +660,7 @@
     "Landing_Page_PreBuiltApplicationModules": "Pre-Built Application Modules which include most common web application requirements.",
     "Landing_Page_ChatModule": "Chat",
     "Landing_Page_DocsModule": "Docs",
-    "Landing_Page_FileManagementModule": "Docs",
+    "Landing_Page_FileManagementModule": "File Management",
     "Landing_Page_CustomerStory_1": "ABP Commercial allowed SC Ventures to deliver a bank-grade multi-tenant silo-database SaaS platform in 9 months to support the accounts receivable / accounts payable supply chain financing of significant value invoices from multiple integrated anchors. The modularity of ABP made it possible for the team to deliver in record time, pass all VAPT, and deploy the containerized microservices stack via full CI/CD and pipelines into production.",
     "Landing_Page_CustomerStory_2": "We are seeing the value of using ABP Commercial to reduce the overhead of custom development projects. And the team is able to unify the code pattern in different project streams. We see more potential in the framework for us to build new features faster than before. We trust we will be constantly seeing the value of leveraging ABP Commercial.",
     "Landing_Page_CustomerStory_3": "We love ABP. We don't have to write everything from scratch. We start from out-of-the-box features and just focus on what we really need to write. Also, ABP is well-architected and the code is high quality with fewer bugs. If we would have to write everything we needed on our own, we might have to spend years. Once more things we like is that the new version, or issue fixing, or improvement come out very soon\n                                every other week. We don't wait too long.",
@@ -735,6 +735,16 @@
     "ConfirmedEmailAddressRequiredToStartTrial": "You should have a confirmed email address in order to start a trial license.",
     "EmailVerificationMailNotSent": "Email verification mail couldn't send.",
     "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">Click here to get a confirmation email</a> if you haven't got it before.",
-    "WhichLicenseTypeYouAreInterestedIn": "Which license type you are interested in?"
+    "WhichLicenseTypeYouAreInterestedIn": "Which license type you are interested in?",
+    "DontTakeOurWordForIt": "Don't take our word for it...",
+    "ReadAbpCommercialUsersWantYouToKnow": "Read what ABP Commercial users want you to know",
+    "Testimonial_ShortDescription_1": "The modularity of ABP made it possible for the team to deliver in time.",
+    "Testimonial_ShortDescription_2": "Build new features faster than before.",
+    "Testimonial_ShortDescription_3": "We start from out-of-the-box features and just focus on what we really need to write.",
+    "Testimonial_ShortDescription_4": "ABP Commercial was the best fit for our needs.",
+    "OnlineReviewersOnAbpCommercial": "Online Reviews on ABP Commercial",
+    "SeeWhatToldAboutAbpCommercial": "See what has been told about ABP Commercial and write your thoughts if you want.",
+    "BlazoriseLicense": "Do we need to buy Blazorise license?",
+    "BlazoriseLicenseExplanation": "We have an agreement between Volosoft and Megabit, with this agreement Blazorise license is bundled with ABP Commercial products therefore our customers do not need to purchase an extra Blazorise license."
   }
 }

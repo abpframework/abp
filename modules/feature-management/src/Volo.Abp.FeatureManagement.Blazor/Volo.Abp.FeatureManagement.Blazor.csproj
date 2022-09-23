@@ -14,6 +14,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.FeatureManagement.Application.Contracts\Volo.Abp.FeatureManagement.Application.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\setting-management\src\Volo.Abp.SettingManagement.Blazor\Volo.Abp.SettingManagement.Blazor.csproj" />
     </ItemGroup>
 
     <ItemGroup>

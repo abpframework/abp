@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.Modularity.PlugIns;
 using Xunit;
@@ -140,6 +141,42 @@ public class AbpApplication_Initialize_Tests
 
             //Assert
             plugInModule.OnApplicationShutdownIsCalled.ShouldBeTrue();
+        }
+    }
+
+    [Fact]
+    public void Should_Set_And_Get_ApplicationName()
+    {
+        const string applicationName = "MyApplication";
+        
+        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>(options =>
+               {
+                   options.ApplicationName = applicationName;
+               }))
+        {
+            application.ApplicationName.ShouldBe(applicationName);
+            application.Services.GetApplicationName().ShouldBe(applicationName);
+            
+            application.Initialize();
+            
+            application.ServiceProvider
+                .GetRequiredService<IApplicationNameAccessor>()
+                .ApplicationName
+                .ShouldBe(applicationName);
+        }
+    }
+    
+    [Fact]
+    public async Task Should_Resolve_Root_Service_Provider()
+    {
+        using (var application = await AbpApplicationFactory.CreateAsync<IndependentEmptyModule>())
+        {
+            await application.InitializeAsync();
+
+            application
+                .ServiceProvider
+                .GetRequiredService<IRootServiceProvider>()
+                .ShouldNotBeNull();
         }
     }
 }

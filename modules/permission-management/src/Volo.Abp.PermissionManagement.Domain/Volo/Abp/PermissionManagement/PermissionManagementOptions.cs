@@ -9,6 +9,16 @@ public class PermissionManagementOptions
 
     public Dictionary<string, string> ProviderPolicies { get; }
 
+    /// <summary>
+    /// Default: true.
+    /// </summary>
+    public bool SaveStaticPermissionsToDatabase { get; set; } = true;
+
+    /// <summary>
+    /// Default: false.
+    /// </summary>
+    public bool IsDynamicPermissionStoreEnabled { get; set; }
+
     public PermissionManagementOptions()
     {
         ManagementProviders = new TypeList<IPermissionManagementProvider>();
