@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace VoloDocs.EntityFrameworkCore.Migrations
+#nullable disable
+
+namespace Migrations
 {
     public partial class Initial : Migration
     {
@@ -68,8 +70,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                         name: "FK_AbpOrganizationUnits_AbpOrganizationUnits_ParentId",
                         column: x => x.ParentId,
                         principalTable: "AbpOrganizationUnits",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -85,6 +86,40 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpPermissionGrants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpPermissionGroups",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpPermissionGroups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpPermissions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GroupName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ParentName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    IsEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    MultiTenancySide = table.Column<byte>(type: "tinyint", nullable: false),
+                    Providers = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    StateCheckers = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpPermissions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -164,6 +199,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                     IsExternal = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -441,9 +477,28 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpPermissionGrants_Name_ProviderName_ProviderKey",
+                name: "IX_AbpPermissionGrants_TenantId_Name_ProviderName_ProviderKey",
                 table: "AbpPermissionGrants",
-                columns: new[] { "Name", "ProviderName", "ProviderKey" });
+                columns: new[] { "TenantId", "Name", "ProviderName", "ProviderKey" },
+                unique: true,
+                filter: "[TenantId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpPermissionGroups_Name",
+                table: "AbpPermissionGroups",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpPermissions_GroupName",
+                table: "AbpPermissions",
+                column: "GroupName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpPermissions_Name",
+                table: "AbpPermissions",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpRoleClaims_RoleId",
@@ -478,7 +533,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AbpSettings_Name_ProviderName_ProviderKey",
                 table: "AbpSettings",
-                columns: new[] { "Name", "ProviderName", "ProviderKey" });
+                columns: new[] { "Name", "ProviderName", "ProviderKey" },
+                unique: true,
+                filter: "[ProviderName] IS NOT NULL AND [ProviderKey] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",
@@ -534,6 +591,12 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpPermissionGrants");
+
+            migrationBuilder.DropTable(
+                name: "AbpPermissionGroups");
+
+            migrationBuilder.DropTable(
+                name: "AbpPermissions");
 
             migrationBuilder.DropTable(
                 name: "AbpRoleClaims");
