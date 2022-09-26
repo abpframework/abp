@@ -4,7 +4,6 @@ import {
   branchAndMerge,
   chain,
   move,
-  SchematicContext,
   SchematicsException,
   Tree,
   url,
@@ -36,7 +35,7 @@ export default function (schema: GenerateProxySchema) {
   const moduleName = params.module || 'app';
 
   return chain([
-    async (tree: Tree, _context: SchematicContext) => {
+    async (tree: Tree) => {
       const getRootNamespace = createRootNamespaceGetter(params);
       const solution = await getRootNamespace(tree);
 

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "tsconfig",
-    "lib": ["es2018", "dom"],
+    "lib": ["es2019", "dom"],
     "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -16,9 +16,9 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "target": "es2017",
+    "target": "es2020",
     "types": ["jest", "node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "src/*/files/**/*", "**/*.spec.ts"]
+  "exclude": ["node_modules", "dist", "src/*/files/**/*", "**/*.spec.ts", "jest.config.ts"]
 }

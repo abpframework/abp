@@ -9,15 +9,16 @@
   "license": "MIT",
   "schematics": "./collection.json",
   "dependencies": {
-    "@angular-devkit/core": "~13.3.9",
-    "@angular-devkit/schematics": "~13.3.9",
+    "@angular-devkit/core": "~14.2.1",
+    "@angular/cli": "~14.2.1",
+    "@angular-devkit/schematics": "~14.2.1",
     "got": "^11.5.2",
     "jsonc-parser": "^2.3.0",
     "should-quote": "^1.0.0",
-    "typescript": "~4.6.4"
+    "typescript": "~4.7.4"
   },
   "devDependencies": {
-    "@schematics/angular": "~11.0.2",
+    "@schematics/angular": "~14.2.1",
     "@types/jest": "^26.0.0",
     "@types/node": "^12.11.1",
     "jest": "^26.0.0",

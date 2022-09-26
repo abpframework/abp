@@ -9,11 +9,11 @@
   "dependencies": {
     "@abp/ng.core": "~6.0.0-rc.4",
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "@ng-bootstrap/ng-bootstrap": "~12.0.0-beta.4",
+    "@ng-bootstrap/ng-bootstrap": "13.0.0",
     "@ngx-validate/core": "^0.1.2",
     "@popperjs/core": "~2.11.2",
     "@swimlane/ngx-datatable": "^20.0.0",
-    "bootstrap": "^5.1.1",
+    "bootstrap": "^5.2.0",
     "tslib": "^2.0.0"
   },
   "publishConfig": {

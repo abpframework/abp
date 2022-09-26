@@ -4,7 +4,6 @@ import {
   move,
   noop,
   Rule,
-  SchematicContext,
   SchematicsException,
   Tree,
   url,
@@ -59,7 +58,7 @@ async function checkLibExist(options: GenerateLibSchema, tree: Tree) {
 }
 
 function createLibrary(options: GenerateLibSchema): Rule {
-  return async (tree: Tree, _context: SchematicContext) => {
+  return async (tree: Tree) => {
     const target = await resolveProject(tree, options.packageName, null);
     if (!target || options.override) {
       if (options.isModuleTemplate) {
@@ -83,9 +82,7 @@ async function resolvePackagesDirFromAngularJson(host: Tree) {
 
 function readFirstLibInAngularJson(workspace: WorkspaceDefinition): ProjectDefinition | undefined {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, props] =
-    Array.from(workspace.projects.entries()).find(([_, value]) => isLibrary(value)) || [];
-  return props;
+  return Array.from(workspace.projects.values()).find(value => isLibrary(value));
 }
 
 async function createLibFromModuleTemplate(tree: Tree, options: GenerateLibSchema) {
@@ -107,7 +104,7 @@ async function createLibFromModuleTemplate(tree: Tree, options: GenerateLibSchem
 }
 
 export function addLibToWorkspaceIfNotExist(name: string, packagesDir: string): Rule {
-  return async (tree: Tree, _: SchematicContext) => {
+  return async (tree: Tree) => {
     const workspace = await getWorkspace(tree);
     const packageName = kebab(name);
     const isProjectExist = workspace.projects.has(packageName);

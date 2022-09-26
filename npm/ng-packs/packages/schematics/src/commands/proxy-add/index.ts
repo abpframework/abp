@@ -1,4 +1,4 @@
-import { chain, SchematicContext, Tree } from '@angular-devkit/schematics';
+import { chain, Tree } from '@angular-devkit/schematics';
 import { GenerateProxySchema } from '../../models';
 import {
   buildTargetPath,
@@ -19,7 +19,7 @@ export default function (schema: GenerateProxySchema) {
   const moduleName = params.module || 'app';
 
   return chain([
-    async (host: Tree, _context: SchematicContext) => {
+    async (host: Tree) => {
       const target = await resolveProject(host, params.target!);
       const targetPath = buildTargetPath(target.definition, params.entryPoint);
       const readProxyConfig = createProxyConfigReader(targetPath);
