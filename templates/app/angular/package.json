@@ -30,7 +30,7 @@
     "@angular/platform-browser-dynamic": "^14.2.1",
     "@angular/router": "^14.2.1",
     "bootstrap-icons": "~1.8.3",
-    "rxjs": "~6.6.0",
+    "rxjs": "7.5.6",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"
   },
