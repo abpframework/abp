@@ -28,28 +28,36 @@
         StringComparison.OrdinalIgnoreCase);
 }
 
-<h4>@L["PersonalSettings"]</h4><hr/>
+<h4>@L["PersonalSettings"]</h4>
+<hr />
 <form method="post" id="PersonalSettingsForm">
 
-    <input asp-for="ConcurrencyStamp"/>
+    <input asp-for="ConcurrencyStamp" />
 
-    <abp-input asp-for="UserName" readonly="!isUserNameUpdateEnabled"/>
+    <abp-input asp-for="UserName" readonly="!isUserNameUpdateEnabled" />
 
     <abp-row>
         <abp-column size-md="_6">
-            <abp-input asp-for="Name"/>
+            <abp-input asp-for="Name" />
         </abp-column>
         <abp-column size-md="_6">
-            <abp-input asp-for="Surname"/>
+            <abp-input asp-for="Surname" />
         </abp-column>
     </abp-row>
 
-    <abp-input asp-for="Email" readonly="!isEmailUpdateEnabled"/>
+    <abp-input asp-for="Email" readonly="!isEmailUpdateEnabled" />
 
-    <abp-input asp-for="PhoneNumber"/>
+    <abp-input asp-for="PhoneNumber" />
 
     @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel>())
     {
+        var isAllowed = propertyInfo.Configuration.GetOrDefault(IdentityModuleExtensionConsts.ConfigurationNames.AllowUserToEdit);
+
+        if (isAllowed == null || !isAllowed.Equals(true))
+        {
+            continue;
+        }
+
         if (!propertyInfo.Name.EndsWith("_Text"))
         {
             if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
@@ -59,28 +67,28 @@
                     Model.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
                 }
                 <abp-select asp-for="ExtraProperties[propertyInfo.Name]"
-                            name="ExtraProperties.@propertyInfo.Name"
-                            label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
-                            autocomplete-api-url="@propertyInfo.Lookup.Url"
-                            autocomplete-selected-item-name="@Model.GetProperty(propertyInfo.Name + "_Text")"
-                            autocomplete-selected-item-value="@Model.GetProperty(propertyInfo.Name)"
-                            autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
-                            autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
-                            autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
-                            autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName">
+                    name="ExtraProperties.@propertyInfo.Name"
+                    label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                    autocomplete-api-url="@propertyInfo.Lookup.Url"
+                    autocomplete-selected-item-name="@Model.GetProperty(propertyInfo.Name + "_Text")"
+                    autocomplete-selected-item-value="@Model.GetProperty(propertyInfo.Name)"
+                    autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
+                    autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                    autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                    autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName">
                 </abp-select>
             }
             else
             {
                 <abp-input type="@propertyInfo.GetInputType()"
-                           asp-for="ExtraProperties[propertyInfo.Name]"
-                           name="ExtraProperties.@propertyInfo.Name"
-                           label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
-                           asp-format="@propertyInfo.GetInputFormatOrNull()"
-                           value="@propertyInfo.GetInputValueOrNull(Model.GetProperty(propertyInfo.Name))"/>
+                   asp-for="ExtraProperties[propertyInfo.Name]"
+                   name="ExtraProperties.@propertyInfo.Name"
+                   label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                   asp-format="@propertyInfo.GetInputFormatOrNull()"
+                   value="@propertyInfo.GetInputValueOrNull(Model.GetProperty(propertyInfo.Name))" />
             }
         }
     }
 
-    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value"/>
+    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
 </form>
