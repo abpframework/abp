@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.Identity.EntityFrameworkCore",
-  "hash": "a7ed00412f00238de041a53dafee4e7b",
+  "hash": "84469ae986fb450025951449cf74f94a",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.EntityFrameworkCore",
+          "namespace": "Volo.Abp.Users.EntityFrameworkCore",
+          "name": "AbpUsersEntityFrameworkCoreModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpIdentityEntityFrameworkCoreModule"
+      "name": "AbpIdentityEntityFrameworkCoreModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
@@ -14,71 +27,85 @@
         {
           "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
           "contentType": "databaseTable",
-          "name": "AbpClaimTypes"
+          "name": "AbpClaimTypes",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
           "contentType": "databaseTable",
-          "name": "AbpLinkUsers"
+          "name": "AbpLinkUsers",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityRole",
           "contentType": "databaseTable",
-          "name": "AbpRoles"
+          "name": "AbpRoles",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityRoleClaim",
           "contentType": "databaseTable",
-          "name": "AbpRoleClaims"
+          "name": "AbpRoleClaims",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
           "contentType": "databaseTable",
-          "name": "AbpSecurityLogs"
+          "name": "AbpSecurityLogs",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityUser",
           "contentType": "databaseTable",
-          "name": "AbpUsers"
+          "name": "AbpUsers",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityUserClaim",
           "contentType": "databaseTable",
-          "name": "AbpUserClaims"
+          "name": "AbpUserClaims",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityUserLogin",
           "contentType": "databaseTable",
-          "name": "AbpUserLogins"
+          "name": "AbpUserLogins",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityUserOrganizationUnit",
           "contentType": "databaseTable",
-          "name": "AbpUserOrganizationUnits"
+          "name": "AbpUserOrganizationUnits",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityUserRole",
           "contentType": "databaseTable",
-          "name": "AbpUserRoles"
+          "name": "AbpUserRoles",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityUserToken",
           "contentType": "databaseTable",
-          "name": "AbpUserTokens"
+          "name": "AbpUserTokens",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
           "contentType": "databaseTable",
-          "name": "AbpOrganizationUnits"
+          "name": "AbpOrganizationUnits",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.OrganizationUnitRole",
           "contentType": "databaseTable",
-          "name": "AbpOrganizationUnitRoles"
+          "name": "AbpOrganizationUnitRoles",
+          "summary": null
         }
       ],
       "contentType": "efCoreDbContext",
-      "name": "IdentityDbContext"
+      "name": "IdentityDbContext",
+      "summary": "Base class for the Entity Framework database context used for identity."
     }
   ]
 }

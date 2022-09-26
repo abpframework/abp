@@ -18,7 +18,7 @@
     "@abp/ng.identity": "~6.0.0-rc.4",
     "@abp/ng.setting-management": "~6.0.0-rc.4",
     "@abp/ng.tenant-management": "~6.0.0-rc.4",
-    "@abp/ng.theme.lepton-x": "^1.0.0-rc.6",
+    "@abp/ng.theme.lepton-x": "~2.0.0-preview20220912",
     "@abp/ng.theme.shared": "~6.0.0-rc.4",
     "@angular/animations": "^14.2.1",
     "@angular/common": "^14.2.1",

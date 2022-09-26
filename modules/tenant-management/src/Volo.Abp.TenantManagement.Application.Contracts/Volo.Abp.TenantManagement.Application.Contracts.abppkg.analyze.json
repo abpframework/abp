@@ -1,47 +1,71 @@
 {
   "name": "Volo.Abp.TenantManagement.Application.Contracts",
-  "hash": "69c3349a2601f6ea9fe76ccd603203f7",
+  "hash": "55adc3caf7ad66c510494f56b78f1847",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Domain.Shared",
+          "namespace": "Volo.Abp.TenantManagement",
+          "name": "AbpTenantManagementDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Authorization.Abstractions",
+          "namespace": "Volo.Abp.Authorization",
+          "name": "AbpAuthorizationAbstractionsModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpTenantManagementApplicationContractsModule"
+      "name": "AbpTenantManagementApplicationContractsModule",
+      "summary": null
     },
     {
       "displayName": "Tenant management",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "AbpTenantManagement.Tenants"
+      "name": "AbpTenantManagement.Tenants",
+      "summary": null
     },
     {
       "displayName": "Create",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "AbpTenantManagement.Tenants.Create"
+      "name": "AbpTenantManagement.Tenants.Create",
+      "summary": null
     },
     {
       "displayName": "Edit",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "AbpTenantManagement.Tenants.Update"
+      "name": "AbpTenantManagement.Tenants.Update",
+      "summary": null
     },
     {
       "displayName": "Delete",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "AbpTenantManagement.Tenants.Delete"
+      "name": "AbpTenantManagement.Tenants.Delete",
+      "summary": null
     },
     {
       "displayName": "Manage features",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "AbpTenantManagement.Tenants.ManageFeatures"
+      "name": "AbpTenantManagement.Tenants.ManageFeatures",
+      "summary": null
     },
     {
       "displayName": "Manage connection strings",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "AbpTenantManagement.Tenants.ManageConnectionStrings"
+      "name": "AbpTenantManagement.Tenants.ManageConnectionStrings",
+      "summary": null
     }
   ]
 }

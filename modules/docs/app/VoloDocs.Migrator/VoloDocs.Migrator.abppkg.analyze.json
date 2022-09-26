@@ -1,0 +1,19 @@
+{
+  "name": "VoloDocs.Migrator",
+  "hash": "0ac8c1eb9d9d1c7a53ace043889b10f7",
+  "contents": [
+    {
+      "namespace": "VoloDocs.Migrator",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "VoloDocs.EntityFrameworkCore",
+          "namespace": "VoloDocs.EntityFrameworkCore",
+          "name": "VoloDocsEntityFrameworkCoreModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "VoloDocsMigratorModule",
+      "summary": null
+    }
+  ]
+}

@@ -1,11 +1,24 @@
 {
   "name": "Volo.Docs.Application.Contracts",
-  "hash": "262e4f1684408074bc48fd8b516291ac",
+  "hash": "4911fb87fa8e3581c4827d6348d925ba",
   "contents": [
     {
       "namespace": "Volo.Docs",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Docs.Domain.Shared",
+          "namespace": "Volo.Docs",
+          "name": "DocsDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationContractsModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "DocsApplicationContractsModule"
+      "name": "DocsApplicationContractsModule",
+      "summary": null
     }
   ]
 }
