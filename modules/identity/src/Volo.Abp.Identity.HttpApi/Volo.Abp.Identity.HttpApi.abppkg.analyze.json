@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.Identity.HttpApi",
-  "hash": "5609d7197a88b2b61c75da1314ead391",
+  "hash": "a4fcad45d0820ac4ecebaa177a0d7456",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Application.Contracts",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
+          "namespace": "Volo.Abp.AspNetCore.Mvc",
+          "name": "AbpAspNetCoreMvcModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpIdentityHttpApiModule"
+      "name": "AbpIdentityHttpApiModule",
+      "summary": null
     }
   ]
 }

@@ -240,9 +240,9 @@ const options: FormPropOptions<IdentityUserDto> = {
 
 const prop = new FormProp(options);
 ```
-FormProp has template option since version 6.0. it can accept custom angular component.
+FormProp has the template option since version 6.0. it can accept custom angular component.
 The component can access PropData and Prop. 
-Example custom prop component.
+Example of the custom prop component.
 ```js
 import {
   EXTENSIBLE_FORM_VIEW_PROVIDER,

@@ -1,18 +1,47 @@
 {
   "name": "VoloDocs.EntityFrameworkCore",
-  "hash": "8ac808bc478d207d2d1ed672d5f16244",
+  "hash": "812957e8869f2799e209f3ee8c080b03",
   "contents": [
     {
       "namespace": "VoloDocs.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Docs.EntityFrameworkCore",
+          "namespace": "Volo.Docs.EntityFrameworkCore",
+          "name": "DocsEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.EntityFrameworkCore",
+          "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
+          "name": "AbpIdentityEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
+          "namespace": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
+          "name": "AbpPermissionManagementEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.EntityFrameworkCore",
+          "namespace": "Volo.Abp.SettingManagement.EntityFrameworkCore",
+          "name": "AbpSettingManagementEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore.SqlServer",
+          "namespace": "Volo.Abp.EntityFrameworkCore.SqlServer",
+          "name": "AbpEntityFrameworkCoreSqlServerModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "VoloDocsEntityFrameworkCoreModule"
+      "name": "VoloDocsEntityFrameworkCoreModule",
+      "summary": null
     },
     {
       "namespace": "VoloDocs.EntityFrameworkCore",
       "connectionStringName": null,
       "databaseTables": [],
       "contentType": "efCoreDbContext",
-      "name": "VoloDocsDbContext"
+      "name": "VoloDocsDbContext",
+      "summary": null
     }
   ]
 }

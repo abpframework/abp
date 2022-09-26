@@ -1,11 +1,29 @@
 {
   "name": "Volo.Abp.PermissionManagement.Application.Contracts",
-  "hash": "761a407cfc112e2c648d5c5cf50064e4",
+  "hash": "7b44f057d35eb8a7517cc889483a9760",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Domain.Shared",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Authorization.Abstractions",
+          "namespace": "Volo.Abp.Authorization",
+          "name": "AbpAuthorizationAbstractionsModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpPermissionManagementApplicationContractsModule"
+      "name": "AbpPermissionManagementApplicationContractsModule",
+      "summary": null
     }
   ]
 }

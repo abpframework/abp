@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.VirtualFileExplorer.Web",
-  "hash": "f553dc666ba87cc5e2fdc5c22546b095",
+  "hash": "0f01f177457fb217bec530fa20f5a940",
   "contents": [
     {
       "namespace": "Volo.Abp.VirtualFileExplorer.Web",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+          "name": "AbpAspNetCoreMvcUiBootstrapModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "name": "AbpAspNetCoreMvcUiThemeSharedModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpVirtualFileExplorerWebModule"
+      "name": "AbpVirtualFileExplorerWebModule",
+      "summary": null
     }
   ]
 }
