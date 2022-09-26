@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { RoutesService } from '../services';
+import { RoutesService } from '../services/routes.service';
 import { DummyInjector } from './utils/common.utils';
 import { mockPermissionService } from './utils/permission-service.spec.utils';
 

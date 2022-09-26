@@ -95,24 +95,14 @@
                 "bundleName": "ngx-datatable-material"
               },
               {
-                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.css",
+                "input": "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
                 "inject": false,
-                "bundleName": "bootstrap-dim"
+                "bundleName": "bootstrap-rtl.min"
               },
               {
-                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.css",
-                "inject": false,
-                "bundleName": "ng-bundle"
-              },
-              {
-                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/side-menu/layout-bundle.css",
-                "inject": false,
-                "bundleName": "layout-bundle"
-              },
-              {
-                "input": "node_modules/@abp/ng.theme.lepton-x/assets/css/abp-bundle.css",
-                "inject": false,
-                "bundleName": "abp-bundle"
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap-ltr.min"
               },
               "projects/dev-app/src/styles.scss"
             ],

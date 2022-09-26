@@ -4,15 +4,13 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
-import {
-  AuthService,
-  ConfigStateService,
-  EnvironmentService,
-  SessionStateService,
-} from '../services';
+import { SessionStateService } from '../services/session-state.service';
+import { EnvironmentService } from '../services/environment.service';
+import { AuthService } from '../services/auth.service';
+import { ConfigStateService } from '../services/config-state.service';
 import * as AuthFlowStrategy from '../strategies/auth-flow.strategy';
 import { CORE_OPTIONS } from '../tokens/options.token';
-import { checkAccessToken, getInitialData, localeInitializer } from '../utils';
+import { checkAccessToken, getInitialData, localeInitializer } from '../utils/initial-utils';
 import * as environmentUtils from '../utils/environment-utils';
 import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
 

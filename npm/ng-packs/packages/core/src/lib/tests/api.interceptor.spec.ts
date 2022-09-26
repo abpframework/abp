@@ -3,8 +3,9 @@ import { SpyObject } from '@ngneat/spectator';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Subject, timer } from 'rxjs';
-import { ApiInterceptor } from '../interceptors';
-import { HttpWaitService, SessionStateService } from '../services';
+import { ApiInterceptor } from '../interceptors/api.interceptor';
+import { HttpWaitService } from '../services/http-wait.service';
+import { SessionStateService } from '../services/session-state.service';
 import { TENANT_KEY } from '../tokens/tenant-key.token';
 
 describe('ApiInterceptor', () => {
