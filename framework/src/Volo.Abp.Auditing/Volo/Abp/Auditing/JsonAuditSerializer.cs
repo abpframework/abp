@@ -38,14 +38,13 @@ public class JsonAuditSerializer : IAuditSerializer, ITransientDependency
                     {
                         jsonTypeInfo =>
                         {
-                            if (Options.IgnoredTypes.Any(ignoredType => ignoredType.IsAssignableFrom(jsonTypeInfo.Type)))
+                            if (Options.IgnoredTypes.Any(ignoredType => ignoredType.IsAssignableFrom(jsonTypeInfo.Type)) ||
+                                jsonTypeInfo.Type.GetCustomAttributes(typeof(DisableAuditingAttribute), false).Any())
                             {
-                                jsonTypeInfo.Properties.Clear();
-                            }
-
-                            if (jsonTypeInfo.Type.GetCustomAttributes(typeof(DisableAuditingAttribute), false).Any())
-                            {
-                                jsonTypeInfo.Properties.Clear();
+                                if (jsonTypeInfo.Kind == JsonTypeInfoKind.Object)
+                                {
+                                    jsonTypeInfo.Properties.Clear();
+                                }
                             }
 
                             foreach (var property in jsonTypeInfo.Properties)
