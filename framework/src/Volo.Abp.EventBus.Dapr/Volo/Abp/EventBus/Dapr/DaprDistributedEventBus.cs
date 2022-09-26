@@ -18,7 +18,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 {
     protected IDaprSerializer Serializer { get; }
     protected AbpDaprEventBusOptions DaprEventBusOptions { get; }
-    protected AbpDaprClientFactory DaprClientFactory { get; }
+    protected IAbpDaprClientFactory DaprClientFactory { get; }
 
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
@@ -33,7 +33,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         IEventHandlerInvoker eventHandlerInvoker,
         IDaprSerializer serializer,
         IOptions<AbpDaprEventBusOptions> daprEventBusOptions,
-        AbpDaprClientFactory daprClientFactory)
+        IAbpDaprClientFactory daprClientFactory)
         : base(serviceScopeFactory, currentTenant, unitOfWorkManager, abpDistributedEventBusOptions, guidGenerator, clock, eventHandlerInvoker)
     {
         Serializer = serializer;
@@ -197,7 +197,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     protected virtual async Task PublishToDaprAsync(string eventName, object eventData)
     {
-        var client = await DaprClientFactory.CreateAsync();
+        var client = DaprClientFactory.Create();
         await client.PublishEventAsync(pubsubName: DaprEventBusOptions.PubSubName, topicName: eventName, data: eventData);
     }
 

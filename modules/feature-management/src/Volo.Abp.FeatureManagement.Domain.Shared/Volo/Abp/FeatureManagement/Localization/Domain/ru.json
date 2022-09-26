@@ -6,6 +6,7 @@
     "ManageHostFeatures": "Управление функциями хоста",
     "Permission:FeatureManagement": "Управление функциями",
     "Permission:FeatureManagement.ManageHostFeatures": "Управление функциями хоста",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Недопустимое значение функции {0}!"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Недопустимое значение функции {0}!",
+		"Menu:FeatureManagement": "Управление функциями"
   }
 }

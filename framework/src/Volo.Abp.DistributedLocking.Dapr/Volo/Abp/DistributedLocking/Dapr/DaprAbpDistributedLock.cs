@@ -7,41 +7,33 @@ namespace Volo.Abp.DistributedLocking.Dapr;
 [Dependency(ReplaceServices = true)]
 public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
 {
-    protected AbpDaprClientFactory DaprClientFactory { get; }
+    protected IAbpDaprClientFactory DaprClientFactory { get; }
     protected AbpDistributedLockDaprOptions DistributedLockDaprOptions { get; }
-    protected AbpDaprOptions DaprOptions { get; }
     protected IDistributedLockKeyNormalizer DistributedLockKeyNormalizer { get; }
     
     public DaprAbpDistributedLock(
-        AbpDaprClientFactory daprClientFactory,
+        IAbpDaprClientFactory daprClientFactory,
         IOptions<AbpDistributedLockDaprOptions> distributedLockDaprOptions,
-        IOptions<AbpDaprOptions> daprOptions, 
         IDistributedLockKeyNormalizer distributedLockKeyNormalizer)
     {
         DaprClientFactory = daprClientFactory;
         DistributedLockKeyNormalizer = distributedLockKeyNormalizer;
-        DaprOptions = daprOptions.Value;
         DistributedLockDaprOptions = distributedLockDaprOptions.Value;
     }
     
-    public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
+    public async Task<IAbpDistributedLockHandle?> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default)
     {
-        if (timeout == default)
-        {
-            timeout = DistributedLockDaprOptions.DefaultTimeout;
-        }
-        
-        var daprClient = await DaprClientFactory.CreateAsync();
-        var key = DistributedLockKeyNormalizer.NormalizeKey(name);
+        name = DistributedLockKeyNormalizer.NormalizeKey(name);
 
+        var daprClient = DaprClientFactory.Create();
         var lockResponse = await daprClient.Lock(
             DistributedLockDaprOptions.StoreName, 
-            key, 
-            DaprOptions.AppId,
-            (int)timeout.TotalSeconds,
+            name, 
+            DistributedLockDaprOptions.Owner ?? Guid.NewGuid().ToString(),
+            (int)DistributedLockDaprOptions.DefaultExpirationTimeout.TotalSeconds,
             cancellationToken);
 
         if (lockResponse == null || !lockResponse.Success)

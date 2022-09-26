@@ -1,10 +1,11 @@
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+
 import { normalize } from '@angular-devkit/core';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { dirname } from 'path';
@@ -59,17 +60,17 @@ export function findBootstrapModulePath(host: Tree, mainPath: string): string {
 
   const mainBuffer = host.read(mainPath);
   if (!mainBuffer) {
-    throw new SchematicsException(`Client app main file (${mainPath}) not found`);
+    throw new SchematicsException(`Client application main file (${mainPath}) not found`);
   }
   const mainText = mainBuffer.toString('utf-8');
   const source = ts.createSourceFile(mainPath, mainText, ts.ScriptTarget.Latest, true);
   const allNodes = getSourceNodes(source);
   const bootstrapModuleRelativePath = allNodes
-    .filter(node => node.kind === ts.SyntaxKind.ImportDeclaration)
+    .filter(ts.isImportDeclaration)
     .filter(imp => {
       return findNode(imp, ts.SyntaxKind.Identifier, bootstrapModule.getText());
     })
-    .map((imp: ts.ImportDeclaration) => {
+    .map(imp => {
       const modulePathStringLiteral = imp.moduleSpecifier as ts.StringLiteral;
 
       return modulePathStringLiteral.text;

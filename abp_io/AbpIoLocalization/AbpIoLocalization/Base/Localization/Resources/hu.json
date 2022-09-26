@@ -142,7 +142,7 @@
     "DomainDrivenDesign": "Domainvezérelt tervezés",
     "CrossCuttingConcerns": "Cross Cutting Concerns",
     "AbpCommunity": "ABP közösség",
-    "Footer_GithubStarCount": "{0} Csillag a GitHubon",
+    "Footer_GithubStarCount": "{0} csillagok a GitHubon",
     "Footer_NugetDownloadCount": "{0} Letöltések a NuGeten",
     "AbpDescription": "Az ABP egy nyílt forráskódú alkalmazás keretrendszer, amely az AspNet Core alapú webalkalmazások fejlesztésére összpontosít. Ne ismételje magát, összpontosítson saját üzleti kódjára.",
     "Layout_AbpFramework_MetaTitle": "ABP Framework – Nyílt forráskódú webalkalmazás-keretrendszer",

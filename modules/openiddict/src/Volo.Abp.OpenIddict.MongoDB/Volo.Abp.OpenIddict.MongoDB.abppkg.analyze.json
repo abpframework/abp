@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.OpenIddict.MongoDB",
-  "hash": "9306b0570c535c0a4124afc3181e8313",
+  "hash": "cd8f04acac2f215c9a2c45c5bbba1f21",
   "contents": [
     {
       "namespace": "Volo.Abp.OpenIddict.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.OpenIddict.Domain",
+          "namespace": "Volo.Abp.OpenIddict",
+          "name": "AbpOpenIddictDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "namespace": "Volo.Abp.MongoDB",
+          "name": "AbpMongoDbModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpOpenIddictMongoDbModule"
+      "name": "AbpOpenIddictMongoDbModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.OpenIddict.MongoDB",
@@ -14,26 +27,31 @@
         {
           "entityFullName": "Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization",
           "contentType": "databaseCollection",
-          "name": "OpenIddictAuthorizations"
-        },
-        {
-          "entityFullName": "Volo.Abp.OpenIddict.Applications.OpenIddictApplication",
-          "contentType": "databaseCollection",
-          "name": "OpenIddictApplications"
-        },
-        {
-          "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
-          "contentType": "databaseCollection",
-          "name": "OpenIddictTokens"
+          "name": "OpenIddictAuthorizations",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.OpenIddict.Scopes.OpenIddictScope",
           "contentType": "databaseCollection",
-          "name": "OpenIddictScopes"
+          "name": "OpenIddictScopes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Applications.OpenIddictApplication",
+          "contentType": "databaseCollection",
+          "name": "OpenIddictApplications",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
+          "contentType": "databaseCollection",
+          "name": "OpenIddictTokens",
+          "summary": null
         }
       ],
       "contentType": "mongoDbContext",
-      "name": "OpenIddictMongoDbContext"
+      "name": "OpenIddictMongoDbContext",
+      "summary": null
     }
   ]
 }

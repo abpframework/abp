@@ -1,11 +1,24 @@
 {
   "name": "Volo.Blogging.EntityFrameworkCore",
-  "hash": "28d4b0828f47b8b4e6cef70a5879915f",
+  "hash": "ebcaf9db9227c69efab38f7fc422bf27",
   "contents": [
     {
       "namespace": "Volo.Blogging.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Blogging.Domain",
+          "namespace": "Volo.Blogging",
+          "name": "BloggingDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "name": "AbpEntityFrameworkCoreModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "BloggingEntityFrameworkCoreModule"
+      "name": "BloggingEntityFrameworkCoreModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Blogging.EntityFrameworkCore",
@@ -14,36 +27,43 @@
         {
           "entityFullName": "Volo.Blogging.Blogs.Blog",
           "contentType": "databaseTable",
-          "name": "BlgBlogs"
+          "name": "BlgBlogs",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Blogging.Comments.Comment",
           "contentType": "databaseTable",
-          "name": "BlgComments"
+          "name": "BlgComments",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Blogging.Posts.Post",
           "contentType": "databaseTable",
-          "name": "BlgPosts"
+          "name": "BlgPosts",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Blogging.Posts.PostTag",
           "contentType": "databaseTable",
-          "name": "BlgPostTags"
+          "name": "BlgPostTags",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Blogging.Tagging.Tag",
           "contentType": "databaseTable",
-          "name": "BlgTags"
+          "name": "BlgTags",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Blogging.Users.BlogUser",
           "contentType": "databaseTable",
-          "name": "BlgUsers"
+          "name": "BlgUsers",
+          "summary": null
         }
       ],
       "contentType": "efCoreDbContext",
-      "name": "BloggingDbContext"
+      "name": "BloggingDbContext",
+      "summary": null
     }
   ]
 }

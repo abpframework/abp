@@ -6,6 +6,7 @@
     "ManageHostFeatures": "Spravovať funkcie poskytovateľa",
     "Permission:FeatureManagement": "Správa funkcií",
     "Permission:FeatureManagement.ManageHostFeatures": "Správa funkcií poskytovateľa",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Hodnota funkcie {0} nie je platná!"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Hodnota funkcie {0} nie je platná!",
+		"Menu:FeatureManagement": "Správa funkcií"
   }
 }

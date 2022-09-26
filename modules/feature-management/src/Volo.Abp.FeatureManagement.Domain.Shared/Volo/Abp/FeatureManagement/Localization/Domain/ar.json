@@ -6,6 +6,7 @@
     "ManageHostFeatures": "إدارة ميزات المضيف",
     "Permission:FeatureManagement": "إدارة الميزات",
     "Permission:FeatureManagement.ManageHostFeatures": "إدارة ميزات المضيف",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} قيمة الميزة غير صالحة!"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} قيمة الميزة غير صالحة!",
+		"Menu:FeatureManagement": "إدارة الميزات"
   }
 }

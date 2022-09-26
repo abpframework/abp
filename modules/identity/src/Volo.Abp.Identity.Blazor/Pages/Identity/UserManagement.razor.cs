@@ -88,7 +88,7 @@ public partial class UserManagement
             await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.ManagePermissions);
     }
 
-    protected override Task OpenCreateModalAsync()
+    protected override async Task OpenCreateModalAsync()
     {
         CreateModalSelectedTab = DefaultSelectedTab;
 
@@ -99,7 +99,10 @@ public partial class UserManagement
         }).ToArray();
 
         ChangePasswordTextRole(TextRole.Password);
-        return base.OpenCreateModalAsync();
+        await base.OpenCreateModalAsync();
+
+        NewEntity.IsActive = true;
+        NewEntity.LockoutEnabled = true;
     }
 
     protected override Task OnCreatingEntityAsync()

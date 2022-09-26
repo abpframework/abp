@@ -59,7 +59,7 @@ public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> : AbpTestBaseWit
     /// <typeparam name="TController">The type of the controller.</typeparam>
     protected virtual string GetUrl<TController>()
     {
-        return "/" + typeof(TController).Name.RemovePostFix("Controller", "AppService", "ApplicationService", "Service");
+        return "/" + typeof(TController).Name.RemovePostFix("Controller", "AppService", "ApplicationService", "IntService", "IntegrationService", "Service");
     }
 
     /// <summary>

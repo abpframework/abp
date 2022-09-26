@@ -1,11 +1,24 @@
 {
   "name": "Volo.CmsKit.Public.HttpApi.Client",
-  "hash": "60549438786408497e188a1626a25bfb",
+  "hash": "e7a6f39a21b56449aa622bceefcd697a",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Public",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.CmsKit.Public.Application.Contracts",
+          "namespace": "Volo.CmsKit.Public",
+          "name": "CmsKitPublicApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.CmsKit.Common.HttpApi.Client",
+          "namespace": "Volo.CmsKit",
+          "name": "CmsKitCommonHttpApiClientModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "CmsKitPublicHttpApiClientModule"
+      "name": "CmsKitPublicHttpApiClientModule",
+      "summary": null
     }
   ]
 }
