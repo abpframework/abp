@@ -37,26 +37,6 @@ public static class MyProjectNameModuleExtensionConfigurator
 
     private static void ConfigureExtraProperties()
     {
-        ObjectExtensionManager.Instance.Modules()
-            .ConfigureIdentity(identity =>
-            {
-                identity.ConfigureUser(user =>
-                {
-                    user.AddOrUpdateProperty<string>( //property type: string
-                        "SocialSecurityNumber", //property name
-                        property =>
-                        {
-                            //validation rules
-                            property.Attributes.Add(new RequiredAttribute());
-                            property.Attributes.Add(new StringLengthAttribute(64) {MinimumLength = 4});
-
-                            //...other configurations for this property
-                            // property.Configuration[IdentityModuleExtensionConsts.ConfigurationNames.AllowUserToEdit] = true;
-                        }
-                    );
-                });
-            });
-
         /* You can configure extra properties for the
          * entities defined in the modules used by your application.
          *
