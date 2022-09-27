@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'core',
+/* eslint-disable */
+export default {
+  displayName: 'theme-basic',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/packages/core',
+  coverageDirectory: '../../coverage/packages/theme-basic',
   transform: {
     '^.+.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'schematics',
+/* eslint-disable */
+export default {
+  displayName: 'identity',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/packages/schematics',
+  coverageDirectory: '../../coverage/packages/identity',
   transform: {
     '^.+.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

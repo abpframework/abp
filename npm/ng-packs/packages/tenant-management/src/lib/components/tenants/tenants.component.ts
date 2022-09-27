@@ -8,7 +8,7 @@ import {
   generateFormFromProps,
 } from '@abp/ng.theme.shared/extensions';
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eTenantManagementComponents } from '../../enums/components';
 
@@ -28,7 +28,7 @@ export class TenantsComponent implements OnInit {
 
   selected!: TenantDto;
 
-  tenantForm!: FormGroup;
+  tenantForm!: UntypedFormGroup;
 
   isModalVisible!: boolean;
 
@@ -54,7 +54,7 @@ export class TenantsComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private service: TenantService,
     private toasterService: ToasterService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) {}
 
   ngOnInit() {

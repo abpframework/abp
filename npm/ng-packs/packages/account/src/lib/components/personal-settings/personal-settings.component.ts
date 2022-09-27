@@ -1,7 +1,7 @@
 import { ProfileDto, ProfileService } from '@abp/ng.account.core/proxy';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { Account } from '../../models/account';
 import { ManageProfileStateService } from '../../services/manage-profile.state.service';
@@ -31,12 +31,12 @@ export class PersonalSettingsComponent
 {
   selected: ProfileDto;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   inProgress: boolean;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private toasterService: ToasterService,
     private profileService: ProfileService,
     private manageProfileState: ManageProfileStateService,

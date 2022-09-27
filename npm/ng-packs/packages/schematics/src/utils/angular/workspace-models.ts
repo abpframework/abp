@@ -11,6 +11,12 @@ export enum ProjectType {
   Library = 'library',
 }
 
+/**
+ * An enum of the official Angular builders.
+ * Each enum value provides the fully qualified name of the associated builder.
+ * This enum can be used when analyzing the `builder` fields of project configurations from the
+ * `angular.json` workspace file.
+ */
 export enum Builders {
   AppShell = '@angular-devkit/build-angular:app-shell',
   Server = '@angular-devkit/build-angular:server',
@@ -129,10 +135,15 @@ export type ServeBuilderTarget = BuilderTarget<Builders.DevServer, ServeBuilderO
 export type ExtractI18nBuilderTarget = BuilderTarget<Builders.ExtractI18n, ExtractI18nOptions>;
 export type E2EBuilderTarget = BuilderTarget<Builders.Protractor, E2EOptions>;
 
+interface WorkspaceCLISchema {
+  warnings?: Record<string, boolean>;
+  schematicCollections?: string[];
+  defaultCollection?: string;
+}
 export interface WorkspaceSchema {
   version: 1;
   defaultProject?: string;
-  cli?: { warnings?: Record<string, boolean> };
+  cli?: WorkspaceCLISchema;
   projects: {
     [key: string]: WorkspaceProject<ProjectType.Application | ProjectType.Library>;
   };
@@ -148,7 +159,7 @@ export interface WorkspaceProject<TProjectType extends ProjectType = ProjectType
   sourceRoot: string;
   prefix: string;
 
-  cli?: { warnings?: Record<string, boolean> };
+  cli?: WorkspaceCLISchema;
 
   /**
    * Tool options.

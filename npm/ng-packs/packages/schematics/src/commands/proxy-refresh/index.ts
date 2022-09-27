@@ -1,4 +1,4 @@
-import { chain, SchematicContext, Tree } from '@angular-devkit/schematics';
+import { chain, Tree } from '@angular-devkit/schematics';
 import { GenerateProxySchema } from '../../models';
 import {
   buildTargetPath,
@@ -16,7 +16,7 @@ import {
 export default function (schema: GenerateProxySchema) {
   const params = removeDefaultPlaceholders(schema);
 
-  return async (host: Tree, _context: SchematicContext) => {
+  return async (host: Tree) => {
     const target = await resolveProject(host, params.target!);
     const targetPath = buildTargetPath(target.definition, params.entryPoint);
 

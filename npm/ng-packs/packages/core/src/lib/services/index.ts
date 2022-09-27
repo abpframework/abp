@@ -19,3 +19,4 @@ export * from './routes.service';
 export * from './session-state.service';
 export * from './subscription.service';
 export * from './track-by.service';
+export * from './timeout-limited-oauth.service';

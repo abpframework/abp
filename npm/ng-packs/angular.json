@@ -2,6 +2,7 @@
   "version": 1,
   "projects": {
     "account": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/account",
       "sourceRoot": "packages/account/src",
@@ -27,7 +28,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/account"],
           "options": {
-            "jestConfig": "packages/account/jest.config.js",
+            "jestConfig": "packages/account/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -43,6 +44,7 @@
       "implicitDependencies": ["core", "theme-shared", "account-core"]
     },
     "account-core": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/account-core",
       "sourceRoot": "packages/account-core/src",
@@ -68,7 +70,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/account-core"],
           "options": {
-            "jestConfig": "packages/account-core/jest.config.js",
+            "jestConfig": "packages/account-core/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -87,6 +89,7 @@
       "implicitDependencies": ["core", "theme-shared"]
     },
     "components": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/components",
       "sourceRoot": "packages/components/src",
@@ -112,7 +115,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/components"],
           "options": {
-            "jestConfig": "packages/components/jest.config.js",
+            "jestConfig": "packages/components/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -131,6 +134,7 @@
       "implicitDependencies": ["core", "theme-shared"]
     },
     "core": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/core",
       "sourceRoot": "packages/core/src",
@@ -156,7 +160,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/core"],
           "options": {
-            "jestConfig": "packages/core/jest.config.js",
+            "jestConfig": "packages/core/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -171,6 +175,7 @@
       "tags": []
     },
     "dev-app": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "application",
       "root": "apps/dev-app",
       "sourceRoot": "apps/dev-app/src",
@@ -290,13 +295,14 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/apps/dev-app"],
           "options": {
-            "jestConfig": "apps/dev-app/jest.config.js",
+            "jestConfig": "apps/dev-app/jest.config.ts",
             "passWithNoTests": true
           }
         }
       }
     },
     "dev-app-e2e": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "apps/dev-app-e2e",
       "sourceRoot": "apps/dev-app-e2e/src",
       "projectType": "application",
@@ -326,6 +332,7 @@
       "implicitDependencies": ["dev-app"]
     },
     "feature-management": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/feature-management",
       "sourceRoot": "packages/feature-management/src",
@@ -351,7 +358,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/feature-management"],
           "options": {
-            "jestConfig": "packages/feature-management/jest.config.js",
+            "jestConfig": "packages/feature-management/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -370,6 +377,7 @@
       "implicitDependencies": ["core", "theme-shared"]
     },
     "identity": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/identity",
       "sourceRoot": "packages/identity/src",
@@ -395,7 +403,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/identity"],
           "options": {
-            "jestConfig": "packages/identity/jest.config.js",
+            "jestConfig": "packages/identity/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -411,6 +419,7 @@
       "implicitDependencies": ["core", "theme-shared", "permission-management"]
     },
     "permission-management": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/permission-management",
       "sourceRoot": "packages/permission-management/src",
@@ -436,7 +445,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/permission-management"],
           "options": {
-            "jestConfig": "packages/permission-management/jest.config.js",
+            "jestConfig": "packages/permission-management/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -455,6 +464,7 @@
       "implicitDependencies": ["core", "theme-shared"]
     },
     "schematics": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/schematics",
       "sourceRoot": "packages/schematics/src",
@@ -464,7 +474,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/schematics"],
           "options": {
-            "jestConfig": "packages/schematics/jest.config.js",
+            "jestConfig": "packages/schematics/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -482,6 +492,7 @@
       "tags": []
     },
     "setting-management": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/setting-management",
       "sourceRoot": "packages/setting-management/src",
@@ -507,7 +518,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/setting-management"],
           "options": {
-            "jestConfig": "packages/setting-management/jest.config.js",
+            "jestConfig": "packages/setting-management/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -526,6 +537,7 @@
       "implicitDependencies": ["core", "theme-shared", "components"]
     },
     "tenant-management": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/tenant-management",
       "sourceRoot": "packages/tenant-management/src",
@@ -551,7 +563,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/tenant-management"],
           "options": {
-            "jestConfig": "packages/tenant-management/jest.config.js",
+            "jestConfig": "packages/tenant-management/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -570,6 +582,7 @@
       "implicitDependencies": ["core", "theme-shared", "feature-management"]
     },
     "theme-basic": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/theme-basic",
       "sourceRoot": "packages/theme-basic/src",
@@ -595,7 +608,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/theme-basic"],
           "options": {
-            "jestConfig": "packages/theme-basic/jest.config.js",
+            "jestConfig": "packages/theme-basic/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -614,6 +627,7 @@
       "implicitDependencies": ["core", "theme-shared", "account-core"]
     },
     "theme-shared": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/theme-shared",
       "sourceRoot": "packages/theme-shared/src",
@@ -639,7 +653,7 @@
           "builder": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/theme-shared"],
           "options": {
-            "jestConfig": "packages/theme-shared/jest.config.js",
+            "jestConfig": "packages/theme-shared/jest.config.ts",
             "passWithNoTests": true
           }
         },
