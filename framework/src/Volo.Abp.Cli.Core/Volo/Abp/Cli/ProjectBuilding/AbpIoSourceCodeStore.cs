@@ -8,9 +8,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.GitHub;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
@@ -85,7 +87,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
         else
         {
-            if (!await IsVersionExists(version))
+            if (!await IsVersionExists(name, version))
             {
                 throw new Exception("There is no version found with given version: " + version);
             }
@@ -201,7 +203,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
     }
 
-    private async Task<bool> IsVersionExists(string version)
+    private async Task<bool> IsVersionExists(string templateName, string version)
     {
         var url = $"{CliUrls.WwwAbpIo}api/download/versions?includePreReleases=true";
 
@@ -214,15 +216,15 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             {
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
                 var result = await response.Content.ReadAsStringAsync();
-                var versions = JsonSerializer.Deserialize<List<GithubRelease>>(result);
+                var versions = JsonSerializer.Deserialize<GithubReleaseVersions>(result);
 
-                return versions.Any(v => v.Name == version);
+                return templateName.Contains("LeptonX") ? 
+                    versions.LeptonXVersions.Any(v => v.Name == version) :
+                    versions.FrameworkAndCommercialVersions.Any(v => v.Name == version);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Logger.LogWarning($"Error occured while getting the versions from {url} : {ex.Message}");
-            // The remote service is currently unavailable, try to work offline.
             return true;
         }
     }
@@ -324,14 +326,10 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         public string Version { get; set; }
     }
 
-    public class GithubRelease
+    public class GithubReleaseVersions
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public bool IsPrerelease { get; set; }
-
-        public DateTime PublishTime { get; set; }
+        public List<GithubRelease> FrameworkAndCommercialVersions { get; set; }
+        
+        public List<GithubRelease> LeptonXVersions { get; set; }
     }
 }
