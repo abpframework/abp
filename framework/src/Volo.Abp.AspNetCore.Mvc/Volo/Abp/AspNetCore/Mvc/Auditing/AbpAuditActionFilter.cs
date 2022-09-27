@@ -41,8 +41,12 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
             finally
             {
                 stopwatch.Stop();
-                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                auditLog.Actions.Add(auditLogAction);
+
+                if (auditLogAction != null)
+                {
+                    auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                    auditLog.Actions.Add(auditLogAction);
+                }
             }
         }
     }
@@ -78,12 +82,16 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
         }
 
         auditLog = auditLogScope.Log;
-        auditLogAction = auditingHelper.CreateAuditLogAction(
-            auditLog,
-            context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
-            context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
-            context.ActionArguments
-        );
+
+        if (!options.DisableLogActionInfo)
+        {
+            auditLogAction = auditingHelper.CreateAuditLogAction(
+                auditLog,
+                context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
+                context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
+                context.ActionArguments
+            );
+        }
 
         return true;
     }
