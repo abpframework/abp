@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Medallion.Threading;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.DistributedLocking;
 
@@ -10,10 +11,18 @@ namespace Volo.Abp.DistributedLocking;
 public class MedallionAbpDistributedLock : IAbpDistributedLock, ITransientDependency
 {
     protected IDistributedLockProvider DistributedLockProvider { get; }
+    protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    
+    protected IDistributedLockKeyNormalizer DistributedLockKeyNormalizer { get; }
 
-    public MedallionAbpDistributedLock(IDistributedLockProvider distributedLockProvider)
+    public MedallionAbpDistributedLock(
+        IDistributedLockProvider distributedLockProvider,
+        ICancellationTokenProvider cancellationTokenProvider,
+        IDistributedLockKeyNormalizer distributedLockKeyNormalizer)
     {
         DistributedLockProvider = distributedLockProvider;
+        CancellationTokenProvider = cancellationTokenProvider;
+        DistributedLockKeyNormalizer = distributedLockKeyNormalizer;
     }
 
     public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
@@ -22,8 +31,16 @@ public class MedallionAbpDistributedLock : IAbpDistributedLock, ITransientDepend
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
+        var key = DistributedLockKeyNormalizer.NormalizeKey(name);
+        
+        CancellationTokenProvider.FallbackToProvider(cancellationToken);
 
-        var handle = await DistributedLockProvider.TryAcquireLockAsync(name, timeout, cancellationToken);
+        var handle = await DistributedLockProvider.TryAcquireLockAsync(
+            key,
+            timeout,
+            CancellationTokenProvider.FallbackToProvider(cancellationToken)
+        );
+        
         if (handle == null)
         {
             return null;

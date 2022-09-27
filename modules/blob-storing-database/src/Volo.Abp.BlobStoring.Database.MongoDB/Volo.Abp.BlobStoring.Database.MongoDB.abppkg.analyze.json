@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BlobStoring.Database.MongoDB",
-  "hash": "ce9648b4f4d4057c01c2a73264cb7671",
+  "hash": "d0d45fc623e9180d60e60935449cb69b",
   "contents": [
     {
       "namespace": "Volo.Abp.BlobStoring.Database.MongoDB",

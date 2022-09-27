@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.EntityFrameworkCore",
-  "hash": "b0c908c44aaf0d22ce27a410ebbcabfc",
+  "hash": "95806ac827332b672654c45c95426d74",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement.EntityFrameworkCore",
@@ -24,6 +24,18 @@
       "namespace": "Volo.Abp.FeatureManagement.EntityFrameworkCore",
       "connectionStringName": "AbpFeatureManagement",
       "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.FeatureManagement.FeatureDefinitionRecord",
+          "contentType": "databaseTable",
+          "name": "AbpFeatures",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.FeatureManagement.FeatureGroupDefinitionRecord",
+          "contentType": "databaseTable",
+          "name": "AbpFeatureGroups",
+          "summary": null
+        },
         {
           "entityFullName": "Volo.Abp.FeatureManagement.FeatureValue",
           "contentType": "databaseTable",

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.AspNetCore",
-  "hash": "870d53856b4363d4dcb02a185d4097c0",
+  "hash": "fdd258dd3b650d287857d19cc8b20404",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.AspNetCore",

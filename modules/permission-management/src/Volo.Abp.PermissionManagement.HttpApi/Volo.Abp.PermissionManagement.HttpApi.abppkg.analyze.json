@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.HttpApi",
-  "hash": "77e663ce97e295ee21c675c923d671b7",
+  "hash": "0acf2c2ba79d7741453d05889640f8ac",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.HttpApi",

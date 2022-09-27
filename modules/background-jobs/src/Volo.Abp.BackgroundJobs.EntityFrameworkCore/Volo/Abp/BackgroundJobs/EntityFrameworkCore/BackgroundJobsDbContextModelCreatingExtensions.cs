@@ -18,7 +18,7 @@ public static class BackgroundJobsDbContextModelCreatingExtensions
 
         builder.Entity<BackgroundJobRecord>(b =>
         {
-            b.ToTable(BackgroundJobsDbProperties.DbTablePrefix + "BackgroundJobs", BackgroundJobsDbProperties.DbSchema);
+            b.ToTable(AbpBackgroundJobsDbProperties.DbTablePrefix + "BackgroundJobs", AbpBackgroundJobsDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
