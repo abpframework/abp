@@ -43,7 +43,7 @@
     "Done": "Done",
     "Open": "Open",
     "Closed": "Closed",
-    "RecentQuestionFrom": "Recent question from ",
+    "RecentQuestionFrom": "Recent question from {0}",
     "Stackoverflow": "Stackoverflow",
     "Votes": "votes",
     "Answer": "Answer",

@@ -43,7 +43,7 @@
     "Done": "Kész",
     "Open": "Nyisd ki",
     "Closed": "Zárva",
-    "RecentQuestionFrom": "Friss kérdés tőle",
+    "RecentQuestionFrom": "Friss kérdés tőle {0}",
     "Stackoverflow": "Stackoverflow",
     "Votes": "szavazatokat",
     "Answer": "Válasz",
