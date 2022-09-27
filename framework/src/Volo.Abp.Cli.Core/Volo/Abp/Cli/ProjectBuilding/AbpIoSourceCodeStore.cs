@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -222,10 +223,8 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
                     versions.FrameworkAndCommercialVersions.Any(v => v.Name == version);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Logger.LogWarning($"Error occured while getting the versions from {url} : {ex.Message}");
-            // The remote service is currently unavailable, try to work offline.
             return true;
         }
     }
