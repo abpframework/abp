@@ -43,7 +43,7 @@
     "Done": "完成",
     "Open": "打开",
     "Closed": "关闭",
-    "RecentQuestionFrom": "最近的问题来自",
+    "RecentQuestionFrom": "最近的问题来自 {0}",
     "Stackoverflow": "Stackoverflow",
     "Votes": "票数",
     "Answer": "回答",
