@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.FeatureManagement.HttpApi",
-  "hash": "9381d1bc9af6ab1460dd76c79547e1e9",
+  "hash": "1f51a6839eec0b582c81c936edded5bc",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application.Contracts",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
+          "namespace": "Volo.Abp.AspNetCore.Mvc",
+          "name": "AbpAspNetCoreMvcModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpFeatureManagementHttpApiModule"
+      "name": "AbpFeatureManagementHttpApiModule",
+      "summary": null
     }
   ]
 }

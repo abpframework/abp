@@ -1,11 +1,34 @@
 {
   "name": "Volo.Abp.Identity.Web",
-  "hash": "28144e19882c7781eaf09b39ce8a320b",
+  "hash": "cca5fb6d5c1fec023459661657ac5a13",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.Web",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Application.Contracts",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Web",
+          "namespace": "Volo.Abp.PermissionManagement.Web",
+          "name": "AbpPermissionManagementWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "name": "AbpAspNetCoreMvcUiThemeSharedModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpIdentityWebModule"
+      "name": "AbpIdentityWebModule",
+      "summary": null
     }
   ]
 }

@@ -1,0 +1,19 @@
+{
+  "name": "Volo.ClientSimulation",
+  "hash": "aad48c6c4f04f1594e8a07ab94daaa79",
+  "contents": [
+    {
+      "namespace": "Volo.ClientSimulation",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Http.Client.IdentityModel",
+          "namespace": "Volo.Abp.Http.Client.IdentityModel",
+          "name": "AbpHttpClientIdentityModelModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "ClientSimulationModule",
+      "summary": null
+    }
+  ]
+}

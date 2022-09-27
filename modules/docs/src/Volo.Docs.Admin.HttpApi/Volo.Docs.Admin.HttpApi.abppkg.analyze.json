@@ -1,11 +1,24 @@
 {
   "name": "Volo.Docs.Admin.HttpApi",
-  "hash": "2ce1eb9b94903de99e5e94c61fecd09d",
+  "hash": "fe772fd289de167d1d3d92bc6cf99e6b",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Docs.Admin.Application.Contracts",
+          "namespace": "Volo.Docs.Admin",
+          "name": "DocsAdminApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
+          "namespace": "Volo.Abp.AspNetCore.Mvc",
+          "name": "AbpAspNetCoreMvcModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "DocsAdminHttpApiModule"
+      "name": "DocsAdminHttpApiModule",
+      "summary": null
     }
   ]
 }

@@ -1,11 +1,24 @@
 {
   "name": "Volo.Docs.HttpApi",
-  "hash": "182385cfe2cc437b662822257d7e78c7",
+  "hash": "54ac44b93fe2ee96458e0c12cfdc2d66",
   "contents": [
     {
       "namespace": "Volo.Docs",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Docs.Application.Contracts",
+          "namespace": "Volo.Docs",
+          "name": "DocsApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
+          "namespace": "Volo.Abp.AspNetCore.Mvc",
+          "name": "AbpAspNetCoreMvcModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "DocsHttpApiModule"
+      "name": "DocsHttpApiModule",
+      "summary": null
     }
   ]
 }

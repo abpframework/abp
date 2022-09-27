@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.AuditLogging.EntityFrameworkCore",
-  "hash": "0495e8cfba68a55319b3774882939845",
+  "hash": "6cc441462ecfefeefa12223a8dd11287",
   "contents": [
     {
       "namespace": "Volo.Abp.AuditLogging.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain",
+          "namespace": "Volo.Abp.AuditLogging",
+          "name": "AbpAuditLoggingDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "name": "AbpEntityFrameworkCoreModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpAuditLoggingEntityFrameworkCoreModule"
+      "name": "AbpAuditLoggingEntityFrameworkCoreModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.AuditLogging.EntityFrameworkCore",
@@ -14,26 +27,31 @@
         {
           "entityFullName": "Volo.Abp.AuditLogging.AuditLog",
           "contentType": "databaseTable",
-          "name": "AbpAuditLogs"
+          "name": "AbpAuditLogs",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.AuditLogging.AuditLogAction",
           "contentType": "databaseTable",
-          "name": "AbpAuditLogActions"
+          "name": "AbpAuditLogActions",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.AuditLogging.EntityChange",
           "contentType": "databaseTable",
-          "name": "AbpEntityChanges"
+          "name": "AbpEntityChanges",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.AuditLogging.EntityPropertyChange",
           "contentType": "databaseTable",
-          "name": "AbpEntityPropertyChanges"
+          "name": "AbpEntityPropertyChanges",
+          "summary": null
         }
       ],
       "contentType": "efCoreDbContext",
-      "name": "AbpAuditLoggingDbContext"
+      "name": "AbpAuditLoggingDbContext",
+      "summary": null
     }
   ]
 }

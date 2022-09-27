@@ -1,11 +1,19 @@
 {
   "name": "Volo.Abp.Account.Application.Contracts",
-  "hash": "63eee204db33a361b137b2cff508e53f",
+  "hash": "6ffcf119ad7ba3024433e44e882d3289",
   "contents": [
     {
       "namespace": "Volo.Abp.Account",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Application.Contracts",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityApplicationContractsModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpAccountApplicationContractsModule"
+      "name": "AbpAccountApplicationContractsModule",
+      "summary": null
     }
   ]
 }

@@ -1,11 +1,19 @@
 {
   "name": "Volo.Blogging.Domain.Shared",
-  "hash": "5c72d38b48fd549c1e4d37eb5f4a5f8e",
+  "hash": "dc6e531b307da6ae3c59bd0b8c13b395",
   "contents": [
     {
       "namespace": "Volo.Blogging",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "BloggingDomainSharedModule"
+      "name": "BloggingDomainSharedModule",
+      "summary": null
     }
   ]
 }

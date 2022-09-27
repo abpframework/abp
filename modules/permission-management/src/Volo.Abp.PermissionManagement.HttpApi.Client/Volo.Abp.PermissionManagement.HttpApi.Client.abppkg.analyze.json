@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.PermissionManagement.HttpApi.Client",
-  "hash": "1b9f52d21ca5d9c7e6f7662ccc27b7c3",
+  "hash": "f2fb11615654c51243da859515cffebc",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Application.Contracts",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Http.Client",
+          "namespace": "Volo.Abp.Http.Client",
+          "name": "AbpHttpClientModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpPermissionManagementHttpApiClientModule"
+      "name": "AbpPermissionManagementHttpApiClientModule",
+      "summary": null
     }
   ]
 }

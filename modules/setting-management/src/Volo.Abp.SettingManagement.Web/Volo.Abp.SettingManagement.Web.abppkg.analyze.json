@@ -1,11 +1,34 @@
 {
   "name": "Volo.Abp.SettingManagement.Web",
-  "hash": "b9a83b6936769cdbfb1b0fed8653d0d2",
+  "hash": "7bcafac2c61ebff1c61f8ec2bad1a1c6",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement.Web",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.Application.Contracts",
+          "namespace": "Volo.Abp.SettingManagement",
+          "name": "AbpSettingManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "name": "AbpAspNetCoreMvcUiThemeSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.Domain.Shared",
+          "namespace": "Volo.Abp.SettingManagement",
+          "name": "AbpSettingManagementDomainSharedModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpSettingManagementWebModule"
+      "name": "AbpSettingManagementWebModule",
+      "summary": null
     }
   ]
 }

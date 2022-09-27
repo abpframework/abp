@@ -1,11 +1,19 @@
 {
   "name": "Volo.Abp.OpenIddict.Domain.Shared",
-  "hash": "bc60e65998f3b40d6651cf0a0a08a84c",
+  "hash": "eff1a36082acc3bbcc13a8214cfea450",
   "contents": [
     {
       "namespace": "Volo.Abp.OpenIddict",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpOpenIddictDomainSharedModule"
+      "name": "AbpOpenIddictDomainSharedModule",
+      "summary": null
     }
   ]
 }

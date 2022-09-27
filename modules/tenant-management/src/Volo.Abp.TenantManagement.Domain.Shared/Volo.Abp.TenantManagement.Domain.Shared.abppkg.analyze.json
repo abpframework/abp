@@ -1,11 +1,19 @@
 {
   "name": "Volo.Abp.TenantManagement.Domain.Shared",
-  "hash": "321266e827d59b7f3da4d631cc7f1b35",
+  "hash": "4c73e30cd5ad9164ffcc884dc7b7cb07",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpTenantManagementDomainSharedModule"
+      "name": "AbpTenantManagementDomainSharedModule",
+      "summary": null
     }
   ]
 }

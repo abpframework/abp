@@ -1,18 +1,52 @@
 {
   "name": "Volo.BloggingTestApp.EntityFrameworkCore",
-  "hash": "9bca59fa99494d82517715624e8b4974",
+  "hash": "1283f9f0b19bc8f775379d9408673dbf",
   "contents": [
     {
       "namespace": "Volo.BloggingTestApp.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Blogging.EntityFrameworkCore",
+          "namespace": "Volo.Blogging.EntityFrameworkCore",
+          "name": "BloggingEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.EntityFrameworkCore",
+          "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
+          "name": "AbpIdentityEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
+          "namespace": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
+          "name": "AbpPermissionManagementEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.EntityFrameworkCore",
+          "namespace": "Volo.Abp.SettingManagement.EntityFrameworkCore",
+          "name": "AbpSettingManagementEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore.SqlServer",
+          "namespace": "Volo.Abp.EntityFrameworkCore.SqlServer",
+          "name": "AbpEntityFrameworkCoreSqlServerModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+          "namespace": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+          "name": "BlobStoringDatabaseEntityFrameworkCoreModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "BloggingTestAppEntityFrameworkCoreModule"
+      "name": "BloggingTestAppEntityFrameworkCoreModule",
+      "summary": null
     },
     {
       "namespace": "Volo.BloggingTestApp.EntityFrameworkCore",
       "connectionStringName": null,
       "databaseTables": [],
       "contentType": "efCoreDbContext",
-      "name": "BloggingTestAppDbContext"
+      "name": "BloggingTestAppDbContext",
+      "summary": null
     }
   ]
 }

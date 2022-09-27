@@ -1,0 +1,24 @@
+{
+  "name": "Volo.Abp.Account.Web.IdentityServer",
+  "hash": "250e1fdd78bbe2b48c2bed1583e5198b",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Account.Web",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Account.Web",
+          "namespace": "Volo.Abp.Account.Web",
+          "name": "AbpAccountWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "namespace": "Volo.Abp.IdentityServer",
+          "name": "AbpIdentityServerDomainModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpAccountWebIdentityServerModule",
+      "summary": null
+    }
+  ]
+}

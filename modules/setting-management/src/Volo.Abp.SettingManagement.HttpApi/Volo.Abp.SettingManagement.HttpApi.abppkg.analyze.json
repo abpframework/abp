@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.SettingManagement.HttpApi",
-  "hash": "59743dcbb13f1d2f74de5cd7b8c7a201",
+  "hash": "5c89e5f86520b917b894f88e1ac116e5",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.Application.Contracts",
+          "namespace": "Volo.Abp.SettingManagement",
+          "name": "AbpSettingManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
+          "namespace": "Volo.Abp.AspNetCore.Mvc",
+          "name": "AbpAspNetCoreMvcModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpSettingManagementHttpApiModule"
+      "name": "AbpSettingManagementHttpApiModule",
+      "summary": null
     }
   ]
 }
