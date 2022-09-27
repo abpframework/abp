@@ -14,6 +14,8 @@ public static class EntityCacheServiceCollectionExtensions
                 IEntityCache<TEntity, TKey>,
                 EntityCacheWithoutCacheItem<TEntity, TKey>
             >();
+        services
+            .TryAddTransient<EntityCacheWithoutCacheItem<TEntity, TKey>>();
         return services;
     }
     
@@ -27,6 +29,8 @@ public static class EntityCacheServiceCollectionExtensions
                 IEntityCache<TEntityCacheItem, TKey>,
                 EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey>
             >();
+        services
+            .TryAddTransient<EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey>>();
         return services;
     }
 
@@ -40,6 +44,7 @@ public static class EntityCacheServiceCollectionExtensions
                 IEntityCache<TEntityCacheItem, TKey>,
                 EntityCacheWithObjectMapperContext<TObjectMapperContext, TEntity, TEntityCacheItem, TKey>
             >();
+        services.TryAddTransient<EntityCacheWithObjectMapperContext<TObjectMapperContext, TEntity, TEntityCacheItem, TKey>>();
         return services;
     }
 }

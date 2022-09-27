@@ -30,7 +30,7 @@ public class AbpMongoDbTestModule : AbpModule
 
         context.Services.AddMongoDbContext<TestAppMongoDbContext>(options =>
         {
-            options.AddDefaultRepositories<ITestAppMongoDbContext>();
+            options.AddDefaultRepositories<ITestAppMongoDbContext>(true);
             options.AddRepository<City, CityRepository>();
 
             options.ReplaceDbContext<IThirdDbContext>();
