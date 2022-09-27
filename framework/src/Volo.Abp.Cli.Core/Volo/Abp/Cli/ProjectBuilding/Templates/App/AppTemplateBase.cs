@@ -217,14 +217,14 @@ public abstract class AppTemplateBase : TemplateInfo
 
     private void RemoveThemeLogoFolders(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
-        if (context.BuildArgs.Theme is not Theme.Lepton && IsPro())
+        if (context.BuildArgs.Theme != Theme.Lepton && IsPro())
         {
-            steps.Add(new RemoveFilesStep("/wwwroot/images/logo/lepton"));
+            steps.Add(new RemoveFilesStep("/wwwroot/images/logo/lepton/"));
         }
-        
-        if (context.BuildArgs.Theme is not Theme.LeptonX or Theme.LeptonXLite)
+
+        if (context.BuildArgs.Theme != Theme.LeptonX && context.BuildArgs.Theme != Theme.LeptonXLite)
         {
-            steps.Add(new RemoveFilesStep("/wwwroot/images/logo/leptonx"));
+            steps.Add(new RemoveFilesStep("/wwwroot/images/logo/leptonx/"));
         }
     }
 
