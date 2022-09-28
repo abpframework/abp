@@ -7,8 +7,16 @@
     }
   },
   "packages": {
+    "Volo.CmsKit.Web.Unified": {
+      "path": "host/Volo.CmsKit.Web.Unified/Volo.CmsKit.Web.Unified.abppkg.json",
+      "folder": "host"
+    },
     "Volo.CmsKit.Web.Host": {
       "path": "host/Volo.CmsKit.Web.Host/Volo.CmsKit.Web.Host.abppkg.json",
+      "folder": "host"
+    },
+    "Volo.CmsKit.HttpApi.Host": {
+      "path": "host/Volo.CmsKit.HttpApi.Host/Volo.CmsKit.HttpApi.Host.abppkg.json",
       "folder": "host"
     },
     "Volo.CmsKit.IdentityServer": {
@@ -17,10 +25,6 @@
     },
     "Volo.CmsKit.Host.Shared": {
       "path": "host/Volo.CmsKit.Host.Shared/Volo.CmsKit.Host.Shared.abppkg.json",
-      "folder": "host"
-    },
-    "Volo.CmsKit.Web.Unified": {
-      "path": "host/Volo.CmsKit.Web.Unified/Volo.CmsKit.Web.Unified.abppkg.json",
       "folder": "host"
     },
     "Volo.CmsKit.Domain.Shared": {
@@ -74,10 +78,6 @@
     "Volo.CmsKit.Application.Tests": {
       "path": "test/Volo.CmsKit.Application.Tests/Volo.CmsKit.Application.Tests.abppkg.json",
       "folder": "test"
-    },
-    "Volo.CmsKit.HttpApi.Host": {
-      "path": "host/Volo.CmsKit.HttpApi.Host/Volo.CmsKit.HttpApi.Host.abppkg.json",
-      "folder": "host"
     },
     "Volo.CmsKit.Web": {
       "path": "src/Volo.CmsKit.Web/Volo.CmsKit.Web.abppkg.json",
