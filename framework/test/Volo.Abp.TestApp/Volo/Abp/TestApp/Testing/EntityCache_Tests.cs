@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Domain.Entities.Caching;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
@@ -91,7 +92,7 @@ public abstract class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStart
 }
 
 [Serializable]
-public class Product : Entity<Guid>
+public class Product : FullAuditedAggregateRoot<Guid>
 {
     public Product(Guid id, string name, decimal price)
        : base(id)
