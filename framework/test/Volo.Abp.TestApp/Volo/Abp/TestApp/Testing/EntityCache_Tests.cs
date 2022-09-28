@@ -10,14 +10,14 @@ using Xunit;
 
 namespace Volo.Abp.TestApp.Testing;
 
-public class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
+public abstract class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
     where TStartupModule : IAbpModule
 {
     protected readonly IRepository<Product, Guid> ProductRepository;
     protected readonly IEntityCache<Product, Guid> ProductEntityCache;
     protected readonly IEntityCache<ProductCacheItem, Guid> ProductCacheItem;
 
-    public EntityCache_Tests()
+    protected EntityCache_Tests()
     {
         ProductRepository = GetRequiredService<IRepository<Product, Guid>>();
         ProductEntityCache = GetRequiredService<IEntityCache<Product, Guid>>();
@@ -43,18 +43,15 @@ public class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
     [Fact]
     public async Task Should_Return_EntityCache()
     {
-        var id = Guid.NewGuid();
-        var product = await ProductRepository.InsertAsync(new Product(id, "Product1", decimal.One));
-        
-        product = await ProductEntityCache.FindAsync(product.Id);
+        var product = await ProductEntityCache.FindAsync(TestDataBuilder.ProductId);
         product.ShouldNotBeNull();
-        product.Id.ShouldBe(id);
+        product.Id.ShouldBe(TestDataBuilder.ProductId);
         product.Name.ShouldBe("Product1");
         product.Price.ShouldBe(decimal.One);
         
         var productCacheItem = await ProductCacheItem.FindAsync(product.Id);
         productCacheItem.ShouldNotBeNull();
-        productCacheItem.Id.ShouldBe(id);
+        productCacheItem.Id.ShouldBe(TestDataBuilder.ProductId);
         productCacheItem.Name.ShouldBe("Product1");
         productCacheItem.Price.ShouldBe(decimal.One);
     }
@@ -62,38 +59,32 @@ public class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
     [Fact]
     public async Task Should_Return_Null_IF_Deleted()
     {
-        var id = Guid.NewGuid();
-        var product = await ProductRepository.InsertAsync(new Product(id, "Product1", decimal.One));
-        (await ProductEntityCache.FindAsync(id)).ShouldNotBeNull();
-        (await ProductCacheItem.FindAsync(id)).ShouldNotBeNull();
-
-        await ProductRepository.DeleteAsync(id);
+        await ProductRepository.DeleteAsync(TestDataBuilder.ProductId);
         
-        (await ProductEntityCache.FindAsync(product.Id)).ShouldBeNull();
-        (await ProductCacheItem.FindAsync(product.Id)).ShouldBeNull();
+        (await ProductEntityCache.FindAsync(TestDataBuilder.ProductId)).ShouldBeNull();
+        (await ProductCacheItem.FindAsync(TestDataBuilder.ProductId)).ShouldBeNull();
     }
 
     [Fact]
     public async Task Should_Return_New_EntityCache_IF_Updated()
     {
-        var id = Guid.NewGuid();
-        var product = await ProductRepository.InsertAsync(new Product(id, "Product1", decimal.One));
-        (await ProductEntityCache.FindAsync(id)).ShouldNotBeNull();
-        (await ProductCacheItem.FindAsync(id)).ShouldNotBeNull();
-        
+        (await ProductEntityCache.FindAsync(TestDataBuilder.ProductId)).ShouldNotBeNull();
+        (await ProductCacheItem.FindAsync(TestDataBuilder.ProductId)).ShouldNotBeNull();
+
+        var product = await ProductRepository.FindAsync(TestDataBuilder.ProductId);
         product.Name = "Product2";
         product.Price = decimal.Zero;
         await ProductRepository.UpdateAsync(product);
         
         product = await ProductEntityCache.FindAsync(product.Id);
         product.ShouldNotBeNull();
-        product.Id.ShouldBe(id);
+        product.Id.ShouldBe(TestDataBuilder.ProductId);
         product.Name.ShouldBe("Product2");
         product.Price.ShouldBe(decimal.Zero);
         
         var productCacheItem = await ProductCacheItem.FindAsync(product.Id);
         productCacheItem.ShouldNotBeNull();
-        productCacheItem.Id.ShouldBe(id);
+        productCacheItem.Id.ShouldBe(TestDataBuilder.ProductId);
         productCacheItem.Name.ShouldBe("Product2");
         productCacheItem.Price.ShouldBe(decimal.Zero);
     }
@@ -102,14 +93,9 @@ public class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
 [Serializable]
 public class Product : Entity<Guid>
 {
-    public Product()
-    {
-        
-    }
-
     public Product(Guid id, string name, decimal price)
+       : base(id)
     {
-        Id = id;
         Name = name;
         Price = price;
     }
