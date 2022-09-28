@@ -205,7 +205,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
 
     private async Task<bool> IsVersionExists(string templateName, string version)
     {
-        var url = $"{CliUrls.WwwAbpIo}api/download/versions?includePreReleases=true";
+        var url = $"{CliUrls.WwwAbpIo}api/download/all-versions?includePreReleases=true";
 
         try
         {
