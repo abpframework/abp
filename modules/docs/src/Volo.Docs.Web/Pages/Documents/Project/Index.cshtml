@@ -249,7 +249,7 @@
                                         @L["Contributors"].Value
                                     </span>
 
-                                    @if (string.IsNullOrEmpty(Model.Document.EditLink))
+                                    @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                                     {
                                         <a href="@Model.Document.EditLink" target="_blank">
                                             <i class="fa fa-edit"></i>
