@@ -116,7 +116,9 @@ public class IdentityClientConfiguration : Dictionary<string, string>
         string userName = null,
         string userPassword = null,
         bool requireHttps = true,
-        int cacheAbsoluteExpiration = 60 * 30)
+        int cacheAbsoluteExpiration = 60 * 30,
+        bool validateIssuerName = true,
+        bool validateEndpoints = true)
     {
         this[nameof(Authority)] = authority;
         this[nameof(Scope)] = scope;
@@ -127,5 +129,7 @@ public class IdentityClientConfiguration : Dictionary<string, string>
         this[nameof(UserPassword)] = userPassword;
         this[nameof(RequireHttps)] = requireHttps.ToString().ToLowerInvariant();
         this[nameof(CacheAbsoluteExpiration)] = cacheAbsoluteExpiration.ToString(CultureInfo.InvariantCulture);
+        this[nameof(ValidateIssuerName)] = validateIssuerName.ToString().ToLowerInvariant();
+        this[nameof(ValidateEndpoints)] = validateEndpoints.ToString().ToLowerInvariant();
     }
 }
