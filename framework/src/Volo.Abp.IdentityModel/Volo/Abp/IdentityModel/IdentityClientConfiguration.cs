@@ -83,6 +83,24 @@ public class IdentityClientConfiguration : Dictionary<string, string>
         get => this.GetOrDefault(nameof(CacheAbsoluteExpiration))?.To<int>() ?? 60 * 30;
         set => this[nameof(CacheAbsoluteExpiration)] = value.ToString(CultureInfo.InvariantCulture);
     }
+    
+    /// <summary>
+    /// ValidateIssuerName.
+    /// Default: true.
+    /// </summary>
+    public bool ValidateIssuerName {
+        get => this.GetOrDefault(nameof(ValidateIssuerName))?.To<bool>() ?? true;
+        set => this[nameof(ValidateIssuerName)] = value.ToString().ToLowerInvariant();
+    }
+    
+    /// <summary>
+    /// ValidateEndpoints.
+    /// Default: true.
+    /// </summary>
+    public bool ValidateEndpoints {
+        get => this.GetOrDefault(nameof(ValidateEndpoints))?.To<bool>() ?? true;
+        set => this[nameof(ValidateEndpoints)] = value.ToString().ToLowerInvariant();
+    }
 
     public IdentityClientConfiguration()
     {
