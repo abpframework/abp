@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Application.Contracts",
-  "hash": "3868288c16b0205199b545969981c86d",
+  "hash": "879a9919f3c5f2dd9f0ee92be5b861c4",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",

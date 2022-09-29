@@ -80,13 +80,15 @@
                         <abp-row>
                             <input type="hidden" name="@nameof(Model.CommentWithAuthorDto.RepliedCommentId)" value="@Model.CommentWithAuthorDto.Id"/>
 
-                            <abp-column size-lg="_6" size-md="_12" class="input-group input-daterange">
-                                <abp-column size="_6" style="padding-left: 0">
-                                    <abp-input asp-for="@Model.CreationStartDate" label="@L["StartDate"].Value" type="text"/>
-                                </abp-column>
-                                <abp-column size="_6" style="padding-right: 0">
-                                    <abp-input asp-for="@Model.CreationEndDate" label="@L["EndDate"].Value" type="text"/>
-                                </abp-column>
+                            <abp-column size-lg="_4" size-md="_12">
+                                <abp-row>
+                                    <abp-column size-lg="_6" size-md="_6">
+                                        <abp-input asp-for="@Model.CreationStartDate" class="singledatepicker" label="@L["StartDate"].Value" type="text" />
+                                    </abp-column>
+                                    <abp-column size-lg="_6" size-md="_6">
+                                        <abp-input asp-for="@Model.CreationEndDate" class="singledatepicker" label="@L["EndDate"].Value" type="text" />
+                                    </abp-column>
+                                </abp-row>
                             </abp-column>
                             <abp-column size-lg="_4" size-md="_12">
                                 <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text"/>

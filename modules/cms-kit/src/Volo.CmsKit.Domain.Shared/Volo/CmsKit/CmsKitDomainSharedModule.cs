@@ -1,18 +1,19 @@
-﻿using System;
+﻿using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
-using Volo.Abp.Modularity;
 using Volo.Abp.Localization;
-using Volo.CmsKit.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
+using Volo.Abp.Modularity;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
+using Volo.CmsKit.Localization;
 
 namespace Volo.CmsKit;
 
 [DependsOn(
     typeof(AbpValidationModule),
-    typeof(AbpGlobalFeaturesModule)
+    typeof(AbpGlobalFeaturesModule),
+    typeof(AbpFeaturesModule)
 )]
 public class CmsKitDomainSharedModule : AbpModule
 {
