@@ -47,7 +47,7 @@ public static class CultureHelper
 
         try
         {
-            CultureInfo.GetCultureInfo(cultureCode);
+            _ = CultureInfo.GetCultureInfo(cultureCode);
             return true;
         }
         catch (CultureNotFoundException)
