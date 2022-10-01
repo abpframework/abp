@@ -28,7 +28,7 @@ public class JsonAuditSerializer_Test : AbpAuditingTestBase
                 {"input2", new Input2Dto {UserName = "admin", Password = "1q2w3E*", Birthday = DateTime.Now}}
             };
 
-        var str = GetRequiredService<JsonNetAuditSerializer>().Serialize(arguments);
+        var str = GetRequiredService<JsonAuditSerializer>().Serialize(arguments);
 
         str.ShouldNotContain("IdCard");
         str.ShouldNotContain("1q2w3E*");
