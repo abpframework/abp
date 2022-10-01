@@ -7,7 +7,7 @@ import { buildDefaultPath, getWorkspace, ProjectType, WorkspaceSchema } from './
 import { findEnvironmentExpression } from './ast';
 import { readFileInTree } from './common';
 import { NOT_FOUND_VALUE } from '../constants/symbols';
-import { parseJson } from '@angular/cli/utilities/json-file';
+import { parseJson } from '@angular/cli/src/utilities/json-file';
 
 export function isLibrary(project: workspaces.ProjectDefinition): boolean {
   return project.extensions['projectType'] === ProjectType.Library;
@@ -35,9 +35,13 @@ export function readWorkspaceSchema(tree: Tree) {
 
   return workspaceSchema;
 }
+// eslint-disable-next-line
+// @typescript-eslint/no-explicit-any
 export async function resolveProject<T = any>(
   tree: Tree,
   name: string,
+  // eslint-disable-next-line
+  // @typescript-eslint/no-explicit-any
   notFoundValue: T = NOT_FOUND_VALUE as unknown as any,
 ): Promise<Project | T> {
   name = name || readWorkspaceSchema(tree).defaultProject!;
@@ -83,7 +87,8 @@ export function getWorkspaceSchema(host: Tree): WorkspaceSchema {
     throw new SchematicsException(`Could not find (${path})`);
   }
   const content = configBuffer.toString();
-
+  // eslint-disable-next-line
+  // @typescript-eslint/no-explicit-any
   return parseJson(content) as Record<string, any> as WorkspaceSchema;
 }
 

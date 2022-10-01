@@ -2,10 +2,11 @@ import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Rest } from '../models';
-import { EnvironmentService, HttpErrorReporterService } from '../services';
+import { Rest } from '../models/rest';
+import { EnvironmentService } from '../services/environment.service';
+import { HttpErrorReporterService } from '../services/http-error-reporter.service';
 import { RestService } from '../services/rest.service';
-import { CORE_OPTIONS } from '../tokens';
+import { CORE_OPTIONS } from '../tokens/options.token';
 
 describe('HttpClient testing', () => {
   let spectator: SpectatorHttp<RestService>;

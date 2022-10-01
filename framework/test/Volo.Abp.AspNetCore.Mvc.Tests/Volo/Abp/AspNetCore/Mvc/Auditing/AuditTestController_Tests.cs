@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using System.Threading.Tasks;
+using Shouldly;
 using Volo.Abp.Auditing;
 using Xunit;
 
@@ -97,5 +99,14 @@ public class AuditTestController_Tests : AspNetCoreMvcTestBase
         catch { }
 
         await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.Exceptions.Any()));
+    }
+
+    [Fact]
+    public async Task Should_DisableLogActionInfo()
+    {
+        _options.IsEnabledForGetRequests = true;
+        _options.DisableLogActionInfo = true;
+        await GetResponseAsync("/api/audit-test/");
+        await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.Actions.IsNullOrEmpty()));
     }
 }

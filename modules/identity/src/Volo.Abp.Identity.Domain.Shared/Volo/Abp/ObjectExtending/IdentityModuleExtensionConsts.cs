@@ -14,4 +14,9 @@ public static class IdentityModuleExtensionConsts
 
         public const string OrganizationUnit = "OrganizationUnit";
     }
+
+    public static class ConfigurationNames
+    {
+        public const string AllowUserToEdit = "AllowUserToEdit";
+    }
 }

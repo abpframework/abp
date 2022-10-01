@@ -46,8 +46,12 @@ public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
             finally
             {
                 stopwatch.Stop();
-                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                auditLog.Actions.Add(auditLogAction);
+
+                if (auditLogAction != null)
+                {
+                    auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                    auditLog.Actions.Add(auditLogAction);
+                }
             }
         }
     }
@@ -81,12 +85,16 @@ public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
         }
 
         auditLog = auditLogScope.Log;
-        auditLogAction = auditingHelper.CreateAuditLogAction(
-            auditLog,
-            context.HandlerMethod.MethodInfo.DeclaringType,
-            context.HandlerMethod.MethodInfo,
-            context.HandlerArguments
-        );
+
+        if (!options.DisableLogActionInfo)
+        {
+            auditLogAction = auditingHelper.CreateAuditLogAction(
+                auditLog,
+                context.HandlerMethod.MethodInfo.DeclaringType,
+                context.HandlerMethod.MethodInfo,
+                context.HandlerArguments
+            );
+        }
 
         return true;
     }

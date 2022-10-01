@@ -1,7 +1,7 @@
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
 import { Subject } from 'rxjs';
 import { PermissionDirective } from '../directives/permission.directive';
-import { PermissionService } from '../services';
+import { PermissionService } from '../services/permission.service';
 import { ChangeDetectorRef } from '@angular/core';
 
 describe('PermissionDirective', () => {

@@ -17,7 +17,7 @@ public class AbpSwashbuckleDocumentFilter : IDocumentFilter
             .Where(actionDescriptor => !string.IsNullOrEmpty(actionDescriptor.DisplayName) &&
                                        ActionUrlPrefixes.Any(actionUrlPrefix => !actionDescriptor.DisplayName.Contains(actionUrlPrefix)))
             .DistinctBy(actionDescriptor => actionDescriptor.AttributeRouteInfo?.Template)
-            .Select(actionDescriptor => actionDescriptor.AttributeRouteInfo?.Template.EnsureStartsWith('/'))
+            .Select(actionDescriptor => actionDescriptor.AttributeRouteInfo?.Template?.EnsureStartsWith('/').Replace("?", ""))
             .Where(actionUrl => !string.IsNullOrEmpty(actionUrl))
             .ToList();
 
