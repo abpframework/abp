@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'account',
+/* eslint-disable */
+export default {
+  displayName: 'permission-management',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/packages/account',
+  coverageDirectory: '../../coverage/packages/permission-management',
   transform: {
     '^.+.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

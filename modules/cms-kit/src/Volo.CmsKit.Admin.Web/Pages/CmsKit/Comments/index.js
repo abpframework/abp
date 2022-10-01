@@ -5,10 +5,20 @@ $(function (){
 
     var detailsModal = new abp.ModalManager(abp.appPath + "CmsKit/Comments/DetailsModal");
     
+    moment()._locale.preparse = (string) => string;
+    moment()._locale.postformat = (string) => string;
+    
     var getFormattedDate = function ($datePicker) {
-        return $datePicker.data('date');
+        if(!$datePicker.val()) {
+            return null;
+        }
+        var momentDate = moment($datePicker.val(), $datePicker.data('daterangepicker').locale.format);
+        return momentDate.isValid() ? momentDate.toISOString() : null;
     };
-
+    
+    
+    var defaultStartDate = moment().add(-7, 'days');
+    $("#CreationStartDate").val(defaultStartDate.format('L'));
 
     $('.singledatepicker').daterangepicker({
         "singleDatePicker": true,
@@ -16,25 +26,25 @@ $(function (){
         "autoUpdateInput": false,
         "autoApply": true,
         "opens": "center",
-        "drops": "auto",
-        "minYear": 1901,
-        "maxYear": 2199,
+        "drops": "auto"
     });
+
+    
 
     $('.singledatepicker').attr('autocomplete', 'off');
 
     $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
-        $(this).data('date', picker.startDate.locale('en').format('YYYY-MM-DD'));
     });
+    
     
     var filterForm = $('#CmsKitCommentsFilterForm');
     
     var getFilter = function () {
         var filterObj = filterForm.serializeFormToObject();
 
-        filterObj.creationStartDate = getFormattedDate($('#creationStartDate'));
-        filterObj.creationEndDate = getFormattedDate($('#creationEndDate'));
+        filterObj.creationStartDate = getFormattedDate($('#CreationStartDate'));
+        filterObj.creationEndDate = getFormattedDate($('#CreationEndDate'));
         
         return filterObj;
     };

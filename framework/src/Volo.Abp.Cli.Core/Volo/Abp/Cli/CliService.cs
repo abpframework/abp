@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Versioning;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,14 +12,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.Memory;
 using Volo.Abp.Cli.NuGet;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.IO;
 
 namespace Volo.Abp.Cli;
 
 public class CliService : ITransientDependency
 {
+    private readonly MemoryService _memoryService;
     public ILogger<CliService> Logger { get; set; }
     protected ICommandLineArgumentParser CommandLineArgumentParser { get; }
     protected ICommandSelector CommandSelector { get; }
@@ -31,8 +35,10 @@ public class CliService : ITransientDependency
         ICommandSelector commandSelector,
         IServiceScopeFactory serviceScopeFactory,
         NuGetService nugetService,
-        ICmdHelper cmdHelper)
+        ICmdHelper cmdHelper,
+        MemoryService memoryService)
     {
+        _memoryService = memoryService;
         CommandLineArgumentParser = commandLineArgumentParser;
         CommandSelector = commandSelector;
         ServiceScopeFactory = serviceScopeFactory;
@@ -164,6 +170,11 @@ public class CliService : ITransientDependency
 
     private async Task CheckCliVersionAsync()
     {
+        if (!await IsLatestVersionCheckExpiredAsync())
+        {
+            return;
+        }
+        
         var assembly = typeof(CliService).Assembly;
         var toolPath = GetToolPath(assembly);
         var currentCliVersion = await GetCurrentCliVersionInternalAsync(assembly);
@@ -184,6 +195,27 @@ public class CliService : ITransientDependency
         {
             Logger.LogWarning("Unable to retrieve the latest version");
             Logger.LogWarning(e.Message);
+        }
+    }
+
+    private async Task<bool> IsLatestVersionCheckExpiredAsync()
+    {
+        try
+        {
+            var latestTime = await _memoryService.GetAsync(CliConsts.MemoryKeys.LatestCliVersionCheckDate);
+
+            if (latestTime != null && DateTime.Now - DateTime.Parse(latestTime, CultureInfo.InvariantCulture) < TimeSpan.FromDays(1))
+            {
+                return false;
+            }
+        
+            await _memoryService.SetAsync(CliConsts.MemoryKeys.LatestCliVersionCheckDate, DateTime.Now.ToString(CultureInfo.InvariantCulture));
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return true;
         }
     }
 

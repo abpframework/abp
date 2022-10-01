@@ -369,9 +369,9 @@ namespace Volo.Docs.Pages.Documents.Project
                 return version;
             }
 
-            var prefix = Project.ExtraProperties["VersionBranchPrefix"].ToString();
+            var prefix = Project.ExtraProperties["VersionBranchPrefix"]?.ToString();
 
-            if (string.IsNullOrWhiteSpace(version) || !version.StartsWith(prefix) || version.Length <= prefix.Length)
+            if (string.IsNullOrWhiteSpace(version) || string.IsNullOrWhiteSpace(prefix) || !version.StartsWith(prefix) || version.Length <= prefix.Length)
             {
                 return version;
             }

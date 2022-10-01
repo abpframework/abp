@@ -1,7 +1,7 @@
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { collapse, ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { SettingManagementPolicyNames } from '../../enums/policy-names';
 import { EmailSettingsService } from '../../proxy/email-settings.service';
@@ -13,8 +13,8 @@ import { EmailSettingsDto } from '../../proxy/models';
   animations: [collapse],
 })
 export class EmailSettingGroupComponent implements OnInit {
-  form!: FormGroup;
-  emailTestForm: FormGroup;
+  form!: UntypedFormGroup;
+  emailTestForm: UntypedFormGroup;
   saving = false;
   emailingPolicy = SettingManagementPolicyNames.Emailing;
   isEmailTestModalOpen = false;
@@ -22,7 +22,7 @@ export class EmailSettingGroupComponent implements OnInit {
 
   constructor(
     private emailSettingsService: EmailSettingsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private toasterService: ToasterService,
   ) {}
 
