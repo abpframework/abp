@@ -50,6 +50,23 @@
       context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
   }
   ```
+  
+  - In the **MyApplicationWebModule.cs** add `PreConfigureServices` like below with your application name as the audience:
+
+  ```csharp
+  public override void PreConfigureServices(ServiceConfigurationContext context)
+  {
+      PreConfigure<OpenIddictBuilder>(builder =>
+      {
+          builder.AddValidation(options =>
+          {
+              options.AddAudiences("MyApplication"); // Replace with your application name
+              options.UseLocalServer();
+              options.UseAspNetCore();
+          });
+      });
+  }
+  ```
 
 - In **MyApplicationWebModule.cs** `OnApplicationInitialization` method **replace IdentityServer and JwtToken midwares**:
 
