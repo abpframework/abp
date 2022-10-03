@@ -82,3 +82,102 @@ To change the logos and brand color of `LeptonX`, simply add the following CSS t
 ### Server Side
 
 In order to migrate to LeptonX on your server side projects (Host and/or AuthServer projects), please follow the [Server Side Migration](AspNetCore.md) document.
+
+## Customization
+
+
+### Layouts
+
+Angular version of LeptonX Lite provides **layout components** for your **user interface** on [ABP Framework Theming](https://docs.abp.io/en/abp/latest/UI/Angular/Theming). You can use layouts to **organize your user interface**. You can replace the **layout components** and some parts of the **layout components** with the [ABP replaceable component  system](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement).
+
+
+The main responsibility of a theme iss to **provides** the layouts. There are **three pre-defined layouts that must be implemented by all the themes:**
+
+* **ApplicationLayoutComponent:** The **default** layout which is used by the **main** application pages.
+  
+* **AccountLayoutComponent:** Mostly used by the **account module** for **login**, **register**, **forgot password**... pages.
+  
+* **EmptyLayoutComponent:** The **Minimal** layout that **has no layout components** at all.
+
+ The **Layout components** and all the replacable components are predefined in  `eThemeLeptonXComponents` as enum.
+  
+### How to replace a component
+
+```js
+import { ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
+import { eIdentityComponents } from '@abp/ng.identity'; // imported eIdentityComponents enum
+import { eThemeLeptonXComponents } from '@abp/ng.theme.lepton-x';   // imported eThemeLeptonXComponents enum
+
+//...
+
+@Component(/* component metadata */)
+export class AppComponent {
+  constructor(
+    private replaceableComponents: ReplaceableComponentsService, // injected the service
+  ) {
+    this.replaceableComponents.add({
+      component: YourNewApplicationLayoutComponent,
+      key: eThemeLeptonXComponents.ApplicationLayout,
+    });
+  }
+}
+```
+See the [Component Replacement](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement) documentation for more information on how to replace components.
+
+
+### Brand Component
+
+The **brand component** is a simple component that can be used to display your brand. I
+t contains a **logo** and a **company name**. You can change logo via css but if you want to change logo component, the key is `eThemeLeptonXComponents.Logo`
+
+```js
+///...
+    this.replaceableComponents.add({
+        component: YourNewLogoComponent,
+        key: eThemeLeptonXComponents.Logo,
+    });
+///...
+```
+
+![Brand component](../../images/leptonxlite-brand-component.png) 
+
+
+
+## Breadcrumb Component
+
+On websites that have a lot of pages, **breadcrumb navigation** can greatly **enhance the way users find their way** around. In terms of **usability**, breadcrumbs reduce the number of actions a website **visitor** needs to take in order to get to a **higher-level page**, and they **improve** the **findability** of **website sections** and **pages**.
+
+``` TODO: DESCRIBE THE HOW TO OVERRIDE```
+
+![Breadcrumb component](../../images/leptonxlite-breadcrumb-component.png) 
+
+## Sidebar Menu Component
+
+Sidebar menus have been used as **a directory for Related Pages** to a **Service** offering, **Navigation** items to a **specific service** or topic and even just as **Links** the user may be interested in.
+
+```js
+///...
+    this.replaceableComponents.add({
+        component: YourNewSidebarComponent,
+        key: eThemeLeptonXComponents.Sidebar,
+    });
+///...
+```
+![Sidebar menu component](../../images/leptonxlite-sidebar-menu-component.png) 
+
+## Page Alerts Component
+
+Provides contextual **feedback messages** for typical user actions with the handful of **available** and **flexible** **alert messages**. Alerts are available for any length of text, as well as an **optional dismiss button**.
+
+![Page alerts component](../../images/leptonxlite-page-alerts-component.png) 
+
+``` TODO: DESCRIBE THE HOW TO OVERRIDE```
+
+## Toolbar Component
+![Breadcrumb component](../../images/leptonxlite-toolbar-component.png)
+
+Toolbar items are used to add **extra functionality to the toolbar**. The toolbar is a **horizontal bar** that **contains** a group of **toolbar items**.
+``` TODO: DESCRIBE THE HOW TO OVERRIDE```
+
+## Toolbar Item Component
+``` TODO: DESCRIBE THE HOW TO OVERRIDE```
