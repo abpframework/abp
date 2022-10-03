@@ -66,6 +66,7 @@
                                 <TextEdit @bind-Text="@PersonalInfoModel.PhoneNumber" />
                             </Field>
 
+                            // TODO: Move this logic to 'ExtensionProperties' component.
                             @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<PersonalInfoModel>())
                             {
                                 var isAllowed = propertyInfo.Configuration.GetOrDefault(IdentityModuleExtensionConsts.ConfigurationNames.AllowUserToEdit);
