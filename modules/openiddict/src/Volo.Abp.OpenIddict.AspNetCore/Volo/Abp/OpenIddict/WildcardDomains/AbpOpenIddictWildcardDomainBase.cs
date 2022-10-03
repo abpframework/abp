@@ -37,7 +37,7 @@ public abstract class AbpOpenIddictWildcardDomainBase<THandler, TContext> : IOpe
 
         foreach (var domainFormat in WildcardDomainOptions.WildcardDomainsFormat)
         {
-            if (domainFormat.Replace("{0}.", "").Equals(url, StringComparison.OrdinalIgnoreCase))
+            if (domainFormat.Replace($"{WildcardDomainOptions.WildcardDomainPlaceholder}.", "").Equals(url, StringComparison.OrdinalIgnoreCase))
             {
                 return Task.FromResult(true);
             }

@@ -8,9 +8,12 @@ public class AbpOpenIddictWildcardDomainOptions
 
     public HashSet<string> WildcardDomainsFormat { get; }
 
+    public string WildcardDomainPlaceholder { get; set; }
+
     public AbpOpenIddictWildcardDomainOptions()
     {
         WildcardDomainsFormat = new HashSet<string>();
+        WildcardDomainPlaceholder = "___";
     }
 
 }
