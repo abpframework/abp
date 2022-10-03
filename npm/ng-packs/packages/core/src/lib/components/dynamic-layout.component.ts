@@ -92,7 +92,7 @@ export class DynamicLayoutComponent {
     if(layoutName === 'account'){
       message = 'Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "AccountLayoutModule.forRoot()" to your app.module configuration.';
     }
-    console.error(message);
+    console.warn(message);
   }
   
 
