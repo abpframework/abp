@@ -25,6 +25,11 @@ public class EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey> :
 
     protected override TEntityCacheItem MapToCacheItem(TEntity entity)
     {
+        if (entity == null)
+        {
+            return null;
+        }
+        
         if (typeof(TEntity) == typeof(TEntityCacheItem))
         {
             return entity.As<TEntityCacheItem>();
