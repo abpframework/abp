@@ -1,8 +1,11 @@
 ﻿@page "/account/manage-profile"
-@using Microsoft.AspNetCore.Components.Forms 
+@using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.Account.Localization
 @using Volo.Abp.AspNetCore.Components.Web
 @using Volo.Abp.BlazoriseUI.Components.ObjectExtending
+@using Volo.Abp.ObjectExtending
+@using Volo.Abp.Data
+
 @inject AbpBlazorMessageLocalizerHelper<AccountResource> LH
 @inherits AbpAccountComponentBase
 
@@ -20,15 +23,15 @@
                         <EditForm id="ChangePasswordForm" Model="@ChangePasswordModel" OnValidSubmit="ChangePasswordAsync">
                             <Field>
                                 <FieldLabel>@L["DisplayName:CurrentPassword"]</FieldLabel>
-                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.CurrentPassword"/>
+                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.CurrentPassword" />
                             </Field>
                             <Field>
                                 <FieldLabel>@L["DisplayName:NewPassword"]</FieldLabel>
-                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.NewPassword"/>
+                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.NewPassword" />
                             </Field>
                             <Field>
                                 <FieldLabel>@L["DisplayName:NewPasswordConfirm"]</FieldLabel>
-                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.NewPasswordConfirm"/>
+                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.NewPasswordConfirm" />
                             </Field>
                             <Field>
                                 <SubmitButton Form="ChangePasswordForm" Clicked="@ChangePasswordAsync" />
@@ -42,27 +45,58 @@
                         <EditForm id="UpdatePersonalInfoForm" Model="@PersonalInfoModel" OnValidSubmit="UpdatePersonalInfoAsync">
                             <Field>
                                 <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                                <TextEdit @bind-Text="@PersonalInfoModel.UserName"/>
+                                <TextEdit @bind-Text="@PersonalInfoModel.UserName" />
                             </Field>
                             <Fields>
                                 <Field ColumnSize="ColumnSize.Is6">
                                     <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
-                                    <TextEdit @bind-Text="@PersonalInfoModel.Name"/>
+                                    <TextEdit @bind-Text="@PersonalInfoModel.Name" />
                                 </Field>
                                 <Field ColumnSize="ColumnSize.Is6">
                                     <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
-                                    <TextEdit @bind-Text="@PersonalInfoModel.Surname"/>
+                                    <TextEdit @bind-Text="@PersonalInfoModel.Surname" />
                                 </Field>
                             </Fields>
                             <Field>
                                 <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
-                                <TextEdit @bind-Text="@PersonalInfoModel.Email"/>
+                                <TextEdit @bind-Text="@PersonalInfoModel.Email" />
                             </Field>
                             <Field>
                                 <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
-                                <TextEdit @bind-Text="@PersonalInfoModel.PhoneNumber"/>
+                                <TextEdit @bind-Text="@PersonalInfoModel.PhoneNumber" />
                             </Field>
-                            <ExtensionProperties TEntityType="PersonalInfoModel" TResourceType="AccountResource" Entity="@PersonalInfoModel" LH="@LH"/>
+
+                            // TODO: Move this logic to 'ExtensionProperties' component.
+                            @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<PersonalInfoModel>())
+                            {
+                                var isAllowed = propertyInfo.Configuration.GetOrDefault(IdentityModuleExtensionConsts.ConfigurationNames.AllowUserToEdit);
+
+                                if (isAllowed == null || !isAllowed.Equals(true))
+                                {
+                                    continue;
+                                }
+
+                                if (!propertyInfo.Name.EndsWith("_Text"))
+                                {
+                                    if (propertyInfo.Type.IsEnum)
+                                    {
+                                        <SelectExtensionProperty PropertyInfo="@propertyInfo" Entity="@PersonalInfoModel" TEntity="PersonalInfoModel" TResourceType="AccountResource" LH="@LH" />
+                                    }
+                                    else if (!propertyInfo.Lookup.Url.IsNullOrEmpty())
+                                    {
+                                        <LookupExtensionProperty PropertyInfo="@propertyInfo" Entity="@PersonalInfoModel" TEntity="PersonalInfoModel" TResourceType="AccountResource" LH="@LH" />
+                                    }
+                                    else
+                                    {
+                                        var inputType = propertyInfo.GetInputType();
+                                        __builder.OpenComponent(0, inputType.MakeGenericType(new[] { typeof(PersonalInfoModel), typeof(AccountResource) }));
+                                        __builder.AddAttribute(1, "PropertyInfo", propertyInfo);
+                                        __builder.AddAttribute(2, "Entity", PersonalInfoModel);
+                                        __builder.AddAttribute(3, "LH", LH);
+                                        __builder.CloseComponent();
+                                    }
+                                }
+                            }
                             <Field>
                                 <SubmitButton Form="UpdatePersonalInfoForm" Clicked="@UpdatePersonalInfoAsync" />
                             </Field>
