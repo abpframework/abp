@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.RequestLocalization;
 using Volo.Abp.Auditing;
@@ -28,6 +29,11 @@ public class AbpLanguagesController : AbpController
         if (!CultureHelper.IsValidCultureCode(culture))
         {
             throw new AbpException("The selected culture is not valid! Make sure you enter a valid culture code.");
+        }
+
+        if (!CultureHelper.IsValidCultureCode(uiCulture))
+        {
+            throw new AbpException("The selected uiCulture is not valid! Make sure you enter a valid culture code.");
         }
 
         AbpRequestCultureCookieHelper.SetCultureCookie(

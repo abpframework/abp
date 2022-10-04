@@ -51,7 +51,7 @@ public class SolutionFileModifier : ITransientDependency
         var srcFolderId = await AddNewFolderAndGetIdOrGetExistingIdAsync(solutionFile, "src");
 
         var solutionFileContent = File.ReadAllText(solutionFile);
-        var lines = solutionFileContent.Split(Environment.NewLine).ToList();
+        var lines = solutionFileContent.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None).ToList();
 
         if (lines.Any(l => l.Contains($"\"{package.Name}\"")))
         {
@@ -140,7 +140,7 @@ public class SolutionFileModifier : ITransientDependency
             await AddNewFolderAndGetIdOrGetExistingIdAsync(solutionFile, "test"));
 
         var file = File.ReadAllText(solutionFile);
-        var lines = file.Split(Environment.NewLine).ToList();
+        var lines = file.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None).ToList();
 
         var projectsUnderModule = Directory.GetFiles(
             Path.Combine(Path.GetDirectoryName(solutionFile), "modules", module.Name),
@@ -206,7 +206,7 @@ public class SolutionFileModifier : ITransientDependency
         string parentFolderId = null)
     {
         var file = File.ReadAllText(solutionFile);
-        var lines = file.Split(Environment.NewLine).ToList();
+        var lines = file.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None).ToList();
         string folderId;
 
         var folderLineIndex = lines.FindIndex(l =>

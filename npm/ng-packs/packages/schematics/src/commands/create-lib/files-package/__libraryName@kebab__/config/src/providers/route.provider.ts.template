@@ -1,0 +1,26 @@
+import { eLayoutType, RoutesService } from '@abp/ng.core';
+import { APP_INITIALIZER } from '@angular/core';
+import { e<%= pascal(libraryName) %>RouteNames } from '../enums/route-names';
+
+export const <%= macro(libraryName) %>_ROUTE_PROVIDERS = [
+  {
+    provide: APP_INITIALIZER,
+    useFactory: configureRoutes,
+    deps: [RoutesService],
+    multi: true,
+  },
+];
+
+export function configureRoutes(routesService: RoutesService) {
+  return () => {
+    routesService.add([
+      {
+        path: '/<%= kebab(libraryName) %>',
+        name: e<%= pascal(libraryName) %>RouteNames.<%= pascal(libraryName) %>,
+        iconClass: 'fas fa-book',
+        layout: eLayoutType.application,
+        order: 3,
+      },
+    ]);
+  };
+}

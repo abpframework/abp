@@ -56,6 +56,8 @@ export interface ParameterInSignature {
   type: string;
   typeSimple: string;
   isOptional: boolean;
+  // eslint-disable-next-line
+  // @typescript-eslint/no-explicit-any
   defaultValue: any;
 }
 
@@ -66,6 +68,8 @@ export interface ParameterInBody {
   type: string;
   typeSimple: string;
   isOptional: boolean;
+  // eslint-disable-next-line
+  // @typescript-eslint/no-explicit-any
   defaultValue: any;
   constraintTypes: string[] | null;
   bindingSourceId: eBindingSourceId;

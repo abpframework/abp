@@ -1,4 +1,4 @@
-import { DomStrategy, DOM_STRATEGY } from '../strategies';
+import { DOM_STRATEGY, DomStrategy } from '../strategies/dom.strategy';
 
 describe('DomStrategy', () => {
   describe('#insertElement', () => {

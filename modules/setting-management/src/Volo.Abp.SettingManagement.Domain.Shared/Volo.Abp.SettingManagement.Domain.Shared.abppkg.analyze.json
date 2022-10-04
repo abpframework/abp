@@ -1,11 +1,29 @@
 {
   "name": "Volo.Abp.SettingManagement.Domain.Shared",
-  "hash": "02864f881f165fef01949fce1324f4ea",
+  "hash": "6d8073c5a7c2d48a1fd1079315c0595b",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Localization",
+          "namespace": "Volo.Abp.Localization",
+          "name": "AbpLocalizationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Features",
+          "namespace": "Volo.Abp.Features",
+          "name": "AbpFeaturesModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpSettingManagementDomainSharedModule"
+      "name": "AbpSettingManagementDomainSharedModule",
+      "summary": null
     },
     {
       "valueType": "ToggleStringValueType",
@@ -15,7 +33,8 @@
       "isAvailableToHost": true,
       "isVisibleToClients": true,
       "contentType": "feature",
-      "name": "SettingManagement.Enable"
+      "name": "SettingManagement.Enable",
+      "summary": null
     },
     {
       "valueType": "ToggleStringValueType",
@@ -25,7 +44,8 @@
       "isAvailableToHost": false,
       "isVisibleToClients": true,
       "contentType": "feature",
-      "name": "SettingManagement.AllowChangingEmailSettings"
+      "name": "SettingManagement.AllowChangingEmailSettings",
+      "summary": null
     }
   ]
 }
