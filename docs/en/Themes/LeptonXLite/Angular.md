@@ -147,7 +147,14 @@ t contains a **logo** and a **company name**. You can change logo via css but if
 
 On websites that have a lot of pages, **breadcrumb navigation** can greatly **enhance the way users find their way** around. In terms of **usability**, breadcrumbs reduce the number of actions a website **visitor** needs to take in order to get to a **higher-level page**, and they **improve** the **findability** of **website sections** and **pages**.
 
-``` TODO: DESCRIBE THE HOW TO OVERRIDE```
+```js
+///...
+    this.replaceableComponents.add({
+        component: YourNewSidebarComponent,
+        key: eThemeLeptonXComponents.Breadcrumb,
+    });
+///...
+```
 
 ![Breadcrumb component](../../images/leptonxlite-breadcrumb-component.png) 
 
