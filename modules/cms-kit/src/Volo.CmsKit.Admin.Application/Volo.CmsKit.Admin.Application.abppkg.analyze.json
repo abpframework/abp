@@ -1,127 +1,1373 @@
 {
   "name": "Volo.CmsKit.Admin.Application",
-  "hash": "d397763f02ef471e9dd35eb1f819db29",
+  "hash": "6fc4ece478c1d91b10d1efac20be8033",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Admin",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts",
+          "namespace": "Volo.CmsKit.Admin",
+          "name": "CmsKitAdminApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.CmsKit.Common.Application",
+          "namespace": "Volo.CmsKit",
+          "name": "CmsKitCommonApplicationModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "CmsKitAdminApplicationModule"
+      "name": "CmsKitAdminApplicationModule",
+      "summary": null
     },
     {
       "namespace": "Volo.CmsKit.Admin.Tags",
-      "summary": null,
+      "baseClass": {
+        "name": "CmsKitAdminAppServiceBase",
+        "namespace": "Volo.CmsKit.Admin",
+        "declaringAssemblyName": "Volo.CmsKit.Admin.Application"
+      },
       "implementingInterfaces": [
-        "Volo.CmsKit.Admin.Tags.IEntityTagAdminAppService"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IEntityTagAdminAppService",
+          "namespace": "Volo.CmsKit.Admin.Tags",
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "AddTagToEntityAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "EntityTagCreateDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "RemoveTagFromEntityAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "EntityTagRemoveDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "SetEntityTagsAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "EntityTagSetDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "EntityTagAdminAppService"
+      "name": "EntityTagAdminAppService",
+      "summary": null
     },
     {
       "namespace": "Volo.CmsKit.Admin.Tags",
-      "summary": null,
+      "baseClass": {
+        "name": "CmsKitAppServiceBase",
+        "namespace": "Volo.CmsKit",
+        "declaringAssemblyName": "Volo.CmsKit.Common.Application"
+      },
       "implementingInterfaces": [
-        "Volo.CmsKit.Admin.Tags.ITagAdminAppService",
-        "Volo.Abp.Application.Services.ICrudAppService`5[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Tags.TagDto, Volo.CmsKit.Common.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "ITagAdminAppService",
+          "namespace": "Volo.CmsKit.Admin.Tags",
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<TagDto, Guid, TagGetListInput, TagCreateDto, TagUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<TagDto, TagDto, Guid, TagGetListInput, TagCreateDto, TagUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IReadOnlyAppService<TagDto, TagDto, Guid, TagGetListInput>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateUpdateAppService<TagDto, Guid, TagCreateDto, TagUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateAppService<TagDto, TagCreateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IUpdateAppService<TagDto, Guid, TagUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IDeleteAppService<Guid>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "TagDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "TagCreateDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "TagDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "TagUpdateDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "List<TagDefinitionDto>",
+          "isAsync": true,
+          "name": "GetTagDefinitionsAsync",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "TagDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PagedResultDto<TagDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "TagGetListInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "TagAdminAppService"
+      "name": "TagAdminAppService",
+      "summary": null
     },
     {
       "namespace": "Volo.CmsKit.Admin.Pages",
-      "summary": null,
+      "baseClass": {
+        "name": "CmsKitAdminAppServiceBase",
+        "namespace": "Volo.CmsKit.Admin",
+        "declaringAssemblyName": "Volo.CmsKit.Admin.Application"
+      },
       "implementingInterfaces": [
-        "Volo.CmsKit.Admin.Pages.IPageAdminAppService",
-        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.GetPagesInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.CreatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.UpdatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.GetPagesInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.CreatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.UpdatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Pages.CreatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Admin.Pages.PageDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Pages.UpdatePageInputDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IPageAdminAppService",
+          "namespace": "Volo.CmsKit.Admin.Pages",
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<PageDto, PageDto, Guid, GetPagesInputDto, CreatePageInputDto, UpdatePageInputDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IReadOnlyAppService<PageDto, PageDto, Guid, GetPagesInputDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateUpdateAppService<PageDto, Guid, CreatePageInputDto, UpdatePageInputDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateAppService<PageDto, CreatePageInputDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IUpdateAppService<PageDto, Guid, UpdatePageInputDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IDeleteAppService<Guid>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "PageDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PagedResultDto<PageDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GetPagesInputDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PageDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CreatePageInputDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PageDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "UpdatePageInputDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "PageAdminAppService"
+      "name": "PageAdminAppService",
+      "summary": null
     },
     {
       "namespace": "Volo.CmsKit.Admin.Menus",
-      "summary": null,
+      "baseClass": {
+        "name": "CmsKitAdminAppServiceBase",
+        "namespace": "Volo.CmsKit.Admin",
+        "declaringAssemblyName": "Volo.CmsKit.Admin.Application"
+      },
       "implementingInterfaces": [
-        "Volo.CmsKit.Admin.Menus.IMenuItemAdminAppService"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IMenuItemAdminAppService",
+          "namespace": "Volo.CmsKit.Admin.Menus",
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "ListResultDto<MenuItemDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "MenuItemDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "MenuItemDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "MenuItemCreateInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "MenuItemDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "MenuItemUpdateInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "MoveMenuItemAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "MenuItemMoveInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PagedResultDto<PageLookupDto>",
+          "isAsync": true,
+          "name": "GetPageLookupAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "PageLookupInputDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "MenuItemAdminAppService"
+      "name": "MenuItemAdminAppService",
+      "summary": null
     },
     {
       "namespace": "Volo.CmsKit.Admin.MediaDescriptors",
-      "summary": null,
+      "baseClass": {
+        "name": "CmsKitAdminAppServiceBase",
+        "namespace": "Volo.CmsKit.Admin",
+        "declaringAssemblyName": "Volo.CmsKit.Admin.Application"
+      },
       "implementingInterfaces": [
-        "Volo.CmsKit.Admin.MediaDescriptors.IMediaDescriptorAdminAppService"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IMediaDescriptorAdminAppService",
+          "namespace": "Volo.CmsKit.Admin.MediaDescriptors",
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "MediaDescriptorDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "CreateMediaInputWithStream",
+              "name": "inputStream",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "MediaDescriptorAdminAppService"
+      "name": "MediaDescriptorAdminAppService",
+      "summary": null
     },
     {
       "namespace": "Volo.CmsKit.Admin.GlobalResources",
-      "summary": null,
+      "baseClass": {
+        "name": "ApplicationService",
+        "namespace": "Volo.Abp.Application.Services",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Application"
+      },
       "implementingInterfaces": [
-        "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IGlobalResourceAdminAppService",
+          "namespace": "Volo.CmsKit.Admin.GlobalResources",
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "GlobalResourcesDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "SetGlobalResourcesAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GlobalResourcesUpdateDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "GlobalResourceAdminAppService"
+      "name": "GlobalResourceAdminAppService",
+      "summary": null
     },
     {
       "namespace": "Volo.CmsKit.Admin.Comments",
-      "summary": null,
+      "baseClass": {
+        "name": "CmsKitAdminAppServiceBase",
+        "namespace": "Volo.CmsKit.Admin",
+        "declaringAssemblyName": "Volo.CmsKit.Admin.Application"
+      },
       "implementingInterfaces": [
-        "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "ICommentAdminAppService",
+          "namespace": "Volo.CmsKit.Admin.Comments",
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "PagedResultDto<CommentWithAuthorDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CommentGetListInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "CommentWithAuthorDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "CommentAdminAppService"
+      "name": "CommentAdminAppService",
+      "summary": null
     },
     {
       "namespace": "Volo.CmsKit.Admin.Blogs",
-      "summary": null,
+      "baseClass": {
+        "name": "CmsKitAdminAppServiceBase",
+        "namespace": "Volo.CmsKit.Admin",
+        "declaringAssemblyName": "Volo.CmsKit.Admin.Application"
+      },
       "implementingInterfaces": [
-        "Volo.CmsKit.Admin.Blogs.IBlogAdminAppService",
-        "Volo.Abp.Application.Services.ICrudAppService`5[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Admin.Blogs.BlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IBlogAdminAppService",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<BlogDto, Guid, BlogGetListInput, CreateBlogDto, UpdateBlogDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<BlogDto, BlogDto, Guid, BlogGetListInput, CreateBlogDto, UpdateBlogDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IReadOnlyAppService<BlogDto, BlogDto, Guid, BlogGetListInput>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateUpdateAppService<BlogDto, Guid, CreateBlogDto, UpdateBlogDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateAppService<BlogDto, CreateBlogDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IUpdateAppService<BlogDto, Guid, UpdateBlogDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IDeleteAppService<Guid>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "BlogDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PagedResultDto<BlogDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "BlogGetListInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "BlogDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CreateBlogDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "BlogDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "UpdateBlogDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "BlogAdminAppService"
+      "name": "BlogAdminAppService",
+      "summary": null
     },
     {
       "namespace": "Volo.CmsKit.Admin.Blogs",
-      "summary": null,
+      "baseClass": {
+        "name": "CmsKitAdminAppServiceBase",
+        "namespace": "Volo.CmsKit.Admin",
+        "declaringAssemblyName": "Volo.CmsKit.Admin.Application"
+      },
       "implementingInterfaces": [
-        "Volo.CmsKit.Admin.Blogs.IBlogFeatureAdminAppService"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IBlogFeatureAdminAppService",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<BlogFeatureDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "blogId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "SetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "blogId",
+              "isOptional": false
+            },
+            {
+              "type": "BlogFeatureInputDto",
+              "name": "dto",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "BlogFeatureAdminAppService"
+      "name": "BlogFeatureAdminAppService",
+      "summary": null
     },
     {
       "namespace": "Volo.CmsKit.Admin.Blogs",
-      "summary": null,
+      "baseClass": {
+        "name": "CmsKitAppServiceBase",
+        "namespace": "Volo.CmsKit",
+        "declaringAssemblyName": "Volo.CmsKit.Common.Application"
+      },
       "implementingInterfaces": [
-        "Volo.CmsKit.Admin.Blogs.IBlogPostAdminAppService",
-        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogPostListDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogPostGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.BlogPostListDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.BlogPostGetListInput, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.CmsKit.Admin.Blogs.BlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IBlogPostAdminAppService",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
+          "declaringAssemblyName": "Volo.CmsKit.Admin.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<BlogPostDto, BlogPostListDto, Guid, BlogPostGetListInput, CreateBlogPostDto, UpdateBlogPostDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IReadOnlyAppService<BlogPostDto, BlogPostListDto, Guid, BlogPostGetListInput>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateUpdateAppService<BlogPostDto, Guid, CreateBlogPostDto, UpdateBlogPostDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateAppService<BlogPostDto, CreateBlogPostDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IUpdateAppService<BlogPostDto, Guid, UpdateBlogPostDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IDeleteAppService<Guid>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "BlogPostDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CreateBlogPostDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "BlogPostDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "UpdateBlogPostDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "BlogPostDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PagedResultDto<BlogPostListDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "BlogPostGetListInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "PublishAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DraftAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "BlogPostDto",
+          "isAsync": true,
+          "name": "CreateAndPublishAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CreateBlogPostDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "SendToReviewAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "BlogPostDto",
+          "isAsync": true,
+          "name": "CreateAndSendToReviewAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CreateBlogPostDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "isAsync": true,
+          "name": "HasBlogPostWaitingForReviewAsync",
+          "summary": null,
+          "parameters": []
+        }
       ],
       "contentType": "applicationService",
-      "name": "BlogPostAdminAppService"
+      "name": "BlogPostAdminAppService",
+      "summary": null
     }
   ]
 }

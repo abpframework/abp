@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.HttpApi.Client",
-  "hash": "f2fb11615654c51243da859515cffebc",
+  "hash": "85ff60c24af9624ea96a7bf097b9d908",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement",

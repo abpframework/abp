@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.MongoDB",
-  "hash": "d706438357416f2b893375ecafdeabba",
+  "hash": "582cce45cb97d3286dbf84eb8f752810",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer.MongoDB",
@@ -25,9 +25,15 @@
       "connectionStringName": "AbpIdentityServer",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
+          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
           "contentType": "databaseCollection",
-          "name": "IdentityServerClients",
+          "name": "IdentityServerIdentityResources",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerApiResources",
           "summary": null
         },
         {
@@ -43,21 +49,15 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerIdentityResources",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerApiResources",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope",
           "contentType": "databaseCollection",
           "name": "IdentityServerApiScopes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerClients",
           "summary": null
         }
       ],

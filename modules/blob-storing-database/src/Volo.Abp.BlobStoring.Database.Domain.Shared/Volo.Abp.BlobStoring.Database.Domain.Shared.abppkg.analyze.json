@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BlobStoring.Database.Domain.Shared",
-  "hash": "cf79106c21ec4ea832235c9dd04f307e",
+  "hash": "492b8c1a18aa5b16851a6085bccc598c",
   "contents": [
     {
       "namespace": "Volo.Abp.BlobStoring.Database",

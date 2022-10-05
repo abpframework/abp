@@ -1,135 +1,764 @@
 {
   "name": "Volo.Blogging.Domain",
-  "hash": "bf1806736d7d435af015acb0aac2eab2",
+  "hash": "479fb45df58aa9027f3f723ebb0e27f8",
   "contents": [
     {
       "namespace": "Volo.Blogging",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Blogging.Domain.Shared",
+          "namespace": "Volo.Blogging",
+          "name": "BloggingDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "namespace": "Volo.Abp.Domain",
+          "name": "AbpDddDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching",
+          "namespace": "Volo.Abp.Caching",
+          "name": "AbpCachingModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "BloggingDomainModule"
+      "name": "BloggingDomainModule",
+      "summary": null
     },
     {
+      "baseClass": {
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "IUser",
+          "namespace": "Volo.Abp.Users",
+          "declaringAssemblyName": "Volo.Abp.Users.Domain"
+        },
+        {
+          "name": "IMultiTenant",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy"
+        },
+        {
+          "name": "IUpdateUserData",
+          "namespace": "Volo.Abp.Users",
+          "declaringAssemblyName": "Volo.Abp.Users.Domain"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Boolean",
+          "isAsync": false,
+          "name": "Update",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "IUserData",
+              "name": "user",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "namespace": "Volo.Blogging.Users",
       "primaryKeyType": "Guid",
-      "summary": null,
-      "collectionProperties": [],
-      "navigationProperties": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
       "contentType": "aggregateRoot",
-      "name": "BlogUser"
+      "name": "BlogUser",
+      "summary": null
     },
     {
+      "baseClass": {
+        "name": "FullAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IModificationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasModificationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IFullAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IDeletionAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasDeletionTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "ISoftDelete",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "SetName",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "IncreaseUsageCount",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Int32",
+              "name": "number",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "DecreaseUsageCount",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Int32",
+              "name": "number",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "SetDescription",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "description",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "namespace": "Volo.Blogging.Tagging",
       "primaryKeyType": "Guid",
-      "summary": null,
-      "collectionProperties": [],
-      "navigationProperties": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
       "contentType": "aggregateRoot",
-      "name": "Tag"
+      "name": "Tag",
+      "summary": null
     },
     {
+      "baseClass": {
+        "name": "FullAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IModificationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasModificationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IFullAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IDeletionAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasDeletionTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "ISoftDelete",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Post",
+          "isAsync": false,
+          "name": "IncreaseReadCount",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Post",
+          "isAsync": false,
+          "name": "SetTitle",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "title",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Post",
+          "isAsync": false,
+          "name": "SetUrl",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "url",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddTag",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "tagId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveTag",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "tagId",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "namespace": "Volo.Blogging.Posts",
       "primaryKeyType": "Guid",
-      "summary": null,
-      "collectionProperties": [
-        "Volo.Blogging.Posts.PostTag"
-      ],
-      "navigationProperties": [],
+      "collectionProperties": {
+        "tags": {
+          "name": "PostTag",
+          "namespace": "Volo.Blogging.Posts",
+          "declaringAssemblyName": "Volo.Blogging.Domain"
+        }
+      },
+      "navigationProperties": {},
       "contentType": "aggregateRoot",
-      "name": "Post"
+      "name": "Post",
+      "summary": null
     },
     {
+      "baseClass": {
+        "name": "FullAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IModificationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasModificationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IFullAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IDeletionAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasDeletionTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "ISoftDelete",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "SetText",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "text",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "namespace": "Volo.Blogging.Comments",
       "primaryKeyType": "Guid",
-      "summary": null,
-      "collectionProperties": [],
-      "navigationProperties": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
       "contentType": "aggregateRoot",
-      "name": "Comment"
+      "name": "Comment",
+      "summary": null
     },
     {
+      "baseClass": {
+        "name": "FullAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IModificationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasModificationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IFullAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IDeletionAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasDeletionTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "ISoftDelete",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Blog",
+          "isAsync": false,
+          "name": "SetName",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Blog",
+          "isAsync": false,
+          "name": "SetShortName",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "shortName",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "namespace": "Volo.Blogging.Blogs",
       "primaryKeyType": "Guid",
-      "summary": null,
-      "collectionProperties": [],
-      "navigationProperties": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
       "contentType": "aggregateRoot",
-      "name": "Blog"
+      "name": "Blog",
+      "summary": null
     },
     {
       "namespace": "Volo.Blogging.Users",
-      "summary": null,
       "entityAnalyzeModel": {
         "namespace": "Volo.Blogging.Users",
         "primaryKeyType": "Guid",
-        "summary": null,
-        "collectionProperties": [],
-        "navigationProperties": [],
+        "collectionProperties": {},
+        "navigationProperties": {},
         "contentType": "entity",
-        "name": "BlogUser"
+        "name": "BlogUser",
+        "summary": null
       },
       "contentType": "repositoryInterface",
-      "name": "IBlogUserRepository"
+      "name": "IBlogUserRepository",
+      "summary": null
     },
     {
       "namespace": "Volo.Blogging.Tagging",
-      "summary": null,
       "entityAnalyzeModel": {
         "namespace": "Volo.Blogging.Tagging",
         "primaryKeyType": "Guid",
-        "summary": null,
-        "collectionProperties": [],
-        "navigationProperties": [],
+        "collectionProperties": {},
+        "navigationProperties": {},
         "contentType": "entity",
-        "name": "Tag"
+        "name": "Tag",
+        "summary": null
       },
       "contentType": "repositoryInterface",
-      "name": "ITagRepository"
+      "name": "ITagRepository",
+      "summary": null
     },
     {
       "namespace": "Volo.Blogging.Posts",
-      "summary": null,
       "entityAnalyzeModel": {
         "namespace": "Volo.Blogging.Posts",
         "primaryKeyType": "Guid",
-        "summary": null,
-        "collectionProperties": [
-          "Volo.Blogging.Posts.PostTag"
-        ],
-        "navigationProperties": [],
+        "collectionProperties": {
+          "tags": {
+            "name": "PostTag",
+            "namespace": "Volo.Blogging.Posts",
+            "declaringAssemblyName": "Volo.Blogging.Domain"
+          }
+        },
+        "navigationProperties": {},
         "contentType": "entity",
-        "name": "Post"
+        "name": "Post",
+        "summary": null
       },
       "contentType": "repositoryInterface",
-      "name": "IPostRepository"
+      "name": "IPostRepository",
+      "summary": null
     },
     {
       "namespace": "Volo.Blogging.Comments",
-      "summary": null,
       "entityAnalyzeModel": {
         "namespace": "Volo.Blogging.Comments",
         "primaryKeyType": "Guid",
-        "summary": null,
-        "collectionProperties": [],
-        "navigationProperties": [],
+        "collectionProperties": {},
+        "navigationProperties": {},
         "contentType": "entity",
-        "name": "Comment"
+        "name": "Comment",
+        "summary": null
       },
       "contentType": "repositoryInterface",
-      "name": "ICommentRepository"
+      "name": "ICommentRepository",
+      "summary": null
     },
     {
       "namespace": "Volo.Blogging.Blogs",
-      "summary": null,
       "entityAnalyzeModel": {
         "namespace": "Volo.Blogging.Blogs",
         "primaryKeyType": "Guid",
-        "summary": null,
-        "collectionProperties": [],
-        "navigationProperties": [],
+        "collectionProperties": {},
+        "navigationProperties": {},
         "contentType": "entity",
-        "name": "Blog"
+        "name": "Blog",
+        "summary": null
       },
       "contentType": "repositoryInterface",
-      "name": "IBlogRepository"
+      "name": "IBlogRepository",
+      "summary": null
     }
   ]
 }

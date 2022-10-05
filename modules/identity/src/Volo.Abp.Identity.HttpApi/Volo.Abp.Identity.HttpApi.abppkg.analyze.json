@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.HttpApi",
-  "hash": "0b367ffacfe35393eb7ae9dd71dfc858",
+  "hash": "157abdf1ee978025d9904d8d792bb738",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity",

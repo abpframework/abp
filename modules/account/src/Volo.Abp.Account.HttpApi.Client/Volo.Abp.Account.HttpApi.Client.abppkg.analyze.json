@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Account.HttpApi.Client",
-  "hash": "e81db7d02e2b33afc0181892c2c49ec5",
+  "hash": "9bc85dfaea6a19a3683acebb80792b2d",
   "contents": [
     {
       "namespace": "Volo.Abp.Account",
