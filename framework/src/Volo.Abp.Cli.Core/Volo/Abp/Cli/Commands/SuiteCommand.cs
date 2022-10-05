@@ -60,7 +60,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
 #if !DEBUG    
         var loginInfo = await _authService.GetLoginInfoAsync();
 
-        if (string.IsNullOrEmpty(loginInfo.Organization))
+        if (string.IsNullOrEmpty(loginInfo?.Organization))
         {
             throw new CliUsageException("Please login with your account.");
         }
