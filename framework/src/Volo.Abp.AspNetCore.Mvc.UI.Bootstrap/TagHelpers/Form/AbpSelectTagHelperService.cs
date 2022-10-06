@@ -145,6 +145,11 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
         }
 
+        if (IsNullableBoolean())
+        {
+            return GetSelectItemsFromNullableBoolean(context, output, TagHelper.AspFor.ModelExplorer);
+        }
+
         var selectItemsAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<SelectItems>();
         if (selectItemsAttribute != null)
         {
@@ -163,6 +168,17 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         }
 
         return TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
+    }
+
+    private bool IsNullableBoolean()
+    {
+        var metadata = TagHelper.AspFor.ModelExplorer.Metadata;
+        if (!metadata.IsNullableValueType)
+        {
+            return false;
+        }
+
+        return metadata.UnderlyingOrModelType.Name == "Boolean";
     }
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
@@ -287,6 +303,38 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         return selectItems;
     }
+
+    protected virtual List<SelectListItem> GetSelectItemsFromNullableBoolean(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
+    {
+        var selectItems = new List<SelectListItem>() { new SelectListItem() };
+
+        var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
+
+        foreach (var iteam in new List<string> { "True", "False" })
+        {
+            var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
+                new[]
+                {
+                        containerLocalizer,
+                        _stringLocalizerFactory.CreateDefaultOrNull()
+                },
+                new[]
+                {
+                        iteam
+                },
+                iteam
+            );
+
+            selectItems.Add(new SelectListItem
+            {
+                Value = iteam,
+                Text = localizedMemberName
+            });
+        }
+
+        return selectItems;
+    }
+
 
     protected virtual List<SelectListItem> GetSelectItemsFromAttribute(
         SelectItems selectItemsAttribute,

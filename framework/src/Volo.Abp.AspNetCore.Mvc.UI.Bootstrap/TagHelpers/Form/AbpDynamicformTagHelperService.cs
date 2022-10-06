@@ -291,7 +291,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
 
     protected virtual bool IsSelectGroup(TagHelperContext context, ModelExpression model)
     {
-        return IsEnum(model.ModelExplorer) || AreSelectItemsProvided(model.ModelExplorer);
+        return IsEnum(model.ModelExplorer) || AreSelectItemsProvided(model.ModelExplorer) || IsNullableBoolean(model.ModelExplorer);
     }
 
     protected virtual bool IsEnum(ModelExplorer explorer)
@@ -307,5 +307,10 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
     protected virtual bool IsRadioGroup(ModelExplorer explorer)
     {
         return explorer.GetAttribute<AbpRadioButton>() != null;
+    }
+
+    protected virtual bool IsNullableBoolean(ModelExplorer explorer)
+    {
+        return explorer.Metadata.IsNullableValueType && explorer.Metadata.UnderlyingOrModelType.Name == "Boolean";
     }
 }
