@@ -88,7 +88,7 @@ However, the distributed lock system works in-process by default. That means it 
 
 ABP provides [SignalR](../SignalR-Integration.md) integration packages to simplify integration and usage. SignalR can be used whenever you need to add real-time web functionality (real-time messaging, real-time notification etc.) into your application. 
 
-SignalR requires that all HTTP requests for a specific connection be handled (needs to keep track of all its connections) by the same server process. So, when SignalR running on a clustered environment (with multiple servers) **"sticky sessions"** must be used.
+SignalR requires that all HTTP requests for a specific connection be handled (needs to keep track of all its connections) by the same server process. So, when SignalR is running on a clustered environment (with multiple servers) **"sticky sessions"** must be used.
 
 If you are considering [scaling out](https://learn.microsoft.com/en-us/aspnet/core/signalr/scale?view=aspnetcore-6.0#scale-out) your servers and don't want to have inconsistency with the active socket connections, you can use [Azure SignalR Service](https://learn.microsoft.com/en-us/aspnet/core/signalr/scale?view=aspnetcore-6.0#azure-signalr-service) or [Redis backplane](https://learn.microsoft.com/en-us/aspnet/core/signalr/scale?view=aspnetcore-6.0#redis-backplane).
 
