@@ -176,9 +176,14 @@ Sidebar menus have been used as **a directory for Related Pages** to a **Service
 Provides contextual **feedback messages** for typical user actions with the handful of **available** and **flexible** **alert messages**. Alerts are available for any length of text, as well as an **optional dismiss button**.
 
 ![Page alerts component](../../images/leptonxlite-page-alerts-component.png) 
-
-``` TODO: DESCRIBE THE HOW TO OVERRIDE```
-
+```js
+///...
+    this.replaceableComponents.add({
+        component: YourNewPageAlertContainerComponent,
+        key: eThemeLeptonXComponents.PageAlertContainer,
+    });
+///...
+```
 ## Toolbar Component
 ![Breadcrumb component](../../images/leptonxlite-toolbar-component.png)
 
@@ -186,7 +191,7 @@ Toolbar items are used to add **extra functionality to the toolbar**. The toolba
 ```js
 ///...
     this.replaceableComponents.add({
-        component: YourNewSidebarComponent,
+        component: YourNewNavItemsComponent,
         key: eThemeLeptonXComponents.NavItems,
     });
 ///...
@@ -203,7 +208,7 @@ Think about a **multi-lingual** website and the first thing that could **hit you
 ```js
 ///...
     this.replaceableComponents.add({
-        component: YourNewSidebarComponent,
+        component: YourNewLanguagesComponent,
         key: eThemeLeptonXComponents.Languages,
     });
 ///...
@@ -217,7 +222,7 @@ The **User Menu** is the **menu** that **drops down** when you **click your name
 ```js
 ///...
     this.replaceableComponents.add({
-        component: YourNewSidebarComponent,
+        component: YourNewCurrentUserComponent,
         key: eThemeLeptonXComponents.CurrentUser,
     });
 ///...
@@ -231,8 +236,8 @@ The **mobile navbar component** is used to display the **navbar menu on mobile d
 ```js
 ///...
     this.replaceableComponents.add({
-        component: YourNewSidebarComponent,
-        key: eThemeLeptonXComponents.Languages,
+        component: YourNewMobileNavbarComponent,
+        key: eThemeLeptonXComponents.MobileNavbar,
     });
 ///...
 ```
