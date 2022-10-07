@@ -127,8 +127,7 @@ See the [Component Replacement](https://docs.abp.io/en/abp/latest/UI/Angular/Com
 
 ### Brand Component
 
-The **brand component** is a simple component that can be used to display your brand. I
-t contains a **logo** and a **company name**. You can change logo via css but if you want to change logo component, the key is `eThemeLeptonXComponents.Logo`
+The **brand component** is a simple component that can be used to display your brand. It contains a **logo** and a **company name**. You can change logo via css but if you want to change logo component, the key is `eThemeLeptonXComponents.Logo`
 
 ```js
 ///...
