@@ -91,7 +91,7 @@ In order to migrate to LeptonX on your server side projects (Host and/or AuthSer
 Angular version of LeptonX Lite provides **layout components** for your **user interface** on [ABP Framework Theming](https://docs.abp.io/en/abp/latest/UI/Angular/Theming). You can use layouts to **organize your user interface**. You can replace the **layout components** and some parts of the **layout components** with the [ABP replaceable component  system](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement).
 
 
-The main responsibility of a theme iss to **provides** the layouts. There are **three pre-defined layouts that must be implemented by all the themes:**
+The main responsibility of a theme is to **provide** the layouts. There are **three pre-defined layouts that must be implemented by all the themes:**
 
 * **ApplicationLayoutComponent:** The **default** layout which is used by the **main** application pages.
   
