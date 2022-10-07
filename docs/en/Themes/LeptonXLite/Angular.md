@@ -184,7 +184,64 @@ Provides contextual **feedback messages** for typical user actions with the hand
 ![Breadcrumb component](../../images/leptonxlite-toolbar-component.png)
 
 Toolbar items are used to add **extra functionality to the toolbar**. The toolbar is a **horizontal bar** that **contains** a group of **toolbar items**.
-``` TODO: DESCRIBE THE HOW TO OVERRIDE```
+```js
+///...
+    this.replaceableComponents.add({
+        component: YourNewSidebarComponent,
+        key: eThemeLeptonXComponents.NavItems,
+    });
+///...
+```
 
-## Toolbar Item Component
-``` TODO: DESCRIBE THE HOW TO OVERRIDE```
+## Toolbar Items
+There are two parts to the toolbar. The first is Language-Switch.The second is the User-Profile element. You can swap out each of these parts individually.
+
+## Language Switch Component
+
+Think about a **multi-lingual** website and the first thing that could **hit your mind** is **the language switch component**. A **navigation bar** is a **great place** to **embed a language switch**. By embedding the language switch in the navigation bar of your website, you would **make it simpler** for users to **find it** and **easily** switch the **language**  <u>**without trying to locate it across the website.**</u>
+
+![Language switch component](../../images/leptonxlite-language-switch-component.png) 
+```js
+///...
+    this.replaceableComponents.add({
+        component: YourNewSidebarComponent,
+        key: eThemeLeptonXComponents.Languages,
+    });
+///...
+```
+
+## User Menu Component
+
+The **User Menu** is the **menu** that **drops down** when you **click your name** or **profile picture** in the **upper right corner** of your page (**in the toolbar**). It drops down options such as **Settings**, **Logout**, etc.
+
+![User menu component](../../images/leptonxlite-user-menu-component.png)
+```js
+///...
+    this.replaceableComponents.add({
+        component: YourNewSidebarComponent,
+        key: eThemeLeptonXComponents.CurrentUser,
+    });
+///...
+```
+Note: The language selection component in the Volo app is not replaceable. It is part of the settings menu.
+
+## Mobile Navbar Component
+The **mobile navbar component** is used to display the **navbar menu on mobile devices**. The mobile navbar component is a **dropdown menu** that contains language selection and user menu.
+
+![Mobile user menu component](../../images/leptonxlite-mobile-user-menu-component.png) 
+```js
+///...
+    this.replaceableComponents.add({
+        component: YourNewSidebarComponent,
+        key: eThemeLeptonXComponents.Languages,
+    });
+///...
+```
+## Mobile Navbar Items.
+There are two parts to the mobile navbar. The mobile navbar has  Language-Switch and   User-Profile.You can swap out each of these parts individually. 
+
+The Mobile language-Selection component key is `eThemeLeptonXComponents.MobileLanguageSelection`.
+
+The Mobile User-Profile component key is `eThemeLeptonXComponents.MobileUserProfile`.
+
+
