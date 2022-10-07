@@ -403,6 +403,7 @@
     "Deleted{0}": "[Deleted {0}]",
     "Tags": "Tags",
     "SetTagsInfo": "Tags should be comma-separated. Eg: CSharp, Entity Framework",
-    "RejectTrialLicenseWarningMessage": "Are you sure you want to reject this trial license request?"
+    "RejectTrialLicenseWarningMessage": "Are you sure you want to reject this trial license request?",
+    "ExportToExcel": "Export to Excel"
   }
 }
