@@ -7,6 +7,8 @@ public class AbpCliOptions
 {
     public Dictionary<string, Type> Commands { get; }
 
+    public List<string> DisabledModulesToAddToSolution { get; set; }
+
     /// <summary>
     /// Default value: true.
     /// </summary>
@@ -20,5 +22,6 @@ public class AbpCliOptions
     public AbpCliOptions()
     {
         Commands = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
+        DisabledModulesToAddToSolution = new();
     }
 }
