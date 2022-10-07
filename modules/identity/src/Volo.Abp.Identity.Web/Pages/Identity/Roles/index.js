@@ -135,7 +135,7 @@
             _dataTable.ajax.reload();
         });
 
-        _$wrapper.find('button[name=CreateRole]').click(function (e) {
+        $('#AbpContentToolbar button[name=CreateRole]').click(function (e) {
             e.preventDefault();
             _createModal.open();
         });

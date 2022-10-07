@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
-  "hash": "a9dcaf39bb235c7d15b845b9a4a2eb61",
+  "hash": "f944ddf83ee507446f4f9e702aeb018f",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
@@ -25,9 +25,21 @@
       "connectionStringName": "AbpPermissionManagement",
       "databaseTables": [
         {
+          "entityFullName": "Volo.Abp.PermissionManagement.PermissionDefinitionRecord",
+          "contentType": "databaseTable",
+          "name": "AbpPermissions",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.Abp.PermissionManagement.PermissionGrant",
           "contentType": "databaseTable",
           "name": "AbpPermissionGrants",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.PermissionManagement.PermissionGroupDefinitionRecord",
+          "contentType": "databaseTable",
+          "name": "AbpPermissionGroups",
           "summary": null
         }
       ],
