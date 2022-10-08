@@ -123,6 +123,9 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 
             [HiddenInput]
             public string ConcurrencyStamp { get; set; }
+
+            [DynamicStringLength(typeof(ProjectConsts), nameof(ProjectConsts.MaxRoleLength))]
+            public string Role { get; set; }
         }
 
         public class EditGithubProjectViewModel : EditProjectViewModelBase

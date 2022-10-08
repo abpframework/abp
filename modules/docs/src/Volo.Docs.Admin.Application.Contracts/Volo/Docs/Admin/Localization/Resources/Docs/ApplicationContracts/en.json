@@ -36,6 +36,7 @@
     "DisplayName:All": "Pull all",
     "DisplayName:LanguageCode": "Language code",
     "DisplayName:Version": "Version",
+    "DisplayName:Role": "Role",
     "Documents": "Documents",
     "RemoveFromCache": "Remove from cache",
     "Reindex": "Reindex",

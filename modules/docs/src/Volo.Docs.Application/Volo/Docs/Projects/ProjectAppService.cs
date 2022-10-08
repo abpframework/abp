@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
@@ -35,8 +36,13 @@ namespace Volo.Docs.Projects
         {
             var projects = await _projectRepository.GetListAsync();
 
+            var filteredProjects = projects
+                .WhereIf(this.CurrentUser != null, s => s.Role.IsNullOrWhiteSpace() || this.CurrentUser.IsInRole(s.Role))
+                .WhereIf(this.CurrentUser == null, s => s.Role.IsNullOrWhiteSpace())
+                .ToList();
+
             var projectDtos = new List<ProjectDto>(
-                ObjectMapper.Map<List<Project>, List<ProjectDto>>(projects)
+                ObjectMapper.Map<List<Project>, List<ProjectDto>>(filteredProjects)
             );
 
             return new ListResultDto<ProjectDto>(
@@ -48,6 +54,15 @@ namespace Volo.Docs.Projects
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);
 
+            if (!project.Role.IsNullOrWhiteSpace())
+            {
+                if (!this.CurrentUser.IsInRole(project.Role))
+                {
+                    throw new UserFriendlyException(
+                        $"You do not have a role for this project {project.Name}.");
+                }
+            }
+
             var projectDto = ObjectMapper.Map<Project, ProjectDto>(project);
 
             return HidePrivateProperties(projectDto);
@@ -56,6 +71,15 @@ namespace Volo.Docs.Projects
         public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);
+
+            if (!project.Role.IsNullOrWhiteSpace())
+            {
+                if (!this.CurrentUser.IsInRole(project.Role))
+                {
+                    throw new UserFriendlyException(
+                        $"You do not have a role for this project {project.Name}.");
+                }
+            }
 
             var versions = await _versionCache.GetOrAddAsync(
                 CacheKeyGenerator.GenerateProjectVersionsCacheKey(project),
@@ -110,6 +134,17 @@ namespace Volo.Docs.Projects
         private async Task<LanguageConfig> GetLanguageListInternalAsync(string shortName, string version)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);
+
+            if (!project.Role.IsNullOrWhiteSpace())
+            {
+                if (!this.CurrentUser.IsInRole(project.Role))
+                {
+                    throw new UserFriendlyException(
+                        $"You do not have a role for this project {project.Name}.");
+                }
+            }
+
+
             var store = _documentSource.Create(project.DocumentStoreType);
 
             version = GetProjectVersionPrefixIfExist(project) + version;

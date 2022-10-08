@@ -26,5 +26,8 @@ namespace Volo.Docs.Projects
         public string MainWebsiteUrl { get; set; }
 
         public string LatestVersionBranchName { get; set; }
+
+        public string Role { get; set; }
+
     }
 }

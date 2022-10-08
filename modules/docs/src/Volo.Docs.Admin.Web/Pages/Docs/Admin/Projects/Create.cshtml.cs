@@ -104,6 +104,9 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 
             [HiddenInput]
             public string DocumentStoreType { get; set; } = "GitHub";
+
+            [DynamicStringLength(typeof(ProjectConsts), nameof(ProjectConsts.MaxRoleLength))]
+            public string Role { get; set; }
         }
 
         public class CreateGithubProjectViewModel : CreateProjectViewModelBase

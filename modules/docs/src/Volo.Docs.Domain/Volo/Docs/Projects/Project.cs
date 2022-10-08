@@ -48,6 +48,8 @@ namespace Volo.Docs.Projects
 
         public virtual string LatestVersionBranchName { get; set; }
 
+        public virtual string Role { get; set; }
+
         protected Project()
         {
         }

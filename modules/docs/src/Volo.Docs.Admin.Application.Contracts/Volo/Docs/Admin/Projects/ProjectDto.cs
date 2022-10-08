@@ -28,6 +28,8 @@ namespace Volo.Docs.Admin.Projects
 
         public string DocumentStoreType { get; set; }
 
+        public string Role { get; set; }
+
         public Dictionary<string, object> ExtraProperties { get; set; }
 
         public string ConcurrencyStamp { get; set; }

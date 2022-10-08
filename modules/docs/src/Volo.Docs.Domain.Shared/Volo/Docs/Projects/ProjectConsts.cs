@@ -36,5 +36,11 @@
         /// Default value: 128
         /// </summary>
         public static int MaxVersionNameLength { get; set; } = 128;
+
+        /// <summary>
+        /// Default value: 256
+        /// </summary>
+        public static int MaxRoleLength { get; set; } = 256;
+
     }
 }

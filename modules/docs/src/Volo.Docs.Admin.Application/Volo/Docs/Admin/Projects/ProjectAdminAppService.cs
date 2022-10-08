@@ -76,7 +76,8 @@ namespace Volo.Docs.Admin.Projects
             {
                 MinimumVersion = input.MinimumVersion,
                 MainWebsiteUrl = input.MainWebsiteUrl,
-                LatestVersionBranchName = input.LatestVersionBranchName
+                LatestVersionBranchName = input.LatestVersionBranchName,
+                Role = input.Role
             };
 
             foreach (var extraProperty in input.ExtraProperties)
@@ -103,6 +104,7 @@ namespace Volo.Docs.Admin.Projects
             project.MinimumVersion = input.MinimumVersion;
             project.MainWebsiteUrl = input.MainWebsiteUrl;
             project.LatestVersionBranchName = input.LatestVersionBranchName;
+            project.Role = input.Role;
 
             foreach (var extraProperty in input.ExtraProperties)
             {
