@@ -745,6 +745,11 @@
     "OnlineReviewersOnAbpCommercial": "Online Reviews on ABP Commercial",
     "SeeWhatToldAboutAbpCommercial": "See what has been told about ABP Commercial and write your thoughts if you want.",
     "BlazoriseLicense": "Do we need to buy Blazorise license?",
-    "BlazoriseLicenseExplanation": "We have an agreement between Volosoft and Megabit, with this agreement Blazorise license is bundled with ABP Commercial products therefore our customers do not need to purchase an extra Blazorise license."
+    "BlazoriseLicenseExplanation": "We have an agreement between Volosoft and Megabit, with this agreement Blazorise license is bundled with ABP Commercial products therefore our customers do not need to purchase an extra Blazorise license.",
+    "EFCore": "Entity Framework Core",
+    "All": "All",
+    "Mvc": "MVC",
+    "DataBaseProvider": "Data Provider",
+    "UIFramework": "UI Framework"
   }
 }
