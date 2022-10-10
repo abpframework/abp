@@ -72,8 +72,8 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
             GetCancellationToken(cancellationToken));
     }
 
-    public virtual Task<Page> FindByIsHomePageAsync(bool isHomePage, CancellationToken cancellationToken = default)
+    public virtual Task<List<Page>> GetListOfHomePagesAsync(CancellationToken cancellationToken = default)
     {
-        return FindAsync(x => x.IsHomePage == isHomePage, cancellationToken: GetCancellationToken(cancellationToken));
+        return GetListAsync(x => x.IsHomePage, cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

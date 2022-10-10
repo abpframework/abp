@@ -91,14 +91,9 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     public virtual async Task SetAsHomePageAsync(Guid id)
     {
         var page = await PageRepository.GetAsync(id);
-        if (!page.IsHomePage)
-        {
-            await PageManager.SetHomePageAsFalseAsync(true);
-            page = await PageRepository.GetAsync(id);
-        }
 
-        page.IsHomePage = !page.IsHomePage; ;
+		await PageManager.SetHomePageAsync(page);
 
-        await PageRepository.UpdateAsync(page);
+		await PageRepository.UpdateAsync(page);
     }
 }

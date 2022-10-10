@@ -20,7 +20,7 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
 
     public virtual string Style { get; protected set; }
 
-    public virtual bool IsHomePage { get; set; }
+    public virtual bool IsHomePage { get; protected set; }
 
     protected Page()
     {
@@ -68,4 +68,9 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         Style = Check.Length(style, nameof(style), PageConsts.MaxStyleLength);
     }
+
+	internal void SetIsHomePage(bool isHomePage)
+    {
+        IsHomePage = isHomePage;
+	}
 }

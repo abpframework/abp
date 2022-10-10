@@ -16,14 +16,15 @@ namespace Volo.CmsKit.Public.Pages;
 public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppService
 {
     protected IPageRepository PageRepository { get; }
-    protected ContentParser ContentParser { get; }
-    private readonly IDistributedCache<PageDto> _cache;
+	protected PageManager PageManager { get; }
 
-    public PagePublicAppService(IPageRepository pageRepository, ContentParser contentParser, IDistributedCache<PageDto> cache)
+    protected IDistributedCache<PageDto> PageCache { get; }
+
+    public PagePublicAppService(IPageRepository pageRepository, PageManager pageManager, IDistributedCache<PageDto> pageCache)
     {
         PageRepository = pageRepository;
-        ContentParser = contentParser;
-        _cache = cache;
+        PageManager = pageManager;
+		PageCache = pageCache;
     }
 
     public virtual async Task<PageDto> FindBySlugAsync(string slug)
@@ -40,10 +41,10 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
     public virtual async Task<PageDto> FindDefaultHomePageAsync()
     {
-        var pageDto = await _cache.GetAsync("DefaultHomePage");
+        var pageDto = await PageCache.GetAsync("DefaultHomePage");
         if (pageDto is null)
         {
-            var page = await PageRepository.FindByIsHomePageAsync(true);
+            var page = await PageManager.GetHomePageAsync();
             if (page is null)
             {
                 return null;
@@ -51,7 +52,7 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
             pageDto = ObjectMapper.Map<Page, PageDto>(page);
 
-            await _cache.SetAsync("DefaultHomePage", pageDto,
+            await PageCache.SetAsync("DefaultHomePage", pageDto,
                 new DistributedCacheEntryOptions { AbsoluteExpiration = DateTimeOffset.Now.AddHours(1) });
         }
 
