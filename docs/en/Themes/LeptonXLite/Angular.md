@@ -88,7 +88,7 @@ In order to migrate to LeptonX on your server side projects (Host and/or AuthSer
 
 ### Layouts
 
-Angular version of LeptonX Lite provides **layout components** for your **user interface** on [ABP Framework Theming](https://docs.abp.io/en/abp/latest/UI/Angular/Theming). You can use layouts to **organize your user interface**. You can replace the **layout components** and some parts of the **layout components** with the [ABP replaceable component  system](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement).
+The Angular version of LeptonX Lite provides **layout components** for your **user interface** on [ABP Framework Theming](https://docs.abp.io/en/abp/latest/UI/Angular/Theming). You can use layouts to **organize your user interface**. You can replace the **layout components** and some parts of the **layout components** with the [ABP replaceable component  system](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement).
 
 
 The main responsibility of a theme is to **provide** the layouts. There are **three pre-defined layouts that must be implemented by all the themes:**
@@ -127,7 +127,7 @@ See the [Component Replacement](https://docs.abp.io/en/abp/latest/UI/Angular/Com
 
 ### Brand Component
 
-The **brand component** is a simple component that can be used to display your brand. It contains a **logo** and a **company name**. You can change logo via css but if you want to change logo component, the key is `eThemeLeptonXComponents.Logo`
+The **brand component** is a simple component that can be used to display your brand. It contains a **logo** and a **company name**. You can change the logo via css but if you want to change logo component, the key is `eThemeLeptonXComponents.Logo`
 
 ```js
 ///...
@@ -159,7 +159,7 @@ On websites that have a lot of pages, **breadcrumb navigation** can greatly **en
 
 ## Sidebar Menu Component
 
-Sidebar menus have been used as **a directory for Related Pages** to a **Service** offering, **Navigation** items to a **specific service** or topic and even just as **Links** the user may be interested in.
+Sidebar menus have been used as a **directory for Related Pages** to a **Service** offering, **Navigation** items to a **specific service** or topic and even just as **Links** the user may be interested in.
 
 ```js
 ///...
@@ -173,7 +173,7 @@ Sidebar menus have been used as **a directory for Related Pages** to a **Service
 
 ## Page Alerts Component
 
-Provides contextual **feedback messages** for typical user actions with the handful of **available** and **flexible** **alert messages**. Alerts are available for any length of text, as well as an **optional dismiss button**.
+Provides contextual **feedback messages** for typical user actions with a handful of **available** and **flexible** **alert messages**. Alerts are available for any length of text, as well as an **optional dismiss button**.
 
 ![Page alerts component](../../images/leptonxlite-page-alerts-component.png) 
 ```js
@@ -198,7 +198,7 @@ Toolbar items are used to add **extra functionality to the toolbar**. The toolba
 ```
 
 ## Toolbar Items
-There are two parts to the toolbar. The first is Language-Switch.The second is the User-Profile element. You can swap out each of these parts individually.
+There are two parts to the toolbar. The first is Language-Switch. The second is the User-Profile element. You can swap out each of these parts individually.
 
 ## Language Switch Component
 
@@ -242,7 +242,7 @@ The **mobile navbar component** is used to display the **navbar menu on mobile d
 ///...
 ```
 ## Mobile Navbar Items.
-There are two parts to the mobile navbar. The mobile navbar has  Language-Switch and   User-Profile.You can swap out each of these parts individually. 
+There are two parts of the mobile navbar. The mobile navbar has Language-Switch and User-Profile. You can swap out each of these parts individually. 
 
 The Mobile language-Selection component key is `eThemeLeptonXComponents.MobileLanguageSelection`.
 
