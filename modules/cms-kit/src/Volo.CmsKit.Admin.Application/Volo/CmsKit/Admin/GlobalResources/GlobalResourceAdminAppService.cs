@@ -1,13 +1,16 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.GlobalResources;
 
+[RequiresFeature(CmsKitFeatures.GlobalResourceEnable)]
 [RequiresGlobalFeature(typeof(GlobalResourcesFeature))]
 [Authorize(CmsKitAdminPermissions.GlobalResources.Default)]
 public class GlobalResourceAdminAppService : ApplicationService, IGlobalResourceAdminAppService
@@ -18,10 +21,11 @@ public class GlobalResourceAdminAppService : ApplicationService, IGlobalResource
     {
         GlobalResourceManager = globalResourceManager;
     }
-    
+
     public async Task<GlobalResourcesDto> GetAsync()
     {
-        return new GlobalResourcesDto {
+        return new GlobalResourcesDto
+        {
             StyleContent = (await GlobalResourceManager.GetGlobalStyleAsync()).Value,
             ScriptContent = (await GlobalResourceManager.GetGlobalScriptAsync()).Value
         };

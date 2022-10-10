@@ -346,7 +346,7 @@
     "AdditionalDeveloperCount": "Additional developer count",
     "LicensePrice": "License price",
     "PurchaseDate": "Purchase date",
-    "IsAbpBookDownloaded": "ABP book downloaded",
+    "IsAbpBookDownloaded": "Mastering ABP Book downloaded?",
     "IsMasteringAbpBookDownloadEnabled": "ABP Book download enabled",
     "Permission:Accounting:CustomPaymentLinkGenerator": "Custom Payment Link",
     "CustomPaymentLink": "Custom Payment Link",
@@ -381,7 +381,7 @@
     "PurchaseItems": "Purchase Items",
     "SuccessfullyUpdated": "Successfully updated",
     "SuccessfullyAdded": "Successfully added",
-    "PurchaseState": "Purchase State",
+    "PurchaseState": "Purchase status",
     "ShowBetweenDayCount": "Show Between Days",
     "PurchaseOrder": "Purchase Order",
     "ShowCreateInvoiceOfOrganization": "Create Invoice",
@@ -399,6 +399,7 @@
     "AllowFeatureUpgradeOnLicenseExpire": "Allow feature upgrade on license expire",
     "Deleted{0}": "[Deleted {0}]",
     "Tags": "Tags",
-    "SetTagsInfo": "Tags should be comma-separated. Eg: CSharp, Entity Framework"
+    "SetTagsInfo": "Tags should be comma-separated. Eg: CSharp, Entity Framework",
+    "RejectTrialLicenseWarningMessage": "Are you sure you want to reject this trial license request?"
   }
 }

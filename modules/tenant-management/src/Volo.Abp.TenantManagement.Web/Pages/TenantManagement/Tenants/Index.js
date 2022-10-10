@@ -109,7 +109,7 @@
             _dataTable.ajax.reload();
         });
 
-        _$wrapper.find('button[name=CreateTenant]').click(function (e) {
+        $('#AbpContentToolbar button[name=CreateTenant]').click(function (e) {
             e.preventDefault();
             _createModal.open();
         });

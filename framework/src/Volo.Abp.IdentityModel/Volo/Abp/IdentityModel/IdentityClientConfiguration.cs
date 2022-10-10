@@ -83,6 +83,24 @@ public class IdentityClientConfiguration : Dictionary<string, string>
         get => this.GetOrDefault(nameof(CacheAbsoluteExpiration))?.To<int>() ?? 60 * 30;
         set => this[nameof(CacheAbsoluteExpiration)] = value.ToString(CultureInfo.InvariantCulture);
     }
+    
+    /// <summary>
+    /// ValidateIssuerName.
+    /// Default: true.
+    /// </summary>
+    public bool ValidateIssuerName {
+        get => this.GetOrDefault(nameof(ValidateIssuerName))?.To<bool>() ?? true;
+        set => this[nameof(ValidateIssuerName)] = value.ToString().ToLowerInvariant();
+    }
+    
+    /// <summary>
+    /// ValidateEndpoints.
+    /// Default: true.
+    /// </summary>
+    public bool ValidateEndpoints {
+        get => this.GetOrDefault(nameof(ValidateEndpoints))?.To<bool>() ?? true;
+        set => this[nameof(ValidateEndpoints)] = value.ToString().ToLowerInvariant();
+    }
 
     public IdentityClientConfiguration()
     {
@@ -98,7 +116,9 @@ public class IdentityClientConfiguration : Dictionary<string, string>
         string userName = null,
         string userPassword = null,
         bool requireHttps = true,
-        int cacheAbsoluteExpiration = 60 * 30)
+        int cacheAbsoluteExpiration = 60 * 30,
+        bool validateIssuerName = true,
+        bool validateEndpoints = true)
     {
         this[nameof(Authority)] = authority;
         this[nameof(Scope)] = scope;
@@ -109,5 +129,7 @@ public class IdentityClientConfiguration : Dictionary<string, string>
         this[nameof(UserPassword)] = userPassword;
         this[nameof(RequireHttps)] = requireHttps.ToString().ToLowerInvariant();
         this[nameof(CacheAbsoluteExpiration)] = cacheAbsoluteExpiration.ToString(CultureInfo.InvariantCulture);
+        this[nameof(ValidateIssuerName)] = validateIssuerName.ToString().ToLowerInvariant();
+        this[nameof(ValidateEndpoints)] = validateEndpoints.ToString().ToLowerInvariant();
     }
 }

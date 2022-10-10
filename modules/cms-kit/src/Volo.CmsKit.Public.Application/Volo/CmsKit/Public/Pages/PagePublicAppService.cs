@@ -2,13 +2,16 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Caching;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Public.Pages;
 
+[RequiresFeature(CmsKitFeatures.PageEnable)]
 [RequiresGlobalFeature(typeof(PagesFeature))]
 public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppService
 {
@@ -32,9 +35,7 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
             return null;
         }
 
-        var pageDto = ObjectMapper.Map<Page, PageDto>(page);
-        pageDto.ContentFragments = await ContentParser.ParseAsync(page.Content);
-        return pageDto;
+        return ObjectMapper.Map<Page, PageDto>(page);
     }
 
     public virtual async Task<PageDto> FindDefaultHomePageAsync()

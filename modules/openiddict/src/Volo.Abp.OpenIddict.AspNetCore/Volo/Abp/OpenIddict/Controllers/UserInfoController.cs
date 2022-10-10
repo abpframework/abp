@@ -19,7 +19,7 @@ public class UserInfoController : AbpOpenIdDictControllerBase
     [HttpGet]
     [HttpPost]
     [Produces("application/json")]
-    public async Task<IActionResult> Userinfo()
+    public virtual async Task<IActionResult> Userinfo()
     {
         var user = await UserManager.GetUserAsync(User);
         if (user == null)

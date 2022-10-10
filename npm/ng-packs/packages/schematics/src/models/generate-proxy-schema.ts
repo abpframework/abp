@@ -23,4 +23,9 @@ export interface GenerateProxySchema {
    * Url to API definition
    */
   url?: string;
+
+  /**
+   * Secondary entrypoint for proxy generation
+   */
+  entryPoint?: string;
 }

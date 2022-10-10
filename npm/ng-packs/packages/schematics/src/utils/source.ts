@@ -23,7 +23,7 @@ export function createApiDefinitionGetter(params: GenerateProxySchema) {
     if (!sourceUrl) {
       sourceUrl = getSourceUrl(host, source, apiName);
     }
-    return await getApiDefinition(sourceUrl);
+    return await getApiDefinition(sourceUrl!);
   };
 }
 

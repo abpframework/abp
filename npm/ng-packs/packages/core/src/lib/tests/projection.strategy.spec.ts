@@ -1,15 +1,21 @@
-import { Component, ComponentRef, EmbeddedViewRef, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ComponentRef,
+  EmbeddedViewRef,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import {
   ComponentProjectionStrategy,
-  CONTAINER_STRATEGY,
-  ContainerStrategy,
-  CONTEXT_STRATEGY,
-  DOM_STRATEGY,
   PROJECTION_STRATEGY,
   RootComponentProjectionStrategy,
   TemplateProjectionStrategy,
-} from '../strategies';
+} from '../strategies/projection.strategy';
+import { CONTAINER_STRATEGY, ContainerStrategy } from '../strategies/container.strategy';
+import { DOM_STRATEGY } from '../strategies/dom.strategy';
+import { CONTEXT_STRATEGY } from '../strategies/context.strategy';
 
 describe('ComponentProjectionStrategy', () => {
   @Component({

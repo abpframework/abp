@@ -6,6 +6,7 @@
     "ManageHostFeatures": "Hallinnoi isäntäominaisuuksia",
     "Permission:FeatureManagement": "Ominaisuuden hallinta",
     "Permission:FeatureManagement.ManageHostFeatures": "Hallinnoi isäntäominaisuuksia",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Ominaisuuden {0} arvo ei kelpaa!"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Ominaisuuden {0} arvo ei kelpaa!",
+		"Menu:FeatureManagement": "Ominaisuuden hallinta"
   }
 }

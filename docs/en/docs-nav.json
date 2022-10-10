@@ -44,6 +44,10 @@
           "path": "Startup-Templates/WPF.md"
         },
         {
+          "text": "MAUI",
+          "path": "Startup-Templates/MAUI.md"
+        },
+        {
           "text": "Empty Web Project",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
@@ -848,6 +852,10 @@
                   "path": "UI/Blazor/Page-Header.md"
                 },
                 {
+                  "text": "Page Layout",
+                  "path": "UI/Blazor/Page-Layout.md"
+                },
+                {
                   "text": "Toolbars",
                   "path": "UI/Blazor/Toolbars.md"
                 }
@@ -931,6 +939,10 @@
             {
               "text": "PWA Configuration",
               "path": "UI/Blazor/Pwa-Configuration.md"
+            },
+            {
+              "text": "Layout Hooks",
+              "path": "UI/Blazor/Layout-Hooks.md"
             }
           ]
         },
@@ -976,6 +988,10 @@
                 {
                   "text": "Authorization",
                   "path": "UI/Angular/Authorization.md"
+                },
+                {
+                  "text": "Current User",
+                  "path": "UI/Angular/Current-User.md"
                 },
                 {
                   "text": "HTTP Requests",
@@ -1266,6 +1282,10 @@
           "path": "SignalR-Integration.md"
         }
       ]
+    },
+    {
+      "text": "Dapr Integration",
+      "path": "Dapr/Index.md"
     },
     {
       "text": "Testing",

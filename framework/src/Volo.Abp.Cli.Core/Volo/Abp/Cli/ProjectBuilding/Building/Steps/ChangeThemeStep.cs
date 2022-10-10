@@ -61,7 +61,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ChangeNamespace(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
-            $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Themes.{defaultThemeName}",
+            $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Components",
             "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic"
         );
         
@@ -69,7 +69,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         #region Blazor.Server Projects
 
-        ChangeThemeToBasicForBlazorServerProjects(context, defaultThemeName);
+        ChangeThemeToBasicForBlazorProjects(context, defaultThemeName);
         
         #endregion
 
@@ -104,6 +104,24 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "/angular/angular.json",
             "node_modules/bootstrap-icons/font/bootstrap-icons.css"
         );
+
+        if(defaultThemeName == "LeptonX")
+        {
+            ReplaceMethodNames(
+                context,
+                "/angular/src/app/app.module.ts",
+                "HttpErrorComponent, ",
+                ""
+            );
+            
+            ChangeModuleImportBetweenStatements(
+                context,
+                "/angular/src/app/app.module.ts",
+                "ThemeSharedModule.forRoot",
+                "AccountAdminConfigModule.forRoot",
+                "ThemeSharedModule.forRoot(),"
+            );
+        }
 
         #endregion
     }
@@ -285,14 +303,12 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             {"Domain.Shared", "MyCompanyName.MyProjectName.Domain.Shared.csproj"},
             {"Application", "MyCompanyName.MyProjectName.Application.csproj"},
             {"Application.Contracts", "MyCompanyName.MyProjectName.Application.Contracts.csproj"},
-            {"Blazor.WebAssembly", "MyCompanyName.MyProjectName.Blazor.csproj"},
-            {"Blazor.Server", "MyCompanyName.MyProjectName.Blazor.Server.csproj"},
             {"HttpApi", "MyCompanyName.MyProjectName.HttpApi.csproj"},
-            {"HttpApi.Client", "MyCompanyName.MyProjectName.HttpApi.Client.csproj"},
-            {"Web.Host", "MyCompanyName.MyProjectName.Web.Host.csproj"},
-            {"Web", "MyCompanyName.MyProjectName.Web.csproj"},
+            {"HttpApi.Client", "MyCompanyName.MyProjectName.HttpApi.Client.csproj"}
         };
-
+        
+        AddUiProjectToProjects(projects, context);
+        
         foreach (var project in projects)
         {
             AddLeptonThemeManagementReference(context, project);
@@ -312,6 +328,28 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         foreach (var microserviceServiceProject in microserviceServiceProjects)
         {
             AddLeptonThemeManagementReference(context, microserviceServiceProject);
+        }
+    }
+
+    private void AddUiProjectToProjects(Dictionary<string, string> projects, ProjectBuildContext context)
+    {
+        if (projects.IsNullOrEmpty())
+        {
+            return;
+        }
+        
+        switch (context.BuildArgs.UiFramework)
+        {
+            case UiFramework.Mvc:
+                projects["Web.Host"] = "MyCompanyName.MyProjectName.Web.Host.csproj";
+                projects["Web"] = "MyCompanyName.MyProjectName.Web.csproj";
+                break;
+            case UiFramework.Blazor:
+                projects["Blazor.WebAssembly"] = "MyCompanyName.MyProjectName.Blazor.csproj";
+                break;
+            case UiFramework.BlazorServer:
+                projects["Blazor.Server"] = "MyCompanyName.MyProjectName.Blazor.csproj";
+                break;
         }
     }
     
@@ -490,6 +528,41 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         file.SetLines(lines.Where(x => x != null));
     }
 
+    private void ChangeModuleImportBetweenStatements(
+        ProjectBuildContext context,        
+        string filePath,
+        string firstStatement,
+        string lastStatement,
+        string newStatement)
+    {
+        var file = context.Files.FirstOrDefault(x => x.Name.Contains(filePath));
+        if (file == null)
+        {
+            return;
+        }
+
+        file.NormalizeLineEndings();
+        
+        var lines = file.GetLines();
+        var firstLineIndex = lines.FindIndex(line => line.Contains(firstStatement));
+        var lastLineIndex = lines.FindIndex(line => line.Contains(lastStatement));
+
+        if(firstLineIndex == -1 || lastLineIndex == -1)
+        {
+            return;
+        }
+        
+        lines[firstLineIndex] = newStatement;
+
+        for (var i = firstLineIndex + 1; i <= lastLineIndex; i++)
+        {
+            lines[i] = null;
+        }
+
+
+        file.SetLines(lines.Where(x => x != null));
+    }
+
     protected void ReplaceMethodNames(
         ProjectBuildContext context,        
         string filePath,
@@ -648,7 +721,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         }
     }
     
-    private void ChangeThemeToBasicForBlazorServerProjects(ProjectBuildContext context, string defaultThemeName)
+    private void ChangeThemeToBasicForBlazorProjects(ProjectBuildContext context, string defaultThemeName)
     {
         var projects = new Dictionary<string, string>
         {
@@ -713,7 +786,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             ChangeNamespaceAndKeyword(
                 context,
                 $"/MyCompanyName.MyProjectName.{project.Key}/Pages/_Host.cshtml",
-                $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Themes.{defaultThemeName}",
+                $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Components",
                 "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic",
                 $"Blazor{defaultThemeName}ThemeBundles.Styles.Global",
                 "BlazorBasicThemeBundles.Styles.Global"

@@ -1,10 +1,10 @@
+import { CROSS_ORIGIN_STRATEGY } from '../strategies/cross-origin.strategy';
 import {
-  CROSS_ORIGIN_STRATEGY,
-  DOM_STRATEGY,
   LOADING_STRATEGY,
   ScriptLoadingStrategy,
   StyleLoadingStrategy,
-} from '../strategies';
+} from '../strategies/loading.strategy';
+import { DOM_STRATEGY } from '../strategies/dom.strategy';
 
 const path = 'http://example.com/';
 

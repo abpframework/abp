@@ -1,7 +1,7 @@
-import { chain, SchematicContext, Tree } from '@angular-devkit/schematics';
+import { chain, Tree } from '@angular-devkit/schematics';
 import { GenerateProxySchema } from '../../models';
 import {
-  buildDefaultPath,
+  buildTargetPath,
   createApiDefinitionGetter,
   createApisGenerator,
   createProxyClearer,
@@ -17,10 +17,10 @@ export default function (schema: GenerateProxySchema) {
   const params = removeDefaultPlaceholders(schema);
   const moduleName = params.module || 'app';
 
-  return async (host: Tree, _context: SchematicContext) => {
+  return async (host: Tree) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const target = await resolveProject(host, params.target!);
-    const targetPath = buildDefaultPath(target.definition);
+    const targetPath = buildTargetPath(target.definition, params.entryPoint);
 
     const readProxyConfig = createProxyConfigReader(targetPath);
     const { generated } = readProxyConfig(host);
