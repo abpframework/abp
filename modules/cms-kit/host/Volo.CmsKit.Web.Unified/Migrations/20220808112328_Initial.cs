@@ -433,6 +433,7 @@ namespace Volo.CmsKit.Migrations
                     Content = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
                     Script = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Style = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsHomePage = table.Column<bool>(type: "bit", nullable: false),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
