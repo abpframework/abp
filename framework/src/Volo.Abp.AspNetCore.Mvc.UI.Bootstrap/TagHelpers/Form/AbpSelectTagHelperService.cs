@@ -320,7 +320,8 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
                 },
                 new[]
                 {
-                        iteam
+                        iteam,
+                        iteam.ToCamelCase()
                 },
                 iteam
             );
