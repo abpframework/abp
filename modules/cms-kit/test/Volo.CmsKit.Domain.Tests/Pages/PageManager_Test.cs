@@ -72,12 +72,14 @@ public class PageManager_Test : CmsKitDomainTestBase
 	[Fact]
 	public async Task SetHomePageAsync_ShouldWorkProperly_IfExistHomePage()
 	{
+		await WithUnitOfWorkAsync(async ()=>
+		{
+			var page = await pageRepository.GetAsync(testData.Page_1_Id);
+
+			await pageManager.SetHomePageAsync(page);
+		});
+
 		var page = await pageRepository.GetAsync(testData.Page_1_Id);
-
-		await pageManager.SetHomePageAsync(page);
-
-		await pageRepository.UpdateAsync(page);
-
 		page.IsHomePage.ShouldBeTrue();
 
 		var pageSetAsHomePageAsFalse = await pageRepository.GetAsync(testData.Page_2_Id);
