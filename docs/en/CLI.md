@@ -365,6 +365,7 @@ abp generate-proxy -t csharp -url https://localhost:44302/
 * `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
 * `--working-directory` or `-wd`: Execution directory. For `csharp` and `js` client types.
 * `--url` or `-u`: API definition URL from.
+* `--service-type` or `-sp`: Specifies the service type to generate. `application`, `integration` and `all`, Default value: `all` for C#, `application` for JavaScript / Angular.
 
 > See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 
