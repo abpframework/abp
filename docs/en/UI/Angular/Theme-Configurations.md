@@ -1,7 +1,6 @@
 # Angular UI: Theme Configurations
 
-As of ABP version 6.0, theme packages do not import styles as css modules. In order for theme packages to load styles, the following style configuration must be added to the angular.json file.
-
+Theme packages no longer import styles as CSS modules as of ABP version 6.0. The following style setting needs to be included to the angular.json file in order for theme packages to load styles.
 ## Lepton X Lite
 ```json
 {
