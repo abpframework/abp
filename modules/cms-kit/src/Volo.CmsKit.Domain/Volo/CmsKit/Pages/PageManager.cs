@@ -56,7 +56,8 @@ public class PageManager : DomainService
 		}
 
 		await PageRepository.UpdateManyAsync(currentHomePages);
-
+		await PageRepository.UpdateAsync(page);
+		
 		page.SetIsHomePage(true);
 	}
 
