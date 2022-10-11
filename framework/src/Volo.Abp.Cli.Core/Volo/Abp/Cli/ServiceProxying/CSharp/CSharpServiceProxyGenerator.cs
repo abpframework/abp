@@ -88,6 +88,11 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         await CreateGenerateProxyJsonFile(args, applicationApiDescriptionModel);
     }
 
+    protected override ServiceType? GetDefaultServiceType(GenerateProxyArgs args)
+    {
+        return ServiceType.All;
+    }
+
     private async Task CreateGenerateProxyJsonFile(GenerateProxyArgs args, ApplicationApiDescriptionModel applicationApiDescriptionModel)
     {
         var folder = args.Folder.IsNullOrWhiteSpace() ? DefaultNamespace : args.Folder;

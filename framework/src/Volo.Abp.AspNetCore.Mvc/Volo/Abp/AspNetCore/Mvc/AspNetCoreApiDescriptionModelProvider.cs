@@ -103,6 +103,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             _options.ControllerNameGenerator(controllerType, setting),
             FindGroupName(controllerType) ?? apiDescription.GroupName,
             apiDescription.IsRemoteService(),
+            apiDescription.IsIntegrationService(),
             apiDescription.GetProperty<ApiVersion>()?.ToString(),
             controllerType,
             _modelOptions.IgnoredInterfaces
