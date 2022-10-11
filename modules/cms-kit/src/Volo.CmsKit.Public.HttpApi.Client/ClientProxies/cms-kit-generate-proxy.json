@@ -553,6 +553,21 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Public.Pages.IPagePublicAppService"
+            },
+            "FindDefaultHomePageAsync": {
+              "uniqueName": "FindDefaultHomePageAsync",
+              "name": "FindDefaultHomePageAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit-public/pages",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.CmsKit.Contents.PageDto",
+                "typeSimple": "Volo.CmsKit.Contents.PageDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.CmsKit.Public.Pages.IPagePublicAppService"
             }
           }
         },

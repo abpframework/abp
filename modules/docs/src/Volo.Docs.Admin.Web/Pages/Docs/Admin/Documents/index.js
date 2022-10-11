@@ -6,7 +6,9 @@ $(function () {
         return $datePicker.data('date');
     };
 
-
+	moment.localeData().preparse = (s)=>s;
+    moment.localeData().postformat = (s)=>s;
+	
     $('.singledatepicker').daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,

@@ -8,18 +8,16 @@ In this article, I will show you how to create a gRPC service and consume it fro
 
 ## Creating the Application
 
-> I will use ABP version 6.0 for this article. I am using the 6.0.0-rc.4 version since the stable version hasn't been published at the time I am writing this article. If it is released while you're reading this, do not specify the `--version` and `--preview` parameters in the following commands.
-
 Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed it yet:
 
 ````bash
-dotnet tool install -g Volo.Abp.Cli --version 6.0.0-rc.4
+dotnet tool install -g Volo.Abp.Cli
 ````
 
-or update to version 6.0.0-rc.4 if you've already installed a previous version:
+or update to the latest version if you've already installed an old version:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 6.0.0-rc.4
+dotnet tool update Volo.Abp.Cli -g
 ````
 
 Create an empty folder, open a command-line terminal and type the following command in the terminal window to create a new ABP solution using the ABP CLI:
