@@ -220,6 +220,7 @@
     "SuccessfullyReIndexAllPosts": "All posts have been successfully reindexed.",
     "Permission:FullSearch": "Full text search",
     "Menu:CliAnalytics": "Cli Analytics",
+    "Menu:Reports": "Reports",
     "TemplateName": "Template name",
     "TemplateVersion": "Template version",
     "DatabaseProvider": "Database provider",
@@ -231,8 +232,10 @@
     "UiFramework": "Ui framework",
     "Options": "Options",
     "CliAnalytics": "Cli Analytics",
+    "Reports": "Reports",
     "Permission:CliAnalyticses": "Cli Analyticses",
     "Permission:CliAnalytics": "Cli Analytics",
+    "Permission:Reports": "Reports",
     "Search": "Search",
     "ClearFilter": "Clear filter",
     "LicensePrivateKey": "License private key",
@@ -346,7 +349,7 @@
     "AdditionalDeveloperCount": "Additional developer count",
     "LicensePrice": "License price",
     "PurchaseDate": "Purchase date",
-    "IsAbpBookDownloaded": "ABP book downloaded",
+    "IsAbpBookDownloaded": "Mastering ABP Book downloaded?",
     "IsMasteringAbpBookDownloadEnabled": "ABP Book download enabled",
     "Permission:Accounting:CustomPaymentLinkGenerator": "Custom Payment Link",
     "CustomPaymentLink": "Custom Payment Link",
@@ -381,7 +384,7 @@
     "PurchaseItems": "Purchase Items",
     "SuccessfullyUpdated": "Successfully updated",
     "SuccessfullyAdded": "Successfully added",
-    "PurchaseState": "Purchase State",
+    "PurchaseState": "Purchase status",
     "ShowBetweenDayCount": "Show Between Days",
     "PurchaseOrder": "Purchase Order",
     "ShowCreateInvoiceOfOrganization": "Create Invoice",
@@ -400,6 +403,7 @@
     "Deleted{0}": "[Deleted {0}]",
     "Tags": "Tags",
     "SetTagsInfo": "Tags should be comma-separated. Eg: CSharp, Entity Framework",
-    "RejectTrialLicenseWarningMessage": "Are you sure you want to reject this trial license request?"
+    "RejectTrialLicenseWarningMessage": "Are you sure you want to reject this trial license request?",
+    "ExportToExcel": "Export to Excel"
   }
 }

@@ -163,6 +163,7 @@ public abstract class AppTemplateBase : TemplateInfo
         if (context.BuildArgs.MobileApp == MobileApp.Maui)
         {
             steps.Add(new MauiChangeApplicationIdGuidStep());
+            steps.Add(new MauiChangePortStep());
         }
         else
         {
