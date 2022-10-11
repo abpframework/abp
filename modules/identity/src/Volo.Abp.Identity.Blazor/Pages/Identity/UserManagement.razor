@@ -64,7 +64,7 @@
                                 <TabPanel Name="UserInformations">
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
-                                            <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
+                                            <FieldLabel>@L["DisplayName:UserName"] *</FieldLabel>
                                             <TextEdit @bind-Text="NewEntity.UserName" Autofocus="true">
                                                 <Feedback>
                                                     <ValidationError/>
@@ -94,7 +94,7 @@
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
-                                            <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
+                                            <FieldLabel>@L["DisplayName:Password"] *</FieldLabel>
                                             <Addons>
                                                 <Addon AddonType="AddonType.Body">
                                                     <TextEdit Role="@_passwordTextRole" @bind-Text="NewEntity.Password">
@@ -109,7 +109,7 @@
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
-                                            <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
+                                            <FieldLabel>@L["DisplayName:Email"] *</FieldLabel>
                                             <TextEdit @bind-Text="NewEntity.Email">
                                                 <Feedback>
                                                     <ValidationError/>
@@ -183,7 +183,7 @@
                                 <TabPanel Name="UserInformations">
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
-                                            <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
+                                            <FieldLabel>@L["DisplayName:UserName"] *</FieldLabel>
                                             <TextEdit @bind-Text="EditingEntity.UserName" Autofocus="true">
                                                 <Feedback>
                                                     <ValidationError/>
@@ -228,7 +228,7 @@
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
-                                            <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
+                                            <FieldLabel>@L["DisplayName:Email"] *</FieldLabel>
                                             <TextEdit @bind-Text="EditingEntity.Email">
                                                 <Feedback>
                                                     <ValidationError/>
