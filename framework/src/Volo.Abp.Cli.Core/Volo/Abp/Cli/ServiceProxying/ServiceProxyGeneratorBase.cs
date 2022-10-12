@@ -43,8 +43,7 @@ public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator wher
             throw new CliUsageException($"Module name: {args.Module} is invalid");
         }
 
-        var serviceType = args.ServiceType ?? GetDefaultServiceType(args);
-
+        var serviceType = GetServiceType(args);
         switch (serviceType)
         {
             case ServiceType.Application:
@@ -58,6 +57,11 @@ public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator wher
         var apiDescriptionModel = ApplicationApiDescriptionModel.Create();
         apiDescriptionModel.AddModule(moduleDefinition);
         return apiDescriptionModel;
+    }
+
+    protected virtual ServiceType? GetServiceType(GenerateProxyArgs args)
+    {
+        return args.ServiceType ?? GetDefaultServiceType(args);
     }
 
     protected abstract ServiceType? GetDefaultServiceType(GenerateProxyArgs args);

@@ -76,6 +76,12 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
             commandBuilder.Append($" --url {url}");
         }
 
+        var serviceType = GetServiceType(args);
+        if (args.ServiceType != null)
+        {
+            commandBuilder.Append($" --service-type {serviceType.ToString().ToLower()}");
+        }
+
         _cmdhelper.RunCmd(commandBuilder.ToString());
     }
 
