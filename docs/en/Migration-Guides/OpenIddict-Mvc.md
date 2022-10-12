@@ -27,7 +27,7 @@
   with 
 
   ```csharp
-  typeof(AbpAccountWebModule),
+  typeof(AbpAccountWebOpenIddictModule),
   ```
 
 - In **MyApplicationWebModule.cs** `ConfigureServices` method **update authentication configuration**:
