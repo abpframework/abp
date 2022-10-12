@@ -36,6 +36,7 @@
     "PersonalSettingsSaved": "Henkilökohtaiset asetukset tallennettu",
     "PasswordChanged": "Salasana vaihdettu",
     "NewPasswordConfirmFailed": "Vahvista uusi salasana.",
+    "NewPasswordSameAsOld": "Uusi salasana ei voi olla sama kuin vanha salasana.",
     "Manage": "Hallitse",
     "MyAccount": "Tilini",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Onko itserekisteröinti käytössä",
