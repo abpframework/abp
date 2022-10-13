@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
@@ -15,7 +16,7 @@ public class AbpPageToolbarButtonViewComponent : AbpViewComponent
         StringLocalizerFactory = stringLocalizerFactory;
     }
 
-    public IViewComponentResult Invoke(
+    public async Task<IViewComponentResult> InvokeAsync(
         ILocalizableString text,
         string name,
         string icon,
@@ -31,11 +32,11 @@ public class AbpPageToolbarButtonViewComponent : AbpViewComponent
         return View(
             "~/Pages/Shared/Components/AbpPageToolbar/Button/Default.cshtml",
             new AbpPageToolbarButtonViewModel(
-                text.Localize(StringLocalizerFactory),
+                await text.LocalizeAsync(StringLocalizerFactory),
                 name,
                 icon,
                 id,
-                busyText?.Localize(StringLocalizerFactory),
+                busyText == null ? null : await busyText.LocalizeAsync(StringLocalizerFactory),
                 iconType,
                 type,
                 size,

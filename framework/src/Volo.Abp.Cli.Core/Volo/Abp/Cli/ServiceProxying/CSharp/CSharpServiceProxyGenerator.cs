@@ -21,7 +21,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
     private const string MethodPlaceholder = "<method placeholder>";
     private const string ClassName = "<className>";
     private const string ServiceInterface = "<serviceInterface>";
-    private readonly static string[] ServicePostfixes = { "AppService", "ApplicationService" , "Service"};
+    private readonly static string[] ServicePostfixes = { "AppService", "ApplicationService", "IntService", "IntegrationService" , "Service"};
     private const string DefaultNamespace = "ClientProxies";
     private const string Namespace = "<namespace>";
     private const string AppServicePrefix = "Volo.Abp.Application.Services";
@@ -293,7 +293,19 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
     private bool ShouldGenerateMethod(string appServiceTypeName, ActionApiDescriptionModel action)
     {
-        return action.ImplementFrom.StartsWith(AppServicePrefix) || action.ImplementFrom.StartsWith(appServiceTypeName);
+        var shouldGenerateMethod = action.ImplementFrom.StartsWith(AppServicePrefix) || action.ImplementFrom.StartsWith(appServiceTypeName);
+
+        if (!shouldGenerateMethod)
+        {
+            shouldGenerateMethod = IsAppServiceInterface(GetRealTypeName(action.ImplementFrom));
+        }
+
+        return shouldGenerateMethod;
+    }
+
+    private bool IsAppServiceInterface(string typeName)
+    {
+        return typeName.StartsWith("I") && ServicePostfixes.Any(typeName.EndsWith);
     }
 
     private string GetTypeNamespace(string typeFullName)

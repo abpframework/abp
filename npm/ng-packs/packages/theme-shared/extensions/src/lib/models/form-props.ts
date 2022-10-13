@@ -9,6 +9,7 @@ import {
   PropContributorCallback,
   PropContributorCallbacks,
   PropData,
+  PropDisplayTextResolver,
   PropList,
   PropPredicate,
   Props,
@@ -69,6 +70,7 @@ export class FormProp<R = any> extends Prop<R> {
   readonly template?: Type<any>;
   readonly className?: string;
   readonly group?: FormPropGroup | undefined;
+  readonly displayTextResolver?: PropDisplayTextResolver<R>;
 
   constructor(options: FormPropOptions<R>) {
     super(
@@ -93,6 +95,7 @@ export class FormProp<R = any> extends Prop<R> {
     this.id = options.id || options.name;
     const defaultValue = options.defaultValue;
     this.defaultValue = isFalsyValue(defaultValue) ? defaultValue : defaultValue || null;
+    this.displayTextResolver = options.displayTextResolver;
   }
 
   static create<R = any>(options: FormPropOptions<R>) {
@@ -128,6 +131,7 @@ export type FormPropOptions<R = any> = O.Optional<
   | 'defaultValue'
   | 'options'
   | 'id'
+  | 'displayTextResolver'
 >;
 
 export type CreateFormPropDefaults<R = any> = Record<string, FormProp<R>[]>;

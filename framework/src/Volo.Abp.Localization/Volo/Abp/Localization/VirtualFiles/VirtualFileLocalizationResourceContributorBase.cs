@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
@@ -11,11 +12,14 @@ namespace Volo.Abp.Localization.VirtualFiles;
 
 public abstract class VirtualFileLocalizationResourceContributorBase : ILocalizationResourceContributor
 {
+    public bool IsDynamic => false;
+
     private readonly string _virtualPath;
     private IVirtualFileProvider _virtualFileProvider;
     private Dictionary<string, ILocalizationDictionary> _dictionaries;
     private bool _subscribedForChanges;
     private readonly object _syncObj = new object();
+    private LocalizationResourceBase _resource;
 
     protected VirtualFileLocalizationResourceContributorBase(string virtualPath)
     {
@@ -24,6 +28,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     public virtual void Initialize(LocalizationResourceInitializationContext context)
     {
+        _resource = context.Resource;
         _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
     }
 
@@ -35,6 +40,17 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     public virtual void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
     {
         GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
+    }
+
+    public Task FillAsync(string cultureName, Dictionary<string, LocalizedString> dictionary)
+    {
+        Fill(cultureName, dictionary);
+        return Task.CompletedTask;
+    }
+
+    public Task<IEnumerable<string>> GetSupportedCulturesAsync()
+    {
+        return Task.FromResult((IEnumerable<string>)GetDictionaries().Keys);
     }
 
     private Dictionary<string, ILocalizationDictionary> GetDictionaries()
@@ -84,7 +100,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
             var dictionary = CreateDictionaryFromFile(file);
             if (dictionaries.ContainsKey(dictionary.CultureName))
             {
-                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
+                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined! Localization resource: {_resource.ResourceName}");
             }
 
             dictionaries[dictionary.CultureName] = dictionary;

@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Určite chcete túto stránku vymazať?",
     "PageId": "Stránka",
     "Pages": "Stránky",
-    "PageSlugInformation": "Slug sa používa v URL. Vaša URL bude '/pages/{{slug}}'.",
+    "PageSlugInformation": "Slug sa používa v URL. Vaša URL bude '/{{slug}}'.",
     "Permission:BlogManagement": "Správa blogov",
     "Permission:BlogManagement.Create": "Vytvoriť",
     "Permission:BlogManagement.Delete": "Zmazať",
