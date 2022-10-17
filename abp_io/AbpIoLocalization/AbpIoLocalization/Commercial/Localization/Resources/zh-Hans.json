@@ -202,10 +202,10 @@
     "WhatHappensWhenLicenseEndsExplanation4": "你不能在你的许可证到期后安装ABP商业平台上添加的新模块和主题。",
     "WhatHappensWhenLicenseEndsExplanation5": "你不能使用ABP Suite。",
     "WhatHappensWhenLicenseEndsExplanation6": "你不能再获得<a href=\"{0}\">高级支持</a>。",
-    "WhatHappensWhenLicenseEndsExplanation7": "如果你想继续获得这些奖励，你可以继续续费你的许可证。如果你在许可证到期后<strong>1个月</strong>内续费，将会应用以下折扣：团队许可证{0}%折扣，商业许可证{1}%折扣，企业许可证{2}%折扣。",
+    "WhatHappensWhenLicenseEndsExplanation7": "如果您想继续获得这些好处，您可以延长（续订）您的许可证。 如果您在许可证到期后 <strong>1 个月</strong>内延长许可证，将应用以下折扣：团队许可证 {0}； 营业执照{1}； 企业许可证 {2}。",
     "WhatHappensWhenLicenseEndsExplanation8": "您生成的 ABP 项目未存储在我们的服务器上。 因此，您有责任保留下载的源代码。 当您的许可证到期时，将无法获取您生成的 ABP 项目源代码。",
     "WhenShouldIRenewMyLicense": "我什么时候应该续订我的许可?",
-    "WhenShouldIRenewMyLicenseExplanation": "如果您在许可证到期后 <strong>1 个月</strong>内续订许可证，将享受以下折扣：团队许可证 {0}% 折扣、商业许可证 {1}% 折扣、企业许可证 {2}% 折扣 . 如果您在许可证到期后 <strong>1 个月</strong>续订许可证，续订价格将与许可证购买价格相同，并且续订不会有折扣。",
+    "WhenShouldIRenewMyLicenseExplanation": "如果您在许可证到期后 <strong>1 个月</strong> 内续订许可证，将适用以下折扣：团队许可证 {0}； 营业执照{1}； 企业许可证 {2}。 但是，如果您在许可证到期后 <strong>1 个月</strong> 后续订许可证，则续订价格将与许可证购买价格相同，并且您的续订不会有任何折扣。",
     "TrialPlan": "你们有试用计划吗?",
     "TrialPlanExplanation": "ABP商业团队许可证有14天的试用期。若要了解更多信息，请访问<a href={0} target='_blank'>这里</a>。此外，我们为团队许可证提供30天的金额返还保证。你只需要在30天内请求退款。商业和企业许可证将提供60%的金额返还保证。这是因为商业和企业许可证包含了所有模块和主题的全部源代码。",
     "DoYouAcceptBankWireTransfer": "你们接受银行电汇吗?",
@@ -564,7 +564,7 @@
     "MyOrganizations_Detail_PaymentProviderInfo": "如果您通过 <i>{0}</i> 网关购买了许可证，它会将 PDF 发票发送到您的电子邮件地址，请参阅 <a href=\"{1}\" target=\"_blank\"> {0} 发票。</a>",
     "MyOrganizations_Detail_PayUInfo": "如果您是通过<i>PayU</i>网关购买的，请点击\"索取发票\"按钮并填写账单信息。",
     "MyOrganizations_Detail_ConclusionInfo": "您的发票申请将在 {0} 个工作日内完成。",
-    "ExtendYourLicense": "延长您的 {0} 许可",
+    "ExtendYourLicense": "延长您的 <span class=\"text-primary\">{0}</span> 许可",
     "Continue": "继续",
     "PurchaseLicense": "购买 {0} 许可证",
     "DownloadInvoiceModal_DownloadInvoice": "下载发票",
@@ -737,6 +737,9 @@
     "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">点击这里获取确认邮件</a> 如果你还没有收到。",
     "WhichLicenseTypeYouAreInterestedIn": "你感兴趣的许可证类型是什么？",
     "BlazoriseLicense": "我们是否需要购买Blazorise许可证？",
-    "BlazoriseLicenseExplanation": "我公司Volosoft和公司Megabit之间有合作协议，根据此协议，购买将同时包含了Blazorise许可证与ABP商业产品，因此我们的客户不需要再额外购买Blazorise许可证。"
+    "BlazoriseLicenseExplanation": "我公司Volosoft和公司Megabit之间有合作协议，根据此协议，购买将同时包含了Blazorise许可证与ABP商业产品，因此我们的客户不需要再额外购买Blazorise许可证。",
+    "ExtendPaymentInfoSection_DeveloperPrice": "{0} x 开发者价格",
+    "ExtendPaymentInfoSection_DiscountRate": "折扣 {0}%",
+    "TotalNetPrice": "总净价"
   }
 }
