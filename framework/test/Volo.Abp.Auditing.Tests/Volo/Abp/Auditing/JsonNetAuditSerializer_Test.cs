@@ -8,13 +8,6 @@ namespace Volo.Abp.Auditing;
 
 public class JsonNetAuditSerializer_Test : AbpAuditingTestBase
 {
-    private readonly JsonNetAuditSerializer _jsonNetAuditSerializer;
-
-    public JsonNetAuditSerializer_Test()
-    {
-        _jsonNetAuditSerializer = GetRequiredService<JsonNetAuditSerializer>();
-    }
-
     protected override void AfterAddApplication(IServiceCollection services)
     {
         services.Configure<AbpAuditingOptions>(options =>
@@ -34,7 +27,7 @@ public class JsonNetAuditSerializer_Test : AbpAuditingTestBase
                 {"input2", new Input2Dto {UserName = "admin", Password = "1q2w3E*", Birthday = DateTime.Now}}
             };
 
-        var str = _jsonNetAuditSerializer.Serialize(arguments);
+        var str = GetRequiredService<JsonNetAuditSerializer>().Serialize(arguments);
 
         str.ShouldNotContain("IdCard");
         str.ShouldNotContain("1q2w3E*");
