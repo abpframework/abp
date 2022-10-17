@@ -120,7 +120,7 @@ public static class FileEntryExtensions
                     }
                 }
 
-                if (lines[i+1].Contains("<TEMPLATE-REMOVE"))
+                if (i < lines.Length - 1 && lines[i+1].Contains("<TEMPLATE-REMOVE"))
                 {
                     continue;
                 }
