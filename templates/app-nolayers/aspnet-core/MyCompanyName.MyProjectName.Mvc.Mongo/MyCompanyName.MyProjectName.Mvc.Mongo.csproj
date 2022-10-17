@@ -100,4 +100,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="$(UserProfile)\.nuget\packages\*\*\contentFiles\any\net6.0\*.abppkg*.json" />
+  </ItemGroup>
+
 </Project>
