@@ -203,6 +203,7 @@
     "WhatHappensWhenLicenseEndsExplanation5": "你不能使用ABP Suite。",
     "WhatHappensWhenLicenseEndsExplanation6": "你不能再获得<a href=\"{0}\">高级支持</a>。",
     "WhatHappensWhenLicenseEndsExplanation7": "如果您想继续获得这些好处，您可以延长（续订）您的许可证。 如果您在许可证到期后 <strong>1 个月</strong>内延长许可证，将应用以下折扣：团队许可证 {0}； 营业执照{1}； 企业许可证 {2}。",
+    "discountForYears": "{0}% 折扣 {1} 年",
     "WhatHappensWhenLicenseEndsExplanation8": "您生成的 ABP 项目未存储在我们的服务器上。 因此，您有责任保留下载的源代码。 当您的许可证到期时，将无法获取您生成的 ABP 项目源代码。",
     "WhenShouldIRenewMyLicense": "我什么时候应该续订我的许可?",
     "WhenShouldIRenewMyLicenseExplanation": "如果您在许可证到期后 <strong>1 个月</strong> 内续订许可证，将适用以下折扣：团队许可证 {0}； 营业执照{1}； 企业许可证 {2}。 但是，如果您在许可证到期后 <strong>1 个月</strong> 后续订许可证，则续订价格将与许可证购买价格相同，并且您的续订不会有任何折扣。",
