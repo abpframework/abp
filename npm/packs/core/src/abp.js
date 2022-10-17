@@ -204,12 +204,10 @@ var abp = abp || {};
 
     abp.auth = abp.auth || {};
 
-    abp.auth.policies = abp.auth.policies || {};
-
     abp.auth.grantedPolicies = abp.auth.grantedPolicies || {};
 
     abp.auth.isGranted = function (policyName) {
-        return abp.auth.policies[policyName] != undefined && abp.auth.grantedPolicies[policyName] != undefined;
+        return abp.auth.grantedPolicies[policyName] != undefined;
     };
 
     abp.auth.isAnyGranted = function () {
