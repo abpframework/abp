@@ -35,6 +35,7 @@
     "PersonalSettingsSaved": "Setări personale salvate",
     "PasswordChanged": "Parola schimbată",
     "NewPasswordConfirmFailed": "Vă rugăm să confirmaţi noua parolă.",
+    "NewPasswordSameAsOld": "Noua parolă trebuie să fie diferită de cea curentă.",
     "Manage": "Administrează",
     "MyAccount": "Contul meu",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Este înregistrarea personală activată",

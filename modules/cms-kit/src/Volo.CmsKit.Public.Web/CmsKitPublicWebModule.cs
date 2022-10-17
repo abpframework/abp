@@ -1,9 +1,11 @@
 ﻿using Markdig;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.Ui.LayoutHooks;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
@@ -75,6 +77,11 @@ public class CmsKitPublicWebModule : AbpModule
         {
             options.DisableModule(CmsKitPublicRemoteServiceConsts.ModuleName);
         });
+
+        Configure<AbpDistributedCacheOptions>(options =>
+        {
+            options.KeyPrefix = "CmsKit:";
+        });
     }
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
@@ -88,21 +95,31 @@ public class CmsKitPublicWebModule : AbpModule
                 options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/BlogPost", @"/blogs/{blogSlug}/{blogPostSlug:minlength(1)}");
             });
         }
-        
+
         if (GlobalFeatureManager.Instance.IsEnabled<GlobalResourcesFeature>())
         {
             Configure<AbpLayoutHookOptions>(options =>
             {
                 options.Add(
-                    LayoutHooks.Head.Last, 
-                    typeof(GlobalStyleViewComponent) 
+                    LayoutHooks.Head.Last,
+                    typeof(GlobalStyleViewComponent)
                 );
                 options.Add(
-                    LayoutHooks.Body.Last, 
-                    typeof(GlobalScriptViewComponent) 
+                    LayoutHooks.Body.Last,
+                    typeof(GlobalScriptViewComponent)
                 );
             });
         }
 
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        
+        if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+        {
+            app.UseHomePageDefaultMiddleware();
+        }
     }
 }

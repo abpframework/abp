@@ -66,6 +66,9 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
             options.Commands[CliCommand.Name] = typeof(CliCommand);
+            
+            options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Pro");
+            options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Lite");
         });
 
         Configure<AbpCliServiceProxyOptions>(options =>

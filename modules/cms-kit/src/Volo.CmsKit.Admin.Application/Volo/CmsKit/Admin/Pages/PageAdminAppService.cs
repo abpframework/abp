@@ -86,4 +86,12 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     {
         await PageRepository.DeleteAsync(id);
     }
+
+    [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]
+    public virtual async Task SetAsHomePageAsync(Guid id)
+    {
+        var page = await PageRepository.GetAsync(id);
+
+		await PageManager.SetHomePageAsync(page);
+    }
 }

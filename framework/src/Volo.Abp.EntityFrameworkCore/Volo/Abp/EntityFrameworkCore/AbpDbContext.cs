@@ -618,8 +618,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 return;
             }
 
-            var dateTimeValueConverter = new AbpDateTimeValueConverter(Clock);
-
             var dateTimePropertyInfos = typeof(TEntity).GetProperties()
                 .Where(property =>
                     (property.PropertyType == typeof(DateTime) ||
@@ -633,7 +631,9 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 modelBuilder
                     .Entity<TEntity>()
                     .Property(property.Name)
-                    .HasConversion(dateTimeValueConverter);
+                    .HasConversion(property.PropertyType == typeof(DateTime)
+                        ? new AbpDateTimeValueConverter(Clock)
+                        : new AbpNullableDateTimeValueConverter(Clock));
             });
         }
     }
