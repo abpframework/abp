@@ -13,7 +13,7 @@
   </Target>
 
   <ItemGroup>
-    <Content Remove="$(UserProfile)\.nuget\packages\*\*\contentFiles\any\net6.0\*.abppkg*.json" />
+    <Content Remove="$(UserProfile)\.nuget\packages\*\*\contentFiles\any\*\*.abppkg*.json" />
   </ItemGroup>
 
 </Project>
