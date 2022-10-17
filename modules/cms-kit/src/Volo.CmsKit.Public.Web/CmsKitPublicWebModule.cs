@@ -116,6 +116,10 @@ public class CmsKitPublicWebModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
-        app.UseHomePageDefaultMiddleware();
+        
+        if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+        {
+            app.UseHomePageDefaultMiddleware();
+        }
     }
 }

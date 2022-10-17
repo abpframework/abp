@@ -36,6 +36,7 @@
     "PersonalSettingsSaved": "Osebne nastavitve so shranjene",
     "PasswordChanged": "Geslo je spremenjeno",
     "NewPasswordConfirmFailed": "Prosimo potrdite novo geslo.",
+    "NewPasswordSameAsOld": "Novo geslo mora biti drugačno od starega.",
     "Manage": "Upravljaj",
     "MyAccount": "Moj račun",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Je lastna registracija uporabnika omogočena",

@@ -93,7 +93,5 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         var page = await PageRepository.GetAsync(id);
 
 		await PageManager.SetHomePageAsync(page);
-
-		await PageRepository.UpdateAsync(page);
     }
 }
