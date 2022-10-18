@@ -61,7 +61,7 @@ Properties:
 
 ## Newtonsoft
 
-Add [Volo.Abp.Json.Newtonsoft](https://www.nuget.org/packages/Volo.Abp.Json.Newtonsoft) pcakge and `AbpJsonNewtonsoftModule` to replace the `System Text Json`.
+Add [Volo.Abp.Json.Newtonsoft](https://www.nuget.org/packages/Volo.Abp.Json.Newtonsoft) packge and depends on `AbpJsonNewtonsoftModule` to replace the `System Text Json`.
 
 #### AbpNewtonsoftJsonSerializerOptions
 
