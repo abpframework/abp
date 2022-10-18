@@ -46,7 +46,7 @@ public class ProductManager
 
 Properties:
 * **InputDateTimeFormats(`List<string>`)**: Formats of input JSON date, Empty string means default format. You can provide multiple formats to parse the date.
-* **OutputDateTimeFormat(`bool`)**: Format of output json date, Null or empty string means default format.
+* **OutputDateTimeFormat(`string`)**: Format of output json date, Null or empty string means default format.
 
 ## System Text Json
 
