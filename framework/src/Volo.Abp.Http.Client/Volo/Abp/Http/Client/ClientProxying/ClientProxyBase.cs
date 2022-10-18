@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -91,8 +92,9 @@ public class ClientProxyBase<TService> : ITransientDependency
              * it before we finish doing our work with the stream */
             return (T)(object)new RemoteStreamContent(
                 await responseContent.ReadAsStreamAsync(),
+                WebUtility.UrlDecode(
                 responseContent.Headers?.ContentDisposition?.FileNameStar ??
-                RemoveQuotes(responseContent.Headers?.ContentDisposition?.FileName).ToString(),
+                RemoveQuotes(responseContent.Headers?.ContentDisposition?.FileName).ToString()),
                 responseContent.Headers?.ContentType?.ToString(),
                 responseContent.Headers?.ContentLength);
         }
