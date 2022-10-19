@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Domain.Entities.Caching;
@@ -110,6 +111,7 @@ public class Product : FullAuditedAggregateRoot<Guid>
 }
 
 [Serializable]
+[CacheName("ProductCacheItem")]
 public class ProductCacheItem
 {
     public Guid Id { get; set; }

@@ -36,6 +36,7 @@
     "PersonalSettingsSaved": "Kişisel ayarlar kaydedildi",
     "PasswordChanged": "Şifre değiştirildi",
     "NewPasswordConfirmFailed": "Lütfen yeni şifreyi onaylayın.",
+    "NewPasswordSameAsOld": "Yeni şifre eski şifre ile aynı olamaz.",
     "Manage": "Manage",
     "MyAccount": "Hesabım",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "self-registration etkin mi ?",

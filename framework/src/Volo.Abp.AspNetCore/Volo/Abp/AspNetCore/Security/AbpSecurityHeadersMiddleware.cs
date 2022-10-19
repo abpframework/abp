@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
 
@@ -8,6 +10,13 @@ namespace Volo.Abp.AspNetCore.Security;
 
 public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
 {
+    public IOptions<AbpSecurityHeadersOptions> Options { get; set; }
+
+    public AbpSecurityHeadersMiddleware(IOptions<AbpSecurityHeadersOptions> options)
+    {
+        Options = options;
+    }
+
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         /*X-Content-Type-Options header tells the browser to not try and “guess” what a mimetype of a resource might be, and to just take what mimetype the server has returned as fact.*/
@@ -21,6 +30,14 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
 
         /*The X-Content-Type-Options response HTTP header is a marker used by the server to indicate that the MIME types advertised in the Content-Type headers should be followed and not be changed. The header allows you to avoid MIME type sniffing by saying that the MIME types are deliberately configured.*/
         AddHeaderIfNotExists(context, "X-Content-Type-Options", "nosniff");
+
+        if (Options.Value.UseContentSecurityPolicyHeader)
+        {
+            AddHeaderIfNotExists(context, "Content-Security-Policy",
+                Options.Value.ContentSecurityPolicyValue.IsNullOrEmpty()
+                    ? "object-src 'none'; form-action 'self'; frame-ancestors 'none'"
+                    : Options.Value.ContentSecurityPolicyValue);
+        }
 
         await next.Invoke(context);
     }
