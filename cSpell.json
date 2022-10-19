@@ -2,7 +2,10 @@
     "version": "0.2",
     "language": "en",
     "words": [
-        "Blazor"
+        "Blazor",
+        "Sweetalert",
+        "Toastr",
+        "Volo"
     ],
     "ignoreWords": [],
     "patterns": [
@@ -44,6 +47,10 @@
             "name": "HTML Tags",
             "pattern": "<[^>]*>",
             "description": "Reference: https://stackoverflow.com/questions/11229831/regular-expression-to-remove-html-tags-from-a-string"
+        },
+        {
+            "name": "Markdown Image",
+            "pattern": "!\\[(.*)\\]\\((.*)\\)"
         }
     ],
     "ignoreRegExpList": [
@@ -54,7 +61,8 @@
         "Snippet references",
         "Snippet references 2",
         "Multi-line code blocks",
-        "HTML Tags"
+        "HTML Tags",
+        "Markdown Image"
     ],
     "ignorePaths": []
 }
