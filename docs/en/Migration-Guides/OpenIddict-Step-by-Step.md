@@ -256,7 +256,7 @@ for creating the host builder.
 
 ## Source code of samples and module
 
-* [Open source tiered & separate auth server application migrate Identity Server to OpenIddct](https://github.com/abpframework/abp-samples/tree/master/Ids2OpenId)
+* [Open source tiered & separate auth server application migrate Identity Server to OpenIddict](https://github.com/abpframework/abp-samples/tree/master/Ids2OpenId)
 * [OpenIddict module document](https://docs.abp.io/en/abp/6.0/Modules/OpenIddict)
 * [OpenIddict module source code](https://github.com/abpframework/abp/tree/rel-6.0/modules/openiddict)
 
