@@ -30,6 +30,16 @@ public class RemoteStreamContentTestController : AbpController
         Response.Headers.Add("Content-Disposition", "attachment; filename=myDownload.rtf");
         return new RemoteStreamContent(memoryStream, "download.rtf", "application/rtf");
     }
+    
+    [HttpGet]
+    [Route("Download_With_Chinese_File_Name")]
+    public async Task<IRemoteStreamContent> Download_With_Chinese_File_Name_Async()
+    {
+        var memoryStream = new MemoryStream();
+        await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("DownloadAsync"));
+        memoryStream.Position = 0;
+        return new RemoteStreamContent(memoryStream, "下载文件.rtf", "application/rtf");
+    }
 
     [HttpPost]
     [Route("Upload")]
