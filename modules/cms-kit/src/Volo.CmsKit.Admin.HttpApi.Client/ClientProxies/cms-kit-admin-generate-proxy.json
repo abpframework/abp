@@ -1955,6 +1955,18 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "TagId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "Status",
                   "jsonName": null,
                   "type": "Volo.CmsKit.Blogs.BlogPostStatus?",

@@ -44,6 +44,10 @@
           "path": "Startup-Templates/WPF.md"
         },
         {
+          "text": "MAUI",
+          "path": "Startup-Templates/MAUI.md"
+        },
+        {
           "text": "Empty Web Project",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
@@ -982,6 +986,10 @@
                   "path": "UI/Angular/Authorization.md"
                 },
                 {
+                  "text": "Current User",
+                  "path": "UI/Angular/Current-User.md"
+                },
+                {
                   "text": "HTTP Requests",
                   "path": "UI/Angular/HTTP-Requests.md"
                 },
@@ -1000,6 +1008,10 @@
                 {
                   "text": "Features",
                   "path": "UI/Angular/Features.md"
+                },
+                {
+                  "text": "Global Features",
+                  "path": "UI/Angular/GlobalFeatures.md"
                 },
                 {
                   "text": "Permission Management",
@@ -1053,6 +1065,10 @@
                 {
                   "text": "Confirmation Popup",
                   "path": "UI/Angular/Confirmation-Service.md"
+                },
+                {
+                  "text": "Loading Directive",
+                  "path": "UI/Angular/Loading-Directive.md"
                 },
                 {
                   "text": "Toast Overlay",
@@ -1315,6 +1331,16 @@
         {
           "text": "IdentityServer",
           "path": "Modules/IdentityServer.md"
+        },
+		{
+          "text": "OpenIddict",
+	  "items": [
+		{
+		 "text": "OpenIddict Migration Guide",
+		 "path": "Migration-Guides/OpenIddict-Step-by-Step.md"
+		}
+	   ],
+          "path": "Modules/OpenIddict.md"
         },
         {
           "text": "Permission Management",

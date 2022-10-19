@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.Identity.HttpApi.Client",
-  "hash": "dad63d5e17ea5af2f0fe08156f16b8ea",
+  "hash": "bc9f7cc72ca54feb5b6d79b1af51af40",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Application.Contracts",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Http.Client",
+          "namespace": "Volo.Abp.Http.Client",
+          "name": "AbpHttpClientModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpIdentityHttpApiClientModule"
+      "name": "AbpIdentityHttpApiClientModule",
+      "summary": null
     }
   ]
 }

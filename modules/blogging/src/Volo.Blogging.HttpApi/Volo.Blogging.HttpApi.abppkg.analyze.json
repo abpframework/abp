@@ -1,11 +1,24 @@
 {
   "name": "Volo.Blogging.HttpApi",
-  "hash": "7e01f3bdcf88041ab5d7632be87716a5",
+  "hash": "8042ded421aaa18ba43eb38eac0346c8",
   "contents": [
     {
       "namespace": "Volo.Blogging",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts",
+          "namespace": "Volo.Blogging",
+          "name": "BloggingApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
+          "namespace": "Volo.Abp.AspNetCore.Mvc",
+          "name": "AbpAspNetCoreMvcModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "BloggingHttpApiModule"
+      "name": "BloggingHttpApiModule",
+      "summary": null
     }
   ]
 }

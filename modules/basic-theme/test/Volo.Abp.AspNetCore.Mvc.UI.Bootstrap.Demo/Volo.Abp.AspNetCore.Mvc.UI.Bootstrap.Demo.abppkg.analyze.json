@@ -1,0 +1,24 @@
+{
+  "name": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo",
+  "hash": "83ada06d39e165a4c7a05e5328be3b51",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+          "name": "AbpAspNetCoreMvcUiBasicThemeModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Autofac",
+          "namespace": "Volo.Abp.Autofac",
+          "name": "AbpAutofacModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpAspNetCoreMvcUiBootstrapDemoModule",
+      "summary": null
+    }
+  ]
+}

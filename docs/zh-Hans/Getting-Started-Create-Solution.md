@@ -20,7 +20,7 @@
 使用 ABP CLI 的 `new` 命令创建一个新项目:
 
 ````shell
-abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u blazor{{else if UI == "BlazorServer"}} -u blazor-server{{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes"}}{{if UI == "MVC" || UI == "BlazorServer"}} --tiered{{else}} --separate-identity-server{{end}}{{end}}
+abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u blazor{{else if UI == "BlazorServer"}} -u blazor-server{{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes"}}{{if UI == "MVC" || UI == "BlazorServer"}} --tiered{{else}} --separate-auth-server{{end}}{{end}}
 ````
 
 *你可以使用不同级别的命名空间, 例如: BookStore、Acme.BookStore或 Acme.Retail.BookStore.*
@@ -33,7 +33,7 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u 
 
 {{ else }}
 
-* `--separate-identity-server` 参数用于将Identity Server应用程序与API主机应用程序分隔开. 如果未指定, 则服务器上将只有一个端点.
+* `--separate-auth-server` 参数用于将Identity Server应用程序与API主机应用程序分隔开. 如果未指定, 则服务器上将只有一个端点.
 
 {{ end }}
 

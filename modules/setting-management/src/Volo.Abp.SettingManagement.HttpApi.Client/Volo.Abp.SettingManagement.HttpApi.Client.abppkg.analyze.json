@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.SettingManagement.HttpApi.Client",
-  "hash": "ca14518fa6993b7549f98795d0814d4d",
+  "hash": "bdec068b4adeb1d80054e4c3b3f20ce7",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.Application.Contracts",
+          "namespace": "Volo.Abp.SettingManagement",
+          "name": "AbpSettingManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Http.Client",
+          "namespace": "Volo.Abp.Http.Client",
+          "name": "AbpHttpClientModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpSettingManagementHttpApiClientModule"
+      "name": "AbpSettingManagementHttpApiClientModule",
+      "summary": null
     }
   ]
 }

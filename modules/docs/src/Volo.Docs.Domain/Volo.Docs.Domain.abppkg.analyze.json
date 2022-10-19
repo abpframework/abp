@@ -1,87 +1,720 @@
 {
   "name": "Volo.Docs.Domain",
-  "hash": "4d8e34c525b142b8afff3b212951f70e",
+  "hash": "4e93e6908541bdab47105ea951441d85",
   "contents": [
     {
       "namespace": "Volo.Docs",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Docs.Domain.Shared",
+          "namespace": "Volo.Docs",
+          "name": "DocsDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "namespace": "Volo.Abp.Domain",
+          "name": "AbpDddDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "DocsDomainModule"
+      "name": "DocsDomainModule",
+      "summary": null
     },
     {
+      "baseClass": {
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "SetName",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "SetFormat",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "format",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "SetNavigationDocumentName",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "navigationDocumentName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "SetParametersDocumentName",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "parametersDocumentName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "SetDefaultDocumentName",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "defaultDocumentName",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "namespace": "Volo.Docs.Projects",
       "primaryKeyType": "Guid",
-      "summary": null,
-      "collectionProperties": [],
-      "navigationProperties": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
       "contentType": "aggregateRoot",
-      "name": "Project"
+      "name": "Project",
+      "summary": null
     },
     {
+      "baseClass": {
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddContributor",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "username",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "userProfileUrl",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "avatarUrl",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "commitCount",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllContributors",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveContributor",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "username",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "userProfileUrl",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "avatarUrl",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "DocumentContributor",
+          "isAsync": false,
+          "name": "FindContributor",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "username",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "userProfileUrl",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "avatarUrl",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "namespace": "Volo.Docs.Documents",
       "primaryKeyType": "Guid",
-      "summary": null,
-      "collectionProperties": [
-        "Volo.Docs.Documents.DocumentContributor"
-      ],
-      "navigationProperties": [],
+      "collectionProperties": {
+        "contributors": {
+          "name": "DocumentContributor",
+          "namespace": "Volo.Docs.Documents",
+          "declaringAssemblyName": "Volo.Docs.Domain"
+        }
+      },
+      "navigationProperties": {},
       "contentType": "aggregateRoot",
-      "name": "Document"
+      "name": "Document",
+      "summary": null
     },
     {
       "namespace": "Volo.Docs.GitHub.Documents",
-      "summary": null,
+      "baseClass": {
+        "name": "DomainService",
+        "namespace": "Volo.Abp.Domain.Services",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "methods": [
+        {
+          "returnType": "Document",
+          "isAsync": true,
+          "name": "GetDocumentAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Project",
+              "name": "project",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "documentName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "languageCode",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "lastKnownSignificantUpdateTime",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<VersionInfo>",
+          "isAsync": true,
+          "name": "GetVersionsAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Project",
+              "name": "project",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "DocumentResource",
+          "isAsync": true,
+          "name": "GetResource",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Project",
+              "name": "project",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "resourceName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "languageCode",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "LanguageConfig",
+          "isAsync": true,
+          "name": "GetLanguageListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Project",
+              "name": "project",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "contentType": "domainService",
-      "name": "GithubDocumentSource"
+      "name": "GithubDocumentSource",
+      "summary": null
     },
     {
       "namespace": "Volo.Docs.GitHub.Documents",
-      "summary": null,
+      "baseClass": {
+        "name": "DomainService",
+        "namespace": "Volo.Abp.Domain.Services",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "methods": [
+        {
+          "returnType": "Boolean",
+          "isAsync": false,
+          "name": "HasPatchSignificantChanges",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "patch",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "contentType": "domainService",
-      "name": "GithubPatchAnalyzer"
+      "name": "GithubPatchAnalyzer",
+      "summary": null
     },
     {
       "namespace": "Volo.Docs.FileSystem.Documents",
-      "summary": null,
+      "baseClass": {
+        "name": "DomainService",
+        "namespace": "Volo.Abp.Domain.Services",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "methods": [
+        {
+          "returnType": "Document",
+          "isAsync": true,
+          "name": "GetDocumentAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Project",
+              "name": "project",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "documentName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "languageCode",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "lastKnownSignificantUpdateTime",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<VersionInfo>",
+          "isAsync": true,
+          "name": "GetVersionsAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Project",
+              "name": "project",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "LanguageConfig",
+          "isAsync": true,
+          "name": "GetLanguageListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Project",
+              "name": "project",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "DocumentResource",
+          "isAsync": true,
+          "name": "GetResource",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Project",
+              "name": "project",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "resourceName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "languageCode",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "contentType": "domainService",
-      "name": "FileSystemDocumentSource"
+      "name": "FileSystemDocumentSource",
+      "summary": null
     },
     {
       "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
-      "summary": null,
+      "baseClass": {
+        "name": "DomainService",
+        "namespace": "Volo.Abp.Domain.Services",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "methods": [
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "CreateIndexIfNeededAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "AddOrUpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Document",
+              "name": "document",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "AddOrUpdateManyAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "IEnumerable<Document>",
+              "name": "documents",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAllAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAllByProjectIdAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "projectId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<EsDocument>",
+          "isAsync": true,
+          "name": "SearchAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "context",
+              "isOptional": false
+            },
+            {
+              "type": "Guid",
+              "name": "projectId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "languageCode",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Int32>",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Int32>",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "ValidateElasticSearchEnabled",
+          "summary": null,
+          "parameters": []
+        }
+      ],
       "contentType": "domainService",
-      "name": "ElasticDocumentFullSearch"
+      "name": "ElasticDocumentFullSearch",
+      "summary": null
     },
     {
       "namespace": "Volo.Docs.Projects",
-      "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Docs.Projects",
         "primaryKeyType": "Guid",
-        "summary": null,
-        "collectionProperties": [],
-        "navigationProperties": [],
+        "collectionProperties": {},
+        "navigationProperties": {},
         "contentType": "entity",
-        "name": "Project"
+        "name": "Project",
+        "summary": null
       },
       "contentType": "repositoryInterface",
-      "name": "IProjectRepository"
+      "name": "IProjectRepository",
+      "summary": null
     },
     {
       "namespace": "Volo.Docs.Documents",
-      "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Docs.Documents",
         "primaryKeyType": "Guid",
-        "summary": null,
-        "collectionProperties": [
-          "Volo.Docs.Documents.DocumentContributor"
-        ],
-        "navigationProperties": [],
+        "collectionProperties": {
+          "contributors": {
+            "name": "DocumentContributor",
+            "namespace": "Volo.Docs.Documents",
+            "declaringAssemblyName": "Volo.Docs.Domain"
+          }
+        },
+        "navigationProperties": {},
         "contentType": "entity",
-        "name": "Document"
+        "name": "Document",
+        "summary": null
       },
       "contentType": "repositoryInterface",
-      "name": "IDocumentRepository"
+      "name": "IDocumentRepository",
+      "summary": null
     }
   ]
 }

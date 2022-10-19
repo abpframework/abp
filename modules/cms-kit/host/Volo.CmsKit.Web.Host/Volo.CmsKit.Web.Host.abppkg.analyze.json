@@ -1,11 +1,89 @@
 {
   "name": "Volo.CmsKit.Web.Host",
-  "hash": "cc4d27ed5d3b15d46c68449fc409a9ea",
+  "hash": "f25d1c7dc806e53d4176ef547e4325a9",
   "contents": [
     {
       "namespace": "Volo.CmsKit",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.CmsKit.Web",
+          "namespace": "Volo.CmsKit.Web",
+          "name": "CmsKitWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.CmsKit.HttpApi.Client",
+          "namespace": "Volo.CmsKit",
+          "name": "CmsKitHttpApiClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Authentication.OAuth",
+          "namespace": "Volo.Abp.AspNetCore.Authentication.OAuth",
+          "name": "AbpAspNetCoreAuthenticationOAuthModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.Client",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.Client",
+          "name": "AbpAspNetCoreMvcClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+          "name": "AbpAspNetCoreMvcUiBasicThemeModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Autofac",
+          "namespace": "Volo.Abp.Autofac",
+          "name": "AbpAutofacModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching.StackExchangeRedis",
+          "namespace": "Volo.Abp.Caching.StackExchangeRedis",
+          "name": "AbpCachingStackExchangeRedisModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Http.Client.IdentityModel.Web",
+          "namespace": "Volo.Abp.Http.Client.IdentityModel.Web",
+          "name": "AbpHttpClientIdentityModelWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Web",
+          "namespace": "Volo.Abp.Identity.Web",
+          "name": "AbpIdentityWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.HttpApi.Client",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityHttpApiClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Web",
+          "namespace": "Volo.Abp.TenantManagement.Web",
+          "name": "AbpTenantManagementWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.HttpApi.Client",
+          "namespace": "Volo.Abp.TenantManagement",
+          "name": "AbpTenantManagementHttpApiClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.HttpApi.Client",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementHttpApiClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.HttpApi.Client",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementHttpApiClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Serilog",
+          "namespace": "Volo.Abp.AspNetCore.Serilog",
+          "name": "AbpAspNetCoreSerilogModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "CmsKitWebHostModule"
+      "name": "CmsKitWebHostModule",
+      "summary": null
     }
   ]
 }

@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Cài đặt quản lý",
     "Feature:SettingManagementEnable": "Bật quản lý cài đặt",
     "Feature:SettingManagementEnableDescription": "Bật cài đặt hệ thống quản lý trong ứng dụng.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Cho phép người thuê thay đổi cài đặt email.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Cho phép người thuê thay đổi cài đặt email."
+    "Feature:AllowChangingEmailSettings": "Cho phép thay đổi cài đặt email.",
+    "Feature:AllowChangingEmailSettingsDescription": "Cho phép thay đổi cài đặt email."
   }
 }

@@ -1,0 +1,12 @@
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { <%= macro(libraryName) %>_ROUTE_PROVIDERS } from './providers/route.provider';
+
+@NgModule()
+export class <%= pascal(libraryName) %>ConfigModule {
+  static forRoot(): ModuleWithProviders<<%= pascal(libraryName) %>ConfigModule> {
+    return {
+      ngModule: <%= pascal(libraryName) %>ConfigModule,
+      providers: [<%= macro(libraryName) %>_ROUTE_PROVIDERS],
+    };
+  }
+}

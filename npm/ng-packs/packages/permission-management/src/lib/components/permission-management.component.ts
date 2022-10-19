@@ -160,8 +160,14 @@ export class PermissionManagementComponent
         }
 
         return per;
+      }).map((per,index,permissions) => {
+        const childrens = permissions
+          .filter(p => p.parentName === per.name);
+          if(childrens.length > 0 && childrens.every(x => !x.isGranted)){
+            return { ...per, isGranted: false };
+          }
+        return per
       });
-
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
     }, 0);

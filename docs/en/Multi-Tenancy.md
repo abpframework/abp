@@ -44,6 +44,9 @@ Configure<AbpMultiTenancyOptions>(options =>
     options.MultiTenancyMiddlewareErrorPageBuilder = async (context, exception) =>
     {
         // Handle the exception.
+
+        // Return true to stop the pipeline, false to continue.
+        return true;
     };
 });
 ```

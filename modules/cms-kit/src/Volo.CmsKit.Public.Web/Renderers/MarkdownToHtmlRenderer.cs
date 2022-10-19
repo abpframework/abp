@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Markdig;
 using System.Threading.Tasks;
 using System.Web;
-using Volo.Abp.DependencyInjection;
 using Ganss.XSS;
+using Markdig;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.CmsKit.Public.Web.Renderers;
 
@@ -20,9 +20,9 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
         _htmlSanitizer = new HtmlSanitizer();
     }
 
-    public async Task<string> RenderAsync(string rawMarkdown, bool preventXSS = false)
+    public Task<string> RenderAsync(string rawMarkdown, bool allowHtmlTags = true, bool preventXSS = true)
     {
-        if (preventXSS)
+        if (!allowHtmlTags)
         {
             rawMarkdown = EncodeHtmlTags(rawMarkdown, true);
         }
@@ -34,7 +34,7 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
             html = _htmlSanitizer.Sanitize(html);
         }
 
-        return html;
+        return Task.FromResult(html);
     }
 
 

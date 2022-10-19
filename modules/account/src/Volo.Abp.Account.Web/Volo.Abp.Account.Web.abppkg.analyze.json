@@ -1,11 +1,39 @@
 {
   "name": "Volo.Abp.Account.Web",
-  "hash": "5fb2aa05261d4febe7ea7083d80fea74",
+  "hash": "bc4f7eb3473979ea911f86e7a6a16e77",
   "contents": [
     {
       "namespace": "Volo.Abp.Account.Web",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Account.Application.Contracts",
+          "namespace": "Volo.Abp.Account",
+          "name": "AbpAccountApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.AspNetCore",
+          "namespace": "Volo.Abp.Identity.AspNetCore",
+          "name": "AbpIdentityAspNetCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "name": "AbpAspNetCoreMvcUiThemeSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.ExceptionHandling",
+          "namespace": "Volo.Abp.ExceptionHandling",
+          "name": "AbpExceptionHandlingModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpAccountWebModule"
+      "name": "AbpAccountWebModule",
+      "summary": null
     }
   ]
 }

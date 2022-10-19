@@ -1,7 +1,7 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
@@ -25,7 +25,8 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
         BlogPostRepository = blogPostRepository;
     }
 
-    public virtual async Task<BlogPostPublicDto> GetAsync([NotNull] string blogSlug, [NotNull] string blogPostSlug)
+    public virtual async Task<BlogPostPublicDto> GetAsync(
+        [NotNull] string blogSlug, [NotNull] string blogPostSlug)
     {
         var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
@@ -38,11 +39,13 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
     {
         var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
-        var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.AuthorId, BlogPostStatus.Published, input.MaxResultCount,
+        var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.AuthorId, input.TagId,
+            BlogPostStatus.Published, input.MaxResultCount,
             input.SkipCount, input.Sorting);
 
         return new PagedResultDto<BlogPostPublicDto>(
-            await BlogPostRepository.GetCountAsync(blogId: blog.Id, statusFilter: BlogPostStatus.Published, authorId: input.AuthorId),
+            await BlogPostRepository.GetCountAsync(blogId: blog.Id, tagId: input.TagId,
+                statusFilter: BlogPostStatus.Published, authorId: input.AuthorId),
             ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
     }
 

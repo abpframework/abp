@@ -4,7 +4,6 @@ import {
   branchAndMerge,
   chain,
   move,
-  SchematicContext,
   SchematicsException,
   Tree,
   url,
@@ -13,7 +12,7 @@ import { Exception } from '../../enums';
 import { GenerateProxySchema, ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
-  buildDefaultPath,
+  buildTargetPath,
   createControllerToServiceMapper,
   createImportRefsToModelReducer,
   createImportRefToEnumMapper,
@@ -36,13 +35,13 @@ export default function (schema: GenerateProxySchema) {
   const moduleName = params.module || 'app';
 
   return chain([
-    async (tree: Tree, _context: SchematicContext) => {
+    async (tree: Tree) => {
       const getRootNamespace = createRootNamespaceGetter(params);
       const solution = await getRootNamespace(tree);
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const target = await resolveProject(tree, params.target!);
-      const targetPath = buildDefaultPath(target.definition);
+      const targetPath = buildTargetPath(target.definition, params.entryPoint);
       const readProxyConfig = createProxyConfigReader(targetPath);
       const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
       const data = readProxyConfig(tree);

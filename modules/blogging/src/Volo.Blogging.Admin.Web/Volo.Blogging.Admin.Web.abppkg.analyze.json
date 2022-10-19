@@ -1,11 +1,34 @@
 {
   "name": "Volo.Blogging.Admin.Web",
-  "hash": "faf036383d0b2be635023b8f9627038d",
+  "hash": "6a6c39d9b44557a1d1f5cf9d5ec4cff0",
   "contents": [
     {
       "namespace": "Volo.Blogging.Admin",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Blogging.Admin.Application.Contracts",
+          "namespace": "Volo.Blogging.Admin",
+          "name": "BloggingAdminApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+          "name": "AbpAspNetCoreMvcUiBootstrapModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Bundling",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Bundling",
+          "name": "AbpAspNetCoreMvcUiBundlingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "BloggingAdminWebModule"
+      "name": "BloggingAdminWebModule",
+      "summary": null
     }
   ]
 }

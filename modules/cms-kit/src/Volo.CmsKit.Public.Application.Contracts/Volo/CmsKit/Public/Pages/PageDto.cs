@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
+using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Public.Pages;
 

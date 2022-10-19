@@ -80,7 +80,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
 
   private _isLoading$ = new BehaviorSubject(false);
 
-  private destroy$ = new Subject();
+  private destroy$ = new Subject<void>();
 
   private delay: MonoTypeOperatorFunction<QueryParamsType>;
 

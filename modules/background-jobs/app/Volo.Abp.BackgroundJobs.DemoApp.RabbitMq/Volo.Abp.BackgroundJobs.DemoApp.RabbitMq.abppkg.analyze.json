@@ -1,0 +1,29 @@
+{
+  "name": "Volo.Abp.BackgroundJobs.DemoApp.RabbitMq",
+  "hash": "fb04b6447b18e8e3c7f6bacee000a8ca",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.BackgroundJobs.DemoApp.RabbitMq",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.DemoApp.Shared",
+          "namespace": "Volo.Abp.BackgroundJobs.DemoApp.Shared",
+          "name": "DemoAppSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Autofac",
+          "namespace": "Volo.Abp.Autofac",
+          "name": "AbpAutofacModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.RabbitMQ",
+          "namespace": "Volo.Abp.BackgroundJobs.RabbitMQ",
+          "name": "AbpBackgroundJobsRabbitMqModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "DemoAppRabbitMqModule",
+      "summary": null
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Volo.BloggingTestApp.MongoDB",
+  "hash": "e35ff08226d480f18eaaa1945791d9a0",
+  "contents": [
+    {
+      "namespace": "Volo.BloggingTestApp.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.MongoDB",
+          "namespace": "Volo.Abp.Identity.MongoDB",
+          "name": "AbpIdentityMongoDbModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Blogging.MongoDB",
+          "namespace": "Volo.Blogging.MongoDB",
+          "name": "BloggingMongoDbModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.MongoDB",
+          "namespace": "Volo.Abp.SettingManagement.MongoDB",
+          "name": "AbpSettingManagementMongoDbModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.MongoDB",
+          "namespace": "Volo.Abp.PermissionManagement.MongoDB",
+          "name": "AbpPermissionManagementMongoDbModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BlobStoring.Database.MongoDB",
+          "namespace": "Volo.Abp.BlobStoring.Database.MongoDB",
+          "name": "BlobStoringDatabaseMongoDbModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "BloggingTestAppMongoDbModule",
+      "summary": null
+    }
+  ]
+}
