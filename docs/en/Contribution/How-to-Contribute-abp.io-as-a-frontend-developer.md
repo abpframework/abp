@@ -11,7 +11,7 @@
 - Abp CLI https://docs.abp.io/en/abp/latest/cli
 - A code editor
 
-Note: This arcticle prepare Windows OS. You may change the path type of your OS. an Example
+Note: This article prepare Windows OS. You may change the path type of your OS. an Example
 
 Windows: `templates\app\aspnet-core\src\MyCompanyName.MyProjectName.DbMigrator\appsettings.json`
 
