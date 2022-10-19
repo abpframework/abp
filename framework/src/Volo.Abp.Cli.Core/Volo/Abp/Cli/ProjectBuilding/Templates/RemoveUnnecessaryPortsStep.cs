@@ -58,8 +58,13 @@ public class RemoveUnnecessaryPortsStep : ProjectBuildPipelineStep
                 f.Name.Contains("MyCompanyName.MyProjectName.DbMigrator") && f.Name.EndsWith("appsettings.json"));
 
         var appSettingsJsonObject = JObject.Parse(dbMigratorAppSettings.Content);
-        var authServerJsonObject = (JObject)appSettingsJsonObject["IdentityServer"] ?? (JObject)appSettingsJsonObject["OpenIddict"];
-        var clientsJsonObject = (JObject)authServerJsonObject["Clients"] ?? (JObject)authServerJsonObject["Applications"];
+        var authServerJsonObject = (JObject)appSettingsJsonObject?["IdentityServer"] ?? (JObject)appSettingsJsonObject["OpenIddict"];
+        var clientsJsonObject = (JObject)authServerJsonObject?["Clients"] ?? (JObject)authServerJsonObject?["Applications"];
+
+        if (clientsJsonObject == null)
+        {
+            return;
+        }
 
         if (context.BuildArgs.UiFramework != UiFramework.Blazor)
         {
