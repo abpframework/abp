@@ -3,6 +3,7 @@
     "language": "en",
     "words": [
         "ABP's",
+        "abpframework",
         "aspnetcore",
         "Blazor",
         "CQRS",
@@ -24,6 +25,7 @@
         "PKCE",
         "preconfigured",
         "scrollbars",
+        "Serilog",
         "Shoudly",
         "Shouldly",
         "Sweetalert",
