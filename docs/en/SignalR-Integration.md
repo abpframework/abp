@@ -235,4 +235,4 @@ Refer to the Microsoft's documentation to [host and scale](https://docs.microsof
 ## See Also
 
 - [Microsoft SignalR documentation](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction)
-- [Real-Time Messaging In A Distributed Architecture Using ABP, SingalR & RabbitMQ](https://volosoft.com/blog/RealTime-Messaging-Distributed-Architecture-Abp-SingalR-RabbitMQ)
+- [Real-Time Messaging In A Distributed Architecture Using ABP, SignalR & RabbitMQ](https://volosoft.com/blog/RealTime-Messaging-Distributed-Architecture-Abp-SingalR-RabbitMQ)
