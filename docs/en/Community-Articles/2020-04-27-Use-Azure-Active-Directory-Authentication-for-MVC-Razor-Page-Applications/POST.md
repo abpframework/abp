@@ -12,7 +12,7 @@ Two different **alternative approaches** for AzureAD integration will be demonst
 
 > There is **no difference** in functionality between these approaches. AddAzureAD is an abstracted way of OpenIdConnection ([source](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADAuthenticationBuilderExtensions.cs#L122)) with predefined cookie settings.
 >
-> However there are key differences in integration to ABP applications because of default configurated signin schemes which will be explained below.
+> However there are key differences in integration to ABP applications because of default configured signin schemes which will be explained below.
 
 ## 1. AddOpenIdConnect 
 
