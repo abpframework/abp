@@ -4,18 +4,27 @@
     "words": [
         "aspnetcore",
         "Blazor",
+        "CQRS",
+        "Dapr",
         "Datatable",
         "datepicker",
         "dismissable",
         "hoverable",
+        "Iddict",
+        "Keysize",
+        "Linq",
         "Luxon",
         "Minifier",
+        "PKCE",
         "scrollbars",
+        "Shoudly",
         "Sweetalert",
+        "Telerik",
         "Templating",
         "Toastr",
         "toolset",
-        "Volo"
+        "Volo",
+        "Xunit"
     ],
     "ignoreWords": [],
     "patterns": [
