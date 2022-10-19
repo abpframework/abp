@@ -30,7 +30,7 @@ public class RemoteStreamContentOutputFormatter : OutputFormatter
             if (!remoteStream.FileName.IsNullOrWhiteSpace() && !context.HttpContext.Response.Headers.ContainsKey(HeaderNames.ContentDisposition))
             {
                 var contentDisposition = new ContentDispositionHeaderValue("attachment");
-                contentDisposition.SetMimeFileName(remoteStream.FileName);
+                contentDisposition.SetHttpFileName(remoteStream.FileName);
                 context.HttpContext.Response.Headers[HeaderNames.ContentDisposition] = contentDisposition.ToString();
             }
 
