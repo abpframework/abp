@@ -108,15 +108,15 @@ public class BundlingService : IBundlingService, ITransientDependency
             Parameters = parameters
         };
 
+        scriptContext.BundleDefinitions.AddIfNotContains(
+            x => x.Source == "_framework/blazor.webassembly.js", 
+            () => new BundleDefinition { Source = "_framework/blazor.webassembly.js" });
+
         foreach (var bundleDefinition in bundleDefinitions)
         {
             var contributor = CreateContributorInstance(bundleDefinition.BundleContributorType);
             contributor.AddScripts(scriptContext);
         }
-        
-        scriptContext.BundleDefinitions.AddIfNotContains(
-            x => x.Source == "_framework/blazor.webassembly.js", 
-            () => new BundleDefinition { Source = "_framework/blazor.webassembly.js" });
 
         return scriptContext;
     }
