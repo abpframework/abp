@@ -48,9 +48,9 @@ Open a command prompt (terminal) in the folder containing your solution (.sln) f
 
 This action will add the module depencies and also module migration. After this action, run `FileActionsDemo.DbMigrator` to update the database.
 
-### Setting up Blob Storaging
+### Setting up Blob Storage
 
-BLOB Strorage system works with `Containers`. Before the using blob storage, we need to create our blob container.
+BLOB Storage system works with `Containers`. Before the using blob storage, we need to create our blob container.
 
 Create a class that name `MyFileContainer` at the `FileActionsDemo.Domain` project.
 
