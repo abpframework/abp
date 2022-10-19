@@ -9,6 +9,7 @@
         "aspnetcore",
         "Autofac",
         "Blazor",
+        "Blazorise",
         "CQRS",
         "crossfade",
         "Dapr",
