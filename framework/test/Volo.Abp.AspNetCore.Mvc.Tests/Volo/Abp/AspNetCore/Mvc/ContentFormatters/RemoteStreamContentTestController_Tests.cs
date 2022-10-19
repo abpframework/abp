@@ -19,6 +19,16 @@ public class RemoteStreamContentTestController_Tests : AspNetCoreMvcTestBase
         result.Content.Headers.ContentLength.ShouldBe("DownloadAsync".Length);
         (await result.Content.ReadAsStringAsync()).ShouldBe("DownloadAsync");
     }
+    
+     [Fact]
+    public async Task Download_With_Custom_Content_Disposition_Async()
+    {
+        var result = await GetResponseAsync("/api/remote-stream-content-test/download-with-custom-content-disposition");
+        result.Content.Headers.ContentType?.ToString().ShouldBe("application/rtf");
+        result.Content.Headers.ContentDisposition?.FileName.ShouldBe("myDownload.rtf");
+        result.Content.Headers.ContentLength.ShouldBe("DownloadAsync".Length);
+        (await result.Content.ReadAsStringAsync()).ShouldBe("DownloadAsync");
+    }
 
     [Fact]
     public async Task UploadAsync()
