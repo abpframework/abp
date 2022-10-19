@@ -91,12 +91,17 @@ public class DatabaseManagementSystemChangeStep : ProjectBuildPipelineStep
 
     private void ChangeUseSqlServer(ProjectBuildContext context, string newUseMethodForEfModule, string newUseMethodForDbContext = null)
     {
-        if (newUseMethodForDbContext == null)
+        var oldUseMethod = "UseSqlServer";
+
+        if (newUseMethodForEfModule.IsNullOrWhiteSpace())
+        {
+            newUseMethodForEfModule = oldUseMethod;
+        }
+
+        if (newUseMethodForDbContext.IsNullOrWhiteSpace())
         {
             newUseMethodForDbContext = newUseMethodForEfModule;
         }
-
-        var oldUseMethod = "UseSqlServer";
 
         var efCoreModuleClass = context.Files.First(f => f.Name.EndsWith("EntityFrameworkCoreModule.cs", StringComparison.OrdinalIgnoreCase));
         efCoreModuleClass.ReplaceText(oldUseMethod, newUseMethodForEfModule);
