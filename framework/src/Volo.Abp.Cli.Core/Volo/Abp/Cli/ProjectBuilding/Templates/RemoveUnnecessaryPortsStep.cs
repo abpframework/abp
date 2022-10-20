@@ -32,23 +32,28 @@ public class RemoveUnnecessaryPortsStep : ProjectBuildPipelineStep
 
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
         {
-            appJson.Property("ClientUrl")?.Remove();
-            portsToRemoveFromCors.Add("4200");
+            var clientUrl = appJson.Property("ClientUrl")?.ToString();
+            portsToRemoveFromCors.Add("http://localhost:4200");
+            
+            if (!clientUrl.IsNullOrWhiteSpace())
+            {
+                httpApiHostAppSettings.SetContent(httpApiHostAppSettings.Content.Replace(clientUrl, string.Empty));
+            }
         }
-
+        
         if (context.BuildArgs.UiFramework != UiFramework.Blazor)
         {
-            portsToRemoveFromCors.Add("44307");
+            portsToRemoveFromCors.Add("https://localhost:44307");
         }
 
+        
         if (appJson["CorsOrigins"] != null)
         {
-            appJson["CorsOrigins"] = string.Join(",",
-                appJson["CorsOrigins"].ToString().Split(",").Where(u => !portsToRemoveFromCors.Any(u.EndsWith))
-            );
+            var corsOrigins = appJson["CorsOrigins"].ToString();
+            var newCorsOrigins = string.Join(",", corsOrigins.Split(',').Where(x => !portsToRemoveFromCors.Contains(x)));
+            
+            httpApiHostAppSettings.SetContent(httpApiHostAppSettings.Content.Replace(corsOrigins, newCorsOrigins));
         }
-
-        httpApiHostAppSettings.SetContent(JsonConvert.SerializeObject(appSettingsJson, Formatting.Indented));
     }
 
     private static void RemoveUnnecessaryDbMigratorClients(ProjectBuildContext context)
