@@ -211,7 +211,7 @@ You can find the source code of the completed example [here](https://github.com/
   
   to your openid configuration.
   
-* Help! I keep getting ***AADSTS50011: The reply URL specified in the request does not match the reply URLs configured for the application*** error!
+* Help! I keep getting `AADSTS50011: The reply URL specified in the request does not match the reply URLs configured for the application` error!
 
   * If you set your **CallbackPath** in appsettings as:
 
