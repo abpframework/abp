@@ -44,7 +44,7 @@ public abstract class AbpApplicationBase : IAbpApplication
         var options = new AbpApplicationCreationOptions(services);
         optionsAction?.Invoke(options);
         
-        ApplicationName = options.ApplicationName;
+        ApplicationName = GetApplicationName(options);
 
         services.AddSingleton<IAbpApplication>(this);
         services.AddSingleton<IApplicationNameAccessor>(this);
@@ -311,5 +311,31 @@ public abstract class AbpApplicationBase : IAbpApplication
         }
 
         _configuredServices = true;
+    }
+    
+    private static string GetApplicationName(AbpApplicationCreationOptions options)
+    {
+        if (!string.IsNullOrWhiteSpace(options.ApplicationName))
+        {
+            return options.ApplicationName;
+        }
+
+        var configuration = options.Services.GetConfigurationOrNull();
+        if (configuration != null)
+        {
+            var appNameConfig = configuration["ApplicationName"];
+            if (string.IsNullOrWhiteSpace(appNameConfig))
+            {
+                return appNameConfig;
+            }
+        }
+        
+        var entryAssembly = Assembly.GetEntryAssembly();
+        if (entryAssembly != null)
+        {
+            return entryAssembly.GetName().Name;
+        }
+
+        return null;
     }
 }
