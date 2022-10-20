@@ -25,6 +25,7 @@
         "dismissable",
         "dockerized",
         "entrypoints",
+        "findability",
         "Formik",
         "Halil",
         "Hanselman",
