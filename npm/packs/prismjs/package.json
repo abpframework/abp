@@ -1,12 +1,12 @@
 {
-  "version": "5.3.4",
+  "version": "5.3.5",
   "name": "@abp/prismjs",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/clipboard": "~5.3.4",
-    "@abp/core": "~5.3.4",
+    "@abp/clipboard": "~5.3.5",
+    "@abp/core": "~5.3.5",
     "prismjs": "^1.26.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
