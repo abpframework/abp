@@ -131,7 +131,7 @@ Then the data seed contributors can access to these properties via the `DataSeed
 
 If a module needs to a parameter, it should be declared on the [module documentation](Modules/Index.md). For example, the [Identity Module](Modules/Identity.md) can use `AdminEmail` and `AdminPassword` parameters if you provide (otherwise uses the default values).
 
-### Separate Unit Of Works
+### Separate Units Of Work
 
 The default seed will be in a unit of work and may use transactions. If there are multiple `IDataSeedContributor` or too much data written, it may cause a database timeout error.
 
