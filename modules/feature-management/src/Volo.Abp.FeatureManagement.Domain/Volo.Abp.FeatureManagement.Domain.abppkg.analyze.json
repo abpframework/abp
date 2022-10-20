@@ -1,35 +1,81 @@
 {
   "name": "Volo.Abp.FeatureManagement.Domain",
-  "hash": "dc844bd57c080aeb4c391df420023816",
+  "hash": "52c1313e28a792c9387111a63542ec27",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Domain.Shared",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Features",
+          "namespace": "Volo.Abp.Features",
+          "name": "AbpFeaturesModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching",
+          "namespace": "Volo.Abp.Caching",
+          "name": "AbpCachingModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpFeatureManagementDomainModule"
+      "name": "AbpFeatureManagementDomainModule",
+      "summary": null
     },
     {
+      "baseClass": {
+        "name": "Entity<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        }
+      ],
+      "methods": [],
       "namespace": "Volo.Abp.FeatureManagement",
       "primaryKeyType": "Guid",
-      "summary": null,
-      "collectionProperties": [],
-      "navigationProperties": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
       "contentType": "aggregateRoot",
-      "name": "FeatureValue"
+      "name": "FeatureValue",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.FeatureManagement",
-      "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.FeatureManagement",
         "primaryKeyType": "Guid",
-        "summary": null,
-        "collectionProperties": [],
-        "navigationProperties": [],
+        "collectionProperties": {},
+        "navigationProperties": {},
         "contentType": "entity",
-        "name": "FeatureValue"
+        "name": "FeatureValue",
+        "summary": null
       },
       "contentType": "repositoryInterface",
-      "name": "IFeatureValueRepository"
+      "name": "IFeatureValueRepository",
+      "summary": null
     }
   ]
 }

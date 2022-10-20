@@ -23,7 +23,7 @@ export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit 
 
   subscription!: Subscription;
 
-  cdrSubject = new ReplaySubject();
+  cdrSubject = new ReplaySubject<void>();
 
   rendered = false;
 

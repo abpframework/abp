@@ -25,7 +25,7 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, ITransientDependency
         return Task.CompletedTask;
     }
 
-    public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
+    public virtual async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
     {
         if (context.HandlerMethod == null || !ShouldHandleException(context))
         {

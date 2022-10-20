@@ -16,10 +16,11 @@ In order to accomplish these goals, ABP Framework;
 
 ### Current Themes
 
-Currently, two themes are **officially provided**:
+Currently, three themes are **officially provided**:
 
 * The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
 * The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
+* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/commercial/angular) and [lite](../../Themes/LeptonXLite/Angular.md) choices.
 
 ## Overall
 

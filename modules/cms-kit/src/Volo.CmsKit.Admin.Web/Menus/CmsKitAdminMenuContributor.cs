@@ -35,7 +35,8 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 CmsKitAdminMenus.Pages.PagesMenu,
                 l["Pages"].Value,
                 "/Cms/Pages",
-                "fa fa-file-alt")
+                "fa fa-file-alt",
+                order: 6)
             .RequireGlobalFeatures(typeof(PagesFeature))
             .RequirePermissions(CmsKitAdminPermissions.Pages.Default));
 
@@ -43,7 +44,8 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 CmsKitAdminMenus.Blogs.BlogsMenu,
                 l["Blogs"],
                 "/Cms/Blogs",
-                "fa fa-blog")
+                "fa fa-blog",
+                order: 1)
             .RequireGlobalFeatures(typeof(BlogsFeature))
             .RequirePermissions(CmsKitAdminPermissions.Blogs.Default));
 
@@ -51,7 +53,8 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 CmsKitAdminMenus.BlogPosts.BlogPostsMenu,
                 l["BlogPosts"],
                 "/Cms/BlogPosts",
-                "fa fa-file-signature")
+                "fa fa-file-signature",
+                order: 2)
             .RequireGlobalFeatures(typeof(BlogsFeature))
             .RequirePermissions(CmsKitAdminPermissions.BlogPosts.Default));
 
@@ -59,7 +62,8 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 CmsKitAdminMenus.Tags.TagsMenu,
                 l["Tags"].Value,
                 "/Cms/Tags",
-                "fa fa-tags")
+                "fa fa-tags",
+                order: 7)
             .RequireGlobalFeatures(typeof(TagsFeature))
             .RequirePermissions(CmsKitAdminPermissions.Tags.Default));
 
@@ -67,7 +71,8 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 CmsKitAdminMenus.Comments.CommentsMenu,
                 l["Comments"].Value,
                 "/Cms/Comments",
-                "fa fa-comments")
+                "fa fa-comments",
+                order: 3)
             .RequireGlobalFeatures(typeof(CommentsFeature))
             .RequirePermissions(CmsKitAdminPermissions.Comments.Default));
 
@@ -75,7 +80,8 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 CmsKitAdminMenus.Menus.MenusMenu,
                 l["Menus"],
                 "/Cms/Menus/Items",
-                "fa fa-stream")
+                "fa fa-stream",
+                order: 5)
             .RequireGlobalFeatures(typeof(MenuFeature))
             .RequirePermissions(CmsKitAdminPermissions.Menus.Default));
 
@@ -83,7 +89,8 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 CmsKitAdminMenus.GlobalResources.GlobalResourcesMenu,
                 l["GlobalResources"],
                 "/Cms/GlobalResources",
-                "fa fa-newspaper")
+                "bi bi-code-slash",
+                order: 4)
             .RequireGlobalFeatures(typeof(GlobalResourcesFeature))
             .RequirePermissions(CmsKitAdminPermissions.GlobalResources.Default));
 
@@ -105,6 +112,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
             {
                 cmsMenu.AddItem(menu);
             }
+            
         }
     }
 }

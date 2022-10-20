@@ -1,29 +1,45 @@
 {
   "name": "Volo.Abp.BlobStoring.Database.MongoDB",
-  "hash": "4c911e5e8a2e8c4630d12f394a157819",
+  "hash": "0f96b9a27559a02485e0c8f6d34db11f",
   "contents": [
     {
       "namespace": "Volo.Abp.BlobStoring.Database.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.BlobStoring.Database.Domain",
+          "namespace": "Volo.Abp.BlobStoring.Database",
+          "name": "BlobStoringDatabaseDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "namespace": "Volo.Abp.MongoDB",
+          "name": "AbpMongoDbModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "BlobStoringDatabaseMongoDbModule"
+      "name": "BlobStoringDatabaseMongoDbModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.BlobStoring.Database.MongoDB",
       "connectionStringName": "AbpBlobStoring",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlobContainer",
-          "contentType": "databaseCollection",
-          "name": "AbpBlobContainers"
-        },
-        {
           "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlob",
           "contentType": "databaseCollection",
-          "name": "AbpBlobs"
+          "name": "AbpBlobs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlobContainer",
+          "contentType": "databaseCollection",
+          "name": "AbpBlobContainers",
+          "summary": null
         }
       ],
       "contentType": "mongoDbContext",
-      "name": "BlobStoringMongoDbContext"
+      "name": "BlobStoringMongoDbContext",
+      "summary": null
     }
   ]
 }

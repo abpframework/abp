@@ -32,7 +32,7 @@ public class PublicApplicationAutoMapperProfile : Profile
 
         CreateMap<Page, PageDto>();
 
-        CreateMap<BlogPost, BlogPostPublicDto>(MemberList.None);
+        CreateMap<BlogPost, BlogPostPublicDto>();
 
         CreateMap<MenuItem, MenuItemDto>();
 

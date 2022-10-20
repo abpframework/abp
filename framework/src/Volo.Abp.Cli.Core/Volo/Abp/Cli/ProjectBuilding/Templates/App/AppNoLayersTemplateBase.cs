@@ -41,10 +41,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 break;
         }
 
-        if (context.BuildArgs.DatabaseManagementSystem == DatabaseManagementSystem.PostgreSQL)
-        {
-            context.Symbols.Add("dbms:PostgreSQL");
-        }
+        context.Symbols.Add($"dbms:{context.BuildArgs.DatabaseManagementSystem}");
 
         switch (context.BuildArgs.UiFramework)
         {
@@ -87,6 +84,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         UpdateNuGetConfig(context, steps);
         ChangeConnectionString(context, steps);
         ConfigureDockerFiles(context, steps);
+        ConfigureTheme(context, steps);
 
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
         {

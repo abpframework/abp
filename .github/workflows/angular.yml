@@ -15,6 +15,9 @@ on:
       - synchronize
       - reopened
       - ready_for_review
+permissions:
+  contents: read
+
 jobs:
   build-test-lint:
     if: ${{ !github.event.pull_request.draft }}

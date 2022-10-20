@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.Users.MongoDB",
-  "hash": "827e73e5cc91bc0e666d7fc131009cb9",
+  "hash": "b470e1c63ff45bccbaff949edd9efcb8",
   "contents": [
     {
       "namespace": "Volo.Abp.Users.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.Domain",
+          "namespace": "Volo.Abp.Users",
+          "name": "AbpUsersDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "namespace": "Volo.Abp.MongoDB",
+          "name": "AbpMongoDbModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpUsersMongoDbModule"
+      "name": "AbpUsersMongoDbModule",
+      "summary": null
     }
   ]
 }

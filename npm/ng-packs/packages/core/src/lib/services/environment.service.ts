@@ -7,6 +7,13 @@ import { InternalStore } from '../utils/internal-store-utils';
 const mapToApiUrl = (key: string) => (apis: Apis) =>
   (apis[key] || apis.default).url || apis.default.url;
 
+const mapToIssuer = (issuer: string) => {
+  if (!issuer) {
+    return issuer;
+  }
+  return issuer.endsWith('/') ? issuer : issuer + '/';
+};
+
 @Injectable({ providedIn: 'root' })
 export class EnvironmentService {
   private readonly store = new InternalStore({} as Environment);
@@ -33,5 +40,14 @@ export class EnvironmentService {
 
   setState(environment: Environment) {
     this.store.set(environment);
+  }
+
+  getIssuer() {
+    const issuer = this.store.state.oAuthConfig.issuer;
+    return mapToIssuer(issuer);
+  }
+  
+  getIssuer$() {
+    return this.store.sliceState(state => state.oAuthConfig.issuer).pipe(map(mapToIssuer));
   }
 }

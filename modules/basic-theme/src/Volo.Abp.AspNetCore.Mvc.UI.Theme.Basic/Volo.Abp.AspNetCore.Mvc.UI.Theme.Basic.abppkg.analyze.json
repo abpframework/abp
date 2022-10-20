@@ -1,0 +1,24 @@
+{
+  "name": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+  "hash": "41d7589d309cc4dcedf98c7f1be3ad15",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "name": "AbpAspNetCoreMvcUiThemeSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy",
+          "name": "AbpAspNetCoreMvcUiMultiTenancyModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpAspNetCoreMvcUiBasicThemeModule",
+      "summary": null
+    }
+  ]
+}

@@ -14,6 +14,16 @@ internal static class CommercialPackages
 
     public static bool IsCommercial(string packageId)
     {
-        return Packages.Contains(packageId.ToLowerInvariant());
+        return Packages.Contains(packageId.ToLowerInvariant()) || IsLeptonXPackage(packageId);
+    }
+
+    private static bool IsLeptonXPackage(string packageId)
+    {
+        return !IsLeptonXLitePackage(packageId) && packageId.Contains("LeptonX");
+    }
+
+    private static bool IsLeptonXLitePackage(string packageId)
+    {
+        return packageId.Contains("LeptonXLite");
     }
 }

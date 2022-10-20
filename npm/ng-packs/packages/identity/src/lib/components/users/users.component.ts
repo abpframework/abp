@@ -20,7 +20,7 @@ import {
   TrackByFunction,
   ViewChild,
 } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
 
@@ -41,7 +41,7 @@ export class UsersComponent implements OnInit {
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   selected: IdentityUserDto;
 
@@ -67,8 +67,8 @@ export class UsersComponent implements OnInit {
     this.visiblePermissions = event;
   };
 
-  get roleGroups(): FormGroup[] {
-    return ((this.form.get('roleNames') as FormArray)?.controls as FormGroup[]) || [];
+  get roleGroups(): UntypedFormGroup[] {
+    return ((this.form.get('roleNames') as UntypedFormArray)?.controls as UntypedFormGroup[]) || [];
   }
 
   constructor(
@@ -76,7 +76,7 @@ export class UsersComponent implements OnInit {
     protected confirmationService: ConfirmationService,
     protected service: IdentityUserService,
     private toasterService: ToasterService,
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected injector: Injector,
   ) {}
 

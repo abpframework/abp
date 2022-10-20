@@ -25,6 +25,8 @@ import fse from 'fs-extra';
         '--prod',
         '--projects',
         'core,theme-shared,components',
+        '--parallel',
+        '1',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -40,6 +42,7 @@ import fse from 'fs-extra';
         '--projects',
         'feature-management,permission-management,account-core',
         '--parallel',
+        '1',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -56,6 +59,7 @@ import fse from 'fs-extra';
         '--exclude',
         'dev-app,schematics,core,theme-shared,components,feature-management,permission-management,account-core',
         '--parallel',
+        '1',
       ],
       { stdout: 'inherit', cwd: '../' },
     );

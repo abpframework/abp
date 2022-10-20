@@ -1,11 +1,24 @@
 {
   "name": "Volo.CmsKit.Domain.Shared",
-  "hash": "515d3328db0b4ded3a5076a582f00053",
+  "hash": "1f739b92301b20db4b5d79c0aa4ce2df",
   "contents": [
     {
       "namespace": "Volo.CmsKit",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "name": "AbpGlobalFeaturesModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "CmsKitDomainSharedModule"
+      "name": "CmsKitDomainSharedModule",
+      "summary": null
     }
   ]
 }

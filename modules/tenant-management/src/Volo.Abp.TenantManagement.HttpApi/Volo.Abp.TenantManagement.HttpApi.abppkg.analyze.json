@@ -1,11 +1,29 @@
 {
   "name": "Volo.Abp.TenantManagement.HttpApi",
-  "hash": "0c2fe9349a905f12458f6fea6d44a5fc",
+  "hash": "96652ec16cc039adbe993847ca6b9e81",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Application.Contracts",
+          "namespace": "Volo.Abp.TenantManagement",
+          "name": "AbpTenantManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.HttpApi",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementHttpApiModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
+          "namespace": "Volo.Abp.AspNetCore.Mvc",
+          "name": "AbpAspNetCoreMvcModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpTenantManagementHttpApiModule"
+      "name": "AbpTenantManagementHttpApiModule",
+      "summary": null
     }
   ]
 }

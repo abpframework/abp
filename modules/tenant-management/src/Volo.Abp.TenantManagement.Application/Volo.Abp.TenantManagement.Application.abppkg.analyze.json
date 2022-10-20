@@ -1,27 +1,238 @@
 {
   "name": "Volo.Abp.TenantManagement.Application",
-  "hash": "f22443bf5a086ca029a9ed79168d496b",
+  "hash": "538b91030108d1739ef7e2b13baf9c3d",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Domain",
+          "namespace": "Volo.Abp.TenantManagement",
+          "name": "AbpTenantManagementDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Application.Contracts",
+          "namespace": "Volo.Abp.TenantManagement",
+          "name": "AbpTenantManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpTenantManagementApplicationModule"
+      "name": "AbpTenantManagementApplicationModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.TenantManagement",
-      "summary": null,
+      "baseClass": {
+        "name": "TenantManagementAppServiceBase",
+        "namespace": "Volo.Abp.TenantManagement",
+        "declaringAssemblyName": "Volo.Abp.TenantManagement.Application"
+      },
       "implementingInterfaces": [
-        "Volo.Abp.TenantManagement.ITenantAppService",
-        "Volo.Abp.Application.Services.ICrudAppService`5[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.TenantManagement.GetTenantsInput, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantCreateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantUpdateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICrudAppService`6[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.TenantManagement.GetTenantsInput, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantCreateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantUpdateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IReadOnlyAppService`4[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.TenantManagement.GetTenantsInput, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateUpdateAppService`4[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.TenantManagement.TenantCreateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantUpdateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.ICreateAppService`2[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[Volo.Abp.TenantManagement.TenantCreateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IUpdateAppService`3[[Volo.Abp.TenantManagement.TenantDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null],[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Volo.Abp.TenantManagement.TenantUpdateDto, Volo.Abp.TenantManagement.Application.Contracts, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "Volo.Abp.Application.Services.IDeleteAppService`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "ITenantAppService",
+          "namespace": "Volo.Abp.TenantManagement",
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<TenantDto, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IReadOnlyAppService<TenantDto, TenantDto, Guid, GetTenantsInput>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateUpdateAppService<TenantDto, Guid, TenantCreateDto, TenantUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateAppService<TenantDto, TenantCreateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IUpdateAppService<TenantDto, Guid, TenantUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IDeleteAppService<Guid>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "TenantDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PagedResultDto<TenantDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GetTenantsInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "TenantDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "TenantCreateDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "TenantDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "TenantUpdateDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "isAsync": true,
+          "name": "GetDefaultConnectionStringAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "UpdateDefaultConnectionStringAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "defaultConnectionString",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteDefaultConnectionStringAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "TenantAppService"
+      "name": "TenantAppService",
+      "summary": null
     }
   ]
 }

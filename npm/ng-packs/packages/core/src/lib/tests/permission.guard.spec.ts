@@ -5,9 +5,10 @@ import { RouterModule } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { of } from 'rxjs';
 import { PermissionGuard } from '../guards/permission.guard';
-import { HttpErrorReporterService, PermissionService } from '../services';
+import { HttpErrorReporterService } from '../services/http-error-reporter.service';
+import { PermissionService } from '../services/permission.service';
 import { RoutesService } from '../services/routes.service';
-import { CORE_OPTIONS } from '../tokens';
+import { CORE_OPTIONS } from '../tokens/options.token';
 
 describe('PermissionGuard', () => {
   let spectator: SpectatorService<PermissionGuard>;

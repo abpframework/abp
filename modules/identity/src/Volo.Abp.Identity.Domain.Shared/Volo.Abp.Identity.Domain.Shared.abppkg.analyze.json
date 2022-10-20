@@ -1,11 +1,29 @@
 {
   "name": "Volo.Abp.Identity.Domain.Shared",
-  "hash": "5f9216e13f38f29ec5f66aeecd448321",
+  "hash": "dbebcb54150006fa70d87ed61cdfe10b",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.Domain.Shared",
+          "namespace": "Volo.Abp.Users",
+          "name": "AbpUsersDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Features",
+          "namespace": "Volo.Abp.Features",
+          "name": "AbpFeaturesModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpIdentityDomainSharedModule"
+      "name": "AbpIdentityDomainSharedModule",
+      "summary": null
     }
   ]
 }

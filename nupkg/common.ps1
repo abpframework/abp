@@ -79,14 +79,14 @@ $solutions = (
     "modules/feature-management",
     "modules/identity",
     "modules/identityserver",
+    "modules/openiddict",
     "modules/permission-management",
     "modules/setting-management",
     "modules/tenant-management",
     "modules/users",
     "modules/virtual-file-explorer",
     "modules/blob-storing-database",
-    "modules/cms-kit",
-    "studio"
+    "modules/cms-kit"
 )
 
 # List of projects
@@ -202,6 +202,7 @@ $projects = (
     "framework/src/Volo.Abp.ObjectMapping",
     "framework/src/Volo.Abp.Quartz",
     "framework/src/Volo.Abp.RabbitMQ",
+    "framework/src/Volo.Abp.RemoteServices",
     "framework/src/Volo.Abp.Security",
     "framework/src/Volo.Abp.Serialization",
     "framework/src/Volo.Abp.Settings",
@@ -231,6 +232,7 @@ $projects = (
     "modules/account/src/Volo.Abp.Account.HttpApi",
     "modules/account/src/Volo.Abp.Account.Web",
     "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
+    "modules/account/src/Volo.Abp.Account.Web.OpenIddict",
     "modules/account/src/Volo.Abp.Account.Blazor",
     "modules/account/src/Volo.Abp.Account.Installer",
     "studio/source-codes/Volo.Abp.Account.SourceCode",
@@ -240,8 +242,8 @@ $projects = (
     "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain.Shared",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.EntityFrameworkCore",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.MongoDB",
-    "modules/audit-logging/src/Volo.Abp.AuditLogging.Installer",
-    "studio/source-codes/Volo.Abp.AuditLogging.SourceCode",
+    # "modules/audit-logging/src/Volo.Abp.AuditLogging.Installer",
+    # "studio/source-codes/Volo.Abp.AuditLogging.SourceCode",
 
     # modules/background-jobs
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain",
@@ -275,6 +277,7 @@ $projects = (
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi",
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi.Client",
     "modules/blogging/src/Volo.Blogging.Admin.Web",
+    "modules/blogging/src/Volo.Blogging.Installer",
     "studio/source-codes/Volo.Blogging.SourceCode",
 
     # modules/client-simulation
@@ -296,6 +299,7 @@ $projects = (
     "modules/docs/src/Volo.Docs.HttpApi",
     "modules/docs/src/Volo.Docs.MongoDB",
     "modules/docs/src/Volo.Docs.Web",
+    "modules/docs/src/Volo.Docs.Installer",
     "studio/source-codes/Volo.Docs.SourceCode",
 
     # modules/feature-management
@@ -340,6 +344,16 @@ $projects = (
     "modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer",
     "modules/identityserver/src/Volo.Abp.IdentityServer.Installer",
     "studio/source-codes/Volo.Abp.IdentityServer.SourceCode",
+
+    # modules/openiddict
+    "modules/openiddict/src/Volo.Abp.OpenIddict.AspNetCore",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.Domain",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.Domain.Shared",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.EntityFrameworkCore",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.MongoDB",
+    "modules/openiddict/src/Volo.Abp.PermissionManagement.Domain.OpenIddict",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.Installer",
+    "studio/source-codes/Volo.Abp.OpenIddict.SourceCode",
 
     # modules/permission-management
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application.Contracts",
@@ -437,12 +451,5 @@ $projects = (
     "modules/cms-kit/src/Volo.CmsKit.Public.Web",
     "modules/cms-kit/src/Volo.CmsKit.Web",
     "modules/cms-kit/src/Volo.CmsKit.Installer",
-    "studio/source-codes/Volo.CmsKit.SourceCode",
-	
-    # abp/studio
-    "studio/src/Volo.Abp.Studio.Analyzing.Abstractions",
-    "studio/src/Volo.Abp.Studio.Domain.CommonServices",
-    "studio/src/Volo.Abp.Studio.Domain.Shared",
-    "studio/src/Volo.Abp.Studio.ModuleInstaller.Abstractions",
-    "studio/src/Volo.Abp.Studio.ModuleInstaller"
+    "studio/source-codes/Volo.CmsKit.SourceCode"
 )
