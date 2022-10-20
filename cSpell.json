@@ -57,6 +57,7 @@
         "Npgsql",
         "NSWAG",
         "oidc",
+        "overridable",
         "Parameterless",
         "Passwordless",
         "PKCE",
