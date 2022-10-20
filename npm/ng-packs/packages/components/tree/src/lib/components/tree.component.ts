@@ -3,6 +3,7 @@ import {
   ContentChild,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
   TemplateRef,
   ViewEncapsulation,
@@ -24,7 +25,7 @@ export type DropEvent = NzFormatEmitEvent & { pos: number };
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class TreeComponent {
+export class TreeComponent implements OnChanges {
   dropPosition: number;
 
   dropdowns = {} as { [key: string]: NgbDropdown };
@@ -44,19 +45,31 @@ export class TreeComponent {
   @Input() nodes = [];
   @Input() expandedKeys: string[] = [];
   @Input() selectedNode: any;
+  @Input() changeCheckboxWithNode: boolean;
+  @Input() changedNodeValues = [];
   @Input() isNodeSelected = node => this.selectedNode?.id === node.key;
   @Input() beforeDrop = (event: NzFormatBeforeDropEvent) => {
     this.dropPosition = event.pos;
     return of(false);
   };
 
+  ngOnChanges() {
+    this.checkedKeys = [...this.changedNodeValues];
+  }
+
   onSelectedNodeChange(node) {
     this.selectedNode = node.origin.entity;
-    this.selectedNodeChange.emit(node.origin.entity);
+    if (this.changeCheckboxWithNode) {
+      this.selectedNodeChange.emit(node);
+      this.checkedKeys = [...this.changedNodeValues];
+      this.checkedKeysChange.emit(this.changedNodeValues);
+    } else {
+      this.selectedNodeChange.emit(node.origin.entity);
+    }
   }
 
   onCheckboxChange(event) {
-    this.checkedKeys = [...event.keys];
+    this.checkedKeys = this.changedNodeValues = [...event.keys];
     this.checkedKeysChange.emit(event.keys);
   }
 

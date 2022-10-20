@@ -41,6 +41,7 @@ Here, a list of the options you can configure:
 * `IsEnabledForAnonymousUsers` (default: `true`): If you want to write audit logs only for the authenticated users, set this to `false`. If you save audit logs for anonymous users, you will see `null` for `UserId` values for these users.
 * `AlwaysLogOnException` (default: `true`): If you set to true, it always saves the audit log on an exception/error case without checking other options (except `IsEnabled`, which completely disables the audit logging).
 * `IsEnabledForGetRequests` (default: `false`): HTTP GET requests should not make any change in the database normally and audit log system doesn't save audit log objects for GET request. Set this to `true` to enable it also for the GET requests.
+* `DisableLogActionInfo` (default: `false`):If you set to true, Will no longer log `AuditLogActionInfo`.
 * `ApplicationName`: If multiple applications saving audit logs into a single database, set this property to your application name, so you can distinguish the logs of different applications.
 * `IgnoredTypes`: A list of `Type`s to be ignored for audit logging. If this is an entity type, changes for this type of entities will not be saved. This list is also used while serializing the action parameters.
 * `EntityHistorySelectors`: A list of selectors those are used to determine if an entity type is selected for saving the entity change. See the section below for details.

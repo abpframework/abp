@@ -127,7 +127,9 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
                     Address = configuration.Authority,
                     Policy =
                     {
-                        RequireHttps = configuration.RequireHttps
+                        RequireHttps = configuration.RequireHttps,
+                        ValidateIssuerName = configuration.ValidateIssuerName,
+                        ValidateEndpoints = configuration.ValidateEndpoints
                     }
                 };
                 IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage?.Invoke(request);

@@ -29,4 +29,10 @@ public class PagesPublicController : CmsKitPublicControllerBase, IPagePublicAppS
     {
         return PageAppService.FindBySlugAsync(slug);
     }
+
+    [HttpGet]
+    public Task<PageDto> FindDefaultHomePageAsync()
+    {
+        return PageAppService.FindDefaultHomePageAsync();
+    }
 }
