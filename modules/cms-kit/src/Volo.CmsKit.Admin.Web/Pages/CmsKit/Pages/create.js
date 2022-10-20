@@ -175,6 +175,7 @@ $(function () {
         if ($(this).attr("aria-label") == 'Preview' && editor.isMarkdownMode()) {
 
             let content = editor.getMarkdown();
+            content = content.replace('<', '< ');
             localStorage.setItem('content', content);
 
             $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
@@ -187,12 +188,14 @@ $(function () {
 
                 editor.setHTML(result);
                 
-                var highllightedText = $('#ContentEditor').find('.toastui-editor-md-preview-highlight');
+                let highllightedText = $('#ContentEditor').find('.toastui-editor-md-preview-highlight');
                 highllightedText.removeClass('toastui-editor-md-preview-highlight');
             });
+
         }
         else if ($(this).attr("aria-label") == 'Write'){
-            var retrievedObject = localStorage.getItem('content');
+            let retrievedObject = localStorage.getItem('content');
+            retrievedObject = retrievedObject.replace('< ', '<');
             editor.setMarkdown(retrievedObject);
         }
     });
