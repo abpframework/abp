@@ -32,34 +32,35 @@ Use the `abp update` command to update your existing application. See [Upgrading
 
 - In **MyApplicationDomainSharedModule.cs** replace usings and **module dependencies:**
 
-  ```csharp
-  using Volo.Abp.IdentityServer;
-  ...
-  typeof(AbpIdentityServerDomainSharedModule)
-  ```
+```csharp
+using Volo.Abp.IdentityServer;
+...
+typeof(AbpIdentityServerDomainSharedModule)
+```
 
   with 
 
-  ```csharp
-  using Volo.Abp.OpenIddict;
-  ...
-  typeof(AbpOpenIddictDomainSharedModule)
+```csharp
+using Volo.Abp.OpenIddict;
+...
+typeof(AbpOpenIddictDomainSharedModule)
+```
 
 ### Domain Layer
 
 - In **MyApplication.Domain.csproj** replace **project references**:
 
-  ```csharp
-  <PackageReference Include="Volo.Abp.IdentityServer.Domain" Version="6.0.*" />
-  <PackageReference Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="6.0.*" />
-  ```
+```csharp
+<PackageReference Include="Volo.Abp.IdentityServer.Domain" Version="6.0.*" />
+<PackageReference Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="6.0.*" />
+```
 
   with   
 
-  ```csharp
-  <PackageReference Include="Volo.Abp.OpenIddict.Domain" Version="6.0.*" />
-  <PackageReference Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="6.0.*" />
-  ```
+```csharp
+<PackageReference Include="Volo.Abp.OpenIddict.Domain" Version="6.0.*" />
+<PackageReference Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="6.0.*" />
+```
 
 - In **MyApplicationDomainModule.cs** replace usings and **module dependencies**:
 
