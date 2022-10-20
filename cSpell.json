@@ -125,5 +125,8 @@
         "HTML Tags",
         "Markdown Image"
     ],
-    "ignorePaths": []
+    "ignorePaths": [
+        "**/*Release/Post.md",
+        "**/*Preview/POST.md"
+    ]
 }
