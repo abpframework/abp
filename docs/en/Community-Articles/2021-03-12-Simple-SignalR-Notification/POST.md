@@ -85,7 +85,7 @@ Add [Microsoft.SignalR](https://www.npmjs.com/package/@microsoft/signalr) JavaSc
 You can install the latest version (3.1.13 will be old)
 ```
   "@microsoft/signalr": "^3.1.13"
-````
+```
 
 ![Add SignalR package](signalr-package.jpg)
 
