@@ -289,7 +289,7 @@ this.footerLinksService.setFooterInfo(footerInfo);
 
 ///...
 ```
-If you want to change logo component, the key is `eThemeLeptonXComponents.Footer`
+If you want to change footer component, the key is `eThemeLeptonXComponents.Footer`
 
 ```js
 ///...
