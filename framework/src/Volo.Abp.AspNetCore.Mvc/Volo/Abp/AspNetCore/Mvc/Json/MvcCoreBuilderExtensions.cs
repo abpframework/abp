@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json;
 
 public static class MvcCoreBuilderExtensions
 {
-    public static IMvcCoreBuilder AddAbpHybridJson(this IMvcCoreBuilder builder)
+    public static IMvcCoreBuilder AddAbpJson(this IMvcCoreBuilder builder)
     {
         builder.Services.AddOptions<JsonOptions>()
             .Configure<IServiceProvider>((options, serviceProvider) =>

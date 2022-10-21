@@ -147,7 +147,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
             mvcCoreBuilder.AddAbpRazorRuntimeCompilation();
         }
 
-        mvcCoreBuilder.AddAbpHybridJson();
+        mvcCoreBuilder.AddAbpJson();
 
         context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
