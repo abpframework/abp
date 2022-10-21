@@ -33,9 +33,9 @@ public static class AbpSwaggerGenServiceCollectionExtensions
         this IServiceCollection services,
         [NotNull] string authority,
         [NotNull] Dictionary<string, string> scopes,
+        Action<SwaggerGenOptions> setupAction = null,
         string authorizationEndpoint = "/connect/authorize",
-        string tokenEndpoint = "/connect/token",
-        Action<SwaggerGenOptions> setupAction = null)
+        string tokenEndpoint = "/connect/token")
     {
         var authorizationUrl = new Uri($"{authority.TrimEnd('/')}{authorizationEndpoint.EnsureStartsWith('/')}");
         var tokenUrl = new Uri($"{authority.TrimEnd('/')}{tokenEndpoint.EnsureStartsWith('/')}");
