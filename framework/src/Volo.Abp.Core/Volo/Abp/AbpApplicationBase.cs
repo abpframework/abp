@@ -23,7 +23,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     public IServiceCollection Services { get; }
 
     public IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
-    
+
     public string ApplicationName { get; }
 
     private bool _configuredServices;
@@ -43,7 +43,7 @@ public abstract class AbpApplicationBase : IAbpApplication
 
         var options = new AbpApplicationCreationOptions(services);
         optionsAction?.Invoke(options);
-        
+
         ApplicationName = GetApplicationName(options);
 
         services.AddSingleton<IAbpApplication>(this);
@@ -147,7 +147,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     public virtual async Task ConfigureServicesAsync()
     {
         CheckMultipleConfigureServices();
-        
+
         var context = new ServiceConfigurationContext(Services);
         Services.AddSingleton(context);
 
@@ -312,7 +312,7 @@ public abstract class AbpApplicationBase : IAbpApplication
 
         _configuredServices = true;
     }
-    
+
     private static string GetApplicationName(AbpApplicationCreationOptions options)
     {
         if (!string.IsNullOrWhiteSpace(options.ApplicationName))
@@ -324,12 +324,12 @@ public abstract class AbpApplicationBase : IAbpApplication
         if (configuration != null)
         {
             var appNameConfig = configuration["ApplicationName"];
-            if (string.IsNullOrWhiteSpace(appNameConfig))
+            if (!string.IsNullOrWhiteSpace(appNameConfig))
             {
                 return appNameConfig;
             }
         }
-        
+
         var entryAssembly = Assembly.GetEntryAssembly();
         if (entryAssembly != null)
         {
