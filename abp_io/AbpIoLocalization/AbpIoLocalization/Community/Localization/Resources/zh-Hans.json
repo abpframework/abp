@@ -176,7 +176,7 @@
     "Events_Page_MetaTitle": "ABP 社区活动",
     "Events_Page_MetaDescription": "现场活动由 ABP 团队主持，是充满社区内容、演示、问答和围绕 ABP 正在发生的事情的讨论的休闲会议。",
     "Events_Page_Title": "ABP<span class=\"gradient-community\">社区</span>会谈",
-    "Events_Page_WritingFromUser": "阅读来自 ABP 社区的 {0} 的文章。",
+    "Members_Page_WritingFromUser": "阅读来自 ABP 社区的 {0} 的文章。",
     "Post_Create_Page_MetaTitle": "最新帖子",
     "Post_Create_Page_MetaDescription": "创建您的帖子以分享您对 ABP 框架的经验并为 ABP 社区做出贡献。",
     "Post_Create_Page_CreateNewPost": "创建新帖子",
