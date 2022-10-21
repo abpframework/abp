@@ -202,10 +202,11 @@
     "WhatHappensWhenLicenseEndsExplanation4": "A licensz lejárta után nem telepíthet új modulokat és témákat az ABP Commercial platformhoz.",
     "WhatHappensWhenLicenseEndsExplanation5": "Az ABP Suite nem használható.",
     "WhatHappensWhenLicenseEndsExplanation6": "A <a href=\"{0}\">prémium támogatást</a> már nem kaphatja meg.",
-    "WhatHappensWhenLicenseEndsExplanation7": "Meghosszabbíthatja (megújíthatja) az engedélyét, ha továbbra is igénybe kívánja venni ezeket az előnyöket. Ha a licensz lejártát követő <strong>1 hónapon</strong> belül meghosszabbítja a licenszet, a következő kedvezmények érvényesek: Team License {0}% kedvezmény, Business License {1}% kedvezmény, Enterprise License {2}% kedvezmény.",
+    "WhatHappensWhenLicenseEndsExplanation7": "Meghosszabbíthatja (megújíthatja) a licencét, ha továbbra is szeretné igénybe venni ezeket az előnyöket. Ha a licenc lejártát követő <strong>1 hónapon belül</strong> meghosszabbítja licencét, a következő kedvezmények érvényesek: Csapat Licenc {0}; Üzleti licenc {1}; Vállalati licenc {2}.",
+    "discountForYears": "{0}% kedvezmény {1} évre",
     "WhatHappensWhenLicenseEndsExplanation8": "Az Ön által generált ABP projekteket nem tároljuk a szervereinken. Ezért az Ön felelőssége a letöltött forráskód megőrzése. Amikor a licensze lejár, nincs mód a generált ABP projekt forráskódjának lekérésére.",
     "WhenShouldIRenewMyLicense": "Mikor kell megújítanom a jogosítványomat?",
-    "WhenShouldIRenewMyLicenseExplanation": "Ha a licenc lejártát követő <strong>1 hónapon belül</strong> megújítja a licencet, a következő kedvezmények érvényesek: Csapatlicenc {0}% kedvezmény, Üzleti licenc {1}% kedvezmény, Vállalati licenc {2}% kedvezmény . Ha megújítja a licencet <strong>1 hónappal</strong> a licenc lejárati dátuma után, a megújítási ár megegyezik a licenc vásárlási árával, és nem jár kedvezmény a megújításra.",
+    "WhenShouldIRenewMyLicenseExplanation": "Ha a licenc lejártát követő <strong>1 hónapon belül</strong> megújítja a licencet, a következő kedvezmények érvényesek: Csapatlicenc {0}; Üzleti engedély {1}; Vállalati licenc {2}. Ha azonban a licenc lejárati dátuma óta <strong>1 hónap</strong> után megújítja a licencet, a megújítási ár megegyezik a licenc vásárlási árával, és nem jár kedvezmény a megújításra.",
     "TrialPlan": "Van próbaterv?",
     "TrialPlanExplanation": "14 napos próbaidővel rendelkezik az ABP Commercial csapat licenszéhez. További információért látogasson el <a href={0} target='_blank'>ide</a> . Továbbá a Team licenszekre 30 napos pénz-visszafizetési garanciát biztosítunk. Az első 30 napban csak visszatérítést kérhet. A Business és Enterprise licenszek esetén 30 napon belül 60%-os visszatérítést biztosítunk. Ennek az az oka, hogy a Business és Enterprise licenszek tartalmazzák az összes modul és téma teljes forráskódját.",
     "DoYouAcceptBankWireTransfer": "Elfogadja a banki átutalást?",
@@ -564,7 +565,7 @@
     "MyOrganizations_Detail_PaymentProviderInfo": "Ha licenszét a <i>(z) {0}</i> átjárón keresztül vásárolta, az elküldi a PDF számlát az Ön e-mail címére, lásd: <a href=\"{1}\" target=\"_blank\">{0} számlázás.</a>",
     "MyOrganizations_Detail_PayUInfo": "Ha a <i>PayU</i> átjárón keresztül vásárolt, kattintson a \"Számla kérése\" gombra, és töltse ki a számlázási adatokat.",
     "MyOrganizations_Detail_ConclusionInfo": "Számlakérését {0} munkanapon belül lezárjuk.",
-    "ExtendYourLicense": "Hosszabbítsa meg {0} licenszét",
+    "ExtendYourLicense": "Hosszabbítsa meg <span class=\"text-primary\">{0}</span> licenszét",
     "Continue": "Folytatni",
     "PurchaseLicense": "Vásároljon {0} licencet",
     "DownloadInvoiceModal_DownloadInvoice": "Számla letöltése",
@@ -743,6 +744,9 @@
     "Testimonial_ShortDescription_3": "A beépített funkciókból indulunk ki, és csak arra koncentrálunk, amit valóban meg kell írnunk.",
     "Testimonial_ShortDescription_4": "Az ABP Commercial volt a legjobban megfelelő az igényeinknek.",
     "OnlineReviewersOnAbpCommercial": "Online vélemények az ABP Commercial-ról",
-    "SeeWhatToldAboutAbpCommercial": "Tekintse meg, mit mondtak az ABP Commercialról, és írja le gondolatait, ha akarja."
+    "SeeWhatToldAboutAbpCommercial": "Tekintse meg, mit mondtak az ABP Commercialról, és írja le gondolatait, ha akarja.",
+    "ExtendPaymentInfoSection_DeveloperPrice": "{0} x Developer(s) Price",
+    "ExtendPaymentInfoSection_DiscountRate": "Kedvezmény: {0}%",
+    "TotalNetPrice": "Total Net Price"
   }
 }
