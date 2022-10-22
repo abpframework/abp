@@ -144,7 +144,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
     * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
-        * `leptonx-lite`: [LeptonX Lite Theme](/Themes/LeptonXLite/mvc.md).
+        * `leptonx-lite`: [LeptonX Lite Theme](/Themes/LeptonXLite/AspNetCore.md).
         * `basic`: [Basic Theme](/UI/AspNetCore/Basic-Theme.md).    
   * **`maui`**: .NET MAUI. A minimalist .NET MAUI application will be created if you specify this option.
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
