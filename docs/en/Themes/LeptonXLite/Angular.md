@@ -87,7 +87,7 @@ In order to migrate to LeptonX on your server side projects (Host and/or AuthSer
 
 ### Layouts
 
-The Angular version of LeptonX Lite provides **layout components** for your **user interface** on [ABP Framework Theming](https://docs.abp.io/en/abp/latest/UI/Angular/Theming). You can use layouts to **organize your user interface**. You can replace the **layout components** and some parts of the **layout components** with the [ABP replaceable component system](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement).
+The Angular version of LeptonX Lite provides **layout components** for your **user interface** on [ABP Framework Theming](https://docs.abp.io/en/abp/latest/UI/Angular/Theming). You can use the layouts to **organize your user interface**. You can replace the **layout components** and some parts of the **layout components** with the [ABP replaceable component system](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement).
 
 The main responsibility of a theme is to **provide** the layouts. There are **three pre-defined layouts that must be implemented by all the themes:**
 
@@ -259,10 +259,10 @@ The Mobile User-Profile component key is `eThemeLeptonXComponents.MobileUserProf
 
 ![Angular Footer Component](../../images/angular-footer.png)
 
-Footer is the section of content at the very bottom of the site. This section of the content can be modified.
-Inject **FooterLinksService** and use **setFooterInfo** method of **FooterLinksService** 
+The Footer is the section of content at the very bottom of the site. This section of the content can be modified.
+Inject **FooterLinksService** and use the **setFooterInfo** method of **FooterLinksService** 
 to assign path or link and description.
-**descUrl** and **footerLinks** are nullable. Constant **footerLinks** is rigth side of footer. 
+**descUrl** and **footerLinks** are nullable. Constant **footerLinks** are on the right side of footer. 
 
 
 ```js
@@ -289,7 +289,7 @@ this.footerLinksService.setFooterInfo(footerInfo);
 
 ///...
 ```
-If you want to change footer component, the key is `eThemeLeptonXComponents.Footer`
+If you want to change the footer component, the key is `eThemeLeptonXComponents.Footer`
 
 ```js
 ///...
