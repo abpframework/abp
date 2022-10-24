@@ -135,6 +135,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         {
             await GenerateClassFileAsync(args, controller.Value);
         }
+
         foreach (var controller in applicationApiDescriptionModel.Modules.Values.SelectMany(x => x.Controllers).Where(x => ShouldGenerateProxy(x.Value)))
         {
             await GenerateClassFileAsync(args, controller.Value);
@@ -146,11 +147,6 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         }
 
         await CreateJsonFile(args, applicationApiDescriptionModel);
-    }
-
-    private void DeleteClientProxyDirectory(GenerateProxyArgs args)
-    {
-
     }
 
     private bool ShouldGenerateProxy(ControllerApiDescriptionModel controllerApiDescription)
@@ -413,24 +409,22 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
         foreach (var controller in applicationApiDescriptionModel.Modules.Values.First().Controllers)
         {
-            foreach (var action in controller.Value.Actions)
+            types.AddIfNotContains(applicationApiDescriptionModel.Types.Where(x => x.Key.StartsWith($"{GetTypeNamespace(controller.Value.Type)}")).Select(x => x.Key));
+        }
+
+        for (var i = 0; i < types.Count; i++)
+        {
+            var className = types[i];
+            if (className.StartsWith("Volo.Abp.Application.Dtos.") && className.Contains("<") && className.Contains(">"))
             {
-                foreach (var parameter in action.Value.ParametersOnMethod)
-                {
-                    types.AddIfNotContains(parameter.Type);
-                }
-                types.AddIfNotContains(action.Value.ReturnValue.Type);
+                types[i] = className.Substring(
+                    className.IndexOf("<", StringComparison.Ordinal) + 1,
+                    className.IndexOf(">", StringComparison.Ordinal) -
+                    className.IndexOf("<", StringComparison.Ordinal) -1);
             }
         }
 
-        types = RemoveSystemAndDtoType(types);
-
-        foreach (var type in applicationApiDescriptionModel.Types.Where(x => types.Contains(x.Key)))
-        {
-            GetRelatedTypes(types, applicationApiDescriptionModel, type.Value);
-        }
-
-        types = RemoveSystemAndDtoType(types);
+        types = types.Where(x => !x.StartsWith("System.") && !x.StartsWith("[System.")).Distinct().OrderBy(x => x).ToList();
 
         foreach (var type in applicationApiDescriptionModel.Types.Where(x => types.Contains(x.Key)))
         {
@@ -440,14 +434,26 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
                 $"using {GetTypeNamespace(type.Key)};"
             };
 
-            dto.Replace(NamespacePlaceholder, GetTypeNamespace(type.Key));
-            dto.Replace(DtoClassNamePlaceholder,GetRealTypeName(type.Key, dtoUsingNamespaceList) + (type.Value.BaseType.IsNullOrEmpty() ? "" :  $" : {GetRealTypeName(type.Value.BaseType, dtoUsingNamespaceList)}"));
+            var genericTypeName = type.Key;
+            if (type.Value.GenericArguments != null)
+            {
+                for (var j = 0; j < type.Value.GenericArguments.Length; j++)
+                {
+                    genericTypeName = genericTypeName.Replace($"T{j}", type.Value.GenericArguments[j]);
+                }
+            }
+
+            dto.Replace(NamespacePlaceholder, GetTypeNamespace(genericTypeName));
+            dto.Replace(DtoClassNamePlaceholder, GetRealTypeName(genericTypeName, dtoUsingNamespaceList) + (type.Value.BaseType.IsNullOrEmpty() ? "" :  $" : {GetRealTypeName(type.Value.BaseType, dtoUsingNamespaceList)}"));
             var properties = new StringBuilder();
             for (var i = 0; i < type.Value.Properties.Length; i++)
             {
                 var property = type.Value.Properties[i];
                 properties.Append("public ");
-                properties.Append(GetRealTypeName(property.Type, dtoUsingNamespaceList));
+
+                properties.Append(type.Value.GenericArguments.IsNullOrEmpty()
+                    ? GetRealTypeName(property.Type, dtoUsingNamespaceList)
+                    : GetRealTypeName(genericTypeName, dtoUsingNamespaceList));
                 properties.Append($" {property.Name}");
                 properties.Append(" { get; set; }");
                 if (i < type.Value.Properties.Length - 1)
@@ -462,11 +468,13 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
             dto.Replace(PropertyPlaceholder, properties.ToString());
 
             var folder = args.Folder.IsNullOrWhiteSpace()
-                ? ProxyDirectory + Path.DirectorySeparatorChar + GetTypeNamespace(type.Key)
+                ? ProxyDirectory + Path.DirectorySeparatorChar + GetTypeNamespace(genericTypeName)
                     .Replace(".", Path.DirectorySeparatorChar.ToString())
                 : args.Folder;
 
-            var filePath = Path.Combine(args.WorkDirectory, folder, $"{GetRealTypeName(type.Key)}.cs");
+            var dtoFileName = GetRealTypeName(genericTypeName).Split("<")[0];
+            var filePath = Path.Combine(args.WorkDirectory, folder,
+                $"{dtoFileName}.cs");
             Directory.CreateDirectory(Path.GetDirectoryName(filePath));
             using (var writer = new StreamWriter(filePath))
             {
@@ -474,43 +482,6 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
                 Logger.LogInformation($"Create {GetLoggerOutputPath(filePath, args.WorkDirectory)}");
             }
         }
-    }
-
-    private static void GetRelatedTypes(List<string> types, ApplicationApiDescriptionModel applicationApiDescriptionModel, TypeApiDescriptionModel typeApiDescriptionModel)
-    {
-        if (!typeApiDescriptionModel.BaseType.IsNullOrEmpty() &&
-            !typeApiDescriptionModel.BaseType.StartsWith("Volo.Abp.Application.Dtos") &&
-            !typeApiDescriptionModel.BaseType.StartsWith("Volo.Abp.ObjectExtending"))
-        {
-            types.AddIfNotContains(typeApiDescriptionModel.BaseType);
-        }
-
-        foreach (var property in typeApiDescriptionModel.Properties.Where(x => !types.Contains(x.Type)))
-        {
-            types.AddIfNotContains(property.Type);
-
-            if (applicationApiDescriptionModel.Types.ContainsKey(property.Type))
-            {
-                GetRelatedTypes(types, applicationApiDescriptionModel, applicationApiDescriptionModel.Types[property.Type]);
-            }
-        }
-    }
-
-    private static List<string> RemoveSystemAndDtoType(List<string> types)
-    {
-        for (var i = 0; i < types.Count; i++)
-        {
-            var className = types[i];
-            if (className.StartsWith("Volo.Abp.Application.Dtos.") && className.Contains("<") && className.Contains(">"))
-            {
-                types[i] = className.Substring(
-                    className.IndexOf("<", StringComparison.Ordinal) + 1,
-                    className.IndexOf(">", StringComparison.Ordinal) -
-                    className.IndexOf("<", StringComparison.Ordinal) -1);
-            }
-        }
-
-        return types.Where(x => !x.StartsWith("System.") && !x.StartsWith("[System.")).Distinct().OrderBy(x => x).ToList();
     }
 
     private static bool IsAppServiceInterface(string typeName)
@@ -523,68 +494,54 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         return typeFullName.Substring(0, typeFullName.LastIndexOf('.'));
     }
 
-    private string GetRealTypeName(string typeName, List<string> usingNamespaceList = null)
+    private static string GetRealTypeName(string typeName, List<string> usingNamespaceList = null)
     {
         if (typeName.StartsWith("[") && typeName.EndsWith("]"))
         {
             return GetRealTypeName(typeName.Substring(1, typeName.Length - 2), usingNamespaceList) + "[]";
         }
 
-        var filter = new[] { "<", ",", ">" };
-        var stringBuilder = new StringBuilder();
-        var typeNames = typeName.Split('.');
-
-        if (typeNames.All(x => !filter.Any(x.Contains)))
+        if (typeName.StartsWith("{") && typeName.EndsWith("}") && typeName.Contains(":"))
         {
-            if (usingNamespaceList != null)
-            {
-                AddUsingNamespace(usingNamespaceList, typeName);
-            }
-
-            return NormalizeTypeName(typeNames.Last());
+            var dic = typeName.Substring(1, typeName.Length - 2).Split(":");
+            var key = GetRealTypeName(dic[0], usingNamespaceList);
+            var value = GetRealTypeName(dic[1], usingNamespaceList);
+            return $"Dictionary<{key}, {value}>";
         }
 
-        var fullName = string.Empty;
-
-        foreach (var item in typeNames)
+        if (!typeName.Contains("<"))
         {
-            if (filter.Any(x => item.Contains(x)))
+            usingNamespaceList?.AddIfNotContains($"using {GetTypeNamespace(typeName)};");
+            return NormalizeTypeName(typeName.Split(".").Last());
+        }
+
+        var type = new StringBuilder();
+        var s1 = typeName.Split("<");
+        for (var i = 0; i < s1.Length; i++)
+        {
+            if (s1[i].Contains(","))
             {
-                if (usingNamespaceList != null)
+                var s2 = s1[i].Split(",");
+                for (var x = 0; x < s2.Length; x++)
                 {
-                    AddUsingNamespace(usingNamespaceList, $"{fullName}.{item}".TrimStart('.'));
-                }
-
-                fullName = string.Empty;
-
-                if (item.Contains('<') || item.Contains(','))
-                {
-                    stringBuilder.Append(item.Substring(0, item.IndexOf(item.Contains('<') ? '<' : ',') + 1));
-                    fullName = item.Substring(item.IndexOf(item.Contains('<') ? '<' : ',') + 1);
-                }
-                else
-                {
-                    stringBuilder.Append(item);
+                    type.Append(s2[x].Split(".").Last());
+                    if (x < s1.Length - 1)
+                    {
+                        type.Append(", ");
+                    }
                 }
             }
             else
             {
-                fullName = $"{fullName}.{item}";
+                type.Append(s1[i].Split(".").Last());
+                if (i < s1.Length - 1)
+                {
+                    type.Append("<");
+                }
             }
         }
 
-        return stringBuilder.ToString();
-    }
-
-    private static void AddUsingNamespace(List<string> usingNamespaceList, string typeName)
-    {
-        var rootNamespace = $"using {GetTypeNamespace(typeName)};";
-        if (usingNamespaceList.Contains(rootNamespace))
-        {
-            return;
-        }
-
-        usingNamespaceList.Add(rootNamespace);
+        return type.ToString();
     }
 
     private static string NormalizeTypeName(string typeName)
@@ -598,14 +555,23 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
         typeName = typeName switch
         {
+            "System.Void" => "void",
             "Void" => "void",
+            "System.Boolean" => "bool",
             "Boolean" => "bool",
+            "System.String" => "string",
             "String" => "string",
+            "System.Int32" => "int",
             "Int32" => "int",
+            "System.Int64" => "long",
             "Int64" => "long",
+            "System.Double" => "double",
             "Double" => "double",
+            "System.Object" => "object",
             "Object" => "object",
+            "System.Byte" => "byte",
             "Byte" => "byte",
+            "System.Char" => "char",
             "Char" => "char",
             _ => typeName
         };
