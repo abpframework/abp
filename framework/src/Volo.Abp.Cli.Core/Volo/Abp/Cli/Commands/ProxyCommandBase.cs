@@ -68,8 +68,9 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long);
         var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
         var folder = commandLineArgs.Options.GetOrNull(Options.Folder.Long);
+        var withContracts  = commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Long);
 
-        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, commandLineArgs.Options);
+        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, withContracts, commandLineArgs.Options);
     }
 
     public virtual string GetUsageInfo()
@@ -161,6 +162,11 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         {
             public const string Short = "wd";
             public const string Long = "working-directory";
+        }
+
+        public static class WithoutContracts
+        {
+            public const string Long = "without-contracts";
         }
     }
 }
