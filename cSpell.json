@@ -26,6 +26,7 @@
         "IntelliCode",
         "Keysize",
         "Linq",
+        "Microservices",
         "middlewares",
         "Minifier",
         "multitenancy",
@@ -46,6 +47,7 @@
         "Templating",
         "textboxes",
         "toolset",
+        "unsubscription",
         "Xunit"
     ],
     "ignoreWords": [
