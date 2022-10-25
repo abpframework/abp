@@ -135,15 +135,15 @@ Open the `en.json` (*the English translations*) file and change the content as s
     "CreationTime": "Creation time",
     "AreYouSure": "Are you sure?",
     "AreYouSureToDelete": "Are you sure you want to delete this item?",
-    "Enum:BookType.Undefined": "Undefined",
-    "Enum:BookType.Adventure": "Adventure",
-    "Enum:BookType.Biography": "Biography",
-    "Enum:BookType.Dystopia": "Dystopia",
-    "Enum:BookType.Fantastic": "Fantastic",
-    "Enum:BookType.Horror": "Horror",
-    "Enum:BookType.Science": "Science",
-    "Enum:BookType.ScienceFiction": "Science fiction",
-    "Enum:BookType.Poetry": "Poetry"
+    "Enum:BookType:0": "Undefined",
+    "Enum:BookType:1": "Adventure",
+    "Enum:BookType:2": "Biography",
+    "Enum:BookType:3": "Dystopia",
+    "Enum:BookType:4": "Fantastic",
+    "Enum:BookType:5": "Horror",
+    "Enum:BookType:6": "Science",
+    "Enum:BookType:7": "Science fiction",
+    "Enum:BookType:8": "Poetry"
   }
 }
 ````
