@@ -75,7 +75,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
                                                                        $"{Environment.NewLine}// ReSharper disable once CheckNamespace" +
                                                                        $"{Environment.NewLine}namespace <namespace>;" +
                                                                        $"{Environment.NewLine}" +
-                                                                       $"{Environment.NewLine}public class <dtoName>" +
+                                                                       $"{Environment.NewLine}public <dtoName>" +
                                                                        $"{Environment.NewLine}{{" +
                                                                        $"{Environment.NewLine}    <property>" +
                                                                        $"{Environment.NewLine}}}" +
@@ -444,23 +444,48 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
             }
 
             dto.Replace(NamespacePlaceholder, GetTypeNamespace(genericTypeName));
-            dto.Replace(DtoClassNamePlaceholder, GetRealTypeName(genericTypeName, dtoUsingNamespaceList) + (type.Value.BaseType.IsNullOrEmpty() ? "" :  $" : {GetRealTypeName(type.Value.BaseType, dtoUsingNamespaceList)}"));
+            dto.Replace(DtoClassNamePlaceholder, type.Value.IsEnum
+                ? "enum " + GetRealTypeName(genericTypeName, dtoUsingNamespaceList)
+                : "class " + GetRealTypeName(genericTypeName, dtoUsingNamespaceList) +
+                  (type.Value.BaseType.IsNullOrEmpty()
+                      ? ""
+                      : $" : {GetRealTypeName(type.Value.BaseType, dtoUsingNamespaceList)}"));
             var properties = new StringBuilder();
-            for (var i = 0; i < type.Value.Properties.Length; i++)
+            if (type.Value.IsEnum)
             {
-                var property = type.Value.Properties[i];
-                properties.Append("public ");
-
-                properties.Append(type.Value.GenericArguments.IsNullOrEmpty()
-                    ? GetRealTypeName(property.Type, dtoUsingNamespaceList)
-                    : GetRealTypeName(genericTypeName, dtoUsingNamespaceList));
-                properties.Append($" {property.Name}");
-                properties.Append(" { get; set; }");
-                if (i < type.Value.Properties.Length - 1)
+                for (var i = 0; i < type.Value.EnumNames.Length; i++)
                 {
-                    properties.AppendLine();
-                    properties.AppendLine();
-                    properties.Append("    ");
+                    var enumName = type.Value.EnumNames[i];
+                    properties.Append($"{enumName} = {type.Value.EnumValues[i]}");
+
+                    if (i < type.Value.EnumNames.Length - 1)
+                    {
+                        properties.Append($",");
+                        properties.AppendLine();
+                        properties.Append("    ");
+                    }
+                }
+            }
+            else
+            {
+                if (!type.Value.Properties.IsNullOrEmpty())
+                {
+                    for (var i = 0; i < type.Value.Properties.Length; i++)
+                    {
+                        var property = type.Value.Properties[i];
+                        properties.Append("public ");
+                        properties.Append(type.Value.GenericArguments.IsNullOrEmpty()
+                            ? GetRealTypeName(property.Type, dtoUsingNamespaceList)
+                            : GetRealTypeName(genericTypeName, dtoUsingNamespaceList));
+                        properties.Append($" {property.Name}");
+                        properties.Append(" { get; set; }");
+                        if (i < type.Value.Properties.Length - 1)
+                        {
+                            properties.AppendLine();
+                            properties.AppendLine();
+                            properties.Append("    ");
+                        }
+                    }
                 }
             }
 
