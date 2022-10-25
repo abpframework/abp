@@ -130,13 +130,8 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
             IncludeTypes = !args.WithoutContracts
         });
 
-        foreach (var controller in applicationApiDescriptionModel.Modules.Values.SelectMany(x => x.Controllers)
-                     .Where(x => x.Value.Interfaces.Any() && ServicePostfixes.Any(s => x.Value.Interfaces.Last().Type.EndsWith(s))))
-        {
-            await GenerateClassFileAsync(args, controller.Value);
-        }
-
-        foreach (var controller in applicationApiDescriptionModel.Modules.Values.SelectMany(x => x.Controllers).Where(x => ShouldGenerateProxy(x.Value)))
+        foreach (var controller in applicationApiDescriptionModel.Modules.Values.SelectMany(x => x.Controllers).
+                     Where(x => x.Value.Interfaces.Any() && ServicePostfixes.Any(s => x.Value.Interfaces.Last().Type.EndsWith(s))))
         {
             await GenerateClassFileAsync(args, controller.Value);
         }
@@ -147,17 +142,6 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         }
 
         await CreateJsonFile(args, applicationApiDescriptionModel);
-    }
-
-    private bool ShouldGenerateProxy(ControllerApiDescriptionModel controllerApiDescription)
-    {
-        if (!controllerApiDescription.Interfaces.Any())
-        {
-            return false;
-        }
-
-        var serviceInterface = controllerApiDescription.Interfaces.Last();
-        return ServicePostfixes.Any(x => serviceInterface.Type.EndsWith(x));
     }
 
     private async Task CreateJsonFile(GenerateProxyArgs args, ApplicationApiDescriptionModel applicationApiDescriptionModel)
