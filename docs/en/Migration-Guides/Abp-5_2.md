@@ -15,7 +15,7 @@ We've upgraded to Blazorise 1.0 stable version. So there is some breaking change
 
 Also You can review that pull request [#11649 - Blazorise 1.0 Migration](https://github.com/abpframework/abp/pull/11649)
 
-- `NumericEdit` is now made around the native `input type="number"` so a lot of its formating features are moved to the new `NumericPicker` component. Replace NumericEdit with NumericPicker.
+- `NumericEdit` is now made around the native `input type="number"` so a lot of its formatting features are moved to the new `NumericPicker` component. Replace NumericEdit with NumericPicker.
 - Rename `DecimalsSeparator` to `DecimalSeparator` on the `DataGridColumn` and `NumericPicker`.
 - Rename `MaxMessageSize` to `MaxChunkSize`.
 - Remove `Fullscreen` parameter on `<ModalContent>` and replace it with `Size="ModalSize.Fullscreen"` parameter.
