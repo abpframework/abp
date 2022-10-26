@@ -5,7 +5,7 @@
   "type": "object",
   "properties": {
     "name": {
-      "description": "The file extension or preprocessor to use for style files.",
+      "description": "The name of theme will change.",
       "type": "integer",
       "default": 1,
       "enum": [1, 2, 3, 4],
@@ -21,7 +21,7 @@
       }
     },
     "targetProject": {
-      "description": "The name of the project will change the style",
+      "description": "The name of the project will change the style.The project type must be 'application'",
       "type": "string",
       "x-prompt": "Please enter the project name"
     }
