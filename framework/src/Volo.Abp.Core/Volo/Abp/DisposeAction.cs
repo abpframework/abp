@@ -28,11 +28,11 @@ public class DisposeAction : IDisposable
     }
 }
 
-public class DisposeActionWithoutClosureAlloc<T> : IDisposable
+public class DisposeAction<T> : IDisposable
 {
     private readonly Action<T> _action;
     [CanBeNull] private readonly T _parameter;
-    public DisposeActionWithoutClosureAlloc(Action<T> action, T parameter)
+    public DisposeAction(Action<T> action, T parameter)
     {
         Check.NotNull(action, nameof(action));
 

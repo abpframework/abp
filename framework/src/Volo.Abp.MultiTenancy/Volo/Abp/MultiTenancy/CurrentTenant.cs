@@ -27,7 +27,7 @@ public class CurrentTenant : ICurrentTenant, ITransientDependency
     {
         var parentScope = _currentTenantAccessor.Current;
         _currentTenantAccessor.Current = new BasicTenantInfo(tenantId, name);
-        return new DisposeActionWithoutClosureAlloc<ValueTuple<ICurrentTenantAccessor, BasicTenantInfo>>(static (state) =>
+        return new DisposeAction<ValueTuple<ICurrentTenantAccessor, BasicTenantInfo>>(static (state) =>
         {
             var (currentTenantAccessor, parentScope) = state;
             currentTenantAccessor.Current = parentScope;
