@@ -1,4 +1,6 @@
+import { ThemeOptionsEnum } from './theme-options.enum';
+
 export type ChangeThemeOptions = {
-  name: string;
+  name: ThemeOptionsEnum;
   targetProject: string;
 };

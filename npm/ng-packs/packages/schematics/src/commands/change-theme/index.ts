@@ -1,12 +1,12 @@
 import { Rule, SchematicContext, SchematicsException, Tree } from '@angular-devkit/schematics';
 import { isLibrary, updateWorkspace, WorkspaceDefinition } from '../../utils';
-import { allStyles, StyleDefinition, styleMap } from './style-map';
+import { allStyles, styleMap } from './style-map';
 import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
 import { JsonArray, JsonValue } from '@angular-devkit/core';
 import { ChangeThemeOptions } from './model';
+import { ThemeOptionsEnum } from './theme-options.enum';
 
 export default function (_options: ChangeThemeOptions): Rule {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return async (_: Tree, __: SchematicContext) => {
     const targetThemeName = _options.name;
     const selectedProject = _options.targetProject;
@@ -23,7 +23,7 @@ export default function (_options: ChangeThemeOptions): Rule {
 function updateProjectStyle(
   projectName: string,
   workspace: WorkspaceDefinition,
-  targetThemeName: string,
+  targetThemeName: ThemeOptionsEnum,
 ) {
   const project = workspace.projects.get(projectName);
 
@@ -41,7 +41,10 @@ function updateProjectStyle(
 
   const sanitizedStyles = removeThemeBasedStyles(styles);
 
-  const newStyles = getStylesOfSelectedTheme(targetThemeName);
+  const newStyles = styleMap.get(targetThemeName);
+  if (!newStyles) {
+    throw new SchematicsException('The theme does not found');
+  }
   targetOption.styles = [...newStyles, ...sanitizedStyles] as JsonArray;
 }
 
@@ -80,7 +83,3 @@ export const styleCompareFn = (item1: string | object, item2: string | object) =
 
   return o1.bundleName && o2.bundleName && o1.bundleName == o2.bundleName;
 };
-
-export function getStylesOfSelectedTheme(theme: string): StyleDefinition[] {
-  return styleMap[theme];
-}

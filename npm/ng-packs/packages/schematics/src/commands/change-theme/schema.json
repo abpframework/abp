@@ -6,17 +6,17 @@
   "properties": {
     "name": {
       "description": "The file extension or preprocessor to use for style files.",
-      "type": "string",
-      "default": "basic",
-      "enum": ["basic", "lepton", "leptonx-lite", "leptonx"],
+      "type": "integer",
+      "default": 1,
+      "enum": [1, 2, 3, 4],
       "x-prompt": {
         "message": "Which theme would you like to use?",
         "type": "list",
         "items": [
-          { "value": "basic", "label": "basic" },
-          { "value": "lepton", "label": "lepton" },
-          { "value": "leptonx-lite", "label": "leptonx-lite" },
-          { "value": "leptonx", "label": "leptonx" }
+          { "value": 1, "label": "Basic" },
+          { "value": 2, "label": "Lepton" },
+          { "value": 3, "label": "LeptonXLite" },
+          { "value": 4, "label": "LeptonX" }
         ]
       }
     },
