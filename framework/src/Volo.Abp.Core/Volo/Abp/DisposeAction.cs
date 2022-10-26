@@ -5,7 +5,7 @@ namespace Volo.Abp;
 
 /// <summary>
 /// This class can be used to provide an action when
-/// Dipose method is called.
+/// Dispose method is called.
 /// </summary>
 public class DisposeAction : IDisposable
 {
@@ -30,7 +30,7 @@ public class DisposeAction : IDisposable
 
 /// <summary>
 /// This class can be used to provide an action when
-/// Dipose method is called. 
+/// Dispose method is called. 
 /// </summary>
 public class DisposeAction<T> : IDisposable
 {
