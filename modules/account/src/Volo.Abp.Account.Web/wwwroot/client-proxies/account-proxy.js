@@ -5,6 +5,48 @@
 
 (function(){
 
+  // controller volo.abp.account.account
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.abp.account.account');
+
+    volo.abp.account.account.register = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/account/register',
+        type: 'POST',
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
+    volo.abp.account.account.sendPasswordResetCode = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/account/send-password-reset-code',
+        type: 'POST',
+        dataType: null,
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
+    volo.abp.account.account.verifyPasswordResetToken = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/account/verify-password-reset-token',
+        type: 'POST',
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
+    volo.abp.account.account.resetPassword = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/account/reset-password',
+        type: 'POST',
+        dataType: null,
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
+  })();
+
   // controller volo.abp.account.web.areas.account.controllers.account
 
   (function(){
@@ -32,40 +74,6 @@
         url: abp.appPath + 'api/account/check-password',
         type: 'POST',
         data: JSON.stringify(login)
-      }, ajaxParams));
-    };
-
-  })();
-
-  // controller volo.abp.account.account
-
-  (function(){
-
-    abp.utils.createNamespace(window, 'volo.abp.account.account');
-
-    volo.abp.account.account.register = function(input, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/account/register',
-        type: 'POST',
-        data: JSON.stringify(input)
-      }, ajaxParams));
-    };
-
-    volo.abp.account.account.sendPasswordResetCode = function(input, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/account/send-password-reset-code',
-        type: 'POST',
-        dataType: null,
-        data: JSON.stringify(input)
-      }, ajaxParams));
-    };
-
-    volo.abp.account.account.resetPassword = function(input, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/account/reset-password',
-        type: 'POST',
-        dataType: null,
-        data: JSON.stringify(input)
       }, ajaxParams));
     };
 
