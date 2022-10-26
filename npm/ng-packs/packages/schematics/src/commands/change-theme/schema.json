@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "SchematicsABPModuleTemplateCreator",
+  "title": "ABP Theme Style Generator API Schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The file extension or preprocessor to use for style files.",
+      "type": "string",
+      "default": "basic",
+      "enum": ["basic", "lepton", "leptonx-lite", "leptonx"],
+      "x-prompt": {
+        "message": "Which theme would you like to use?",
+        "type": "list",
+        "items": [
+          { "value": "basic", "label": "basic" },
+          { "value": "lepton", "label": "lepton" },
+          { "value": "leptonx-lite", "label": "leptonx-lite" },
+          { "value": "leptonx", "label": "leptonx" }
+        ]
+      }
+    },
+    "targetProject": {
+      "description": "The name of the project will change the style",
+      "type": "string",
+      "x-prompt": "Please enter the project name"
+    }
+  },
+  "required": ["name"]
+}
