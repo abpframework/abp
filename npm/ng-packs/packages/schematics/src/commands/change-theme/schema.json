@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "SchematicsABPModuleTemplateCreator",
+  "$id": "SchematicsABPThemeChanger",
   "title": "ABP Theme Style Generator API Schema",
   "type": "object",
   "properties": {
