@@ -86,7 +86,7 @@
                     parentSelector = ".modal.fade";
                 }
                 var name = $(this).attr("name");
-                var selectedTextInputName = name.substring(0, name.length - 1) + "_Text]";
+                var selectedTextInputName = name + "_Text";
                 var selectedTextInput = $('<input>', {
                     type: 'hidden',
                     id: selectedTextInputName,
