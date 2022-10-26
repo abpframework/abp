@@ -11,11 +11,11 @@ namespace Volo.Abp.Json;
 
 public abstract class AbpSystemTextJsonSerializerProvider_TestBase : AbpJsonTestBase
 {
-    protected AbpSystemTextJsonSerializerProvider JsonSerializer;
+    protected AbpSystemTextJsonSerializer JsonSerializer;
 
     public AbpSystemTextJsonSerializerProvider_TestBase()
     {
-        JsonSerializer = GetRequiredService<AbpSystemTextJsonSerializerProvider>();
+        JsonSerializer = GetRequiredService<AbpSystemTextJsonSerializer>();
     }
 
     public class TestExtensibleObjectClass : ExtensibleObject
@@ -220,7 +220,8 @@ public class AbpSystemTextJsonSerializerProvider_DateTimeFormat_Tests : AbpSyste
     {
         services.Configure<AbpJsonOptions>(options =>
         {
-            options.DefaultDateTimeFormat = "yyyy*MM*dd";
+            options.InputDateTimeFormats.Add("yyyy*MM*dd");
+            options.OutputDateTimeFormat = "yyyy*MM*dd HH*mm*ss";
         });
     }
 
@@ -233,8 +234,12 @@ public class AbpSystemTextJsonSerializerProvider_DateTimeFormat_Tests : AbpSyste
         file.CreationTime.Month.ShouldBe(11);
         file.CreationTime.Day.ShouldBe(20);
 
-        var newJson = JsonSerializer.Serialize(file);
-        newJson.ShouldBe(json);
+        json = JsonSerializer.Serialize(new FileWithDatetime()
+        {
+            Name = "abp",
+            CreationTime = new DateTime(2020, 11, 20, 12, 34, 56)
+        });
+        json.ShouldContain("\"2020*11*20 12*34*56\"");
     }
 
     [Fact]
@@ -256,8 +261,12 @@ public class AbpSystemTextJsonSerializerProvider_DateTimeFormat_Tests : AbpSyste
         file.CreationTime.Value.Month.ShouldBe(11);
         file.CreationTime.Value.Day.ShouldBe(20);
 
-        var newJson = JsonSerializer.Serialize(file);
-        newJson.ShouldBe(json);
+        json = JsonSerializer.Serialize(new FileWithDatetime()
+        {
+            Name = "abp",
+            CreationTime = new DateTime(2020, 11, 20, 12, 34, 56)
+        });
+        json.ShouldContain("\"2020*11*20 12*34*56\"");
     }
 }
 
