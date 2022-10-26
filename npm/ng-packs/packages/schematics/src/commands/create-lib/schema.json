@@ -15,7 +15,7 @@
     },
     "isSecondaryEntrypoint": {
       "description": "Is secondary entrypoint",
-      "type": "boole∂an",
+      "type": "boolean",
       "$default": false,
       "x-prompt": "Is secondary entrypoint?"
     },
