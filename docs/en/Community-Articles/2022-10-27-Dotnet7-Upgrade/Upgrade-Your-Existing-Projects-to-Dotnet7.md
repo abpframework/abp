@@ -12,7 +12,7 @@ When I wrote this article, the latest .NET version was `7.0.0-rc.2`. So some of 
 
 ## Install .NET7 SDK
 
-If you are on your development computer, then you need to install the .NET7 SDK `7.x.x`. For the production servers, you need to install the .NET 7 runtimes. Download the link for the .NET7 SDK and runtimes is:
+If you are on your development computer, then you need to install the .NET7 SDK `7.x.x`. For the production servers, you need to install the .NET 7 runtimes. Download link for the .NET7 SDK and runtimes is:
 
 * https://dotnet.microsoft.com/en-us/download/dotnet/7.0
 
@@ -254,7 +254,8 @@ For this update, you can check out the following PR as an example:
 
 We have updated all our dependencies from .NET6 to .NET7. Not all the changes are here, but here's the commit of our .NET 7 update process:
 
-[github.com/abpframework/abp/commit/e7e9756cf228acdeaf0eaa2eee49264d6927fdd5](https://github.com/abpframework/abp/commit/e7e9756cf228acdeaf0eaa2eee49264d6927fdd5)
+* [github.com/abpframework/abp/pull/13626/files](https://github.com/abpframework/abp/pull/13626/files)
+
 
 
 Happy coding with .NET 7 🤗
