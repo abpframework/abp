@@ -21,6 +21,7 @@ class FileCopy {
 const PACKAGE_TO_BUILD = 'schematics';
 const FILES_TO_COPY_AFTER_BUILD: (FileCopy | string)[] = [
   { src: 'src/commands/create-lib/schema.json', dest: 'commands/create-lib/schema.json' },
+  { src: 'src/commands/change-theme/schema.json', dest: 'commands/change-theme/schema.json' },
   { src: 'src/commands/create-lib/files-package', dest: 'commands/create-lib/files-package' },
   {
     src: 'src/commands/create-lib/files-secondary-entrypoint',

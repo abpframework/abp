@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "SchematicsABPThemeChanger",
+  "title": "ABP Theme Style Generator API Schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The name of theme will change.",
+      "type": "number",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "enum": [1, 2, 3, 4],
+      "x-prompt": {
+        "message": "Which theme would you like to use?",
+        "type": "list",
+        "items": [
+          { "value": 1, "label": "Basic" },
+          { "value": 2, "label": "Lepton" },
+          { "value": 3, "label": "LeptonXLite" },
+          { "value": 4, "label": "LeptonX" }
+        ]
+      }
+    },
+    "targetProject": {
+      "description": "The name of the project will change the style.The project type must be 'application'",
+      "type": "string",
+      "x-prompt": "Please enter the project name",
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      }
+    }
+  },
+  "required": ["name"]
+}
