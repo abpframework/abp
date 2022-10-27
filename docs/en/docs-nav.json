@@ -631,6 +631,10 @@
       "text": "User Interface",
       "items": [
         {
+          "text": "Themes",
+          "path": "Themes/LeptonXLite/Index.md"
+        },
+        {
           "text": "MVC / Razor Pages",
           "items": [
             {
