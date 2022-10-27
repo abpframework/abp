@@ -25,17 +25,10 @@ Using [ngx-datatable](https://github.com/swimlane/ngx-datatable) in extensinble 
       </abp-extensible-table>
 ````
 
-`       actionsText : ` ** Column name of action column.
-
-`              data : ` Items shows in your table. 
-
-`              list : ` Instance of ListService. 
-
-`actionsColumnWidth : ` Width of your action column. 
-
-`   actionsTemplate : ` Template of action when click this button or whatever. Generally ng-template.
-
-`      recordsTotal : ` Count of record total. 
-
-`    tableActivate  : ` It is Output(). A cell or row was focused via keyboard or mouse click.
-A cell or row was focused via keyboard or mouse click.
+ * `       actionsText : ` ** Column name of action column. **Type** : string
+ * `              data : ` Items shows in your table. **Type** : R[]
+ * `              list : ` Instance of ListService. **Type** : ListService
+ * `actionsColumnWidth : ` Width of your action column. **Type** : number
+ * `   actionsTemplate : ` Template of action when click this button or whatever. Generally ng-template. **Type** : TemplateRef<any>
+ * `      recordsTotal : ` Count of record total. **Type** : number
+ * `    tableActivate  : ` It is Output(). A cell or row was focused via keyboard or mouse click. **Type** : EventEmitter() 
