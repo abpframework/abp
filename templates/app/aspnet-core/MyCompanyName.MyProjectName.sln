@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.Web.Host", "src\MyCompanyName.MyProjectName.Web.Host\MyCompanyName.MyProjectName.Web.Host.csproj", "{6FE54035-9C11-4702-A5E2-D16F23101468}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.IdentityServer", "src\MyCompanyName.MyProjectName.IdentityServer\MyCompanyName.MyProjectName.IdentityServer.csproj", "{073C361E-B8F4-49F5-93CC-72A3FF49C026}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.AuthServer", "src\MyCompanyName.MyProjectName.AuthServer\MyCompanyName.MyProjectName.AuthServer.csproj", "{073C361E-B8F4-49F5-93CC-72A3FF49C026}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.HttpApi.Host", "src\MyCompanyName.MyProjectName.HttpApi.Host\MyCompanyName.MyProjectName.HttpApi.Host.csproj", "{E6D5BF0E-DE92-4D82-A352-EF04B37CB11C}"
 EndProject

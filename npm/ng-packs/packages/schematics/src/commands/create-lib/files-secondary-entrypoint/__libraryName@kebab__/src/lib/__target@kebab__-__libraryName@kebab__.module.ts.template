@@ -1,0 +1,11 @@
+import { ModuleWithProviders, NgModule } from '@angular/core';
+
+@NgModule()
+export class <%= pascal(target) %><%= pascal(libraryName) %>Module {
+    static forRoot(): ModuleWithProviders<<%= pascal(target) %><%= pascal(libraryName) %>Module> {
+        return {
+            ngModule:<%= pascal(target) %><%= pascal(libraryName) %>Module,
+            providers: []
+        }
+    }
+}

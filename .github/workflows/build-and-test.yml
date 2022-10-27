@@ -36,6 +36,9 @@ on:
       - synchronize
       - reopened
       - ready_for_review
+permissions:
+  contents: read
+
 jobs:
   build-test:
     runs-on: windows-latest

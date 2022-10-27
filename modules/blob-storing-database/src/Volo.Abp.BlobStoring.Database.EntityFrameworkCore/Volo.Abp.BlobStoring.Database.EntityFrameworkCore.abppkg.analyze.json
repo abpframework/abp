@@ -1,11 +1,24 @@
 {
   "name": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
-  "hash": "91e3a724f35375f79d9505ca0e950b9e",
+  "hash": "9da583073bbfee862d0e3219a8e19ab5",
   "contents": [
     {
       "namespace": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.BlobStoring.Database.Domain",
+          "namespace": "Volo.Abp.BlobStoring.Database",
+          "name": "BlobStoringDatabaseDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "name": "AbpEntityFrameworkCoreModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "BlobStoringDatabaseEntityFrameworkCoreModule"
+      "name": "BlobStoringDatabaseEntityFrameworkCoreModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
@@ -14,16 +27,19 @@
         {
           "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlob",
           "contentType": "databaseTable",
-          "name": "AbpBlobs"
+          "name": "AbpBlobs",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlobContainer",
           "contentType": "databaseTable",
-          "name": "AbpBlobContainers"
+          "name": "AbpBlobContainers",
+          "summary": null
         }
       ],
       "contentType": "efCoreDbContext",
-      "name": "BlobStoringDbContext"
+      "name": "BlobStoringDbContext",
+      "summary": null
     }
   ]
 }

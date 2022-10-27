@@ -1,20 +1,176 @@
 {
   "name": "Volo.Blogging.Admin.Application",
-  "hash": "7b36c95fbcf2605d9ea2614cba9ed2b6",
+  "hash": "eefefd2ea6eb529f0396e0f21a26894a",
   "contents": [
     {
       "namespace": "Volo.Blogging.Admin",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Blogging.Domain",
+          "namespace": "Volo.Blogging",
+          "name": "BloggingDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Blogging.Admin.Application.Contracts",
+          "namespace": "Volo.Blogging.Admin",
+          "name": "BloggingAdminApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching",
+          "namespace": "Volo.Abp.Caching",
+          "name": "AbpCachingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "BloggingAdminApplicationModule"
+      "name": "BloggingAdminApplicationModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Blogging.Admin.Blogs",
-      "summary": null,
+      "baseClass": {
+        "name": "BloggingAdminAppServiceBase",
+        "namespace": "Volo.Blogging.Admin",
+        "declaringAssemblyName": "Volo.Blogging.Admin.Application"
+      },
       "implementingInterfaces": [
-        "Volo.Blogging.Admin.Blogs.IBlogManagementAppService"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IBlogManagementAppService",
+          "namespace": "Volo.Blogging.Admin.Blogs",
+          "declaringAssemblyName": "Volo.Blogging.Admin.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "ListResultDto<BlogDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "BlogDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "BlogDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CreateBlogDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "BlogDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "UpdateBlogDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "ClearCacheAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "BlogManagementAppService"
+      "name": "BlogManagementAppService",
+      "summary": null
     }
   ]
 }

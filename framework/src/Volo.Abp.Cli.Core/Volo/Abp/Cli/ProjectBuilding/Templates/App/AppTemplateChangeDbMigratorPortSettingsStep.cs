@@ -5,19 +5,19 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 public class AppTemplateChangeDbMigratorPortSettingsStep : ProjectBuildPipelineStep
 {
-    public string IdentityServerPort { get; }
+    public string AuthServerPort { get; }
 
-    /// <param name="identityServerPort"></param>
+    /// <param name="authServerPort"></param>
     public AppTemplateChangeDbMigratorPortSettingsStep(
-        string identityServerPort)
+        string authServerPort)
     {
-        IdentityServerPort = identityServerPort;
+        AuthServerPort = authServerPort;
     }
 
     public override void Execute(ProjectBuildContext context)
     {
         context
             .GetFile("/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json")
-            .ReplaceText("44305", IdentityServerPort);
+            .ReplaceText("44305", AuthServerPort);
     }
 }

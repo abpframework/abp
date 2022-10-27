@@ -78,26 +78,26 @@ public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 
 ## 注册后台工作者
 
-创建一个后台工作者后,你应该将其添加到 `IBackgroundWorkerManager`. 最常见的地方是模块类的 `OnApplicationInitialization` 方法:
+创建一个后台工作者后,你应该将其添加到 `IBackgroundWorkerManager`. 最常见的地方是模块类的 `OnApplicationInitializationAsync` 方法:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundWorkersModule))]
 public class MyModule : AbpModule
 {
-    public override void OnApplicationInitialization(
+    public override async Task OnApplicationInitialization(
         ApplicationInitializationContext context)
     {
-        context.AddBackgroundWorker<PassiveUserCheckerWorker>();
+        await context.AddBackgroundWorkerAsync<PassiveUserCheckerWorker>();
     }
 }
 ````
 
-`context.AddBackgroundWorker(...)` 是以下代码的简化扩展方法:
+`context.AddBackgroundWorkerAsync(...)` 是以下代码的简化扩展方法:
 
 ````csharp
 context.ServiceProvider
     .GetRequiredService<IBackgroundWorkerManager>()
-    .Add(
+    .AddAsync(
         context
             .ServiceProvider
             .GetRequiredService<PassiveUserCheckerWorker>()
@@ -106,7 +106,7 @@ context.ServiceProvider
 
 所以,它解析了给定的后台工作者并添加到 `IBackgroundWorkerManager`.
 
-如果我们通常在 `OnApplicationInitialization` 添加工作者,但并不是强制的. 你可以在应用程序的任何地方注入 `IBackgroundWorkerManager` 并在运行时添加工作者. 在你的应用程序关闭时Background worker manager会释放所有已注册的后台工作者.
+如果我们通常在 `OnApplicationInitializationAsync` 添加工作者,但并不是强制的. 你可以在应用程序的任何地方注入 `IBackgroundWorkerManager` 并在运行时添加工作者. 在你的应用程序关闭时Background worker manager会释放所有已注册的后台工作者.
 
 ## Options
 

@@ -165,6 +165,25 @@
     "SortBy": "Sort by",
     "NoPublishedEventsYet": "No published events yet.",
     "SubscribeYoutubeChannel": "Subscribe to the Youtube Channel",
-    "Enum:EventType:0": "Talks"
+    "Enum:EventType:0": "Talks",
+    "MemberNotPublishedPostYet": "This member hasn't published any posts yet.",
+    "TimeAgo": "{0} ago",
+    "Discord_Page_JoinCommunityMessage": "Join ABP Discord Community",
+    "Discord_Page_Announce": "We are happy to announce ABP Community Discord Server!",
+    "Discord_Page_Description_1": "ABP Community has been growing since day one. We wanted to take it to the next step by creating an official ABP Discord server so the ABP Community can interact with each other using the wonders of instant messaging.",
+    "Discord_Page_Description_2": "ABP Community Discord Server is the place where you can showcase your creations using ABP Framework, share the tips that worked for you, catch up with the latest news and announcements about ABP Framework, just chat with community members to exchange ideas, and have fun!",
+    "Discord_Page_Description_3": "This ABP Community Discord Server is the official one with the ABP Core Team is present on the server to monitor.", 
+    "Discord_Page_JoinToServer": "Join ABP Discord Server",
+    "Events_Page_MetaTitle": "ABP Community Events",
+    "Events_Page_MetaDescription": "The live shows, hosted by the ABP Team, are casual sessions full of community content, demos, Q&A, and discussions around what's happening in ABP.",
+    "Events_Page_Title": "ABP<span class=\"gradient-community\"> Community</span> Talks",
+    "Events_Page_WritingFromUser": "Read writing from {0} on ABP Community.",
+    "Post_Create_Page_MetaTitle": "New Post",
+    "Post_Create_Page_MetaDescription": "Create your post for sharing your experiences about ABP framework and contributing the ABP Community.",
+    "Post_Create_Page_CreateNewPost": "Create New Post",
+    "Post_Index_Page_MetaDescription": "ABP Community's purpose is to create a contribution environment for developers who use the ABP framework.",
+    "Layout_Title": "{0} | ABP Community",
+    "Layout_MetaDescription": "ABP Community is an environment where people can share posts about ABP framework and follows the projects.",
+    "Index_Page_CommunityIntroduction": "This is a hub for ABP Framework, .NET and software development. You can read the articles, watch the video tutorials, get informed about ABP’s development progress and ABP-related events, help other developers and share your expertise with the ABP community."
   }
 }

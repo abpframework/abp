@@ -1,0 +1,24 @@
+{
+  "name": "Volo.Abp.PermissionManagement.Domain.OpenIddict",
+  "hash": "5ed92e26408968b1d65da3a024f83872",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.PermissionManagement.OpenIddict",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.OpenIddict.Domain.Shared",
+          "namespace": "Volo.Abp.OpenIddict",
+          "name": "AbpOpenIddictDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Domain",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementDomainModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpPermissionManagementDomainOpenIddictModule",
+      "summary": null
+    }
+  ]
+}

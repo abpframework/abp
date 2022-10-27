@@ -1,49 +1,69 @@
 {
   "name": "Volo.Abp.IdentityServer.MongoDB",
-  "hash": "021e08c97b6f93ee8ef4afe4dcd4c490",
+  "hash": "582cce45cb97d3286dbf84eb8f752810",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "namespace": "Volo.Abp.IdentityServer",
+          "name": "AbpIdentityServerDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "namespace": "Volo.Abp.MongoDB",
+          "name": "AbpMongoDbModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpIdentityServerMongoDbModule"
+      "name": "AbpIdentityServerMongoDbModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.IdentityServer.MongoDB",
       "connectionStringName": "AbpIdentityServer",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.IdentityServer.Devices.DeviceFlowCodes",
+          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
           "contentType": "databaseCollection",
-          "name": "IdentityServerDeviceFlowCodes"
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerApiScopes"
+          "name": "IdentityServerIdentityResources",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource",
           "contentType": "databaseCollection",
-          "name": "IdentityServerApiResources"
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerIdentityResources"
+          "name": "IdentityServerApiResources",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
           "contentType": "databaseCollection",
-          "name": "IdentityServerPersistedGrants"
+          "name": "IdentityServerPersistedGrants",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Devices.DeviceFlowCodes",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerDeviceFlowCodes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerApiScopes",
+          "summary": null
         },
         {
           "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
           "contentType": "databaseCollection",
-          "name": "IdentityServerClients"
+          "name": "IdentityServerClients",
+          "summary": null
         }
       ],
       "contentType": "mongoDbContext",
-      "name": "AbpIdentityServerMongoDbContext"
+      "name": "AbpIdentityServerMongoDbContext",
+      "summary": null
     }
   ]
 }

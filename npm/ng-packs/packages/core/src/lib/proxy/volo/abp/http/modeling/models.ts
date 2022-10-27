@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 
 export interface ActionApiDescriptionModel {
   uniqueName?: string;
@@ -9,6 +8,8 @@ export interface ActionApiDescriptionModel {
   parametersOnMethod: MethodParameterApiDescriptionModel[];
   parameters: ParameterApiDescriptionModel[];
   returnValue: ReturnValueApiDescriptionModel;
+  allowAnonymous?: boolean;
+  implementFrom?: string;
 }
 
 export interface ApplicationApiDescriptionModel {
@@ -22,6 +23,9 @@ export interface ApplicationApiDescriptionModelRequestDto {
 
 export interface ControllerApiDescriptionModel {
   controllerName?: string;
+  controllerGroupName?: string;
+  isRemoteService: boolean;
+  apiVersion?: string;
   type?: string;
   interfaces: ControllerInterfaceApiDescriptionModel[];
   actions: Record<string, ActionApiDescriptionModel>;
@@ -65,6 +69,11 @@ export interface PropertyApiDescriptionModel {
   type?: string;
   typeSimple?: string;
   isRequired: boolean;
+  minLength?: number;
+  maxLength?: number;
+  minimum?: string;
+  maximum?: string;
+  regex?: string;
 }
 
 export interface ReturnValueApiDescriptionModel {

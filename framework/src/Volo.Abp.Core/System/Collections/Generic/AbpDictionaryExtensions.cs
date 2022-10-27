@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Dynamic;
 
 namespace System.Collections.Generic;
 
@@ -127,5 +128,23 @@ public static class AbpDictionaryExtensions
     public static TValue GetOrAdd<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> factory)
     {
         return dictionary.GetOrAdd(key, k => factory());
+    }
+
+    /// <summary>
+    /// Converts a <string,object> dictionary to dynamic object so added and removed at run
+    /// </summary>
+    /// <param name="dictionary">The collection object</param>
+    /// <returns>If value is correct, return ExpandoObject that represents an object</returns>
+    public static dynamic ConvertToDynamicObject(this Dictionary<string, object> dictionary)
+    {
+        var expandoObject = new ExpandoObject();
+        var expendObjectCollection = (ICollection<KeyValuePair<string, object>>)expandoObject;
+
+        foreach (var keyValuePair in dictionary)
+        {
+            expendObjectCollection.Add(keyValuePair);
+        }
+
+        return expandoObject;
     }
 }

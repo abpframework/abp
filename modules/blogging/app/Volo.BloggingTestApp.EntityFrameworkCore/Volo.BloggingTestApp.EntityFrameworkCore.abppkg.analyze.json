@@ -1,0 +1,52 @@
+{
+  "name": "Volo.BloggingTestApp.EntityFrameworkCore",
+  "hash": "a30a07f1bf892d0519d78a28a8051656",
+  "contents": [
+    {
+      "namespace": "Volo.BloggingTestApp.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Blogging.EntityFrameworkCore",
+          "namespace": "Volo.Blogging.EntityFrameworkCore",
+          "name": "BloggingEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.EntityFrameworkCore",
+          "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
+          "name": "AbpIdentityEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
+          "namespace": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
+          "name": "AbpPermissionManagementEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.EntityFrameworkCore",
+          "namespace": "Volo.Abp.SettingManagement.EntityFrameworkCore",
+          "name": "AbpSettingManagementEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore.SqlServer",
+          "namespace": "Volo.Abp.EntityFrameworkCore.SqlServer",
+          "name": "AbpEntityFrameworkCoreSqlServerModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+          "namespace": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+          "name": "BlobStoringDatabaseEntityFrameworkCoreModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "BloggingTestAppEntityFrameworkCoreModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.BloggingTestApp.EntityFrameworkCore",
+      "connectionStringName": null,
+      "databaseTables": [],
+      "contentType": "efCoreDbContext",
+      "name": "BloggingTestAppDbContext",
+      "summary": null
+    }
+  ]
+}

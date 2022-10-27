@@ -1,20 +1,130 @@
 {
   "name": "Volo.Abp.FeatureManagement.Application",
-  "hash": "0a1e4a174a26dbb996988ce6c9964901",
+  "hash": "b8d2538c64bd8582191c9468edbd0156",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Domain",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application.Contracts",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpFeatureManagementApplicationModule"
+      "name": "AbpFeatureManagementApplicationModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.FeatureManagement",
-      "summary": null,
+      "baseClass": {
+        "name": "FeatureManagementAppServiceBase",
+        "namespace": "Volo.Abp.FeatureManagement",
+        "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application"
+      },
       "implementingInterfaces": [
-        "Volo.Abp.FeatureManagement.IFeatureAppService"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IFeatureAppService",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "GetFeatureListResultDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            },
+            {
+              "type": "UpdateFeaturesDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "FeatureAppService"
+      "name": "FeatureAppService",
+      "summary": null
     }
   ]
 }

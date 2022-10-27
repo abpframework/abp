@@ -108,13 +108,16 @@ public class BundlingService : IBundlingService, ITransientDependency
             Parameters = parameters
         };
 
+        scriptContext.BundleDefinitions.AddIfNotContains(
+            x => x.Source == "_framework/blazor.webassembly.js", 
+            () => new BundleDefinition { Source = "_framework/blazor.webassembly.js" });
+
         foreach (var bundleDefinition in bundleDefinitions)
         {
             var contributor = CreateContributorInstance(bundleDefinition.BundleContributorType);
             contributor.AddScripts(scriptContext);
         }
 
-        scriptContext.Add("_framework/blazor.webassembly.js");
         return scriptContext;
     }
 
@@ -206,7 +209,7 @@ public class BundlingService : IBundlingService, ITransientDependency
             builder.Append($"    <script src=\"{script.Source}\"");
             foreach (var additionalProperty in script.AdditionalProperties)
             {
-                builder.Append($"{additionalProperty.Key}={additionalProperty.Value} ");
+                builder.Append($" {additionalProperty.Key}={additionalProperty.Value} ");
             }
 
             builder.AppendLine("></script>");
@@ -229,7 +232,7 @@ public class BundlingService : IBundlingService, ITransientDependency
     {
         var bundleContributors = module.Assembly
             .GetTypes()
-            .Where(t => t.IsAssignableTo<IBundleContributor>())
+            .Where(t => !t.IsAbstract && !t.IsInterface && t.IsAssignableTo<IBundleContributor>())
             .ToList();
 
         if (bundleContributors.Count > 1)

@@ -4,7 +4,6 @@ using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Data;
-using Volo.Abp.IdentityServer;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
@@ -20,15 +19,7 @@ public class MyProjectNameTestBaseModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        PreConfigure<AbpIdentityServerBuilderOptions>(options =>
-        {
-            options.AddDeveloperSigningCredential = false;
-        });
 
-        PreConfigure<IIdentityServerBuilder>(identityServerBuilder =>
-        {
-            identityServerBuilder.AddDeveloperSigningCredential(false, System.Guid.NewGuid().ToString());
-        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

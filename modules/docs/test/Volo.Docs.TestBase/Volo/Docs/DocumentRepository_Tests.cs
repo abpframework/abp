@@ -21,7 +21,7 @@ namespace Volo.Docs
         [Fact]
         public async Task FindAsync()
         {
-            var document = await DocumentRepository.FindAsync(DocsTestData.PorjectId, "CLI.md", "en", "2.0.0");
+            var document = await DocumentRepository.FindAsync(DocsTestData.ProjectId, "CLI.md", "en", "2.0.0");
             document.ShouldNotBeNull();
         }
 
@@ -30,7 +30,7 @@ namespace Volo.Docs
         {
             (await DocumentRepository.GetListAsync()).ShouldNotBeEmpty();
 
-            await DocumentRepository.DeleteAsync(DocsTestData.PorjectId, "CLI.md", "en", "2.0.0");
+            await DocumentRepository.DeleteAsync(DocsTestData.ProjectId, "CLI.md", "en", "2.0.0");
 
             (await DocumentRepository.GetListAsync()).ShouldBeEmpty();
         }

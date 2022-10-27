@@ -1,0 +1,19 @@
+{
+  "name": "Volo.Abp.AspNetCore.Components.Web.BasicTheme",
+  "hash": "64ff38427c8271c0e16043dadf3e18af",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AspNetCore.Components.Web.BasicTheme",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Components.Web.Theming",
+          "namespace": "Volo.Abp.AspNetCore.Components.Web.Theming",
+          "name": "AbpAspNetCoreComponentsWebThemingModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpAspNetCoreComponentsWebBasicThemeModule",
+      "summary": null
+    }
+  ]
+}

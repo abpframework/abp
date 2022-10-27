@@ -1,11 +1,29 @@
 {
   "name": "Volo.Abp.Users.Domain",
-  "hash": "97a2a74c722bc59336bb9c6f75049e99",
+  "hash": "ed71dde92c0b74df1ed6f0907494b652",
   "contents": [
     {
       "namespace": "Volo.Abp.Users",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.Domain.Shared",
+          "namespace": "Volo.Abp.Users",
+          "name": "AbpUsersDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.Abstractions",
+          "namespace": "Volo.Abp.Users",
+          "name": "AbpUsersAbstractionModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "namespace": "Volo.Abp.Domain",
+          "name": "AbpDddDomainModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpUsersDomainModule"
+      "name": "AbpUsersDomainModule",
+      "summary": null
     }
   ]
 }

@@ -1,26 +1,54 @@
 {
   "name": "Volo.Abp.PermissionManagement.Domain",
-  "hash": "6aed5a285610c53b3714ba717d73d675",
+  "hash": "7cf58c0603205548bae5e0f414cdc933",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Authorization",
+          "namespace": "Volo.Abp.Authorization",
+          "name": "AbpAuthorizationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "namespace": "Volo.Abp.Domain",
+          "name": "AbpDddDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Domain.Shared",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching",
+          "namespace": "Volo.Abp.Caching",
+          "name": "AbpCachingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Json",
+          "namespace": "Volo.Abp.Json",
+          "name": "AbpJsonModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpPermissionManagementDomainModule"
+      "name": "AbpPermissionManagementDomainModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Abp.PermissionManagement",
-      "summary": null,
-      "entityModel": {
+      "entityAnalyzeModel": {
         "namespace": "Volo.Abp.PermissionManagement",
         "primaryKeyType": "Guid",
-        "summary": null,
-        "collectionProperties": [],
-        "navigationProperties": [],
+        "collectionProperties": {},
+        "navigationProperties": {},
         "contentType": "entity",
-        "name": "PermissionGrant"
+        "name": "PermissionGrant",
+        "summary": null
       },
       "contentType": "repositoryInterface",
-      "name": "IPermissionGrantRepository"
+      "name": "IPermissionGrantRepository",
+      "summary": null
     }
   ]
 }

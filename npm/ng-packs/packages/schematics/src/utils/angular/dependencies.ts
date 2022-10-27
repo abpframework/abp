@@ -1,10 +1,11 @@
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+
 import { Tree } from '@angular-devkit/schematics';
 import { JSONFile } from './json-file';
 
@@ -36,9 +37,6 @@ export function addPackageJsonDependency(
   pkgJsonPath = PKG_JSON_PATH,
 ): void {
   const json = new JSONFile(tree, pkgJsonPath);
-  if (json.error) {
-    throw json.error;
-  }
 
   const { overwrite, type, name, version } = dependency;
   const path = [type, name];
@@ -53,9 +51,6 @@ export function removePackageJsonDependency(
   pkgJsonPath = PKG_JSON_PATH,
 ): void {
   const json = new JSONFile(tree, pkgJsonPath);
-  if (json.error) {
-    throw json.error;
-  }
 
   for (const depType of ALL_DEPENDENCY_TYPE) {
     json.remove([depType, name]);
@@ -68,9 +63,6 @@ export function getPackageJsonDependency(
   pkgJsonPath = PKG_JSON_PATH,
 ): NodeDependency | null {
   const json = new JSONFile(tree, pkgJsonPath);
-  if (json.error) {
-    throw json.error;
-  }
 
   for (const depType of ALL_DEPENDENCY_TYPE) {
     const version = json.get([depType, name]);

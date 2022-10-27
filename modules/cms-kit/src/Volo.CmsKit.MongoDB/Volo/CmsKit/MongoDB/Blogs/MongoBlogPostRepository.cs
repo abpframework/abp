@@ -12,15 +12,18 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.MongoDB.Blogs;
 
 public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, BlogPost, Guid>, IBlogPostRepository
 {
-    public MongoBlogPostRepository(IMongoDbContextProvider<CmsKitMongoDbContext> dbContextProvider) : base(
+    private EntityTagManager _entityTagManager;
+    public MongoBlogPostRepository(IMongoDbContextProvider<CmsKitMongoDbContext> dbContextProvider, EntityTagManager entityTagManager) : base(
         dbContextProvider)
     {
+        _entityTagManager = entityTagManager;
     }
 
     public virtual async Task<BlogPost> GetBySlugAsync(Guid blogId, [NotNull] string slug,
@@ -44,12 +47,20 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         string filter = null,
         Guid? blogId = null,
         Guid? authorId = null,
+        Guid? tagId = null,
         BlogPostStatus? statusFilter = null,
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
+        List<string> entityIdFilters = null;
+        if (tagId.HasValue)
+        {
+            entityIdFilters = await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
+        }
+        
         return await (await GetMongoQueryableAsync(cancellationToken))
+            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(blogId.HasValue, x => x.BlogId == blogId)
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(authorId.HasValue, x => x.AuthorId == authorId)
@@ -61,6 +72,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         string filter = null,
         Guid? blogId = null,
         Guid? authorId = null,
+        Guid? tagId = null,
         BlogPostStatus? statusFilter = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
@@ -70,10 +82,17 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         cancellationToken = GetCancellationToken(cancellationToken);
         var dbContext = await GetDbContextAsync(cancellationToken);
         var blogPostQueryable = await GetQueryableAsync();
-
+        
+        List<string> entityIdFilters = null;
+        if (tagId.HasValue)
+        {
+            entityIdFilters = await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
+        }
+        
         var usersQueryable = dbContext.Collection<CmsUser>().AsQueryable();
 
         var queryable = blogPostQueryable
+            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()))
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
             .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
             .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)

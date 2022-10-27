@@ -1,0 +1,24 @@
+{
+  "name": "Volo.Abp.PermissionManagement.Domain.IdentityServer",
+  "hash": "76bfa6bba0f71e992585abb6f1c3e8bf",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.PermissionManagement.IdentityServer",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain.Shared",
+          "namespace": "Volo.Abp.IdentityServer",
+          "name": "AbpIdentityServerDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Domain",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementDomainModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpPermissionManagementDomainIdentityServerModule",
+      "summary": null
+    }
+  ]
+}

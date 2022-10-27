@@ -18,6 +18,7 @@ ABP是一个 **模块化的应用程序框架** 由十多个 **NuGet & NPM packa
 * [**Docs**](Docs.md): 用于创建技术文档页面. ABP的[文档](https://abp.io/documents/) 就使用了此模块.
 * [**Feature Management**](Feature-Management.md): 用于保存和管理功能.
 * [**Identity**](Identity.md): 基于Microsoft Identity管理组织单元,角色,用户和他们的权限.
+* [**OpenIddict**](OpenIddict.md): 集成了OpenIddict.
 * [**Identity Server**](IdentityServer.md): 集成了IdentityServer4.
 * [**Permission Management**](Permission-Management.md): 用于保存权限.
 * [**Setting Management**](Setting-Management.md): 用于保存设置.
