@@ -1,8 +1,8 @@
 # Upgrade Your Existing  Projects to .NET7
 
-A new .NET version has come. As open-source contributors, we are tracking the latest libraries and adopting them to our existing projects. In this sense, we completed our .NET 7 upgrade in our repositories for ABP Framework and ABP Commercial. In this article, I'll share our experiences we faced, while upgrading to the new .NET version 👉  .NET 7.
+A new .NET version has come. As open-source contributors, we are tracking the latest libraries and adopting them to our existing projects. In this sense, we completed our .NET 7 upgrade in our repositories for ABP Framework and ABP Commercial. In this article, I'll share the experiences we faced while upgrading to the new .NET version 👉  .NET 7.
 
-At the time I wrote this article, the latest .NET version was `7.0.0-rc.2`. So some of the version statements I wrote below must be changed due to the stable version release.
+When I wrote this article, the latest .NET version was `7.0.0-rc.2`. So some of the version statements I wrote below must be changed due to the stable version release.
 
 
 
@@ -12,7 +12,7 @@ At the time I wrote this article, the latest .NET version was `7.0.0-rc.2`. So s
 
 ## Install .NET7 SDK
 
-If you are on your development computer, then you need to install the .NET7 SDK `7.x.x`. For the production servers, you need to install the .NET 7 runtimes. Download link for the .NET7 SDK and runtimes is:
+If you are on your development computer, then you need to install the .NET7 SDK `7.x.x`. For the production servers, you need to install the .NET 7 runtimes. Download the link for the .NET7 SDK and runtimes is:
 
 * https://dotnet.microsoft.com/en-us/download/dotnet/7.0
 
@@ -20,7 +20,7 @@ If you are on your development computer, then you need to install the .NET7 SDK 
 
 ## Update Your *.csproj Files 
 
-First of all, you need to update all your `*.csproj` files to support .NET7. Find and replace all your `<TargetFramework>*</TargetFramework>` in the `*.csproj` files to support .NET 7:
+First, you need to update all your `*.csproj` files to support .NET7. Find and replace all your `<TargetFramework>*</TargetFramework>` in the `*.csproj` files to support .NET 7:
 
 ```xml
 <TargetFramework>net7.0</TargetFramework>
@@ -32,7 +32,7 @@ We already did this in ABP Framework, see this commit as an example [github.com/
 
 ### Microsoft Package Updates
 
-You must be using Microsoft packages as well, then you need to update them to the latest .NET 7 version. 
+You must be using Microsoft packages as well; then you need to update them to the latest .NET 7 version. 
 At the time, I wrote this article, the latest version was `7.0.0-rc.2.22476.2`, so I'll update them to this version including minor version changes.
 
 Here's the list of all package reference updates I did:
@@ -90,7 +90,7 @@ Here's the list of all package reference updates I did:
 
 ## Entity Framework Core Updates
 
-If you are using EF Core as your data access library, then you should update your `dotnet-ef` CLI tool. Here's the terminal command to update it:
+If you use EF Core as your data access library, you should update your `dotnet-ef` CLI tool. Here's the terminal command to update it:
 
 ```bash
 dotnet tool update dotnet-ef --global --prerelease
@@ -102,7 +102,7 @@ We already did the the EF Core package reference update in the *Microsoft Packag
 
 ### Breaking Change: OrderBy
 
-In this release, there's a breaking change in an EF Core query running behavior.  We faced this issue in some of our queries that were missing `OrderBy` statement. It throws an exception and does not run the query. Here's the explanation of a EF Core team member for this issue: [github.com/dotnet/efcore/issues/21202#issuecomment-913206415](https://github.com/dotnet/efcore/issues/21202#issuecomment-913206415).
+This release makes a breaking change in an EF Core query running behavior.  We faced this issue in some of our queries that were missing `OrderBy` statement. It throws an exception and does not run the query. Here's the explanation of a EF Core team member for this issue: [github.com/dotnet/efcore/issues/21202#issuecomment-913206415](https://github.com/dotnet/efcore/issues/21202#issuecomment-913206415).
 
 The following exception is being thrown:
 
@@ -238,7 +238,7 @@ maui-check
 
 ## Docker Image Update
 
-If you are using Docker for automating the deployment of applications, you also need to update your images. We were using `aspnet:6.0.0-bullseye-slim` base and after the .NET 7, we started using `aspnet:6.0.0-bullseye-slim` in our Docker files. 
+If you are using Docker to automate the deployment of applications, you also need to update your images. We were using `aspnet:6.0.0-bullseye-slim` base and after the .NET 7, we started using `aspnet:6.0.0-bullseye-slim` in our Docker files. 
 
 ```
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim AS base
@@ -252,10 +252,9 @@ For this update, you can check out the following PR as an example:
 
 ## ABP Framework .NET 7 Update
 
-We have update all our dependencies from .NET6 to .NET7. Not all the changes are here but here's the commit of our .NET 7 update process:
+We have updated all our dependencies from .NET6 to .NET7. Not all the changes are here, but here's the commit of our .NET 7 update process:
 
 [github.com/abpframework/abp/commit/e7e9756cf228acdeaf0eaa2eee49264d6927fdd5](https://github.com/abpframework/abp/commit/e7e9756cf228acdeaf0eaa2eee49264d6927fdd5)
-
 
 
 Happy coding with .NET 7 🤗
