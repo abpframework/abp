@@ -22,3 +22,15 @@ We created `Volo.Abp.Json.SystemTextJson` and `Volo.Abp.Json.Newtonsoft` as sepa
 * Volo.Abp.Json.SystemTextJson
 * Volo.Abp.Json (Depends on `Volo.Abp.Json.SystemTextJson` by default to prevent breaking)
 * Volo.Abp.AspNetCore.Mvc.NewtonsoftJson
+
+The `AbpJsonOptions` now has only two properties, which are
+
+* `InputDateTimeFormats(List<string>)`: Formats of input JSON date, Empty string means default format. You can provide multiple formats to parse the date.
+* `OutputDateTimeFormat(string)`: Format of output json date, Null or empty string means default format.
+
+Please remove all `UnsupportedTypes` add custom `Modifiers` to control serialization/deserialization behavior.
+
+Check the docs to see the more info: https://github.com/abpframework/abp/blob/dev/docs/en/JSON.md#configuration
+
+Check the docs to see how to customize a JSON contract: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/custom-contracts
+
