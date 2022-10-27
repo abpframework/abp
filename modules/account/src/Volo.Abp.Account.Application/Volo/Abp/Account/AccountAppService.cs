@@ -60,6 +60,16 @@ public class AccountAppService : ApplicationService, IAccountAppService
         await AccountEmailer.SendPasswordResetLinkAsync(user, resetToken, input.AppName, input.ReturnUrl, input.ReturnUrlHash);
     }
 
+    public virtual async Task<bool> VerifyPasswordResetTokenAsync(VerifyPasswordResetTokenInput input)
+    {
+        var user = await UserManager.GetByIdAsync(input.UserId);
+        return await UserManager.VerifyUserTokenAsync(
+            user,
+            UserManager.Options.Tokens.PasswordResetTokenProvider,
+            UserManager<IdentityUser>.ResetPasswordTokenPurpose,
+            input.ResetToken);
+    }
+
     public virtual async Task ResetPasswordAsync(ResetPasswordDto input)
     {
         await IdentityOptions.SetAsync();

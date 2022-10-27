@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -96,5 +97,15 @@ public class AuditTestPage_Tests : AspNetCoreMvcTestBase
         catch { }
 
         await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.Exceptions.Any()));
+    }
+
+    [Fact]
+    public async Task Should_DisableLogActionInfo()
+    {
+        _options.IsEnabledForGetRequests = true;
+        _options.DisableLogActionInfo = true;
+
+        await GetResponseAsync("/Auditing/AuditTestPage");
+        await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.Actions.IsNullOrEmpty()));
     }
 }
