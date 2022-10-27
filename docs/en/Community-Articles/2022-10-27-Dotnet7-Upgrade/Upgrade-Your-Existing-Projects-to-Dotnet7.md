@@ -12,7 +12,7 @@ When I wrote this article, the latest .NET version was `7.0.0-rc.2`. So some of 
 
 ## Install .NET7 SDK
 
-If you are on your development computer, then you need to install the .NET7 SDK `7.x.x`. For the production servers, you need to install the .NET 7 runtimes. Download the link for the .NET7 SDK and runtimes is:
+If you are on your development computer, then you need to install the .NET7 SDK `7.x.x`. For the production servers, you need to install the .NET 7 runtimes. Download link for the .NET7 SDK and runtimes is:
 
 * https://dotnet.microsoft.com/en-us/download/dotnet/7.0
 
