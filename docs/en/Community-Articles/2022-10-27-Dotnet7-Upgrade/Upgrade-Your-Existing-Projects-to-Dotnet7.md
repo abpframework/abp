@@ -254,7 +254,7 @@ For this update, you can check out the following PR as an example:
 
 We have updated all our dependencies from .NET6 to .NET7. Not all the changes are here, but here's the commit of our .NET 7 update process:
 
-[github.com/abpframework/abp/pull/13626/files](https://github.com/abpframework/abp/pull/13626/files)
+* [github.com/abpframework/abp/pull/13626/files](https://github.com/abpframework/abp/pull/13626/files)
 
 
 
