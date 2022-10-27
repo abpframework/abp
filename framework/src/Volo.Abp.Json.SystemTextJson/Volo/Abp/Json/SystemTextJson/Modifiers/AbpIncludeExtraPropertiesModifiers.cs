@@ -11,19 +11,22 @@ public static class AbpIncludeExtraPropertiesModifiers
 {
     public static void Modify(JsonTypeInfo jsonTypeInfo)
     {
-        var propertyJsonInfo = jsonTypeInfo.Properties
-            .Where(x => x.AttributeProvider is MemberInfo)
-            .FirstOrDefault(x =>
-                x.PropertyType == typeof(ExtraPropertyDictionary) &&
-                x.AttributeProvider.As<MemberInfo>().Name == nameof(ExtensibleObject.ExtraProperties) &&
-                x.Set == null);
-
-        if (propertyJsonInfo != null)
+        if (typeof(IHasExtraProperties).IsAssignableFrom(jsonTypeInfo.Type))
         {
-            propertyJsonInfo.Set = (extraProperties, value) =>
+            var propertyJsonInfo = jsonTypeInfo.Properties
+                .Where(x => x.AttributeProvider is MemberInfo)
+                .FirstOrDefault(x =>
+                    x.PropertyType == typeof(ExtraPropertyDictionary) &&
+                    x.AttributeProvider.As<MemberInfo>().Name == nameof(ExtensibleObject.ExtraProperties) &&
+                    x.Set == null);
+
+            if (propertyJsonInfo != null)
             {
-                ObjectHelper.TrySetProperty(extraProperties.As<ExtensibleObject>(), x => x.ExtraProperties, () => (ExtraPropertyDictionary)value);
-            };
+                propertyJsonInfo.Set = (obj, value) =>
+                {
+                    ObjectHelper.TrySetProperty(obj.As<IHasExtraProperties>(), x => x.ExtraProperties, () => value);
+                };
+            }
         }
     }
 }
