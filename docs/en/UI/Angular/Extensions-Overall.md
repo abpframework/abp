@@ -29,7 +29,7 @@ Using [ngx-datatable](https://github.com/swimlane/ngx-datatable) in extensinble 
 
 `              data : ` Items shows in your table. 
 
-`              list : ` Template of your table. 
+`              list : ` Instance of ListService. 
 
 `actionsColumnWidth : ` Width of your action column. 
 
