@@ -15,14 +15,14 @@ Using [ngx-datatable](https://github.com/swimlane/ngx-datatable) in extensinble 
 
 ````ts
       <abp-extensible-table
-    actionsText="Your Action"
-    [data]="items"
-    [recordsTotal]="totalCount"
-    [actionsColumnWidth]="38"
-    [actionsTemplate]="customAction"
-    [list]="list"
-    (tableActivate)="onTableSelect($event)"
-    ></abp-extensible-table>
+         actionsText="Your Action"
+         [data]="items"
+         [recordsTotal]="totalCount"
+         [actionsColumnWidth]="38"
+         [actionsTemplate]="customAction"
+         [list]="list"
+         (tableActivate)="onTableSelect($event)" > 
+      </abp-extensible-table>
 ````
 
 `       actionsText : ` ** Column name of action column.
