@@ -2,7 +2,7 @@ using System.Reflection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.Instrumentation.Sentry.Volo.Abp.Instrumentation.Sentry;
+namespace Volo.Abp.Instrumentation.Sentry;
 
 public class SentryInterceptorRegistrar
 {

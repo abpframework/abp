@@ -1,7 +1,7 @@
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Instrumentation.Sentry.Volo.Abp.Instrumentation.Sentry;
+namespace Volo.Abp.Instrumentation.Sentry;
 
 public static class SentryHelper
 {

@@ -1,4 +1,4 @@
-namespace Volo.Abp.Instrumentation.Sentry.Volo.Abp.Instrumentation.Sentry;
+namespace Volo.Abp.Instrumentation.Sentry;
 
 /// <summary>
 /// Used to indicate that declaring method (or all methods of the class) could start new transaction or if transaction exist get child Sentry span.

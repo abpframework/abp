@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Instrumentation.Sentry.Volo.Abp.Instrumentation.Sentry;
+namespace Volo.Abp.Instrumentation.Sentry;
 
 public class AbpSentryModule : AbpModule
 {

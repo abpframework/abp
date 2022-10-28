@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Instrumentation.Sentry.Volo.Abp.Instrumentation.Sentry;
+namespace Volo.Abp.Instrumentation.Sentry;
 
 /// <summary>
 /// Used to indicate that declaring method (or all methods of the class) should get child Sentry span.
