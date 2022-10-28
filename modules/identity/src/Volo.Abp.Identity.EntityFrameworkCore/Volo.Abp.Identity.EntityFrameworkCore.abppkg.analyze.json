@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.EntityFrameworkCore",
-  "hash": "fed49e0913e578e824175d6cd93f0933",
+  "hash": "99db3fa42fe2b8effa79fa259eea0b78",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.EntityFrameworkCore",

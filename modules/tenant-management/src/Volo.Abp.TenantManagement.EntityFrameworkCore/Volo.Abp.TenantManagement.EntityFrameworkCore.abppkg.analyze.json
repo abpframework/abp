@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.EntityFrameworkCore",
-  "hash": "d5be7ecde589386b35d45a61e63f2ff1",
+  "hash": "72c674c774d099fb683f38d9baff38c3",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement.EntityFrameworkCore",

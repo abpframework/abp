@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.MongoDB",
-  "hash": "dfc11facc6daa61964bad9610aef2d44",
+  "hash": "3233b6b97462ea791df170eadd63f7a4",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement.MongoDB",

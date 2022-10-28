@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Web",
-  "hash": "b97145c717fa53c297bca8240560908b",
+  "hash": "2c74abf24c40a3a8c272f1e381a5cc81",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",

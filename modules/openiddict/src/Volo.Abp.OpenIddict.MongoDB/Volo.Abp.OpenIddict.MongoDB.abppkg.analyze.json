@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.OpenIddict.MongoDB",
-  "hash": "b54097bc294950a73d02325fcacb5e92",
+  "hash": "91dacf5ce31567334caedbb69b01f480",
   "contents": [
     {
       "namespace": "Volo.Abp.OpenIddict.MongoDB",
@@ -25,9 +25,9 @@
       "connectionStringName": "AbpOpenIddict",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
+          "entityFullName": "Volo.Abp.OpenIddict.Scopes.OpenIddictScope",
           "contentType": "databaseCollection",
-          "name": "OpenIddictTokens",
+          "name": "OpenIddictScopes",
           "summary": null
         },
         {
@@ -37,15 +37,15 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.OpenIddict.Scopes.OpenIddictScope",
-          "contentType": "databaseCollection",
-          "name": "OpenIddictScopes",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.Abp.OpenIddict.Applications.OpenIddictApplication",
           "contentType": "databaseCollection",
           "name": "OpenIddictApplications",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
+          "contentType": "databaseCollection",
+          "name": "OpenIddictTokens",
           "summary": null
         }
       ],
