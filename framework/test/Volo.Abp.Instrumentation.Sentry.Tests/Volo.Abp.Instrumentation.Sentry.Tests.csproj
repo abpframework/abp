@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+      <ProjectReference Include="..\..\src\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+      <ProjectReference Include="..\..\src\Volo.Abp.Instrumentation.Sentry\Volo.Abp.Instrumentation.Sentry.csproj" />
+      <ProjectReference Include="..\..\src\Volo.Abp.TestBase\Volo.Abp.TestBase.csproj" />
+    </ItemGroup>
+
+</Project>

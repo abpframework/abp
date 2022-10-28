@@ -431,6 +431,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.DistributedLocking
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Instrumentation.Sentry", "src\Volo.Abp.Instrumentation.Sentry\Volo.Abp.Instrumentation.Sentry.csproj", "{5D8A62C7-CF33-4553-B1FE-BC3FF5F0ECB8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Instrumentation.Sentry.Tests", "test\Volo.Abp.Instrumentation.Sentry.Tests\Volo.Abp.Instrumentation.Sentry.Tests.csproj", "{B1CA64AD-C83F-4843-8A53-3BB93896721D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1285,6 +1287,10 @@ Global
 		{5D8A62C7-CF33-4553-B1FE-BC3FF5F0ECB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D8A62C7-CF33-4553-B1FE-BC3FF5F0ECB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D8A62C7-CF33-4553-B1FE-BC3FF5F0ECB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1CA64AD-C83F-4843-8A53-3BB93896721D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1CA64AD-C83F-4843-8A53-3BB93896721D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1CA64AD-C83F-4843-8A53-3BB93896721D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1CA64AD-C83F-4843-8A53-3BB93896721D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1502,6 +1508,7 @@ Global
 		{B02EF042-C39E-45C4-A92D-BF7554E1889D} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{CAE48068-233C-47A9-BEAB-DDF521730E7A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{5D8A62C7-CF33-4553-B1FE-BC3FF5F0ECB8} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{B1CA64AD-C83F-4843-8A53-3BB93896721D} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\src\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.EntityFrameworkCore.Sqlite\Volo.Abp.EntityFrameworkCore.Sqlite.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Instrumentation.Sentry\Volo.Abp.Instrumentation.Sentry.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
   </ItemGroup>
 
