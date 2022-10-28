@@ -231,7 +231,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
                 if (localizer != null)
                 {
-                    foreach (var localizedString in await localizer.GetAllStringsAsync())
+                    foreach (var localizedString in await localizer.GetAllStringsAsync(includeParentCultures: false))
                     {
                         dictionary[localizedString.Name] = localizedString.Value;
                     }
