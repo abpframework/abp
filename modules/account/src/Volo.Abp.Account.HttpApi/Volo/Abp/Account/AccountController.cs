@@ -32,6 +32,13 @@ public class AccountController : AbpControllerBase, IAccountAppService
     }
 
     [HttpPost]
+    [Route("verify-password-reset-token")]
+    public Task<bool> VerifyPasswordResetTokenAsync(VerifyPasswordResetTokenInput input)
+    {
+        return AccountAppService.VerifyPasswordResetTokenAsync(input);
+    }
+
+    [HttpPost]
     [Route("reset-password")]
     public virtual Task ResetPasswordAsync(ResetPasswordDto input)
     {

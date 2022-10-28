@@ -5,7 +5,10 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp;
 
-public interface IAbpApplication : IModuleContainer, IDisposable
+public interface IAbpApplication :
+    IModuleContainer,
+    IApplicationNameAccessor,
+    IDisposable
 {
     /// <summary>
     /// Type of the startup (entrance) module of the application.
@@ -23,7 +26,7 @@ public interface IAbpApplication : IModuleContainer, IDisposable
     /// This can not be used before initialize the application.
     /// </summary>
     IServiceProvider ServiceProvider { get; }
-    
+
     /// <summary>
     /// Calls the Pre/Post/ConfigureServicesAsync methods of the modules.
     /// If you use this method, you must have set the <see cref="AbpApplicationCreationOptions.SkipConfigureServices"/>

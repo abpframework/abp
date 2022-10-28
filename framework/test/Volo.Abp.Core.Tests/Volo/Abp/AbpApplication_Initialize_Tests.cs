@@ -1,9 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Shouldly;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.Modularity.PlugIns;
 using Xunit;
+using IConfiguration = Castle.Core.Configuration.IConfiguration;
 
 namespace Volo.Abp;
 
@@ -140,6 +147,75 @@ public class AbpApplication_Initialize_Tests
 
             //Assert
             plugInModule.OnApplicationShutdownIsCalled.ShouldBeTrue();
+        }
+    }
+
+    [Fact]
+    public void Should_Set_And_Get_ApplicationName()
+    {
+        var applicationName = "MyApplication";
+
+        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>(options =>
+               {
+                   options.ApplicationName = applicationName;
+               }))
+        {
+            application.ApplicationName.ShouldBe(applicationName);
+            application.Services.GetApplicationName().ShouldBe(applicationName);
+
+            application.Initialize();
+
+            application.ServiceProvider
+                .GetRequiredService<IApplicationNameAccessor>()
+                .ApplicationName
+                .ShouldBe(applicationName);
+        }
+
+        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>(options =>
+               {
+                   options.Services.ReplaceConfiguration(new ConfigurationBuilder()
+                       .AddInMemoryCollection(new Dictionary<string, string> {{"ApplicationName", applicationName}})
+                       .Build());
+               }))
+        {
+
+            application.ApplicationName.ShouldBe(applicationName);
+            application.Services.GetApplicationName().ShouldBe(applicationName);
+
+            application.Initialize();
+
+            application.ServiceProvider
+                .GetRequiredService<IApplicationNameAccessor>()
+                .ApplicationName
+                .ShouldBe(applicationName);
+        }
+
+        applicationName = Assembly.GetEntryAssembly()?.GetName().Name;
+        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
+        {
+            application.ApplicationName.ShouldBe(applicationName);
+            application.Services.GetApplicationName().ShouldBe(applicationName);
+
+            application.Initialize();
+
+            application.ServiceProvider
+                .GetRequiredService<IApplicationNameAccessor>()
+                .ApplicationName
+                .ShouldBe(applicationName);
+        }
+    }
+
+    [Fact]
+    public async Task Should_Resolve_Root_Service_Provider()
+    {
+        using (var application = await AbpApplicationFactory.CreateAsync<IndependentEmptyModule>())
+        {
+            await application.InitializeAsync();
+
+            application
+                .ServiceProvider
+                .GetRequiredService<IRootServiceProvider>()
+                .ShouldNotBeNull();
         }
     }
 }

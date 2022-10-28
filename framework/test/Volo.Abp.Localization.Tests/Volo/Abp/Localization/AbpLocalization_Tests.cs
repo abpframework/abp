@@ -1,18 +1,16 @@
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Shouldly;
-using Volo.Abp.Localization.TestResources.Base.CountryNames;
-using Volo.Abp.Localization.TestResources.Base.Validation;
+using Volo.Abp.Localization.TestResources.External;
 using Volo.Abp.Localization.TestResources.Source;
-using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
-using Volo.Abp.VirtualFileSystem;
 using Xunit;
 
 namespace Volo.Abp.Localization;
 
-public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.TestModule>
+public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule>
 {
     private readonly IStringLocalizer<LocalizationTestResource> _localizer;
     private readonly IStringLocalizerFactory _localizerFactory;
@@ -76,7 +74,6 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.Tes
         {
             _localizer["Car"].Value.ShouldBe("Auto");
         }
-
     }
 
     [Fact]
@@ -106,7 +103,6 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.Tes
         {
             _localizer["SeeYou"].Value.ShouldBe("Bis bald");
         }
-
     }
 
     [Fact]
@@ -132,7 +128,6 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.Tes
 
             _localizer.GetAllStrings().ShouldContain(ls => ls.Name == "USA");
         }
-
     }
 
     [Fact]
@@ -275,7 +270,6 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.Tes
                       ls.ResourceNotFound == false
             );
         }
-
     }
 
     [Fact]
@@ -310,7 +304,6 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.Tes
                       ls.ResourceNotFound == false
             );
         }
-
     }
 
     [Fact]
@@ -319,7 +312,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.Tes
         using (CultureHelper.Use("tr"))
         {
             var localizedStrings = _localizer
-                .GetAllStrings(true, includeBaseLocalizers: true)
+                .GetAllStrings(true, includeBaseLocalizers: true, includeDynamicContributors: true)
                 .ToList();
 
             localizedStrings.ShouldContain(
@@ -348,7 +341,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.Tes
         using (CultureHelper.Use("tr"))
         {
             var localizedStrings = _localizer
-                .GetAllStrings(true, includeBaseLocalizers: false)
+                .GetAllStrings(true, includeBaseLocalizers: false, includeDynamicContributors: true)
                 .ToList();
 
             localizedStrings.ShouldNotContain(
@@ -369,35 +362,17 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.Tes
         }
     }
 
-    [DependsOn(typeof(AbpTestBaseModule))]
-    [DependsOn(typeof(AbpLocalizationModule))]
-    public class TestModule : AbpModule
+    [Fact]
+    public async Task Should_Get_Supported_Cultures()
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<TestModule>();
-            });
+        var cultures = await _localizer.GetSupportedCulturesAsync();
+        cultures.Count().ShouldBeGreaterThan(0);
+    }
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Add<LocalizationTestValidationResource>("en")
-                    .AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/Validation");
-
-                options.Resources
-                    .Add<LocalizationTestCountryNamesResource>("en")
-                    .AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/CountryNames");
-
-                options.Resources
-                    .Add<LocalizationTestResource>("en")
-                    .AddVirtualJson("/Volo/Abp/Localization/TestResources/Source");
-
-                options.Resources
-                    .Get<LocalizationTestResource>()
-                    .AddVirtualJson("/Volo/Abp/Localization/TestResources/SourceExt");
-            });
-        }
+    [Fact]
+    public void Should_Get_Localized_Text_From_External()
+    {
+        var externalLocalizer = _localizerFactory.CreateByResourceName(TestExternalLocalizationStore.TestExternalResourceNames.ExternalResource1);
+        externalLocalizer["Car"].Value.ShouldBe("Car");
     }
 }
