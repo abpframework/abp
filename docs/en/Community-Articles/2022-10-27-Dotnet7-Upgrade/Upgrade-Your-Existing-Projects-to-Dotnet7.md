@@ -110,7 +110,7 @@ The following exception is being thrown:
 
 If you don't want to add `OrderBy` statement to solve the issue, you can also use  `AsSingleQuery()`.
 
-![AsSingleQuery](./as-single-query.jpg)
+![AsSingleQuery](https://raw.githubusercontent.com/abpframework/abp/dev/docs/en/Community-Articles/2022-10-27-Dotnet7-Upgrade/./as-single-query.jpg)
 
 
 
@@ -238,13 +238,13 @@ maui-check
 
 ## Docker Image Update
 
-If you are using Docker to automate the deployment of applications, you also need to update your images. We were using `aspnet:6.0.0-bullseye-slim` base and after the .NET 7, we started using `aspnet:6.0.0-bullseye-slim` in our Docker files. 
+If you are using Docker to automate the deployment of applications, you also need to update your images. We were using `aspnet:6.0.0-bullseye-slim` base and after the .NET 7 update, we started using `aspnet:7.0-bullseye-slim` in our Docker files. 
 
 ```
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim AS base
 ```
 
-For this update, you can check out the following PR as an example:
+For this update, you can check out the following commit as an example:
 
 * [github.com/abpframework/abp/commit/2d07b9bd00152bef4658c48ff9b2cbee5788d308](https://github.com/abpframework/abp/commit/2d07b9bd00152bef4658c48ff9b2cbee5788d308)
 
@@ -252,10 +252,14 @@ For this update, you can check out the following PR as an example:
 
 ## ABP Framework .NET 7 Update
 
-We have updated all our dependencies from .NET6 to .NET7. Not all the changes are here, but here's the commit of our .NET 7 update process:
+In [ABP Framework repository](https://github.com/abpframework/abp), we pdated all our dependencies from .NET 6 to .NET 7. 
+Not all the changes are here, but you can check out the following PR of the .NET 7 update:
 
 * [github.com/abpframework/abp/pull/13626/files](https://github.com/abpframework/abp/pull/13626/files)
 
 
+...
 
 Happy coding with .NET 7 🤗
+
+...
