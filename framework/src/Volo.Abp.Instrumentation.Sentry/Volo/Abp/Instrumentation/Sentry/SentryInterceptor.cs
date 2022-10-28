@@ -18,10 +18,10 @@ public class SentryInterceptor : AbpInterceptor, ITransientDependency
     
     public async override Task InterceptAsync(IAbpMethodInvocation invocation)
     {
-        if (SentryHelper.IsSentrySpanMethod(invocation.Method, out var SentrySpanAttribute))
+        if (SentryHelper.IsSentrySpanMethod(invocation.Method, out var sentrySpanAttribute))
         {
-            var operation = $"{invocation.Method?.DeclaringType?.Name}.{invocation.Method?.Name}";
-            var description = "";
+            var operation = sentrySpanAttribute?.Operation ?? $"{invocation.Method?.DeclaringType?.Name}.{invocation.Method?.Name}";
+            var description = sentrySpanAttribute?.Description ?? null;
             var span = _sentryHub.GetSpan()?.StartChild(operation, description);
 
             if (_logger.IsEnabled(LogLevel.Debug) && span is not null)

@@ -23,8 +23,8 @@ public static class SentryHelper
     }
 
 
-    public static bool IsSentrySpanMethod([NotNull] MethodInfo methodInfo,
-        [CanBeNull] out SentrySpanAttribute sentrySpanAttribute)
+    public static bool IsSentrySpanMethod(MethodInfo methodInfo,
+        out SentrySpanAttribute? sentrySpanAttribute)
     {
         Check.NotNull(methodInfo, nameof(methodInfo));
 

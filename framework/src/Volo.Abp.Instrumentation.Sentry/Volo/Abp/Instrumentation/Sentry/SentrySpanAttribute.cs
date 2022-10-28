@@ -43,7 +43,7 @@ public class SentrySpanAttribute : Attribute
         Operation = operation;
     }
     
-    public SentrySpanAttribute(string operation, string description)
+    public SentrySpanAttribute(string? operation = null, string? description = null)
     {
         Operation = operation;
         Description = description;
