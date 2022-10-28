@@ -13,4 +13,8 @@
       <ProjectReference Include="..\..\src\Volo.Abp.TestBase\Volo.Abp.TestBase.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Sentry" Version="3.23.0" />
+    </ItemGroup>
+
 </Project>
