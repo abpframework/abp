@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp;
 using Volo.Abp.Reflection;
 
@@ -9,6 +10,56 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionCommonExtensions
 {
+    /// <summary>
+    /// Removes the service in <see cref="IServiceCollection"/> with the base implementation type as descriptor and adds descriptor to the services.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="descriptor"></param>
+    /// <returns></returns>
+    public static IServiceCollection ReplaceBaseServiceOrDefault(this IServiceCollection services, ServiceDescriptor descriptor)
+    {
+        if (services == null)
+        {
+            throw new ArgumentNullException(nameof(services));
+        }
+
+        if (descriptor == null)
+        {
+            throw new ArgumentNullException(nameof(descriptor));
+        }
+
+        
+        if (descriptor.ImplementationType?.BaseType == null || descriptor.ImplementationType.BaseType == typeof(object))
+        {
+            services.Replace(descriptor);
+            return services;
+        }
+
+        // Remove the base service of descriptor implementation type if base service has been registered
+        var isBaseServiceRemoved = false;
+        var count = services.Count;
+        for (var i = 0; i < count; i++)
+        {
+            if (services[i].ImplementationType == descriptor.ImplementationType?.BaseType)
+            {
+                services.RemoveAt(i);
+                isBaseServiceRemoved = true;
+                break;
+            }
+        }
+
+        if (isBaseServiceRemoved)
+        {
+            services.Add(descriptor);
+        }
+        else
+        {
+            services.Replace(descriptor); // If no base service found, just use the default descriptor replace implementation.
+        }
+
+        return services;
+    }
+
     public static bool IsAdded<T>(this IServiceCollection services)
     {
         return services.IsAdded(typeof(T));

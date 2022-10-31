@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Shouldly;
 using Xunit;
 using Volo.Abp.DependencyInjection;
@@ -157,6 +158,37 @@ public class AbpConventionalDependencyInjectionExtensions_Tests
     }
 
     [Fact]
+    public void Should_Replace_Base_Implementation_By_ReplaceService()
+    {
+        //Act
+        _services.AddTypes(typeof(MyFilterA), typeof(MyFilterB), typeof(MyFilterC), typeof(MyFilterBOverride));
+
+        //Assert
+
+        //Check descriptions in service collection
+        var descriptions = _services.Where(s => s.ServiceType == typeof(IMyFilter)).ToList();
+        descriptions.Count.ShouldBe(3);
+        descriptions.Any(x => x.ImplementationType == typeof(MyFilterA)).ShouldBeTrue();
+        descriptions.Any(x => x.ImplementationType == typeof(MyFilterB)).ShouldBeFalse();
+        descriptions.Any(x => x.ImplementationType == typeof(MyFilterC)).ShouldBeTrue();
+        descriptions.Any(x => x.ImplementationType == typeof(MyFilterBOverride)).ShouldBeTrue();
+
+        //Check from service provider
+        var serviceProvider = _services.BuildServiceProvider();
+
+        //Default service should be the replaced one
+        serviceProvider.GetRequiredService<IMyFilter>().ShouldBeOfType(typeof(MyFilterBOverride));
+
+        //Should also get all services
+        var instances = serviceProvider.GetServices<IMyFilter>().ToList();
+        instances.Count.ShouldBe(3);
+        instances.Any(x => x.GetType() == typeof(MyFilterA)).ShouldBeTrue();
+        instances.Any(x => x.GetType() == typeof(MyFilterB)).ShouldBeFalse();
+        instances.Any(x => x.GetType() == typeof(MyFilterC)).ShouldBeTrue();
+        instances.Any(x => x.GetType() == typeof(MyFilterBOverride)).ShouldBeTrue();
+    }
+
+    [Fact]
     public void Should_Not_Register_Classes_Marked_With_DisableConventionalRegistration()
     {
         _services.AddType(typeof(NonConventionalImplOfMyService));
@@ -263,5 +295,35 @@ public class AbpConventionalDependencyInjectionExtensions_Tests
     public class MyEmptyClass
     {
 
+    }
+
+    [ExposeServices(typeof(IMyFilter))]
+    public class MyFilterA : IMyFilter
+    {
+        
+    }
+
+    [ExposeServices(typeof(IMyFilter))]
+    public class MyFilterB : IMyFilter
+    {
+        
+    }
+
+    [ExposeServices(typeof(IMyFilter))]
+    public class MyFilterC : IMyFilter
+    {
+        
+    }
+
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IMyFilter))]
+    public class MyFilterBOverride : MyFilterB
+    {
+        
+    }
+
+    public interface IMyFilter : ITransientDependency
+    {
+        
     }
 }
