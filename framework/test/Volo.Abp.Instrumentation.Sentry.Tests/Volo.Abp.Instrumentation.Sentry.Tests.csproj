@@ -9,12 +9,17 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
       <ProjectReference Include="..\..\src\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+      <ProjectReference Include="..\..\src\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj" />
+      <ProjectReference Include="..\..\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
       <ProjectReference Include="..\..\src\Volo.Abp.Instrumentation.Sentry\Volo.Abp.Instrumentation.Sentry.csproj" />
-      <ProjectReference Include="..\..\src\Volo.Abp.TestBase\Volo.Abp.TestBase.csproj" />
+      <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+      <PackageReference Include="NSubstitute" Version="4.3.0" />
       <PackageReference Include="Sentry" Version="3.23.0" />
+      <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
     </ItemGroup>
 
 </Project>
