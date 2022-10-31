@@ -292,7 +292,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         {
             case EntityState.Added:
                 ApplyAbpConceptsForAddedEntity(entry);
-                EntityChangeEventHelper.PublishEntityCreatingEvent(entry.Entity);
                 EntityChangeEventHelper.PublishEntityCreatedEvent(entry.Entity);
                 break;
             case EntityState.Modified:
@@ -301,12 +300,10 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 {
                     if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
                     {
-                        EntityChangeEventHelper.PublishEntityDeletingEvent(entry.Entity);
                         EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                     }
                     else
                     {
-                        EntityChangeEventHelper.PublishEntityUpdatingEvent(entry.Entity);
                         EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
                     }
                 }
@@ -314,7 +311,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 break;
             case EntityState.Deleted:
                 ApplyAbpConceptsForDeletedEntity(entry);
-                EntityChangeEventHelper.PublishEntityDeletingEvent(entry.Entity);
                 EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                 break;
         }
@@ -485,7 +481,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
 
         entry.Reload();
-        entry.Entity.As<ISoftDelete>().IsDeleted = true;
+        ObjectHelper.TrySetProperty(entry.Entity.As<ISoftDelete>(), x => x.IsDeleted, () => true);
         SetDeletionAuditProperties(entry);
     }
 
@@ -622,19 +618,23 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 return;
             }
 
-            var dateTimeValueConverter = new AbpDateTimeValueConverter(Clock);
+            var dateTimePropertyInfos = typeof(TEntity).GetProperties()
+                .Where(property =>
+                    (property.PropertyType == typeof(DateTime) ||
+                     property.PropertyType == typeof(DateTime?)) &&
+                    property.CanWrite &&
+                    ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property) == null
+                ).ToList();
 
-            foreach (var property in mutableEntityType.GetProperties().
-                         Where(property => property.PropertyInfo != null &&
-                                           (property.PropertyInfo.PropertyType == typeof(DateTime) || property.PropertyInfo.PropertyType == typeof(DateTime?)) &&
-                                           property.PropertyInfo.CanWrite &&
-                                           ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property.PropertyInfo) == null))
+            dateTimePropertyInfos.ForEach(property =>
             {
                 modelBuilder
                     .Entity<TEntity>()
                     .Property(property.Name)
-                    .HasConversion(dateTimeValueConverter);
-            }
+                    .HasConversion(property.PropertyType == typeof(DateTime)
+                        ? new AbpDateTimeValueConverter(Clock)
+                        : new AbpNullableDateTimeValueConverter(Clock));
+            });
         }
     }
 

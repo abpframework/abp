@@ -11,7 +11,7 @@
 - Abp CLI https://docs.abp.io/en/abp/latest/cli
 - A code editor
 
-Note: This arcticle prepare Windows OS. You may change the path type of your OS. an Example
+Note: This article prepare Windows OS. You may change the path type of your OS. an Example
 
 Windows: `templates\app\aspnet-core\src\MyCompanyName.MyProjectName.DbMigrator\appsettings.json`
 
@@ -22,11 +22,15 @@ Unix: `templates/app/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/apps
 You need to install SQL Server and Redis. You can install these programs without docker, but my example uses docker containers. Your computer should have Docker Engine. Then open the terminal en execute the commands one by one.
 For the Sql Server
 
+```cmd
 docker run -v sqlvolume:/var/opt/mssql -e 'ACCEPT_EULA=Y' -e "SA_PASSWORD=yourpassword" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+```
 
 For the Redis
 
+```cmd
 docker run -p 6379:6379 -d redis
+```
 
 Then we are ready to download and execute the code.
 

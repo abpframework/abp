@@ -13,6 +13,7 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
+import { FeatureManagementModule } from '@abp/ng.feature-management';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     AccountConfigModule.forRoot(),
     IdentityConfigModule.forRoot(),
     TenantManagementConfigModule.forRoot(),
+    FeatureManagementModule.forRoot(),
     SettingManagementConfigModule.forRoot(),
     ThemeBasicModule.forRoot(),
   ],

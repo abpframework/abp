@@ -63,14 +63,19 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
         await CheckGetListPolicyAsync();
 
         var query = await CreateFilteredQueryAsync(input);
-
         var totalCount = await AsyncExecuter.CountAsync(query);
 
-        query = ApplySorting(query, input);
-        query = ApplyPaging(query, input);
+        var entities = new List<TEntity>();
+        var entityDtos = new List<TGetListOutputDto>();
 
-        var entities = await AsyncExecuter.ToListAsync(query);
-        var entityDtos = await MapToGetListOutputDtosAsync(entities);
+        if (totalCount > 0)
+        {
+            query = ApplySorting(query, input);
+            query = ApplyPaging(query, input);
+
+            entities = await AsyncExecuter.ToListAsync(query);
+            entityDtos = await MapToGetListOutputDtosAsync(entities);
+        }
 
         return new PagedResultDto<TGetListOutputDto>(
             totalCount,

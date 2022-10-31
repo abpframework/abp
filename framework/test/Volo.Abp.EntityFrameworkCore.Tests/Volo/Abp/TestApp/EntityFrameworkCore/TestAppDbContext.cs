@@ -7,6 +7,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
+using Volo.Abp.TestApp.Testing;
 
 namespace Volo.Abp.TestApp.EntityFrameworkCore;
 
@@ -28,6 +29,8 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
     public DbSet<Author> Author { get; set; }
 
     public DbSet<FourthDbContextDummyEntity> FourthDummyEntities { get; set; }
+    
+    public DbSet<Product> Products { get; set; }
 
     public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
         : base(options)
@@ -78,6 +81,8 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
 
             b.ApplyObjectExtensionMappings();
         });
+
+        modelBuilder.Entity<Product>();
 
         modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
     }

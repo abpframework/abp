@@ -20,7 +20,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftPackageVersion)" />
     <PackageReference Include="Octokit" Version="0.50.0" />
     <PackageReference Include="NEST" Version="7.14.1" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,5 +10,5 @@ public class AbpAspNetCoreAuditingOptions
     /// <see cref="AbpAuditingMiddleware"/> will be disabled for URLs
     /// starting with an ignored URL.  
     /// </summary>
-    public List<string> IgnoredUrls { get; } = new List<string>();
+    public List<string> IgnoredUrls { get; } = new();
 }

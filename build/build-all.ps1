@@ -6,6 +6,8 @@ $full = $args[0]
 
 Write-Host $solutionPaths
 
+dotnet workload install wasm-tools
+
 foreach ($solutionPath in $solutionPaths) {    
     $solutionAbsPath = (Join-Path $rootFolder $solutionPath)
     Set-Location $solutionAbsPath

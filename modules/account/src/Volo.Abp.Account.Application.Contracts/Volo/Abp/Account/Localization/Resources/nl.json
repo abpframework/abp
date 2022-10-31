@@ -35,6 +35,7 @@
     "PersonalSettingsSaved": "Persoonlijke instellingen opgeslagen",
     "PasswordChanged": "Wachtwoord veranderd",
     "NewPasswordConfirmFailed": "Bevestig het nieuwe wachtwoord a.u.b.",
+    "NewPasswordSameAsOld": "Het nieuwe wachtwoord moet verschillen van het huidige wachtwoord.",
     "Manage": "Beheer",
     "MyAccount": "Mijn rekening",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Is zelfregistratie ingeschakeld",
