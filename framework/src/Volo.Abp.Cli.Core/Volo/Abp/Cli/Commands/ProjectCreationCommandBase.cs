@@ -750,6 +750,12 @@ public abstract class ProjectCreationCommandBase
             public const string Long = "skip-installing-libs";
         }
 
+        public static class SkipBundling
+        {
+            public const string Short = "sb";
+            public const string Long = "skip-bundling";
+        }
+
         public static class Tiered
         {
             public const string Long = "tiered";
