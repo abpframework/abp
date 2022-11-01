@@ -15,15 +15,18 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 {
     protected FeatureManagementOptions Options { get; }
     protected IFeatureManager FeatureManager { get; }
+    protected IFeatureValueRepository FeatureValueRepository { get; }
     protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
 
     public FeatureAppService(IFeatureManager featureManager,
         IFeatureDefinitionManager featureDefinitionManager,
-        IOptions<FeatureManagementOptions> options)
+        IOptions<FeatureManagementOptions> options,
+        IFeatureValueRepository featureValueRepository)
     {
         FeatureManager = featureManager;
         FeatureDefinitionManager = featureDefinitionManager;
         Options = options.Value;
+        FeatureValueRepository = featureValueRepository;
     }
 
     public virtual async Task<GetFeatureListResultDto> GetAsync([NotNull] string providerName, string providerKey)
@@ -134,5 +137,10 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         }
 
         await AuthorizationService.CheckAsync(policyName);
+    }
+    
+    public virtual async Task ResetToDefaultAsync()
+    {
+        await FeatureValueRepository.DeleteAsync();
     }
 }

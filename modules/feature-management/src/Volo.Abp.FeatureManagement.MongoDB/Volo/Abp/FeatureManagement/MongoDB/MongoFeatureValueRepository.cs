@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -48,5 +50,12 @@ public class MongoFeatureValueRepository :
         return await (await GetMongoQueryableAsync(cancellationToken))
             .Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey)
             .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task DeleteAsync(CancellationToken cancellationToken = default)
+    {
+        //TODO check it again
+        var entities = await AsyncExecuter.ToListAsync((await GetQueryableAsync()).Select(p => p.Id));
+        await DeleteManyAsync(entities, true, GetCancellationToken(cancellationToken));
     }
 }
