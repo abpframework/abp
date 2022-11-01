@@ -72,4 +72,12 @@ public abstract class FeatureValueRepository_Tests<TStartupModule> : FeatureMana
                   fv.Value == "3"
         );
     }
+
+    [Fact]
+    public async Task DeleteAsync()
+    {
+        var exception =  await Record.ExceptionAsync(async() => await Repository.DeleteAsync());
+        Assert.Null(exception);
+        
+    }
 }
