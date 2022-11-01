@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Localization.TestResources.Base.Validation;
+using Volo.Abp.Localization.TestResources.External;
 using Volo.Abp.Localization.TestResources.Source;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -34,6 +35,8 @@ public class AbpLocalizationTestModule : AbpModule
             options.Resources
                 .Get<LocalizationTestResource>()
                 .AddVirtualJson("/Volo/Abp/Localization/TestResources/SourceExt");
+            
+            options.GlobalContributors.Add<TestExternalLocalizationContributor>();
         });
     }
 }
