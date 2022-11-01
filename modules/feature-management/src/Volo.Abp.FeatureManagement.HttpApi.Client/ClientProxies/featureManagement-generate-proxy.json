@@ -7,6 +7,8 @@
         "Volo.Abp.FeatureManagement.FeaturesController": {
           "controllerName": "Features",
           "controllerGroupName": "Features",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.Abp.FeatureManagement.FeaturesController",
           "interfaces": [
             {
@@ -141,6 +143,21 @@
                   "descriptorName": ""
                 }
               ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.FeatureManagement.IFeatureAppService"
+            },
+            "ResetToDefaultAsync": {
+              "uniqueName": "ResetToDefaultAsync",
+              "name": "ResetToDefaultAsync",
+              "httpMethod": null,
+              "url": "api/feature-management/features",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
               "returnValue": {
                 "type": "System.Void",
                 "typeSimple": "System.Void"

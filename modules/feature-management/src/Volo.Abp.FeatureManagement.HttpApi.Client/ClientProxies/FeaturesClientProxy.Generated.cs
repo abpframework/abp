@@ -33,4 +33,9 @@ public partial class FeaturesClientProxy : ClientProxyBase<IFeatureAppService>, 
             { typeof(UpdateFeaturesDto), input }
         });
     }
+
+    public virtual async Task ResetToDefaultAsync()
+    {
+        await RequestAsync(nameof(ResetToDefaultAsync));
+    }
 }
