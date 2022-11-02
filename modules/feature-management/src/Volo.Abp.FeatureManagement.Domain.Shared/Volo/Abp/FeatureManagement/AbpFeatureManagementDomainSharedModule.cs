@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.FeatureManagement.JsonConverters;
 using Volo.Abp.FeatureManagement.Localization;
-using Volo.Abp.Json;
-using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -17,7 +13,7 @@ namespace Volo.Abp.FeatureManagement;
 
 [DependsOn(
     typeof(AbpValidationModule),
-    typeof(AbpJsonModule)
+    typeof(AbpJsonSystemTextJsonModule)
 )]
 public class AbpFeatureManagementDomainSharedModule : AbpModule
 {
@@ -40,11 +36,6 @@ public class AbpFeatureManagementDomainSharedModule : AbpModule
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace("Volo.Abp.FeatureManagement", typeof(AbpFeatureManagementResource));
-        });
-
-        Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
-        {
-            options.Converters.Add<NewtonsoftStringValueTypeJsonConverter>();
         });
 
         var valueValidatorFactoryOptions = context.Services.GetPreConfigureActions<ValueValidatorFactoryOptions>();

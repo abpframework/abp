@@ -98,7 +98,13 @@ public class DatabaseManagementSystemChangeStep : ProjectBuildPipelineStep
 
         var oldUseMethod = "UseSqlServer";
 
-        var efCoreModuleClass = context.Files.First(f => f.Name.EndsWith("EntityFrameworkCoreModule.cs", StringComparison.OrdinalIgnoreCase));
+        var efCoreModuleClass = context.Files.FirstOrDefault(f => f.Name.EndsWith("EntityFrameworkCoreModule.cs", StringComparison.OrdinalIgnoreCase));
+        
+        if(efCoreModuleClass == null)
+        {
+            return;
+        }
+        
         efCoreModuleClass.ReplaceText(oldUseMethod, newUseMethodForEfModule);
 
         var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith($"{(_hasDbMigrations ? "Migrations" : string.Empty)}DbContextFactoryBase.cs", StringComparison.OrdinalIgnoreCase))

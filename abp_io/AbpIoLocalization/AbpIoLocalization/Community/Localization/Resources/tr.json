@@ -182,7 +182,7 @@
     "Events_Page_MetaTitle": "ABP Topluluk Etkinlikleri",
     "Events_Page_MetaDescription": "ABP Ekibi tarafından düzenlenen canlı programlar, topluluk içeriği, demolar, Soru-Cevap ve ABP'de neler olup bittiğine dair tartışmalarla dolu rahat oturumlardır.",
     "Events_Page_Title": "ABP<span class=\"gradient-community\"> Topluluk</span> Konuşmaları",
-    "Events_Page_WritingFromUser": "ABP Topluluğunda {0} adlı kişiden gelen yazıları okuyun.",
+    "Members_Page_WritingFromUser": "ABP Topluluğunda {0} adlı kişiden gelen yazıları okuyun.",
     "Post_Create_Page_MetaTitle": "Yeni Gönderi",
     "Post_Create_Page_MetaDescription": "ABP çerçevesi hakkındaki deneyimlerinizi paylaşmak ve ABP Topluluğuna katkıda bulunmak için gönderinizi oluşturun.",
     "Post_Create_Page_CreateNewPost": "Yeni Gönderi Oluştur",
