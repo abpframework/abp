@@ -11,8 +11,6 @@ var abp = abp || {};
             abp.message.confirm(l('AreYouSureToResetToDefault'))
                 .then(function (confirmed) {
                     if (confirmed) {
-                        debugger
-                        
                         let providerName = $('#ProviderName').val();
                         let prodiverKey = $('#ProviderKey').val();
                         volo.abp.featureManagement.features.resetToDefault(providerName, prodiverKey).then(function () {
