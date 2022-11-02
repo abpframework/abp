@@ -37,8 +37,7 @@ public interface IPermissionDefinitionContext
     /// </summary>
     PermissionGroupDefinition AddGroup(
         [NotNull] string name,
-        ILocalizableString displayName = null,
-        MultiTenancySides multiTenancySide = MultiTenancySides.Both);
+        ILocalizableString displayName = null);
 
     /// <summary>
     /// Tries to remove a permission group.

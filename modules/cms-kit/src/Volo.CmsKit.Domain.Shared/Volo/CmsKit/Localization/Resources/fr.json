@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Êtes-vous sûr de vouloir supprimer cette page?",
     "PageId": "Page",
     "Pages": "Pages",
-    "PageSlugInformation": "Slug est utilisé sur l'url. Votre URL sera '/pages/{{slug}}'.",
+    "PageSlugInformation": "Slug est utilisé sur l'url. Votre URL sera '/{{slug}}'.",
     "Permission:BlogManagement": "Gestion de blog",
     "Permission:BlogManagement.Create": "Créer",
     "Permission:BlogManagement.Delete": "Effacer",

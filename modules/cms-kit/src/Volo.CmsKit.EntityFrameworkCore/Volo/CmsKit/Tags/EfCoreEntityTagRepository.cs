@@ -1,9 +1,9 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -19,11 +19,11 @@ public class EfCoreEntityTagRepository : EfCoreRepository<ICmsKitDbContext, Enti
     {
     }
 
-    public virtual async Task DeleteManyAsync(Guid[] tagIds, CancellationToken cancellationToken = default)
+    public virtual async Task DeleteManyAsync(Guid[] tagIds, string entityId, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
         var dbSet = dbContext.Set<EntityTag>();
-        dbSet.RemoveRange(dbSet.Where(x => tagIds.Contains(x.TagId)));
+        dbSet.RemoveRange(dbSet.Where(x => tagIds.Contains(x.TagId) && x.EntityId == entityId));
         await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -56,18 +56,18 @@ public class EfCoreEntityTagRepository : EfCoreRepository<ICmsKitDbContext, Enti
     public async Task<List<string>> GetEntityIdsFilteredByTagNameAsync(
         [NotNull] string tagName,
         [NotNull] string entityType,
-        [CanBeNull] Guid? tenantId=null, 
-        CancellationToken cancellationToken=default)
+        [CanBeNull] Guid? tenantId = null,
+        CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
         var result = from et in dbContext.Set<EntityTag>()
                      join t in dbContext.Set<Tag>() on et.TagId equals t.Id
-                     where t.Name == tagName 
-                           && t.EntityType == entityType 
-                           && et.TenantId == tenantId 
+                     where t.Name == tagName
+                           && t.EntityType == entityType
+                           && et.TenantId == tenantId
                            && t.TenantId == tenantId
                            && !t.IsDeleted
-                     select et.EntityId; 
-        return await result.ToListAsync(cancellationToken:GetCancellationToken(cancellationToken));
+                     select et.EntityId;
+        return await result.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

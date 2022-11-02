@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
+using Volo.Abp.TestApp.Testing;
 
 namespace Volo.Abp.EntityFrameworkCore;
 
@@ -19,6 +20,8 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
     public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
 
     public DbSet<Author> Author { get; set; }
+    
+    public DbSet<Product> Products { get; set; }
 
     public TestMigrationsDbContext(DbContextOptions<TestMigrationsDbContext> options)
         : base(options)
@@ -51,5 +54,7 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
                 d.HasKey(x => new { x.CityId, x.Name });
             });
         });
+
+        modelBuilder.Entity<Product>();
     }
 }

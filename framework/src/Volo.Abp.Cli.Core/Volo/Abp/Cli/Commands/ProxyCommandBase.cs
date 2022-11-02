@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -19,11 +20,11 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
 
     protected AbpCliServiceProxyOptions ServiceProxyOptions { get; }
 
-    protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     public ProxyCommandBase(
         IOptions<AbpCliServiceProxyOptions> serviceProxyOptions,
-        IHybridServiceScopeFactory serviceScopeFactory)
+        IServiceScopeFactory serviceScopeFactory)
     {
         ServiceScopeFactory = serviceScopeFactory;
         ServiceProxyOptions = serviceProxyOptions.Value;
@@ -67,8 +68,10 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long);
         var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
         var folder = commandLineArgs.Options.GetOrNull(Options.Folder.Long);
+        var withoutContracts = commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Short) ||
+                               commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Long);
 
-        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, commandLineArgs.Options);
+        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, withoutContracts, commandLineArgs.Options);
     }
 
     public virtual string GetUsageInfo()
@@ -160,6 +163,12 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         {
             public const string Short = "wd";
             public const string Long = "working-directory";
+        }
+
+        public static class WithoutContracts
+        {
+            public const string Short = "c";
+            public const string Long = "without-contracts";
         }
     }
 }

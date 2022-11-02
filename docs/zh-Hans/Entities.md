@@ -105,6 +105,22 @@ public class UserRole : Entity
 
 > 需要注意,复合主键实体不可以使用 `IRepository<TEntity, TKey>` 接口,因为它需要一个唯一的Id属性. 但你可以使用 `IRepository<TEntity>`.更多信息请参见[仓储](Repositories.md)的文档.
 
+### EntityEquals
+
+`Entity.EntityEquals(...)` 方法用于检查两个实体对象是否相等.
+
+示例:
+
+```csharp
+Book book1 = ...
+Book book2 = ...
+
+if (book1.EntityEquals(book2)) //Check equality
+{
+    ...
+}
+```
+
 ## 聚合根
 
 "*聚合是域驱动设计中的一种模式.DDD的聚合是一组可以作为一个单元处理的域对象.例如,订单及订单系列的商品,这些是独立的对象,但将订单(连同订单系列的商品)视为一个聚合通常是很有用的*"( [查看详细介绍](http://martinfowler.com/bliki/DDD_Aggregate.html))

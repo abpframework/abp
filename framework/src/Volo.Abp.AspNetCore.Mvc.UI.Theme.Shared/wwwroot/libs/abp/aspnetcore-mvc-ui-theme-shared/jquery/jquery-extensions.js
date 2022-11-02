@@ -99,7 +99,7 @@
         // add unchecked checkboxes because serializeArray ignores them
         $(this).find("input[type=checkbox]").each(function () {
             if (!$(this).is(':checked')) {
-                data.push({name: this.name, value: this.checked});
+                data.push({ name: this.name, value: this.checked });
             }
         });
 
@@ -118,26 +118,7 @@
             });
 
         //map to object
-
-        var getVarName = function (v) {
-            return v.toString().replace(/\(\)\s?=\>\s?/, '');
-        }
-
-        var getNames = function (index, variable) {
-            var name = '';
-            for (var i = 0; i <= index; i++) {
-                if (i == 0) {
-                    name = variable + '[' + i + ']'
-                } else {
-                    name += '][' + variable + '[' + i + ']'
-                }
-            }
-            return name;
-        }
-
         var obj = {};
-        var objName = getVarName(() => obj);
-
         if (camelCase !== undefined ? camelCase : true) {
             data.forEach(function (d) {
                 d.name = toCamelCase(d.name);
@@ -146,18 +127,19 @@
 
         data.map(function (x) {
             var names = x.name.split(".");
-            var xName = getVarName(() => x);
-            var namesName = getVarName(() => names);
+            for (var i = 0; i < names.length; i++) {
+                var o = obj;
+                for (var j = 0; j <= i; j++) {
+                    if ($.isEmptyObject(o[names[j]])) {
+                        o[names[j]] = {};
+                    }
 
-            var i = obj ? 0 : 1;
-            for (i = 0; i < names.length; i++) {
-                if (eval('!' + objName + '[' + getNames(i, '' + namesName + '') + ']')) {
-                    eval('' + objName + '[' + getNames(i, '' + namesName + '') + '] = {}');
+                    if (i == names.length - 1 && j == i) {
+                        o[names[j]] = x.value;
+                    }
+
+                    o = o[names[j]]
                 }
-            }
-
-            if ($.isEmptyObject(eval('' + objName + '[' + getNames(names.length - 1, '' + namesName + '') + ']'))) {
-                eval('' + objName + '[' + getNames(names.length - 1, '' + namesName + '') + '] = ' + xName + '.value');
             }
         });
 

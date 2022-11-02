@@ -4,7 +4,7 @@ namespace Volo.Abp.Cli.Utils;
 
 public interface ICmdHelper
 {
-    void OpenWebPage(string url);
+    void Open(string pathOrUrl);
 
     void Run(string file, string arguments);
 
