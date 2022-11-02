@@ -1,0 +1,37 @@
+{
+  "name": "Volo.CmsKit.EntityFrameworkCore",
+  "hash": "052e43dff51cc6025796a334e3b6b401",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.CmsKit.Domain",
+          "namespace": "Volo.CmsKit",
+          "name": "CmsKitDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.EntityFrameworkCore",
+          "namespace": "Volo.Abp.Users.EntityFrameworkCore",
+          "name": "AbpUsersEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "name": "AbpEntityFrameworkCoreModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "CmsKitEntityFrameworkCoreModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.EntityFrameworkCore",
+      "connectionStringName": "CmsKit",
+      "databaseTables": [],
+      "contentType": "efCoreDbContext",
+      "name": "CmsKitDbContext",
+      "summary": null
+    }
+  ]
+}

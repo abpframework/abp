@@ -1,0 +1,123 @@
+{
+  "name": "Volo.CmsKit.Domain.Shared",
+  "hash": "b350dc08d218613d7c72fd8613d8c8dd",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "name": "AbpGlobalFeaturesModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "CmsKitDomainSharedModule",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "true",
+      "displayName": "Enabled blog page",
+      "description": "Enable blog page in the application.",
+      "isAvailableToHost": true,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "CmsKit.BlogEnable",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "true",
+      "displayName": "Enabled commenting",
+      "description": "Enable comment in the application.",
+      "isAvailableToHost": true,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "CmsKit.CommentEnable",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "true",
+      "displayName": "Enabled global resourcing",
+      "description": "Enable global resource in the application.",
+      "isAvailableToHost": true,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "CmsKit.GlobalResourceEnable",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "true",
+      "displayName": "Enabled media",
+      "description": "Enable media in the application.",
+      "isAvailableToHost": true,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "CmsKit.MediaEnable",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "true",
+      "displayName": "Enabled menu",
+      "description": "Enable menu in the application.",
+      "isAvailableToHost": true,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "CmsKit.MenuEnable",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "true",
+      "displayName": "Enabled paging page",
+      "description": "Enable paging page in the application.",
+      "isAvailableToHost": true,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "CmsKit.PageEnable",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "true",
+      "displayName": "Enabled rating",
+      "description": "Enable rating in the application.",
+      "isAvailableToHost": true,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "CmsKit.RatingEnable",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "true",
+      "displayName": "Enabled reaction",
+      "description": "Enable reaction in the application.",
+      "isAvailableToHost": true,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "CmsKit.ReactionEnable",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "true",
+      "displayName": "Enabled taging",
+      "description": "Enable taging in the application.",
+      "isAvailableToHost": true,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "CmsKit.TagEnable",
+      "summary": null
+    }
+  ]
+}

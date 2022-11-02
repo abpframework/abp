@@ -1,0 +1,547 @@
+{
+  "name": "Volo.Abp.Identity.Application",
+  "hash": "b2a5a6d9d3fb6c1804a52f6e576fb9c7",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Identity",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Application.Contracts",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Application",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementApplicationModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpIdentityApplicationModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "baseClass": {
+        "name": "IdentityAppServiceBase",
+        "namespace": "Volo.Abp.Identity",
+        "declaringAssemblyName": "Volo.Abp.Identity.Application"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IIdentityRoleAppService",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<IdentityRoleDto, IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IReadOnlyAppService<IdentityRoleDto, IdentityRoleDto, Guid, GetIdentityRolesInput>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateUpdateAppService<IdentityRoleDto, Guid, IdentityRoleCreateDto, IdentityRoleUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateAppService<IdentityRoleDto, IdentityRoleCreateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IUpdateAppService<IdentityRoleDto, Guid, IdentityRoleUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IDeleteAppService<Guid>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "IdentityRoleDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ListResultDto<IdentityRoleDto>",
+          "isAsync": true,
+          "name": "GetAllListAsync",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "PagedResultDto<IdentityRoleDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GetIdentityRolesInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityRoleDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "IdentityRoleCreateDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityRoleDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "IdentityRoleUpdateDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "IdentityRoleAppService",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "baseClass": {
+        "name": "IdentityAppServiceBase",
+        "namespace": "Volo.Abp.Identity",
+        "declaringAssemblyName": "Volo.Abp.Identity.Application"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IIdentityUserAppService",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICrudAppService<IdentityUserDto, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IReadOnlyAppService<IdentityUserDto, IdentityUserDto, Guid, GetIdentityUsersInput>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateUpdateAppService<IdentityUserDto, Guid, IdentityUserCreateDto, IdentityUserUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "ICreateAppService<IdentityUserDto, IdentityUserCreateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IUpdateAppService<IdentityUserDto, Guid, IdentityUserUpdateDto>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IDeleteAppService<Guid>",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "IdentityUserDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PagedResultDto<IdentityUserDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GetIdentityUsersInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ListResultDto<IdentityRoleDto>",
+          "isAsync": true,
+          "name": "GetRolesAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ListResultDto<IdentityRoleDto>",
+          "isAsync": true,
+          "name": "GetAssignableRolesAsync",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "IdentityUserDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "IdentityUserCreateDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUserDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "IdentityUserUpdateDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "UpdateRolesAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "IdentityUserUpdateRolesDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUserDto",
+          "isAsync": true,
+          "name": "FindByUsernameAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUserDto",
+          "isAsync": true,
+          "name": "FindByEmailAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "email",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "IdentityUserAppService",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "baseClass": {
+        "name": "IdentityAppServiceBase",
+        "namespace": "Volo.Abp.Identity",
+        "declaringAssemblyName": "Volo.Abp.Identity.Application"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IIdentityUserLookupAppService",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "UserData",
+          "isAsync": true,
+          "name": "FindByIdAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "UserData",
+          "isAsync": true,
+          "name": "FindByUserNameAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ListResultDto<UserData>",
+          "isAsync": true,
+          "name": "SearchAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "UserLookupSearchInputDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "isAsync": true,
+          "name": "GetCountAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "UserLookupCountInputDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "IdentityUserLookupAppService",
+      "summary": null
+    }
+  ]
+}

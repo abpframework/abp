@@ -1,0 +1,1734 @@
+{
+  "name": "Volo.Abp.IdentityServer.Domain",
+  "hash": "5d8c49058240ab44c4829a6da5629387",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.IdentityServer",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain.Shared",
+          "namespace": "Volo.Abp.IdentityServer",
+          "name": "AbpIdentityServerDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Security",
+          "namespace": "Volo.Abp.Security",
+          "name": "AbpSecurityModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching",
+          "namespace": "Volo.Abp.Caching",
+          "name": "AbpCachingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundWorkers",
+          "namespace": "Volo.Abp.BackgroundWorkers",
+          "name": "AbpBackgroundWorkersModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpIdentityServerDomainModule",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "FullAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IModificationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasModificationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IFullAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IDeletionAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasDeletionTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "ISoftDelete",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddUserClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllUserClaims",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveUserClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityResourceClaim",
+          "isAsync": false,
+          "name": "FindUserClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllProperties",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityResourceProperty",
+          "isAsync": false,
+          "name": "FindProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+      "primaryKeyType": "Guid",
+      "collectionProperties": {
+        "userClaims": {
+          "name": "IdentityResourceClaim",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "properties": {
+          "name": "IdentityResourceProperty",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        }
+      },
+      "navigationProperties": {},
+      "contentType": "aggregateRoot",
+      "name": "IdentityResource",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        }
+      ],
+      "methods": [],
+      "namespace": "Volo.Abp.IdentityServer.Grants",
+      "primaryKeyType": "Guid",
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "contentType": "aggregateRoot",
+      "name": "PersistedGrant",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "CreationAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        }
+      ],
+      "methods": [],
+      "namespace": "Volo.Abp.IdentityServer.Devices",
+      "primaryKeyType": "Guid",
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "contentType": "aggregateRoot",
+      "name": "DeviceFlowCodes",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "FullAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IModificationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasModificationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IFullAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IDeletionAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasDeletionTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "ISoftDelete",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "List<ClientClaim>",
+          "isAsync": false,
+          "name": "FindClaims",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ClientClaim",
+          "isAsync": false,
+          "name": "FindClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddIdentityProviderRestriction",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "provider",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllIdentityProviderRestrictions",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveIdentityProviderRestriction",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "provider",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ClientIdPRestriction",
+          "isAsync": false,
+          "name": "FindIdentityProviderRestriction",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "provider",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddGrantType",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "grantType",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllAllowedGrantTypes",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveGrantType",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "grantType",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ClientGrantType",
+          "isAsync": false,
+          "name": "FindGrantType",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "grantType",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddSecret",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "expiration",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "description",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveSecret",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "ClientSecret",
+          "isAsync": false,
+          "name": "FindSecret",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddScope",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "scope",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllScopes",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveScope",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "scope",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ClientScope",
+          "isAsync": false,
+          "name": "FindScope",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "scope",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddCorsOrigin",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "origin",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddRedirectUri",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "redirectUri",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddPostLogoutRedirectUri",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "postLogoutRedirectUri",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllCorsOrigins",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveCorsOrigin",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "uri",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllRedirectUris",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveRedirectUri",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "uri",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllPostLogoutRedirectUris",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemovePostLogoutRedirectUri",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "uri",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ClientCorsOrigin",
+          "isAsync": false,
+          "name": "FindCorsOrigin",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "uri",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ClientRedirectUri",
+          "isAsync": false,
+          "name": "FindRedirectUri",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "uri",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ClientPostLogoutRedirectUri",
+          "isAsync": false,
+          "name": "FindPostLogoutRedirectUri",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "uri",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllProperties",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ClientProperty",
+          "isAsync": false,
+          "name": "FindProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllClaims",
+          "summary": null,
+          "parameters": []
+        }
+      ],
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": "Guid",
+      "collectionProperties": {
+        "allowedScopes": {
+          "name": "ClientScope",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "clientSecrets": {
+          "name": "ClientSecret",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "allowedGrantTypes": {
+          "name": "ClientGrantType",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "allowedCorsOrigins": {
+          "name": "ClientCorsOrigin",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "redirectUris": {
+          "name": "ClientRedirectUri",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "postLogoutRedirectUris": {
+          "name": "ClientPostLogoutRedirectUri",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "identityProviderRestrictions": {
+          "name": "ClientIdPRestriction",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "claims": {
+          "name": "ClientClaim",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "properties": {
+          "name": "ClientProperty",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        }
+      },
+      "navigationProperties": {},
+      "contentType": "aggregateRoot",
+      "name": "Client",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "FullAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IModificationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasModificationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IFullAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IDeletionAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasDeletionTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "ISoftDelete",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddUserClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllUserClaims",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ApiScopeClaim",
+          "isAsync": false,
+          "name": "FindClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllProperties",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ApiScopeProperty",
+          "isAsync": false,
+          "name": "FindProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+      "primaryKeyType": "Guid",
+      "collectionProperties": {
+        "userClaims": {
+          "name": "ApiScopeClaim",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "properties": {
+          "name": "ApiScopeProperty",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        }
+      },
+      "navigationProperties": {},
+      "contentType": "aggregateRoot",
+      "name": "ApiScope",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "FullAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IModificationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasModificationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IFullAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IDeletionAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IHasDeletionTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "ISoftDelete",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddSecret",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "expiration",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "description",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveSecret",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "ApiResourceSecret",
+          "isAsync": false,
+          "name": "FindSecret",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "ApiResourceScope",
+          "isAsync": false,
+          "name": "AddScope",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "scope",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddUserClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllUserClaims",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ApiResourceClaim",
+          "isAsync": false,
+          "name": "FindClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllSecrets",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllScopes",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveScope",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "scope",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ApiResourceScope",
+          "isAsync": false,
+          "name": "FindScope",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "scope",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllProperties",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ApiResourceProperty",
+          "isAsync": false,
+          "name": "FindProperty",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "namespace": "Volo.Abp.IdentityServer.ApiResources",
+      "primaryKeyType": "Guid",
+      "collectionProperties": {
+        "secrets": {
+          "name": "ApiResourceSecret",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "scopes": {
+          "name": "ApiResourceScope",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "userClaims": {
+          "name": "ApiResourceClaim",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        },
+        "properties": {
+          "name": "ApiResourceProperty",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+        }
+      },
+      "navigationProperties": {},
+      "contentType": "aggregateRoot",
+      "name": "ApiResource",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+        "primaryKeyType": "Guid",
+        "collectionProperties": {
+          "userClaims": {
+            "name": "IdentityResourceClaim",
+            "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "properties": {
+            "name": "IdentityResourceProperty",
+            "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          }
+        },
+        "navigationProperties": {},
+        "contentType": "entity",
+        "name": "IdentityResource",
+        "summary": null
+      },
+      "contentType": "repositoryInterface",
+      "name": "IIdentityResourceRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Grants",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.IdentityServer.Grants",
+        "primaryKeyType": "Guid",
+        "collectionProperties": {},
+        "navigationProperties": {},
+        "contentType": "entity",
+        "name": "PersistedGrant",
+        "summary": null
+      },
+      "contentType": "repositoryInterface",
+      "name": "IPersistentGrantRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Devices",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.IdentityServer.Devices",
+        "primaryKeyType": "Guid",
+        "collectionProperties": {},
+        "navigationProperties": {},
+        "contentType": "entity",
+        "name": "DeviceFlowCodes",
+        "summary": null
+      },
+      "contentType": "repositoryInterface",
+      "name": "IDeviceFlowCodesRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.IdentityServer.Clients",
+        "primaryKeyType": "Guid",
+        "collectionProperties": {
+          "allowedScopes": {
+            "name": "ClientScope",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "clientSecrets": {
+            "name": "ClientSecret",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "allowedGrantTypes": {
+            "name": "ClientGrantType",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "allowedCorsOrigins": {
+            "name": "ClientCorsOrigin",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "redirectUris": {
+            "name": "ClientRedirectUri",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "postLogoutRedirectUris": {
+            "name": "ClientPostLogoutRedirectUri",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "identityProviderRestrictions": {
+            "name": "ClientIdPRestriction",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "claims": {
+            "name": "ClientClaim",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "properties": {
+            "name": "ClientProperty",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          }
+        },
+        "navigationProperties": {},
+        "contentType": "entity",
+        "name": "Client",
+        "summary": null
+      },
+      "contentType": "repositoryInterface",
+      "name": "IClientRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+        "primaryKeyType": "Guid",
+        "collectionProperties": {
+          "userClaims": {
+            "name": "ApiScopeClaim",
+            "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "properties": {
+            "name": "ApiScopeProperty",
+            "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          }
+        },
+        "navigationProperties": {},
+        "contentType": "entity",
+        "name": "ApiScope",
+        "summary": null
+      },
+      "contentType": "repositoryInterface",
+      "name": "IApiScopeRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiResources",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.IdentityServer.ApiResources",
+        "primaryKeyType": "Guid",
+        "collectionProperties": {
+          "secrets": {
+            "name": "ApiResourceSecret",
+            "namespace": "Volo.Abp.IdentityServer.ApiResources",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "scopes": {
+            "name": "ApiResourceScope",
+            "namespace": "Volo.Abp.IdentityServer.ApiResources",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "userClaims": {
+            "name": "ApiResourceClaim",
+            "namespace": "Volo.Abp.IdentityServer.ApiResources",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          },
+          "properties": {
+            "name": "ApiResourceProperty",
+            "namespace": "Volo.Abp.IdentityServer.ApiResources",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          }
+        },
+        "navigationProperties": {},
+        "contentType": "entity",
+        "name": "ApiResource",
+        "summary": null
+      },
+      "contentType": "repositoryInterface",
+      "name": "IApiResourceRepository",
+      "summary": null
+    }
+  ]
+}

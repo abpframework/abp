@@ -1,0 +1,130 @@
+{
+  "name": "Volo.Abp.FeatureManagement.Application",
+  "hash": "d038e9165d998d0aec011b6a17798f1a",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Domain",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application.Contracts",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpFeatureManagementApplicationModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "baseClass": {
+        "name": "FeatureManagementAppServiceBase",
+        "namespace": "Volo.Abp.FeatureManagement",
+        "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IFeatureAppService",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "GetFeatureListResultDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            },
+            {
+              "type": "UpdateFeaturesDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "FeatureAppService",
+      "summary": null
+    }
+  ]
+}

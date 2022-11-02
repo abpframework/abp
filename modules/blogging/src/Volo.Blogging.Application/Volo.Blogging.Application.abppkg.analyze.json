@@ -1,0 +1,592 @@
+{
+  "name": "Volo.Blogging.Application",
+  "hash": "8514bb852f12b47891c28619ff32dce0",
+  "contents": [
+    {
+      "namespace": "Volo.Blogging",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Blogging.Domain",
+          "namespace": "Volo.Blogging",
+          "name": "BloggingDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts",
+          "namespace": "Volo.Blogging",
+          "name": "BloggingApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching",
+          "namespace": "Volo.Abp.Caching",
+          "name": "AbpCachingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BlobStoring",
+          "namespace": "Volo.Abp.BlobStoring",
+          "name": "AbpBlobStoringModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "BloggingApplicationModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Tagging",
+      "baseClass": {
+        "name": "BloggingAppServiceBase",
+        "namespace": "Volo.Blogging",
+        "declaringAssemblyName": "Volo.Blogging.Application"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "ITagAppService",
+          "namespace": "Volo.Blogging.Tagging",
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<TagDto>",
+          "isAsync": true,
+          "name": "GetPopularTagsAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "blogId",
+              "isOptional": false
+            },
+            {
+              "type": "GetPopularTagsInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "TagAppService",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Posts",
+      "baseClass": {
+        "name": "BloggingAppServiceBase",
+        "namespace": "Volo.Blogging",
+        "declaringAssemblyName": "Volo.Blogging.Application"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IPostAppService",
+          "namespace": "Volo.Blogging.Posts",
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "ListResultDto<PostWithDetailsDto>",
+          "isAsync": true,
+          "name": "GetListByBlogIdAndTagNameAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "tagName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ListResultDto<PostWithDetailsDto>",
+          "isAsync": true,
+          "name": "GetTimeOrderedListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "blogId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PostWithDetailsDto",
+          "isAsync": true,
+          "name": "GetForReadingAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GetPostInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PostWithDetailsDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PostWithDetailsDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "UpdatePostDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PostWithDetailsDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CreatePostDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "PostAppService",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Files",
+      "baseClass": {
+        "name": "BloggingAppServiceBase",
+        "namespace": "Volo.Blogging",
+        "declaringAssemblyName": "Volo.Blogging.Application"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IFileAppService",
+          "namespace": "Volo.Blogging.Files",
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "RawFileDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IRemoteStreamContent",
+          "isAsync": true,
+          "name": "GetFileAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "FileUploadOutputDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "FileUploadInputDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "FileAppService",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Comments",
+      "baseClass": {
+        "name": "BloggingAppServiceBase",
+        "namespace": "Volo.Blogging",
+        "declaringAssemblyName": "Volo.Blogging.Application"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "ICommentAppService",
+          "namespace": "Volo.Blogging.Comments",
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<CommentWithRepliesDto>",
+          "isAsync": true,
+          "name": "GetHierarchicalListOfPostAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "postId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "CommentWithDetailsDto",
+          "isAsync": true,
+          "name": "CreateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "CreateCommentDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "CommentWithDetailsDto",
+          "isAsync": true,
+          "name": "UpdateAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "UpdateCommentDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "CommentAppService",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Blogs",
+      "baseClass": {
+        "name": "BloggingAppServiceBase",
+        "namespace": "Volo.Blogging",
+        "declaringAssemblyName": "Volo.Blogging.Application"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IBlogAppService",
+          "namespace": "Volo.Blogging.Blogs",
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "ListResultDto<BlogDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "BlogDto",
+          "isAsync": true,
+          "name": "GetByShortNameAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "shortName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "BlogDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "BlogAppService",
+      "summary": null
+    }
+  ]
+}

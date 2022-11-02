@@ -1,0 +1,19 @@
+{
+  "name": "Volo.Blogging.Admin.Application.Contracts",
+  "hash": "60b70929e0d5bf7e78c1ab98cf925ebf",
+  "contents": [
+    {
+      "namespace": "Volo.Blogging.Admin",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts.Shared",
+          "namespace": "Volo.Blogging",
+          "name": "BloggingApplicationContractsSharedModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "BloggingAdminApplicationContractsModule",
+      "summary": null
+    }
+  ]
+}

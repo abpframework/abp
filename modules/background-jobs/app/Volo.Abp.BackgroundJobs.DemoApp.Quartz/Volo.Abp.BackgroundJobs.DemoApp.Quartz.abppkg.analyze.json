@@ -1,0 +1,29 @@
+{
+  "name": "Volo.Abp.BackgroundJobs.DemoApp.Quartz",
+  "hash": "9f7a22f6afd944505bd8381a25fee9c2",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.BackgroundJobs.DemoApp.Quartz",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.DemoApp.Shared",
+          "namespace": "Volo.Abp.BackgroundJobs.DemoApp.Shared",
+          "name": "DemoAppSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Autofac",
+          "namespace": "Volo.Abp.Autofac",
+          "name": "AbpAutofacModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.Quartz",
+          "namespace": "Volo.Abp.BackgroundJobs.Quartz",
+          "name": "AbpBackgroundJobsQuartzModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "DemoAppQuartzModule",
+      "summary": null
+    }
+  ]
+}

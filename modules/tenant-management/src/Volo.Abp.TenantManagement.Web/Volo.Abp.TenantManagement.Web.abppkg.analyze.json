@@ -1,0 +1,34 @@
+{
+  "name": "Volo.Abp.TenantManagement.Web",
+  "hash": "4c51a7801b94f63a6e4a00ffd61ae137",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.TenantManagement.Web",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Application.Contracts",
+          "namespace": "Volo.Abp.TenantManagement",
+          "name": "AbpTenantManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+          "name": "AbpAspNetCoreMvcUiBootstrapModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Web",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpTenantManagementWebModule",
+      "summary": null
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "name": "Volo.Abp.OpenIddict.EntityFrameworkCore",
+  "hash": "e3299c9881979d3707173d06a9ebc886",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.OpenIddict.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.OpenIddict.Domain",
+          "namespace": "Volo.Abp.OpenIddict",
+          "name": "AbpOpenIddictDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "name": "AbpEntityFrameworkCoreModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpOpenIddictEntityFrameworkCoreModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.OpenIddict.EntityFrameworkCore",
+      "connectionStringName": "AbpOpenIddict",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Applications.OpenIddictApplication",
+          "contentType": "databaseTable",
+          "name": "OpenIddictApplications",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization",
+          "contentType": "databaseTable",
+          "name": "OpenIddictAuthorizations",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Scopes.OpenIddictScope",
+          "contentType": "databaseTable",
+          "name": "OpenIddictScopes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
+          "contentType": "databaseTable",
+          "name": "OpenIddictTokens",
+          "summary": null
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "OpenIddictDbContext",
+      "summary": null
+    }
+  ]
+}

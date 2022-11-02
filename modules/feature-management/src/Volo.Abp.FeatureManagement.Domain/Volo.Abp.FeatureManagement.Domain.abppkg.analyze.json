@@ -1,0 +1,259 @@
+{
+  "name": "Volo.Abp.FeatureManagement.Domain",
+  "hash": "c492222dd20fe3ffd91cf8837101affe",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Domain.Shared",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Features",
+          "namespace": "Volo.Abp.Features",
+          "name": "AbpFeaturesModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching",
+          "namespace": "Volo.Abp.Caching",
+          "name": "AbpCachingModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpFeatureManagementDomainModule",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "BasicAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Boolean",
+          "isAsync": false,
+          "name": "HasSameData",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "FeatureDefinitionRecord",
+              "name": "otherRecord",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "Patch",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "FeatureDefinitionRecord",
+              "name": "otherRecord",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "namespace": "Volo.Abp.FeatureManagement",
+      "primaryKeyType": "Guid",
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "contentType": "aggregateRoot",
+      "name": "FeatureDefinitionRecord",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "BasicAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Boolean",
+          "isAsync": false,
+          "name": "HasSameData",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "FeatureGroupDefinitionRecord",
+              "name": "otherRecord",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "Patch",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "FeatureGroupDefinitionRecord",
+              "name": "otherRecord",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "namespace": "Volo.Abp.FeatureManagement",
+      "primaryKeyType": "Guid",
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "contentType": "aggregateRoot",
+      "name": "FeatureGroupDefinitionRecord",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "Entity<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        }
+      ],
+      "methods": [],
+      "namespace": "Volo.Abp.FeatureManagement",
+      "primaryKeyType": "Guid",
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "contentType": "aggregateRoot",
+      "name": "FeatureValue",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.FeatureManagement",
+        "primaryKeyType": "Guid",
+        "collectionProperties": {},
+        "navigationProperties": {},
+        "contentType": "entity",
+        "name": "FeatureDefinitionRecord",
+        "summary": null
+      },
+      "contentType": "repositoryInterface",
+      "name": "IFeatureDefinitionRecordRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.FeatureManagement",
+        "primaryKeyType": "Guid",
+        "collectionProperties": {},
+        "navigationProperties": {},
+        "contentType": "entity",
+        "name": "FeatureGroupDefinitionRecord",
+        "summary": null
+      },
+      "contentType": "repositoryInterface",
+      "name": "IFeatureGroupDefinitionRecordRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.FeatureManagement",
+        "primaryKeyType": "Guid",
+        "collectionProperties": {},
+        "navigationProperties": {},
+        "contentType": "entity",
+        "name": "FeatureValue",
+        "summary": null
+      },
+      "contentType": "repositoryInterface",
+      "name": "IFeatureValueRepository",
+      "summary": null
+    }
+  ]
+}

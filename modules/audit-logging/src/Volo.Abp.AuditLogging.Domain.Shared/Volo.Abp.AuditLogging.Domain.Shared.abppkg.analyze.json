@@ -1,0 +1,19 @@
+{
+  "name": "Volo.Abp.AuditLogging.Domain.Shared",
+  "hash": "e6804aee981e73c0bf60780e69c001ac",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpAuditLoggingDomainSharedModule",
+      "summary": null
+    }
+  ]
+}

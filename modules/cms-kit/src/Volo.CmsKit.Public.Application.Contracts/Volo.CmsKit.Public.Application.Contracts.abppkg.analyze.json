@@ -1,0 +1,24 @@
+{
+  "name": "Volo.CmsKit.Public.Application.Contracts",
+  "hash": "4f50ee0046fbfc7a37609a9c4408cafc",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit.Public",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.CmsKit.Common.Application.Contracts",
+          "namespace": "Volo.CmsKit",
+          "name": "CmsKitCommonApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EventBus",
+          "namespace": "Volo.Abp.EventBus",
+          "name": "AbpEventBusModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "CmsKitPublicApplicationContractsModule",
+      "summary": null
+    }
+  ]
+}

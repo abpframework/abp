@@ -1,0 +1,29 @@
+{
+  "name": "Volo.Abp.BackgroundJobs.DemoApp.HangFire",
+  "hash": "f48c5cb958c77d7b4cfb1e4ddda9c88c",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.BackgroundJobs.DemoApp.HangFire",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.DemoApp.Shared",
+          "namespace": "Volo.Abp.BackgroundJobs.DemoApp.Shared",
+          "name": "DemoAppSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Autofac",
+          "namespace": "Volo.Abp.Autofac",
+          "name": "AbpAutofacModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.HangFire",
+          "namespace": "Volo.Abp.BackgroundJobs.Hangfire",
+          "name": "AbpBackgroundJobsHangfireModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "DemoAppHangfireModule",
+      "summary": null
+    }
+  ]
+}
