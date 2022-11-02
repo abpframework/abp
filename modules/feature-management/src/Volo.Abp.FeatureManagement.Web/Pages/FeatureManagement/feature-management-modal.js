@@ -2,17 +2,17 @@ var abp = abp || {};
 (function ($) {
     abp.modals = abp.modals || {};
 
-    let l = abp.localization.getResource("FeatureManagement");
+    let l = abp.localization.getResource("AbpFeatureManagement");
 
 
     abp.modals.FeatureManagement = function () {
         abp.ResourceLoader.loadScript('/client-proxies/featureManagement-proxy.js');
         $('#ResetToDefaults').click(function (e) {
-            abp.message.confirm('Are you sure to reset to defaults?')
+            abp.message.confirm(l('AreYouSureToResetToDefault'))
                 .then(function (confirmed) {
                     if (confirmed) {
                         volo.abp.featureManagement.features.resetToDefault().then(function () {
-                            abp.notify.success(l('Reseted'));
+                            abp.notify.success(l('ResetedToDefault'));
                         });
                     }
                 });
