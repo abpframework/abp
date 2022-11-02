@@ -34,8 +34,12 @@ public partial class FeaturesClientProxy : ClientProxyBase<IFeatureAppService>, 
         });
     }
 
-    public virtual async Task ResetToDefaultAsync()
+    public virtual async Task ResetToDefaultAsync(string providerName, string providerKey)
     {
-        await RequestAsync(nameof(ResetToDefaultAsync));
+        await RequestAsync(nameof(ResetToDefaultAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), providerName },
+            { typeof(string), providerKey }
+        });
     }
 }

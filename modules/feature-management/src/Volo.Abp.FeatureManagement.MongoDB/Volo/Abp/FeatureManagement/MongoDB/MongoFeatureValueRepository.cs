@@ -52,10 +52,14 @@ public class MongoFeatureValueRepository :
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task DeleteAsync(CancellationToken cancellationToken = default)
+    public virtual async Task DeleteAsync(
+        string providerName,
+        string providerKey,
+        CancellationToken cancellationToken = default)
     {
-        //TODO check it again
-        var entities = await AsyncExecuter.ToListAsync((await GetQueryableAsync()).Select(p => p.Id));
+        var entities = await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey)
+            .ToListAsync(GetCancellationToken(cancellationToken));
         await DeleteManyAsync(entities, true, GetCancellationToken(cancellationToken));
     }
 }

@@ -72,7 +72,8 @@ public class FeatureAppService_Tests : FeatureManagementApplicationTestBase
     public async Task ResetToDefaultAsync()
     {
         Login(_testData.User1Id);
-        var exception = await Record.ExceptionAsync(async () => await _featureAppService.ResetToDefaultAsync());
+        var exception = await Record.ExceptionAsync(async () =>
+            await _featureAppService.ResetToDefaultAsync("test", "test"));
         Assert.Null(exception);
     }
 

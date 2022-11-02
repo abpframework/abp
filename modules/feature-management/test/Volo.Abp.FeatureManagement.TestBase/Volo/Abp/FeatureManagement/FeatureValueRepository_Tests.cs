@@ -76,8 +76,9 @@ public abstract class FeatureValueRepository_Tests<TStartupModule> : FeatureMana
     [Fact]
     public async Task DeleteAsync()
     {
-        var exception =  await Record.ExceptionAsync(async() => await Repository.DeleteAsync());
+        var exception = await Record.ExceptionAsync(async () =>
+            await Repository.DeleteAsync(TestFeatureDefinitionProvider.SocialLogins, "true"));
         Assert.Null(exception);
-        
+
     }
 }
