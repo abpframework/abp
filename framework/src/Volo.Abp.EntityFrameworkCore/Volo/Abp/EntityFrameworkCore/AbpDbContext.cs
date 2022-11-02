@@ -627,7 +627,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 				modelBuilder
                     .Entity<TEntity>()
                     .Property(property.Name)
-                    .HasConversion(property.PropertyType == typeof(DateTime)
+                    .HasConversion(property.ClrType == typeof(DateTime)
                         ? new AbpDateTimeValueConverter(Clock)
                         : new AbpNullableDateTimeValueConverter(Clock));
             }
