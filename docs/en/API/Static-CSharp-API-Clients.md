@@ -136,7 +136,7 @@ This command should generate the following files under the `ClientProxies` folde
 
 ![generated-static-client-proxies](../images/generated-static-client-proxies-with-contracts.png)
 
-* `BookProxy.Generated.cs` is the actual generated proxy class in this example. `BookClientProxy` is a `partial` class * where you can write your custom code (ABP won't override it). 
+* `BookClientProxy.Generated.cs` is the actual generated proxy class in this example. `BookClientProxy` is a `partial` class * where you can write your custom code (ABP won't override it). 
 * `IBookAppService.cs` is the app service.
 * `BookDto.cs` is the Dto class which uses by app service.
 * `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests.
