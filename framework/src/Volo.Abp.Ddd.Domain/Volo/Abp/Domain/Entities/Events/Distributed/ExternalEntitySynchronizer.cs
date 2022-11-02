@@ -13,8 +13,8 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed;
 
 public abstract class ExternalEntitySynchronizer<TEntity, TKey, TExternalEntityEto> :
     ExternalEntitySynchronizer<TEntity, TExternalEntityEto>
-    where TEntity : class, IEntity<TKey>, IHasRemoteModificationTime
-    where TExternalEntityEto : EntityEto, IHasModificationTime
+    where TEntity : class, IEntity<TKey>, IHasEntityVersion
+    where TExternalEntityEto : EntityEto, IHasEntityVersion
 {
     private readonly IRepository<TEntity, TKey> _repository;
 
@@ -48,8 +48,8 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
     IDistributedEventHandler<EntityUpdatedEto<TExternalEntityEto>>,
     IDistributedEventHandler<EntityDeletedEto<TExternalEntityEto>>,
     IUnitOfWorkEnabled
-    where TEntity : class, IEntity, IHasRemoteModificationTime
-    where TExternalEntityEto : EntityEto, IHasModificationTime
+    where TEntity : class, IEntity, IHasEntityVersion
+    where TExternalEntityEto : EntityEto, IHasEntityVersion
 {
     protected IObjectMapper ObjectMapper { get; }
     private readonly IRepository<TEntity> _repository;
@@ -73,7 +73,7 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
             return;
         }
 
-        await CreateOrUpdateEntityAsync(eventData.Entity);
+        await TryCreateOrUpdateEntityAsync(eventData.Entity);
     }
 
     public virtual async Task HandleEventAsync(EntityUpdatedEto<TExternalEntityEto> eventData)
@@ -83,7 +83,7 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
             return;
         }
 
-        await CreateOrUpdateEntityAsync(eventData.Entity);
+        await TryCreateOrUpdateEntityAsync(eventData.Entity);
     }
 
     public virtual async Task HandleEventAsync(EntityDeletedEto<TExternalEntityEto> eventData)
@@ -96,29 +96,31 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
         await TryDeleteEntityAsync(eventData.Entity);
     }
 
-    protected virtual async Task CreateOrUpdateEntityAsync(TExternalEntityEto eto)
+    protected virtual async Task<bool> TryCreateOrUpdateEntityAsync(TExternalEntityEto eto)
     {
         var localEntity = await FindLocalEntityAsync(eto);
 
         if (!await IsEtoNewerAsync(eto, localEntity))
         {
-            return;
+            return false;
         }
 
         if (localEntity == null)
         {
             localEntity = await MapToEntityAsync(eto);
-            ObjectHelper.TrySetProperty(localEntity, x => x.RemoteLastModificationTime, () => eto.LastModificationTime);
+            ObjectHelper.TrySetProperty(localEntity, x => x.EntityVersion, () => eto.EntityVersion);
 
             await _repository.InsertAsync(localEntity, true);
         }
         else
         {
             await MapToEntityAsync(eto, localEntity);
-            ObjectHelper.TrySetProperty(localEntity, x => x.RemoteLastModificationTime, () => eto.LastModificationTime);
+            ObjectHelper.TrySetProperty(localEntity, x => x.EntityVersion, () => eto.EntityVersion);
 
             await _repository.UpdateAsync(localEntity, true);
         }
+
+        return true;
     }
 
     protected virtual Task<TEntity> MapToEntityAsync(TExternalEntityEto eto)
@@ -132,16 +134,18 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
         return Task.CompletedTask;
     }
 
-    protected virtual async Task TryDeleteEntityAsync(TExternalEntityEto eto)
+    protected virtual async Task<bool> TryDeleteEntityAsync(TExternalEntityEto eto)
     {
         var localEntity = await FindLocalEntityAsync(eto);
 
         if (localEntity == null)
         {
-            return;
+            return false;
         }
 
         await _repository.DeleteAsync(localEntity, true);
+
+        return true;
     }
 
     [ItemCanBeNull]
@@ -149,9 +153,6 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
 
     protected virtual Task<bool> IsEtoNewerAsync(TExternalEntityEto eto, [CanBeNull] TEntity localEntity)
     {
-        return Task.FromResult(
-            localEntity?.RemoteLastModificationTime == null ||
-            eto.LastModificationTime > localEntity.RemoteLastModificationTime
-        );
+        return Task.FromResult(localEntity == null || eto.EntityVersion > localEntity.EntityVersion);
     }
 }

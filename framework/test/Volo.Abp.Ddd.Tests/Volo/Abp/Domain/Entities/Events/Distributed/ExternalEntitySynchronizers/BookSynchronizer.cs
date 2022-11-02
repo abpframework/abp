@@ -7,7 +7,8 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed.ExternalEntitySynchronizer
 
 public class BookSynchronizer : ExternalEntitySynchronizer<Book, Guid, RemoteBookEto>, ITransientDependency
 {
-    public BookSynchronizer(IObjectMapper objectMapper, IRepository<Book, Guid> repository) : base(objectMapper, repository)
+    public BookSynchronizer(IObjectMapper objectMapper, IRepository<Book, Guid> repository)
+        : base(objectMapper, repository)
     {
     }
 }

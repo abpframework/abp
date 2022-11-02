@@ -8,7 +8,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Domain.Repositories.MemoryDb;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
@@ -32,15 +31,13 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
 
         (await repository.FindAsync(bookId)).ShouldBeNull();
 
-        var remoteBookEto = new RemoteBookEto {
-            KeysAsString = bookId.ToString(), LastModificationTime = DateTime.Now, Sold = 1
-        };
+        var remoteBookEto = new RemoteBookEto { KeysAsString = bookId.ToString(), EntityVersion = 0, Sold = 1 };
 
         await bookSynchronizer.HandleEventAsync(new EntityCreatedEto<RemoteBookEto>(remoteBookEto));
 
         var book = await repository.FindAsync(bookId);
         book.ShouldNotBeNull();
-        book.RemoteLastModificationTime.ShouldBe(remoteBookEto.LastModificationTime);
+        book.EntityVersion.ShouldBe(remoteBookEto.EntityVersion);
         book.Sold.ShouldBe(1);
     }
 
@@ -57,37 +54,34 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
 
         (await repository.FindAsync(bookId)).ShouldBeNull();
 
-        var remoteBookEto = new RemoteBookEto {
-            KeysAsString = bookId.ToString(), LastModificationTime = DateTime.Now, Sold = 1
-        };
+        var remoteBookEto = new RemoteBookEto { KeysAsString = bookId.ToString(), EntityVersion = 0, Sold = 1 };
 
         await bookSynchronizer.HandleEventAsync(new EntityUpdatedEto<RemoteBookEto>(remoteBookEto));
 
         var book = await repository.FindAsync(bookId);
         book.ShouldNotBeNull();
-        book.RemoteLastModificationTime.ShouldBe(remoteBookEto.LastModificationTime);
+        book.EntityVersion.ShouldBe(remoteBookEto.EntityVersion);
         book.Sold.ShouldBe(1);
 
-        remoteBookEto.LastModificationTime = DateTime.Now;
+        remoteBookEto.EntityVersion = 1;
         remoteBookEto.Sold = 2;
 
         await bookSynchronizer.HandleEventAsync(new EntityUpdatedEto<RemoteBookEto>(remoteBookEto));
 
         book = await repository.FindAsync(bookId);
         book.ShouldNotBeNull();
-        book.RemoteLastModificationTime.ShouldBe(remoteBookEto.LastModificationTime);
+        book.EntityVersion.ShouldBe(remoteBookEto.EntityVersion);
         book.Sold.ShouldBe(2);
 
-        // Should skip synchronizing older remote entities.
-        var originalLastModificationTime = remoteBookEto.LastModificationTime;
-        remoteBookEto.LastModificationTime = remoteBookEto.LastModificationTime.Value.AddTicks(-1);
+        remoteBookEto.EntityVersion = 0;
         remoteBookEto.Sold = 3;
 
         await bookSynchronizer.HandleEventAsync(new EntityUpdatedEto<RemoteBookEto>(remoteBookEto));
 
+        // Should skip synchronizing older remote entities.
         book = await repository.FindAsync(bookId);
         book.ShouldNotBeNull();
-        book.RemoteLastModificationTime.ShouldBe(originalLastModificationTime);
+        book.EntityVersion.ShouldBe(1);
         book.Sold.ShouldBe(2);
     }
 
@@ -102,16 +96,14 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
         var bookSynchronizer = GetRequiredService<BookSynchronizer>();
         var repository = GetRequiredService<IRepository<Book, Guid>>();
 
-        await repository.InsertAsync(new Book(bookId, 1), true);
+        await repository.InsertAsync(new Book(bookId, 1, 0), true);
 
         var book = await repository.FindAsync(bookId);
         book.ShouldNotBeNull();
         book.Id.ShouldBe(bookId);
-        book.RemoteLastModificationTime.ShouldBeNull();
+        book.EntityVersion.ShouldBe(0);
 
-        var remoteBookEto = new RemoteBookEto {
-            KeysAsString = bookId.ToString(), LastModificationTime = DateTime.Now, Sold = 1
-        };
+        var remoteBookEto = new RemoteBookEto { KeysAsString = bookId.ToString(), EntityVersion = 0, Sold = 1 };
 
         await bookSynchronizer.HandleEventAsync(new EntityDeletedEto<RemoteBookEto>(remoteBookEto));
 
@@ -147,11 +139,6 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
             context.Services.AddMemoryDbContext<MyMemoryDbContext>(options =>
             {
                 options.AddDefaultRepositories(includeAllEntities: true);
-            });
-
-            Configure<Utf8JsonMemoryDbSerializerOptions>(options =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new BookEntityJsonConverter());
             });
 
             context.Services.AddAutoMapperObjectMapper<TestModule>();

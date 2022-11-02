@@ -48,7 +48,7 @@ public class AuditPropertySetterTestBase
 
     }
 
-    public class MyAuditedObject : IMultiTenant, IFullAuditedObject
+    public class MyAuditedObject : IMultiTenant, IFullAuditedObject, IHasEntityVersion
     {
         public Guid? TenantId { get; set; }
         public DateTime CreationTime { get; set; }
@@ -58,5 +58,6 @@ public class AuditPropertySetterTestBase
         public bool IsDeleted { get; set; }
         public DateTime? DeletionTime { get; set; }
         public Guid? DeleterId { get; set; }
+        public int EntityVersion { get; set; }
     }
 }
