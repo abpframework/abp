@@ -378,6 +378,7 @@
     "TrialLicenseExpireMessage": "Uporabljate preizkusno licenco in vaša preizkusna licenca bo potekla {0}.",
     "TryForFree": "Poskusite brezplačno",
     "TrialLicenseExpiredInfo": "Vaša preizkusna licenca je potekla!",
-    "CommercialNewsletterConfirmationMessage": "Strinjam se s <a href=\"https://commercial.abp.io/TermsConditions\">pogoji in določili</a> in <a href=\"https://commercial.abp.io/Privacy\">pravilnikom o zasebnosti </a>."
+    "CommercialNewsletterConfirmationMessage": "Strinjam se s <a href=\"https://commercial.abp.io/TermsConditions\">pogoji in določili</a> in <a href=\"https://commercial.abp.io/Privacy\">pravilnikom o zasebnosti </a>.",
+    "BlackFridayDiscount": "Popust Black Friday"
   }
 }

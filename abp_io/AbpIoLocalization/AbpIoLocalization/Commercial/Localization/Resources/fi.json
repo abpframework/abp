@@ -382,6 +382,7 @@
     "ContinueWithNewOrganization": "Jatka uudessa organisaatiossa",
     "RenewLicenseEarly": "Jos uusin ajokorttini etuajassa, saanko koko vuoden?",
     "RenewLicenseEarylExplanation": "Kun uusit lisenssisi ennen lisenssin vanhenemispäivää, lisenssin voimassaolopäivään lisätään 1 vuosi. Jos lisenssisi vanhenee esimerkiksi {0}-06-06 ja uusit sen {0}-01-01, uusi lisenssisi päättymispäivä on {1}-06-06.",
-    "discountForYears": "{0}% de remise pendant {1} an(s)"
+    "discountForYears": "{0}% de remise pendant {1} an(s)",
+    "BlackFridayDiscount": "Black Friday -alennus"
   }
 }
