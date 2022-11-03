@@ -114,8 +114,11 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
         }
         else
         {
+            // The version will auto-increment by one when the repository updates the entity.
+            var entityVersion = eto.EntityVersion - 1;
+
             await MapToEntityAsync(eto, localEntity);
-            ObjectHelper.TrySetProperty(localEntity, x => x.EntityVersion, () => eto.EntityVersion);
+            ObjectHelper.TrySetProperty(localEntity, x => x.EntityVersion, () => entityVersion);
 
             await _repository.UpdateAsync(localEntity, true);
         }

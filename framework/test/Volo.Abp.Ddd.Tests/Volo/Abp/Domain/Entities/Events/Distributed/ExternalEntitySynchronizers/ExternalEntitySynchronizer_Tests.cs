@@ -60,7 +60,7 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
 
         var book = await repository.FindAsync(bookId);
         book.ShouldNotBeNull();
-        book.EntityVersion.ShouldBe(remoteBookEto.EntityVersion);
+        book.EntityVersion.ShouldBe(0);
         book.Sold.ShouldBe(1);
 
         remoteBookEto.EntityVersion = 1;
@@ -70,7 +70,7 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
 
         book = await repository.FindAsync(bookId);
         book.ShouldNotBeNull();
-        book.EntityVersion.ShouldBe(remoteBookEto.EntityVersion);
+        book.EntityVersion.ShouldBe(1);
         book.Sold.ShouldBe(2);
 
         remoteBookEto.EntityVersion = 0;
