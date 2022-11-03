@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -11,14 +12,14 @@ public class DaprApiTokenProvider : IDaprApiTokenProvider, ISingletonDependency
     {
         Options = options.Value;
     }
-    
-    public virtual string? GetDaprApiToken()
+
+    public virtual Task<string> GetDaprApiTokenAsync()
     {
-        return Options.DaprApiToken;
+        return Task.FromResult(Options.DaprApiToken);
     }
 
-    public virtual string? GetAppApiToken()
+    public virtual Task<string> GetAppApiTokenAsync()
     {
-        return Options.AppApiToken;
+        return Task.FromResult(Options.AppApiToken);
     }
 }

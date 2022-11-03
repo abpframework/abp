@@ -5,8 +5,6 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
         <RootNamespace />
     </PropertyGroup>
 
@@ -16,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Dapr.AspNetCore" Version="1.8.0" />
+      <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
     </ItemGroup>
 
 </Project>

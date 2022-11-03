@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization;
 using Volo.Abp.Dapr;
@@ -10,22 +11,22 @@ namespace Volo.Abp.AspNetCore.Mvc.Dapr;
 public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDependency
 {
     protected IHttpContextAccessor HttpContextAccessor { get; }
-    protected HttpContext HttpContext => GetHttpContext(); 
+    protected HttpContext HttpContext => GetHttpContext();
 
     public DaprAppApiTokenValidator(IHttpContextAccessor httpContextAccessor)
     {
         HttpContextAccessor = httpContextAccessor;
     }
-    
-    public virtual void CheckDaprAppApiToken()
+
+    public virtual async Task CheckDaprAppApiTokenAsync()
     {
-        var expectedAppApiToken = GetConfiguredAppApiTokenOrNull();
+        var expectedAppApiToken = await GetConfiguredAppApiTokenOrNullAsync();
         if (expectedAppApiToken.IsNullOrWhiteSpace())
         {
             return;
         }
-        
-        var headerAppApiToken = GetDaprAppApiTokenOrNull();
+
+        var headerAppApiToken = await GetDaprAppApiTokenOrNullAsync();
         if (headerAppApiToken.IsNullOrWhiteSpace())
         {
             throw new AbpAuthorizationException("Expected Dapr App API Token is not provided! Dapr should set the 'dapr-api-token' HTTP header.");
@@ -37,35 +38,35 @@ public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDep
         }
     }
 
-    public virtual bool IsValidDaprAppApiToken()
+    public virtual async Task<bool> IsValidDaprAppApiTokenAsync()
     {
-        var expectedAppApiToken = GetConfiguredAppApiTokenOrNull();
+        var expectedAppApiToken = await GetConfiguredAppApiTokenOrNullAsync();
         if (expectedAppApiToken.IsNullOrWhiteSpace())
         {
             return true;
         }
-        
-        var headerAppApiToken = GetDaprAppApiTokenOrNull();
+
+        var headerAppApiToken = await GetDaprAppApiTokenOrNullAsync();
         return expectedAppApiToken == headerAppApiToken;
     }
 
-    public virtual string? GetDaprAppApiTokenOrNull()
+    public virtual Task<string> GetDaprAppApiTokenOrNullAsync()
     {
         string apiTokenHeader = HttpContext.Request.Headers["dapr-api-token"];
         if (string.IsNullOrEmpty(apiTokenHeader) || apiTokenHeader.Length < 1)
         {
-            return null;
+            return Task.FromResult<string>(null);
         }
 
-        return apiTokenHeader;
+        return Task.FromResult(apiTokenHeader);
     }
-    
-    protected virtual string? GetConfiguredAppApiTokenOrNull()
+
+    protected virtual async Task<string> GetConfiguredAppApiTokenOrNullAsync()
     {
-        return HttpContext
+        return await HttpContext
             .RequestServices
             .GetRequiredService<IDaprApiTokenProvider>()
-            .GetAppApiToken();
+            .GetAppApiTokenAsync();
     }
 
     protected virtual HttpContext GetHttpContext()

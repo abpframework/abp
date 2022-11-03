@@ -1,8 +1,10 @@
+using System.Threading.Tasks;
+
 namespace Volo.Abp.Dapr;
 
 public interface IDaprApiTokenProvider
 {
-    string? GetDaprApiToken();
-    
-    string? GetAppApiToken();
+    Task<string> GetDaprApiTokenAsync();
+
+    Task<string> GetAppApiTokenAsync();
 }

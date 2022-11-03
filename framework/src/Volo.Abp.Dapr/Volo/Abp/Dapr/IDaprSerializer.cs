@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Dapr;
+﻿using System;
+
+namespace Volo.Abp.Dapr;
 
 public interface IDaprSerializer
 {

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,19 +11,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.Controllers;
 
 [Area("abp")]
 [RemoteService(Name = "abp")]
-public class AbpAspNetCoreMvcDaprPubSubController : AbpController
+public class AbpAspNetCoreMvcDaprEventsController : AbpController
 {
-    [HttpGet(AbpAspNetCoreMvcDaprPubSubConsts.DaprSubscribeUrl)]
-    public virtual async Task<List<AbpAspNetCoreMvcDaprSubscriptionDefinition>> SubscribeAsync()
-    {
-        return await HttpContext.RequestServices.GetRequiredService<AbpAspNetCoreMvcDaprPubSubProvider>().GetSubscriptionsAsync();
-    }
-
     [HttpPost(AbpAspNetCoreMvcDaprPubSubConsts.DaprEventCallbackUrl)]
     public virtual async Task<IActionResult> EventsAsync()
     {
-        this.HttpContext.ValidateDaprAppApiToken();
-        
+        await HttpContext.ValidateDaprAppApiTokenAsync();
+
         var bodyJsonDocument = await JsonDocument.ParseAsync(HttpContext.Request.Body);
         var request = JsonSerializer.Deserialize<AbpAspNetCoreMvcDaprSubscriptionRequest>(bodyJsonDocument.RootElement.GetRawText(),
             HttpContext.RequestServices.GetRequiredService<IOptions<JsonOptions>>().Value.JsonSerializerOptions);

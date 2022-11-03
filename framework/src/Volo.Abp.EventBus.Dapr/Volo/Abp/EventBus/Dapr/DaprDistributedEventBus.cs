@@ -1,4 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Dapr;
@@ -113,7 +117,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
     }
 
-    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         await PublishToDaprAsync(eventType, eventData);
     }
@@ -135,12 +139,12 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         return handlerFactoryList.ToArray();
     }
 
-    public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
+    public override async Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
         await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)));
     }
 
-    public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    public override async Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
     {
         var outgoingEventArray = outgoingEvents.ToArray();
 
@@ -197,7 +201,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     protected virtual async Task PublishToDaprAsync(string eventName, object eventData)
     {
-        var client = DaprClientFactory.Create();
+        var client = await DaprClientFactory.CreateAsync();
         await client.PublishEventAsync(pubsubName: DaprEventBusOptions.PubSubName, topicName: eventName, data: eventData);
     }
 

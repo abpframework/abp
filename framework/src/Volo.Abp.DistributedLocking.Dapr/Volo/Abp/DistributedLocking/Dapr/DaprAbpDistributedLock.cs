@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Dapr;
 using Volo.Abp.DependencyInjection;
 
@@ -10,7 +13,7 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
     protected IAbpDaprClientFactory DaprClientFactory { get; }
     protected AbpDistributedLockDaprOptions DistributedLockDaprOptions { get; }
     protected IDistributedLockKeyNormalizer DistributedLockKeyNormalizer { get; }
-    
+
     public DaprAbpDistributedLock(
         IAbpDaprClientFactory daprClientFactory,
         IOptions<AbpDistributedLockDaprOptions> distributedLockDaprOptions,
@@ -20,18 +23,18 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
         DistributedLockKeyNormalizer = distributedLockKeyNormalizer;
         DistributedLockDaprOptions = distributedLockDaprOptions.Value;
     }
-    
-    public async Task<IAbpDistributedLockHandle?> TryAcquireAsync(
+
+    public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default)
     {
         name = DistributedLockKeyNormalizer.NormalizeKey(name);
 
-        var daprClient = DaprClientFactory.Create();
+        var daprClient = await DaprClientFactory.CreateAsync();
         var lockResponse = await daprClient.Lock(
-            DistributedLockDaprOptions.StoreName, 
-            name, 
+            DistributedLockDaprOptions.StoreName,
+            name,
             DistributedLockDaprOptions.Owner ?? Guid.NewGuid().ToString(),
             (int)DistributedLockDaprOptions.DefaultExpirationTimeout.TotalSeconds,
             cancellationToken);

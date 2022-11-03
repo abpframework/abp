@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Threading.Tasks;
+using Dapr.Client;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Json;
@@ -12,14 +15,8 @@ public class AbpDaprModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
-        
-        ConfigureDaprOptions(configuration);
 
-        context.Services.TryAddSingleton(
-            serviceProvider => serviceProvider
-                .GetRequiredService<IAbpDaprClientFactory>()
-                .Create()
-        );
+        ConfigureDaprOptions(configuration);
     }
 
     private void ConfigureDaprOptions(IConfiguration configuration)
