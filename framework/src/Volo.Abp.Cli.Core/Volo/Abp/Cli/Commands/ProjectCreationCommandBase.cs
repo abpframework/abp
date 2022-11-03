@@ -38,6 +38,8 @@ public abstract class ProjectCreationCommandBase
     public ILogger<NewCommand> Logger { get; set; }
 
     public ThemePackageAdder ThemePackageAdder { get; }
+    
+    public AngularThemeConfigurer AngularThemeConfigurer { get; }
 
     public ProjectCreationCommandBase(
         ConnectionStringProvider connectionStringProvider,
@@ -49,7 +51,8 @@ public abstract class ProjectCreationCommandBase
         InitialMigrationCreator initialMigrationCreator,
         ThemePackageAdder themePackageAdder,
         ILocalEventBus eventBus,
-        IBundlingService bundlingService)
+        IBundlingService bundlingService, 
+        AngularThemeConfigurer angularThemeConfigurer)
     {
         _bundlingService = bundlingService;
         ConnectionStringProvider = connectionStringProvider;
@@ -61,6 +64,7 @@ public abstract class ProjectCreationCommandBase
         InitialMigrationCreator = initialMigrationCreator;
         EventBus = eventBus;
         ThemePackageAdder = themePackageAdder;
+        AngularThemeConfigurer = angularThemeConfigurer;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -664,6 +668,18 @@ public abstract class ProjectCreationCommandBase
         if (projectArgs.UiFramework is UiFramework.Angular)
         {
             ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@volo/abp.ng.theme.lepton", projectArgs.Version);
+        }
+    }
+
+    protected void ConfigureAngularJsonForThemeSelection(ProjectBuildArgs projectArgs)
+    {
+        //TODO: do not run if the theme is default
+        if (projectArgs.Theme.HasValue && projectArgs.UiFramework == UiFramework.Angular)
+        {
+            AngularThemeConfigurer.Configure(new AngularThemeConfigurationArgs(
+                theme: projectArgs.Theme.Value,
+                projectName: projectArgs.SolutionName.FullName, 
+                angularFolderPath: projectArgs.OutputFolder + Path.DirectorySeparatorChar + "angular"));
         }
     }
 

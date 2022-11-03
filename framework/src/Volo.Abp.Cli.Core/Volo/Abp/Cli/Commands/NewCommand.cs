@@ -40,7 +40,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         ILocalEventBus eventBus, 
         IBundlingService bundlingService,
         ITemplateInfoProvider templateInfoProvider, 
-        TemplateProjectBuilder templateProjectBuilder) :
+        TemplateProjectBuilder templateProjectBuilder,
+        AngularThemeConfigurer angularThemeConfigurer) :
         base(connectionStringProvider,
             solutionPackageVersionFinder, 
             cmdHelper, 
@@ -50,7 +51,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
             initialMigrationCreator,
             themePackageAdder, 
             eventBus, 
-            bundlingService)
+            bundlingService,
+            angularThemeConfigurer)
     {
         TemplateInfoProvider = templateInfoProvider;
         TemplateProjectBuilder = templateProjectBuilder;
@@ -95,6 +97,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
+        ConfigureAngularJsonForThemeSelection(projectArgs);
         ConfigureNpmPackagesForTheme(projectArgs);
         await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
