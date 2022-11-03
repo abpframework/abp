@@ -13,7 +13,8 @@ import { InternalStore } from '../utils/internal-store-utils';
 })
 export class ConfigStateService {
   private readonly store = new InternalStore({} as ApplicationConfigurationDto);
-
+  private includeLocalizationResources = false;
+  
   get createOnUpdateStream() {
     return this.store.sliceUpdate;
   }
@@ -26,7 +27,7 @@ export class ConfigStateService {
 
   private initUpdateStream() {
     this.updateSubject
-      .pipe(switchMap(() => this.abpConfigService.get()))
+      .pipe(switchMap(() => this.abpConfigService.get({ includeLocalizationResources:this.includeLocalizationResources})))
       .subscribe(res => this.store.set(res));
   }
 
