@@ -1,8 +1,10 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Concurrent;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
+using Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.Json;
 using Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.Models;
 using Volo.Abp.Dapr;
 using Volo.Abp.EventBus.Dapr;
@@ -14,20 +16,36 @@ namespace Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.Controllers;
 public class AbpAspNetCoreMvcDaprEventsController : AbpController
 {
     [HttpPost(AbpAspNetCoreMvcDaprPubSubConsts.DaprEventCallbackUrl)]
-    public virtual async Task<IActionResult> EventsAsync()
+    public virtual async Task<IActionResult> EventAsync()
     {
         await HttpContext.ValidateDaprAppApiTokenAsync();
 
-        var bodyJsonDocument = await JsonDocument.ParseAsync(HttpContext.Request.Body);
-        var request = JsonSerializer.Deserialize<AbpAspNetCoreMvcDaprSubscriptionRequest>(bodyJsonDocument.RootElement.GetRawText(),
-            HttpContext.RequestServices.GetRequiredService<IOptions<JsonOptions>>().Value.JsonSerializerOptions);
-
-        var distributedEventBus = HttpContext.RequestServices.GetRequiredService<DaprDistributedEventBus>();
         var daprSerializer = HttpContext.RequestServices.GetRequiredService<IDaprSerializer>();
+        var request = (await JsonDocument.ParseAsync(HttpContext.Request.Body)).Deserialize<AbpDaprSubscriptionRequest<object>>(CreateJsonSerializerOptions(daprSerializer));
+        if (request != null && request.Data is JsonElement jsonElement)
+        {
+            var distributedEventBus = HttpContext.RequestServices.GetRequiredService<DaprDistributedEventBus>();
+            var eventData = daprSerializer.Deserialize(jsonElement.GetRawText(), distributedEventBus.GetEventType(request.Topic));
+            await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(request.Topic), eventData);
+            return Ok();
+        }
 
-        var eventData = daprSerializer.Deserialize(bodyJsonDocument.RootElement.GetProperty("data").GetRawText(), distributedEventBus.GetEventType(request.Topic));
-        await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(request.Topic), eventData);
+        Logger.LogError("Invalid Dapr event request.");
+        return BadRequest();
+    }
 
-        return Ok();
+    private static readonly ConcurrentDictionary<string, JsonSerializerOptions> JsonSerializerOptionsCache = new ConcurrentDictionary<string, JsonSerializerOptions>();
+
+    protected virtual JsonSerializerOptions CreateJsonSerializerOptions(IDaprSerializer daprSerializer)
+    {
+        return JsonSerializerOptionsCache.GetOrAdd(nameof(AbpAspNetCoreMvcDaprEventsController), _ =>
+        {
+            var settings = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+            {
+                PropertyNamingPolicy = new AbpDaprSubscriptionRequestJsonNamingPolicy()
+            };
+            settings.Converters.Add(new AbpDaprSubscriptionRequestConverterFactory(daprSerializer));
+            return settings;
+        });
     }
 }

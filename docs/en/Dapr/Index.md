@@ -62,27 +62,6 @@ Alternatively, you can configure the options in the `Dapr` section of your `apps
 
 ### Injecting DaprClient
 
-ABP registers the `DaprClient` class to the [dependency injection](../Dependency-Injection.md) system. So, you can inject and use it whenever you need:
-
-````csharp
-public class MyService : ITransientDependency
-{
-    private readonly DaprClient _daprClient;
-
-    public MyService(DaprClient daprClient)
-    {
-        _daprClient = daprClient;
-    }
-
-    public async Task DoItAsync()
-    {
-        // TODO: Use the injected _daprClient object
-    }
-}
-````
-
-Injecting `DaprClient` is the recommended way of using it in your application code. When you inject it, the `IAbpDaprClientFactory` service is used to create it, which is explained in the next section.
-
 ### IAbpDaprClientFactory
 
 `IAbpDaprClientFactory` can be used to create `DaprClient` or `HttpClient` objects to perform operations on Dapr. It uses `AbpDaprOptions`, so you can configure the settings in a central place.
@@ -209,7 +188,7 @@ ABP provides the following endpoints to receive events from Dapr:
 * `dapr/subscribe`: Dapr uses this endpoint to get a list of subscriptions from the application. ABP automatically returns all the subscriptions for your distributed event handler classes and custom controller actions with the `Topic` attribute.
 * `api/abp/dapr/event`: The unified endpoint to receive all the events from Dapr. ABP dispatches the events to your event handlers based on the topic name.
 
-> **Since ABP provides the standard `dapr/subscribe` endpoint, you should not manually call the `app.MapSubscribeHandler()` method of Dapr.** You can use the `app.UseCloudEvents()` middleware in your ASP.NET Core pipeline if you want to support the [CloudEvents](https://cloudevents.io/) standard.
+> **Since ABP will call `MapSubscribeHandler` internally, you should not manually call it anymore.** You can use the `app.UseCloudEvents()` middleware in your ASP.NET Core pipeline if you want to support the [CloudEvents](https://cloudevents.io/) standard.
 
 ### Usage
 
@@ -270,15 +249,18 @@ In addition to ABP's standard distributed event bus system, you can also use Dap
 ````csharp
 public class MyService : ITransientDependency
 {
-    private readonly DaprClient _daprClient;
+    private readonly IAbpDaprClientFactory _daprClientFactory;
 
-    public MyService(DaprClient daprClient)
+    public MyService(IAbpDaprClientFactory daprClientFactory)
     {
-        _daprClient = daprClient;
+        _daprClientFactory = daprClientFactory;
     }
 
     public async Task DoItAsync()
     {
+        // Create a DaprClient object with default options
+        DaprClient _daprClient = await _daprClientFactory.CreateAsync();
+
         await _daprClient.PublishEventAsync(
             "pubsub", // pubsub name
             "StockChanged", // topic name 
@@ -299,8 +281,7 @@ public class MyController : AbpController
 {
     [HttpPost("/stock-changed")]
     [Topic("pubsub", "StockChanged")]
-    public async Task<IActionResult> TestRouteAsync(
-        [FromBody] StockCountChangedEto model)
+    public async Task<IActionResult> TestRouteAsync([FromBody] AbpDaprSubscriptionRequest<StockCountChangedEto> model)
     {
         HttpContext.ValidateDaprAppApiToken();
         
@@ -430,8 +411,7 @@ public class MyController : AbpController
 {
     [HttpPost("/stock-changed")]
     [Topic("pubsub", "StockChanged")]
-    public async Task<IActionResult> TestRouteAsync(
-        [FromBody] StockCountChangedEto model)
+    public async Task<IActionResult> TestRouteAsync([FromBody] AbpDaprSubscriptionRequest<StockCountChangedEto> model)
     {
         // Validate the App API token!
         HttpContext.ValidateDaprAppApiToken();

@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapr;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.Json;
+using Volo.Abp.Dapr;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Dapr;
@@ -22,6 +25,12 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddOptions<JsonOptions>()
+            .Configure<IServiceProvider>((options, serviceProvider) =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new AbpDaprSubscriptionRequestConverterFactory(serviceProvider.GetRequiredService<IDaprSerializer>()));
+            });
+
         var subscribeOptions = context.Services.ExecutePreConfiguredActions<AbpSubscribeOptions>();
 
         Configure<AbpEndpointRouterOptions>(options =>
@@ -38,6 +47,13 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
                         {
                             var eventType = @interface.GetGenericArguments()[0];
                             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+
+                            if (subscriptions.Any(x => x.PubsubName == daprEventBusOptions.PubSubName && x.Topic == eventName))
+                            {
+                                // Controllers with a [Topic] attribute can replace built-in event handlers.
+                                continue;
+                            }
+
                             subscriptions.Add(new AbpSubscription()
                             {
                                 PubsubName = daprEventBusOptions.PubSubName,
