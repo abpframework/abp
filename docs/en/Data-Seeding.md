@@ -135,7 +135,7 @@ If a module needs to a parameter, it should be declared on the [module documenta
 
 The default seed will be in a unit of work and may use transactions. If there are multiple `IDataSeedContributor` or too much data written, it may cause a database timeout error.
 
-We provide an extension method of `SeedInSeparateUowAsync` to create a separate unit of work for each `IDataSeedContributor`.
+We provide an extension method of `SeedInSeparateUowAsync` for the `IDataSeeder` service to create a separate unit of work for each `IDataSeedContributor`.
 
 ````csharp
 public static Task SeedInSeparateUowAsync(this IDataSeeder seeder, Guid? tenantId = null, AbpUnitOfWorkOptions options = null, bool requiresNew = false)
