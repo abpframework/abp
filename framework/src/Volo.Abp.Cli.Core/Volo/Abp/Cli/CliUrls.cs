@@ -4,9 +4,9 @@ namespace Volo.Abp.Cli;
 
 public static class CliUrls
 {
-    public const string WwwAbpIo = WwwAbpIoDevelopment;
-    public const string AccountAbpIo = AccountAbpIoDevelopment;
-    public const string NuGetRootPath = NuGetRootPathDevelopment;
+    public const string WwwAbpIo = WwwAbpIoProduction;
+    public const string AccountAbpIo = AccountAbpIoProduction;
+    public const string NuGetRootPath = NuGetRootPathProduction;
 
     public const string WwwAbpIoProduction = "https://abp.io/";
     public const string AccountAbpIoProduction = "https://account.abp.io/";
