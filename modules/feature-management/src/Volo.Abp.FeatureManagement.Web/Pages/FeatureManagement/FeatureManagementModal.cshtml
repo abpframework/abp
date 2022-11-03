@@ -119,7 +119,11 @@
 
                 </abp-tabs>
             </abp-modal-body>
-            <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+            <abp-modal-footer>
+                <abp-button button-type="Primary" id="ResetToDefaults"><i class="fa fa-refresh"></i> @L["ResetToDefault"]</abp-button>
+                <abp-button data-bs-dismiss="modal" button-type="Secondary">@L["Cancel"]</abp-button>
+                <abp-button button-type="Primary" type="submit"><i class="fa fa-check"></i> @L["Save"]</abp-button>
+            </abp-modal-footer>
         }
         else
         {
