@@ -381,6 +381,7 @@
     "CommercialNewsletterConfirmationMessage": "أوافق على <a href=\"https://commercial.abp.io/TermsConditions\"> البنود والشروط </a> و <a href=\"https://commercial.abp.io/Privacy\"> سياسة الخصوصية </a>.",
     "RenewLicenseEarly": "إذا قمت بتجديد رخصتي في وقت مبكر ، هل سأحصل على السنة كاملة؟",
     "RenewLicenseEarylExplanation": "عند تجديد الترخيص الخاص بك قبل تاريخ انتهاء الترخيص الخاص بك ، ستتم إضافة سنة واحدة إلى تاريخ انتهاء الترخيص الخاص بك. على سبيل المثال ، إذا انتهت صلاحية ترخيصك في {0} -06-06 وقمت بتجديده في {0} -01-01 ، فسيكون تاريخ انتهاء صلاحية الترخيص الجديد {1} -06-06.",
-    "discountForYears": "{0}٪ خصم لمدة {1} سنة (سنوات)"
+    "discountForYears": "{0}٪ خصم لمدة {1} سنة (سنوات)",
+    "BlackFridayDiscount": "خصم الجمعة السوداء"
   }
 }

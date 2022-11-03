@@ -382,6 +382,7 @@
     "ContinueWithNewOrganization": "Continuer avec une nouvelle organisation",
     "RenewLicenseEarly": "Si je renouvelle ma licence plus tôt, obtiendrai-je l'année complète ?",
     "RenewLicenseEarylExplanation": "Lorsque vous renouvelez votre licence avant la date d'expiration de votre licence, 1 an sera ajouté à la date d'expiration de votre licence. Par exemple, si votre licence expire le {0}-06-06 et que vous la renouvelez le {0}-01-01, la nouvelle date d'expiration de votre licence sera le {1}-06-06.",
-    "discountForYears": "{0} % de remise pendentif {1} an(s)"
+    "discountForYears": "{0} % de remise pendentif {1} an(s)",
+    "BlackFridayDiscount": "Remise Black Friday"
   }
 }

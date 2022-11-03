@@ -114,6 +114,16 @@ public partial class FeatureManagementModal
         }
     }
 
+    public virtual async Task ResetToDefaultAsync([NotNull] string providerName, string providerKey = null)
+    {
+        if (!await Message.Confirm(L["AreYouSureToResetToDefault"]))
+        {
+            return;
+        }
+        await FeatureAppService.ResetToDefaultAsync(ProviderName, ProviderKey);
+        await Message.Success(L["ResetedToDefault"]);
+    }
+
     protected virtual string GetNormalizedGroupName(string name)
     {
         return "FeatureGroup_" + name.Replace(".", "_");

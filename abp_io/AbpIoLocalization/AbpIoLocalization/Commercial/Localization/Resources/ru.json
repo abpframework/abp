@@ -378,6 +378,7 @@
     "TrialLicenseExpireMessage": "Вы используете пробную лицензию, и срок ее действия истечет {0}.",
     "TryForFree": "Попробуй бесплатно",
     "TrialLicenseExpiredInfo": "Срок действия вашей пробной лицензии истек!",
-    "CommercialNewsletterConfirmationMessage": "Я согласен с <a href=\"https://commercial.abp.io/TermsConditions\"> Положениями и условиями </a> и <a href=\"https://commercial.abp.io/Privacy\"> Политикой конфиденциальности </a>."
+    "CommercialNewsletterConfirmationMessage": "Я согласен с <a href=\"https://commercial.abp.io/TermsConditions\"> Положениями и условиями </a> и <a href=\"https://commercial.abp.io/Privacy\"> Политикой конфиденциальности </a>.",
+    "BlackFridayDiscount": "Черная пятница Скидка"
   }
 }

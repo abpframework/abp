@@ -379,6 +379,7 @@
     "TryForFree": "मुफ्त में आजमाइये",
     "TrialLicenseExpiredInfo": "आपके परीक्षण लाइसेंस की अवधि समाप्त हो गई है!",
     "CommercialNewsletterConfirmationMessage": "मैं <a href=\"https://commercial.abp.io/TermsConditions\">नियम और शर्तों</a> और <a href=\"https://commercial.abp.io/Privacy\">गोपनीयता नीति से सहमत हूं </a>.",
-    "discountForYears": "{1}वर्ष(वर्षों) के लिए {0}% छूट"
+    "discountForYears": "{1}वर्ष(वर्षों) के लिए {0}% छूट",
+    "BlackFridayDiscount": "ब्लैक फ्राइडे छूट",
   }
 }
