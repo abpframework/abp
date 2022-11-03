@@ -170,7 +170,7 @@
             _dataTable.ajax.reload();
         });
 
-        _$wrapper.find('button[name=CreateUser]').click(function (e) {
+        $('#AbpContentToolbar button[name=CreateUser]').click(function (e) {
             e.preventDefault();
             _createModal.open();
         });

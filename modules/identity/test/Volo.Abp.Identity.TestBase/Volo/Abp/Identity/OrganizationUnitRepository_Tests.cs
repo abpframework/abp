@@ -124,7 +124,7 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
     [Fact]
     public async Task RemoveOrganizationUnitFromUser()
     {
-        using (var uow = _unitOfWorkManager.Begin())
+        using (var uow = _unitOfWorkManager.Begin(requiresNew: true, isTransactional: true))
         {
             var ou112 = await _organizationUnitRepository.GetAsync(
                 _lookupNormalizer.NormalizeName("OU112"));

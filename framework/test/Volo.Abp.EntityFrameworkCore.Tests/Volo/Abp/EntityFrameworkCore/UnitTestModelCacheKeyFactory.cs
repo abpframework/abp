@@ -13,4 +13,9 @@ public class UnitTestModelCacheKeyFactory : IModelCacheKeyFactory
     {
         return context;
     }
+
+    public virtual object Create(DbContext context, bool designTime)
+    {
+        return context;
+    }
 }

@@ -60,7 +60,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   asterisk = '';
 
-  containerClassName = 'mb-3 form-group'
+  containerClassName = 'mb-3 form-group';
 
   options$: Observable<ABP.Option<any>[]> = of([]);
 
@@ -136,6 +136,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   ngAfterViewInit() {
     if (this.first && this.fieldRef) {
       this.fieldRef.nativeElement.focus();
+      this.cdRef.detectChanges();
     }
   }
 
@@ -213,7 +214,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
       this.validators = validators(this.data);
       this.setAsterisk();
     }
-    if(className !== undefined){
+    if (className !== undefined) {
       this.containerClassName = className;
     }
 

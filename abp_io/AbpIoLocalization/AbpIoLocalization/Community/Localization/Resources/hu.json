@@ -176,7 +176,7 @@
     "Events_Page_MetaTitle": "ABP közösségi események",
     "Events_Page_MetaDescription": "Az ABP Team által rendezett élő műsorok hétköznapi előadások, tele közösségi tartalommal, demókkal, kérdésekkel és válaszokkal, valamint az ABP-ben zajló eseményekről szóló vitákkal.",
     "Events_Page_Title": "ABP <span class=\"gradient-community\">közösségi</span> beszélgetések",
-    "Events_Page_WritingFromUser": "Olvassa el {0} írását az ABP közösségben.",
+    "Members_Page_WritingFromUser": "Olvassa el {0} írását az ABP közösségben.",
     "Post_Create_Page_MetaTitle": "Új bejegyzés",
     "Post_Create_Page_MetaDescription": "Hozzon létre bejegyzést, hogy megossza tapasztalatait az ABP keretrendszerrel kapcsolatban, és hozzájáruljon az ABP közösséghez.",
     "Post_Create_Page_CreateNewPost": "Új bejegyzés létrehozása",

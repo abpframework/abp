@@ -25,11 +25,11 @@ public class IndexModel : CmsKitPublicPageModelBase
     [BindProperty(SupportsGet = true)]
     public Guid? TagId { get; set; }
 
-    public PagedResultDto<BlogPostCommonDto> Blogs { get; private set; }
+    public PagedResultDto<BlogPostCommonDto> Blogs { get; protected set; }
 
     public PagerModel PagerModel => new PagerModel(Blogs.TotalCount, Blogs.Items.Count, CurrentPage, PageSize, Request.Path.ToString());
 
-    public CmsUserDto SelectedAuthor { get; set; }
+    public CmsUserDto SelectedAuthor { get; protected set; }
 
     protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
 
@@ -38,7 +38,7 @@ public class IndexModel : CmsKitPublicPageModelBase
         BlogPostPublicAppService = blogPostPublicAppService;
     }
 
-    public async Task OnGetAsync()
+    public virtual async Task<IActionResult> OnGetAsync()
     {
         Blogs = await BlogPostPublicAppService.GetListAsync(
             BlogSlug,
@@ -54,5 +54,7 @@ public class IndexModel : CmsKitPublicPageModelBase
         {
             SelectedAuthor = await BlogPostPublicAppService.GetAuthorHasBlogPostAsync(AuthorId.Value);
         }
+        
+        return Page();
     }
 }

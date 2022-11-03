@@ -9,12 +9,12 @@
       "path": "src/Volo.Abp.Users.Domain/Volo.Abp.Users.Domain.abppkg.json",
       "folder": "src"
     },
-    "Volo.Abp.Users.EntityFrameworkCore": {
-      "path": "src/Volo.Abp.Users.EntityFrameworkCore/Volo.Abp.Users.EntityFrameworkCore.abppkg.json",
-      "folder": "src"
-    },
     "Volo.Abp.Users.Domain.Shared": {
       "path": "src/Volo.Abp.Users.Domain.Shared/Volo.Abp.Users.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Users.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.Users.EntityFrameworkCore/Volo.Abp.Users.EntityFrameworkCore.abppkg.json",
       "folder": "src"
     },
     "Volo.Abp.Users.Abstractions": {

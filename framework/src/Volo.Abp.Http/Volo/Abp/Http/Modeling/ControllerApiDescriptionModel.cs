@@ -14,6 +14,8 @@ public class ControllerApiDescriptionModel
 
     public bool IsRemoteService { get; set; }
 
+    public bool IntegrationService { get; set; }
+
     public string ApiVersion { get; set; }
 
     public string Type { get; set; }
@@ -34,6 +36,7 @@ public class ControllerApiDescriptionModel
             ControllerName = controllerName,
             ControllerGroupName = groupName,
             IsRemoteService = isRemoteService,
+            IntegrationService = IntegrationServiceAttribute.IsDefinedOrInherited(type),
             ApiVersion = apiVersion,
             Type = type.FullName,
             Actions = new Dictionary<string, ActionApiDescriptionModel>(),
