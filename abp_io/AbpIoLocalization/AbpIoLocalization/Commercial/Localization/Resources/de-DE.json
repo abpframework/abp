@@ -381,6 +381,7 @@
     "CommercialNewsletterConfirmationMessage": "Ich stimme den <a href=\"https://commercial.abp.io/TermsConditions\">Allgemeinen Geschäftsbedingungen</a> und der <a href=\"https://commercial.abp.io/Privacy\">Datenschutzerklärung . zu </a>.",
     "ContinueWithNewOrganization": "Weiter mit einer neuen Organisation",
     "RenewLicenseEarly": "Erhalte ich das ganze Jahr, wenn ich meine Lizenz vorzeitig erneuere?",
-    "RenewLicenseEarylExplanation": "Wenn Sie Ihre Lizenz vor dem Ablaufdatum Ihrer Lizenz erneuern, wird Ihr Lizenzablaufdatum um 1 Jahr verlängert. Wenn Ihre Lizenz beispielsweise am {0}-06-06 abläuft und Sie sie am {0}-01-01 erneuern, ist das neue Ablaufdatum der Lizenz der {1}-06-06."
+    "RenewLicenseEarylExplanation": "Wenn Sie Ihre Lizenz vor dem Ablaufdatum Ihrer Lizenz erneuern, wird Ihr Lizenzablaufdatum um 1 Jahr verlängert. Wenn Ihre Lizenz beispielsweise am {0}-06-06 abläuft und Sie sie am {0}-01-01 erneuern, ist das neue Ablaufdatum der Lizenz der {1}-06-06.",
+    "BlackFridayDiscount": "Black Friday Rabatt"
   }
 }

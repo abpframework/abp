@@ -379,6 +379,7 @@
     "TryForFree": "Skúste zadarmo",
     "TrialLicenseExpiredInfo": "Vaše skúšobné licenčné obdobie vypršalo!",
     "CommercialNewsletterConfirmationMessage": "I agree to the <a href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
-    "discountForYears": "{0} % odpusteného prívesku {1} an(ov)"
+    "discountForYears": "{0} % odpusteného prívesku {1} an(ov)",
+    "BlackFridayDiscount": "Black Friday zľava"
   }
 }

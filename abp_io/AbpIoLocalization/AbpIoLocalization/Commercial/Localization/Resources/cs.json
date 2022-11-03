@@ -382,6 +382,7 @@
     "ContinueWithNewOrganization": "Pokračujte s novou organizací",
     "RenewLicenseEarly": "Pokud si předčasně obnovím licenci, dostanu celý rok?",
     "RenewLicenseEarylExplanation": "Když obnovíte licenci před datem vypršení platnosti licence, bude k datu vypršení platnosti licence přidán 1 rok. Pokud například platnost vaší licence vyprší dne {0}-06-06 a obnovíte ji dne {0}-01-01, bude vaše nové datum vypršení platnosti licence {1}-06-06.",
-    "discountForYears": "{0}% sleva po dobu {1} let"
+    "discountForYears": "{0}% sleva po dobu {1} let",
+    "BlackFridayDiscount": "Black Friday sleva"
   }
 }
