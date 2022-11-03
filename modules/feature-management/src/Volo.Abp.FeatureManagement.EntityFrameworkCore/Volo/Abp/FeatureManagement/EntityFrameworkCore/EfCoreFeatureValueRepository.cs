@@ -56,11 +56,6 @@ public class EfCoreFeatureValueRepository : EfCoreRepository<IFeatureManagementD
         string providerKey,
         CancellationToken cancellationToken = default)
     {
-        var entities = await (await GetDbSetAsync())
-            .Where(
-                s => s.ProviderName == providerName && s.ProviderKey == providerKey
-            ).ToListAsync(GetCancellationToken(cancellationToken));
-        (await GetDbSetAsync()).RemoveRange(entities);
-        await (await GetDbContextAsync()).SaveChangesAsync(cancellationToken);
+        await DeleteAsync(s => s.ProviderName == providerName && s.ProviderKey == providerKey, cancellationToken: GetCancellationToken(cancellationToken));
     }
 }
