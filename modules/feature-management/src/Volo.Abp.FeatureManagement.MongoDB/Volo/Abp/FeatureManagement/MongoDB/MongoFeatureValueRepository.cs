@@ -57,9 +57,10 @@ public class MongoFeatureValueRepository :
         string providerKey,
         CancellationToken cancellationToken = default)
     {
-        var entities = await (await GetMongoQueryableAsync(cancellationToken))
-            .Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey)
-            .ToListAsync(GetCancellationToken(cancellationToken));
-        await DeleteManyAsync(entities, true, GetCancellationToken(cancellationToken));
+        var dbContext = await GetDbContextAsync();
+
+        await dbContext.FeatureValues
+            .DeleteManyAsync(x => x.ProviderName == providerName && x.ProviderKey == providerKey, GetCancellationToken(cancellationToken));
+
     }
 }
