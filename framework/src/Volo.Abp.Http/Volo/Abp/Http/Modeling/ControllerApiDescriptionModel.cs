@@ -14,7 +14,7 @@ public class ControllerApiDescriptionModel
 
     public bool IsRemoteService { get; set; }
 
-    public bool IntegrationService { get; set; }
+    public bool IsIntegrationService { get; set; }
 
     public string ApiVersion { get; set; }
 
@@ -29,14 +29,14 @@ public class ControllerApiDescriptionModel
 
     }
 
-    public static ControllerApiDescriptionModel Create(string controllerName, string groupName, bool isRemoteService, string apiVersion, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
+    public static ControllerApiDescriptionModel Create(string controllerName, string groupName, bool isRemoteService, bool isIntegrationService, string apiVersion, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
     {
         return new ControllerApiDescriptionModel
         {
             ControllerName = controllerName,
             ControllerGroupName = groupName,
             IsRemoteService = isRemoteService,
-            IntegrationService = IntegrationServiceAttribute.IsDefinedOrInherited(type),
+            IsIntegrationService = isIntegrationService, //IntegrationServiceAttribute.IsDefinedOrInherited(type),
             ApiVersion = apiVersion,
             Type = type.FullName,
             Actions = new Dictionary<string, ActionApiDescriptionModel>(),

@@ -144,6 +144,11 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         await CreateJsonFile(args, applicationApiDescriptionModel);
     }
 
+    protected override ServiceType? GetDefaultServiceType(GenerateProxyArgs args)
+    {
+        return ServiceType.All;
+    }
+
     private async Task CreateJsonFile(GenerateProxyArgs args, ApplicationApiDescriptionModel applicationApiDescriptionModel)
     {
         var folder = args.Folder.IsNullOrWhiteSpace() ? ProxyDirectory : args.Folder;
@@ -190,7 +195,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
             $"using {GetTypeNamespace(appServiceTypeFullName)};"
         };
 
-        if (!controllerApiDescription.IntegrationService)
+        if (!controllerApiDescription.IsIntegrationService)
         {
             classTemplate.Replace($"{Environment.NewLine}[IntegrationService]", string.Empty);
         }
