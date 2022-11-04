@@ -29,6 +29,12 @@
       "description": "ABP Create Library Schematics",
       "factory": "./commands/create-lib",
       "schema": "./commands/create-lib/schema.json"
+    },
+    "change-theme": {
+      "description": "ABP Change Styles of Theme Schematics",
+      "factory": "./commands/change-theme",
+      "schema": "./commands/change-theme/schema.json"
+
     }
   }
 }

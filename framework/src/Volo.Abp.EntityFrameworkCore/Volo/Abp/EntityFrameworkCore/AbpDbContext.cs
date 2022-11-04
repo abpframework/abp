@@ -618,23 +618,19 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 return;
             }
 
-            var dateTimeValueConverter = new AbpDateTimeValueConverter(Clock);
-
-            var dateTimePropertyInfos = typeof(TEntity).GetProperties()
-                .Where(property =>
-                    (property.PropertyType == typeof(DateTime) ||
-                     property.PropertyType == typeof(DateTime?)) &&
-                    property.CanWrite &&
-                    ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property) == null
-                ).ToList();
-
-            dateTimePropertyInfos.ForEach(property =>
+            foreach (var property in mutableEntityType.GetProperties().
+                         Where(property => property.PropertyInfo != null &&
+                                           (property.PropertyInfo.PropertyType == typeof(DateTime) || property.PropertyInfo.PropertyType == typeof(DateTime?)) &&
+                                           property.PropertyInfo.CanWrite &&
+                                           ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property.PropertyInfo) == null))
             {
-                modelBuilder
+				modelBuilder
                     .Entity<TEntity>()
                     .Property(property.Name)
-                    .HasConversion(dateTimeValueConverter);
-            });
+                    .HasConversion(property.ClrType == typeof(DateTime)
+                        ? new AbpDateTimeValueConverter(Clock)
+                        : new AbpNullableDateTimeValueConverter(Clock));
+            }
         }
     }
 

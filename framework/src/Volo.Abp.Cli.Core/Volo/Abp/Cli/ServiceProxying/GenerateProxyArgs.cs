@@ -27,6 +27,8 @@ public class GenerateProxyArgs
 
     public ServiceType? ServiceType { get; }
 
+    public bool WithoutContracts { get; }
+
     [NotNull]
     public Dictionary<string, string> ExtraProperties { get; set; }
 
@@ -41,6 +43,7 @@ public class GenerateProxyArgs
         string source,
         string folder,
         ServiceType? serviceType,
+        bool withoutContracts,
         Dictionary<string, string> extraProperties = null)
     {
         CommandName = Check.NotNullOrWhiteSpace(commandName, nameof(commandName));
@@ -53,6 +56,7 @@ public class GenerateProxyArgs
         Source = source;
         Folder = folder;
         ServiceType = serviceType;
+        WithoutContracts = withoutContracts;
         ExtraProperties = extraProperties ?? new Dictionary<string, string>();
     }
 }

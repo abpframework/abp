@@ -28,13 +28,13 @@ public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator wher
 
     public abstract Task GenerateProxyAsync(GenerateProxyArgs args);
 
-    protected virtual async Task<ApplicationApiDescriptionModel> GetApplicationApiDescriptionModelAsync(GenerateProxyArgs args)
+    protected virtual async Task<ApplicationApiDescriptionModel> GetApplicationApiDescriptionModelAsync(GenerateProxyArgs args, ApplicationApiDescriptionModelRequestDto requestDto = null)
     {
         Check.NotNull(args.Url, nameof(args.Url));
 
         var client = CliHttpClientFactory.CreateClient();
 
-        var apiDefinitionResult = await client.GetStringAsync(CliUrls.GetApiDefinitionUrl(args.Url));
+        var apiDefinitionResult = await client.GetStringAsync(CliUrls.GetApiDefinitionUrl(args.Url, requestDto));
         var apiDefinition = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(apiDefinitionResult);
 
         var moduleDefinition = apiDefinition.Modules.FirstOrDefault(x => string.Equals(x.Key, args.Module, StringComparison.CurrentCultureIgnoreCase)).Value;
@@ -55,6 +55,7 @@ public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator wher
         }
 
         var apiDescriptionModel = ApplicationApiDescriptionModel.Create();
+        apiDescriptionModel.Types = apiDefinition.Types;
         apiDescriptionModel.AddModule(moduleDefinition);
         return apiDescriptionModel;
     }

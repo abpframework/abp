@@ -27,6 +27,14 @@
       }, ajaxParams));
     };
 
+    volo.abp.featureManagement.features.resetToDefault = function(providerName, providerKey, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/feature-management/features' + abp.utils.buildQueryString([{ name: 'providerName', value: providerName }, { name: 'providerKey', value: providerKey }]) + '',
+        type: 'POST',
+        dataType: null
+      }, ajaxParams));
+    };
+
   })();
 
 })();

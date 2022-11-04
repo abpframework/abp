@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Shouldly;
+using Volo.Abp.Localization.TestResources.External;
 using Volo.Abp.Localization.TestResources.Source;
 using Volo.Abp.Testing;
 using Xunit;
@@ -366,5 +367,12 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
     {
         var cultures = await _localizer.GetSupportedCulturesAsync();
         cultures.Count().ShouldBeGreaterThan(0);
+    }
+
+    [Fact]
+    public void Should_Get_Localized_Text_From_External()
+    {
+        var externalLocalizer = _localizerFactory.CreateByResourceName(TestExternalLocalizationStore.TestExternalResourceNames.ExternalResource1);
+        externalLocalizer["Car"].Value.ShouldBe("Car");
     }
 }

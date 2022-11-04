@@ -80,7 +80,10 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
                     : null;
         }
 
-        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, serviceType, commandLineArgs.Options);
+        var withoutContracts = commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Short) ||
+                               commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Long);
+
+        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, serviceType, withoutContracts, commandLineArgs.Options);
     }
 
     public virtual string GetUsageInfo()
@@ -174,10 +177,17 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
             public const string Long = "working-directory";
         }
 
+
         public static class ServiceType
         {
             public const string Short = "st";
             public const string Long = "service-type";
+        }
+
+        public static class WithoutContracts
+        {
+            public const string Short = "c";
+            public const string Long = "without-contracts";
         }
     }
 }

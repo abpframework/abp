@@ -36,34 +36,29 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
     static AbpRedisCache()
     {
         var type = typeof(RedisCache);
-        
-        RedisDatabaseField = type.GetField("_cache", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        SetScriptField = type.GetField("_setScript", BindingFlags.Instance | BindingFlags.NonPublic);
+        RedisDatabaseField = Check.NotNull(type.GetField("_cache", BindingFlags.Instance | BindingFlags.NonPublic), nameof(RedisDatabaseField));
 
-        ConnectMethod = type.GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic);
+        SetScriptField = Check.NotNull(type.GetField("_setScript", BindingFlags.Instance | BindingFlags.NonPublic), nameof(SetScriptField));
 
-        ConnectAsyncMethod = type.GetMethod("ConnectAsync", BindingFlags.Instance | BindingFlags.NonPublic);
+        ConnectMethod = Check.NotNull(type.GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic), nameof(ConnectMethod));
 
-        MapMetadataMethod = type.GetMethod("MapMetadata", BindingFlags.Instance | BindingFlags.NonPublic);
+        ConnectAsyncMethod = Check.NotNull(type.GetMethod("ConnectAsync", BindingFlags.Instance | BindingFlags.NonPublic), nameof(ConnectAsyncMethod));
 
-        GetAbsoluteExpirationMethod =
-            type.GetMethod("GetAbsoluteExpiration", BindingFlags.Static | BindingFlags.NonPublic);
+        MapMetadataMethod = Check.NotNull(type.GetMethod("MapMetadata", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static), nameof(MapMetadataMethod));
 
-        GetExpirationInSecondsMethod =
-            type.GetMethod("GetExpirationInSeconds", BindingFlags.Static | BindingFlags.NonPublic);
+        GetAbsoluteExpirationMethod = Check.NotNull(type.GetMethod("GetAbsoluteExpiration", BindingFlags.Static | BindingFlags.NonPublic), nameof(GetAbsoluteExpirationMethod));
 
-        AbsoluteExpirationKey = type.GetField("AbsoluteExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)
-            ?.GetValue(null).ToString();
+        GetExpirationInSecondsMethod = Check.NotNull(type.GetMethod("GetExpirationInSeconds", BindingFlags.Static | BindingFlags.NonPublic), nameof(GetExpirationInSecondsMethod));
 
-        SlidingExpirationKey = type.GetField("SlidingExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)
-            ?.GetValue(null).ToString();
+        AbsoluteExpirationKey = type.GetField("AbsoluteExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null).ToString();
+
+        SlidingExpirationKey = type.GetField("SlidingExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null).ToString();
 
         DataKey = type.GetField("DataKey", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null).ToString();
 
         // ReSharper disable once PossibleNullReferenceException
-        NotPresent = type.GetField("NotPresent", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null)
-            .To<int>();
+        NotPresent = Check.NotNull(type.GetField("NotPresent", BindingFlags.Static | BindingFlags.NonPublic), nameof(NotPresent)).GetValue(null).To<int>();
     }
 
     public AbpRedisCache(IOptions<RedisCacheOptions> optionsAccessor)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
@@ -20,6 +21,9 @@ public class Person : FullAuditedAggregateRoot<Guid>, IMultiTenant
 
     [DisableDateTimeNormalization]
     public virtual DateTime? LastActive { get; set; }
+
+    [NotMapped]
+    public virtual DateTime? NotMappedDateTime { get; set; }
 
     public virtual Collection<Phone> Phones { get; set; }
 

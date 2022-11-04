@@ -36,7 +36,7 @@ public class ControllerApiDescriptionModel
             ControllerName = controllerName,
             ControllerGroupName = groupName,
             IsRemoteService = isRemoteService,
-            IsIntegrationService = isIntegrationService,
+            IsIntegrationService = isIntegrationService, //IntegrationServiceAttribute.IsDefinedOrInherited(type),
             ApiVersion = apiVersion,
             Type = type.FullName,
             Actions = new Dictionary<string, ActionApiDescriptionModel>(),

@@ -98,7 +98,15 @@ public class AbpUowActionFilter : IAsyncActionFilter, ITransientDependency
         var currentUow = unitOfWorkManager.Current;
         if (currentUow != null)
         {
-            await currentUow.SaveChangesAsync(context.HttpContext.RequestAborted);
+            try
+            {
+                await currentUow.SaveChangesAsync(context.HttpContext.RequestAborted);
+            }
+            catch (Exception e)
+            {
+                await currentUow.RollbackAsync(context.HttpContext.RequestAborted);
+                throw;
+            }
         }
     }
 

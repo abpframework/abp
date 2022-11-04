@@ -360,7 +360,7 @@
     "Next": "Următorul",
     "StartTrial": "Începeți încercarea mea gratuită",
     "ContactUsIssues": "Contactați-ne dacă aveți probleme",
-    "TrialActivatedWarning": "Stimate {0}, un utilizator are dreptul la o singură perioadă de probă gratuită. Ai folosit deja perioada de probă.",
+    "TrialActivatedWarning": "Un utilizator are dreptul la o singură perioadă de probă gratuită. Ai folosit deja perioada de probă.",
     "SaveAndDownload": "Salvați și descărcați",
     "CompanyNameValidationMessage": "Numele companiei este prea lung!",
     "AddressValidationMessage": "Adresa este prea lungă!",
@@ -373,11 +373,12 @@
     "TrialLicenseModelInvalidErrorMessage": "Unul dintre următoarele câmpuri este nevalid: Numele țării, Mărimea companiei, Industria sau Scopul utilizării.",
     "Trial": "Proces",
     "Purchased": "Cumparat",
-    "PurchaseLicense": "Licență de cumpărare",
+    "PurchaseLicense": "Achiziționați licența {0}",
     "PurchaseTrialLicenseMessage": "Data de expirare a licenței este {0}. <br> Dacă doriți să continuați să utilizați proiectele pe care le-ați creat în timpul perioadei de probă gratuită, trebuie să schimbați cheile de licență din fișierele <code>appsettings.secrets.json</code>. Iată cheia de licență:",
     "TrialLicenseExpireMessage": "Utilizați licența de probă și licența de probă va expira pe {0}.",
     "TryForFree": "Încearcă pe gratis",
     "TrialLicenseExpiredInfo": "Perioada de licență de probă a expirat!",
-    "CommercialNewsletterConfirmationMessage": "Sunt de acord cu <a href=\"https://commercial.abp.io/TermsConditions\">Termenii și condițiile</a> și cu <a href=\"https://commercial.abp.io/Privacy\">Politica de confidențialitate </a>."
+    "CommercialNewsletterConfirmationMessage": "Sunt de acord cu <a href=\"https://commercial.abp.io/TermsConditions\">Termenii și condițiile</a> și cu <a href=\"https://commercial.abp.io/Privacy\">Politica de confidențialitate </a>.",
+    "BlackFridayDiscount": "Black Friday Discount"
   }
 }
