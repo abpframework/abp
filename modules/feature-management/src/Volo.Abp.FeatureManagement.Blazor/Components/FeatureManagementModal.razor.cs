@@ -120,7 +120,7 @@ public partial class FeatureManagementModal
         {
             return;
         }
-        await FeatureAppService.ResetToDefaultAsync(ProviderName, ProviderKey);
+        await FeatureAppService.DeleteAsync(ProviderName, ProviderKey);
         await Message.Success(L["ResetedToDefault"]);
     }
 

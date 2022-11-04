@@ -150,10 +150,10 @@
               "allowAnonymous": null,
               "implementFrom": "Volo.Abp.FeatureManagement.IFeatureAppService"
             },
-            "ResetToDefaultAsyncByProviderNameAndProviderKey": {
-              "uniqueName": "ResetToDefaultAsyncByProviderNameAndProviderKey",
-              "name": "ResetToDefaultAsync",
-              "httpMethod": null,
+            "DeleteAsyncByProviderNameAndProviderKey": {
+              "uniqueName": "DeleteAsyncByProviderNameAndProviderKey",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
               "url": "api/feature-management/features",
               "supportedVersions": [],
               "parametersOnMethod": [
