@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { Observable, Subject,of } from 'rxjs';
+import { map, switchMap, take, } from 'rxjs/operators';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
 import {
   ApplicationConfigurationDto,
   ApplicationGlobalFeatureConfigurationDto,
@@ -14,21 +15,45 @@ import { InternalStore } from '../utils/internal-store-utils';
 export class ConfigStateService {
   private readonly store = new InternalStore({} as ApplicationConfigurationDto);
   private includeLocalizationResources = false;
-  
+
   get createOnUpdateStream() {
     return this.store.sliceUpdate;
   }
 
   private updateSubject = new Subject<void>();
 
-  constructor(private abpConfigService: AbpApplicationConfigurationService) {
+  constructor(
+    private abpConfigService: AbpApplicationConfigurationService,
+    private abpApplicationLocalizationService: AbpApplicationLocalizationService,
+  ) {
     this.initUpdateStream();
   }
 
   private initUpdateStream() {
     this.updateSubject
-      .pipe(switchMap(() => this.abpConfigService.get({ includeLocalizationResources:this.includeLocalizationResources})))
-      .subscribe(res => this.store.set(res));
+      .pipe(
+        switchMap(() =>
+          this.abpConfigService.get({
+            includeLocalizationResources: this.includeLocalizationResources,
+          }),
+        ),
+      )
+      .pipe(switchMap(appState => this.getLocalizationAndCombineWithAppState(appState)))
+      .subscribe(res => {
+        return this.store.set(res);
+      });
+  }
+
+  private getLocalizationAndCombineWithAppState(
+    appState: ApplicationConfigurationDto,
+  ): Observable<ApplicationConfigurationDto> {
+    return this.abpApplicationLocalizationService
+      .get({ cultureName: appState.localization.currentCulture.name, onlyDynamics: false })
+      .pipe(
+        switchMap(result =>
+          of({ ...appState, localization: { ...appState.localization, ...result } }),
+        ),
+      );
   }
 
   refreshAppState() {
