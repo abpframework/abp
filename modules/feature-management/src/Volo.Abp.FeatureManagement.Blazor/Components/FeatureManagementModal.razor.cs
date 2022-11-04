@@ -114,7 +114,7 @@ public partial class FeatureManagementModal
         }
     }
 
-    public virtual async Task ResetToDefaultAsync([NotNull] string providerName, string providerKey = null)
+    public virtual async Task DeleteAsync([NotNull] string providerName, string providerKey = null)
     {
         if (!await Message.Confirm(L["AreYouSureToResetToDefault"]))
         {
