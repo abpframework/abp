@@ -13,7 +13,7 @@ var abp = abp || {};
                     if (confirmed) {
                         let providerName = $('#ProviderName').val();
                         let prodiverKey = $('#ProviderKey').val();
-                        volo.abp.featureManagement.features.resetToDefault(providerName, prodiverKey).then(function () {
+                        volo.abp.featureManagement.features.delete(providerName, prodiverKey).then(function () {
                             abp.notify.success(l('ResetedToDefault'));
                         });
                     }
