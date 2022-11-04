@@ -7,7 +7,7 @@ namespace Volo.Abp;
 
 public interface IAbpApplication :
     IModuleContainer,
-    IApplicationNameAccessor,
+    IApplicationInfoAccessor,
     IDisposable
 {
     /// <summary>

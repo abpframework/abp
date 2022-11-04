@@ -151,7 +151,7 @@ public class AbpApplication_Initialize_Tests
     }
 
     [Fact]
-    public void Should_Set_And_Get_ApplicationName()
+    public void Should_Set_And_Get_ApplicationName_And_InstanceId()
     {
         var applicationName = "MyApplication";
 
@@ -165,10 +165,9 @@ public class AbpApplication_Initialize_Tests
 
             application.Initialize();
 
-            application.ServiceProvider
-                .GetRequiredService<IApplicationNameAccessor>()
-                .ApplicationName
-                .ShouldBe(applicationName);
+            var appInfo = application.ServiceProvider.GetRequiredService<IApplicationInfoAccessor>();
+            appInfo.ApplicationName.ShouldBe(applicationName);
+            appInfo.InstanceId.ShouldNotBeNullOrEmpty();
         }
 
         using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>(options =>
@@ -185,7 +184,7 @@ public class AbpApplication_Initialize_Tests
             application.Initialize();
 
             application.ServiceProvider
-                .GetRequiredService<IApplicationNameAccessor>()
+                .GetRequiredService<IApplicationInfoAccessor>()
                 .ApplicationName
                 .ShouldBe(applicationName);
         }
@@ -199,7 +198,7 @@ public class AbpApplication_Initialize_Tests
             application.Initialize();
 
             application.ServiceProvider
-                .GetRequiredService<IApplicationNameAccessor>()
+                .GetRequiredService<IApplicationInfoAccessor>()
                 .ApplicationName
                 .ShouldBe(applicationName);
         }

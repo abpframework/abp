@@ -36,6 +36,12 @@ public interface IBookAppService : IApplicationService
 
 Implement this class in your service application. You can use [auto API controller system](Auto-API-Controllers.md) to expose the service as a REST API endpoint.
 
+## With Contracts or Without Contracts
+
+`Without Contracts` depending on target service's `application.contracts` package, so they can reuse the DTOs and other related classes. However, that can be a problem when we want to create fully independently developed and deployed microservices. We want to use the static proxy generation even without depending target service's application.contracts package.
+
+`With Contracts` generate all the `classes/enums/other` types in the client side (including application service interfaces) , This is also the default behavior of the `generate-proxy` command.
+
 ## Client Proxy Generation
 
 First, add [Volo.Abp.Http.Client](https://www.nuget.org/packages/Volo.Abp.Http.Client) nuget package to your client project:
@@ -53,7 +59,27 @@ public class MyClientAppModule : AbpModule
 }
 ````
 
-Now, it's ready to configure the application for the  static client proxy generation. Example:
+Now, it's ready to configure the application for the static client proxy generation.
+
+### With Contracts Example
+
+````csharp
+[DependsOn(
+    typeof(AbpHttpClientModule) //used to create client proxies
+    )]
+public class MyClientAppModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        // Prepare for static client proxy generation
+        context.Services.AddStaticHttpClientProxies(
+            typeof(MyClientAppModule).Assembly
+        );
+    }
+}
+````
+
+### Without Contracts Example
 
 ````csharp
 [DependsOn(
@@ -98,6 +124,8 @@ Server side must be up and running while generating the client proxy code. So, r
 
 Open a command-line terminal in the root folder of your client project (`.csproj`) and type the following command:
 
+#### With Contracts
+
 ````bash
 abp generate-proxy -t csharp -u http://localhost:53929/
 ````
@@ -106,9 +134,25 @@ abp generate-proxy -t csharp -u http://localhost:53929/
 
 This command should generate the following files under the `ClientProxies` folder:
 
-![generated-static-client-proxies](../images/generated-static-client-proxies.png)
+![generated-static-client-proxies](../images/generated-static-client-proxies-with-contracts.png)
 
-`BookClientProxy.Generated.cs` is the actual generated proxy class in this example. `BookClientProxy` is a `partial` class where you can write your custom code (ABP won't override it). `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests.
+* `BookClientProxy.Generated.cs` is the actual generated proxy class in this example. `BookClientProxy` is a `partial` class * where you can write your custom code (ABP won't override it). 
+* `IBookAppService.cs` is the app service.
+* `BookDto.cs` is the Dto class which uses by app service.
+* `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests.
+
+#### Without Contracts
+
+````bash
+abp generate-proxy -t csharp -u http://localhost:53929/ --without-contracts
+````
+
+This command should generate the following files under the `ClientProxies` folder:
+
+![generated-static-client-proxies](../images/generated-static-client-proxies-without-contracts.png)
+
+* `BookClientProxy.Generated.cs` is the actual generated proxy class in this example. `BookClientProxy` is a `partial` class where you can write your custom code (ABP won't override it). 
+* `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests.
 
 > `generate-proxy` command generates proxies for only the APIs you've defined in your application. If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../CLI.md) documentation for other options.
 
