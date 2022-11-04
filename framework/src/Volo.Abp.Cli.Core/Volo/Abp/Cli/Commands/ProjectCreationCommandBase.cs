@@ -19,6 +19,7 @@ using Volo.Abp.Cli.ProjectBuilding.Events;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.EventBus.Local;
 
@@ -673,11 +674,21 @@ public abstract class ProjectCreationCommandBase
 
     protected void ConfigureAngularJsonForThemeSelection(ProjectBuildArgs projectArgs)
     {
-        //TODO: do not run if the theme is default
-        if (projectArgs.Theme.HasValue && projectArgs.UiFramework == UiFramework.Angular)
+        var isProTemplate = !projectArgs.TemplateName.IsNullOrEmpty() && projectArgs.TemplateName.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
+        var theme = projectArgs.Theme;
+        
+        var isDefaultTheme = (isProTemplate && theme == AppProTemplate.DefaultTheme) ||
+                             (!isProTemplate && theme == AppTemplate.DefaultTheme);
+
+        if (isDefaultTheme || projectArgs.TemplateName == ModuleTemplate.TemplateName)
+        {
+            return;
+        }
+        
+        if (theme.HasValue && projectArgs.UiFramework == UiFramework.Angular)
         {
             AngularThemeConfigurer.Configure(new AngularThemeConfigurationArgs(
-                theme: projectArgs.Theme.Value,
+                theme: theme.Value,
                 projectName: projectArgs.SolutionName.FullName, 
                 angularFolderPath: projectArgs.OutputFolder + Path.DirectorySeparatorChar + "angular"));
         }
