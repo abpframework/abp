@@ -73,7 +73,7 @@ public class FeatureAppService_Tests : FeatureManagementApplicationTestBase
     {
         Login(_testData.User1Id);
         var exception = await Record.ExceptionAsync(async () =>
-            await _featureAppService.ResetToDefaultAsync("test", "test"));
+            await _featureAppService.DeleteAsync("test", "test"));
         Assert.Null(exception);
     }
 
