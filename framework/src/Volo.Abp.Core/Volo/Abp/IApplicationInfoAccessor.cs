@@ -2,7 +2,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp;
 
-public interface IApplicationNameAccessor
+public interface IApplicationInfoAccessor
 {
     /// <summary>
     /// Name of the application.
@@ -11,4 +11,11 @@ public interface IApplicationNameAccessor
     /// </summary>
     [CanBeNull]
     string ApplicationName { get; }
+    
+    /// <summary>
+    /// A unique identifier for this application instance.
+    /// This value changes whenever the application is restarted.
+    /// </summary>
+    [NotNull]
+    string InstanceId { get; }
 }
