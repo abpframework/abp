@@ -30,7 +30,7 @@ public class MyProjectNameDomainSharedModule : AbpModule
 
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
-            options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
+            options.MapCodeNamespace("MyCompanyName.MyProjectName", typeof(MyProjectNameResource));
         });
     }
 }
