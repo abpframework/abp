@@ -674,9 +674,8 @@ public abstract class ProjectCreationCommandBase
 
     protected void ConfigureAngularJsonForThemeSelection(ProjectBuildArgs projectArgs)
     {
-        var isProTemplate = !projectArgs.TemplateName.IsNullOrEmpty() && projectArgs.TemplateName.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
         var theme = projectArgs.Theme;
-        
+        var isProTemplate = !projectArgs.TemplateName.IsNullOrEmpty() && projectArgs.TemplateName.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
         var isDefaultTheme = (isProTemplate && theme == AppProTemplate.DefaultTheme) ||
                              (!isProTemplate && theme == AppTemplate.DefaultTheme);
 
@@ -687,10 +686,15 @@ public abstract class ProjectCreationCommandBase
         
         if (theme.HasValue && projectArgs.UiFramework == UiFramework.Angular)
         {
+            var angularFolderPath = projectArgs.TemplateName == MicroserviceProTemplate.TemplateName
+                ? projectArgs.OutputFolder.EnsureEndsWith(Path.DirectorySeparatorChar) + "apps" + Path.DirectorySeparatorChar + "angular"
+                : projectArgs.OutputFolder.EnsureEndsWith(Path.DirectorySeparatorChar) + "angular";
+
             AngularThemeConfigurer.Configure(new AngularThemeConfigurationArgs(
                 theme: theme.Value,
-                projectName: projectArgs.SolutionName.FullName, 
-                angularFolderPath: projectArgs.OutputFolder + Path.DirectorySeparatorChar + "angular"));
+                projectName: projectArgs.SolutionName.FullName,
+                angularFolderPath: angularFolderPath
+            ));
         }
     }
 
