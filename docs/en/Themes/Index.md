@@ -13,7 +13,7 @@ The Basic Theme is a minimalist theme that doesn't add any styling on top of the
 ## LeptonX Lite
 [LeptonX Theme](https://x.leptontheme.com/) is a new generation theme of Lepton Theme. **LeptonX Lite** is a simplified variation of the **LeptonX Theme**. It is a free theme and you can use it in your ABP projects. 
 
-![](../images/leptonxlite-theme-application-layout.jpeg)
+![LeptonX Lite application layout](../images/leptonxlite-theme-application-layout.jpeg)
 
 - [LeptonX Lite - MVC](LeptonXLite/AspNetCore.md)
 - [LeptonX Lite - Blazor](LeptonXLite/Blazor.md)
