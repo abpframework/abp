@@ -7,6 +7,7 @@ using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
 using NuGet.Versioning;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -30,12 +31,9 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
     public ILogger<InstallLibsService> Logger { get; set; }
 
-    private readonly IJsonSerializer _jsonSerializer;
-
-    public InstallLibsService(IJsonSerializer jsonSerializer, NpmHelper npmHelper)
+    public InstallLibsService(NpmHelper npmHelper)
     {
         NpmHelper = npmHelper;
-        _jsonSerializer = jsonSerializer;
     }
 
     public async Task InstallLibsAsync(string directory)
@@ -119,7 +117,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                     {
                         return false;
                     }
-                
+
                     using (var reader = File.OpenText(file))
                     {
                         return reader.ReadToEnd().Contains("Microsoft.NET.Sdk.Web");
@@ -145,7 +143,8 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             {
                 var mappingFileContent = await reader.ReadToEndAsync();
 
-                var mapping = _jsonSerializer.Deserialize<ResourceMapping>(mappingFileContent
+                // System.Text.Json doesn't support the property name without quotes.
+                var mapping = Newtonsoft.Json.JsonConvert.DeserializeObject<ResourceMapping>(mappingFileContent
                     .Replace("module.exports", string.Empty)
                     .Replace("=", string.Empty).Trim().TrimEnd(';'));
 

@@ -15,9 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp.ObjectExtending\Volo.Abp.ObjectExtending.csproj" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <ProjectReference Include="..\Volo.Abp.Json.SystemTextJson\Volo.Abp.Json.SystemTextJson.csproj" />
   </ItemGroup>
 
 </Project>

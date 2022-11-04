@@ -379,6 +379,7 @@
     "TryForFree": "Prova gratis",
     "TrialLicenseExpiredInfo": "Il periodo della tua licenza di prova è scaduto!",
     "CommercialNewsletterConfirmationMessage": "Accetto i <a href=\"https://commercial.abp.io/TermsConditions\">Termini e condizioni</a> e la <a href=\"https://commercial.abp.io/Privacy\">Informativa sulla privacy </a>.",
-    "discountForYears": "{0}% di sconto per {1} anno/i"
+    "discountForYears": "{0}% di sconto per {1} anno/i",
+    "BlackFridayDiscount": "Sconto Black Friday"
   }
 }

@@ -28,35 +28,35 @@ import { BASIC_THEME_USER_MENU_PROVIDERS } from './providers/user-menu.provider'
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
 @NgModule({
-    declarations: [
-        ...LAYOUTS,
-        ValidationErrorComponent,
-        LogoComponent,
-        NavItemsComponent,
-        RoutesComponent,
-        CurrentUserComponent,
-        LanguagesComponent,
-        PageAlertContainerComponent,
-        TenantBoxComponent,
-        AuthWrapperComponent,
-    ],
-    exports: [
-        ...LAYOUTS,
-        ValidationErrorComponent,
-        LogoComponent,
-        NavItemsComponent,
-        RoutesComponent,
-        CurrentUserComponent,
-        LanguagesComponent,
-        PageAlertContainerComponent,
-    ],
-    imports: [
-        CoreModule,
-        ThemeSharedModule,
-        NgbCollapseModule,
-        NgbDropdownModule,
-        NgxValidateCoreModule,
-    ]
+  declarations: [
+    ...LAYOUTS,
+    ValidationErrorComponent,
+    LogoComponent,
+    NavItemsComponent,
+    RoutesComponent,
+    CurrentUserComponent,
+    LanguagesComponent,
+    PageAlertContainerComponent,
+    TenantBoxComponent,
+    AuthWrapperComponent,
+  ],
+  exports: [
+    ...LAYOUTS,
+    ValidationErrorComponent,
+    LogoComponent,
+    NavItemsComponent,
+    RoutesComponent,
+    CurrentUserComponent,
+    LanguagesComponent,
+    PageAlertContainerComponent,
+  ],
+  imports: [
+    CoreModule,
+    ThemeSharedModule,
+    NgbCollapseModule,
+    NgbDropdownModule,
+    NgxValidateCoreModule,
+  ],
 })
 export class BaseThemeBasicModule {}
 
@@ -78,7 +78,7 @@ export class ThemeBasicModule {
         },
         {
           provide: VALIDATION_TARGET_SELECTOR,
-          useValue: '.form-group',
+          useValue: '*:has(> .form-control)',
         },
         {
           provide: VALIDATION_INVALID_CLASSES,

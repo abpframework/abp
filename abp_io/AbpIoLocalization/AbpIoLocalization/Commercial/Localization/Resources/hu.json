@@ -747,6 +747,7 @@
     "SeeWhatToldAboutAbpCommercial": "Tekintse meg, mit mondtak az ABP Commercialról, és írja le gondolatait, ha akarja.",
     "ExtendPaymentInfoSection_DeveloperPrice": "{0} x Developer(s) Price",
     "ExtendPaymentInfoSection_DiscountRate": "Kedvezmény: {0}%",
-    "TotalNetPrice": "Total Net Price"
+    "TotalNetPrice": "Total Net Price",
+    "BlackFridayDiscount": "Black Friday Kedvezmény"
   }
 }

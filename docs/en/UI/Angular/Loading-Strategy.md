@@ -102,7 +102,7 @@ Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<s
 LOADING_STRATEGY.PrependAnonymousStyleToHead(href: string, integrity?: string)
 ```
 
-Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<style>` element and places it at the **beginning** of `<head>` tag in the document.
+Sets given parameters and `crossorigin="anonymous"` as attributes of created `<style>` element and places it at the **beginning** of `<head>` tag in the document.
 
 
 ## See Also

@@ -383,6 +383,7 @@
     "CommercialNewsletterConfirmationMessage": "我同意<a href=\"https://commercial.abp.io/TermsConditions\">條款和條件</a>和<a href=\"https://commercial.abp.io/Privacy\">隱私政策</a>。",
     "BlazoriseLicense": "我们是否需要购买Blazorise许可证？",
     "BlazoriseLicenseExplanation": "我公司Volosoft和公司Megabit之间有合作协议，根据此协议，购买将同时包含了Blazorise许可证与ABP商业产品，因此我们的客户不需要再额外购买Blazorise许可证。",
-    "discountForYears": "{0}% 折扣 {1} 年"
+    "discountForYears": "{0}% 折扣 {1} 年",
+    "BlackFridayDiscount": "黑色星期五折扣"
   }
 }

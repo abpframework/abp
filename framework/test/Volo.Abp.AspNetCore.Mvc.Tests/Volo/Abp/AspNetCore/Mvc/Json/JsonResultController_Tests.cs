@@ -14,7 +14,7 @@ public class JsonResultController_Tests : AspNetCoreMvcTestBase
     {
         services.Configure<AbpJsonOptions>(options =>
         {
-            options.DefaultDateTimeFormat = "yyyy*MM*dd";
+            options.OutputDateTimeFormat = "yyyy*MM*dd";
         });
 
         base.ConfigureServices(context, services);

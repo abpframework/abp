@@ -7,7 +7,7 @@ Form prop extension system allows you to add a new field to the create and/or ed
 
 <img alt="Form Prop Extension Example: 'Date of Birth' Field" src="./images/form-prop-extensions---birthday-field.gif" width="800px" style="max-width:100%">
 
-You can validate the field, perform visibility checks, and do more. You will also have access to the current entity when creating a contibutor for an edit form.
+You can validate the field, perform visibility checks, and do more. You will also have access to the current entity when creating a contributor for an edit form.
 
 ## How to Set Up
 
