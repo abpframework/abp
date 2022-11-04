@@ -22,7 +22,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     protected IPermissionDefinitionRecordRepository PermissionRepository { get; }
     protected IPermissionDefinitionSerializer PermissionSerializer { get; }
     protected IDistributedCache Cache { get; }
-    protected IApplicationNameAccessor ApplicationNameAccessor { get; }
+    protected IApplicationInfoAccessor ApplicationInfoAccessor { get; }
     protected IAbpDistributedLock DistributedLock { get; }
     protected AbpPermissionOptions PermissionOptions { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
@@ -35,7 +35,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         IPermissionDefinitionSerializer permissionSerializer,
         IDistributedCache cache,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
-        IApplicationNameAccessor applicationNameAccessor,
+        IApplicationInfoAccessor applicationInfoAccessor,
         IAbpDistributedLock distributedLock,
         IOptions<AbpPermissionOptions> permissionOptions,
         ICancellationTokenProvider cancellationTokenProvider)
@@ -45,7 +45,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         PermissionRepository = permissionRepository;
         PermissionSerializer = permissionSerializer;
         Cache = cache;
-        ApplicationNameAccessor = applicationNameAccessor;
+        ApplicationInfoAccessor = applicationInfoAccessor;
         DistributedLock = distributedLock;
         CancellationTokenProvider = cancellationTokenProvider;
         PermissionOptions = permissionOptions.Value;
@@ -249,7 +249,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
 
     private string GetApplicationDistributedLockKey()
     {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpPermissionUpdateLock";
+        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpPermissionUpdateLock";
     }
 
     private string GetCommonDistributedLockKey()
@@ -259,7 +259,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
 
     private string GetApplicationHashCacheKey()
     {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpPermissionsHash";
+        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpPermissionsHash";
     }
 
     private string GetCommonStampCacheKey()
