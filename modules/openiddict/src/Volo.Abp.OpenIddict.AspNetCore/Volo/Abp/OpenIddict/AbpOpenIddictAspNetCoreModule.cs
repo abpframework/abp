@@ -5,7 +5,6 @@ using OpenIddict.Server;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict.Handlers;
 using Volo.Abp.OpenIddict.WildcardDomains;
 using Volo.Abp.Security.Claims;
 
@@ -130,7 +129,6 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                     builder.AddEventHandler(AbpValidatePostLogoutRedirectUriParameter.Descriptor);
                 }
 
-                builder.AddEventHandler(AttachAbpCustomChallengeErrors.Descriptor);
                 builder.AddEventHandler(RemoveClaimsFromClientCredentialsGrantType.Descriptor);
 
                 services.ExecutePreConfiguredActions(builder);
