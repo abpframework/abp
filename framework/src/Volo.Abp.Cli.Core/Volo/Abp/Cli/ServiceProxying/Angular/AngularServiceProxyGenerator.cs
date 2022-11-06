@@ -30,7 +30,7 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
         _cliService = cliService;
     }
 
-    public override async Task GenerateProxyAsync(GenerateProxyArgs args)
+    public async override Task GenerateProxyAsync(GenerateProxyArgs args)
     {
         CheckAngularJsonFile();
         await CheckNgSchematicsAsync();
@@ -76,7 +76,18 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
             commandBuilder.Append($" --url {url}");
         }
 
+        var serviceType = GetServiceType(args);
+        if (args.ServiceType != null)
+        {
+            commandBuilder.Append($" --service-type {serviceType.ToString().ToLower()}");
+        }
+
         _cmdhelper.RunCmd(commandBuilder.ToString());
+    }
+
+    protected override ServiceType? GetDefaultServiceType(GenerateProxyArgs args)
+    {
+        return ServiceType.Application;
     }
 
     private async Task CheckNgSchematicsAsync()

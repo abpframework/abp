@@ -56,6 +56,8 @@
     "ShareOn": "Ossza meg",
     "TitleLengthWarning": "A címméret 60 karakter alatt maradjon hogy SEO-barát legyen!",
     "ClearCache": "Törölje a gyorsítótárat",
-    "ClearCacheConfirmationMessage": "Biztosan törli a gyorsítótárat?"
+    "ClearCacheConfirmationMessage": "Biztosan törli a gyorsítótárat?",
+    "MarkdownSupported": "A Markdown támogatott",
+    "FileUploadInfo": "Húzza, ejtse vagy illessze be a másolt képet."
   }
 }

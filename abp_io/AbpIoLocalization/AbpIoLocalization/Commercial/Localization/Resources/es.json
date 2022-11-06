@@ -360,7 +360,7 @@
     "Next": "próximo",
     "StartTrial": "Iniciar mi prueba gratuita",
     "ContactUsIssues": "Contáctanos si tienes algún problema",
-    "TrialActivatedWarning": "Estimado {0}, un usuario tiene derecho a tener solo 1 período de prueba gratuito. Ya usaste tu período de prueba.",
+    "TrialActivatedWarning": "Un usuario tiene derecho a tener solo 1 período de prueba gratuito. Ya utilizó su período de prueba.",
     "SaveAndDownload": "Guardar y descargar",
     "CompanyNameValidationMessage": "¡El nombre de la empresa es demasiado largo!",
     "AddressValidationMessage": "¡La dirección es demasiado larga!",
@@ -373,7 +373,7 @@
     "TrialLicenseModelInvalidErrorMessage": "Uno de los siguientes campos no es válido: nombre del país, tamaño de la empresa, sector o finalidad de uso.",
     "Trial": "Prueba",
     "Purchased": "Comprado",
-    "PurchaseLicense": "Licencia de compra",
+    "PurchaseLicense": "Comprar {0} licencia",
     "PurchaseTrialLicenseMessage": "La fecha de vencimiento de su licencia es {0}. <br> Si desea continuar usando los proyectos que creó durante su período de prueba gratuito, debe cambiar las claves de licencia en sus archivos <code> appsettings.secrets.json </code>. Aquí está su clave de licencia:",
     "TrialLicenseExpireMessage": "Está utilizando la licencia de prueba y su licencia de prueba caducará el {0}.",
     "TryForFree": "Prueba gratis",
@@ -381,6 +381,7 @@
     "CommercialNewsletterConfirmationMessage": "Acepto los <a href=\"https://commercial.abp.io/TermsConditions\"> Términos y condiciones </a> y la <a href=\"https://commercial.abp.io/Privacy\"> Política de privacidad </a>.",
     "ContinueWithNewOrganization": "Continuar con una nueva organización",
     "RenewLicenseEarly": "Si renuevo mi licencia antes, ¿obtendré el año completo?",
-    "RenewLicenseEarylExplanation": "Cuando renueve su licencia antes de la fecha de vencimiento de su licencia, se agregará 1 año a la fecha de vencimiento de su licencia. Por ejemplo, si su licencia vence el {0} -06-06 y la renueva el {0} -01-01, la fecha de vencimiento de su nueva licencia será {1} -06-06."
+    "RenewLicenseEarylExplanation": "Cuando renueve su licencia antes de la fecha de vencimiento de su licencia, se agregará 1 año a la fecha de vencimiento de su licencia. Por ejemplo, si su licencia vence el {0} -06-06 y la renueva el {0} -01-01, la fecha de vencimiento de su nueva licencia será {1} -06-06.",
+    "BlackFridayDiscount": "Descuento de viernes negro"
   }
 }

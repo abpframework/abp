@@ -36,7 +36,7 @@ public class OpenIddictClaimsPrincipalContributor : IAbpClaimsPrincipalContribut
                 var clientId = httpContext.GetOpenIddictServerRequest()?.ClientId;
                 if (clientId != null)
                 {
-                    identity.AddClaim(OpenIddictConstants.Claims.ClientId, clientId, OpenIddictConstants.Destinations.AccessToken);
+                    identity.AddClaim(OpenIddictConstants.Claims.ClientId, clientId);
                 }
             }
         }

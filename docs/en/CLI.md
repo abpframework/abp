@@ -365,6 +365,7 @@ abp generate-proxy -t csharp -url https://localhost:44302/
 * `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
 * `--working-directory` or `-wd`: Execution directory. For `csharp` and `js` client types.
 * `--url` or `-u`: API definition URL from.
+* `--service-type` or `-st`: Specifies the service type to generate. `application`, `integration` and `all`, Default value: `all` for C#, `application` for JavaScript / Angular.
 
 > See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 
@@ -505,6 +506,7 @@ abp login <username>                                  # Allows you to enter your
 abp login <username> -p <password>                    # Specify the password as a parameter (password is visible)
 abp login <username> --organization <organization>    # If you have multiple organizations, you need set your active organization
 abp login <username> -p <password> -o <organization>  # You can enter both your password and organization in the same command
+abp login <username> --device                         # Use device login flow
 ```
 
 > When using the -p parameter, be careful as your password will be visible. It's useful for CI/CD automation pipelines.

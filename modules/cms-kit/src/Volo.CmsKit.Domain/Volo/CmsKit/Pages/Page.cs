@@ -20,6 +20,8 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
 
     public virtual string Style { get; protected set; }
 
+    public virtual bool IsHomePage { get; protected set; }
+
     protected Page()
     {
     }
@@ -49,9 +51,7 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
 
     internal virtual void SetSlug(string slug)
     {
-        Slug = SlugNormalizer.Normalize(
-                Check.NotNullOrEmpty(slug, nameof(slug), PageConsts.MaxSlugLength)
-            );
+        Slug = SlugNormalizer.Normalize(Check.NotNullOrEmpty(slug, nameof(slug), PageConsts.MaxSlugLength));
     }
 
     public virtual void SetContent(string content)
@@ -68,4 +68,9 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         Style = Check.Length(style, nameof(style), PageConsts.MaxStyleLength);
     }
+
+	internal void SetIsHomePage(bool isHomePage)
+    {
+        IsHomePage = isHomePage;
+	}
 }

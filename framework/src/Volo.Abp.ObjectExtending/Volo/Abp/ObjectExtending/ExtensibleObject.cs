@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using Volo.Abp.Data;
 using Volo.Abp.DynamicProxy;
 
@@ -10,7 +9,6 @@ namespace Volo.Abp.ObjectExtending;
 [Serializable]
 public class ExtensibleObject : IHasExtraProperties, IValidatableObject
 {
-    [JsonInclude]
     public ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
     public ExtensibleObject()

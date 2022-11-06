@@ -46,7 +46,7 @@
                     <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["TenantName"]</FieldLabel>
+                                <FieldLabel>@L["TenantName"] *</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
@@ -56,7 +56,7 @@
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["DisplayName:AdminEmailAddress"]</FieldLabel>
+                                <FieldLabel>@L["DisplayName:AdminEmailAddress"] *</FieldLabel>
                                 <TextEdit Role="@TextRole.Email" @bind-Text="@NewEntity.AdminEmailAddress">
                                     <Feedback>
                                         <ValidationError/>
@@ -66,7 +66,7 @@
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["DisplayName:AdminPassword"]</FieldLabel>
+                                <FieldLabel>@L["DisplayName:AdminPassword"] *</FieldLabel>
                                 <TextEdit Role="@TextRole.Password" @bind-Text="@NewEntity.AdminPassword">
                                     <Feedback>
                                         <ValidationError/>
@@ -100,7 +100,7 @@
                     <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["TenantName"]</FieldLabel>
+                                <FieldLabel>@L["TenantName"] *</FieldLabel>
                                 <TextEdit @bind-Text="@EditingEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>

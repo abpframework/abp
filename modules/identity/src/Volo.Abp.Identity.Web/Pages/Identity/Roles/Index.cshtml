@@ -28,17 +28,10 @@
         <abp-script src="/Pages/identity/roles/index.js" />
     </abp-script-bundle>
 }
+@section content_toolbar {
+    @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
+}
 <abp-card id="IdentityRolesWrapper">
-    <abp-card-header>
-        <abp-row>
-            <abp-column size-md="_6">
-                <abp-card-title>@L["Roles"]</abp-card-title>
-            </abp-column>
-            <abp-column size-md="_6" class="text-end">
-                @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
-            </abp-column>
-        </abp-row>
-    </abp-card-header>
     <abp-card-body>
         <abp-table striped-rows="true" class="nowrap"></abp-table>
     </abp-card-body>
