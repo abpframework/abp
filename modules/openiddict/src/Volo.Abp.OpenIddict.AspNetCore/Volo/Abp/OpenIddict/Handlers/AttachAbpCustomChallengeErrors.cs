@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using OpenIddict.Server;
 
 namespace Volo.Abp.OpenIddict.Handlers;
@@ -26,13 +24,9 @@ public class AttachAbpCustomChallengeErrors : IOpenIddictServerHandler<OpenIddic
     {
         Check.NotNull(context, nameof(context));
 
-        var properties = context.Transaction.Properties[typeof(AuthenticationProperties).FullName!].As<AuthenticationProperties>();
-        if (properties != null)
+        foreach (var property in context.Properties.Where(x => CustomChallengeErrors.Contains(x.Key)))
         {
-            foreach (var property in properties.Items.Where(x => CustomChallengeErrors.Contains(x.Key)))
-            {
-                context.Response.SetParameter(property.Key, property.Value);
-            }
+            context.Response.SetParameter(property.Key, property.Value);
         }
 
         return default;

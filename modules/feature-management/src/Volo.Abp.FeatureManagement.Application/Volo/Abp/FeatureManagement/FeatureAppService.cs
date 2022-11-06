@@ -138,7 +138,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         await AuthorizationService.CheckAsync(policyName);
     }
 
-    public virtual async Task ResetToDefaultAsync([NotNull] string providerName, string providerKey)
+    public virtual async Task DeleteAsync([NotNull] string providerName, string providerKey)
     {
         await FeatureValueRepository.DeleteAsync(providerName, providerKey);
     }

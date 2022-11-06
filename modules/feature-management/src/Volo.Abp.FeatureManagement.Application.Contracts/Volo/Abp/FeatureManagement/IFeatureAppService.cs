@@ -10,5 +10,5 @@ public interface IFeatureAppService : IApplicationService
 
     Task UpdateAsync([NotNull] string providerName, string providerKey, UpdateFeaturesDto input);
 
-    Task ResetToDefaultAsync([NotNull] string providerName, string providerKey);
+    Task DeleteAsync([NotNull] string providerName, string providerKey);
 }

@@ -28,9 +28,9 @@ public class FeaturesController : AbpControllerBase, IFeatureAppService
         return FeatureAppService.UpdateAsync(providerName, providerKey, input);
     }
 
-    [HttpPost]
-    public Task ResetToDefaultAsync(string providerName, string providerKey)
+    [HttpDelete]
+    public virtual Task DeleteAsync(string providerName, string providerKey)
     {
-        return FeatureAppService.ResetToDefaultAsync(providerName, providerKey);
+        return FeatureAppService.DeleteAsync(providerName, providerKey);
     }
 }
