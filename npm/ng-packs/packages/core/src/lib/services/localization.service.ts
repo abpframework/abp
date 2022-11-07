@@ -58,7 +58,6 @@ export class LocalizationService {
     this.initLocalizationValues();
   }
 
-
   private initLocalizationValues() {
     localizations$.subscribe(val => this.addLocalization(val));
 
@@ -79,8 +78,7 @@ export class LocalizationService {
     combineLatest([legacyResources$, remoteLocalizations$, uiLocalizations$])
       .pipe(
         map(([legacy, resource, local]) => {
-
-          if(!resource){
+          if (!resource) {
             return;
           }
           const remote = combineLegacyandNewResources(legacy || {}, resource);
@@ -265,31 +263,27 @@ export class LocalizationService {
   }
 }
 
-
-function recursivelyMergeBaseResources  (baseResourceName: string, source: ResourceDto) {
+function recursivelyMergeBaseResources(baseResourceName: string, source: ResourceDto) {
   const item = source[baseResourceName];
 
   if (item.baseResources.length === 0) {
     return item;
   }
 
-  return item.baseResources.reduce((acc,baseResource) => {
+  return item.baseResources.reduce((acc, baseResource) => {
     const baseItem = recursivelyMergeBaseResources(baseResource, source);
     const texts = { ...baseItem.texts, ...item.texts };
-    return  {...acc,texts}
-  },item);
-  
-};
-
-function mergeResourcesWithBaseResource(resource: ResourceDto):ResourceDto {
-  const entities = Object.keys(resource).map((key) => {
-    const newValue =  recursivelyMergeBaseResources(key,resource)
-    return [key,newValue]
-  });
-  return entities.reduce((acc,[key,value]) => ({...acc,[key]:value}),{})
+    return { ...acc, texts };
+  }, item);
 }
 
-
+function mergeResourcesWithBaseResource(resource: ResourceDto): ResourceDto {
+  const entities = Object.keys(resource).map(key => {
+    const newValue = recursivelyMergeBaseResources(key, resource);
+    return [key, newValue];
+  });
+  return entities.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+}
 
 function combineLegacyandNewResources(
   legacy: LegacyLanguageDto,
