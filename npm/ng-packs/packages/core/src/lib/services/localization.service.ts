@@ -1,6 +1,6 @@
 import { registerLocaleData } from '@angular/common';
 import { Injectable, Injector, isDevMode, Optional, SkipSelf } from '@angular/core';
-import { BehaviorSubject, combineLatest, from, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, from, Observable, of, Subject } from 'rxjs';
 import { filter, map, mapTo, switchMap } from 'rxjs/operators';
 import { ABP } from '../models/common';
 import { LocalizationWithDefault } from '../models/localization';
@@ -133,7 +133,7 @@ export class LocalizationService {
         filter(
           lang => this.configState.getDeep('localization.currentCulture.cultureName') !== lang,
         ),
-        switchMap(lang => this.configState.refreshAppState().pipe(mapTo(lang))),
+        switchMap(lang => this.configState.refreshLocalization(lang).pipe(map(() => lang))),
         switchMap(lang => from(this.registerLocale(lang).then(() => lang))),
       )
       .subscribe(lang => this._languageChange$.next(lang));

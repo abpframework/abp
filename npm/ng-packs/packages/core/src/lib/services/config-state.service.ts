@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable, Subject, of } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
@@ -7,6 +7,7 @@ import {
   ApplicationConfigurationDto,
   ApplicationGlobalFeatureConfigurationDto,
 } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
+import { INCUDE_LOCALIZATION_RESOURCES_TOKEN } from '../tokens/include-localization-resources.token';
 import { InternalStore } from '../utils/internal-store-utils';
 
 @Injectable({
@@ -14,8 +15,7 @@ import { InternalStore } from '../utils/internal-store-utils';
 })
 export class ConfigStateService {
   private readonly store = new InternalStore({} as ApplicationConfigurationDto);
-  private includeLocalizationResources = false;
-
+ 
   get createOnUpdateStream() {
     return this.store.sliceUpdate;
   }
@@ -25,6 +25,7 @@ export class ConfigStateService {
   constructor(
     private abpConfigService: AbpApplicationConfigurationService,
     private abpApplicationLocalizationService: AbpApplicationLocalizationService,
+    @Inject(INCUDE_LOCALIZATION_RESOURCES_TOKEN) private readonly includeLocalizationResources: boolean,
   ) {
     this.initUpdateStream();
   }
@@ -36,7 +37,7 @@ export class ConfigStateService {
           this.abpConfigService.get({
             includeLocalizationResources: this.includeLocalizationResources,
           }),
-        ),
+        )
       )
       .pipe(switchMap(appState => this.getLocalizationAndCombineWithAppState(appState)))
       .subscribe(res => this.store.set(res));
@@ -45,18 +46,34 @@ export class ConfigStateService {
   private getLocalizationAndCombineWithAppState(
     appState: ApplicationConfigurationDto,
   ): Observable<ApplicationConfigurationDto> {
-    return this.abpApplicationLocalizationService
-      .get({ cultureName: appState.localization.currentCulture.name, onlyDynamics: false })
+    return this.getlocalizationResource(appState.localization.currentCulture.cultureName)
       .pipe(
-        switchMap(result =>
-          of({ ...appState, localization: { ...appState.localization, ...result } }),
+        map(result =>({ ...appState, localization: { ...appState.localization, ...result } }),
         ),
       );
   }
 
+  private getlocalizationResource(cultureName:string){
+    return  this.abpApplicationLocalizationService
+      .get({ cultureName: cultureName, onlyDynamics: false })
+  }
   refreshAppState() {
     this.updateSubject.next();
     return this.createOnUpdateStream(state => state).pipe(take(1));
+  }
+
+  refreshLocalization(lang:string) {
+    if (this.includeLocalizationResources) {
+      return this.refreshAppState();
+    } else {
+       return  this.getlocalizationResource(lang)
+        .pipe(
+          switchMap(result => {
+            this.store.patch({ localization: { ...this.store.state.localization, ...result } });
+            return of(null);
+          }),
+        );
+    }
   }
 
   getOne$(key: string) {
