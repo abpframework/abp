@@ -1,5 +1,5 @@
 {
-  "culture": "de-DE",
+  "culture": "de",
   "texts": {
     "Permission:CommunityPost": "Community-Beitrag",
     "Permission:Edit": "Bearbeiten",
@@ -36,7 +36,6 @@
     "FeatureRequest": "Featureanfrage",
     "CreatePostTitleInfo": "Titel des Beitrags, der in der Beitragsliste angezeigt werden soll.",
     "CreatePostSummaryInfo": "Eine kurze Zusammenfassung des Beitrags, der in der Beitragsliste angezeigt werden soll.",
-    "CreatePostCoverInfo": "Fügen Sie zum Erstellen eines effektiven Beitrags ein Titelbild hinzu. Laden Sie Bilder mit einem Seitenverhältnis von 16: 9 hoch, um die beste Ansicht zu erhalten.",
     "ThisExtensionIsNotAllowed": "Diese Erweiterung ist nicht zulässig.",
     "TheFileIsTooLarge": "Die Datei ist zu groß.",
     "GoToThePost": "Gehe zum Beitrag",

@@ -1,5 +1,5 @@
 {
-  "culture": "de-DE",
+  "culture": "de",
   "texts": {
     "OrganizationManagement": "Organisationsverwaltung",
     "OrganizationList": "Organisationsauflistung",
@@ -14,7 +14,7 @@
     "AddDeveloper": "Entwickler hinzufügen",
     "UserName": "Benutzername",
     "Name": "Name",
-    "EmailAddress": "E-Mail-Adress",
+    "EmailAddress": "E-Mail Adresse",
     "Developers": "Entwickler",
     "LicenseType": "Lizenztyp",
     "Manage": "Verwalten",
@@ -61,7 +61,7 @@
     "JoinOurNewsletter": "Abonnieren Sie unseren Newsletter",
     "Send": "Senden",
     "Learn": "Lernen",
-    "AdditionalServices": "Zusatzleitungen",
+    "AdditionalServices": "Zusatzleistungen",
     "WhatIsABPFramework": "WAS IST DER ABP-RAHMEN?",
     "OpenSourceBaseFramework": "Open-Source-Basis-Framework",
     "ABPFrameworkExplanation": "<p class=\"lead\">ABP Commercial basiert auf dem ABP Framework, einem Open-Source- und Community-gesteuerten Webanwendungs-Framework für ASP.NET Core.</p><p>ABP Framework bietet eine hervorragende Infrastruktur zum Schreiben von wartbaren, erweiterbaren und testbarer Code mit Best Practices.</p><p>Aufgebaut und integriert in beliebte Tools, die Sie bereits kennen. Niedrige Lernkurve, einfache Anpassung, komfortable Entwicklung.</p>",
