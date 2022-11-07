@@ -15,7 +15,7 @@ import { InternalStore } from '../utils/internal-store-utils';
 })
 export class ConfigStateService {
   private readonly store = new InternalStore({} as ApplicationConfigurationDto);
- 
+
   get createOnUpdateStream() {
     return this.store.sliceUpdate;
   }
@@ -25,7 +25,8 @@ export class ConfigStateService {
   constructor(
     private abpConfigService: AbpApplicationConfigurationService,
     private abpApplicationLocalizationService: AbpApplicationLocalizationService,
-    @Inject(INCUDE_LOCALIZATION_RESOURCES_TOKEN) private readonly includeLocalizationResources: boolean,
+    @Inject(INCUDE_LOCALIZATION_RESOURCES_TOKEN)
+    private readonly includeLocalizationResources: boolean,
   ) {
     this.initUpdateStream();
   }
@@ -37,7 +38,7 @@ export class ConfigStateService {
           this.abpConfigService.get({
             includeLocalizationResources: this.includeLocalizationResources,
           }),
-        )
+        ),
       )
       .pipe(switchMap(appState => this.getLocalizationAndCombineWithAppState(appState)))
       .subscribe(res => this.store.set(res));
@@ -46,31 +47,33 @@ export class ConfigStateService {
   private getLocalizationAndCombineWithAppState(
     appState: ApplicationConfigurationDto,
   ): Observable<ApplicationConfigurationDto> {
-    return this.getlocalizationResource(appState.localization.currentCulture.cultureName)
-      .pipe(
-        map(result =>({ ...appState, localization: { ...appState.localization, ...result } }),
-        ),
-      );
+    return this.getlocalizationResource(appState.localization.currentCulture.cultureName).pipe(
+      map(result => ({ ...appState, localization: { ...appState.localization, ...result } })),
+    );
   }
 
-  private getlocalizationResource(cultureName:string){
-    return  this.abpApplicationLocalizationService
-      .get({ cultureName: cultureName, onlyDynamics: false })
+  private getlocalizationResource(cultureName: string) {
+    return this.abpApplicationLocalizationService.get({
+      cultureName: cultureName,
+      onlyDynamics: false,
+    });
   }
   refreshAppState() {
     this.updateSubject.next();
     return this.createOnUpdateStream(state => state).pipe(take(1));
   }
 
-  refreshLocalization(lang:string): Observable<null> {
+  refreshLocalization(lang: string): Observable<null> {
     if (this.includeLocalizationResources) {
-      return this.refreshAppState().pipe(map(()=> null));
+      return this.refreshAppState().pipe(map(() => null));
     } else {
-       return  this.getlocalizationResource(lang)
+      return this.getlocalizationResource(lang)
         .pipe(
-          tap(result => this.store.patch({ localization: { ...this.store.state.localization, ...result } }))
+          tap(result =>
+            this.store.patch({ localization: { ...this.store.state.localization, ...result } }),
+          ),
         )
-        .pipe(map(()=> null));
+        .pipe(map(() => null));
     }
   }
 
