@@ -1,12 +1,21 @@
+---
+name: Blank issue
+about: Something that doesn't fit the other categories
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ### Documentation
 
 Please check the official documentation before asking questions: https://docs.abp.io
 
 ### GitHub Issues
 
-GitHub issues are for bug reports, feature requests and other discussions about the framework.
+GitHub issues are for bug reports, feature requests, and other discussions about the framework.
 
-If you're creating a bug/problem report, please include followings:
+If you're creating a bug/problem report, please include the followings:
 
 * Your **ABP Framework version**.
 * Your **User Interface** type (Angular/MVC/React... etc.) if the issue is related to a specific UI
@@ -18,7 +27,7 @@ Please **write in English**.
 
 ### Stack Overflow
 
-Please use Stack Overflow for your questions about using the framework, templates and samples:
+Please use Stack Overflow for your questions about using the framework, templates, and samples:
 
 https://stackoverflow.com/questions/tagged/abp
 

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -23,23 +24,8 @@ public class Utf8JsonDaprSerializer : IDaprSerializer, ITransientDependency
         return _jsonSerializer.Deserialize(type, Encoding.UTF8.GetString(value));
     }
 
-    public T Deserialize<T>(byte[] value)
-    {
-        return _jsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(value));
-    }
-
-    public string SerializeToString(object obj)
-    {
-        return _jsonSerializer.Serialize(obj);
-    }
-
     public object Deserialize(string value, Type type)
     {
         return _jsonSerializer.Deserialize(type, value);
-    }
-
-    public T Deserialize<T>(string value)
-    {
-        return _jsonSerializer.Deserialize<T>(value);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Dapr;
+﻿using System;
+
+namespace Volo.Abp.Dapr;
 
 public interface IDaprSerializer
 {
@@ -6,11 +8,5 @@ public interface IDaprSerializer
 
     object Deserialize(byte[] value, Type type);
 
-    T Deserialize<T>(byte[] value);
-
-    string SerializeToString(object obj);
-
     object Deserialize(string value, Type type);
-
-    T Deserialize<T>(string value);
 }

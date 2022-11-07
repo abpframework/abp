@@ -1,4 +1,5 @@
-﻿using Dapr.Client;
+﻿using System;
+using Dapr.Client;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Dapr;
 using Volo.Abp.DependencyInjection;
