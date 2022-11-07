@@ -23,8 +23,10 @@ public abstract class AbpApplicationBase : IAbpApplication
     public IServiceCollection Services { get; }
 
     public IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
-    
+
     public string ApplicationName { get; }
+
+    public string InstanceId { get; } = Guid.NewGuid().ToString();
 
     private bool _configuredServices;
 
@@ -43,11 +45,11 @@ public abstract class AbpApplicationBase : IAbpApplication
 
         var options = new AbpApplicationCreationOptions(services);
         optionsAction?.Invoke(options);
-        
-        ApplicationName = options.ApplicationName;
+
+        ApplicationName = GetApplicationName(options);
 
         services.AddSingleton<IAbpApplication>(this);
-        services.AddSingleton<IApplicationNameAccessor>(this);
+        services.AddSingleton<IApplicationInfoAccessor>(this);
         services.AddSingleton<IModuleContainer>(this);
 
         services.AddCoreServices();
@@ -147,7 +149,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     public virtual async Task ConfigureServicesAsync()
     {
         CheckMultipleConfigureServices();
-        
+
         var context = new ServiceConfigurationContext(Services);
         Services.AddSingleton(context);
 
@@ -311,5 +313,31 @@ public abstract class AbpApplicationBase : IAbpApplication
         }
 
         _configuredServices = true;
+    }
+
+    private static string GetApplicationName(AbpApplicationCreationOptions options)
+    {
+        if (!string.IsNullOrWhiteSpace(options.ApplicationName))
+        {
+            return options.ApplicationName;
+        }
+
+        var configuration = options.Services.GetConfigurationOrNull();
+        if (configuration != null)
+        {
+            var appNameConfig = configuration["ApplicationName"];
+            if (!string.IsNullOrWhiteSpace(appNameConfig))
+            {
+                return appNameConfig;
+            }
+        }
+
+        var entryAssembly = Assembly.GetEntryAssembly();
+        if (entryAssembly != null)
+        {
+            return entryAssembly.GetName().Name;
+        }
+
+        return null;
     }
 }

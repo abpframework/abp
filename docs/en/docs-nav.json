@@ -852,6 +852,10 @@
                   "path": "UI/Blazor/Page-Header.md"
                 },
                 {
+                  "text": "Page Layout",
+                  "path": "UI/Blazor/Page-Layout.md"
+                },
+                {
                   "text": "Toolbars",
                   "path": "UI/Blazor/Toolbars.md"
                 }
@@ -935,6 +939,10 @@
             {
               "text": "PWA Configuration",
               "path": "UI/Blazor/Pwa-Configuration.md"
+            },
+            {
+              "text": "Layout Hooks",
+              "path": "UI/Blazor/Layout-Hooks.md"
             }
           ]
         },
@@ -1274,6 +1282,10 @@
           "path": "SignalR-Integration.md"
         }
       ]
+    },
+    {
+      "text": "Dapr Integration",
+      "path": "Dapr/Index.md"
     },
     {
       "text": "Testing",

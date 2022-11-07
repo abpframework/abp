@@ -360,7 +360,7 @@
     "Next": "Nächste",
     "StartTrial": "Starten Sie meine kostenlose Testversion",
     "ContactUsIssues": "Kontaktieren Sie uns, wenn Sie irgendwelche Probleme haben",
-    "TrialActivatedWarning": "Sehr geehrte(r) {0}, ein Nutzer hat nur 1 kostenlosen Testzeitraum. Sie haben Ihren Testzeitraum bereits genutzt.",
+    "TrialActivatedWarning": "Ein Benutzer hat nur Anspruch auf 1 kostenlose Testphase. Sie haben Ihre Testphase bereits genutzt.",
     "SaveAndDownload": "Speichern und herunterladen",
     "CompanyNameValidationMessage": "Firmenname ist zu lang!",
     "AddressValidationMessage": "Adresse ist zu lang!",
@@ -373,7 +373,7 @@
     "TrialLicenseModelInvalidErrorMessage": "Eines der folgenden Felder ist ungültig: Ländername, Unternehmensgröße, Branche oder Verwendungszweck.",
     "Trial": "Versuch",
     "Purchased": "Gekauft",
-    "PurchaseLicense": "Lizenz kaufen",
+    "PurchaseLicense": "Kaufe {0} Lizenz",
     "PurchaseTrialLicenseMessage": "Das Ablaufdatum Ihrer Lizenz ist {0}. <br> Wenn Sie die Projekte, die Sie während Ihres kostenlosen Testzeitraums erstellt haben, weiterhin verwenden möchten, müssen Sie die Lizenzschlüssel in Ihren <code>appsettings.secrets.json</code>-Dateien ändern. Hier ist Ihr Lizenzschlüssel:",
     "TrialLicenseExpireMessage": "Sie verwenden die Testlizenz und Ihre Testlizenz läuft am {0} ab.",
     "TryForFree": "Kostenlos testen",
@@ -381,6 +381,7 @@
     "CommercialNewsletterConfirmationMessage": "Ich stimme den <a href=\"https://commercial.abp.io/TermsConditions\">Allgemeinen Geschäftsbedingungen</a> und der <a href=\"https://commercial.abp.io/Privacy\">Datenschutzerklärung . zu </a>.",
     "ContinueWithNewOrganization": "Weiter mit einer neuen Organisation",
     "RenewLicenseEarly": "Erhalte ich das ganze Jahr, wenn ich meine Lizenz vorzeitig erneuere?",
-    "RenewLicenseEarylExplanation": "Wenn Sie Ihre Lizenz vor dem Ablaufdatum Ihrer Lizenz erneuern, wird Ihr Lizenzablaufdatum um 1 Jahr verlängert. Wenn Ihre Lizenz beispielsweise am {0}-06-06 abläuft und Sie sie am {0}-01-01 erneuern, ist das neue Ablaufdatum der Lizenz der {1}-06-06."
+    "RenewLicenseEarylExplanation": "Wenn Sie Ihre Lizenz vor dem Ablaufdatum Ihrer Lizenz erneuern, wird Ihr Lizenzablaufdatum um 1 Jahr verlängert. Wenn Ihre Lizenz beispielsweise am {0}-06-06 abläuft und Sie sie am {0}-01-01 erneuern, ist das neue Ablaufdatum der Lizenz der {1}-06-06.",
+    "BlackFridayDiscount": "Black Friday Rabatt"
   }
 }

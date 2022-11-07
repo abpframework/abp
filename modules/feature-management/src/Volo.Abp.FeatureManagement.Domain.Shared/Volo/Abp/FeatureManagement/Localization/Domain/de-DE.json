@@ -6,6 +6,7 @@
     "ManageHostFeatures": "Host-Features verwalten",
     "Permission:FeatureManagement": "Feature-Verwaltung",
     "Permission:FeatureManagement.ManageHostFeatures": "Host-Features verwalten",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} Feature-Wert ist ungültig!"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} Feature-Wert ist ungültig!",
+		"Menu:FeatureManagement": "Feature Verwaltung"
   }
 }

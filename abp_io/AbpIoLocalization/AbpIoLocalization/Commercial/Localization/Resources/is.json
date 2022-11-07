@@ -360,7 +360,7 @@
     "Next": "Næsta",
     "StartTrial": "Byrjaðu ókeypis prufuáskriftina mína",
     "ContactUsIssues": "Hafðu samband við okkur ef þú hefur einhver vandamál",
-    "TrialActivatedWarning": "Kæri {0}, notandi á rétt á aðeins 1 ókeypis prufutíma. Þú hefur þegar notað prufutíma þinn.",
+    "TrialActivatedWarning": "Notandi á aðeins rétt á að fá 1 ókeypis prufutímabil. Þú hefur þegar notað prufutímabilið þitt.",
     "SaveAndDownload": "Vista og hala niður",
     "CompanyNameValidationMessage": "Nafn fyrirtækis er of langt!",
     "AddressValidationMessage": "Heimilisfang er of langt!",
@@ -373,11 +373,12 @@
     "TrialLicenseModelInvalidErrorMessage": "Einn af eftirfarandi reitum er ógildur: heiti lands, stærð fyrirtækis, iðnaður eða tilgangur notkunar.",
     "Trial": "Prufu aðgangur",
     "Purchased": "Keypt",
-    "PurchaseLicense": "Keypt leyfi",
+    "PurchaseLicense": "Kaupa {0} leyfi",
     "PurchaseTrialLicenseMessage": "Gildistími leyfis þíns er {0}. <br> Ef þú vilt halda áfram að nota verkefnin sem þú bjóst til á ókeypis prufutímabilinu þarftu að breyta leyfislyklunum í <code> appsettings.secrets.json </code> skránni þinn. Hér er leyfislykillinn þinn:",
     "TrialLicenseExpireMessage": "Þú ert að nota prufuleyfið og prufuleyfið rennur út {0}.",
     "TryForFree": "Prófaðu ókeypis",
     "TrialLicenseExpiredInfo": "Prófunartímabil þitt er útrunnið!",
-    "CommercialNewsletterConfirmationMessage": "Ég samþykki <a href=\"https://commercial.abp.io/TermsConditions\">skilmálana</a> og <a href=\"https://commercial.abp.io/Privacy\">persónuverndarstefnuna </a>."
+    "CommercialNewsletterConfirmationMessage": "Ég samþykki <a href=\"https://commercial.abp.io/TermsConditions\">skilmálana</a> og <a href=\"https://commercial.abp.io/Privacy\">persónuverndarstefnuna </a>.",
+    "BlackFridayDiscount": "Black Friday afsláttur"
   }
 }

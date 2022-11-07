@@ -9,4 +9,6 @@ public interface IFeatureAppService : IApplicationService
     Task<GetFeatureListResultDto> GetAsync([NotNull] string providerName, string providerKey);
 
     Task UpdateAsync([NotNull] string providerName, string providerKey, UpdateFeaturesDto input);
+
+    Task DeleteAsync([NotNull] string providerName, string providerKey);
 }

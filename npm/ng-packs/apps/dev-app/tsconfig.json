@@ -18,7 +18,8 @@
     "strict": false,
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "target": "es2020"
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

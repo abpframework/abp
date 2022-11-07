@@ -1,29 +1,326 @@
 {
   "name": "Volo.Docs.Application",
-  "hash": "604b6ef5c6cc68a154a2a4700a711c77",
+  "hash": "6577c5c6152a502ca398540df8cd3a62",
   "contents": [
     {
       "namespace": "Volo.Docs",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Docs.Domain",
+          "namespace": "Volo.Docs",
+          "name": "DocsDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Docs.Application.Contracts",
+          "namespace": "Volo.Docs",
+          "name": "DocsApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching",
+          "namespace": "Volo.Abp.Caching",
+          "name": "AbpCachingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "DocsApplicationModule"
+      "name": "DocsApplicationModule",
+      "summary": null
     },
     {
       "namespace": "Volo.Docs.Projects",
-      "summary": null,
+      "baseClass": {
+        "name": "DocsAppServiceBase",
+        "namespace": "Volo.Docs",
+        "declaringAssemblyName": "Volo.Docs.Application"
+      },
       "implementingInterfaces": [
-        "Volo.Docs.Projects.IProjectAppService"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IProjectAppService",
+          "namespace": "Volo.Docs.Projects",
+          "declaringAssemblyName": "Volo.Docs.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "ListResultDto<ProjectDto>",
+          "isAsync": true,
+          "name": "GetListAsync",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "ProjectDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "shortName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ListResultDto<VersionInfoDto>",
+          "isAsync": true,
+          "name": "GetVersionsAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "shortName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "LanguageConfig",
+          "isAsync": true,
+          "name": "GetLanguageListAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "shortName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "isAsync": true,
+          "name": "GetDefaultLanguageCodeAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "shortName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "ProjectAppService"
+      "name": "ProjectAppService",
+      "summary": null
     },
     {
       "namespace": "Volo.Docs.Documents",
-      "summary": null,
+      "baseClass": {
+        "name": "DocsAppServiceBase",
+        "namespace": "Volo.Docs",
+        "declaringAssemblyName": "Volo.Docs.Application"
+      },
       "implementingInterfaces": [
-        "Volo.Docs.Documents.IDocumentAppService"
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core"
+        },
+        {
+          "name": "IDocumentAppService",
+          "namespace": "Volo.Docs.Documents",
+          "declaringAssemblyName": "Volo.Docs.Application.Contracts"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "DocumentWithDetailsDto",
+          "isAsync": true,
+          "name": "GetAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GetDocumentInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "DocumentWithDetailsDto",
+          "isAsync": true,
+          "name": "GetDefaultAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GetDefaultDocumentInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "NavigationNode",
+          "isAsync": true,
+          "name": "GetNavigationAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GetNavigationDocumentInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "DocumentResourceDto",
+          "isAsync": true,
+          "name": "GetResourceAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GetDocumentResourceInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "List<DocumentSearchOutput>",
+          "isAsync": true,
+          "name": "SearchAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "DocumentSearchInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "isAsync": true,
+          "name": "FullSearchEnabledAsync",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "List<String>",
+          "isAsync": true,
+          "name": "GetUrlsAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "prefix",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "DocumentParametersDto",
+          "isAsync": true,
+          "name": "GetParametersAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "GetParametersDocumentInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
       ],
       "contentType": "applicationService",
-      "name": "DocumentAppService"
+      "name": "DocumentAppService",
+      "summary": null
     }
   ]
 }

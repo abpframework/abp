@@ -14,7 +14,6 @@ namespace Volo.Abp.FeatureManagement;
 public class FeatureAppService_Tests : FeatureManagementApplicationTestBase
 {
     private readonly IFeatureAppService _featureAppService;
-    private readonly IFeatureValueRepository _featureValueRepository;
     private ICurrentUser _currentUser;
     private readonly FeatureManagementTestData _testData;
 
@@ -22,7 +21,6 @@ public class FeatureAppService_Tests : FeatureManagementApplicationTestBase
     public FeatureAppService_Tests()
     {
         _featureAppService = GetRequiredService<IFeatureAppService>();
-        _featureValueRepository = GetRequiredService<IFeatureValueRepository>();
         _testData = GetRequiredService<FeatureManagementTestData>();
     }
 
@@ -68,6 +66,15 @@ public class FeatureAppService_Tests : FeatureManagementApplicationTestBase
                 x.Value == false.ToString().ToLowerInvariant())
             .ShouldBeTrue();
 
+    }
+
+    [Fact]
+    public async Task ResetToDefaultAsync()
+    {
+        Login(_testData.User1Id);
+        var exception = await Record.ExceptionAsync(async () =>
+            await _featureAppService.DeleteAsync("test", "test"));
+        Assert.Null(exception);
     }
 
     private void Login(Guid userId)

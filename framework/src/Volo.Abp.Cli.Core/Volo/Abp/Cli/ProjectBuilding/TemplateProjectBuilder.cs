@@ -235,6 +235,16 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
         if (args.Theme.HasValue)
         {
             Logger.LogInformation("Theme: " + args.Theme);
+
+            var isProTemplate = !args.TemplateName.IsNullOrEmpty() && args.TemplateName.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
+
+            if (args.UiFramework == UiFramework.Angular && ((isProTemplate && args.Theme != AppProTemplate.DefaultTheme) ||
+                                                            (!isProTemplate && args.Theme != AppTemplate.DefaultTheme)))
+            {
+                Logger.LogWarning("You may need to make some additional changes for this theme. " +
+                                  "See the documentation for more information: " +
+                                  "https://docs.abp.io/en/abp/latest/UI/Angular/Theme-Configurations");
+            }
         }
 
         if(args.ThemeStyle.HasValue) 

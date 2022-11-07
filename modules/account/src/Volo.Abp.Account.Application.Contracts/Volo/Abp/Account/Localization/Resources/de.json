@@ -36,6 +36,7 @@
     "PersonalSettingsSaved": "Persönliche Einstellungen gespeichert",
     "PasswordChanged": "Passwort geändert",
     "NewPasswordConfirmFailed": "Bitte bestätigen Sie das neue Passwort.",
+    "NewPasswordSameAsOld": "Das neue Passwort muss sich vom alten Passwort unterscheiden.",
     "Manage": "Verwalten",
     "MyAccount": "Mein Benutzerkonto",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Selbstregistrierung ist aktiviert",

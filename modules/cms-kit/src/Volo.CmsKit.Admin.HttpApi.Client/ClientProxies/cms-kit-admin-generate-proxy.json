@@ -675,6 +675,43 @@
               },
               "allowAnonymous": false,
               "implementFrom": "Volo.Abp.Application.Services.IDeleteAppService<System.Guid>"
+            },
+            "SetAsHomePageAsyncById": {
+              "uniqueName": "SetAsHomePageAsyncById",
+              "name": "SetAsHomePageAsync",
+              "httpMethod": "PUT",
+              "url": "api/cms-kit-admin/pages/setashomepage/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.CmsKit.Admin.Pages.IPageAdminAppService"
             }
           }
         },
@@ -1188,35 +1225,6 @@
               },
               "allowAnonymous": false,
               "implementFrom": "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService"
-            }
-          }
-        },
-        "Volo.CmsKit.Admin.Contents.ContentAdminController": {
-          "controllerName": "ContentAdmin",
-          "controllerGroupName": "ContentAdmin",
-          "isRemoteService": true,
-          "apiVersion": null,
-          "type": "Volo.CmsKit.Admin.Contents.ContentAdminController",
-          "interfaces": [
-            {
-              "type": "Volo.CmsKit.Admin.Contents.IContentAdminAppService"
-            }
-          ],
-          "actions": {
-            "GetWidgetsAsync": {
-              "uniqueName": "GetWidgetsAsync",
-              "name": "GetWidgetsAsync",
-              "httpMethod": "GET",
-              "url": "api/cms-kit-admin/contents",
-              "supportedVersions": [],
-              "parametersOnMethod": [],
-              "parameters": [],
-              "returnValue": {
-                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.CmsKit.Admin.Contents.ContentWidgetDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.CmsKit.Admin.Contents.ContentWidgetDto>"
-              },
-              "allowAnonymous": null,
-              "implementFrom": "Volo.CmsKit.Admin.Contents.IContentAdminAppService"
             }
           }
         },

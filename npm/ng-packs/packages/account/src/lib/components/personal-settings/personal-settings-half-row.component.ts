@@ -4,12 +4,12 @@ import {
   FormProp,
   EXTENSIBLE_FORM_VIEW_PROVIDER,
 } from '@abp/ng.theme.shared/extensions';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'abp-personal-settings-half-row',
   template: ` <div class="w-50 d-inline">
-    <div class="mb-3 form-group">
+    <div class="mb-3">
       <label [attr.for]="name" class="form-label">{{ displayName | abpLocalization }} </label>
       <input
         type="text"
@@ -27,7 +27,7 @@ export class PersonalSettingsHalfRowComponent {
   public displayName: string;
   public name: string;
   public id: string;
-  public formGroup: FormGroup;
+  public formGroup: UntypedFormGroup;
 
   constructor(@Inject(EXTENSIONS_FORM_PROP) private propData: FormProp) {
     this.displayName = propData.displayName;

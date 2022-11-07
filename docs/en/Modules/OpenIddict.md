@@ -293,6 +293,8 @@ PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
 - `UpdateAbpClaimTypes(default: true)`:  Updates `AbpClaimTypes` to be compatible with the Openiddict claims.
 - `AddDevelopmentEncryptionAndSigningCertificate(default: true)`:  Registers (and generates if necessary) a user-specific development encryption/development signing certificate.
 
+> `AddDevelopmentEncryptionAndSigningCertificate` cannot be used in applications deployed on IIS or Azure App Service: trying to use them on IIS or Azure App Service will result in an exception being thrown at runtime (unless the application pool is configured to load a user profile). To avoid that, consider creating self-signed certificates and storing them in the X.509 certificates store of the host machine(s). Please refer to: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-development-certificate
+
 #### Automatically Removing Orphaned Tokens/Authorizations
 
 The background task that automatically removes orphaned tokens/authorizations. This can be configured by `TokenCleanupOptions` to manage it.

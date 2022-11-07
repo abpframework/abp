@@ -6,7 +6,7 @@ ABP's Dependency Injection system is developed based on Microsoft's [dependency 
 
 ## Modularity
 
-Since ABP is a modular framework, every module defines it's own services and registers via dependency injection in it's own seperate [module class](Module-Development-Basics.md). Example:
+Since ABP is a modular framework, every module defines it's own services and registers via dependency injection in it's own separate [module class](Module-Development-Basics.md). Example:
 
 ````C#
 public class BlogModule : AbpModule

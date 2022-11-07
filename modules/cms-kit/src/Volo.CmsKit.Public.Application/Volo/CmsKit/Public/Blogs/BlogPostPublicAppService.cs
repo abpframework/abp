@@ -6,6 +6,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
+
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
@@ -20,16 +21,13 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
     protected IBlogRepository BlogRepository { get; }
 
     protected IBlogPostRepository BlogPostRepository { get; }
-    protected ContentParser ContentParser { get; }
 
     public BlogPostPublicAppService(
         IBlogRepository blogRepository,
-        IBlogPostRepository blogPostRepository,
-        ContentParser contentParser)
+        IBlogPostRepository blogPostRepository)
     {
         BlogRepository = blogRepository;
         BlogPostRepository = blogPostRepository;
-        ContentParser = contentParser;
     }
 
     public virtual async Task<BlogPostCommonDto> GetAsync(
@@ -39,10 +37,7 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
 
         var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
 
-        var blogPostDto = ObjectMapper.Map<BlogPost, BlogPostCommonDto>(blogPost);
-        blogPostDto.ContentFragments = await ContentParser.ParseAsync(blogPost.Content);
-
-        return blogPostDto;
+        return ObjectMapper.Map<BlogPost, BlogPostCommonDto>(blogPost);
     }
 
     public virtual async Task<PagedResultDto<BlogPostCommonDto>> GetListAsync([NotNull] string blogSlug, BlogPostGetListInput input)

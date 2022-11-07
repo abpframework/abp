@@ -1,7 +1,9 @@
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Shouldly;
+using Volo.Abp.Localization.TestResources.External;
 using Volo.Abp.Localization.TestResources.Source;
 using Volo.Abp.Testing;
 using Xunit;
@@ -310,7 +312,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
         using (CultureHelper.Use("tr"))
         {
             var localizedStrings = _localizer
-                .GetAllStrings(true, includeBaseLocalizers: true)
+                .GetAllStrings(true, includeBaseLocalizers: true, includeDynamicContributors: true)
                 .ToList();
 
             localizedStrings.ShouldContain(
@@ -339,7 +341,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
         using (CultureHelper.Use("tr"))
         {
             var localizedStrings = _localizer
-                .GetAllStrings(true, includeBaseLocalizers: false)
+                .GetAllStrings(true, includeBaseLocalizers: false, includeDynamicContributors: true)
                 .ToList();
 
             localizedStrings.ShouldNotContain(
@@ -358,5 +360,19 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
                       ls.ResourceNotFound == false
             );
         }
+    }
+
+    [Fact]
+    public async Task Should_Get_Supported_Cultures()
+    {
+        var cultures = await _localizer.GetSupportedCulturesAsync();
+        cultures.Count().ShouldBeGreaterThan(0);
+    }
+
+    [Fact]
+    public void Should_Get_Localized_Text_From_External()
+    {
+        var externalLocalizer = _localizerFactory.CreateByResourceName(TestExternalLocalizationStore.TestExternalResourceNames.ExternalResource1);
+        externalLocalizer["Car"].Value.ShouldBe("Car");
     }
 }

@@ -15,8 +15,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 [ExposeServices(typeof(IAbpApplicationConfigurationAppService), typeof(AbpApplicationConfigurationClientProxy))]
 public partial class AbpApplicationConfigurationClientProxy : ClientProxyBase<IAbpApplicationConfigurationAppService>, IAbpApplicationConfigurationAppService
 {
-    public virtual async Task<ApplicationConfigurationDto> GetAsync()
+    public virtual async Task<ApplicationConfigurationDto> GetAsync(ApplicationConfigurationRequestOptions options)
     {
-        return await RequestAsync<ApplicationConfigurationDto>(nameof(GetAsync));
+        return await RequestAsync<ApplicationConfigurationDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(ApplicationConfigurationRequestOptions), options }
+        });
     }
 }

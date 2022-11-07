@@ -1,4 +1,4 @@
-import { EXTENSIONS_FORM_PROP_DATA, EXTENSIONS_FORM_PROP } from './../../tokens/extensions.token';
+import { EXTENSIONS_FORM_PROP, EXTENSIONS_FORM_PROP_DATA } from './../../tokens/extensions.token';
 import { ABP, AbpValidators, ConfigStateService, TrackByService } from '@abp/ng.core';
 import {
   AfterViewInit,
@@ -16,8 +16,8 @@ import {
 } from '@angular/core';
 import {
   ControlContainer,
-  FormGroup,
   FormGroupDirective,
+  UntypedFormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
@@ -60,6 +60,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   asterisk = '';
 
+  containerClassName = 'mb-3';
+
   options$: Observable<ABP.Option<any>[]> = of([]);
 
   validators: ValidatorFn[] = [];
@@ -68,7 +70,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   typeaheadModel: any;
 
-  private readonly form: FormGroup;
+  private readonly form: UntypedFormGroup;
 
   disabledFn = (data: PropData) => false;
 
@@ -134,6 +136,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   ngAfterViewInit() {
     if (this.first && this.fieldRef) {
       this.fieldRef.nativeElement.focus();
+      this.cdRef.detectChanges();
     }
   }
 
@@ -183,7 +186,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges({ prop, data }: SimpleChanges) {
     const currentProp = prop?.currentValue as FormProp;
-    const { options, readonly, disabled, validators, template } = currentProp || {};
+    const { options, readonly, disabled, validators, className, template } = currentProp || {};
     if (template) {
       this.injectorForCustomComponent = Injector.create({
         providers: [
@@ -210,6 +213,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     if (validators) {
       this.validators = validators(this.data);
       this.setAsterisk();
+    }
+    if (className !== undefined) {
+      this.containerClassName = className;
     }
 
     const [keyControl, valueControl] = this.getTypeaheadControls();

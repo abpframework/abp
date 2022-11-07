@@ -1,0 +1,71 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "app": {}
+    }
+  },
+  "packages": {
+    "OpenIddict.Demo.Server": {
+      "path": "app/OpenIddict.Demo.Server/OpenIddict.Demo.Server.abppkg.json",
+      "folder": "app"
+    },
+    "OpenIddict.Demo.Client.Mvc": {
+      "path": "app/OpenIddict.Demo.Client.Mvc/OpenIddict.Demo.Client.Mvc.abppkg.json",
+      "folder": "app"
+    },
+    "OpenIddict.Demo.Client.Console": {
+      "path": "app/OpenIddict.Demo.Client.Console/OpenIddict.Demo.Client.Console.abppkg.json",
+      "folder": "app"
+    },
+    "OpenIddict.Demo.API": {
+      "path": "app/OpenIddict.Demo.API/OpenIddict.Demo.API.abppkg.json",
+      "folder": "app"
+    },
+    "OpenIddict.Demo.Client.BlazorWASM": {
+      "path": "app/OpenIddict.Demo.Client.BlazorWASM/OpenIddict.Demo.Client.BlazorWASM.abppkg.json",
+      "folder": "app"
+    },
+    "Volo.Abp.OpenIddict.Domain": {
+      "path": "src/Volo.Abp.OpenIddict.Domain/Volo.Abp.OpenIddict.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.OpenIddict.Domain.Shared": {
+      "path": "src/Volo.Abp.OpenIddict.Domain.Shared/Volo.Abp.OpenIddict.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.OpenIddict.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.OpenIddict.EntityFrameworkCore/Volo.Abp.OpenIddict.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.OpenIddict.MongoDB": {
+      "path": "src/Volo.Abp.OpenIddict.MongoDB/Volo.Abp.OpenIddict.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.OpenIddict.TestBase": {
+      "path": "test/Volo.Abp.OpenIddict.TestBase/Volo.Abp.OpenIddict.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.OpenIddict.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.OpenIddict.EntityFrameworkCore.Tests/Volo.Abp.OpenIddict.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.OpenIddict.MongoDB.Tests": {
+      "path": "test/Volo.Abp.OpenIddict.MongoDB.Tests/Volo.Abp.OpenIddict.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.OpenIddict.Domain.Tests": {
+      "path": "test/Volo.Abp.OpenIddict.Domain.Tests/Volo.Abp.OpenIddict.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.OpenIddict.AspNetCore": {
+      "path": "src/Volo.Abp.OpenIddict.AspNetCore/Volo.Abp.OpenIddict.AspNetCore.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.PermissionManagement.Domain.OpenIddict": {
+      "path": "src/Volo.Abp.PermissionManagement.Domain.OpenIddict/Volo.Abp.PermissionManagement.Domain.OpenIddict.abppkg.json",
+      "folder": "src"
+    }
+  }
+}

@@ -3,38 +3,48 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.CmsKit.Admin.Contents;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Web.Contents;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents;
 
 public class AddWidgetModal : AbpPageModel
 {
-    protected IContentAdminAppService ContentAdminAppService { get; }
 
     [BindProperty]
     public ContentViewModel ViewModel { get; set; }
 
     public List<SelectListItem> Widgets { get; set; } = new();
 
-    public AddWidgetModal(IContentAdminAppService contentAdminAppService)
+    private readonly CmsKitContentWidgetOptions _options;
+
+    public AddWidgetModal(IOptions<CmsKitContentWidgetOptions> options)
     {
-        ContentAdminAppService = contentAdminAppService;
+        _options = options.Value;
     }
 
     public async Task OnGetAsync()
     {
-        var widgets = await ContentAdminAppService.GetWidgetsAsync();
+        var widgets = _options.WidgetConfigs
+                .Select(n =>
+                    new ContentWidgetDto
+                    {
+                        Key = n.Key,
+                        Details = new WidgetDetailDto() { EditorComponentName = n.Value.EditorComponentName, Name = n.Value.Name },
+
+                    }).ToList();
+        
         ViewModel = new ContentViewModel()
         {
-            Details = widgets.Items.Select(p => p.Details).ToList()
+            Details = widgets.Select(p => p.Details).ToList()
         };
 
         Widgets = new List<SelectListItem>() { new(string.Empty, string.Empty) };
         Widgets.AddRange(widgets
-            .Items
             .Select(w => new SelectListItem(w.Key, w.Details.Name))
             .ToList());
     }

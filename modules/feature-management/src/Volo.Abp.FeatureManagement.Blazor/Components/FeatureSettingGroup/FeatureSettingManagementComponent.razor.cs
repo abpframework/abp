@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Components;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.FeatureManagement.Localization;
@@ -11,20 +11,22 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components.FeatureSettingGroup;
 public partial class FeatureSettingManagementComponent : AbpComponentBase
 {
     [Inject]
-    protected IStringLocalizer<AbpFeatureManagementResource> L { get; set; }
-    
-    [Inject]
     protected PermissionChecker PermissionChecker { get; set; }
     
     protected FeatureManagementModal FeatureManagementModal;
     
     protected FeatureSettingViewModel Settings;
 
+    public FeatureSettingManagementComponent()
+    {
+        LocalizationResource = typeof(AbpFeatureManagementResource);
+    }
+
     protected async override Task OnInitializedAsync()
     {
         Settings = new FeatureSettingViewModel 
         {
-            HasManageHostFeaturesPermission = await PermissionChecker.IsGrantedAsync(FeatureManagementPermissions.ManageHostFeatures)
+            HasManageHostFeaturesPermission = await AuthorizationService.IsGrantedAsync(FeatureManagementPermissions.ManageHostFeatures)
         };
     }
 
@@ -32,9 +34,4 @@ public partial class FeatureSettingManagementComponent : AbpComponentBase
     {
        await FeatureManagementModal.OpenAsync(TenantFeatureValueProvider.ProviderName);
     }
-}
-
-public class FeatureSettingViewModel
-{
-    public bool HasManageHostFeaturesPermission { get; set; }
 }

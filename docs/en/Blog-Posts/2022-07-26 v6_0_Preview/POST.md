@@ -10,16 +10,16 @@ Try this version and provide feedback for the stable ABP v6.0! Thank you to all.
 
 Follow the steps below to try version 6.0.0 RC today:
 
-1) **Upgrade** the ABP CLI to version `6.0.0-rc.1` using a command line terminal:
+1) **Upgrade** the ABP CLI to version `6.0.0-rc.5` using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 6.0.0-rc.1
+dotnet tool update Volo.Abp.Cli -g --version 6.0.0-rc.5
 ````
 
 **or install** it if you haven't before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 6.0.0-rc.1
+dotnet tool install Volo.Abp.Cli -g --version 6.0.0-rc.5
 ````
 
 2) Create a **new application** with the `--preview` option:
@@ -199,7 +199,7 @@ The following improvements have been made on [eShopOnAbp project](https://github
 * Performance Improvements have been made in the **Settings Module** and tabs on the *Settings* page are lazy loading now.
 * Some improvements have been made in the CMS Kit Module. You can see the improvements from [here](https://github.com/abpframework/abp/issues/11965).
 
-If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/6.0.0-rc.1), which contains a list of all the issues and pull requests closed in this version.
+If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/6.0.0-rc.5), which contains a list of all the issues and pull requests closed in this version.
 
 
 

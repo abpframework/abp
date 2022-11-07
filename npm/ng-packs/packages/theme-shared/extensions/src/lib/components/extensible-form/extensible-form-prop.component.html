@@ -1,16 +1,13 @@
-<ng-container [ngSwitch]="getComponent(prop)"
-              *abpPermission="prop.permission; runChangeDetection: false">
-
+<ng-container
+  [ngSwitch]="getComponent(prop)"
+  *abpPermission="prop.permission; runChangeDetection: false"
+>
   <ng-template ngSwitchCase="template">
-    <ng-container
-      *ngComponentOutlet="prop.template;injector:injectorForCustomComponent">
+    <ng-container *ngComponentOutlet="prop.template; injector: injectorForCustomComponent">
     </ng-container>
   </ng-template>
 
-  <div
-    class="mb-3 form-group"
-  >
-
+  <div [ngClass]="containerClassName" class="mb-3">
     <ng-template ngSwitchCase="input">
       <ng-template [ngTemplateOutlet]="label"></ng-template>
       <input
@@ -26,7 +23,7 @@
     </ng-template>
 
     <ng-template ngSwitchCase="hidden">
-      <input [formControlName]="prop.name" type="hidden"/>
+      <input [formControlName]="prop.name" type="hidden" />
     </ng-template>
 
     <ng-template ngSwitchCase="checkbox">
@@ -102,7 +99,7 @@
           [class.is-invalid]="typeahead.classList.contains('is-invalid')"
           class="form-control"
         />
-        <input [formControlName]="prop.name" type="hidden"/>
+        <input [formControlName]="prop.name" type="hidden" />
       </div>
     </ng-template>
 
@@ -142,11 +139,14 @@
       ></textarea>
     </ng-template>
   </div>
-
 </ng-container>
 
 <ng-template #label let-classes>
-  <label [htmlFor]="prop.id" [ngClass]="classes || 'form-label'" x
-  >{{ prop.displayName | abpLocalization }} {{ asterisk }}</label
-  >
+  <label [htmlFor]="prop.id" [ngClass]="classes || 'form-label'">
+    <ng-container *ngIf="prop.displayTextResolver; else displayNameTemplate">
+      {{ prop.displayTextResolver(data) | abpLocalization }}
+    </ng-container>
+    <ng-template #displayNameTemplate> {{ prop.displayName | abpLocalization }}</ng-template>
+    {{ asterisk }}
+  </label>
 </ng-template>

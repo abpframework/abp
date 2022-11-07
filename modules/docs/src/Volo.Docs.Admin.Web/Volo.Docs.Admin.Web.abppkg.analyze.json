@@ -1,11 +1,24 @@
 {
   "name": "Volo.Docs.Admin.Web",
-  "hash": "213ccad3d288d801779462d0fb32d938",
+  "hash": "dd7cce7e2fd63c55998fa4c2030c5cd6",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Docs.Admin.Application.Contracts",
+          "namespace": "Volo.Docs.Admin",
+          "name": "DocsAdminApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+          "name": "AbpAspNetCoreMvcUiBootstrapModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "DocsAdminWebModule"
+      "name": "DocsAdminWebModule",
+      "summary": null
     }
   ]
 }

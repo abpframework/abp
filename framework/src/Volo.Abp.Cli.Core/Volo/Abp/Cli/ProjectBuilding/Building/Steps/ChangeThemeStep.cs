@@ -31,9 +31,9 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     protected void ChangeToBasicTheme(ProjectBuildContext context)
     {
         var defaultThemeName = context.BuildArgs.TemplateName is AppTemplate.TemplateName or AppNoLayersTemplate.TemplateName
-            ? "LeptonXLite" 
+            ? "LeptonXLite"
             : "LeptonX";
-        
+
         #region MVC Projects
 
         ChangeThemeToBasicForMvcProjects(context, defaultThemeName);
@@ -41,14 +41,14 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         #endregion
 
         #region MyCompanyName.MyProjectName.Blazor
-        
+
         ReplacePackageReferenceWithProjectReference(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyCompanyName.MyProjectName.Blazor.csproj",
             $"Volo.Abp.AspNetCore.Components.WebAssembly.{defaultThemeName}Theme",
             @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj"
             );
-        
+
         ChangeNamespaceAndKeyword(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
@@ -58,31 +58,40 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "AbpAspNetCoreComponentsWebAssemblyBasicThemeModule"
         );
 
-        ChangeNamespace(
+        ChangeNamespaceAndKeyword(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
             $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Themes.{defaultThemeName}",
+            "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic",
+            $"AbpAspNetCoreComponentsWebAssembly{defaultThemeName}ThemeModule",
+            "AbpAspNetCoreComponentsWebAssemblyBasicThemeModule"
+        );
+
+        ChangeNamespace(
+            context,
+            "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
+            $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Components",
             "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic"
         );
-        
+
         #endregion
 
         #region Blazor.Server Projects
 
-        ChangeThemeToBasicForBlazorServerProjects(context, defaultThemeName);
-        
+        ChangeThemeToBasicForBlazorProjects(context, defaultThemeName);
+
         #endregion
 
         #region Angular
 
         var angularPackageName = context.BuildArgs.TemplateName is AppTemplate.TemplateName or AppNoLayersTemplate.TemplateName
-            ? "@abp/ng.theme.lepton-x" 
+            ? "@abp/ng.theme.lepton-x"
             : "@volosoft/abp.ng.theme.lepton-x";
-        
+
         ReplaceImportPackage(
-            context, 
+            context,
             "/angular/src/app/app.module.ts",
-            angularPackageName, 
+            angularPackageName,
             "@abp/ng.theme.basic"
         );
 
@@ -98,23 +107,41 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "ThemeLeptonXModule",
             "ThemeBasicModule"
         );
-        
+
         RemoveLinesByStatement(
             context,
             "/angular/angular.json",
             "node_modules/bootstrap-icons/font/bootstrap-icons.css"
         );
 
+        if(defaultThemeName == "LeptonX")
+        {
+            ReplaceMethodNames(
+                context,
+                "/angular/src/app/app.module.ts",
+                "HttpErrorComponent, ",
+                ""
+            );
+
+            ChangeModuleImportBetweenStatements(
+                context,
+                "/angular/src/app/app.module.ts",
+                "ThemeSharedModule.forRoot",
+                "AccountAdminConfigModule.forRoot",
+                "ThemeSharedModule.forRoot(),"
+            );
+        }
+
         #endregion
     }
 
     protected void ChangeToLeptonTheme(ProjectBuildContext context)
     {
-        #region Common 
-        
+        #region Common
+
         RenameLeptonXFolders(context, folderName: "Lepton");
         AddLeptonThemeManagementReferenceToProjects(context);
-        
+
         #endregion
 
         #region MVC Projects
@@ -122,16 +149,16 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ChangeThemeToLeptonForMvcProjects(context);
 
         #endregion
-        
+
         #region MyCompanyName.MyProjectName.Blazor
-        
+
         ReplacePackageReferenceWithProjectReference(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyCompanyName.MyProjectName.Blazor.csproj",
             "Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXTheme",
             @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.WebAssembly.LeptonTheme\Volo.Abp.AspNetCore.Components.WebAssembly.LeptonTheme.csproj"
         );
-        
+
         ChangeNamespaceAndKeyword(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
@@ -150,7 +177,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         #endregion
 
-        #region MyCompanyName.MyProjectName.Blazor.Server && MyCompanyName.MyProjectName.Blazor.Server.Tiered 
+        #region MyCompanyName.MyProjectName.Blazor.Server && MyCompanyName.MyProjectName.Blazor.Server.Tiered
 
         ChangeThemeToLeptonForBlazorServerProjects(context);
 
@@ -159,9 +186,9 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         #region Angular
 
         ReplaceImportPackage(
-            context, 
+            context,
             "/angular/src/app/app.module.ts",
-            "@volosoft/abp.ng.theme.lepton-x", 
+            "@volosoft/abp.ng.theme.lepton-x",
             "@volo/abp.ng.theme.lepton"
         );
 
@@ -177,7 +204,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "ThemeLeptonXModule",
             "ThemeLeptonModule"
         );
-        
+
         RemoveLinesByStatement(
             context,
             "/angular/angular.json",
@@ -196,7 +223,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         #region MyCompanyName.MyProjectName.Blazor.Server && MyCompanyName.MyProjectName.Blazor.Server.Mongo - (app-nolayers)
 
         ChangeThemeToLeptonForNoLayersBlazorServerProjects(context);
-        
+
         #endregion
     }
 
@@ -215,7 +242,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             {
                 continue;
             }
-            
+
             AddProjectReference(file, $@"..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.{projectName}\Volo.Abp.LeptonTheme.Management.{projectName}.csproj");
             AddModuleDependency(moduleFile, projectName, $"LeptonThemeManagement{ConvertProjectNameToModuleName($"{projectName}")}Module");
         }
@@ -223,12 +250,12 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
     private void ChangeThemeToLeptonForMvcProjects(ProjectBuildContext context)
     {
-        var projectNames = new[] 
+        var projectNames = new[]
         {
-            ".Web", ".HttpApi.Host", ".AuthServer", 
+            ".Web", ".HttpApi.Host", ".AuthServer",
             "" //for app-nolayers-mvc
         };
-        
+
         foreach (var projectName in projectNames)
         {
             var projectPath = $"/MyCompanyName.MyProjectName{projectName}/MyCompanyName.MyProjectName{projectName}.csproj";
@@ -237,20 +264,20 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             {
                 continue;
             }
-        
+
             var moduleFile = ConvertProjectFileToModuleFile(context, projectFile);
             if (moduleFile == null)
             {
                 continue;
             }
-        
+
             ReplacePackageReferenceWithProjectReference(
                 context,
                 projectFile.Name,
                 "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
                 @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
             );
-        
+
             ChangeNamespaceAndKeyword(
                 context,
                 moduleFile.Name,
@@ -259,7 +286,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 "LeptonXThemeBundles.Styles.Global",
                 "LeptonThemeBundles.Styles.Global"
             );
-        
+
             ChangeNamespaceAndKeyword(
                 context,
                 moduleFile.Name,
@@ -268,7 +295,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 "AbpAspNetCoreMvcUiLeptonXThemeModule",
                 "AbpAspNetCoreMvcUiLeptonThemeModule"
             );
-        
+
             RemoveLinesByStatement(
                 context,
                 moduleFile.Name,
@@ -276,10 +303,10 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             );
         }
     }
-    
+
     private void AddLeptonThemeManagementReferenceToProjects(ProjectBuildContext context)
     {
-        var projects = new Dictionary<string, string> 
+        var projects = new Dictionary<string, string>
         {
             {"Domain", "MyCompanyName.MyProjectName.Domain.csproj"},
             {"Domain.Shared", "MyCompanyName.MyProjectName.Domain.Shared.csproj"},
@@ -288,9 +315,9 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             {"HttpApi", "MyCompanyName.MyProjectName.HttpApi.csproj"},
             {"HttpApi.Client", "MyCompanyName.MyProjectName.HttpApi.Client.csproj"}
         };
-        
+
         AddUiProjectToProjects(projects, context);
-        
+
         foreach (var project in projects)
         {
             AddLeptonThemeManagementReference(context, project);
@@ -306,7 +333,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             {"HttpApi.Client", "MyCompanyName.MyProjectName.AdministrationService.HttpApi.Client.csproj"},
             {"Web", "MyCompanyName.MyProjectName.AdministrationService.Web.csproj"}
         };
-        
+
         foreach (var microserviceServiceProject in microserviceServiceProjects)
         {
             AddLeptonThemeManagementReference(context, microserviceServiceProject);
@@ -319,7 +346,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         {
             return;
         }
-        
+
         switch (context.BuildArgs.UiFramework)
         {
             case UiFramework.Mvc:
@@ -334,8 +361,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 break;
         }
     }
-    
-    private void AddLeptonThemeManagementReference(ProjectBuildContext context, KeyValuePair<string, string> projectInfo) 
+
+    private void AddLeptonThemeManagementReference(ProjectBuildContext context, KeyValuePair<string, string> projectInfo)
     {
         var reference = $@"..\..\..\..\..\lepton-theme\src\Volo.Abp.LeptonTheme.Management.{projectInfo.Key}\Volo.Abp.LeptonTheme.Management.{projectInfo.Key}.csproj";
         var projectFile = context.Files.FirstOrDefault(f => !f.Name.Contains("Test") && f.Name.Contains(projectInfo.Value) && f.Name.Contains(".csproj"));
@@ -349,7 +376,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         {
             return;
         }
-            
+
         AddProjectReference(projectFile, reference);
 
         AddModuleDependency(moduleFile, projectInfo.Key, $"LeptonThemeManagement{ConvertProjectNameToModuleName(projectInfo.Key)}Module",
@@ -373,12 +400,12 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 lines[i - 2] = lines[i - 2] + "," + Environment.NewLine + $"\ttypeof({dependency})";
             }
         }
-        
+
         moduleFile.SetLines(lines);
     }
 
-    protected void ReplacePackageReferenceWithProjectReference(        
-        ProjectBuildContext context, 
+    protected void ReplacePackageReferenceWithProjectReference(
+        ProjectBuildContext context,
         string targetProjectFilePath,
         string packageReference,
         string projectReference)
@@ -388,16 +415,16 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         {
             return;
         }
-      
+
         file.NormalizeLineEndings();
-        
+
         var lines = file.GetLines();
         var lineIndex = lines.FindIndex(line => line.Contains("PackageReference") && line.Contains(packageReference));
         if (lineIndex == -1)
         {
             return;
         }
-        
+
         lines[lineIndex] = lines[lineIndex].Replace(lines[lineIndex], $"\t<ProjectReference Include=\"{projectReference}\" />");
         file.SetLines(lines);
     }
@@ -480,13 +507,13 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         {
             return;
         }
-        
+
         lines[lineIndex] = lines[lineIndex].Replace(oldImportPackage, newImportPackage);
         file.SetLines(lines);
     }
 
     protected void RemoveLinesByStatement(
-        ProjectBuildContext context,        
+        ProjectBuildContext context,
         string filePath,
         string statement)
     {
@@ -497,7 +524,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         }
 
         file.NormalizeLineEndings();
-        
+
         var lines = file.GetLines();
         for (var i = 0; i < lines.Length; i++)
         {
@@ -510,8 +537,43 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         file.SetLines(lines.Where(x => x != null));
     }
 
+    private void ChangeModuleImportBetweenStatements(
+        ProjectBuildContext context,
+        string filePath,
+        string firstStatement,
+        string lastStatement,
+        string newStatement)
+    {
+        var file = context.Files.FirstOrDefault(x => x.Name.Contains(filePath));
+        if (file == null)
+        {
+            return;
+        }
+
+        file.NormalizeLineEndings();
+
+        var lines = file.GetLines();
+        var firstLineIndex = lines.FindIndex(line => line.Contains(firstStatement));
+        var lastLineIndex = lines.FindIndex(line => line.Contains(lastStatement));
+
+        if(firstLineIndex == -1 || lastLineIndex == -1)
+        {
+            return;
+        }
+
+        lines[firstLineIndex] = newStatement;
+
+        for (var i = firstLineIndex + 1; i <= lastLineIndex; i++)
+        {
+            lines[i] = null;
+        }
+
+
+        file.SetLines(lines.Where(x => x != null));
+    }
+
     protected void ReplaceMethodNames(
-        ProjectBuildContext context,        
+        ProjectBuildContext context,
         string filePath,
         string oldMethodName,
         string newMethodName)
@@ -523,7 +585,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         }
 
         file.NormalizeLineEndings();
-        
+
         var lines = file.GetLines();
         for (var i = 0; i < lines.Length; i++)
         {
@@ -532,17 +594,17 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 lines[i] = lines[i].Replace(oldMethodName, newMethodName);
             }
         }
-        
+
         file.SetLines(lines);
     }
-    
+
     private static void AddProjectReference(FileEntry file, string reference)
     {
         if (!file.Name.Contains(".csproj"))
         {
             return;
         }
-        
+
         var doc = new XmlDocument() { PreserveWhitespace = true };
         using (var stream = StreamHelper.GenerateStreamFromString(file.Content))
         {
@@ -594,19 +656,19 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             file.SetContent(doc.OuterXml);
         }
     }
-    
+
     private static FileEntry ConvertProjectFileToModuleFile(ProjectBuildContext context, FileEntry projectFile)
     {
         var splittedProjectFileName = projectFile.Name.RemovePostFix("/").Split("/");
-        
+
         splittedProjectFileName = splittedProjectFileName.Take(splittedProjectFileName.Length - 1).ToArray();
-        
+
         var fileName = splittedProjectFileName?.Last();
         if (fileName == null)
         {
             return null;
         }
-        
+
         fileName = fileName
             .Replace("MyCompanyName.", "")
             .Replace(".csproj", "Module")
@@ -614,12 +676,12 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         return context.Files.FirstOrDefault(f => f.Name.Contains(splittedProjectFileName.Last() + "/" + fileName) && f.Name.EndsWith("Module.cs"));
     }
-    
+
     private static string ConvertProjectNameToModuleName(string moduleName)
     {
         return moduleName.Replace(".", "");
     }
-    
+
     private static void RenameLeptonXFolders(ProjectBuildContext context, string folderName)
     {
         var leptonXFiles = context.Files.Where(x => x.Name.Contains("LeptonX") && x.IsDirectory);
@@ -647,7 +709,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
                 @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
             );
-        
+
             ChangeNamespaceAndKeyword(
                 context,
                 $"/MyCompanyName.MyProjectName{project.Key}/{project.Value}.cs",
@@ -667,8 +729,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             );
         }
     }
-    
-    private void ChangeThemeToBasicForBlazorServerProjects(ProjectBuildContext context, string defaultThemeName)
+
+    private void ChangeThemeToBasicForBlazorProjects(ProjectBuildContext context, string defaultThemeName)
     {
         var projects = new Dictionary<string, string>
         {
@@ -733,7 +795,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             ChangeNamespaceAndKeyword(
                 context,
                 $"/MyCompanyName.MyProjectName.{project.Key}/Pages/_Host.cshtml",
-                $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Themes.{defaultThemeName}",
+                $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Components",
                 "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic",
                 $"Blazor{defaultThemeName}ThemeBundles.Styles.Global",
                 "BlazorBasicThemeBundles.Styles.Global"

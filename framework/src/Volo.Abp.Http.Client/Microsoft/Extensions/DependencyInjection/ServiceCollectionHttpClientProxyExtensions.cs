@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Castle.DynamicProxy;
 using JetBrains.Annotations;
 using Volo.Abp;
@@ -27,14 +29,22 @@ public static class ServiceCollectionHttpClientProxyExtensions
     /// The name of the remote service configuration to be used by the Static HTTP Client proxies.
     /// See <see cref="AbpRemoteServiceOptions"/>.
     /// </param>
+    /// <param name="applicationServiceTypes">
+    /// Can be set to filter the application service types to be registered.
+    /// Default value: All.
+    /// </param>
     public static IServiceCollection AddStaticHttpClientProxies(
         [NotNull] this IServiceCollection services,
         [NotNull] Assembly assembly,
-        [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName)
+        [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
+        ApplicationServiceTypes applicationServiceTypes = ApplicationServiceTypes.All)
     {
         Check.NotNull(services, nameof(assembly));
 
-        var serviceTypes = assembly.GetTypes().Where(IsSuitableForClientProxying).ToArray();
+        var serviceTypes = assembly
+            .GetTypes()
+            .Where(x => IsSuitableForClientProxying(x, applicationServiceTypes))
+            .ToArray();
 
         foreach (var serviceType in serviceTypes)
         {
@@ -63,15 +73,23 @@ public static class ServiceCollectionHttpClientProxyExtensions
     /// <param name="asDefaultServices">
     /// True, to register the HTTP client proxy as the default implementation for the services.
     /// </param>
+    /// <param name="applicationServiceTypes">
+    /// Can be set to filter the application service types to be registered.
+    /// Default value: All.
+    /// </param>
     public static IServiceCollection AddHttpClientProxies(
         [NotNull] this IServiceCollection services,
         [NotNull] Assembly assembly,
         [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
-        bool asDefaultServices = true)
+        bool asDefaultServices = true,
+        ApplicationServiceTypes applicationServiceTypes = ApplicationServiceTypes.All)
     {
         Check.NotNull(services, nameof(assembly));
 
-        var serviceTypes = assembly.GetTypes().Where(IsSuitableForClientProxying).ToArray();
+        var serviceTypes = assembly
+            .GetTypes()
+            .Where(x => IsSuitableForClientProxying(x, applicationServiceTypes))
+            .ToArray();
 
         foreach (var serviceType in serviceTypes)
         {
@@ -196,6 +214,21 @@ public static class ServiceCollectionHttpClientProxyExtensions
             {
                 clientBuildAction(remoteServiceConfigurationName, provider, client);
             }
+        }).ConfigurePrimaryHttpMessageHandler(provider =>
+        {
+            var handler = new HttpClientHandler();
+            
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Create("BROWSER")))
+            {
+                handler.UseCookies = false;
+            }
+            
+            foreach (var handlerAction in preOptions.ProxyClientHandlerActions)
+            {
+                handlerAction(remoteServiceConfigurationName, provider, handler);
+            }
+
+            return handler;
         });
 
         foreach (var clientBuildAction in preOptions.ProxyClientBuildActions)
@@ -216,14 +249,30 @@ public static class ServiceCollectionHttpClientProxyExtensions
     /// Currently the type is checked statically against some fixed conditions.
     /// </summary>
     /// <param name="type">Type to check</param>
+    /// <param name="applicationServiceTypes">Option to filter application service types</param>
     /// <returns>True, if the type is suitable for proxying. Otherwise false.</returns>
-    private static bool IsSuitableForClientProxying(Type type)
+    private static bool IsSuitableForClientProxying(
+        Type type,
+        ApplicationServiceTypes applicationServiceTypes)
     {
-        //TODO: Add option to change type filter
+        if (!type.IsInterface || 
+            !type.IsPublic || 
+            type.IsGenericType || 
+            !typeof(IRemoteService).IsAssignableFrom(type))
+        {
+            return false;
+        }
 
-        return type.IsInterface
-            && type.IsPublic
-            && !type.IsGenericType
-            && typeof(IRemoteService).IsAssignableFrom(type);
+        if (applicationServiceTypes == ApplicationServiceTypes.ApplicationServices)
+        {
+            return !IntegrationServiceAttribute.IsDefinedOrInherited(type);
+        }
+        
+        if (applicationServiceTypes == ApplicationServiceTypes.IntegrationServices)
+        {
+            return IntegrationServiceAttribute.IsDefinedOrInherited(type);
+        }
+
+        return true;
     }
 }

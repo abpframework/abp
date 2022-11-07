@@ -142,7 +142,7 @@
     "DomainDrivenDesign": "Domain Driven Design",
     "CrossCuttingConcerns": "Cross Cutting Concerns",
     "AbpCommunity": "ABP Community",
-    "Footer_GithubStarCount": "{0} Star on GitHub",
+    "Footer_GithubStarCount": "{0} Stars on GitHub",
     "Footer_NugetDownloadCount": "{0} Downloads on NuGet",
     "AbpDescription": "ABP is an open source application framework focused on AspNet Core based web application development. Don't repeat yourself, focus on your own business code.",
     "Layout_AbpFramework_MetaTitle": "ABP Framework - Open Source Web Application Framework",

@@ -18,7 +18,7 @@ To solve the versioning problem, we created a **standard set of packages** those
 The benefit of a **standard package** is:
 
 * It depends on a **standard version** of a package. Depending on this package is **safe** because all modules depend on the same version.
-* It contains the mappings copy library resources (js, css, img... files) from the **node_modules** folder to **wwwroot/libs** folder. See the *Mapping The Library Resources* section for more.
+* It contains the mappings copy library resources (js, css, img... files) from the `node_modules` folder to `wwwroot/libs` folder. See the *Mapping The Library Resources* section for more.
 
 Depending on a standard package is easy. Just add it to your **package.json** file like you normally do. Example:
 
@@ -57,7 +57,7 @@ See current standard packages for examples.
 
 ### Mapping The Library Resources
 
-Using NPM packages and NPM/Yarn tool is the de facto standard for client side libraries. NPM/Yarn tool creates a **node_modules** folder in the root folder of your web project. 
+Using NPM packages and NPM/Yarn tool is the de facto standard for client side libraries. NPM/Yarn tool creates a **node_modules** folder in the root folder of your web project.
 
 Next challenge is copying needed resources (js, css, img... files) from the `node_modules` into a folder inside the **wwwroot** folder to make it accessible to the clients/browsers.
 
@@ -108,7 +108,7 @@ Once you properly configure the `abp.resourcemapping.js` file, you can run the f
 abp install-libs
 ````
 
-When you run this command, all packages will copy their own resources into the **wwwroot/libs** folder. Running `abp install-libs` is only necessary if you make a change in your dependencies in the **package.json** file.
+When you run this command, all packages will copy their own resources into the `wwwroot/libs` folder. Running `abp install-libs` is only necessary if you make a change in your dependencies in the **package.json** file.
 
 #### See Also
 

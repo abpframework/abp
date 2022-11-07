@@ -4,6 +4,7 @@ import { UpdateProfileDto } from '@abp/ng.account.core/proxy';
 
 export interface AccountConfigOptions {
   redirectUrl?: string;
+  isPersonalSettingsChangedConfirmationActive?: boolean;
   editFormPropContributors?: AccountEditFormPropContributors;
 }
 export type AccountEditFormPropContributors = Partial<{

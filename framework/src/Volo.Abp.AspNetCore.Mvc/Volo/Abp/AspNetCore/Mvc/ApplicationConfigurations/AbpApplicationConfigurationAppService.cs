@@ -17,6 +17,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.External;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;
@@ -82,7 +83,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         _multiTenancyOptions = multiTenancyOptions.Value;
     }
 
-    public virtual async Task<ApplicationConfigurationDto> GetAsync()
+    public virtual async Task<ApplicationConfigurationDto> GetAsync(ApplicationConfigurationRequestOptions options)
     {
         //TODO: Optimize & cache..?
 
@@ -93,7 +94,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             Auth = await GetAuthConfigAsync(),
             Features = await GetFeaturesConfigAsync(),
             GlobalFeatures = await GetGlobalFeaturesConfigAsync(),
-            Localization = await GetLocalizationConfigAsync(),
+            Localization = await GetLocalizationConfigAsync(options),
             CurrentUser = GetCurrentUser(),
             Setting = await GetSettingConfigAsync(),
             MultiTenancy = GetMultiTenancy(),
@@ -184,8 +185,6 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         foreach (var policyName in otherPolicyNames)
         {
-            authConfig.Policies[policyName] = true;
-
             if (await _authorizationService.IsGrantedAsync(policyName))
             {
                 authConfig.GrantedPolicies[policyName] = true;
@@ -195,7 +194,6 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         var result = await _permissionChecker.IsGrantedAsync(abpPolicyNames.ToArray());
         foreach (var (key, value) in result.Result)
         {
-            authConfig.Policies[key] = true;
             if (value == PermissionGrantResult.Granted)
             {
                 authConfig.GrantedPolicies[key] = true;
@@ -205,26 +203,42 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         return authConfig;
     }
 
-    protected virtual async Task<ApplicationLocalizationConfigurationDto> GetLocalizationConfigAsync()
+    protected virtual async Task<ApplicationLocalizationConfigurationDto> GetLocalizationConfigAsync(
+        ApplicationConfigurationRequestOptions options)
     {
         var localizationConfig = new ApplicationLocalizationConfigurationDto();
 
         localizationConfig.Languages.AddRange(await _languageProvider.GetLanguagesAsync());
 
-        foreach (var resource in _localizationOptions.Resources.Values)
+        if (options.IncludeLocalizationResources)
         {
-            var dictionary = new Dictionary<string, string>();
+            var resourceNames = _localizationOptions
+                .Resources
+                .Values
+                .Select(x => x.ResourceName)
+                .Union(
+                    await LazyServiceProvider
+                        .LazyGetRequiredService<IExternalLocalizationStore>()
+                        .GetResourceNamesAsync()
+                );
 
-            var localizer = (IStringLocalizer) _serviceProvider.GetRequiredService(
-                typeof(IStringLocalizer<>).MakeGenericType(resource.ResourceType)
-            );
-
-            foreach (var localizedString in localizer.GetAllStrings())
+            foreach (var resourceName in resourceNames)
             {
-                dictionary[localizedString.Name] = localizedString.Value;
-            }
+                var dictionary = new Dictionary<string, string>();
 
-            localizationConfig.Values[resource.ResourceName] = dictionary;
+                var localizer = await StringLocalizerFactory
+                    .CreateByResourceNameOrNullAsync(resourceName);
+
+                if (localizer != null)
+                {
+                    foreach (var localizedString in await localizer.GetAllStringsAsync())
+                    {
+                        dictionary[localizedString.Name] = localizedString.Value;
+                    }
+                }
+
+                localizationConfig.Values[resourceName] = dictionary;
+            }
         }
 
         localizationConfig.CurrentCulture = GetCurrentCultureInfo();
@@ -291,7 +305,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     {
         var result = new ApplicationFeatureConfigurationDto();
 
-        foreach (var featureDefinition in _featureDefinitionManager.GetAll())
+        foreach (var featureDefinition in await _featureDefinitionManager.GetAllAsync())
         {
             if (!featureDefinition.IsVisibleToClients)
             {
