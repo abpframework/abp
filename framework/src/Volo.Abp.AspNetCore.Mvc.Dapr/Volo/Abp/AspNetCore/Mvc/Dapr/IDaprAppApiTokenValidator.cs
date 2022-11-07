@@ -1,12 +1,10 @@
-using System.Threading.Tasks;
-
 namespace Volo.Abp.AspNetCore.Mvc.Dapr;
 
 public interface IDaprAppApiTokenValidator
 {
-    Task CheckDaprAppApiTokenAsync();
+    void CheckDaprAppApiToken();
 
-    Task<bool> IsValidDaprAppApiTokenAsync();
+    bool IsValidDaprAppApiToken();
 
-    Task<string> GetDaprAppApiTokenOrNullAsync();
+    string GetDaprAppApiTokenOrNull();
 }

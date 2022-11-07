@@ -201,7 +201,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     protected virtual async Task PublishToDaprAsync(string eventName, object eventData)
     {
-        var client = await DaprClientFactory.CreateAsync();
+        var client = DaprClientFactory.Create();
         await client.PublishEventAsync(pubsubName: DaprEventBusOptions.PubSubName, topicName: eventName, data: eventData);
     }
 

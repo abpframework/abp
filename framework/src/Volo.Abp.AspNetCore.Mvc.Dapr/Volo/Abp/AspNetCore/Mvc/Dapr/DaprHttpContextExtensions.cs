@@ -6,27 +6,27 @@ namespace Volo.Abp.AspNetCore.Mvc.Dapr;
 
 public static class DaprHttpContextExtensions
 {
-    public static async Task ValidateDaprAppApiTokenAsync(this HttpContext httpContext)
+    public static void ValidateDaprAppApiToken(this HttpContext httpContext)
     {
-        await httpContext
+        httpContext
             .RequestServices
             .GetRequiredService<IDaprAppApiTokenValidator>()
-            .CheckDaprAppApiTokenAsync();
+            .CheckDaprAppApiToken();
     }
 
-    public static async Task<bool> IsValidDaprAppApiTokenAsync(this HttpContext httpContext)
+    public static bool IsValidDaprAppApiToken(this HttpContext httpContext)
     {
-        return await httpContext
+        return httpContext
             .RequestServices
             .GetRequiredService<IDaprAppApiTokenValidator>()
-            .IsValidDaprAppApiTokenAsync();
+            .IsValidDaprAppApiToken();
     }
 
-    public static async Task<string> GetDaprAppApiTokenOrNullAsync(HttpContext httpContext)
+    public static string GetDaprAppApiTokenOrNull(HttpContext httpContext)
     {
-        return await httpContext
+        return httpContext
             .RequestServices
             .GetRequiredService<IDaprAppApiTokenValidator>()
-            .GetDaprAppApiTokenOrNullAsync();
+            .GetDaprAppApiTokenOrNull();
     }
 }

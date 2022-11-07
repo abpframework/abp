@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Dapr.Client;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -25,7 +24,7 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
         JsonSerializerOptions = CreateJsonSerializerOptions(systemTextJsonSerializerOptions.Value);
     }
 
-    public virtual async Task<DaprClient> CreateAsync(Action<DaprClientBuilder> builderAction = null)
+    public virtual DaprClient Create(Action<DaprClientBuilder> builderAction = null)
     {
         var builder = new DaprClientBuilder()
             .UseJsonSerializationOptions(JsonSerializerOptions);
@@ -40,7 +39,7 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
             builder.UseGrpcEndpoint(DaprOptions.GrpcEndpoint);
         }
 
-        var apiToken = await DaprApiTokenProvider.GetDaprApiTokenAsync();
+        var apiToken = DaprApiTokenProvider.GetDaprApiToken();
         if (!apiToken.IsNullOrWhiteSpace())
         {
             builder.UseDaprApiToken(apiToken);
@@ -51,7 +50,7 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
         return builder.Build();
     }
 
-    public virtual async Task<HttpClient> CreateHttpClientAsync(
+    public virtual HttpClient CreateHttpClient(
         string appId = null,
         string daprEndpoint = null,
         string daprApiToken = null)
@@ -65,7 +64,7 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
         return DaprClient.CreateInvokeHttpClient(
             appId,
             daprEndpoint,
-            daprApiToken ?? await DaprApiTokenProvider.GetDaprApiTokenAsync()
+            daprApiToken ?? DaprApiTokenProvider.GetDaprApiToken()
         );
     }
 

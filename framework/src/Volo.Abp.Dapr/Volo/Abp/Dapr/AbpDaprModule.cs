@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Dapr.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -17,6 +15,12 @@ public class AbpDaprModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureDaprOptions(configuration);
+
+        context.Services.TryAddSingleton(
+            serviceProvider => serviceProvider
+                .GetRequiredService<IAbpDaprClientFactory>()
+                .Create()
+        );
     }
 
     private void ConfigureDaprOptions(IConfiguration configuration)
