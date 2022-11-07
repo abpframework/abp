@@ -209,7 +209,7 @@ ABP provides the following endpoints to receive events from Dapr:
 * `dapr/subscribe`: Dapr uses this endpoint to get a list of subscriptions from the application. ABP automatically returns all the subscriptions for your distributed event handler classes and custom controller actions with the `Topic` attribute.
 * `api/abp/dapr/event`: The unified endpoint to receive all the events from Dapr. ABP dispatches the events to your event handlers based on the topic name.
 
-> **Since ABP provides the standard `dapr/subscribe` endpoint, you should not manually call the `app.MapSubscribeHandler()` method of Dapr.** You can use the `app.UseCloudEvents()` middleware in your ASP.NET Core pipeline if you want to support the [CloudEvents](https://cloudevents.io/) standard.
+> **Since ABP will call `MapSubscribeHandler` internally, you should not manually call it anymore.** You can use the `app.UseCloudEvents()` middleware in your ASP.NET Core pipeline if you want to support the [CloudEvents](https://cloudevents.io/) standard.
 
 ### Usage
 
@@ -299,8 +299,7 @@ public class MyController : AbpController
 {
     [HttpPost("/stock-changed")]
     [Topic("pubsub", "StockChanged")]
-    public async Task<IActionResult> TestRouteAsync(
-        [FromBody] StockCountChangedEto model)
+    public async Task<IActionResult> TestRouteAsync([FromBody] StockCountChangedEto model)
     {
         HttpContext.ValidateDaprAppApiToken();
         
@@ -430,8 +429,7 @@ public class MyController : AbpController
 {
     [HttpPost("/stock-changed")]
     [Topic("pubsub", "StockChanged")]
-    public async Task<IActionResult> TestRouteAsync(
-        [FromBody] StockCountChangedEto model)
+    public async Task<IActionResult> TestRouteAsync([FromBody] StockCountChangedEto model)
     {
         // Validate the App API token!
         HttpContext.ValidateDaprAppApiToken();
