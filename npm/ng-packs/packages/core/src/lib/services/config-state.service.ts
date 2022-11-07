@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Observable, Subject, of } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
 import {
@@ -62,17 +62,15 @@ export class ConfigStateService {
     return this.createOnUpdateStream(state => state).pipe(take(1));
   }
 
-  refreshLocalization(lang:string) {
+  refreshLocalization(lang:string): Observable<null> {
     if (this.includeLocalizationResources) {
-      return this.refreshAppState();
+      return this.refreshAppState().pipe(map(()=> null));
     } else {
        return  this.getlocalizationResource(lang)
         .pipe(
-          switchMap(result => {
-            this.store.patch({ localization: { ...this.store.state.localization, ...result } });
-            return of(null);
-          }),
-        );
+          tap(result => this.store.patch({ localization: { ...this.store.state.localization, ...result } }))
+        )
+        .pipe(map(()=> null));
     }
   }
 

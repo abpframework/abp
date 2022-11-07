@@ -133,7 +133,7 @@ export class LocalizationService {
         filter(
           lang => this.configState.getDeep('localization.currentCulture.cultureName') !== lang,
         ),
-        switchMap(lang => this.configState.refreshLocalization(lang).pipe(map(() => lang))),
+        switchMap(lang => this.configState.refreshLocalization(lang).pipe(map(()=> lang))),
         switchMap(lang => from(this.registerLocale(lang).then(() => lang))),
       )
       .subscribe(lang => this._languageChange$.next(lang));
