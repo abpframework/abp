@@ -253,4 +253,17 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return await UpdateUserAsync(user);
     }
+
+    public virtual async Task SetPasswordAsync(Guid? userId, string userName, string password)
+    {
+        if (!password.IsNullOrEmpty())
+        {
+            var user = await UserRepository.GetAsync(userId.GetValueOrDefault(), cancellationToken: CancellationToken);
+            if (user != null)
+            {
+                (await RemovePasswordAsync(user)).CheckErrors();
+                (await AddPasswordAsync(user, password)).CheckErrors();
+            }
+        }
+    }
 }
