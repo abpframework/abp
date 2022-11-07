@@ -1,14 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Dapr;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.Json;
-using Volo.Abp.Dapr;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Dapr;
@@ -25,12 +21,6 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddOptions<JsonOptions>()
-            .Configure<IServiceProvider>((options, serviceProvider) =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new AbpDaprSubscriptionRequestConverterFactory(serviceProvider.GetRequiredService<IDaprSerializer>()));
-            });
-
         var subscribeOptions = context.Services.ExecutePreConfiguredActions<AbpSubscribeOptions>();
 
         Configure<AbpEndpointRouterOptions>(options =>
@@ -54,12 +44,19 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
                                 continue;
                             }
 
-                            subscriptions.Add(new AbpSubscription()
+                            var subscription = new AbpSubscription
                             {
                                 PubsubName = daprEventBusOptions.PubSubName,
                                 Topic = eventName,
-                                Route = AbpAspNetCoreMvcDaprPubSubConsts.DaprEventCallbackUrl
-                            });
+                                Route = AbpAspNetCoreMvcDaprPubSubConsts.DaprEventCallbackUrl,
+                                Metadata = new AbpMetadata
+                                {
+                                    {
+                                        AbpMetadata.RawPayload, "true"
+                                    }
+                                }
+                            };
+                            subscriptions.Add(subscription);
                         }
                     }
 

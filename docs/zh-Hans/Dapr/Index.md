@@ -281,7 +281,7 @@ public class MyController : AbpController
 {
     [HttpPost("/stock-changed")]
     [Topic("pubsub", "StockChanged")]
-    public async Task<IActionResult> TestRouteAsync([FromBody] AbpDaprSubscriptionRequest<StockCountChangedEto> model)
+    public async Task<IActionResult> TestRouteAsync([FromBody] StockCountChangedEto model)
     {
         HttpContext.ValidateDaprAppApiToken();
         
@@ -411,7 +411,7 @@ public class MyController : AbpController
 {
     [HttpPost("/stock-changed")]
     [Topic("pubsub", "StockChanged")]
-    public async Task<IActionResult> TestRouteAsync([FromBody] AbpDaprSubscriptionRequest<StockCountChangedEto> model)
+    public async Task<IActionResult> TestRouteAsync([FromBody] StockCountChangedEto model)
     {
         // Validate the App API token!
         HttpContext.ValidateDaprAppApiToken();
