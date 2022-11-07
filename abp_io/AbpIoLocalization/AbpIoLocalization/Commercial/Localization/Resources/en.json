@@ -797,7 +797,7 @@
     "LeptonThemeForAdminDescription": "Lepton Theme is still available and will be maintained. If you want to switch to LeptonX Theme as a Lepton Theme user, you can see the documentation to learn how-to.",
     "LeptonCompatibleWith": "Lepton Theme is compatible with",
     "BlackFridayDiscount": "Black Friday Discount",
-    "UpgradePaymentInfoSection_DeveloperPrice": "{0} for {1} additional x developer(s)",
+    "UpgradePaymentInfoSection_DeveloperPrice": "{0} for {1} additional developer(s)",
     "Upgrade": "Upgrade",
     "Renewal": "Renewal",
     "UpgradePaymentInfoSection_LicensePrice": "{0} license",
