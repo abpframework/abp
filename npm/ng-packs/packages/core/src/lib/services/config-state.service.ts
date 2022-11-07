@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject,of } from 'rxjs';
-import { map, switchMap, take, } from 'rxjs/operators';
+import { Observable, Subject, of } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
 import {
@@ -39,9 +39,7 @@ export class ConfigStateService {
         ),
       )
       .pipe(switchMap(appState => this.getLocalizationAndCombineWithAppState(appState)))
-      .subscribe(res => {
-        return this.store.set(res);
-      });
+      .subscribe(res => this.store.set(res));
   }
 
   private getLocalizationAndCombineWithAppState(
