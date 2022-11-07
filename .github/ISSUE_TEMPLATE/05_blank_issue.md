@@ -1,3 +1,12 @@
+---
+name: Blank issue
+about: Something that doesn't fit the other categories
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ### Documentation
 
 Please check the official documentation before asking questions: https://docs.abp.io
