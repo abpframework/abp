@@ -62,6 +62,27 @@ Alternatively, you can configure the options in the `Dapr` section of your `apps
 
 ### Injecting DaprClient
 
+ABP registers the `DaprClient` class to the [dependency injection](../Dependency-Injection.md) system. So, you can inject and use it whenever you need:
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly DaprClient _daprClient;
+
+    public MyService(DaprClient daprClient)
+    {
+        _daprClient = daprClient;
+    }
+
+    public async Task DoItAsync()
+    {
+        // TODO: Use the injected _daprClient object
+    }
+}
+````
+
+Injecting `DaprClient` is the recommended way of using it in your application code. When you inject it, the `IAbpDaprClientFactory` service is used to create it, which is explained in the next section.
+
 ### IAbpDaprClientFactory
 
 `IAbpDaprClientFactory` can be used to create `DaprClient` or `HttpClient` objects to perform operations on Dapr. It uses `AbpDaprOptions`, so you can configure the settings in a central place.
@@ -249,18 +270,15 @@ In addition to ABP's standard distributed event bus system, you can also use Dap
 ````csharp
 public class MyService : ITransientDependency
 {
-    private readonly IAbpDaprClientFactory _daprClientFactory;
+    private readonly DaprClient _daprClient;
 
-    public MyService(IAbpDaprClientFactory daprClientFactory)
+    public MyService(DaprClient daprClient)
     {
-        _daprClientFactory = daprClientFactory;
+        _daprClient = daprClient;
     }
 
     public async Task DoItAsync()
     {
-        // Create a DaprClient object with default options
-        DaprClient _daprClient = await _daprClientFactory.CreateAsync();
-
         await _daprClient.PublishEventAsync(
             "pubsub", // pubsub name
             "StockChanged", // topic name 

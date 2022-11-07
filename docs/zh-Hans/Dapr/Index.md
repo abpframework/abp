@@ -62,6 +62,27 @@ Configure<AbpDaprOptions>(options =>
 
 ### 注入DaprClient
 
+ABP 将 `DaprClient` 类注册到 [依赖注入](../Dependency-Injection.md) 系统中.因此,你可以在需要时注入并使用它:
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly DaprClient _daprClient;
+
+    public MyService(DaprClient daprClient)
+    {
+        _daprClient = daprClient;
+    }
+
+    public async Task DoItAsync()
+    {
+        // TODO: Use the injected _daprClient object
+    }
+}
+````
+
+注入 `DaprClient` 是在应用程序代码中使用它的推荐方法.当你注入它时,将使用 `IAbpDaprClientFactory` 服务创建它,这会在下一节中将进行说明.
+
 ### IAbpDaprClientFactory
 
 `IAbpDaprClientFactory` 可用于创建 `DaprClient` 或 `HttpClient` 对象来执行对 Dapr 的操作.它使用 `AbpDaprOptions`,因此你可以配置设置.
@@ -249,19 +270,16 @@ public class MyHandler :
 ````csharp
 public class MyService : ITransientDependency
 {
-    private readonly IAbpDaprClientFactory _daprClientFactory;
+    private readonly DaprClient _daprClient;
 
-    public MyService(IAbpDaprClientFactory daprClientFactory)
+    public MyService(DaprClient daprClient)
     {
-        _daprClientFactory = daprClientFactory;
+        _daprClient = daprClient;
     }
 
     public async Task DoItAsync()
     {
-        // Create a DaprClient object with default options
-        DaprClient daprClient = await _daprClientFactory.CreateAsync();
-        
-        await daprClient.PublishEventAsync(
+        await _daprClient.PublishEventAsync(
             "pubsub", // pubsub name
             "StockChanged", // topic name 
             new StockCountChangedEto // event data
