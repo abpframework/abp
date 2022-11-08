@@ -55,8 +55,8 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
         // Hopefully this should be sufficient for most purposes. :)
         // long timestamp = DateTime.UtcNow.Ticks / 10000L;
 
-        // New:
-        // the timestamp generated in the case of high concurrency may be the same,
+        // New: 
+        // the timestamp generated in the case of high concurrency may be the same, 
         // resulting in the Guid generated at the same time not being sequential.
         // See: https://github.com/abpframework/abp/issues/11453
         long timestamp = DateTime.UtcNow.Ticks;
@@ -117,6 +117,112 @@ public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
                 // then Data3, Data2, and Data1 right to left.
                 Buffer.BlockCopy(timestampBytes, 6, guidBytes, 8, 2);
                 Buffer.BlockCopy(timestampBytes, 0, guidBytes, 10, 6);
+                break;
+        }
+
+        return new Guid(guidBytes);
+    }
+
+    /// <summary>
+    /// Generate a new <see cref="Guid"/> that conform to the RFC 4122 Version 4.
+    /// </summary>
+    /// <returns></returns>
+    public virtual Guid Next()
+    {
+        return Next(Options.GetDefaultSequentialGuidType());
+    }
+
+    /// <summary>
+    /// Generate a new <see cref="Guid"/> that conform to the RFC 4122 Version 4.
+    /// </summary>
+    /// <param name="guidType"></param>
+    /// <returns></returns>
+    public virtual Guid Next(SequentialGuidType guidType)
+    {
+        // According to RFC 4122 Version 4:
+        // dddddddd-dddd-Mddd-Ndrr-rrrrrrrrrrrr
+        // - M = RFC version, in this case '4' for random UUID
+        // - N = RFC variant (plus other bits), where N is one of 8,9,A, or B, in this case 8 for variant 1
+        // - d = nibbles based on UTC date/time in ticks
+        // - r = nibbles based on random bytes
+
+        const byte version = (byte)4;
+        const byte variant = (byte)8;
+        const byte filterHighBit = (byte)0b00001111;
+        const byte filterLowBit = (byte)0b11110000;
+
+        var randomBytes = new byte[8];
+        RandomNumberGenerator.GetBytes(randomBytes);
+
+        long timestamp = DateTime.UtcNow.Ticks;
+
+        byte[] timestampBytes = BitConverter.GetBytes(timestamp);
+        if (BitConverter.IsLittleEndian)
+        {
+            Array.Reverse(timestampBytes);
+        }
+
+        byte[] guidBytes = new byte[16];
+
+        switch (guidType)
+        {
+            case SequentialGuidType.SequentialAsString:
+            case SequentialGuidType.SequentialAsBinary:
+
+                // AsString: dddddddd-dddd-Mddd-Ndrr-rrrrrrrrrrrr
+
+                // dddddddd-dddd
+                Buffer.BlockCopy(timestampBytes, 0, guidBytes, 0, 6);
+                // Md
+                guidBytes[6] = (byte)((version << 4) | ((timestampBytes[6] & filterLowBit) >> 4));
+                // dd
+                guidBytes[7] = (byte)(((timestampBytes[6] & filterHighBit) << 4) | ((timestampBytes[7] & filterLowBit) >> 4));
+                // Nd
+                guidBytes[8] = (byte)((variant << 4) | (timestampBytes[7] & filterHighBit));
+                // rr-rrrrrrrrrrrr
+                Buffer.BlockCopy(randomBytes, 0, guidBytes, 9, 7);
+
+                // If formatting as a string, we have to compensate for the fact
+                // that .NET regards the Data1, Data2 and Data3 block as an Int32, an Int16 and an Int16,
+                // respectively.  That means that it switches the order on little-endian
+                // systems.  So again, we have to reverse.
+                if (guidType == SequentialGuidType.SequentialAsString && BitConverter.IsLittleEndian)
+                {
+                    Array.Reverse(guidBytes, 0, 4);
+                    Array.Reverse(guidBytes, 4, 2);
+                    Array.Reverse(guidBytes, 6, 2);
+                }
+
+                break;
+
+            case SequentialGuidType.SequentialAtEnd:
+
+                // MSSQL and System.Data.SqlTypes.SqlGuid sort first by the last 6 Data4 bytes, left to right,
+                // then the first two bytes of Data4 (again, left to right),
+                // then Data3, Data2, and Data1 right to left.
+
+                // AtEnd: rrrrrrrr-rrrr-Mxdr-Nddd-dddddddddddd
+                // Block: 1        2    3    4    5
+                // Order：Block5 >> Block4 >> Block3 >> Block2 >> Block1
+
+                // rrrrrrrr-rrrr
+                Buffer.BlockCopy(randomBytes, 0, guidBytes, 0, 6);
+                // Mx
+                guidBytes[6] = (byte)(version << 4);
+                // dr
+                guidBytes[7] = (byte)(((timestampBytes[7] & filterHighBit) << 4) | (randomBytes[7] & filterHighBit));
+                // Nd
+                guidBytes[8] = (byte)((variant << 4) | ((timestampBytes[6] & filterLowBit) >> 4));
+                // dd
+                guidBytes[9] = (byte)(((timestampBytes[6] & filterHighBit) << 4) | ((timestampBytes[7] & filterLowBit) >> 4));
+                // dddddddddddd
+                Buffer.BlockCopy(timestampBytes, 0, guidBytes, 10, 6);
+
+                // .NET regards the Data3 block as an Int16, we have to reverse it.
+                if (BitConverter.IsLittleEndian)
+                {
+                    Array.Reverse(guidBytes, 6, 2);
+                }
                 break;
         }
 

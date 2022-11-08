@@ -14,7 +14,7 @@ public class SimpleGuidGenerator : IGuidGenerator
         return Guid.NewGuid();
     }
 
-    public Guid Create(SequentialGuidType guidType)
+    public virtual Guid Next()
     {
         return Guid.NewGuid();
     }

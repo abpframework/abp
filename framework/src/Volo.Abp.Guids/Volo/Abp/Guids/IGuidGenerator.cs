@@ -13,7 +13,8 @@ public interface IGuidGenerator
     Guid Create();
 
     /// <summary>
-    /// Creates a new <see cref="Guid"/>.
+    /// Generate a new <see cref="Guid"/> that conform to the RFC 4122 .
     /// </summary>
-    Guid Create(SequentialGuidType guidType);
+    /// <returns></returns>
+    Guid Next();
 }
