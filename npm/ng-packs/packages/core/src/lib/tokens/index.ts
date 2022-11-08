@@ -6,3 +6,4 @@ export * from './lodaer-delay.token';
 export * from './manage-profile.token';
 export * from './options.token';
 export * from './tenant-key.token';
+export * from './include-localization-resources.token';
