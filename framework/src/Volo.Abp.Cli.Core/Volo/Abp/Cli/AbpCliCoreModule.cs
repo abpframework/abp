@@ -2,17 +2,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
-using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ServiceProxying;
 using Volo.Abp.Cli.ServiceProxying.Angular;
 using Volo.Abp.Cli.ServiceProxying.CSharp;
 using Volo.Abp.Cli.ServiceProxying.JavaScript;
 using Volo.Abp.Domain;
 using Volo.Abp.Http;
-using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Json;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Minify;
 using Volo.Abp.Modularity;
 
@@ -33,11 +30,6 @@ public class AbpCliCoreModule : AbpModule
             .ConfigurePrimaryHttpMessageHandler(() => new CliHttpClientHandler());
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-        Configure<AbpSystemTextJsonSerializerOptions>(options =>
-        {
-            options.UnsupportedTypes.Add(typeof(ResourceMapping));
-        });
 
         Configure<AbpCliOptions>(options =>
         {
@@ -66,6 +58,9 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
             options.Commands[CliCommand.Name] = typeof(CliCommand);
+            
+            options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Pro");
+            options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Lite");
         });
 
         Configure<AbpCliServiceProxyOptions>(options =>

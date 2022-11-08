@@ -16,6 +16,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.DistributedLocking.Abstractions\Volo.Abp.DistributedLocking.Abstractions.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
     </ItemGroup>
 
     <ItemGroup>

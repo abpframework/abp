@@ -86,8 +86,7 @@ $solutions = (
     "modules/users",
     "modules/virtual-file-explorer",
     "modules/blob-storing-database",
-    "modules/cms-kit",
-    "studio"
+    "modules/cms-kit"
 )
 
 # List of projects
@@ -99,6 +98,8 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Authentication.OAuth",
     "framework/src/Volo.Abp.AspNetCore.Authentication.OpenIdConnect",
     "framework/src/Volo.Abp.AspNetCore",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.Dapr",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus",
     "framework/src/Volo.Abp.AspNetCore.Components",
     "framework/src/Volo.Abp.AspNetCore.Components.Server",
     "framework/src/Volo.Abp.AspNetCore.Components.Web",
@@ -112,6 +113,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.Client.Common",
     "framework/src/Volo.Abp.AspNetCore.Mvc.Contracts",
     "framework/src/Volo.Abp.AspNetCore.Mvc",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.NewtonsoftJson",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling",
@@ -155,12 +157,14 @@ $projects = (
     "framework/src/Volo.Abp.Core",
     "framework/src/Volo.Abp",
     "framework/src/Volo.Abp.Dapper",
+    "framework/src/Volo.Abp.Dapr",
     "framework/src/Volo.Abp.Data",
     "framework/src/Volo.Abp.Ddd.Application",
     "framework/src/Volo.Abp.Ddd.Application.Contracts",
     "framework/src/Volo.Abp.Ddd.Domain",
     "framework/src/Volo.Abp.DistributedLocking.Abstractions",
     "framework/src/Volo.Abp.DistributedLocking",
+    "framework/src/Volo.Abp.DistributedLocking.Dapr",
     "framework/src/Volo.Abp.Emailing",
     "framework/src/Volo.Abp.EntityFrameworkCore",
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
@@ -175,6 +179,7 @@ $projects = (
     "framework/src/Volo.Abp.EventBus.Kafka",
     "framework/src/Volo.Abp.EventBus.Rebus",
     "framework/src/Volo.Abp.EventBus.Azure",
+    "framework/src/Volo.Abp.EventBus.Dapr",
     "framework/src/Volo.Abp.ExceptionHandling",
     "framework/src/Volo.Abp.Features",
     "framework/src/Volo.Abp.FluentValidation",
@@ -184,13 +189,17 @@ $projects = (
     "framework/src/Volo.Abp.HangFire",
     "framework/src/Volo.Abp.Http.Abstractions",
     "framework/src/Volo.Abp.Http.Client",
-	"framework/src/Volo.Abp.Http.Client.Web",
+    "framework/src/Volo.Abp.Http.Client.Dapr",
+    "framework/src/Volo.Abp.Http.Client.Web",
     "framework/src/Volo.Abp.Http.Client.IdentityModel",
     "framework/src/Volo.Abp.Http.Client.IdentityModel.Web",
     "framework/src/Volo.Abp.Http.Client.IdentityModel.WebAssembly",
     "framework/src/Volo.Abp.Http",
     "framework/src/Volo.Abp.IdentityModel",
     "framework/src/Volo.Abp.Json",
+    "framework/src/Volo.Abp.Json.Abstractions",
+    "framework/src/Volo.Abp.Json.Newtonsoft",
+    "framework/src/Volo.Abp.Json.SystemTextJson",
     "framework/src/Volo.Abp.Ldap",
     "framework/src/Volo.Abp.Localization.Abstractions",
     "framework/src/Volo.Abp.MailKit",
@@ -243,8 +252,8 @@ $projects = (
     "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain.Shared",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.EntityFrameworkCore",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.MongoDB",
-    "modules/audit-logging/src/Volo.Abp.AuditLogging.Installer",
-    "studio/source-codes/Volo.Abp.AuditLogging.SourceCode",
+    # "modules/audit-logging/src/Volo.Abp.AuditLogging.Installer",
+    # "studio/source-codes/Volo.Abp.AuditLogging.SourceCode",
 
     # modules/background-jobs
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain",
@@ -278,6 +287,7 @@ $projects = (
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi",
     "modules/blogging/src/Volo.Blogging.Admin.HttpApi.Client",
     "modules/blogging/src/Volo.Blogging.Admin.Web",
+    "modules/blogging/src/Volo.Blogging.Installer",
     "studio/source-codes/Volo.Blogging.SourceCode",
 
     # modules/client-simulation
@@ -299,6 +309,7 @@ $projects = (
     "modules/docs/src/Volo.Docs.HttpApi",
     "modules/docs/src/Volo.Docs.MongoDB",
     "modules/docs/src/Volo.Docs.Web",
+    "modules/docs/src/Volo.Docs.Installer",
     "studio/source-codes/Volo.Docs.SourceCode",
 
     # modules/feature-management
@@ -351,6 +362,8 @@ $projects = (
     "modules/openiddict/src/Volo.Abp.OpenIddict.EntityFrameworkCore",
     "modules/openiddict/src/Volo.Abp.OpenIddict.MongoDB",
     "modules/openiddict/src/Volo.Abp.PermissionManagement.Domain.OpenIddict",
+    "modules/openiddict/src/Volo.Abp.OpenIddict.Installer",
+    "studio/source-codes/Volo.Abp.OpenIddict.SourceCode",
 
     # modules/permission-management
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application.Contracts",
@@ -448,12 +461,5 @@ $projects = (
     "modules/cms-kit/src/Volo.CmsKit.Public.Web",
     "modules/cms-kit/src/Volo.CmsKit.Web",
     "modules/cms-kit/src/Volo.CmsKit.Installer",
-    "studio/source-codes/Volo.CmsKit.SourceCode",
-	
-    # abp/studio
-    "studio/src/Volo.Abp.Studio.Analyzing.Abstractions",
-    "studio/src/Volo.Abp.Studio.Domain.CommonServices",
-    "studio/src/Volo.Abp.Studio.Domain.Shared",
-    "studio/src/Volo.Abp.Studio.ModuleInstaller.Abstractions",
-    "studio/src/Volo.Abp.Studio.ModuleInstaller"
+    "studio/source-codes/Volo.CmsKit.SourceCode"
 )

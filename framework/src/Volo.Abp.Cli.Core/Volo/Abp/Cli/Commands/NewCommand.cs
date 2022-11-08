@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -26,23 +27,35 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
     
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
-
-    public NewCommand(TemplateProjectBuilder templateProjectBuilder
-        , ITemplateInfoProvider templateInfoProvider,
-        ConnectionStringProvider connectionStringProvider,
+    
+    public NewCommand(
+        ConnectionStringProvider connectionStringProvider, 
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
-        IInstallLibsService installLibsService,
-        AngularPwaSupportAdder angularPwaSupportAdder,
+        IInstallLibsService installLibsService, 
+        CliService cliService,
+        AngularPwaSupportAdder angularPwaSupportAdder, 
         InitialMigrationCreator initialMigrationCreator,
-        ThemePackageAdder themePackageAdder,
-        ILocalEventBus eventBus)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService, angularPwaSupportAdder, initialMigrationCreator, themePackageAdder, eventBus)
+        ThemePackageAdder themePackageAdder, 
+        ILocalEventBus eventBus, 
+        IBundlingService bundlingService,
+        ITemplateInfoProvider templateInfoProvider, 
+        TemplateProjectBuilder templateProjectBuilder) :
+        base(connectionStringProvider,
+            solutionPackageVersionFinder, 
+            cmdHelper, 
+            installLibsService, 
+            cliService, 
+            angularPwaSupportAdder,
+            initialMigrationCreator,
+            themePackageAdder, 
+            eventBus, 
+            bundlingService)
     {
-        TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
+        TemplateProjectBuilder = templateProjectBuilder;
     }
-
+    
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
         var projectName = NamespaceHelper.NormalizeNamespace(commandLineArgs.Target);
@@ -72,7 +85,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
             Logger.LogInformation("Tiered: yes");
         }
 
-        var projectArgs = GetProjectBuildArgs(commandLineArgs, template, projectName);
+        var projectArgs = await GetProjectBuildArgsAsync(commandLineArgs, template, projectName);
 
         var result = await TemplateProjectBuilder.BuildAsync(
             projectArgs
@@ -85,7 +98,19 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         ConfigureNpmPackagesForTheme(projectArgs);
         await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
-        await RunInstallLibsForWebTemplateAsync(projectArgs);
+        
+        var skipInstallLibs = commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Long) || commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Short);
+        if (!skipInstallLibs)
+        {
+            await RunInstallLibsForWebTemplateAsync(projectArgs);
+        }
+        
+        var skipBundling = commandLineArgs.Options.ContainsKey(Options.SkipBundling.Long) || commandLineArgs.Options.ContainsKey(Options.SkipBundling.Short);
+        if (!skipBundling)
+        {
+            await RunBundleForBlazorWasmTemplateAsync(projectArgs);
+        }
+            
         await ConfigurePwaSupportForAngular(projectArgs);
 
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
@@ -119,6 +144,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         sb.AppendLine("--no-random-port                            (Use template's default ports)");
         sb.AppendLine("--separate-auth-server                      (if supported by the template)");
         sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
+        sb.AppendLine("-sib|--skip-installing-libs                      (Doesn't run `abp install-libs` command after project creation)");
+        sb.AppendLine("-sb|--skip-bundling                             (Doesn't run `abp bundle` command after Blazor Wasm project creation)");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
         sb.AppendLine("");
@@ -149,5 +176,4 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
     {
         return "Generate a new solution based on the ABP startup templates.";
     }
-
 }

@@ -1,4 +1,4 @@
-# Real Time Messaging In A Distributed Architecture Using Abp Framework, SingalR & RabbitMQ
+# Real Time Messaging In A Distributed Architecture Using Abp Framework, SignalR & RabbitMQ
 
 In this article, we will build a basic real time messaging application in a distributed architecture. We will use [Abp Framework](https://abp.io) for infrastructure and tiered startup template, [SignalR](https://dotnet.microsoft.com/apps/aspnet/signalr) for real time server-client communication and [RabbitMQ](https://www.rabbitmq.com/) as the distributed event bus.
 

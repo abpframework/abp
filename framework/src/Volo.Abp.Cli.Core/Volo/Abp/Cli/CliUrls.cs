@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.Cli;
 
@@ -26,9 +27,9 @@ public static class CliUrls
         return $"{NuGetRootPath}{apiKey}/v3/package/{packageId}/index.json";
     }
 
-    public static string GetApiDefinitionUrl(string url)
+    public static string GetApiDefinitionUrl(string url, ApplicationApiDescriptionModelRequestDto model = null)
     {
         url = url.EnsureEndsWith('/');
-        return $"{url}api/abp/api-definition";
+        return $"{url}api/abp/api-definition{(model != null ? model.IncludeTypes ? "?includeTypes=true" : string.Empty : string.Empty)}";
     }
 }

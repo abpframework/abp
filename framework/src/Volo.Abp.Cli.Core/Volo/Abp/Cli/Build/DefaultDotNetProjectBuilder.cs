@@ -76,7 +76,7 @@ public class DefaultDotNetProjectBuilder : IDotNetProjectBuilder, ITransientDepe
         Console.WriteLine("Executing...: dotnet build " + project.CsProjPath + " " + buildArguments);
 
         var output = CmdHelper.RunCmdAndGetOutput(
-            "dotnet build " + project.CsProjPath + " " + buildArguments,
+            "dotnet build \"" + project.CsProjPath + "\" " + buildArguments,
             out int buildStatus
         );
 

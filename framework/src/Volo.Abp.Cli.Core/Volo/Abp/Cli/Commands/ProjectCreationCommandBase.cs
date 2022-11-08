@@ -10,6 +10,7 @@ using NuGet.Versioning;
 using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -25,10 +26,12 @@ namespace Volo.Abp.Cli.Commands;
 
 public abstract class ProjectCreationCommandBase
 {
+    private readonly IBundlingService _bundlingService;
     public ConnectionStringProvider ConnectionStringProvider { get; }
     public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
     public ICmdHelper CmdHelper { get; }
     public IInstallLibsService InstallLibsService { get; }
+    public CliService CliService { get; }
     public AngularPwaSupportAdder AngularPwaSupportAdder { get; }
     public InitialMigrationCreator InitialMigrationCreator { get; }
     public ILocalEventBus EventBus { get; }
@@ -41,15 +44,19 @@ public abstract class ProjectCreationCommandBase
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
         IInstallLibsService installLibsService,
+        CliService cliService,
         AngularPwaSupportAdder angularPwaSupportAdder,
         InitialMigrationCreator initialMigrationCreator,
         ThemePackageAdder themePackageAdder,
-        ILocalEventBus eventBus)
+        ILocalEventBus eventBus,
+        IBundlingService bundlingService)
     {
+        _bundlingService = bundlingService;
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
         InstallLibsService = installLibsService;
+        CliService = cliService;
         AngularPwaSupportAdder = angularPwaSupportAdder;
         InitialMigrationCreator = initialMigrationCreator;
         EventBus = eventBus;
@@ -58,7 +65,7 @@ public abstract class ProjectCreationCommandBase
         Logger = NullLogger<NewCommand>.Instance;
     }
 
-    protected ProjectBuildArgs GetProjectBuildArgs(CommandLineArgs commandLineArgs, string template, string projectName)
+    protected async Task<ProjectBuildArgs> GetProjectBuildArgsAsync(CommandLineArgs commandLineArgs, string template, string projectName)
     {
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
 
@@ -71,6 +78,15 @@ public abstract class ProjectCreationCommandBase
         if (preview)
         {
             Logger.LogInformation("Preview: yes");
+
+            var cliVersion = await CliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
+
+            if (!cliVersion.IsPrerelease)
+            {
+                throw new CliUsageException(
+                    "You can only create a new preview solution with preview CLI version." +
+                    " Update your ABP CLI to the preview version.");
+            }
         }
 
         var pwa = commandLineArgs.Options.ContainsKey(Options.ProgressiveWebApp.Short);
@@ -101,18 +117,6 @@ public abstract class ProjectCreationCommandBase
         if (uiFramework != UiFramework.NotSpecified)
         {
             Logger.LogInformation("UI Framework: " + uiFramework);
-        }
-
-        var theme = uiFramework == UiFramework.None ? (Theme?)null : GetThemeByTemplateOrNull(commandLineArgs, template);
-        if (theme.HasValue)
-        {
-            Logger.LogInformation("Theme: " + theme);
-        }
-
-        var themeStyle = theme.HasValue ? GetThemeStyleOrNull(commandLineArgs, theme.Value) : (ThemeStyle?)null;
-        if(themeStyle.HasValue) 
-        {
-            Logger.LogInformation("Theme Style: " + themeStyle);
         }
 
         var publicWebSite = uiFramework != UiFramework.None && commandLineArgs.Options.ContainsKey(Options.PublicWebSite.Long);
@@ -210,6 +214,9 @@ public abstract class ProjectCreationCommandBase
         }
 
         commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
+        
+        var theme = uiFramework == UiFramework.None ? (Theme?)null : GetThemeByTemplateOrNull(commandLineArgs, template);
+        var themeStyle = theme.HasValue ? GetThemeStyleOrNull(commandLineArgs, theme.Value) : (ThemeStyle?)null;
 
         return new ProjectBuildArgs(
             solutionName,
@@ -326,14 +333,14 @@ public abstract class ProjectCreationCommandBase
         var tieredYesNo = tiered ? "yes" : "no";
         var url = $"https://{urlPrefix}.abp.io/project-created-success?ui={uiFramework:g}&db={databaseProvider:g}&tiered={tieredYesNo}";
 
-        CmdHelper.OpenWebPage(url);
+        CmdHelper.Open(url);
     }
 
     protected void OpenMicroserviceDocumentPage()
     {
         var url = "https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index";
 
-        CmdHelper.OpenWebPage(url);
+        CmdHelper.Open(url);
     }
 
     protected bool GetCreateSolutionFolderPreference(CommandLineArgs commandLineArgs)
@@ -398,6 +405,25 @@ public abstract class ProjectCreationCommandBase
             }, false);
 
             await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
+        }
+    }
+
+    protected async Task RunBundleForBlazorWasmTemplateAsync(ProjectBuildArgs projectArgs)
+    {
+        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) && projectArgs.UiFramework == UiFramework.Blazor)
+        {
+            Logger.LogInformation("Generating bundles for Blazor Wasm...");
+
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent
+            {
+                Message = "Generating bundles for Blazor Wasm"
+            }, false);
+
+            var directory = Path.GetDirectoryName(
+                Directory.GetFiles(projectArgs.OutputFolder, "*.Blazor.csproj", SearchOption.AllDirectories).First()
+                );
+            
+            await _bundlingService.BundleAsync(directory, true);
         }
     }
 
@@ -493,6 +519,8 @@ public abstract class ProjectCreationCommandBase
                 return MobileApp.None;
             case "react-native":
                 return MobileApp.ReactNative;
+            case "maui":
+                return MobileApp.Maui;
             default:
                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Mobile App"));
         }
@@ -567,10 +595,11 @@ public abstract class ProjectCreationCommandBase
         }
 
         var themeStyle = commandLineArgs.Options.GetOrNull(Options.ThemeStyle.Long)?.ToLower();
+        
         return themeStyle switch 
         {
-            // null => ThemeStyle.NotSpecified, TODO: remove it!!!
-            "dim" or null => ThemeStyle.Dim,
+            "system" or null => ThemeStyle.System,
+            "dim" => ThemeStyle.Dim,
             "light" => ThemeStyle.Light,
             "dark" => ThemeStyle.Dark,
             _ => null
@@ -713,6 +742,18 @@ public abstract class ProjectCreationCommandBase
         {
             public const string Short = "csf";
             public const string Long = "create-solution-folder";
+        }
+
+        public static class SkipInstallingLibs
+        {
+            public const string Short = "sib";
+            public const string Long = "skip-installing-libs";
+        }
+
+        public static class SkipBundling
+        {
+            public const string Short = "sb";
+            public const string Long = "skip-bundling";
         }
 
         public static class Tiered

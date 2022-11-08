@@ -1,41 +1,64 @@
 {
   "name": "Volo.Docs.Admin.Application.Contracts",
-  "hash": "8e78a71db249bde834148637edf070b1",
+  "hash": "095b47a140f09e91f022f81e715b4976",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Docs.Domain.Shared",
+          "namespace": "Volo.Docs",
+          "name": "DocsDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Authorization.Abstractions",
+          "namespace": "Volo.Abp.Authorization",
+          "name": "AbpAuthorizationAbstractionsModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "DocsAdminApplicationContractsModule"
+      "name": "DocsAdminApplicationContractsModule",
+      "summary": null
     },
     {
       "displayName": "Projects",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "Docs.Admin.Projects"
+      "name": "Docs.Admin.Projects",
+      "summary": null
     },
     {
       "displayName": "Edit",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "Docs.Admin.Projects.Update"
+      "name": "Docs.Admin.Projects.Update",
+      "summary": null
     },
     {
       "displayName": "Delete",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "Docs.Admin.Projects.Delete"
+      "name": "Docs.Admin.Projects.Delete",
+      "summary": null
     },
     {
       "displayName": "Create",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "Docs.Admin.Projects.Create"
+      "name": "Docs.Admin.Projects.Create",
+      "summary": null
     },
     {
       "displayName": "Documents",
       "isEnabled": true,
       "contentType": "permission",
-      "name": "Docs.Admin.Documents"
+      "name": "Docs.Admin.Documents",
+      "summary": null
     }
   ]
 }

@@ -1,8 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { Inject, Injectable } from '@angular/core';
+import { Observable, Subject, of } from 'rxjs';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
-import { ApplicationConfigurationDto, ApplicationGlobalFeatureConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
+import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
+import {
+  ApplicationConfigurationDto,
+  ApplicationGlobalFeatureConfigurationDto,
+} from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
+import { INCUDE_LOCALIZATION_RESOURCES_TOKEN } from '../tokens/include-localization-resources.token';
 import { InternalStore } from '../utils/internal-store-utils';
 
 @Injectable({
@@ -15,21 +20,61 @@ export class ConfigStateService {
     return this.store.sliceUpdate;
   }
 
-  private updateSubject = new Subject();
+  private updateSubject = new Subject<void>();
 
-  constructor(private abpConfigService: AbpApplicationConfigurationService) {
+  constructor(
+    private abpConfigService: AbpApplicationConfigurationService,
+    private abpApplicationLocalizationService: AbpApplicationLocalizationService,
+    @Inject(INCUDE_LOCALIZATION_RESOURCES_TOKEN)
+    private readonly includeLocalizationResources: boolean,
+  ) {
     this.initUpdateStream();
   }
 
   private initUpdateStream() {
     this.updateSubject
-      .pipe(switchMap(() => this.abpConfigService.get()))
+      .pipe(
+        switchMap(() =>
+          this.abpConfigService.get({
+            includeLocalizationResources: this.includeLocalizationResources,
+          }),
+        ),
+      )
+      .pipe(switchMap(appState => this.getLocalizationAndCombineWithAppState(appState)))
       .subscribe(res => this.store.set(res));
   }
 
+  private getLocalizationAndCombineWithAppState(
+    appState: ApplicationConfigurationDto,
+  ): Observable<ApplicationConfigurationDto> {
+    return this.getlocalizationResource(appState.localization.currentCulture.cultureName).pipe(
+      map(result => ({ ...appState, localization: { ...appState.localization, ...result } })),
+    );
+  }
+
+  private getlocalizationResource(cultureName: string) {
+    return this.abpApplicationLocalizationService.get({
+      cultureName: cultureName,
+      onlyDynamics: false,
+    });
+  }
   refreshAppState() {
     this.updateSubject.next();
     return this.createOnUpdateStream(state => state).pipe(take(1));
+  }
+
+  refreshLocalization(lang: string): Observable<null> {
+    if (this.includeLocalizationResources) {
+      return this.refreshAppState().pipe(map(() => null));
+    } else {
+      return this.getlocalizationResource(lang)
+        .pipe(
+          tap(result =>
+            this.store.patch({ localization: { ...this.store.state.localization, ...result } }),
+          ),
+        )
+        .pipe(map(() => null));
+    }
   }
 
   getOne$(key: string) {
@@ -147,8 +192,11 @@ export class ConfigStateService {
     return this.store.sliceState(state => state.globalFeatures);
   }
 
-  private isGlobalFeatureEnabled(key: string, globalFeatures: ApplicationGlobalFeatureConfigurationDto) {
-    const features = globalFeatures.enabledFeatures || []
+  private isGlobalFeatureEnabled(
+    key: string,
+    globalFeatures: ApplicationGlobalFeatureConfigurationDto,
+  ) {
+    const features = globalFeatures.enabledFeatures || [];
     return features.some(f => key === f);
   }
 
@@ -159,9 +207,6 @@ export class ConfigStateService {
   getGlobalFeatureIsEnabled$(key: string) {
     return this.store.sliceState(state => this.isGlobalFeatureEnabled(key, state.globalFeatures));
   }
-
-
-
 }
 
 function splitKeys(keys: string[] | string): string[] {

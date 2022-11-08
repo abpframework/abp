@@ -9,12 +9,12 @@
       "path": "src/Volo.Abp.Users.Domain/Volo.Abp.Users.Domain.abppkg.json",
       "folder": "src"
     },
-    "Volo.Abp.Users.EntityFrameworkCore": {
-      "path": "src/Volo.Abp.Users.EntityFrameworkCore/Volo.Abp.Users.EntityFrameworkCore.abppkg.json",
-      "folder": "src"
-    },
     "Volo.Abp.Users.Domain.Shared": {
       "path": "src/Volo.Abp.Users.Domain.Shared/Volo.Abp.Users.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Users.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.Users.EntityFrameworkCore/Volo.Abp.Users.EntityFrameworkCore.abppkg.json",
       "folder": "src"
     },
     "Volo.Abp.Users.Abstractions": {
@@ -23,10 +23,6 @@
     },
     "Volo.Abp.Users.MongoDB": {
       "path": "src/Volo.Abp.Users.MongoDB/Volo.Abp.Users.MongoDB.abppkg.json",
-      "folder": "src"
-    },
-    "Volo.Abp.Users.Installer": {
-      "path": "src/Volo.Abp.Users.Installer/Volo.Abp.Users.Installer.abppkg.json",
       "folder": "src"
     }
   }

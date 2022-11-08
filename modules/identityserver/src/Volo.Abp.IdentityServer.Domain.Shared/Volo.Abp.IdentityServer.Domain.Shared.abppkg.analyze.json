@@ -1,11 +1,19 @@
 {
   "name": "Volo.Abp.IdentityServer.Domain.Shared",
-  "hash": "f6854c52bc731d064b0d610f14a941c7",
+  "hash": "63502cf3b9ed49b7316017ef5a85c10e",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "AbpIdentityServerDomainSharedModule"
+      "name": "AbpIdentityServerDomainSharedModule",
+      "summary": null
     }
   ]
 }

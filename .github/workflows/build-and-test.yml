@@ -31,17 +31,23 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
 permissions:
   contents: read
 
 jobs:
   build-test:
     runs-on: windows-latest
+    if: ${{ !github.event.pull_request.draft }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-dotnet@master
       with:
-        dotnet-version: 6.0.100
+        dotnet-version: 7.0.100-rc.2.22477.23
 
     - name: Build All
       run: .\build-all.ps1 -f

@@ -19,9 +19,9 @@ public class IndexModel : AbpPageModel
 
     protected ILanguageProvider LanguageProvider { get; }
 
-    public IndexModel(IOpenIddictApplicationRepository openIdApplicationmRepository, ILanguageProvider languageProvider)
+    public IndexModel(IOpenIddictApplicationRepository openIdApplicationRepository, ILanguageProvider languageProvider)
     {
-        OpenIdApplicationRepository = openIdApplicationmRepository;
+        OpenIdApplicationRepository = openIdApplicationRepository;
         LanguageProvider = languageProvider;
     }
 

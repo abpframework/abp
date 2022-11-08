@@ -7,6 +7,7 @@ using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Security.Claims;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.IdentityServer.AspNetIdentity;
@@ -14,30 +15,37 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity;
 public class AbpUserClaimsFactory<TUser> : IUserClaimsPrincipalFactory<TUser>
     where TUser : class
 {
-    private readonly IObjectAccessor<IUserClaimsPrincipalFactory<TUser>> _inner;
-    private readonly UserManager<TUser> _userManager;
+    protected IObjectAccessor<IUserClaimsPrincipalFactory<TUser>> Inner { get; }
+    protected UserManager<TUser> UserManager { get; }
+    protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
+    protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
 
-    public AbpUserClaimsFactory(IObjectAccessor<IUserClaimsPrincipalFactory<TUser>> inner,
-        UserManager<TUser> userManager)
+    public AbpUserClaimsFactory(
+        IObjectAccessor<IUserClaimsPrincipalFactory<TUser>> inner,
+        UserManager<TUser> userManager,
+        ICurrentPrincipalAccessor currentPrincipalAccessor,
+        IAbpClaimsPrincipalFactory abpClaimsPrincipalFactory)
     {
-        _inner = inner;
-        _userManager = userManager;
+        Inner = inner;
+        UserManager = userManager;
+        CurrentPrincipalAccessor = currentPrincipalAccessor;
+        AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
     }
 
-    public async Task<ClaimsPrincipal> CreateAsync(TUser user)
+    public virtual async Task<ClaimsPrincipal> CreateAsync(TUser user)
     {
-        var principal = await _inner.Value.CreateAsync(user);
+        var principal = await Inner.Value.CreateAsync(user);
         var identity = principal.Identities.First();
 
         if (!identity.HasClaim(x => x.Type == JwtClaimTypes.Subject))
         {
-            var sub = await _userManager.GetUserIdAsync(user);
+            var sub = await UserManager.GetUserIdAsync(user);
             identity.AddIfNotContains(new Claim(JwtClaimTypes.Subject, sub));
         }
 
-        var username = await _userManager.GetUserNameAsync(user);
+        var username = await UserManager.GetUserNameAsync(user);
         var usernameClaim = identity.FindFirst(claim =>
-            claim.Type == _userManager.Options.ClaimsIdentity.UserNameClaimType && claim.Value == username);
+            claim.Type == UserManager.Options.ClaimsIdentity.UserNameClaimType && claim.Value == username);
         if (usernameClaim != null)
         {
             identity.RemoveClaim(usernameClaim);
@@ -53,25 +61,25 @@ public class AbpUserClaimsFactory<TUser> : IUserClaimsPrincipalFactory<TUser>
             identity.AddIfNotContains(new Claim(JwtClaimTypes.Name, username));
         }
 
-        if (_userManager.SupportsUserEmail)
+        if (UserManager.SupportsUserEmail)
         {
-            var email = await _userManager.GetEmailAsync(user);
+            var email = await UserManager.GetEmailAsync(user);
             if (!string.IsNullOrWhiteSpace(email))
             {
                 identity.AddIfNotContains(new Claim(JwtClaimTypes.Email, email));
                 identity.AddIfNotContains(new Claim(JwtClaimTypes.EmailVerified,
-                    await _userManager.IsEmailConfirmedAsync(user) ? "true" : "false", ClaimValueTypes.Boolean));
+                    await UserManager.IsEmailConfirmedAsync(user) ? "true" : "false", ClaimValueTypes.Boolean));
             }
         }
 
-        if (_userManager.SupportsUserPhoneNumber)
+        if (UserManager.SupportsUserPhoneNumber)
         {
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var phoneNumber = await UserManager.GetPhoneNumberAsync(user);
             if (!string.IsNullOrWhiteSpace(phoneNumber))
             {
                 identity.AddIfNotContains(new Claim(JwtClaimTypes.PhoneNumber, phoneNumber));
                 identity.AddIfNotContains(new Claim(JwtClaimTypes.PhoneNumberVerified,
-                    await _userManager.IsPhoneNumberConfirmedAsync(user) ? "true" : "false",
+                    await UserManager.IsPhoneNumberConfirmedAsync(user) ? "true" : "false",
                     ClaimValueTypes.Boolean));
             }
         }
@@ -87,6 +95,11 @@ public class AbpUserClaimsFactory<TUser> : IUserClaimsPrincipalFactory<TUser>
             {
                 identity.AddIfNotContains(new Claim(JwtClaimTypes.FamilyName, identityUser.Surname));
             }
+        }
+
+        using (CurrentPrincipalAccessor.Change(identity))
+        {
+            await AbpClaimsPrincipalFactory.CreateAsync(principal);
         }
 
         return principal;

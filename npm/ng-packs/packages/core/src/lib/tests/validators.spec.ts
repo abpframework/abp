@@ -1,9 +1,12 @@
 import { FormControl, Validators } from '@angular/forms';
-import { AbpValidators, validateMinAge, validateRange } from '../validators';
+import { validateMinAge } from '../validators/age.validator';
+import { validateRange } from '../validators/range.validator';
 import { validateCreditCard } from '../validators/credit-card.validator';
 import { validateRequired } from '../validators/required.validator';
 import { validateStringLength } from '../validators/string-length.validator';
 import { validateUrl } from '../validators/url.validator';
+
+const emailAddress = () => Validators.email;
 
 describe('Validators', () => {
   describe('Credit Card Validator', () => {
@@ -41,7 +44,7 @@ describe('Validators', () => {
 
   describe('Email Validator', () => {
     it('should return email validator of Angular', () => {
-      expect(AbpValidators.emailAddress()).toBe(Validators.email);
+      expect(emailAddress()).toBe(Validators.email);
     });
   });
 

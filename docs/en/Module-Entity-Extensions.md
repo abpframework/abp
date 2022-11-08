@@ -6,7 +6,7 @@ Module entity extension system is a **high level** extension system that allows 
 
 ## Quick Example
 
-Open the *YourProjectNameModuleExtensionConfigurator* class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraProperties`method  as shown below to add a `SocialSecurityNumber` property to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md).
+Open the `YourProjectNameModuleExtensionConfigurator` class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraProperties`method  as shown below to add a `SocialSecurityNumber` property to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md).
 
 ````csharp
 public static void ConfigureExtraProperties()

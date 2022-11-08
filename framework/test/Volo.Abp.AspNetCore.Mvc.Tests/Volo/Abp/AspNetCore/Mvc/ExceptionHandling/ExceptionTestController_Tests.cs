@@ -3,12 +3,14 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using Shouldly;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
@@ -31,6 +33,8 @@ public class ExceptionTestController_Tests : AspNetCoreMvcTestBase
         _fakeExceptionSubscriber = Substitute.For<IExceptionSubscriber>();
 
         services.AddSingleton(_fakeExceptionSubscriber);
+
+        services.Replace(ServiceDescriptor.Transient<IUnitOfWork, ExceptionHandingUnitOfWork>());
     }
 
     [Fact]
@@ -92,5 +96,25 @@ public class ExceptionTestController_Tests : AspNetCoreMvcTestBase
             .Received()
             .HandleAsync(Arg.Any<ExceptionNotificationContext>());
 #pragma warning restore 4014
+    }
+
+    [Fact]
+    public async Task Should_Handle_Exception_On_Uow_SaveChangeAsync()
+    {
+        FakeRequiredService.Claims.AddRange(new[]
+        {
+            new Claim(AbpClaimTypes.UserId, Guid.Empty.ToString())
+        });
+
+        var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/exception-test/ExceptionOnUowSaveChange", HttpStatusCode.Conflict);
+        result.Error.ShouldNotBeNull();
+        result.Error.Message.ShouldBe("The data you have submitted has already changed by another user/client. Please discard the changes you've done and try from the beginning.");
+
+     #pragma warning disable 4014
+                 _fakeExceptionSubscriber
+                     .Received()
+                     .HandleAsync(Arg.Any<ExceptionNotificationContext>());
+     #pragma warning restore 4014
+
     }
 }

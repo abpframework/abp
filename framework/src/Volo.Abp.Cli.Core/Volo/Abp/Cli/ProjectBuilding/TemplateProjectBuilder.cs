@@ -71,6 +71,8 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
             args.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long)
         );
 
+        ConfigureThemeOptions(args, templateFile.Version);
+
         DeveloperApiKeyResult apiKeyResult = null;
 
 #if DEBUG
@@ -205,6 +207,49 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
         else
         {
             return TemplateInfoProvider.Get(args.TemplateName);
+        }
+    }
+
+    private bool IsThemeOptionEnabled(ProjectBuildArgs args, string templateVersion)
+    {
+        var version = string.IsNullOrWhiteSpace(args.Version)
+            ? templateVersion
+            : args.Version;
+
+        if (!SemanticVersion.TryParse(version, out var semanticVersion))
+        {
+            return false;
+        }
+
+        return semanticVersion >= SemanticVersion.Parse("6.0.0-rc.1");
+    }
+
+    private void ConfigureThemeOptions(ProjectBuildArgs args, string templateVersion)
+    {
+        if (!IsThemeOptionEnabled(args, templateVersion))
+        {
+            args.Theme = null;
+            args.ThemeStyle = null;
+        }
+        
+        if (args.Theme.HasValue)
+        {
+            Logger.LogInformation("Theme: " + args.Theme);
+
+            var isProTemplate = !args.TemplateName.IsNullOrEmpty() && args.TemplateName.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
+
+            if (args.UiFramework == UiFramework.Angular && ((isProTemplate && args.Theme != AppProTemplate.DefaultTheme) ||
+                                                            (!isProTemplate && args.Theme != AppTemplate.DefaultTheme)))
+            {
+                Logger.LogWarning("You may need to make some additional changes for this theme. " +
+                                  "See the documentation for more information: " +
+                                  "https://docs.abp.io/en/abp/latest/UI/Angular/Theme-Configurations");
+            }
+        }
+
+        if(args.ThemeStyle.HasValue) 
+        {
+            Logger.LogInformation("Theme Style: " + args.ThemeStyle);
         }
     }
 }

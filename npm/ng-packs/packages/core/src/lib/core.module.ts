@@ -3,7 +3,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule } from '@angu
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
+import { OAuthModule, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
 import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
@@ -37,6 +37,8 @@ import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
 import { ShortTimePipe } from './pipes/short-time.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
+import { TimeoutLimitedOAuthService } from './services/timeout-limited-oauth.service';
+import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 
 export function storageFactory(): OAuthStorage {
   return oAuthStorage;
@@ -184,6 +186,7 @@ export class CoreModule {
           useFactory: noop,
         },
         { provide: OAuthStorage, useFactory: storageFactory },
+        { provide: OAuthService, useClass: TimeoutLimitedOAuthService },
         { provide: TENANT_KEY, useValue: options.tenantKey || '__tenant' },
         {
           provide: LOCALIZATIONS,
@@ -191,6 +194,7 @@ export class CoreModule {
           useValue: localizationContributor(options.localizations),
           deps: [LocalizationService],
         },
+        IncludeLocalizationResourcesProvider
       ],
     };
   }

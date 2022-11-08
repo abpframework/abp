@@ -8,7 +8,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Public.Comments;
-using Volo.CmsKit.Public.Web.Renderers;
+using Volo.CmsKit.Web.Renderers;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting;
 
@@ -65,12 +65,12 @@ public class CommentingViewComponent : AbpViewComponent
         foreach (var comment in viewModel.Comments)
         {
             viewModel.RawCommentTexts.Add(comment.Id, comment.Text);
-            comment.Text = await MarkdownToHtmlRenderer.RenderAsync(comment.Text, true);
+            comment.Text = await MarkdownToHtmlRenderer.RenderAsync(comment.Text, allowHtmlTags: false, preventXSS: true);
 
             foreach (var reply in comment.Replies)
             {
                 viewModel.RawCommentTexts.Add(reply.Id, reply.Text);
-                reply.Text = await MarkdownToHtmlRenderer.RenderAsync(reply.Text, true);
+                reply.Text = await MarkdownToHtmlRenderer.RenderAsync(reply.Text, allowHtmlTags: false, preventXSS: true);
             }
         }
     }

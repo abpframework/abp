@@ -9,6 +9,7 @@ import {
   PropContributorCallback,
   PropContributorCallbacks,
   PropData,
+  PropDisplayTextResolver,
   PropList,
   PropPredicate,
   Props,
@@ -19,6 +20,34 @@ export class FormPropList<R = any> extends PropList<R, FormProp<R>> {}
 
 export class FormProps<R = any> extends Props<FormPropList<R>> {
   protected _ctor: Type<FormPropList<R>> = FormPropList;
+}
+
+export interface FormPropGroup {
+  name: string;
+  className?: string;
+}
+
+export class GroupedFormPropList<R = any> {
+  public readonly items: GroupedFormPropItem[] = [];
+  addItem(item: FormProp<R>) {
+    const groupName = item.group?.name;
+    let group = this.items.find(i => i.group?.name === groupName);
+    if (group) {
+      group.formPropList.addTail(item);
+    } else {
+      group = {
+        formPropList: new FormPropList(),
+        group: item.group,
+      };
+      group.formPropList.addHead(item);
+      this.items.push(group);
+    }
+  }
+}
+
+export interface GroupedFormPropItem {
+  group: FormPropGroup;
+  formPropList: FormPropList;
 }
 
 export class CreateFormPropsFactory<R = any> extends PropsFactory<FormProps<R>> {
@@ -38,6 +67,10 @@ export class FormProp<R = any> extends Prop<R> {
   readonly defaultValue: boolean | number | string | Date;
   readonly options: PropCallback<R, Observable<ABP.Option<any>[]>> | undefined;
   readonly id: string | undefined;
+  readonly template?: Type<any>;
+  readonly className?: string;
+  readonly group?: FormPropGroup | undefined;
+  readonly displayTextResolver?: PropDisplayTextResolver<R>;
 
   constructor(options: FormPropOptions<R>) {
     super(
@@ -47,7 +80,11 @@ export class FormProp<R = any> extends Prop<R> {
       options.permission,
       options.visible,
       options.isExtra,
+      options.template,
+      options.className,
     );
+    this.group = options.group;
+    this.className = options.className;
 
     this.asyncValidators = options.asyncValidators || (_ => []);
     this.validators = options.validators || (_ => []);
@@ -58,6 +95,7 @@ export class FormProp<R = any> extends Prop<R> {
     this.id = options.id || options.name;
     const defaultValue = options.defaultValue;
     this.defaultValue = isFalsyValue(defaultValue) ? defaultValue : defaultValue || null;
+    this.displayTextResolver = options.displayTextResolver;
   }
 
   static create<R = any>(options: FormPropOptions<R>) {
@@ -93,6 +131,7 @@ export type FormPropOptions<R = any> = O.Optional<
   | 'defaultValue'
   | 'options'
   | 'id'
+  | 'displayTextResolver'
 >;
 
 export type CreateFormPropDefaults<R = any> = Record<string, FormProp<R>[]>;

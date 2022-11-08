@@ -33,6 +33,9 @@ export abstract class Prop<R = any> {
     public readonly permission: string,
     public readonly visible: PropPredicate<R> = _ => true,
     public readonly isExtra = false,
+    public readonly template?: Type<any>,
+    public readonly className?: string,
+    public readonly displayTextResolver?: PropDisplayTextResolver<R>,
   ) {
     this.displayName = this.displayName || this.name;
   }
@@ -40,6 +43,7 @@ export abstract class Prop<R = any> {
 
 export type PropCallback<T, R = any> = (data: Omit<PropData<T>, 'data'>, auxData?: any) => R;
 export type PropPredicate<T> = (data?: Omit<PropData<T>, 'data'>, auxData?: any) => boolean;
+export type PropDisplayTextResolver<T> = (data?: Omit<PropData<T>, 'data'>) => string;
 
 export abstract class PropsFactory<C extends Props<any>> {
   protected abstract _ctor: Type<C>;

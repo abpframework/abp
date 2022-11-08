@@ -4,7 +4,7 @@ The ABP Framework provides an abstraction to work with JSON. Having such an abst
 * You can write library independent code. Therefore, you can change the underlying library with the minimum effort and code change.
 * You can use the predefined converters defined in the ABP without worrying about the underlying library's internal details.
 
-> The JSON serialization system is implemented with the [Volo.Abp.Json](https://www.nuget.org/packages/Volo.Abp.Json) NuGet package. Most of the time, you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Json) since it comes pre-installed with the [application startup template](Startup-Templates/Application.md).
+> The JSON serialization system is implemented with the [Volo.Abp.Json](https://www.nuget.org/packages/Volo.Abp.Json) NuGet package([Volo.Abp.Json.SystemTextJson](https://www.nuget.org/packages/Volo.Abp.Json.SystemTextJson) is the default implementation). Most of the time, you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Json) since it comes pre-installed with the [application startup template](Startup-Templates/Application.md).
 
 ## IJsonSerializer
 
@@ -45,16 +45,24 @@ public class ProductManager
 `AbpJsonOptions` type provides options for the JSON operations in the ABP Framework.
 
 Properties:
-* **DefaultDateTimeFormat(`string`)**: Default `DateTime` format.
-* **UseHybridSerializer(`bool`)**: True by default. Boolean field indicating whether the ABP Framework uses the hybrid approach or not. If the field is true, it will try to use `System.Json.Text` to handle JSON if it can otherwise use the `Newtonsoft.Json.`
-* **Providers(`ITypeList<IJsonSerializerProvider>`)**: List of JSON serializer providers implementing the `IJsonSerializerProvider` interface. You can create and add custom serializers to the list, and the ABP Framework uses them automatically. When the `Serialize` or `Deserialize` method is called on the `IJsonSerializer` interface, the ABP Framework calls the `CanHandle` methods of the given providers in reverse order and uses the first provider that returns `true` to do the JSON operation.
+* **InputDateTimeFormats(`List<string>`)**: Formats of input JSON date, Empty string means default format. You can provide multiple formats to parse the date.
+* **OutputDateTimeFormat(`string`)**: Format of output json date, Null or empty string means default format.
+
+## System Text Json
 
 ### AbpSystemTextJsonSerializerOptions
 
-`AbpSystemTextJsonSerializerOptions` provides options for  `System.Text.Json` usage. 
-
-Properties:
-
 - **JsonSerializerOptions(`System.Text.Json.JsonSerializerOptions`)**: Global options for System.Text.Json library operations. See [here](https://docs.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializeroptions) for reference.
-- **UnsupportedTypes(`ITypeList`)**: List of the unsupported types. You can add types of the unsupported types to the list and, the hybrid JSON serializer automatically uses the `Newtonsoft.Json` library instead of `System.Text.Json`.
 
+### AbpSystemTextJsonSerializerModifiersOptions
+
+- **Modifiers(`List<Action<JsonTypeInfo>>`)**: Configure `Modifiers` of `DefaultJsonTypeInfoResolver`. See [here](https://devblogs.microsoft.com/dotnet/announcing-dotnet-7-preview-6/#json-contract-customization) for reference.
+
+
+## Newtonsoft
+
+Add [Volo.Abp.Json.Newtonsoft](https://www.nuget.org/packages/Volo.Abp.Json.Newtonsoft) package and depends on `AbpJsonNewtonsoftModule` to replace the `System Text Json`.
+
+#### AbpNewtonsoftJsonSerializerOptions
+
+- **JsonSerializerSettings(`Newtonsoft.Json.JsonSerializerSettings`)**: Global options for Newtonsoft library operations. See [here](https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_JsonSerializerSettings.htm) for reference.

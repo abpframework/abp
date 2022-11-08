@@ -193,14 +193,18 @@ public partial class TokenController
                 ClientId = request.ClientId
             });
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
-            {
-                [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = nameof(SignInResult.RequiresTwoFactor),
-
-                ["userId"] = user.Id.ToString("N"),
-                ["twoFactorToken"] = twoFactorToken
-            });
+            var properties = new AuthenticationProperties(
+                items: new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
+                        nameof(SignInResult.RequiresTwoFactor),
+                },
+                parameters: new Dictionary<string, object>
+                {
+                    ["userId"] = user.Id.ToString("N"),
+                    ["twoFactorToken"] = twoFactorToken
+                });
 
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }

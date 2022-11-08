@@ -73,6 +73,7 @@
     "DeveloperFocused": "Developer Focused",
     "ShareYourExperiences": "Share your experiences with the ABP Framework",
     "LatestPosts": "Latest Posts",
+    "LatestVideos": "Latest Videos",
     "Views": "Views",
     "LearnLatestNewsAboutABPFramework": "Get information about happenings in ABP like new releases, free sources, posts, and more.",
     "DeveloperTools": "Developer Tools",
@@ -98,6 +99,7 @@
     "Logout": "Logout",
     "Home": "Home",
     "Posts": "Posts",
+    "Videos": "Videos",
     "JoinTheABPCommunity": "Join the ABP Community",
     "SubmitYourPost": "Submit Your Post",
     "Modules": "Modules",
@@ -140,7 +142,7 @@
     "DomainDrivenDesign": "Domain Driven Design",
     "CrossCuttingConcerns": "Cross Cutting Concerns",
     "AbpCommunity": "ABP Community",
-    "Footer_GithubStarCount": "{0} Star on GitHub",
+    "Footer_GithubStarCount": "{0} Stars on GitHub",
     "Footer_NugetDownloadCount": "{0} Downloads on NuGet",
     "AbpDescription": "ABP is an open source application framework focused on AspNet Core based web application development. Don't repeat yourself, focus on your own business code.",
     "Layout_AbpFramework_MetaTitle": "ABP Framework - Open Source Web Application Framework",
@@ -171,6 +173,12 @@
     "BuyOrRenewLicenseToGetExtra2Months": "Buy or Renew License Now and Get 2 Extra Months! HURRY UP! ⏰ Last Day: {0}",
     "HurryUp": "HURRY UP!",
     "LastDay": "Last Day: {0}",
-    "BuyNewLicenseBetweenDatesToGetBenefit": "Buy a new license between {0} and {1} to get benefit for extra 2 months!"
+    "BuyNewLicenseBetweenDatesToGetBenefit": "Buy a new license between {0} and {1} to get benefit for extra 2 months!",
+    "CheckAllCommunityTalks": "Check All Community Posts",
+    "ReadMore": "Read More",
+    "Post": "Post",
+    "ExploreTheContentsCreatedByTheCoreABPTeamAndTheABPCommunity": "Explore the contents created by the core ABP team and the ABP community.",
+    "WelcomeFallCampaign": "Welcome Fall Campaign!",
+    "GiveAwayForNewPurchases": "Application Development Classroom Training will be given away for the new purchases!"
   }
 }

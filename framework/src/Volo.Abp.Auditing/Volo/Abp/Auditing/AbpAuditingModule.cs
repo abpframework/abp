@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
@@ -23,5 +25,18 @@ public class AbpAuditingModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.OnRegistred(AuditingInterceptorRegistrar.RegisterIfNeeded);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var applicationName = context.Services.GetApplicationName();
+        
+        if (!applicationName.IsNullOrEmpty())
+        {
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.ApplicationName = applicationName;
+            });
+        }
     }
 }
