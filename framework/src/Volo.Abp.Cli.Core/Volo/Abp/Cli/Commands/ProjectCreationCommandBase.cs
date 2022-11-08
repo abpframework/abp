@@ -19,6 +19,7 @@ using Volo.Abp.Cli.ProjectBuilding.Events;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.EventBus.Local;
 
@@ -38,6 +39,8 @@ public abstract class ProjectCreationCommandBase
     public ILogger<NewCommand> Logger { get; set; }
 
     public ThemePackageAdder ThemePackageAdder { get; }
+    
+    public AngularThemeConfigurer AngularThemeConfigurer { get; }
 
     public ProjectCreationCommandBase(
         ConnectionStringProvider connectionStringProvider,
@@ -49,7 +52,8 @@ public abstract class ProjectCreationCommandBase
         InitialMigrationCreator initialMigrationCreator,
         ThemePackageAdder themePackageAdder,
         ILocalEventBus eventBus,
-        IBundlingService bundlingService)
+        IBundlingService bundlingService, 
+        AngularThemeConfigurer angularThemeConfigurer)
     {
         _bundlingService = bundlingService;
         ConnectionStringProvider = connectionStringProvider;
@@ -61,6 +65,7 @@ public abstract class ProjectCreationCommandBase
         InitialMigrationCreator = initialMigrationCreator;
         EventBus = eventBus;
         ThemePackageAdder = themePackageAdder;
+        AngularThemeConfigurer = angularThemeConfigurer;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -664,6 +669,32 @@ public abstract class ProjectCreationCommandBase
         if (projectArgs.UiFramework is UiFramework.Angular)
         {
             ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@volo/abp.ng.theme.lepton", projectArgs.Version);
+        }
+    }
+
+    protected void ConfigureAngularJsonForThemeSelection(ProjectBuildArgs projectArgs)
+    {
+        var theme = projectArgs.Theme;
+        var isProTemplate = !projectArgs.TemplateName.IsNullOrEmpty() && projectArgs.TemplateName.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
+        var isDefaultTheme = (isProTemplate && theme == AppProTemplate.DefaultTheme) ||
+                             (!isProTemplate && theme == AppTemplate.DefaultTheme);
+
+        if (isDefaultTheme || projectArgs.TemplateName == ModuleTemplate.TemplateName)
+        {
+            return;
+        }
+        
+        if (theme.HasValue && projectArgs.UiFramework == UiFramework.Angular)
+        {
+            var angularFolderPath = projectArgs.TemplateName == MicroserviceProTemplate.TemplateName
+                ? projectArgs.OutputFolder.EnsureEndsWith(Path.DirectorySeparatorChar) + "apps" + Path.DirectorySeparatorChar + "angular"
+                : projectArgs.OutputFolder.EnsureEndsWith(Path.DirectorySeparatorChar) + "angular";
+
+            AngularThemeConfigurer.Configure(new AngularThemeConfigurationArgs(
+                theme: theme.Value,
+                projectName: projectArgs.SolutionName.FullName,
+                angularFolderPath: angularFolderPath
+            ));
         }
     }
 
