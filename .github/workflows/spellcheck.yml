@@ -12,6 +12,8 @@ on:
       - dev
     paths:
       - "docs/en/**/*"
+permissions:
+  contents: read  #  to fetch code (actions/checkout)
 jobs:
   spellcheck:
     name: "Docs: Spellcheck (En)"
