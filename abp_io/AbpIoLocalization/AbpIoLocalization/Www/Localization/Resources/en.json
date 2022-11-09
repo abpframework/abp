@@ -405,6 +405,7 @@
     "SingleLayerApplication": "Single-layer <br>Application",
     "SingleLayerApplicationExplanation1": "Creates a single-layer web application.  ",
     "SingleLayerApplicationExplanation2": "Recommended for building an application with a simpler and easy to understand architecture.",
-    "ApplicationModule": "Application <br>Module"
+    "ApplicationModule": "Application <br>Module",
+    "SeeTheScreenshot": "See the screenshot"
   }
 }
