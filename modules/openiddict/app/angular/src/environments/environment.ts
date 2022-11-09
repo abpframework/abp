@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   application: {
     baseUrl,
-    name: 'Angular',
+    name: 'BookStore',
     logoUrl: '',
   },
   oAuthConfig: {
@@ -16,12 +16,12 @@ export const environment = {
     dummyClientSecret: '1q2w3e*',
     responseType: 'code',
     scope: 'offline_access AbpAPI',
-    requireHttps: false,
+    requireHttps: true,
   },
   apis: {
     default: {
       url: 'https://localhost:44301',
-      rootNamespace: 'OpenIddict.Demo.Client.Angular',
+      rootNamespace: 'BookStore',
     },
   },
 } as Environment;

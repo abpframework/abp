@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.MongoDB",
-  "hash": "e2b74536ee049ef90c3debe073f3032a",
+  "hash": "48de03f43b9110bea915d0fbcd3c8cde",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer.MongoDB",
@@ -25,21 +25,15 @@
       "connectionStringName": "AbpIdentityServer",
       "databaseCollections": [
         {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerClients",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope",
           "contentType": "databaseCollection",
           "name": "IdentityServerApiScopes",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Devices.DeviceFlowCodes",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerDeviceFlowCodes",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerPersistedGrants",
           "summary": null
         },
         {
@@ -49,15 +43,21 @@
           "summary": null
         },
         {
+          "entityFullName": "Volo.Abp.IdentityServer.Devices.DeviceFlowCodes",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerDeviceFlowCodes",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource",
           "contentType": "databaseCollection",
           "name": "IdentityServerApiResources",
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
+          "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
           "contentType": "databaseCollection",
-          "name": "IdentityServerClients",
+          "name": "IdentityServerPersistedGrants",
           "summary": null
         }
       ],

@@ -7,6 +7,8 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore;
 [ConnectionStringName(AbpPermissionManagementDbProperties.ConnectionStringName)]
 public class PermissionManagementDbContext : AbpDbContext<PermissionManagementDbContext>, IPermissionManagementDbContext
 {
+    public DbSet<PermissionGroupDefinitionRecord> PermissionGroups { get; set; }
+    public DbSet<PermissionDefinitionRecord> Permissions { get; set; }
     public DbSet<PermissionGrant> PermissionGrants { get; set; }
 
     public PermissionManagementDbContext(DbContextOptions<PermissionManagementDbContext> options)

@@ -373,7 +373,7 @@ abp translate -c <culture> [options]
 示例:
 
 ````bash
-abp translate -c de-DE
+abp translate -c de
 ````
 
 该命令为 `de-DE` (德语)文化创建了统一的翻译文件.
@@ -409,6 +409,7 @@ abp login <username>                                  # Allows you to enter your
 abp login <username> -p <password>                    # Specify the password as a parameter (password is visible)
 abp login <username> --organization <organization>    # If you have multiple organizations, you need set your active organization
 abp login <username> -p <password> -o <organization>  # You can enter both your password and organization in the same command
+abp login <username> --device                         # Use device login flow
 ```
 
 > 当使用-p参数,请注意,因为你的密码是可见的. 它对于CI / CD自动化管道很有用.

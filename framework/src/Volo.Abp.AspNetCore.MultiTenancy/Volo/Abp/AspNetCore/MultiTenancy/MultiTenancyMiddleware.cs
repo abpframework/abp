@@ -118,6 +118,12 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
             uiCulture = defaultLanguage;
         }
 
-        return new RequestCulture(culture, uiCulture);
+        if (CultureHelper.IsValidCultureCode(culture) &&
+            CultureHelper.IsValidCultureCode(uiCulture))
+        {
+            return new RequestCulture(culture, uiCulture);
+        }
+
+        return null;
     }
 }

@@ -36,6 +36,7 @@
     "PersonalSettingsSaved": "Paramètres personnels enregistrés",
     "PasswordChanged": "Mot de passe changé",
     "NewPasswordConfirmFailed": "Veuillez confirmer le nouveau mot de passe.",
+    "NewPasswordSameAsOld": "Le nouveau mot de passe doit être différent de l'ancien.",
     "Manage": "Gérer",
     "MyAccount": "Mon compte",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "L’auto-inscription est-elle activée",

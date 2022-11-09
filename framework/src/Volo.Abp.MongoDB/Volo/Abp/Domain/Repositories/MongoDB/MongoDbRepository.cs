@@ -294,7 +294,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
         {
-            ((ISoftDelete)entity).IsDeleted = true;
+            ObjectHelper.TrySetProperty(((ISoftDelete)entity), x => x.IsDeleted, () => true);
             ApplyAbpConceptsForDeletedEntity(entity);
 
             ReplaceOneResult result;
@@ -365,8 +365,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         {
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
             {
-                ((ISoftDelete)entity).IsDeleted = true;
-
+                ObjectHelper.TrySetProperty(((ISoftDelete)entity), x => x.IsDeleted, () => true);
                 softDeletedEntities.Add(entity, SetNewConcurrencyStamp(entity));
             }
             else
@@ -598,13 +597,11 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     private void TriggerEntityCreateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityCreatingEvent(entity);
         EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
     }
 
     protected virtual void TriggerEntityUpdateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityUpdatingEvent(entity);
         EntityChangeEventHelper.PublishEntityUpdatedEvent(entity);
     }
 
@@ -617,7 +614,6 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     protected virtual void TriggerEntityDeleteEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityDeletingEvent(entity);
         EntityChangeEventHelper.PublishEntityDeletedEvent(entity);
     }
 

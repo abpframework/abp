@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Public.Application",
-  "hash": "1a950a6b3602894f5e6c9e0db5ff12c3",
+  "hash": "dbc8794dfdbb275a73d410403ce7df09",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Public",
@@ -670,7 +670,7 @@
       ],
       "methods": [
         {
-          "returnType": "BlogPostPublicDto",
+          "returnType": "BlogPostCommonDto",
           "isAsync": true,
           "name": "GetAsync",
           "summary": null,
@@ -688,7 +688,7 @@
           ]
         },
         {
-          "returnType": "PagedResultDto<BlogPostPublicDto>",
+          "returnType": "PagedResultDto<BlogPostCommonDto>",
           "isAsync": true,
           "name": "GetListAsync",
           "summary": null,

@@ -36,6 +36,7 @@
     "PersonalSettingsSaved": "個人設置已保存",
     "PasswordChanged": "修改密碼",
     "NewPasswordConfirmFailed": "請確認新密碼",
+    "NewPasswordSameAsOld": "新密碼不能與舊密碼相同",
     "Manage": "管理",
     "MyAccount": "我的賬戶",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "啟用自行註冊",

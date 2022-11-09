@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.MongoDB",
-  "hash": "49aaf97ee2cd1733544921cdaf142f7c",
+  "hash": "6644f706dba141bad89ee2370c9eef66",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.MongoDB",
@@ -37,15 +37,15 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
-          "contentType": "databaseCollection",
-          "name": "AbpOrganizationUnits",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.Abp.Identity.IdentityRole",
           "contentType": "databaseCollection",
           "name": "AbpRoles",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
+          "contentType": "databaseCollection",
+          "name": "AbpOrganizationUnits",
           "summary": null
         },
         {
