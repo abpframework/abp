@@ -1199,6 +1199,10 @@
           "text": "Common",
           "items": [
             {
+              "text": "Themes",
+              "path": "Themes/Index.md"
+            },
+            {
               "text": "Overriding the User Interface",
               "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
             },
