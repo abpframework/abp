@@ -75,8 +75,8 @@ After you have installed these NuGet packages, you need to configure your projec
             
     // ... others
     
-    app.UseHangfireDashboard();
- 
+    app.UseHangfireDashboard(); //should add to the request pipeline before the app.UseConfiguredEndpoints()
+    app.UseConfiguredEndpoints();
  }
 ````
 
