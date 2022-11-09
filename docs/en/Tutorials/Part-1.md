@@ -51,6 +51,11 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 Before starting the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../Getting-Started.md).
 
+{{if UI == "MVC"}}
+
+> this tutorials is for no-tiered solution , when create with CLI please do not add `--tiered` param
+
+{{end}}
 ## Create the Book Entity
 
 **Domain layer** in the startup template is separated into two projects:
