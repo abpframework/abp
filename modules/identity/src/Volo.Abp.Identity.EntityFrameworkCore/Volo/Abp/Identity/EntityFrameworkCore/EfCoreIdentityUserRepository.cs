@@ -304,8 +304,8 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
     }
 
     public virtual async Task<IdentityUser> FindByTenantIdAndUserNameAsync(
-        Guid tenantId, 
         [NotNull] string userName,
+        Guid? tenantId, 
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {

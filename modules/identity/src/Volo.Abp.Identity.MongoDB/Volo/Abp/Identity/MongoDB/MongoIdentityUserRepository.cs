@@ -272,8 +272,8 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
     }
 
     public virtual async Task<IdentityUser> FindByTenantIdAndUserNameAsync(
-        Guid tenantId, 
         [NotNull] string userName, 
+        Guid? tenantId, 
         bool includeDetails = true, 
         CancellationToken cancellationToken = default)
     {
