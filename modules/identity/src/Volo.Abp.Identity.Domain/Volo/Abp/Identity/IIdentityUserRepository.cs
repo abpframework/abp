@@ -103,10 +103,9 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         CancellationToken cancellationToken = default
     );
 
-    Task<IdentityUser> GetUserByTenantIdAndUserNameAsync(
+    Task<IdentityUser> FindByTenantIdAndUserNameAsync(
         Guid tenantId,
         [NotNull] string userName,
-        bool includeDetails = true,
         CancellationToken cancellationToken = default
     );
 }

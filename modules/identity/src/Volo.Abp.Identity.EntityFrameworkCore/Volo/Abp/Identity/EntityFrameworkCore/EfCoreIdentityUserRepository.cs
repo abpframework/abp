@@ -303,7 +303,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return (await GetQueryableAsync()).IncludeDetails();
     }
 
-    public virtual async Task<IdentityUser> GetUserByTenantIdAndUserNameAsync(Guid tenantId, [NotNull] string userName, bool includeDetails = true, CancellationToken cancellationToken = default)
+    public virtual async Task<IdentityUser> FindByTenantIdAndUserNameAsync(Guid tenantId, [NotNull] string userName, CancellationToken cancellationToken = default)
     {
         return await(await GetDbSetAsync())
             .FirstOrDefaultAsync(
