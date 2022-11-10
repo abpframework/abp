@@ -106,6 +106,7 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
     Task<IdentityUser> FindByTenantIdAndUserNameAsync(
         Guid tenantId,
         [NotNull] string userName,
+        bool includeDetails = true,
         CancellationToken cancellationToken = default
     );
 }

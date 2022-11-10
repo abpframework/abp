@@ -303,9 +303,14 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return (await GetQueryableAsync()).IncludeDetails();
     }
 
-    public virtual async Task<IdentityUser> FindByTenantIdAndUserNameAsync(Guid tenantId, [NotNull] string userName, CancellationToken cancellationToken = default)
+    public virtual async Task<IdentityUser> FindByTenantIdAndUserNameAsync(
+        Guid tenantId, 
+        [NotNull] string userName,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default)
     {
         return await(await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
             .FirstOrDefaultAsync(
                 u => u.TenantId == tenantId && u.UserName == userName,
                 GetCancellationToken(cancellationToken)
