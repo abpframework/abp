@@ -179,6 +179,10 @@
     "Post": "Post",
     "ExploreTheContentsCreatedByTheCoreABPTeamAndTheABPCommunity": "Explore the contents created by the core ABP team and the ABP community.",
     "WelcomeFallCampaign": "Welcome Fall Campaign!",
-    "GiveAwayForNewPurchases": "Application Development Classroom Training will be given away for the new purchases!"
+    "GiveAwayForNewPurchases": "Application Development Classroom Training will be given away for the new purchases!",
+    "BlackFriday": "<strong>BLACK</strong> <span>FRIDAY</span>",
+    "ValidForExistingCustomers": "Also valid for the <br> existing customers!",
+    "CampaignBetweenDates": "From {0} <br>to {1}",
+    "SaveUpTo": "<span>SAVE</span> UP TO<strong>${0}K</strong>"
   }
 }
