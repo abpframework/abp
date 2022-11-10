@@ -5,6 +5,7 @@ using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -300,5 +301,14 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
     public override async Task<IQueryable<IdentityUser>> WithDetailsAsync()
     {
         return (await GetQueryableAsync()).IncludeDetails();
+    }
+
+    public virtual async Task<IdentityUser> GetUserByTenantIdAndUserNameAsync(Guid tenantId, [NotNull] string userName, bool includeDetails = true, CancellationToken cancellationToken = default)
+    {
+        return await(await GetDbSetAsync())
+            .FirstOrDefaultAsync(
+                u => u.TenantId == tenantId && u.UserName == userName,
+                GetCancellationToken(cancellationToken)
+            );
     }
 }

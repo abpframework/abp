@@ -5,6 +5,7 @@ using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
@@ -268,5 +269,14 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         return await (await GetMongoQueryableAsync(cancellationToken))
                  .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
                  .ToListAsync(cancellationToken);
+    }
+
+    public virtual async Task<IdentityUser> GetUserByTenantIdAndUserNameAsync(Guid tenantId, [NotNull] string userName, bool includeDetails = true, CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .FirstOrDefaultAsync(
+                u => u.TenantId == tenantId && u.UserName == userName,
+                GetCancellationToken(cancellationToken)
+            );
     }
 }
