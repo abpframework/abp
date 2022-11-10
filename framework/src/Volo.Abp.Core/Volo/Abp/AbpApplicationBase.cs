@@ -26,6 +26,8 @@ public abstract class AbpApplicationBase : IAbpApplication
 
     public string ApplicationName { get; }
 
+    public string InstanceId { get; } = Guid.NewGuid().ToString();
+
     private bool _configuredServices;
 
     internal AbpApplicationBase(
@@ -47,7 +49,7 @@ public abstract class AbpApplicationBase : IAbpApplication
         ApplicationName = GetApplicationName(options);
 
         services.AddSingleton<IAbpApplication>(this);
-        services.AddSingleton<IApplicationNameAccessor>(this);
+        services.AddSingleton<IApplicationInfoAccessor>(this);
         services.AddSingleton<IModuleContainer>(this);
 
         services.AddCoreServices();

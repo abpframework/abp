@@ -240,6 +240,10 @@ body {
                         color: #ddd;
                     }
                 }
+
+                select option {
+                    background-color: #000;
+                  }
             }
 
             > ul {
@@ -359,6 +363,9 @@ body {
                 }
             }
         }
+
+   
+
     }
 
     .docs-content {
@@ -390,9 +397,9 @@ body {
                     white-space: nowrap;
                     padding-bottom: 10px;
 
-                    &::-webkit-scrollbar {
-                        display: none;
-                    }
+                    // &::-webkit-scrollbar {
+                    //     display: none;
+                    // }
 
                     .breadcrumb-item {
                         color: #838690;

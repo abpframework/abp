@@ -2,11 +2,9 @@
 
     <Import Project="..\..\..\configureawait.props" />
     <Import Project="..\..\..\common.props" />
-    
+
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
         <RootNamespace />
     </PropertyGroup>
 
@@ -14,5 +12,5 @@
         <ProjectReference Include="..\Volo.Abp.Dapr\Volo.Abp.Dapr.csproj" />
         <ProjectReference Include="..\Volo.Abp.DistributedLocking.Abstractions\Volo.Abp.DistributedLocking.Abstractions.csproj" />
     </ItemGroup>
-    
+
 </Project>

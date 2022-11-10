@@ -795,6 +795,15 @@
     "CreateAndCustomizeDescription": "By using LeptonX Theme you also have access to many pre-made html pages. These include many pages such as login page, blog, FAQ, subscription list, invoice, pricing, file management.",
     "LeptonThemeForAdmin": "Lepton Theme for your admin dashboard by",
     "LeptonThemeForAdminDescription": "Lepton Theme is still available and will be maintained. If you want to switch to LeptonX Theme as a Lepton Theme user, you can see the documentation to learn how-to.",
-    "LeptonCompatibleWith": "Lepton Theme is compatible with"
+    "LeptonCompatibleWith": "Lepton Theme is compatible with",
+    "BlackFridayDiscount": "Black Friday Discount",
+    "UpgradePaymentInfoSection_DeveloperPrice": "{0} for {1} additional developer(s)",
+    "Upgrade": "Upgrade",
+    "Renewal": "Renewal",
+    "UpgradePaymentInfoSection_LicensePrice": "{0} license",
+    "UpgradePaymentInfoSection_LicenseRenewalPrice": "License renewal",
+    "Total": "Total",
+    "SupportPolicyFaqTitle": "What is your support policy?",
+    "SupportPolicyFaqExplanation": "We do support only the active and the previous major version. We do not guarantee a patch release for the 3rd and older major versions. For example, if the active version is 7.0.0, we will release patch releases for both 6.x.x and 7.x.x. Besides, we provide support only for ABP Framework and ABP Commercial related issues. That means no support is given for the 3rd party applications, cloud services and other peripheral libraries used by ABP products. We will use commercially reasonable efforts to provide our customers with technical support during \"Volosoft Bilisim A.S\"s official business hours. On the other hand, we do not commit to a service-level agreement (SLA) response time, but we will try to respond to the technical issues as quickly as possible within our official working hours. Unless a special agreement is made with the customer, we only provide support at https://support.abp.io. We also have private email support, which is only available to Enterprise License holders."
   }
 }

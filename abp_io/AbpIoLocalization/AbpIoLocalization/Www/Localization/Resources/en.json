@@ -393,6 +393,19 @@
     "BasicThemeInfo": "Minimalist UI theme with plain Bootstrap colors and styles. Ideal if you will build your own UI theme.",
     "SeeDocumentation": "See <a href='{0}' target='_blank'>documentation</a>.",
     "SeeFullScreen": "<a href='{0}' target='_blank'>🖼️ See the screenshot</a>",
-    "BuildingMicroserviceSolutionsShortDescription": "This book is a reference guide for developing and managing microservice-based applications using the ABP Framework."
+    "BuildingMicroserviceSolutionsShortDescription": "This book is a reference guide for developing and managing microservice-based applications using the ABP Framework.",
+    "InstallAbpCliMessage": "Install the ABP CLI in a command line terminal, if you haven't installed it before:",
+    "Terminal": "Terminal",
+    "Copy": "Copy",
+    "RunTheFollowingCommand": "Run the following command in a command line terminal:",
+    "ChangeSolutionOptionsBelow": "You can change the solution options below.",
+    "MultiLayerApplication": "Multi-layer <br>Application",
+    "MultiLayerApplicationExplanation1": "Creates a fully layered solution based on Domain Driven Design practices.",
+    "MultiLayerApplicationExplanation2": "Recommended for long-term projects that need a maintainable and extensible codebase.",
+    "SingleLayerApplication": "Single-layer <br>Application",
+    "SingleLayerApplicationExplanation1": "Creates a single-layer web application.  ",
+    "SingleLayerApplicationExplanation2": "Recommended for building an application with a simpler and easy to understand architecture.",
+    "ApplicationModule": "Application <br>Module",
+    "SeeTheScreenshot": "See the screenshot"
   }
 }

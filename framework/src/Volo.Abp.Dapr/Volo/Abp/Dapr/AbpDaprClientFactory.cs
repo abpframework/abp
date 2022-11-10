@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Net.Http;
+using System.Text.Json;
 using Dapr.Client;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -22,7 +24,7 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
         JsonSerializerOptions = CreateJsonSerializerOptions(systemTextJsonSerializerOptions.Value);
     }
 
-    public virtual DaprClient Create(Action<DaprClientBuilder>? builderAction = null)
+    public virtual DaprClient Create(Action<DaprClientBuilder> builderAction = null)
     {
         var builder = new DaprClientBuilder()
             .UseJsonSerializationOptions(JsonSerializerOptions);
@@ -49,9 +51,9 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
     }
 
     public virtual HttpClient CreateHttpClient(
-        string? appId = null,
-        string? daprEndpoint = null,
-        string? daprApiToken = null)
+        string appId = null,
+        string daprEndpoint = null,
+        string daprApiToken = null)
     {
         if(daprEndpoint.IsNullOrWhiteSpace() &&
            !DaprOptions.HttpEndpoint.IsNullOrWhiteSpace())
@@ -65,7 +67,7 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
             daprApiToken ?? DaprApiTokenProvider.GetDaprApiToken()
         );
     }
-    
+
     protected virtual JsonSerializerOptions CreateJsonSerializerOptions(AbpSystemTextJsonSerializerOptions systemTextJsonSerializerOptions)
     {
         return new JsonSerializerOptions(systemTextJsonSerializerOptions.JsonSerializerOptions);

@@ -404,6 +404,9 @@
     "Tags": "Tags",
     "SetTagsInfo": "Tags should be comma-separated. Eg: CSharp, Entity Framework",
     "RejectTrialLicenseWarningMessage": "Are you sure you want to reject this trial license request?",
-    "ExportToExcel": "Export to Excel"
+    "ExportToExcel": "Export to Excel",
+    "OverallTotalPrice": "Overall Total Price",
+    "OverallDiscountPrice": "Overall Discount Price",
+    "OverallDiscountText": "Overall Discount Text"
   }
 }

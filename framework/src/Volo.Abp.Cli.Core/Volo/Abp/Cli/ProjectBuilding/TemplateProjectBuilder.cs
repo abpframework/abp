@@ -236,10 +236,14 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
         {
             Logger.LogInformation("Theme: " + args.Theme);
 
-            if (args.UiFramework == UiFramework.Angular && (args.Theme != AppTemplate.DefaultTheme || args.Theme != AppProTemplate.DefaultTheme))
+            var isProTemplate = !args.TemplateName.IsNullOrEmpty() && args.TemplateName.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
+
+            if (args.UiFramework == UiFramework.Angular && ((isProTemplate && args.Theme != AppProTemplate.DefaultTheme) ||
+                                                            (!isProTemplate && args.Theme != AppTemplate.DefaultTheme)))
             {
                 Logger.LogWarning("You may need to make some additional changes for this theme. " +
-                                  "See the documentation for more information: https://docs.abp.io/en/abp/latest/UI/Angular/Theme-Configurations");
+                                  "See the documentation for more information: " +
+                                  "https://docs.abp.io/en/abp/latest/UI/Angular/Theme-Configurations");
             }
         }
 

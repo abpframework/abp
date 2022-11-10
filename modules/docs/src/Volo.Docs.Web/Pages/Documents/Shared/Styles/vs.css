@@ -199,6 +199,9 @@ body.scrolledMore .alert-criteria p.alert-p {
   border-color: #000000;
   color: #ddd;
 }
+.docs-page .docs-sidebar .docs-tree-list .docs-version select option {
+  background-color: #000;
+}
 .docs-page .docs-sidebar .docs-tree-list > ul {
   display: block;
   height: calc(100vh - 310px);
@@ -313,9 +316,6 @@ body.scrolledMore .alert-criteria p.alert-p {
   overflow-x: scroll;
   white-space: nowrap;
   padding-bottom: 10px;
-}
-.docs-page .docs-content .top-container nav .breadcrumb::-webkit-scrollbar {
-  display: none;
 }
 .docs-page .docs-content .top-container nav .breadcrumb .breadcrumb-item {
   color: #838690;

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Localization.TestResources.External;
 using Volo.Abp.Testing;
 using Xunit;
 
@@ -58,5 +59,35 @@ public class AbpStringLocalizerFactory_Tests : AbpIntegratedTest<AbpLocalization
         await Assert.ThrowsAsync<AbpException>(
             async () => await _factory.CreateByResourceNameAsync("UnknownResourceName")
         );
+    }
+
+    [Fact]
+    public void Should_Create_External_Resource_By_Name()
+    {
+        using (CultureHelper.Use("en"))
+        {
+            var localizer = _factory.CreateByResourceNameOrNull(TestExternalLocalizationStore.TestExternalResourceNames.ExternalResource1);
+            localizer.ShouldNotBeNull();
+            localizer["CarPlural"].Value.ShouldBe("CarPlural");
+            
+            var localizer2 = _factory.CreateByResourceNameOrNull(TestExternalLocalizationStore.TestExternalResourceNames.ExternalResource2);
+            localizer2.ShouldNotBeNull();
+            localizer2["CarPlural"].Value.ShouldBe("CarPlural");
+        }
+    }
+
+    [Fact]
+    public async Task Should_Create_External_Resource_By_Name_Async()
+    {
+        using (CultureHelper.Use("en"))
+        {
+            var localizer = await _factory.CreateByResourceNameOrNullAsync(TestExternalLocalizationStore.TestExternalResourceNames.ExternalResource1);
+            localizer.ShouldNotBeNull();
+            localizer["CarPlural"].Value.ShouldBe("CarPlural");
+            
+            var localizer2 = await _factory.CreateByResourceNameOrNullAsync(TestExternalLocalizationStore.TestExternalResourceNames.ExternalResource2);
+            localizer2.ShouldNotBeNull();
+            localizer2["CarPlural"].Value.ShouldBe("CarPlural");
+        }
     }
 }
