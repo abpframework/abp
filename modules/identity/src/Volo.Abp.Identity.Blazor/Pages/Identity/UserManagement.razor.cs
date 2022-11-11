@@ -35,12 +35,13 @@ public partial class UserManagement
     protected string CreateModalSelectedTab = DefaultSelectedTab;
 
     protected string EditModalSelectedTab = DefaultSelectedTab;
+    protected bool IsShowPasswordText { get; set; } = false;
 
     protected PageToolbar Toolbar { get; } = new();
 
     private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
     private TextRole _passwordTextRole = TextRole.Password;
-    
+
     public UserManagement()
     {
         ObjectMapperContext = typeof(AbpIdentityBlazorModule);
@@ -232,12 +233,17 @@ public partial class UserManagement
     {
         if (textRole == null)
         {
-            ChangePasswordTextRole(_passwordTextRole == TextRole.Password ? TextRole.Text: TextRole.Password);
+            ChangePasswordTextRole(_passwordTextRole == TextRole.Password ? TextRole.Text : TextRole.Password);
         }
         else
         {
             _passwordTextRole = textRole.Value;
         }
+    }
+
+    protected virtual void IsShowPassword(bool isShowPassword)
+    {
+        IsShowPasswordText = !isShowPassword;
     }
 }
 
