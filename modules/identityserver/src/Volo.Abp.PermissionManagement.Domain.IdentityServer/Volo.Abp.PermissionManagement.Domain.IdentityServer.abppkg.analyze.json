@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.Domain.IdentityServer",
-  "hash": "a828bf223e800a04b7ea1436b39b8d29",
+  "hash": "c1fd056b5d9b3371d5061601e5324d6a",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.IdentityServer",

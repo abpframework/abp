@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Domain.Shared",
-  "hash": "b350dc08d218613d7c72fd8613d8c8dd",
+  "hash": "38a96fbb5fde9d00dddaf4ced2969725",
   "contents": [
     {
       "namespace": "Volo.CmsKit",
@@ -14,6 +14,11 @@
           "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
           "namespace": "Volo.Abp.GlobalFeatures",
           "name": "AbpGlobalFeaturesModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Features",
+          "namespace": "Volo.Abp.Features",
+          "name": "AbpFeaturesModule"
         }
       ],
       "contentType": "abpModule",

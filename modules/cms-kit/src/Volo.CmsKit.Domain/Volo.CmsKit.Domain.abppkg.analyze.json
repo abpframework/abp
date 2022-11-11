@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Domain",
-  "hash": "6c2d3f40902f74086295ce02c87bc1c8",
+  "hash": "9563ec318b090e3347580fe48ee5639e",
   "contents": [
     {
       "namespace": "Volo.CmsKit",
@@ -1779,6 +1779,26 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "SetHomePageAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Page",
+              "name": "page",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Page",
+          "isAsync": true,
+          "name": "GetHomePageAsync",
+          "summary": null,
+          "parameters": []
         }
       ],
       "contentType": "domainService",
