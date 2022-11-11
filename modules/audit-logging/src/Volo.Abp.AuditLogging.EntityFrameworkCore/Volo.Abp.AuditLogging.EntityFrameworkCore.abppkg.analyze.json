@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.AuditLogging.EntityFrameworkCore",
-  "hash": "9339bfe48072c12a6b76f9265168e21b",
+  "hash": "403384d69b1bcbf6e117d4620fc7be25",
   "contents": [
     {
       "namespace": "Volo.Abp.AuditLogging.EntityFrameworkCore",

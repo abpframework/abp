@@ -54,6 +54,7 @@
     "Version": "إصدار",
     "LanguageCode": "رمز اللغة",
     "FileName": "اسم الملف",
-    "LastCachedTime": "وقت ذاكرة التخزين"
+    "LastCachedTime": "وقت ذاكرة التخزين",
+    "Project": "مشروع "
   }
 }

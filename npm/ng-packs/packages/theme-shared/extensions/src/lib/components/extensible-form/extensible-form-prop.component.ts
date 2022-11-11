@@ -60,7 +60,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   asterisk = '';
 
-  containerClassName = 'mb-3 form-group';
+  containerClassName = 'mb-3';
 
   options$: Observable<ABP.Option<any>[]> = of([]);
 

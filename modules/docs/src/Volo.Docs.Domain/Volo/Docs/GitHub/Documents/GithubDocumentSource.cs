@@ -197,7 +197,7 @@ namespace Volo.Docs.GitHub.Documents
             }
             catch (Exception e)
             {
-                Logger.LogError(e.ToString());
+                Logger.LogWarning(e.ToString());
                 return null;
             }
         }

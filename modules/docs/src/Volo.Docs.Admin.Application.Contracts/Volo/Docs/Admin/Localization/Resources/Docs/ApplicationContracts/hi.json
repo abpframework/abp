@@ -54,6 +54,7 @@
     "Version": "संस्करण",
     "LanguageCode": "भाषा कोड",
     "FileName": "फ़ाइल का नाम",
-    "LastCachedTime": "कैश समय"
+    "LastCachedTime": "कैश समय",
+    "Project": "परियोजना"
   }
 }

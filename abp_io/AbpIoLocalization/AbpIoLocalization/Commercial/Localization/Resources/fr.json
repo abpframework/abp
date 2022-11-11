@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Puis-je changer les développeurs enregistrés de mon organisation à l'avenir?",
     "ChangingDevelopersExplanation": "En plus d'ajouter de nouveaux développeurs à votre licence, vous pouvez également modifier les développeurs existants (vous pouvez supprimer un développeur et en ajouter un nouveau sur le même siège) sans aucun coût supplémentaire.",
     "WhenShouldIRenewMyLicense": "Quand dois-je renouveler ma licence?",
-    "WhenShouldIRenewMyLicenseExplanation": "Si vous renouvelez votre licence dans un délai de <strong>1 mois</strong> après l'expiration de votre licence, les remises suivantes seront appliquées : licence d'équipe {0} % de remise, licence d'entreprise {1} % de remise, licence d'entreprise {2} % de remise . Si vous renouvelez votre licence <strong>1 mois</strong> après la date d'expiration de votre licence, le prix de renouvellement sera le même que le prix d'achat de la licence et il n'y aura aucune remise sur votre renouvellement.",
+    "WhenShouldIRenewMyLicenseExplanation": "Si vous renouvelez votre licence dans <strong>1 mois</strong> après l'expiration de votre licence, les remises suivantes seront appliquées : licence d'équipe {0} ; licence commerciale {1} ; licence d'entreprise {2}. Toutefois, si vous renouveler votre licence après <strong>1 mois</strong> depuis la date d'expiration de votre licence, le prix de renouvellement sera le même que le prix d'achat de la licence et il n'y aura pas de remise sur votre renouvellement.",
     "TrialPlan": "Avez-vous un plan d'essai?",
     "DoYouAcceptBankWireTransfer": "Acceptez-vous les virements bancaires?",
     "DoYouAcceptBankWireTransferExplanation": "Oui, nous acceptons les virements bancaires.<br />Après avoir envoyé les frais de licence par virement bancaire, envoyez-nous par e-mail à accounting@abp.io votre reçu et le type de licence demandé. Nos coordonnées bancaires internationales :",
@@ -360,7 +360,7 @@
     "Next": "Prochain",
     "StartTrial": "Commencer mon essai gratuit",
     "ContactUsIssues": "Contactez-nous si vous avez des problèmes",
-    "TrialActivatedWarning": "Cher {0}, un utilisateur n'a droit qu'à une seule période d'essai gratuite. Vous avez déjà utilisé votre période d'essai.",
+    "TrialActivatedWarning": "Un utilisateur n'a droit qu'à 1 période d'essai gratuite. Vous avez déjà utilisé votre période d'essai.",
     "SaveAndDownload": "Enregistrer et télécharger",
     "CompanyNameValidationMessage": "Le nom de l'entreprise est trop long !",
     "AddressValidationMessage": "L'adresse est trop longue !",
@@ -373,7 +373,7 @@
     "TrialLicenseModelInvalidErrorMessage": "L'un des champs suivants n'est pas valide : Nom du pays, Taille de l'entreprise, Secteur d'activité ou Objet de l'utilisation.",
     "Trial": "Essai",
     "Purchased": "Acheté",
-    "PurchaseLicense": "Licence d'achat",
+    "PurchaseLicense": "Acheter la licence {0}",
     "PurchaseTrialLicenseMessage": "La date d'expiration de votre licence est {0}. <br> Si vous souhaitez continuer à utiliser les projets que vous avez créés pendant votre période d'essai gratuite, vous devez modifier les clés de licence dans vos fichiers <code>appsettings.secrets.json</code>. Voici votre clé de licence :",
     "TrialLicenseExpireMessage": "Vous utilisez la licence d'essai et votre licence d'essai expirera le {0}.",
     "TryForFree": "Essayer gratuitement",
@@ -381,6 +381,8 @@
     "CommercialNewsletterConfirmationMessage": "J'accepte les <a href=\"https://commercial.abp.io/TermsConditions\">Conditions générales</a> et la <a href=\"https://commercial.abp.io/Privacy\">Politique de confidentialité </a>.",
     "ContinueWithNewOrganization": "Continuer avec une nouvelle organisation",
     "RenewLicenseEarly": "Si je renouvelle ma licence plus tôt, obtiendrai-je l'année complète ?",
-    "RenewLicenseEarylExplanation": "Lorsque vous renouvelez votre licence avant la date d'expiration de votre licence, 1 an sera ajouté à la date d'expiration de votre licence. Par exemple, si votre licence expire le {0}-06-06 et que vous la renouvelez le {0}-01-01, la nouvelle date d'expiration de votre licence sera le {1}-06-06."
+    "RenewLicenseEarylExplanation": "Lorsque vous renouvelez votre licence avant la date d'expiration de votre licence, 1 an sera ajouté à la date d'expiration de votre licence. Par exemple, si votre licence expire le {0}-06-06 et que vous la renouvelez le {0}-01-01, la nouvelle date d'expiration de votre licence sera le {1}-06-06.",
+    "discountForYears": "{0} % de remise pendentif {1} an(s)",
+    "BlackFridayDiscount": "Remise Black Friday"
   }
 }

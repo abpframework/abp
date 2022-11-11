@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.MongoDB",
-  "hash": "e2b74536ee049ef90c3debe073f3032a",
+  "hash": "9446fd3b3bce5c88b354e36fbfab6e61",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer.MongoDB",
@@ -37,15 +37,9 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
           "contentType": "databaseCollection",
-          "name": "IdentityServerPersistedGrants",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerIdentityResources",
+          "name": "IdentityServerClients",
           "summary": null
         },
         {
@@ -55,9 +49,15 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
+          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
           "contentType": "databaseCollection",
-          "name": "IdentityServerClients",
+          "name": "IdentityServerIdentityResources",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerPersistedGrants",
           "summary": null
         }
       ],

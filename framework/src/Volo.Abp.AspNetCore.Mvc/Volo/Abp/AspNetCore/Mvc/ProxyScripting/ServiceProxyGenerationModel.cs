@@ -5,7 +5,7 @@ using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 
 namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting;
 
-public class ServiceProxyGenerationModel //: TODO: IShouldNormalize
+public class ServiceProxyGenerationModel
 {
     public string Type { get; set; }
 

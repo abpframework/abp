@@ -1,0 +1,13 @@
+﻿@inject IHtmlLocalizer<AbpFeatureManagementResource> L
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.FeatureManagement.Localization
+@model Volo.Abp.FeatureManagement.Pages.FeatureManagement.Components.FeatureSettingGroup.FeatureSettingGroupViewComponent.FeatureSettingViewModel
+
+<abp-script src="/Pages/FeatureManagement/Components/FeatureSettingGroup/Default.js" />
+
+<form id="FeatureSettingsForm">
+    @if (Model.HasManageHostFeaturesPermission)
+    {
+        <abp-button size="Small" button-type="Primary" id="ManageHostFeatures" icon="cog" text="@L["ManageHostFeatures"].Value"/>
+    }
+</form>

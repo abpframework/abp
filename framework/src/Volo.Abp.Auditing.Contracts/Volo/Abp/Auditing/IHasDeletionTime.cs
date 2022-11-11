@@ -11,5 +11,5 @@ public interface IHasDeletionTime : ISoftDelete
     /// <summary>
     /// Deletion time.
     /// </summary>
-    DateTime? DeletionTime { get; set; }
+    DateTime? DeletionTime { get; }
 }

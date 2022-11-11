@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Web",
-  "hash": "2c74abf24c40a3a8c272f1e381a5cc81",
+  "hash": "cd5ec250e701194ff1cff4bd65855545",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
@@ -14,6 +14,11 @@
           "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
           "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
           "name": "AbpAspNetCoreMvcUiThemeSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.Web",
+          "namespace": "Volo.Abp.SettingManagement.Web",
+          "name": "AbpSettingManagementWebModule"
         }
       ],
       "contentType": "abpModule",
