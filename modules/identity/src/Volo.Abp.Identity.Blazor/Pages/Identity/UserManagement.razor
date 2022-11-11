@@ -101,8 +101,8 @@
                                                     </TextEdit>
                                                 </Addon>
                                                 <Addon AddonType="AddonType.End">
-                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))">
-                                                        <Icon Name="IsShowPasswordText ? IconName.Eye : IconName.EyeSlash" Clicked="@(() => IsShowPassword(IsShowPasswordText))" />
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null, IsShowPassword))">
+                                                        <Icon Name="IsShowPassword ? IconName.Eye : IconName.EyeSlash" />
                                                     </Button>
                                                 </Addon>
                                             </Addons>

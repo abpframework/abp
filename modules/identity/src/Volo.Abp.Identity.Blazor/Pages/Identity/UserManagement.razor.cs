@@ -35,7 +35,7 @@ public partial class UserManagement
     protected string CreateModalSelectedTab = DefaultSelectedTab;
 
     protected string EditModalSelectedTab = DefaultSelectedTab;
-    protected bool IsShowPasswordText { get; set; } = false;
+    protected bool IsShowPassword { get; set; }
 
     protected PageToolbar Toolbar { get; } = new();
 
@@ -229,7 +229,7 @@ public partial class UserManagement
         return base.SetToolbarItemsAsync();
     }
 
-    protected virtual void ChangePasswordTextRole(TextRole? textRole)
+    protected virtual void ChangePasswordTextRole(TextRole? textRole, bool? isShowPassword = null)
     {
         if (textRole == null)
         {
@@ -239,11 +239,11 @@ public partial class UserManagement
         {
             _passwordTextRole = textRole.Value;
         }
-    }
 
-    protected virtual void IsShowPassword(bool isShowPassword)
-    {
-        IsShowPasswordText = !isShowPassword;
+        if (isShowPassword.HasValue)
+        {
+            IsShowPassword = !isShowPassword.Value;
+        }
     }
 }
 
