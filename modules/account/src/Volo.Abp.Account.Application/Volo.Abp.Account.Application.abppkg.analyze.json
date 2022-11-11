@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Account.Application",
-  "hash": "c95864b3ff1b05d0dd660125cccea539",
+  "hash": "dd191425299922e0c891df10f5b4141d",
   "contents": [
     {
       "namespace": "Volo.Abp.Account",
@@ -106,6 +106,19 @@
           "parameters": [
             {
               "type": "SendPasswordResetCodeDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "isAsync": true,
+          "name": "VerifyPasswordResetTokenAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "VerifyPasswordResetTokenInput",
               "name": "input",
               "isOptional": false
             }
