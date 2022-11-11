@@ -33,7 +33,7 @@ var abp = abp || {};
 
         var _createDropdownItem = function (record, fieldItem, tableInstance) {
             var $li = $('<li/>');
-            var $a = $('<a/>');
+            var $a = $('<a/>').addClass('dropdown-item');
 
             if (fieldItem.displayNameHtml) {
                 $a.html(abp.utils.isFunction(fieldItem.text) ? fieldItem.text(record, tableInstance) : fieldItem.text);
