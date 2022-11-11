@@ -1,3 +1,4 @@
+{%{
 # DateTime Format Pipes
 
 You can format date by Date pipe of angular.
@@ -16,14 +17,18 @@ ShortDate, ShortTime and ShortDateTime format data like angular's data pipe but 
 <span> {{today | shortDatePipe }}</span>
 ```
 
+
 # ShortTime Pipe
 
 ```html
 <span> {{today | shortTimePipe }}</span>
 ```
 
+
 # ShortDateTime Pipe
 
 ```html
 <span> {{today | shortDateTimePipe }}</span>
 ```
+
+}%} 
