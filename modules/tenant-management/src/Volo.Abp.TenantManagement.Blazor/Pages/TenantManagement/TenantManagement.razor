@@ -65,14 +65,21 @@
                             </Field>
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
-                            <Field>
-                                <FieldLabel>@L["DisplayName:AdminPassword"] *</FieldLabel>
-                                <TextEdit Role="@TextRole.Password" @bind-Text="@NewEntity.AdminPassword">
-                                    <Feedback>
-                                        <ValidationError/>
-                                    </Feedback>
-                                </TextEdit>
-                            </Field>
+						<Field>
+                             <FieldLabel>@L["DisplayName:AdminPassword"] *</FieldLabel>
+                             <Addons>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit Role="IsShowPassword ? TextRole.Text : TextRole.Password" @bind-Text="@NewEntity.AdminPassword">
+                                    </TextEdit>
+                                </Addon>
+                                <Addon AddonType="AddonType.End">
+                                    <Button Color="Color.Secondary" Clicked="@(() => ShowHidePassword(IsShowPassword))">
+                                        <Icon Name="IsShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                    </Button>
+                                </Addon>
+                            </Addons>
+                            <ValidationError Style="display: block" />
+                         </Field>
                         </Validation>
                         <ExtensionProperties TEntityType="TenantCreateDto" TResourceType="AbpTenantManagementResource" Entity="@NewEntity" LH="@LH"/>
                     </Validations>
