@@ -273,6 +273,9 @@
     "SubscribeToNewsletter": "Abonaţi-vă la newsletter pentru a primi informaţii despre evnimentele din platforma ABP.IO, precum noi lansări, articole, oferte şi multe altele.",
     "FirstEdition": "Prima ediţie",
 	"ThankYou": "Vă mulţumim!",
-	"CheckboxMandatory": "Trebuie să bifaţi asta pentru a continua!"
+	"CheckboxMandatory": "Trebuie să bifaţi asta pentru a continua!",
+    "SelectUITheme": "Selectați Tema UI",
+    
+
   }
 }
