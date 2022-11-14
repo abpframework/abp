@@ -77,7 +77,8 @@ public class BundlingService : IBundlingService, ITransientDependency
                 FrameworkVersion = frameworkVersion,
                 ProjectFileName = projectName,
                 BundleName = bundleConfig.Name.IsNullOrEmpty() ? "global" : bundleConfig.Name,
-                Minify = bundleConfig.Mode == BundlingMode.BundleAndMinify
+                Minify = bundleConfig.Mode == BundlingMode.BundleAndMinify,
+                ProjectType = projectType
             };
 
             Logger.LogInformation("Generating style bundle...");
