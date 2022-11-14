@@ -1,4 +1,4 @@
-name: Merge branch rel-6.0 with rel-7.0
+name: Merge branch rel-7.0 with rel-6.0
 on:
   push:
     branches:
