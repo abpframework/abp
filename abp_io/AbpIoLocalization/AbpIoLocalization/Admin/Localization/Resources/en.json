@@ -407,6 +407,8 @@
     "ExportToExcel": "Export to Excel",
     "OverallTotalPrice": "Overall Total Price",
     "OverallDiscountPrice": "Overall Discount Price",
-    "OverallDiscountText": "Overall Discount Text"
+    "OverallDiscountText": "Overall Discount Text",
+    "SelectReport": "-- select report --",
+    "NoDataAvailable": "No data available"
   }
 }
