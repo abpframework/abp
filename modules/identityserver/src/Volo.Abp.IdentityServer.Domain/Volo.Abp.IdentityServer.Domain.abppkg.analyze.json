@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.Domain",
-  "hash": "5d8c49058240ab44c4829a6da5629387",
+  "hash": "e467b5584235a373be0f9719a9f9665f",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer",
@@ -472,114 +472,6 @@
         {
           "returnType": "Void",
           "isAsync": false,
-          "name": "RemoveClaim",
-          "summary": null,
-          "parameters": [
-            {
-              "type": "String",
-              "name": "type",
-              "isOptional": false
-            }
-          ]
-        },
-        {
-          "returnType": "Void",
-          "isAsync": false,
-          "name": "RemoveClaim",
-          "summary": null,
-          "parameters": [
-            {
-              "type": "String",
-              "name": "type",
-              "isOptional": false
-            },
-            {
-              "type": "String",
-              "name": "value",
-              "isOptional": false
-            }
-          ]
-        },
-        {
-          "returnType": "List<ClientClaim>",
-          "isAsync": false,
-          "name": "FindClaims",
-          "summary": null,
-          "parameters": [
-            {
-              "type": "String",
-              "name": "type",
-              "isOptional": false
-            }
-          ]
-        },
-        {
-          "returnType": "ClientClaim",
-          "isAsync": false,
-          "name": "FindClaim",
-          "summary": null,
-          "parameters": [
-            {
-              "type": "String",
-              "name": "type",
-              "isOptional": false
-            },
-            {
-              "type": "String",
-              "name": "value",
-              "isOptional": false
-            }
-          ]
-        },
-        {
-          "returnType": "Void",
-          "isAsync": false,
-          "name": "AddIdentityProviderRestriction",
-          "summary": null,
-          "parameters": [
-            {
-              "type": "String",
-              "name": "provider",
-              "isOptional": false
-            }
-          ]
-        },
-        {
-          "returnType": "Void",
-          "isAsync": false,
-          "name": "RemoveAllIdentityProviderRestrictions",
-          "summary": null,
-          "parameters": []
-        },
-        {
-          "returnType": "Void",
-          "isAsync": false,
-          "name": "RemoveIdentityProviderRestriction",
-          "summary": null,
-          "parameters": [
-            {
-              "type": "String",
-              "name": "provider",
-              "isOptional": false
-            }
-          ]
-        },
-        {
-          "returnType": "ClientIdPRestriction",
-          "isAsync": false,
-          "name": "FindIdentityProviderRestriction",
-          "summary": null,
-          "parameters": [
-            {
-              "type": "String",
-              "name": "provider",
-              "isOptional": false
-            }
-          ]
-        },
-        {
-          "returnType": "Void",
-          "isAsync": false,
           "name": "AddGrantType",
           "summary": null,
           "parameters": [
@@ -946,6 +838,114 @@
           "name": "RemoveAllClaims",
           "summary": null,
           "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "List<ClientClaim>",
+          "isAsync": false,
+          "name": "FindClaims",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ClientClaim",
+          "isAsync": false,
+          "name": "FindClaim",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "AddIdentityProviderRestriction",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "provider",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveAllIdentityProviderRestrictions",
+          "summary": null,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "isAsync": false,
+          "name": "RemoveIdentityProviderRestriction",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "provider",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ClientIdPRestriction",
+          "isAsync": false,
+          "name": "FindIdentityProviderRestriction",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "provider",
+              "isOptional": false
+            }
+          ]
         }
       ],
       "namespace": "Volo.Abp.IdentityServer.Clients",

@@ -273,6 +273,8 @@
     "SubscribeToNewsletter": "Abonnieren Sie den Newsletter, um Informationen über Ereignisse in der ABP.IO-Plattform zu erhalten, wie Neuerscheinungen, Artikel, Angebote und mehr.",
     "FirstEdition": "Erste Ausgabe",
     "ThankYou": "Dankeschön!",
-    "CheckboxMandatory": "Sie müssen dies überprüfen, um fortzufahren!"
+    "CheckboxMandatory": "Sie müssen dies überprüfen, um fortzufahren!",
+    "SelectUITheme": "Wählen Sie UI-Design aus"
+
   }
 }

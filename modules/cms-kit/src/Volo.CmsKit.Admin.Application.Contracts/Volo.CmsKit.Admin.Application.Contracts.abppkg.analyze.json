@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Admin.Application.Contracts",
-  "hash": "f823ecf14f09a112538b9030d69584ec",
+  "hash": "8af5f6e0e4121e3d327561cb67a129c2",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Admin",
@@ -83,6 +83,13 @@
       "isEnabled": true,
       "contentType": "permission",
       "name": "CmsKit.Pages.Delete",
+      "summary": null
+    },
+    {
+      "displayName": "Set As Home Page",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Pages.SetAsHomePage",
       "summary": null
     },
     {

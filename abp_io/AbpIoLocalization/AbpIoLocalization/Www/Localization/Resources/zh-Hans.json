@@ -372,6 +372,8 @@
     "MasteringAbpFramework_Book_WhoIsThisBookFor": "这本书是给谁看的",
     "MasteringAbpFramework_Book_WhoIsThisBookFor_Description": "本书适用于希望学习软件架构和最佳实践的 Web 开发人员，以使用 Microsoft 技术和 ABP 框架构建\n 可维护的基于 Web 的解决方案。 C#\n 和 ASP.NET Core 的基本知识是开始阅读本书所必需的。",
     "ComputersAndTechnology": "计算机与技术",
-    "ThisBookIsInDraftStageAndIsNotCompletedYet": "这本书正在草案阶段，还没有完成。"
+    "ThisBookIsInDraftStageAndIsNotCompletedYet": "这本书正在草案阶段，还没有完成。",
+    "SelectUITheme": "选择 UI 主题"
+
   }
 }
