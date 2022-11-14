@@ -1,11 +1,10 @@
 # How to add a custom grant type in OpenIddict
 
 ## ITokenExtensionGrant
+
 Create a class that inherits `ITokenExtensionGrant`, and then register it with the framework. 
 
-In the `MyTokenExtensionGrant` class below we try to get the token details. The `ForbidResult` handles the failure case and `SignInResult` returns a new token response.
-
-You can pass more parameters to implement business checks.
+In the `MyTokenExtensionGrant` class below we try to get the token details, The `ForbidResult` handles the failure case and `SignInResult` returns a new token response, You can pass more parameters to implement business checks.
 
 ```cs
 public class MyTokenExtensionGrant : ITokenExtensionGrant
