@@ -56,7 +56,7 @@
     "ExtensibleReplaceable": "Extensible/Replaceable",
     "ExtensibleReplaceableExplanation": "All services & modules are designed with extensibility in mind. You can replace services, pages, styles and components.",
     "CrossCuttingConcernsExplanation2": "Keep your codebase smaller so you can maintain focus on the code that’s specific to your business.",
-    "CrossCuttingConcernsExplanation3": "Don\u2019t send time implementing common application requirements on multiple projects.",
+    "CrossCuttingConcernsExplanation3": "Don\u2019t spend time implementing common application requirements on multiple projects.",
     "AuthenticationAuthorization": "Authentication & Authorization",
     "ExceptionHandling": "Exception Handling",
     "Validation": "Validation",

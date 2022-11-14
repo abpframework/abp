@@ -26,7 +26,8 @@ $.extend( $.validator.messages, {
 	range: $.validator.format( "Musí byť medzi {0} a {1}." ),
 	max: $.validator.format( "Nemôže byť viac ako {0}." ),
 	min: $.validator.format( "Nemôže byť menej ako {0}." ),
-	creditcard: "Číslo platobnej karty musí byť platné."
+	creditcard: "Číslo platobnej karty musí byť platné.",
+	step: $.validator.format( "Musí byť násobkom čísla {0}." )
 } );
 return $;
 }));

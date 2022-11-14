@@ -4,7 +4,7 @@ Prism.languages.hoon = {
 		greedy: true
 	},
 	'string': {
-		pattern: /"[^"]*"|'[^']*'/,
+		pattern: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/,
 		greedy: true
 	},
 	'constant': /%(?:\.[ny]|[\w-]+)/,
