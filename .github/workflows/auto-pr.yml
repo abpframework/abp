@@ -18,8 +18,8 @@ jobs:
           ref: dev
       - name: Reset promotion branch
         run: |
-          git fetch origin rel-6.0:rel-6.0
-          git reset --hard rel-6.0
+          git fetch origin rel-7.0:rel-7.0
+          git reset --hard rel-7.0
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
