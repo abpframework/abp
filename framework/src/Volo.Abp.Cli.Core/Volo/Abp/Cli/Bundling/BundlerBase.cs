@@ -35,7 +35,7 @@ public abstract class BundlerBase : IBundler, ITransientDependency
         var bundleFileDefinitions = context.BundleDefinitions.Where(t => t.ExcludeFromBundle == false).ToList();
         var fileDefinitionsExcludingFromBundle = context.BundleDefinitions.Where(t => t.ExcludeFromBundle).ToList();
 
-        var bundledContent = BundleFiles(options, bundleFileDefinitions);
+        var bundledContent = options.ProjectType == BundlingConsts.WebAssembly? BundleWebAssemblyFiles(options, bundleFileDefinitions) : BundleMauiBlazorFiles(options, bundleFileDefinitions);
         File.WriteAllText(bundleFilePath, bundledContent);
 
         return GenerateDefinition(bundleFilePath,fileDefinitionsExcludingFromBundle);
@@ -59,7 +59,7 @@ public abstract class BundlerBase : IBundler, ITransientDependency
         return false;
     }
 
-    private string BundleFiles(BundleOptions options, List<BundleDefinition> bundleDefinitions)
+    private string BundleWebAssemblyFiles(BundleOptions options, List<BundleDefinition> bundleDefinitions)
     {
         var staticAssetsFilePath = Path.Combine(options.Directory, "bin", "Debug", options.FrameworkVersion,
             $"{options.ProjectFileName}.staticwebassets.runtime.json");
@@ -99,7 +99,7 @@ public abstract class BundlerBase : IBundler, ITransientDependency
                     var fileName =
                         definition.Source.Substring(slashIndex + 1, definition.Source.Length - slashIndex - 1);
                     var filePath =
-                        Path.Combine(PathHelper.GetFrameworkFolderPath(options.Directory, options.FrameworkVersion),
+                        Path.Combine(PathHelper.GetWebAssemblyFrameworkFolderPath(options.Directory, options.FrameworkVersion),
                             fileName);
                     content = GetFileContent(filePath, false);
                 }
@@ -117,6 +117,29 @@ public abstract class BundlerBase : IBundler, ITransientDependency
 
             return builder.ToString();
         }
+    }
+
+    private string BundleMauiBlazorFiles(BundleOptions options, List<BundleDefinition> bundleDefinitions)
+    {
+        var builder = new StringBuilder();
+        foreach (var definition in bundleDefinitions)
+        {
+            var filePath = Path.Combine(definition.Source.Split('/'));
+            
+            var fileFullPath = Directory.GetFiles(options.Directory, string.Empty, SearchOption.AllDirectories).FirstOrDefault(x => x.EndsWith(filePath));
+            if(fileFullPath == null)
+            {
+                throw new AbpException("Not found: " + definition.Source);
+            }
+            
+            var content = GetFileContent(fileFullPath, options.Minify);
+            content = ProcessBeforeAddingToTheBundle(definition.Source, Path.Combine(options.Directory, "wwwroot"),
+                content);
+
+            builder.AppendLine(content);
+        }
+
+        return builder.ToString();
     }
 
     private string GetFileContent(string filePath, bool minify)
