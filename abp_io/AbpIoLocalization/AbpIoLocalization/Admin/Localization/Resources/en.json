@@ -408,7 +408,7 @@
     "OverallTotalPrice": "Overall Total Price",
     "OverallDiscountPrice": "Overall Discount Price",
     "OverallDiscountText": "Overall Discount Text",
-    "SelectReport": "-- select report --",
+    "SelectReport": "- Select Report -",
     "NoDataAvailable": "No data available"
   }
 }
