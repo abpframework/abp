@@ -14,11 +14,14 @@ var luxon = (function (exports) {
   function _createClass(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", {
+      writable: false
+    });
     return Constructor;
   }
 
   function _extends() {
-    _extends = Object.assign || function (target) {
+    _extends = Object.assign ? Object.assign.bind() : function (target) {
       for (var i = 1; i < arguments.length; i++) {
         var source = arguments[i];
 
@@ -31,7 +34,6 @@ var luxon = (function (exports) {
 
       return target;
     };
-
     return _extends.apply(this, arguments);
   }
 
@@ -43,18 +45,17 @@ var luxon = (function (exports) {
   }
 
   function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
     return _getPrototypeOf(o);
   }
 
   function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
-
     return _setPrototypeOf(o, p);
   }
 
@@ -73,7 +74,7 @@ var luxon = (function (exports) {
 
   function _construct(Parent, args, Class) {
     if (_isNativeReflectConstruct()) {
-      _construct = Reflect.construct;
+      _construct = Reflect.construct.bind();
     } else {
       _construct = function _construct(Parent, args, Class) {
         var a = [null];
@@ -675,7 +676,7 @@ var luxon = (function (exports) {
   function timeObject(obj) {
     return pick(obj, ["hour", "minute", "second", "millisecond"]);
   }
-  var ianaRegex = /[A-Za-z_+-]{1,256}(:?\/[A-Za-z0-9_+-]{1,256}(\/[A-Za-z0-9_+-]{1,256})?)?/;
+  var ianaRegex = /[A-Za-z_+-]{1,256}(?::?\/[A-Za-z0-9_+-]{1,256}(?:\/[A-Za-z0-9_+-]{1,256})?)?/;
 
   /**
    * @private
@@ -1305,6 +1306,9 @@ var luxon = (function (exports) {
           case "d":
             return "day";
 
+          case "w":
+            return "week";
+
           case "M":
             return "month";
 
@@ -1446,6 +1450,11 @@ var luxon = (function (exports) {
       get: function get() {
         throw new ZoneIsAbstractError();
       }
+    }, {
+      key: "ianaName",
+      get: function get() {
+        return this.name;
+      }
       /**
        * Returns whether the offset is known to be fixed for the whole year.
        * @abstract
@@ -1554,7 +1563,6 @@ var luxon = (function (exports) {
     return SystemZone;
   }(Zone);
 
-  RegExp("^" + ianaRegex.source + "$");
   var dtfCache = {};
 
   function makeDTF(zone) {
@@ -1567,7 +1575,8 @@ var luxon = (function (exports) {
         day: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
-        second: "2-digit"
+        second: "2-digit",
+        era: "short"
       });
     }
 
@@ -1578,34 +1587,38 @@ var luxon = (function (exports) {
     year: 0,
     month: 1,
     day: 2,
-    hour: 3,
-    minute: 4,
-    second: 5
+    era: 3,
+    hour: 4,
+    minute: 5,
+    second: 6
   };
 
   function hackyOffset(dtf, date) {
     var formatted = dtf.format(date).replace(/\u200E/g, ""),
-        parsed = /(\d+)\/(\d+)\/(\d+),? (\d+):(\d+):(\d+)/.exec(formatted),
+        parsed = /(\d+)\/(\d+)\/(\d+) (AD|BC),? (\d+):(\d+):(\d+)/.exec(formatted),
         fMonth = parsed[1],
         fDay = parsed[2],
         fYear = parsed[3],
-        fHour = parsed[4],
-        fMinute = parsed[5],
-        fSecond = parsed[6];
-    return [fYear, fMonth, fDay, fHour, fMinute, fSecond];
+        fadOrBc = parsed[4],
+        fHour = parsed[5],
+        fMinute = parsed[6],
+        fSecond = parsed[7];
+    return [fYear, fMonth, fDay, fadOrBc, fHour, fMinute, fSecond];
   }
 
   function partsOffset(dtf, date) {
-    var formatted = dtf.formatToParts(date),
-        filled = [];
+    var formatted = dtf.formatToParts(date);
+    var filled = [];
 
     for (var i = 0; i < formatted.length; i++) {
       var _formatted$i = formatted[i],
           type = _formatted$i.type,
-          value = _formatted$i.value,
-          pos = typeToPos[type];
+          value = _formatted$i.value;
+      var pos = typeToPos[type];
 
-      if (!isUndefined(pos)) {
+      if (type === "era") {
+        filled[pos] = value;
+      } else if (!isUndefined(pos)) {
         filled[pos] = parseInt(value, 10);
       }
     }
@@ -1648,7 +1661,7 @@ var luxon = (function (exports) {
      * @param {string} s - The string to check validity on
      * @example IANAZone.isValidSpecifier("America/New_York") //=> true
      * @example IANAZone.isValidSpecifier("Sport~~blorp") //=> false
-     * @deprecated This method returns false some valid IANA names. Use isValidZone instead
+     * @deprecated This method returns false for some valid IANA names. Use isValidZone instead.
      * @return {boolean}
      */
     ;
@@ -1716,15 +1729,20 @@ var luxon = (function (exports) {
     _proto.offset = function offset(ts) {
       var date = new Date(ts);
       if (isNaN(date)) return NaN;
+      var dtf = makeDTF(this.name);
 
-      var dtf = makeDTF(this.name),
-          _ref2 = dtf.formatToParts ? partsOffset(dtf, date) : hackyOffset(dtf, date),
+      var _ref2 = dtf.formatToParts ? partsOffset(dtf, date) : hackyOffset(dtf, date),
           year = _ref2[0],
           month = _ref2[1],
           day = _ref2[2],
-          hour = _ref2[3],
-          minute = _ref2[4],
-          second = _ref2[5]; // because we're using hour12 and https://bugs.chromium.org/p/chromium/issues/detail?id=1025564&can=2&q=%2224%3A00%22%20datetimeformat
+          adOrBc = _ref2[3],
+          hour = _ref2[4],
+          minute = _ref2[5],
+          second = _ref2[6];
+
+      if (adOrBc === "BC") {
+        year = -Math.abs(year) + 1;
+      } // because we're using hour12 and https://bugs.chromium.org/p/chromium/issues/detail?id=1025564&can=2&q=%2224%3A00%22%20datetimeformat
 
 
       var adjustedHour = hour === 24 ? 0 : hour;
@@ -1870,6 +1888,15 @@ var luxon = (function (exports) {
       key: "name",
       get: function get() {
         return this.fixed === 0 ? "UTC" : "UTC" + formatOffset(this.fixed, "narrow");
+      }
+    }, {
+      key: "ianaName",
+      get: function get() {
+        if (this.fixed === 0) {
+          return "Etc/UTC";
+        } else {
+          return "Etc/GMT" + formatOffset(-this.fixed, "narrow");
+        }
       }
     }, {
       key: "isUniversal",
@@ -2780,7 +2807,7 @@ var luxon = (function (exports) {
             zone = _ex[1],
             next = _ex[2];
 
-        return [_extends({}, mergedVals, val), mergedZone || zone, next];
+        return [_extends({}, mergedVals, val), zone || mergedZone, next];
       }, [{}, null, 1]).slice(0, 2);
     };
   }
@@ -2826,19 +2853,20 @@ var luxon = (function (exports) {
   } // ISO and SQL parsing
 
 
-  var offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/,
-      isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,30}))?)?)?/,
-      isoTimeRegex = RegExp("" + isoTimeBaseRegex.source + offsetRegex.source + "?"),
-      isoTimeExtensionRegex = RegExp("(?:T" + isoTimeRegex.source + ")?"),
-      isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/,
-      isoWeekRegex = /(\d{4})-?W(\d\d)(?:-?(\d))?/,
-      isoOrdinalRegex = /(\d{4})-?(\d{3})/,
-      extractISOWeekData = simpleParse("weekYear", "weekNumber", "weekDay"),
-      extractISOOrdinalData = simpleParse("year", "ordinal"),
-      sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/,
-      // dumbed-down version of the ISO one
-  sqlTimeRegex = RegExp(isoTimeBaseRegex.source + " ?(?:" + offsetRegex.source + "|(" + ianaRegex.source + "))?"),
-      sqlTimeExtensionRegex = RegExp("(?: " + sqlTimeRegex.source + ")?");
+  var offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/;
+  var isoExtendedZone = "(?:" + offsetRegex.source + "?(?:\\[(" + ianaRegex.source + ")\\])?)?";
+  var isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,30}))?)?)?/;
+  var isoTimeRegex = RegExp("" + isoTimeBaseRegex.source + isoExtendedZone);
+  var isoTimeExtensionRegex = RegExp("(?:T" + isoTimeRegex.source + ")?");
+  var isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/;
+  var isoWeekRegex = /(\d{4})-?W(\d\d)(?:-?(\d))?/;
+  var isoOrdinalRegex = /(\d{4})-?(\d{3})/;
+  var extractISOWeekData = simpleParse("weekYear", "weekNumber", "weekDay");
+  var extractISOOrdinalData = simpleParse("year", "ordinal");
+  var sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/; // dumbed-down version of the ISO one
+
+  var sqlTimeRegex = RegExp(isoTimeBaseRegex.source + " ?(?:" + offsetRegex.source + "|(" + ianaRegex.source + "))?");
+  var sqlTimeExtensionRegex = RegExp("(?: " + sqlTimeRegex.source + ")?");
 
   function int(match, pos, fallback) {
     var m = match[pos];
@@ -2879,7 +2907,7 @@ var luxon = (function (exports) {
 
   var isoTimeOnly = RegExp("^T?" + isoTimeBaseRegex.source + "$"); // ISO duration parsing
 
-  var isoDuration = /^-?P(?:(?:(-?\d{1,9}(?:\.\d{1,9})?)Y)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,9}(?:\.\d{1,9})?)W)?(?:(-?\d{1,9}(?:\.\d{1,9})?)D)?(?:T(?:(-?\d{1,9}(?:\.\d{1,9})?)H)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
+  var isoDuration = /^-?P(?:(?:(-?\d{1,20}(?:\.\d{1,20})?)Y)?(?:(-?\d{1,20}(?:\.\d{1,20})?)M)?(?:(-?\d{1,20}(?:\.\d{1,20})?)W)?(?:(-?\d{1,20}(?:\.\d{1,20})?)D)?(?:T(?:(-?\d{1,20}(?:\.\d{1,20})?)H)?(?:(-?\d{1,20}(?:\.\d{1,20})?)M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,20}))?S)?)?)$/;
 
   function extractISODuration(match) {
     var s = match[0],
@@ -2982,7 +3010,7 @@ var luxon = (function (exports) {
 
 
   var rfc1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/,
-      rfc850 = /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/,
+      rfc850 = /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/,
       ascii = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
 
   function extractRFC1123Or850(match) {
@@ -3013,11 +3041,11 @@ var luxon = (function (exports) {
   var isoWeekWithTimeExtensionRegex = combineRegexes(isoWeekRegex, isoTimeExtensionRegex);
   var isoOrdinalWithTimeExtensionRegex = combineRegexes(isoOrdinalRegex, isoTimeExtensionRegex);
   var isoTimeCombinedRegex = combineRegexes(isoTimeRegex);
-  var extractISOYmdTimeAndOffset = combineExtractors(extractISOYmd, extractISOTime, extractISOOffset);
-  var extractISOWeekTimeAndOffset = combineExtractors(extractISOWeekData, extractISOTime, extractISOOffset);
-  var extractISOOrdinalDateAndTime = combineExtractors(extractISOOrdinalData, extractISOTime, extractISOOffset);
-  var extractISOTimeAndOffset = combineExtractors(extractISOTime, extractISOOffset);
-  /**
+  var extractISOYmdTimeAndOffset = combineExtractors(extractISOYmd, extractISOTime, extractISOOffset, extractIANAZone);
+  var extractISOWeekTimeAndOffset = combineExtractors(extractISOWeekData, extractISOTime, extractISOOffset, extractIANAZone);
+  var extractISOOrdinalDateAndTime = combineExtractors(extractISOOrdinalData, extractISOTime, extractISOOffset, extractIANAZone);
+  var extractISOTimeAndOffset = combineExtractors(extractISOTime, extractISOOffset, extractIANAZone);
+  /*
    * @private
    */
 
@@ -3039,10 +3067,9 @@ var luxon = (function (exports) {
   }
   var sqlYmdWithTimeExtensionRegex = combineRegexes(sqlYmdRegex, sqlTimeExtensionRegex);
   var sqlTimeCombinedRegex = combineRegexes(sqlTimeRegex);
-  var extractISOYmdTimeOffsetAndIANAZone = combineExtractors(extractISOYmd, extractISOTime, extractISOOffset, extractIANAZone);
   var extractISOTimeOffsetAndIANAZone = combineExtractors(extractISOTime, extractISOOffset, extractIANAZone);
   function parseSQL(s) {
-    return parse(s, [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeOffsetAndIANAZone], [sqlTimeCombinedRegex, extractISOTimeOffsetAndIANAZone]);
+    return parse(s, [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeAndOffset], [sqlTimeCombinedRegex, extractISOTimeOffsetAndIANAZone]);
   }
 
   var INVALID$2 = "Invalid Duration"; // unit conversion constants
@@ -3187,7 +3214,7 @@ var luxon = (function (exports) {
    * Here is a brief overview of commonly used methods and getters in Duration:
    *
    * * **Creation** To create a Duration, use {@link Duration#fromMillis}, {@link Duration#fromObject}, or {@link Duration#fromISO}.
-   * * **Unit values** See the {@link Duration#years}, {@link Duration.months}, {@link Duration#weeks}, {@link Duration#days}, {@link Duration#hours}, {@link Duration#minutes}, {@link Duration#seconds}, {@link Duration#milliseconds} accessors.
+   * * **Unit values** See the {@link Duration#years}, {@link Duration#months}, {@link Duration#weeks}, {@link Duration#days}, {@link Duration#hours}, {@link Duration#minutes}, {@link Duration#seconds}, {@link Duration#milliseconds} accessors.
    * * **Configuration** See  {@link Duration#locale} and {@link Duration#numberingSystem} accessors.
    * * **Transformation** To create new Durations out of old ones use {@link Duration#plus}, {@link Duration#minus}, {@link Duration#normalize}, {@link Duration#set}, {@link Duration#reconfigure}, {@link Duration#shiftTo}, and {@link Duration#negate}.
    * * **Output** To convert the Duration into other representations, see {@link Duration#as}, {@link Duration#toISO}, {@link Duration#toFormat}, and {@link Duration#toJSON}
@@ -3441,10 +3468,12 @@ var luxon = (function (exports) {
      * * `m` for minutes
      * * `h` for hours
      * * `d` for days
+     * * `w` for weeks
      * * `M` for months
      * * `y` for years
      * Notes:
      * * Add padding by repeating the token, e.g. "yy" pads the years to two digits, "hhhh" pads the hours out to four digits
+     * * Tokens can be escaped by wrapping with single quotes.
      * * The duration will be converted to the set of units in the format string using {@link Duration#shiftTo} and the Durations's conversion accuracy setting.
      * @param {string} fmt - the format string
      * @param {Object} opts - options
@@ -3467,8 +3496,9 @@ var luxon = (function (exports) {
       return this.isValid ? Formatter.create(this.loc, fmtOpts).formatDurationFromString(this, fmt) : INVALID$2;
     }
     /**
-     * Returns a string representation of a Duration with all units included
-     * To modify its behavior use the `listStyle` and any Intl.NumberFormat option, though `unitDisplay` is especially relevant. See {@link Intl.NumberFormat}.
+     * Returns a string representation of a Duration with all units included.
+     * To modify its behavior use the `listStyle` and any Intl.NumberFormat option, though `unitDisplay` is especially relevant.
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
      * @param opts - On option object to override the formatting. Accepts the same keys as the options parameter of the native `Int.NumberFormat` constructor, as well as `listStyle`.
      * @example
      * ```js
@@ -5188,7 +5218,7 @@ var luxon = (function (exports) {
   }
 
   var NBSP = String.fromCharCode(160);
-  var spaceOrNBSP = "( |" + NBSP + ")";
+  var spaceOrNBSP = "[ " + NBSP + "]";
   var spaceOrNBSPRegExp = new RegExp(spaceOrNBSP, "g");
 
   function fixListRegex(s) {
@@ -5741,7 +5771,13 @@ var luxon = (function (exports) {
   }
 
   function dayOfWeek(year, month, day) {
-    var js = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+    var d = new Date(Date.UTC(year, month - 1, day));
+
+    if (year < 100 && year >= 0) {
+      d.setUTCFullYear(d.getUTCFullYear() - 1900);
+    }
+
+    var js = d.getUTCDay();
     return js === 0 ? 7 : js;
   }
 
@@ -6066,7 +6102,7 @@ var luxon = (function (exports) {
     return c;
   }
 
-  function _toISOTime(o, extended, suppressSeconds, suppressMilliseconds, includeOffset) {
+  function _toISOTime(o, extended, suppressSeconds, suppressMilliseconds, includeOffset, extendedZone) {
     var c = padStart(o.c.hour);
 
     if (extended) {
@@ -6090,7 +6126,7 @@ var luxon = (function (exports) {
     }
 
     if (includeOffset) {
-      if (o.isOffsetFixed && o.offset === 0) {
+      if (o.isOffsetFixed && o.offset === 0 && !extendedZone) {
         c += "Z";
       } else if (o.o < 0) {
         c += "-";
@@ -6103,6 +6139,10 @@ var luxon = (function (exports) {
         c += ":";
         c += padStart(Math.trunc(o.o % 60));
       }
+    }
+
+    if (extendedZone) {
+      c += "[" + o.zone.ianaName + "]";
     }
 
     return c;
@@ -6167,9 +6207,6 @@ var luxon = (function (exports) {
     if (!normalized) throw new InvalidUnitError(unit);
     return normalized;
   } // this is a dumbed down version of fromObject() that runs about 60% faster
-  // but doesn't do any validation, makes a bunch of assumptions about what units
-  // are present, and so on.
-  // this is a dumbed down version of fromObject() that runs about 60% faster
   // but doesn't do any validation, makes a bunch of assumptions about what units
   // are present, and so on.
 
@@ -6873,7 +6910,7 @@ var luxon = (function (exports) {
       }
     }
     /**
-     * Check if an object is a DateTime. Works across context boundaries
+     * Check if an object is an instance of DateTime. Works across context boundaries
      * @param {object} o
      * @return {boolean}
      */
@@ -7281,6 +7318,7 @@ var luxon = (function (exports) {
      * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
      * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
      * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+     * @param {boolean} [opts.extendedZone=true] - add the time zone format extension
      * @param {string} [opts.format='extended'] - choose between the basic and extended format
      * @example DateTime.utc(1983, 5, 25).toISO() //=> '1982-05-25T00:00:00.000Z'
      * @example DateTime.now().toISO() //=> '2017-04-22T20:47:05.335-04:00'
@@ -7299,7 +7337,9 @@ var luxon = (function (exports) {
           _ref4$suppressMillise = _ref4.suppressMilliseconds,
           suppressMilliseconds = _ref4$suppressMillise === void 0 ? false : _ref4$suppressMillise,
           _ref4$includeOffset = _ref4.includeOffset,
-          includeOffset = _ref4$includeOffset === void 0 ? true : _ref4$includeOffset;
+          includeOffset = _ref4$includeOffset === void 0 ? true : _ref4$includeOffset,
+          _ref4$extendedZone = _ref4.extendedZone,
+          extendedZone = _ref4$extendedZone === void 0 ? false : _ref4$extendedZone;
 
       if (!this.isValid) {
         return null;
@@ -7310,7 +7350,7 @@ var luxon = (function (exports) {
       var c = _toISODate(this, ext);
 
       c += "T";
-      c += _toISOTime(this, ext, suppressSeconds, suppressMilliseconds, includeOffset);
+      c += _toISOTime(this, ext, suppressSeconds, suppressMilliseconds, includeOffset, extendedZone);
       return c;
     }
     /**
@@ -7350,6 +7390,7 @@ var luxon = (function (exports) {
      * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
      * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
      * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+     * @param {boolean} [opts.extendedZone=true] - add the time zone format extension
      * @param {boolean} [opts.includePrefix=false] - include the `T` prefix
      * @param {string} [opts.format='extended'] - choose between the basic and extended format
      * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime() //=> '07:34:19.361Z'
@@ -7370,6 +7411,8 @@ var luxon = (function (exports) {
           includeOffset = _ref6$includeOffset === void 0 ? true : _ref6$includeOffset,
           _ref6$includePrefix = _ref6.includePrefix,
           includePrefix = _ref6$includePrefix === void 0 ? false : _ref6$includePrefix,
+          _ref6$extendedZone = _ref6.extendedZone,
+          extendedZone = _ref6$extendedZone === void 0 ? false : _ref6$extendedZone,
           _ref6$format = _ref6.format,
           format = _ref6$format === void 0 ? "extended" : _ref6$format;
 
@@ -7378,7 +7421,7 @@ var luxon = (function (exports) {
       }
 
       var c = includePrefix ? "T" : "";
-      return c + _toISOTime(this, format === "extended", suppressSeconds, suppressMilliseconds, includeOffset);
+      return c + _toISOTime(this, format === "extended", suppressSeconds, suppressMilliseconds, includeOffset, extendedZone);
     }
     /**
      * Returns an RFC 2822-compatible string representation of this DateTime
@@ -8185,7 +8228,8 @@ var luxon = (function (exports) {
           return false;
         } else {
           return this.offset > this.set({
-            month: 1
+            month: 1,
+            day: 1
           }).offset || this.offset > this.set({
             month: 5
           }).offset;
@@ -8471,7 +8515,7 @@ var luxon = (function (exports) {
     }
   }
 
-  var VERSION = "2.3.1";
+  var VERSION = "2.5.0";
 
   exports.DateTime = DateTime;
   exports.Duration = Duration;

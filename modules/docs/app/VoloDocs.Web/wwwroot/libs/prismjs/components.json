@@ -203,8 +203,9 @@
 		},
 		"bash": {
 			"title": "Bash",
-			"alias": "shell",
+			"alias": ["sh", "shell"],
 			"aliasTitles": {
+				"sh": "Shell",
 				"shell": "Shell"
 			},
 			"owner": "zeitgeist87"
@@ -224,6 +225,10 @@
 				"shortcode": "Shortcode"
 			},
 			"owner": "RunDevelopment"
+		},
+		"bbj": {
+			"title": "BBj",
+			"owner": "hyyan"
 		},
 		"bicep": {
 			"title": "Bicep",
@@ -246,6 +251,10 @@
 				"rbnf": "RBNF"
 			},
 			"owner": "RunDevelopment"
+		},
+		"bqn": {
+			"title": "BQN",
+			"owner": "yewscion"
 		},
 		"brainfuck": {
 			"title": "Brainfuck",
@@ -297,6 +306,18 @@
 		"cil": {
 			"title": "CIL",
 			"owner": "sbrl"
+		},
+		"cilkc": {
+			"title": "Cilk/C",
+			"require": "c",
+			"alias": "cilk-c",
+			"owner": "OpenCilk"
+		},
+		"cilkcpp": {
+			"title": "Cilk/C++",
+			"require": "cpp",
+			"alias": ["cilk-cpp", "cilk"],
+			"owner": "OpenCilk"
 		},
 		"clojure": {
 			"title": "Clojure",
@@ -543,6 +564,11 @@
 			"title": "Go module",
 			"alias": "go-mod",
 			"owner": "RunDevelopment"
+		},
+		"gradle": {
+			"title": "Gradle",
+			"require": "clike",
+			"owner": "zeabdelkhalek-badido18"
 		},
 		"graphql": {
 			"title": "GraphQL",
@@ -896,6 +922,10 @@
 		"mermaid": {
 			"title": "Mermaid",
 			"owner": "RunDevelopment"
+		},
+		"metafont": {
+			"title": "METAFONT",
+			"owner": "LaeriExNihilo"
 		},
 		"mizar": {
 			"title": "Mizar",
@@ -1256,7 +1286,7 @@
 			"owner": "Golmote"
 		},
 		"scss": {
-			"title": "Sass (Scss)",
+			"title": "Sass (SCSS)",
 			"require": "css",
 			"optional": "css-extras",
 			"owner": "MoOx"
@@ -1517,6 +1547,10 @@
 			"title": "Web IDL",
 			"alias": "webidl",
 			"owner": "RunDevelopment"
+		},
+		"wgsl": {
+			"title": "WGSL",
+			"owner": "Dr4gonthree"
 		},
 		"wiki": {
 			"title": "Wiki markup",

@@ -3,6 +3,6 @@
   "name": "my-app-identityserver",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^6.0.1"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^7.0.0-rc.1"
   }
 }
