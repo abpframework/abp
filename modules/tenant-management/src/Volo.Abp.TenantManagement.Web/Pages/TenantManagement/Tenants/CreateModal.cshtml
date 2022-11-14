@@ -7,6 +7,7 @@
 @using Volo.Abp.TenantManagement.Localization
 @using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 @using Volo.Abp.Data
+@using Volo.Abp.TenantManagement;
 @model CreateModalModel
 @inject IHtmlLocalizer<AbpTenantManagementResource> L
 @inject IStringLocalizerFactory StringLocalizerFactory
@@ -21,7 +22,15 @@
 
             <abp-input asp-for="Tenant.AdminEmailAddress" />
 
-            <abp-input asp-for="Tenant.AdminPassword" />
+            <div class="mb-3">
+                <div class="input-group">
+                    <input type="password" class="form-control" maxlength="@TenantConsts.MaxPasswordLength" asp-for="Tenant.AdminPassword" />
+                    <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton">
+                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Tenant.AdminPassword"></span>
+            </div>
 
             @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<CreateModalModel.TenantInfoModel>())
             {
