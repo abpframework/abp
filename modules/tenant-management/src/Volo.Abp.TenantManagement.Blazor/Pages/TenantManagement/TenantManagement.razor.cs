@@ -21,7 +21,7 @@ public partial class TenantManagement
 
     protected FeatureManagementModal FeatureManagementModal;
 
-    protected bool IsShowPassword { get; set; }
+    protected bool ShowPassword { get; set; }
 
     protected PageToolbar Toolbar { get; } = new();
 
@@ -127,8 +127,8 @@ public partial class TenantManagement
         return base.SetTableColumnsAsync();
     }
 
-    protected virtual void ShowHidePassword(bool isShowPassword)
+    protected virtual void TogglePasswordVisibility()
     {
-        IsShowPassword = !isShowPassword;
+        ShowPassword = !ShowPassword;
     }
 }

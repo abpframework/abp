@@ -69,12 +69,12 @@
                              <FieldLabel>@L["DisplayName:AdminPassword"] *</FieldLabel>
                              <Addons>
                                 <Addon AddonType="AddonType.Body">
-                                    <TextEdit Role="IsShowPassword ? TextRole.Text : TextRole.Password" @bind-Text="@NewEntity.AdminPassword">
+                                    <TextEdit Role="ShowPassword ? TextRole.Text : TextRole.Password" @bind-Text="@NewEntity.AdminPassword">
                                     </TextEdit>
                                 </Addon>
                                 <Addon AddonType="AddonType.End">
-                                    <Button Color="Color.Secondary" Clicked="@(() => ShowHidePassword(IsShowPassword))">
-                                        <Icon Name="IsShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                    <Button Color="Color.Secondary" Clicked="@(() => TogglePasswordVisibility())">
+                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
                                     </Button>
                                 </Addon>
                             </Addons>
