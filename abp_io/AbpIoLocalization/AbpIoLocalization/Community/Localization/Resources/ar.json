@@ -94,7 +94,7 @@
     "NoThanks": "لا شكرا",
     "MaybeLater": "ربما في وقت لاحق",
     "JoinOurPostNewsletter": "انضم إلى النشرة الإخبارية لمقالتنا",
-    "Community": "تواصل اجتماعي",
+    "Community": "منتدى",
     "Marketing": "تسويق",
     "CommunityPrivacyPolicyConfirmation": "أوافق على البنود والشروط و <a href=\"https://commercial.abp.io/Privacy\"> سياسة الخصوصية </a>.",
     "PostRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\"> افتح مشكلة </a> على GitHub لطلب مقالة/برنامج تعليمي تريد رؤيته على موقع الويب هذا.",
@@ -185,6 +185,7 @@
     "Layout_Title": "{0} | ABP منتدى",
     "Layout_MetaDescription": "منتدى ABP هو عبارة عن بيئة حيث يمكن للأشخاص مشاركة منشورات حول إطار عمل برنامج ABP ومتابعة المشاريع.",
     "Index_Page_CommunityIntroduction": "إن هذا محور لإطار عمل ABP و.NET وتطوير البرامج. يمكنك قراءة المقالات ومشاهدة مقاطع الفيديو التعليمية والحصول على معلومات حول تقدم تطوير ABP والأحداث المتعلقة بـ ABP ومساعدة المطورين الآخرين ومشاركة خبرتك مع منتدى ABP.",
-    "TagsInArticle": "العلامات في المقال"
+    "TagsInArticle": "العلامات في المقال",
+    "WelcomeToABP": "أهلا بكم في ABP"
   }
 }
