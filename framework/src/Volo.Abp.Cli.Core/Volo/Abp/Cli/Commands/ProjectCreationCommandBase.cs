@@ -248,7 +248,7 @@ public abstract class ProjectCreationCommandBase
     {
         EventBus.PublishAsync(new ProjectCreationProgressEvent
         {
-            Message = "Extracting the solution archieve"
+            Message = "Unzipping the solution"
         }, false);
 
         using (var templateFileStream = new MemoryStream(project.ZipContent))
