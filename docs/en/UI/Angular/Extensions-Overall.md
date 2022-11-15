@@ -26,7 +26,7 @@ Using [ngx-datatable](https://github.com/swimlane/ngx-datatable) in extensinble 
 ````
 
  * `       actionsText : ` ** Column name of action column. **Type** : string
- * `              data : ` Items shows in your table. **Type** : R[]
+ * `              data : ` Items shows in your table. **Type** : Array<any>
  * `              list : ` Instance of ListService. **Type** : ListService
  * `actionsColumnWidth : ` Width of your action column. **Type** : number
  * `   actionsTemplate : ` Template of action when click this button or whatever. Generally ng-template. **Type** : TemplateRef<any>
