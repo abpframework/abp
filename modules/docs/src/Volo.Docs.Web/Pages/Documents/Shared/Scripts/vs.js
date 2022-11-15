@@ -60,7 +60,7 @@
 
             $targetElement = $targetElement.length
                 ? $targetElement
-                : $('[name=' + this.hash.slice(1) + ']');
+                : $('[name=' + hash.slice(1) + ']');
 
             if (!$targetElement.length) {
                 return;
