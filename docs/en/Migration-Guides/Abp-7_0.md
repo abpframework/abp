@@ -2,13 +2,13 @@
 
 This document is a guide for upgrading ABP v6.0 solutions to ABP v7.0. There is a change in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.
 
-## Remove `FormTenantResolveContributor` from the `AbpTenantResolveOptions`.
+## `FormTenantResolveContributor` Removed from the `AbpTenantResolveOptions`
 
-If you need to get tenant info from `HTTP Request From`, please add a custom `TenantResolveContributor` to implement it.
+`FormTenantResolveContributor` has been removed from the `AbpTenantResolveOptions`. Thus, if you need to get tenant info from `HTTP Request From`, please add a custom `TenantResolveContributor` to implement it.
 
-## Remove `IHybridServiceScopeFactory`. 
+## `IHybridServiceScopeFactory` Removed 
 
-Please use `IServiceScopeFactory` to replace the `IHybridServiceScopeFactory`.
+`IHybridServiceScopeFactory` has been removed. Please use the `IServiceScopeFactory` instead.
 
 ## Hybrid JSON was removed.
 
@@ -42,19 +42,19 @@ Check the docs to see the more info: https://github.com/abpframework/abp/blob/de
 
 Check the docs to see how to customize a JSON contract: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/custom-contracts
 
-## Move "host features" to the settings page.
+## "Manage Host Features" Moved to the Settings Page
 
-It's just a UI change.
+"Manage Host Features" button has been moved from Tenants page to Settings page.
 
-See https://github.com/abpframework/abp/pull/13359
+See https://github.com/abpframework/abp/pull/13359 for more info.
 
-## Remove the `setter` from the auditing interfaces. 
+## Removed the `setter` from the Auditing Interfaces 
 
 `AuditedEntity` and other base entity classes will continue to have public setters. If you want to make them private, don't derive from these base classes, but implement the interfaces yourself.
 
-See https://github.com/abpframework/abp/issues/12229#issuecomment-1191384798
+See https://github.com/abpframework/abp/issues/12229#issuecomment-1191384798 for more info.
 
-## Add Abp prefix to DbProperties classes
+## Added Abp prefix to DbProperties Classes
 
 Please update the database migration and related connection string names.
 
@@ -64,31 +64,38 @@ They are deprecated don't use them anymore.
 
 ## LayoutHookInfo.cs, LayoutHookViewModel.cs, LayoutHooks.cs, AbpLayoutHookOptions.cs classes have been moved under the Volo.Abp.Ui.LayoutHooks namespace.
 
-See https://github.com/abpframework/abp/pull/13903
+See https://github.com/abpframework/abp/pull/13903 for more info.
 
-## Remove abp.auth.policies.
+## Removed `abp.auth.policies`
 
-`abp.auth.policies` was never used, We only use `abp.auth.grantedPolicies`.
+`abp.auth.polices` has been removed, use `abp.auth.grantedPolicies` instead.
 
-## Static C# proxy generation
+## Static C# Proxy Generation
 
-The `abp generate-proxy -t csharp ..` command will generate all the `classes/enums/other types` in the client side (including application service interfaces)
+The `abp generate-proxy -t csharp ..` command will generate all the `classes/enums/other types` in the client side (including application service interfaces) behalf of you.
 
-If you have reference to the target contracts package, then we can pass a parameter `--without-contracts (shortcut: -c)`.
+If you have reference to the target contracts package, then you can pass a parameter `--without-contracts (shortcut: -c)`.
 
-See https://github.com/abpframework/abp/issues/13613#issue-1333088953
+See https://github.com/abpframework/abp/issues/13613#issue-1333088953 for more info.
 
-## Dynamic permissions
+## Dynamic Permissions
+
 * `IPermissionDefinitionManager` methods are converted to asynchronous, and renamed (added Async postfix).
 * Removed `MultiTenancySides` from permission groups.
 * Inherit `MultiTenancySides` enum from byte (default was int).
 * Needs to add migration for new entities in the Permission Management module.
 
-See https://github.com/abpframework/abp/pull/13644
+See https://github.com/abpframework/abp/pull/13644 for more info.
 
 ## External Localization Infrastructure
 
-* Introduced LocalizationResourceBase that is base for localization resources. LocalizationResource inherits from it for typed (static) localization resources (like before). Also introduced NonTypedLocalizationResource that inherits from LocalizationResourceBase for dynamic/external localization resources. We are using LocalizationResourceBase for most of the places where we were using LocalizationResource before and that can be a breaking change for some applications.
-*  All layouts in all MVC UI themes should add this line just before the ApplicationConfigurationString line <script src="~/Abp/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>. I've implemented for the basic theme with this release. Because of that, we should be careful while merging this PR - it will break the LeptonX theme.
+* Introduced `LocalizationResourceBase` that is base for localization resources. `LocalizationResource` inherits from it for typed (static) localization resources (like before). Also introduced `NonTypedLocalizationResource` that inherits from `LocalizationResourceBase` for dynamic/external localization resources. We are using `LocalizationResourceBase` for most of the places where we were using `LocalizationResource` before and that can be a breaking change for some applications.
+*  All layouts in all MVC UI themes should add this line just before the **ApplicationConfigurationString** line:
 
-See https://github.com/abpframework/abp/pull/13845
+```html
+<script src="~/Abp/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
+```
+
+We've already done this for our themes. 
+
+See https://github.com/abpframework/abp/pull/13845 for more info.
