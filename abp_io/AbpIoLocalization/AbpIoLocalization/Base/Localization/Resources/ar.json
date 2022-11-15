@@ -178,6 +178,10 @@
     "Post": "نشر",
     "ExploreTheContentsCreatedByTheCoreABPTeamAndTheABPCommunity": "استكشف المحتويات التي أنشأها فريق ABP الأساسي ومنتدى ABP.",
     "WelcomeFallCampaign": "مرحبا بكم في حملة الخريف!",
-    "GiveAwayForNewPurchases": "سيتم منح التدريب لتطوير التطبيقات مجانا مع عمليات الشراء الجديدة!"
+    "GiveAwayForNewPurchases": "سيتم منح التدريب لتطوير التطبيقات مجانا مع عمليات الشراء الجديدة!",
+    "BlackFriday": "<strong>السوداء</strong> <span>الجمعة</span>",
+    "ValidForExistingCustomers": "صالح أيضًا <br> للعملاء الحاليين!",
+    "CampaignBetweenDates": "من {0} <br>إلى {1}",
+    "SaveUpTo": "<span>وفر</span> ماقد يصل الى <strong>${0}K</strong>"
   }
 }
