@@ -180,5 +180,9 @@
     "ExploreTheContentsCreatedByTheCoreABPTeamAndTheABPCommunity": "探索核心 ABP 团队和 ABP 社区创建的内容。",
     "WelcomeFallCampaign": "欢迎秋季活动！",
     "GiveAwayForNewPurchases": "新购买将赠送应用程序开发课堂培训！"
+    "BlackFriday": "<strong>黑色</strong> <span>星期五</span>",
+    "ValidForExistingCustomers": "也适用于 <br> 现有用户!",
+    "CampaignBetweenDates": "从 {0} <br>至 {1}",
+    "SaveUpTo": "<span>最多节省</span> 至<strong>${0}K</strong>"
   }
 }
