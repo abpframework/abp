@@ -62,11 +62,19 @@ Please see the following migration documents, if you are upgrading from v6.0:
 
 ### Volosoft Has Attended the .NET Conf 2022
 
-//TODO:
+![](dotnef-conf-2022.jpg)
 
-### Community Talks 2022.9
+Halil İbrahim Kalkan, the lead developer of ABP Framework attended to [.NET Conf 2022](https://www.dotnetconf.net/) on November 10, 2022. His topic was "Authorization in a Distributed / Microservice System". In this talk, he talked about the permisson-based authorization systems and its challenges. Then, gave solutions that are implemented in open source ABP Framework. 
 
-//TODO:
+You can watch his speech from 👉 [here](https://www.youtube.com/watch?v=DVqvRZ0w-7g).
+
+### Community Talks 2022.9: .NET 7.0 & ABP 7.0
+
+![](community-talks-cover-image.png)
+
+In this episode of ABP Community Talks, 2022.9; we'll talk about .NET 7.0 and ABP 7.0 with ABP Core Team. We will dive into the features that came with .NET 7.0, how they are implemented in ABP 7.0, what were the highlights in the .NET Conf 2022 with [Halil İbrahim Kalkan](https://github.com/hikalkan), [Alper Ebicoglu](https://github.com/ebicoglu), [Engincan Veske](https://github.com/EngincanV), [Hamza Albreem](https://github.com/braim23) and [Bige Besikci Yaman](https://github.com/bigebesikci). 
+
+> Register to listen and ask your questions now 👉 https://kommunity.com/volosoft/events/abp-community-20229-net-70-abp-70-f9e8fb72 .
 
 ## Conclusion 
 
