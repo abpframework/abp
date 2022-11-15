@@ -402,6 +402,8 @@
     "SingleLayerApplicationExplanation2": "موصى به لبناء تطبيق بمعمارية أبسط وأسهل في الفهم.",
     "ApplicationModule": "وحدة <br>التطبيق",
     "SeeTheScreenshot": "انظر الى الصورة",
-    "Details": "التفاصيل"
+    "Details": "التفاصيل",
+    "ApplicationModuleExplanation1": "إنشاء حل وحدة تطبيق ذات طبقات كاملة وقابلة لإعادة الاستخدام.",
+    "ApplicationModuleExplanation2": "يمكنك استخدام هذا الخيار لإنشاء وحدات نمطية لتطبيقك المعياري."
   }
 }
