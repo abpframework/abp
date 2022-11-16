@@ -7,7 +7,13 @@ public static class TenantConsts
     /// </summary>
     public static int MaxNameLength { get; set; } = 64;
 
-    public const int MaxPasswordLength = 128; 
-    
-    public const int AdminEmailAddress = 256; 
+    /// <summary>
+    /// Default value: 128
+    /// </summary>
+    public static int MaxPasswordLength { get; set; } = 128;
+
+    /// <summary>
+    /// Default value: 256
+    /// </summary>
+    public static int AdminEmailAddress { get; set; } = 256; 
 }
