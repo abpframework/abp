@@ -747,7 +747,7 @@
     "SeeWhatToldAboutAbpCommercial": "查看关于 ABP Comemrcial 的报道，并根据需要写下您的想法。",
     "BlazoriseLicense": "我们是否需要购买Blazorise许可证？",
     "BlazoriseLicenseExplanation": "我公司Volosoft和公司Megabit之间有合作协议，根据此协议，购买将同时包含了Blazorise许可证与ABP商业产品，因此我们的客户不需要再额外购买Blazorise许可证。",
-    "ExtendPaymentInfoSection_DeveloperPrice": "{0} x 开发者价格",
+    "ExtendPaymentInfoSection_DeveloperPrice": "{0}x 额外的 开发者价格",
     "ExtendPaymentInfoSection_DiscountRate": "折扣 {0}%",
     "TotalNetPrice": "总净价",
     "EFCore": "实体框架核心",
