@@ -44,11 +44,71 @@ Please see the following migration documents, if you are upgrading from v6.0:
 
 ## What's New with ABP Framework 7.0?
 
+In this section, I will introduce some major features released in this version. Here is a brief list of titles explained in the next sections:
+
+* Upgrade to .NET 7.0
+* ABP Dapr Integration
+* Upgrade to OpenIddict 4.0
+* Dynamic Features
+* Integration Services
+* External Localization Infrastructure
+* Dynamic Permissions
+* Distributed Entity Cache Base Class
+* Layout Hooks for the Blazor UI
+* CMS Kit New Features 
+* Improvements on **eShopOnAbp**
+* Other news...
+
 //TODO:
+### Upgrade to .NET 7.0
+
+### ABP Dapr Integration
+
+### Upgrade to OpenIddict 4.0
+
+### Dynamic Features
+
+### Integration Services 
+
+### External Localization Infrastructure
+
+### Dynamic Permissions
+
+### Distributed Entity Cache Base Class 
+
+### Layout Hooks for the Blazor UI
+
+### CMS Kit - New Features
+
+### Improvements on eShopOnAbp
+
+### Other News
 
 ## What's New with ABP Commercial 7.0?
 
-//TODO:
+### External Localization System in the Language Management Module
+
+//TODO: (@hikalkan)
+
+### Set Tenant Admin's Password from Host
+
+![](tenant-admin-password.gif)
+
+ABP 7.0 allows to set tenant admin's password from the Host side. You can set a new password to any tenant admin's password from the Tenants page, if you are  Host user.
+
+### WeChat and Alipay Integrations for the Payment Module
+
+//TODO: add screenshot sent from Liang.
+
+In this version, WeChat Pay and Alipay gateways have been added to the payment module.
+
+You can read the [Payment Module documentation](https://docs.abp.io/en/commercial/7.0/modules/payment#alipayoptions) for more info.
+
+### Other News
+
+* Project Dependencies removed from the Administration Service for Microservice Pro Template.
+* CMS Kit - Contact Feature allows multiple(named) contact forms with this version. Now, you can add different contact forms on different pages (with different settings).
+* 
 
 ## Community News
 
