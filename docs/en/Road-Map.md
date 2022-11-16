@@ -4,18 +4,11 @@ This document provides a road map, release schedule and planned features for the
 
 ## Next Versions
 
-### v7.0
+### v7.1
 
-In the [7.0 milestone](https://github.com/abpframework/abp/milestone/75), we will be mostly working on the following topics:
+The next version will be 7.1 and planned to release the stable 7.1 version in February, 2024. In the version 7.1, we will mostly focus on stabilizing and enhancing existing features, improving the developer experience, as well as adding relatively minor new features.
 
-* Dapr integration ([#13337](https://github.com/abpframework/abp/issues/13337))
-* Upgrade to .NET 7.0 ([#13336](https://github.com/abpframework/abp/issues/13336))
-* Integration Services ([#12470](https://github.com/abpframework/abp/issues/12470))
-* Maturing and documenting the [eShopOnAbp](https://github.com/abpframework/eShopOnAbp) project, writing a free e-book that explains the solution.
-* Working on the [LeptonX](https://blog.abp.io/abp/LeptonX-Theme-for-ABP-Framework-Alpha-Release) theme.
-* Improvements on the existing features and providing more guides.
-
-The planned stable release date for v7.0 is **December, 2022**. We will be publishing more than one pre-release versions before that date.
+See the [7.1 milestone](https://github.com/abpframework/abp/milestone/68) for all the issues we've planned to work on.
 
 ## Backlog Items
 
