@@ -406,6 +406,8 @@
     "SingleLayerApplicationExplanation1": "Creates a single-layer web application.  ",
     "SingleLayerApplicationExplanation2": "Recommended for building an application with a simpler and easy to understand architecture.",
     "ApplicationModule": "Application <br>Module",
-    "SeeTheScreenshot": "See the screenshot"
+    "SeeTheScreenshot": "See the screenshot",
+    "ApplicationModuleExplanation1": "Creates a reusable, fully layered application module solution.",
+    "ApplicationModuleExplanation2": "You can use this option to create modules for your modular application."  
   }
 }

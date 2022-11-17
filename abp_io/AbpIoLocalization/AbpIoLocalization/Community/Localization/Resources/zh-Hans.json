@@ -183,6 +183,7 @@
     "Post_Index_Page_MetaDescription": "ABP 社区的目的是为使用 ABP 框架的开发人员创建一个贡献环境。",
     "Layout_Title": "{0} | ABP 社区",
     "Layout_MetaDescription": "ABP 社区是一个人们可以分享有关 ABP 框架的帖子并关注项目的环境。",
-    "Index_Page_CommunityIntroduction": "这是 ABP 框架、.NET 和软件开发的中心。 您可以阅读文章，观看视频教程，了解 ABP 的开发进度和 ABP 相关事件，帮助其他开发人员并与 ABP 社区分享您的专业知识。"
+    "Index_Page_CommunityIntroduction": "这是 ABP 框架、.NET 和软件开发的中心。 您可以阅读文章，观看视频教程，了解 ABP 的开发进度和 ABP 相关事件，帮助其他开发人员并与 ABP 社区分享您的专业知识。",
+    "TagsInArticle": "文章中的标签"
   }
 }
