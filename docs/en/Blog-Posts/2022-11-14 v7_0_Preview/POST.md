@@ -44,7 +44,7 @@ Please see the following migration documents, if you are upgrading from v6.0:
 
 In this section, I will introduce some major features released in this version. Here is a brief list of titles explained in the next sections:
 
-* Upgrade to .NET 7.0
+* Upgraded to .NET 7.0
 * ABP Dapr Integration
 * Upgrade to OpenIddict 4.0
 * Dynamic Features
@@ -57,26 +57,57 @@ In this section, I will introduce some major features released in this version. 
 * Improvements on **eShopOnAbp**
 * Other news...
 
-//TODO:
-### Upgrade to .NET 7.0
+### Upgraded to .NET 7.0
+
+Upgraded to .NET 7.0, so you need to move your solutions to .NET 7.0 if you want to use the ABP 7.0.
+
+> There is a community article to show how to upgrade an existing project to .NET 7.0. You can check it from 👉 [here](https://community.abp.io/posts/upgrade-your-existing-projects-to-.net7-nmx6vm9m).
 
 ### ABP Dapr Integration
 
+//TODO:
+
 ### Upgrade to OpenIddict 4.0
+
+OpenIddict 4.0 preview has been released on June 22. So, we decided to upgrade the OpenIddict packages to 4.0-preview in ABP 7.0.
+
+Once the final release of OpenIddict 4.0 is published, we will immediately upgrade it to the stable version and planning to make ABP 7.0 final to use the OpenIddict 4.0 stable version.
+
+> You can read the "[OpenIddict 4.0 preview1 is out](https://kevinchalet.com/2022/06/22/openiddict-4-0-preview1-is-out/)" post to learn what's new with this release.
 
 ### Dynamic Features
 
+//TODO: (@hikalkan)
+
 ### Integration Services 
+
+//TODO:
 
 ### External Localization Infrastructure
 
+//TODO: (@hikalkan)
+
 ### Dynamic Permissions
+
+//TODO: (@hikalkan)
 
 ### Distributed Entity Cache Base Class 
 
+//TODO:
+
 ### Layout Hooks for the Blazor UI
 
+The **Layout Hook System** allows you to add code to some specific parts of the layout and all layout of the themes provided by the ABP Framework implement these hooks. 
+
+This system was already implemented for MVC UI but not for the Blazor UI and we've announced in the [ABP 6.0 Release Candidate blog-post](https://blog.abp.io/abp/ABP.IO-Platform-6.0-RC-Has-Been-Published) to we're planning to implement it in version 7.0.
+
+Now, we are introducing the Layout Hook System for Blazor UI as planned within this version. 
+
+> You can read the [Blazor UI: Layout Hooks](https://docs.abp.io/en/abp/7.0/UI/Blazor/Layout-Hooks) documentation if you want to use the Layout Hooks in your Blazor application and see the required configurations.
+
 ### CMS Kit - New Features
+
+//TODO:
 
 ### Improvements on eShopOnAbp
 
