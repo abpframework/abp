@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
-using Volo.Abp.BlazoriseUI;
-using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.Blazor.Components;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.TenantManagement.Localization;
@@ -23,6 +20,8 @@ public partial class TenantManagement
     protected string ManageFeaturesPolicyName;
 
     protected FeatureManagementModal FeatureManagementModal;
+
+    protected bool ShowPassword { get; set; }
 
     protected PageToolbar Toolbar { get; } = new();
 
@@ -126,5 +125,10 @@ public partial class TenantManagement
             TenantManagementModuleExtensionConsts.EntityNames.Tenant));
 
         return base.SetTableColumnsAsync();
+    }
+
+    protected virtual void TogglePasswordVisibility()
+    {
+        ShowPassword = !ShowPassword;
     }
 }

@@ -101,7 +101,9 @@
                                                     </TextEdit>
                                                 </Addon>
                                                 <Addon AddonType="AddonType.End">
-                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"><Icon Name="IconName.EyeSlash"/></Button>
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))">
+                                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                                    </Button>
                                                 </Addon>
                                             </Addons>
                                             <ValidationError Style="display: block"/>
@@ -220,7 +222,9 @@
                                                     </TextEdit>
                                                 </Addon>
                                                 <Addon AddonType="AddonType.End">
-                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"><Icon Name="IconName.EyeSlash"/></Button>
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))">
+                                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                                    </Button>
                                                 </Addon>
                                             </Addons>
                                             <ValidationError Style="display: block"/>
