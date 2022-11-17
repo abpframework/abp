@@ -2,8 +2,6 @@
 
 Today, we are happy to release the [ABP Framework](https://abp.io/) and  [ABP Commercial](https://commercial.abp.io/) version **7.0 RC** (release candidate). This blog post introduces the new features and important changes in this new version.
 
-> **The planned release date for the [7.0.0 Stable](https://github.com/abpframework/abp/milestone/76) version is December 13, 2022**.
-
 Try this version and provide feedback for the stable ABP v7.0! Thank you to all.
 
 ## Get Started with the 7.0 RC
@@ -82,7 +80,14 @@ In this section, I will introduce some major features released in this version. 
 
 ### Improvements on eShopOnAbp
 
+The following improvements have been made on [eShopOnAbp project](https://github.com/abpframework/eShopOnAbp) with this version:
+
+* Keycloak is an open-source identity management system. Keycloak Integration has been added to the project within this release period. See [#12021](https://github.com/abpframework/abp/issues/12021) for more info.
+* Product detail page now uses CMS Kit's [Rating](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Ratings) and [Comment](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments) features. See [#11429](https://github.com/abpframework/abp/issues/11429) for more info.
+
 ### Other News
+
+* ABP 7.0 introduces the `AbpDistributedLockOptions` for main options class to configure the distributed locking. You can specify any name as the lock prefix. See the [documentation](https://docs.abp.io/en/abp/7.0/Distributed-Locking#abpdistributedlockoptions) for more.
 
 ## What's New with ABP Commercial 7.0?
 
@@ -94,21 +99,21 @@ In this section, I will introduce some major features released in this version. 
 
 ![](tenant-admin-password.gif)
 
-ABP 7.0 allows to set tenant admin's password from the Host side. You can set a new password to any tenant admin's password from the Tenants page, if you are  Host user.
+ABP 7.0 allows to set tenant admin's password from the Host side. You can set a new password to any tenant admin's password from the Tenants page, if you are the Host of the system.
 
 ### WeChat and Alipay Integrations for the Payment Module
 
-//TODO: add screenshot sent from Liang.
+![](payment-gateway-1.png)
 
 In this version, WeChat Pay and Alipay gateways have been added to the payment module.
 
-You can read the [Payment Module documentation](https://docs.abp.io/en/commercial/7.0/modules/payment#alipayoptions) for more info.
+You can read the [Payment Module documentation](https://docs.abp.io/en/commercial/7.0/modules/payment#alipayoptions) for configurations and more info.
 
-### Other News
+### Others
 
 * Project Dependencies removed from the Administration Service for Microservice Pro Template.
 * CMS Kit - Contact Feature allows multiple(named) contact forms with this version. Now, you can add different contact forms on different pages (with different settings).
-* 
+
 
 ## Community News
 
@@ -138,6 +143,6 @@ In this episode of ABP Community Talks, 2022.9; we'll talk about .NET 7.0 and AB
 
 ## Conclusion 
 
-This version comes with some features and enhancements to the existing features. You can see the [Road Map](https://docs.abp.io/en/abp/7.0/Road-Map) documentation to learn about the release schedule and planned features for the next releases. The planned release date for the [7.0.0 Stable](https://github.com/abpframework/abp/milestone/76) version is December 13, 2022. Please try the ABP v7.0 RC and provide feedback to us. 
+This version comes with some features and enhancements to the existing features. You can see the [Road Map](https://docs.abp.io/en/abp/7.0/Road-Map) documentation to learn about the release schedule and planned features for the next releases. Please try the ABP v7.0 RC and provide feedback to us. 
 
 Thanks for being a part of this community!
