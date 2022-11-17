@@ -143,6 +143,7 @@
     "Volo.AbpIo.Domain:060001": "عنوان URL المصدر (\"{PostUrl}\") ليس عنوان URL لـ Github",
     "Volo.AbpIo.Domain:060002": "محتوى المقالة غير متوفر من مورد Github (\"{PostUrl}\").",
     "Volo.AbpIo.Domain:060003": "لم يتم العثور على محتوى مقال!",
-    "SeeMore": "شاهد المزيد"
+    "SeeMore": "شاهد المزيد",
+    "IConsentToMedium": "أوافق على نشر هذا المنشور على https://medium.com/volosoft."
   }
 }
