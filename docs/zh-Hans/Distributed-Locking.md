@@ -109,10 +109,12 @@ namespace AbpDemo
 
 **示例: 设置应用程序的分布式锁Key前缀**
 
+```csharp
 Configure<AbpDistributedLockOptions>(options =>
 {
     options.KeyPrefix = "MyApp1";
 });
+```
 
 > 在你的[模块类](Module-Development-Basics.md)中的 `ConfigureServices` 方法进行配置.
 

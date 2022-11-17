@@ -109,10 +109,12 @@ namespace AbpDemo
 
 **Example: Set the distributed lock key prefix for the application**
 
+```csharp
 Configure<AbpDistributedLockOptions>(options =>
 {
     options.KeyPrefix = "MyApp1";
 });
+```
 
 > Write that code inside the `ConfigureServices` method of your [module class](Module-Development-Basics.md).
 
