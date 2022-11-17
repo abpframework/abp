@@ -144,6 +144,6 @@
     "Volo.AbpIo.Domain:060002": "محتوى المقالة غير متوفر من مورد Github (\"{PostUrl}\").",
     "Volo.AbpIo.Domain:060003": "لم يتم العثور على محتوى مقال!",
     "SeeMore": "شاهد المزيد",
-    "IConsentToMedium": "أوافق على نشر هذا المنشور على https://medium.com/volosoft."
+    "IConsentToMedium": ".https://medium.com/volosoft أوافق على نشر هذا المنشور على"
   }
 }
