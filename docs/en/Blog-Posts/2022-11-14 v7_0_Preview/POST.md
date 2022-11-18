@@ -52,7 +52,6 @@ In this section, I will introduce some major features released in this version. 
 * External Localization Infrastructure
 * Distributed Entity Cache Service
 * Layout Hooks for the Blazor UI
-* CMS Kit New Features
 * Improvements on eShopOnAbp project
 
 ### Upgraded to .NET 7.0
@@ -184,29 +183,9 @@ Default cache duration is 2 minutes with `AbsoluteExpirationRelativeToNow` confi
 
 The **Layout Hook System** allows you to add code to some specific parts of the layout and all layouts of the themes provided by the ABP Framework implement these hooks. 
 
-This system was already implemented for MVC UI but not for the Blazor UI. 
-
-We've announced in the previous blog post ([ABP 6.0 Release Candidate blog post](https://blog.abp.io/abp/ABP.IO-Platform-6.0-RC-Has-Been-Published)) to we're planning to implement it in version 7.0.
-
-And now, we are introducing the Layout Hook System for Blazor UI as planned within this version. 
+This system was already implemented for MVC UI but not for the Blazor UI. We've announced in the previous blog post ([ABP 6.0 Release Candidate blog post](https://blog.abp.io/abp/ABP.IO-Platform-6.0-RC-Has-Been-Published)) to we're planning to implement it in version 7.0. And now, we are introducing the Layout Hook System for Blazor UI as planned within this version. 
 
 > You can read the [Blazor UI: Layout Hooks](https://docs.abp.io/en/abp/7.0/UI/Blazor/Layout-Hooks) documentation if you want to use the Layout Hooks in your Blazor application and see the required configurations.
-
-### CMS Kit - New Features
-
-There are two new features that came with this version on the CMS Kit module:
-
-#### Features Integration
-
-![](cms-kit-features.png)
-
-ABP's [Feature System](https://docs.abp.io/en/abp/latest/Features) is used to **enable**, **disable** or **change the behavior** of the application features on runtime. In ABP 7.0, this is implemented for the CMS Kit module.
-
-#### Set a Page as the Homepage
-
-![](cms-kit-homepage.png)
-
-ABP 7.0 introduces a new feature on the CMS Kit module and that allows you to set any page as the home page (if you haven't created a homepage in your code such as `/Pages/Index.cshtml` for Razor Page applications). Then when the users access your website, they will see this page as the homepage.
 
 ### Improvements on eShopOnAbp
 
