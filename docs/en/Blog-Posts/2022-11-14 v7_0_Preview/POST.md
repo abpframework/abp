@@ -131,11 +131,27 @@ When you do that ABP takes the following actions by conventions:
 
 ### Dynamic Permissions and Features
 
-//TODO: (@hikalkan)
+In ABP Framework, [permissions](https://docs.abp.io/en/abp/latest/Authorization) and [features](https://docs.abp.io/en/abp/latest/Features) are defined in the codebase of your application. Because of that design, it was hard to define permissions (and features) in different microservices and centrally manage all the permissions (and features) in a single admin application. To make that possible, we were adding project references for all microservices' service contract packages from a single microservice, so it can know all the permissions (and features) and manage them. As a result, that permission manager microservice needs to be re-deployed whenever a microservice's permissions change.
+
+With ABP 7.0, we've introduced the [dynamic permissions](https://github.com/abpframework/abp/pull/13644) and [dynamic features](https://github.com/abpframework/abp/pull/13881) systems. See the following figure:
+
+![dynamic-permissions](dynamic-permissions.png)
+
+Here, Microservice 1 defines the permissions A and B, Microservice 2 defines the permissions C, D, E. The Permission Management microservice is used by the permission management UI and manages all the permissions of a user in the application.
+
+Basically, in the solution with ABP 7.0, all microservices serializes their own permission definitions and write them into a shared database on their application startup (with an highly optimized algorithm). On the other hand, the permission management service can dynamically get these permission definitions from the database (it is also highly optimized to reduce database usage) and allow the UI to show and manage them for a user or role.
+
+We will update the authorization and features documentation in next days to state the configuration, while it mostly works automatically.
+
+> If you want to know why we made all these decisions and what problems we've solved, you can watch Halil İbrahim Kalkan's "[Authorization in a Distributed / Microservice System](https://www.youtube.com/watch?v=DVqvRZ0w-7g)" talk in .NET Conf 2022.
 
 ### External Localization Infrastructure
 
-//TODO: (@hikalkan)
+Localization was another problem in a microservice system, when each microservice try to define its own localization texts and you build a unified UI application.
+
+The PR [#13845](https://github.com/abpframework/abp/pull/13845) described what's done in details. Basically, you need to implement `IExternalLocalizationStore ` to get localizations of other services. However, since the open-source ABP Framework doesn't provide a module for dynamic localization, we haven't implemented that out of the box. We may implement it for open-source if we get a considerable request from the community (upvote [#13953](https://github.com/abpframework/abp/issues/13953)).
+
+We've implemented the external localization system in ABP Commercial's [Language Management module](https://commercial.abp.io/modules/Volo.LanguageManagement) and also applied in the [microservice startup template](https://commercial.abp.io/startup-templates/microservice). See the ABP Commercial part of this blog post to know more.
 
 ### Distributed Entity Cache Service
 
