@@ -1,6 +1,6 @@
 # ABP Version 7.0 Migration Guide
 
-This document is a guide for upgrading ABP v6.0 solutions to ABP v7.0. There are some changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.
+This document is a guide for upgrading ABP v6.x solutions to ABP v7.0. There are some changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.
 
 > ABP Framework upgraded to .NET 7.0, so you need to move your solutions to .NET 7.0 if you want to use the ABP 7.0. You can check the [Migrate from ASP.NET Core 6.0 to 7.0](https://learn.microsoft.com/en-us/aspnet/core/migration/60-70?view=aspnetcore-7.0) documentation.
 
