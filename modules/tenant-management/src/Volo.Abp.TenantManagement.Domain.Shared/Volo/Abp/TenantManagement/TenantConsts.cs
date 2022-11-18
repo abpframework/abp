@@ -15,5 +15,5 @@ public static class TenantConsts
     /// <summary>
     /// Default value: 256
     /// </summary>
-    public static int AdminEmailAddress { get; set; } = 256; 
+    public static int MaxAdminEmailAddressLength { get; set; } = 256; 
 }
