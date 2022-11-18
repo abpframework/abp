@@ -63,6 +63,8 @@ public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IR
 
     public abstract Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
 
+    public abstract Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
+
     protected virtual TQueryable ApplyDataFilters<TQueryable>(TQueryable query)
         where TQueryable : IQueryable<TEntity>
     {

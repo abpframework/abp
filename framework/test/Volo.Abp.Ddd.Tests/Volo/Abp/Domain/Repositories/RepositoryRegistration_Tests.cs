@@ -317,6 +317,11 @@ public class RepositoryRegistration_Tests
             throw new NotImplementedException();
         }
 
+        public override Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
