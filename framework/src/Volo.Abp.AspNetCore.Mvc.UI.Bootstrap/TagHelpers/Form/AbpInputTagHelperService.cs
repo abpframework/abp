@@ -273,6 +273,18 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
         label.AddCssClass(isCheckbox ? "form-check-label" : "form-label");
 
+        if (!TagHelper.LabelTooltip.IsNullOrEmpty())
+        {
+            label.Attributes.Add("data-bs-toggle", "tooltip");
+            label.Attributes.Add("data-bs-placement", TagHelper.LabelTooltipPlacement);
+            if (TagHelper.LabelTooltipHtml)
+            {
+                label.Attributes.Add("data-bs-html", "true");
+            }
+            label.Attributes.Add("title", TagHelper.LabelTooltip);
+            label.InnerHtml.AppendHtml($" <i class=\"bi {TagHelper.LabelTooltipIcon}\"></i>");
+        }
+
         return label.ToHtmlString();
     }
 
@@ -337,7 +349,24 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
         attributeList.AddClass(isCheckbox ? "form-check-label" : "form-label");
 
-        return await labelTagHelper.RenderAsync(attributeList, context, _encoder, "label", TagMode.StartTagAndEndTag);
+        if (!TagHelper.LabelTooltip.IsNullOrEmpty())
+        {
+            attributeList.Add("data-bs-toggle", "tooltip");
+            attributeList.Add("data-bs-placement", TagHelper.LabelTooltipPlacement);
+            if (TagHelper.LabelTooltipHtml)
+            {
+                attributeList.Add("data-bs-html", "true");
+            }
+            attributeList.Add("title", TagHelper.LabelTooltip);
+        }
+
+        var innerOutput = await labelTagHelper.ProcessAndGetOutputAsync(attributeList, context, "label", TagMode.StartTagAndEndTag);
+        if (!TagHelper.LabelTooltip.IsNullOrEmpty())
+        {
+            innerOutput.Content.AppendHtml($" <i class=\"bi {TagHelper.LabelTooltipIcon}\"></i>");
+        }
+
+        return innerOutput.Render(_encoder);
     }
 
     protected virtual void ConvertToTextAreaIfTextArea(TagHelperOutput tagHelperOutput)
