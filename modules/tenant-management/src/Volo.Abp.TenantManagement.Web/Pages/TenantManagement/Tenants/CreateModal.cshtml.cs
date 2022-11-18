@@ -43,7 +43,7 @@ public class CreateModalModel : TenantManagementPageModel
 
         [Required]
         [EmailAddress]
-        [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.AdminEmailAddress))]
+        [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxAdminEmailAddressLength))]
 
         public string AdminEmailAddress { get; set; }
 
