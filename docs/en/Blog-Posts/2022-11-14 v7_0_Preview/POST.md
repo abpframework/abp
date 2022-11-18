@@ -191,7 +191,7 @@ This system was already implemented for MVC UI but not for the Blazor UI. We've 
 
 The following improvements have been made on the [eShopOnAbp project](https://github.com/abpframework/eShopOnAbp) within this version:
 
-* Keycloak is an open-source identity management system. Keycloak Integration has been added to the project within this release period. See [#12021](https://github.com/abpframework/abp/issues/12021) for more info.
+* We've integrated the [Keycloak](https://www.keycloak.org/) (an open-source identity and access management system) as the authentication server instead of built-in authentication server (that was based on IdentityServer). See [#12021](https://github.com/abpframework/abp/issues/12021) for more information.
 * The product detail page now uses CMS Kit's [Rating](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Ratings) and [Comment](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments) features. See [#11429](https://github.com/abpframework/abp/issues/11429) for more info.
 
 ### Other News
