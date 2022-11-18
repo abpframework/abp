@@ -1,23 +1,23 @@
 # ABP.IO Platform 7.0 RC Has Been Released
 
-Today, we are happy to release the [ABP Framework](https://abp.io/) and  [ABP Commercial](https://commercial.abp.io/) version **7.0 RC** (release candidate). This blog post introduces the new features and important changes in this new version.
+Today, we are happy to release the [ABP Framework](https://abp.io/) and [ABP Commercial](https://commercial.abp.io/) version **7.0 RC** (Release Candidate). This blog post introduces the new features and important changes in this new version.
 
-Try this version and provide feedback for the stable ABP v7.0! Thank you to all.
+Try this version and provide feedback for more stable ABP v7.0! Thank you to all.
 
 ## Get Started with the 7.0 RC
 
 Follow the steps below to try version 7.0.0 RC today:
 
-1) **Upgrade** the ABP CLI to version `7.0.0-rc.1` using a command line terminal:
+1) **Upgrade** the ABP CLI to version `7.0.0-rc.2` using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 7.0.0-rc.1
+dotnet tool update Volo.Abp.Cli -g --version 7.0.0-rc.2
 ````
 
 **or install** it if you haven't before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 7.0.0-rc.1
+dotnet tool install Volo.Abp.Cli -g --version 7.0.0-rc.2
 ````
 
 2) Create a **new application** with the `--preview` option:
@@ -30,12 +30,12 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 > You can also use the [Get Started](https://abp.io/get-started) page to generate a CLI command for creating an application.
 
-You can use any IDE that supports .NET 7.x, like **[Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)**.
+You can use any IDE that supports .NET 7.x, like [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
 
 ## Migration Guides
 
 There are breaking changes in this version that may affect your application. 
-Please see the following migration documents, if you are upgrading from v6.0:
+Please see the following migration documents, if you are upgrading from v6.x:
 
 * [ABP Framework 6.x to 7.0 Migration Guide](https://docs.abp.io/en/abp/7.0/Migration-Guides/Abp-7_0)
 * [ABP Commercial 6.x to 7.0 Migration Guide](https://docs.abp.io/en/commercial/7.0/migration-guides/v7_0)
@@ -45,43 +45,43 @@ Please see the following migration documents, if you are upgrading from v6.0:
 In this section, I will introduce some major features released in this version. Here is a brief list of titles explained in the next sections:
 
 * Upgraded to .NET 7.0
-* ABP Dapr Integration
 * Upgraded to OpenIddict 4.0
-* Dynamic Features
+* Dapr Integration
 * Integration Services
+* Dynamic Permissions and Features
 * External Localization Infrastructure
-* Dynamic Permissions
-* Distributed Entity Cache Base Class
+* Distributed Entity Cache Service
 * Layout Hooks for the Blazor UI
-* CMS Kit New Features 
-* Improvements on **eShopOnAbp**
-* Other news...
+* CMS Kit New Features
+* Improvements on eShopOnAbp project
 
 ### Upgraded to .NET 7.0
 
-Upgraded to .NET 7.0, so you need to move your solutions to .NET 7.0 if you want to use the ABP 7.0.
+We've upgraded the ABP Framework to .NET 7.0, so you need to move your solutions to .NET 7.0 if you want to use the ABP 7.0.
 
-> You can check the [Migrate from ASP.NET Core 6.0 to 7.0](https://learn.microsoft.com/en-us/aspnet/core/migration/60-70?view=aspnetcore-7.0) documentation. Also, there is a community article to show how to upgrade an existing project to .NET 7.0. You can check it from 👉 [here](https://community.abp.io/posts/upgrade-your-existing-projects-to-.net7-nmx6vm9m).
+> You can check the [Migrate from ASP.NET Core 6.0 to 7.0](https://learn.microsoft.com/en-us/aspnet/core/migration/60-70?view=aspnetcore-7.0) documentation. Also, there is an ABP Community article to show how to upgrade an existing project to .NET 7.0. You can check it from 👉 [here](https://community.abp.io/posts/upgrade-your-existing-projects-to-.net7-nmx6vm9m).
 
-### ABP Dapr Integration
+### Upgraded to OpenIddict 4.0
+
+OpenIddict 4.0 preview has been released on June 22. So, we decided to upgrade the OpenIddict packages to 4.0-preview in ABP 7.0.
+
+Once the final release of OpenIddict 4.0 is published, we will immediately upgrade it to the stable version and plan to make ABP 7.0 final to use the OpenIddict 4.0 stable version.
+
+> You can read the "[OpenIddict 4.0 preview1 is out](https://kevinchalet.com/2022/06/22/openiddict-4-0-preview1-is-out/)" post to learn what's new with OpenIddict 4.0.
+
+### Dapr Integration
 
 [Dapr (Distributed Application Runtime)](https://dapr.io/) provides APIs that simplify microservice connectivity.
 
-ABP and Dapr have some intersecting features like service-to-service communication, distributed message bus and distributed locking. However, their purposes are totally different. 
+ABP and Dapr have some intersecting features like service-to-service communication, distributed message bus and distributed locking. However, the purposes of ABP and Dapr are different. ABP's goal is to provide an end-to-end developer experience with an opinionated architecture. On the other hand, Dapr's purpose is to provide a runtime to decouple common microservice communication patterns from your application logic.
 
-ABP's goal is to provide an end-to-end developer experience with an opinionated architecture. On the other hand, Dapr's purpose is to provide a runtime to decouple common microservice communication patterns from your application logic.
-
-ABP 7.0 offers some packages to provide better integration with Dapper.
-
-> I will cover some important integration notes below but if you want to get a full overview of ABP Dapr Integration please see the [ABP Dapr Integration documentation](https://docs.abp.io/en/abp/7.0/Dapr/Index).
+ABP 7.0 offers some packages to provide better integration with Dapper. I will cover some important integration notes below but if you want to get a full overview of ABP Dapr Integration please see the [ABP Dapr Integration documentation](https://docs.abp.io/en/abp/7.0/Dapr/Index).
 
 #### Distributed Event Bus Integration
 
 ABP's [Distributed Event Bus System](https://docs.abp.io/en/abp/7.0/Distributed-Event-Bus) provides a convenient abstraction to allow applications to communicate asynchronously via events. 
 
-ABP's [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) and [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) packages make it possible to use the Dapr infrastructure with the ABP's distributed event bus.
-
-> **Volo.Abp.EventBus.Dapr** package is used to publish events and on other hand the **Volo.Abp.AspNetCore.Mvc.Dapr.EventBus** package is used to subscribe to these events.
+The new [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) and [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) packages make it possible to use the Dapr infrastructure with the ABP's standard distributed event bus abstractions. **Volo.Abp.EventBus.Dapr** package is used to publish events and the **Volo.Abp.AspNetCore.Mvc.Dapr.EventBus** package is used to subscribe to events.
 
 > See [the documentation](https://docs.abp.io/en/abp/7.0/Dapr/Index#distributed-event-bus-integration) to learn more.
 
@@ -101,19 +101,11 @@ The [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.D
 
 > See [the documentation](https://docs.abp.io/en/abp/7.0/Dapr/Index#distributed-lock) to learn more.
 
-### Upgraded to OpenIddict 4.0
-
-OpenIddict 4.0 preview has been released on June 22. So, we decided to upgrade the OpenIddict packages to 4.0-preview in ABP 7.0.
-
-Once the final release of OpenIddict 4.0 is published, we will immediately upgrade it to the stable version and plan to make ABP 7.0 final to use the OpenIddict 4.0 stable version.
-
-> You can read the "[OpenIddict 4.0 preview1 is out](https://kevinchalet.com/2022/06/22/openiddict-4-0-preview1-is-out/)" post to learn what's new with OpenIddict 4.0.
-
-### Dynamic Features
+### Integration Services
 
 //TODO: (@hikalkan)
 
-### Integration Services 
+### Dynamic Permissions and Features
 
 //TODO: (@hikalkan)
 
@@ -121,15 +113,70 @@ Once the final release of OpenIddict 4.0 is published, we will immediately upgra
 
 //TODO: (@hikalkan)
 
-### Dynamic Permissions
+### Distributed Entity Cache Service
 
-//TODO: (@hikalkan)
+ABP introduces a distributed entity cache service with v7.0. 
 
-### Distributed Entity Cache Base Class
+Assume that you have a `Product` entity (an [aggregate root](https://docs.abp.io/en/abp/latest/Entities) actually):
 
-ABP introduces **Distributed Entity Cache Base Class** with v7.0. 
+````csharp
+public class Product : AggregateRoot<Guid>
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public float Price { get; set; }
+    public int StockCount { get; set; }
+}
+````
 
-There is an `EntityCache<>` base class that can help you if you want to cache entities. This base class helps you to easily implement caching for entities.
+And you want to use caching for faster access to the products. You first should configure the [dependency injection](https://docs.abp.io/en/abp/latest/Dependency-Injection) to register the `IEntityCache` service, in the `ConfigureServices` method of your [module class](https://docs.abp.io/en/abp/latest/Module-Development-Basics):
+
+````csharp
+context.Services.AddEntityCache<Product, Guid>();
+````
+
+Now, you can inject the `IEntityCache<Product, Guid>` service whenever you need:
+
+````csharp
+public class ProductAppService : ApplicationService
+{
+    private readonly IEntityCache<Product, Guid> _productCache;
+
+    public ProductAppService(IEntityCache<Product, Guid> productCache)
+    {
+        _productCache = productCache;
+    }
+
+    public async Task<ProductDto> GetAsync(Guid id)
+    {
+        var product = await _productCache.GetAsync(id);
+        return ObjectMapper.Map<Product, ProductDto>(product);
+    }
+}
+````
+
+*In this example, I assume that the [object mapping](https://docs.abp.io/en/abp/latest/Object-To-Object-Mapping) is configured to map from `Product` to `ProductDto`.*
+
+Here, We've directly cached the `Product` objects. In that case, the `Product` class must be serializable (because it is serialized to JSON while saving to [distributed cache](https://docs.abp.io/en/abp/latest/Caching)). That may not be possible in some scenarios and you may want to use another class to store the cache data. For example, we may want to use the `ProductDto` class instead of the `Product` class for the cache object. In this case, change the dependency injection configuration as like below:
+
+````csharp
+context.Services.AddEntityCache<Product, ProductDto, Guid>();
+````
+
+Then inject the `IEntityCache<ProductDto, Guid>` service instead of the `IEntityCache<Product, Guid>` service.
+
+You can configure the cache duration by passing a `DistributedCacheEntryOptions` object to the `AddEntityCache` method:
+
+````csharp
+context.Services.AddEntityCache<Product, ProductDto, Guid>(
+    new DistributedCacheEntryOptions
+    {
+        SlidingExpiration = TimeSpan.FromMinutes(30)
+    }
+);
+````
+
+Default cache duration is 2 minutes with `AbsoluteExpirationRelativeToNow` configuration.
 
 > Check [this PR](https://github.com/abpframework/abp/pull/14055) to see the implementation and additional notes.
 
