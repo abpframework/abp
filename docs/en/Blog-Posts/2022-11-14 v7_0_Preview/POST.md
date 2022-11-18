@@ -200,7 +200,11 @@ The following improvements have been made on the [eShopOnAbp project](https://gi
 
 ## What's New with ABP Commercial 7.0?
 
-### External Localization System in the Language Management Module
+We've also worked on the [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with the ABP Commercial 7.0.
+
+### Microservice Solution Improvements
+
+We've worked on the [microservice startup solution](https://commercial.abp.io/startup-templates/microservice) to make it proper for more advanced scenarios and better service independencies. As a result, all the services are made independently deployable and flexible to define its own permissions, features and localization texts.
 
 //TODO: (@hikalkan)
 
@@ -220,25 +224,26 @@ You can read the [Payment Module documentation](https://docs.abp.io/en/commercia
 
 ### Others
 
-* Project Dependencies removed from the Administration Service for Microservice Pro Template.
-* CMS Kit - Contact Feature allows multiple(named) contact forms with this version. Now, you can add different contact forms on different pages (with different settings).
+* CMS Kit - Contact Feature allows multiple (named) contact forms with this version. Now, you can add different contact forms on different pages (with different settings).
 
 
 ## Community News
 
 ### New ABP Community Posts
 
-* [gdlcf88](https://github.com/gdlcf88) has created a new community article. You can read it 👉 [here](https://community.abp.io/posts/use-stepping-to-perform-atomic-multistep-operations-4kqu8ewp).
-* [GDUnit](https://community.abp.io/members/GDUnit) has created her/his first ABP community article that shows multi-tenant subdomain resolution in blazor applications. You can read it 👉 [here](https://community.abp.io/posts/abp-blazor-multitenant-subdomain-resolution-c1x4un8x).
+* [gdlcf88](https://github.com/gdlcf88) has created a new community article, titled "Use Stepping To Perform Atomic Multi-Step Operations". You can read it 👉 [here](https://community.abp.io/posts/use-stepping-to-perform-atomic-multistep-operations-4kqu8ewp).
+* [GDUnit](https://community.abp.io/members/GDUnit) has created his first ABP community article that shows multi-tenant subdomain resolution in Blazor applications. You can read it 👉 [here](https://community.abp.io/posts/abp-blazor-multitenant-subdomain-resolution-c1x4un8x).
 * [EngincanV](https://twitter.com/EngincanVeske) has created a new community article to introduce the ABP's testing infrastructure. You can read it 👉 [here](https://community.abp.io/posts/testing-in-abp-framework-with-examples-3w29v6ce).
 * [Alper Ebicoglu](https://twitter.com/alperebicoglu) has created a new community article to show "How to upgrade an existing project to .NET7". You can read it 👉 [here](https://community.abp.io/posts/upgrade-your-existing-projects-to-.net7-nmx6vm9m).
 * [Kirti Kulkarni](https://community.abp.io/members/kirtik) has created a new community article to show "How to integrate and enable the Chat Module in an ABP Commercial application". You can read it 👉 [here](https://community.abp.io/posts/integrating-and-enabling-the-chat-module-in-abp-commercial-vsci3ov2).
 
-### Volosoft Has Attended the .NET Conf 2022
+We thank you to all the authors for contributing to the [ABP Community platform](https://community.abp.io/).
+
+### We were in the .NET Conf 2022
 
 ![](dotnef-conf-2022.jpg)
 
-Halil İbrahim Kalkan, the lead developer of ABP Framework attended [.NET Conf 2022](https://www.dotnetconf.net/) on November 10, 2022. His topic was "Authorization in a Distributed / Microservice System". In this talk, he talked about permission-based authorization systems and its challenges. Then, gave solutions that are implemented in open source ABP Framework. 
+Microsoft has released .NET 7.0 and celebrated it with a 3-days international online conference. Halil İbrahim Kalkan, the lead developer of ABP Framework attended [.NET Conf 2022](https://www.dotnetconf.net/) on November 10, 2022. His topic was "Authorization in a Distributed / Microservice System". In this talk, he talked about permission-based authorization systems and its challenges in a distributed system. Then, gave solutions that are implemented in open source ABP Framework.
 
 You can watch his speech from 👉 [here](https://www.youtube.com/watch?v=DVqvRZ0w-7g).
 
@@ -252,6 +257,6 @@ In this episode of ABP Community Talks, 2022.9; we'll talk about .NET 7.0 and AB
 
 ## Conclusion 
 
-This version comes with some features and enhancements to the existing features. You can see the [Road Map](https://docs.abp.io/en/abp/7.0/Road-Map) documentation to learn about the release schedule and planned features for the next releases. Please try the ABP v7.0 RC and provide feedback to us. 
+This version comes with some new features and a lot of enhancements to the existing features. You can see the [Road Map](https://docs.abp.io/en/abp/7.0/Road-Map) documentation to learn about the release schedule and planned features for the next releases. Please try the ABP v7.0 RC and provide feedback to help us for releasing a more stable version.
 
 Thanks for being a part of this community!
