@@ -55,7 +55,7 @@ public class Program
         }
         catch (Exception ex)
         {
-            if (ex.GetType().Name.Equals("StopTheHostException", StringComparison.Ordinal))
+            if (ex is HostAbortedException)
             {
                 throw;
             }

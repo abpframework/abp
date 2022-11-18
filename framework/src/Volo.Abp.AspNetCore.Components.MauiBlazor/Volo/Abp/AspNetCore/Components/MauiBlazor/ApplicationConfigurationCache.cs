@@ -9,7 +9,7 @@ public class ApplicationConfigurationCache : ISingletonDependency
 {
     protected ApplicationConfigurationDto Configuration { get; set; }
 
-    public event Func<Action> ApplicationConfigurationChanged;
+    public event Action ApplicationConfigurationChanged;
 
     public virtual ApplicationConfigurationDto Get()
     {
