@@ -65,7 +65,41 @@ Upgraded to .NET 7.0, so you need to move your solutions to .NET 7.0 if you want
 
 ### ABP Dapr Integration
 
-//TODO:
+[Dapr (Distributed Application Runtime)](https://dapr.io/) provides APIs that simplify microservice connectivity.
+
+ABP and Dapr have some intersecting features like service-to-service communication, distributed message bus and distributed locking. However their purposes are totally different. 
+
+ABP's goal is to provide and end-to-end developer expericen with an opinionated architecture. On the other hand, Dapr's purpose is to provide a runtime to decouple common microservice communication patterns from your application logic.
+
+ABP 7.0 offers some packages to provide better integration with Dapper.
+
+> You can read the [ABP Dapr Integration documentation](https://docs.abp.io/en/abp/7.0/Dapr/Index) to learn more.
+
+#### Distributed Event Bus Integration
+
+ABP's [Distributed Event Bus System](https://docs.abp.io/en/abp/7.0/Distributed-Event-Bus) provides a convenient abstraction to allow applications to communicate asynchronously via events. 
+
+ABP's [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) and [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) packages make it possible to use the Dapr infrastructure with the ABP's distributed event bus.
+
+> **Volo.Abp.EventBus.Dapr** package is used to publish events and other hand the **Volo.Abp.AspNetCore.Mvc.Dapr.EventBus** package is used to subscribe to these events.
+
+> See [the documentation](https://docs.abp.io/en/abp/7.0/Dapr/Index#distributed-event-bus-integration) to learn more.
+
+#### C# API Client Proxies Integration
+
+ABP can [dynamically](https://docs.abp.io/en/abp/7.0/API/Dynamic-CSharp-API-Clients) or [statically](https://docs.abp.io/en/abp/7.0/API/Static-CSharp-API-Clients) generate proxy classes to invoke your HTTP APIs from a Dotnet client application. 
+
+The [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) package configures the client-side proxies system, so it uses Dapr's service invocation building block for the communication between your applications.
+
+> See [the documentation](https://docs.abp.io/en/abp/7.0/Dapr/Index#c-api-client-proxies-integration) to learn more.
+
+#### Distributed Lock
+
+ABP provides a [Distributed Locking](https://docs.abp.io/en/abp/7.0/Distributed-Locking) abstraction to control access to a shared resource by multiple applications. Dapr also has a [distributed lock building block](https://docs.dapr.io/developing-applications/building-blocks/distributed-lock/). 
+
+The [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr) package makes ABP use Dapr's distributed locking system.
+
+> See [the documentation](https://docs.abp.io/en/abp/7.0/Dapr/Index#distributed-lock) to learn more.
 
 ### Upgrade to OpenIddict 4.0
 
@@ -81,7 +115,7 @@ Once the final release of OpenIddict 4.0 is published, we will immediately upgra
 
 ### Integration Services 
 
-//TODO:
+//TODO: (@hikalkan)
 
 ### External Localization Infrastructure
 
@@ -99,15 +133,27 @@ Once the final release of OpenIddict 4.0 is published, we will immediately upgra
 
 The **Layout Hook System** allows you to add code to some specific parts of the layout and all layout of the themes provided by the ABP Framework implement these hooks. 
 
-This system was already implemented for MVC UI but not for the Blazor UI and we've announced in the [ABP 6.0 Release Candidate blog-post](https://blog.abp.io/abp/ABP.IO-Platform-6.0-RC-Has-Been-Published) to we're planning to implement it in version 7.0.
+This system was already implemented for MVC UI but not for the Blazor UI and we've announced in the [ABP 6.0 Release Candidate blog post](https://blog.abp.io/abp/ABP.IO-Platform-6.0-RC-Has-Been-Published) to we're planning to implement it in version 7.0.
 
-Now, we are introducing the Layout Hook System for Blazor UI as planned within this version. 
+And now, we are introducing the Layout Hook System for Blazor UI as planned within this version. 
 
 > You can read the [Blazor UI: Layout Hooks](https://docs.abp.io/en/abp/7.0/UI/Blazor/Layout-Hooks) documentation if you want to use the Layout Hooks in your Blazor application and see the required configurations.
 
 ### CMS Kit - New Features
 
-//TODO:
+There are two new features that came with this version on CMS Kit module:
+
+#### Features Integration
+
+![](cms-kit-features.png)
+
+ABP's [Feature System](https://docs.abp.io/en/abp/latest/Features) is used to **enable**, **disable** or **change the behaviour** of the application features on runtime. In ABP 7.0, this is implemented for the CMS Kit module.
+
+#### Set a Page as the Homepage
+
+![](cms-kit-homepage.png)
+
+ABP 7.0 introduces a new feature on CMS Kit module and that's allow you to set any page as the home page (if you haven't created a homepage in your code such as `/Pages/Index.cshtml` for Razor Page applications). Then when the users access to your website, they will see this page as the homepage.
 
 ### Improvements on eShopOnAbp
 
@@ -118,7 +164,7 @@ The following improvements have been made on [eShopOnAbp project](https://github
 
 ### Other News
 
-* ABP 7.0 introduces the `AbpDistributedLockOptions` for main options class to configure the distributed locking. You can specify any name as the lock prefix. See the [documentation](https://docs.abp.io/en/abp/7.0/Distributed-Locking#abpdistributedlockoptions) for more.
+* ABP 7.0 introduces the `AbpDistributedLockOptions` for main options class to configure the distributed locking. You can specify any name as the lock prefix by configuring the `AbpDistributedLockOptions`. See the [documentation](https://docs.abp.io/en/abp/7.0/Distributed-Locking#abpdistributedlockoptions) for more.
 
 ## What's New with ABP Commercial 7.0?
 
