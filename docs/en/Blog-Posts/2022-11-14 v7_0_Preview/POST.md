@@ -253,7 +253,7 @@ We've worked on the [microservice startup solution](https://commercial.abp.io/st
 
 ![](tenant-admin-password.gif)
 
-ABP 7.0 allows setting the tenant admin's password from the Host side. You can set a new password to any tenant admin's password from the Tenants page if you are the Host of the system.
+ABP Commercial's SaaS module now allows setting the tenant admin's password from the host side. You can set a new password to any tenant admin's password from the Tenants page if you are a host user of the system.
 
 ### WeChat and Alipay Integrations for the Payment Module
 
