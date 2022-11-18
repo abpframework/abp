@@ -243,29 +243,31 @@ The following improvements have been made on the [eShopOnAbp project](https://gi
 
 We've also worked on the [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with the ABP Commercial 7.0.
 
-### Microservice Solution Improvements
+### Microservice Solution Architectural Improvements
 
 We've worked on the [microservice startup solution](https://commercial.abp.io/startup-templates/microservice) to make it proper for more advanced scenarios and better service independencies. As a result, all the services are made independently deployable and flexible to define its own permissions, features and localization texts.
 
-//TODO: (@hikalkan)
+For the permissions and features part, we've applied ABP's new dynamic permission and feature systems, those are explained above. For the localization texts, we'd implemented ABP's new external localization infrastructure (that was also explained above) in the [Language Management Module](https://commercial.abp.io/modules/Volo.LanguageManagement).
+
+If you want to build a new microservice solution with ABP 7.0, all these are pre-configured for you. Just create a new solution and focus on your own business code! You can also migrate your existing microservice solutions to take advantage of these new enhancements. You can follow [this guide](https://docs.abp.io/en/abp/latest/Migration-Guides/Upgrading-Startup-Template) as a good way to see the changes you need to apply in your solutions.
 
 ### Set Tenant Admin's Password from Host
 
 ![](tenant-admin-password.gif)
 
-ABP Commercial's SaaS module now allows setting the tenant admin's password from the host side. You can set a new password to any tenant admin's password from the Tenants page if you are a host user of the system.
+ABP Commercial's [SaaS module](https://commercial.abp.io/modules/Volo.Saas) now allows setting the tenant admin's password from the host side. You can set a new password to any tenant admin's password from the Tenants page if you are a host user of the system.
 
 ### WeChat and Alipay Integrations for the Payment Module
 
 ![](payment-gateway-1.png)
 
-In this version, WeChat Pay and Alipay gateways have been added to the payment module.
-
-You can read the [Payment Module documentation](https://docs.abp.io/en/commercial/7.0/modules/payment#alipayoptions) for configurations and more info.
+In this version, WeChat Pay and Alipay gateways have been added to the payment module. You can read the [Payment Module documentation](https://docs.abp.io/en/commercial/7.0/modules/payment#alipayoptions) for configurations and more information.
 
 ### Others
 
-* CMS Kit - Contact Feature allows multiple (named) contact forms with this version. Now, you can add different contact forms on different pages (with different settings).
+* [CMS Kit (Pro) Module](https://commercial.abp.io/modules/Volo.CmsKit.Pro): Contact Feature allows multiple (named) contact forms with this version. Now, you can add different contact forms on different pages (with different settings).
+* [Saas Module](https://commercial.abp.io/modules/Volo.Saas): Allow host users to test connection string of a tenant database on the UI.
+* [Chat Module](https://commercial.abp.io/modules/Volo.Chat): Introduce permission for searching other users.
 
 
 ## Community News
