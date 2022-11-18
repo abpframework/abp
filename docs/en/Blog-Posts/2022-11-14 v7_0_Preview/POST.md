@@ -102,7 +102,32 @@ The [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.D
 
 ### Integration Services
 
-//TODO: (@hikalkan)
+Integration services [was an idea](https://github.com/abpframework/abp/issues/12470) to distinguish the application services those are built for inter-module (or inter-microservice) communication from the application services those are intended to be consumed from a user interface or a client application.
+
+With ABP 7.0, now it is possible to mark an application service as an integration service using the `[IntegrationService]` attribute (that is define in the `Volo.Abp.Application.Services` namespace). Example:
+
+````csharp
+[IntegrationService]
+public class ProductAppService : ApplicationService, IProductAppService
+{
+    // ...
+}
+````
+
+If your application service has an interface, like `IProductService`, you can use it on the service interface:
+
+````csharp
+[IntegrationService]
+public interface IProductAppService : IApplicationService
+{
+    // ...
+}
+````
+
+When you do that ABP takes the following actions by conventions:
+
+* If you use the [Auto API Controllers](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) feature, URL prefix will be `/integration-api/` instead of `/api/`. In this way, for example, you can prevent REST API calls to your integration services out of your API Gateway, in a microservice system, and don't authorize these services.  You can also filter integration services (or non-integration services) while creating Auto API Controllers, using the `ApplicationServiceTypes` option of the `ConventionalControllerSetting` object.
+* Calls made to integration services are not audit logged by default, because they are intended to be used by other services. You can set `IsEnabledForIntegrationServices` to `true` in `AbpAuditingOptions` [options class](https://docs.abp.io/en/abp/latest/Options) to enable audit logging also for the integration services.
 
 ### Dynamic Permissions and Features
 
