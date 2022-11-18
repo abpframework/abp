@@ -61,7 +61,7 @@ In this section, I will introduce some major features released in this version. 
 
 Upgraded to .NET 7.0, so you need to move your solutions to .NET 7.0 if you want to use the ABP 7.0.
 
-> There is a community article to show how to upgrade an existing project to .NET 7.0. You can check it from 👉 [here](https://community.abp.io/posts/upgrade-your-existing-projects-to-.net7-nmx6vm9m).
+> You can check the [Migrate from ASP.NET Core 6.0 to 7.0](https://learn.microsoft.com/en-us/aspnet/core/migration/60-70?view=aspnetcore-7.0) documentation. Also, there is a community article to show how to upgrade an existing project to .NET 7.0. You can check it from 👉 [here](https://community.abp.io/posts/upgrade-your-existing-projects-to-.net7-nmx6vm9m).
 
 ### ABP Dapr Integration
 
