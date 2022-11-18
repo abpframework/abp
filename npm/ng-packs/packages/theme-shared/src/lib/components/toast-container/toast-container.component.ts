@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { toastInOut } from '../../animations/toast.animations';
 import { Toaster } from '../../models/toaster';
@@ -21,6 +21,8 @@ export class ToastContainerComponent implements OnInit {
 
   @Input()
   right = '30px';
+  defaultRight = '30px';
+  defaultMobileRight = '0';
 
   @Input()
   bottom = '30px';
@@ -28,10 +30,13 @@ export class ToastContainerComponent implements OnInit {
   @Input()
   left?: string;
 
+
   @Input()
   toastKey?: string;
+  screenWidth: number;
 
   ngOnInit() {
+    this.setDefaultRight();
     this.toasts$.subscribe(toasts => {
       this.toasts = this.toastKey
         ? toasts.filter(t => {
@@ -39,6 +44,18 @@ export class ToastContainerComponent implements OnInit {
           })
         : toasts;
     });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+  this.setDefaultRight();
+   }
+   setDefaultRight() {
+  
+    const screenWidth = window.innerWidth;
+    if(screenWidth < 768 && this.right == this.defaultRight) {
+      this.right = this.defaultMobileRight;
+    }
   }
 
   trackByFunc(index: number, toast: Toaster.Toast) {
