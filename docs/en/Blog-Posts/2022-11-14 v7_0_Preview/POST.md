@@ -139,7 +139,7 @@ With ABP 7.0, we've introduced the [dynamic permissions](https://github.com/abpf
 
 Here, Microservice 1 defines the permissions A and B, Microservice 2 defines the permissions C, D, E. The Permission Management microservice is used by the permission management UI and manages all the permissions of a user in the application.
 
-Basically, in the solution with ABP 7.0, all microservices serializes their own permission definitions and write them into a shared database on their application startup (with an highly optimized algorithm). On the other hand, the permission management service can dynamically get these permission definitions from the database (it is also highly optimized to reduce database usage) and allow the UI to show and manage them for a user or role.
+Basically, in the solution with ABP 7.0, all microservices serialize their own permission definitions and write them into a shared database on their application startup (with an highly optimized algorithm). On the other hand, the permission management service can dynamically get these permission definitions from the database (it is also highly optimized to reduce database usage) and allow the UI to show and manage them for a user or role.
 
 We will update the authorization and features documentation in next days to state the configuration, while it mostly works automatically.
 
@@ -149,7 +149,7 @@ We will update the authorization and features documentation in next days to stat
 
 Localization was another problem in a microservice system, when each microservice try to define its own localization texts and you build a unified UI application.
 
-The PR [#13845](https://github.com/abpframework/abp/pull/13845) described what's done in details. Basically, you need to implement `IExternalLocalizationStore ` to get localizations of other services. However, since the open-source ABP Framework doesn't provide a module for dynamic localization, we haven't implemented that out of the box. We may implement it for open-source if we get a considerable request from the community (upvote [#13953](https://github.com/abpframework/abp/issues/13953)).
+The PR [#13845](https://github.com/abpframework/abp/pull/13845) described what's done in details. Basically, you need to implement `IExternalLocalizationStore ` to get localizations of other services. However, since the open-source ABP Framework doesn't provide a module for dynamic localization, we haven't implemented that out of the box. We may implement it for open-source if we get a considerable request from the community (you can upvote [#13953](https://github.com/abpframework/abp/issues/13953)).
 
 We've implemented the external localization system in ABP Commercial's [Language Management module](https://commercial.abp.io/modules/Volo.LanguageManagement) and also applied in the [microservice startup template](https://commercial.abp.io/startup-templates/microservice). See the ABP Commercial part of this blog post to know more.
 
