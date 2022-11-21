@@ -21,6 +21,14 @@ export function readEnvironment(tree: Tree, project: workspaces.ProjectDefinitio
   const source = readFileInTree(tree, envPath);
   return findEnvironmentExpression(source);
 }
+export function getFirstApplication(tree: Tree) {
+  const workspace = readWorkspaceSchema(tree);
+  const [name, project] =
+    Object.entries(workspace.projects).find(
+      ([_, project]) => project.projectType === ProjectType.Application,
+    ) || [];
+  return { name, project };
+}
 
 export function readWorkspaceSchema(tree: Tree) {
   if (!tree.exists('/angular.json')) throw new SchematicsException(Exception.NoWorkspace);
@@ -44,7 +52,7 @@ export async function resolveProject<T = any>(
   // @typescript-eslint/no-explicit-any
   notFoundValue: T = NOT_FOUND_VALUE as unknown as any,
 ): Promise<Project | T> {
-  name = name || readWorkspaceSchema(tree).defaultProject!;
+  name = name || readWorkspaceSchema(tree).defaultProject || getFirstApplication(tree).name!;
   const workspace = await getWorkspace(tree);
   let definition: Project['definition'] | undefined;
 
