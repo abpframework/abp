@@ -25,21 +25,18 @@ public class RemoveUnnecessaryPortsStep : ProjectBuildPipelineStep
             return;
         }
 
+        var lines = httpApiHostAppSettings.GetLines();
+        var newlines = new List<string>();
         var portsToRemove = new List<string>();
+        var removeAngularUrl = false;
 
         var appSettingsJson = JObject.Parse(httpApiHostAppSettings.Content);
         var appJson = (JObject)appSettingsJson["App"];
 
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
         {
-            var angularUrl = appJson.Property("AngularUrl")?.ToString() ?? appJson.Property("ClientUrl")?.ToString();
-
+            removeAngularUrl = true;
             portsToRemove.Add("http://localhost:4200");
-            
-            if (!angularUrl.IsNullOrWhiteSpace())
-            {
-                httpApiHostAppSettings.SetContent(httpApiHostAppSettings.Content.Replace($"{angularUrl.EnsureEndsWith(',')}\n    ", string.Empty));
-            }
         }
         
         if (context.BuildArgs.UiFramework != UiFramework.Blazor)
@@ -47,22 +44,27 @@ public class RemoveUnnecessaryPortsStep : ProjectBuildPipelineStep
             portsToRemove.Add("https://localhost:44307");
         }
 
-        
-        if (appJson["CorsOrigins"] != null)
+        foreach (var line in lines)
         {
-            var corsOrigins = appJson["CorsOrigins"].ToString();
-            var newCorsOrigins = string.Join(",", corsOrigins.Split(',').Where(x => !portsToRemove.Contains(x)));
+            var newLine = line;
+            if(removeAngularUrl && (line.Contains("AngularUrl")|| line.Contains("ClientUrl")))
+            {
+                continue;
+            }
             
-            httpApiHostAppSettings.SetContent(httpApiHostAppSettings.Content.Replace(corsOrigins, newCorsOrigins));
+            if(line.Contains("CorsOrigins") || line.Contains("RedirectAllowedUrls"))
+            {
+                var jsonValue = line.Contains("CorsOrigins") ? appJson["CorsOrigins"]?.ToString() : appJson["RedirectAllowedUrls"]?.ToString();
+                if(!jsonValue.IsNullOrWhiteSpace())
+                {
+                    newLine = line.Replace(jsonValue, string.Join(",", jsonValue.Split(',').Where(x => !portsToRemove.Contains(x))));
+                }
+            }
+            
+            newlines.Add(newLine);
         }
-
-        if (appJson["RedirectAllowedUrls"] != null)
-        {
-            var redirectAllowedUrls = appJson["RedirectAllowedUrls"].ToString();
-            var newRedirectAllowedUrls = string.Join(",", redirectAllowedUrls.Split(',').Where(x => !portsToRemove.Contains(x)));
-
-            httpApiHostAppSettings.SetContent(httpApiHostAppSettings.Content.Replace(redirectAllowedUrls, newRedirectAllowedUrls));
-        }
+        
+        httpApiHostAppSettings.SetContent(string.Join(Environment.NewLine, newlines));
     }
 
     private static void RemoveUnnecessaryDbMigratorClients(ProjectBuildContext context)
