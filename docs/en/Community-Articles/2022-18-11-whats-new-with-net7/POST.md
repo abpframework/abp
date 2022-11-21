@@ -4,7 +4,7 @@ In this article, I will highlight a few interesting features that are now availa
 
 > If you are considering using ABP 7.0, you should update your projects to .NET 7. There is a good community article you might want to check out 👉 "[Upgrade Your Existing Projects to .NET7](https://community.abp.io/posts/upgrade-your-existing-projects-to-.net7-nmx6vm9m)".
 
-There are many new features coming with this release. We are going to examine new features within 4 sub-section: ASP.NET Core, C#11, EF 7 and MAUI. Let's start with ASP.NET Core.
+There are many new features coming with this release. We are going to examine new features within 4 sub-sections: ASP.NET Core, C#11, EF 7 and MAUI. Let's start with ASP.NET Core.
 
 ## ASP.NET Core
 
@@ -20,11 +20,11 @@ We will see the following features in this section:
 
 ### Rate Limiting
 
-Rate limiting is a way to limit request frequency for a limited time. Before, .NET 7 we didn’t have built-in support so we would needed to implement it ourselves or use some NuGet packages around or let the CDN provider do this on server level behalf of us (like Cloudflare).
+Rate limiting is a way to limit request frequency for a limited time. Before .NET 7 we didn’t have built-in support so we would need to implement it ourselves, use some NuGet packages around or let the CDN provider do this on server level on behalf of us (like Cloudflare).
 
 With .NET 7, built-in Rate Limiting support has been added and we can easily define rate-limiting policies and attach them to our endpoints.
 
-*Defining rate-limiting policy and registering the required services to DI container*:
+*Defining rate-limiting policy and registering the required services to the DI container*:
 
 ![](rate-limiting-1.png)
 
@@ -39,7 +39,7 @@ Output Caching is a new middleware that provides a caching mechanism and allows 
 It’s pretty straightforward to use output caching in minimal APIs. 
 You just need to create an endpoint and use the `CacheOutput` method with an expiration time. Then when someone sends a request to your endpoint, it will be cached for a specified time and not calculate the result every time.
 
-For the following example, the result will be same for 10 minutes:
+For the following example, the result will be the same for 10 minutes:
 
 ```csharp
 app.MapGet("/cached-output", () => $"Minute: {DateTime.Now.Minute}")
@@ -51,7 +51,7 @@ app.MapGet("/cached-output", () => $"Minute: {DateTime.Now.Minute}")
 
 ### Built-in HTTP/3 Support
 
-In .NET 6, HTTP/3 was introduced for experimental purposes and with .NET 7 now it’s fully supported. But it's not enabled by default, it's understandable since it's still new and only %20 of the applications currently use it, on the other hand, HTTP/2 uses by almost every application.
+In .NET 6, HTTP/3 was introduced for experimental purposes and now with .NET 7 it’s fully supported. But it's not enabled by default, it's understandable since it's still new and only %20 of the applications currently use it, on the other hand, HTTP/2 is used by almost every application.
 
 To enable the HTTP/3 support, we need to configure it in our **Program.cs** file:
 
@@ -89,7 +89,7 @@ We are going to cover two new features for Blazor:
 
 Blazor Custom Elements provide a way to dynamically render Razor Components from other SPA frameworks/libraries such as Angular and React.
 
-To be able to use custom elements, there are two steps need to be done:
+To be able to use custom elements, there are two steps that need to be done:
 
 **1-) Registering a Razor Component as a Custom Element:**
 
@@ -124,7 +124,7 @@ There are great features that came with C# 11. In this article, we are going to 
 
 ### Required Members
 
-C# 11 introduces a new **required** keyword to allow us to ensure property initialization while object creation. 
+C# 11 introduces a new **required** keyword to allow us to ensure property initialization on object creation. 
 
 We just need to use the **required** keyword before the property type. That’s it. Then if we try to create an object without initializing the required properties, compile-time errors will be shown:
 
@@ -188,7 +188,7 @@ This pattern allows us to capture an element at that position and use the variab
 
 ## Entity Framework Core 7
 
-There are too many improvements and new features that shipped with EF Core 7. Here's what we are going to cover in this article:
+There are too many improvements and new features that were shipped with EF Core 7. Here's what we're going to cover in this article:
 
 * JSON Columns
 * Improvements on Bulk Updates & Deletes
@@ -196,11 +196,11 @@ There are too many improvements and new features that shipped with EF Core 7. He
 
 ### JSON Columns
 
-EF 7 supports JSON Columns and this allows mapping of aggregates built from .NET types to JSON documents. 
+EF 7 supports JSON Columns and this allows the mapping of aggregates built from .NET types to JSON documents. 
 
-Thus, it's kind of combines relational database and document-based databases in a way.
+Thus, it's kind of combines relational databases and document-based databases in a way.
 
-We can easily mark a column as JSON column on the `OnModelCreating` method of our `DbContext` class:
+We can easily mark a column as a JSON column on the `OnModelCreating` method of our `DbContext` class:
 
 ```csharp
 protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -215,7 +215,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 }
 ```
 
-Also with this version, LINQ JSON query support has been announced. So, we can query over JSON Columns using LINQ like below:
+Also with this version, LINQ JSON query support has been announced. So, we can query over JSON Columns using LINQ as below:
 
 ```csharp
 var posts = await context.Posts
@@ -245,7 +245,7 @@ await (await GetDbContextAsync()).Tags
 
 ### Performance Improvements on SaveChanges & SaveChangesAsync
 
-With EF 7, there are significant performance improvements on SaveChanges & SaveChangesAsync methods. According to the EF Core team, in some cases, saving changes are now four times faster than EF 6. You can see a simple benchmark result from the EF Core blog post here. 
+With EF 7, there are significant performance improvements on SaveChanges & SaveChangesAsync methods. According to the EF Core team, in some cases, saving changes is now four times faster than EF 6. You can see a simple benchmark result from the EF Core blog post here. 
 
 ![](benchmark.png)
 
@@ -253,7 +253,7 @@ Even after inserting just four records, there is a significant performance gain.
 
 ## .NET MAUI 7
 
-As you know, .NET MAUI is a cross-platform framework for creating native mobile and desktop applications by using C# and XAML. By using the .NET MAUI, apps can be developed that can run on Android, IOS, macOS and Windows from a single-code base.
+As you know, .NET MAUI is a cross-platform framework for creating native mobile and desktop applications by using C# and XAML. By using the .NET MAUI, apps that can run on Android, IOS, macOS and Windows from a single-code base can be developed.
 
 It’s a new technology, so it's evolving and the .NET MAUI team introduces good features with every release.
 
@@ -269,7 +269,7 @@ It supports pins, polygons, circles, geolocations and much more...
 
 ### Improvements on Mobile Rendering & Desktop Enhancements
 
-.NET MAUI 7 came with an optimized rendering for mobile applications and is much faster than .NET MAUI 6.
+.NET MAUI 7 came with optimized rendering for mobile applications and is much faster than .NET MAUI 6.
 
 Also, there are some good enhancements on the desktop side:
 
@@ -282,9 +282,9 @@ Also, there are some good enhancements on the desktop side:
 
 ## Conclusion 
 
-In this article, I've highlighted some features that shipped with .NET 7.
+In this article, I've highlighted some features that were shipped with .NET 7.
 
-> I've added a references section down below, so you can check the references and see other features came with this version.
+> I've added a references section down below, so you can check the references and see other features that came with this version.
 
 Thanks for reading the article and I hope you find it helpful. See you in the next one!
 
