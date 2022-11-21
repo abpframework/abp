@@ -25,34 +25,43 @@ public class RemoveUnnecessaryPortsStep : ProjectBuildPipelineStep
             return;
         }
 
-        var portsToRemoveFromCors = new List<string>();
+        var portsToRemove = new List<string>();
 
         var appSettingsJson = JObject.Parse(httpApiHostAppSettings.Content);
         var appJson = (JObject)appSettingsJson["App"];
 
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
         {
-            var clientUrl = appJson.Property("ClientUrl")?.ToString();
-            portsToRemoveFromCors.Add("http://localhost:4200");
+            var angularUrl = appJson.Property("AngularUrl")?.ToString() ?? appJson.Property("ClientUrl")?.ToString();
+
+            portsToRemove.Add("http://localhost:4200");
             
-            if (!clientUrl.IsNullOrWhiteSpace())
+            if (!angularUrl.IsNullOrWhiteSpace())
             {
-                httpApiHostAppSettings.SetContent(httpApiHostAppSettings.Content.Replace(clientUrl, string.Empty));
+                httpApiHostAppSettings.SetContent(httpApiHostAppSettings.Content.Replace($"{angularUrl.EnsureEndsWith(',')}\n    ", string.Empty));
             }
         }
         
         if (context.BuildArgs.UiFramework != UiFramework.Blazor)
         {
-            portsToRemoveFromCors.Add("https://localhost:44307");
+            portsToRemove.Add("https://localhost:44307");
         }
 
         
         if (appJson["CorsOrigins"] != null)
         {
             var corsOrigins = appJson["CorsOrigins"].ToString();
-            var newCorsOrigins = string.Join(",", corsOrigins.Split(',').Where(x => !portsToRemoveFromCors.Contains(x)));
+            var newCorsOrigins = string.Join(",", corsOrigins.Split(',').Where(x => !portsToRemove.Contains(x)));
             
             httpApiHostAppSettings.SetContent(httpApiHostAppSettings.Content.Replace(corsOrigins, newCorsOrigins));
+        }
+
+        if (appJson["RedirectAllowedUrls"] != null)
+        {
+            var redirectAllowedUrls = appJson["RedirectAllowedUrls"].ToString();
+            var newRedirectAllowedUrls = string.Join(",", redirectAllowedUrls.Split(',').Where(x => !portsToRemove.Contains(x)));
+
+            httpApiHostAppSettings.SetContent(httpApiHostAppSettings.Content.Replace(redirectAllowedUrls, newRedirectAllowedUrls));
         }
     }
 
