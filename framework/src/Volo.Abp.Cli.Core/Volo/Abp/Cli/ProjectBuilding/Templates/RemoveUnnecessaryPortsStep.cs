@@ -63,8 +63,8 @@ public class RemoveUnnecessaryPortsStep : ProjectBuildPipelineStep
             
             newlines.Add(newLine);
         }
-        
-        httpApiHostAppSettings.SetContent(string.Join(Environment.NewLine, newlines));
+
+        httpApiHostAppSettings.SetLines(newlines);
     }
 
     private static void RemoveUnnecessaryDbMigratorClients(ProjectBuildContext context)
