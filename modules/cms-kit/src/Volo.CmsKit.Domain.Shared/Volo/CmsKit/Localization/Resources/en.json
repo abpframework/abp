@@ -195,22 +195,20 @@
     "RemovedSettingAsHomePage": "Removed setting the home page",
     "Feature:CmsKitGroup": "Cms Kit",
     "Feature:BlogEnable": "Blogpost",
-    "Feature:BlogEnableDescription": "CMS Kit's dynamic blogpost system",
+    "Feature:BlogEnableDescription": "CMS Kit's blogpost system",
     "Feature:CommentEnable": "Commenting",
-    "Feature:CommentEnableDescription": "CMS Kit's dynamic comment system",
+    "Feature:CommentEnableDescription": "CMS Kit's comment system",
     "Feature:GlobalResourceEnable": "Global resourcing",
     "Feature:GlobalResourceEnableDescription": "CMS Kit's dynamic globa resoruce system",
-    "Feature:MediaEnable": "Media",
-    "Feature:MediaEnableDescription": "CMS Kit's dynamic media system",
     "Feature:MenuEnable": "Menu",
     "Feature:MenuEnableDescription": "CMS Kit's dynamic menu system",
     "Feature:PageEnable": "Paging",
-    "Feature:PageEnableDescription": "CMS Kit's dynamic page system",
+    "Feature:PageEnableDescription": "CMS Kit's page system",
     "Feature:RatingEnable": "Rating",
-    "Feature:RatingEnableDescription": "CMS Kit's dynamic rating system",
+    "Feature:RatingEnableDescription": "CMS Kit's rating system",
     "Feature:ReactionEnable": "Reaction",
-    "Feature:ReactionEnableDescription": "CMS Kit's dynamic reaction system",
+    "Feature:ReactionEnableDescription": "CMS Kit's reaction system",
     "Feature:TagEnable": "Taging",
-    "Feature:TagEnableDescription": "CMS Kit's dynamic tag system"
+    "Feature:TagEnableDescription": "CMS Kit's tag system"
   }
 }

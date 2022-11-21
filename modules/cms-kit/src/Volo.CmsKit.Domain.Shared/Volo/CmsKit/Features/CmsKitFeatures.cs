@@ -6,7 +6,6 @@ public static class CmsKitFeatures
     public const string BlogEnable = GroupName + ".BlogEnable";
     public const string CommentEnable = GroupName + ".CommentEnable";
     public const string GlobalResourceEnable = GroupName + ".GlobalResourceEnable";
-    public const string MediaEnable = GroupName + ".MediaEnable";
     public const string MenuEnable = GroupName + ".MenuEnable";
     public const string PageEnable = GroupName + ".PageEnable";
     public const string RatingEnable = GroupName + ".RatingEnable";

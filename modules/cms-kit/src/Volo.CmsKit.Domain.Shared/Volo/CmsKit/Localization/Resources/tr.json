@@ -197,20 +197,18 @@
     "Feature:BlogEnable": "Blogpost",
     "Feature:BlogEnableDescription": "Cmskit blogpost sistemi",
     "Feature:CommentEnable": "Yorum",
-    "Feature:CommentEnableDescription": "Cmskit dinamik yorum sistemi",
+    "Feature:CommentEnableDescription": "Cmskit yorum sistemi",
     "Feature:GlobalResourceEnable": "Global kaynaklar",
-    "Feature:GlobalResourceEnableDescription": "Cmskit dinamik global kaynaklar sistemi",
-    "Feature:MediaEnable": "Medya",
-    "Feature:MediaEnableDescription": "Cmskit dinamik medya sistemi",
+    "Feature:GlobalResourceEnableDescription": "Cmskit global kaynaklar sistemi",
     "Feature:MenuEnable": "Menü",
     "Feature:MenuEnableDescription": "Cmskit dinamik menü sistemi",
     "Feature:PageEnable": "Sayfa",
-    "Feature:PageEnableDescription": "Cmskit dinamik sayfa sistemi",
+    "Feature:PageEnableDescription": "Cmskit sayfa sistemi",
     "Feature:RatingEnable": "Oylama",
-    "Feature:RatingEnableDescription": "Cmskit dinamik oylama sistemi",
+    "Feature:RatingEnableDescription": "Cmskit oylama sistemi",
     "Feature:ReactionEnable": "Reaksiyon",
-    "Feature:ReactionEnableDescription": "Cmskit dinamik reaksiyon sistemi",
+    "Feature:ReactionEnableDescription": "Cmskit reaksiyon sistemi",
     "Feature:TagEnable": "Etkiket",
-    "Feature:TagEnableDescription": "Cmskit dinamik etiket sistemi"
+    "Feature:TagEnableDescription": "Cmskit etiket sistemi"
   }
 }

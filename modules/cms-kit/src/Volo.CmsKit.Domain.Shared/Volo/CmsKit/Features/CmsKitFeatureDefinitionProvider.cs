@@ -40,15 +40,6 @@ public class CmsKitFeatureDefinitionProvider : FeatureDefinitionProvider
             new ToggleStringValueType());
         }
 
-        if (GlobalFeatureManager.Instance.IsEnabled<MediaFeature>())
-        {
-            group.AddFeature(CmsKitFeatures.MediaEnable,
-            "true",
-            L("Feature:MediaEnable"),
-            L("Feature:MediaEnableDescription"),
-            new ToggleStringValueType());
-        }
-
         if (GlobalFeatureManager.Instance.IsEnabled<MenuFeature>())
         {
             group.AddFeature(CmsKitFeatures.MenuEnable,
