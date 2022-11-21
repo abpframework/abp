@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.Web",
-  "hash": "43fc7c0008acd764da74c126d096dc10",
+  "hash": "2dbf7de47a209bdd73c7d91811e11c64",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement.Web",

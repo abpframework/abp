@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.MongoDB",
-  "hash": "3134b6b7b96beb35f3df93e06cb5c2e2",
+  "hash": "d2e699f4e13f5cf8410de703a36b4b72",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.MongoDB",
@@ -25,15 +25,15 @@
       "connectionStringName": "AbpIdentity",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
+          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
           "contentType": "databaseCollection",
-          "name": "AbpClaimTypes",
+          "name": "AbpSecurityLogs",
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
+          "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
           "contentType": "databaseCollection",
-          "name": "AbpOrganizationUnits",
+          "name": "AbpClaimTypes",
           "summary": null
         },
         {
@@ -43,21 +43,21 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
           "contentType": "databaseCollection",
-          "name": "AbpSecurityLogs",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
-          "contentType": "databaseCollection",
-          "name": "AbpLinkUsers",
+          "name": "AbpOrganizationUnits",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityRole",
           "contentType": "databaseCollection",
           "name": "AbpRoles",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
+          "contentType": "databaseCollection",
+          "name": "AbpLinkUsers",
           "summary": null
         }
       ],
