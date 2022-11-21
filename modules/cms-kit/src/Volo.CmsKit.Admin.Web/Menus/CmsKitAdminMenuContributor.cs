@@ -27,7 +27,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
         await AddCmsMenuAsync(context);
     }
 
-    private async Task AddCmsMenuAsync(MenuConfigurationContext context)
+    private Task AddCmsMenuAsync(MenuConfigurationContext context)
     {
         var l = context.GetLocalizer<CmsKitResource>();
 
@@ -121,7 +121,8 @@ public class CmsKitAdminMenuContributor : IMenuContributor
             {
                 cmsMenu.AddItem(menu);
             }
-            
+
         }
+        return Task.CompletedTask;
     }
 }
