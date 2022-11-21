@@ -274,11 +274,16 @@ In this version, WeChat Pay and Alipay gateways have been added to the payment m
 
 ### New ABP Community Posts
 
-* [gdlcf88](https://github.com/gdlcf88) has created a new community article, titled "Use Stepping To Perform Atomic Multi-Step Operations". You can read it 👉 [here](https://community.abp.io/posts/use-stepping-to-perform-atomic-multistep-operations-4kqu8ewp).
+* [gdlcf88](https://github.com/gdlcf88) has created two new community articles:
+    * [Use Stepping To Perform Atomic Multi-Step Operations](https://community.abp.io/posts/use-stepping-to-perform-atomic-multistep-operations-4kqu8ewp)
+    * [Notice and Solve ABP Distributed Events Disordering](https://community.abp.io/posts/notice-and-solve-abp-distributed-events-disordering-yi9vq3p4)
 * [GDUnit](https://community.abp.io/members/GDUnit) has created his first ABP community article that shows multi-tenant subdomain resolution in Blazor applications. You can read it 👉 [here](https://community.abp.io/posts/abp-blazor-multitenant-subdomain-resolution-c1x4un8x).
-* [EngincanV](https://twitter.com/EngincanVeske) has created a new community article to introduce the ABP's testing infrastructure. You can read it 👉 [here](https://community.abp.io/posts/testing-in-abp-framework-with-examples-3w29v6ce).
+* [EngincanV](https://twitter.com/EngincanVeske) has created two new community articles: 
+    * [Testing in ABP Framework (with examples)](https://community.abp.io/posts/testing-in-abp-framework-with-examples-3w29v6ce)
+    * [What's new with .NET 7?](https://community.abp.io/posts/whats-new-with-.net-7-tlq2g43w)
 * [Alper Ebicoglu](https://twitter.com/alperebicoglu) has created a new community article to show "How to upgrade an existing project to .NET7". You can read it 👉 [here](https://community.abp.io/posts/upgrade-your-existing-projects-to-.net7-nmx6vm9m).
 * [Kirti Kulkarni](https://community.abp.io/members/kirtik) has created a new community article to show "How to integrate and enable the Chat Module in an ABP Commercial application". You can read it 👉 [here](https://community.abp.io/posts/integrating-and-enabling-the-chat-module-in-abp-commercial-vsci3ov2).
+* [maliming](https://github.com/maliming) has created a new community article to show "how to add custom grant type in OpenIddict". You can read it 👉 [here](https://community.abp.io/posts/how-to-add-a-custom-grant-type-in-openiddict.-6v0df94z).
 
 We thank you all. We thank all the authors for contributing to the [ABP Community platform](https://community.abp.io/).
 
