@@ -104,6 +104,8 @@ export class PermissionManagementComponent
 
   selectAllTab = false;
 
+  disableSelectAllTab = false;
+
   modalBusy = false;
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
@@ -137,8 +139,11 @@ export class PermissionManagementComponent
 
   isGrantedByOtherProviderName(grantedProviders: ProviderInfoDto[]): boolean {
     if (grantedProviders.length) {
+      this.disableSelectAllTab =
+        grantedProviders.findIndex(p => p.providerName !== this.providerName) > -1;
       return grantedProviders.findIndex(p => p.providerName !== this.providerName) > -1;
     }
+    this.disableSelectAllTab = false;
     return false;
   }
 
@@ -150,24 +155,25 @@ export class PermissionManagementComponent
       return;
 
     setTimeout(() => {
-      this.permissions = this.permissions.map(per => {
-        if (clickedPermission.name === per.name) {
-          return { ...per, isGranted: !per.isGranted };
-        } else if (clickedPermission.name === per.parentName && clickedPermission.isGranted) {
-          return { ...per, isGranted: false };
-        } else if (clickedPermission.parentName === per.name && !clickedPermission.isGranted) {
-          return { ...per, isGranted: true };
-        }
+      this.permissions = this.permissions
+        .map(per => {
+          if (clickedPermission.name === per.name) {
+            return { ...per, isGranted: !per.isGranted };
+          } else if (clickedPermission.name === per.parentName && clickedPermission.isGranted) {
+            return { ...per, isGranted: false };
+          } else if (clickedPermission.parentName === per.name && !clickedPermission.isGranted) {
+            return { ...per, isGranted: true };
+          }
 
-        return per;
-      }).map((per,index,permissions) => {
-        const childrens = permissions
-          .filter(p => p.parentName === per.name);
-          if(childrens.length > 0 && childrens.every(x => !x.isGranted)){
+          return per;
+        })
+        .map((per, index, permissions) => {
+          const childrens = permissions.filter(p => p.parentName === per.name);
+          if (childrens.length > 0 && childrens.every(x => !x.isGranted)) {
             return { ...per, isGranted: false };
           }
-        return per
-      });
+          return per;
+        });
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
     }, 0);

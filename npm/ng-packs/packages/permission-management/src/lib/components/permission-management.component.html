@@ -35,7 +35,7 @@
               >
                 <div [class.font-weight-bold]="count.assignedCount">
                   {{ group?.displayName }}
-                  <span>({{ count.assignedCount }})</span>
+                  <span *ngIf="count.assignedCount > 0">({{ count.assignedCount }})</span>
                 </div>
               </a>
             </li>
@@ -53,6 +53,7 @@
                 name="select-all-in-this-tabs"
                 class="form-check-input"
                 [(ngModel)]="selectThisTab"
+                [disabled]="disableSelectAllTab"
                 (click)="onClickSelectThisTab()"
               />
               <label class="form-check-label" for="select-all-in-this-tabs">{{
