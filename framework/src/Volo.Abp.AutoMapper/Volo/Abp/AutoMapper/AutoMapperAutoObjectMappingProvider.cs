@@ -1,31 +1,37 @@
-﻿using Volo.Abp.ObjectMapping;
+﻿using System;
+using AutoMapper;
+using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.AutoMapper;
 
 public class AutoMapperAutoObjectMappingProvider<TContext> : AutoMapperAutoObjectMappingProvider, IAutoObjectMappingProvider<TContext>
 {
-    public AutoMapperAutoObjectMappingProvider(IMapperAccessor mapperAccessor)
-        : base(mapperAccessor)
+    public AutoMapperAutoObjectMappingProvider(IMapper mapper)
+        : base(mapper)
     {
     }
 }
 
-public class AutoMapperAutoObjectMappingProvider : IAutoObjectMappingProvider
+public class AutoMapperAutoObjectMappingProvider : IAutoObjectMappingProvider, IDisposable
 {
-    public IMapperAccessor MapperAccessor { get; }
+    public IMapper Mapper { get; }
 
-    public AutoMapperAutoObjectMappingProvider(IMapperAccessor mapperAccessor)
+    public AutoMapperAutoObjectMappingProvider(IMapper mapper)
     {
-        MapperAccessor = mapperAccessor;
+        Mapper = mapper;
     }
 
     public virtual TDestination Map<TSource, TDestination>(object source)
     {
-        return MapperAccessor.Mapper.Map<TDestination>(source);
+        return Mapper.Map<TDestination>(source);
     }
 
     public virtual TDestination Map<TSource, TDestination>(TSource source, TDestination destination)
     {
-        return MapperAccessor.Mapper.Map(source, destination);
+        return Mapper.Map(source, destination);
+    }
+
+    public void Dispose()
+    {
     }
 }
