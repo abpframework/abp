@@ -1,6 +1,8 @@
 ﻿using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.Validation.StringValues;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
 
 namespace Volo.CmsKit.Features;
@@ -11,59 +13,77 @@ public class CmsKitFeatureDefinitionProvider : FeatureDefinitionProvider
         var group = context.AddGroup(CmsKitFeatures.GroupName,
             L("Feature:CmsKitGroup"));
 
-        group.AddFeature(CmsKitFeatures.BlogEnable,
+        if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
+        {
+            group.AddFeature(CmsKitFeatures.BlogEnable,
             "true",
             L("Feature:BlogEnable"),
             L("Feature:BlogEnableDescription"),
             new ToggleStringValueType());
+        }
 
-        group.AddFeature(CmsKitFeatures.CommentEnable,
+        if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+        {
+            group.AddFeature(CmsKitFeatures.CommentEnable,
             "true",
             L("Feature:CommentEnable"),
             L("Feature:CommentEnableDescription"),
             new ToggleStringValueType());
+        }
 
-        group.AddFeature(CmsKitFeatures.GlobalResourceEnable,
+        if (GlobalFeatureManager.Instance.IsEnabled<GlobalResourcesFeature>())
+        {
+            group.AddFeature(CmsKitFeatures.GlobalResourceEnable,
             "true",
             L("Feature:GlobalResourceEnable"),
             L("Feature:GlobalResourceEnableDescription"),
             new ToggleStringValueType());
+        }
 
-        group.AddFeature(CmsKitFeatures.MediaEnable,
-            "true",
-            L("Feature:MediaEnable"),
-            L("Feature:MediaEnableDescription"),
-            new ToggleStringValueType());
-
-        group.AddFeature(CmsKitFeatures.MenuEnable,
+        if (GlobalFeatureManager.Instance.IsEnabled<MenuFeature>())
+        {
+            group.AddFeature(CmsKitFeatures.MenuEnable,
             "true",
             L("Feature:MenuEnable"),
             L("Feature:MenuEnableDescription"),
             new ToggleStringValueType());
+        }
 
-        group.AddFeature(CmsKitFeatures.PageEnable,
+        if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+        {
+            group.AddFeature(CmsKitFeatures.PageEnable,
             "true",
             L("Feature:PageEnable"),
             L("Feature:PageEnableDescription"),
             new ToggleStringValueType());
+        }
 
-        group.AddFeature(CmsKitFeatures.RatingEnable,
+        if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+        {
+            group.AddFeature(CmsKitFeatures.RatingEnable,
             "true",
             L("Feature:RatingEnable"),
             L("Feature:RatingEnableDescription"),
             new ToggleStringValueType());
+        }
 
-        group.AddFeature(CmsKitFeatures.ReactionEnable,
+        if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+        {
+            group.AddFeature(CmsKitFeatures.ReactionEnable,
             "true",
             L("Feature:ReactionEnable"),
             L("Feature:ReactionEnableDescription"),
             new ToggleStringValueType());
+        }
 
-        group.AddFeature(CmsKitFeatures.TagEnable,
+        if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+        {
+            group.AddFeature(CmsKitFeatures.TagEnable,
             "true",
             L("Feature:TagEnable"),
             L("Feature:TagEnableDescription"),
             new ToggleStringValueType());
+        }
     }
 
     private static LocalizableString L(string name)

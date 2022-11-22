@@ -195,8 +195,6 @@
     "Feature:CommentEnableDescription": "Habilitar comentários no aplicativo.",
     "Feature:GlobalResourceEnable": "Recursos globais ativados",
     "Feature:GlobalResourceEnableDescription": "Habilitar recurso global no aplicativo.",
-    "Feature:MediaEnable": "Mídia ativada",
-    "Feature:MediaEnableDescription": "Mídia ativada no aplicativo.",
     "Feature:MenuEnable": "Menu habilitado",
     "Feature:MenuEnableDescription": "Menu habilitado no aplicativo.",
     "Feature:PageEnable": "Página de paginação ativada",
