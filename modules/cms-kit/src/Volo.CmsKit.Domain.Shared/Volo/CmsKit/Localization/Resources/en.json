@@ -195,7 +195,7 @@
     "RemovedSettingAsHomePage": "Removed setting the home page",
     "Feature:CmsKitGroup": "Cms Kit",
     "Feature:BlogEnable": "Blogpost",
-    "Feature:BlogEnableDescription": "CMS Kit's blogpost system",
+    "Feature:BlogEnableDescription": "CMS Kit's blogpost system that allows create blogs and posts dynamically in the application.",
     "Feature:CommentEnable": "Commenting",
     "Feature:CommentEnableDescription": "CMS Kit's comment system allows commenting on entities such as BlogPost.",
     "Feature:GlobalResourceEnable": "Global resourcing",
