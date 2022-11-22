@@ -203,7 +203,7 @@
     "Feature:MenuEnable": "Menu",
     "Feature:MenuEnableDescription": "CMS Kit's dynamic menu system that allows adding/removing application menus dynamically.",
     "Feature:PageEnable": "Paging",
-    "Feature:PageEnableDescription": "CMS Kit's page system",
+    "Feature:PageEnableDescription": "CMS Kit's page system that allows creating static pages with specific URL.",
     "Feature:RatingEnable": "Rating",
     "Feature:RatingEnableDescription": "CMS Kit's rating system",
     "Feature:ReactionEnable": "Reaction",
