@@ -207,7 +207,7 @@
     "Feature:RatingEnable": "Rating",
     "Feature:RatingEnableDescription": "CMS Kit's rating system that allows users to rate entities such as BlogPost.",
     "Feature:ReactionEnable": "Reaction",
-    "Feature:ReactionEnableDescription": "CMS Kit's reaction system",
+    "Feature:ReactionEnableDescription": "CMS Kit's reaction system that allows users to send reactions to entities such as BlogPost, Comments, etc.",
     "Feature:TagEnable": "Taging",
     "Feature:TagEnableDescription": "CMS Kit's tag system"
   }
