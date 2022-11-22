@@ -205,7 +205,7 @@
     "Feature:PageEnable": "Paging",
     "Feature:PageEnableDescription": "CMS Kit's page system that allows creating static pages with specific URL.",
     "Feature:RatingEnable": "Rating",
-    "Feature:RatingEnableDescription": "CMS Kit's rating system",
+    "Feature:RatingEnableDescription": "CMS Kit's rating system that allows users to rate entities such as BlogPost.",
     "Feature:ReactionEnable": "Reaction",
     "Feature:ReactionEnableDescription": "CMS Kit's reaction system",
     "Feature:TagEnable": "Taging",
