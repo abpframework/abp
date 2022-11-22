@@ -201,7 +201,7 @@
     "Feature:GlobalResourceEnable": "Global resourcing",
     "Feature:GlobalResourceEnableDescription": "CMS Kit's global resoruces feature that allows managing global styles & scripts.",
     "Feature:MenuEnable": "Menu",
-    "Feature:MenuEnableDescription": "CMS Kit's dynamic menu system",
+    "Feature:MenuEnableDescription": "CMS Kit's dynamic menu system that allows adding/removing application menus dynamically.",
     "Feature:PageEnable": "Paging",
     "Feature:PageEnableDescription": "CMS Kit's page system",
     "Feature:RatingEnable": "Rating",
