@@ -199,7 +199,7 @@
     "Feature:CommentEnable": "Commenting",
     "Feature:CommentEnableDescription": "CMS Kit's comment system",
     "Feature:GlobalResourceEnable": "Global resourcing",
-    "Feature:GlobalResourceEnableDescription": "CMS Kit's dynamic globa resoruce system",
+    "Feature:GlobalResourceEnableDescription": "CMS Kit's global resoruces feature that allows managing global styles & scripts.",
     "Feature:MenuEnable": "Menu",
     "Feature:MenuEnableDescription": "CMS Kit's dynamic menu system",
     "Feature:PageEnable": "Paging",
