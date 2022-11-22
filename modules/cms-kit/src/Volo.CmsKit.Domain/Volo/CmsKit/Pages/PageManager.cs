@@ -8,76 +8,80 @@ namespace Volo.CmsKit.Pages;
 
 public class PageManager : DomainService
 {
-	protected IPageRepository PageRepository { get; }
+    protected IPageRepository PageRepository { get; }
 
-	public PageManager(IPageRepository pageRepository)
-	{
-		PageRepository = pageRepository;
-	}
+    public PageManager(IPageRepository pageRepository)
+    {
+        PageRepository = pageRepository;
+    }
 
-	public virtual async Task<Page> CreateAsync(
-		[NotNull] string title,
-		[NotNull] string slug,
-		[CanBeNull] string content = null,
-		[CanBeNull] string script = null,
-		[CanBeNull] string style = null)
-	{
-		Check.NotNullOrEmpty(title, nameof(title));
-		Check.NotNullOrEmpty(slug, nameof(slug));
+    public virtual async Task<Page> CreateAsync(
+        [NotNull] string title,
+        [NotNull] string slug,
+        [CanBeNull] string content = null,
+        [CanBeNull] string script = null,
+        [CanBeNull] string style = null)
+    {
+        Check.NotNullOrEmpty(title, nameof(title));
+        Check.NotNullOrEmpty(slug, nameof(slug));
 
-		await CheckPageSlugAsync(slug);
+        await CheckPageSlugAsync(slug);
 
-		return new Page(
-			GuidGenerator.Create(),
-			title,
-			slug,
-			content,
-			script,
-			style,
-			CurrentTenant.Id);
-	}
+        return new Page(
+            GuidGenerator.Create(),
+            title,
+            slug,
+            content,
+            script,
+            style,
+            CurrentTenant.Id);
+    }
 
-	public virtual async Task SetSlugAsync(Page page, string newSlug)
-	{
-		if (page.Slug != newSlug)
-		{
-			await CheckPageSlugAsync(newSlug);
-			page.SetSlug(newSlug);
-		}
-	}
+    public virtual async Task SetSlugAsync(Page page, string newSlug)
+    {
+        if (page.Slug != newSlug)
+        {
+            await CheckPageSlugAsync(newSlug);
+            page.SetSlug(newSlug);
+        }
+    }
 
-	public virtual async Task SetHomePageAsync(Page page)
-	{
-		var currentHomePages = await PageRepository.GetListAsync();
+    public virtual async Task SetHomePageAsync(Page page)
+    {
+        var homePage = await GetHomePageAsync();
 
-		foreach (var homePage in currentHomePages)
-		{
-			homePage.SetIsHomePage(false);
-		}
+        if (!page.IsHomePage)
+        {
+            if (homePage != null)
+            {
+                homePage.SetIsHomePage(false);
+                await PageRepository.UpdateAsync(homePage);
+            }
 
-		await PageRepository.UpdateManyAsync(currentHomePages);
-		await PageRepository.UpdateAsync(page);
-		
-		page.SetIsHomePage(true);
-	}
+            homePage = await PageRepository.GetAsync(page.Id);
+        }
 
-	public virtual async Task<Page> GetHomePageAsync()
-	{
-		var currentHomePages = await PageRepository.GetListAsync();
+        homePage.SetIsHomePage(!page.IsHomePage);
+        await PageRepository.UpdateAsync(homePage);
+    }
 
-		if (currentHomePages.Count > 1)
-		{
-			throw new BusinessException("There can be only one home page.");
-		}
+    public virtual async Task<Page> GetHomePageAsync()
+    {
+        var currentHomePages = await PageRepository.GetListOfHomePagesAsync();
 
-		return currentHomePages.FirstOrDefault();
-	}
+        if (currentHomePages.Count > 1)
+        {
+            throw new BusinessException("There can be only one home page.");
+        }
 
-	protected virtual async Task CheckPageSlugAsync(string slug)
-	{
-		if (await PageRepository.ExistsAsync(slug))
-		{
-			throw new PageSlugAlreadyExistsException(slug);
-		}
-	}
+        return currentHomePages.FirstOrDefault();
+    }
+
+    protected virtual async Task CheckPageSlugAsync(string slug)
+    {
+        if (await PageRepository.ExistsAsync(slug))
+        {
+            throw new PageSlugAlreadyExistsException(slug);
+        }
+    }
 }
