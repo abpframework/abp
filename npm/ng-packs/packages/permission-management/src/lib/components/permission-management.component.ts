@@ -137,13 +137,15 @@ export class PermissionManagementComponent
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
   }
 
+  setDisabled(grantedProviders) {
+    this.disableSelectAllTab = grantedProviders.some(p => p.providerName !== this.providerName);
+  }
+
   isGrantedByOtherProviderName(grantedProviders: ProviderInfoDto[]): boolean {
+    this.setDisabled(grantedProviders);
     if (grantedProviders.length) {
-      this.disableSelectAllTab =
-        grantedProviders.findIndex(p => p.providerName !== this.providerName) > -1;
       return grantedProviders.findIndex(p => p.providerName !== this.providerName) > -1;
     }
-    this.disableSelectAllTab = false;
     return false;
   }
 
