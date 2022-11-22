@@ -195,8 +195,6 @@
     "Feature:CommentEnableDescription": "Megjegyzés engedélyezése az alkalmazásban.",
     "Feature:GlobalResourceEnable": "Globális erőforrás-kihelyezés engedélyezve",
     "Feature:GlobalResourceEnableDescription": "Globális erőforrás engedélyezése az alkalmazásban.",
-    "Feature:MediaEnable": "Engedélyezett média",
-    "Feature:MediaEnableDescription": "Média engedélyezése az alkalmazásban.",
     "Feature:MenuEnable": "Engedélyezett menü",
     "Feature:MenuEnableDescription": "Menü engedélyezése az alkalmazásban.",
     "Feature:PageEnable": "Lapozási oldal engedélyezve",
