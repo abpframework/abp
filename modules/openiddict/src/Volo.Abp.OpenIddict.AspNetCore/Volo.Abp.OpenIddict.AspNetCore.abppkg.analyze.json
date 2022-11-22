@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.OpenIddict.AspNetCore",
-  "hash": "9fa207c953252c722f96dbaf50cc9cbc",
+  "hash": "e9002ee460e7410c7a2c90cc877cf6ac",
   "contents": [
     {
       "namespace": "Volo.Abp.OpenIddict",

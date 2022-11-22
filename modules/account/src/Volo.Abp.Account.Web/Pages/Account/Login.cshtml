@@ -2,10 +2,26 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Settings
+@using Volo.Abp.Account.Web.Pages.Account;
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+@using Volo.Abp.Identity;
 @using Volo.Abp.Settings
 @model Volo.Abp.Account.Web.Pages.Account.LoginModel
 @inject IHtmlLocalizer<AccountResource> L
+@inject IThemeManager ThemeManager
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
+
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+}
+
+@section scripts
+    {
+    <abp-script-bundle name="@typeof(LoginModel).FullName">
+        <abp-script src="/Pages/Account/Login.js" />
+    </abp-script-bundle>
+}
+
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
         <h4>@L["Login"]</h4>
@@ -21,17 +37,21 @@
             <form method="post" class="mt-4">
                 <div class="mb-3">
                     <label asp-for="LoginInput.UserNameOrEmailAddress" class="form-label"></label>
-                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control"/>
+                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" />
                     <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
                 </div>
+
                 <div class="mb-3">
                     <label asp-for="LoginInput.Password" class="form-label"></label>
-                    <input asp-for="LoginInput.Password" class="form-control"/>
-                    <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
+                    <div class="input-group">
+                        <input type="password" class="form-control" autocomplete="new-password" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="LoginInput.Password" />
+                        <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                    </div>
+                    <span asp-validation-for="LoginInput.Password"></span>
                 </div>
                 <abp-row>
                     <abp-column>
-                        <abp-input asp-for="LoginInput.RememberMe" class="mb-4"/>
+                        <abp-input asp-for="LoginInput.RememberMe" class="mb-4" />
                     </abp-column>
                     <abp-column class="text-end">
                         <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>

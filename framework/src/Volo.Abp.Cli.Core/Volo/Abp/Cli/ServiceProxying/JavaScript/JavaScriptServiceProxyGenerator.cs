@@ -28,7 +28,7 @@ public class JavaScriptServiceProxyGenerator : ServiceProxyGeneratorBase<JavaScr
         _jQueryProxyScriptGenerator = jQueryProxyScriptGenerator;
     }
 
-    public override async Task GenerateProxyAsync(GenerateProxyArgs args)
+    public async override Task GenerateProxyAsync(GenerateProxyArgs args)
     {
         CheckWorkDirectory(args.WorkDirectory);
 
@@ -55,6 +55,11 @@ public class JavaScriptServiceProxyGenerator : ServiceProxyGeneratorBase<JavaScr
         }
 
         Logger.LogInformation($"Create {GetLoggerOutputPath(output, args.WorkDirectory)}");
+    }
+
+    protected override ServiceType? GetDefaultServiceType(GenerateProxyArgs args)
+    {
+        return ServiceType.Application;
     }
 
     private void RemoveProxy(GenerateProxyArgs args, string filePath)

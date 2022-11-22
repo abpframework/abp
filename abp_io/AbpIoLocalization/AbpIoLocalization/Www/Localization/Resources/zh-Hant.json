@@ -273,6 +273,8 @@
     "SubscribeToNewsletter": "訂閱時事通訊以獲取有關 ABP.IO 平台中發生的事件的信息，例如新版本、文章、優惠等。",
     "FirstEdition": "第一版",
     "ThankYou": "謝謝！",
-    "CheckboxMandatory": "你需要檢查這個才能繼續！"
+    "CheckboxMandatory": "你需要檢查這個才能繼續！",
+    "SelectUITheme": "選擇 UI 主題"
+
   }
 }

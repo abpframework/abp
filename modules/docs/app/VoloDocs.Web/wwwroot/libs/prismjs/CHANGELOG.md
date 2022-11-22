@@ -1,5 +1,60 @@
 # Prism Changelog
 
+## 1.29.0 (2022-08-23)
+
+### New components
+
+* __BBj__ ([#3511](https://github.com/PrismJS/prism/issues/3511)) [`1134bdfc`](https://github.com/PrismJS/prism/commit/1134bdfc)
+* __BQN__ ([#3515](https://github.com/PrismJS/prism/issues/3515)) [`859f99a0`](https://github.com/PrismJS/prism/commit/859f99a0)
+* __Cilk/C__ & __Cilk/C++__ ([#3522](https://github.com/PrismJS/prism/issues/3522)) [`c8462a29`](https://github.com/PrismJS/prism/commit/c8462a29)
+* __Gradle__ ([#3443](https://github.com/PrismJS/prism/issues/3443)) [`32119823`](https://github.com/PrismJS/prism/commit/32119823)
+* __METAFONT__ ([#3465](https://github.com/PrismJS/prism/issues/3465)) [`2815f699`](https://github.com/PrismJS/prism/commit/2815f699)
+* __WGSL__ ([#3455](https://github.com/PrismJS/prism/issues/3455)) [`4c87d418`](https://github.com/PrismJS/prism/commit/4c87d418)
+
+### Updated components
+
+* __AsciiDoc__
+    * Some regexes are too greedy ([#3481](https://github.com/PrismJS/prism/issues/3481)) [`c4cbeeaa`](https://github.com/PrismJS/prism/commit/c4cbeeaa)
+* __Bash__
+    * Added "sh" alias ([#3509](https://github.com/PrismJS/prism/issues/3509)) [`6b824d47`](https://github.com/PrismJS/prism/commit/6b824d47)
+    * Added support for parameters and the `java` and `sysctl` commands. ([#3505](https://github.com/PrismJS/prism/issues/3505)) [`b9512b22`](https://github.com/PrismJS/prism/commit/b9512b22)
+    * Added `cargo` command ([#3488](https://github.com/PrismJS/prism/issues/3488)) [`3e937137`](https://github.com/PrismJS/prism/commit/3e937137)
+* __BBj__
+    * Improve regexes ([#3512](https://github.com/PrismJS/prism/issues/3512)) [`0cad9ae5`](https://github.com/PrismJS/prism/commit/0cad9ae5)
+* __CSS__
+    * Fixed @-rules not accounting for strings ([#3438](https://github.com/PrismJS/prism/issues/3438)) [`0d4b6cb6`](https://github.com/PrismJS/prism/commit/0d4b6cb6)
+* __CSS Extras__
+    * Added support for `RebeccaPurple` color ([#3448](https://github.com/PrismJS/prism/issues/3448)) [`646b2e0a`](https://github.com/PrismJS/prism/commit/646b2e0a)
+* __Hoon__
+    * Fixed escaped strings ([#3473](https://github.com/PrismJS/prism/issues/3473)) [`64642716`](https://github.com/PrismJS/prism/commit/64642716)
+* __Java__
+    * Added support for constants ([#3507](https://github.com/PrismJS/prism/issues/3507)) [`342a0039`](https://github.com/PrismJS/prism/commit/342a0039)
+* __Markup__
+    * Fixed quotes in HTML attribute values ([#3442](https://github.com/PrismJS/prism/issues/3442)) [`ca8eaeee`](https://github.com/PrismJS/prism/commit/ca8eaeee)
+* __NSIS__
+    * Added missing commands ([#3504](https://github.com/PrismJS/prism/issues/3504)) [`b0c2a9b4`](https://github.com/PrismJS/prism/commit/b0c2a9b4)
+* __Scala__
+    * Updated keywords to support Scala 3 ([#3506](https://github.com/PrismJS/prism/issues/3506)) [`a090d063`](https://github.com/PrismJS/prism/commit/a090d063)
+* __SCSS__
+    * Fix casing in title of the `scss` lang ([#3501](https://github.com/PrismJS/prism/issues/3501)) [`2aed9ce7`](https://github.com/PrismJS/prism/commit/2aed9ce7)
+
+### Updated plugins
+
+* __Line Highlight__
+    * Account for offset when clamping ranges ([#3518](https://github.com/PrismJS/prism/issues/3518)) [`098e3000`](https://github.com/PrismJS/prism/commit/098e3000)
+    * Ignore ranges outside of actual lines ([#3475](https://github.com/PrismJS/prism/issues/3475)) [`9a4e725b`](https://github.com/PrismJS/prism/commit/9a4e725b)
+* __Normalize Whitespace__
+    * Add configuration via attributes ([#3467](https://github.com/PrismJS/prism/issues/3467)) [`91dea0c8`](https://github.com/PrismJS/prism/commit/91dea0c8)
+
+### Other
+
+* Added security policy ([#3070](https://github.com/PrismJS/prism/issues/3070)) [`05ee042a`](https://github.com/PrismJS/prism/commit/05ee042a)
+* Added list of maintainers ([#3410](https://github.com/PrismJS/prism/issues/3410)) [`866b302e`](https://github.com/PrismJS/prism/commit/866b302e)
+* Included githubactions in the dependabot config ([#3470](https://github.com/PrismJS/prism/issues/3470)) [`9561a9ab`](https://github.com/PrismJS/prism/commit/9561a9ab)
+* Set permissions for GitHub actions ([#3468](https://github.com/PrismJS/prism/issues/3468)) [`b85e1ada`](https://github.com/PrismJS/prism/commit/b85e1ada)
+* __Website__
+    * Website: Added third-party tutorial for Pug template ([#3459](https://github.com/PrismJS/prism/issues/3459)) [`15272f76`](https://github.com/PrismJS/prism/commit/15272f76)
+    * Docs: Add missing word ([#3489](https://github.com/PrismJS/prism/issues/3489)) [`9d603ef4`](https://github.com/PrismJS/prism/commit/9d603ef4)
 
 ## 1.28.0 (2022-04-17)
 

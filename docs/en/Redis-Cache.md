@@ -4,7 +4,7 @@ ABP Framework [Caching System](Caching.md) extends the [ASP.NET Core distributed
 
 However, ABP provides an **integration package** for Redis Cache: [Volo.Abp.Caching.StackExchangeRedis](https://www.nuget.org/packages/Volo.Abp.Caching.StackExchangeRedis). There are two reasons for using this package, instead of the standard [Microsoft.Extensions.Caching.StackExchangeRedis](https://www.nuget.org/packages/Microsoft.Extensions.Caching.StackExchangeRedis/) package.
 
-1. It implements `SetManyAsync` and `GetManyAsync` methods. These are not standard methods of the Microsoft Caching library, but added by the ABP Framework [Caching](Caching.md) system. They **significiantly increases the performance** when you need to set/get multiple cache items with a single method call.
+1. It implements `SetManyAsync` and `GetManyAsync` methods. These are not standard methods of the Microsoft Caching library, but added by the ABP Framework [Caching](Caching.md) system. They **significantly increases the performance** when you need to set/get multiple cache items with a single method call.
 2. It **simplifies** the Redis cache **configuration** (will be explained below).
 
 > Volo.Abp.Caching.StackExchangeRedis is already uses the Microsoft.Extensions.Caching.StackExchangeRedis package, but extends and improves it.

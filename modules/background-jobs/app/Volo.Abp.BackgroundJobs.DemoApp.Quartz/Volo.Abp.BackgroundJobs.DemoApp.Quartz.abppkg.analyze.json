@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.DemoApp.Quartz",
-  "hash": "605e0852eba8994ac8ec0c8936a28049",
+  "hash": "14e917e354473e23af0ef58d41c57f44",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs.DemoApp.Quartz",

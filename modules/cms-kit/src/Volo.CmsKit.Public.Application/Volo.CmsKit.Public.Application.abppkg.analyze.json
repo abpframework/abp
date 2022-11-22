@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Public.Application",
-  "hash": "1a950a6b3602894f5e6c9e0db5ff12c3",
+  "hash": "77338bad1fc8047314551102a95cad7e",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Public",
@@ -335,6 +335,13 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "PageDto",
+          "isAsync": true,
+          "name": "FindDefaultHomePageAsync",
+          "summary": null,
+          "parameters": []
         }
       ],
       "contentType": "applicationService",
@@ -670,7 +677,7 @@
       ],
       "methods": [
         {
-          "returnType": "BlogPostPublicDto",
+          "returnType": "BlogPostCommonDto",
           "isAsync": true,
           "name": "GetAsync",
           "summary": null,
@@ -688,7 +695,7 @@
           ]
         },
         {
-          "returnType": "PagedResultDto<BlogPostPublicDto>",
+          "returnType": "PagedResultDto<BlogPostCommonDto>",
           "isAsync": true,
           "name": "GetListAsync",
           "summary": null,

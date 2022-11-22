@@ -38,6 +38,7 @@ import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
 import { ShortTimePipe } from './pipes/short-time.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
 import { TimeoutLimitedOAuthService } from './services/timeout-limited-oauth.service';
+import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 
 export function storageFactory(): OAuthStorage {
   return oAuthStorage;
@@ -193,6 +194,7 @@ export class CoreModule {
           useValue: localizationContributor(options.localizations),
           deps: [LocalizationService],
         },
+        IncludeLocalizationResourcesProvider
       ],
     };
   }

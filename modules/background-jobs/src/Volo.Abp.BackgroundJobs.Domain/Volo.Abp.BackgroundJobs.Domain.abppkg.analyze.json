@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.Domain",
-  "hash": "b15ee9e0da3bb1c4cce82b58adbf25ef",
+  "hash": "0a062f136c8cc53e0d7160a192825f41",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs",

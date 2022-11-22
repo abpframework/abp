@@ -273,6 +273,8 @@
     "SubscribeToNewsletter": "Đăng ký bản tin để nhận thông tin về các diễn biến trong Nền tảng ABP.IO, chẳng hạn như các bản phát hành, bài báo, ưu đãi mới và hơn thế nữa.",
     "FirstEdition": "Ấn bản đầu tiên",
     "ThankYou": "Cảm ơn bạn!",
-    "CheckboxMandatory": "Bạn cần kiểm tra điều này để tiếp tục!"
+    "CheckboxMandatory": "Bạn cần kiểm tra điều này để tiếp tục!",
+    "SelectUITheme": "Chọn chủ đề giao diện người dùng"
+
   }
 }

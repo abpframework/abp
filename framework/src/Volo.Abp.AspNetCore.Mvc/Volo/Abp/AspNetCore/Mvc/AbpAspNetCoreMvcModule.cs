@@ -38,6 +38,7 @@ using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI;
@@ -52,7 +53,8 @@ namespace Volo.Abp.AspNetCore.Mvc;
     typeof(AbpAspNetCoreMvcContractsModule),
     typeof(AbpUiNavigationModule),
     typeof(AbpGlobalFeaturesModule),
-    typeof(AbpDddApplicationModule)
+    typeof(AbpDddApplicationModule),
+    typeof(AbpJsonSystemTextJsonModule)
     )]
 public class AbpAspNetCoreMvcModule : AbpModule
 {
@@ -145,7 +147,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
             mvcCoreBuilder.AddAbpRazorRuntimeCompilation();
         }
 
-        mvcCoreBuilder.AddAbpHybridJson();
+        mvcCoreBuilder.AddAbpJson();
 
         context.Services.ExecutePreConfiguredActions(mvcBuilder);
 

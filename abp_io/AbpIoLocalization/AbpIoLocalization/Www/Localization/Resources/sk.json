@@ -273,6 +273,8 @@
     "SubscribeToNewsletter": "Prihláste sa na odber bulletinu a získajte informácie o dianí na platforme ABP.IO, ako sú nové vydania, články, ponuky a ďalšie.",
     "FirstEdition": "Prvá edícia",
     "ThankYou": "Ďakujem!",
-    "CheckboxMandatory": "Ak chcete pokračovať, musíte to skontrolovať!"
+    "CheckboxMandatory": "Ak chcete pokračovať, musíte to skontrolovať!",
+    "SelectUITheme": "Vyberte tému používateľského rozhrania"
+
   }
 }

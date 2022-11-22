@@ -35,6 +35,7 @@
     "PersonalSettingsSaved": "Persónulegar stillingar vistaðar",
     "PasswordChanged": "Lykilorði breytt",
     "NewPasswordConfirmFailed": "Vinsamlegast staðfestu nýja lykilorðið.",
+    "NewPasswordSameAsOld": "Nýtt lykilorð verður að vera frábrugðið núverandi lykilorði.",
     "Manage": "Umsjá",
     "MyAccount": "Minn aðgangur",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Er sjálfskráning virk",

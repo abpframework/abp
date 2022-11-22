@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,13 +16,34 @@ public class Startup
         services.AddApplication<AbpAspNetCoreMvcTestModule>(options =>
         {
             var hostEnvironment = services.GetHostingEnvironment();
+            var currentDirectory = hostEnvironment.ContentRootPath;
+            var plugDllInPath = "";
+
+            for (var i = 0; i < 10; i++)
+            {
+                var parentDirectory = new DirectoryInfo(currentDirectory).Parent;
+                if (parentDirectory == null)
+                {
+                    break;
+                }
+
+                if (parentDirectory.Name == "test")
+                {
 #if DEBUG
-            var plugDllInPath = Path.Combine(hostEnvironment.ContentRootPath,
-                @"..\..\..\..\..\Volo.Abp.AspNetCore.Mvc.PlugIn\bin\Debug\net6.0\");
+                    plugDllInPath = Path.Combine(parentDirectory.FullName, "Volo.Abp.AspNetCore.Mvc.PlugIn", "bin", "Debug", "net7.0");
 #else
-            plugDllInPath = Path.Combine(_env.ContentRootPath,
-                @"..\..\..\..\..\Volo.Abp.AspNetCore.Mvc.PlugIn\bin\Release\net6.0\");
+                    plugDllInPath = Path.Combine(parentDirectory.FullName, "Volo.Abp.AspNetCore.Mvc.PlugIn", "bin", "Release", "net7.0");
 #endif
+                    break;
+                }
+
+                currentDirectory = parentDirectory.FullName;
+            }
+
+            if (plugDllInPath.IsNullOrWhiteSpace())
+            {
+                throw new AbpException("Could not find the plug DLL path!");
+            }
 
             options.PlugInSources.AddFolder(plugDllInPath);
         });
