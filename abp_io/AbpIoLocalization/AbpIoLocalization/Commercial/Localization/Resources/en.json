@@ -735,7 +735,7 @@
     "WatchTakeCloserLookVideo": "Watch the \"Take a closer look at the code generation: ABP Suite\" Video!",
     "ConfirmedEmailAddressRequiredToStartTrial": "You should have a confirmed email address in order to start a trial license.",
     "EmailVerificationMailNotSent": "Email verification mail couldn't send.",
-    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">Click here to get a confirmation email</a> if you haven't got it before.",
+    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">Click here to get a verification email</a> if you haven't got it before.",
     "WhichLicenseTypeYouAreInterestedIn": "Which license type you are interested in?",
     "DontTakeOurWordForIt": "Don't take our word for it...",
     "ReadAbpCommercialUsersWantYouToKnow": "Read what ABP Commercial users want you to know",
