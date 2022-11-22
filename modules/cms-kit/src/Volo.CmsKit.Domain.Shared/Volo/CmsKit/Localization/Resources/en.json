@@ -197,7 +197,7 @@
     "Feature:BlogEnable": "Blogpost",
     "Feature:BlogEnableDescription": "CMS Kit's blogpost system",
     "Feature:CommentEnable": "Commenting",
-    "Feature:CommentEnableDescription": "CMS Kit's comment system",
+    "Feature:CommentEnableDescription": "CMS Kit's comment system allows commenting on entities such as BlogPost.",
     "Feature:GlobalResourceEnable": "Global resourcing",
     "Feature:GlobalResourceEnableDescription": "CMS Kit's global resoruces feature that allows managing global styles & scripts.",
     "Feature:MenuEnable": "Menu",
