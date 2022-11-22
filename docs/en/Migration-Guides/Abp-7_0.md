@@ -19,9 +19,9 @@ Since [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/standard/seria
 ### Previous Behavior
 
 There is a `Volo.Abp.Json` package which contains the `AbpJsonModule` module.
-`Serialization/deserialization` features of [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/overview) and [Nettonsoft](https://www.newtonsoft.com/json/help/html/SerializingJSON.htm) are implemented in this module.
+`Serialization/deserialization` features of [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/overview) and [Newtonsoft](https://www.newtonsoft.com/json/help/html/SerializingJSON.htm) are implemented in this module.
 
-We use [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/overview) first,  More custom cases can be handled with [Nettonsoft](https://www.newtonsoft.com/json/help/html/SerializingJSON.htm) by configuring `UnsupportedTypes` of `AbpSystemTextJsonSerializerOptions`.
+We use [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/overview) first,  More custom cases can be handled with [Newtonsoft](https://www.newtonsoft.com/json/help/html/SerializingJSON.htm) by configuring `UnsupportedTypes` of `AbpSystemTextJsonSerializerOptions`.
 
 ### New Behavior
 
