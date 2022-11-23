@@ -3,12 +3,11 @@ import {
   ContentChild,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { NzFormatEmitEvent, NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
+import { NzFormatBeforeDropEvent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
 import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
@@ -25,7 +24,7 @@ export type DropEvent = NzFormatEmitEvent & { pos: number };
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class TreeComponent implements OnChanges {
+export class TreeComponent {
   dropPosition: number;
 
   dropdowns = {} as { [key: string]: NgbDropdown };
@@ -46,30 +45,26 @@ export class TreeComponent implements OnChanges {
   @Input() expandedKeys: string[] = [];
   @Input() selectedNode: any;
   @Input() changeCheckboxWithNode: boolean;
-  @Input() changedNodeValues = [];
   @Input() isNodeSelected = node => this.selectedNode?.id === node.key;
   @Input() beforeDrop = (event: NzFormatBeforeDropEvent) => {
     this.dropPosition = event.pos;
     return of(false);
   };
 
-  ngOnChanges() {
-    this.checkedKeys = [...this.changedNodeValues];
-  }
-
   onSelectedNodeChange(node) {
     this.selectedNode = node.origin.entity;
     if (this.changeCheckboxWithNode) {
       this.selectedNodeChange.emit(node);
-      this.checkedKeys = [...this.changedNodeValues];
-      this.checkedKeysChange.emit(this.changedNodeValues);
+      const newVal = [...this.checkedKeys, node.key];
+      this.checkedKeys = newVal;
+      this.checkedKeysChange.emit(newVal);
     } else {
       this.selectedNodeChange.emit(node.origin.entity);
     }
   }
 
   onCheckboxChange(event) {
-    this.checkedKeys = this.changedNodeValues = [...event.keys];
+    this.checkedKeys = [...event.keys];
     this.checkedKeysChange.emit(event.keys);
   }
 
