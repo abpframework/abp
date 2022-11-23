@@ -11,6 +11,7 @@
         <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
         <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
         <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+        <UseMaui>true</UseMaui>
         <RootNamespace />
     </PropertyGroup>
 
