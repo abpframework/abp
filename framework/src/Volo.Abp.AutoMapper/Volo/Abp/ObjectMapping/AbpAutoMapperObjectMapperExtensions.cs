@@ -14,7 +14,7 @@ public static class AbpAutoMapperObjectMapperExtensions
     {
         if (autoObjectMappingProvider is AutoMapperAutoObjectMappingProvider autoMapperAutoObjectMappingProvider)
         {
-            return autoMapperAutoObjectMappingProvider.Mapper;
+            return autoMapperAutoObjectMappingProvider.MapperAccessor.Mapper;
         }
 
         throw new AbpException($"Given object is not an instance of {typeof(AutoMapperAutoObjectMappingProvider).AssemblyQualifiedName}. The type of the given object it {autoObjectMappingProvider.GetType().AssemblyQualifiedName}");
