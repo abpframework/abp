@@ -47,7 +47,7 @@ connection.on("GetMessage", function () {
 
 ## Strongly-typed hubs
 
-We can use strongly-typed instead of `InvokeAsync` by inheriting from `AbpHub<T>` or `Hub<t>`:
+We can use strongly-typed instead of `InvokeAsync` by inheriting from `AbpHub<T>` or `Hub<T>`:
 
 ```csharp
 public interface IClient
