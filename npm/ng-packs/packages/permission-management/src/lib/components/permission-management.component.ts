@@ -138,11 +138,18 @@ export class PermissionManagementComponent
   }
 
   setDisabled(grantedProviders) {
-    this.disableSelectAllTab = grantedProviders.some(p => p.providerName !== this.providerName);
+    if (grantedProviders.length) {
+      grantedProviders.forEach(permission => {
+        this.disableSelectAllTab = permission.grantedProviders?.some(
+          p => p.providerName !== this.providerName,
+        );
+      });
+    } else {
+      this.disableSelectAllTab = false;
+    }
   }
 
   isGrantedByOtherProviderName(grantedProviders: ProviderInfoDto[]): boolean {
-    this.setDisabled(grantedProviders);
     if (grantedProviders.length) {
       return grantedProviders.findIndex(p => p.providerName !== this.providerName) > -1;
     }
@@ -239,6 +246,7 @@ export class PermissionManagementComponent
   }
 
   onChangeGroup(group: PermissionGroupDto) {
+    this.setDisabled(group.permissions);
     this.selectedGroup = group;
     this.setTabCheckboxState();
   }
@@ -291,6 +299,7 @@ export class PermissionManagementComponent
   initModal() {
     // TODO: Refactor
     setTimeout(() => {
+      this.setDisabled(this.data.groups[0]?.permissions);
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
     });

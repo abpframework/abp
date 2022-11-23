@@ -32,6 +32,7 @@
                 class="nav-link pointer"
                 [class.active]="selectedGroup?.name === group?.name"
                 (click)="onChangeGroup(group)"
+                (select)="setDisabled(group.permissions)"
               >
                 <div [class.font-weight-bold]="count.assignedCount">
                   {{ group?.displayName }}
