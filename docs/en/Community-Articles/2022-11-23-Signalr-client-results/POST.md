@@ -1,6 +1,6 @@
 # Signalr Client results
 
-ASP.NET Core 7 supports [requesting a reuslt from a client](https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-7.0?view=aspnetcore-7.0#signalr), in this article will, we will show you how to use client results with the ABP framework.
+ASP.NET Core 7 supports [requesting a reuslt from a client](https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-7.0?view=aspnetcore-7.0#signalr), in this article, we will show you how to use client results with the ABP framework.
 
 ## Create a SignalR hub
 
@@ -15,8 +15,8 @@ public class ChatHub : AbpHub
 }
 ```
 
-* ChatHub inherit from the `AbpHub` which have useful base properties like `CurrentUser`.
-* Define `WaitForMessage` method to call the client's `GetMessage` method and get the return value.
+* ChatHub inherits from `AbpHub` that has useful base properties like `CurrentUser`.
+* Define the `WaitForMessage` method to call the client's `GetMessage` method and get the return value.
 
 > Using `InvokeAsync` from a Hub method requires setting the [MaximumParallelInvocationsPerClient](https://learn.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-7.0&tabs=dotnet#configure-server-options) option to a value greater than 1.
 
