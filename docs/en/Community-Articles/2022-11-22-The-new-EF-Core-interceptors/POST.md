@@ -9,7 +9,7 @@ EF Core 7 has made a lot of enhancements to interceptors, You can see the list f
 * Interception for optimistic concurrency handling (DbUpdateConcurrencyException)
 * Interception for connections before checking if the connection string has been set
 * Interception for when EF Core has finished consuming a result set, but before that result set is closed
-* Interception for creation of a DbConnection by EF Core
+* Interception for the creation of a DbConnection by EF Core
 * Interception for DbCommand after it has been initialized
 
 ## Lazy initialization of `connection string`
