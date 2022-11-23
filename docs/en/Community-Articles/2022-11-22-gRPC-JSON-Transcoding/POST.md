@@ -176,10 +176,10 @@ public class BookAppService : BookApp.BookAppBase
 ```
 
 * Here, as you notice we've inherited our service from the `BookAppBase` class. You might wonder where it came from.
-* **Grpc.AspNetCore** package creates auto-generated classes from our protobuf file (`bookstore.proto`). We just need to inherit from `BookAppService` class, override the `GetBookList` method and implement it. That's it.
+* **Grpc.AspNetCore** package creates auto-generated classes from our protobuf file (`bookstore.proto`). We just need to inherit from `BookAppService` class (it's matched with service name we define in protobuf file), override the `GetBookList` method and implement it. That's it.
 * Also, notice we did not create the other classes such as `Book`, `GetBookListRequest` and `GetBookListResponse`. These are all auto-generated from our protobuf file.
 
-We created a gRPC service and now let's run our application (before running the application run the `*DbMigrator` project to create the database and seed the initial data) and see it in action.
+We created a gRPC service and now let's run our application (before running the application run the `*.DbMigrator` project to create the database and seed the initial data) and see it in action.
 
 ![](grpc-result.png)
 
