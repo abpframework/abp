@@ -9,9 +9,15 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
+using Volo.Abp.UI;
 
 namespace Volo.Abp.AspNetCore.Components.MauiBlazor;
 
+[DependsOn(
+    typeof(AbpAspNetCoreMvcClientCommonModule),
+    typeof(AbpUiModule),
+    typeof(AbpAspNetCoreComponentsWebModule)
+)]
 public class AbpAspNetCoreComponentsMauiBlazorModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -20,7 +26,7 @@ public class AbpAspNetCoreComponentsMauiBlazorModule : AbpModule
         {
             options.ProxyClientBuildActions.Add((_, builder) =>
             {
-                builder.AddHttpMessageHandler<AbpBlazorClientHttpMessageHandler>();
+                builder.AddHttpMessageHandler<AbpMauiBlazorClientHttpMessageHandler>();
             });
         });
     }
