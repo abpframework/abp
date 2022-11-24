@@ -27,6 +27,7 @@ import fse from 'fs-extra';
         'core,theme-shared,components',
         '--parallel',
         '1',
+        '--skip-nx-cache',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -43,6 +44,7 @@ import fse from 'fs-extra';
         'feature-management,permission-management,account-core',
         '--parallel',
         '1',
+        '--skip-nx-cache',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -60,6 +62,7 @@ import fse from 'fs-extra';
         'dev-app,schematics,core,theme-shared,components,feature-management,permission-management,account-core',
         '--parallel',
         '1',
+        '--skip-nx-cache',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
