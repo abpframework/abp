@@ -78,6 +78,8 @@ gRPC - JSON Transcoding is an extension for ASP.NET Core that creates RESTful JS
 
 It's a really good feature and allows us to expose our gRPC services as REST APIs. It's worth checking out 👉 [JSON Transcoding](https://learn.microsoft.com/en-us/aspnet/core/grpc/json-transcoding?view=aspnetcore-7.0).
 
+> I've created a separate community article for this feature. Check it from [here](https://community.abp.io/posts/grpc-json-transcoding-16eai2zw).
+
 ### Blazor
 
 We are going to cover two new features for Blazor:
@@ -100,7 +102,7 @@ builder.Services.AddServerSideBlazor(options =>
 });
 ```
 
-**2-)Using the Custom Element**
+**2-) Using the Custom Element**
 
 ```html
 <my-counter increment-amount={incrementAmount} />
