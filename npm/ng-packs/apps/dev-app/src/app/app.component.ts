@@ -9,6 +9,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   constructor() {
+    // Hello
     if (false) {
       console.log('hi');
       console.log('hi 2');
