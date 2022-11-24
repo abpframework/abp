@@ -11,8 +11,7 @@ export class AppComponent {
   constructor() {
     // Hello
     if (false) {
-      console.log('hi');
-      console.log('hi 2');
+      console.log('hi');console.log('hi 2');
     }
   }
 }
