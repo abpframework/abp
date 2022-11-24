@@ -2,7 +2,7 @@
 
 In this article, I'll show you one of the new features that came with .NET 7: **JSON Transcoding**. 
 
-> I've created a community article to highlight some interesting features (briefly) that are now available with the release of .NET 7. You can check from [here](https://community.abp.io/posts/whats-new-with-.net-7-tlq2g43w).
+> I've created a community article to highlight some interesting features (briefly) that are now available with the release of .NET 7. You can check it from [here](https://community.abp.io/posts/whats-new-with-.net-7-tlq2g43w).
 
 ## What is gRPC? What are the pros and cons?
 
@@ -60,7 +60,7 @@ dotnet add package Grpc.AspNetCore
 dotnet add package Microsoft.AspNetCore.Grpc.JsonTranscoding
 ```
 
-Then, add [*google/api/http.proto*](https://github.com/dotnet/aspnetcore/blob/main/src/Grpc/JsonTranscoding/test/testassets/Sandbox/google/api/http.proto) and [*google/api/annotations.proto*](https://github.com/dotnet/aspnetcore/blob/main/src/Grpc/JsonTranscoding/test/testassets/Sandbox/google/api/annotations.proto) files under to the **google/api** folder. These files are required for JSON Transcoding and contain all related stuff related to that.
+Then, add the [*google/api/http.proto*](https://github.com/dotnet/aspnetcore/blob/main/src/Grpc/JsonTranscoding/test/testassets/Sandbox/google/api/http.proto) and [*google/api/annotations.proto*](https://github.com/dotnet/aspnetcore/blob/main/src/Grpc/JsonTranscoding/test/testassets/Sandbox/google/api/annotations.proto) files under to the **google/api** folder. These files are required for JSON Transcoding and contain all the stuff related to that.
 
 ![](google-api-folders.png)
 
@@ -94,7 +94,7 @@ public class BookStoreHttpApiHostModule : AbpModule
 * Here, we've registered the related gRPC services into the DI container by calling the `AddGdpr()` and `AddJsonTranscoding()` methods.
 * Also, we've defined our gRPC service: `BookAppService`. We have not created this service yet and will create it in the next section.
 
-So far, we've added the required packages to our project and made the related configurations. Now we can start to create our gRPC services.
+So far, we've added the required packages to our project and made the related configurations. Now we can start creating our gRPC services.
 
 ### Implementing gRPC Services
 
@@ -127,7 +127,7 @@ service BookApp {
 }
 ```
 
-* Here, we've defined the `bookstore.proto` file. You can thought this file as a contract that the server and client agreed on.
+* Here, we've defined the `bookstore.proto` file. You can consider this file as a contract that the server and client have agreed on.
 * An important point here, we've imported the `google/api/annotations.proto` (we added this file under the **google/api** folder in the previous section) and by using the `google.api.http` we are exposing this gRPC service (with the specified URL). 
 * So, when we run the application we can send a request to that endpoint and see the result. 
 * Thanks to JSON Transcoding, we don't need to use any other tools to test our gRPC services anymore!
@@ -140,7 +140,7 @@ Let's mark the `bookstore.proto` file as our protobuf file in the `*.HttpApi.Hos
   </ItemGroup>
 ```
 
-For the final step, we just need to define a service that corresponds to the service that we defined in the `bookstore.proto` file. Voilà 🎉!
+For the final step, we just need to define a service that corresponds to the service that we've defined in the `bookstore.proto` file. Voilà 🎉!
 
 So, create a new class named `BookAppService` under the `Services` folder:
 
@@ -176,16 +176,16 @@ public class BookAppService : BookApp.BookAppBase
 ```
 
 * Here, as you notice we've inherited our service from the `BookAppBase` class. You might wonder where it came from.
-* **Grpc.AspNetCore** package creates auto-generated classes from our protobuf file (`bookstore.proto`). We just need to inherit from `BookAppService` class (it's matched with service name we define in protobuf file), override the `GetBookList` method and implement it. That's it.
+* The **Grpc.AspNetCore** package creates auto-generated classes from our protobuf file (`bookstore.proto`). We just need to inherit from `BookAppService` class (it's matched with the service name that we've defined in protobuf file), override the `GetBookList` method and implement it. That's it.
 * Also, notice we did not create the other classes such as `Book`, `GetBookListRequest` and `GetBookListResponse`. These are all auto-generated from our protobuf file.
 
-We created a gRPC service and now let's run our application (before running the application run the `*.DbMigrator` project to create the database and seed the initial data) and see it in action.
+We've created a gRPC service and now let's run our application (before running the application, run the `*.DbMigrator` project to create the database and seed the initial data) and see it in action.
 
 ![](grpc-result.png)
 
 ## Conclusion 
 
-In this article, I've briefly introduced the JSON Transcoding feature that shipped with .NET 7 and show it in an ABP Based application.
+In this article, I've briefly introduced the JSON Transcoding feature that was shipped with .NET 7 and showed it in an ABP Based application.
 
 > See the [gRPC JSON transcoding in ASP.NET Core gRPC apps](https://learn.microsoft.com/en-us/aspnet/core/grpc/json-transcoding?view=aspnetcore-7.0) documentation for more information.
 
