@@ -299,7 +299,7 @@ export class PermissionManagementComponent
   initModal() {
     // TODO: Refactor
     setTimeout(() => {
-      this.setDisabled(this.data.groups[0]?.permissions);
+      this.setDisabled(this.permissions);
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
     });
