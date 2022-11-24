@@ -1,7 +1,7 @@
-import {Component, HostListener, Input, OnInit} from '@angular/core';
-import {ReplaySubject} from 'rxjs';
-import {toastInOut} from '../../animations/toast.animations';
-import {Toaster} from '../../models/toaster';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
+import { toastInOut } from '../../animations/toast.animations';
+import { Toaster } from '../../models/toaster';
 
 @Component({
   selector: 'abp-toast-container',
@@ -30,7 +30,6 @@ export class ToastContainerComponent implements OnInit {
   @Input()
   left?: string;
 
-
   @Input()
   toastKey?: string;
 
@@ -39,8 +38,8 @@ export class ToastContainerComponent implements OnInit {
     this.toasts$.subscribe(toasts => {
       this.toasts = this.toastKey
         ? toasts.filter(t => {
-          return t.options && t.options.containerKey !== this.toastKey;
-        })
+            return t.options && t.options.containerKey !== this.toastKey;
+          })
         : toasts;
     });
   }
@@ -51,7 +50,6 @@ export class ToastContainerComponent implements OnInit {
   }
 
   setDefaultRight() {
-
     const screenWidth = window.innerWidth;
     if (screenWidth < 768 && this.right == this.defaultRight) {
       this.right = this.defaultMobileRight;
