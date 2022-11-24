@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Storage;
 using Volo.Abp.AspNetCore.Components.Progression;
 using Volo.Abp.DependencyInjection;
 
@@ -13,11 +12,13 @@ namespace Volo.Abp.AspNetCore.Components.MauiBlazor;
 public class AbpMauiBlazorClientHttpMessageHandler : DelegatingHandler, ITransientDependency
 {
     private readonly IUiPageProgressService _uiPageProgressService;
-    
-    private const string SelectedLanguageName = "Abp.SelectedLanguage";
+    private readonly IMauiBlazorSelectedLanguageProvider _mauiBlazorSelectedLanguageProvider;
 
-    public AbpMauiBlazorClientHttpMessageHandler(IClientScopeServiceProviderAccessor clientScopeServiceProviderAccessor)
+    public AbpMauiBlazorClientHttpMessageHandler(
+        IClientScopeServiceProviderAccessor clientScopeServiceProviderAccessor,
+        IMauiBlazorSelectedLanguageProvider mauiBlazorSelectedLanguageProvider)
     {
+        _mauiBlazorSelectedLanguageProvider = mauiBlazorSelectedLanguageProvider;
         _uiPageProgressService = clientScopeServiceProviderAccessor.ServiceProvider.GetRequiredService<IUiPageProgressService>();
     }
 
@@ -40,16 +41,14 @@ public class AbpMauiBlazorClientHttpMessageHandler : DelegatingHandler, ITransie
         }
     }
 
-    private Task SetLanguageAsync(HttpRequestMessage request)
+    private async Task SetLanguageAsync(HttpRequestMessage request)
     {
-        var selectedLanguage = Preferences.Get(SelectedLanguageName, string.Empty);
+        var selectedLanguage = await _mauiBlazorSelectedLanguageProvider.GetSelectedLanguageAsync();
 
         if (!selectedLanguage.IsNullOrWhiteSpace())
         {
             request.Headers.AcceptLanguage.Clear();
             request.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(selectedLanguage));
         }
-        
-        return Task.CompletedTask;
     }
 }
