@@ -1,4 +1,4 @@
-# EF Core Mapping Strategies
+# Inheritance Strategies in Entity Framework Core 7
 
 In this article, I'll show you all the object mapping strategies of EF Core and especially the new one: **TPC Inheritance Mapping**.  TPC mapping is the new feature introduced with Entity Framework Core 7. It's called Table Per Concrete type inheritance mapping. I'll explain the EF Core's inheritance mapping strategies with how the inherited entity and the specific information are saved into a relational database. I'll also explain which strategy is best for your case.
 
