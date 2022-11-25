@@ -79,3 +79,10 @@ $toastClass: abp-toast;
     }
   }
 }
+
+.toast-flex {
+  display: flex;
+  align-self: center;
+  word-break: break-word;
+
+}
