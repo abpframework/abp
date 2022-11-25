@@ -47,6 +47,9 @@ $toastClass: abp-toast;
   }
   .#{$toastClass}-content {
     position: relative;
+    display: flex;
+    align-self: center;
+    word-break: break-word;
     .#{$toastClass}-close-button {
       position: absolute;
       top: 0;
@@ -78,10 +81,4 @@ $toastClass: abp-toast;
       max-width: 240px;
     }
   }
-}
-
-.toast-flex {
-  display: flex;
-  align-self: center;
-  word-break: break-word;
 }
