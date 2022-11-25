@@ -1,6 +1,6 @@
 # Signalr Client results
 
-ASP.NET Core 7 supports [requesting a reuslt from a client](https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-7.0?view=aspnetcore-7.0#signalr), in this article, we will show you how to use client results with the ABP framework.
+ASP.NET Core 7 supports [requesting a result from a client](https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-7.0?view=aspnetcore-7.0#signalr), in this article, we will show you how to use client results with the ABP framework.
 
 ## Create a SignalR hub
 
