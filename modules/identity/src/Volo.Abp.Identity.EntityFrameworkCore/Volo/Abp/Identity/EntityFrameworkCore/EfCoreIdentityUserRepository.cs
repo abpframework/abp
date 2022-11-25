@@ -142,8 +142,17 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
+        string tenantName = null,
+        string name = null,
+        string surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
+        bool? emailConfirmed = null,
+        bool? isExternal = null,
+        DateTime? maxCreationTime = null,
+        DateTime? minCreationTime = null,
+        DateTime? maxModifitionTime = null,
+        DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -155,7 +164,10 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
                     u.Email.Contains(filter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter)) ||
+                    //(u.TenantId != null && u.PhoneNumber.Contains(filter)) ||
+                    (u.Name.Contains(filter)) ||
+                    (u.Surname != null && u.Surname.Contains(filter))
             )
             .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
@@ -164,6 +176,12 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
             .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0)
             .WhereIf(notActive == true, x => !x.IsActive)
+            .WhereIf(emailConfirmed == true, x => !x.EmailConfirmed)
+            .WhereIf(isExternal == true, x => !x.IsExternal)
+            .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
+            .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
+            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime >= maxModifitionTime)
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime <= minModifitionTime)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -207,8 +225,17 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
+        string tenantName = null,
+        string name = null,
+        string surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
+        bool? emailConfirmed = null,
+        bool? isExternal = null,
+        DateTime? maxCreationTime = null,
+        DateTime? minCreationTime = null,
+        DateTime? maxModifitionTime = null,
+        DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -219,7 +246,10 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
                     u.Email.Contains(filter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter)) ||
+                    //(u.TenantId != null && u.PhoneNumber.Contains(filter)) ||
+                    (u.Name != null && u.Name.Contains(filter)) ||
+                    (u.Surname != null && u.Surname.Contains(filter))
             )
             .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
@@ -228,6 +258,12 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
             .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0)
             .WhereIf(notActive == true, x => !x.IsActive)
+            .WhereIf(emailConfirmed == true, x => !x.EmailConfirmed)
+            .WhereIf(isExternal == true, x => !x.IsExternal)
+            .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
+            .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
+            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime >= maxModifitionTime)
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime <= minModifitionTime)
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -305,11 +341,11 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<IdentityUser> FindByTenantIdAndUserNameAsync(
         [NotNull] string userName,
-        Guid? tenantId, 
+        Guid? tenantId,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await(await GetDbSetAsync())
+        return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
             .FirstOrDefaultAsync(
                 u => u.TenantId == tenantId && u.UserName == userName,

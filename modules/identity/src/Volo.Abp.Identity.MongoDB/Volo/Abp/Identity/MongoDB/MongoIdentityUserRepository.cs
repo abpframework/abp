@@ -143,8 +143,17 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
+        string tenantName = null,
+        string name = null,
+        string surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
+        bool? emailConfirmed = null,
+        bool? isExternal = null,
+        DateTime? maxCreationTime = null,
+        DateTime? minCreationTime = null,
+        DateTime? maxModifitionTime = null,
+        DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
@@ -155,7 +164,10 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
                     u.Email.Contains(filter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter)) ||
+                    //(u.Tenant != null && u.Tenant.Contains(filter)) ||
+                    (u.Name != null && u.Name.Contains(filter)) ||
+                    (u.Surname != null && u.Surname.Contains(filter))
             )
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
@@ -164,6 +176,12 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd > DateTimeOffset.UtcNow)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(notActive == true, x => !x.IsActive)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(emailConfirmed == true, x => !x.EmailConfirmed)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isExternal == true, x => !x.IsExternal)
+            .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
+            .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
+            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime >= maxModifitionTime)
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime <= minModifitionTime)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
             .As<IMongoQueryable<IdentityUser>>()
             .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
@@ -211,8 +229,17 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
+        string tenantName = null,
+        string name = null,
+        string surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
+        bool? emailConfirmed = null,
+        bool? isExternal = null,
+        DateTime? maxCreationTime = null,
+        DateTime? minCreationTime = null,
+        DateTime? maxModifitionTime = null,
+        DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
@@ -223,7 +250,10 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
                     u.Email.Contains(filter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter)) ||
+                    //(u.Tenant != null && u.Tenant.Contains(filter)) ||
+                    (u.Name != null && u.Name.Contains(filter)) ||
+                    (u.Surname != null && u.Surname.Contains(filter))
             )
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
@@ -232,6 +262,12 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd > DateTimeOffset.UtcNow)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(notActive == true, x => !x.IsActive)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(emailConfirmed == true, x => !x.EmailConfirmed)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isExternal == true, x => !x.IsExternal)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(minCreationTime != null, p => p.CreationTime >= minCreationTime)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(maxModifitionTime != null, p => p.LastModificationTime >= maxModifitionTime)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(minModifitionTime != null, p => p.LastModificationTime <= minModifitionTime)
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -272,9 +308,9 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
     }
 
     public virtual async Task<IdentityUser> FindByTenantIdAndUserNameAsync(
-        [NotNull] string userName, 
-        Guid? tenantId, 
-        bool includeDetails = true, 
+        [NotNull] string userName,
+        Guid? tenantId,
+        bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
