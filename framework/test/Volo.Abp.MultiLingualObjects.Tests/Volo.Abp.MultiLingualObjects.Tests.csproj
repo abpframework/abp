@@ -1,18 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="..\..\..\common.test.props" />
+	<Import Project="..\..\..\common.test.props" />
 
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <RootNamespace />
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<RootNamespace />
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-        <ProjectReference Include="..\..\src\Volo.Abp.MultiLingualObjects\Volo.Abp.MultiLingualObjects.csproj" />
-        <ProjectReference Include="..\..\src\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
-        <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
-    </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+		<ProjectReference Include="..\..\src\Volo.Abp.MultiLingualObjects\Volo.Abp.MultiLingualObjects.csproj" />
+		<ProjectReference Include="..\..\src\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
+		<ProjectReference Include="..\..\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+
+		<ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+	</ItemGroup>
 
 </Project>
