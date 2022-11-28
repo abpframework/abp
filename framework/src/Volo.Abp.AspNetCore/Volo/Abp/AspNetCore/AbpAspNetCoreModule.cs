@@ -29,14 +29,17 @@ namespace Volo.Abp.AspNetCore;
     )]
 public class AbpAspNetCoreModule : AbpModule
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         var abpHostEnvironment = context.Services.GetSingletonInstance<IAbpHostEnvironment>();
         if (abpHostEnvironment.EnvironmentName.IsNullOrWhiteSpace())
         {
             abpHostEnvironment.EnvironmentName = context.Services.GetHostingEnvironment().EnvironmentName;
         }
+    }
 
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
         context.Services.AddAuthorization();
 
         Configure<AbpAuditingOptions>(options =>

@@ -67,10 +67,13 @@ public abstract class AbpApplicationBase : IAbpApplication
             ConfigureServices();
         }
 
-        var abpHostEnvironment = services.GetSingletonInstance<IAbpHostEnvironment>();
-        if (abpHostEnvironment.EnvironmentName.IsNullOrWhiteSpace())
+        if (options.Environment.IsNullOrWhiteSpace())
         {
-            abpHostEnvironment.EnvironmentName = Environments.Production;
+            var abpHostEnvironment = services.GetSingletonInstance<IAbpHostEnvironment>();
+            if (abpHostEnvironment.EnvironmentName.IsNullOrWhiteSpace())
+            {
+                abpHostEnvironment.EnvironmentName = Environments.Production;
+            }
         }
     }
 
