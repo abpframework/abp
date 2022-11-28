@@ -9,16 +9,11 @@ With .NET 7, there are two new methods such as `ExecuteUpdate` and `ExecuteDelet
 
 You can visit the microsoft example [here](https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#executeupdate-and-executedelete-bulk-updates) about how to use it.
 
-
-## Bulk Operations in ABP Framework
-
-ABP Framework supports Entity Framework Core as its ORM. So, you can use these new methods in your repository classes in your ABP applications. But there is another feature that the ABP Framework provides: `IEfCoreBulkOperationProvider`. You can visit the [documentation](https://docs.abp.io/en/abp/latest/Entity-Framework-Core#customize-bulk-operations) to learn more about it. You always have full control of the execution of bulk operations in your ABP applications. When you call the `InsertMany`, `DeleteMany` or `UpdateMany` methods of the repository, that provider will be invoked and you can customize all the queries from one point. You don't mostly need to implement & customize that interface, but it's good to know that you can do it if you need. 
+ABP Framework supports Entity Framework Core as its ORM. So, you can use these new methods in your repository classes in your ABP applications without any limitation.
 
 ## Usage in Repositories
 
-In most of the real world case scenarios, you need custom queries to execute bulk operations. You can't manage all the cases by overriding `IEfCoreBulkOperationProvider` and you can't even identify the entities in this provider because it's not aware of the properties of the entities. The best way to use this new feature is inside the repositories.
-
-Let me show an example below:
+You can use these methods in your repositories as below:
 
 ```csharp
 public class BookEntityFrameworkCoreRepository : EfCoreRepository<BookStoreDbContext, Book, Guid>, IBookRepository
@@ -40,7 +35,8 @@ public class BookEntityFrameworkCoreRepository : EfCoreRepository<BookStoreDbCon
     {
         var dbSet = await GetDbSetAsync();
 
-        await dbSet.Where(x => x.PublishedOn.Year <= 2000)
+        await dbSet
+            .Where(x => x.PublishedOn.Year <= 2000)
             .ExecuteDeleteAsync();
     }
 }
