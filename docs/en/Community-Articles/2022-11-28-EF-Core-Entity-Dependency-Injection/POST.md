@@ -244,7 +244,7 @@ public class ServiceProviderInterceptor : IMaterializationInterceptor
 }
 ````
 
-> Lifetime of the resolved services are tied to the lifetime of the related `DbContext` instance. So, you don't need to care if the resolved dependencies are disposed. ABP's [unit of work](https://docs.abp.io/en/abp/latest/Unit-Of-Work) system already disposes the `DbContext` instance when the unit of work completed.
+> Lifetime of the resolved services are tied to the lifetime of the related `DbContext` instance. So, you don't need to care if the resolved dependencies are disposed. ABP's [unit of work](https://docs.abp.io/en/abp/latest/Unit-Of-Work) system already disposes the `DbContext` instance when the unit of work is completed.
 
 Once we defined such an interceptor, we should configure our `DbContext` class to use it. You can do it by overriding the `OnConfiguring` method in your `DbContext` class:
 
@@ -256,7 +256,7 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 }
 ````
 
-Finally, you should ignore the `ServiceProvider` property in your entity mapping configuration in your `DbContext`:
+Finally, you should ignore the `ServiceProvider` property in your entity mapping configuration in your `DbContext` (because we don't want to map it to a database table field):
 
 ````csharp
 protected override void OnModelCreating(ModelBuilder builder)
@@ -292,11 +292,13 @@ public async Task CreateAsync(CreateProductDto input)
 }
 ````
 
-Here, you may think that it is not necessary to set the `ServiceProvider` here, because we haven't used the `ChangeCodeAsync` method. You are definitely right; It is not needed in this example, because it is clear to see there is no action between the entity creation and saving it to the database. However, if you call a method of the entity, or pass it to another service before inserting into the database, you may not know if the `ServiceProvider` will be needed before saving it. So, you should carefully use it.
+Here, you may think that it is not necessary to set the `ServiceProvider`, because we haven't used the `ChangeCodeAsync` method. You are definitely right; It is not needed in this example, because it is clear to see the entity object is not used between the entity creation and saving it to the database. However, if you call a method of the entity, or pass it to another service before inserting into the database, you may not know if the `ServiceProvider` will be needed. So, you should carefully use it.
 
 Basically, I've introduced the problem and the solution. In the next section, I will explain some limitations of that design and some of my other thoughts.
 
-## Discussions & Alternatives
+## Discussions
+
+In this section, I will first discuss a slightly different way of obtaining services. Then I will explain limitations and problems of injecting services into entities.
 
 ### Why injected a service provider, but not the services?
 
@@ -330,9 +332,9 @@ public class Product : AuditedAggregateRoot<Guid>
 }
 ````
 
-Now, we don't need to implement the `IInjectServiceProvider` interface, and manually resolve the `IRepository<Product, Guid>` object from the `ServiceProvider`. You see that the `ChangeCodeAsync` method is much simpler now.
+Now, we don't need to implement the `IInjectServiceProvider` interface and manually resolve the `IRepository<Product, Guid>` object from the `ServiceProvider`. You see that the `ChangeCodeAsync` method is much simpler now.
 
-So, how to set `ProductRepository`? For the EF Core interceptor part, you can somehow get all public properties of the entity via reflection, for each property, check if such a service does exist, and set it from the dependency injection system if available. That will have less performant, but would work. On the other hand, it would be extra hard to set all dependencies of the entity while manually creating it using the `new` keyword. So, personally I wouldn't recommend that.
+So, how to set `ProductRepository`? For the EF Core interceptor part, you can somehow get all public properties of the entity via reflection. Then, for each property, check if such a service does exist, and set it from the dependency injection system if available. Surely, that will be less performant, but will work if you can truly implement. On the other hand, it would be extra hard to set all the dependencies of the entity while manually creating it using the `new` keyword. So, personally I wouldn't recommend that approach.
 
 ### Limitations
 
