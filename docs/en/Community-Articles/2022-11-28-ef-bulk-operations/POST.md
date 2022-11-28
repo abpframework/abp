@@ -43,14 +43,6 @@ public class BookEntityFrameworkCoreRepository : EfCoreRepository<BookStoreDbCon
         await dbSet.Where(x => x.PublishedOn.Year <= 2000)
             .ExecuteDeleteAsync();
     }
-
-    public async Task ImportAsync(List<Book> books)
-    {
-        var dbSet = await GetDbSetAsync();
-
-        // No need for an action for bulk inserting.
-        await base.InsertManyAsync(books); 
-    }
 }
 ```
 
