@@ -54,4 +54,4 @@ public class BookEntityFrameworkCoreRepository : EfCoreRepository<BookStoreDbCon
 }
 ```
 
-> There is no need to take an action for bulk inserting. You can use `InsertManyAsync` method of repository instead of creating a new method for it if you don't have a custom logic. It'll use new bulk inserting feature autmatically since it's available in EF Core 7.0.
+> There is no need to take an action for bulk inserting. You can use `InsertManyAsync` method of repository instead of creating a new method for it if you don't have a custom logic. It'll use new bulk inserting feature automatically since it's available in EF Core 7.0.
