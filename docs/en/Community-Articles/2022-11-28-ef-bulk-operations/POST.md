@@ -31,17 +31,17 @@ public class BookEntityFrameworkCoreRepository : EfCoreRepository<BookStoreDbCon
     {
         var dbSet = await GetDbSetAsync();
 
-        dbSet
+        await dbSet
             .Where(x => x.IsListed && x.PublishedOn.Year <= 2022)
-            .ExecuteUpdate(s => s.SetProperty(x => x.IsListed, x => false));
+            .ExecuteUpdateAsync(s => s.SetProperty(x => x.IsListed, x => false));
     }
 
     public async Task DeleteOldBooksAsync()
     {
         var dbSet = await GetDbSetAsync();
 
-        dbSet.Where(x => x.PublishedOn.Year <= 2000)
-            .ExecuteDelete();
+        await dbSet.Where(x => x.PublishedOn.Year <= 2000)
+            .ExecuteDeleteAsync();
     }
 
     public async Task ImportAsync(List<Book> books)
