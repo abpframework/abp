@@ -11,7 +11,7 @@ If you want to add, remove or replace a convention, you need to override `Config
 ```csharp
 protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
 {
-    configurationBuilder.Conventions.Remove(typeof(MyCustomConvention));
+    configurationBuilder.Conventions.Add(_ =>  new MyCustomConvention());
 }
 ```
 
