@@ -55,3 +55,5 @@ public class BookEntityFrameworkCoreRepository : EfCoreRepository<BookStoreDbCon
 ```
 
 > There is no need to take an action for bulk inserting. You can use the `InsertManyAsync` method of the repository instead of creating a new method for it if you don't have custom logic. It'll use a new bulk inserting feature automatically since it's available in EF Core 7.0.
+
+> `ExecuteDeleteAsync` breaks the soft delete and auditing since deleted entities are removed from the change tracker. ABP can't handle it. So, you have to be careful while using it.
