@@ -11,6 +11,6 @@ public class AbpAspNetCoreMvcClientCacheOptions
     public AbpAspNetCoreMvcClientCacheOptions()
     {
         TenantConfigurationCacheAbsoluteExpiration = TimeSpan.FromMinutes(5);
-        TenantConfigurationCacheAbsoluteExpiration = TimeSpan.FromSeconds(300);
+        ApplicationConfigurationDtoCacheAbsoluteExpiration = TimeSpan.FromSeconds(300);
     }
 }
