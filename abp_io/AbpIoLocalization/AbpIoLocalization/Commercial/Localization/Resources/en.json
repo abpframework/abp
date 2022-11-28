@@ -210,7 +210,7 @@
     "TrialPlan": "Do you have a trial plan?",
     "TrialPlanExplanation": "It has a 14 days trial period for the ABP Commercial team license. For more information visit <a href={0} target='_blank'>here</a>. Furthermore, for the Team licenses we provide a 30 days money-back guarantee. You can just request a refund in the first 30 days. For the Business and Enterprise licenses, we provide 60% refund in 30 days. This is because Business and Enterprise licenses include the full source code of all the modules and the themes.",
     "DoYouAcceptBankWireTransfer": "Do you accept bank wire transfers?",
-    "DoYouAcceptBankWireTransferExplanation": "Yes, we accept bank wire transfers.<br/>After sending the license fee via bank transfer, send your receipt and requested license type to accounting@abp.io.<br/>Our international bank account information:",
+    "DoYouAcceptBankWireTransferExplanation": "Yes, we accept bank wire transfers.<br/>After sending the license fee via bank transfer, send your receipt and requested license type to accounting@volosoft.com.<br/>Our international bank account information:",
     "HowToUpgrade": "How to upgrade existing applications when a new version is available?",
     "HowToUpgradeExplanation1": "When you create a new application using ABP Commercial, all the modules and theme are used as NuGet and NPM packages. So, you can easily upgrade the packages when a new version is available.",
     "HowToUpgradeExplanation2": "In addition to the standard NuGet/NPM upgrades, <a href=\"{0}\">ABP CLI</a> provides an update command that automatically finds and upgrades all ABP related packages in your solution.",
