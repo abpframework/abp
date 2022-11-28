@@ -40,7 +40,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
         .AddCheck("SampleHealthCheck", () => HealthCheckResult.Healthy());
 }
 ```
-* `MapGrpcHealthChecksService` to add a health checks service endpoint.
+* `MapGrpcHealthChecksService` to add a health check service endpoint.
 
 ```csharp
 public override void OnApplicationInitialization(ApplicationInitializationContext context)
