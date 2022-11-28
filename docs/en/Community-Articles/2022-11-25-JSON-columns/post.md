@@ -68,7 +68,7 @@ public class MyDbContext : AbpDbContext<MyDbContext>
 
         builder.Entity<Person>(b =>
         {
-            b.ToTable(MyProjectConsts.DbTablePrefix + "Persons", MyProjecConsts.DbSchema);
+            b.ToTable(MyProjectConsts.DbTablePrefix + "Persons", MyProjectConsts.DbSchema);
             b.ConfigureByConvention();
             b.OwnsOne(x=>x.ContactDetails, c =>
             {
@@ -126,8 +126,13 @@ await UpdateAsync(person, true);
 
 ![image](./Database.png)
 
+
+### The Source Code
+* You can find the full source code of the example application [here](https://github.com/abpframework/abp-samples/tree/master/EfCoreJSONColumnDemo).
+* You can see this pull [request](https://github.com/abpframework/abp-samples/pull/210) for the changes I've done after creating the application.
+
 ### References
 
-[https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#json-columns](https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#json-columns)
+* [https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#json-columns](https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#json-columns)
 
-[https://docs.microsoft.com/en-us/ef/core/modeling/owned-entities](https://docs.microsoft.com/en-us/ef/core/modeling/owned-entities)
+* [https://docs.microsoft.com/en-us/ef/core/modeling/owned-entities](https://docs.microsoft.com/en-us/ef/core/modeling/owned-entities)
