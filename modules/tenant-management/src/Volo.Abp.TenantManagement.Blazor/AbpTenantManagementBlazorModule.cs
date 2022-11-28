@@ -1,11 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement.Blazor;
+using Volo.Abp.FeatureManagement.Localization;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.TenantManagement.Blazor.Navigation;
+using Volo.Abp.TenantManagement.Localization;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
 
@@ -37,6 +41,15 @@ public class AbpTenantManagementBlazorModule : AbpModule
         Configure<AbpRouterOptions>(options =>
         {
             options.AdditionalAssemblies.Add(typeof(AbpTenantManagementBlazorModule).Assembly);
+        });
+        
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<AbpTenantManagementResource>()
+                .AddBaseTypes(
+                    typeof(AbpFeatureManagementResource),
+                    typeof(AbpUiResource));
         });
     }
 
