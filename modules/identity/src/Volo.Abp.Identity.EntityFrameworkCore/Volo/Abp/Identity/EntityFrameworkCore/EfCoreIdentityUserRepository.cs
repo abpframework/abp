@@ -139,10 +139,10 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = false,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
+        Guid? tenantId = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
-        string tenantName = null,
         string name = null,
         string surname = null,
         bool? isLockedOut = null,
@@ -164,20 +164,20 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
                     u.Email.Contains(filter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter)) ||
-                    //(u.TenantId != null && u.PhoneNumber.Contains(filter)) ||
-                    (u.Name.Contains(filter)) ||
-                    (u.Surname != null && u.Surname.Contains(filter))
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
             .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
+            .WhereIf(tenantId.HasValue, identityUser => identityUser.TenantId == tenantId)
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
+            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
+            .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
             .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0)
             .WhereIf(notActive == true, x => !x.IsActive)
-            .WhereIf(emailConfirmed == true, x => !x.EmailConfirmed)
-            .WhereIf(isExternal == true, x => !x.IsExternal)
+            .WhereIf(emailConfirmed == true, x => x.EmailConfirmed)
+            .WhereIf(isExternal == true, x => x.IsExternal)
             .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
             .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
             .WhereIf(maxModifitionTime != null, p => p.LastModificationTime >= maxModifitionTime)
@@ -222,10 +222,10 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         string filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
+        Guid? tenantId = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
-        string tenantName = null,
         string name = null,
         string surname = null,
         bool? isLockedOut = null,
@@ -246,20 +246,20 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
                     u.Email.Contains(filter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter)) ||
-                    //(u.TenantId != null && u.PhoneNumber.Contains(filter)) ||
-                    (u.Name != null && u.Name.Contains(filter)) ||
-                    (u.Surname != null && u.Surname.Contains(filter))
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
             .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
+            .WhereIf(tenantId.HasValue, identityUser => identityUser.TenantId == tenantId)
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
+            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
+            .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
             .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0)
             .WhereIf(notActive == true, x => !x.IsActive)
-            .WhereIf(emailConfirmed == true, x => !x.EmailConfirmed)
-            .WhereIf(isExternal == true, x => !x.IsExternal)
+            .WhereIf(emailConfirmed == true, x => x.EmailConfirmed)
+            .WhereIf(isExternal == true, x => x.IsExternal)
             .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
             .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
             .WhereIf(maxModifitionTime != null, p => p.LastModificationTime >= maxModifitionTime)
