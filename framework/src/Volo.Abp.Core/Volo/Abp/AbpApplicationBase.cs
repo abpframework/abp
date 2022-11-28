@@ -54,9 +54,7 @@ public abstract class AbpApplicationBase : IAbpApplication
         services.AddSingleton<IModuleContainer>(this);
         services.AddSingleton<IAbpHostEnvironment>(new AbpHostEnvironment()
         {
-            EnvironmentName = options.Environment.IsNullOrWhiteSpace()
-                ? Environments.Production
-                : options.Environment
+            EnvironmentName = options.Environment
         });
 
         services.AddCoreServices();
@@ -67,6 +65,12 @@ public abstract class AbpApplicationBase : IAbpApplication
         if (!options.SkipConfigureServices)
         {
             ConfigureServices();
+        }
+
+        var abpHostEnvironment = services.GetSingletonInstance<IAbpHostEnvironment>();
+        if (abpHostEnvironment.EnvironmentName.IsNullOrWhiteSpace())
+        {
+            abpHostEnvironment.EnvironmentName = Environments.Production;
         }
     }
 
