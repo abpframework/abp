@@ -1,4 +1,4 @@
-# Entity Framework Core Bulk Operations
+# Bulk Operations with Entity Framework Core 7.0
 Entity Framework tracks all the entity changes and applies those changes to the database one by one when the `SaveChanges()` method is called. There was no way to execute bulk operations in Entity Framework Core without a dependency. 
 
 As you know the [Entity Framework Extensions](https://entityframework-extensions.net/bulk-savechanges) library was doing it but it was not free.
