@@ -176,7 +176,7 @@ app.UseConfiguredEndpoints(endpoints =>
 
 ## `EnableRateLimiting` and `DisableRateLimiting` attributes
 
-It's kind of unrealistic to always use rate limiting for all controllers or pages. We may want to throttle a particular endpoint or page many times. In such cases, we can use the `EnableRateLimiting` and `DisableRateLimiting` attributes. The `EnableRateLimiting` and `DisableRateLimiting` attributes can be applied to a controller, action method, or razor rage. Check [here](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit?preserve-view=true&view=aspnetcore-7.0#enableratelimiting-and-disableratelimiting-attributes) for more.
+It's kind of unrealistic to always use rate limiting for all controllers or pages. Sometimes, we may want to throttle a particular endpoint or page. In such cases, we can use the `EnableRateLimiting` and `DisableRateLimiting` attributes. The `EnableRateLimiting` and `DisableRateLimiting` attributes can be applied to a controller, action method, or razor rage. Check [here](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit?preserve-view=true&view=aspnetcore-7.0#enableratelimiting-and-disableratelimiting-attributes) for more.
 
 ## Rate limit an HTTP handler
 
