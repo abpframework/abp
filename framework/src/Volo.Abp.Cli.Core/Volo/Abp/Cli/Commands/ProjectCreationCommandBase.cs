@@ -118,7 +118,7 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("DBMS: " + databaseManagementSystem);
         }
 
-        var uiFramework = GetUiFramework(commandLineArgs);
+        var uiFramework = GetUiFramework(commandLineArgs, template);
         if (uiFramework != UiFramework.NotSpecified)
         {
             Logger.LogInformation("UI Framework: " + uiFramework);
@@ -413,22 +413,24 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected async Task RunBundleForBlazorWasmTemplateAsync(ProjectBuildArgs projectArgs)
+    protected async Task RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(ProjectBuildArgs projectArgs)
     {
-        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) && projectArgs.UiFramework == UiFramework.Blazor)
+        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) && projectArgs.UiFramework is UiFramework.Blazor or UiFramework.MauiBlazor)
         {
-            Logger.LogInformation("Generating bundles for Blazor Wasm...");
+            var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
+            var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";
+            Logger.LogInformation($"{message}...");
 
             await EventBus.PublishAsync(new ProjectCreationProgressEvent
             {
-                Message = "Generating bundles for Blazor Wasm"
+                Message = message
             }, false);
 
             var directory = Path.GetDirectoryName(
-                Directory.GetFiles(projectArgs.OutputFolder, "*.Blazor.csproj", SearchOption.AllDirectories).First()
+                Directory.GetFiles(projectArgs.OutputFolder, isWebassembly? "*.Blazor.csproj" :"*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
                 );
             
-            await _bundlingService.BundleAsync(directory, true);
+            await _bundlingService.BundleAsync(directory, true, projectType: isWebassembly ? BundlingConsts.WebAssembly : BundlingConsts.MauiBlazor);
         }
     }
 
@@ -531,7 +533,7 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected virtual UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
+    protected virtual UiFramework GetUiFramework(CommandLineArgs commandLineArgs, string template = "app")
     {
         if (commandLineArgs.Options.ContainsKey("no-ui"))
         {
@@ -554,6 +556,8 @@ public abstract class ProjectCreationCommandBase
                 return UiFramework.Blazor;
             case "blazor-server":
                 return UiFramework.BlazorServer;
+            case "maui-blazor" when template == AppProTemplate.TemplateName:
+                return UiFramework.MauiBlazor;
             default:
                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("UI Framework"));
         }
