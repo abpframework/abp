@@ -197,7 +197,6 @@ As in many DDD concepts and patterns, guarded types provides improved safety for
 ## The Source Code
 
 * You can find the full source code of the example application [here](https://github.com/abpframework/abp-samples/tree/master/EfCoreGuardedTypeDemo).
-* You can see [this pull request](https://github.com/abpframework/abp-samples/pull/207/files) for the changes I've done after creating the application.
 
 ## See Also
 
