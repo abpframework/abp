@@ -1,6 +1,8 @@
 # Rate Limiting with ASP.NET Core 7.0
 
-Rate limiting is a way of controlling traffic so that a web application or API receives. In other words, rate limiting helps you control the amount of traffic each user has access to at any given time. This is extremely useful when you want to manage the load on your server or services, avoid going over your monthly data transfer limit and allow the system to continue to function and meet service level agreements, even when an increase in demand places an extreme load on resources. In this article, we will look at why you need to use rate limiting, how the different rate limiting algorithms provided with .NET 7.0 work, and best practices for using rate limiting in your application.
+Rate limiting is a way of controlling traffic so that a web application or API receives. In other words, rate limiting helps you control the amount of traffic each user has access to at any given time. This is extremely useful when you want to manage the load on your server or services, avoid going over your monthly data transfer limit and allow the system to continue to function and meet service level agreements, even when an increase in demand places an extreme load on resources. 
+
+In this article, we will look at what is rate limiting, why we need to use it, how the different rate limiting algorithms provided with .NET 7.0 work, and best practices for using rate limiting in your application.
 
 ## What is rate limiting?
 
