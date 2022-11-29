@@ -12,9 +12,9 @@ namespace MyCompanyName.MyProjectName;
 /// </summary>
 public partial class App : Application
 {
-    private IAbpApplicationWithInternalServiceProvider _abpApplication;
+    private IAbpApplicationWithInternalServiceProvider? _abpApplication;
 
-    protected async override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
         Log.Logger = new LoggerConfiguration()
 #if DEBUG
@@ -48,9 +48,12 @@ public partial class App : Application
         }
     }
 
-    protected async override void OnExit(ExitEventArgs e)
+    protected override async void OnExit(ExitEventArgs e)
     {
-        await _abpApplication.ShutdownAsync();
+        if (_abpApplication != null)
+        {
+            await _abpApplication.ShutdownAsync();
+        }
         Log.CloseAndFlush();
     }
 }

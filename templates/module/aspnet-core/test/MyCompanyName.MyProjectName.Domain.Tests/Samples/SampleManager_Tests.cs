@@ -13,8 +13,8 @@ public class SampleManager_Tests : MyProjectNameDomainTestBase
     }
 
     [Fact]
-    public async Task Method1Async()
+    public Task Method1Async()
     {
-
+        return Task.CompletedTask;
     }
 }
