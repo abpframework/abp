@@ -139,7 +139,6 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = false,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        Guid? tenantId = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
@@ -168,7 +167,6 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             )
             .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
-            .WhereIf(tenantId.HasValue, identityUser => identityUser.TenantId == tenantId)
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
@@ -180,8 +178,8 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(isExternal == true, x => x.IsExternal)
             .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
             .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
-            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime >= maxModifitionTime)
-            .WhereIf(minModifitionTime != null, p => p.LastModificationTime <= minModifitionTime)
+            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -222,7 +220,6 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         string filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        Guid? tenantId = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
@@ -250,7 +247,6 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             )
             .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
-            .WhereIf(tenantId.HasValue, identityUser => identityUser.TenantId == tenantId)
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
@@ -262,8 +258,8 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(isExternal == true, x => x.IsExternal)
             .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
             .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
-            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime >= maxModifitionTime)
-            .WhereIf(minModifitionTime != null, p => p.LastModificationTime <= minModifitionTime)
+            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 

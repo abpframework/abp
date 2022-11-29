@@ -140,7 +140,6 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         bool includeDetails = false,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        Guid? tenantId = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
@@ -168,7 +167,6 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             )
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(tenantId.HasValue, identityUser => identityUser.TenantId == tenantId.Value)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
@@ -180,8 +178,8 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isExternal == true, x => x.IsExternal)
             .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
             .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
-            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime >= maxModifitionTime)
-            .WhereIf(minModifitionTime != null, p => p.LastModificationTime <= minModifitionTime)
+            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
             .As<IMongoQueryable<IdentityUser>>()
             .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
@@ -226,7 +224,6 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         string filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        Guid? tenantId = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
@@ -254,7 +251,6 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             )
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(tenantId.HasValue, identityUser => identityUser.TenantId == tenantId.Value)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
@@ -266,8 +262,8 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isExternal == true, x => x.IsExternal)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(minCreationTime != null, p => p.CreationTime >= minCreationTime)
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(maxModifitionTime != null, p => p.LastModificationTime >= maxModifitionTime)
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(minModifitionTime != null, p => p.LastModificationTime <= minModifitionTime)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
