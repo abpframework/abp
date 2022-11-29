@@ -9,11 +9,17 @@ With .NET 7, there are two new methods such as `ExecuteUpdate` and `ExecuteDelet
 
 You can visit the microsoft example [here](https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#executeupdate-and-executedelete-bulk-updates) about how to use it.
 
-ABP Framework supports Entity Framework Core as its ORM. So, you can use these new methods in your repository classes in your ABP applications without any limitation.
 
-## Usage in Repositories
+It can be easily used with the DbContext. 
 
-You can use these methods in your repositories as below:
+```csharp
+await context.Tags.Where(t => t.Text.Contains(".NET")).ExecuteDeleteAsync();
+```
+
+## Using with ABP Framework
+ABP Framework provides an abstraction over database operations and implements generic repository pattern. So, DbContext can't be accessed outside of [repositories](https://docs.abp.io/en/abp/latest/Repositories).
+
+You can use the `ExecuteUpdate` and `ExecuteDelete` methods inside a repository.
 
 ```csharp
 public class BookEntityFrameworkCoreRepository : EfCoreRepository<BookStoreDbContext, Book, Guid>, IBookRepository
@@ -42,6 +48,24 @@ public class BookEntityFrameworkCoreRepository : EfCoreRepository<BookStoreDbCon
 }
 ```
 
-> There is no need to take an action for bulk inserting. You can use the `InsertManyAsync` method of the repository instead of creating a new method for it if you don't have custom logic. It'll use a new bulk inserting feature automatically since it's available in EF Core 7.0.
+There is no need to take an action for bulk inserting. You can use the `InsertManyAsync` method of the repository instead of creating a new method for it if you don't have custom logic. It'll use a new bulk inserting feature automatically since it's available in EF Core 7.0.
+
+```csharp
+public class MyDomainService : DomainService
+{
+    protected IRepository<Book, Guid> BookRepository { get; }
+
+    public MyDomainService(IRepository<Book, Guid> bookRepository)
+    {
+        BookRepository = bookRepository;
+    }
+
+    public async Task CreateBooksAsync(List<Book> books)
+    {
+        // It'll use bulk inserting automatically.
+        await BookRepository.InsertManyAsync(books);
+    }
+}
+```
 
 > If you use `ExecuteDeleteAsync` or `ExecuteUpdateAsync`, then ABP's soft delete and auditing features can not work. Because these ABP features work with EF Core's change tracking system and these new methods doesn't work with the change tracking system. So, use them carefully.
