@@ -17,7 +17,7 @@ public class AbpLazyServiceProvider : CachedServiceProviderBase, IAbpLazyService
 
     public virtual object LazyGetRequiredService(Type serviceType)
     {
-        return GetService(serviceType);
+        return GetRequiredService(serviceType);
     }
 
     public virtual T LazyGetService<T>()
