@@ -91,6 +91,10 @@ Configure<AbpStringEncryptionOptions>(options =>
 
 Note that ABP CLI automatically sets the password to a random value on a new project creation. However, it is stored in the `appsettings.json` file and generally added to your source control. It is suggested to use [User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) or [Environment Variables](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration) to set that value.
 
-## Swagger
+## The Swagger UI
 
-TODO
+ABP's startup solution templates come with the [Swagger UI](https://swagger.io/) pre-installed. Swagger is a pretty standard and useful tool to discover and test your HTTP APIs on a built-in UI that is embedded into your application or service. It is typically used in development environment, but you may want to enable it on staging or production environments too.
+
+While you will always secure your HTTP APIs with other techniques (like the [Authorization](../Authorization.md) system), allowing malicious software and people to easily discover your HTTP API endpoint details can be considered as a security problem for some systems. So, be careful while taking the decision of enabling or disabling Swagger for the production environment.
+
+> You may also want to see the [ABP Swagger integration](../API/Swagger-Integration.md) document.
