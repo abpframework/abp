@@ -2,7 +2,7 @@
 
 ABP's Dependency Injection system is developed based on Microsoft's [dependency injection extension](https://medium.com/volosoft/asp-net-core-dependency-injection-best-practices-tips-tricks-c6e9c67f9d96) library (Microsoft.Extensions.DependencyInjection nuget package). So, it's documentation is valid in ABP too.
 
-> While ABP has no core dependency to any 3rd-party DI provider, it's required to use a provider that supports dynamic proxying and some other advanced features to make some ABP features properly work. Startup templates come with Autofac installed. See [Autofac integration](Autofac-Integration.md) document for more information.
+> While ABP has no core dependency to any 3rd-party DI provider. However, it's required to use a provider that supports dynamic proxying and some other advanced features to make some ABP features properly work. Startup templates come with [Autofac](https://autofac.org/) installed. See [Autofac integration](Autofac-Integration.md) document for more information.
 
 ## Modularity
 
@@ -20,24 +20,24 @@ public class BlogModule : AbpModule
 
 ## Conventional Registration
 
-ABP introduces conventional service registration. You need not do anything to register a service by convention. It's automatically done. If you want to disable it, you can set `SkipAutoServiceRegistration` to `true` by overriding the `PreConfigureServices` method.
+ABP introduces conventional service registration. You need not do anything to register a service by convention. It's automatically done. If you want to disable it, you can set `SkipAutoServiceRegistration` to `true` in the constructor of your module class. Example:
 
 ````C#
 public class BlogModule : AbpModule
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    public BlogModule()
     {
         SkipAutoServiceRegistration = true;
     }
 }
 ````
 
-Once you skip auto registration, you should manually register your services. In that case, ``AddAssemblyOf`` extension method can help you to register all your services by convention. Example:
+Once you skip the auto registration, you should manually register your services. In that case, ``AddAssemblyOf`` extension method can help you to register all your services by convention. Example:
 
 ````c#
 public class BlogModule : AbpModule
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
+    public BlogModule()
     {
         SkipAutoServiceRegistration = true;
     }
@@ -105,9 +105,7 @@ Example:
 [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
 public class TaxCalculator
 {
-
 }
-
 ````
 
 ``Dependency`` attribute has a higher priority than other dependency interfaces if it defines the ``Lifetime`` property.
@@ -120,7 +118,6 @@ public class TaxCalculator
 [ExposeServices(typeof(ITaxCalculator))]
 public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
 {
-
 }
 ````
 
@@ -179,7 +176,11 @@ public class MyModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //Replacing the IConnectionStringResolver service
-        context.Services.Replace(ServiceDescriptor.Transient<IConnectionStringResolver, MyConnectionStringResolver>());
+        context.Services.Replace(
+            ServiceDescriptor.Transient<
+            	IConnectionStringResolver,
+                MyConnectionStringResolver
+            >());
     }
 }
 ````
@@ -202,7 +203,7 @@ public class TaxAppService : ApplicationService
         _taxCalculator = taxCalculator;
     }
 
-    public void DoSomething()
+    public async Task DoSomethingAsync()
     {
         //...use _taxCalculator...
     }
@@ -227,7 +228,7 @@ public class MyService : ITransientDependency
         Logger = NullLogger<MyService>.Instance;
     }
 
-    public void DoSomething()
+    public async Task DoSomethingAsync()
     {
         //...use Logger to write logs...
     }
@@ -244,17 +245,21 @@ One restriction of property injection is that you cannot use the dependency in y
 
 Property injection is also useful when you want to design a base class that has some common services injected by default. If you're going to use constructor injection, all derived classes should also inject depended services into their own constructors which makes development harder. However, be very careful using property injection for non-optional services as it makes it harder to clearly see the requirements of a class.
 
-#### DisablePropertyInjectionAttribute
+#### DisablePropertyInjection Attribute
 
-You can use `[DisablePropertyInjection]` attribute on class or properties to disable property injection for the whole class or some specific properties.
+You can use `[DisablePropertyInjection]` attribute on classes or their properties to disable property injection for the whole class or some specific properties.
 
 ````C#
+// Disabling for all properties of the MyService class
 [DisablePropertyInjection]
 public class MyService : ITransientDependency
 {
+    public ILogger<MyService> Logger { get; set; }
+    
     public ITaxCalculator TaxCalculator { get; set; }
 }
 
+// Disabling only for the TaxCalculator property
 public class MyService : ITransientDependency
 {
     public ILogger<MyService> Logger { get; set; }
@@ -262,17 +267,21 @@ public class MyService : ITransientDependency
     [DisablePropertyInjection]
     public ITaxCalculator TaxCalculator { get; set; }
 }
-
 ````
 
 ### Resolve Service from IServiceProvider
 
-You may want to resolve a service directly from ``IServiceProvider``. In that case, you can inject IServiceProvider into your class and use ``GetService`` method as shown below:
+You may want to resolve a service directly from ``IServiceProvider``. In that case, you can inject `IServiceProvider` into your class and use the ``GetService`` or the `GetRequiredService` method as shown below:
 
 ````C#
 public class MyService : ITransientDependency
 {
-    public ILogger<MyService> Logger { get; set; }
+    private readonly ITaxCalculator _taxCalculator;
+
+    public MyService(IServiceProvider serviceProvider)
+    {
+        _taxCalculator = serviceProvider.GetRequiredService<ITaxCalculator>();
+    }
 }
 ````
 
@@ -374,15 +383,15 @@ IEnumerable<IExternalLogger> services = _serviceProvider.GetServices<IExternalLo
 
 ### Releasing/Disposing Services
 
-If you used a constructor or property injection, you don't need to be concerned about releasing the service's resources. However, if you have resolved a service from ``IServiceProvider``, you might, in some cases, need to take care about releasing the service resources.
+If you used a constructor or property injection, you don't need to be concerned about releasing the service's resources. However, if you have resolved a service from ``IServiceProvider``, in some cases, you might need to take care about releasing the service resources.
 
-ASP.NET Core releases all services at the end of a current HTTP request, even if you directly resolved from ``IServiceProvider`` (assuming you injected IServiceProvider). But, there are several cases where you may want to release/dispose manually resolved services:
+ASP.NET Core releases all services at the end of a current HTTP request, even if you directly resolved from ``IServiceProvider`` (assuming you injected `IServiceProvider`). But, there are several cases where you may want to release/dispose manually resolved services:
 
-* Your code is executed outside of AspNet Core request and the executer hasn't handled the service scope.
+* Your code is executed outside of ASP.NET Core request and the executer hasn't handled the service scope.
 * You only have a reference to the root service provider.
-* You may want to immediately release & dispose services (for example, you may creating too many services with big memory usage and don't want to overuse memory).
+* You may want to immediately release & dispose services (for example, you may creating too many services with big memory usages and don't want to overuse the memory).
 
-In any case, you can use such a 'using' code block to safely and immediately release services:
+In any case, you can create a service scope block to safely and immediately release services:
 
 ````C#
 using (var scope = _serviceProvider.CreateScope())
@@ -392,7 +401,7 @@ using (var scope = _serviceProvider.CreateScope())
 }
 ````
 
-Both services are released when the created scope is disposed (at the end of the using block).
+Both services are released when the created scope is disposed (at the end of the `using` block).
 
 ## Advanced Features
 

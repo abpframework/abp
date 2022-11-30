@@ -101,3 +101,11 @@ See https://github.com/abpframework/abp/pull/13644 for more info.
 We've already done this for our themes. 
 
 See https://github.com/abpframework/abp/pull/13845 for more info.
+
+## Replaced `BlogPostPublicDto` with `BlogPostCommonDto`
+
+- In the CMS Kit Module, `BlogPostPublicDto` has been moved to `Volo.CmsKit.Common.Application.Contracts` from `Volo.CmsKit.Public.Application.Contracts` and renamed to `BlogPostCommonDto`.
+
+- See the [PR#13499](https://github.com/abpframework/abp/pull/13499) for more information.
+
+> You can ignore this if you don't use CMS Kit Module.
