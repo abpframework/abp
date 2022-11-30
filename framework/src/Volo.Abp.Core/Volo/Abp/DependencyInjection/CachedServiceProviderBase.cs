@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.DependencyInjection;
 
-public abstract class CachedServiceProviderBase
+public abstract class CachedServiceProviderBase : IServiceProvider
 {
     protected IServiceProvider ServiceProvider { get; }
     protected ConcurrentDictionary<Type, Lazy<object>> CachedServices { get; }
@@ -21,14 +21,6 @@ public abstract class CachedServiceProviderBase
         return CachedServices.GetOrAdd(
             serviceType,
             _ => new Lazy<object>(() => ServiceProvider.GetService(serviceType))
-        ).Value;
-    }
-    
-    public virtual object GetRequiredService(Type serviceType)
-    {
-        return CachedServices.GetOrAdd(
-            serviceType,
-            _ => new Lazy<object>(() => ServiceProvider.GetRequiredService(serviceType))
         ).Value;
     }
 }
