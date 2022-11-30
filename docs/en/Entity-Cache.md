@@ -10,7 +10,6 @@ ABP's Entity Caching System does the following operations on behalf of you:
 
 * It gets the entity from the database (by using the [Repositories](Repositories.md)) in its first call and then gets from the cache in subsequent calls.
 * It automatically invalidates the cached entity if the entity is updated or deleted. Thus, it will be retrieved from the database in the next call and will be re-cached.
-* It uses the cache class's **FullName** as a cache name by default. You can use the `CacheName` attribute on the cache item class to set the cache name.
 
 ## Installation
 
@@ -177,6 +176,7 @@ context.Services.AddEntityCache<Product, ProductDto, Guid>(
 
 * Entity classes should be serializable/deserializable to/from JSON to be cached (because it's serialized to JSON when saving in the [Distributed Cache](Caching.md)). If your entity class is not serializable, you can consider using a cache-item/DTO class instead, as mentioned in the *Usage* section above.
 * Entity Caching System is designed as **read-only**. So, you shouldn't make changes to the same entity when you use the entity cache. Instead, you should always read it from the database to ensure transactional consistency.
+* Entity Caching System uses the cache class's **FullName** as the cache name by default. You can use the `CacheName` attribute on the cache item class to set the cache name.
 
 ## See Also
 
