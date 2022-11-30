@@ -403,6 +403,41 @@ using (var scope = _serviceProvider.CreateScope())
 
 Both services are released when the created scope is disposed (at the end of the `using` block).
 
+### Cached Service Providers
+
+ABP provides two special services to optimize resolving services from `IServiceProvider`. `ICachedServiceProvider` and `ITransientCachedServiceProvider` both inherits from the `IServiceProvider` interface and internally caches the resolved services, so you get the same service instance even if you resolve a service multiple times.
+
+The main difference is the `ICachedServiceProvider` is itself registered as scoped, while the `ITransientCachedServiceProvider` is registered as transient to the dependency injection system.
+
+The following example injects the `ICachedServiceProvider` service and resolves a service in the `DoSomethingAsync` method:
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly ICachedServiceProvider _serviceProvider;
+
+    public MyService(ICachedServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    public async Task DoSomethingAsync()
+    {
+        var taxCalculator = _serviceProvider.GetRequiredService<ITaxCalculator>();
+        // TODO: Use the taxCalculator
+    }
+}
+
+````
+
+With such a usage, you don't need to deal with creating service scopes and disposing the resolved services (as explained in the *Releasing/Disposing Services* section above). Because all the services resolved from the `ICachedServiceProvider` will be released once the service scope of the `MyService` instance is disposed. Also, you don't need to care about memory leaks (because of creating too many `ITaxCalculator` instances if we call `DoSomethingAsync` too many times), because only one `ITaxCalculator` instance is created, and it is reused.
+
+Since `ICachedServiceProvider` and `ITransientCachedServiceProvider` extends the standard `IServiceProvider` interface, you can use all the extension method of the `IServiceProvider` interface on them. In addition, they provides some other methods to provide a default value or a factory method for the services that are not found (that means not registered to the dependency injection system). Notice that the default value (or the value returned from your factory method) is also cached and reused.
+
+Use `ICachedServiceProvider` (instead of `ITransientCachedServiceProvider`) unless you need to create the service cache per usage. `ITransientCachedServiceProvider` guarantees that the created service instances are not shared with any other service, even they are in the same service scope. The services resolved from `ICachedServiceProvider` are shared with other services in the same service scope (in the same HTTP Request, for example), so it can be thought as more optimized.
+
+> ABP Framework also provides the `IAbpLazyServiceProvider` service. It does exists for backward compatibility and works exactly same with the `ITransientCachedServiceProvider` service. So, use the `ITransientCachedServiceProvider` since the `IAbpLazyServiceProvider` might be removed in future ABP versions.
+
 ## Advanced Features
 
 ### IServiceCollection.OnRegistred Event
