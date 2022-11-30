@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.EventBus.Abstractions;
-using Volo.Abp.EventBus.Boxes;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;

@@ -1,5 +1,4 @@
 ﻿using System;
-using Volo.Abp.EventBus.Boxes;
 
 namespace Volo.Abp.EventBus.Distributed;
 
