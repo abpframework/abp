@@ -54,7 +54,21 @@ Please see the [Email Sending](../Emailing.md) document to learn how to configur
 
 ## SMS Sender
 
-TODO
+ABP's [SMS Sending abstraction](https://docs.abp.io/en/abp/latest/SMS-Sending) provides a unified interface to send SMS to users. However, its implementation is left to you. Because, typically a paid SMS service is used to send SMS, and ABP doesn't depend on a specific SMS provider.
+
+So, if you are using the `ISmsSender` service, you must implement it yourself, as shown in the following code block:
+
+````csharp
+public class MySmsSender : ISmsSender, ITransientDependency
+{
+    public async Task SendAsync(SmsMessage smsMessage)
+    {
+        // TODO: Send it using your provider...
+    }
+}
+````
+
+> [ABP Commercial](https://commercial.abp.io/) provide a [Twilio SMS Module](https://docs.abp.io/en/commercial/latest/modules/twilio-sms) as a pre-built integration with the popular [Twilio](https://www.twilio.com/) platform.
 
 ## BLOB Provider
 
