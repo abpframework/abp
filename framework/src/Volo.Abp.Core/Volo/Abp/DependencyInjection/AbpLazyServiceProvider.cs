@@ -3,6 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.DependencyInjection;
 
+/// <summary>
+/// This class is equivalent of the <see cref="TransientCachedServiceProvider"/>.
+/// Use <see cref="TransientCachedServiceProvider"/> instead of this class, for new projects. 
+/// </summary>
 [ExposeServices(typeof(IAbpLazyServiceProvider))]
 public class AbpLazyServiceProvider :
     CachedServiceProviderBase,
@@ -13,29 +17,8 @@ public class AbpLazyServiceProvider :
         : base(serviceProvider)
     {
     }
-
-    public T GetService<T>(T defaultValue)
-    {
-        return (T)GetService(typeof(T), defaultValue);
-    }
-
-    public object GetService(Type serviceType, object defaultValue)
-    {
-        return GetService(serviceType) ?? defaultValue;
-    }
-
-    public T GetService<T>(Func<IServiceProvider, object> factory)
-    {
-        return (T)GetService(typeof(T), factory);
-    }
     
-    public object GetService(Type serviceType, Func<IServiceProvider, object> factory)
-    {
-        return CachedServices.GetOrAdd(
-            serviceType,
-            _ => new Lazy<object>(() => factory(ServiceProvider))
-        ).Value;
-    }
+    #region Old Methods
 
     public virtual T LazyGetRequiredService<T>()
     {
@@ -56,8 +39,6 @@ public class AbpLazyServiceProvider :
     {
         return GetService(serviceType);
     }
-
-    #region Old Methods
 
     public virtual T LazyGetService<T>(T defaultValue)
     {
