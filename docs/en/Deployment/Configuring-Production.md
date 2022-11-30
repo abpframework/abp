@@ -42,3 +42,28 @@ That's all. ABP, then will add this prefix to all of your keys in your applicati
 
 > **Warning #3**: Some of the ABP's startup templates are pre-configured to set a prefix value for the distributed locking. So, please check your application code if it is already configured.
 
+## Email Sender
+
+ABP's [Email Sending](../Emailing.md) system abstracts sending emails from your application and module code and allows you to configure the email provider and settings in a single place.
+
+Email service is configured to write email contents to the standard [application log](../Logging.md) in development environment. You should configure the email settings to be able to send emails to users in your production environment.
+
+Please see the [Email Sending](../Emailing.md) document to learn how to configure its settings to really send emails.
+
+> **Warning**: If you don't configure the email settings, you will get errors while trying to send emails. For example, the [Account module](../Modules/Account.md)'s *Password Reset* feature sends email to the users to reset their passwords if they forget it.
+
+## SMS Sender
+
+TODO
+
+## BLOB Provider
+
+TODO
+
+## String Encryption
+
+TODO
+
+## Swagger
+
+TODO
