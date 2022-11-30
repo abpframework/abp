@@ -19,7 +19,9 @@ That's all. ABP, then will add this prefix to all of your cache keys in your app
 
 > **Warning #2**: Even if you have never used distributed caching in your own codebase, ABP still uses it for some features. So, you should always configure this prefix if your caching server is shared among multiple systems.
 
-> **Warning #3**: Some of the ABP's startup templates are pre-configured to set a prefix value for the distributed cache. So, please check your application code if it is already configured.
+> **Warning #3**: If you are building a microservice system, then you will have multiple applications that share the same distributed cache server. In such systems, all applications (or services) normally should use the same cache prefix, because you want all the applications use the same cache data to have consistency between applications.
+
+> **Warning #4**: Some of the ABP's startup templates are pre-configured to set a prefix value for the distributed cache. So, please check your application code if it is already configured.
 
 ## Distributed Lock Prefix
 
@@ -36,5 +38,7 @@ That's all. ABP, then will add this prefix to all of your keys in your applicati
 
 > **Warning #1**: Even if you have never used distributed locking in your own codebase, ABP still uses it for some features. So, you should always configure this prefix if your distributed lock server is shared among multiple systems.
 
-> **Warning #2**: Some of the ABP's startup templates are pre-configured to set a prefix value for the distributed locking. So, please check your application code if it is already configured.
+> **Warning #2**: If you are building a microservice system, then you will have multiple applications that share the same distributed locking server. In such systems, all applications (or services) normally should use the same lock prefix, because you want to lock your resources globally in your system.
+
+> **Warning #3**: Some of the ABP's startup templates are pre-configured to set a prefix value for the distributed locking. So, please check your application code if it is already configured.
 
