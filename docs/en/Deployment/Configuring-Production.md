@@ -15,13 +15,13 @@ Configure<AbpDistributedCacheOptions>(options =>
 
 That's all. ABP, then will add this prefix to all of your cache keys in your application as along as you use ABP's `IDistributedCache<TCacheItem>` or `IDistributedCache<TCacheItem,TKey>` services. See the [Caching documentation](../Caching.md) if you are new to the distributed caching.
 
-> **Warning #1**: If you use ASP.NET Core's standard `IDistributedCache` service, it's your responsibility to add the key prefix (you can get the value by injecting `IOptions<AbpDistributedCacheOptions>`). ABP can not do it.
+> **Warning**: If you use ASP.NET Core's standard `IDistributedCache` service, it's your responsibility to add the key prefix (you can get the value by injecting `IOptions<AbpDistributedCacheOptions>`). ABP can not do it.
 
-> **Warning #2**: Even if you have never used distributed caching in your own codebase, ABP still uses it for some features. So, you should always configure this prefix if your caching server is shared among multiple systems.
+> **Warning**: Even if you have never used distributed caching in your own codebase, ABP still uses it for some features. So, you should always configure this prefix if your caching server is shared among multiple systems.
 
-> **Warning #3**: If you are building a microservice system, then you will have multiple applications that share the same distributed cache server. In such systems, all applications (or services) normally should use the same cache prefix, because you want all the applications use the same cache data to have consistency between applications.
+> **Warning**: If you are building a microservice system, then you will have multiple applications that share the same distributed cache server. In such systems, all applications (or services) normally should use the same cache prefix, because you want all the applications use the same cache data to have consistency between applications.
 
-> **Warning #4**: Some of the ABP's startup templates are pre-configured to set a prefix value for the distributed cache. So, please check your application code if it is already configured.
+> **Warning**: Some of the ABP's startup templates are pre-configured to set a prefix value for the distributed cache. So, please check your application code if it is already configured.
 
 ## Distributed Lock Prefix
 
@@ -36,11 +36,11 @@ Configure<AbpDistributedLockOptions>(options =>
 
 That's all. ABP, then will add this prefix to all of your keys in your application. See the [Distributed Locking documentation](../Distributed-Locking.md) if you are new to the distributed locking.
 
-> **Warning #1**: Even if you have never used distributed locking in your own codebase, ABP still uses it for some features. So, you should always configure this prefix if your distributed lock server is shared among multiple systems.
+> **Warning**: Even if you have never used distributed locking in your own codebase, ABP still uses it for some features. So, you should always configure this prefix if your distributed lock server is shared among multiple systems.
 
-> **Warning #2**: If you are building a microservice system, then you will have multiple applications that share the same distributed locking server. In such systems, all applications (or services) normally should use the same lock prefix, because you want to lock your resources globally in your system.
+> **Warning**: If you are building a microservice system, then you will have multiple applications that share the same distributed locking server. In such systems, all applications (or services) normally should use the same lock prefix, because you want to lock your resources globally in your system.
 
-> **Warning #3**: Some of the ABP's startup templates are pre-configured to set a prefix value for the distributed locking. So, please check your application code if it is already configured.
+> **Warning**: Some of the ABP's startup templates are pre-configured to set a prefix value for the distributed locking. So, please check your application code if it is already configured.
 
 ## Email Sender
 
