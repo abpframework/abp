@@ -72,7 +72,11 @@ public class MySmsSender : ISmsSender, ITransientDependency
 
 ## BLOB Provider
 
-TODO
+If you use ABP's [BLOB Storing](https://docs.abp.io/en/abp/latest/Blob-Storing) infrastructure, you should care about the BLOB provider in your production environment. For example, if you use the [File System](../Blob-Storing-File-System.md) provider and running your application in a Docker container, you should configure a volume map for the BLOB storage path. Otherwise, your data is lost when the container has been restarted. Also, File System is not a good provider for production if you have a [clustered deployment](Clustered-Environment.md) or a microservice system.
+
+Check the [BLOB Storing](../Blob-Storing.md) document to see all the available BLOG storage providers.
+
+> **Warning**: Even if you don't directly use the BLOB Storage system, a module you are depending may use it. For example, ABP Commercial's [File Management](https://docs.abp.io/en/commercial/latest/modules/file-management) module stores file contents, and the [Account](https://docs.abp.io/en/commercial/latest/modules/account) module stores user profile pictures in the BLOB Storage system. So, be careful on the BLOB Storing configuration in production. Note that ABP Commercial uses the [Database Provider](../Blob-Storing-Database.md) as pre-configured BLOB storage provider, which works in production without any problem, but you may still want to use another provider.
 
 ## String Encryption
 
