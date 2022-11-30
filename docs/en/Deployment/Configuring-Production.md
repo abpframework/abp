@@ -72,15 +72,24 @@ public class MySmsSender : ISmsSender, ITransientDependency
 
 ## BLOB Provider
 
-If you use ABP's [BLOB Storing](https://docs.abp.io/en/abp/latest/Blob-Storing) infrastructure, you should care about the BLOB provider in your production environment. For example, if you use the [File System](../Blob-Storing-File-System.md) provider and running your application in a Docker container, you should configure a volume map for the BLOB storage path. Otherwise, your data is lost when the container has been restarted. Also, File System is not a good provider for production if you have a [clustered deployment](Clustered-Environment.md) or a microservice system.
+If you use ABP's [BLOB Storing](https://docs.abp.io/en/abp/latest/Blob-Storing) infrastructure, you should care about the BLOB provider in your production environment. For example, if you use the [File System](../Blob-Storing-File-System.md) provider and running your application in a Docker container, you should configure a volume mapping for the BLOB storage path. Otherwise, your data is lost when the container has been restarted. Also, File System is not a good provider for production if you have a [clustered deployment](Clustered-Environment.md) or a microservice system.
 
-Check the [BLOB Storing](../Blob-Storing.md) document to see all the available BLOG storage providers.
+Check the [BLOB Storing](../Blob-Storing.md) document to see all the available BLOB storage providers.
 
 > **Warning**: Even if you don't directly use the BLOB Storage system, a module you are depending may use it. For example, ABP Commercial's [File Management](https://docs.abp.io/en/commercial/latest/modules/file-management) module stores file contents, and the [Account](https://docs.abp.io/en/commercial/latest/modules/account) module stores user profile pictures in the BLOB Storage system. So, be careful on the BLOB Storing configuration in production. Note that ABP Commercial uses the [Database Provider](../Blob-Storing-Database.md) as pre-configured BLOB storage provider, which works in production without any problem, but you may still want to use another provider.
 
 ## String Encryption
 
-TODO
+ABP's [`IStringEncryptionService` Service](../String-Encryption.md) simply encrypts and decrypts given strings based on a password phrase. You should configure the `AbpStringEncryptionOptions` options for the production with a strong password and keep it as a secret. You can also configure the other properties of that options class. See the following example:
+
+````csharp
+Configure<AbpStringEncryptionOptions>(options =>
+{
+    options.DefaultPassPhrase = "gs5nTT042HAL4it1";
+});
+````
+
+Note that ABP CLI automatically sets the password to a random value on a new project creation. However, it is stored in the `appsettings.json` file and generally added to your source control. It is suggested to use [User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) or [Environment Variables](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration) to set that value.
 
 ## Swagger
 
