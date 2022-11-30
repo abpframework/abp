@@ -18,8 +18,6 @@ public class AbpLazyServiceProvider :
     {
     }
     
-    #region Old Methods
-
     public virtual T LazyGetRequiredService<T>()
     {
         return (T)LazyGetRequiredService(typeof(T));
@@ -59,6 +57,4 @@ public class AbpLazyServiceProvider :
     {
         return GetService(serviceType, factory);
     }
-    
-    #endregion
 }
