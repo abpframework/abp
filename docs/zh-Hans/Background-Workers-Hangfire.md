@@ -54,7 +54,7 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
         CronExpression = Cron.Daily();
     }
 
-    public override Task DoWorkAsync()
+    public override Task DoWorkAsync(CancellationToken cancellationToken = default)
     {
         Logger.LogInformation("Executed MyLogWorker..!");
         return Task.CompletedTask;
@@ -69,14 +69,7 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
 
 ### UnitOfWork
 
-使用 `UnitOfWorkAttribute` 你需要为工作者定义一个接口:
-
 ```csharp
-public interface IMyLogWorker : IHangfireBackgroundWorker
-{
-}
-
-[ExposeServices(typeof(IMyLogWorker))]
 public class MyLogWorker : HangfireBackgroundWorkerBase, IMyLogWorker
 {
     public MyLogWorker()
@@ -85,11 +78,13 @@ public class MyLogWorker : HangfireBackgroundWorkerBase, IMyLogWorker
         CronExpression = Cron.Daily();
     }
 
-    [UnitOfWork]
-    public override Task DoWorkAsync()
+    public override Task DoWorkAsync(CancellationToken cancellationToken = default)
     {
-        Logger.LogInformation("Executed MyLogWorker..!");
-        return Task.CompletedTask;
+        using (var uow = LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>().Begin())
+        {
+            Logger.LogInformation("Executed MyLogWorker..!");
+            return Task.CompletedTask;
+        }
     }
 }
 ```
@@ -106,9 +101,6 @@ public class MyModule : AbpModule
         ApplicationInitializationContext context)
     {
         await context.AddBackgroundWorkerAsync<MyLogWorker>();
-
-        //如果定义了接口
-        //await context.AddBackgroundWorkerAsync<IMyLogWorker>(); 
     }
 }
 ````
