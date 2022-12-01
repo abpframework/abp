@@ -16,3 +16,7 @@ There may be more based on your solution structure and deployment environment, b
 ## Bundling & Minification for MVC (Razor Pages) UI
 
 ABP's [bundling & minification](../UI/AspNetCore/Bundling-Minification.md) system automatically bundles, minifies and versions your CSS and JavaScript files in production environment. Normally, you don't need to do anything, if you haven't disabled it yourself in your application code. It is important to follow the [bundling & minification](../UI/AspNetCore/Bundling-Minification.md) document and truly use the system to get the maximum optimization.
+
+## Background Jobs
+
+ABP's [Background Jobs](../Background-Jobs.md) system provides an abstraction with a basic implementation to enqueue works and execute them in a background thread. ABP's Default Background Job Manager may not be enough if you are adding too many jobs to the queue and want them to be executed in parallel by multiple servers with a high performance. If you need these, you should consider to configure a dedicated background job software, like [Hangfire](https://www.hangfire.io/). ABP has a pre-built [Hangfire integration](../Background-Jobs-Hangfire.md), so you can switch to Hangfire without changing your application code.
