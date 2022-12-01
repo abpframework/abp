@@ -19,8 +19,8 @@ public abstract class SampleRepository_Tests<TStartupModule> : MyProjectNameTest
     }
 
     [Fact]
-    public async Task Method1Async()
+    public Task Method1Async()
     {
-
+        return Task.CompletedTask;
     }
 }
