@@ -85,9 +85,20 @@ public class EfCoreOpenIddictAuthorizationRepository : EfCoreRepository<IOpenIdd
         return await (await GetDbSetAsync())
             .Where(x => x.CreationDate < date)
             .Where(x => x.Status != OpenIddictConstants.Statuses.Valid ||
-                        (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && tokenQueryable.Any(t => t.AuthorizationId == x.Id)))
+                        (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc &&
+                         !tokenQueryable.Any(t => t.AuthorizationId == x.Id)))
             .OrderBy(x => x.Id)
             .Take(count)
             .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
+    {
+        var tokenQueryable = (await GetDbContextAsync()).Tokens.AsQueryable();
+        await DeleteDirectAsync(x => x.CreationDate < date &&
+                                     x.Status != OpenIddictConstants.Statuses.Valid ||
+                                     (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc &&
+                                      !tokenQueryable.Any(t => t.AuthorizationId == x.Id)),
+            cancellationToken: cancellationToken);
     }
 }

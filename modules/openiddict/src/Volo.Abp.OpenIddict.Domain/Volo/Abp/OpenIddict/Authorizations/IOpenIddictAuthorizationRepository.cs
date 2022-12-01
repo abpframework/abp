@@ -23,4 +23,6 @@ public interface IOpenIddictAuthorizationRepository : IBasicRepository<OpenIddic
     Task<List<OpenIddictAuthorization>> ListAsync(int? count, int? offset, CancellationToken cancellationToken = default);
 
     Task<List<OpenIddictAuthorization>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default);
+
+    Task PruneAsync(DateTime date, CancellationToken cancellationToken = default);
 }

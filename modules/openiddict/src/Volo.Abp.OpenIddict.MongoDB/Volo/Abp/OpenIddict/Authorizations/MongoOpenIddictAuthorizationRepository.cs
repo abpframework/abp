@@ -68,15 +68,23 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
     public virtual async Task<List<OpenIddictAuthorization>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default)
     {
         var tokenQueryable = await GetMongoQueryableAsync<OpenIddictToken>(GetCancellationToken(cancellationToken));
-        
-        var authorizations = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.CreationDate < date)
             .Where(x => x.Status != OpenIddictConstants.Statuses.Valid ||
-                        (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc))
+                        (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc &&
+                         !tokenQueryable.Any(t => t.AuthorizationId == x.Id)))
             .OrderBy(x => x.Id)
             .Take(count)
             .ToListAsync(GetCancellationToken(cancellationToken));
-        
-        return authorizations.Where(x => tokenQueryable.Any(t => t.AuthorizationId == x.Id)).ToList();
+    }
+
+    public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
+    {
+        var tokenQueryable = await GetMongoQueryableAsync<OpenIddictToken>(GetCancellationToken(cancellationToken));
+        await DeleteDirectAsync(x => x.CreationDate < date &&
+                                     x.Status != OpenIddictConstants.Statuses.Valid ||
+                                     (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc &&
+                                      !tokenQueryable.Any(t => t.AuthorizationId == x.Id)),
+            GetCancellationToken(cancellationToken));
     }
 }
