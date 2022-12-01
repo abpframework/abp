@@ -78,7 +78,6 @@ public class MyLogWorker : HangfireBackgroundWorkerBase, IMyLogWorker
         CronExpression = Cron.Daily();
     }
 
-    [UnitOfWork]
     public override Task DoWorkAsync(CancellationToken cancellationToken = default)
     {
         using (var uow = LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>().Begin())
