@@ -1300,6 +1300,10 @@
       "path": "Deployment/Index.md",
       "items": [
         {
+          "text": "Configuring for Production",
+          "path": "Deployment/Configuring-Production.md"
+        },
+        {
           "text": "Deploying to a Clustered Environment",
           "path": "Deployment/Clustered-Environment.md"
         }

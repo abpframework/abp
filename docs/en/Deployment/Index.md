@@ -6,4 +6,5 @@ However, there are some topics that you should care about when you are deploying
 
 ## Guides
 
+* [Configuring for production](Configuring-Production.md): Notes for some important configurations for production environments.
 * [Deploying to a clustered environment](Clustered-Environment.md): Explains how to configure your application when you want to run multiple instances of your application concurrently.
