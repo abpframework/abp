@@ -1306,6 +1306,10 @@
         {
           "text": "Deploying to a Clustered Environment",
           "path": "Deployment/Clustered-Environment.md"
+        },
+        {
+          "text": "Optimizing for Production",
+          "path": "Deployment/Optimizing-Production.md"
         }
       ]
     },
