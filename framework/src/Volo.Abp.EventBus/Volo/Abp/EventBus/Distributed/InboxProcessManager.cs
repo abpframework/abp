@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
-using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EventBus.Boxes;
+namespace Volo.Abp.EventBus.Distributed;
 
 public class InboxProcessManager : IBackgroundWorker
 {
