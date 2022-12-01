@@ -322,7 +322,7 @@ ABP Framework provides a [Distributed Entity Cache System](Entity-Cache.md) for 
 
 It's designed as read-only and automatically invalidates a cached entity if the entity is updated or deleted.
 
-> See [Entity Cache](Entity-Cache.md) documentation for more information.
+> See the [Entity Cache](Entity-Cache.md) documentation for more information.
 
 ## Extra Properties
 
