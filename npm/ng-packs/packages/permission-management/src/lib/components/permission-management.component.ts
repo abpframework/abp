@@ -156,36 +156,33 @@ export class PermissionManagementComponent
     return false;
   }
 
-  onClickCheckbox(clickedPermission: PermissionGrantInfoDto, value) {
+  onClickCheckbox(clickedPermission: PermissionGrantInfoDto, value: boolean) {
     if (
       clickedPermission.isGranted &&
       this.isGrantedByOtherProviderName(clickedPermission.grantedProviders)
-    )
+    ) {
       return;
+    }
 
-    setTimeout(() => {
-      this.permissions = this.permissions
-        .map(per => {
-          if (clickedPermission.name === per.name) {
-            return { ...per, isGranted: !per.isGranted };
-          } else if (clickedPermission.name === per.parentName && clickedPermission.isGranted) {
-            return { ...per, isGranted: false };
-          } else if (clickedPermission.parentName === per.name && !clickedPermission.isGranted) {
-            return { ...per, isGranted: true };
-          }
+    this.permissions = this.permissions.map(per => {
+      if (clickedPermission.name === per.name) {
+        return { ...per, isGranted: value };
+      }
+      return per;
+    });
 
-          return per;
-        })
-        .map((per, index, permissions) => {
-          const childrens = permissions.filter(p => p.parentName === per.name);
-          if (childrens.length > 0 && childrens.every(x => !x.isGranted)) {
-            return { ...per, isGranted: false };
-          }
-          return per;
-        });
-      this.setTabCheckboxState();
-      this.setGrantCheckboxState();
-    }, 0);
+    // find all child permissions and set them to 'value'
+    setIsGrantedtoChildrenOfPermission(this.permissions, clickedPermission, value);
+    if (!value) {
+      // find parent permission and if all child permissions are false then set parent permission to false
+      setIsGrantedtoParentWhenAllChildrenAreFalse(this.permissions, clickedPermission);
+    } else {
+      // find parent permission and if any child permission is true then set parent permission to true
+      setIsGrantedtoParentWhenAnyChildIsTrue(this.permissions, clickedPermission);
+    }
+
+    this.setTabCheckboxState();
+    this.setGrantCheckboxState();
   }
 
   setTabCheckboxState() {
@@ -339,4 +336,47 @@ function getPermissions(groups: PermissionGroupDto[]): PermissionWithGroupName[]
     (acc, val) => [...acc, ...val.permissions.map(p => ({ ...p, groupName: val.name }))],
     [],
   );
+}
+
+function setIsGrantedtoChildrenOfPermission(
+  permissions: PermissionGrantInfoDto[],
+  permission: PermissionGrantInfoDto,
+  isGranted: boolean,
+) {
+  const childrens = permissions.filter(p => p.parentName === permission.name);
+  if (childrens.length > 0) {
+    childrens.forEach(per => {
+      per.isGranted = isGranted;
+      setIsGrantedtoChildrenOfPermission(permissions, per, isGranted);
+    });
+  }
+  return permission;
+}
+
+function setIsGrantedtoParentWhenAllChildrenAreFalse(
+  permissions: PermissionWithGroupName[],
+  clickedPermission: PermissionGrantInfoDto,
+) {
+  const parentPermission = permissions.find(p => p.name === clickedPermission.parentName);
+  if (!parentPermission) {
+    return permissions;
+  }
+
+  const childrens = permissions.filter(p => p.parentName === parentPermission.name);
+  if (childrens.every(p => p.isGranted === false)) {
+    parentPermission.isGranted = false;
+  }
+}
+function setIsGrantedtoParentWhenAnyChildIsTrue(
+  permissions: PermissionWithGroupName[],
+  clickedPermission: PermissionGrantInfoDto,
+) {
+  const parentPermission = permissions.find(p => p.name === clickedPermission.parentName);
+
+  if (!parentPermission) {
+    return permissions;
+  }
+  parentPermission.isGranted = true;
+
+  return permissions;
 }
