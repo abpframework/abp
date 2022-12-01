@@ -21,7 +21,7 @@ That's all. ABP, then will add this prefix to all of your cache keys in your app
 
 > **Warning**: If you are building a microservice system, then you will have multiple applications that share the same distributed cache server. In such systems, all applications (or services) should normally use the same cache prefix, because you want all the applications to use the same cache data to have consistency between them.
 
-> **Warning**: Some of the ABP's startup templates are pre-configured to set a prefix value for the distributed cache. So, please check your application code if it is already configured.
+> **Warning**: Some of ABP's startup templates are pre-configured to set a prefix value for the distributed cache. So, please check your application code if it is already configured.
 
 ## Distributed Lock Prefix
 
