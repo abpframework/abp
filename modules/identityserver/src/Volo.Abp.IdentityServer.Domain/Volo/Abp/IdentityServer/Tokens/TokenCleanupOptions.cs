@@ -24,7 +24,7 @@ public class TokenCleanupOptions
     ///
     /// Default value: 10.
     /// </summary>
-    /// [Obsolete("This option will be removed in future versions.")]
+    [Obsolete("This option will be removed in future versions.")]
     public int CleanupLoopCount { get; set; } = 10;
 
     /// <summary>
