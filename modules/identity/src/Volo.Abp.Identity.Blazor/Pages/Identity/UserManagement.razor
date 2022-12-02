@@ -26,22 +26,27 @@ IdentityUserUpdateDto>
             </Column>
         </Row>
         @* ************************* DATA GRID ************************* *@
-        <AbpExtensibleDataGrid TItem="IdentityUserDto" Data="Entities" ReadData="OnDataGridReadAsync"
-            TotalItems="TotalCount" ShowPager="true" PageSize="PageSize" CurrentPage="@CurrentPage"
-            Columns="@UserManagementTableColumns">
+        <AbpExtensibleDataGrid TItem="IdentityUserDto"
+                               Data="Entities"
+                               ReadData="OnDataGridReadAsync"
+                               TotalItems="TotalCount"
+                               ShowPager="true"
+                               PageSize="PageSize"
+                               CurrentPage="@CurrentPage"
+                               Columns="@UserManagementTableColumns">
         </AbpExtensibleDataGrid>
     </CardBody>
 </Card>
 
 @* ************************* CREATE MODAL ************************* *@
-@if (HasCreatePermission)
+@if ( HasCreatePermission )
 {
     <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
                     <ModalTitle>@L["NewUser"]</ModalTitle>
-                    <CloseButton Clicked="CloseCreateModalAsync" />
+                    <CloseButton Clicked="CloseCreateModalAsync"/>
                 </ModalHeader>
                 <ModalBody>
                     <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
@@ -57,7 +62,7 @@ IdentityUserUpdateDto>
                                             <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
                                             <TextEdit @bind-Text="NewEntity.UserName" Autofocus="true">
                                                 <Feedback>
-                                                    <ValidationError />
+                                                    <ValidationError/>
                                                 </Feedback>
                                             </TextEdit>
                                         </Field>
@@ -67,7 +72,7 @@ IdentityUserUpdateDto>
                                             <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
                                             <TextEdit @bind-Text="NewEntity.Name">
                                                 <Feedback>
-                                                    <ValidationError />
+                                                    <ValidationError/>
                                                 </Feedback>
                                             </TextEdit>
                                         </Field>
@@ -77,7 +82,7 @@ IdentityUserUpdateDto>
                                             <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
                                             <TextEdit @bind-Text="NewEntity.Surname">
                                                 <Feedback>
-                                                    <ValidationError />
+                                                    <ValidationError/>
                                                 </Feedback>
                                             </TextEdit>
                                         </Field>
@@ -91,13 +96,10 @@ IdentityUserUpdateDto>
                                                     </TextEdit>
                                                 </Addon>
                                                 <Addon AddonType="AddonType.End">
-                                                    <Button Color="Color.Secondary"
-                                                    Clicked="@(() => ChangePasswordTextRole(null))">
-                                                        <Icon Name="IconName.EyeSlash" />
-                                                    </Button>
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"><Icon Name="IconName.EyeSlash"/></Button>
                                                 </Addon>
                                             </Addons>
-                                            <ValidationError Style="display: block" />
+                                            <ValidationError Style="display: block"/>
                                         </Field>
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
@@ -105,7 +107,7 @@ IdentityUserUpdateDto>
                                             <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
                                             <TextEdit @bind-Text="NewEntity.Email">
                                                 <Feedback>
-                                                    <ValidationError />
+                                                    <ValidationError/>
                                                 </Feedback>
                                             </TextEdit>
                                         </Field>
@@ -115,29 +117,26 @@ IdentityUserUpdateDto>
                                             <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
                                             <TextEdit @bind-Text="NewEntity.PhoneNumber">
                                                 <Feedback>
-                                                    <ValidationError />
+                                                    <ValidationError/>
                                                 </Feedback>
                                             </TextEdit>
                                         </Field>
                                     </Validation>
                                     <Field>
-                                        <Check TValue="bool" @bind-Checked="@NewEntity.IsActive">@L["DisplayName:IsActive"]
-                                        </Check>
+                                        <Check TValue="bool" @bind-Checked="@NewEntity.IsActive">@L["DisplayName:IsActive"]</Check>
                                     </Field>
                                     <Field>
-                                        <Check TValue="bool" @bind-Checked="@NewEntity.LockoutEnabled">
-                                            @L["DisplayName:LockoutEnabled"]</Check>
+                                        <Check TValue="bool" @bind-Checked="@NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
                                     </Field>
-                                    <ExtensionProperties TEntityType="IdentityUserCreateDto"
-                                    TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH" />
+                                    <ExtensionProperties TEntityType="IdentityUserCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH"/>
                                 </TabPanel>
                                 <TabPanel Name="Roles">
-                                    @if (NewUserRoles != null)
+                                    @if ( NewUserRoles != null )
                                     {
-                                        @foreach (var role in NewUserRoles)
+                                        @foreach ( var role in NewUserRoles )
                                         {
                                             <Field>
-                                                <input type="hidden" @bind-value="@role.Name" />
+                                                <input type="hidden" @bind-value="@role.Name"/>
                                                 <Check TValue="bool" @bind-Checked="@role.IsAssigned">@role.Name</Check>
                                             </Field>
                                         }
@@ -149,7 +148,7 @@ IdentityUserUpdateDto>
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Clicked="@CreateEntityAsync" />
+                    <SubmitButton Clicked="@CreateEntityAsync"/>
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -157,18 +156,18 @@ IdentityUserUpdateDto>
 }
 
 @* ************************* EDIT MODAL ************************* *@
-@if (HasUpdatePermission)
+@if ( HasUpdatePermission )
 {
     <Modal @ref="EditModal" Closing="@ClosingEditModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
                     <ModalTitle>@L["Edit"]</ModalTitle>
-                    <CloseButton Clicked="CloseEditModalAsync" />
+                    <CloseButton Clicked="CloseEditModalAsync"/>
                 </ModalHeader>
                 <ModalBody>
                     <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
-                        <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
+                        <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp"/>
 
                         <Tabs @bind-SelectedTab="@EditModalSelectedTab">
                             <Items>
@@ -182,7 +181,7 @@ IdentityUserUpdateDto>
                                             <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
                                             <TextEdit @bind-Text="EditingEntity.UserName" Autofocus="true">
                                                 <Feedback>
-                                                    <ValidationError />
+                                                    <ValidationError/>
                                                 </Feedback>
                                             </TextEdit>
                                         </Field>
@@ -192,7 +191,7 @@ IdentityUserUpdateDto>
                                             <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
                                             <TextEdit @bind-Text="EditingEntity.Name">
                                                 <Feedback>
-                                                    <ValidationError />
+                                                    <ValidationError/>
                                                 </Feedback>
                                             </TextEdit>
                                         </Field>
@@ -202,7 +201,7 @@ IdentityUserUpdateDto>
                                             <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
                                             <TextEdit @bind-Text="EditingEntity.Surname">
                                                 <Feedback>
-                                                    <ValidationError />
+                                                    <ValidationError/>
                                                 </Feedback>
                                             </TextEdit>
                                         </Field>
@@ -216,13 +215,10 @@ IdentityUserUpdateDto>
                                                     </TextEdit>
                                                 </Addon>
                                                 <Addon AddonType="AddonType.End">
-                                                    <Button Color="Color.Secondary"
-                                                    Clicked="@(() => ChangePasswordTextRole(null))">
-                                                        <Icon Name="IconName.EyeSlash" />
-                                                    </Button>
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"><Icon Name="IconName.EyeSlash"/></Button>
                                                 </Addon>
                                             </Addons>
-                                            <ValidationError Style="display: block" />
+                                            <ValidationError Style="display: block"/>
                                         </Field>
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
@@ -230,7 +226,7 @@ IdentityUserUpdateDto>
                                             <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
                                             <TextEdit @bind-Text="EditingEntity.Email">
                                                 <Feedback>
-                                                    <ValidationError />
+                                                    <ValidationError/>
                                                 </Feedback>
                                             </TextEdit>
                                         </Field>
@@ -240,29 +236,26 @@ IdentityUserUpdateDto>
                                             <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
                                             <TextEdit @bind-Text="EditingEntity.PhoneNumber">
                                                 <Feedback>
-                                                    <ValidationError />
+                                                    <ValidationError/>
                                                 </Feedback>
                                             </TextEdit>
                                         </Field>
                                     </Validation>
                                     <Field>
-                                        <Check TValue="bool" @bind-Checked="EditingEntity.IsActive">
-                                            @L["DisplayName:IsActive"]</Check>
+                                        <Check TValue="bool" @bind-Checked="EditingEntity.IsActive">@L["DisplayName:IsActive"]</Check>
                                     </Field>
                                     <Field>
-                                        <Check TValue="bool" @bind-Checked="EditingEntity.LockoutEnabled">
-                                            @L["DisplayName:LockoutEnabled"]</Check>
+                                        <Check TValue="bool" @bind-Checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
                                     </Field>
-                                    <ExtensionProperties TEntityType="IdentityUserUpdateDto"
-                                    TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH" />
+                                    <ExtensionProperties TEntityType="IdentityUserUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH"/>
                                 </TabPanel>
                                 <TabPanel Name="Roles">
-                                    @if (EditUserRoles != null)
+                                    @if ( EditUserRoles != null )
                                     {
-                                        @foreach (var role in EditUserRoles)
+                                        @foreach ( var role in EditUserRoles )
                                         {
                                             <Field>
-                                                <input type="hidden" @bind-value="@role.Name" />
+                                                <input type="hidden" @bind-value="@role.Name"/>
                                                 <Check TValue="bool" @bind-Checked="@role.IsAssigned">@role.Name</Check>
                                             </Field>
                                         }
@@ -274,14 +267,14 @@ IdentityUserUpdateDto>
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Clicked="@UpdateEntityAsync" />
+                    <SubmitButton Clicked="@UpdateEntityAsync"/>
                 </ModalFooter>
             </Form>
         </ModalContent>
     </Modal>
 }
 
-@if (HasManagePermissionsPermission)
+@if ( HasManagePermissionsPermission )
 {
-    <PermissionManagementModal @ref="PermissionManagementModal" />
+    <PermissionManagementModal @ref="PermissionManagementModal"/>
 }
