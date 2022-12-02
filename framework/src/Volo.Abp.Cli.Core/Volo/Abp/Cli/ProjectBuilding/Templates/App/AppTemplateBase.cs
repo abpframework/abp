@@ -154,6 +154,11 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
         }
 
+        if (context.BuildArgs.UiFramework != UiFramework.MauiBlazor)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MauiBlazor"));
+        }
+
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
         {
             steps.Add(new RemoveFolderStep("/angular"));
