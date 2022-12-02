@@ -7,14 +7,14 @@
 @using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
 @inject AbpBlazorMessageLocalizerHelper<IdentityResource> LH
 
-@inherits AbpCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto,
-IdentityUserUpdateDto>
+@inherits AbpCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
 
 <Card>
     <CardHeader>
         @* ************************* PAGE HEADER ************************* *@
-        <PageHeader Title="@L["Users"]" BreadcrumbItems="@BreadcrumbItems" Toolbar="@Toolbar">
-        </PageHeader>
+        <PageHeader Title="@L["Users"]"
+                    BreadcrumbItems="@BreadcrumbItems"
+                    Toolbar="@Toolbar" />
     </CardHeader>
     <CardBody>
         <Row>
