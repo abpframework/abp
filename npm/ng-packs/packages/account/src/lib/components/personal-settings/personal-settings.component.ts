@@ -36,7 +36,6 @@ export class PersonalSettingsComponent
   form: UntypedFormGroup;
 
   inProgress: boolean;
-  private profile: ProfileDto;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -79,24 +78,12 @@ export class PersonalSettingsComponent
       });
   }
 
-  isDataSame(oldValue, newValue) {
-    return Object.entries(oldValue).some(([key, value]) => {
-      if (key in newValue) {
-        return value !== newValue[key];
-      }
-      return false;
-    });
-  }
-
   logoutConfirmation = () => {
     this.authService.logout().subscribe();
   };
 
   private isLogoutConfirmMessageActive() {
-    if (!this.isPersonalSettingsChangedConfirmationActive) {
-      return false;
-    }
-    return this.isDataSame(this.profile, this.form.value);
+    return this.isPersonalSettingsChangedConfirmationActive;
   }
 
   private showLogoutConfirmMessage() {
