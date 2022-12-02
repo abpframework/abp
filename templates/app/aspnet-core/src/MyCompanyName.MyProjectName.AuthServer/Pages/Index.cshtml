@@ -71,7 +71,7 @@
                                             <abp-dropdown-menu>
                                                 @foreach (var language in Model.Languages)
                                                 {
-                                                    <a class="dropdown-item" href="~/Abp/Languages/Switch?culture=@(language.CultureName)&uiCulture=@(language.UiCultureName)&returnUrl=@(System.Net.WebUtility.UrlEncode(Request.GetEncodedPathAndQuery()))">@language.DisplayName</a>
+                                                    <abp-dropdown-item href="@Url.Content($"~/Abp/Languages/Switch?culture={language.CultureName}&uiCulture={language.UiCultureName}&returnUrl={System.Net.WebUtility.UrlEncode(Request.GetEncodedPathAndQuery())}")">@language.DisplayName</abp-dropdown-item>
                                                 }
                                             </abp-dropdown-menu>
                                         </abp-dropdown>
