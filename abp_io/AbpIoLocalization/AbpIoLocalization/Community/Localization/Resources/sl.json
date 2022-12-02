@@ -142,6 +142,7 @@
     "MinimumSearchContent": "Vnesti morate vsaj 3 znake!",
     "Volo.AbpIo.Domain:060001": "Izvorni URL (\"{PostUrl}\") ni URL Github",
     "Volo.AbpIo.Domain:060002": "Vsebina članka ni na voljo iz vira Github(\"{PostUrl}\").",
-    "Volo.AbpIo.Domain:060003": "Vsebina članka ni bila najdena!"
+    "Volo.AbpIo.Domain:060003": "Vsebina članka ni bila najdena!",
+    "IConsentToMedium": "Soglašam z objavo te objave na https://medium.com/volosoft."
   }
 }

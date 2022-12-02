@@ -47,12 +47,12 @@
 
 @code
 {
-    private IEnumerable<Claim> _claims;
+    private IEnumerable<Claim>? _claims;
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        if (authState.User.Identity.IsAuthenticated)
+        if (authState.User.Identity != null && authState.User.Identity.IsAuthenticated)
         {
             _claims = authState.User.Claims;
         }

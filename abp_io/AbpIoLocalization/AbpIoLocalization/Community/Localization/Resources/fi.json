@@ -143,6 +143,7 @@
     "Volo.AbpIo.Domain:060001": "Lähteen URL-osoite (\"{PostUrl}\") ei ole Githubin URL-osoite",
     "Volo.AbpIo.Domain:060002": "Artikkelin sisältö ei ole saatavilla Githubin (\"{PostUrl}\") -resurssista.",
     "Volo.AbpIo.Domain:060003": "Artikkelin sisältöä ei löytynyt!",
-    "SeeMore": "Katso Lisää"
+    "SeeMore": "Katso Lisää",
+    "IConsentToMedium": "Hyväksyn tämän viestin julkaisemisen osoitteessa https://medium.com/volosoft."
   }
 }
