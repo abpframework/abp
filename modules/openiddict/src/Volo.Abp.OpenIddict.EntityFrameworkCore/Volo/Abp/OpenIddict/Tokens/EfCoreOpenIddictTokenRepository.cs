@@ -87,34 +87,16 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<OpenIddictToken>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default)
-    {
-        return await (from token in await GetQueryableAsync()
-            join authorization in (await GetDbContextAsync()).Set<OpenIddictAuthorization>().AsQueryable()
-                on token.AuthorizationId equals authorization.Id into ta
-            from a in ta
-            where token.CreationDate < date
-            where (token.Status != OpenIddictConstants.Statuses.Inactive &&
-                   token.Status != OpenIddictConstants.Statuses.Valid) ||
-                  (a != null && a.Status != OpenIddictConstants.Statuses.Valid) ||
-                  token.ExpirationDate < DateTime.UtcNow
-            orderby token.Id
-            select token).Take(count)
-            .ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
     public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
     {
         await (from token in await GetQueryableAsync()
-                join authorization in (await GetDbContextAsync()).Set<OpenIddictAuthorization>().AsQueryable()
-                    on token.AuthorizationId equals authorization.Id into ta
-                from a in ta
+                join authorization in (await GetDbContextAsync()).Set<OpenIddictAuthorization>()
+                    on token.AuthorizationId equals authorization.Id into tokenAuthorizations
+                from tokenAuthorization in tokenAuthorizations.DefaultIfEmpty()
                 where token.CreationDate < date
-                where (token.Status != OpenIddictConstants.Statuses.Inactive &&
-                       token.Status != OpenIddictConstants.Statuses.Valid) ||
-                      (a != null && a.Status != OpenIddictConstants.Statuses.Valid) ||
+                where (token.Status != OpenIddictConstants.Statuses.Inactive && token.Status != OpenIddictConstants.Statuses.Valid) ||
+                      (tokenAuthorization != null && tokenAuthorization.Status != OpenIddictConstants.Statuses.Valid) ||
                       token.ExpirationDate < DateTime.UtcNow
-                orderby token.Id
                 select token)
             .ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
     }
