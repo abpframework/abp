@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Data;
+using MyCompanyName.MyProjectName.Server.Data;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Migrations
+namespace MyCompanyName.MyProjectName.Server.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
     partial class MyProjectNameDbContextModelSnapshot : ModelSnapshot

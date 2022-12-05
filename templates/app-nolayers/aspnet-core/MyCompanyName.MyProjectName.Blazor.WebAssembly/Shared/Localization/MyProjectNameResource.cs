@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Localization;
 
-namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared.Localization;
+namespace MyCompanyName.MyProjectName.Shared.Localization;
 
 [LocalizationResourceName("MyProjectName")]
 public class MyProjectNameResource

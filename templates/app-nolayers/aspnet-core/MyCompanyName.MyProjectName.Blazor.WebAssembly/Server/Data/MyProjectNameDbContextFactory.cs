@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Data;
+namespace MyCompanyName.MyProjectName.Server.Data;
 
 public class MyProjectNameDbContextFactory : IDesignTimeDbContextFactory<MyProjectNameDbContext>
 {

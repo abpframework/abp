@@ -1,4 +1,4 @@
-﻿namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared.MultiTenancy;
+﻿namespace MyCompanyName.MyProjectName.Shared.MultiTenancy;
 
 public static class MultiTenancyConsts
 {

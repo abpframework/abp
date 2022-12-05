@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Bundling;
 
-namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Client;
+namespace MyCompanyName.MyProjectName.Client;
 
 /* Add your global styles/scripts here.
  * See https://docs.abp.io/en/abp/latest/UI/Blazor/Global-Scripts-Styles to learn how to use it

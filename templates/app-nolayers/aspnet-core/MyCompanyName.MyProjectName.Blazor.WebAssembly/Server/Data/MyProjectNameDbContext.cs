@@ -8,7 +8,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
-namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Data;
+namespace MyCompanyName.MyProjectName.Server.Data;
 
 public class MyProjectNameDbContext : AbpDbContext<MyProjectNameDbContext>
 {

@@ -1,4 +1,4 @@
-﻿namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Client.Pages;
+﻿namespace MyCompanyName.MyProjectName.Client.Pages;
 
 public partial class Index
 {

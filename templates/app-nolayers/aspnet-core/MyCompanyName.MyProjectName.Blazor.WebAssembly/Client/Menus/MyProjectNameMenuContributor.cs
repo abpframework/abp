@@ -1,6 +1,6 @@
 ﻿using MyCompanyName.MyProjectName.Blazor.Menus;
-using MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared.Localization;
-using MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared.MultiTenancy;
+using MyCompanyName.MyProjectName.Shared.Localization;
+using MyCompanyName.MyProjectName.Shared.MultiTenancy;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Identity.Blazor;
@@ -8,7 +8,7 @@ using Volo.Abp.SettingManagement.Blazor.Menus;
 using Volo.Abp.TenantManagement.Blazor.Navigation;
 using Volo.Abp.UI.Navigation;
 
-namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Client.Menus;
+namespace MyCompanyName.MyProjectName.Client.Menus;
 
 public class MyProjectNameMenuContributor : IMenuContributor
 {
@@ -45,9 +45,9 @@ public class MyProjectNameMenuContributor : IMenuContributor
                 order: 0
             )
         );
-     
+
         var administration = context.Menu.GetAdministration();
-        
+
         if (MultiTenancyConsts.IsEnabled)
         {
             administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
@@ -56,7 +56,7 @@ public class MyProjectNameMenuContributor : IMenuContributor
         {
             administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
         }
-        
+
         administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
         administration.SetSubItemOrder(SettingManagementMenus.GroupName, 3);
 

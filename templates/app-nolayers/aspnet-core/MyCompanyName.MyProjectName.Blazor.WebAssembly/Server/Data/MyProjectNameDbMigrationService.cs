@@ -7,7 +7,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TenantManagement;
 
-namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Data;
+namespace MyCompanyName.MyProjectName.Server.Data;
 
 public class MyProjectNameDbMigrationService : ITransientDependency
 {

@@ -1,8 +1,8 @@
 ﻿using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using MyCompanyName.MyProjectName.Blazor.WebAssembly.Client.Menus;
-using MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared;
+using MyCompanyName.MyProjectName.Client.Menus;
+using MyCompanyName.MyProjectName.Shared;
 using OpenIddict.Abstractions;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite;
@@ -22,33 +22,33 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Blazor.WebAssembly;
 using Volo.Abp.UI.Navigation;
 
-namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Client;
+namespace MyCompanyName.MyProjectName.Client;
 
 [DependsOn(
     typeof(MyProjectNameSharedModule),
-    
+
     // ABP Framework packages
     typeof(AbpAutofacWebAssemblyModule),
     typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule),
-    
+
     // Account module packages
     typeof(AbpAccountHttpApiClientModule),
-    
+
     // Identity module packages
     typeof(AbpIdentityHttpApiClientModule),
     typeof(AbpIdentityBlazorWebAssemblyModule),
     typeof(AbpOpenIddictDomainSharedModule),
-    
+
     // Permission Management module packages
     typeof(AbpPermissionManagementHttpApiClientModule),
 
     // Tenant Management module packages
     typeof(AbpTenantManagementHttpApiClientModule),
     typeof(AbpTenantManagementBlazorWebAssemblyModule),
-    
+
     // Feature Management module packages
     typeof(AbpFeatureManagementHttpApiClientModule),
-    
+
     // Setting Management module packages
     typeof(AbpSettingManagementHttpApiClientModule),
     typeof(AbpSettingManagementBlazorWebAssemblyModule)
@@ -56,7 +56,7 @@ namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Client;
 public class MyProjectNameBlazorModule : AbpModule
 {
     public const string RemoteServiceName = "Default";
-    
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var environment = context.Services.GetSingletonInstance<IWebAssemblyHostEnvironment>();
@@ -94,7 +94,7 @@ public class MyProjectNameBlazorModule : AbpModule
             .AddBootstrap5Providers()
             .AddFontAwesomeIcons();
     }
-    
+
     private void ConfigureHttpClientProxies(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClientProxies(

@@ -1,7 +1,7 @@
-﻿using MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared.Localization;
+﻿using MyCompanyName.MyProjectName.Shared.Localization;
 using Volo.Abp.AspNetCore.Components;
 
-namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Client;
+namespace MyCompanyName.MyProjectName.Client;
 
 public abstract class MyProjectNameComponentBase : AbpComponentBase
 {

@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", "MyCompanyName.MyProjectName.Blazor.WebAssembly\Shared\MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared.csproj", "{430B37D2-9008-4704-8FC7-77A2DF3F3587}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo", "MyCompanyName.MyProjectName.Blazor.WebAssembly\Server.Mongo\MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo.csproj", "{36773181-4623-41E0-B456-67C1EEC03A2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{430B37D2-9008-4704-8FC7-77A2DF3F3587}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{430B37D2-9008-4704-8FC7-77A2DF3F3587}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{430B37D2-9008-4704-8FC7-77A2DF3F3587}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36773181-4623-41E0-B456-67C1EEC03A2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36773181-4623-41E0-B456-67C1EEC03A2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36773181-4623-41E0-B456-67C1EEC03A2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36773181-4623-41E0-B456-67C1EEC03A2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

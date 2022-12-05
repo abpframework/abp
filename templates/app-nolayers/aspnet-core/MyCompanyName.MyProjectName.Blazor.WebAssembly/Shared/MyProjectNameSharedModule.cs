@@ -1,4 +1,4 @@
-﻿using MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared.Localization;
+﻿using MyCompanyName.MyProjectName.Shared.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
@@ -6,7 +6,7 @@ using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared;
+namespace MyCompanyName.MyProjectName.Shared;
 
 [DependsOn(
     typeof(AbpValidationModule)

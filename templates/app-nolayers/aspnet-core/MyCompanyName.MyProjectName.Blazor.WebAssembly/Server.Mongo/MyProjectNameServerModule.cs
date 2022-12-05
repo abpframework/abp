@@ -19,29 +19,27 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
-using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Emailing;
-using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement;
-using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement.MongoDB;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.Identity.MongoDB;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.MongoDB;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
-using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.MongoDB;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;
 using Volo.Abp.VirtualFileSystem;
@@ -57,7 +55,6 @@ namespace MyCompanyName.MyProjectName.Server;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAutofacModule),
     typeof(AbpAutoMapperModule),
-    typeof(AbpEntityFrameworkCoreSqlServerModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -72,30 +69,30 @@ namespace MyCompanyName.MyProjectName.Server;
     typeof(AbpPermissionManagementDomainOpenIddictModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
-    typeof(AbpIdentityEntityFrameworkCoreModule),
-    typeof(AbpOpenIddictEntityFrameworkCoreModule),
+    typeof(AbpIdentityMongoDbModule),
+    typeof(AbpOpenIddictMongoDbModule),
 
     // Audit logging module packages
-    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+    typeof(AbpAuditLoggingMongoDbModule),
 
     // Permission Management module packages
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpPermissionManagementHttpApiModule),
-    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementMongoDbModule),
 
     // Tenant Management module packages
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpTenantManagementHttpApiModule),
-    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpTenantManagementMongoDbModule),
 
     // Feature Management module packages
     typeof(AbpFeatureManagementApplicationModule),
-    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementMongoDbModule),
     typeof(AbpFeatureManagementHttpApiModule),
 
     // Setting Management module packages
     typeof(AbpSettingManagementApplicationModule),
-    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementMongoDbModule),
     typeof(AbpSettingManagementHttpApiModule)
 )]
 public class MyProjectNameServerModule : AbpModule
@@ -140,7 +137,7 @@ public class MyProjectNameServerModule : AbpModule
             ConfigureVirtualFiles(hostingEnvironment);
             ConfigureCors(context, configuration);
             ConfigureDataProtection(context);
-            ConfigureEfCore(context);
+            ConfigureMongoDB(context);
         }
 
         private void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -253,31 +250,17 @@ public class MyProjectNameServerModule : AbpModule
             context.Services.AddDataProtection().SetApplicationName("MyProjectName");
         }
 
-        private void ConfigureEfCore(ServiceConfigurationContext context)
+        private void ConfigureMongoDB(ServiceConfigurationContext context)
         {
-            context.Services.AddAbpDbContext<MyProjectNameDbContext>(options =>
+            context.Services.AddMongoDbContext<MyProjectNameDbContext>(options =>
             {
-                /* You can remove "includeAllEntities: true" to create
-                 * default repositories only for aggregate roots
-                 * Documentation: https://docs.abp.io/en/abp/latest/Entity-Framework-Core#add-default-repositories
-                 */
-                options.AddDefaultRepositories(includeAllEntities: true);
+                options.AddDefaultRepositories();
             });
 
-            Configure<AbpDbContextOptions>(options =>
-            {
-                options.Configure(configurationContext =>
-                {
-                    configurationContext.UseSqlServer();
-                });
-            });
-
-            //<TEMPLATE-REMOVE IF-NOT='dbms:SQLite'>
             Configure<AbpUnitOfWorkDefaultOptions>(options =>
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
             });
-            //</TEMPLATE-REMOVE>
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
