@@ -12,22 +12,27 @@ import { of } from 'rxjs';
 import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+import { LazyLoadService, LOADING_STRATEGY, SubscriptionService } from '@abp/ng.core';
 
 export type DropEvent = NzFormatEmitEvent & { pos: number };
 
 @Component({
   selector: 'abp-tree',
   templateUrl: 'tree.component.html',
-  styleUrls: [
-    '../../../../../../node_modules/ng-zorro-antd/tree/style/index.min.css',
-    'tree.component.scss',
-  ],
+  styleUrls: ['tree.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  providers: [SubscriptionService],
 })
 export class TreeComponent {
   dropPosition: number;
 
   dropdowns = {} as { [key: string]: NgbDropdown };
+  constructor(private lazyLoadService: LazyLoadService, subscriptionService: SubscriptionService) {
+    const loaded$ = this.lazyLoadService.load(
+      LOADING_STRATEGY.AppendAnonymousStyleToHead('ng-zorro-antd-tree.css'),
+    );
+    subscriptionService.addOne(loaded$);
+  }
 
   @ContentChild('menu') menu: TemplateRef<any>;
   @ContentChild(TreeNodeTemplateDirective) customNodeTemplate: TreeNodeTemplateDirective;
