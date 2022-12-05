@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Volo.Abp.EventBus.Boxes;
+namespace Volo.Abp.EventBus.Distributed;
 
 public class AbpEventBusBoxesOptions
 {
