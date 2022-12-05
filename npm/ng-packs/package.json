@@ -71,7 +71,7 @@
     "@abp/ng.theme.basic": "~7.0.0-rc.2",
     "@abp/ng.theme.shared": "~7.0.0-rc.2",
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "@ng-bootstrap/ng-bootstrap": "~13.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^14.0.0-rc.1",
     "@ngneat/spectator": "^10.0.0",
     "@ngx-validate/core": "^0.2.0",
     "@nrwl/angular": "15.2.1",

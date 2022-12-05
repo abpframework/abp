@@ -9,7 +9,7 @@
   "dependencies": {
     "@abp/ng.core": "~7.0.0-rc.2",
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "@ng-bootstrap/ng-bootstrap": "13.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^14.0.0-rc.1",
     "@ngx-validate/core": "^0.2.0",
     "@popperjs/core": "~2.11.2",
     "@swimlane/ngx-datatable": "^20.0.0",
