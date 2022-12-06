@@ -62,7 +62,7 @@
   typeof(AbpAccountWebOpenIddictModule),
   ```
 
-- In the **MyApplicationBlazorModule.cs** add `PreConfigureServices` like below with your application name as the audience:
+- In the **MyApplicationHostModule.cs** add `PreConfigureServices` like below with your application name as the audience:
 
   ```csharp
   public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -79,7 +79,7 @@
   }
   ```
 
-- In the **MyApplicationBlazorModule.cs** `ConfigureServices` method, **replace the method call**:
+- In the **MyApplicationHostModule.cs** `ConfigureServices` method, **replace the method call**:
 
   From `ConfigureAuthentication(context, configuration);` to `ConfigureAuthentication(context);` and update the method as:
 
@@ -90,7 +90,7 @@
   }
   ```
 
-- In the **MyApplicationBlazorModule.cs** `OnApplicationInitialization` method, **replace the midware**:
+- In the **MyApplicationHostModule.cs** `OnApplicationInitialization` method, **replace the midware**:
 
   ```csharp
   app.UseJwtTokenMiddleware();
