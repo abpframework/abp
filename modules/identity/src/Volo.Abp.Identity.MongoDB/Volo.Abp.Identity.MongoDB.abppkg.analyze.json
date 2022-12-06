@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.MongoDB",
-  "hash": "49aaf97ee2cd1733544921cdaf142f7c",
+  "hash": "00188a3684ee8caa0e14d455a798e107",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.MongoDB",
@@ -31,15 +31,9 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
+          "entityFullName": "Volo.Abp.Identity.IdentityUser",
           "contentType": "databaseCollection",
-          "name": "AbpLinkUsers",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
-          "contentType": "databaseCollection",
-          "name": "AbpOrganizationUnits",
+          "name": "AbpUsers",
           "summary": null
         },
         {
@@ -55,9 +49,15 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.Identity.IdentityUser",
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
           "contentType": "databaseCollection",
-          "name": "AbpUsers",
+          "name": "AbpOrganizationUnits",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
+          "contentType": "databaseCollection",
+          "name": "AbpLinkUsers",
           "summary": null
         }
       ],

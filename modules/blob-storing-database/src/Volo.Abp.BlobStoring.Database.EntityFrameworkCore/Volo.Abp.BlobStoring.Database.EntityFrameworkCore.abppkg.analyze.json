@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
-  "hash": "d25ebba701f3361cd8147e381b20df8e",
+  "hash": "5b426ae9e49adf8452f9d161cf1088dc",
   "contents": [
     {
       "namespace": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",

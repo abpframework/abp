@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
-  "hash": "b16dd53ece11775e42fd92bb1a84e900",
+  "hash": "746a6bae038ff9979209daf244a67b58",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
