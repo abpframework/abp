@@ -35,4 +35,8 @@
     <Content Remove="wwwroot\**\*.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Pages\Public\CmsKit\Blogs\blogPost.js" />
+  </ItemGroup>
+
 </Project>

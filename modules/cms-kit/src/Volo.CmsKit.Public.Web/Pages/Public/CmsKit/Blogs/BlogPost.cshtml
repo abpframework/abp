@@ -50,14 +50,15 @@
     <abp-script-bundle>
         <abp-script type="typeof(HighlightJsScriptContributor)" />
         <abp-script src="/Pages/Public/CmsKit/highlightOnLoad.js" />
+        <abp-script src="/Pages/Public/CmsKit/Blogs/blogPost.js" />
     </abp-script-bundle>
 }
-
 
     <div class="row">
         <div @Html.Raw(isScrollIndexEnabled ? "class=\"col-md-10 col-sm-12\"" : "class=\"col-md-12\"")>
             <abp-card class="mb-4">
                 <img src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
+                <input hidden id="BlogId" value="@Model.ViewModel.Id" />
                 <abp-card-body>
                     <abp-row>
                         <div class="col-lg-8 col-md-10 mx-auto pb-4">
@@ -109,10 +110,10 @@
                             if (Model.ReactionsFeature?.IsEnabled == true)
                             {
                                 @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
-                        {
-                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                        entityId = Model.ViewModel.Id.ToString()
-                        })
+                                {
+                                    entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                                    entityId = Model.ViewModel.Id.ToString()
+                                })
                             }
                         }
                     </abp-column>
@@ -122,10 +123,10 @@
                             if (Model.RatingsFeature?.IsEnabled == true)
                             {
                                 @await Component.InvokeAsync(typeof(RatingViewComponent), new
-                        {
-                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                        entityId = Model.ViewModel.Id.ToString()
-                        })
+                                {
+                                    entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                                    entityId = Model.ViewModel.Id.ToString()
+                                })
                             }
                         }
                     </abp-column>
@@ -133,24 +134,31 @@
             </abp-card-body>
         </abp-card>
     </div>
-    @if (isScrollIndexEnabled)
-    {
-        <div class="col-md-2 d-sm-none d-md-block">
-            <div id="scroll-index" class="docs-inner-anchors mt-2">
-                <h5>@L["InThisDocument"]</h5>
-                <nav id="blog-post-sticky-index" class="navbar index-scroll pt-0">
-                </nav>
 
-                <div class="row">
-                    <div class="col p-0 py-3">
-                        <a href="#" class="scroll-top-btn">
-                            <i class="fa fa-chevron-up"></i> @L["GoToTop"]
-                        </a>
+    <div class="col-md-2 d-sm-none d-md-block">
+        <button id="deleteBlogPost" class="btn btn-danger">
+            <i class="fa fa-remove">
+                @L["Delete"]
+            </i>
+        </button>
+    
+        @if (isScrollIndexEnabled)
+        {
+                <div id="scroll-index" class="docs-inner-anchors mt-2">
+                    <h5>@L["InThisDocument"]</h5>
+                    <nav id="blog-post-sticky-index" class="navbar index-scroll pt-0">
+                    </nav>
+
+                    <div class="row">
+                        <div class="col p-0 py-3">
+                            <a href="#" class="scroll-top-btn">
+                                <i class="fa fa-chevron-up"></i> @L["GoToTop"]
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    }
+        }
+    </div>
 
 </div>
 
