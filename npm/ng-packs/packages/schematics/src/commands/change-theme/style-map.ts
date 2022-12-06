@@ -159,7 +159,7 @@ styleMap.set(ThemeOptionsEnum.LeptonX, [
   {
     input: 'node_modules/@volosoft/ngx-lepton-x/assets/css/bootstrap-light.rtl.css',
     inject: false,
-
+    bundleName: 'bootstrap-light.rtl',
   },
   {
     input: 'node_modules/@volosoft/ngx-lepton-x/assets/css/font-bundle.css',
@@ -194,11 +194,6 @@ styleMap.set(ThemeOptionsEnum.LeptonXLite, [
     bundleName: 'bootstrap-dim',
   },
   {
-    input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.css',
-    inject: false,
-    bundleName: 'font-bundle',
-  },
-  {
     input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.css',
     inject: false,
     bundleName: 'ng-bundle',
@@ -224,9 +219,9 @@ styleMap.set(ThemeOptionsEnum.LeptonXLite, [
     bundleName: 'font-bundle.rtl',
   },
   {
-    input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.rtl.css',
+    input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.css',
     inject: false,
-    bundleName: 'font-bundle.rtl',
+    bundleName: 'font-bundle',
   },
   {
     input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.rtl.css',
