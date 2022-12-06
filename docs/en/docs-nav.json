@@ -154,40 +154,12 @@
       "text": "Fundamentals",
       "items": [
         {
-          "text": "Dependency Injection",
-          "path": "Dependency-Injection.md",
-          "items": [
-            {
-              "text": "AutoFac Integration",
-              "path": "Autofac-Integration.md"
-            }
-          ]
-        },
-        {
-          "text": "Configuration",
-          "path": "Configuration.md"
-        },
-        {
-          "text": "Options",
-          "path": "Options.md"
+          "text": "Application Startup",
+          "path": "Application-Startup.md"
         },
         {
           "text": "Authorization",
           "path": "Authorization.md"
-        },
-        {
-          "text": "Validation",
-          "path": "Validation.md",
-          "items": [
-            {
-              "text": "FluentValidation Integration",
-              "path": "FluentValidation.md"
-            }
-          ]
-        },
-        {
-          "text": "Localization",
-          "path": "Localization.md"
         },
         {
           "text": "Caching",
@@ -200,24 +172,56 @@
           ]
         },
         {
-          "text": "Exception Handling",
-          "path": "Exception-Handling.md"
-        },
-        {
-          "text": "Settings",
-          "path": "Settings.md"
+          "text": "Configuration",
+          "path": "Configuration.md"
         },
         {
           "text": "Connection Strings",
           "path": "Connection-Strings.md"
         },
         {
-          "text": "Object Extensions",
-          "path": "Object-Extensions.md"
+          "text": "Dependency Injection",
+          "path": "Dependency-Injection.md",
+          "items": [
+            {
+              "text": "AutoFac Integration",
+              "path": "Autofac-Integration.md"
+            }
+          ]
+        },
+        {
+          "text": "Exception Handling",
+          "path": "Exception-Handling.md"
+        },
+        {
+          "text": "Localization",
+          "path": "Localization.md"
         },
         {
           "text": "Logging",
           "path": "Logging.md"
+        },
+        {
+          "text": "Object Extensions",
+          "path": "Object-Extensions.md"
+        },
+        {
+          "text": "Options",
+          "path": "Options.md"
+        },
+        {
+          "text": "Settings",
+          "path": "Settings.md"
+        },
+        {
+          "text": "Validation",
+          "path": "Validation.md",
+          "items": [
+            {
+              "text": "FluentValidation Integration",
+              "path": "FluentValidation.md"
+            }
+          ]
         }
       ]
     },
@@ -1310,6 +1314,10 @@
         {
           "text": "Deploying to a Clustered Environment",
           "path": "Deployment/Clustered-Environment.md"
+        },
+        {
+          "text": "Distributed / Microservice Solutions",
+          "path": "Distributed-Microservice.md"
         },
         {
           "text": "Optimizing for Production",
