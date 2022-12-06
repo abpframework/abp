@@ -117,11 +117,6 @@ styleMap.set(ThemeOptionsEnum.LeptonX, [
     bundleName: 'bootstrap-light',
   },
   {
-    input: 'node_modules/@volosoft/ngx-lepton-x/assets/css/font-bundle.css',
-    inject: false,
-    bundleName: 'font-bundle.rtl',
-  },
-  {
     input: 'node_modules/@volosoft/ngx-lepton-x/assets/css/ng-bundle.css',
     inject: false,
     bundleName: 'ng-bundle',
