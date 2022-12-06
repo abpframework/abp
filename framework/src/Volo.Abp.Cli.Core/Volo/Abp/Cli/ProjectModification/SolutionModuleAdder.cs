@@ -428,6 +428,11 @@ public class SolutionModuleAdder : ITransientDependency
         await PublishEventAsync(9, $"Adding angular source code");
 
         await AngularSourceCodeAdder.AddFromModuleAsync(solutionFilePath, angularPath);
+
+        if (newTemplate)
+        {
+            await AngularSourceCodeAdder.AddModuleConfigurationAsync(angularPath, moduleName);
+        }
     }
 
     private static void DeleteAngularDirectoriesInModulesFolder(string modulesFolderInSolution)
