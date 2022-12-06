@@ -597,18 +597,6 @@
       "text": "API",
       "items": [
         {
-          "text": "Auto API Controllers",
-          "path": "API/Auto-API-Controllers.md"
-        },
-        {
-          "text": "Dynamic C# API Clients",
-          "path": "API/Dynamic-CSharp-API-Clients.md"
-        },
-        {
-          "text": "Static C# API Clients",
-          "path": "API/Static-CSharp-API-Clients.md"
-        },
-        {
           "text": "ABP Endpoints",
           "items": [
             {
@@ -622,12 +610,28 @@
           ]
         },
         {
-          "text": "Swagger Integration",
-          "path": "API/Swagger-Integration.md"
-        },
-        {
           "text": "API Versioning",
           "path": "API/API-Versioning.md"
+        },
+        {
+          "text": "Auto API Controllers",
+          "path": "API/Auto-API-Controllers.md"
+        },
+        {
+          "text": "Dynamic C# API Clients",
+          "path": "API/Dynamic-CSharp-API-Clients.md"
+        },
+        {
+          "text": "Integration Services",
+          "path": "Integration-Services.md"
+        },
+        {
+          "text": "Static C# API Clients",
+          "path": "API/Static-CSharp-API-Clients.md"
+        },
+        {
+          "text": "Swagger Integration",
+          "path": "API/Swagger-Integration.md"
         }
       ]
     },
