@@ -30,6 +30,16 @@ await builder.AddApplicationAsync<OrderingServiceHttpApiHostModule>(options =>
 });
 ````
 
+## Using a Distributed Event Bus
 
+ABP's [Distributed Event Bus](../Distributed-Event-Bus.md) system provides a standard interface to communicate to other applications and services. While the name is "distributed", the default implementation is in-process. That means, your applications / services can not communicate to each other unless you explicitly configure a distributed event bus provider.
 
-s
+If you are building a distributed system, then the applications should communicate through an external distributed messaging server. Please follow the [Distributed Event Bus](../Distributed-Event-Bus.md) document to learn how to install and configure your distributed event bus provider.
+
+> **Warning**: Even if you don't use the distributed event bus directly in your application code, the ABP Framework and some of the modules you are using may use it. So, if you are building a distributed system, always configure a distributed event bus provider.
+
+> **Info**: [Clustered deployment](Clustered-Environment.md) of a single application is not considered as a distributed system. So, if you only have a single application with multiple instances serving behind a load balancer, a real distributed messaging server may not be needed.
+
+## See Also
+
+* [Deploying to a Clustered Environment](Clustered-Environment.md)
