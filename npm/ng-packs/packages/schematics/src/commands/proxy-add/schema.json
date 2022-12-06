@@ -48,6 +48,34 @@
         "index": 4
       },
       "x-prompt": "Please enter URL for API definition (default: API Name's url in environment file)"
+    },
+    "serviceType": {
+      "description": "Service type to the generated code",
+      "type": "string",
+      "$default": "application",
+      "enum": [
+        "application",
+        "integration",
+        "all"
+      ],
+      "x-prompt": {
+        "message": "Specifies the service type to generate. `application`, `integration` and `all`, Default value: `application`",
+        "type": "list",
+        "items": [
+          {
+            "value": "all",
+            "label": "All"
+          },
+          {
+            "value": "application",
+            "label": "Application"
+          },
+          {
+            "value": "integration",
+            "label": "Integration"
+          }
+        ]
+      }
     }
   },
   "entryPoint": {

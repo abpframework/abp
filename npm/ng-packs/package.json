@@ -36,7 +36,7 @@
     "lerna": "lerna",
     "migrate-nx": "yarn nx migrate --run-migrations",
     "mock:schematics": "cd scripts/mock-schematic && yarn && yarn start",
-    "debug:schematics": "./node_modules/.bin/ng g ./packages/schematics/src/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url http://localhost:4300"
+    "debug:schematics": "./node_modules/.bin/ng g ./packages/schematics/src/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url https://localhost:44305 --serviceType application"
   },
   "private": true,
   "devDependencies": {
