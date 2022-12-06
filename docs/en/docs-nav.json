@@ -1312,6 +1312,10 @@
           "path": "Deployment/Clustered-Environment.md"
         },
         {
+          "text": "Distributed / Microservice Solutions",
+          "path": "Distributed-Microservice.md"
+        },
+        {
           "text": "Optimizing for Production",
           "path": "Deployment/Optimizing-Production.md"
         }
