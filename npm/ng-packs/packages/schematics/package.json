@@ -1,7 +1,7 @@
 {
   "name": "@abp/ng.schematics",
   "version": "7.0.0-rc.2",
-  "description": "Schematics that works with ABP Backend. powered by HOLY Odin!",
+  "description": "Schematics that works with ABP Backend.",
   "keywords": [
     "schematics"
   ],
