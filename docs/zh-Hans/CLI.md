@@ -259,6 +259,7 @@ abp generate-proxy -t csharp -url https://localhost:44302/
 
 * `--type` 或 `-t`: 客户端类型的名称. 可用的客户端有:
   * `csharp`: C#, 工作在 `*.HttpApi.Client` 项目目录. 此客户端有一些可选选项:
+    * `--without-contracts`: 取消生成应用程序服务接口,类,枚举和DTO.
     * `--folder`: 放置生成的 CSharp 代码的文件夹名称. 默认值: `ClientProxies`.
   * `ng`: Angular. 此客户端有一些可选选项:
     * `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
