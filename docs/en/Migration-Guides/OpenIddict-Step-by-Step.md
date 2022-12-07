@@ -146,6 +146,17 @@ If you are using MongoDB, skip this step and check the *MongoDB* layer section.
       ...
       builder.ConfigureOpenIddict();
   ```
+- Add migration to create new tables in database
+
+  ```csharp
+  MyApplication\src\MyApplication.EntityFrameworkCore> dotnet ef migrations add OpenIddict
+  MyApplication\src\MyApplication.EntityFrameworkCore> dotnet ef database update
+  ```
+  
+  
+     
+
+  ```csharp
 
 ### MongoDB Layer
 
