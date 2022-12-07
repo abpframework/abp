@@ -52,7 +52,10 @@
     "serviceType": {
       "description": "Service type to the generated code",
       "type": "string",
-      "$default": "application",
+      "$default": {
+        "$source": "argv",
+        "index": 5
+      },
       "enum": [
         "application",
         "integration",
