@@ -142,6 +142,7 @@
     "MinimumSearchContent": "Musíte zadat alespoň 3 znaky!",
     "Volo.AbpIo.Domain:060001": "Zdrojová adresa URL („{PostUrl}“) není adresa URL Github",
     "Volo.AbpIo.Domain:060002": "Obsah článku není dostupný ze zdroje Github(\"{PostUrl}\").",
-    "Volo.AbpIo.Domain:060003": "Nebyl nalezen žádný obsah článku!"
+    "Volo.AbpIo.Domain:060003": "Nebyl nalezen žádný obsah článku!",
+    "IConsentToMedium": "Souhlasím se zveřejněním tohoto příspěvku na https://medium.com/volosoft."
   }
 }

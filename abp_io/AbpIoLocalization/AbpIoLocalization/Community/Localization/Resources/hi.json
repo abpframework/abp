@@ -143,6 +143,7 @@
     "Volo.AbpIo.Domain:060001": "स्रोत URL (\"{PostUrl}\") जीथब URL नहीं है",
     "Volo.AbpIo.Domain:060002": "लेख सामग्री Github (\"{PostUrl}\") संसाधन से उपलब्ध नहीं है।",
     "Volo.AbpIo.Domain:060003": "कोई लेख सामग्री नहीं मिली!",
-    "SeeMore": "और देखें"
+    "SeeMore": "और देखें",
+    "IConsentToMedium": "मैं https://medium.com/volosoft पर इस पोस्ट के प्रकाशन के लिए सहमति देता/देती हूं।"
   }
 }
