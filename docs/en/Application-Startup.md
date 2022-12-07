@@ -4,7 +4,7 @@ You typically use the [ABP CLI](CLI.md)'s `abp new` command to [get started](Get
 
 > It is always suggested to [get started with a startup template](Getting-Started.md) and modify it for your requirements. Read this document only if you want to understand the details or if you need to modify how the ABP Framework starts.
 
-While the ABP Framework has a lot of features and integrations, it is built as a lightweight and modular framework. It consists of [hundreds of NuGet and NMP packages](https://abp.io/packages), so you can only use the features you need. If you follow the [Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application](Getting-Started-AspNetCore-Application.md) document, you'll see how easy it is to install the ABP Framework into an empty ASP.NET Core project from scratch. You only install a single NuGet package and make a few small changes.
+While the ABP Framework has a lot of features and integrations, it is built as a lightweight and modular framework. It consists of [hundreds of NuGet and NPM packages](https://abp.io/packages), so you can only use the features you need. If you follow the [Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application](Getting-Started-AspNetCore-Application.md) document, you'll see how easy it is to install the ABP Framework into an empty ASP.NET Core project from scratch. You only need to install a single NuGet package and make a few small changes.
 
 This document is for who wants to better understand how the ABP Framework is initialized and configured on startup.
 
