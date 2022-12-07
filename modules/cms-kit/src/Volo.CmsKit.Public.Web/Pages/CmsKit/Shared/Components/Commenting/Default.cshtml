@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Options
 @using Volo.Abp.GlobalFeatures
 @using Volo.Abp.Users
+@using Volo.CmsKit.Comments;
 @using Volo.CmsKit.GlobalFeatures
 @using Volo.CmsKit.Localization
 @using Volo.CmsKit.Public.Comments
@@ -10,6 +11,7 @@
 @using Volo.CmsKit.Web
 @inject ICurrentUser CurrentUser
 @inject IOptionsSnapshot<CmsKitUiOptions> cmsKitUiOptions;
+@inject IOptions<CmsKitCommentOptions> CmsKitCommentOptions
 @inject IHtmlLocalizer<CmsKitResource> L
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting.CommentingViewComponent
 
@@ -37,22 +39,22 @@
                     </div>
                 </div>
 
-
-                <div class="volo-captcha">
-                    <label class="form-label" for="Input_Captcha">Captcha code</label>
-                    <div class="d-flex">
-                        <div class="bd-highlight">
-                            <img src="@Model.Input.CaptchaImageBase64" />
+                @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
+                {
+                    <div class="volo-captcha">
+                        <label class="form-label" for="Input_Captcha">@L["CaptchaCode"]</label>
+                        <div class="d-flex">
+                            <div class="bd-highlight">
+                                <img src="@Model.Input.CaptchaImageBase64" />
+                            </div>
+                            <div class="flex-grow-1 bd-highlight">
+                                <abp-input asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off" />
+                            </div>
+                            
+                            <abp-input asp-for="@Model.CaptchaId" value="@Model.CaptchaOutput.Id" />
                         </div>
-                        <div class="flex-grow-1 bd-highlight">
-                            <abp-input asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off" />
-                        </div>
-                        
-                        <abp-input asp-for="@Model.CaptchaId" value="@Model.CaptchaOutput.Id" />
                     </div>
-                </div>
-                
-                
+                }
                 <div class="col-auto">
                     <div class="text-end">
                         <abp-button id="submit-button" type="submit" button-type="Primary" size="Block">

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp.Formats.Gif;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -28,7 +29,7 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     protected ICmsUserLookupService CmsUserLookupService { get; }
     public IDistributedEventBus DistributedEventBus { get; }
     protected CommentManager CommentManager { get; }
-
+    protected CmsKitCommentOptions CmsKitCommentOptions { get; }
     public SimpleMathsCaptchaGenerator SimpleMathsCaptchaGenerator { get; }
 
     public CommentPublicAppService(
@@ -36,12 +37,14 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
         ICmsUserLookupService cmsUserLookupService,
         IDistributedEventBus distributedEventBus,
         CommentManager commentManager,
+        IOptions<CmsKitCommentOptions> cmsKitCommentOptions,
         SimpleMathsCaptchaGenerator simpleMathsCaptchaGenerator)
     {
         CommentRepository = commentRepository;
         CmsUserLookupService = cmsUserLookupService;
         DistributedEventBus = distributedEventBus;
         CommentManager = commentManager;
+        CmsKitCommentOptions = cmsKitCommentOptions.Value;
         SimpleMathsCaptchaGenerator = simpleMathsCaptchaGenerator;
     }
 
@@ -58,7 +61,7 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     [Authorize]
     public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
     {
-        if (input.RepliedCommentId.HasValue)
+        if (CmsKitCommentOptions.IsRecaptchaEnabled && input.CaptchaToken.HasValue)
         { 
             SimpleMathsCaptchaGenerator.Validate(input.CaptchaToken.Value, input.CaptchaAnswer);
         }

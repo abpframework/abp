@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+using Volo.CmsKit.Comments;
 using Volo.CmsKit.Public.Application.Security.VoloCaptcha;
 using Volo.CmsKit.Public.Comments;
 using Volo.CmsKit.Web.Renderers;
@@ -26,6 +27,7 @@ public class CommentingViewComponent : AbpViewComponent
     public ICommentPublicAppService CommentPublicAppService { get; }
     public IMarkdownToHtmlRenderer MarkdownToHtmlRenderer { get; }
     public AbpMvcUiOptions AbpMvcUiOptions { get; }
+    public CmsKitCommentOptions CmsKitCommentOptions { get; }
     public SimpleMathsCaptchaGenerator SimpleMathsCaptchaGenerator { get; }
 
     [HiddenInput]
@@ -45,11 +47,13 @@ public class CommentingViewComponent : AbpViewComponent
         ICommentPublicAppService commentPublicAppService,
         IOptions<AbpMvcUiOptions> options,
         IMarkdownToHtmlRenderer markdownToHtmlRenderer,
+        IOptions<CmsKitCommentOptions> cmsKitCommentOptions,
         SimpleMathsCaptchaGenerator simpleMathsCaptchaGenerator)
     {
         CommentPublicAppService = commentPublicAppService;
         MarkdownToHtmlRenderer = markdownToHtmlRenderer;
         AbpMvcUiOptions = options.Value;
+        CmsKitCommentOptions = cmsKitCommentOptions.Value;
         SimpleMathsCaptchaGenerator = simpleMathsCaptchaGenerator;
     }
 
@@ -71,14 +75,17 @@ public class CommentingViewComponent : AbpViewComponent
         };
         await ConvertMarkdownTextsToHtml(viewModel);
 
-        CaptchaOutput = SimpleMathsCaptchaGenerator.Generate(new CaptchaOptions(
-                number1MinValue: 1,
-                number1MaxValue: 10,
-                number2MinValue: 5,
-                number2MaxValue: 15)
-            );
+        if (CmsKitCommentOptions.IsRecaptchaEnabled)
+        {
+            CaptchaOutput = SimpleMathsCaptchaGenerator.Generate(new CaptchaOptions(
+                    number1MinValue: 1,
+                    number1MaxValue: 10,
+                    number2MinValue: 5,
+                    number2MaxValue: 15)
+                );
 
-        viewModel.CaptchaImageBase64 = GetCaptchaImageBase64(CaptchaOutput.ImageBytes);
+            viewModel.CaptchaImageBase64 = GetCaptchaImageBase64(CaptchaOutput.ImageBytes);
+        }
         this.Input = viewModel;
         return View("~/Pages/CmsKit/Shared/Components/Commenting/Default.cshtml", this);
     }
