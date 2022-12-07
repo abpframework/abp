@@ -126,6 +126,7 @@
                     if (formAsObject.repliedCommentId == '') {
                         formAsObject.repliedCommentId = null;
                     }
+
                     volo.cmsKit.public.comments.commentPublic.create(
                         $commentArea.attr('data-entity-type'),
                         $commentArea.attr('data-entity-id'),
@@ -133,7 +134,7 @@
                             repliedCommentId: formAsObject.repliedCommentId,
                             text: formAsObject.commentText,
                             captchaToken: formAsObject.captchaId,
-                            captchaAnswer: formAsObject.input.captcha
+                            captchaAnswer: formAsObject.input?.captcha
                         }
                     ).then(function () {
                         widgetManager.refresh($widget);
