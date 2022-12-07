@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.HttpApi.Client",
-  "hash": "96adf2a1515bf75be918df4d373677ac",
+  "hash": "d752fdc2c96eba9d15976e2540623bce",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",

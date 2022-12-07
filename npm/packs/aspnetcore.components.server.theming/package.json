@@ -1,12 +1,12 @@
 {
-  "version": "6.0.2",
+  "version": "6.0.1",
   "name": "@abp/aspnetcore.components.server.theming",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/bootstrap": "~6.0.2",
-    "@abp/font-awesome": "~6.0.2"
+    "@abp/bootstrap": "~6.0.1",
+    "@abp/font-awesome": "~6.0.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
