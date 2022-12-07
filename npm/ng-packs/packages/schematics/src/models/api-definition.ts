@@ -31,6 +31,8 @@ export interface Module {
 export interface Controller {
   controllerName: string;
   type: string;
+  isRemoteService: boolean;
+  isIntegrationService: boolean;
   interfaces: InterfaceDef[];
   actions: Record<string, Action>;
 }

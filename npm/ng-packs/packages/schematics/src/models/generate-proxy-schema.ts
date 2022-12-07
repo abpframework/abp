@@ -1,3 +1,5 @@
+import { eServiceType } from '../enums';
+
 export interface GenerateProxySchema {
   /**
    * Backend module name
@@ -28,4 +30,5 @@ export interface GenerateProxySchema {
    * Secondary entrypoint for proxy generation
    */
   entryPoint?: string;
+  serviceType?: eServiceType;
 }
