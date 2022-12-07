@@ -237,3 +237,33 @@ await builder.AddApplicationAsync<OrderingServiceHttpApiHostModule>(options =>
 If you need to access the `ApplicationName` later in your solution, you can inject the `IApplicationInfoAccessor` service and get the value from its `ApplicationName` property.
 
 `IApplicationInfoAccessor` also provides an `InstanceId` value, that is a random GUID value that is generated when your application starts. You can use that value to distinguish application instances from each other.
+
+## IAbpApplication
+
+`AbpApplicationFactory` returns an `IAbpApplication` object from its `CreateAsync` (or `Create`) method. `IAbpApplication` is the main container for an ABP application. It is also registered to the [dependency injection](Dependency-Injection.md) system, so you can inject `IAbpApplication` in your services to use its properties and methods.
+
+Here, a list of `IAbpApplication` properties you may want to know:
+
+* `StartupModuleType`: Gets the root module of the application that was used while creating the application container (on the `AbpApplicationFactory.CreateAsync` method).
+* `Services`: List of all service registrations (the `IServiceCollection` object). You can not add new services to this collection after application initialize (actually you can add, but it won't have any effect).
+* `ServiceProvider`: Reference to the root service provider used by the application. This can not be used before initializing the application. If you need to resolve non-singleton services from that `IServiceProvider` object, always create a new service scope and dispose it after usage. Otherwise, your application will have memory leak problems. See the *Releasing/Disposing Services* section of the [dependency injection](Dependency-Injection.md) document for more information about service scopes.
+* `Modules`: A read-only list of all the modules loaded into the current application. Alternatively, you can inject the `IModuleContainer` service if you need to access the module list in your application code.
+
+The `IAbpApplication` interface extends the `IApplicationInfoAccessor` interface, so you can get the `ApplicationName` and `InstanceId` values from it. However, if you only need to access these properties, inject and use the `IApplicationInfoAccessor` service instead.
+
+`IAbpApplication` is disposable. Always dispose it before exiting from your application.
+
+## .NET Generic Host & ASP.NET Core Integrations
+
+`AbpApplicationFactory` can create a standalone ABP application container without any external dependency. However, in most cases, you will want to integrate it with [.NET's generic host](https://learn.microsoft.com/en-us/dotnet/core/extensions/generic-host) or ASP.NET Core. For such usages, ABP provides built-in extension methods to easily create ABP application container that is well-integrated to these systems.
+
+The [Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application](Getting-Started-AspNetCore-Application.md) document clearly explains how you can create an ABP application container in an ASP.NET Core application.
+
+You can also [create a console application](Startup-Templates/Console) to see how it is integrated with .NET Generic Host.
+
+> Most of the times, you will directly create ABP applications using the ABP CLI's `new` command. So, you don't need to care about these integration details.
+
+## See Also
+
+* [Dependency injection](Dependency-Injection.md)
+* [Modularity](Module-Development-Basics.md)
