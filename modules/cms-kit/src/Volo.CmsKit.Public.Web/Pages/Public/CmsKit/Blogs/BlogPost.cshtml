@@ -1,6 +1,7 @@
 ﻿@page
 
 @using Volo.Abp.Data
+@using Volo.Abp.Users;
 @using Volo.CmsKit.Public.Blogs
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
 @using Volo.CmsKit.Public.Web.Pages
@@ -17,8 +18,8 @@
 
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs.BlogPostModel
 
+@inject ICurrentUser CurrentUser
 @inject IMarkdownToHtmlRenderer MarkdownRenderer
-
 
 @{
     string dummyImageSource = "https://dummyimage.com/1280x720/a3a3a3/fff.png?text=" + Model.ViewModel.Title;
@@ -136,12 +137,14 @@
     </div>
 
     <div class="col-md-2 d-sm-none d-md-block">
-        <button id="deleteBlogPost" class="btn btn-danger">
-            <i class="fa fa-remove">
-                @L["Delete"]
-            </i>
-        </button>
-    
+        @if (Model.ViewModel.Author.Id == CurrentUser.Id)
+        {
+            <button id="deleteBlogPost" class="btn btn-danger">
+                <i class="fa fa-remove">
+                    @L["Delete"]
+                </i>
+            </button>
+        }
         @if (isScrollIndexEnabled)
         {
                 <div id="scroll-index" class="docs-inner-anchors mt-2">
