@@ -27,7 +27,9 @@ public class AbpRequestLocalizationMiddleware : IMiddleware, ITransientDependenc
     {
         var middleware = new RequestLocalizationMiddleware(
             next,
-            new OptionsWrapper<RequestLocalizationOptions>(await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync()),
+            new OptionsWrapper<RequestLocalizationOptions>(
+                await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+            ),
             _loggerFactory
         );
 

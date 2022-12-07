@@ -41,15 +41,6 @@
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
 
-@media screen and (min-width: 768px) {
-    .navbar .dropdown:hover > .dropdown-menu {
-        display: block;
-    }
-
-    .navbar .dropdown-submenu:hover > .dropdown-menu {
-        display: block;
-    }
-}
 .input-validation-error {
     border-color: #dc3545;
 }
@@ -175,4 +166,8 @@ h1.content-header-title{
 
 .b-table h4.h4 {
     text-align: center;
+}
+
+form .table-responsive{
+    min-height: 412px;
 }

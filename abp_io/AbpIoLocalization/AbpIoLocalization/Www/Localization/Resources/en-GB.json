@@ -270,6 +270,7 @@
     "InvalidFormInputs": "Please, type the valid information specified on the form.",
     "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>.",
     "SubscribeToNewsletter": "Subscribe to the newsletter to get information about happenings in the ABP.IO Platform, like new releases, posts, offers, and more.",
-    "FirstEdition": "First Edition"
+    "FirstEdition": "First Edition",
+    "SelectUITheme": "Select UI Theme"
   }
 }

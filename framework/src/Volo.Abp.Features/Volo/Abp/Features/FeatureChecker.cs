@@ -37,7 +37,7 @@ public class FeatureChecker : FeatureCheckerBase
 
     public override async Task<string> GetOrNullAsync(string name)
     {
-        var featureDefinition = FeatureDefinitionManager.Get(name);
+        var featureDefinition = await FeatureDefinitionManager.GetAsync(name);
         var providers = Enumerable
             .Reverse(Providers);
 

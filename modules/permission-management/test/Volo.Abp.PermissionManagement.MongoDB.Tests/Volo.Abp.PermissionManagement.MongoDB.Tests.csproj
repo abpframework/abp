@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>Volo.Abp.PermissionManagement.MongoDB.Tests</AssemblyName>
     <PackageId>Volo.Abp.PermissionManagement.MongoDB.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.PermissionManagement.MongoDB\Volo.Abp.PermissionManagement.MongoDB.csproj" />
+    <ProjectReference Include="..\Volo.Abp.PermissionManagement.Domain.Tests\Volo.Abp.PermissionManagement.Domain.Tests.csproj" />
     <ProjectReference Include="..\Volo.Abp.PermissionManagement.TestBase\Volo.Abp.PermissionManagement.TestBase.csproj" />
   </ItemGroup>
 

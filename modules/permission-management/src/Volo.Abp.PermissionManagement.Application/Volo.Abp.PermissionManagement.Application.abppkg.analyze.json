@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.Application",
-  "hash": "585c0f4874552a5359577717fa36bf40",
+  "hash": "9ce0cf16e11558d84e5f77fbd0c95ce9",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement",

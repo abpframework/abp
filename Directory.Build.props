@@ -2,13 +2,13 @@
   <PropertyGroup>
     
     <!-- All Microsoft AspNetCore packages -->
-    <MicrosoftAspNetCorePackageVersion>6.0.5</MicrosoftAspNetCorePackageVersion>
+    <MicrosoftAspNetCorePackageVersion>7.0.0</MicrosoftAspNetCorePackageVersion>
     
     <!-- All Microsoft EntityFrameworkCore packages -->
-    <MicrosoftEntityFrameworkCorePackageVersion>6.0.5</MicrosoftEntityFrameworkCorePackageVersion>
+    <MicrosoftEntityFrameworkCorePackageVersion>7.0.0</MicrosoftEntityFrameworkCorePackageVersion>
     
     <!-- All Microsoft packages -->
-    <MicrosoftPackageVersion>6.0.0</MicrosoftPackageVersion>
+    <MicrosoftPackageVersion>7.0.0</MicrosoftPackageVersion>
 
     <!-- Microsoft.NET.Test.Sdk https://www.nuget.org/packages/Microsoft.NET.Test.Sdk -->
     <MicrosoftNETTestSdkPackageVersion>17.2.0</MicrosoftNETTestSdkPackageVersion>
