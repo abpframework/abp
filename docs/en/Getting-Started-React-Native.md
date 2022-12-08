@@ -80,11 +80,11 @@ Run the backend application as described in the [getting started document](Getti
  Go to MyProjectNameHttpApiHostModule.cs under the host project. Add these codes under `PreConfigureServices` function.
 
 ```csharp
-#ifDEBUG
-PreConfigure<OpenIddictServerBuilder>(options => {
-options.UseAspNetCore()
-.DisableTransportSecurityRequirement();
-});
+#if DEBUG
+    PreConfigure<OpenIddictServerBuilder>(options => {
+    options.UseAspNetCore()
+    .DisableTransportSecurityRequirement();
+    });
 #endif
 ```
 
