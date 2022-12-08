@@ -18,8 +18,8 @@ public class AbpAspNetCoreMvcClientModule : AbpModule
         {
             Configure<AbpAspNetCoreMvcClientCacheOptions>(options =>
             {
-                options.TenantConfigurationCacheAbsoluteExpiration = TimeSpan.Zero;
-                options.ApplicationConfigurationDtoCacheAbsoluteExpiration = TimeSpan.Zero;
+                options.TenantConfigurationCacheAbsoluteExpiration = TimeSpan.FromSeconds(5);
+                options.ApplicationConfigurationDtoCacheAbsoluteExpiration = TimeSpan.FromSeconds(5);
             });
         }
     }

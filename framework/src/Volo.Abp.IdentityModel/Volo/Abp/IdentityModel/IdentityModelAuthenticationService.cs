@@ -103,7 +103,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
             await TokenCache.SetAsync(cacheKey, tokenCacheItem, new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = AbpHostEnvironment.IsDevelopment()
-                    ? TimeSpan.Zero
+                    ? TimeSpan.FromSeconds(5)
                     : TimeSpan.FromSeconds(configuration.CacheAbsoluteExpiration)
             });
         }
@@ -151,7 +151,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
                 new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = AbpHostEnvironment.IsDevelopment()
-                        ? TimeSpan.Zero
+                        ? TimeSpan.FromSeconds(5)
                         : TimeSpan.FromSeconds(configuration.CacheAbsoluteExpiration)
                 });
         }
