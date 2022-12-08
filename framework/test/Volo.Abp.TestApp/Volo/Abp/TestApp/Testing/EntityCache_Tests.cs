@@ -102,9 +102,6 @@ public class Product : FullAuditedAggregateRoot<Guid>
         Price = price;
     }
 
-    [JsonInclude]
-    public override Guid Id { get; protected set; }
-
     public string Name { get; set; }
 
     public decimal Price { get; set; }
