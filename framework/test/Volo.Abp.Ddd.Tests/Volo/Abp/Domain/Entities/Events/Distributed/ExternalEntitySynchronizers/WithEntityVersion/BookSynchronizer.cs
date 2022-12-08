@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed.ExternalEntitySynchronizers;
+namespace Volo.Abp.Domain.Entities.Events.Distributed.ExternalEntitySynchronizers.WithEntityVersion;
 
 public class BookSynchronizer : ExternalEntitySynchronizer<Book, Guid, RemoteBookEto>, ITransientDependency
 {

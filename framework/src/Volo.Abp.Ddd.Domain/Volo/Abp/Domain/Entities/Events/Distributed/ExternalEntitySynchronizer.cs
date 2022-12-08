@@ -13,8 +13,8 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed;
 
 public abstract class ExternalEntitySynchronizer<TEntity, TKey, TExternalEntityEto> :
     ExternalEntitySynchronizer<TEntity, TExternalEntityEto>
-    where TEntity : class, IEntity<TKey>, IHasEntityVersion
-    where TExternalEntityEto : EntityEto, IHasEntityVersion
+    where TEntity : class, IEntity<TKey>
+    where TExternalEntityEto : EntityEto
 {
     private readonly IRepository<TEntity, TKey> _repository;
 
@@ -48,8 +48,8 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
     IDistributedEventHandler<EntityUpdatedEto<TExternalEntityEto>>,
     IDistributedEventHandler<EntityDeletedEto<TExternalEntityEto>>,
     IUnitOfWorkEnabled
-    where TEntity : class, IEntity, IHasEntityVersion
-    where TExternalEntityEto : EntityEto, IHasEntityVersion
+    where TEntity : class, IEntity
+    where TExternalEntityEto : EntityEto
 {
     protected IObjectMapper ObjectMapper { get; }
     private readonly IRepository<TEntity> _repository;
@@ -108,17 +108,26 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
         if (localEntity == null)
         {
             localEntity = await MapToEntityAsync(eto);
-            ObjectHelper.TrySetProperty(localEntity, x => x.EntityVersion, () => eto.EntityVersion);
+
+            if (localEntity is IHasEntityVersion versionedLocalEntity && eto is IHasEntityVersion versionedEto)
+            {
+                ObjectHelper.TrySetProperty(versionedLocalEntity, x => x.EntityVersion,
+                    () => versionedEto.EntityVersion);
+            }
 
             await _repository.InsertAsync(localEntity, true);
         }
         else
         {
-            // The version will auto-increment by one when the repository updates the entity.
-            var entityVersion = eto.EntityVersion - 1;
-
             await MapToEntityAsync(eto, localEntity);
-            ObjectHelper.TrySetProperty(localEntity, x => x.EntityVersion, () => entityVersion);
+
+            if (localEntity is IHasEntityVersion versionedLocalEntity && eto is IHasEntityVersion versionedEto)
+            {
+                // The version will auto-increment by one when the repository updates the entity.
+                var entityVersion = versionedEto.EntityVersion - 1;
+
+                ObjectHelper.TrySetProperty(versionedLocalEntity, x => x.EntityVersion, () => entityVersion);
+            }
 
             await _repository.UpdateAsync(localEntity, true);
         }
@@ -156,6 +165,11 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
 
     protected virtual Task<bool> IsEtoNewerAsync(TExternalEntityEto eto, [CanBeNull] TEntity localEntity)
     {
-        return Task.FromResult(localEntity == null || eto.EntityVersion > localEntity.EntityVersion);
+        if (localEntity is IHasEntityVersion versionedLocalEntity && eto is IHasEntityVersion versionedEto)
+        {
+            return Task.FromResult(versionedEto.EntityVersion > versionedLocalEntity.EntityVersion);
+        }
+
+        return Task.FromResult(true);
     }
 }

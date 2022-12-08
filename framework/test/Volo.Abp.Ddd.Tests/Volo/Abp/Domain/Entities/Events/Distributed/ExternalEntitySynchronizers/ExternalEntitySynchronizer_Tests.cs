@@ -7,6 +7,8 @@ using Shouldly;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities.Events.Distributed.ExternalEntitySynchronizers.WithEntityVersion;
+using Volo.Abp.Domain.Entities.Events.Distributed.ExternalEntitySynchronizers.WithoutEntityVersion;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
@@ -20,6 +22,84 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
 {
     [Fact]
     public async Task Should_Handle_Entity_Created_Event()
+    {
+        var authorId = Guid.NewGuid();
+
+        var uowManager = GetRequiredService<IUnitOfWorkManager>();
+        using var uow = uowManager.Begin();
+
+        var authorSynchronizer = GetRequiredService<AuthorSynchronizer>();
+        var repository = GetRequiredService<IRepository<Author, Guid>>();
+
+        (await repository.FindAsync(authorId)).ShouldBeNull();
+
+        var remoteAuthorEto = new RemoteAuthorEto { KeysAsString = authorId.ToString(), Name = "New" };
+
+        await authorSynchronizer.HandleEventAsync(new EntityCreatedEto<RemoteAuthorEto>(remoteAuthorEto));
+
+        var author = await repository.FindAsync(authorId);
+        author.ShouldNotBeNull();
+        author.Name.ShouldBe("New");
+    }
+
+    [Fact]
+    public async Task Should_Handle_Entity_Update_Event()
+    {
+        var authorId = Guid.NewGuid();
+
+        var uowManager = GetRequiredService<IUnitOfWorkManager>();
+        using var uow = uowManager.Begin();
+
+        var authorSynchronizer = GetRequiredService<AuthorSynchronizer>();
+        var repository = GetRequiredService<IRepository<Author, Guid>>();
+
+        await repository.InsertAsync(new Author(authorId, "Old"), true);
+
+        var author = await repository.FindAsync(authorId);
+        author.ShouldNotBeNull();
+        author.Id.ShouldBe(authorId);
+        author.Name.ShouldBe("Old");
+
+        var remoteAuthorEto = new RemoteAuthorEto { KeysAsString = authorId.ToString(), Name = "New" };
+
+        await authorSynchronizer.HandleEventAsync(new EntityUpdatedEto<RemoteAuthorEto>(remoteAuthorEto));
+
+        author = await repository.FindAsync(authorId);
+        author.ShouldNotBeNull();
+        author.Id.ShouldBe(authorId);
+        author.Name.ShouldBe("New");
+    }
+
+    [Fact]
+    public async Task Should_Handle_Entity_Deleted_Event()
+    {
+        var authorId = Guid.NewGuid();
+
+        var uowManager = GetRequiredService<IUnitOfWorkManager>();
+        using var uow = uowManager.Begin();
+
+        var authorSynchronizer = GetRequiredService<AuthorSynchronizer>();
+        var repository = GetRequiredService<IRepository<Author, Guid>>();
+
+        await repository.InsertAsync(new Author(authorId, "Old"), true);
+
+        var author = await repository.FindAsync(authorId);
+        author.ShouldNotBeNull();
+        author.Id.ShouldBe(authorId);
+        author.Name.ShouldBe("Old");
+
+        var remoteAuthorEto = new RemoteAuthorEto { KeysAsString = authorId.ToString(), Name = "New" };
+
+        await authorSynchronizer.HandleEventAsync(new EntityDeletedEto<RemoteAuthorEto>(remoteAuthorEto));
+
+        (await repository.FindAsync(authorId)).ShouldBeNull();
+
+        await Should.NotThrowAsync(() =>
+            authorSynchronizer.HandleEventAsync(new EntityDeletedEto<RemoteAuthorEto>(remoteAuthorEto)));
+    }
+
+    [Fact]
+    public async Task Should_Handle_Versioned_Entity_Created_Event()
     {
         var bookId = Guid.NewGuid();
 
@@ -42,7 +122,7 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
     }
 
     [Fact]
-    public async Task Should_Handle_Entity_Update_Event()
+    public async Task Should_Handle_Versioned_Entity_Update_Event()
     {
         var bookId = Guid.NewGuid();
 
@@ -52,13 +132,18 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
         var bookSynchronizer = GetRequiredService<BookSynchronizer>();
         var repository = GetRequiredService<IRepository<Book, Guid>>();
 
-        (await repository.FindAsync(bookId)).ShouldBeNull();
+        await repository.InsertAsync(new Book(bookId, 1), true);
 
-        var remoteBookEto = new RemoteBookEto { KeysAsString = bookId.ToString(), EntityVersion = 0, Sold = 1 };
+        var book = await repository.FindAsync(bookId);
+        book.ShouldNotBeNull();
+        book.Id.ShouldBe(bookId);
+        book.EntityVersion.ShouldBe(0);
+
+        var remoteBookEto = new RemoteBookEto { KeysAsString = bookId.ToString(), EntityVersion = 0, Sold = 10 };
 
         await bookSynchronizer.HandleEventAsync(new EntityUpdatedEto<RemoteBookEto>(remoteBookEto));
 
-        var book = await repository.FindAsync(bookId);
+        book = await repository.FindAsync(bookId);
         book.ShouldNotBeNull();
         book.EntityVersion.ShouldBe(0);
         book.Sold.ShouldBe(1);
@@ -86,7 +171,7 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
     }
 
     [Fact]
-    public async Task Should_Handle_Entity_Deleted_Event()
+    public async Task Should_Handle_Versioned_Entity_Deleted_Event()
     {
         var bookId = Guid.NewGuid();
 
@@ -96,7 +181,7 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
         var bookSynchronizer = GetRequiredService<BookSynchronizer>();
         var repository = GetRequiredService<IRepository<Book, Guid>>();
 
-        await repository.InsertAsync(new Book(bookId, 1, 0), true);
+        await repository.InsertAsync(new Book(bookId, 1), true);
 
         var book = await repository.FindAsync(bookId);
         book.ShouldNotBeNull();
@@ -109,9 +194,8 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
 
         (await repository.FindAsync(bookId)).ShouldBeNull();
 
-        await bookSynchronizer.HandleEventAsync(new EntityDeletedEto<RemoteBookEto>(remoteBookEto));
-
-        (await repository.FindAsync(bookId)).ShouldBeNull();
+        await Should.NotThrowAsync(() =>
+            bookSynchronizer.HandleEventAsync(new EntityDeletedEto<RemoteBookEto>(remoteBookEto)));
     }
 
     protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
@@ -153,7 +237,7 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
     {
         public override IReadOnlyList<Type> GetEntityTypes()
         {
-            return new List<Type> { typeof(Book) };
+            return new List<Type> { typeof(Book), typeof(Author) };
         }
     }
 
@@ -162,6 +246,8 @@ public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntity
         public MyAutoMapperProfile()
         {
             CreateMap<RemoteBookEto, Book>(MemberList.None)
+                .ForMember(x => x.Id, options => options.MapFrom(x => Guid.Parse(x.KeysAsString)));
+            CreateMap<RemoteAuthorEto, Author>(MemberList.None)
                 .ForMember(x => x.Id, options => options.MapFrom(x => Guid.Parse(x.KeysAsString)));
         }
     }
