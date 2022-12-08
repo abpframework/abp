@@ -1,4 +1,4 @@
-# Configuring for Production
+# Configuring Your Application for Production Environments
 
 ABP Framework has a lot of options to configure and fine-tune its features. They are all explained in their own documents. Default values for these options are pretty well for most of the deployment environments. However, you may need to care about some options based on how you've structured your deployment environment. In this document, we will highlight these kind of options. So, it is highly recommended to read this document in order to not have unexpected behaviors in your system in production.
 
@@ -90,6 +90,10 @@ Configure<AbpStringEncryptionOptions>(options =>
 ````
 
 Note that ABP CLI automatically sets the password to a random value on a new project creation. However, it is stored in the `appsettings.json` file and is generally added to your source control. It is suggested to use [User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) or [Environment Variables](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration) to set that value.
+
+## Logging
+
+ABP uses .NET's standard [Logging services](../Logging.md). So, it is compatible with any logging provider that works with .NET. ABP's startup solution templates come with [Serilog](https://serilog.net/) pre-installed and configured for you. It writes logs to file system and console with the initial configuration. File system is useful for development environment, but it is suggested you to use a different provider for your production environment, like Elasticsearch, database or any other provider that can properly work.
 
 ## The Swagger UI
 

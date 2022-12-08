@@ -10,6 +10,7 @@
     "build:all": "nx run-many --target=build --all --exclude=dev-app,schematics --prod && yarn build:schematics",
     "test": "ng test --detect-open-handles=true --run-in-band=true --watch-all=true",
     "test:all": "nx run-many --target=test --all",
+    "lint-staged": "lint-staged",
     "lint": "nx workspace-lint && ng lint",
     "lint:all": "nx run-many --target=lint --all",
     "e2e": "ng e2e",
@@ -36,11 +37,10 @@
     "lerna": "lerna",
     "migrate-nx": "yarn nx migrate --run-migrations",
     "mock:schematics": "cd scripts/mock-schematic && yarn && yarn start",
-    "debug:schematics": "./node_modules/.bin/ng g ./packages/schematics/src/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url http://localhost:4300"
+    "debug:schematics": "./node_modules/.bin/ng g ./packages/schematics/src/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url https://localhost:44305 --serviceType application"
   },
   "private": true,
   "devDependencies": {
-    "@abp/utils": "~7.0.0-rc.2",
     "@angular-devkit/build-angular": "14.2.1",
     "@angular-devkit/build-ng-packagr": "^0.1002.0",
     "@angular-devkit/schematics-cli": "~14.2.1",
@@ -105,6 +105,7 @@
     "just-clone": "^3.2.1",
     "just-compare": "^1.4.0",
     "lerna": "^4.0.0",
+    "lint-staged": "^13.0.3",
     "ng-packagr": "14.2.1",
     "ng-zorro-antd": "^14.0.0",
     "nx": "14.7.5",
@@ -125,5 +126,10 @@
     "typescript": "4.7.4",
     "zone.js": "0.11.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}":[
+      "npx prettier --write --config .prettierrc "
+    ]
+  }
 }

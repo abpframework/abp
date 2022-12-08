@@ -41,6 +41,7 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddHttpClient();
         context.Services
             .GetHostBuilder().Logging
             .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));
