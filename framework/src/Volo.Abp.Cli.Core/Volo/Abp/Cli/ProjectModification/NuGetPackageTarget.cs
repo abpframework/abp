@@ -16,5 +16,6 @@ public enum NuGetPackageTarget : byte
     Blazor = 11,
     IdentityServer = 12, //todo: Rename to AuthServer
     BlazorServer = 13,
-    BlazorWebAssembly = 14
+    BlazorWebAssembly = 14,
+    MauiBlazor = 15
 }
