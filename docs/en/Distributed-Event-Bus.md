@@ -501,7 +501,7 @@ Configure<AbpDistributedEventBusOptions>(options =>
 
 ## Entity Synchronizer
 
-Todo: introdution.
+Todo: introduction.
 
 ### Create a Synchronizer Class
 
