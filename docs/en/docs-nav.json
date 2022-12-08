@@ -166,6 +166,10 @@
           "path": "Caching.md",
           "items": [
             {
+              "text": "Entity Cache",
+              "path": "Entity-Cache.md"
+            },
+            {
               "text": "Redis Cache",
               "path": "Redis-Cache.md"
             }
@@ -1317,7 +1321,7 @@
         },
         {
           "text": "Distributed / Microservice Solutions",
-          "path": "Distributed-Microservice.md"
+          "path": "Deployment/Distributed-Microservice.md"
         },
         {
           "text": "Optimizing for Production",
