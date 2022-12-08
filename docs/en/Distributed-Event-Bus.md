@@ -536,10 +536,15 @@ public class BlogUserSynchronizer : EntitySynchronizer<BlogUser, Guid, UserEto>,
 
 Developers should always handle the distributed events disordering. ABP framework has an `EntityVersion` audit property to avoid an old version of entity data overriding a new one.
 
-The only thing we need to do is make the entity implement the `IHasEntityVersion` interface.
+The only thing we need to do is make the entity class and the ETO class implement the `IHasEntityVersion` interface.
 
 ```csharp
 public class User : Entity<Guid>, IHasEntityVersion
+{
+    public int EntityVersion { get; set; }
+}
+
+public class UserEto : EntityEto, IHasEntityVersion
 {
     public int EntityVersion { get; set; }
 }
