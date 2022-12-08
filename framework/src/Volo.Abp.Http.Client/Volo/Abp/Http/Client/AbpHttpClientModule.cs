@@ -23,6 +23,7 @@ public class AbpHttpClientModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddHttpClient();
         context.Services.AddTransient(typeof(DynamicHttpProxyInterceptorClientProxy<>));
     }
 }

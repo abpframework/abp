@@ -154,6 +154,36 @@
       "text": "Fundamentals",
       "items": [
         {
+          "text": "Application Startup",
+          "path": "Application-Startup.md"
+        },
+        {
+          "text": "Authorization",
+          "path": "Authorization.md"
+        },
+        {
+          "text": "Caching",
+          "path": "Caching.md",
+          "items": [
+            {
+              "text": "Entity Cache",
+              "path": "Entity-Cache.md"
+            },
+            {
+              "text": "Redis Cache",
+              "path": "Redis-Cache.md"
+            }
+          ]
+        },
+        {
+          "text": "Configuration",
+          "path": "Configuration.md"
+        },
+        {
+          "text": "Connection Strings",
+          "path": "Connection-Strings.md"
+        },
+        {
           "text": "Dependency Injection",
           "path": "Dependency-Injection.md",
           "items": [
@@ -164,16 +194,28 @@
           ]
         },
         {
-          "text": "Configuration",
-          "path": "Configuration.md"
+          "text": "Exception Handling",
+          "path": "Exception-Handling.md"
+        },
+        {
+          "text": "Localization",
+          "path": "Localization.md"
+        },
+        {
+          "text": "Logging",
+          "path": "Logging.md"
+        },
+        {
+          "text": "Object Extensions",
+          "path": "Object-Extensions.md"
         },
         {
           "text": "Options",
           "path": "Options.md"
         },
         {
-          "text": "Authorization",
-          "path": "Authorization.md"
+          "text": "Settings",
+          "path": "Settings.md"
         },
         {
           "text": "Validation",
@@ -184,40 +226,6 @@
               "path": "FluentValidation.md"
             }
           ]
-        },
-        {
-          "text": "Localization",
-          "path": "Localization.md"
-        },
-        {
-          "text": "Caching",
-          "path": "Caching.md",
-          "items": [
-            {
-              "text": "Redis Cache",
-              "path": "Redis-Cache.md"
-            }
-          ]
-        },
-        {
-          "text": "Exception Handling",
-          "path": "Exception-Handling.md"
-        },
-        {
-          "text": "Settings",
-          "path": "Settings.md"
-        },
-        {
-          "text": "Connection Strings",
-          "path": "Connection-Strings.md"
-        },
-        {
-          "text": "Object Extensions",
-          "path": "Object-Extensions.md"
-        },
-        {
-          "text": "Logging",
-          "path": "Logging.md"
         }
       ]
     },
@@ -1314,6 +1322,10 @@
         {
           "text": "Deploying to a Clustered Environment",
           "path": "Deployment/Clustered-Environment.md"
+        },
+        {
+          "text": "Distributed / Microservice Solutions",
+          "path": "Deployment/Distributed-Microservice.md"
         },
         {
           "text": "Optimizing for Production",

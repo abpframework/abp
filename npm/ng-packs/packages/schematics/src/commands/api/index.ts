@@ -8,8 +8,8 @@ import {
   Tree,
   url,
 } from '@angular-devkit/schematics';
-import { Exception } from '../../enums';
-import { GenerateProxySchema, ServiceGeneratorParams } from '../../models';
+import { defaultEServiceType, eServiceType, Exception } from '../../enums';
+import { Controller, GenerateProxySchema, ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
   buildTargetPath,
@@ -47,6 +47,7 @@ export default function (schema: GenerateProxySchema) {
       const data = readProxyConfig(tree);
       const types = data.types;
       const modules = data.modules;
+      const serviceType = schema.serviceType || defaultEServiceType;
       if (!types || !modules) throw new SchematicsException(Exception.InvalidApiDefinition);
 
       const definition = data.modules[moduleName];
@@ -54,7 +55,7 @@ export default function (schema: GenerateProxySchema) {
         throw new SchematicsException(interpolate(Exception.InvalidModule, moduleName));
 
       const apiName = definition.remoteServiceName;
-      const controllers = Object.values(definition.controllers || {});
+      const controllers = filterControllersByServiceType(serviceType, definition.controllers);
       const serviceImports: Record<string, string[]> = {};
       const generateServices = createServiceGenerator({
         targetPath,
@@ -168,5 +169,16 @@ function createServiceGenerator(params: ServiceGeneratorParams) {
         move(normalize(targetPath)),
       ]);
     }),
+  );
+}
+
+function filterControllersByServiceType(
+  serviceType: eServiceType,
+  controllers: Record<string, Controller>,
+): Controller[] {
+  const itShouldBeIntegratedService = serviceType === eServiceType.Integration;
+  const skipFilter = serviceType === eServiceType.All;
+  return Object.values(controllers || {}).filter(
+    x => x.isIntegrationService === itShouldBeIntegratedService || skipFilter,
   );
 }
