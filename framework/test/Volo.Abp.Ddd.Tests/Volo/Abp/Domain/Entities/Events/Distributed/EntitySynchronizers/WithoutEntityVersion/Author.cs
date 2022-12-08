@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed.ExternalEntitySynchronizers.WithoutEntityVersion;
+namespace Volo.Abp.Domain.Entities.Events.Distributed.EntitySynchronizers.WithoutEntityVersion;
 
 public class Author : Entity<Guid>
 {

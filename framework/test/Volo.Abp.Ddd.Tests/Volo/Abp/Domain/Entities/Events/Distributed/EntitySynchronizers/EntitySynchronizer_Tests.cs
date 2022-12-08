@@ -7,8 +7,8 @@ using Shouldly;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
-using Volo.Abp.Domain.Entities.Events.Distributed.ExternalEntitySynchronizers.WithEntityVersion;
-using Volo.Abp.Domain.Entities.Events.Distributed.ExternalEntitySynchronizers.WithoutEntityVersion;
+using Volo.Abp.Domain.Entities.Events.Distributed.EntitySynchronizers.WithEntityVersion;
+using Volo.Abp.Domain.Entities.Events.Distributed.EntitySynchronizers.WithoutEntityVersion;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
@@ -16,9 +16,9 @@ using Volo.Abp.Testing;
 using Volo.Abp.Uow;
 using Xunit;
 
-namespace Volo.Abp.Domain.Entities.Events.Distributed.ExternalEntitySynchronizers;
+namespace Volo.Abp.Domain.Entities.Events.Distributed.EntitySynchronizers;
 
-public class ExternalEntitySynchronizer_Tests : AbpIntegratedTest<ExternalEntitySynchronizer_Tests.TestModule>
+public class EntitySynchronizer_Tests : AbpIntegratedTest<EntitySynchronizer_Tests.TestModule>
 {
     [Fact]
     public async Task Should_Handle_Entity_Created_Event()

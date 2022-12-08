@@ -11,14 +11,14 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Entities.Events.Distributed;
 
-public abstract class ExternalEntitySynchronizer<TEntity, TKey, TExternalEntityEto> :
-    ExternalEntitySynchronizer<TEntity, TExternalEntityEto>
+public abstract class EntitySynchronizer<TEntity, TKey, TExternalEntityEto> :
+    EntitySynchronizer<TEntity, TExternalEntityEto>
     where TEntity : class, IEntity<TKey>
     where TExternalEntityEto : EntityEto
 {
     private readonly IRepository<TEntity, TKey> _repository;
 
-    protected ExternalEntitySynchronizer(IObjectMapper objectMapper, IRepository<TEntity, TKey> repository) :
+    protected EntitySynchronizer(IObjectMapper objectMapper, IRepository<TEntity, TKey> repository) :
         base(objectMapper, repository)
     {
         _repository = repository;
@@ -43,7 +43,7 @@ public abstract class ExternalEntitySynchronizer<TEntity, TKey, TExternalEntityE
     }
 }
 
-public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
+public abstract class EntitySynchronizer<TEntity, TExternalEntityEto> :
     IDistributedEventHandler<EntityCreatedEto<TExternalEntityEto>>,
     IDistributedEventHandler<EntityUpdatedEto<TExternalEntityEto>>,
     IDistributedEventHandler<EntityDeletedEto<TExternalEntityEto>>,
@@ -58,7 +58,7 @@ public abstract class ExternalEntitySynchronizer<TEntity, TExternalEntityEto> :
     protected virtual bool IgnoreEntityUpdatedEvent { get; set; }
     protected virtual bool IgnoreEntityDeletedEvent { get; set; }
 
-    public ExternalEntitySynchronizer(
+    public EntitySynchronizer(
         IObjectMapper objectMapper,
         IRepository<TEntity> repository)
     {
