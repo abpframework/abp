@@ -66,15 +66,6 @@ public abstract class AbpApplicationBase : IAbpApplication
         {
             ConfigureServices();
         }
-
-        if (options.Environment.IsNullOrWhiteSpace())
-        {
-            var abpHostEnvironment = services.GetSingletonInstance<IAbpHostEnvironment>();
-            if (abpHostEnvironment.EnvironmentName.IsNullOrWhiteSpace())
-            {
-                abpHostEnvironment.EnvironmentName = Environments.Production;
-            }
-        }
     }
 
     public virtual async Task ShutdownAsync()
@@ -238,6 +229,8 @@ public abstract class AbpApplicationBase : IAbpApplication
         }
 
         _configuredServices = true;
+
+        TryToSetEnvironment(Services);
     }
 
     private void CheckMultipleConfigureServices()
@@ -327,6 +320,8 @@ public abstract class AbpApplicationBase : IAbpApplication
         }
 
         _configuredServices = true;
+
+        TryToSetEnvironment(Services);
     }
 
     private static string GetApplicationName(AbpApplicationCreationOptions options)
@@ -353,5 +348,14 @@ public abstract class AbpApplicationBase : IAbpApplication
         }
 
         return null;
+    }
+
+    private static void TryToSetEnvironment(IServiceCollection services)
+    {
+        var abpHostEnvironment = services.GetSingletonInstance<IAbpHostEnvironment>();
+        if (abpHostEnvironment.EnvironmentName.IsNullOrWhiteSpace())
+        {
+            abpHostEnvironment.EnvironmentName = Environments.Production;
+        }
     }
 }
