@@ -2,6 +2,8 @@
 
 [Dependency injection](https://docs.abp.io/en/abp/latest/Dependency-Injection) is a widely-used pattern of obtaining references to other services from our classes. It is a built-in feature when you develop ASP.NET Core applications. In this article, I will explain why we may need to have references to other services in an entity class and how we can implement Entity Framework Core's new `IMaterializationInterceptor` interface to provide these services to the entities using the standard dependency injection system.
 
+> You can find the source code of the example application [here](https://github.com/abpframework/abp-samples/tree/master/EfCoreEntityDependencyInjectionDemo).
+
 ## The Problem
 
 While developing applications based on [Domain-Driven Design](https://docs.abp.io/en/abp/latest/Domain-Driven-Design) (DDD) patterns, we typically write our business code inside [application services](https://docs.abp.io/en/abp/latest/Application-Services), [domain services](https://docs.abp.io/en/abp/latest/Domain-Services) and [entities](https://docs.abp.io/en/abp/latest/Entities). Since the application and domain service instances are created by the dependency injection system, they can inject services into their constructors.
@@ -366,6 +368,11 @@ Beside the technical limitations, coupling your entities to external services is
 In this article, I tried to investigate all aspects of injecting services into entity classes. I explained how to use Entity Framework 7.0 `IMaterializationInterceptor` to implement property-injection pattern while getting entities from database.
 
 Injecting services into entities seems a certain way of forcing some business rules in your entities. However, because of the current technical limitations, design issues and usage difficulties, I don't suggest to depend on services in your entities. Instead, create domain services when you need to implement a business rule that depends on external services and entities.
+
+## The Source Code
+
+* You can find the full source code of the example application [here](https://github.com/abpframework/abp-samples/tree/master/EfCoreEntityDependencyInjectionDemo).
+* You can see [this pull request](https://github.com/abpframework/abp-samples/pull/207/files) for the changes I've done after creating the application.
 
 ## See Also
 

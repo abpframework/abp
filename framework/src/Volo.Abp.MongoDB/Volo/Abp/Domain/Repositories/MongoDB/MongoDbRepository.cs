@@ -484,6 +484,20 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         await DeleteManyAsync(entities, autoSave, cancellationToken);
     }
 
+    public override async Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        cancellationToken = GetCancellationToken(cancellationToken);
+
+        var dbContext = await GetDbContextAsync(cancellationToken);
+        var collection = dbContext.Collection<TEntity>();
+
+        await collection.DeleteManyAsync(
+            dbContext.SessionHandle,
+            Builders<TEntity>.Filter.Where(predicate),
+            cancellationToken: cancellationToken
+        );
+    }
+
     [Obsolete("Use GetQueryableAsync method.")]
     protected override IQueryable<TEntity> GetQueryable()
     {

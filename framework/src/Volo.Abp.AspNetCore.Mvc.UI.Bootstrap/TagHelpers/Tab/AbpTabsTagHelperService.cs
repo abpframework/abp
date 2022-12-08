@@ -84,7 +84,7 @@ public class AbpTabsTagHelperService : AbpTagHelperService<AbpTabsTagHelper>
         var id = TagHelper.Name + "Content";
 
         var wrapper = new TagBuilder("div");
-        wrapper.AddCssClass("tab-content");
+        wrapper.AddCssClass("tab-content pt-3");
         wrapper.Attributes.Add("id", id);
         wrapper.InnerHtml.AppendHtml(contents);
 
