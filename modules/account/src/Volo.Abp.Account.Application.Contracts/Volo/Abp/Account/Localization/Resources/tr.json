@@ -1,6 +1,7 @@
 {
   "culture": "tr",
   "texts": {
+    "Menu:Account": "Hesap",
     "UserName": "Kullanıcı adı",
     "EmailAddress": "E-posta adresi",
     "UserNameOrEmailAddress": "Kullanıcı adı veya e-posta",
@@ -33,8 +34,11 @@
     "DisplayName:PhoneNumber": "Telefon numarası",
     "PersonalSettings": "Kişisel ayarlar",
     "PersonalSettingsSaved": "Kişisel ayarlar kaydedildi",
+    "PersonalSettingsChangedConfirmationModalTitle": "Personal info changed",
+    "PersonalSettingsChangedConfirmationModalDescription": "If you want to apply these changes, you have to login. Do you want to log out?",
     "PasswordChanged": "Şifre değiştirildi",
     "NewPasswordConfirmFailed": "Lütfen yeni şifreyi onaylayın.",
+    "NewPasswordSameAsOld": "Yeni şifre eski şifre ile aynı olamaz.",
     "Manage": "Manage",
     "MyAccount": "Hesabım",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "self-registration etkin mi ?",

@@ -1,7 +1,8 @@
-import { eLayoutType, SubscriptionService } from '@abp/ng.core';
+import {eLayoutType, SubscriptionService} from '@abp/ng.core';
 import { collapseWithMargin, slideFromBottom } from '@abp/ng.theme.shared';
-import { AfterViewInit, Component } from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import { LayoutService } from '../../services/layout.service';
+
 
 @Component({
   selector: 'abp-layout-application',

@@ -1,8 +1,8 @@
-import { Toast } from 'native-base';
 import i18n from 'i18n-js';
+import { Toast } from 'native-base';
 import api from '../api/API';
-import PersistentStorageActions from '../store/actions/PersistentStorageActions';
 import LoadingActions from '../store/actions/LoadingActions';
+import PersistentStorageActions from '../store/actions/PersistentStorageActions';
 
 export function initAPIInterceptor(store) {
   api.interceptors.request.use(
@@ -45,11 +45,10 @@ export function initAPIInterceptor(store) {
         showError({ error: errorRes.data.error || {}, status: errorRes.status });
       } else {
         Toast.show({
-          text: 'An unexpected error has occurred',
-          buttonText: 'x',
+          title: 'An unexpected error has occurred',
+          isClosable: true,
           duration: 10000,
-          type: 'danger',
-          textStyle: { textAlign: 'center' },
+          backgroundColor: 'danger.500',
         });
       }
 
@@ -93,10 +92,9 @@ function showError({ error = {}, status }) {
   }
 
   Toast.show({
-    text: `${title}\n${message}`,
-    buttonText: 'x',
+    title: `${title}\n${message}`,
+    isClosable: true,
     duration: 10000,
-    type: 'danger',
-    textStyle: { textAlign: 'center' },
+    backgroundColor: 'danger.500',
   });
 }

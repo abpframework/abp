@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
 using Volo.Abp.BlazoriseUI;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout;
 
@@ -13,8 +15,11 @@ public partial class PageHeader : ComponentBase
 
     public IPageToolbarManager PageToolbarManager { get; set; }
 
-    [Parameter]
-    public string Title { get; set; }
+    [Inject]
+    public PageLayout PageLayout { get; private set; }
+
+    [Parameter] // TODO: Consider removing this property in future and use only PageLayout.
+    public string Title { get => PageLayout.Title; set => PageLayout.Title = value; }
 
     [Parameter]
     public bool BreadcrumbShowHome { get; set; } = true;
@@ -25,25 +30,37 @@ public partial class PageHeader : ComponentBase
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 
-    [Parameter]
-    public List<BreadcrumbItem> BreadcrumbItems { get; set; }
+    [Parameter] // TODO: Consider removing this property in future and use only PageLayout.
+    public List<BreadcrumbItem> BreadcrumbItems {
+        get => PageLayout.BreadcrumbItems.ToList();
+        set => PageLayout.BreadcrumbItems = new ObservableCollection<BreadcrumbItem>(value);
+    }
 
     [Parameter]
     public PageToolbar Toolbar { get; set; }
 
     public PageHeader()
     {
-        BreadcrumbItems = new List<BreadcrumbItem>();
         ToolbarItemRenders = new List<RenderFragment>();
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected async override Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
         if (Toolbar != null)
         {
             var toolbarItems = await PageToolbarManager.GetItemsAsync(Toolbar);
             ToolbarItemRenders.Clear();
+
+            if (!Options.Value.RenderToolbar)
+            {
+                PageLayout.ToolbarItems.Clear();
+                foreach (var item in toolbarItems)
+                {
+                    PageLayout.ToolbarItems.Add(item);
+                }
+                return;
+            }
 
             foreach (var item in toolbarItems)
             {
@@ -65,7 +82,7 @@ public partial class PageHeader : ComponentBase
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
     }

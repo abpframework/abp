@@ -1,0 +1,39 @@
+{
+  "name": "Volo.Abp.TenantManagement.MongoDB",
+  "hash": "ce8774d1604c7f6f6420d89b0ac407fb",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.TenantManagement.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Domain",
+          "namespace": "Volo.Abp.TenantManagement",
+          "name": "AbpTenantManagementDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "namespace": "Volo.Abp.MongoDB",
+          "name": "AbpMongoDbModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpTenantManagementMongoDbModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.TenantManagement.MongoDB",
+      "connectionStringName": "AbpTenantManagement",
+      "databaseCollections": [
+        {
+          "entityFullName": "Volo.Abp.TenantManagement.Tenant",
+          "contentType": "databaseCollection",
+          "name": "AbpTenants",
+          "summary": null
+        }
+      ],
+      "contentType": "mongoDbContext",
+      "name": "TenantManagementMongoDbContext",
+      "summary": null
+    }
+  ]
+}

@@ -56,6 +56,8 @@
     "ShareOn": "Paylaş",
     "TitleLengthWarning": "Başlığınınz SEO dostu olabilmesi için 60 karakterden az olmasını sağlayın!",
     "ClearCache": "Önbelleği temizle",
-    "ClearCacheConfirmationMessage": "Önbelleği temizlemek istediğinizden emin misiniz?"
+    "ClearCacheConfirmationMessage": "Önbelleği temizlemek istediğinizden emin misiniz?",
+    "MarkdownSupported": "Markdown destekleniyor",
+    "FileUploadInfo": "Kopyalanan bir görüntüyü sürükleyin, bırakın veya yapıştırın."
   }
 }

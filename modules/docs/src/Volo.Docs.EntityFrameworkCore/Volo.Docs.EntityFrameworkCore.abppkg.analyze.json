@@ -1,0 +1,51 @@
+{
+  "name": "Volo.Docs.EntityFrameworkCore",
+  "hash": "0c5943f8fb36f3ace9b19500bcf0bbe1",
+  "contents": [
+    {
+      "namespace": "Volo.Docs.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Docs.Domain",
+          "namespace": "Volo.Docs",
+          "name": "DocsDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "name": "AbpEntityFrameworkCoreModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "DocsEntityFrameworkCoreModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.EntityFrameworkCore",
+      "connectionStringName": "Docs",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Docs.Documents.Document",
+          "contentType": "databaseTable",
+          "name": "DocsDocuments",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Docs.Documents.DocumentContributor",
+          "contentType": "databaseTable",
+          "name": "DocsDocumentContributors",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Docs.Projects.Project",
+          "contentType": "databaseTable",
+          "name": "DocsProjects",
+          "summary": null
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "DocsDbContext",
+      "summary": null
+    }
+  ]
+}

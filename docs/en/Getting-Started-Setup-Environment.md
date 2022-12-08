@@ -19,9 +19,9 @@ First things first! Let's setup your development environment before creating the
 
 The following tools should be installed on your development machine:
 
-* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 6.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 7.0+](https://dotnet.microsoft.com/download/dotnet) development.
 {{ if UI != "Blazor" }}
-* [Node v12 or v14](https://nodejs.org/)
+* [Node v16 or v18](https://nodejs.org/)
 * [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[1](#f-yarn)</sup> or npm v6+ (already installed with Node)
 {{ end }}
 {{ if Tiered == "Yes" }}

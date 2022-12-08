@@ -1,0 +1,24 @@
+{
+  "name": "Volo.Docs.HttpApi.Client",
+  "hash": "07f660adf3a154815743516185181b24",
+  "contents": [
+    {
+      "namespace": "Volo.Docs",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Docs.Application.Contracts",
+          "namespace": "Volo.Docs",
+          "name": "DocsApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Http.Client",
+          "namespace": "Volo.Abp.Http.Client",
+          "name": "AbpHttpClientModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "DocsHttpApiClientModule",
+      "summary": null
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "name": "Volo.Abp.AuditLogging.Domain",
+  "hash": "e9a142f0fb1cfdb533df93b36245c0d3",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Auditing",
+          "namespace": "Volo.Abp.Auditing",
+          "name": "AbpAuditingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "namespace": "Volo.Abp.Domain",
+          "name": "AbpDddDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain.Shared",
+          "namespace": "Volo.Abp.AuditLogging",
+          "name": "AbpAuditLoggingDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.ExceptionHandling",
+          "namespace": "Volo.Abp.ExceptionHandling",
+          "name": "AbpExceptionHandlingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Json",
+          "namespace": "Volo.Abp.Json",
+          "name": "AbpJsonModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpAuditLoggingDomainModule",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data"
+        },
+        {
+          "name": "IMultiTenant",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy"
+        }
+      ],
+      "methods": [],
+      "namespace": "Volo.Abp.AuditLogging",
+      "primaryKeyType": "Guid",
+      "collectionProperties": {
+        "entityChanges": {
+          "name": "EntityChange",
+          "namespace": "Volo.Abp.AuditLogging",
+          "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain"
+        },
+        "actions": {
+          "name": "AuditLogAction",
+          "namespace": "Volo.Abp.AuditLogging",
+          "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain"
+        }
+      },
+      "navigationProperties": {},
+      "contentType": "aggregateRoot",
+      "name": "AuditLog",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.AuditLogging",
+        "primaryKeyType": "Guid",
+        "collectionProperties": {
+          "entityChanges": {
+            "name": "EntityChange",
+            "namespace": "Volo.Abp.AuditLogging",
+            "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain"
+          },
+          "actions": {
+            "name": "AuditLogAction",
+            "namespace": "Volo.Abp.AuditLogging",
+            "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain"
+          }
+        },
+        "navigationProperties": {},
+        "contentType": "entity",
+        "name": "AuditLog",
+        "summary": null
+      },
+      "contentType": "repositoryInterface",
+      "name": "IAuditLogRepository",
+      "summary": null
+    }
+  ]
+}

@@ -33,10 +33,10 @@ var abp = abp || {};
 
         var _createDropdownItem = function (record, fieldItem, tableInstance) {
             var $li = $('<li/>');
-            var $a = $('<a/>');
+            var $a = $('<a/>').addClass('dropdown-item');
 
             if (fieldItem.displayNameHtml) {
-                $a.html(fieldItem.text);
+                $a.html(abp.utils.isFunction(fieldItem.text) ? fieldItem.text(record, tableInstance) : fieldItem.text);
             } else {
 
                 if (fieldItem.icon !== undefined && fieldItem.icon) {
@@ -45,7 +45,7 @@ var abp = abp || {};
                     $a.append($("<i>").addClass(fieldItem.iconClass + " me-1"));
                 }
 
-                $a.append(htmlEncode(fieldItem.text));
+                $a.append(htmlEncode(abp.utils.isFunction(fieldItem.text) ? fieldItem.text(record, tableInstance) : fieldItem.text));
             }
 
             if (fieldItem.action) {
@@ -81,14 +81,14 @@ var abp = abp || {};
                 var $button = $('<button type="button" class="btn btn-primary abp-action-button"></button>');
 
                 if (firstItem.displayNameHtml) {
-                    $button.html(firstItem.text);
+                    $button.html(abp.utils.isFunction(firstItem.text) ? firstItem.text(record, tableInstance) : firstItem.text);
                 } else {
                     if (firstItem.icon !== undefined && firstItem.icon) {
                         $button.append($("<i>").addClass("fa fa-" + firstItem.icon + " me-1"));
                     } else if (firstItem.iconClass) {
                         $button.append($("<i>").addClass(firstItem.iconClass + " me-1"));
                     }
-                    $button.append(htmlEncode(firstItem.text));
+                    $button.append(htmlEncode(abp.utils.isFunction(firstItem.text) ? firstItem.text(record, tableInstance) : firstItem.text));
                 }
 
                 if (firstItem.enabled && !firstItem.enabled({ record: record, table: tableInstance })) {
@@ -132,7 +132,7 @@ var abp = abp || {};
             }
 
             if (field.text) {
-                $dropdownButton.append(htmlEncode(field.text));
+                $dropdownButton.append(htmlEncode(abp.utils.isFunction(field.text) ? field.text(record, tableInstance) : field.text));
             } else {
                 $dropdownButton.append(htmlEncode(localize("DatatableActionDropdownDefaultText")));
             }
@@ -168,12 +168,11 @@ var abp = abp || {};
 
             if ($dropdownItemsContainer.find('li').length > 0) {
                 $dropdownItemsContainer.appendTo($container);
-                $dropdownButton.prependTo($container);
+            } else {
+                $dropdownButton.attr('disabled', 'disabled');
             }
 
-            if ($dropdownItemsContainer.children().length === 0) {
-                return "";
-            }
+            $dropdownButton.prependTo($container);
 
             return $container;
         };
@@ -273,7 +272,7 @@ var abp = abp || {};
                 }
             });
 
-       //Delay for processing indicator
+        //Delay for processing indicator
         var defaultDelayForProcessingIndicator = 500;
         var _existingDefaultFnPreDrawCallback = $.fn.dataTable.defaults.fnPreDrawCallback;
         $.extend(true,
@@ -366,7 +365,7 @@ var abp = abp || {};
                 }
 
                 //Text filter
-                if(settings.oInit.searching){
+                if(settings.oInit.searching !== false){
                     if (requestData.search && requestData.search.value !== "") {
                         input.filter = requestData.search.value;
                     } else {
@@ -432,9 +431,7 @@ var abp = abp || {};
 
             configuration.language = datatables.defaultConfigurations.language();
 
-            if(configuration.dom){
-                configuration.dom += datatables.defaultConfigurations.dom;
-            }else{
+            if(!configuration.dom){
                 configuration.dom = datatables.defaultConfigurations.dom;
             }
 

@@ -1,0 +1,39 @@
+{
+  "name": "Volo.Abp.BackgroundJobs.MongoDB",
+  "hash": "86276c7c339195b7847f99812ce7d45e",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.BackgroundJobs.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.Domain",
+          "namespace": "Volo.Abp.BackgroundJobs",
+          "name": "AbpBackgroundJobsDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "namespace": "Volo.Abp.MongoDB",
+          "name": "AbpMongoDbModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpBackgroundJobsMongoDbModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.BackgroundJobs.MongoDB",
+      "connectionStringName": "AbpBackgroundJobs",
+      "databaseCollections": [
+        {
+          "entityFullName": "Volo.Abp.BackgroundJobs.BackgroundJobRecord",
+          "contentType": "databaseCollection",
+          "name": "AbpBackgroundJobs",
+          "summary": null
+        }
+      ],
+      "contentType": "mongoDbContext",
+      "name": "BackgroundJobsMongoDbContext",
+      "summary": null
+    }
+  ]
+}

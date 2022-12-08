@@ -126,25 +126,31 @@ By default, all the job types use the `Default` RabbitMQ connection.
 Configure<AbpRabbitMqBackgroundJobOptions>(options =>
 {
     options.DefaultQueueNamePrefix = "my_app_jobs.";
+    options.DefaultDelayedQueueNamePrefix = "my_app_jobs.delayed"
+    options.PrefetchCount = 1;
     options.JobQueues[typeof(EmailSendingArgs)] =
         new JobQueueConfiguration(
             typeof(EmailSendingArgs),
             queueName: "my_app_jobs.emails",
-            connectionName: "SecondConnection"
+            connectionName: "SecondConnection",
+            delayedQueueName:"my_app_jobs.emails.delayed"
         );
 });
 ````
 
-* This example sets the default queue name prefix to `my_app_jobs.`. If different applications use the same RabbitMQ server, it would be important to use different prefixes for each application to not consume jobs of each other.
+* This example sets the default queue name prefix to `my_app_jobs.` and default delayed queue name prefix to `my_app_jobs.delayed`. If different applications use the same RabbitMQ server, it would be important to use different prefixes for each application to not consume jobs of each other.
+* Sets `PrefetchCount` for all queues.
 * Also specifies a different connection string for the `EmailSendingArgs`.
 
 `JobQueueConfiguration` class has some additional options in its constructor;
 
 * `queueName`: The queue name that is used for this job. The prefix is not added, so you need to specify the full name of the queue.
+* `DelayedQueueName`: The delayed queue name that is used for delayed execution of job. The prefix is not added, so you need to specify the full name of the queue.
 * `connectionName`: The RabbitMQ connection name (see the connection configuration above). This is optional and the default value is `Default`.
 * `durable` (optional, default: `true`).
 * `exclusive` (optional, default: `false`).
-* `autoDelete` (optional, default: `false`)
+* `autoDelete` (optional, default: `false`).
+* `PrefetchCount` (optional, default: null)
 
 See the RabbitMQ documentation if you want to understand the `durable`, `exclusive` and `autoDelete` options better, while most of the times the default configuration is what you want. 
 

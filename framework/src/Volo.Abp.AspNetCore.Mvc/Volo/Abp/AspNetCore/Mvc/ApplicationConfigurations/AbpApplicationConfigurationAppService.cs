@@ -13,8 +13,11 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Data;
 using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.External;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;
@@ -40,6 +43,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     private readonly ITimezoneProvider _timezoneProvider;
     private readonly AbpClockOptions _abpClockOptions;
     private readonly ICachedObjectExtensionsDtoService _cachedObjectExtensionsDtoService;
+    private readonly AbpApplicationConfigurationOptions _options;
 
     public AbpApplicationConfigurationAppService(
         IOptions<AbpLocalizationOptions> localizationOptions,
@@ -57,7 +61,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         ILanguageProvider languageProvider,
         ITimezoneProvider timezoneProvider,
         IOptions<AbpClockOptions> abpClockOptions,
-        ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService)
+        ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService,
+        IOptions<AbpApplicationConfigurationOptions> options)
     {
         _serviceProvider = serviceProvider;
         _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
@@ -73,11 +78,12 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         _timezoneProvider = timezoneProvider;
         _abpClockOptions = abpClockOptions.Value;
         _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
+        _options = options.Value;
         _localizationOptions = localizationOptions.Value;
         _multiTenancyOptions = multiTenancyOptions.Value;
     }
 
-    public virtual async Task<ApplicationConfigurationDto> GetAsync()
+    public virtual async Task<ApplicationConfigurationDto> GetAsync(ApplicationConfigurationRequestOptions options)
     {
         //TODO: Optimize & cache..?
 
@@ -87,15 +93,29 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         {
             Auth = await GetAuthConfigAsync(),
             Features = await GetFeaturesConfigAsync(),
-            Localization = await GetLocalizationConfigAsync(),
+            GlobalFeatures = await GetGlobalFeaturesConfigAsync(),
+            Localization = await GetLocalizationConfigAsync(options),
             CurrentUser = GetCurrentUser(),
             Setting = await GetSettingConfigAsync(),
             MultiTenancy = GetMultiTenancy(),
             CurrentTenant = GetCurrentTenant(),
             Timing = await GetTimingConfigAsync(),
             Clock = GetClockConfig(),
-            ObjectExtensions = _cachedObjectExtensionsDtoService.Get()
+            ObjectExtensions = _cachedObjectExtensionsDtoService.Get(),
+            ExtraProperties = new ExtraPropertyDictionary()
         };
+
+        if (_options.Contributors.Any())
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var context = new ApplicationConfigurationContributorContext(scope.ServiceProvider, result);
+                foreach (var contributor in _options.Contributors)
+                {
+                    await contributor.ContributeAsync(context);
+                }
+            }
+        }
 
         Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetAsync().");
 
@@ -129,6 +149,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             TenantId = _currentUser.TenantId,
             ImpersonatorUserId = _currentUser.FindImpersonatorUserId(),
             ImpersonatorTenantId = _currentUser.FindImpersonatorTenantId(),
+            ImpersonatorUserName = _currentUser.FindImpersonatorUserName(),
+            ImpersonatorTenantName = _currentUser.FindImpersonatorTenantName(),
             UserName = _currentUser.UserName,
             SurName = _currentUser.SurName,
             Name = _currentUser.Name,
@@ -150,7 +172,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         foreach (var policyName in policyNames)
         {
-            if (await _defaultAuthorizationPolicyProvider.GetPolicyAsync(policyName) == null && _permissionDefinitionManager.GetOrNull(policyName) != null)
+            if (await _defaultAuthorizationPolicyProvider.GetPolicyAsync(policyName) == null &&
+                await _permissionDefinitionManager.GetOrNullAsync(policyName) != null)
             {
                 abpPolicyNames.Add(policyName);
             }
@@ -162,8 +185,6 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         foreach (var policyName in otherPolicyNames)
         {
-            authConfig.Policies[policyName] = true;
-
             if (await _authorizationService.IsGrantedAsync(policyName))
             {
                 authConfig.GrantedPolicies[policyName] = true;
@@ -173,7 +194,6 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         var result = await _permissionChecker.IsGrantedAsync(abpPolicyNames.ToArray());
         foreach (var (key, value) in result.Result)
         {
-            authConfig.Policies[key] = true;
             if (value == PermissionGrantResult.Granted)
             {
                 authConfig.GrantedPolicies[key] = true;
@@ -183,26 +203,42 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         return authConfig;
     }
 
-    protected virtual async Task<ApplicationLocalizationConfigurationDto> GetLocalizationConfigAsync()
+    protected virtual async Task<ApplicationLocalizationConfigurationDto> GetLocalizationConfigAsync(
+        ApplicationConfigurationRequestOptions options)
     {
         var localizationConfig = new ApplicationLocalizationConfigurationDto();
 
         localizationConfig.Languages.AddRange(await _languageProvider.GetLanguagesAsync());
 
-        foreach (var resource in _localizationOptions.Resources.Values)
+        if (options.IncludeLocalizationResources)
         {
-            var dictionary = new Dictionary<string, string>();
+            var resourceNames = _localizationOptions
+                .Resources
+                .Values
+                .Select(x => x.ResourceName)
+                .Union(
+                    await LazyServiceProvider
+                        .LazyGetRequiredService<IExternalLocalizationStore>()
+                        .GetResourceNamesAsync()
+                );
 
-            var localizer = _serviceProvider.GetRequiredService(
-                typeof(IStringLocalizer<>).MakeGenericType(resource.ResourceType)
-            ) as IStringLocalizer;
-
-            foreach (var localizedString in localizer.GetAllStrings())
+            foreach (var resourceName in resourceNames)
             {
-                dictionary[localizedString.Name] = localizedString.Value;
-            }
+                var dictionary = new Dictionary<string, string>();
 
-            localizationConfig.Values[resource.ResourceName] = dictionary;
+                var localizer = await StringLocalizerFactory
+                    .CreateByResourceNameOrNullAsync(resourceName);
+
+                if (localizer != null)
+                {
+                    foreach (var localizedString in await localizer.GetAllStringsAsync())
+                    {
+                        dictionary[localizedString.Name] = localizedString.Value;
+                    }
+                }
+
+                localizationConfig.Values[resourceName] = dictionary;
+            }
         }
 
         localizationConfig.CurrentCulture = GetCurrentCultureInfo();
@@ -269,7 +305,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     {
         var result = new ApplicationFeatureConfigurationDto();
 
-        foreach (var featureDefinition in _featureDefinitionManager.GetAll())
+        foreach (var featureDefinition in await _featureDefinitionManager.GetAllAsync())
         {
             if (!featureDefinition.IsVisibleToClients)
             {
@@ -280,6 +316,18 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         }
 
         return result;
+    }
+
+    protected virtual Task<ApplicationGlobalFeatureConfigurationDto> GetGlobalFeaturesConfigAsync()
+    {
+        var result = new ApplicationGlobalFeatureConfigurationDto();
+
+        foreach (var enabledFeatureName in GlobalFeatureManager.Instance.GetEnabledFeatureNames())
+        {
+            result.EnabledFeatures.AddIfNotContains(enabledFeatureName);
+        }
+
+        return Task.FromResult(result);
     }
 
     protected virtual async Task<TimingDto> GetTimingConfigAsync()

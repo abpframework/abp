@@ -1,18 +1,16 @@
 import i18n from 'i18n-js';
-import { connectStyle } from 'native-base';
 import React, { forwardRef } from 'react';
 import { Text } from 'react-native';
 
 const ValidationMessage = ({ children, ...props }) =>
-  children ? <Text {...props}>{i18n.t(children)}</Text> : null;
+  children ? <Text style={styles} {...props}>{i18n.t(children)}</Text> : null;
 
 const styles = {
   fontSize: 12,
-  marginHorizontal: 10,
-  marginTop: -5,
+  marginTop: 3,
   color: '#ed2f2f',
 };
 
 const Forwarded = forwardRef((props, ref) => <ValidationMessage {...props} forwardedRef={ref} />);
 
-export default connectStyle('ABP.ValidationMessage', styles)(Forwarded);
+export default Forwarded

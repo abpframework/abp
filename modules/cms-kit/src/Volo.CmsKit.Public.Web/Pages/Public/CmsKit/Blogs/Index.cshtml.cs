@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.Public.Blogs;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs;
 
@@ -20,9 +19,17 @@ public class IndexModel : CmsKitPublicPageModelBase
     [BindProperty(SupportsGet = true)]
     public int CurrentPage { get; set; } = 1;
 
-    public PagedResultDto<BlogPostPublicDto> Blogs { get; private set; }
+    [BindProperty(SupportsGet = true)]
+    public Guid? AuthorId { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public Guid? TagId { get; set; }
+
+    public PagedResultDto<BlogPostCommonDto> Blogs { get; protected set; }
 
     public PagerModel PagerModel => new PagerModel(Blogs.TotalCount, Blogs.Items.Count, CurrentPage, PageSize, Request.Path.ToString());
+
+    public CmsUserDto SelectedAuthor { get; protected set; }
 
     protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
 
@@ -31,14 +38,23 @@ public class IndexModel : CmsKitPublicPageModelBase
         BlogPostPublicAppService = blogPostPublicAppService;
     }
 
-    public async Task OnGetAsync()
+    public virtual async Task<IActionResult> OnGetAsync()
     {
         Blogs = await BlogPostPublicAppService.GetListAsync(
             BlogSlug,
-            new PagedAndSortedResultRequestDto
+            new BlogPostGetListInput
             {
                 SkipCount = PageSize * (CurrentPage - 1),
-                MaxResultCount = PageSize
+                MaxResultCount = PageSize,
+                AuthorId = AuthorId,
+                TagId = TagId
             });
+
+        if (AuthorId != null)
+        {
+            SelectedAuthor = await BlogPostPublicAppService.GetAuthorHasBlogPostAsync(AuthorId.Value);
+        }
+        
+        return Page();
     }
 }

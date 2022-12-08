@@ -14,10 +14,17 @@
         @* ************************* PAGE HEADER ************************* *@
         <PageHeader Title="@L["Users"]"
                     BreadcrumbItems="@BreadcrumbItems"
-                    Toolbar="@Toolbar">
-        </PageHeader>
+                    Toolbar="@Toolbar" />
     </CardHeader>
     <CardBody>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is3">
+                <Field>
+                    <FieldLabel>@L["Search"]</FieldLabel>
+                    <TextEdit Size="Size.Small" Text="@GetListInput.Filter" TextChanged="@OnSearchTextChanged" />
+                </Field>
+            </Column>
+        </Row>
         @* ************************* DATA GRID ************************* *@
         <AbpExtensibleDataGrid TItem="IdentityUserDto"
                                Data="Entities"
@@ -52,7 +59,7 @@
                                 <TabPanel Name="UserInformations">
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
-                                            <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
+                                            <FieldLabel>@L["DisplayName:UserName"] *</FieldLabel>
                                             <TextEdit @bind-Text="NewEntity.UserName" Autofocus="true">
                                                 <Feedback>
                                                     <ValidationError/>
@@ -82,17 +89,24 @@
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
-                                            <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                                            <TextEdit Role="TextRole.Password" @bind-Text="NewEntity.Password">
-                                                <Feedback>
-                                                    <ValidationError/>
-                                                </Feedback>
-                                            </TextEdit>
+                                            <FieldLabel>@L["DisplayName:Password"] *</FieldLabel>
+                                            <Addons>
+                                                <Addon AddonType="AddonType.Body">
+                                                    <TextEdit Role="@_passwordTextRole" @bind-Text="NewEntity.Password">
+                                                    </TextEdit>
+                                                </Addon>
+                                                <Addon AddonType="AddonType.End">
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))">
+                                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                                    </Button>
+                                                </Addon>
+                                            </Addons>
+                                            <ValidationError Style="display: block"/>
                                         </Field>
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
-                                            <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
+                                            <FieldLabel>@L["DisplayName:Email"] *</FieldLabel>
                                             <TextEdit @bind-Text="NewEntity.Email">
                                                 <Feedback>
                                                     <ValidationError/>
@@ -166,7 +180,7 @@
                                 <TabPanel Name="UserInformations">
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
-                                            <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
+                                            <FieldLabel>@L["DisplayName:UserName"] *</FieldLabel>
                                             <TextEdit @bind-Text="EditingEntity.UserName" Autofocus="true">
                                                 <Feedback>
                                                     <ValidationError/>
@@ -197,16 +211,23 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                                            <TextEdit Role="TextRole.Password" @bind-Text="EditingEntity.Password">
-                                                <Feedback>
-                                                    <ValidationError/>
-                                                </Feedback>
-                                            </TextEdit>
+                                            <Addons>
+                                                <Addon AddonType="AddonType.Body">
+                                                    <TextEdit Role="@_passwordTextRole" @bind-Text="EditingEntity.Password">
+                                                    </TextEdit>
+                                                </Addon>
+                                                <Addon AddonType="AddonType.End">
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))">
+                                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                                    </Button>
+                                                </Addon>
+                                            </Addons>
+                                            <ValidationError Style="display: block"/>
                                         </Field>
                                     </Validation>
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
-                                            <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
+                                            <FieldLabel>@L["DisplayName:Email"] *</FieldLabel>
                                             <TextEdit @bind-Text="EditingEntity.Email">
                                                 <Feedback>
                                                     <ValidationError/>

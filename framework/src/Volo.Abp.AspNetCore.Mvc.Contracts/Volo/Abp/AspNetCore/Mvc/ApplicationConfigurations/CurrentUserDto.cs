@@ -15,6 +15,10 @@ public class CurrentUserDto
 
     public Guid? ImpersonatorTenantId { get; set; }
 
+    public string ImpersonatorUserName { get; set; }
+
+    public string ImpersonatorTenantName { get; set; }
+
     public string UserName { get; set; }
 
     public string Name { get; set; }

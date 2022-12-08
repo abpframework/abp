@@ -18,15 +18,16 @@ public class RemoteStreamContentOutputFormatter : OutputFormatter
         return typeof(IRemoteStreamContent).IsAssignableFrom(type);
     }
 
-    public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
+    public async override Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
     {
         var remoteStream = (IRemoteStreamContent)context.Object;
 
         if (remoteStream != null)
         {
             context.HttpContext.Response.ContentType = remoteStream.ContentType;
+            context.HttpContext.Response.ContentLength = remoteStream.ContentLength;
 
-            if (!remoteStream.FileName.IsNullOrWhiteSpace())
+            if (!remoteStream.FileName.IsNullOrWhiteSpace() && !context.HttpContext.Response.Headers.ContainsKey(HeaderNames.ContentDisposition))
             {
                 var contentDisposition = new ContentDispositionHeaderValue("attachment");
                 contentDisposition.SetHttpFileName(remoteStream.FileName);

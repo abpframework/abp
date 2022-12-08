@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.CmsKit.Admin.Web.Menus;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
+using Volo.Abp.AutoMapper;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using Volo.CmsKit.Localization;
-using Volo.CmsKit.Web;
-using Volo.CmsKit.Permissions;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
-using Volo.Abp.Localization;
-using Volo.Abp.AutoMapper;
-using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.CmsKit.Admin.MediaDescriptors;
+using Volo.CmsKit.Admin.Web.Menus;
+using Volo.CmsKit.Localization;
+using Volo.CmsKit.Permissions;
+using Volo.CmsKit.Web;
 
 namespace Volo.CmsKit.Admin.Web;
 
@@ -64,6 +64,7 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AuthorizeFolder("/CmsKit/Pages", CmsKitAdminPermissions.Pages.Default);
             options.Conventions.AuthorizeFolder("/CmsKit/Pages/Create", CmsKitAdminPermissions.Pages.Create);
             options.Conventions.AuthorizeFolder("/CmsKit/Pages/Update", CmsKitAdminPermissions.Pages.Update);
+            options.Conventions.AuthorizeFolder("/CmsKit/Pages/SetAsHomePage", CmsKitAdminPermissions.Pages.SetAsHomePage);
             options.Conventions.AuthorizeFolder("/CmsKit/Blogs", CmsKitAdminPermissions.Blogs.Default);
             options.Conventions.AuthorizeFolder("/CmsKit/Blogs/Create", CmsKitAdminPermissions.Blogs.Create);
             options.Conventions.AuthorizeFolder("/CmsKit/Blogs/Update", CmsKitAdminPermissions.Blogs.Update);
@@ -76,6 +77,7 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AuthorizePage("/CmsKit/Menus/MenuItems/CreateModal", CmsKitAdminPermissions.Menus.Create);
             options.Conventions.AuthorizePage("/CmsKit/Menus/MenuItems/UpdateModal", CmsKitAdminPermissions.Menus.Update);
             options.Conventions.AuthorizeFolder("/CmsKit/Menus/MenuItems", CmsKitAdminPermissions.Menus.Update);
+            options.Conventions.AuthorizeFolder("/CmsKit/GlobalResources", CmsKitAdminPermissions.GlobalResources.Default);
         });
 
         Configure<RazorPagesOptions>(options =>
@@ -91,12 +93,13 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AddPageRoute("/CmsKit/Comments/Index", "/Cms/Comments");
             options.Conventions.AddPageRoute("/CmsKit/Comments/Details", "/Cms/Comments/{Id}");
             options.Conventions.AddPageRoute("/CmsKit/Menus/MenuItems/Index", "/Cms/Menus/Items");
+            options.Conventions.AddPageRoute("/CmsKit/GlobalResources/Index", "/Cms/GlobalResources");
         });
 
         Configure<AbpPageToolbarOptions>(options =>
         {
 
-            options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.IndexModel>(
+            options.Configure<Pages.CmsKit.Tags.IndexModel>(
                 toolbar =>
                 {
                     toolbar.AddButton(
@@ -108,7 +111,7 @@ public class CmsKitAdminWebModule : AbpModule
                 }
             );
 
-            options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages.IndexModel>(
+            options.Configure<Pages.CmsKit.Pages.IndexModel>(
                 toolbar =>
                 {
                     toolbar.AddButton(
@@ -119,7 +122,7 @@ public class CmsKitAdminWebModule : AbpModule
                     );
                 });
 
-            options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs.IndexModel>(
+            options.Configure<Pages.CmsKit.Blogs.IndexModel>(
                 toolbar =>
                 {
                     toolbar.AddButton(
@@ -131,7 +134,7 @@ public class CmsKitAdminWebModule : AbpModule
                         );
                 });
 
-            options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts.IndexModel>(
+            options.Configure<Pages.CmsKit.BlogPosts.IndexModel>(
                 toolbar =>
                 {
                     toolbar.AddButton(
@@ -143,7 +146,7 @@ public class CmsKitAdminWebModule : AbpModule
                         );
                 });
 
-            options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.IndexModel>(
+            options.Configure<Pages.CmsKit.Menus.MenuItems.IndexModel>(
                 toolbar =>
                 {
                     toolbar.AddButton(

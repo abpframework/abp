@@ -11,13 +11,13 @@ export class SubscriptionService implements OnDestroy {
     return this.subscription.closed;
   }
 
-  addOne<T extends unknown>(
+  addOne<T>(
     source$: Observable<T>,
     next?: (value: T) => void,
     error?: (error: any) => void,
   ): Subscription;
-  addOne<T extends unknown>(source$: Observable<T>, observer?: PartialObserver<T>): Subscription;
-  addOne<T extends unknown>(
+  addOne<T>(source$: Observable<T>, observer?: PartialObserver<T>): Subscription;
+  addOne<T>(
     source$: Observable<T>,
     nextOrObserver?: PartialObserver<T> | Next<T>,
     error?: (error: any) => void,

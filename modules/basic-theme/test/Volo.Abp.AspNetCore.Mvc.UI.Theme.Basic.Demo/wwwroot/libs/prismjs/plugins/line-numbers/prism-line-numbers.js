@@ -1,17 +1,19 @@
 (function () {
 
-	if (typeof self === 'undefined' || !self.Prism || !self.document) {
+	if (typeof Prism === 'undefined' || typeof document === 'undefined') {
 		return;
 	}
 
 	/**
 	 * Plugin name which is used as a class name for <pre> which is activating the plugin
-	 * @type {String}
+	 *
+	 * @type {string}
 	 */
 	var PLUGIN_NAME = 'line-numbers';
 
 	/**
 	 * Regular expression used for determining line breaks
+	 *
 	 * @type {RegExp}
 	 */
 	var NEW_LINE_EXP = /\n(?!$)/g;
@@ -23,9 +25,10 @@
 	var config = Prism.plugins.lineNumbers = {
 		/**
 		 * Get node for provided line number
+		 *
 		 * @param {Element} element pre element
-		 * @param {Number} number line number
-		 * @return {Element|undefined}
+		 * @param {number} number line number
+		 * @returns {Element|undefined}
 		 */
 		getLine: function (element, number) {
 			if (element.tagName !== 'PRE' || !element.classList.contains(PLUGIN_NAME)) {
@@ -33,6 +36,9 @@
 			}
 
 			var lineNumberRows = element.querySelector('.line-numbers-rows');
+			if (!lineNumberRows) {
+				return;
+			}
 			var lineNumberStart = parseInt(element.getAttribute('data-start'), 10) || 1;
 			var lineNumberEnd = lineNumberStart + (lineNumberRows.children.length - 1);
 
@@ -52,6 +58,7 @@
 		 * Resizes the line numbers of the given element.
 		 *
 		 * This function will not add line numbers. It will only resize existing ones.
+		 *
 		 * @param {HTMLElement} element A `<pre>` element with line numbers.
 		 * @returns {void}
 		 */
@@ -166,15 +173,16 @@
 
 	/**
 	 * Returns style declarations for the element
+	 *
 	 * @param {Element} element
 	 */
-	var getStyles = function (element) {
+	function getStyles(element) {
 		if (!element) {
 			return null;
 		}
 
 		return window.getComputedStyle ? getComputedStyle(element) : (element.currentStyle || null);
-	};
+	}
 
 	var lastWidth = undefined;
 	window.addEventListener('resize', function () {

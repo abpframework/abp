@@ -34,15 +34,17 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        TenantConfiguration tenant;
+        TenantConfiguration tenant = null;
         try
         {
             tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
         }
         catch (Exception e)
         {
-            await _options.MultiTenancyMiddlewareErrorPageBuilder(context, e);
-            return;
+            if (await _options.MultiTenancyMiddlewareErrorPageBuilder(context, e))
+            {
+                return;
+            }
         }
 
         if (tenant?.Id != _currentTenant.Id)
@@ -116,6 +118,12 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
             uiCulture = defaultLanguage;
         }
 
-        return new RequestCulture(culture, uiCulture);
+        if (CultureHelper.IsValidCultureCode(culture) &&
+            CultureHelper.IsValidCultureCode(uiCulture))
+        {
+            return new RequestCulture(culture, uiCulture);
+        }
+
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 {
   "culture": "fi",
   "texts": {
+    "Menu:Account": "Tili",
     "UserName": "Käyttäjätunnus",
     "EmailAddress": "Sähköpostiosoite",
     "UserNameOrEmailAddress": "Käyttäjänimi tai Sähköpostiosoite",
@@ -35,6 +36,7 @@
     "PersonalSettingsSaved": "Henkilökohtaiset asetukset tallennettu",
     "PasswordChanged": "Salasana vaihdettu",
     "NewPasswordConfirmFailed": "Vahvista uusi salasana.",
+    "NewPasswordSameAsOld": "Uusi salasana ei voi olla sama kuin vanha salasana.",
     "Manage": "Hallitse",
     "MyAccount": "Tilini",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Onko itserekisteröinti käytössä",

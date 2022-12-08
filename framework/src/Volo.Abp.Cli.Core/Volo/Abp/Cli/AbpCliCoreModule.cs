@@ -2,17 +2,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
-using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ServiceProxying;
 using Volo.Abp.Cli.ServiceProxying.Angular;
 using Volo.Abp.Cli.ServiceProxying.CSharp;
 using Volo.Abp.Cli.ServiceProxying.JavaScript;
 using Volo.Abp.Domain;
 using Volo.Abp.Http;
-using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Json;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Minify;
 using Volo.Abp.Modularity;
 
@@ -34,11 +31,6 @@ public class AbpCliCoreModule : AbpModule
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-        Configure<AbpSystemTextJsonSerializerOptions>(options =>
-        {
-            options.UnsupportedTypes.Add(typeof(ResourceMapping));
-        });
-
         Configure<AbpCliOptions>(options =>
         {
             options.Commands[HelpCommand.Name] = typeof(HelpCommand);
@@ -49,6 +41,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[AddPackageCommand.Name] = typeof(AddPackageCommand);
             options.Commands[AddModuleCommand.Name] = typeof(AddModuleCommand);
             options.Commands[ListModulesCommand.Name] = typeof(ListModulesCommand);
+            options.Commands[ListTemplatesCommand.Name] = typeof(ListTemplatesCommand);
             options.Commands[LoginCommand.Name] = typeof(LoginCommand);
             options.Commands[LoginInfoCommand.Name] = typeof(LoginInfoCommand);
             options.Commands[LogoutCommand.Name] = typeof(LogoutCommand);
@@ -64,6 +57,10 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[CreateMigrationAndRunMigratorCommand.Name] = typeof(CreateMigrationAndRunMigratorCommand);
             options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
+            options.Commands[CliCommand.Name] = typeof(CliCommand);
+            
+            options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Pro");
+            options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Lite");
         });
 
         Configure<AbpCliServiceProxyOptions>(options =>

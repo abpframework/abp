@@ -1,9 +1,7 @@
-﻿using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Shouldly;
+using Volo.Abp;
+using Xunit;
 
 namespace Volo.CmsKit.Pages;
 
@@ -20,6 +18,7 @@ public class PageManager_Test : CmsKitDomainTestBase
         pageRepository = GetRequiredService<IPageRepository>();
     }
 
+    [Fact]
     public async Task CreateAsync_ShouldWorkProperly_WithNonExistingSlug()
     {
         var title = "My awesome page";
@@ -34,6 +33,7 @@ public class PageManager_Test : CmsKitDomainTestBase
         page.Content.ShouldBe(content);
     }
 
+    [Fact]
     public async Task CreateAsync_ShouldThrowException_WithExistingSlug()
     {
         var title = "My awesome page";
@@ -46,6 +46,7 @@ public class PageManager_Test : CmsKitDomainTestBase
         exception.ShouldNotBeNull();
     }
 
+    [Fact]
     public async Task SetSlugAsync_ShouldWorkProperly_WithNonExistingSlug()
     {
         var newSlug = "freshly-generated-new-slug";
@@ -56,6 +57,7 @@ public class PageManager_Test : CmsKitDomainTestBase
         page.Slug.ShouldBe(newSlug);
     }
 
+    [Fact]
     public async Task SetSlugAsync_ShouldThrowException_WithExistingSlug()
     {
         var newSlug = testData.Page_2_Slug;
@@ -65,5 +67,39 @@ public class PageManager_Test : CmsKitDomainTestBase
                             await pageManager.SetSlugAsync(page, newSlug));
 
         exception.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task SetHomePageAsync_ShouldWorkProperly_IfExistHomePage()
+    {
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var page = await pageRepository.GetAsync(testData.Page_1_Id);
+
+            await pageManager.SetHomePageAsync(page);
+        });
+
+        var page = await pageRepository.GetAsync(testData.Page_1_Id);
+        page.IsHomePage.ShouldBeTrue();
+
+        var pageSetAsHomePageAsFalse = await pageRepository.GetAsync(testData.Page_2_Id);
+        pageSetAsHomePageAsFalse.IsHomePage.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task SetHomePageAsync_ShouldThrowException_WhenMultipleHomePageExist()
+    {
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var page1 = await pageRepository.GetAsync(testData.Page_1_Id);
+            var page2 = await pageRepository.GetAsync(testData.Page_2_Id);
+
+            page1.SetIsHomePage(true);
+            page2.SetIsHomePage(true);
+
+            await pageRepository.UpdateManyAsync(new[] { page1, page2 }, autoSave: true);
+
+            await Assert.ThrowsAsync<BusinessException>(async () => await pageManager.SetHomePageAsync(page1));
+        });
     }
 }

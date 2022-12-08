@@ -1,14 +1,14 @@
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { eFeatureManagementComponents } from '@abp/ng.feature-management';
 import { GetTenantsInput, TenantDto, TenantService } from '@abp/ng.tenant-management/proxy';
-import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
+import {Confirmation, ConfirmationService, ToasterService} from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.theme.shared/extensions';
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eTenantManagementComponents } from '../../enums/components';
 
@@ -28,7 +28,7 @@ export class TenantsComponent implements OnInit {
 
   selected!: TenantDto;
 
-  tenantForm!: FormGroup;
+  tenantForm!: UntypedFormGroup;
 
   isModalVisible!: boolean;
 
@@ -53,7 +53,8 @@ export class TenantsComponent implements OnInit {
     private injector: Injector,
     private confirmationService: ConfirmationService,
     private service: TenantService,
-    private fb: FormBuilder,
+    private toasterService: ToasterService,
+    private fb: UntypedFormBuilder,
   ) {}
 
   ngOnInit() {
@@ -107,6 +108,7 @@ export class TenantsComponent implements OnInit {
       )
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
+          this.toasterService.success('AbpUi::SuccessfullyDeleted');
           this.service.delete(id).subscribe(() => this.list.get());
         }
       });

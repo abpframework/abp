@@ -23,7 +23,8 @@ public static class ProjectFinder
             case NuGetPackageTarget.Web:
                 return FindProjectEndsWith(projectFiles, assemblyNames, ".Web");
             case NuGetPackageTarget.IdentityServer:
-                return FindProjectEndsWith(projectFiles, assemblyNames, ".IdentityServer");
+                return FindProjectEndsWith(projectFiles, assemblyNames, ".IdentityServer") ??
+                       FindProjectEndsWith(projectFiles, assemblyNames, ".AuthServer");
             case NuGetPackageTarget.EntityFrameworkCore:
                 return FindProjectEndsWith(projectFiles, assemblyNames, ".EntityFrameworkCore");
             case NuGetPackageTarget.MongoDB:
@@ -48,7 +49,8 @@ public static class ProjectFinder
                        FindProjectEndsWith(projectFiles, assemblyNames, ".Web") ??
                        FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi.Host");
             case NuGetPackageTarget.Blazor:
-                return FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
+                return FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor")
+                    ?? FindProjectEndsWith(projectFiles, assemblyNames, ".MauiBlazor");;
             case NuGetPackageTarget.BlazorWebAssembly:
                 var BlazorWebAssemblyTargetProject = FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
                 return BlazorWebAssemblyTargetProject != null &&
@@ -61,6 +63,8 @@ public static class ProjectFinder
                        BlazorProjectTypeChecker.IsBlazorServerProject(BlazorServerTargetProject)
                     ? BlazorServerTargetProject
                     : null;
+            case NuGetPackageTarget.MauiBlazor:
+                return FindProjectEndsWith(projectFiles, assemblyNames, ".MauiBlazor");
             default:
                 return null;
         }

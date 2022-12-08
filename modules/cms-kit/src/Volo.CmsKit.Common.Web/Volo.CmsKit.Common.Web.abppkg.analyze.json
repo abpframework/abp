@@ -1,11 +1,29 @@
 {
   "name": "Volo.CmsKit.Common.Web",
-  "hash": "0ed851e40c32f928cb057e6d2bbe1a51",
+  "hash": "2d1411a8c551f908543bb0ca9a78514e",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Web",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+          "name": "AbpAspNetCoreMvcUiThemeSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.CmsKit.Common.Application.Contracts",
+          "namespace": "Volo.CmsKit",
+          "name": "CmsKitCommonApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "CmsKitCommonWebModule"
+      "name": "CmsKitCommonWebModule",
+      "summary": null
     }
   ]
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
 using NuGet.Versioning;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -16,52 +17,116 @@ namespace Volo.Abp.Cli.LIbs;
 
 public class InstallLibsService : IInstallLibsService, ITransientDependency
 {
-    public ICmdHelper CmdHelper { get; }
+    private readonly static List<string> ExcludeDirectory = new List<string>()
+    {
+        "node_modules",
+        ".git",
+        ".idea",
+        Path.Combine("bin", "debug"),
+        Path.Combine("obj", "debug")
+    };
+
+    public NpmHelper NpmHelper { get; }
     public const string LibsDirectory = "./wwwroot/libs";
 
     public ILogger<InstallLibsService> Logger { get; set; }
 
-    private readonly IJsonSerializer _jsonSerializer;
-
-    public InstallLibsService(IJsonSerializer jsonSerializer, ICmdHelper cmdHelper)
+    public InstallLibsService(NpmHelper npmHelper)
     {
-        CmdHelper = cmdHelper;
-        _jsonSerializer = jsonSerializer;
-        Logger = NullLogger<InstallLibsService>.Instance;
+        NpmHelper = npmHelper;
     }
 
     public async Task InstallLibsAsync(string directory)
     {
-        var projectFiles = Directory.GetFiles(directory, "*.csproj");
-        if (!projectFiles.Any())
+        var projectPaths = FindAllProjects(directory);
+        if (!projectPaths.Any())
         {
-            Logger.LogError("No project file found in the directory.");
+            Logger.LogError("No project found in the directory.");
             return;
         }
 
-        if (!await CanInstallLibs(directory))
-        {
-            Logger.LogWarning(
-                "abp install-libs command is available for MVC, Razor Page, and Blazor-Server UI types");
-            return;
-        }
-
-        if (!IsNpmInstalled())
+        if (!NpmHelper.IsNpmInstalled())
         {
             Logger.LogWarning("NPM is not installed, visit https://nodejs.org/en/download/ and install NPM");
             return;
         }
 
-        if (IsYarnAvailable())
+        if (!NpmHelper.IsYarnAvailable())
         {
-            RunYarn(directory);
-        }
-        else
-        {
-            RunNpmInstall(directory);
+            Logger.LogWarning("YARN is not installed, which may cause package inconsistency, please use YARN instead of NPM. visit https://classic.yarnpkg.com/lang/en/docs/install/ and install YARN");
         }
 
-        await CleanAndCopyResources(directory);
+        Logger.LogInformation($"Found {projectPaths.Count} projects.");
+        foreach (var projectPath in projectPaths)
+        {
+            Logger.LogInformation($"{Path.GetDirectoryName(projectPath)}");
+        }
+
+        foreach (var projectPath in projectPaths)
+        {
+            var projectDirectory = Path.GetDirectoryName(projectPath);
+
+            // angular
+            if (projectPath.EndsWith("angular.json"))
+            {
+                if (NpmHelper.IsYarnAvailable())
+                {
+                    NpmHelper.RunYarn(projectDirectory);
+                }
+                else
+                {
+                    NpmHelper.RunNpmInstall(projectDirectory);
+                }
+            }
+
+            // MVC or BLAZOR SERVER
+            if (projectPath.EndsWith(".csproj"))
+            {
+                var packageJsonFilePath = Path.Combine(Path.GetDirectoryName(projectPath), "package.json");
+
+                if (!File.Exists(packageJsonFilePath))
+                {
+                    continue;
+                }
+
+                if (NpmHelper.IsYarnAvailable())
+                {
+                    NpmHelper.RunYarn(projectDirectory);
+                }
+                else
+                {
+                    NpmHelper.RunNpmInstall(projectDirectory);
+                }
+
+                await CleanAndCopyResources(projectDirectory);
+            }
+        }
+    }
+
+    private List<string> FindAllProjects(string directory)
+    {
+        return Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories)
+            .Union(Directory.GetFiles(directory, "angular.json", SearchOption.AllDirectories))
+            .Where(file => ExcludeDirectory.All(x => file.IndexOf(x, StringComparison.OrdinalIgnoreCase) == -1))
+            .Where(file =>
+            {
+                if (file.EndsWith(".csproj"))
+                {
+                    var packageJsonFilePath = Path.Combine(Path.GetDirectoryName(file), "package.json");
+                    if (!File.Exists(packageJsonFilePath))
+                    {
+                        return false;
+                    }
+
+                    using (var reader = File.OpenText(file))
+                    {
+                        return reader.ReadToEnd().Contains("Microsoft.NET.Sdk.Web");
+                    }
+                }
+                return true;
+            })
+            .OrderBy(x => x)
+            .ToList();
     }
 
     private async Task CleanAndCopyResources(string fileDirectory)
@@ -78,7 +143,8 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             {
                 var mappingFileContent = await reader.ReadToEndAsync();
 
-                var mapping = _jsonSerializer.Deserialize<ResourceMapping>(mappingFileContent
+                // System.Text.Json doesn't support the property name without quotes.
+                var mapping = Newtonsoft.Json.JsonConvert.DeserializeObject<ResourceMapping>(mappingFileContent
                     .Replace("module.exports", string.Empty)
                     .Replace("=", string.Empty).Trim().TrimEnd(';'));
 
@@ -126,18 +192,6 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                 File.Copy(file.Path, destFilePath);
 
             }
-        }
-    }
-
-    private async Task<bool> CanInstallLibs(string fileDirectory)
-    {
-        var projectFiles = Directory.GetFiles(fileDirectory, "*.csproj");
-
-        using (var reader = File.OpenText(projectFiles[0]))
-        {
-            var projectFileContent = await reader.ReadToEndAsync();
-
-            return projectFileContent.Contains("Microsoft.NET.Sdk.Web");
         }
     }
 
@@ -193,39 +247,5 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
         }
 
         return pattern;
-    }
-
-    private void RunNpmInstall(string directory)
-    {
-        Logger.LogInformation($"Running npm install on {directory}");
-        CmdHelper.RunCmd($"cd {directory} && npm install");
-    }
-
-    private void RunYarn(string directory)
-    {
-        Logger.LogInformation($"Running Yarn on {directory}");
-        CmdHelper.RunCmd($"cd {directory} && yarn");
-    }
-
-    private bool IsNpmInstalled()
-    {
-        var output = CmdHelper.RunCmdAndGetOutput("npm -v").Trim();
-        return SemanticVersion.TryParse(output, out _);
-    }
-
-    private bool IsYarnAvailable()
-    {
-        var output = CmdHelper.RunCmdAndGetOutput("npm list yarn -g").Trim();
-        if (output.Contains("empty"))
-        {
-            return false;
-        }
-
-        if (!SemanticVersion.TryParse(output.Substring(output.IndexOf('@') + 1), out var version))
-        {
-            return false;
-        }
-
-        return version > SemanticVersion.Parse("1.20.0");
     }
 }

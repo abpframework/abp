@@ -15,8 +15,6 @@
     PageLayout.Content.Title = L["Comments"].Value;
     PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
     PageLayout.Content.MenuItemName = CmsKitAdminMenus.Comments.CommentsMenu;
-
-    var defaultStartDate = DateTime.Now.AddDays(-7).Date.ToShortDateString();
 }
 
 @section styles{
@@ -37,14 +35,14 @@
     <abp-card-body>
         <div id="CmsKitCommentsWrapper">
             <form id="CmsKitCommentsFilterForm" method="post">
-                <abp-row>
+                <abp-row class="align-items-end">
                     <abp-column size-lg="_4" size-md="_12">
-                        <abp-row class="input-daterange">
+                        <abp-row>
                             <abp-column size-lg="_6" size-md="_6">
-                                <abp-input asp-for="@Model.CreationStartDate" label="@L["StartDate"].Value" value="@defaultStartDate" type="text" />
+                                <abp-input asp-for="@Model.CreationStartDate" class="singledatepicker" label="@L["StartDate"].Value" type="text" />
                             </abp-column>
                             <abp-column size-lg="_6" size-md="_6">
-                                <abp-input asp-for="@Model.CreationEndDate" label="@L["EndDate"].Value" type="text" />
+                                <abp-input asp-for="@Model.CreationEndDate" class="singledatepicker" label="@L["EndDate"].Value" type="text" />
                             </abp-column>
                         </abp-row>
                     </abp-column>
@@ -58,11 +56,9 @@
                     </abp-column>
 
                     <abp-column size-lg="_2" size-md="_6">
-                        <div class="d-grid gap-2">
-                            <abp-button class="mt-md-4" button-type="Primary" type="submit" style="margin-top: 1.75rem !important;">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </abp-button>
-                        </div>
+                        <abp-button class="w-100 mb-3" button-type="Primary" type="submit">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </abp-button>
                     </abp-column>
                 </abp-row>
             </form>

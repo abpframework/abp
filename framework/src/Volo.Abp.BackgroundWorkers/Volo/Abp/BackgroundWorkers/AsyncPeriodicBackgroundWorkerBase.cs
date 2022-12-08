@@ -12,6 +12,7 @@ public abstract class AsyncPeriodicBackgroundWorkerBase : BackgroundWorkerBase
 {
     protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected AbpAsyncTimer Timer { get; }
+    protected CancellationToken StartCancellationToken { get; set; }
 
     protected AsyncPeriodicBackgroundWorkerBase(
         AbpAsyncTimer timer,
@@ -22,13 +23,15 @@ public abstract class AsyncPeriodicBackgroundWorkerBase : BackgroundWorkerBase
         Timer.Elapsed = Timer_Elapsed;
     }
 
-    public override async Task StartAsync(CancellationToken cancellationToken = default)
+    public async override Task StartAsync(CancellationToken cancellationToken = default)
     {
+        StartCancellationToken = cancellationToken;
+
         await base.StartAsync(cancellationToken);
         Timer.Start(cancellationToken);
     }
 
-    public override async Task StopAsync(CancellationToken cancellationToken = default)
+    public async override Task StopAsync(CancellationToken cancellationToken = default)
     {
         Timer.Stop(cancellationToken);
         await base.StopAsync(cancellationToken);
@@ -36,16 +39,16 @@ public abstract class AsyncPeriodicBackgroundWorkerBase : BackgroundWorkerBase
 
     private async Task Timer_Elapsed(AbpAsyncTimer timer)
     {
-        await DoWorkAsync();
+        await DoWorkAsync(StartCancellationToken);
     }
 
-    private async Task DoWorkAsync()
+    private async Task DoWorkAsync(CancellationToken cancellationToken = default)
     {
         using (var scope = ServiceScopeFactory.CreateScope())
         {
             try
             {
-                await DoWorkAsync(new PeriodicBackgroundWorkerContext(scope.ServiceProvider));
+                await DoWorkAsync(new PeriodicBackgroundWorkerContext(scope.ServiceProvider, cancellationToken));
             }
             catch (Exception ex)
             {

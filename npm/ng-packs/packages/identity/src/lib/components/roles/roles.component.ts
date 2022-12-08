@@ -1,14 +1,14 @@
 import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
+import {Confirmation, ConfirmationService, ToasterService} from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.theme.shared/extensions';
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
 
@@ -26,7 +26,7 @@ import { eIdentityComponents } from '../../enums/components';
 export class RolesComponent implements OnInit {
   data: PagedResultDto<IdentityRoleDto> = { items: [], totalCount: 0 };
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   selected: IdentityRoleDto;
 
@@ -47,6 +47,7 @@ export class RolesComponent implements OnInit {
   constructor(
     public readonly list: ListService<PagedAndSortedResultRequestDto>,
     protected confirmationService: ConfirmationService,
+    private toasterService: ToasterService,
     protected injector: Injector,
     protected service: IdentityRoleService,
   ) {}
@@ -100,6 +101,7 @@ export class RolesComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
+          this.toasterService.success('AbpUi::SuccessfullyDeleted');
           this.service.delete(id).subscribe(() => this.list.get());
         }
       });

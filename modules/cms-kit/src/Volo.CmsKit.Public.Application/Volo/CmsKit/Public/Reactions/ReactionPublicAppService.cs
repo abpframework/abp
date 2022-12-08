@@ -1,15 +1,19 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit.Public.Reactions;
 
+[RequiresFeature(CmsKitFeatures.ReactionEnable)]
 [RequiresGlobalFeature(typeof(ReactionsFeature))]
 public class ReactionPublicAppService : CmsKitPublicAppServiceBase, IReactionPublicAppService
 {
@@ -39,7 +43,9 @@ public class ReactionPublicAppService : CmsKitPublicAppServiceBase, IReactionPub
                     CurrentUser.GetId(),
                     entityType,
                     entityId
-                )).ToDictionary(x => x.ReactionName, x => x)
+                ))
+                .GroupBy(x => x.ReactionName)
+                .ToDictionary(x => x.Key, x => x.First())
             : null;
 
         var reactionWithSelectionDtos = new List<ReactionWithSelectionDto>();

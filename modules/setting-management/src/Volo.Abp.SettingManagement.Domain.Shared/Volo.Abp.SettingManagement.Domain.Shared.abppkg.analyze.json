@@ -1,0 +1,51 @@
+{
+  "name": "Volo.Abp.SettingManagement.Domain.Shared",
+  "hash": "f2d3e0e780e73b531766a51f55f21acb",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.SettingManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Localization",
+          "namespace": "Volo.Abp.Localization",
+          "name": "AbpLocalizationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Features",
+          "namespace": "Volo.Abp.Features",
+          "name": "AbpFeaturesModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpSettingManagementDomainSharedModule",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "true",
+      "displayName": "Enable setting management",
+      "description": "Enable setting management system in the application.",
+      "isAvailableToHost": true,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "SettingManagement.Enable",
+      "summary": null
+    },
+    {
+      "valueType": "ToggleStringValueType",
+      "defaultValue": "false",
+      "displayName": "Allow changing email settings.",
+      "description": null,
+      "isAvailableToHost": false,
+      "isVisibleToClients": true,
+      "contentType": "feature",
+      "name": "SettingManagement.AllowChangingEmailSettings",
+      "summary": null
+    }
+  ]
+}

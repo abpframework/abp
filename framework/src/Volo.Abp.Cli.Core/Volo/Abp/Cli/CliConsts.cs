@@ -11,4 +11,15 @@ public static class CliConsts
     public const string HttpClientName = "AbpHttpClient";
 
     public const string LogoutUrl = CliUrls.WwwAbpIo + "api/license/logout";
+
+    public const string LicenseCodePlaceHolder = @"<LICENSE_CODE/>";
+
+    public const string AppSettingsJsonFileName = "appsettings.json";
+
+    public const string AppSettingsSecretJsonFileName = "appsettings.secrets.json";
+    
+    public static class MemoryKeys
+    {
+        public const string LatestCliVersionCheckDate = "LatestCliVersionCheckDate";
+    }
 }

@@ -3,7 +3,7 @@
 <a class="navbar-brand" href="">
     @if (!BrandingProvider.LogoUrl.IsNullOrWhiteSpace())
     {
-        <img src="@BrandingProvider.LogoUrl" alt="@BrandingProvider.AppName" >
+        <img src="@BrandingProvider.LogoUrl.TrimStart('/', '~')" alt="@BrandingProvider.AppName">
     }
     @BrandingProvider.AppName
 </a>

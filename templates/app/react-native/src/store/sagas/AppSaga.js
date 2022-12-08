@@ -1,6 +1,6 @@
-import { call, put, takeLatest, all } from 'redux-saga/effects';
+import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { Logout } from '../../api/AccountAPI';
 import { getApplicationConfiguration } from '../../api/ApplicationConfigurationAPI';
-import { logout as logoutAsync } from '../../api/AccountAPI';
 import AppActions from '../actions/AppActions';
 import LoadingActions from '../actions/LoadingActions';
 import PersistentStorageActions from '../actions/PersistentStorageActions';
@@ -20,7 +20,7 @@ function* setLanguage(action) {
 }
 
 function* logout() {
-  yield call(logoutAsync);
+  yield call(Logout);
   yield put(PersistentStorageActions.setToken({}));
   yield put(AppActions.fetchAppConfigAsync());
 }

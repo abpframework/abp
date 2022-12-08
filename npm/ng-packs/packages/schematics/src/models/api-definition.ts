@@ -31,6 +31,8 @@ export interface Module {
 export interface Controller {
   controllerName: string;
   type: string;
+  isRemoteService: boolean;
+  isIntegrationService: boolean;
   interfaces: InterfaceDef[];
   actions: Record<string, Action>;
 }
@@ -56,6 +58,8 @@ export interface ParameterInSignature {
   type: string;
   typeSimple: string;
   isOptional: boolean;
+  // eslint-disable-next-line
+  // @typescript-eslint/no-explicit-any
   defaultValue: any;
 }
 
@@ -66,6 +70,8 @@ export interface ParameterInBody {
   type: string;
   typeSimple: string;
   isOptional: boolean;
+  // eslint-disable-next-line
+  // @typescript-eslint/no-explicit-any
   defaultValue: any;
   constraintTypes: string[] | null;
   bindingSourceId: eBindingSourceId;

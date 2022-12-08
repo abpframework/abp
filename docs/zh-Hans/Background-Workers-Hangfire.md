@@ -54,7 +54,7 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
         CronExpression = Cron.Daily();
     }
 
-    public override Task DoWorkAsync()
+    public override Task DoWorkAsync(CancellationToken cancellationToken = default)
     {
         Logger.LogInformation("Executed MyLogWorker..!");
         return Task.CompletedTask;
@@ -67,28 +67,50 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
 
 > 你可以直接实现 `IHangfireBackgroundWorker`, 但是 `HangfireBackgroundWorkerBase` 提供了一些有用的属性,例如 `Logger`.
 
+### UnitOfWork
+
+```csharp
+public class MyLogWorker : HangfireBackgroundWorkerBase, IMyLogWorker
+{
+    public MyLogWorker()
+    {
+        RecurringJobId = nameof(MyLogWorker);
+        CronExpression = Cron.Daily();
+    }
+
+    public override Task DoWorkAsync(CancellationToken cancellationToken = default)
+    {
+        using (var uow = LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>().Begin())
+        {
+            Logger.LogInformation("Executed MyLogWorker..!");
+            return Task.CompletedTask;
+        }
+    }
+}
+```
+
 ## 注册到后台工作者管理器
 
-创建一个后台工作者后, 你应该添加到 `IBackgroundWorkerManager`, 最常用的地方是在你模块类的 `OnApplicationInitialization` 方法中:
+创建一个后台工作者后, 你应该添加到 `IBackgroundWorkerManager`, 最常用的地方是在你模块类的 `OnApplicationInitializationAsync` 方法中:
 
 ```` csharp
 [DependsOn(typeof(AbpBackgroundWorkersModule))]
 public class MyModule : AbpModule
 {
-    public override void OnApplicationInitialization(
+    public override async Task OnApplicationInitializationAsync(
         ApplicationInitializationContext context)
     {
-        context.AddBackgroundWorker<MyLogWorker>();
+        await context.AddBackgroundWorkerAsync<MyLogWorker>();
     }
 }
 ````
 
-`context.AddBackgroundWorker(...)` 是一个是以下代码快捷的扩展方法:
+`context.AddBackgroundWorkerAsync(...)` 是一个是以下代码快捷的扩展方法:
 
 ```` csharp
 context.ServiceProvider
     .GetRequiredService<IBackgroundWorkerManager>()
-    .Add(
+    .AddAsync(
         context
             .ServiceProvider
             .GetRequiredService<MyLogWorker>()
@@ -97,4 +119,4 @@ context.ServiceProvider
 
 它解析给定的后台工作者并添加到 `IBackgroundWorkerManager`.
 
-虽然我们通常在 `OnApplicationInitialization` 中添加后台工作者, 但对此没有限制. 你可以在任何地方注入 `IBackgroundWorkerManager` 并在运行时添加后台工作者.
+虽然我们通常在 `OnApplicationInitializationAsync` 中添加后台工作者, 但对此没有限制. 你可以在任何地方注入 `IBackgroundWorkerManager` 并在运行时添加后台工作者.

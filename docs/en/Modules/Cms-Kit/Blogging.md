@@ -33,7 +33,12 @@ Blog feature uses some of the other CMS Kit features. You can enable or disable 
 
 You can select/deselect the desired features for blog posts. 
 
-![features-dialog](../../images/cmskit-module-features-dialog.png)
+![features-dialog](../../images/cmskit-module-features-dialog-2.png)
+
+##### Quick Navigation Bar In Blog Post
+If you enable "Quick navigation bar in blog posts", it will enabled scroll index as seen below.
+
+![scroll-index](../../images/cmskit-module-features-scroll-index.png)
 
 ### Blog Post Management
 

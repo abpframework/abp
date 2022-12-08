@@ -7,6 +7,8 @@
     "Description:Abp.Ldap.ServerPort": "Server port",
     "DisplayName:Abp.Ldap.BaseDc": "Grunn léna hlutur",
     "Description:Abp.Ldap.BaseDc": "Grunn léna hluturt",
+    "DisplayName:Abp.Ldap.Domain": "Lén",
+    "Description:Abp.Ldap.Domain": "Lén",
     "DisplayName:Abp.Ldap.UserName": "Notanda nafn",
     "Description:Abp.Ldap.UserName": "Notanda nafn",
     "DisplayName:Abp.Ldap.Password": "Lykilorð",

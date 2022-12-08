@@ -1,6 +1,7 @@
 {
   "culture": "es",
   "texts": {
+    "Menu:Account": "Cuenta",
     "UserName": "Nombre de usuario",
     "EmailAddress": "Dirección de correo electrónico",
     "UserNameOrEmailAddress": "Nombre de usuario o dirección de correo electrónico",
@@ -35,6 +36,7 @@
     "PersonalSettingsSaved": "Ajustes personales guardados",
     "PasswordChanged": "Cambiar la contraseña",
     "NewPasswordConfirmFailed": "Por favor, confirme la nueva contraseña.",
+    "NewPasswordSameAsOld": "La nueva contraseña debe ser diferente de la contraseña actual.",
     "Manage": "Administrar",
     "MyAccount": "Mi cuenta",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "¿El auto-registro está habilitado?",

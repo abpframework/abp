@@ -198,6 +198,5 @@ describe('DynamicLayoutComponent', () => {
     spectator.detectComponentChanges();
 
     expect(spectator.query('abp-layout-empty')).toBeFalsy();
-    expect(spectator.query('abp-dynamic-layout').children[0].tagName).toEqual('ROUTER-OUTLET');
   });
 });

@@ -3,6 +3,7 @@ using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -14,7 +15,7 @@ using Tag = Volo.CmsKit.Tags.Tag;
 
 namespace Volo.CmsKit.MongoDB;
 
-[ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
+[ConnectionStringName(AbpCmsKitDbProperties.ConnectionStringName)]
 public interface ICmsKitMongoDbContext : IAbpMongoDbContext
 {
     IMongoCollection<UserReaction> UserReactions { get; }
@@ -40,4 +41,6 @@ public interface ICmsKitMongoDbContext : IAbpMongoDbContext
     IMongoCollection<MediaDescriptor> MediaDescriptors { get; }
 
     IMongoCollection<MenuItem> MenuItems { get; }
+
+    IMongoCollection<GlobalResource> GlobalResources { get; }
 }

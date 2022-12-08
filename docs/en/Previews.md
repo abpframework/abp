@@ -1,6 +1,6 @@
 # Preview Releases
 
-The preview versions are released **~2 weeks before** releasing a major or feature version of the ABP Framework. They are released for developers to try and provide feedback to have more stable versions.
+The preview versions are released **~4 weeks before** releasing a major or feature version of the ABP Framework. They are released for developers to try and provide feedback to have more stable versions.
 
 Versioning of a preview release is like that:
 
@@ -10,6 +10,14 @@ Versioning of a preview release is like that:
 More than one preview releases (like 3.1.0-rc.2 and 3.1.0-rc.3) might be published until the stable version (like 3.1.0).
 
 ## Using the Preview Versions
+
+### Update the CLI
+
+Before creating or updating an existing solution make sure to update the CLI to the latest preview version, for example:
+
+````bash
+dotnet tool update --global Volo.Abp.Cli --version 6.0.0-rc.2
+````
 
 ### New Solutions
 

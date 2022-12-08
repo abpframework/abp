@@ -1,0 +1,19 @@
+{
+  "name": "Volo.Abp.Identity.AspNetCore",
+  "hash": "f7b676f00b5b46aa65a365f1472fbf07",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Identity.AspNetCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityDomainModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpIdentityAspNetCoreModule",
+      "summary": null
+    }
+  ]
+}

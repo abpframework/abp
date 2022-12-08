@@ -67,7 +67,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
             creationEndDate,
             token);
 
-        if (sorting != null)
+        if (!sorting.IsNullOrEmpty())
         {
             sorting = "comment." + sorting;
         }

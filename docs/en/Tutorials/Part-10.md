@@ -126,7 +126,7 @@ migrationBuilder.AddForeignKey(
 * Creates an index on the `AuthorId` field.
 * Declares the foreign key to the `AppAuthors` table.
 
-> If you are using Visual Studio, you may want to use `Add-Migration Added_AuthorId_To_Book -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use `Add-Migration Added_AuthorId_To_Book -c BookStoreDbContext` and `Update-Database -Context BookStoreDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{end}}
 
@@ -325,7 +325,7 @@ This new method will be used from the UI to get a list of authors and fill a dro
 
 ### BookAppService
 
-Open the `BookAppService` interface in the `Books` folder of the `Acme.BookStore.Application` project and replace the file content with the following code:
+Open the `BookAppService` class in the `Books` folder of the `Acme.BookStore.Application` project and replace the file content with the following code:
 
 {{if DB=="EF"}}
 
@@ -377,7 +377,7 @@ namespace Acme.BookStore.Books
 
             //Prepare a query to join books and authors
             var query = from book in queryable
-                join author in _authorRepository on book.AuthorId equals author.Id
+                join author in await _authorRepository.GetQueryableAsync() on book.AuthorId equals author.Id
                 where book.Id == id
                 select new { book, author };
 
@@ -400,7 +400,7 @@ namespace Acme.BookStore.Books
 
             //Prepare a query to join books and authors
             var query = from book in queryable
-                join author in _authorRepository on book.AuthorId equals author.Id
+                join author in await _authorRepository.GetQueryableAsync() on book.AuthorId equals author.Id
                 select new {book, author};
 
             //Paging
@@ -449,7 +449,7 @@ namespace Acme.BookStore.Books
             {
                 return sorting.Replace(
                     "authorName",
-                    "author.Name", 
+                    "author.Name",
                     StringComparison.OrdinalIgnoreCase
                 );
             }
@@ -533,7 +533,7 @@ namespace Acme.BookStore.Books
             {
                 input.Sorting = nameof(Book.Name);
             }
-            
+
             //Get the IQueryable<Book> from the repository
             var queryable = await Repository.GetQueryableAsync();
 
@@ -582,7 +582,7 @@ namespace Acme.BookStore.Books
                 .ToArray();
 
             var queryable = await _authorRepository.GetQueryableAsync();
-            
+
             var authors = await AsyncExecuter.ToListAsync(
                 queryable.Where(a => authorIds.Contains(a.Id))
             );

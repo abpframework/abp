@@ -1,0 +1,34 @@
+{
+  "name": "Volo.Abp.BackgroundJobs.DemoApp",
+  "hash": "053ab974fd20cec81546a9ebd74179d0",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.BackgroundJobs.DemoApp",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.DemoApp.Shared",
+          "namespace": "Volo.Abp.BackgroundJobs.DemoApp.Shared",
+          "name": "DemoAppSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.EntityFrameworkCore",
+          "namespace": "Volo.Abp.BackgroundJobs.EntityFrameworkCore",
+          "name": "AbpBackgroundJobsEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Autofac",
+          "namespace": "Volo.Abp.Autofac",
+          "name": "AbpAutofacModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore.SqlServer",
+          "namespace": "Volo.Abp.EntityFrameworkCore.SqlServer",
+          "name": "AbpEntityFrameworkCoreSqlServerModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "DemoAppModule",
+      "summary": null
+    }
+  ]
+}

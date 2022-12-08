@@ -46,7 +46,7 @@
                     <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["TenantName"]</FieldLabel>
+                                <FieldLabel>@L["TenantName"] *</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
@@ -56,7 +56,7 @@
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["DisplayName:AdminEmailAddress"]</FieldLabel>
+                                <FieldLabel>@L["DisplayName:AdminEmailAddress"] *</FieldLabel>
                                 <TextEdit Role="@TextRole.Email" @bind-Text="@NewEntity.AdminEmailAddress">
                                     <Feedback>
                                         <ValidationError/>
@@ -65,14 +65,21 @@
                             </Field>
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
-                            <Field>
-                                <FieldLabel>@L["DisplayName:AdminPassword"]</FieldLabel>
-                                <TextEdit Role="@TextRole.Password" @bind-Text="@NewEntity.AdminPassword">
-                                    <Feedback>
-                                        <ValidationError/>
-                                    </Feedback>
-                                </TextEdit>
-                            </Field>
+						<Field>
+                             <FieldLabel>@L["DisplayName:AdminPassword"] *</FieldLabel>
+                             <Addons>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit Role="ShowPassword ? TextRole.Text : TextRole.Password" @bind-Text="@NewEntity.AdminPassword">
+                                    </TextEdit>
+                                </Addon>
+                                <Addon AddonType="AddonType.End">
+                                    <Button Color="Color.Secondary" Clicked="@(() => TogglePasswordVisibility())">
+                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                    </Button>
+                                </Addon>
+                            </Addons>
+                            <ValidationError Style="display: block" />
+                         </Field>
                         </Validation>
                         <ExtensionProperties TEntityType="TenantCreateDto" TResourceType="AbpTenantManagementResource" Entity="@NewEntity" LH="@LH"/>
                     </Validations>
@@ -100,7 +107,7 @@
                     <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["TenantName"]</FieldLabel>
+                                <FieldLabel>@L["TenantName"] *</FieldLabel>
                                 <TextEdit @bind-Text="@EditingEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>

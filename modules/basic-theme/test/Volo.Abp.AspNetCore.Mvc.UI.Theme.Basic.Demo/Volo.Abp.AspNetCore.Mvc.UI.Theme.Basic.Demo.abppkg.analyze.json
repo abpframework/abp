@@ -1,0 +1,29 @@
+{
+  "name": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo",
+  "hash": "66b7fd45780148492adcdfb9774a146d",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+          "name": "AbpAspNetCoreMvcUiBasicThemeModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo",
+          "name": "AbpAspNetCoreMvcUiThemeSharedDemoModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Autofac",
+          "namespace": "Volo.Abp.Autofac",
+          "name": "AbpAutofacModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpAspNetCoreMvcUiThemeBasicDemoModule",
+      "summary": null
+    }
+  ]
+}

@@ -7,6 +7,6 @@ export * from './logo/logo.component';
 export * from './nav-items/current-user.component';
 export * from './nav-items/languages.component';
 export * from './nav-items/nav-items.component';
+export * from './page-alert-container/page-alert-container.component';
 export * from './routes/routes.component';
 export * from './validation-error/validation-error.component';
-export * from './page-alert-container/page-alert-container.component';

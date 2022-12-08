@@ -74,9 +74,9 @@ public class AuthService : IAuthService, ITransientDependency
     {
         var configuration = new IdentityClientConfiguration(
             CliUrls.AccountAbpIo,
-            "role email abpio abpio_www abpio_commercial offline_access",
+            "abpio offline_access",
             "abp-cli",
-            "1q2w3e*",
+            null,
             OidcConstants.GrantTypes.Password,
             userName,
             password
@@ -86,6 +86,21 @@ public class AuthService : IAuthService, ITransientDependency
         {
             configuration["[o]abp-organization-name"] = organizationName;
         }
+
+        var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration);
+
+        File.WriteAllText(CliPaths.AccessToken, accessToken, Encoding.UTF8);
+    }
+
+    public async Task DeviceLoginAsync()
+    {
+        var configuration = new IdentityClientConfiguration(
+            CliUrls.AccountAbpIo,
+            "abpio offline_access",
+            "abp-cli",
+            null,
+            OidcConstants.GrantTypes.DeviceCode
+        );
 
         var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration);
 

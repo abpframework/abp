@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Mvc.Authorization;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
@@ -109,6 +109,7 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
             options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
             options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
             options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+            options.Languages.Add(new LanguageInfo("el", "el", "Ελληνικά"));
         });
 
         Configure<RazorPagesOptions>(options =>
@@ -125,6 +126,11 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         {
             options.Maps.Add("SerialNumber", () => ClaimTypes.SerialNumber);
             options.Maps.Add("DateOfBirth", () => ClaimTypes.DateOfBirth);
+        });
+
+        Configure<AbpApplicationConfigurationOptions>(options =>
+        {
+            options.Contributors.Add(new TestApplicationConfigurationContributor());
         });
     }
 

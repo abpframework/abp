@@ -1,0 +1,29 @@
+{
+  "name": "Volo.Abp.PermissionManagement.Web",
+  "hash": "19ff32f2f9f56d9a18139f3d47633020",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.PermissionManagement.Web",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Application.Contracts",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+          "name": "AbpAspNetCoreMvcUiBootstrapModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpPermissionManagementWebModule",
+      "summary": null
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "culture": "el",
+  "texts": {
+    "Menu:TenantManagement": "Διαχείριση ενοικιαστών",
+    "Tenants": "Ενοικιαστές",
+    "NewTenant": "Νέος Ενοικιαστής",
+    "TenantName": "Όνομα ενοικιαστή",
+    "DisplayName:TenantName": "Όνομα ενοικιαστή",
+    "TenantDeletionConfirmationMessage": "Ο μισθωτής '{0}' θα διαγραφεί. Το επιβεβαιώνεις;",
+    "ConnectionStrings": "Συμβολοσειρές σύνδεσης",
+    "DisplayName:DefaultConnectionString": "Προεπιλεγμένη συμβολοσειρά σύνδεσης",
+    "DisplayName:UseSharedDatabase": "Χρησιμοποιήστε την Κοινόχρηστη βάση δεδομένων",
+    "Permission:TenantManagement": "Διαχείριση ενοικιαστών",
+    "Permission:Create": "Δημιουργία",
+    "Permission:Edit": "Επεξεργασία",
+    "Permission:Delete": "Διαγραφή",
+    "Permission:ManageConnectionStrings": "Διαχείριση συμβολοσειρών σύνδεσης",
+    "Permission:ManageFeatures": "Διαχείριση λειτουργιών",
+    "DisplayName:AdminEmailAddress": "Διεύθυνση email διαχειριστή",
+    "DisplayName:AdminPassword": "Κωδικός διαχειριστή"
+  }
+}

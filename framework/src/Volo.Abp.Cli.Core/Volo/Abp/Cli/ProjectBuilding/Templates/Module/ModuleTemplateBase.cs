@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module;
 
@@ -10,6 +11,12 @@ public abstract class ModuleTemplateBase : TemplateInfo
     protected ModuleTemplateBase([NotNull] string name)
         : base(name)
     {
+    }
+
+    public static bool IsModuleTemplate(string templateName)
+    {
+        return templateName == ModuleTemplate.TemplateName ||
+               templateName == ModuleProTemplate.TemplateName;
     }
 
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
@@ -83,7 +90,9 @@ public abstract class ModuleTemplateBase : TemplateInfo
                 "https://localhost:44300",
                 "https://localhost:44301",
                 "https://localhost:44302",
-                "https://localhost:44303"
+                "https://localhost:44303",
+                "https://localhost:44304",
+                "https://localhost:44305"
             }));
     }
 

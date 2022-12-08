@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Auditing;
@@ -36,12 +37,13 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             var auditingManager = serviceScope.ServiceProvider.GetRequiredService<IAuditingManager>();
             if (auditingManager.Current != null)
             {
-                await ProceedByLoggingAsync(invocation, auditingHelper, auditingManager.Current);
+                await ProceedByLoggingAsync(invocation, auditingOptions, auditingHelper, auditingManager.Current);
             }
             else
             {
                 var currentUser = serviceScope.ServiceProvider.GetRequiredService<ICurrentUser>();
-                await ProcessWithNewAuditingScopeAsync(invocation, auditingOptions, currentUser, auditingManager, auditingHelper);
+                var unitOfWorkManager = serviceScope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+                await ProcessWithNewAuditingScopeAsync(invocation, auditingOptions, currentUser, auditingManager, auditingHelper, unitOfWorkManager);
             }
         }
     }
@@ -60,7 +62,9 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             return false;
         }
 
-        if (!auditingHelper.ShouldSaveAudit(invocation.Method))
+        if (!auditingHelper.ShouldSaveAudit(
+                invocation.Method,
+                ignoreIntegrationServiceAttribute: options.IsEnabledForIntegrationServices))
         {
             return false;
         }
@@ -70,16 +74,22 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
 
     private static async Task ProceedByLoggingAsync(
         IAbpMethodInvocation invocation,
+        AbpAuditingOptions options,
         IAuditingHelper auditingHelper,
         IAuditLogScope auditLogScope)
     {
         var auditLog = auditLogScope.Log;
-        var auditLogAction = auditingHelper.CreateAuditLogAction(
-            auditLog,
-            invocation.TargetObject.GetType(),
-            invocation.Method,
-            invocation.Arguments
-        );
+
+        AuditLogActionInfo auditLogAction = null;
+        if (!options.DisableLogActionInfo)
+        {
+            auditLogAction = auditingHelper.CreateAuditLogAction(
+                auditLog,
+                invocation.TargetObject.GetType(),
+                invocation.Method,
+                invocation.Arguments
+            );
+        }
 
         var stopwatch = Stopwatch.StartNew();
 
@@ -95,8 +105,12 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         finally
         {
             stopwatch.Stop();
-            auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-            auditLog.Actions.Add(auditLogAction);
+
+            if (auditLogAction != null)
+            {
+                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                auditLog.Actions.Add(auditLogAction);
+            }
         }
     }
 
@@ -105,14 +119,15 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         AbpAuditingOptions options,
         ICurrentUser currentUser,
         IAuditingManager auditingManager,
-        IAuditingHelper auditingHelper)
+        IAuditingHelper auditingHelper,
+        IUnitOfWorkManager unitOfWorkManager)
     {
         var hasError = false;
         using (var saveHandle = auditingManager.BeginScope())
         {
             try
             {
-                await ProceedByLoggingAsync(invocation, auditingHelper, auditingManager.Current);
+                await ProceedByLoggingAsync(invocation, options, auditingHelper, auditingManager.Current);
 
                 Debug.Assert(auditingManager.Current != null);
                 if (auditingManager.Current.Log.Exceptions.Any())
@@ -127,20 +142,44 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             }
             finally
             {
-                if (ShouldWriteAuditLog(invocation, options, currentUser, hasError))
+                if (await ShouldWriteAuditLogAsync(invocation, auditingManager.Current.Log, options, currentUser, hasError))
                 {
+                    if (unitOfWorkManager.Current != null)
+                    {
+                        try
+                        {
+                            await unitOfWorkManager.Current.SaveChangesAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            if (!auditingManager.Current.Log.Exceptions.Contains(ex))
+                            {
+                                auditingManager.Current.Log.Exceptions.Add(ex);
+                            }
+                        }
+                    }
+
                     await saveHandle.SaveAsync();
                 }
             }
         }
     }
 
-    private bool ShouldWriteAuditLog(
+    private async Task<bool> ShouldWriteAuditLogAsync(
         IAbpMethodInvocation invocation,
+        AuditLogInfo auditLogInfo,
         AbpAuditingOptions options,
         ICurrentUser currentUser,
         bool hasError)
     {
+        foreach (var selector in options.AlwaysLogSelectors)
+        {
+            if (await selector(auditLogInfo))
+            {
+                return true;
+            }
+        }
+
         if (options.AlwaysLogOnException && hasError)
         {
             return true;

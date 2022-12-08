@@ -1,24 +1,23 @@
-import React, { forwardRef } from 'react';
-import { Spinner, View, connectStyle } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { Spinner, View } from 'native-base';
 import PropTypes from 'prop-types';
-import { activeTheme } from '../../theme/variables';
-import { connectToRedux } from '../../utils/ReduxConnect';
+import React, { forwardRef } from 'react';
+import { StyleSheet } from 'react-native';
 import {
   createLoadingSelector,
-  createOpacitySelector,
+  createOpacitySelector
 } from '../../store/selectors/LoadingSelectors';
+import { connectToRedux } from '../../utils/ReduxConnect';
 
-function Loading({ style, loading, opacity }) {
+function Loading({ loading, opacity }) {
   return loading ? (
-    <View style={style.container}>
+    <View style={styles.container}>
       <View
         style={{
-          ...style.backdrop,
+          ...styles.backdrop,
           opacity: opacity || 0.6,
         }}
       />
-      <Spinner style={style.spinner} color={style.spinner.color} />
+      <Spinner style={styles.spinner} color={styles.spinner.color} />
     </View>
   ) : null;
 }
@@ -37,13 +36,13 @@ export const styles = StyleSheet.create({
   container: {
     ...backdropStyle,
     backgroundColor: 'transparent',
-    zIndex: activeTheme.zIndex.indicator,
+    // zIndex: activeTheme.zIndex.indicator, // TODO
     alignItems: 'center',
     justifyContent: 'center',
   },
   backdrop: backdropStyle,
   spinner: {
-    color: activeTheme.brandPrimary,
+    // color: activeTheme.brandPrimary, // TODO
     fontSize: 100,
   },
 });
@@ -55,7 +54,7 @@ Loading.propTypes = {
 };
 
 export default connectToRedux({
-  component: connectStyle('ABP.Loading', styles)(Forwarded),
+  component: Forwarded,
   stateProps: state => ({
     loading: createLoadingSelector()(state),
     opacity: createOpacitySelector()(state),

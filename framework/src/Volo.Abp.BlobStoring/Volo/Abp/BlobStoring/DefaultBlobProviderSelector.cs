@@ -30,7 +30,12 @@ public class DefaultBlobProviderSelector : IBlobProviderSelector, ITransientDepe
 
         if (!BlobProviders.Any())
         {
-            throw new AbpException("No BLOB Storage provider was registered! At least one provider must be registered to be able to use the Blog Storing System.");
+            throw new AbpException("No BLOB Storage provider was registered! At least one provider must be registered to be able to use the BLOB Storing System.");
+        }
+
+        if (configuration.ProviderType == null)
+        {
+            throw new AbpException("No BLOB Storage provider was used! At least one provider must be configured to be able to use the BLOB Storing System.");
         }
 
         foreach (var provider in BlobProviders)

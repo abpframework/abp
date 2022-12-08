@@ -252,7 +252,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
             : await GetDbSetAsync();
 
         return await queryable
-            .OrderBy(sorting)
+            .OrderByIf<TEntity, IQueryable<TEntity>>(!sorting.IsNullOrWhiteSpace(), sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -302,6 +302,13 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
         {
             await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
         }
+    }
+
+    public override async Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+        var dbSet = dbContext.Set<TEntity>();
+        await dbSet.Where(predicate).ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task EnsureCollectionLoadedAsync<TProperty>(

@@ -33,8 +33,9 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         IOptions<AbpLocalEventBusOptions> options,
         IServiceScopeFactory serviceScopeFactory,
         ICurrentTenant currentTenant,
-        IUnitOfWorkManager unitOfWorkManager)
-        : base(serviceScopeFactory, currentTenant, unitOfWorkManager)
+        IUnitOfWorkManager unitOfWorkManager,
+        IEventHandlerInvoker eventHandlerInvoker)
+        : base(serviceScopeFactory, currentTenant, unitOfWorkManager, eventHandlerInvoker)
     {
         Options = options.Value;
         Logger = NullLogger<LocalEventBus>.Instance;

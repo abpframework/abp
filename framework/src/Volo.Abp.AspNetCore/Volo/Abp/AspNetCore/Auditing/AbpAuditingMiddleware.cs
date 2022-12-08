@@ -69,11 +69,21 @@ public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
             }
             finally
             {
-                if (ShouldWriteAuditLog(context, hasError))
+                if (await ShouldWriteAuditLogAsync(_auditingManager.Current.Log, context, hasError))
                 {
                     if (UnitOfWorkManager.Current != null)
                     {
-                        await UnitOfWorkManager.Current.SaveChangesAsync();
+                        try
+                        {
+                            await UnitOfWorkManager.Current.SaveChangesAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            if (!_auditingManager.Current.Log.Exceptions.Contains(ex))
+                            {
+                                _auditingManager.Current.Log.Exceptions.Add(ex);
+                            }
+                        }
                     }
 
                     await saveHandle.SaveAsync();
@@ -84,12 +94,35 @@ public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
 
     private bool IsIgnoredUrl(HttpContext context)
     {
-        return context.Request.Path.Value != null &&
-               AspNetCoreAuditingOptions.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x));
+        if (context.Request.Path.Value == null)
+        {
+            return false;
+        }
+        
+        if (!AuditingOptions.IsEnabledForIntegrationServices && 
+            context.Request.Path.Value.StartsWith($"/{AbpAspNetCoreConsts.DefaultIntegrationServiceApiPrefix}/"))
+        {
+            return true;
+        }
+        
+        if (AspNetCoreAuditingOptions.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x)))
+        {
+            return true;
+        }
+
+        return false;
     }
 
-    private bool ShouldWriteAuditLog(HttpContext httpContext, bool hasError)
+    private async Task<bool> ShouldWriteAuditLogAsync(AuditLogInfo auditLogInfo, HttpContext httpContext, bool hasError)
     {
+        foreach (var selector in AuditingOptions.AlwaysLogSelectors)
+        {
+            if (await selector(auditLogInfo))
+            {
+                return true;
+            }
+        }
+
         if (AuditingOptions.AlwaysLogOnException && hasError)
         {
             return true;

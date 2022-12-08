@@ -8,12 +8,15 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.GitHub;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Maui;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
 using Volo.Abp.DependencyInjection;
@@ -84,7 +87,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
         else
         {
-            if (!await IsVersionExists(version))
+            if (!await IsVersionExists(name, version))
             {
                 throw new Exception("There is no version found with given version: " + version);
             }
@@ -200,9 +203,9 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
     }
 
-    private async Task<bool> IsVersionExists(string version)
+    private async Task<bool> IsVersionExists(string templateName, string version)
     {
-        var url = $"{CliUrls.WwwAbpIo}api/download/versions?includePreReleases=true";
+        var url = $"{CliUrls.WwwAbpIo}api/download/all-versions?includePreReleases=true";
 
         try
         {
@@ -213,14 +216,16 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             {
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
                 var result = await response.Content.ReadAsStringAsync();
-                var versions = JsonSerializer.Deserialize<List<GithubRelease>>(result);
+                var versions = JsonSerializer.Deserialize<GithubReleaseVersions>(result);
 
-                return versions.Any(v => v.Name == version);
+                return templateName.Contains("LeptonX") ? 
+                    versions.LeptonXVersions.Any(v => v.Name == version) :
+                    versions.FrameworkAndCommercialVersions.Any(v => v.Name == version);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new Exception($"Error occured while getting the versions from {url} : {ex.Message}");
+            return true;
         }
     }
 
@@ -256,6 +261,12 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
         catch (Exception ex)
         {
+            if(ex is UserFriendlyException)
+            {
+                Logger.LogWarning(ex.Message);
+                throw;
+            }
+
             Console.WriteLine("Error occured while downloading source-code from {0} : {1}{2}{3}", url,
                 responseMessage?.ToString(), Environment.NewLine, ex.Message);
             throw;
@@ -278,7 +289,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
 
         var matches = Regex.Matches(stringBuilder.ToString(),
-            $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName}|{WpfTemplate.TemplateName})-(.+).zip");
+            $"({AppTemplate.TemplateName}|{AppNoLayersProTemplate.TemplateName}|{AppNoLayersTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName}|{WpfTemplate.TemplateName}|{MauiTemplate.TemplateName})-(.+).zip");
         foreach (Match match in matches)
         {
             templateList.Add((match.Groups[1].Value, match.Groups[2].Value));
@@ -321,14 +332,10 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         public string Version { get; set; }
     }
 
-    public class GithubRelease
+    public class GithubReleaseVersions
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public bool IsPrerelease { get; set; }
-
-        public DateTime PublishTime { get; set; }
+        public List<GithubRelease> FrameworkAndCommercialVersions { get; set; }
+        
+        public List<GithubRelease> LeptonXVersions { get; set; }
     }
 }

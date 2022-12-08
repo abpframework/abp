@@ -87,6 +87,7 @@ public class AbpIdentityServerTestDataBuilder : ITransientDependency
         apiResource.DisplayName = nameof(apiResource.DisplayName);
 
         apiResource.AddScope(nameof(ApiResourceScope.Scope));
+        apiResource.AddScope("Test-ApiResource-ApiScope-Name-1");
         apiResource.AddUserClaim(nameof(ApiResourceClaim.Type));
         apiResource.AddSecret(nameof(ApiResourceSecret.Value));
 
@@ -103,6 +104,7 @@ public class AbpIdentityServerTestDataBuilder : ITransientDependency
 
         apiResource2.AddSecret("secret".Sha256());
         apiResource2.AddScope("Test-ApiResource-ApiScope-Name-1");
+        apiResource2.AddScope("Test-ApiResource-ApiScope-Name-2");
         apiResource2.AddScope("Test-ApiResource-ApiScope-DisplayName-1");
         apiResource2.AddUserClaim("Test-ApiResource-Claim-Type-1");
 

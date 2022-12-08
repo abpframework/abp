@@ -75,10 +75,11 @@ ABP Framework provides a complete [Theming](Theming.md) system with the followin
 
 ### Current Themes
 
-Currently, two themes are **officially provided**:
+Currently, three themes are **officially provided**:
 
 * The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
 * The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
+* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/commercial/blazor) and [lite](../../Themes/LeptonXLite/Blazor.md) choices.
 
 ### Base Libraries
 
@@ -93,7 +94,7 @@ These libraries are selected as the base libraries and available to the applicat
 
 > Bootstrap's JavaScript part is not used since the Blazorise library already provides the necessary functionalities to the Bootstrap components in a native way.
 
-> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/blazorise-commercial-going-live/) for the announcement.
+> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/announcing-2022-blazorise-plans-and-pricing-updates) to learn more. The Blazorise license is bundled with ABP Commercial and commercial customers doesn’t need to buy an extra Blazorise license.
 
 ### The Layout
 

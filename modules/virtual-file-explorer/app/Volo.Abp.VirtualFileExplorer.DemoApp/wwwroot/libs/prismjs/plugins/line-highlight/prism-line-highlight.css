@@ -19,6 +19,17 @@ pre[data-line] {
 	white-space: pre;
 }
 
+@media print {
+	.line-highlight {
+		/*
+		 * This will prevent browsers from replacing the background color with white.
+		 * It's necessary because the element is layered on top of the displayed code.
+		 */
+		-webkit-print-color-adjust: exact;
+		color-adjust: exact;
+	}
+}
+
 	.line-highlight:before,
 	.line-highlight[data-end]:after {
 		content: attr(data-start);

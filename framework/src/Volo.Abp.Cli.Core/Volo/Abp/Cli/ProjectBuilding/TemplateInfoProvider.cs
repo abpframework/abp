@@ -8,6 +8,7 @@ using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Maui;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
@@ -52,6 +53,10 @@ public class TemplateInfoProvider : ITemplateInfoProvider, ITransientDependency
         {
             case AppTemplate.TemplateName:
                 return new AppTemplate();
+            case AppNoLayersTemplate.TemplateName:
+                return new AppNoLayersTemplate();
+            case AppNoLayersProTemplate.TemplateName:
+                return new AppNoLayersProTemplate();
             case AppProTemplate.TemplateName:
                 return new AppProTemplate();
             case MicroserviceProTemplate.TemplateName:
@@ -66,6 +71,8 @@ public class TemplateInfoProvider : ITemplateInfoProvider, ITransientDependency
                 return new ConsoleTemplate();
             case WpfTemplate.TemplateName:
                 return new WpfTemplate();
+            case MauiTemplate.TemplateName:
+                return new MauiTemplate();
             default:
                 throw new Exception("There is no template found with given name: " + name);
         }

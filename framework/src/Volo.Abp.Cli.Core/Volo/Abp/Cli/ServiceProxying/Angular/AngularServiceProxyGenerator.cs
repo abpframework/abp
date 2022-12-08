@@ -30,7 +30,7 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
         _cliService = cliService;
     }
 
-    public override async Task GenerateProxyAsync(GenerateProxyArgs args)
+    public async override Task GenerateProxyAsync(GenerateProxyArgs args)
     {
         CheckAngularJsonFile();
         await CheckNgSchematicsAsync();
@@ -48,7 +48,7 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
         var apiName = args.ApiName ?? defaultValue;
         var source = args.Source ?? defaultValue;
         var target = args.Target ?? defaultValue;
-
+        var url = args.Url ?? defaultValue;
         var commandBuilder = new StringBuilder("npx ng g @abp/ng.schematics:" + schematicsCommandName);
 
         if (module != null)
@@ -71,7 +71,21 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
             commandBuilder.Append($" --target {target}");
         }
 
+        if (url != null)
+        {
+            commandBuilder.Append($" --url {url}");
+        }
+
+        var serviceType = GetServiceType(args) ?? Volo.Abp.Cli.ServiceProxying.ServiceType.Application;
+        commandBuilder.Append($" --service-type {serviceType.ToString().ToLower()}");
+
+
         _cmdhelper.RunCmd(commandBuilder.ToString());
+    }
+
+    protected override ServiceType? GetDefaultServiceType(GenerateProxyArgs args)
+    {
+        return ServiceType.Application;
     }
 
     private async Task CheckNgSchematicsAsync()
@@ -95,8 +109,8 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
             );
         }
 
-        var parseError = SemanticVersion.TryParse(schematicsVersion.TrimStart('~', '^', 'v'), out var semanticSchematicsVersion);
-        if (parseError)
+        var parsed = SemanticVersion.TryParse(schematicsVersion.TrimStart('~', '^', 'v'), out var semanticSchematicsVersion);
+        if (!parsed)
         {
             Logger.LogWarning("Couldn't determinate version of \"@abp/ng.schematics\" package.");
             return;

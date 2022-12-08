@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Rebus.Bus;
+using Rebus.Messages;
 using Rebus.Pipeline;
+using Rebus.Transport;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
@@ -38,14 +40,16 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions,
         IRebusSerializer serializer,
         IGuidGenerator guidGenerator,
-        IClock clock) :
+        IClock clock,
+        IEventHandlerInvoker eventHandlerInvoker) :
         base(
             serviceScopeFactory,
             currentTenant,
             unitOfWorkManager,
             abpDistributedEventBusOptions,
             guidGenerator,
-            clock)
+            clock,
+            eventHandlerInvoker)
     {
         Rebus = rebus;
         Serializer = serializer;
@@ -146,9 +150,30 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await TriggerHandlersAsync(eventType, eventData);
     }
 
-    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
+        await PublishAsync(eventType, eventData);
+    }
+
+    protected virtual async Task PublishAsync(
+        Type eventType,
+        object eventData,
+        Guid? eventId = null,
+        Dictionary<string, string> headersArguments = null)
+    {
+        if (AbpRebusEventBusOptions.Publish != null)
+        {
+            await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
+            return;
+        }
+
+        headersArguments ??= new Dictionary<string, string>();
+        if (!headersArguments.ContainsKey(Headers.MessageId))
+        {
+            headersArguments[Headers.MessageId] = (eventId ?? GuidGenerator.Create()).ToString("N");
+        }
+
+        await Rebus.Publish(eventData, headersArguments);
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -207,10 +232,25 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
         var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
 
-        return PublishToEventBusAsync(eventType, eventData);
+        return PublishAsync(eventType, eventData, eventId: outgoingEvent.Id);
     }
 
-    public override async Task ProcessFromInboxAsync(
+    public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    {
+        var outgoingEventArray = outgoingEvents.ToArray();
+
+        using (var scope = new RebusTransactionScope())
+        {
+            foreach (var outgoingEvent in outgoingEventArray)
+            {
+                await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
+            }
+            
+            await scope.CompleteAsync();
+        }
+    }
+
+    public async override Task ProcessFromInboxAsync(
         IncomingEventInfo incomingEvent,
         InboxConfig inboxConfig)
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Auditing;
 
@@ -37,6 +38,14 @@ public class AbpAuditingOptions
     /// </summary>
     public bool AlwaysLogOnException { get; set; }
 
+    /// <summary>
+    /// Disables/enables audit logging for integration services.
+    /// Default: false.
+    /// </summary>
+    public bool IsEnabledForIntegrationServices { get; set; }
+
+    public List<Func<AuditLogInfo, Task<bool>>> AlwaysLogSelectors { get; }
+
     public List<AuditLogContributor> Contributors { get; }
 
     public List<Type> IgnoredTypes { get; }
@@ -49,12 +58,18 @@ public class AbpAuditingOptions
     /// </summary>
     public bool IsEnabledForGetRequests { get; set; }
 
+    /// <summary>
+    /// Default: false.
+    /// </summary>
+    public bool DisableLogActionInfo { get; set; }
+
     public AbpAuditingOptions()
     {
         IsEnabled = true;
         IsEnabledForAnonymousUsers = true;
         HideErrors = true;
         AlwaysLogOnException = true;
+        AlwaysLogSelectors = new List<Func<AuditLogInfo, Task<bool>>>();
 
         Contributors = new List<AuditLogContributor>();
 

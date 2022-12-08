@@ -19,6 +19,7 @@
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
         <abp-style src="/Pages/AbpPermissionManagement/permission-management-modal.css" />
+        <abp-style src="/Pages/identity/users/index.css"/>
     </abp-style-bundle>
 }
 @section scripts {
@@ -28,18 +29,10 @@
         <abp-script src="/Pages/identity/users/index.js" />
     </abp-script-bundle>
 }
-
+@section content_toolbar {
+    @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
+}
 <abp-card id="IdentityUsersWrapper">
-    <abp-card-header>
-        <abp-row>
-            <abp-column size-md="_6">
-                <abp-card-title>@L["Users"]</abp-card-title>
-            </abp-column>
-            <abp-column size-md="_6" class="text-end">
-                @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
-            </abp-column>
-        </abp-row>
-    </abp-card-header>
     <abp-card-body>
         <abp-table striped-rows="true" class="nowrap"></abp-table>
     </abp-card-body>

@@ -16,6 +16,8 @@ Once you add the `PageHeader` component to your page, you can control the relate
 ## Breadcrumb
 
 > **The [Basic Theme](Basic-Theme.md) currently doesn't implement the breadcrumbs.**
+> 
+> The [LeptonX Lite Theme](../../Themes/LeptonXLite/Blazor.md) supports breadcrumbs.
 
 Breadcrumbs can be added using the `BreadcrumbItems` property.
 
@@ -88,3 +90,18 @@ An example render result can be:
 
 ![breadcrumbs-example](../../images/page-header-toolbar-blazor.png)
 
+---
+
+## Options
+Rendering can be enabled or disabled for each section of PageHeader via using `PageHeaderOptions`.
+
+```csharp
+    Configure<PageHeaderOptions>(options => 
+    {
+        options.RenderPageTitle = false;
+        options.RenderBreadcrumbs = false;
+        options.RenderToolbar = false;
+    });
+```
+
+*All values are **true** by default. If the PageHeaderOptions isn't configured, each section will be rendered.*

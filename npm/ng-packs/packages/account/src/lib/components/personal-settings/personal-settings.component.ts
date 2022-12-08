@@ -1,17 +1,29 @@
-import { ProfileService } from '@abp/ng.account.core/proxy';
-import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { finalize } from 'rxjs/operators';
+import { ProfileDto, ProfileService } from '@abp/ng.account.core/proxy';
+import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
+import { Component, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { finalize, filter } from 'rxjs/operators';
 import { Account } from '../../models/account';
 import { ManageProfileStateService } from '../../services/manage-profile.state.service';
-
-const { maxLength, required, email } = Validators;
+import { AuthService } from '@abp/ng.core';
+import { RE_LOGIN_CONFIRMATION_TOKEN } from '../../tokens';
+import {
+  EXTENSIONS_IDENTIFIER,
+  FormPropData,
+  generateFormFromProps,
+} from '@abp/ng.theme.shared/extensions';
+import { eAccountComponents } from '../../enums';
 
 @Component({
   selector: 'abp-personal-settings-form',
   templateUrl: './personal-settings.component.html',
   exportAs: 'abpPersonalSettingsForm',
+  providers: [
+    {
+      provide: EXTENSIONS_IDENTIFIER,
+      useValue: eAccountComponents.PersonalSettings,
+    },
+  ],
 })
 export class PersonalSettingsComponent
   implements
@@ -19,34 +31,40 @@ export class PersonalSettingsComponent
     Account.PersonalSettingsComponentInputs,
     Account.PersonalSettingsComponentOutputs
 {
-  form: FormGroup;
+  selected: ProfileDto;
+
+  form: UntypedFormGroup;
 
   inProgress: boolean;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private toasterService: ToasterService,
     private profileService: ProfileService,
     private manageProfileState: ManageProfileStateService,
+    private readonly authService: AuthService,
+    private confirmationService: ConfirmationService,
+    @Inject(RE_LOGIN_CONFIRMATION_TOKEN)
+    private isPersonalSettingsChangedConfirmationActive: boolean,
+    protected injector: Injector,
   ) {}
 
-  ngOnInit() {
-    this.buildForm();
+  buildForm() {
+    this.selected = this.manageProfileState.getProfile();
+    if (!this.selected) {
+      return;
+    }
+    const data = new FormPropData(this.injector, this.selected);
+    this.form = generateFormFromProps(data);
   }
 
-  buildForm() {
-    const profile = this.manageProfileState.getProfile();
-    this.form = this.fb.group({
-      userName: [profile.userName, [required, maxLength(256)]],
-      email: [profile.email, [required, email, maxLength(256)]],
-      name: [profile.name || '', [maxLength(64)]],
-      surname: [profile.surname || '', [maxLength(64)]],
-      phoneNumber: [profile.phoneNumber || '', [maxLength(16)]],
-    });
+  ngOnInit(): void {
+    this.buildForm();
   }
 
   submit() {
     if (this.form.invalid) return;
+    const isLogOutConfirmMessageVisible = this.isLogoutConfirmMessageActive();
     this.inProgress = true;
     this.profileService
       .update(this.form.value)
@@ -54,6 +72,27 @@ export class PersonalSettingsComponent
       .subscribe(profile => {
         this.manageProfileState.setProfile(profile);
         this.toasterService.success('AbpAccount::PersonalSettingsSaved', 'Success', { life: 5000 });
+        if (isLogOutConfirmMessageVisible) {
+          this.showLogoutConfirmMessage();
+        }
       });
+  }
+
+  logoutConfirmation = () => {
+    this.authService.logout().subscribe();
+  };
+
+  private isLogoutConfirmMessageActive() {
+    return this.isPersonalSettingsChangedConfirmationActive;
+  }
+
+  private showLogoutConfirmMessage() {
+    this.confirmationService
+      .info(
+        'AbpAccount::PersonalSettingsChangedConfirmationModalDescription',
+        'AbpAccount::PersonalSettingsChangedConfirmationModalTitle',
+      )
+      .pipe(filter(status => status === Confirmation.Status.confirm))
+      .subscribe(this.logoutConfirmation);
   }
 }

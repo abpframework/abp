@@ -16,10 +16,11 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.DistributedLocking.Abstractions\Volo.Abp.DistributedLocking.Abstractions.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="DistributedLock.Core" Version="1.0.2" />
+      <PackageReference Include="DistributedLock.Core" Version="1.0.4" />
     </ItemGroup>
 
 </Project>

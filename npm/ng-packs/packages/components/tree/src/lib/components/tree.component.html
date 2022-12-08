@@ -16,7 +16,6 @@
 ></nz-tree>
 <ng-template #treeTemplate let-node>
   <div
-    class="node-wrapper"
     [class.selected]="isNodeSelected(node)"
     [title]="node.title"
     (click)="onSelectedNodeChange(node)"
@@ -60,7 +59,7 @@
 </ng-template>
 
 <ng-template #defaultIconTemplate let-node let-origin="origin">
-  <i style="line-height: 28px" aria-hidden="true">
+  <i aria-hidden="true">
     <ng-container *ngTemplateOutlet="node.isExpanded ? minusIcon : plusIcon"></ng-container
   ></i>
 </ng-template>

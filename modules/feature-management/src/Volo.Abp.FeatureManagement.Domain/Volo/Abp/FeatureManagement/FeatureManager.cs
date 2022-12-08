@@ -29,7 +29,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         StringLocalizerFactory = stringLocalizerFactory;
         Options = options.Value;
 
-        //TODO: Instead, use IHybridServiceScopeFactory and create a scope..?
+        //TODO: Instead, use IServiceScopeFactory and create a scope..?
 
         _lazyProviders = new Lazy<List<IFeatureManagementProvider>>(
             () => Options
@@ -75,7 +75,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
     {
         Check.NotNull(providerName, nameof(providerName));
 
-        var featureDefinitions = FeatureDefinitionManager.GetAll();
+        var featureDefinitions = await FeatureDefinitionManager.GetAllAsync();
         var providers = Enumerable.Reverse(Providers).SkipWhile(c => c.Name != providerName);
 
         if (!fallback)
@@ -130,9 +130,9 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         Check.NotNull(name, nameof(name));
         Check.NotNull(providerName, nameof(providerName));
 
-        var feature = FeatureDefinitionManager.Get(name);
+        var feature = await FeatureDefinitionManager.GetAsync(name);
 
-        if (feature?.ValueType?.Validator.IsValid(value) == false)
+        if (feature.ValueType?.Validator.IsValid(value) == false)
         {
             throw new FeatureValueInvalidException(feature.DisplayName.Localize(StringLocalizerFactory));
         }
@@ -149,11 +149,14 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
         if (providers.Count > 1 && !forceToSet && value != null)
         {
-            var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null);
-            if (fallbackValue.Value == value)
+            await using (await providers[0].HandleContextAsync(providerName, providerKey))
             {
-                //Clear the value if it's same as it's fallback value
-                value = null;
+                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null);
+                if (fallbackValue.Value == value)
+                {
+                    //Clear the value if it's same as it's fallback value
+                    value = null;
+                }
             }
         }
 
@@ -183,7 +186,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         string providerKey,
         bool fallback = true) //TODO: Fallback is not used
     {
-        var feature = FeatureDefinitionManager.Get(name);
+        var feature = await FeatureDefinitionManager.GetAsync(name);
         var providers = Enumerable
             .Reverse(Providers);
 

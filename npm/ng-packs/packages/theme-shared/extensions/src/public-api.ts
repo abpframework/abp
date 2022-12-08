@@ -61,8 +61,10 @@ export {
   ToolbarComponent,
   ToolbarComponentOptions,
 } from './lib/models/toolbar-actions';
+export * from './lib/pipes/create-injector.pipe';
 export * from './lib/services/extensions.service';
 export * from './lib/tokens/extensions.token';
+export * from './lib/tokens/extensible-form-view-provider.token';
 export * from './lib/ui-extensions.module';
 export * from './lib/utils/actions.util';
 export * from './lib/utils/form-props.util';

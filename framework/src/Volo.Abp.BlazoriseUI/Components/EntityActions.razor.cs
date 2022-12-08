@@ -29,6 +29,9 @@ public partial class EntityActions<TItem> : ComponentBase
     [Parameter]
     public ActionType Type { get; set; } = ActionType.Dropdown;
 
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
     [CascadingParameter]
     public DataGridEntityActionsColumn<TItem> ParentEntityActionsColumn { get; set; }
 
@@ -46,7 +49,7 @@ public partial class EntityActions<TItem> : ComponentBase
         ToggleText = UiLocalizer["Actions"];
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {

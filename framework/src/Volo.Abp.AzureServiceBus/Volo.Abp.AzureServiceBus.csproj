@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.1.1" />
+        <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.8.1" />
         <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
         <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
     </ItemGroup>

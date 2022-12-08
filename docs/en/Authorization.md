@@ -4,7 +4,7 @@ Authorization is used to check if a user is allowed to perform some specific ope
 
 ABP extends [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing authorization system to be usable in the **[application services](Application-Services.md)** too.
 
-So, all the ASP.NET Core authorization features and the documentation are valid in an ABP based application. This document focuses on the features that added on top of ASP.NET Core authorization features.
+So, all the ASP.NET Core authorization features and the documentation are valid in an ABP based application. This document focuses on the features that are added on top of ASP.NET Core authorization features.
 
 ## Authorize Attribute
 
@@ -428,7 +428,7 @@ This is already done for the startup template integration tests.
 
 Claims are important elements of authentication and authorization. ABP uses the `IAbpClaimsPrincipalFactory` service to create claims on authentication. This service was designed as extensible. If you need to add your custom claims to the authentication ticket, you can implement the `IAbpClaimsPrincipalContributor` in your application.
 
-**Example: Add a `SocialSecurityNumber` claim:**
+**Example: Add a `SocialSecurityNumber` claim and get it:**
 
 ```csharp
 public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
@@ -448,6 +448,24 @@ public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipa
         }
     }
 }
+
+
+public static class CurrentUserExtensions
+{
+    public static string GetSocialSecurityNumber(this ICurrentUser currentUser)
+    {
+        return currentUser.FindClaimValue("SocialSecurityNumber");
+    }
+}
+```
+
+> If you use Identity Server please add your claims to `RequestedClaims` of `AbpClaimsServiceOptions`.
+
+```csharp
+Configure<AbpClaimsServiceOptions>(options =>
+{
+    options.RequestedClaims.AddRange(new[]{ "SocialSecurityNumber" });
+});
 ```
 
 ## See Also

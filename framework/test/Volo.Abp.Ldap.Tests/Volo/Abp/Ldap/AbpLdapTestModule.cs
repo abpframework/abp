@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.Abp.Settings;
 
 namespace Volo.Abp.Ldap;
 
@@ -12,13 +13,9 @@ public class AbpLdapTestModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpLdapOptions>(options =>
+        Configure<AbpSettingOptions>(options =>
         {
-            options.ServerHost = "192.168.0.3";
-            options.ServerPort = 389;
-            options.BaseDc = "dc=abp,dc=io";
-            options.UserName = "admin";
-            options.Password = "123qwe";
+            options.ValueProviders.Add<TestLdapSettingValueProvider>();
         });
     }
 }

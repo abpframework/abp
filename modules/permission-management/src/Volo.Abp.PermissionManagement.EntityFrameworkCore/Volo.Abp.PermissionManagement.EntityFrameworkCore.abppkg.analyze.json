@@ -1,0 +1,51 @@
+{
+  "name": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
+  "hash": "a4106b63425c84219f73b1a9c3b9d6fa",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Domain",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "name": "AbpEntityFrameworkCoreModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpPermissionManagementEntityFrameworkCoreModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
+      "connectionStringName": "AbpPermissionManagement",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.PermissionManagement.PermissionDefinitionRecord",
+          "contentType": "databaseTable",
+          "name": "AbpPermissions",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.PermissionManagement.PermissionGrant",
+          "contentType": "databaseTable",
+          "name": "AbpPermissionGrants",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.PermissionManagement.PermissionGroupDefinitionRecord",
+          "contentType": "databaseTable",
+          "name": "AbpPermissionGroups",
+          "summary": null
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "PermissionManagementDbContext",
+      "summary": null
+    }
+  ]
+}

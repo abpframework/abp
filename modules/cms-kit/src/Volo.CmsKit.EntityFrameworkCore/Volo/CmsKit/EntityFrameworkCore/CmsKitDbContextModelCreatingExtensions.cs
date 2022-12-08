@@ -6,6 +6,7 @@ using Volo.Abp.Users.EntityFrameworkCore;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -27,7 +28,7 @@ public static class CmsKitDbContextModelCreatingExtensions
         {
             builder.Entity<CmsUser>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "Users", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "Users", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
@@ -47,7 +48,7 @@ public static class CmsKitDbContextModelCreatingExtensions
         {
             builder.Entity<UserReaction>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "UserReactions", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "UserReactions", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -70,7 +71,7 @@ public static class CmsKitDbContextModelCreatingExtensions
         {
             builder.Entity<Comment>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "Comments", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "Comments", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -94,7 +95,7 @@ public static class CmsKitDbContextModelCreatingExtensions
         {
             builder.Entity<Rating>(r =>
             {
-                r.ToTable(CmsKitDbProperties.DbTablePrefix + "Ratings", CmsKitDbProperties.DbSchema);
+                r.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "Ratings", AbpCmsKitDbProperties.DbSchema);
 
                 r.ConfigureByConvention();
 
@@ -116,7 +117,7 @@ public static class CmsKitDbContextModelCreatingExtensions
         {
             builder.Entity<Tag>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "Tags", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "Tags", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -133,7 +134,7 @@ public static class CmsKitDbContextModelCreatingExtensions
 
             builder.Entity<EntityTag>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "EntityTags", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "EntityTags", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -157,7 +158,7 @@ public static class CmsKitDbContextModelCreatingExtensions
         {
             builder.Entity<Page>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "Pages", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "Pages", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -179,7 +180,7 @@ public static class CmsKitDbContextModelCreatingExtensions
         {
             builder.Entity<Blog>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "Blogs", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "Blogs", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -192,7 +193,7 @@ public static class CmsKitDbContextModelCreatingExtensions
 
             builder.Entity<BlogPost>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "BlogPosts", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "BlogPosts", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -209,7 +210,7 @@ public static class CmsKitDbContextModelCreatingExtensions
 
             builder.Entity<BlogFeature>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "BlogFeatures", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "BlogFeatures", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -229,7 +230,7 @@ public static class CmsKitDbContextModelCreatingExtensions
         {
             builder.Entity<MediaDescriptor>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "MediaDescriptors", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "MediaDescriptors", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -250,7 +251,7 @@ public static class CmsKitDbContextModelCreatingExtensions
         {
             builder.Entity<MenuItem>(b =>
             {
-                b.ToTable(CmsKitDbProperties.DbTablePrefix + "MenuItems", CmsKitDbProperties.DbSchema);
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "MenuItems", AbpCmsKitDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -262,6 +263,24 @@ public static class CmsKitDbContextModelCreatingExtensions
         else
         {
             builder.Ignore<MenuItem>();
+        }
+
+        if (GlobalFeatureManager.Instance.IsEnabled<GlobalResourcesFeature>())
+        {
+            builder.Entity<GlobalResource>(b =>
+            {
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "GlobalResources", AbpCmsKitDbProperties.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Name).IsRequired().HasMaxLength(GlobalResourceConsts.MaxNameLength);
+
+                b.Property(x => x.Value).IsRequired().HasMaxLength(GlobalResourceConsts.MaxValueLength);
+            });
+        }
+        else
+        {
+            builder.Ignore<GlobalResource>();
         }
 
         builder.TryConfigureObjectExtensions<CmsKitDbContext>();

@@ -16,10 +16,12 @@ In order to accomplish these goals, ABP Framework;
 
 ### Current Themes
 
-Currently, two themes are **officially provided**:
+Currently, four themes are **officially provided**:
 
 * The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
+* The [LeptonX Lite Theme](../../Themes/LeptonXLite/AspNetCore.md) is modern and stylish Bootstrap UI theme. It is ideal if you want to have a production ready UI theme. It is also **open source and free**.
 * The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
+* The [LeptonX Theme](https://docs.abp.io/en/commercial/6.0/themes/leptonx) is also a **commercial** theme developed by the core ABP theme and is a part of the [ABP Commercial](https://commercial.abp.io/) license. This is the default theme after ABP v6.0.0.
 
 There are also some community-driven themes for the ABP Framework (you can search on the web).
 
@@ -122,9 +124,13 @@ The empty layout provides an empty page. It typically includes the following par
 
 ## Implementing a Theme
 
-### The Easy Way
+### The Easiest Way
 
-The easiest way to create a new theme is to copy the [Basic Theme Source Code](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic) and customize it. Once you get a copy of the theme in your solution, remove the `Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic` NuGet package and reference to the local project.
+The easiest way of creating a new theme is adding [Basic Theme Source Code](https://github.com/abpframework/abp/tree/dev/modules/basic-theme) module with source codes and customizing it. 
+
+```bash
+abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic --with-source-code --add-to-solution-file
+```
 
 ### The ITheme Interface
 
@@ -363,7 +369,7 @@ Another pre-defined section is the Content Toolbar section which can be used by 
 
 ````html
 <div id="AbpContentToolbar">
-    <div class="text-right mb-2">
+    <div class="text-end mb-2">
         @RenderSection("content_toolbar", false)
     </div>
 </div>

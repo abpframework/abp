@@ -1,4 +1,4 @@
-# Getting Started With an ABP and AspNet Core MVC Web Application
+# Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application
 
 This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](Getting-Started-AspNetCore-MVC-Template.md)**.
 
@@ -77,20 +77,17 @@ using BasicAspNetCoreApplication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ReplaceConfiguration(builder.Configuration);
-
-builder.Services.AddApplication<AppModule>();
+await builder.AddApplicationAsync<AppModule>();
 
 var app = builder.Build();
 
-app.InitializeApplication();
-
-app.Run();
+await app.InitializeApplicationAsync();
+await app.RunAsync();
 ````
 
-``builder.Services.AddApplication<AppModule>();`` adds all services defined in all modules starting from the ``AppModule``.
+``builder.AddApplicationAsync<AppModule>();`` adds all services defined in all modules starting from the ``AppModule``.
 
-``app.InitializeApplication()`` initializes and starts the application.
+``app.InitializeApplicationAsync()`` initializes and starts the application.
 
 ## Run the Application!
 
@@ -98,9 +95,9 @@ That's all! Run the application, it will just work as expected.
 
 ## Using Autofac as the Dependency Injection Framework
 
-While AspNet Core's Dependency Injection (DI) system is fine for basic requirements, [Autofac](https://autofac.org/) provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
+While ASP.NET Core's Dependency Injection (DI) system is fine for basic requirements, [Autofac](https://autofac.org/) provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
 
-Replacing AspNet Core's DI system by Autofac and integrating to ABP is pretty easy.
+Replacing ASP.NET Core's DI system by Autofac and integrating to ABP is pretty easy.
 
 1. Install [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) package
 
@@ -128,19 +125,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseAutofac();  //Add this line
 
-builder.Services.ReplaceConfiguration(builder.Configuration);
-
-builder.Services.AddApplication<AppModule>();
+await builder.AddApplicationAsync<AppModule>();
 
 var app = builder.Build();
 
-app.InitializeApplication();
-
-app.Run();
-
+await app.InitializeApplicationAsync();
+await app.RunAsync();
 ````
 
 ## Source Code
 
 Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication).
-

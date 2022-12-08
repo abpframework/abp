@@ -11,6 +11,7 @@ import { formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Inject,
   InjectFlags,
   InjectionToken,
@@ -18,6 +19,7 @@ import {
   Input,
   LOCALE_ID,
   OnChanges,
+  Output,
   SimpleChanges,
   TemplateRef,
   TrackByFunction,
@@ -30,7 +32,12 @@ import { EntityActionList } from '../../models/entity-actions';
 import { EntityProp, EntityPropList } from '../../models/entity-props';
 import { PropData } from '../../models/props';
 import { ExtensionsService } from '../../services/extensions.service';
-import { EXTENSIONS_IDENTIFIER, PROP_DATA_STREAM } from '../../tokens/extensions.token';
+import {
+  ENTITY_PROP_TYPE_CLASSES,
+  EntityPropTypeClass,
+  EXTENSIONS_IDENTIFIER,
+  PROP_DATA_STREAM,
+} from '../../tokens/extensions.token';
 
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
@@ -58,9 +65,13 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   }
   @Input() actionsTemplate: TemplateRef<any>;
 
+  @Output() tableActivate = new EventEmitter();
+
   getInjected: <T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags) => T;
 
   hasAtLeastOnePermittedAction: boolean;
+
+  entityPropTypeClasses: EntityPropTypeClass;
 
   readonly columnWidths: number[];
 
@@ -75,6 +86,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     private config: ConfigStateService,
     private injector: Injector,
   ) {
+    this.entityPropTypeClasses = injector.get(ENTITY_PROP_TYPE_CLASSES);
     this.getInjected = injector.get.bind(injector);
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);
@@ -104,8 +116,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   private getIcon(value: boolean) {
     return value
-      ? '<div class="text-center text-success"><i class="fa fa-check"></i></div>'
-      : '<div class="text-center text-danger"><i class="fa fa-times"></i></div>';
+      ? '<div class="text-success"><i class="fa fa-check"></i></div>'
+      : '<div class="text-danger"><i class="fa fa-times"></i></div>';
   }
 
   private getEnum(rowValue: any, list: Array<ABP.Option<any>>) {
@@ -150,15 +162,15 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
           value,
         };
         if (prop.value.component) {
-          const injector = Injector.create(
-            [
+          const injector = Injector.create({
+            providers: [
               {
                 provide: PROP_DATA_STREAM,
                 useValue: value,
               },
             ],
-            this.injector,
-          );
+            parent: this.injector,
+          });
           record[propKey].injector = injector;
           record[propKey].component = prop.value.component;
         }

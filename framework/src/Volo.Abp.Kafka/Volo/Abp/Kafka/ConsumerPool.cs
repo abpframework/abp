@@ -37,7 +37,7 @@ public class ConsumerPool : IConsumerPool, ISingletonDependency
         return Consumers.GetOrAdd(
             connectionName, connection => new Lazy<IConsumer<string, byte[]>>(() =>
             {
-                var config = new ConsumerConfig(Options.Connections.GetOrDefault(connection))
+                var config = new ConsumerConfig(Options.Connections.GetOrDefault(connection).ToDictionary(k => k.Key, v => v.Value))
                 {
                     GroupId = groupId,
                     EnableAutoCommit = false
@@ -76,6 +76,7 @@ public class ConsumerPool : IConsumerPool, ISingletonDependency
 
             try
             {
+                consumer.Value.Unsubscribe();
                 consumer.Value.Close();
                 consumer.Value.Dispose();
             }

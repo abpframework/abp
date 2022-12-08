@@ -1,11 +1,12 @@
 ﻿using System;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 [Serializable]
-public class ApplicationConfigurationDto
+public class ApplicationConfigurationDto : IHasExtraProperties
 {
     public ApplicationLocalizationConfigurationDto Localization { get; set; }
 
@@ -17,6 +18,8 @@ public class ApplicationConfigurationDto
 
     public ApplicationFeatureConfigurationDto Features { get; set; }
 
+    public ApplicationGlobalFeatureConfigurationDto GlobalFeatures { get; set; }
+
     public MultiTenancyInfoDto MultiTenancy { get; set; }
 
     public CurrentTenantDto CurrentTenant { get; set; }
@@ -26,4 +29,6 @@ public class ApplicationConfigurationDto
     public ClockDto Clock { get; set; }
 
     public ObjectExtensionsDto ObjectExtensions { get; set; }
+
+    public ExtraPropertyDictionary ExtraProperties { get; set; }
 }

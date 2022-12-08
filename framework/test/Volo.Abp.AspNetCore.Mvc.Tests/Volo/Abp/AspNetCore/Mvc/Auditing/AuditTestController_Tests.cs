@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using System.Threading.Tasks;
+using Shouldly;
 using Volo.Abp.Auditing;
 using Xunit;
 
@@ -49,6 +50,16 @@ public class AuditTestController_Tests : AspNetCoreMvcTestBase
         await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
     }
 
+
+    [Fact]
+    public async Task Should_Trigger_Middleware_And_AuditLog_Success_For_Specified_Requests()
+    {
+        _options.AlwaysLogOnException = false;
+        _options.AlwaysLogSelectors.Add(info => Task.FromResult(info.Url.Contains("api/audit-test/audit-success")));
+        await GetResponseAsync("api/audit-test/audit-success");
+        await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+    }
+
     [Fact]
     public async Task Should_Trigger_Middleware_And_AuditLog_Exception_Always()
     {
@@ -88,5 +99,14 @@ public class AuditTestController_Tests : AspNetCoreMvcTestBase
         catch { }
 
         await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.Exceptions.Any()));
+    }
+
+    [Fact]
+    public async Task Should_DisableLogActionInfo()
+    {
+        _options.IsEnabledForGetRequests = true;
+        _options.DisableLogActionInfo = true;
+        await GetResponseAsync("/api/audit-test/");
+        await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.Actions.IsNullOrEmpty()));
     }
 }

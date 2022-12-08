@@ -1,0 +1,24 @@
+{
+  "name": "Volo.Abp.FeatureManagement.HttpApi.Client",
+  "hash": "97c3ff203f977940d8f7af19ebbc407b",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application.Contracts",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Http.Client",
+          "namespace": "Volo.Abp.Http.Client",
+          "name": "AbpHttpClientModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpFeatureManagementHttpApiClientModule",
+      "summary": null
+    }
+  ]
+}

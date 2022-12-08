@@ -10,9 +10,9 @@ import {
   SkipSelf,
   ViewChildren,
 } from '@angular/core';
-import { ControlContainer, FormGroup } from '@angular/forms';
+import { ControlContainer, UntypedFormGroup } from '@angular/forms';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
-import { FormPropList } from '../../models/form-props';
+import { FormPropList, GroupedFormPropList } from '../../models/form-props';
 import { ExtensionsService } from '../../services/extensions.service';
 import { EXTENSIONS_IDENTIFIER } from '../../tokens/extensions.token';
 import { selfFactory } from '../../utils/factory.util';
@@ -38,20 +38,29 @@ export class ExtensibleFormComponent<R = any> {
   @Input()
   set selectedRecord(record: R) {
     const type = !record || JSON.stringify(record) === '{}' ? 'create' : 'edit';
-    this.propList = this.extensions[`${type}FormProps`].get(this.identifier).props;
+    const propList = this.extensions[`${type}FormProps`].get(this.identifier).props;
+    this.groupedPropList = this.createGroupedList(propList);
     this.record = record;
   }
 
   extraPropertiesKey = EXTRA_PROPERTIES_KEY;
-  propList!: FormPropList<R>;
+  groupedPropList: GroupedFormPropList;
   record!: R;
 
-  get form(): FormGroup {
-    return (this.container ? this.container.control : { controls: {} }) as FormGroup;
+  createGroupedList(propList: FormPropList<R>) {
+    const groupedFormPropList = new GroupedFormPropList();
+    propList.forEach(item => {
+      groupedFormPropList.addItem(item.value);
+    });
+    return groupedFormPropList;
   }
 
-  get extraProperties(): FormGroup {
-    return (this.form.controls.extraProperties || { controls: {} }) as FormGroup;
+  get form(): UntypedFormGroup {
+    return (this.container ? this.container.control : { controls: {} }) as UntypedFormGroup;
+  }
+
+  get extraProperties(): UntypedFormGroup {
+    return (this.form.controls.extraProperties || { controls: {} }) as UntypedFormGroup;
   }
 
   constructor(

@@ -18,11 +18,6 @@ public class AbpLdapModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAbpDynamicOptions<AbpLdapOptions, AbpAbpLdapOptionsManager>();
-
-        var configuration = context.Services.GetConfiguration();
-        Configure<AbpLdapOptions>(configuration.GetSection("Ldap"));
-
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<AbpLdapModule>();

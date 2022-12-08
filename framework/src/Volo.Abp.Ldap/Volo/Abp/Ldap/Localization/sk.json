@@ -7,6 +7,8 @@
     "Description:Abp.Ldap.ServerPort": "Server post",
     "DisplayName:Abp.Ldap.BaseDc": "Základný komponent domény",
     "Description:Abp.Ldap.BaseDc": "Základný komponent domény",
+    "DisplayName:Abp.Ldap.Domain": "doména",
+    "Description:Abp.Ldap.Domain": "doména",
     "DisplayName:Abp.Ldap.UserName": "Používateľské meno",
     "Description:Abp.Ldap.UserName": "Používateľské meno",
     "DisplayName:Abp.Ldap.Password": "Heslo",

@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
@@ -20,6 +22,7 @@ namespace Volo.Abp.Http.Client.Web.Conventions;
 public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
 {
     protected readonly IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder;
+    protected readonly List<ControllerModel> ControllerWithAttributeRoute;
     protected readonly List<ActionModel> ActionWithAttributeRoute;
 
     public AbpHttpClientProxyServiceConvention(
@@ -29,6 +32,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         : base(options, conventionalRouteBuilder)
     {
         ClientProxyApiDescriptionFinder = clientProxyApiDescriptionFinder;
+        ControllerWithAttributeRoute = new List<ControllerModel>();
         ActionWithAttributeRoute = new List<ActionModel>();
     }
 
@@ -48,6 +52,12 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
 
         foreach (var controller in GetClientProxyControllers(application))
         {
+            if (ShouldBeRemove(application, controller))
+            {
+                application.Controllers.Remove(controller);
+                continue;
+            }
+
             controller.ControllerName = controller.ControllerName.RemovePostFix("ClientProxy");
 
             var controllerApiDescription = FindControllerApiDescriptionModel(controller);
@@ -63,9 +73,24 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         }
     }
 
+    protected virtual bool ShouldBeRemove(ApplicationModel application, ControllerModel controllerModel)
+    {
+        return application.Controllers
+            .Where(x => x.ControllerType != controllerModel.ControllerType)
+            .Any(x => FindAppServiceInterfaceType(x) == FindAppServiceInterfaceType(controllerModel));
+    }
+
     protected virtual void ConfigureClientProxySelector(ControllerModel controller)
     {
         RemoveEmptySelectors(controller.Selectors);
+
+        var moduleApiDescription = FindModuleApiDescriptionModel(controller);
+        if (moduleApiDescription != null && !moduleApiDescription.RootPath.IsNullOrWhiteSpace())
+        {
+            var selector = controller.Selectors.FirstOrDefault();
+            selector?.EndpointMetadata.Add(new AreaAttribute(moduleApiDescription.RootPath));
+            controller.RouteValues.Add(new KeyValuePair<string, string>("area", moduleApiDescription.RootPath));
+        }
 
         var controllerType = controller.ControllerType.AsType();
         var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(controllerType.GetTypeInfo());
@@ -87,74 +112,83 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
 
     protected virtual void ConfigureClientProxySelector(ControllerModel controller, ActionModel action)
     {
-        RemoveEmptySelectors(action.Selectors);
-
-        var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(action.ActionMethod);
-        if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabledFor(action.ActionMethod))
+        try
         {
-            return;
-        }
+            RemoveEmptySelectors(action.Selectors);
 
-        var actionApiDescriptionModel = FindActionApiDescriptionModel(controller, action);
-        if (actionApiDescriptionModel == null)
-        {
-            return; ;
-        }
-
-        ActionWithAttributeRoute.Add(action);
-
-        if (!action.Selectors.Any())
-        {
-            var abpServiceSelectorModel = new SelectorModel
+            var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(action.ActionMethod);
+            if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabledFor(action.ActionMethod))
             {
-                AttributeRouteModel = new AttributeRouteModel(
-                    new RouteAttribute(template: actionApiDescriptionModel.Url)
-                ),
-                ActionConstraints = { new HttpMethodActionConstraint(new[] { actionApiDescriptionModel.HttpMethod }) }
-            };
+                return;
+            }
 
-            action.Selectors.Add(abpServiceSelectorModel);
-        }
-        else
-        {
-            foreach (var selector in action.Selectors)
+            var actionApiDescriptionModel = FindActionApiDescriptionModel(controller, action);
+            if (actionApiDescriptionModel == null)
             {
-                var httpMethod = selector.ActionConstraints
-                    .OfType<HttpMethodActionConstraint>()
-                    .FirstOrDefault()?
-                    .HttpMethods?
-                    .FirstOrDefault();
+                Logger.LogWarning($"Could not find ApiDescriptionModel for action: {action.ActionName} in controller: {controller.ControllerName}, May be the generate-proxy.json is not up to date.");
+                return;;
+            }
 
-                if (httpMethod == null)
-                {
-                    httpMethod = actionApiDescriptionModel.HttpMethod;
-                }
+            ControllerWithAttributeRoute.Add(controller);
+            ActionWithAttributeRoute.Add(action);
 
-                if (selector.AttributeRouteModel == null)
+            if (!action.Selectors.Any())
+            {
+                var abpServiceSelectorModel = new SelectorModel
                 {
-                    selector.AttributeRouteModel = new AttributeRouteModel(
-                        new RouteAttribute(template: actionApiDescriptionModel.Url)
-                    );
-                }
+                    AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(template: actionApiDescriptionModel.Url)),
+                    ActionConstraints = { new HttpMethodActionConstraint(new[] { actionApiDescriptionModel.HttpMethod }) }
+                };
 
-                if (!selector.ActionConstraints.OfType<HttpMethodActionConstraint>().Any())
+                action.Selectors.Add(abpServiceSelectorModel);
+            }
+            else
+            {
+                foreach (var selector in action.Selectors)
                 {
-                    selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { httpMethod }));
+                    var httpMethod = selector.ActionConstraints
+                        .OfType<HttpMethodActionConstraint>()
+                        .FirstOrDefault()?
+                        .HttpMethods?
+                        .FirstOrDefault();
+
+                    if (httpMethod == null)
+                    {
+                        httpMethod = actionApiDescriptionModel.HttpMethod;
+                    }
+
+                    if (selector.AttributeRouteModel == null)
+                    {
+                        selector.AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(template: actionApiDescriptionModel.Url));
+                    }
+
+                    if (!selector.ActionConstraints.OfType<HttpMethodActionConstraint>().Any())
+                    {
+                        selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { httpMethod }));
+                    }
                 }
             }
+        }
+        catch
+        {
+            Logger.LogError($"An exception has occured while configuring client proxy selector. Controller: {controller.ControllerName} ({controller.ControllerType.AssemblyQualifiedName}), Action: {action.ActionName}");
+            throw;
         }
     }
 
     protected virtual void ConfigureClientProxyApiExplorer(ControllerModel controller)
     {
-        if (controller.ApiExplorer.GroupName.IsNullOrEmpty())
+        if (ControllerWithAttributeRoute.Contains(controller))
         {
-            controller.ApiExplorer.GroupName = controller.ControllerName;
-        }
+            if (Options.ChangeControllerModelApiExplorerGroupName && controller.ApiExplorer.GroupName.IsNullOrEmpty())
+            {
+                controller.ApiExplorer.GroupName = controller.ControllerName;
+            }
 
-        if (controller.ApiExplorer.IsVisible == null)
-        {
-            controller.ApiExplorer.IsVisible = IsVisibleRemoteService(controller.ControllerType);
+            if (controller.ApiExplorer.IsVisible == null)
+            {
+                controller.ApiExplorer.IsVisible = IsVisibleRemoteService(controller.ControllerType);
+            }
         }
 
         foreach (var action in controller.Actions)

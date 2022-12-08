@@ -159,19 +159,16 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
 
     protected virtual void TriggerEntityCreateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityCreatingEvent(entity);
         EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
     }
 
     protected virtual void TriggerEntityUpdateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityUpdatingEvent(entity);
         EntityChangeEventHelper.PublishEntityUpdatedEvent(entity);
     }
 
     protected virtual void TriggerEntityDeleteEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityDeletingEvent(entity);
         EntityChangeEventHelper.PublishEntityDeletedEvent(entity);
     }
 
@@ -206,6 +203,11 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         var entities = (await GetQueryableAsync()).Where(predicate).ToList();
 
         await DeleteManyAsync(entities, autoSave, cancellationToken);
+    }
+
+    public override async Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        await DeleteAsync(predicate, true, cancellationToken);
     }
 
     public override async Task<TEntity> InsertAsync(
@@ -253,7 +255,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
 
         if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
         {
-            softDeleteEntity.IsDeleted = true;
+            ObjectHelper.TrySetProperty(softDeleteEntity, x => x.IsDeleted, () => true);
             (await GetCollectionAsync()).Update(entity);
         }
         else
@@ -285,7 +287,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         CancellationToken cancellationToken = default)
     {
         return (await GetQueryableAsync())
-            .OrderBy(sorting)
+            .OrderByIf<TEntity, IQueryable<TEntity>>(!sorting.IsNullOrWhiteSpace(), sorting)
             .PageBy(skipCount, maxResultCount)
             .ToList();
     }

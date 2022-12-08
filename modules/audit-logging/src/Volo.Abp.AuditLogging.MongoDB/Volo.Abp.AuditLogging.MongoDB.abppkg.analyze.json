@@ -1,0 +1,39 @@
+{
+  "name": "Volo.Abp.AuditLogging.MongoDB",
+  "hash": "9cf771e4d74259af6e1ab7a594edcc8d",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AuditLogging.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain",
+          "namespace": "Volo.Abp.AuditLogging",
+          "name": "AbpAuditLoggingDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "namespace": "Volo.Abp.MongoDB",
+          "name": "AbpMongoDbModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpAuditLoggingMongoDbModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging.MongoDB",
+      "connectionStringName": "AbpAuditLogging",
+      "databaseCollections": [
+        {
+          "entityFullName": "Volo.Abp.AuditLogging.AuditLog",
+          "contentType": "databaseCollection",
+          "name": "AbpAuditLogs",
+          "summary": null
+        }
+      ],
+      "contentType": "mongoDbContext",
+      "name": "AuditLoggingMongoDbContext",
+      "summary": null
+    }
+  ]
+}

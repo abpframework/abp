@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
-import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import PropTypes from 'prop-types';
+import React, { useCallback, useState } from 'react';
 import {
   createTenant,
   getTenantById,
   removeTenant,
-  updateTenant,
+  updateTenant
 } from '../../api/TenantManagementAPI';
 import LoadingActions from '../../store/actions/LoadingActions';
 import { createLoadingSelector } from '../../store/selectors/LoadingSelectors';
@@ -48,7 +48,11 @@ function CreateUpdateTenantScreen({ navigation, route, startLoading, stopLoading
   };
 
   const renderForm = () => (
-    <CreateUpdateTenantForm editingTenant={tenant} submit={submit} remove={remove} />
+    <CreateUpdateTenantForm
+      editingTenant={tenant}
+      submit={submit}
+      remove={remove}
+    />
   );
 
   if (tenantId && tenant) {

@@ -139,7 +139,7 @@ Set `host/YourProjectName.Web.Unified` as the startup project, run `Update-Datab
 
 In this scenario, there are three applications;
 
-* `.IdentityServer` application is an authentication server used by other applications. It has its own `appsettings.json` that contains database connection and other configurations.
+* `.AuthServer` application is an authentication server used by other applications. It has its own `appsettings.json` that contains database connection and other configurations.
 * `.HttpApi.Host` hosts the HTTP API of the module. It has its own `appsettings.json` that contains database connections and other configurations.
 * `.Web.Host` host the UI of the module. This project contains an `appsettings.json` file, but it does not have a connection string because it never connects to the database. Instead, it mainly contains endpoint of the remote API server and the authentication server.
 
@@ -147,7 +147,7 @@ The diagram below shows the relation of the applications:
 
 ![tiered-solution-applications](../images/tiered-solution-applications.png)
 
-`.Web.Host` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the `.IdentityServer`. Then uses the access token to call the `.HttpApi.Host`. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
+`.Web.Host` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the `.AuthServer`. Then uses the access token to call the `.HttpApi.Host`. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
 
 ##### Pre-requirements
 
@@ -157,7 +157,7 @@ The diagram below shows the relation of the applications:
 
 You should run the application with the given order:
 
-- First, run the `.IdentityServer` since other applications depends on it.
+- First, run the `.AuthServer` since other applications depends on it.
 - Then run the `.HttpApi.Host` since it is used by the `.Web.Host` application.
 - Finally, you can run the `.Web.Host` project and login to the application using `admin` as the username and `1q2w3E*` as the password.
 
@@ -195,7 +195,7 @@ The module you will develop depends on two of these ABP packages: _@abp/ng.core_
 
 Once all dependencies are installed, follow the steps below to serve your development app:
 
-1. Make sure `.IdentityServer` and `*.HttpApi.Host` projects are up and running.
+1. Make sure `.AuthServer` and `*.HttpApi.Host` projects are up and running.
 2. Open your terminal at the root folder, i.e. `angular`.
 3. Run `yarn start` or `npm start`.
 

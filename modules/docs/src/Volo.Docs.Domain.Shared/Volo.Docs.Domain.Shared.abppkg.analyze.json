@@ -1,0 +1,19 @@
+{
+  "name": "Volo.Docs.Domain.Shared",
+  "hash": "2bdd87e1d28dfd717dced43a69bae15a",
+  "contents": [
+    {
+      "namespace": "Volo.Docs",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Localization",
+          "namespace": "Volo.Abp.Localization",
+          "name": "AbpLocalizationModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "DocsDomainSharedModule",
+      "summary": null
+    }
+  ]
+}

@@ -10,10 +10,10 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Identity.Settings;
+using Volo.Abp.Settings;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
-using Volo.Abp.Settings;
-using Volo.Abp.Identity.Settings;
 
 namespace Volo.Abp.Identity;
 

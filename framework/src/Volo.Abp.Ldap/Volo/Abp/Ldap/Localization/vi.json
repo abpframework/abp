@@ -7,6 +7,8 @@
     "Description:Abp.Ldap.ServerPort": "Cổng máy chủ",
     "DisplayName:Abp.Ldap.BaseDc": "Thành phần miền cơ sở",
     "Description:Abp.Ldap.BaseDc": "Thành phần miền cơ sở",
+    "DisplayName:Abp.Ldap.Domain": "Lãnh địa",
+    "Description:Abp.Ldap.Domain": "Lãnh địa",
     "DisplayName:Abp.Ldap.UserName": "tên tài khoản",
     "Description:Abp.Ldap.UserName": "tên tài khoản",
     "DisplayName:Abp.Ldap.Password": "Mật khẩu",

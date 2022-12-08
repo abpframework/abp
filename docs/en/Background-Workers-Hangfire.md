@@ -1,6 +1,6 @@
 # Hangfire Background Worker Manager
 
-[Hangfire](https://https://www.hangfire.io/) is an advanced background jobs and worker manager. You can integrate Hangfire with the ABP Framework to use it instead of the [default background worker manager](Background-Workers.md).
+[Hangfire](https://www.hangfire.io/) is an advanced background jobs and worker manager. You can integrate Hangfire with the ABP Framework to use it instead of the [default background worker manager](Background-Workers.md).
 
 The major advantage is that you can use the same server farm to manage your Background Jobs and Workers, as well as leverage the advanced scheduling that is available from Hangfire for [Recurring Jobs](https://docs.hangfire.io/en/latest/background-methods/performing-recurrent-tasks.html?highlight=recurring), aka Background Workers.
 
@@ -53,7 +53,7 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
         CronExpression = Cron.Daily();
     }
 
-    public override Task DoWorkAsync()
+    public override Task DoWorkAsync(CancellationToken cancellationToken = default)
     {
         Logger.LogInformation("Executed MyLogWorker..!");
         return Task.CompletedTask;
@@ -66,28 +66,50 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
 
 > You can directly implement the `IHangfireBackgroundWorker`, but `HangfireBackgroundWorkerBase` provides some useful properties like Logger.
 
+### UnitOfWork
+
+```csharp
+public class MyLogWorker : HangfireBackgroundWorkerBase, IMyLogWorker
+{
+    public MyLogWorker()
+    {
+        RecurringJobId = nameof(MyLogWorker);
+        CronExpression = Cron.Daily();
+    }
+
+    public override Task DoWorkAsync(CancellationToken cancellationToken = default)
+    {
+        using (var uow = LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>().Begin())
+        {
+            Logger.LogInformation("Executed MyLogWorker..!");
+            return Task.CompletedTask;
+        }
+    }
+}
+```
+
 ## Register BackgroundWorkerManager
 
-After creating a background worker class, you should add it to the `IBackgroundWorkerManager`. The most common place is the `OnApplicationInitialization` method of your module class:
+After creating a background worker class, you should add it to the `IBackgroundWorkerManager`. The most common place is the `OnApplicationInitializationAsync` method of your module class:
 
 ```` csharp
 [DependsOn(typeof(AbpBackgroundWorkersModule))]
 public class MyModule : AbpModule
 {
-    public override void OnApplicationInitialization(
+    public override async Task OnApplicationInitializationAsync(
         ApplicationInitializationContext context)
     {
-        context.AddBackgroundWorker<MyLogWorker>();
+        await context.AddBackgroundWorkerAsync<MyLogWorker>();
     }
 }
 ````
 
-`context.AddBackgroundWorker(...)` is a shortcut extension method for the expression below:
+`context.AddBackgroundWorkerAsync(...)` is a shortcut extension method for the expression below:
 
 ```` csharp
 context.ServiceProvider
     .GetRequiredService<IBackgroundWorkerManager>()
-    .Add(
+    .AddAsync(
         context
             .ServiceProvider
             .GetRequiredService<MyLogWorker>()
@@ -96,4 +118,4 @@ context.ServiceProvider
 
 So, it resolves the given background worker and adds to the `IBackgroundWorkerManager`.
 
-While we generally add workers in OnApplicationInitialization, there are no restrictions on that. You can inject IBackgroundWorkerManager anywhere and add workers at runtime. Background worker manager will stop and release all the registered workers when your application is being shut down.
+While we generally add workers in `OnApplicationInitializationAsync`, there are no restrictions on that. You can inject `IBackgroundWorkerManager` anywhere and add workers at runtime. Background worker manager will stop and release all the registered workers when your application is being shut down.

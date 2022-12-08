@@ -10,6 +10,7 @@ using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.PermissionManagement.Blazor.Components;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity;
 
@@ -34,10 +35,12 @@ public partial class UserManagement
     protected string CreateModalSelectedTab = DefaultSelectedTab;
 
     protected string EditModalSelectedTab = DefaultSelectedTab;
+    protected bool ShowPassword { get; set; }
 
     protected PageToolbar Toolbar { get; } = new();
 
     private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
+    private TextRole _passwordTextRole = TextRole.Password;
 
     public UserManagement()
     {
@@ -64,6 +67,20 @@ public partial class UserManagement
         }
     }
 
+    protected override ValueTask SetBreadcrumbItemsAsync()
+    {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Users"].Value));
+        return base.SetBreadcrumbItemsAsync();
+    }
+
+    protected virtual async Task OnSearchTextChanged(string value)
+    {
+        GetListInput.Filter = value;
+        CurrentPage = 1;
+        await GetEntitiesAsync();
+    }
+
     protected override async Task SetPermissionsAsync()
     {
         await base.SetPermissionsAsync();
@@ -72,7 +89,7 @@ public partial class UserManagement
             await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.ManagePermissions);
     }
 
-    protected override Task OpenCreateModalAsync()
+    protected override async Task OpenCreateModalAsync()
     {
         CreateModalSelectedTab = DefaultSelectedTab;
 
@@ -82,7 +99,11 @@ public partial class UserManagement
             IsAssigned = x.IsDefault
         }).ToArray();
 
-        return base.OpenCreateModalAsync();
+        ChangePasswordTextRole(TextRole.Password);
+        await base.OpenCreateModalAsync();
+
+        NewEntity.IsActive = true;
+        NewEntity.LockoutEnabled = true;
     }
 
     protected override Task OnCreatingEntityAsync()
@@ -107,6 +128,7 @@ public partial class UserManagement
                 IsAssigned = userRoleNames.Contains(x.Name)
             }).ToArray();
 
+            ChangePasswordTextRole(TextRole.Password);
             await base.OpenEditModalAsync(entity);
         }
         catch (Exception ex)
@@ -147,13 +169,14 @@ public partial class UserManagement
                         Clicked = async (data) =>
                         {
                             await PermissionManagementModal.OpenAsync(PermissionProviderName,
-                                data.As<IdentityUserDto>().Id.ToString());
+                                data.As<IdentityUserDto>().Id.ToString(),
+                                data.As<IdentityUserDto>().UserName);
                         }
                     },
                     new EntityAction
                     {
                         Text = L["Delete"],
-                        Visible = (data) => HasDeletePermission,
+                        Visible = (data) => HasDeletePermission && CurrentUser.GetId() != data.As<IdentityUserDto>().Id,
                         Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityUserDto>()),
                         ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityUserDto>())
                     }
@@ -170,22 +193,25 @@ public partial class UserManagement
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = EntityActions.Get<UserManagement>()
+                        Actions = EntityActions.Get<UserManagement>(),
                     },
                     new TableColumn
                     {
                         Title = L["UserName"],
                         Data = nameof(IdentityUserDto.UserName),
+                        Sortable = true,
                     },
                     new TableColumn
                     {
-                        Title = L["Email"],
+                        Title = L["EmailAddress"],
                         Data = nameof(IdentityUserDto.Email),
+                        Sortable = true,
                     },
                     new TableColumn
                     {
                         Title = L["PhoneNumber"],
                         Data = nameof(IdentityUserDto.PhoneNumber),
+                        Sortable = true,
                     }
             });
 
@@ -201,6 +227,20 @@ public partial class UserManagement
             requiredPolicyName: CreatePolicyName);
 
         return base.SetToolbarItemsAsync();
+    }
+
+    protected virtual void ChangePasswordTextRole(TextRole? textRole)
+    {
+        if (textRole == null)
+        {
+            ChangePasswordTextRole(_passwordTextRole == TextRole.Password ? TextRole.Text : TextRole.Password);
+            ShowPassword = !ShowPassword;
+        }
+        else
+        {
+            _passwordTextRole = textRole.Value;
+        }
+
     }
 }
 

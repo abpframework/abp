@@ -1,0 +1,19 @@
+{
+  "name": "Volo.Abp.PermissionManagement.Domain.Shared",
+  "hash": "63d60d676a64a92319c0a1caf54e8070",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.PermissionManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpPermissionManagementDomainSharedModule",
+      "summary": null
+    }
+  ]
+}

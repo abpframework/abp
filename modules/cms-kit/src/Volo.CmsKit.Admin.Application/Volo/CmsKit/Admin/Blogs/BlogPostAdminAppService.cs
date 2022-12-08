@@ -1,18 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.CmsKit.Admin.MediaDescriptors;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Admin.Blogs;
 
+[RequiresFeature(CmsKitFeatures.BlogEnable)]
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
 public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppService
@@ -22,16 +26,20 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     protected IBlogRepository BlogRepository { get; }
     protected ICmsUserLookupService UserLookupService { get; }
 
+    protected IMediaDescriptorAdminAppService MediaDescriptorAdminAppService { get; }
+
     public BlogPostAdminAppService(
         BlogPostManager blogPostManager,
         IBlogPostRepository blogPostRepository,
         IBlogRepository blogRepository,
-        ICmsUserLookupService userLookupService)
+        ICmsUserLookupService userLookupService,
+        IMediaDescriptorAdminAppService mediaDescriptorAdminAppService)
     {
         BlogPostManager = blogPostManager;
         BlogPostRepository = blogPostRepository;
         BlogRepository = blogRepository;
         UserLookupService = userLookupService;
+        MediaDescriptorAdminAppService = mediaDescriptorAdminAppService;
     }
 
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
@@ -42,13 +50,15 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         var blog = await BlogRepository.GetAsync(input.BlogId);
 
         var blogPost = await BlogPostManager.CreateAsync(
-                                                    author,
-                                                    blog,
-                                                    input.Title,
-                                                    input.Slug,
-                                                    input.ShortDescription,
-                                                    input.Content,
-                                                    input.CoverImageMediaId);
+            author,
+            blog,
+            input.Title,
+            input.Slug,
+            BlogPostStatus.Draft,
+            input.ShortDescription,
+            input.Content,
+            input.CoverImageMediaId
+        );
 
         await BlogPostRepository.InsertAsync(blogPost);
 
@@ -64,6 +74,11 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         blogPost.SetShortDescription(input.ShortDescription);
         blogPost.SetContent(input.Content);
         blogPost.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+
+        if (blogPost.CoverImageMediaId != null && input.CoverImageMediaId == null)
+        {
+            await MediaDescriptorAdminAppService.DeleteAsync(blogPost.CoverImageMediaId.Value);
+        }
         blogPost.CoverImageMediaId = input.CoverImageMediaId;
 
         if (blogPost.Slug != input.Slug)
@@ -89,9 +104,11 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     {
         var blogs = (await BlogRepository.GetListAsync()).ToDictionary(x => x.Id);
 
-        var blogPosts = await BlogPostRepository.GetListAsync(input.Filter, input.BlogId, input.MaxResultCount, input.SkipCount, input.Sorting);
+        var blogPosts = await BlogPostRepository.GetListAsync(input.Filter, input.BlogId, input.AuthorId, input.TagId,
+            statusFilter: input.Status,
+            input.MaxResultCount, input.SkipCount, input.Sorting);
 
-        var count = await BlogPostRepository.GetCountAsync(input.Filter);
+        var count = await BlogPostRepository.GetCountAsync(input.Filter, input.BlogId, input.AuthorId, tagId: input.TagId);
 
         var dtoList = blogPosts.Select(x =>
         {
@@ -108,5 +125,58 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     public virtual async Task DeleteAsync(Guid id)
     {
         await BlogPostRepository.DeleteAsync(id);
+    }
+
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
+    public virtual async Task PublishAsync(Guid id)
+    {
+        var blogPost = await BlogPostRepository.GetAsync(id);
+        blogPost.SetPublished();
+        await BlogPostRepository.UpdateAsync(blogPost);
+    }
+
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
+    public virtual async Task DraftAsync(Guid id)
+    {
+        var blogPost = await BlogPostRepository.GetAsync(id);
+        blogPost.SetDraft();
+        await BlogPostRepository.UpdateAsync(blogPost);
+    }
+
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
+    public virtual async Task<BlogPostDto> CreateAndPublishAsync(CreateBlogPostDto input)
+    {
+        var blogPost = await CreateAsync(input);
+        await CurrentUnitOfWork.SaveChangesAsync();
+
+        await PublishAsync(blogPost.Id);
+        blogPost.Status = BlogPostStatus.Published;
+        return blogPost;
+    }
+
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    public virtual async Task SendToReviewAsync(Guid id)
+    {
+        var blogPost = await BlogPostRepository.GetAsync(id);
+        blogPost.SetWaitingForReview();
+        await BlogPostRepository.UpdateAsync(blogPost);
+    }
+
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
+    public virtual async Task<BlogPostDto> CreateAndSendToReviewAsync(CreateBlogPostDto input)
+    {
+        var blogPost = await CreateAsync(input);
+        await CurrentUnitOfWork.SaveChangesAsync();
+
+        await SendToReviewAsync(blogPost.Id);
+        blogPost.Status = BlogPostStatus.WaitingForReview;
+        return blogPost;
+    }
+
+    [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
+    public async Task<bool> HasBlogPostWaitingForReviewAsync()
+    {
+        return await BlogPostRepository.HasBlogPostWaitingForReviewAsync();
     }
 }

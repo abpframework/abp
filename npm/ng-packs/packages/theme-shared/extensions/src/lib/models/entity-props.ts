@@ -1,7 +1,7 @@
+import { ABP, escapeHtmlChars } from '@abp/ng.core';
 import { Type } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { O } from 'ts-toolbelt';
-import { ABP } from '@abp/ng.core';
 import { ActionCallback } from './actions';
 import {
   Prop,
@@ -43,7 +43,8 @@ export class EntityProp<R = any> extends Prop<R> {
 
     this.columnWidth = options.columnWidth;
     this.sortable = options.sortable || false;
-    this.valueResolver = options.valueResolver || (data => of(data.record[this.name]));
+    this.valueResolver =
+      options.valueResolver || (data => of(escapeHtmlChars(data.record[this.name])));
     this.action = options.action;
     this.component = options.component;
     this.enumList = options.enumList;

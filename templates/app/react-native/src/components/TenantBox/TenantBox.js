@@ -1,23 +1,19 @@
 import i18n from 'i18n-js';
-import {
-  Button,
-  connectStyle,
-  Content,
-  Input,
-  InputGroup,
-  Label,
-  Segment,
-  Text,
-} from 'native-base';
+import { Box, Button, FormControl, Input, Text } from 'native-base';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { getTenant } from '../../api/AccountAPI';
 import PersistentStorageActions from '../../store/actions/PersistentStorageActions';
-import { connectToRedux } from '../../utils/ReduxConnect';
 import { createTenantSelector } from '../../store/selectors/PersistentStorageSelectors';
+import { connectToRedux } from '../../utils/ReduxConnect';
 
-function TenantBox({ style, tenant = {}, setTenant, showTenantSelection, toggleTenantSelection }) {
+function TenantBox({
+  tenant = {},
+  setTenant,
+  showTenantSelection,
+  toggleTenantSelection,
+}) {
   const [tenantName, setTenantName] = useState(tenant.name);
 
   const findTenant = () => {
@@ -34,7 +30,7 @@ function TenantBox({ style, tenant = {}, setTenant, showTenantSelection, toggleT
           i18n.t('AbpUiMultiTenancy::GivenTenantIsNotAvailable', {
             0: tenantName,
           }),
-          [{ text: i18n.t('AbpUi::Ok') }],
+          [{ text: i18n.t('AbpUi::Ok') }]
         );
         return;
       }
@@ -45,42 +41,74 @@ function TenantBox({ style, tenant = {}, setTenant, showTenantSelection, toggleT
 
   return (
     <>
-      <Segment style={style.container}>
-        <View>
-          <Text style={style.title}>{i18n.t('AbpUiMultiTenancy::Tenant')}</Text>
-          <Text style={style.tenant}>
-            {tenant.name ? tenant.name : i18n.t('AbpUiMultiTenancy::NotSelected')}
+      <Box
+        mb="5"
+        px="4"
+        w={{
+          base: '100%',
+        }}
+        style={{ flexDirection: 'row' }}
+      >
+        <View style={{ flex: 1 }}>
+          <Text style={styles.title}>
+            {i18n.t('AbpUiMultiTenancy::Tenant')}
+          </Text>
+          <Text style={styles.tenant}>
+            {tenant.name
+              ? tenant.name
+              : i18n.t('AbpUiMultiTenancy::NotSelected')}
           </Text>
         </View>
         <Button
-          style={{ ...style.switchButton, display: !showTenantSelection ? 'flex' : 'none' }}
-          onPress={() => toggleTenantSelection()}>
-          <Text style={{ color: '#fff' }}>{i18n.t('AbpUiMultiTenancy::Switch')}</Text>
+          style={{
+            display: !showTenantSelection ? 'flex' : 'none',
+          }}
+          onPress={() => toggleTenantSelection()}
+        >
+            {i18n.t('AbpUiMultiTenancy::Switch')}
         </Button>
-      </Segment>
+      </Box>
       {showTenantSelection ? (
-        <Content px20 style={{ flex: 1 }}>
-          <InputGroup abpInputGroup>
-            <Label abpLabel>{i18n.t('AbpUiMultiTenancy::Name')}</Label>
-            <Input abpInput value={tenantName} onChangeText={setTenantName} autoCapitalize = 'none'/>
-          </InputGroup>
-          <Text style={style.hint}>{i18n.t('AbpUiMultiTenancy::SwitchTenantHint')}</Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Button abpButton light style={style.button} onPress={() => toggleTenantSelection()}>
-              <Text>{i18n.t('AbpAccount::Cancel')}</Text>
+        <Box
+          px="3"
+          w={{
+            base: '100%',
+          }}
+        >
+          <FormControl my="2" width={350}>
+            <FormControl.Label>
+              {i18n.t('AbpUiMultiTenancy::Name')}
+            </FormControl.Label>
+            <Input
+              autoCapitalize="none"
+              value={tenantName}
+              onChangeText={setTenantName}
+            />
+          </FormControl>
+          <Text style={styles.hint}>
+            {i18n.t('AbpUiMultiTenancy::SwitchTenantHint')}
+          </Text>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+          >
+            <Button
+              style={styles.button}
+              onPress={() => toggleTenantSelection()}
+              variant="outline"
+            >
+              {i18n.t('AbpAccount::Cancel')}
             </Button>
-            <Button abpButton style={style.button} onPress={() => findTenant()}>
-              <Text>{i18n.t('AbpAccount::Save')}</Text>
+            <Button style={styles.button} onPress={() => findTenant()}>
+              {i18n.t('AbpAccount::Save')}
             </Button>
           </View>
-        </Content>
+        </Box>
       ) : null}
     </>
   );
 }
 
 TenantBox.propTypes = {
-  style: PropTypes.any.isRequired,
   setTenant: PropTypes.func.isRequired,
   showTenantSelection: PropTypes.bool.isRequired,
   toggleTenantSelection: PropTypes.func.isRequired,
@@ -88,26 +116,11 @@ TenantBox.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 70,
-  },
   button: { marginTop: 20, width: '49%' },
-  switchButton: {
-    borderTopWidth: 0,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-    borderLeftWidth: 0,
-    borderRadius: 10,
-    backgroundColor: '#38003c',
-    height: 35,
-  },
+
   tenant: { color: '#777' },
   title: {
     marginRight: 10,
-    color: '#777',
     fontSize: 13,
     fontWeight: '600',
     textTransform: 'uppercase',
@@ -115,14 +128,16 @@ const styles = StyleSheet.create({
   hint: { color: '#bbb', textAlign: 'left' },
 });
 
-const Forwarded = forwardRef((props, ref) => <TenantBox {...props} forwardedRef={ref} />);
+const Forwarded = forwardRef((props, ref) => (
+  <TenantBox {...props} forwardedRef={ref} />
+));
 
 export default connectToRedux({
-  component: connectStyle('ABP.TenantBox', styles)(Forwarded),
+  component: Forwarded,
   dispatchProps: {
     setTenant: PersistentStorageActions.setTenant,
   },
-  stateProps: state => ({
+  stateProps: (state) => ({
     tenant: createTenantSelector()(state),
   }),
 });

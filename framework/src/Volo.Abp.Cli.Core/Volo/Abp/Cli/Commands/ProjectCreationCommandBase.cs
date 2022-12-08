@@ -1,38 +1,76 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using NuGet.Versioning;
+using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands.Services;
+using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Events;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.Utils;
+using Volo.Abp.EventBus.Local;
 
 namespace Volo.Abp.Cli.Commands;
 
 public abstract class ProjectCreationCommandBase
 {
+    private readonly IBundlingService _bundlingService;
     public ConnectionStringProvider ConnectionStringProvider { get; }
     public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
     public ICmdHelper CmdHelper { get; }
+    public IInstallLibsService InstallLibsService { get; }
+    public CliService CliService { get; }
+    public AngularPwaSupportAdder AngularPwaSupportAdder { get; }
+    public InitialMigrationCreator InitialMigrationCreator { get; }
+    public ILocalEventBus EventBus { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
-    public ProjectCreationCommandBase(ConnectionStringProvider connectionStringProvider, SolutionPackageVersionFinder solutionPackageVersionFinder, ICmdHelper cmdHelper)
+    public ThemePackageAdder ThemePackageAdder { get; }
+    
+    public AngularThemeConfigurer AngularThemeConfigurer { get; }
+
+    public ProjectCreationCommandBase(
+        ConnectionStringProvider connectionStringProvider,
+        SolutionPackageVersionFinder solutionPackageVersionFinder,
+        ICmdHelper cmdHelper,
+        IInstallLibsService installLibsService,
+        CliService cliService,
+        AngularPwaSupportAdder angularPwaSupportAdder,
+        InitialMigrationCreator initialMigrationCreator,
+        ThemePackageAdder themePackageAdder,
+        ILocalEventBus eventBus,
+        IBundlingService bundlingService, 
+        AngularThemeConfigurer angularThemeConfigurer)
     {
+        _bundlingService = bundlingService;
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
+        InstallLibsService = installLibsService;
+        CliService = cliService;
+        AngularPwaSupportAdder = angularPwaSupportAdder;
+        InitialMigrationCreator = initialMigrationCreator;
+        EventBus = eventBus;
+        ThemePackageAdder = themePackageAdder;
+        AngularThemeConfigurer = angularThemeConfigurer;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
 
-    protected ProjectBuildArgs GetProjectBuildArgs(CommandLineArgs commandLineArgs, string template, string projectName)
+    protected async Task<ProjectBuildArgs> GetProjectBuildArgsAsync(CommandLineArgs commandLineArgs, string template, string projectName)
     {
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
 
@@ -45,6 +83,21 @@ public abstract class ProjectCreationCommandBase
         if (preview)
         {
             Logger.LogInformation("Preview: yes");
+
+            var cliVersion = await CliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
+
+            if (!cliVersion.IsPrerelease)
+            {
+                throw new CliUsageException(
+                    "You can only create a new preview solution with preview CLI version." +
+                    " Update your ABP CLI to the preview version.");
+            }
+        }
+
+        var pwa = commandLineArgs.Options.ContainsKey(Options.ProgressiveWebApp.Short);
+        if (pwa)
+        {
+            Logger.LogInformation("Progressive Web App: yes");
         }
 
         var databaseProvider = GetDatabaseProvider(commandLineArgs);
@@ -65,7 +118,7 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("DBMS: " + databaseManagementSystem);
         }
 
-        var uiFramework = GetUiFramework(commandLineArgs);
+        var uiFramework = GetUiFramework(commandLineArgs, template);
         if (uiFramework != UiFramework.NotSpecified)
         {
             Logger.LogInformation("UI Framework: " + uiFramework);
@@ -111,18 +164,38 @@ public abstract class ProjectCreationCommandBase
         SolutionName solutionName;
         if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
         {
-            var slnFile = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+            var slnPath = commandLineArgs.Options.GetOrNull(Options.MainSolution.Short, Options.MainSolution.Long);
 
-            if (slnFile == null)
+            if (slnPath == null)
             {
-                throw new CliUsageException("This command should be run inside a folder that contains a microservice solution!");
+                slnPath = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+            }
+            else if (slnPath.EndsWith(".sln"))
+            {
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(slnPath));
+                outputFolderRoot = Path.GetDirectoryName(slnPath);
+            }
+            else if (!Directory.Exists(slnPath))
+            {
+                slnPath = null;
+            }
+            else
+            {
+                Directory.SetCurrentDirectory(slnPath);
+                outputFolderRoot = slnPath;
+                slnPath = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
             }
 
-            var microserviceSolutionName = Path.GetFileName(slnFile).RemovePostFix(".sln");
+            if (slnPath == null)
+            {
+                throw new CliUsageException($"This command should be run inside a folder that contains a microservice solution! Or use -{Options.MainSolution.Short} parameter.");
+            }
 
-            version ??= SolutionPackageVersionFinder.Find(slnFile);
+            var microserviceSolutionName = Path.GetFileName(slnPath).RemovePostFix(".sln");
+
+            version ??= SolutionPackageVersionFinder.Find(slnPath);
             solutionName = SolutionName.Parse(microserviceSolutionName, projectName);
-            outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, projectName);
+            outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, solutionName.ProjectName);
             uiFramework = uiFramework == UiFramework.NotSpecified ? FindMicroserviceSolutionUiFramework(outputFolderRoot) : uiFramework;
         }
         else
@@ -146,6 +219,9 @@ public abstract class ProjectCreationCommandBase
         }
 
         commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
+        
+        var theme = uiFramework == UiFramework.None ? (Theme?)null : GetThemeByTemplateOrNull(commandLineArgs, template);
+        var themeStyle = theme.HasValue ? GetThemeStyleOrNull(commandLineArgs, theme.Value) : (ThemeStyle?)null;
 
         return new ProjectBuildArgs(
             solutionName,
@@ -161,12 +237,20 @@ public abstract class ProjectCreationCommandBase
             gitHubVoloLocalRepositoryPath,
             templateSource,
             commandLineArgs.Options,
-            connectionString
+            connectionString,
+            pwa,
+            theme,
+            themeStyle
         );
     }
 
     protected void ExtractProjectZip(ProjectBuildResult project, string outputFolder)
     {
+        EventBus.PublishAsync(new ProjectCreationProgressEvent
+        {
+            Message = "Unzipping the solution"
+        }, false);
+
         using (var templateFileStream = new MemoryStream(project.ZipContent))
         {
             using (var zipInputStream = new ZipInputStream(templateFileStream))
@@ -219,7 +303,7 @@ public abstract class ProjectCreationCommandBase
         if (AppTemplateBase.IsAppTemplate(template))
         {
             var isCommercial = template == AppProTemplate.TemplateName;
-            OpenThanksPage(projectArgs.UiFramework, projectArgs.DatabaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
+            OpenThanksPage(projectArgs.UiFramework, projectArgs.DatabaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server") || commandLineArgs.Options.ContainsKey("separate-auth-server"), isCommercial);
         }
         else if (MicroserviceTemplateBase.IsMicroserviceTemplate(template))
         {
@@ -254,14 +338,14 @@ public abstract class ProjectCreationCommandBase
         var tieredYesNo = tiered ? "yes" : "no";
         var url = $"https://{urlPrefix}.abp.io/project-created-success?ui={uiFramework:g}&db={databaseProvider:g}&tiered={tieredYesNo}";
 
-        CmdHelper.OpenWebPage(url);
+        CmdHelper.Open(url);
     }
 
     protected void OpenMicroserviceDocumentPage()
     {
         var url = "https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index";
 
-        CmdHelper.OpenWebPage(url);
+        CmdHelper.Open(url);
     }
 
     protected bool GetCreateSolutionFolderPreference(CommandLineArgs commandLineArgs)
@@ -279,25 +363,130 @@ public abstract class ProjectCreationCommandBase
     protected virtual DatabaseProvider GetDatabaseProvider(CommandLineArgs commandLineArgs)
     {
         var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseProvider.Short, Options.DatabaseProvider.Long);
-        switch (optionValue)
+
+        if (optionValue == null)
         {
-            case "ef":
-                return DatabaseProvider.EntityFrameworkCore;
-            case "mongodb":
-                return DatabaseProvider.MongoDb;
-            default:
-                return DatabaseProvider.NotSpecified;
+            return DatabaseProvider.NotSpecified;
         }
+
+        if (optionValue.Equals("ef", StringComparison.InvariantCultureIgnoreCase) || optionValue.Equals("entityframeworkcore", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return DatabaseProvider.EntityFrameworkCore;
+        }
+
+        if (optionValue.Equals("mongo", StringComparison.InvariantCultureIgnoreCase) || optionValue.Equals("mongodb", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return DatabaseProvider.MongoDb;
+        }
+
+        throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Database Provider"));
     }
 
-    protected virtual void RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
+    protected virtual async Task RunGraphBuildForMicroserviceServiceTemplate(ProjectBuildArgs projectArgs)
     {
         if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
         {
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent
+            {
+                Message = "Building the microservice solution"
+            }, false);
+
             CmdHelper.RunCmd("dotnet build /graphbuild", projectArgs.OutputFolder);
         }
     }
-    
+
+    protected async Task RunInstallLibsForWebTemplateAsync(ProjectBuildArgs projectArgs)
+    {
+        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) ||
+            ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) ||
+            AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName) ||
+            MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
+        {
+            Logger.LogInformation("Installing client-side packages...");
+
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent
+            {
+                Message = "Installing client-side packages"
+            }, false);
+
+            await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
+        }
+    }
+
+    protected async Task RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(ProjectBuildArgs projectArgs)
+    {
+        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) && projectArgs.UiFramework is UiFramework.Blazor or UiFramework.MauiBlazor)
+        {
+            var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
+            var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";
+            Logger.LogInformation($"{message}...");
+
+            await EventBus.PublishAsync(new ProjectCreationProgressEvent
+            {
+                Message = message
+            }, false);
+
+            var directory = Path.GetDirectoryName(
+                Directory.GetFiles(projectArgs.OutputFolder, isWebassembly? "*.Blazor.csproj" :"*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
+                );
+            
+            await _bundlingService.BundleAsync(directory, true, projectType: isWebassembly ? BundlingConsts.WebAssembly : BundlingConsts.MauiBlazor);
+        }
+    }
+
+    protected async Task CreateInitialMigrationsAsync(ProjectBuildArgs projectArgs)
+    {
+        if (projectArgs.DatabaseProvider == DatabaseProvider.MongoDb)
+        {
+            return;
+        }
+
+        var efCoreProjectPath = string.Empty;
+        bool isLayeredTemplate;
+
+        switch (projectArgs.TemplateName)
+        {
+            case AppTemplate.TemplateName:
+            case AppProTemplate.TemplateName:
+                efCoreProjectPath = Directory.GetFiles(projectArgs.OutputFolder, "*EntityFrameworkCore.csproj", SearchOption.AllDirectories).FirstOrDefault();
+                isLayeredTemplate = true;
+                break;
+            case AppNoLayersTemplate.TemplateName:
+            case AppNoLayersProTemplate.TemplateName:
+                efCoreProjectPath = Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
+                isLayeredTemplate = false;
+                break;
+            default:
+                return;
+        }
+
+        if (string.IsNullOrWhiteSpace(efCoreProjectPath))
+        {
+            Logger.LogWarning("Couldn't find the project to create initial migrations!");
+            return;
+        }
+
+        await EventBus.PublishAsync(new ProjectCreationProgressEvent
+        {
+            Message = "Creating the initial DB migration"
+        }, false);
+
+        await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+    }
+
+    protected async Task ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)
+    {
+        var isAngular = projectArgs.UiFramework == UiFramework.Angular;
+        var isPwa = projectArgs.Pwa;
+
+        if (isAngular && isPwa)
+        {
+            Logger.LogInformation("Adding PWA Support to Angular app.");
+
+            AngularPwaSupportAdder.AddPwaSupport(projectArgs.OutputFolder);
+        }
+    }
+
     protected virtual DatabaseManagementSystem GetDatabaseManagementSystem(CommandLineArgs commandLineArgs)
     {
         var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseManagementSystem.Short, Options.DatabaseManagementSystem.Long);
@@ -322,7 +511,7 @@ public abstract class ProjectCreationCommandBase
             case "oracle":
                 return DatabaseManagementSystem.Oracle;
             default:
-                return DatabaseManagementSystem.NotSpecified;
+                throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Database Management System"));
         }
     }
 
@@ -332,16 +521,19 @@ public abstract class ProjectCreationCommandBase
 
         switch (optionValue)
         {
+            case null:
             case "none":
                 return MobileApp.None;
             case "react-native":
                 return MobileApp.ReactNative;
+            case "maui":
+                return MobileApp.Maui;
             default:
-                return MobileApp.None;
+                throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Mobile App"));
         }
     }
 
-    protected virtual UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
+    protected virtual UiFramework GetUiFramework(CommandLineArgs commandLineArgs, string template = "app")
     {
         if (commandLineArgs.Options.ContainsKey("no-ui"))
         {
@@ -349,8 +541,11 @@ public abstract class ProjectCreationCommandBase
         }
 
         var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
+
         switch (optionValue)
         {
+            case null:
+                return UiFramework.NotSpecified;
             case "none":
                 return UiFramework.None;
             case "mvc":
@@ -361,8 +556,149 @@ public abstract class ProjectCreationCommandBase
                 return UiFramework.Blazor;
             case "blazor-server":
                 return UiFramework.BlazorServer;
+            case "maui-blazor" when template == AppProTemplate.TemplateName:
+                return UiFramework.MauiBlazor;
             default:
-                return UiFramework.NotSpecified;
+                throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("UI Framework"));
+        }
+    }
+
+    protected virtual Theme? GetThemeByTemplateOrNull(CommandLineArgs commandLineArgs, string template = "app")
+    {
+        var theme = commandLineArgs.Options.GetOrNull(Options.Theme.Long)?.ToLower();
+
+        return template switch
+        {
+            AppTemplate.TemplateName or AppNoLayersTemplate.TemplateName => GetAppTheme(),
+            AppProTemplate.TemplateName or AppNoLayersProTemplate.TemplateName or MicroserviceProTemplate.TemplateName => GetAppProTheme(),
+            _ => null
+        };
+
+        Theme GetAppTheme()
+        {
+            return theme switch
+            {
+                // null or "leptonx-lite" => Theme.LeptonXLite,
+                "basic" => Theme.Basic,
+                _ => Theme.LeptonXLite 
+            };
+        }
+    
+        Theme GetAppProTheme()
+        {
+            return theme switch
+            {
+                // null or "leptonx" => Theme.LeptonX,
+                "lepton" => Theme.Lepton,
+                "basic" => Theme.Basic,
+                _ => Theme.LeptonX //TODO: default???
+            };
+        }
+    }
+
+    protected virtual ThemeStyle? GetThemeStyleOrNull(CommandLineArgs commandLineArgs, Theme theme) 
+    {
+        if(theme != Theme.LeptonX) 
+        {
+            return null;
+        }
+
+        var themeStyle = commandLineArgs.Options.GetOrNull(Options.ThemeStyle.Long)?.ToLower();
+        
+        return themeStyle switch 
+        {
+            "system" or null => ThemeStyle.System,
+            "dim" => ThemeStyle.Dim,
+            "light" => ThemeStyle.Light,
+            "dark" => ThemeStyle.Dark,
+            _ => null
+        };
+    }
+
+    protected void ConfigureNpmPackagesForTheme(ProjectBuildArgs projectArgs)
+    {
+        if (!projectArgs.Theme.HasValue)
+        {
+            return;
+        }
+
+        switch (projectArgs.Theme)
+        {
+            case Theme.Basic:
+                ConfigureNpmPackagesForBasicTheme(projectArgs);
+                break;
+            case Theme.Lepton:
+                ConfigureNpmPackagesForLeptonTheme(projectArgs);
+                break;
+            case Theme.NotSpecified:
+            case Theme.LeptonXLite:
+            case Theme.LeptonX:
+                break;
+            default:
+                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage(Options.Theme.Long));
+        }
+    }
+
+    private void ConfigureNpmPackagesForBasicTheme(ProjectBuildArgs projectArgs)
+    {
+        if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.mvc.ui.theme.basic", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.BlazorServer)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.components.server.basictheme", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.Angular)
+        {
+            ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
+        }
+    }
+    
+    private void ConfigureNpmPackagesForLeptonTheme(ProjectBuildArgs projectArgs)
+    {
+        if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.mvc.ui.theme.lepton", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.BlazorServer)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.components.server.leptontheme", projectArgs.Version);
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.mvc.ui.theme.lepton", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.Angular)
+        {
+            ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@volo/abp.ng.theme.lepton", projectArgs.Version);
+        }
+    }
+
+    protected void ConfigureAngularJsonForThemeSelection(ProjectBuildArgs projectArgs)
+    {
+        var theme = projectArgs.Theme;
+        var isProTemplate = !projectArgs.TemplateName.IsNullOrEmpty() && projectArgs.TemplateName.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
+        var isDefaultTheme = (isProTemplate && theme == AppProTemplate.DefaultTheme) ||
+                             (!isProTemplate && theme == AppTemplate.DefaultTheme);
+
+        if (isDefaultTheme || projectArgs.TemplateName == ModuleTemplate.TemplateName)
+        {
+            return;
+        }
+        
+        if (theme.HasValue && projectArgs.UiFramework == UiFramework.Angular)
+        {
+            var angularFolderPath = projectArgs.TemplateName == MicroserviceProTemplate.TemplateName
+                ? projectArgs.OutputFolder.EnsureEndsWith(Path.DirectorySeparatorChar) + "apps" + Path.DirectorySeparatorChar + "angular"
+                : projectArgs.OutputFolder.EnsureEndsWith(Path.DirectorySeparatorChar) + "angular";
+
+            AngularThemeConfigurer.Configure(new AngularThemeConfigurationArgs(
+                theme: theme.Value,
+                projectName: projectArgs.SolutionName.FullName,
+                angularFolderPath: angularFolderPath
+            ));
         }
     }
 
@@ -443,6 +779,18 @@ public abstract class ProjectCreationCommandBase
             public const string Long = "create-solution-folder";
         }
 
+        public static class SkipInstallingLibs
+        {
+            public const string Short = "sib";
+            public const string Long = "skip-installing-libs";
+        }
+
+        public static class SkipBundling
+        {
+            public const string Short = "sb";
+            public const string Long = "skip-bundling";
+        }
+
         public static class Tiered
         {
             public const string Long = "tiered";
@@ -451,6 +799,27 @@ public abstract class ProjectCreationCommandBase
         public static class Preview
         {
             public const string Long = "preview";
+        }
+
+        public static class ProgressiveWebApp
+        {
+            public const string Short = "pwa";
+        }
+
+        public static class MainSolution
+        {
+            public const string Short = "ms";
+            public const string Long = "main-solution";
+        }
+
+        public static class Theme
+        {
+            public const string Long = "theme";
+        }
+
+        public static class ThemeStyle
+        {
+            public const string Long = "theme-style";
         }
     }
 }

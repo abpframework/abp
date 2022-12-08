@@ -2,17 +2,27 @@ $(function () {
 
     var l = abp.localization.getResource("CmsKit");
 
+    var blogPostStatus = {
+        Draft: 0,
+        Published: 1,
+        SendToReview: 2
+    };
+
     var $selectBlog = $('#BlogSelectionSelect');
     var $formCreate = $('#form-blog-post-create');
     var $title = $('#ViewModel_Title');
     var $shortDescription = $('#ViewModel_ShortDescription');
     var $coverImage = $('#ViewModel_CoverImageMediaId');
     var $url = $('#ViewModel_Slug');
+    var $status = $('#ViewModel_Status');
     var $buttonSubmit = $('#button-blog-post-create');
+    var $buttonPublish = $('#button-blog-post-publish');
+    var $buttonSendToReview = $('#button-blog-post-send-to-review');
     var $pageContentInput = $('#ViewModel_Content');
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
     var $tagsWrapper = $('#blog-post-tags-wrapper');
+    var widgetModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Contents/AddWidgetModal", modalClass: "addWidgetModal" });
 
     var UPPY_FILE_ID = "uppy-upload-file";
 
@@ -59,27 +69,57 @@ $(function () {
 
     $buttonSubmit.click(function (e) {
         e.preventDefault();
+        $status.val(blogPostStatus.Draft);
         submitCoverImage();
+    });
+
+    $buttonPublish.click(function (e) {
+        abp.message.confirm(
+            l('BlogPostPublishConfirmationMessage', $title.val()),
+            function (isConfirmed) {
+                if (isConfirmed) {
+                    e.preventDefault();
+                    $status.val(blogPostStatus.Published);
+                    submitCoverImage();
+                }
+            }
+        );
+    });
+
+    $buttonSendToReview.click(function (e) {
+        abp.message.confirm(
+            l('BlogPostSendToReviewConfirmationMessage', $title.val()),
+            function (isConfirmed) {
+                if (isConfirmed) {
+                    e.preventDefault();
+                    $status.val(blogPostStatus.SendToReview);
+                    submitCoverImage();
+                }
+            }
+        );
     });
 
     function submitEntityTags(blogPostId) {
 
-        var tags = $tagsInput.val().split(',').map(x => x.trim()).filter(x => x);
+        if ($tagsInput.val()) {
 
-        if (tags.length === 0) {
-            finishSaving();
-            return;
+            var tags = $tagsInput.val().split(',').map(x => x.trim()).filter(x => x);
+
+            if (tags.length > 0) {
+                volo.cmsKit.admin.tags.entityTagAdmin
+                    .setEntityTags({
+                        entityType: 'BlogPost',
+                        entityId: blogPostId,
+                        tags: tags
+                    })
+                    .then(function (result) {
+                        finishSaving(result);
+                    });
+                return;
+            }
         }
 
-        volo.cmsKit.admin.tags.entityTagAdmin
-            .setEntityTags({
-                entityType: 'BlogPost',
-                entityId: blogPostId,
-                tags: tags
-            })
-            .then(function (result) {
-                finishSaving(result);
-            });
+        finishSaving();
     }
 
     function getUppyHeaders() {
@@ -210,21 +250,17 @@ $(function () {
     var fileUploadUri = "/api/cms-kit-admin/media/blogpost";
     var fileUriPrefix = "/api/cms-kit/media/";
 
-    initAllEditors();
+    initEditor();
 
-    function initAllEditors() {
-        $('.content-editor').each(function (i, item) {
-            initEditor(item);
-        });
-    }
+    var editor;
 
-    function initEditor(element) {
-        var $editorContainer = $(element);
+    function initEditor() {
+        var $editorContainer = $("#ContentEditor");
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
 
-        var editor = new toastui.Editor({
+        editor = new toastui.Editor({
             el: $editorContainer[0],
             usageStatistics: false,
             useCommandShortcut: true,
@@ -235,6 +271,19 @@ $(function () {
             minHeight: "25em",
             initialEditType: 'markdown',
             language: $editorContainer.data("language"),
+            toolbarItems: [
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'image', 'link'],
+                ['code', 'codeblock'],
+                // Using Option: Customize the last button
+                [{
+                    el: createAddWidgetButton(),
+                    command: 'bold',
+                    tooltip: 'Add Widget'
+                }]
+            ],
             hooks: {
                 addImageBlobHook: uploadFile,
             },
@@ -242,7 +291,7 @@ $(function () {
                 change: function (_val) {
                     $editorInput.val(editor.getMarkdown());
                     $editorInput.trigger("change");
-                    reflectContentChanges(editor.getHtml());
+                    reflectContentChanges(editor.getHTML());
                 }
             }
         });
@@ -278,5 +327,44 @@ $(function () {
                 callback(fileUrl, mediaDto.name);
             }
         });
+    }
+
+    $('#GeneratedWidgetText').on('change', function () {
+        var txt = $('#GeneratedWidgetText').val();
+        editor.insertText(txt);
+    });
+
+    $('.tab-item').on('click', function () {
+        if ($(this).attr("aria-label") == 'Preview' && editor.isMarkdownMode()) {
+
+            let content = editor.getMarkdown();
+            localStorage.setItem('content', content);
+
+            $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
+                editor.setHTML(result);
+
+                var highllightedText = $('#ContentEditor').find('.toastui-editor-md-preview-highlight');
+                highllightedText.removeClass('toastui-editor-md-preview-highlight');
+            });
+        }
+        else if ($(this).attr("aria-label") == 'Write') {
+            var retrievedObject = localStorage.getItem('content');
+            editor.setMarkdown(retrievedObject);
+        }
+    });
+
+    function createAddWidgetButton() {
+        const button = document.createElement('button');
+
+        button.className = 'toastui-editor-toolbar-icons last dropdown';
+        button.style.backgroundImage = 'none';
+        button.style.margin = '0';
+        button.innerHTML = `W`;
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            widgetModal.open();
+        });
+
+        return button;
     }
 });

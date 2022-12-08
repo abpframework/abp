@@ -1,6 +1,7 @@
 {
   "culture": "ar",
   "texts": {
+    "Menu:Account": "حساب",
     "UserName": "اسم المستخدم",
     "EmailAddress": "البريد الإلكتروني",
     "UserNameOrEmailAddress": "اسم المستخدم أو البريد الإلكتروني",
@@ -35,6 +36,7 @@
     "PersonalSettingsSaved": "تم حفظ الإعدادات الشخصية",
     "PasswordChanged": "تم تغيير كلمة المرور",
     "NewPasswordConfirmFailed": "يرجى تأكيد كلمة المرور الجديدة.",
+    "NewPasswordSameAsOld": "يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمة المرور الحالية.",
     "Manage": "إدارة",
     "MyAccount": "حسابي",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "هل تم تمكين التسجيل الذاتي",

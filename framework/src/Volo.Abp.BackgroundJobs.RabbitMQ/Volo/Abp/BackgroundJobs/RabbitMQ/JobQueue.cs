@@ -70,7 +70,8 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
                new JobQueueConfiguration(
                    typeof(TArgs),
                    AbpRabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName,
-                   AbpRabbitMqBackgroundJobOptions.DefaultDelayedQueueNamePrefix + JobConfiguration.JobName
+                   AbpRabbitMqBackgroundJobOptions.DefaultDelayedQueueNamePrefix + JobConfiguration.JobName,
+                   prefetchCount: AbpRabbitMqBackgroundJobOptions.PrefetchCount
                );
     }
 
@@ -152,9 +153,14 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
 
         if (AbpBackgroundJobOptions.IsJobExecutionEnabled)
         {
+            if (QueueConfiguration.PrefetchCount.HasValue)
+            {
+                ChannelAccessor.Channel.BasicQos(0, QueueConfiguration.PrefetchCount.Value, false);
+            }
+            
             Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
             Consumer.Received += MessageReceived;
-
+            
             //TODO: What BasicConsume returns?
             ChannelAccessor.Channel.BasicConsume(
                 queue: QueueConfiguration.QueueName,

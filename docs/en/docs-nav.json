@@ -2,7 +2,17 @@
   "items": [
     {
       "text": "Quick Start",
-      "path": "Tutorials/Todo/Index.md"
+      "path": "Tutorials/Todo/Overall.md",
+      "items": [
+        {
+          "text": "With single-layer solution",
+          "path": "Tutorials/Todo/Single-Layer/Index.md"
+        },
+        {
+          "text": "With layered architecture",
+          "path": "Tutorials/Todo/Index.md"
+        }
+      ]
     },
     {
       "text": "Getting Started",
@@ -32,6 +42,10 @@
         {
           "text": "WPF Application",
           "path": "Startup-Templates/WPF.md"
+        },
+        {
+          "text": "MAUI",
+          "path": "Startup-Templates/MAUI.md"
         },
         {
           "text": "Empty Web Project",
@@ -119,6 +133,10 @@
           "path": "Startup-Templates/Application.md"
         },
         {
+          "text": "Application (Single Layer)",
+          "path": "Startup-Templates/Application-Single-Layer.md"
+        },
+        {
           "text": "Module",
           "path": "Startup-Templates/Module.md"
         },
@@ -136,6 +154,36 @@
       "text": "Fundamentals",
       "items": [
         {
+          "text": "Application Startup",
+          "path": "Application-Startup.md"
+        },
+        {
+          "text": "Authorization",
+          "path": "Authorization.md"
+        },
+        {
+          "text": "Caching",
+          "path": "Caching.md",
+          "items": [
+            {
+              "text": "Entity Cache",
+              "path": "Entity-Cache.md"
+            },
+            {
+              "text": "Redis Cache",
+              "path": "Redis-Cache.md"
+            }
+          ]
+        },
+        {
+          "text": "Configuration",
+          "path": "Configuration.md"
+        },
+        {
+          "text": "Connection Strings",
+          "path": "Connection-Strings.md"
+        },
+        {
           "text": "Dependency Injection",
           "path": "Dependency-Injection.md",
           "items": [
@@ -146,16 +194,28 @@
           ]
         },
         {
-          "text": "Configuration",
-          "path": "Configuration.md"
+          "text": "Exception Handling",
+          "path": "Exception-Handling.md"
+        },
+        {
+          "text": "Localization",
+          "path": "Localization.md"
+        },
+        {
+          "text": "Logging",
+          "path": "Logging.md"
+        },
+        {
+          "text": "Object Extensions",
+          "path": "Object-Extensions.md"
         },
         {
           "text": "Options",
           "path": "Options.md"
         },
         {
-          "text": "Authorization",
-          "path": "Authorization.md"
+          "text": "Settings",
+          "path": "Settings.md"
         },
         {
           "text": "Validation",
@@ -166,40 +226,6 @@
               "path": "FluentValidation.md"
             }
           ]
-        },
-        {
-          "text": "Localization",
-          "path": "Localization.md"
-        },
-        {
-          "text": "Caching",
-          "path": "Caching.md",
-          "items": [
-            {
-              "text": "Redis Cache",
-              "path": "Redis-Cache.md"
-            }
-          ]
-        },
-        {
-          "text": "Exception Handling",
-          "path": "Exception-Handling.md"
-        },
-        {
-          "text": "Settings",
-          "path": "Settings.md"
-        },
-        {
-          "text": "Connection Strings",
-          "path": "Connection-Strings.md"
-        },
-        {
-          "text": "Object Extensions",
-          "path": "Object-Extensions.md"
-        },
-        {
-          "text": "Logging",
-          "path": "Logging.md"
         }
       ]
     },
@@ -285,8 +311,16 @@
           ]
         },
         {
+          "text": "Cancellation Token Provider",
+          "path": "Cancellation-Token-Provider.md"
+        },
+        {
           "text": "CSRF/XSRF & Anti Forgery",
           "path": "CSRF-Anti-Forgery.md"
+        },
+        {
+          "text": "Concurrency Check",
+          "path": "Concurrency-Check.md"
         },
         {
           "text": "Current User",
@@ -301,6 +335,10 @@
           "path": "Data-Seeding.md"
         },
         {
+          "text": "Distributed Locking",
+          "path": "Distributed-Locking.md"
+        },
+        {
           "text": "Email Sending",
           "items": [
             {
@@ -312,10 +350,6 @@
               "path": "MailKit.md"
             }
           ]
-        },
-        {
-          "text": "SMS Sending",
-          "path": "SMS-Sending.md"
         },
         {
           "text": "Event Bus",
@@ -353,10 +387,6 @@
           ]
         },
         {
-          "text": "JSON",
-          "path": "JSON.md"
-        },
-        {
           "text": "Features",
           "path": "Features.md"
         },
@@ -369,8 +399,20 @@
           "path": "Guid-Generation.md"
         },
         {
+          "text": "JSON",
+          "path": "JSON.md"
+        },
+        {
           "text": "Object to Object Mapping",
           "path": "Object-To-Object-Mapping.md"
+        },
+        {
+          "text": "Simple State Checker",
+          "path": "SimpleStateChecker.md"
+        },
+        {
+          "text": "SMS Sending",
+          "path": "SMS-Sending.md"
         },
         {
           "text": "String Encryption",
@@ -397,14 +439,6 @@
         {
           "text": "Virtual File System",
           "path": "Virtual-File-System.md"
-        },
-        {
-          "text": "Cancellation Token Provider",
-          "path": "Cancellation-Token-Provider.md"
-        },
-        {
-          "text": "Simple State Checker",
-          "path": "SimpleStateChecker.md"
         }
       ]
     },
@@ -579,17 +613,29 @@
           "path": "API/Dynamic-CSharp-API-Clients.md"
         },
         {
+          "text": "Static C# API Clients",
+          "path": "API/Static-CSharp-API-Clients.md"
+        },
+        {
           "text": "ABP Endpoints",
           "items": [
             {
               "text": "Application Configuration",
               "path": "API/Application-Configuration.md"
+            },
+            {
+              "text": "Application Localization",
+              "path": "API/Application-Localization.md"
             }
           ]
         },
         {
           "text": "Swagger Integration",
           "path": "API/Swagger-Integration.md"
+        },
+        {
+          "text": "API Versioning",
+          "path": "API/API-Versioning.md"
         }
       ]
     },
@@ -620,12 +666,20 @@
               "path": "UI/AspNetCore/Data-Tables.md"
             },
             {
+              "text": "Auto-Complete Select",
+              "path": "UI/AspNetCore/AutoComplete-Select.md"
+            },
+            {
               "text": "Page Alerts",
               "path": "UI/AspNetCore/Page-Alerts.md"
             },
             {
               "text": "Dynamic JavaScript API Client Proxies",
               "path": "UI/AspNetCore/Dynamic-JavaScript-Proxies.md"
+            },
+            {
+              "text": "Static JavaScript API Client Proxies",
+              "path": "UI/AspNetCore/Static-JavaScript-Proxies.md"
             },
             {
               "text": "Client Side Package Management",
@@ -680,6 +734,10 @@
                 {
                   "text": "The Basic Theme",
                   "path": "UI/AspNetCore/Basic-Theme.md"
+                },
+                {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/AspNetCore.md"
                 }
               ]
             },
@@ -794,12 +852,20 @@
                   "path": "UI/Blazor/Basic-Theme.md"
                 },
                 {
+                  "text": "LeptonX Lite",
+                  "path": "Themes/LeptonXLite/Blazor.md"
+                },
+                {
                   "text": "Branding",
                   "path": "UI/Blazor/Branding.md"
                 },
                 {
                   "text": "Page Header",
                   "path": "UI/Blazor/Page-Header.md"
+                },
+                {
+                  "text": "Page Layout",
+                  "path": "UI/Blazor/Page-Layout.md"
                 },
                 {
                   "text": "Toolbars",
@@ -875,8 +941,20 @@
               "path": "UI/Blazor/Global-Scripts-Styles.md"
             },
             {
+              "text": "Global Features",
+              "path": "UI/Blazor/Global-Features.md"
+            },
+            {
               "text": "Routing",
               "path": "UI/Blazor/Routing.md"
+            },
+            {
+              "text": "PWA Configuration",
+              "path": "UI/Blazor/Pwa-Configuration.md"
+            },
+            {
+              "text": "Layout Hooks",
+              "path": "UI/Blazor/Layout-Hooks.md"
             }
           ]
         },
@@ -924,6 +1002,10 @@
                   "path": "UI/Angular/Authorization.md"
                 },
                 {
+                  "text": "Current User",
+                  "path": "UI/Angular/Current-User.md"
+                },
+                {
                   "text": "HTTP Requests",
                   "path": "UI/Angular/HTTP-Requests.md"
                 },
@@ -942,6 +1024,10 @@
                 {
                   "text": "Features",
                   "path": "UI/Angular/Features.md"
+                },
+                {
+                  "text": "Global Features",
+                  "path": "UI/Angular/GlobalFeatures.md"
                 },
                 {
                   "text": "Permission Management",
@@ -997,6 +1083,10 @@
                   "path": "UI/Angular/Confirmation-Service.md"
                 },
                 {
+                  "text": "Loading Directive",
+                  "path": "UI/Angular/Loading-Directive.md"
+                },
+                {
                   "text": "Toast Overlay",
                   "path": "UI/Angular/Toaster-Service.md"
                 },
@@ -1047,6 +1137,10 @@
                     {
                       "text": "The Basic Theme",
                       "path": "UI/Angular/Basic-Theme.md"
+                    },
+                    {
+                      "text": "LeptonX Lite",
+                      "path": "Themes/LeptonXLite/Angular.md"
                     }
                   ]
                 },
@@ -1061,10 +1155,10 @@
                 {
                   "text": "Extensions",
                   "items": [
-                     {
+                    {
                       "text": "Overall",
                       "path": "UI/Angular/Extensions-Overall.md"
-                     },
+                    },
                     {
                       "text": "Entity Action Extensions",
                       "path": "UI/Angular/Entity-Action-Extensions.md"
@@ -1080,6 +1174,10 @@
                     {
                       "text": "Dynamic Form Extensions",
                       "path": "UI/Angular/Dynamic-Form-Extensions.md"
+                    },
+                    {
+                      "text": "Date, time and datetime format pipes",
+                      "path": "UI/Angular/DateTime-Format-Pipe.md"
                     }
                   ]
                 }
@@ -1112,6 +1210,10 @@
         {
           "text": "Common",
           "items": [
+            {
+              "text": "Themes",
+              "path": "Themes/Index.md"
+            },
             {
               "text": "Overriding the User Interface",
               "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
@@ -1198,19 +1300,32 @@
       ]
     },
     {
+      "text": "Dapr Integration",
+      "path": "Dapr/Index.md"
+    },
+    {
       "text": "Testing",
       "path": "Testing.md"
     },
     {
-      "text": "Samples",
+      "text": "Deployment",
+      "path": "Deployment/Index.md",
       "items": [
         {
-          "text": "All Samples",
-          "path": "Samples/Index.md"
+          "text": "Configuring for Production",
+          "path": "Deployment/Configuring-Production.md"
         },
         {
-          "text": "Microservice Demo",
-          "path": "Samples/Microservice-Demo.md"
+          "text": "Deploying to a Clustered Environment",
+          "path": "Deployment/Clustered-Environment.md"
+        },
+        {
+          "text": "Distributed / Microservice Solutions",
+          "path": "Deployment/Distributed-Microservice.md"
+        },
+        {
+          "text": "Optimizing for Production",
+          "path": "Deployment/Optimizing-Production.md"
         }
       ]
     },
@@ -1253,6 +1368,16 @@
           "text": "IdentityServer",
           "path": "Modules/IdentityServer.md"
         },
+		{
+          "text": "OpenIddict",
+	  "items": [
+		{
+		 "text": "OpenIddict Migration Guide",
+		 "path": "Migration-Guides/OpenIddict-Step-by-Step.md"
+		}
+	   ],
+          "path": "Modules/OpenIddict.md"
+        },
         {
           "text": "Permission Management",
           "path": "Modules/Permission-Management.md"
@@ -1268,6 +1393,40 @@
         {
           "text": "Virtual File Explorer",
           "path": "Modules/Virtual-File-Explorer.md"
+        }
+      ]
+    },
+    {
+      "text": "Samples",
+      "items": [
+        {
+          "text": "All Samples",
+          "path": "Samples/Index.md"
+        },
+        {
+          "text": "eShopOnAbp",
+          "path": "https://github.com/abpframework/eShopOnAbp"
+        },
+        {
+          "text": "EventHub",
+          "path": "https://github.com/abpframework/eventhub"
+        },
+        {
+          "text": "Microservice Demo (legacy)",
+          "path": "Samples/Microservice-Demo.md"
+        }
+      ]
+    },
+    {
+      "text": "Books",
+      "items": [
+        {
+          "text": "Mastering ABP Framework",
+          "path": "https://abp.io/books/mastering-abp-framework"
+        },
+        {
+          "text": "Implementing Domain Driven Design",
+          "path": "https://abp.io/books/implementing-domain-driven-design"
         }
       ]
     },

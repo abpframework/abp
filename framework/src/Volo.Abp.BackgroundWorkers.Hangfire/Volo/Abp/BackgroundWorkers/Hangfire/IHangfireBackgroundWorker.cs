@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.BackgroundWorkers.Hangfire;
 
@@ -8,7 +10,9 @@ public interface IHangfireBackgroundWorker : IBackgroundWorker
 
     string CronExpression { get; set; }
 
-    Task DoWorkAsync();
+    TimeZoneInfo TimeZone  { get; set; }
+
+    string Queue  { get; set; }
+
+    Task DoWorkAsync(CancellationToken cancellationToken = default);
 }
-
-
