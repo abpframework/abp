@@ -249,7 +249,7 @@ public class AngularSourceCodeAdder : ITransientDependency
 
         fileContent = Regex.Replace(fileContent, @"apis\s*:\s*{", 
             "apis: {"+ Environment.NewLine +
-            "    " + moduleName.Split(".").Last() + ":"+ Environment.NewLine +
+            "    " + moduleName.Split(".").Last() + ": {"+ Environment.NewLine +
             "      rootNamespace: '" + moduleName + "',"+ Environment.NewLine +
             "    },");
         
