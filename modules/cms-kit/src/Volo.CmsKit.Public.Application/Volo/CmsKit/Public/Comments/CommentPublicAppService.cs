@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
-using SixLabors.ImageSharp.Formats.Gif;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Data;
@@ -16,7 +13,6 @@ using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
-using Volo.CmsKit.Public.Application.Security.VoloCaptcha;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Comments;
@@ -29,23 +25,17 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     protected ICmsUserLookupService CmsUserLookupService { get; }
     public IDistributedEventBus DistributedEventBus { get; }
     protected CommentManager CommentManager { get; }
-    protected CmsKitCommentOptions CmsKitCommentOptions { get; }
-    public SimpleMathsCaptchaGenerator SimpleMathsCaptchaGenerator { get; }
 
     public CommentPublicAppService(
         ICommentRepository commentRepository,
         ICmsUserLookupService cmsUserLookupService,
         IDistributedEventBus distributedEventBus,
-        CommentManager commentManager,
-        IOptions<CmsKitCommentOptions> cmsKitCommentOptions,
-        SimpleMathsCaptchaGenerator simpleMathsCaptchaGenerator)
+        CommentManager commentManager)
     {
         CommentRepository = commentRepository;
         CmsUserLookupService = cmsUserLookupService;
         DistributedEventBus = distributedEventBus;
         CommentManager = commentManager;
-        CmsKitCommentOptions = cmsKitCommentOptions.Value;
-        SimpleMathsCaptchaGenerator = simpleMathsCaptchaGenerator;
     }
 
     public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
@@ -61,11 +51,6 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     [Authorize]
     public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
     {
-        if (CmsKitCommentOptions.IsRecaptchaEnabled && input.CaptchaToken.HasValue)
-        { 
-            SimpleMathsCaptchaGenerator.Validate(input.CaptchaToken.Value, input.CaptchaAnswer);
-        }
-        
         var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
         if (input.RepliedCommentId.HasValue)
@@ -82,7 +67,6 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
                 input.RepliedCommentId
             )
         );
-
 
         await UnitOfWorkManager.Current.SaveChangesAsync();
 
