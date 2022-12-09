@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.SettingManagement.EntityFrameworkCore",
-  "hash": "f4d50cfb5807cf6a37ba0fda96e0abaa",
+  "hash": "38906a070e0a0ac6dc294b3d712ea2d9",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement.EntityFrameworkCore",

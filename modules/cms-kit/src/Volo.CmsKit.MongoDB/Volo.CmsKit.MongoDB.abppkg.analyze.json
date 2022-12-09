@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.MongoDB",
-  "hash": "3ea192b1c0724a8b6b79c8443b0ee55d",
+  "hash": "c784a28151e2ef4637ace9aaa4729c55",
   "contents": [
     {
       "namespace": "Volo.CmsKit.MongoDB",
@@ -30,51 +30,9 @@
       "connectionStringName": "CmsKit",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.CmsKit.Pages.Page",
-          "contentType": "databaseCollection",
-          "name": "CmsPages",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Tags.Tag",
-          "contentType": "databaseCollection",
-          "name": "CmsTags",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Blogs.Blog",
-          "contentType": "databaseCollection",
-          "name": "CmsBlogs",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.CmsKit.Comments.Comment",
           "contentType": "databaseCollection",
           "name": "CmsComments",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Tags.EntityTag",
-          "contentType": "databaseCollection",
-          "name": "CmsEntityTags",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Users.CmsUser",
-          "contentType": "databaseCollection",
-          "name": "CmsUsers",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Blogs.BlogPost",
-          "contentType": "databaseCollection",
-          "name": "CmsBlogPosts",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Ratings.Rating",
-          "contentType": "databaseCollection",
-          "name": "CmsRatings",
           "summary": null
         },
         {
@@ -84,15 +42,15 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
+          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
           "contentType": "databaseCollection",
-          "name": "CmsMenuItems",
+          "name": "CmsBlogFeatures",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.MediaDescriptors.MediaDescriptor",
+          "entityFullName": "Volo.CmsKit.Users.CmsUser",
           "contentType": "databaseCollection",
-          "name": "CmsMediaDescriptors",
+          "name": "CmsUsers",
           "summary": null
         },
         {
@@ -102,9 +60,51 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
+          "entityFullName": "Volo.CmsKit.Blogs.Blog",
           "contentType": "databaseCollection",
-          "name": "CmsBlogFeatures",
+          "name": "CmsBlogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.MediaDescriptors.MediaDescriptor",
+          "contentType": "databaseCollection",
+          "name": "CmsMediaDescriptors",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Pages.Page",
+          "contentType": "databaseCollection",
+          "name": "CmsPages",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Ratings.Rating",
+          "contentType": "databaseCollection",
+          "name": "CmsRatings",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Tags.EntityTag",
+          "contentType": "databaseCollection",
+          "name": "CmsEntityTags",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Tags.Tag",
+          "contentType": "databaseCollection",
+          "name": "CmsTags",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.BlogPost",
+          "contentType": "databaseCollection",
+          "name": "CmsBlogPosts",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
+          "contentType": "databaseCollection",
+          "name": "CmsMenuItems",
           "summary": null
         }
       ],
