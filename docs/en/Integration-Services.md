@@ -8,7 +8,7 @@ ABP Framework provides **Integration Services** for inter-module (or inter-micro
 
 You can mark an application service as an integration service by using the `[IntegrationService]` attribute.
 
-Assume that you have an application service named `ProductAppService`, if you want to mark this application service as an integration service, you should use the `[IntegrationService]` attribute top of the application service class as shown below:
+Assume that you have an application service named `ProductAppService`, if you want to mark this application service as an integration service, you should use the `[IntegrationService]` attribute on top of the application service class as shown below:
 
 ```csharp
 [IntegrationService]
@@ -28,7 +28,7 @@ public interface IProductAppService : IApplicationService
 }
 ```
 
-That's all. If you are using the [Auto API Controllers](API/Auto-API-Controllers.md) feature in your application, the URL prefix will be `/integration-api` instead of `/api` for your services. Thus, you can distinguish internal and external service communications and take additional actions, such as preventing REST API calls for integration services out of API Gateway.
+That's all. If you are using the [Auto API Controllers](API/Auto-API-Controllers.md) feature in your application, the URL prefix will be `/integration-api` instead of `/api` for your services. Thus, you can distinguish internal and external service communications and take additional actions, such as preventing REST API calls for integration services out of the API Gateway.
 
 ## Enabling/Disabling Audit Logging
 
