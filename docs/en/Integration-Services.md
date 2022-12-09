@@ -28,7 +28,7 @@ public interface IProductAppService : IApplicationService
 }
 ```
 
-That's all. If you are using the [Auto API Controllers](API/Auto-API-Controllers.md) feature in your application, the URL prefix will be `/integration-api` instead of `/api` for your services. Therefore, you can distinguish internal and external service communications and take additional actions, such as preventing REST API calls for integration services out of API Gateway.
+That's all. If you are using the [Auto API Controllers](API/Auto-API-Controllers.md) feature in your application, the URL prefix will be `/integration-api` instead of `/api` for your services. Thus, you can distinguish internal and external service communications and take additional actions, such as preventing REST API calls for integration services out of API Gateway.
 
 ## Enabling/Disabling Audit Logging
 
@@ -53,7 +53,7 @@ You can filter integration services (or non-integration services) while creating
 ```csharp
 Configure<AbpAspNetCoreMvcOptions>(options =>
 {
-    options.ConventionalControllers.Create(typeof(MyAppDmoMcApplicationModule).Assembly, conventionalControllerSetting =>
+    options.ConventionalControllers.Create(typeof(MyApplicationModule).Assembly, conventionalControllerSetting =>
     {
         conventionalControllerSetting.ApplicationServiceTypes = ApplicationServiceTypes.IntegrationServices;
     });
@@ -66,3 +66,4 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
 
 * [Application Services](Application-Services.md)
 * [Auto API Controllers](API/Auto-API-Controllers.md)
+* [Audit Logging](Audit-Logging.md)
