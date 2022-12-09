@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.ObjectMapping;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Public.Comments;
 using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting;
@@ -35,13 +36,7 @@ public class CmsKitPublicCommentsController : AbpController
             SimpleMathsCaptchaGenerator.Validate(input.CaptchaToken.Value, input.CaptchaAnswer);
         }
 
-        await CommentPublicAppService.CreateAsync(input.EntityType, input.EntityId,
-            new CreateCommentInput()
-            {
-                Text = input.Text,
-                RepliedCommentId = input.RepliedCommentId,
-                CaptchaAnswer = input.CaptchaAnswer,
-                CaptchaToken = input.CaptchaToken
-            });
+        var dto = ObjectMapper.Map<CreateCommentWithParameteresInput, CreateCommentInput> (input);
+        await CommentPublicAppService.CreateAsync(input.EntityType, input.EntityId, dto);
     }
 }
