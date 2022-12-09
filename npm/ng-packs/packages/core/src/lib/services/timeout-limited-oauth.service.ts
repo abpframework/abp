@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone, Optional } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 @Injectable()
