@@ -33,11 +33,12 @@
     "postinstall": "node ./decorate-angular-cli.js && yarn compile:ivy",
     "build:schematics": "cd scripts && yarn && yarn build:schematics && cd ..",
     "dev:schematics": "tsc -p packages/schematics/tsconfig.json -w",
+    "mock:schematics": "cd scripts/mock-schematic && yarn && yarn start",
+    "debug:schematics": "./node_modules/.bin/ng g ./packages/schematics/src/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url https://localhost:44305 --serviceType application",
+    "debug:schematics-dist": "./node_modules/.bin/ng g ./dist/packages/schematics/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url http://localhost:4300 --service-type application",
     "ci": "yarn affected:lint && yarn affected:build && yarn affected:test",
     "lerna": "lerna",
-    "migrate-nx": "yarn nx migrate --run-migrations",
-    "mock:schematics": "cd scripts/mock-schematic && yarn && yarn start",
-    "debug:schematics": "./node_modules/.bin/ng g ./packages/schematics/src/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url https://localhost:44305 --serviceType application"
+    "migrate-nx": "yarn nx migrate --run-migrations"
   },
   "private": true,
   "devDependencies": {
