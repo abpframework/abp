@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.MongoDB",
-  "hash": "d2e699f4e13f5cf8410de703a36b4b72",
+  "hash": "b30025800fa66a13314e7c5987db45fb",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.MongoDB",
@@ -25,9 +25,9 @@
       "connectionStringName": "AbpIdentity",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
+          "entityFullName": "Volo.Abp.Identity.IdentityUser",
           "contentType": "databaseCollection",
-          "name": "AbpSecurityLogs",
+          "name": "AbpUsers",
           "summary": null
         },
         {
@@ -37,21 +37,21 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.Identity.IdentityUser",
+          "entityFullName": "Volo.Abp.Identity.IdentityRole",
           "contentType": "databaseCollection",
-          "name": "AbpUsers",
+          "name": "AbpRoles",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
+          "contentType": "databaseCollection",
+          "name": "AbpSecurityLogs",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
           "contentType": "databaseCollection",
           "name": "AbpOrganizationUnits",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityRole",
-          "contentType": "databaseCollection",
-          "name": "AbpRoles",
           "summary": null
         },
         {

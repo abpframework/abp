@@ -8,6 +8,7 @@
 <form id="FeatureSettingsForm">
     @if (Model.HasManageHostFeaturesPermission)
     {
+        <p>@L["ManageHostFeaturesText"]</p>
         <abp-button size="Small" button-type="Primary" id="ManageHostFeatures" icon="cog" text="@L["ManageHostFeatures"].Value"/>
     }
 </form>
