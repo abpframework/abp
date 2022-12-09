@@ -9,8 +9,8 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Comments;
-using Volo.CmsKit.Public.Application.Security.VoloCaptcha;
 using Volo.CmsKit.Public.Comments;
+using Volo.CmsKit.Public.Web.Security.Captcha;
 using Volo.CmsKit.Web.Renderers;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting;
@@ -129,9 +129,6 @@ public class CommentingViewComponent : AbpViewComponent
         public string Captcha { get; set; }
 
         public string CaptchaImageBase64 { get; set; }
-
-
-
     }
 }
 

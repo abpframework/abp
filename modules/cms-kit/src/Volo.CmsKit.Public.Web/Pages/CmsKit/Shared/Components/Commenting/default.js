@@ -127,17 +127,25 @@
                         formAsObject.repliedCommentId = null;
                     }
 
-                    volo.cmsKit.public.comments.commentPublic.create(
-                        $commentArea.attr('data-entity-type'),
-                        $commentArea.attr('data-entity-id'),
-                        {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'CmsKitPublicComments/Validate',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            entityId: $commentArea.attr('data-entity-id'),
+                            entityType: $commentArea.attr('data-entity-type'),
                             repliedCommentId: formAsObject.repliedCommentId,
                             text: formAsObject.commentText,
                             captchaToken: formAsObject.captchaId,
                             captchaAnswer: formAsObject.input?.captcha
+                        }),
+                        success: function () {
+                            widgetManager.refresh($widget);
+                        },
+                        error: function (data) {
+                            abp.message.error(data.responseJSON.error.message);
                         }
-                    ).then(function () {
-                        widgetManager.refresh($widget);
                     });
                 });
             });
