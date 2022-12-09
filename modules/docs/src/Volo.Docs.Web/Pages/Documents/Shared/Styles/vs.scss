@@ -179,7 +179,7 @@ body {
                         padding: 0 0;
                         font-size: 0.75rem;
                         width: 15px;
-                        height: 34px;
+                        height: 24px;
                         line-height: 1;
                         border-radius: 0px;
                         border: 0;
@@ -393,7 +393,7 @@ body {
                 .breadcrumb {
                     margin-bottom: 0;
                     flex-wrap: nowrap;
-                    overflow-x: scroll;
+                    overflow-x: auto;
                     white-space: nowrap;
                     padding-bottom: 10px;
 
