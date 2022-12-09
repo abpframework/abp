@@ -210,6 +210,7 @@
     "Feature:ReactionEnableDescription": "CMS Kit's reaction system that allows users to send reactions to entities such as BlogPost, Comments, etc.",
     "Feature:TagEnable": "Taging",
     "Feature:TagEnableDescription": "CMS Kit's tag system that allows tagging entities such as BlogPost.",
-    "DeleteBlogPostMessage": "The blog will be deleted. Are you sure?"
+    "DeleteBlogPostMessage": "The blog will be deleted. Are you sure?",
+    "CaptchaCode": "Captcha code"
   }
 }
