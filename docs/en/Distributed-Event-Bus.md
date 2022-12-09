@@ -434,6 +434,29 @@ Here, the following properties are available on the `config` object:
 * `HandlerSelector`: A predicate to filter the event handled types (classes implementing the `IDistributedEventHandler<TEvent>` interface) to be used for this configuration. This is especially useful if you want to ignore some event handler types from inbox processing, or want to define named inbox configurations and group event handlers within these configurations. See the *Named Configurations* section.
 * `ImplementationType`: Type of the class that implements the database operations for the inbox. This is normally set when you call `UseDbContext` as shown before. See *Implementing a Custom Outbox/Inbox Database Provider* section for advanced usages.
 
+#### AbpEventBusBoxesOptions
+
+`AbpEventBusBoxesOptions` can be used to fine-tune how inbox and outbox systems work. For most of the systems, using the defaults would be more than enough, but you can configure it to optimize your system when it is needed.
+
+Just like all the [options classes](Options.md), `AbpEventBusBoxesOptions` can be configured in the `ConfigureServices` method of your [module class](Module-Development-Basics.md) as shown in the following code block:
+
+````csharp
+Configure<AbpEventBusBoxesOptions>(options =>
+{
+    // TODO: configure the options
+});
+````
+
+`AbpEventBusBoxesOptions` has the following properties to be configured:
+
+* `BatchPublishOutboxEvents`: Can be used to enable or disable batch publishing events to the message broker. Batch publishing works if it is supported by the distributed event bus provider. If not supported, events are sent one by one as the fallback logic. Keep it as enabled since it has a great performance gain wherever possible. Default value is `true` (enabled).
+* `PeriodTimeSpan`: The period of the inbox and outbox message processors to check if there is a new event in the database. Default value is 2 seconds (`TimeSpan.FromSeconds(2)`).
+* `CleanOldEventTimeIntervalSpan`: The event inbox system periodically checks and deletes the old processed events from the inbox in the database. You can set this value to determine the check period. Default value is 6 hours (`TimeSpan.FromHours(6)`).
+* `WaitTimeToDeleteProcessedInboxEvents`: Inbox events are not deleted from the database for a while even if they are successfully processed. This is for a system to prevent multiple process of the same event (if the event broker sends it twice). This configuration value determines the time to keep the processed events. Default value is 2 hours (`TimeSpan.FromHours(2)`).
+* `InboxWaitingEventMaxCount`: The maximum number of events to query at once from the inbox in the database. Default value is 1000.
+* `OutboxWaitingEventMaxCount`: The maximum number of events to query at once from the outbox in the database. Default value is 1000.
+* `DistributedLockWaitDuration`: ABP uses [distributed locking](Distributed-Locking.md) to prevent concurrent access to the inbox and outbox messages in the database, when running multiple instance of the same application. If an instance of the application can not obtain the lock, it tries after a duration. This is the configuration of that duration. Default value is 15 seconds (`TimeSpan.FromSeconds(15)`).
+
 ### Skipping Outbox
 
 `IDistributedEventBus.PublishAsync` method provides an optional parameter, `useOutbox`, which is set to `true` by default. If you bypass outbox and immediately publish an event, you can set it to `false` for a specific event publishing operation.

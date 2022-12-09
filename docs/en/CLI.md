@@ -353,6 +353,7 @@ abp generate-proxy -t csharp -url https://localhost:44302/
 
 * `--type` or `-t`: The name of client type. Available clients:
   * `csharp`: C#, work in the `*.HttpApi.Client` project directory. There are some additional options for this client:
+    * `--without-contracts`: Avoid generating the application service interface, class, enum and dto types.
     * `--folder`: Folder name to place generated CSharp code in. Default value: `ClientProxies`.
   * `ng`: Angular. There are some additional options for this client:
     * `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.

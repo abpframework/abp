@@ -1,6 +1,9 @@
-﻿using Volo.Abp.AspNetCore.Components.Web.Theming;
+﻿using Localization.Resources.AbpUi;
+using Volo.Abp.AspNetCore.Components.Web.Theming;
 using Volo.Abp.FeatureManagement.Blazor.Settings;
+using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Features;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Blazor;
 
@@ -19,6 +22,13 @@ public class AbpFeatureManagementBlazorModule : AbpModule
         Configure<SettingManagementComponentOptions>(options =>
         {
             options.Contributors.Add(new FeatureSettingManagementComponentContributor());
+        });
+        
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<AbpFeatureManagementResource>()
+                .AddBaseTypes(typeof(AbpUiResource));
         });
     }
 }
