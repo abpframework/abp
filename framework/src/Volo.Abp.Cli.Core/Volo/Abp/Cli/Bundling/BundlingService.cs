@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -31,6 +32,12 @@ public class BundlingService : IBundlingService, ITransientDependency
 
     public async Task BundleAsync(string directory, bool forceBuild, string projectType = BundlingConsts.WebAssembly)
     {
+        if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && projectType == BundlingConsts.MauiBlazor) 
+        {
+            Logger.LogWarning("ABP bundle command does not support OSX for MAUI Blazor");
+            return;
+        }
+
         var projectFiles = Directory.GetFiles(directory, "*.csproj");
         if (!projectFiles.Any())
         {
@@ -52,7 +59,7 @@ public class BundlingService : IBundlingService, ITransientDependency
                     new DotNetProjectInfo(string.Empty, projectFilePath, true)
                 };
 
-            DotNetProjectBuilder.BuildProjects(projects, string.Empty);
+            DotNetProjectBuilder.BuildProjects(projects, string.Empty); 
         }
 
         var frameworkVersion = GetTargetFrameworkVersion(projectFilePath, projectType);
