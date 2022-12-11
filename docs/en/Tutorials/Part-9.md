@@ -1115,8 +1115,8 @@ namespace Acme.BookStore.Blazor.Pages
         private async Task OnDataGridReadAsync(DataGridReadDataEventArgs<AuthorDto> e)
         {
             CurrentSorting = e.Columns
-                .Where(c => c.Direction != SortDirection.None)
-                .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
+                .Where(c => c.SortDirection != SortDirection.Default)
+                .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
             CurrentPage = e.Page - 1;
 
@@ -1166,7 +1166,7 @@ namespace Acme.BookStore.Blazor.Pages
 
         private async Task CreateAuthorAsync()
         {
-            if (CreateValidationsRef.ValidateAll())
+            if (CreateValidationsRef.ValidateAll() != null)
             {
                 await AuthorAppService.CreateAsync(NewAuthor);
                 await GetAuthorsAsync();
@@ -1176,7 +1176,7 @@ namespace Acme.BookStore.Blazor.Pages
 
         private async Task UpdateAuthorAsync()
         {
-            if (EditValidationsRef.ValidateAll())
+            if (EditValidationsRef.ValidateAll() != null)
             {
                 await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
                 await GetAuthorsAsync();
@@ -1208,7 +1208,7 @@ Open the `BookStoreMenuContributor.cs` in the `Acme.BookStore.Blazor` project an
 ````csharp
 if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
 {
-    bookStoreMenu.AddItem(new ApplicationMenuItem(
+    context.Menu.AddItem(new ApplicationMenuItem(
         "BooksStore.Authors",
         l["Menu:Authors"],
         url: "/authors"
