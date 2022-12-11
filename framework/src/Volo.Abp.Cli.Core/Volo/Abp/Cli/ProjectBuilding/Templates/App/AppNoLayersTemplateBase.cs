@@ -29,15 +29,21 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo"));
+                
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server", "MyCompanyName.MyProjectName.Server"));
                 break;
             case DatabaseProvider.MongoDb:
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server"));
 
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Mvc.Mongo", "MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host.Mongo", "MyCompanyName.MyProjectName.Host"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo", "MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo", "MyCompanyName.MyProjectName.Server"));
+                //TODO: rename Server.Mongo folder to Server
                 break;
         }
 
@@ -48,6 +54,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
             case UiFramework.Angular:
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host", "MyCompanyName.MyProjectName"));
                 break;
 
@@ -55,6 +62,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host", "MyCompanyName.MyProjectName"));
                 break;
 
@@ -62,6 +70,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server", "MyCompanyName.MyProjectName"));
                 break;
 
@@ -70,11 +79,14 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Mvc", "MyCompanyName.MyProjectName"));
                 break;
 
             case UiFramework.Blazor:
-                throw new AbpException("app-nolayers doesn't support blazor wasm.");
+                steps.Add(new RemoveFolderStep("/angular"));
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", "MyCompanyName.MyProjectName.Shared"));
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Client", "MyCompanyName.MyProjectName.Client"));
                 break;
         }
 
