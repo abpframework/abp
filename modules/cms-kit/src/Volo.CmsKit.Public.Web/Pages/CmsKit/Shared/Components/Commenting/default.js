@@ -129,7 +129,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: 'CmsKitPublicComments/Validate',
+                        url: '/CmsKitPublicComments/Validate',
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'json',
                         data: JSON.stringify({
