@@ -253,4 +253,15 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return await UpdateUserAsync(user);
     }
+
+    public virtual async Task<IdentityResult> UpdatePasswordAsync(IdentityUser user, string newPassword)
+    {
+        var result = await UpdatePasswordHash(user, newPassword, true);
+        if (!result.Succeeded)
+        {
+            return result;
+        }
+
+        return await UpdateSecurityStampAsync(user);
+    }
 }
