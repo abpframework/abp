@@ -85,6 +85,9 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
 
             case UiFramework.Blazor:
                 steps.Add(new RemoveFolderStep("/angular"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", "MyCompanyName.MyProjectName.Shared"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Client", "MyCompanyName.MyProjectName.Client"));
                 break;
