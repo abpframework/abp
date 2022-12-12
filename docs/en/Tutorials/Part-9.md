@@ -1166,7 +1166,7 @@ namespace Acme.BookStore.Blazor.Pages
 
         private async Task CreateAuthorAsync()
         {
-            if (CreateValidationsRef.ValidateAll() != null)
+            if (await CreateValidationsRef.ValidateAll())
             {
                 await AuthorAppService.CreateAsync(NewAuthor);
                 await GetAuthorsAsync();
@@ -1176,7 +1176,7 @@ namespace Acme.BookStore.Blazor.Pages
 
         private async Task UpdateAuthorAsync()
         {
-            if (EditValidationsRef.ValidateAll() != null)
+            if (await EditValidationsRef.ValidateAll())
             {
                 await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
                 await GetAuthorsAsync();
@@ -1208,7 +1208,7 @@ Open the `BookStoreMenuContributor.cs` in the `Acme.BookStore.Blazor` project an
 ````csharp
 if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
 {
-    context.Menu.AddItem(new ApplicationMenuItem(
+    bookStoreMenu.AddItem(new ApplicationMenuItem(
         "BooksStore.Authors",
         l["Menu:Authors"],
         url: "/authors"
