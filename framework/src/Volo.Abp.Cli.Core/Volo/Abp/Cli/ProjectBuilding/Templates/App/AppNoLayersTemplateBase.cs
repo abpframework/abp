@@ -46,7 +46,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host.Mongo", "MyCompanyName.MyProjectName.Host"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo", "MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo", "MyCompanyName.MyProjectName.Server"));
-                steps.Add(new ProjectRenameStep("Server.Mongo", "Server"));
+                steps.Add(new ProjectRenameStep("Server.Mongo", "Server")); //rename folder
                 break;
         }
 
@@ -94,6 +94,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 
                 steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", "MyCompanyName.MyProjectName.Shared"));
                 steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Client", "MyCompanyName.MyProjectName.Client"));
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly", "MyCompanyName.MyProjectName"));
                 break;
         }
 
