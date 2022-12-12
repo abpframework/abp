@@ -2,7 +2,9 @@ import {
   Component,
   ContentChild,
   EventEmitter,
+  Inject,
   Input,
+  Optional,
   Output,
   TemplateRef,
   ViewEncapsulation,
@@ -13,6 +15,7 @@ import { TreeNodeTemplateDirective } from '../templates/tree-node-template.direc
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadService, LOADING_STRATEGY, SubscriptionService } from '@abp/ng.core';
+import { DISABLE_TREE_STYLE_LADING_TOKEN } from '../disable-tree-style-loading.token';
 
 export type DropEvent = NzFormatEmitEvent & { pos: number };
 
@@ -27,7 +30,17 @@ export class TreeComponent {
   dropPosition: number;
 
   dropdowns = {} as { [key: string]: NgbDropdown };
-  constructor(private lazyLoadService: LazyLoadService, subscriptionService: SubscriptionService) {
+
+  constructor(
+    private lazyLoadService: LazyLoadService,
+    subscriptionService: SubscriptionService,
+    @Optional()
+    @Inject(DISABLE_TREE_STYLE_LADING_TOKEN)
+    disableTreeStyleLoading: boolean | undefined,
+  ) {
+    if (disableTreeStyleLoading) {
+      return;
+    }
     const loaded$ = this.lazyLoadService.load(
       LOADING_STRATEGY.AppendAnonymousStyleToHead('ng-zorro-antd-tree.css'),
     );
