@@ -29,21 +29,24 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo"));
-                
+
+                steps.Add(new RemoveProjectFromSolutionStep(
+                    "MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo",
+                    projectFolderPath: "/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server.Mongo"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server", "MyCompanyName.MyProjectName.Server"));
                 break;
             case DatabaseProvider.MongoDb:
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server",
+                    projectFolderPath: "/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server"));
 
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Mvc.Mongo", "MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host.Mongo", "MyCompanyName.MyProjectName.Host"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo", "MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo", "MyCompanyName.MyProjectName.Server"));
-                //TODO: rename Server.Mongo folder to Server
+                steps.Add(new ProjectRenameStep("Server.Mongo", "Server"));
                 break;
         }
 
@@ -88,8 +91,9 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
-                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", "MyCompanyName.MyProjectName.Shared"));
-                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Client", "MyCompanyName.MyProjectName.Client"));
+                
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", "MyCompanyName.MyProjectName.Shared"));
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Client", "MyCompanyName.MyProjectName.Client"));
                 break;
         }
 
