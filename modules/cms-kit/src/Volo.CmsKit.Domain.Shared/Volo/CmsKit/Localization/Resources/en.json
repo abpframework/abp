@@ -211,6 +211,7 @@
     "Feature:TagEnable": "Taging",
     "Feature:TagEnableDescription": "CMS Kit's tag system that allows tagging entities such as BlogPost.",
     "DeleteBlogPostMessage": "The blog will be deleted. Are you sure?",
-    "CaptchaCode": "Captcha code"
+    "CaptchaCode": "Captcha code",
+    "CommentTextRequired": "Comment is required"
   }
 }

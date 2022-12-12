@@ -127,6 +127,11 @@
                         formAsObject.repliedCommentId = null;
                     }
 
+                    if (formAsObject.commentText == '') {
+                        abp.message.error(l("CommentTextRequired"));
+                        return;
+                    }
+
                     $.ajax({
                         type: 'POST',
                         url: '/CmsKitPublicComments/Validate',
