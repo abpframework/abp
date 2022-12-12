@@ -41,6 +41,7 @@ export class TreeComponent {
   @Output() readonly expandedKeysChange = new EventEmitter<string[]>();
   @Output() readonly selectedNodeChange = new EventEmitter();
   @Output() readonly dropOver = new EventEmitter<DropEvent>();
+  @Output() readonly nzExpandChange = new EventEmitter<NzFormatEmitEvent>();
   @Input() noAnimation = true;
   @Input() draggable: boolean;
   @Input() checkable: boolean;
@@ -76,6 +77,7 @@ export class TreeComponent {
   onExpandedKeysChange(event) {
     this.expandedKeys = [...event.keys];
     this.expandedKeysChange.emit(event.keys);
+    this.nzExpandChange.emit(event);
   }
 
   onDrop(event: DropEvent) {

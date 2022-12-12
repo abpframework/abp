@@ -213,7 +213,7 @@ styleMap.set(ThemeOptionsEnum.LeptonXLite, [
     inject: false,
     bundleName: 'bootstrap-dim.rtl',
   },
-   {
+  {
     input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.rtl.css',
     inject: false,
     bundleName: 'font-bundle.rtl',
