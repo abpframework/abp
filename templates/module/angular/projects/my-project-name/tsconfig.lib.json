@@ -3,7 +3,6 @@
   "extends": "../../tsconfig.prod.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
-    "target": "es2020",
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,

@@ -1,5 +1,5 @@
 import { LinkedList } from '@abp/utils';
-import { InjectFlags, InjectionToken, Type } from '@angular/core';
+import { InjectFlags, InjectionToken, InjectOptions, Type } from '@angular/core';
 import { O } from 'ts-toolbelt';
 import { ePropType } from '../enums/props.enum';
 
@@ -9,7 +9,7 @@ export abstract class PropData<R = any> {
   abstract getInjected: <T>(
     token: Type<T> | InjectionToken<T>,
     notFoundValue?: T,
-    flags?: InjectFlags,
+    options?: InjectOptions | InjectFlags,
   ) => T;
   index?: number;
   abstract record: R;
