@@ -161,6 +161,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
         return 'time';
       case ePropType.Typeahead:
         return 'typeahead';
+      case ePropType.Password:
+        return 'password';
       default:
         return prop.options ? 'select' : 'input';
     }

@@ -138,6 +138,11 @@
         class="form-control"
       ></textarea>
     </ng-template>
+
+    <ng-template ngSwitchCase="password">
+      <ng-template [ngTemplateOutlet]="label"></ng-template>
+      <abp-password [prop]="prop"></abp-password>
+    </ng-template>
   </div>
 </ng-container>
 

@@ -17,6 +17,7 @@ import { PageToolbarComponent } from './components/page-toolbar/page-toolbar.com
 import { DisabledDirective } from './directives/disabled.directive';
 import { PropDataDirective } from './directives/prop-data.directive';
 import { CreateInjectorPipe } from './pipes/create-injector.pipe';
+import { PasswordComponent } from './components/password/password.component';
 
 @NgModule({
   exports: [
@@ -25,6 +26,7 @@ import { CreateInjectorPipe } from './pipes/create-injector.pipe';
     GridActionsComponent,
     ExtensibleFormComponent,
     ExtensibleTableComponent,
+    PasswordComponent,
     PropDataDirective,
     DisabledDirective,
     CreateInjectorPipe,
@@ -36,6 +38,7 @@ import { CreateInjectorPipe } from './pipes/create-injector.pipe';
     ExtensibleFormPropComponent,
     ExtensibleFormComponent,
     ExtensibleTableComponent,
+    PasswordComponent,
     PropDataDirective,
     DisabledDirective,
     CreateInjectorPipe,
