@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.AuditLogging.Domain.Shared",
-  "hash": "a0ffc1b5440ee562f0964e5ccb6b2a38",
+  "hash": "34412f56a2d86cbb131a8ee55ca3c9dd",
   "contents": [
     {
       "namespace": "Volo.Abp.AuditLogging",
