@@ -38,6 +38,9 @@
                         <textarea class="form-control" name="commentText" placeholder="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? L["YourComment"] : L["YourReply"])..." rows="3"></textarea>
                     </div>
                 </div>
+                <div class="mt-0">
+                    <small class="text-muted float-start float-end">@L["MarkdownSupported"]</small>
+                </div>
 
                 @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
                 {
@@ -67,9 +70,6 @@
                             </abp-button>
                         }
                     </div>
-                </div>
-                <div class="mt-0">
-                    <small class="text-muted float-start" >@L["MarkdownSupported"]</small>
                 </div>
             </div>
         </form>
