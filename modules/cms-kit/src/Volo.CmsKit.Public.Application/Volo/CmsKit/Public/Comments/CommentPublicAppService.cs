@@ -68,7 +68,6 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
             )
         );
 
-
         await UnitOfWorkManager.Current.SaveChangesAsync();
 
         await DistributedEventBus.PublishAsync(new CreatedCommentEvent

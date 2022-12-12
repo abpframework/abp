@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Options
 @using Volo.Abp.GlobalFeatures
 @using Volo.Abp.Users
+@using Volo.CmsKit.Comments;
 @using Volo.CmsKit.GlobalFeatures
 @using Volo.CmsKit.Localization
 @using Volo.CmsKit.Public.Comments
@@ -10,8 +11,9 @@
 @using Volo.CmsKit.Web
 @inject ICurrentUser CurrentUser
 @inject IOptionsSnapshot<CmsKitUiOptions> cmsKitUiOptions;
+@inject IOptions<CmsKitCommentOptions> CmsKitCommentOptions
 @inject IHtmlLocalizer<CmsKitResource> L
-@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting.CommentingViewComponent.CommentingViewModel
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting.CommentingViewComponent
 
 @{
     Func<dynamic, IHtmlContent> GetCommentTitle(CmsUserDto author, DateTime creationTime) =>
@@ -36,9 +38,29 @@
                         <textarea class="form-control" name="commentText" placeholder="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? L["YourComment"] : L["YourReply"])..." rows="3"></textarea>
                     </div>
                 </div>
+                <div class="mt-0">
+                    <small class="text-muted float-start float-end">@L["MarkdownSupported"]</small>
+                </div>
+
+                @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
+                {
+                    <div class="volo-captcha">
+                        <label class="form-label" for="Input_Captcha">@L["CaptchaCode"]</label>
+                        <div class="d-flex">
+                            <div class="bd-highlight">
+                                <img src="@Model.Input.CaptchaImageBase64" />
+                            </div>
+                            <div class="flex-grow-1 bd-highlight">
+                                <abp-input asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off" />
+                            </div>
+                            
+                            <abp-input asp-for="@Model.CaptchaId" value="@Model.CaptchaOutput.Id" />
+                        </div>
+                    </div>
+                }
                 <div class="col-auto">
                     <div class="text-end">
-                        <abp-button type="submit" button-type="Primary" size="Block">
+                        <abp-button id="submit-button" type="submit" button-type="Primary" size="Block">
                             <i class="fa fa-comment-alt me-1"></i> @L["Send"]
                         </abp-button>
                         @if (cancelButton)
@@ -48,9 +70,6 @@
                             </abp-button>
                         }
                     </div>
-                </div>
-                <div class="mt-0">
-                    <small class="text-muted float-start" >@L["MarkdownSupported"]</small>
                 </div>
             </div>
         </form>
@@ -71,13 +90,13 @@
         {
             @if (CurrentUser.IsAuthenticated)
             {
-                <a href="#" class="comment-links comment-reply-link btn btn-sm  shadow-sm  btn-primary" data-reply-id="@id.ToString()" id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}_{id}_link")">
+            <a href="#" class="comment-links comment-reply-link btn btn-sm  shadow-sm  btn-primary" data-reply-id="@id.ToString()" id="@($"cms-comment_{Model.Input.EntityType}_{Model.Input.EntityId}_{id}_link")">
                     <i class="fa fa-reply mr -1"></i> @L["Reply"]
                 </a>
             }
             else
             {
-                <a href="@(Model.LoginUrl + "_" + id)" class="btn btn-sm btn-light shadow-sm"> @L["LoginToReply"]</a>
+            <a href="@(Model.Input.LoginUrl + "_" + id)" class="btn btn-sm btn-light shadow-sm"> @L["LoginToReply"]</a>
             }
         }
         @if (authorId == CurrentUser.Id)
@@ -93,9 +112,10 @@
 }
 @{
     Func<dynamic, IHtmlContent> GetEditArea(Guid id, string text, string concurrencyStamp) =>
-    @<div class="cms-comment-edit-area" id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}_{id}")" data-id="@id.ToString()" style="display:none">
+    @<div class="cms-comment-edit-area" id="@($"cms-comment_{Model.Input.EntityType}_{Model.Input.EntityId}_{id}")" data-id="@id.ToString()" style="display:none">
         <div class="card bg-light p-3 mx-0 mt-3">
-            <form class="cms-comment-update-form">
+            <form id="ContactForm" class="cms-comment-update-form">
+                <abp-input asp-for="@Model.RecaptchaToken" />
                 <input hidden value="@id.ToString()" name="id" />
                 <div class="row">
                     <div class="col">
@@ -119,20 +139,20 @@
     </div>;
 }
 
-<div class="cms-comment-area mb-5" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+<div class="cms-comment-area mb-5" data-entity-type="@Model.Input.EntityType" data-entity-id="@Model.Input.EntityId">
     @if (CurrentUser.IsAuthenticated)
     {
-        <div id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}")">
+        <div id="@($"cms-comment_{Model.Input.EntityType}_{Model.Input.EntityId}")">
             @GetCommentArea(null).Invoke(null)
         </div>
     }
-    else if (!string.IsNullOrWhiteSpace(Model.LoginUrl))
+    else if (!string.IsNullOrWhiteSpace(Model.Input.LoginUrl))
     {
         <div class="text-end">
-            <a href="@Model.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
+            <a href="@Model.Input.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
         </div>
     }
-    @foreach (var comment in Model.Comments)
+    @foreach (var comment in Model.Input.Comments)
     {
         <div class="comment">
             <div class="card p-3 mx-0 my-3">
@@ -157,7 +177,7 @@
                         </div>
                     </div>
                 </div>
-                @GetEditArea(comment.Id, Model.RawCommentTexts[comment.Id], comment.ConcurrencyStamp).Invoke(null)
+                @GetEditArea(comment.Id, Model.Input.RawCommentTexts[comment.Id], comment.ConcurrencyStamp).Invoke(null)
 
                 @if (comment.Replies.Any())
                 {
@@ -187,7 +207,7 @@
                                     </div>
                                 </div>
 
-                                @GetEditArea(reply.Id, Model.RawCommentTexts[reply.Id], reply.ConcurrencyStamp).Invoke(null)
+                                @GetEditArea(reply.Id, Model.Input.RawCommentTexts[reply.Id], reply.ConcurrencyStamp).Invoke(null)
                             </div>
                         </div>
                     }
@@ -202,7 +222,7 @@
                             }
                             else
                             {
-                                <a href="@(Model.LoginUrl + "_" + comment.Id)" class="btn btn-sm btn-light shadow-sm"> @L["LoginToReply"]</a>
+                                <a href="@(Model.Input.LoginUrl + "_" + comment.Id)" class="btn btn-sm btn-light shadow-sm"> @L["LoginToReply"]</a>
                             }
                         </div>
                     }
@@ -216,3 +236,4 @@
         </div>
     }
 </div>
+

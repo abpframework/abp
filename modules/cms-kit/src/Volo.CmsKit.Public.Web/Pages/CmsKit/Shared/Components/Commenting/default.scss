@@ -1,0 +1,30 @@
+body {
+    .volo-captcha {
+        img {
+            border: 1px outset #dddcdc;
+            border-radius: 4px;
+            height: 45px;
+        }
+
+        .d-flex {
+            .form-group {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 800px) {
+            #Input_Captcha {
+                margin-left: 0px;
+            }
+        }
+    }
+
+    .form-control {
+        border: 1px outset #e3e3e3 !important;
+        padding: 10px !important;
+    }
+
+    #submit-button {
+        margin-top: 10px;
+    }
+}

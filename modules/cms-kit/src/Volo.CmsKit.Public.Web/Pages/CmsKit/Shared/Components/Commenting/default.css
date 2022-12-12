@@ -4,3 +4,27 @@
 .comment-links:hover { 
     text-decoration: none;
 }
+body .volo-captcha img {
+    border: 1px outset #dddcdc;
+    border-radius: 4px;
+    height: 45px;
+}
+
+body .volo-captcha .d-flex .form-group {
+    width: 100%;
+}
+
+@media (max-width: 800px) {
+    body .volo-captcha #Input_Captcha {
+        margin-left: 0px;
+    }
+}
+
+body .form-control {
+    border: 1px outset #e3e3e3 !important;
+    padding: 10px !important;
+}
+
+body #submit-button {
+    margin-top: 10px;
+}

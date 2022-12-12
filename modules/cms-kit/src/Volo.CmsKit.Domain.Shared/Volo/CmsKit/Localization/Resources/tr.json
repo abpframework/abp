@@ -209,6 +209,9 @@
     "Feature:ReactionEnable": "Reaksiyon",
     "Feature:ReactionEnableDescription": "Cmskit reaksiyon sistemi",
     "Feature:TagEnable": "Etkiket",
-    "Feature:TagEnableDescription": "Cmskit etiket sistemi"
+    "Feature:TagEnableDescription": "Cmskit etiket sistemi",
+    "DeleteBlogPostMessage": "Blog silinecek. Emin misiniz?",
+    "CaptchaCode": "Captcha kodu",
+    "CommentTextRequired": "Yorum zorunlu"
   }
 }
