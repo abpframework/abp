@@ -205,6 +205,11 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         await DeleteManyAsync(entities, autoSave, cancellationToken);
     }
 
+    public override async Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        await DeleteAsync(predicate, true, cancellationToken);
+    }
+
     public override async Task<TEntity> InsertAsync(
         TEntity entity,
         bool autoSave = false,

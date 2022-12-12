@@ -143,6 +143,7 @@
     "Volo.AbpIo.Domain:060001": "Zdrojová URL(\"{PostUrl}\") nie je URL Githubu",
     "Volo.AbpIo.Domain:060002": "Obsah článku nie je dostupný v Github zdroji(\"{PostUrl}\").",
     "Volo.AbpIo.Domain:060003": "Nenašiel sa žiadny obsah článku!",
-    "SeeMore": "Vidět Víc"
+    "SeeMore": "Vidět Víc",
+    "IConsentToMedium": "Súhlasím so zverejnením tohto príspevku na https://medium.com/volosoft."
   }
 }
