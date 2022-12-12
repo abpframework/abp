@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.MongoDB",
-  "hash": "0d066c6a10aba12ee0474d9d5e436759",
+  "hash": "44f482453a0fd61a9709bc248bcbdf4c",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement.MongoDB",
@@ -25,6 +25,12 @@
       "connectionStringName": "AbpFeatureManagement",
       "databaseCollections": [
         {
+          "entityFullName": "Volo.Abp.FeatureManagement.FeatureValue",
+          "contentType": "databaseCollection",
+          "name": "AbpFeatureValues",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.Abp.FeatureManagement.FeatureGroupDefinitionRecord",
           "contentType": "databaseCollection",
           "name": "AbpFeatureGroups",
@@ -34,12 +40,6 @@
           "entityFullName": "Volo.Abp.FeatureManagement.FeatureDefinitionRecord",
           "contentType": "databaseCollection",
           "name": "AbpFeatures",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.FeatureManagement.FeatureValue",
-          "contentType": "databaseCollection",
-          "name": "AbpFeatureValues",
           "summary": null
         }
       ],

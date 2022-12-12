@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.Application.Contracts",
-  "hash": "c863c118255fa7a371e3c9a8204c38af",
+  "hash": "1a12a4af590eba4723e0edc7fabed03c",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",

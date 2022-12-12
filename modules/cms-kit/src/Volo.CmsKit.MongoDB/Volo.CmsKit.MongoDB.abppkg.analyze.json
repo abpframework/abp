@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.MongoDB",
-  "hash": "c784a28151e2ef4637ace9aaa4729c55",
+  "hash": "ab14c521e16a9ae08b59c30a345873b1",
   "contents": [
     {
       "namespace": "Volo.CmsKit.MongoDB",
@@ -30,21 +30,27 @@
       "connectionStringName": "CmsKit",
       "databaseCollections": [
         {
+          "entityFullName": "Volo.CmsKit.Tags.EntityTag",
+          "contentType": "databaseCollection",
+          "name": "CmsEntityTags",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.CmsKit.Comments.Comment",
           "contentType": "databaseCollection",
           "name": "CmsComments",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Reactions.UserReaction",
+          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
           "contentType": "databaseCollection",
-          "name": "CmsUserReactions",
+          "name": "CmsMenuItems",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
+          "entityFullName": "Volo.CmsKit.Blogs.BlogPost",
           "contentType": "databaseCollection",
-          "name": "CmsBlogFeatures",
+          "name": "CmsBlogPosts",
           "summary": null
         },
         {
@@ -54,9 +60,9 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.GlobalResources.GlobalResource",
+          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
           "contentType": "databaseCollection",
-          "name": "CmsGlobalResources",
+          "name": "CmsBlogFeatures",
           "summary": null
         },
         {
@@ -72,9 +78,9 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Pages.Page",
+          "entityFullName": "Volo.CmsKit.GlobalResources.GlobalResource",
           "contentType": "databaseCollection",
-          "name": "CmsPages",
+          "name": "CmsGlobalResources",
           "summary": null
         },
         {
@@ -84,27 +90,21 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Tags.EntityTag",
-          "contentType": "databaseCollection",
-          "name": "CmsEntityTags",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.CmsKit.Tags.Tag",
           "contentType": "databaseCollection",
           "name": "CmsTags",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Blogs.BlogPost",
+          "entityFullName": "Volo.CmsKit.Reactions.UserReaction",
           "contentType": "databaseCollection",
-          "name": "CmsBlogPosts",
+          "name": "CmsUserReactions",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
+          "entityFullName": "Volo.CmsKit.Pages.Page",
           "contentType": "databaseCollection",
-          "name": "CmsMenuItems",
+          "name": "CmsPages",
           "summary": null
         }
       ],

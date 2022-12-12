@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.Domain",
-  "hash": "4d7a4c2b867ad25f4bb5de4a28a0ffc4",
+  "hash": "f6bed7d60647ccfb25d1821019226bb3",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
