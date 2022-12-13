@@ -3,3 +3,4 @@ export * from './lib/components/tree.component';
 export * from './lib/utils/nz-tree-adapter';
 export * from './lib/templates/tree-node-template.directive';
 export * from './lib/templates/expanded-icon-template.directive';
+export * from './lib/disable-tree-style-loading.token';

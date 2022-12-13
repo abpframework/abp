@@ -277,6 +277,11 @@
                 "inject": true,
                 "bundleName": "ngx-datatable-material"
               },
+              {
+                "input": "node_modules/ng-zorro-antd/tree/style/index.min.css",
+                "inject": false,
+                "bundleName": "ng-zorro-antd-tree"
+              },
               "apps/dev-app/src/styles.scss"
             ],
             "scripts": []
