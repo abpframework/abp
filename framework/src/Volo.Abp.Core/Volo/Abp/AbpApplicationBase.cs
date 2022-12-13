@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal;
@@ -51,6 +52,10 @@ public abstract class AbpApplicationBase : IAbpApplication
         services.AddSingleton<IAbpApplication>(this);
         services.AddSingleton<IApplicationInfoAccessor>(this);
         services.AddSingleton<IModuleContainer>(this);
+        services.AddSingleton<IAbpHostEnvironment>(new AbpHostEnvironment()
+        {
+            EnvironmentName = options.Environment
+        });
 
         services.AddCoreServices();
         services.AddCoreAbpServices(this, options);
@@ -224,6 +229,8 @@ public abstract class AbpApplicationBase : IAbpApplication
         }
 
         _configuredServices = true;
+
+        TryToSetEnvironment(Services);
     }
 
     private void CheckMultipleConfigureServices()
@@ -313,6 +320,8 @@ public abstract class AbpApplicationBase : IAbpApplication
         }
 
         _configuredServices = true;
+
+        TryToSetEnvironment(Services);
     }
 
     private static string GetApplicationName(AbpApplicationCreationOptions options)
@@ -339,5 +348,14 @@ public abstract class AbpApplicationBase : IAbpApplication
         }
 
         return null;
+    }
+
+    private static void TryToSetEnvironment(IServiceCollection services)
+    {
+        var abpHostEnvironment = services.GetSingletonInstance<IAbpHostEnvironment>();
+        if (abpHostEnvironment.EnvironmentName.IsNullOrWhiteSpace())
+        {
+            abpHostEnvironment.EnvironmentName = Environments.Production;
+        }
     }
 }
