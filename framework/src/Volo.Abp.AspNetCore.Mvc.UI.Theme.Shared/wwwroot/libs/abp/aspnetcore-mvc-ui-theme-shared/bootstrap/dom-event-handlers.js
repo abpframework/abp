@@ -82,8 +82,8 @@
                 let filterParamName = $(this).data("autocompleteFilterParamName");
                 let selectedText = $(this).data("autocompleteSelectedItemName");
                 let parentSelector = $(this).data("autocompleteParentSelector");
-                let allowClear = $(this).data("allowClear");
-                let placeholder = $(this).data("placeholder");
+                let allowClear = $(this).data("autocompleteAllowClear");
+                let placeholder = $(this).data("autocompletePlaceholder");
                 if (allowClear && placeholder == undefined) {
                     placeholder = " ";
                 }
