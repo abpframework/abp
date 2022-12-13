@@ -8,6 +8,7 @@ import {
   Output,
   TemplateRef,
   ViewEncapsulation,
+  OnInit
 } from '@angular/core';
 import { NzFormatBeforeDropEvent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
@@ -26,7 +27,7 @@ export type DropEvent = NzFormatEmitEvent & { pos: number };
   encapsulation: ViewEncapsulation.None,
   providers: [SubscriptionService],
 })
-export class TreeComponent {
+export class TreeComponent implements OnInit {
   dropPosition: number;
 
   dropdowns = {} as { [key: string]: NgbDropdown };
@@ -36,16 +37,8 @@ export class TreeComponent {
     subscriptionService: SubscriptionService,
     @Optional()
     @Inject(DISABLE_TREE_STYLE_LOADING_TOKEN)
-    disableTreeStyleLoading: boolean | undefined,
-  ) {
-    if (disableTreeStyleLoading) {
-      return;
-    }
-    const loaded$ = this.lazyLoadService.load(
-      LOADING_STRATEGY.AppendAnonymousStyleToHead('ng-zorro-antd-tree.css'),
-    );
-    subscriptionService.addOne(loaded$);
-  }
+    private disableTreeStyleLoading: boolean | undefined,
+  ) { }
 
   @ContentChild('menu') menu: TemplateRef<any>;
   @ContentChild(TreeNodeTemplateDirective) customNodeTemplate: TreeNodeTemplateDirective;
@@ -70,6 +63,20 @@ export class TreeComponent {
     return of(false);
   };
 
+  ngOnInit() {
+    this.loadStyle()
+  }
+
+  private loadStyle() {
+    if (disableTreeStyleLoading) {
+      return;
+    }
+    const loaded$ = this.lazyLoadService.load(
+      LOADING_STRATEGY.AppendAnonymousStyleToHead('ng-zorro-antd-tree.css'),
+    );
+    subscriptionService.addOne(loaded$);
+  }
+  
   onSelectedNodeChange(node) {
     this.selectedNode = node.origin.entity;
     if (this.changeCheckboxWithNode) {
