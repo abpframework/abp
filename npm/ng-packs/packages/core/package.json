@@ -9,7 +9,7 @@
   "dependencies": {
     "@abp/utils": "~7.0.0-rc.4",
     "angular-oauth2-oidc": "^15.0.1",
-    "just-clone": "^3.2.1",
+    "just-clone": "^6.1.1",
     "just-compare": "^1.4.0",
     "ts-toolbelt": "6.15.4",
     "tslib": "^2.0.0"
