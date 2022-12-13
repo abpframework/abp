@@ -1,7 +1,13 @@
 ﻿using MyCompanyName.MyProjectName.Shared.Localization;
+using Volo.Abp.Account;
+using Volo.Abp.FeatureManagement;
+using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement;
+using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
@@ -9,7 +15,13 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName.Shared;
 
 [DependsOn(
-    typeof(AbpValidationModule)
+    typeof(AbpValidationModule),
+    typeof(AbpAccountApplicationContractsModule),
+    typeof(AbpIdentityApplicationContractsModule),
+    typeof(AbpPermissionManagementApplicationContractsModule),
+    typeof(AbpTenantManagementApplicationContractsModule),
+    typeof(AbpFeatureManagementApplicationContractsModule),
+    typeof(AbpSettingManagementApplicationContractsModule)
 )]
 public class MyProjectNameSharedModule : AbpModule
 {
