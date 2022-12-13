@@ -1,26 +1,28 @@
 @page
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using Volo.Abp.FeatureManagement.Localization
 @using Volo.Abp.Validation.StringValues
 @using Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
-@using Volo.Abp.Localization
 @model FeatureManagementModal
 @inject IHtmlLocalizer<AbpFeatureManagementResource> L
-@inject IHtmlLocalizerFactory HtmlLocalizerFactory
-@inject IOptions<AbpLocalizationOptions> LocalizationOptions
+@inject IStringLocalizerFactory StringLocalizerFactory
 @{
     Layout = null;
 
     IHtmlLocalizer CreateHtmlLocalizer(string resourceName)
     {
-        var resource = LocalizationOptions.Value.Resources.Values.FirstOrDefault(x => x.ResourceName == resourceName);
-        return HtmlLocalizerFactory.Create(resource != null ? resource.ResourceType : LocalizationOptions.Value.DefaultResourceType);
+        var localizer = StringLocalizerFactory.CreateByResourceNameOrNull(resourceName) ??
+                        StringLocalizerFactory.CreateDefaultOrNull();
+        return new HtmlLocalizer(localizer);
     }
 }
+
+<abp-script src="/Pages/FeatureManagement/feature-management-modal.js" />
+
 <form method="post" asp-page="/FeatureManagement/FeatureManagementModal" data-script-class="abp.modals.FeatureManagement">
-    <abp-modal size="Large">
+    <abp-modal id="featureManagmentModal" size="Large">
         <abp-modal-header title="@(L["Features"].Value)"></abp-modal-header>
         @if (Model.FeatureListResultDto != null && Model.FeatureListResultDto.Groups.Any())
         {
@@ -120,7 +122,11 @@
 
                 </abp-tabs>
             </abp-modal-body>
-            <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+            <abp-modal-footer>
+                <abp-button button-type="Primary" id="ResetToDefaults"><i class="fa fa-refresh"></i> @L["ResetToDefault"]</abp-button>
+                <abp-button data-bs-dismiss="modal" button-type="Secondary">@L["Cancel"]</abp-button>
+                <abp-button button-type="Primary" type="submit"><i class="fa fa-check"></i> @L["Save"]</abp-button>
+            </abp-modal-footer>
         }
         else
         {

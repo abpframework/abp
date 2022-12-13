@@ -3,8 +3,10 @@
   "texts": {
     "Features": "Funkcje",
     "NoFeatureFoundMessage": "Brak dostępnej funkcji.",
+    "ManageHostFeatures": "Zarządzaj funkcjami hosta",
     "Permission:FeatureManagement": "Zarządzanie funkcjami",
     "Permission:FeatureManagement.ManageHostFeatures": "Zarządzaj funkcjami hosta",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} wartość funkcji jest nieprawidłowa!"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} wartość funkcji jest nieprawidłowa!",
+		"Menu:FeatureManagement": "Zarządzanie funkcjami"
   }
 }

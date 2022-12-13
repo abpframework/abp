@@ -43,12 +43,13 @@ public class CreateModalModel : TenantManagementPageModel
 
         [Required]
         [EmailAddress]
-        [MaxLength(256)]
+        [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxAdminEmailAddressLength))]
+
         public string AdminEmailAddress { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [MaxLength(128)]
+        [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxPasswordLength))]
         public string AdminPassword { get; set; }
     }
 }

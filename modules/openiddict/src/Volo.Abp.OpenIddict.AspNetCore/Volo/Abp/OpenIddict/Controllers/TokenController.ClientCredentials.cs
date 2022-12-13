@@ -29,13 +29,9 @@ public partial class TokenController
             OpenIddictConstants.Claims.PreferredUsername, OpenIddictConstants.Claims.Role);
 
         // The Subject and PreferredUsername will be removed by <see cref="RemoveClaimsFromClientCredentialsGrantType"/>.
-
         // Use the client_id as the subject identifier.
-        identity.AddClaim(OpenIddictConstants.Claims.Subject, await ApplicationManager.GetClientIdAsync(application),
-            OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
-
-        identity.AddClaim(OpenIddictConstants.Claims.PreferredUsername, await ApplicationManager.GetDisplayNameAsync(application),
-            OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
+        identity.AddClaim(OpenIddictConstants.Claims.Subject, await ApplicationManager.GetClientIdAsync(application));
+        identity.AddClaim(OpenIddictConstants.Claims.PreferredUsername, await ApplicationManager.GetDisplayNameAsync(application));
 
         // Note: In the original OAuth 2.0 specification, the client credentials grant
         // doesn't return an identity token, which is an OpenID Connect concept.

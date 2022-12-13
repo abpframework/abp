@@ -1,0 +1,109 @@
+{
+  "name": "Volo.BloggingTestApp",
+  "hash": "6ad36d47583e70fabdb8ecb06397cf1a",
+  "contents": [
+    {
+      "namespace": "Volo.BloggingTestApp",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Blogging.Web",
+          "namespace": "Volo.Blogging",
+          "name": "BloggingWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Blogging.Application",
+          "namespace": "Volo.Blogging",
+          "name": "BloggingApplicationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Blogging.HttpApi",
+          "namespace": "Volo.Blogging",
+          "name": "BloggingHttpApiModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Blogging.Admin.Web",
+          "namespace": "Volo.Blogging.Admin",
+          "name": "BloggingAdminWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Blogging.Admin.HttpApi",
+          "namespace": "Volo.Blogging.Admin",
+          "name": "BloggingAdminHttpApiModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Blogging.Admin.Application",
+          "namespace": "Volo.Blogging.Admin",
+          "name": "BloggingAdminApplicationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.BloggingTestApp.EntityFrameworkCore",
+          "namespace": "Volo.BloggingTestApp.EntityFrameworkCore",
+          "name": "BloggingTestAppEntityFrameworkCoreModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Account.Web",
+          "namespace": "Volo.Abp.Account.Web",
+          "name": "AbpAccountWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Account.HttpApi",
+          "namespace": "Volo.Abp.Account",
+          "name": "AbpAccountHttpApiModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Account.Application",
+          "namespace": "Volo.Abp.Account",
+          "name": "AbpAccountApplicationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Web",
+          "namespace": "Volo.Abp.Identity.Web",
+          "name": "AbpIdentityWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.HttpApi",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityHttpApiModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Application",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityApplicationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Domain.Identity",
+          "namespace": "Volo.Abp.PermissionManagement.Identity",
+          "name": "AbpPermissionManagementDomainIdentityModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Application",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementApplicationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.HttpApi",
+          "namespace": "Volo.Abp.PermissionManagement.HttpApi",
+          "name": "AbpPermissionManagementHttpApiModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BlobStoring.Database.Domain",
+          "namespace": "Volo.Abp.BlobStoring.Database",
+          "name": "BlobStoringDatabaseDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Autofac",
+          "namespace": "Volo.Abp.Autofac",
+          "name": "AbpAutofacModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+          "name": "AbpAspNetCoreMvcUiBasicThemeModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "BloggingTestAppModule",
+      "summary": null
+    }
+  ]
+}

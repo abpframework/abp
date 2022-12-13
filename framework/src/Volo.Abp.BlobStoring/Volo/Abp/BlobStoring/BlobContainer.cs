@@ -10,11 +10,11 @@ namespace Volo.Abp.BlobStoring;
 public class BlobContainer<TContainer> : IBlobContainer<TContainer>
     where TContainer : class
 {
-    private readonly IBlobContainer _container;
+    protected readonly IBlobContainer Container;
 
     public BlobContainer(IBlobContainerFactory blobContainerFactory)
     {
-        _container = blobContainerFactory.Create<TContainer>();
+        Container = blobContainerFactory.Create<TContainer>();
     }
 
     public Task SaveAsync(
@@ -23,7 +23,7 @@ public class BlobContainer<TContainer> : IBlobContainer<TContainer>
         bool overrideExisting = false,
         CancellationToken cancellationToken = default)
     {
-        return _container.SaveAsync(
+        return Container.SaveAsync(
             name,
             stream,
             overrideExisting,
@@ -35,7 +35,7 @@ public class BlobContainer<TContainer> : IBlobContainer<TContainer>
         string name,
         CancellationToken cancellationToken = default)
     {
-        return _container.DeleteAsync(
+        return Container.DeleteAsync(
             name,
             cancellationToken
         );
@@ -45,7 +45,7 @@ public class BlobContainer<TContainer> : IBlobContainer<TContainer>
         string name,
         CancellationToken cancellationToken = default)
     {
-        return _container.ExistsAsync(
+        return Container.ExistsAsync(
             name,
             cancellationToken
         );
@@ -55,7 +55,7 @@ public class BlobContainer<TContainer> : IBlobContainer<TContainer>
         string name,
         CancellationToken cancellationToken = default)
     {
-        return _container.GetAsync(
+        return Container.GetAsync(
             name,
             cancellationToken
         );
@@ -65,7 +65,7 @@ public class BlobContainer<TContainer> : IBlobContainer<TContainer>
         string name,
         CancellationToken cancellationToken = default)
     {
-        return _container.GetOrNullAsync(
+        return Container.GetOrNullAsync(
             name,
             cancellationToken
         );

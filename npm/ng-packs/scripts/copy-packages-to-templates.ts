@@ -17,6 +17,7 @@ const packageMap = {
   'tenant-management': 'ng.tenant-management',
   'theme-basic': 'ng.theme.basic',
   'theme-shared': 'ng.theme.shared',
+  'schematics':'ng.schematics'
 };
 program.option('-t, --templates  <templates>', 'template dirs', false);
 program.option('-p, --template-path <templatePath>', 'root template path', false);

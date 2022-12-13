@@ -42,6 +42,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
 * **`login-info`**: 展示当前登录用户信息.
 * **`logout`**: 在你的计算机注销认证.
+* **`bundle`**: 为 ABP Blazor 和 MAUI Blazor 项目生成引用的脚本和样式. 
 * **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
 
 ### help
@@ -258,6 +259,7 @@ abp generate-proxy -t csharp -url https://localhost:44302/
 
 * `--type` 或 `-t`: 客户端类型的名称. 可用的客户端有:
   * `csharp`: C#, 工作在 `*.HttpApi.Client` 项目目录. 此客户端有一些可选选项:
+    * `--without-contracts`: 取消生成应用程序服务接口,类,枚举和DTO.
     * `--folder`: 放置生成的 CSharp 代码的文件夹名称. 默认值: `ClientProxies`.
   * `ng`: Angular. 此客户端有一些可选选项:
     * `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
@@ -373,7 +375,7 @@ abp translate -c <culture> [options]
 示例:
 
 ````bash
-abp translate -c de-DE
+abp translate -c de
 ````
 
 该命令为 `de-DE` (德语)文化创建了统一的翻译文件.
@@ -409,6 +411,7 @@ abp login <username>                                  # Allows you to enter your
 abp login <username> -p <password>                    # Specify the password as a parameter (password is visible)
 abp login <username> --organization <organization>    # If you have multiple organizations, you need set your active organization
 abp login <username> -p <password> -o <organization>  # You can enter both your password and organization in the same command
+abp login <username> --device                         # Use device login flow
 ```
 
 > 当使用-p参数,请注意,因为你的密码是可见的. 它对于CI / CD自动化管道很有用.
@@ -430,6 +433,26 @@ abp login-info
 ```
 abp logout
 ```
+
+### bundle
+
+这个命令为ABP Blazor WebAssembly 和 MAUI Blazor 项目生成引用的脚本和样式并且更新 **index.html** 文件, 它帮助开发者轻松的管理ABP模块的依赖. 为了使 ```bundle``` 命令工作, 它的**执行目录**或者传递 ```--working-directory``` 参数的目录必须包含Blazor或MAUI Blazor项目文件(*.csproj)
+
+用法:
+
+````bash
+abp bundle [options]
+````
+
+#### Options
+
+* ```--working-directory``` 或 ```-wd```: 指定当前执行目录, 这个命令在当前目录不包含项目文件时非常有用.
+* ```--force``` 或 ```-f```: 在生成引用之前强制构建项目.
+* ```--project-type``` 或 ```-t```: 指定项目类型. 默认类型是 `webassembly`. 可用的类型有:
+  * `webassembly`
+  * `maui-blazor`
+
+`bundle` command reads the `appsettings.json` file inside the Blazor and MAUI Blazor project for bundling options. For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
 
 ### install-libs
 

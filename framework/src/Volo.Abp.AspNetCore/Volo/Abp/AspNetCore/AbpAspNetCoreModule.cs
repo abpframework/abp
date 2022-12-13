@@ -33,6 +33,8 @@ public class AbpAspNetCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddAuthorization();
+
         Configure<AbpAuditingOptions>(options =>
         {
             options.Contributors.Add(new AspNetCoreAuditLogContributor());

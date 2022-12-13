@@ -8,6 +8,8 @@ namespace Volo.Docs.Admin.Documents
     public class DocumentDto : EntityDto<Guid>
     {
         public virtual Guid ProjectId { get; set; }
+        
+        public virtual string ProjectName { get; set; }
 
         public virtual string Name { get; set; }
 

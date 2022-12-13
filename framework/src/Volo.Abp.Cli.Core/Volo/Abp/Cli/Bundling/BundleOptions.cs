@@ -15,6 +15,9 @@ public class BundleOptions
 
     [NotNull]
     public string ProjectFileName { get; set; }
+    
+    [NotNull]
+    public string ProjectType { get; set; }
 
     public bool Minify { get; set; }
 }

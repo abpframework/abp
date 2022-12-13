@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.MongoDB",
-  "hash": "7cbc7b55c7c08dbb623f122af5993d52",
+  "hash": "ab14c521e16a9ae08b59c30a345873b1",
   "contents": [
     {
       "namespace": "Volo.CmsKit.MongoDB",
@@ -30,45 +30,15 @@
       "connectionStringName": "CmsKit",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.CmsKit.Reactions.UserReaction",
-          "contentType": "databaseCollection",
-          "name": "CmsUserReactions",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.CmsKit.Tags.EntityTag",
           "contentType": "databaseCollection",
           "name": "CmsEntityTags",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.GlobalResources.GlobalResource",
+          "entityFullName": "Volo.CmsKit.Comments.Comment",
           "contentType": "databaseCollection",
-          "name": "CmsGlobalResources",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Pages.Page",
-          "contentType": "databaseCollection",
-          "name": "CmsPages",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Tags.Tag",
-          "contentType": "databaseCollection",
-          "name": "CmsTags",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Users.CmsUser",
-          "contentType": "databaseCollection",
-          "name": "CmsUsers",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Blogs.Blog",
-          "contentType": "databaseCollection",
-          "name": "CmsBlogs",
+          "name": "CmsComments",
           "summary": null
         },
         {
@@ -84,9 +54,9 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Ratings.Rating",
+          "entityFullName": "Volo.CmsKit.Users.CmsUser",
           "contentType": "databaseCollection",
-          "name": "CmsRatings",
+          "name": "CmsUsers",
           "summary": null
         },
         {
@@ -96,15 +66,45 @@
           "summary": null
         },
         {
+          "entityFullName": "Volo.CmsKit.Blogs.Blog",
+          "contentType": "databaseCollection",
+          "name": "CmsBlogs",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.CmsKit.MediaDescriptors.MediaDescriptor",
           "contentType": "databaseCollection",
           "name": "CmsMediaDescriptors",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Comments.Comment",
+          "entityFullName": "Volo.CmsKit.GlobalResources.GlobalResource",
           "contentType": "databaseCollection",
-          "name": "CmsComments",
+          "name": "CmsGlobalResources",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Ratings.Rating",
+          "contentType": "databaseCollection",
+          "name": "CmsRatings",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Tags.Tag",
+          "contentType": "databaseCollection",
+          "name": "CmsTags",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Reactions.UserReaction",
+          "contentType": "databaseCollection",
+          "name": "CmsUserReactions",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Pages.Page",
+          "contentType": "databaseCollection",
+          "name": "CmsPages",
           "summary": null
         }
       ],

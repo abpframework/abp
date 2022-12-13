@@ -9,9 +9,19 @@ public static class FeatureManagementMongoDbContextExtensions
     {
         Check.NotNull(builder, nameof(builder));
 
+        builder.Entity<FeatureGroupDefinitionRecord>(b =>
+        {
+            b.CollectionName = AbpFeatureManagementDbProperties.DbTablePrefix + "FeatureGroups";
+        });
+
+        builder.Entity<FeatureDefinitionRecord>(b =>
+        {
+            b.CollectionName = AbpFeatureManagementDbProperties.DbTablePrefix + "Features";
+        });
+
         builder.Entity<FeatureValue>(b =>
         {
-            b.CollectionName = FeatureManagementDbProperties.DbTablePrefix + "FeatureValues";
+            b.CollectionName = AbpFeatureManagementDbProperties.DbTablePrefix + "FeatureValues";
         });
     }
 }

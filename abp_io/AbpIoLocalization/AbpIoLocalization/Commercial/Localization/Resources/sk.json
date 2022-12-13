@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Môžem v budúcnosti zmeniť registrovaných vývojárov svojej organizácie?",
     "ChangingDevelopersExplanation": "Okrem pridávania nových vývojárov do licencie môžete tiež meniť existujúcich vývojárov (môžete odstrániť vývojára a pridať nového na to isté miesto) bez akýchkoľvek ďalších nákladov.",
     "WhenShouldIRenewMyLicense": "Kedy si mám obnoviť licenciu?",
-    "WhenShouldIRenewMyLicenseExplanation": "Ak si licenciu obnovíte do <strong>1 mesiaca</strong> po vypršaní platnosti licencie, budú sa uplatňovať tieto zľavy: Tímová licencia {0}% zľava, Obchodná licencia {1}% zľava, Enterprise licencia {2}% zľava . Ak si licenciu obnovíte <strong>1 mesiac</strong> po dátume skončenia platnosti licencie, cena za obnovenie bude rovnaká ako cena za nákup licencie a na obnovenie nebude poskytnutá žiadna zľava.",
+    "WhenShouldIRenewMyLicenseExplanation": "Ak si licenciu obnovíte do <strong>1 mesiaca</strong> po vypršaní platnosti licencie, budú sa uplatňovať tieto zľavy: Tímová licencia {0} ; Obchodná licencia {1} ; Enterprise licencia {2} . Ak si licenciu obnovíte <strong>1 mesiac</strong> po dátume skončenia platnosti licencie, cena za obnovenie bude rovnaká ako cena za nákup licencie a na obnovenie nebude poskytnutá žiadna zľava.",
     "TrialPlan": "Máte skúšobný plán?",
     "DoYouAcceptBankWireTransfer": "Prijímate bankový prevod?",
     "DoYouAcceptBankWireTransferExplanation": "Áno, akceptujeme bankový prevod.<br />Po odoslaní licenčného poplatku bankovým prevodom nám pošlite e-mail na adresu accounting@abp.io svoje potvrdenie a požadovaný typ licencie. Informácie o našom medzinárodnom bankovom účte:",
@@ -360,7 +360,7 @@
     "Next": "Ďalšie",
     "StartTrial": "Spustite moju bezplatnú skúšobnú verziu",
     "ContactUsIssues": "Ak máte nejaké problémy, kontaktujte nás",
-    "TrialActivatedWarning": "Vážený {0}, používateľ má nárok len na 1 bezplatné skúšobné obdobie. Skúšobné obdobie ste už využili.",
+    "TrialActivatedWarning": "Používateľ má nárok len na 1 bezplatné skúšobné obdobie. Skúšobné obdobie ste už využili.",
     "SaveAndDownload": "Uložiť a stiahnuť",
     "CompanyNameValidationMessage": "Názov spoločnosti je príliš dlhý!",
     "AddressValidationMessage": "Adresa je príliš dlhá!",
@@ -373,11 +373,13 @@
     "TrialLicenseModelInvalidErrorMessage": "Jedno z nasledujúcich polí je neplatné: Názov krajiny, Veľkosť spoločnosti, Odvetvie alebo Účel použitia.",
     "Trial": "Skúška",
     "Purchased": "Kúpené",
-    "PurchaseLicense": "Zakúpiť licenciu",
+    "PurchaseLicense": "Kúpiť licenciu {0}",
     "PurchaseTrialLicenseMessage": "Dátum vypršania platnosti vašej licencie je {0}. <br> Ak chcete pokračovať v používaní projektov, ktoré ste vytvorili počas bezplatného skúšobného obdobia, musíte zmeniť licenčné kľúče vo svojich súboroch <code>appsettings.secrets.json</code>. Tu je váš licenčný kľúč:",
     "TrialLicenseExpireMessage": "Používate skúšobnú licenciu a platnosť vašej skúšobnej licencie vyprší {0}.",
     "TryForFree": "Skúste zadarmo",
     "TrialLicenseExpiredInfo": "Vaše skúšobné licenčné obdobie vypršalo!",
-    "CommercialNewsletterConfirmationMessage": "I agree to the <a href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>."
+    "CommercialNewsletterConfirmationMessage": "I agree to the <a href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
+    "discountForYears": "{0} % odpusteného prívesku {1} an(ov)",
+    "BlackFridayDiscount": "Black Friday zľava"
   }
 }

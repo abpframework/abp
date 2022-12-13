@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using AutoMapper;
 using Volo.Abp.Application.Dtos;
 using Volo.CmsKit.Contents;
-using Volo.CmsKit.Public.Blogs;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs;
 
-[AutoMap(typeof(BlogPostPublicDto), ReverseMap = true)]
+[AutoMap(typeof(BlogPostCommonDto), ReverseMap = true)]
 public class BlogPostViewModel : AuditedEntityDto<Guid>
 {
     public Guid BlogId { get; set; }

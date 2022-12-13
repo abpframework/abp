@@ -25,6 +25,7 @@ export interface ControllerApiDescriptionModel {
   controllerName?: string;
   controllerGroupName?: string;
   isRemoteService: boolean;
+  integrationService: boolean;
   apiVersion?: string;
   type?: string;
   interfaces: ControllerInterfaceApiDescriptionModel[];
@@ -33,6 +34,14 @@ export interface ControllerApiDescriptionModel {
 
 export interface ControllerInterfaceApiDescriptionModel {
   type?: string;
+  name?: string;
+  methods: InterfaceMethodApiDescriptionModel[];
+}
+
+export interface InterfaceMethodApiDescriptionModel {
+  name?: string;
+  parametersOnMethod: MethodParameterApiDescriptionModel[];
+  returnValue: ReturnValueApiDescriptionModel;
 }
 
 export interface MethodParameterApiDescriptionModel {

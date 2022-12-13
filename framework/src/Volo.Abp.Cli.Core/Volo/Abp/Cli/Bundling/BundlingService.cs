@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -29,8 +30,14 @@ public class BundlingService : IBundlingService, ITransientDependency
     public IStyleBundler StyleBundler { get; set; }
     public IConfigReader ConfigReader { get; set; }
 
-    public async Task BundleAsync(string directory, bool forceBuild)
+    public async Task BundleAsync(string directory, bool forceBuild, string projectType = BundlingConsts.WebAssembly)
     {
+        if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && projectType == BundlingConsts.MauiBlazor) 
+        {
+            Logger.LogWarning("ABP bundle command does not support OSX for MAUI Blazor");
+            return;
+        }
+
         var projectFiles = Directory.GetFiles(directory, "*.csproj");
         if (!projectFiles.Any())
         {
@@ -40,9 +47,9 @@ public class BundlingService : IBundlingService, ITransientDependency
 
         var projectFilePath = projectFiles[0];
 
-        CheckProjectIsSupportedType(projectFilePath);
+        CheckProjectIsSupportedType(projectFilePath, projectType);
 
-        var config = ConfigReader.Read(PathHelper.GetWwwRootPath(directory));
+        var config = projectType == BundlingConsts.WebAssembly? ConfigReader.Read(PathHelper.GetWwwRootPath(directory)): ConfigReader.Read(directory);
         var bundleConfig = config.Bundle;
 
         if (forceBuild)
@@ -52,12 +59,12 @@ public class BundlingService : IBundlingService, ITransientDependency
                     new DotNetProjectInfo(string.Empty, projectFilePath, true)
                 };
 
-            DotNetProjectBuilder.BuildProjects(projects, string.Empty);
+            DotNetProjectBuilder.BuildProjects(projects, string.Empty); 
         }
 
-        var frameworkVersion = GetTargetFrameworkVersion(projectFilePath);
+        var frameworkVersion = GetTargetFrameworkVersion(projectFilePath, projectType);
         var projectName = Path.GetFileNameWithoutExtension(projectFilePath);
-        var assemblyFilePath = PathHelper.GetAssemblyFilePath(directory, frameworkVersion, projectName);
+        var assemblyFilePath = projectType == BundlingConsts.WebAssembly? PathHelper.GetWebAssemblyFilePath(directory, frameworkVersion, projectName) : PathHelper.GetMauiBlazorAssemblyFilePath(directory, projectName);
         var startupModule = GetStartupModule(assemblyFilePath);
 
         var bundleDefinitions = new List<BundleTypeDefinition>();
@@ -65,7 +72,7 @@ public class BundlingService : IBundlingService, ITransientDependency
         bundleDefinitions = bundleDefinitions.OrderByDescending(t => t.Level).ToList();
 
         var styleContext = GetStyleContext(bundleDefinitions, bundleConfig.Parameters);
-        var scriptContext = GetScriptContext(bundleDefinitions, bundleConfig.Parameters);
+        var scriptContext = GetScriptContext(bundleDefinitions, bundleConfig.Parameters, projectType);
         string styleDefinitions;
         string scriptDefinitions;
 
@@ -77,7 +84,8 @@ public class BundlingService : IBundlingService, ITransientDependency
                 FrameworkVersion = frameworkVersion,
                 ProjectFileName = projectName,
                 BundleName = bundleConfig.Name.IsNullOrEmpty() ? "global" : bundleConfig.Name,
-                Minify = bundleConfig.Mode == BundlingMode.BundleAndMinify
+                Minify = bundleConfig.Mode == BundlingMode.BundleAndMinify,
+                ProjectType = projectType
             };
 
             Logger.LogInformation("Generating style bundle...");
@@ -101,17 +109,20 @@ public class BundlingService : IBundlingService, ITransientDependency
     }
 
     private BundleContext GetScriptContext(List<BundleTypeDefinition> bundleDefinitions,
-        BundleParameterDictionary parameters)
+        BundleParameterDictionary parameters, string projectType)
     {
         var scriptContext = new BundleContext
         {
             Parameters = parameters
         };
 
-        scriptContext.BundleDefinitions.AddIfNotContains(
-            x => x.Source == "_framework/blazor.webassembly.js", 
-            () => new BundleDefinition { Source = "_framework/blazor.webassembly.js" });
-
+        if (projectType == BundlingConsts.WebAssembly)
+        {
+            scriptContext.BundleDefinitions.AddIfNotContains(
+                x => x.Source == "_framework/blazor.webassembly.js", 
+                () => new BundleDefinition { Source = "_framework/blazor.webassembly.js" });
+        }
+        
         foreach (var bundleDefinition in bundleDefinitions)
         {
             var contributor = CreateContributorInstance(bundleDefinition.BundleContributorType);
@@ -283,24 +294,41 @@ public class BundlingService : IBundlingService, ITransientDependency
             .SingleOrDefault(AbpModule.IsAbpModule);
     }
 
-    private string GetTargetFrameworkVersion(string projectFilePath)
+    private string GetTargetFrameworkVersion(string projectFilePath, string projectType)
     {
         var document = new XmlDocument();
         document.Load(projectFilePath);
 
-        return document.SelectSingleNode("//TargetFramework").InnerText;
+        return projectType switch {
+            BundlingConsts.WebAssembly => document.SelectSingleNode("//TargetFramework").InnerText,
+            BundlingConsts.MauiBlazor => document.SelectNodes("//TargetFrameworks")[0].InnerText,
+            _ => null
+        };
     }
 
-    private void CheckProjectIsSupportedType(string projectFilePath)
+    private void CheckProjectIsSupportedType(string projectFilePath, string projectType)
     {
         var document = new XmlDocument();
         document.Load(projectFilePath);
 
         var sdk = document.DocumentElement.GetAttribute("Sdk");
-        if (sdk != BundlingConsts.SupportedWebAssemblyProjectType)
+        
+        switch (projectType)
         {
-            throw new BundlingException(
-                $"Unsupported project type. Project type must be {BundlingConsts.SupportedWebAssemblyProjectType}.");
+            case BundlingConsts.WebAssembly:
+                if (sdk != BundlingConsts.SupportedWebAssemblyProjectType)
+                {
+                    throw new BundlingException(
+                        $"Unsupported project type. Project type must be {BundlingConsts.SupportedWebAssemblyProjectType}.");
+                }
+                break;
+            case BundlingConsts.MauiBlazor:
+                if (sdk != BundlingConsts.SupportedMauiBlazorProjectType)
+                {
+                    throw new BundlingException(
+                        $"Unsupported project type. Project type must be {BundlingConsts.SupportedMauiBlazorProjectType}.");
+                }
+                break;
         }
     }
 }
