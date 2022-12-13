@@ -60,12 +60,12 @@
                 }
                 <div class="col-auto">
                     <div class="text-end">
-                        <abp-button id="submit-button" type="submit" button-type="Primary" size="Block">
+                        <abp-button id="submit-button" type="submit" button-type="Primary">
                             <i class="fa fa-comment-alt me-1"></i> @L["Send"]
                         </abp-button>
                         @if (cancelButton)
                         {
-                            <abp-button type="button" button-type="Light" class="reply-cancel-button mb-2" size="Block_Small" data-reply-id="@(repliedCommentId?.ToString() ?? "")">
+                            <abp-button type="button" button-type="Light" class="reply-cancel-button" data-reply-id="@(repliedCommentId?.ToString() ?? "")">
                                 <i class="fa fa-times me-1"></i> @L["Cancel"]
                             </abp-button>
                         }
