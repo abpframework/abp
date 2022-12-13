@@ -22,7 +22,8 @@ A simple usage is presented below.
     data-autocomplete-display-property="name"
     data-autocomplete-value-property="id"
     data-autocomplete-items-property="items"
-    data-autocomplete-filter-param-name="filter">
+    data-autocomplete-filter-param-name="filter"
+    data-autocomplete-allow-clear="true">
 
     <!-- You can define selected option(s) here  -->
     <option selected value="@SelectedAuthor.Id">@SelectedAuthor.Name</option>
@@ -38,6 +39,8 @@ The select must have the `auto-complete-select` class and the following attribut
 - `data-autocomplete-filter-param-name`: * Filter text property name. _(For example: `filter`)_.
 - `data-autocomplete-selected-item-name`: Text to display as selected item.
 - `data-autocomplete-parent-selector`: jQuery selector expression for parent DOM. _(If it's in a modal, it's suggested to send the modal selector as this parameter)_.
+- `data-autocomplete-allow-clear`: If `true`, it'll allow to clear the selected value. Default value: `false`.
+- `data-autocomplete-placeholder`: Placeholder text to display when no value is selected.
 
 Also, selected value(s) should be defined with the `<option>` tags inside select, since pagination is applied and the selected options might haven't loaded yet.
 
