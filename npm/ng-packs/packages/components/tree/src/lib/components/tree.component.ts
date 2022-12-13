@@ -15,7 +15,7 @@ import { TreeNodeTemplateDirective } from '../templates/tree-node-template.direc
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadService, LOADING_STRATEGY, SubscriptionService } from '@abp/ng.core';
-import { DISABLE_TREE_STYLE_LADING_TOKEN } from '../disable-tree-style-loading.token';
+import { DISABLE_TREE_STYLE_LOADING_TOKEN } from '../disable-tree-style-loading.token';
 
 export type DropEvent = NzFormatEmitEvent & { pos: number };
 
@@ -35,7 +35,7 @@ export class TreeComponent {
     private lazyLoadService: LazyLoadService,
     subscriptionService: SubscriptionService,
     @Optional()
-    @Inject(DISABLE_TREE_STYLE_LADING_TOKEN)
+    @Inject(DISABLE_TREE_STYLE_LOADING_TOKEN)
     disableTreeStyleLoading: boolean | undefined,
   ) {
     if (disableTreeStyleLoading) {
