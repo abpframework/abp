@@ -141,7 +141,15 @@
 
     <ng-template ngSwitchCase="password">
       <ng-template [ngTemplateOutlet]="label"></ng-template>
-      <abp-password [prop]="prop"></abp-password>
+      <abp-password
+        *abpReplaceableTemplate="{
+          componentKey: passwordKey,
+          inputs: {
+            appInfo: { value: prop }
+          }
+        }"
+        [prop]="prop"
+      ></abp-password>
     </ng-template>
   </div>
 </ng-container>

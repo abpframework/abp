@@ -70,6 +70,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   typeaheadModel: any;
 
+  passwordKey = 'ThemeShared.PasswordComponent';
+
   private readonly form: UntypedFormGroup;
 
   disabledFn = (data: PropData) => false;
