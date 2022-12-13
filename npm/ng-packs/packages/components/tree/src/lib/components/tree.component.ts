@@ -74,7 +74,7 @@ export class TreeComponent implements OnInit {
     const loaded$ = this.lazyLoadService.load(
       LOADING_STRATEGY.AppendAnonymousStyleToHead('ng-zorro-antd-tree.css'),
     );
-    subscriptionService.addOne(loaded$);
+    this.subscriptionService.addOne(loaded$);
   }
   
   onSelectedNodeChange(node) {
