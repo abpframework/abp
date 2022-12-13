@@ -810,11 +810,11 @@
     "WhereDidYouHearAboutUs": "Where did you hear about us?",
     "Twitter": "Twitter",
     "Facebook": "Facebook",
-    "Youtube": "Youtube",
+    "Youtube": "YouTube",
     "Google": "Google",
-    "Github": "Github",
+    "Github": "GitHub",
     "Friend": " From a friend",
     "Other": "Other",
-    "WhereDidYouHearAboutUs_explain": "explain ..."
+    "WhereDidYouHearAboutUs_explain": "Specify ..."
   }
 }
