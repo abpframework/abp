@@ -104,7 +104,7 @@
     "jest-environment-jsdom": "28.1.1",
     "jest-preset-angular": "12.2.2",
     "jsonc-parser": "^2.3.0",
-    "just-clone": "^3.2.1",
+    "just-clone": "^6.1.1",
     "just-compare": "^1.4.0",
     "lerna": "^4.0.0",
     "lint-staged": "^13.0.3",
