@@ -24,7 +24,3 @@ body .form-control {
     border: 1px outset #e3e3e3 !important;
     padding: 10px !important;
 }
-
-body #submit-button {
-    margin-top: 10px;
-}
