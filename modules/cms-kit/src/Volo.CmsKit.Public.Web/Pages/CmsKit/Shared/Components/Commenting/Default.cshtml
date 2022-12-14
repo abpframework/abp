@@ -53,7 +53,6 @@
                             <div class="flex-grow-1 bd-highlight">
                                 <abp-input type="number" asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off" />
                             </div>
-                            
                             <abp-input asp-for="@Model.CaptchaId" value="@Model.CaptchaOutput.Id" />
                         </div>
                     </div>
@@ -90,20 +89,25 @@
         {
             @if (CurrentUser.IsAuthenticated)
             {
-            <a href="#" class="comment-links comment-reply-link btn btn-sm  shadow-sm  btn-primary" data-reply-id="@id.ToString()" id="@($"cms-comment_{Model.Input.EntityType}_{Model.Input.EntityId}_{id}_link")">
+                <a href="#" class="comment-links comment-reply-link btn btn-sm  shadow-sm  btn-primary" data-reply-id="@id.ToString()" id="@($"cms-comment_{Model.Input.EntityType}_{Model.Input.EntityId}_{id}_link")">
                     <i class="fa fa-reply mr -1"></i> @L["Reply"]
+                </a>
+
+                <a href="#" class="comment-links comment-delete-link btn btn-sm shadow-sm btn-link text-muted bg-white " data-author-id="@authorId.ToString()" data-id="@id.ToString()">
+                    <i class="fa fa-trash  mr -1"></i> @L["Delete"]
                 </a>
             }
             else
             {
-            <a href="@(Model.Input.LoginUrl + "_" + id)" class="btn btn-sm btn-light shadow-sm"> @L["LoginToReply"]</a>
+                <a href="@(Model.Input.LoginUrl + "_" + id)" class="btn btn-sm btn-light shadow-sm">
+                    @L["LoginToReply"]
+                </a>
             }
         }
+        
+        
         @if (authorId == CurrentUser.Id)
         {
-            <a href="#" class="comment-links comment-delete-link btn btn-sm shadow-sm btn-link text-muted bg-white " data-id="@id.ToString()">
-                <i class="fa fa-trash  mr -1"></i> @L["Delete"]
-            </a>
             <a href="#" class="comment-links comment-edit-link  btn btn-sm shadow-sm  btn-link text-muted bg-white" data-id="@id.ToString()">
                 <i class="fa fa-pencil  mr -1 "></i> @L["Edit"]
             </a>
@@ -114,8 +118,7 @@
     Func<dynamic, IHtmlContent> GetEditArea(Guid id, string text, string concurrencyStamp) =>
     @<div class="cms-comment-edit-area" id="@($"cms-comment_{Model.Input.EntityType}_{Model.Input.EntityId}_{id}")" data-id="@id.ToString()" style="display:none">
         <div class="card bg-light p-3 mx-0 mt-3">
-            <form id="ContactForm" class="cms-comment-update-form">
-                <abp-input asp-for="@Model.RecaptchaToken" />
+            <form class="cms-comment-update-form">
                 <input hidden value="@id.ToString()" name="id" />
                 <div class="row">
                     <div class="col">

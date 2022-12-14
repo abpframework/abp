@@ -82,18 +82,26 @@
         function registerDeleteLinks($container) {
             $container.find('.comment-delete-link').each(function () {
                 let $link = $(this);
-                $link.on('click', '', function (e) {
-                    e.preventDefault();
 
-                    abp.message.confirm(l("MessageDeletionConfirmationMessage"), function (ok) {
-                        if (ok) {
-                            volo.cmsKit.public.comments.commentPublic.delete($link.data('id')
-                            ).then(function () {
-                                widgetManager.refresh($widget);
-                            });
-                        }
+                let allowDelete = abp.auth.isGranted('CmsKitPublic.Comments.DeleteAll');
+                let isCurrentUser = abp.currentUser.id == $link.data('author-id');
+                if (!allowDelete && !isCurrentUser) {
+                    $link.hide();
+                }
+                else {
+                    $link.on('click', '', function (e) {
+                        e.preventDefault();
+
+                        abp.message.confirm(l("MessageDeletionConfirmationMessage"), function (ok) {
+                            if (ok) {
+                                volo.cmsKit.public.comments.commentPublic.delete($link.data('id')
+                                ).then(function () {
+                                    widgetManager.refresh($widget);
+                                });
+                            }
+                        });
                     });
-                });
+                }
             });
         }
 
