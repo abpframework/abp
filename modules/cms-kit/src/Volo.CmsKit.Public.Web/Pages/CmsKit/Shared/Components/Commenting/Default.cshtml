@@ -51,7 +51,7 @@
                                 <img src="@Model.Input.CaptchaImageBase64" />
                             </div>
                             <div class="flex-grow-1 bd-highlight">
-                                <abp-input asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off" />
+                                <abp-input type="number" asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off" />
                             </div>
                             
                             <abp-input asp-for="@Model.CaptchaId" value="@Model.CaptchaOutput.Id" />
