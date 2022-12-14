@@ -139,13 +139,13 @@
       ></textarea>
     </ng-template>
 
-    <ng-template ngSwitchCase="password">
+    <ng-template ngSwitchCase="passwordinputgroup">
       <ng-template [ngTemplateOutlet]="label"></ng-template>
       <abp-password
         *abpReplaceableTemplate="{
           componentKey: passwordKey,
           inputs: {
-            appInfo: { value: prop }
+            prop: { value: prop }
           }
         }"
         [prop]="prop"
