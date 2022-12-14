@@ -8,7 +8,7 @@ import {
   Output,
   TemplateRef,
   ViewEncapsulation,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import { NzFormatBeforeDropEvent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
@@ -34,11 +34,11 @@ export class TreeComponent implements OnInit {
 
   constructor(
     private lazyLoadService: LazyLoadService,
-    subscriptionService: SubscriptionService,
+    private subscriptionService: SubscriptionService,
     @Optional()
     @Inject(DISABLE_TREE_STYLE_LOADING_TOKEN)
     private disableTreeStyleLoading: boolean | undefined,
-  ) { }
+  ) {}
 
   @ContentChild('menu') menu: TemplateRef<any>;
   @ContentChild(TreeNodeTemplateDirective) customNodeTemplate: TreeNodeTemplateDirective;
@@ -64,7 +64,7 @@ export class TreeComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.loadStyle()
+    this.loadStyle();
   }
 
   private loadStyle() {
@@ -76,7 +76,7 @@ export class TreeComponent implements OnInit {
     );
     this.subscriptionService.addOne(loaded$);
   }
-  
+
   onSelectedNodeChange(node) {
     this.selectedNode = node.origin.entity;
     if (this.changeCheckboxWithNode) {
