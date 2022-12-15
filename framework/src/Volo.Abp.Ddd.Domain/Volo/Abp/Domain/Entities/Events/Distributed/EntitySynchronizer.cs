@@ -1,9 +1,7 @@
-﻿using System;
-using System.ComponentModel;
-using System.Globalization;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Auditing;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.ObjectMapping;
@@ -33,7 +31,8 @@ public abstract class EntitySynchronizer<TEntity, TKey, TSourceEntityEto> :
 public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
     IDistributedEventHandler<EntityCreatedEto<TSourceEntityEto>>,
     IDistributedEventHandler<EntityUpdatedEto<TSourceEntityEto>>,
-    IDistributedEventHandler<EntityDeletedEto<TSourceEntityEto>>
+    IDistributedEventHandler<EntityDeletedEto<TSourceEntityEto>>,
+    ITransientDependency
     where TEntity : class, IEntity
 {
     protected IObjectMapper ObjectMapper { get; }
