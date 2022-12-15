@@ -522,6 +522,61 @@ Configure<AbpDistributedEventBusOptions>(options =>
 });
 ````
 
+## Entity Synchronizer
+
+Todo: introduction.
+
+### Create a Synchronizer Class
+
+Todo.
+
+```csharp
+public class BlogUserSynchronizer : EntitySynchronizer<BlogUser, Guid, UserEto>, ITransientDependency
+{
+    public BlogUserSynchronizer(IObjectMapper objectMapper, IRepository<BlogUser, Guid> repository) :
+        base(objectMapper, repository)
+    {
+    }
+}
+```
+
+### Advanced Usages
+
+We may want to skip synchronizing the entity data on the external entity created, updated, or deleted. The `EntitySynchronizer` has three bool properties to control the handling behaviors.
+
+```csharp
+public class BlogUserSynchronizer : EntitySynchronizer<BlogUser, Guid, UserEto>, ITransientDependency
+{
+    protected override bool IgnoreEntityCreatedEvent => true;
+    protected override bool IgnoreEntityUpdatedEvent => true;
+    protected override bool IgnoreEntityDeletedEvent => true;
+
+    // ctor ...
+}
+```
+
+### Eventual Consistency Guarantee
+
+Developers should always handle the distributed events disordering. ABP framework has an `EntityVersion` audit property to avoid an old version of entity data overriding a new one.
+
+The only thing we need to do is make the entity class and the ETO class implement the `IHasEntityVersion` interface.
+
+```csharp
+public class User : Entity<Guid>, IHasEntityVersion
+{
+    public int EntityVersion { get; set; }
+}
+
+public class UserEto : EntityEto, IHasEntityVersion
+{
+    public int EntityVersion { get; set; }
+}
+```
+
+After that, the entity synchronizer will know the entity version number and skip handling the stale events.
+
+> See the community post [Notice and Solve ABP Distributed Events Disordering](https://community.abp.io/posts/notice-and-solve-abp-distributed-events-disordering-yi9vq3p4) for more if you are interested or worried.
+
 ## See Also
 
 * [Local Event Bus](Local-Event-Bus.md)
