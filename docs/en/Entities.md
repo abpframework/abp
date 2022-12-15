@@ -324,6 +324,19 @@ It's designed as read-only and automatically invalidates a cached entity if the 
 
 > See the [Entity Cache](Entity-Cache.md) documentation for more information.
 
+## Versioning Entities
+
+ABP defines the `IHasEntityVersion` interface for automatic versioning of your entities. It only provides a single `EntityVersion` properties, as shown in the following code block:
+
+````csharp
+public interface IHasEntityVersion
+{
+    int EntityVersion { get; }
+}
+````
+
+If you implement the `IHasEntityVersion` interface, ABP automatically increases the `EntityVersion` value whenever you update your entity. The initial value will be `0`, when you first create the entity and save to the database.
+
 ## Extra Properties
 
 ABP defines the `IHasExtraProperties` interface that can be implemented by an entity to be able to dynamically set and get properties for the entity. `AggregateRoot` base class already implements the `IHasExtraProperties` interface. If you've derived from this class (or one of the related audit class defined above), you can directly use the API.
