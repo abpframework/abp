@@ -11,28 +11,35 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Entities.Events.Distributed;
 
-public abstract class EntitySynchronizer<TEntity, TKey, TExternalEntityEto> :
-    EntitySynchronizer<TEntity, TExternalEntityEto>
+public abstract class EntitySynchronizer<TEntity, TKey, TSourceEntityEto> :
+    EntitySynchronizer<TEntity, TSourceEntityEto>
     where TEntity : class, IEntity<TKey>
-    where TExternalEntityEto : EntityEto
 {
-    private readonly IRepository<TEntity, TKey> _repository;
+    protected new IRepository<TEntity, TKey> Repository { get; }
 
     protected EntitySynchronizer(IObjectMapper objectMapper, IRepository<TEntity, TKey> repository) :
         base(objectMapper, repository)
     {
-        _repository = repository;
+        Repository = repository;
     }
 
-    protected override Task<TEntity> FindLocalEntityAsync(TExternalEntityEto eto)
+    protected override Task<TEntity> FindLocalEntityAsync(TSourceEntityEto eto)
     {
-        return _repository.FindAsync(GetExternalEntityId(eto));
+        return Repository.FindAsync(GetExternalEntityId(eto));
     }
 
-    protected virtual TKey GetExternalEntityId(TExternalEntityEto eto)
+    protected virtual TKey GetExternalEntityId(TSourceEntityEto eto)
     {
         var keyType = typeof(TKey);
-        var keyValue = Check.NotNullOrEmpty(eto.KeysAsString, nameof(eto.KeysAsString));
+        
+        if (eto is not EntityEto entityEto)
+        {
+            throw new AbpException(
+                $"The given ETO is not an EntityEto! Its type is {typeof(TSourceEntityEto).FullName}. " +
+                $"In this case, you should override the {nameof(GetExternalEntityId)} method and return the entity's Id, or override the {nameof(FindLocalEntityAsync)} method and return the entity.");
+        }
+
+        var keyValue = Check.NotNullOrEmpty(entityEto.KeysAsString, nameof(entityEto.KeysAsString));
 
         if (keyType == typeof(Guid))
         {
@@ -43,30 +50,28 @@ public abstract class EntitySynchronizer<TEntity, TKey, TExternalEntityEto> :
     }
 }
 
-public abstract class EntitySynchronizer<TEntity, TExternalEntityEto> :
-    IDistributedEventHandler<EntityCreatedEto<TExternalEntityEto>>,
-    IDistributedEventHandler<EntityUpdatedEto<TExternalEntityEto>>,
-    IDistributedEventHandler<EntityDeletedEto<TExternalEntityEto>>,
-    IUnitOfWorkEnabled
+public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
+    IDistributedEventHandler<EntityCreatedEto<TSourceEntityEto>>,
+    IDistributedEventHandler<EntityUpdatedEto<TSourceEntityEto>>,
+    IDistributedEventHandler<EntityDeletedEto<TSourceEntityEto>>
     where TEntity : class, IEntity
-    where TExternalEntityEto : EntityEto
 {
     protected IObjectMapper ObjectMapper { get; }
-    private readonly IRepository<TEntity> _repository;
+    protected IRepository<TEntity> Repository { get; }
 
-    protected virtual bool IgnoreEntityCreatedEvent { get; set; }
-    protected virtual bool IgnoreEntityUpdatedEvent { get; set; }
-    protected virtual bool IgnoreEntityDeletedEvent { get; set; }
+    protected bool IgnoreEntityCreatedEvent { get; set; }
+    protected bool IgnoreEntityUpdatedEvent { get; set; }
+    protected bool IgnoreEntityDeletedEvent { get; set; }
 
     public EntitySynchronizer(
         IObjectMapper objectMapper,
         IRepository<TEntity> repository)
     {
         ObjectMapper = objectMapper;
-        _repository = repository;
+        Repository = repository;
     }
 
-    public virtual async Task HandleEventAsync(EntityCreatedEto<TExternalEntityEto> eventData)
+    public virtual async Task HandleEventAsync(EntityCreatedEto<TSourceEntityEto> eventData)
     {
         if (IgnoreEntityCreatedEvent)
         {
@@ -76,7 +81,7 @@ public abstract class EntitySynchronizer<TEntity, TExternalEntityEto> :
         await TryCreateOrUpdateEntityAsync(eventData.Entity);
     }
 
-    public virtual async Task HandleEventAsync(EntityUpdatedEto<TExternalEntityEto> eventData)
+    public virtual async Task HandleEventAsync(EntityUpdatedEto<TSourceEntityEto> eventData)
     {
         if (IgnoreEntityUpdatedEvent)
         {
@@ -86,7 +91,7 @@ public abstract class EntitySynchronizer<TEntity, TExternalEntityEto> :
         await TryCreateOrUpdateEntityAsync(eventData.Entity);
     }
 
-    public virtual async Task HandleEventAsync(EntityDeletedEto<TExternalEntityEto> eventData)
+    public virtual async Task HandleEventAsync(EntityDeletedEto<TSourceEntityEto> eventData)
     {
         if (IgnoreEntityDeletedEvent)
         {
@@ -96,7 +101,8 @@ public abstract class EntitySynchronizer<TEntity, TExternalEntityEto> :
         await TryDeleteEntityAsync(eventData.Entity);
     }
 
-    protected virtual async Task<bool> TryCreateOrUpdateEntityAsync(TExternalEntityEto eto)
+    [UnitOfWork]
+    protected virtual async Task<bool> TryCreateOrUpdateEntityAsync(TSourceEntityEto eto)
     {
         var localEntity = await FindLocalEntityAsync(eto);
 
@@ -111,11 +117,14 @@ public abstract class EntitySynchronizer<TEntity, TExternalEntityEto> :
 
             if (localEntity is IHasEntityVersion versionedLocalEntity && eto is IHasEntityVersion versionedEto)
             {
-                ObjectHelper.TrySetProperty(versionedLocalEntity, x => x.EntityVersion,
-                    () => versionedEto.EntityVersion);
+                ObjectHelper.TrySetProperty(
+                    versionedLocalEntity,
+                    x => x.EntityVersion,
+                    () => versionedEto.EntityVersion
+                );
             }
 
-            await _repository.InsertAsync(localEntity, true);
+            await Repository.InsertAsync(localEntity);
         }
         else
         {
@@ -123,30 +132,36 @@ public abstract class EntitySynchronizer<TEntity, TExternalEntityEto> :
 
             if (localEntity is IHasEntityVersion versionedLocalEntity && eto is IHasEntityVersion versionedEto)
             {
-                // The version will auto-increment by one when the repository updates the entity.
+                /* The version will auto-increment by one when the repository updates the entity.
+                 * So, we are decreasing it as a workaround here.
+                 */
                 var entityVersion = versionedEto.EntityVersion - 1;
-
-                ObjectHelper.TrySetProperty(versionedLocalEntity, x => x.EntityVersion, () => entityVersion);
+                ObjectHelper.TrySetProperty(
+                    versionedLocalEntity,
+                    x => x.EntityVersion,
+                    () => entityVersion
+                );
             }
 
-            await _repository.UpdateAsync(localEntity, true);
+            await Repository.UpdateAsync(localEntity);
         }
 
         return true;
     }
 
-    protected virtual Task<TEntity> MapToEntityAsync(TExternalEntityEto eto)
+    protected virtual Task<TEntity> MapToEntityAsync(TSourceEntityEto eto)
     {
-        return Task.FromResult(ObjectMapper.Map<TExternalEntityEto, TEntity>(eto));
+        return Task.FromResult(ObjectMapper.Map<TSourceEntityEto, TEntity>(eto));
     }
 
-    protected virtual Task MapToEntityAsync(TExternalEntityEto eto, TEntity localEntity)
+    protected virtual Task MapToEntityAsync(TSourceEntityEto eto, TEntity localEntity)
     {
         ObjectMapper.Map(eto, localEntity);
         return Task.CompletedTask;
     }
 
-    protected virtual async Task<bool> TryDeleteEntityAsync(TExternalEntityEto eto)
+    [UnitOfWork]
+    protected virtual async Task<bool> TryDeleteEntityAsync(TSourceEntityEto eto)
     {
         var localEntity = await FindLocalEntityAsync(eto);
 
@@ -155,15 +170,15 @@ public abstract class EntitySynchronizer<TEntity, TExternalEntityEto> :
             return false;
         }
 
-        await _repository.DeleteAsync(localEntity, true);
+        await Repository.DeleteAsync(localEntity, true);
 
         return true;
     }
 
     [ItemCanBeNull]
-    protected abstract Task<TEntity> FindLocalEntityAsync(TExternalEntityEto eto);
+    protected abstract Task<TEntity> FindLocalEntityAsync(TSourceEntityEto eto);
 
-    protected virtual Task<bool> IsEtoNewerAsync(TExternalEntityEto eto, [CanBeNull] TEntity localEntity)
+    protected virtual Task<bool> IsEtoNewerAsync(TSourceEntityEto eto, [CanBeNull] TEntity localEntity)
     {
         if (localEntity is IHasEntityVersion versionedLocalEntity && eto is IHasEntityVersion versionedEto)
         {
