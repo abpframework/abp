@@ -21,7 +21,7 @@ public class EntityEto : EtoBase
     }
 }
 
-public class EntityEto<TKey> : IEntityEto<TKey>
+public abstract class EntityEto<TKey> : IEntityEto<TKey>
 {
     public TKey Id { get; set; }
 }
