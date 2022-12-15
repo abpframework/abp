@@ -11,7 +11,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import compare from 'just-compare';
-import { Subscription, BehaviorSubject } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ABP } from '../models/common';
 import { ReplaceableComponents } from '../models/replaceable-components';
