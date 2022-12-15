@@ -33,7 +33,7 @@ public class EntitySynchronizer_Tests : AbpIntegratedTest<EntitySynchronizer_Tes
 
         (await repository.FindAsync(authorId)).ShouldBeNull();
 
-        var remoteAuthorEto = new RemoteAuthorEto { KeysAsString = authorId.ToString(), Name = "New" };
+        var remoteAuthorEto = new RemoteAuthorEto { Id = authorId, Name = "New" };
 
         await authorSynchronizer.HandleEventAsync(new EntityCreatedEto<RemoteAuthorEto>(remoteAuthorEto));
 
@@ -60,7 +60,7 @@ public class EntitySynchronizer_Tests : AbpIntegratedTest<EntitySynchronizer_Tes
         author.Id.ShouldBe(authorId);
         author.Name.ShouldBe("Old");
 
-        var remoteAuthorEto = new RemoteAuthorEto { KeysAsString = authorId.ToString(), Name = "New" };
+        var remoteAuthorEto = new RemoteAuthorEto { Id = authorId, Name = "New" };
 
         await authorSynchronizer.HandleEventAsync(new EntityUpdatedEto<RemoteAuthorEto>(remoteAuthorEto));
 
@@ -88,7 +88,7 @@ public class EntitySynchronizer_Tests : AbpIntegratedTest<EntitySynchronizer_Tes
         author.Id.ShouldBe(authorId);
         author.Name.ShouldBe("Old");
 
-        var remoteAuthorEto = new RemoteAuthorEto { KeysAsString = authorId.ToString(), Name = "New" };
+        var remoteAuthorEto = new RemoteAuthorEto { Id = authorId, Name = "New" };
 
         await authorSynchronizer.HandleEventAsync(new EntityDeletedEto<RemoteAuthorEto>(remoteAuthorEto));
 
@@ -111,7 +111,7 @@ public class EntitySynchronizer_Tests : AbpIntegratedTest<EntitySynchronizer_Tes
 
         (await repository.FindAsync(bookId)).ShouldBeNull();
 
-        var remoteBookEto = new RemoteBookEto { KeysAsString = bookId.ToString(), EntityVersion = 0, Sold = 1 };
+        var remoteBookEto = new RemoteBookEto { Id = bookId, EntityVersion = 0, Sold = 1 };
 
         await bookSynchronizer.HandleEventAsync(new EntityCreatedEto<RemoteBookEto>(remoteBookEto));
 
@@ -139,7 +139,7 @@ public class EntitySynchronizer_Tests : AbpIntegratedTest<EntitySynchronizer_Tes
         book.Id.ShouldBe(bookId);
         book.EntityVersion.ShouldBe(0);
 
-        var remoteBookEto = new RemoteBookEto { KeysAsString = bookId.ToString(), EntityVersion = 0, Sold = 10 };
+        var remoteBookEto = new RemoteBookEto { Id = bookId, EntityVersion = 0, Sold = 10 };
 
         await bookSynchronizer.HandleEventAsync(new EntityUpdatedEto<RemoteBookEto>(remoteBookEto));
 
@@ -188,7 +188,7 @@ public class EntitySynchronizer_Tests : AbpIntegratedTest<EntitySynchronizer_Tes
         book.Id.ShouldBe(bookId);
         book.EntityVersion.ShouldBe(0);
 
-        var remoteBookEto = new RemoteBookEto { KeysAsString = bookId.ToString(), EntityVersion = 0, Sold = 1 };
+        var remoteBookEto = new RemoteBookEto { Id = bookId, EntityVersion = 0, Sold = 1 };
 
         await bookSynchronizer.HandleEventAsync(new EntityDeletedEto<RemoteBookEto>(remoteBookEto));
 
@@ -245,10 +245,8 @@ public class EntitySynchronizer_Tests : AbpIntegratedTest<EntitySynchronizer_Tes
     {
         public MyAutoMapperProfile()
         {
-            CreateMap<RemoteBookEto, Book>(MemberList.None)
-                .ForMember(x => x.Id, options => options.MapFrom(x => Guid.Parse(x.KeysAsString)));
-            CreateMap<RemoteAuthorEto, Author>(MemberList.None)
-                .ForMember(x => x.Id, options => options.MapFrom(x => Guid.Parse(x.KeysAsString)));
+            CreateMap<RemoteBookEto, Book>(MemberList.None);
+            CreateMap<RemoteAuthorEto, Author>(MemberList.None);
         }
     }
 }

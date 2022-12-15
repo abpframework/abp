@@ -14,6 +14,7 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed;
 public abstract class EntitySynchronizer<TEntity, TKey, TSourceEntityEto> :
     EntitySynchronizer<TEntity, TSourceEntityEto>
     where TEntity : class, IEntity<TKey>
+    where TSourceEntityEto : IEntityEto<TKey> 
 {
     protected new IRepository<TEntity, TKey> Repository { get; }
 
@@ -25,28 +26,7 @@ public abstract class EntitySynchronizer<TEntity, TKey, TSourceEntityEto> :
 
     protected override Task<TEntity> FindLocalEntityAsync(TSourceEntityEto eto)
     {
-        return Repository.FindAsync(GetExternalEntityId(eto));
-    }
-
-    protected virtual TKey GetExternalEntityId(TSourceEntityEto eto)
-    {
-        var keyType = typeof(TKey);
-        
-        if (eto is not EntityEto entityEto)
-        {
-            throw new AbpException(
-                $"The given ETO is not an EntityEto! Its type is {typeof(TSourceEntityEto).FullName}. " +
-                $"In this case, you should override the {nameof(GetExternalEntityId)} method and return the entity's Id, or override the {nameof(FindLocalEntityAsync)} method and return the entity.");
-        }
-
-        var keyValue = Check.NotNullOrEmpty(entityEto.KeysAsString, nameof(entityEto.KeysAsString));
-
-        if (keyType == typeof(Guid))
-        {
-            return (TKey)TypeDescriptor.GetConverter(keyType).ConvertFromInvariantString(keyValue);
-        }
-
-        return (TKey)Convert.ChangeType(keyValue, keyType, CultureInfo.InvariantCulture);
+        return Repository.FindAsync(eto.Id);
     }
 }
 

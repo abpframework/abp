@@ -1,6 +1,8 @@
-﻿namespace Volo.Abp.Domain.Entities.Events.Distributed.EntitySynchronizers.WithoutEntityVersion;
+﻿using System;
 
-public class RemoteAuthorEto : EntityEto
+namespace Volo.Abp.Domain.Entities.Events.Distributed.EntitySynchronizers.WithoutEntityVersion;
+
+public class RemoteAuthorEto : EntityEto<Guid>
 {
     public string Name { get; set; }
 }
