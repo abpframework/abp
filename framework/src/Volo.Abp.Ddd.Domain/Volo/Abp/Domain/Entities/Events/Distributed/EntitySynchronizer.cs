@@ -161,7 +161,10 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
     {
         if (localEntity is IHasEntityVersion versionedLocalEntity && eto is IHasEntityVersion versionedEto)
         {
-            return Task.FromResult(versionedEto.EntityVersion > versionedLocalEntity.EntityVersion);
+            /* We are also accepting the same version because
+             * the entity may be updated, but the version might not be changed.
+             */
+            return Task.FromResult(versionedEto.EntityVersion >= versionedLocalEntity.EntityVersion);
         }
 
         return Task.FromResult(true);
