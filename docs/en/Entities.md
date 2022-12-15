@@ -326,7 +326,7 @@ It's designed as read-only and automatically invalidates a cached entity if the 
 
 ## Versioning Entities
 
-ABP defines the `IHasEntityVersion` interface for automatic versioning of your entities. It only provides a single `EntityVersion` properties, as shown in the following code block:
+ABP defines the `IHasEntityVersion` interface for automatic versioning of your entities. It only provides a single `EntityVersion` property, as shown in the following code block:
 
 ````csharp
 public interface IHasEntityVersion
@@ -335,7 +335,7 @@ public interface IHasEntityVersion
 }
 ````
 
-If you implement the `IHasEntityVersion` interface, ABP automatically increases the `EntityVersion` value whenever you update your entity. The initial value will be `0`, when you first create the entity and save to the database.
+If you implement the `IHasEntityVersion` interface, ABP automatically increases the `EntityVersion` value whenever you update your entity. The initial `EntityVersion` value will be `0`, when you first create an entity and save to the database.
 
 ## Extra Properties
 
