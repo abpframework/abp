@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
@@ -13,6 +14,7 @@ using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Comments;
@@ -25,17 +27,20 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     protected ICmsUserLookupService CmsUserLookupService { get; }
     public IDistributedEventBus DistributedEventBus { get; }
     protected CommentManager CommentManager { get; }
+    protected IAuthorizationService AuthorizationService { get; }
 
     public CommentPublicAppService(
         ICommentRepository commentRepository,
         ICmsUserLookupService cmsUserLookupService,
         IDistributedEventBus distributedEventBus,
-        CommentManager commentManager)
+        CommentManager commentManager,
+        IAuthorizationService authorizationService)
     {
         CommentRepository = commentRepository;
         CmsUserLookupService = cmsUserLookupService;
         DistributedEventBus = distributedEventBus;
         CommentManager = commentManager;
+        AuthorizationService = authorizationService;
     }
 
     public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
@@ -99,14 +104,17 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     [Authorize]
     public virtual async Task DeleteAsync(Guid id)
     {
-        var comment = await CommentRepository.GetAsync(id);
+        var allowDelete = await AuthorizationService.IsGrantedAsync(CmsKitPublicPermissions.Comments.DeleteAll);
 
-        if (comment.CreatorId != CurrentUser.GetId())
+        var comment = await CommentRepository.GetAsync(id);
+        if (allowDelete || comment.CreatorId == CurrentUser.Id)
+        {
+            await CommentRepository.DeleteWithRepliesAsync(comment);
+        }
+        else
         {
             throw new AbpAuthorizationException();
         }
-
-        await CommentRepository.DeleteWithRepliesAsync(comment);
     }
 
     private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthorQueryResultItem> comments)
