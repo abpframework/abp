@@ -136,6 +136,11 @@ export class FeatureManagementComponent
           this.service.delete(this.providerName, this.providerKey).subscribe(() => {
             this.toasterService.success('AbpFeatureManagement::ResetedToDefault');
             this.visible = false;
+
+            if (!this.providerKey) {
+              // to refresh host's features
+              this.configState.refreshAppState().subscribe();
+            }
           });
         }
       });
