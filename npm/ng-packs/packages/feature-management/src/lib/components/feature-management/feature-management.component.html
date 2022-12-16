@@ -111,6 +111,10 @@
   </ng-template>
 
   <ng-template #abpFooter>
+    <abp-button iconClass="fa fa-refresh" [disabled]="modalBusy" (click)="resetToDefault()">
+      {{ 'AbpFeatureManagement::ResetToDefault' | abpLocalization }}
+    </abp-button>
+
     <button abpClose type="button" class="btn btn-secondary">
       {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
     </button>

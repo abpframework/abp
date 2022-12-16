@@ -11,6 +11,7 @@
     "Menu:FeatureManagement": "Feature Management",
     "ResetToDefault": "Reset to default",
     "ResetedToDefault": "Reseted to default",
+    "AreYouSure": "Are you sure?",
     "AreYouSureToResetToDefault": "Are you sure to reset to default?"
   }
 }
