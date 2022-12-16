@@ -337,6 +337,8 @@ public interface IHasEntityVersion
 
 If you implement the `IHasEntityVersion` interface, ABP automatically increases the `EntityVersion` value whenever you update your entity. The initial `EntityVersion` value will be `0`, when you first create an entity and save to the database.
 
+> ABP can not increase the version if you directly execute SQL `UPDATE` commands in the database. It is your responsibility to increase the `EntityVersion` value in that case. Also, if you are using the aggregate pattern and change sub-collections of an aggregate root, it is your responsibility if you want to increase the version of the aggregate root object.
+
 ## Extra Properties
 
 ABP defines the `IHasExtraProperties` interface that can be implemented by an entity to be able to dynamically set and get properties for the entity. `AggregateRoot` base class already implements the `IHasExtraProperties` interface. If you've derived from this class (or one of the related audit class defined above), you can directly use the API.
