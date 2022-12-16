@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Auditing;
 
 namespace Volo.CmsKit.Contents;
 
 [Serializable]
-public class PageDto : EntityDto<Guid>
+public class PageDto : EntityDto<Guid>, IHasEntityVersion
 {
     public string Title { get; set; }
 
@@ -16,4 +16,6 @@ public class PageDto : EntityDto<Guid>
     public string Script { get; set; }
 
     public string Style { get; set; }
+
+    public int EntityVersion { get; set; }
 }
