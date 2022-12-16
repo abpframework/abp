@@ -302,7 +302,7 @@ In a distributed (or microservice) system, it is typical to subscribe to change 
 
 If your purpose is to store your local copies of a remote entity, you typically subscribe to create, update and delete events of the remote entity and update your local database in your event handler. ABP provides a pre-built `EntitySynchronizer` base class to make that operation easier for you.
 
-Assume that there is a `Product` entity (probably an aggregate root entity) in a Catalog microservice, and you want to keep copies of products in your Ordering microservice, with a local `OrderProduct` entity. In practice, properties of the `OrderProduct` class will be a subset of the `Product` properties, because not all product data is needed in the Ordering microservice (however, you can make a full copy if you need). Also, the `OrderProduct` entity may have additional properties that are populated and used in the Ordering microservice.
+Assume that there is a `Product` entity (probably an aggregate root entity) in a Catalog microservice, and you want to keep copies of the products in your Ordering microservice, with a local `OrderProduct` entity. In practice, properties of the `OrderProduct` class will be a subset of the `Product` properties, because not all the product data is needed in the Ordering microservice (however, you can make a full copy if you need). Also, the `OrderProduct` entity may have additional properties that are populated and used in the Ordering microservice.
 
 The first step to establish the synchronization is to define an ETO (Event Transfer Object) class in the Catalog microservice that is used to transfer the event data. Assuming the `Product` entity has a `Guid` key, your ETO can be as shown below:
 
@@ -314,7 +314,7 @@ public class ProductEto : EntityEto<Guid>
 }
 ````
 
-`ProductEto` can be put a shared project (DLL) that is referenced by the Catalog and the Ordering microservices. Alternatively, you can put a copy of the `ProductEto` class in the Ordering microservice if you don't want to introduce a common project dependency between the services. In this case, the `EventName` attribute becomes critical to map the `ProductEto` classes across two services (you should use the same event name).
+`ProductEto` can be put in a shared project (DLL) that is referenced by the Catalog and the Ordering microservices. Alternatively, you can put a copy of the `ProductEto` class in the Ordering microservice if you don't want to introduce a common project dependency between the services. In this case, the `EventName` attribute becomes critical to map the `ProductEto` classes across two services (you should use the same event name).
 
 Once you define an ETO class, you should configure the ABP Framework to publish auto (create, update and delete) events for the `Product` entity, as explained in the previous section:
 
@@ -326,7 +326,7 @@ Configure<AbpDistributedEntityEventOptions>(options =>
 });
 ````
 
-Finally, you should create class in the Ordering microservice, that is derived from the `EntitySynchronizer` class:
+Finally, you should create a class in the Ordering microservice, that is derived from the `EntitySynchronizer` class:
 
 ````csharp
 public class ProductSynchronizer : EntitySynchronizer<OrderProduct, Guid, ProductEto>
@@ -340,11 +340,11 @@ public class ProductSynchronizer : EntitySynchronizer<OrderProduct, Guid, Produc
 }
 ````
 
-The main point of this class is it subscribes to the create, update and delete events of the source entity and updates the local entity in the database. It uses the [Object Mapper](Object-To-Object-Mapping.md) system to create or update the `OrderProduct` objects from `ProductEto` objects. So, you should also configure the object mapper to make it properly works. Otherwise, you should manually perform the object mapping by overriding the `MapToEntityAsync(TSourceEntityEto)` and `MapToEntityAsync(TSourceEntityEto,TEntity)` methods in your `ProductSynchronizer` class.
+The main point of this class is it subscribes to the create, update and delete events of the source entity and updates the local entity in the database. It uses the [Object Mapper](Object-To-Object-Mapping.md) system to create or update the `OrderProduct` objects from the `ProductEto` objects. So, you should also configure the object mapper to make it properly work. Otherwise, you should manually perform the object mapping by overriding the `MapToEntityAsync(TSourceEntityEto)` and `MapToEntityAsync(TSourceEntityEto,TEntity)` methods in your `ProductSynchronizer` class.
 
-If your entity has a composite primary key (see the [Entities document](Entities.md)), then you should inherit from the `EntitySynchronizer<TEntity, TSourceEntityEto>` class (just don't use the `Guid` generic argument in the previous example) and implement the `FindLocalEntityAsync` to find the entity in your local database using the `Repository`.
+If your entity has a composite primary key (see the [Entities document](Entities.md)), then you should inherit from the `EntitySynchronizer<TEntity, TSourceEntityEto>` class (just don't use the `Guid` generic argument in the previous example) and implement `FindLocalEntityAsync` to find the entity in your local database using the `Repository`.
 
-`EntitySynchronizer` is compatible with the *Entity Versioning* system (see the [Entities document](Entities.md)). So, it works as expected even if the events are received as disordered. If the entity's version in your local database is newer than the entity in the received event, then the event is ignored. You should implement the `IHasEntityVersion` interface for the entity and ETO classes (for this example, you should implement for `Product`, `ProductEto` and `OrderProduct` classes).
+`EntitySynchronizer` is compatible with the *Entity Versioning* system (see the [Entities document](Entities.md)). So, it works as expected even if the events are received as disordered. If the entity's version in your local database is newer than the entity in the received event, then the event is ignored. You should implement the `IHasEntityVersion` interface for the entity and ETO classes (for this example, you should implement for the `Product`, `ProductEto` and `OrderProduct` classes).
 
 If you want to ignore some type of change events, you can set `IgnoreEntityCreatedEvent`, `IgnoreEntityUpdatedEvent` and `IgnoreEntityDeletedEvent` in the constructor of your class. Example:
 
