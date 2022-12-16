@@ -51,7 +51,7 @@ public class CliService : ITransientDependency
     public async Task RunAsync(string[] args)
     {
         var currentCliVersion = await GetCurrentCliVersionInternalAsync(typeof(CliService).Assembly);
-        Logger.LogInformation($"ABP CLI {currentCliVersion} (https://abp.io)");
+        Logger.LogInformation($"ABP CLI {currentCliVersion}");
 
         var commandLineArgs = CommandLineArgumentParser.Parse(args);
 
