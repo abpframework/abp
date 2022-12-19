@@ -14,7 +14,7 @@ This is a single-part quick-start tutorial to build a simple todo application wi
 
 You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
 
-This documentation has a tutorial on **YouTube**!! You can watch it here:
+This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 {{if UI=="MVC" && DB =="EF"}}
 
