@@ -48,6 +48,8 @@ This documentation has a tutorial on **YouTube**!! You can watch it here:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/DOxk9Doxad0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+{{end}}
+
 ## Pre-Requirements
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 6.0+](https://dotnet.microsoft.com/download/dotnet) development.
