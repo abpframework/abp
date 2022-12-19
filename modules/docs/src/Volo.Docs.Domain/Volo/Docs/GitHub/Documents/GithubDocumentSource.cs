@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Domain.Services;
@@ -23,20 +24,22 @@ namespace Volo.Docs.GitHub.Documents
 
         private readonly IGithubRepositoryManager _githubRepositoryManager;
         private readonly IGithubPatchAnalyzer _githubPatchAnalyzer;
+        private readonly IDocumentRepository _documentRepository;
 
-        public GithubDocumentSource(IGithubRepositoryManager githubRepositoryManager, IGithubPatchAnalyzer githubPatchAnalyzer)
+        public GithubDocumentSource(
+            IGithubRepositoryManager githubRepositoryManager, 
+            IGithubPatchAnalyzer githubPatchAnalyzer, 
+            IDocumentRepository documentRepository)
         {
             _githubRepositoryManager = githubRepositoryManager;
             _githubPatchAnalyzer = githubPatchAnalyzer;
+            _documentRepository = documentRepository;
         }
 
         public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version, DateTime? lastKnownSignificantUpdateTime = null)
         {
-            var token = project.GetGitHubAccessTokenOrNull();
             var rootUrl = project.GetGitHubUrl(version);
-            var userAgent = project.GetGithubUserAgentOrNull();
             var rawRootUrl = CalculateRawRootUrlWithLanguageCode(rootUrl, languageCode);
-            var rawDocumentUrl = rawRootUrl + documentName;
             var isNavigationDocument = documentName == project.NavigationDocumentName;
             var isParameterDocument = documentName == project.ParametersDocumentName;
             var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/").EnsureEndsWith('/') + languageCode + "/" + documentName;
@@ -49,7 +52,7 @@ namespace Volo.Docs.GitHub.Documents
                 fileName = documentName.Substring(documentName.LastIndexOf('/') + 1);
             }
 
-            var content = await DownloadWebContentAsStringAsync(rawDocumentUrl, token, userAgent);
+            var content = await DownloadWebContentAsStringAsync(project, documentName, languageCode, version);
             var commits = await GetGitHubCommitsOrNull(project, documentName, languageCode, version);
 
             var documentCreationTime = GetFirstCommitDate(commits);
@@ -317,17 +320,32 @@ namespace Volo.Docs.GitHub.Documents
             var token = project.GetGitHubAccessTokenOrNull();
             var rootUrl = project.GetGitHubUrl(version);
             var userAgent = project.GetGithubUserAgentOrNull();
-
             var url = CalculateRawRootUrl(rootUrl) + DocsDomainConsts.LanguageConfigFileName;
 
-            var configAsJson = await DownloadWebContentAsStringAsync(url, token, userAgent);
-
-            if (!DocsJsonSerializerHelper.TryDeserialize<LanguageConfig>(configAsJson, out var languageConfig))
+            try
             {
-                throw new UserFriendlyException($"Cannot validate language config file '{DocsDomainConsts.LanguageConfigFileName}' for the project {project.Name} - v{version}.");
-            }
+                var configAsJson = await _githubRepositoryManager.GetFileRawStringContentAsync(url, token, userAgent);
 
-            return languageConfig;
+                if (!DocsJsonSerializerHelper.TryDeserialize<LanguageConfig>(configAsJson, out var languageConfig))
+                {
+                    throw new UserFriendlyException($"Cannot validate language config file '{DocsDomainConsts.LanguageConfigFileName}' for the project {project.Name} - v{version}.");
+                }
+
+                return languageConfig;
+            }
+            catch
+            {
+                Logger.LogWarning("Could not retrieved language list from Github."); 
+                
+                //TODO: save language list to documents table and then retrieve here!!!
+                return new LanguageConfig 
+                {
+                    Languages = new List<LanguageConfigElement>
+                    {
+                        new LanguageConfigElement { Code = "en", DisplayName = "English", IsDefault = true }
+                    }
+                };
+            }
         }
 
         private async Task<IReadOnlyList<GitHubCommit>> GetFileCommitsAsync(Project project, string version, string filename)
@@ -372,19 +390,38 @@ namespace Volo.Docs.GitHub.Documents
             }
         }
 
-        private async Task<string> DownloadWebContentAsStringAsync(string rawUrl, string token, string userAgent)
+        private async Task<string> DownloadWebContentAsStringAsync(Project project, string documentName, string languageCode, string version)
         {
+            var token = project.GetGitHubAccessTokenOrNull();
+            var rootUrl = project.GetGitHubUrl(version);
+            var userAgent = project.GetGithubUserAgentOrNull();
+            var rawRootUrl = CalculateRawRootUrlWithLanguageCode(rootUrl, languageCode);
+            var rawDocumentUrl = rawRootUrl + documentName;
+
             try
             {
-                Logger.LogInformation("Downloading content from Github (DownloadWebContentAsStringAsync): " + rawUrl);
+                Logger.LogInformation("Downloading content from Github (DownloadWebContentAsStringAsync): " +
+                                      rawDocumentUrl);
 
-                return await _githubRepositoryManager.GetFileRawStringContentAsync(rawUrl, token, userAgent);
+                return await _githubRepositoryManager.GetFileRawStringContentAsync(rawDocumentUrl, token, userAgent);
+            }
+            catch (HttpRequestException ex)
+            {
+                Logger.LogWarning($"Could not retrieve the document ({rawDocumentUrl}) from Github. Trying to get it from database...");
+                
+                var document = await _documentRepository.FindAsync(project.Id, documentName, languageCode, version);
+                if (document == null)
+                {
+                    throw new DocumentNotFoundException(rawDocumentUrl);
+                }
+                
+                return document.Content;
             }
             catch (Exception ex)
             {
                 //TODO: Only handle when document is really not available
-                Logger.LogWarning($"{ex.Message}: {rawUrl}", ex);
-                throw new DocumentNotFoundException(rawUrl);
+                Logger.LogWarning($"{ex.Message}: {rawDocumentUrl}", ex);
+                throw new DocumentNotFoundException(rawDocumentUrl);
             }
         }
 
