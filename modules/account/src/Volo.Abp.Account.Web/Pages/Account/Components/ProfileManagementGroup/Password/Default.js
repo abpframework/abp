@@ -1,10 +1,25 @@
 (function ($) {
+    $("#PasswordVisibilityButton").click(function (e) {
+        let button = $(this);
+        let passwordInput = button.parent().find("input");
+        if (!passwordInput) {
+            return;
+        }
+        if (passwordInput.attr("type") === "password") {
+            passwordInput.attr("type", "text");
+        }
+        else {
+            passwordInput.attr("type", "password");
+        }
+        let icon = button.find("i");
+        if (icon) {
+            icon.toggleClass("fa-eye-slash").toggleClass("fa-eye");
+        }
+    });
     $(function () {
         var l = abp.localization.getResource("AbpAccount");
-
         $('#ChangePasswordForm').submit(function (e) {
             e.preventDefault();
-
             if (!$('#ChangePasswordForm').valid()) {
                 return false;
             }
@@ -19,11 +34,11 @@
                 return;
             }
 
-            if (input.currentPassword && input.currentPassword == ''){
+            if (input.currentPassword && input.currentPassword == '') {
                 return;
             }
             
-            if(input.currentPassword == input.newPassword) {
+            if (input.currentPassword == input.newPassword) {
                 abp.message.error(l('NewPasswordSameAsOld'));
                 return;
             }

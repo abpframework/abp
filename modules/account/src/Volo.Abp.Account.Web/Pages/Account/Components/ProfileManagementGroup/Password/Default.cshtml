@@ -9,9 +9,10 @@
 <form id="ChangePasswordForm">
     @if (!Model.HideOldPasswordInput)
     {
-        <abp-input asp-for="CurrentPassword"/>
+        <abp-input asp-for="CurrentPassword" class="password-visibility" />
     }
-    <abp-input asp-for="NewPassword"/>
-    <abp-input asp-for="NewPasswordConfirm"/>
-    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value"/>
+    <abp-input asp-for="NewPassword" class="password-visibility" />
+    <abp-input asp-for="NewPasswordConfirm" class="password-visibility" />
+    <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
 </form>
