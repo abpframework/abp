@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Abp.TenantManagement;
 
-public class Tenant : FullAuditedAggregateRoot<Guid>
+public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 {
     public virtual string Name { get; protected set; }
+    
+    public virtual int EntityVersion { get; protected set; }
 
     public virtual List<TenantConnectionString> ConnectionStrings { get; protected set; }
 

@@ -21,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
+	  <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
+	  <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
   </ItemGroup>
 
   <ItemGroup>
