@@ -139,7 +139,7 @@ public class EntitySynchronizer_Tests : AbpIntegratedTest<EntitySynchronizer_Tes
         book.Id.ShouldBe(bookId);
         book.EntityVersion.ShouldBe(0);
 
-        var remoteBookEto = new RemoteBookEto { Id = bookId, EntityVersion = 0, Sold = 10 };
+        var remoteBookEto = new RemoteBookEto { Id = bookId, EntityVersion = 0, Sold = 1 };
 
         await bookSynchronizer.HandleEventAsync(new EntityUpdatedEto<RemoteBookEto>(remoteBookEto));
 
