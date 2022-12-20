@@ -1,5 +1,5 @@
 import {
-  ComponentFactoryResolver,
+  ComponentRef,
   Directive,
   Injector,
   Input,
@@ -44,7 +44,6 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   constructor(
     private injector: Injector,
     private templateRef: TemplateRef<any>,
-    private cfRes: ComponentFactoryResolver,
     private vcRef: ViewContainerRef,
     private replaceableComponents: ReplaceableComponentsService,
     private subscription: SubscriptionService,
@@ -83,11 +82,10 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
             providers: [{ provide: 'REPLACEABLE_DATA', useValue: this.providedData }],
             parent: this.injector,
           });
-          this.vcRef.createComponent(
-            this.cfRes.resolveComponentFactory(res.component),
-            0,
-            customInjector,
-          );
+          const ref = this.vcRef.createComponent(res.component, {
+            index: 0,
+            injector: customInjector,
+          });
         } else {
           this.vcRef.createEmbeddedView(this.templateRef, this.context);
         }

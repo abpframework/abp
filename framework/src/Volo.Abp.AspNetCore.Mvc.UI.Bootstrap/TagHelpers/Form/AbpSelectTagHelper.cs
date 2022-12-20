@@ -38,6 +38,10 @@ public class AbpSelectTagHelper : AbpTagHelper<AbpSelectTagHelper, AbpSelectTagH
 
     public string AutocompleteSelectedItemValue { get; set; }
 
+    public string AllowClear { get; set; }
+
+    public string Placeholder { get; set; }
+
     public AbpSelectTagHelper(AbpSelectTagHelperService tagHelperService)
         : base(tagHelperService)
     {

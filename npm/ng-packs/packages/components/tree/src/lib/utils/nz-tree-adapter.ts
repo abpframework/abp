@@ -5,7 +5,7 @@ export abstract class BaseNode {
   constructor(public id: string, public parentId: string | null) {}
 }
 
-class TreeNode<T extends BaseNode> extends BaseNode {
+export class TreeNode<T extends BaseNode> extends BaseNode {
   title: string | undefined;
   key: string;
   icon: string | null = null;
@@ -89,7 +89,6 @@ function createTreeFromList<T extends BaseNode>(list: T[]): TreeNode<T>[] {
       tree.push(node);
     }
   });
-
   return tree;
 }
 

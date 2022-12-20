@@ -13,7 +13,7 @@ public class ConnectionStringProvider : ITransientDependency
         {
             case DatabaseManagementSystem.NotSpecified:
             case DatabaseManagementSystem.SQLServer:
-                return "Server=localhost;Database=MyProjectName;Trusted_Connection=True";
+                return "Server=localhost;Database=MyProjectName;Trusted_Connection=True;TrustServerCertificate=True";
             case DatabaseManagementSystem.MySQL:
                 return "Server=localhost;Port=3306;Database=MyProjectName;Uid=root;Pwd=myPassword;";
             case DatabaseManagementSystem.PostgreSQL:

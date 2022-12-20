@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.DemoApp.HangFire",
-  "hash": "1c49c85322e623ca45225fda66b72f6f",
+  "hash": "12dc0c36f7c5e0571bc13d5bcd2037a9",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs.DemoApp.HangFire",
