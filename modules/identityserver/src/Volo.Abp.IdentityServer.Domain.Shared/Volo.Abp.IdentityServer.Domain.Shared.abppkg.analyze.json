@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.Domain.Shared",
-  "hash": "7f766c6329609c616fb59eefe36628a2",
+  "hash": "d7ec0abcda6b491865ec22a02307ad43",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer",
