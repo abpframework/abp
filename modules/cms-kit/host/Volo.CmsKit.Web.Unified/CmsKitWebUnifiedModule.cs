@@ -167,6 +167,7 @@ public class CmsKitWebUnifiedModule : AbpModule
         Configure<CmsKitCommentOptions>(options =>
         {
             options.EntityTypes.Add(new CommentEntityTypeDefinition("quote"));
+            options.IsRecaptchaEnabled = true;
         });
 
         Configure<CmsKitMediaOptions>(options =>

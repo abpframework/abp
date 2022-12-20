@@ -40,6 +40,11 @@ public class Program
         }
         catch (Exception ex)
         {
+            if (ex is HostAbortedException)
+            {
+                throw;
+            }
+
             Log.Fatal(ex, "MyCompanyName.MyProjectName.AuthServer terminated unexpectedly!");
             return 1;
         }

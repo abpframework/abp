@@ -11,7 +11,7 @@ namespace MyCompanyName.MyProjectName;
 /// </summary>
 public static class WebContentDirectoryFinder
 {
-    public static string CalculateContentRootFolder()
+    public static string? CalculateContentRootFolder()
     {
         var domainAssemblyDirectoryPath =
             Path.GetDirectoryName(typeof(MyProjectNameDomainModule).Assembly.Location);

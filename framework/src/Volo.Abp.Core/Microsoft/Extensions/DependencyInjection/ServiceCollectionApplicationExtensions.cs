@@ -39,16 +39,22 @@ public static class ServiceCollectionApplicationExtensions
     {
         return await AbpApplicationFactory.CreateAsync(startupModuleType, services, optionsAction);
     }
-    
+
     [CanBeNull]
     public static string GetApplicationName(this IServiceCollection services)
     {
         return services.GetSingletonInstance<IApplicationInfoAccessor>().ApplicationName;
     }
-    
+
     [NotNull]
     public static string GetApplicationInstanceId(this IServiceCollection services)
     {
         return services.GetSingletonInstance<IApplicationInfoAccessor>().InstanceId;
+    }
+
+    [NotNull]
+    public static IAbpHostEnvironment GetAbpHostEnvironment(this IServiceCollection services)
+    {
+        return services.GetSingletonInstance<IAbpHostEnvironment>();
     }
 }
