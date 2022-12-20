@@ -24,6 +24,7 @@
     <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.Domain.Shared\Volo.Abp.Users.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Features\Volo.Abp.Features.csproj" />
+	<ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
   </ItemGroup>
 
   <ItemGroup>
