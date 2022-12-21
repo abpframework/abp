@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Admin.Blogs;
 
+[Serializable]
 public class UpdateBlogDto : IHasConcurrencyStamp
 {
     [Required]

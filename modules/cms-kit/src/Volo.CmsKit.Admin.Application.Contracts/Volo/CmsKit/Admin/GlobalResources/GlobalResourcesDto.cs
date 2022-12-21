@@ -1,5 +1,8 @@
-﻿namespace Volo.CmsKit.Admin.GlobalResources;
+﻿using System;
 
+namespace Volo.CmsKit.Admin.GlobalResources;
+
+[Serializable]
 public class GlobalResourcesDto
 {
     public string StyleContent { get; set; }
