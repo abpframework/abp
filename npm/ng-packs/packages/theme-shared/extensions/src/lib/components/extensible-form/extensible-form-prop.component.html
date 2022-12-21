@@ -145,10 +145,12 @@
         *abpReplaceableTemplate="{
           componentKey: passwordKey,
           inputs: {
-            prop: { value: prop }
+            inputId: { value: prop.id },
+            formControlName: { value: prop.name }
           }
         }"
-        [prop]="prop"
+        [inputId]="prop.id"
+        [formControlName]="prop.name"
       ></abp-password>
     </ng-template>
   </div>
