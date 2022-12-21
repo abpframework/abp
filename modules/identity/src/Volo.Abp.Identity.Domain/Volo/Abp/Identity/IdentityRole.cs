@@ -50,7 +50,7 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
     public virtual bool IsPublic { get; set; }
 
     /// <summary>
-    /// An entity version property that auto-increments when the entity changes.
+    /// A version value that is increased whenever the entity is changed.
     /// </summary>
     public virtual int EntityVersion { get; protected set; }
 
