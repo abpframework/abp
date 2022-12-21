@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.AuditLogging.MongoDB",
-  "hash": "91c8e3ef726ae6e7d937987da42dad8b",
+  "hash": "5808a537c01ea8a51afbc0115d4764c2",
   "contents": [
     {
       "namespace": "Volo.Abp.AuditLogging.MongoDB",

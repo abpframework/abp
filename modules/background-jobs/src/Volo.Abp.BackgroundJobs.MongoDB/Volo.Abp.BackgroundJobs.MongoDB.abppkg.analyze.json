@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.MongoDB",
-  "hash": "f898288a0029a2493b264dc5c129e68e",
+  "hash": "95ca98a460bf0dcb0c3c08e2a04bbe92",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs.MongoDB",
