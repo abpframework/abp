@@ -1,13 +1,13 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { AuthGuard } from '../guards/auth.guard';
-import { AuthService } from '../services/auth.service';
+import { AbpOAuthGuard } from '../guards/oauth.guard';
+import { AuthService } from '@Abp/ng.core';
 
 describe('AuthGuard', () => {
-  let spectator: SpectatorService<AuthGuard>;
-  let guard: AuthGuard;
+  let spectator: SpectatorService<AbpOAuthGuard>;
+  let guard: AbpOAuthGuard;
   const createService = createServiceFactory({
-    service: AuthGuard,
+    service: AbpOAuthGuard,
     mocks: [OAuthService, AuthService],
   });
 
