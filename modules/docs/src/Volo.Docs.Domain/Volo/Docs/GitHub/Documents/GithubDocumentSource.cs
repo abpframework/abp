@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Services;
 using Volo.Docs.Documents;
 using Volo.Docs.GitHub.Projects;
@@ -25,15 +26,18 @@ namespace Volo.Docs.GitHub.Documents
         private readonly IGithubRepositoryManager _githubRepositoryManager;
         private readonly IGithubPatchAnalyzer _githubPatchAnalyzer;
         private readonly IDocumentRepository _documentRepository;
+        private readonly DocsGithubLanguageOptions _docsGithubLanguageOptions;
 
         public GithubDocumentSource(
             IGithubRepositoryManager githubRepositoryManager, 
             IGithubPatchAnalyzer githubPatchAnalyzer, 
-            IDocumentRepository documentRepository)
+            IDocumentRepository documentRepository,
+            IOptions<DocsGithubLanguageOptions> docsGithubLanguageOptions)
         {
             _githubRepositoryManager = githubRepositoryManager;
             _githubPatchAnalyzer = githubPatchAnalyzer;
             _documentRepository = documentRepository;
+            _docsGithubLanguageOptions = docsGithubLanguageOptions.Value;
         }
 
         public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version, DateTime? lastKnownSignificantUpdateTime = null)
@@ -57,7 +61,7 @@ namespace Volo.Docs.GitHub.Documents
 
             var documentCreationTime = GetFirstCommitDate(commits);
             var lastUpdateTime = GetLastCommitDate(commits);
-            var lastSignificantUpdateTime = await GetLastKnownSignificantUpdateTime(project, documentName, languageCode, version, lastKnownSignificantUpdateTime, isNavigationDocument, isParameterDocument, commits, documentCreationTime);
+            var lastSignificantUpdateTime = await GetLastKnownSignificantUpdateTime(project, documentName, languageCode, version, lastKnownSignificantUpdateTime, isNavigationDocument, isParameterDocument, commits);
 
             var document = new Document
             (
@@ -103,18 +107,24 @@ namespace Volo.Docs.GitHub.Documents
             DateTime? lastKnownSignificantUpdateTime,
             bool isNavigationDocument,
             bool isParameterDocument,
-            IReadOnlyList<GitHubCommit> commits,
-            DateTime documentCreationTime)
+            IReadOnlyList<GitHubCommit> commits)
         {
-            return !isNavigationDocument && !isParameterDocument && version == project.LatestVersionBranchName
-                ? await GetLastSignificantUpdateTime(
-                      commits,
-                      project,
-                      project.GetGitHubInnerUrl(languageCode, documentName),
-                      lastKnownSignificantUpdateTime,
-                      documentCreationTime
-                  ) ?? lastKnownSignificantUpdateTime
-                : null;
+            try
+            {
+                return !isNavigationDocument && !isParameterDocument && version == project.LatestVersionBranchName
+                    ? await GetLastSignificantUpdateTime(
+                        commits,
+                        project,
+                        project.GetGitHubInnerUrl(languageCode, documentName),
+                        lastKnownSignificantUpdateTime
+                    ) ?? lastKnownSignificantUpdateTime
+                    : null;
+            }
+            catch
+            {
+                Logger.LogWarning("Could not retrieved the last update time from Github.");
+                return null;
+            }
         }
 
         private static List<DocumentAuthor> GetAuthors(IReadOnlyList<GitHubCommit> commits)
@@ -209,8 +219,7 @@ namespace Volo.Docs.GitHub.Documents
             IReadOnlyList<GitHubCommit> commits,
             Project project,
             string fileName,
-            DateTime? lastKnownSignificantUpdateTime,
-            DateTime documentCreationTime)
+            DateTime? lastKnownSignificantUpdateTime)
         {
             if (commits == null || !commits.Any())
             {
@@ -335,15 +344,11 @@ namespace Volo.Docs.GitHub.Documents
             }
             catch
             {
-                Logger.LogWarning("Could not retrieved language list from Github."); 
+                Logger.LogWarning("Could not retrieved language list from Github. Using the default language from DocsGithubLanguageOptions."); 
                 
-                //TODO: save language list to documents table and then retrieve here!!!
                 return new LanguageConfig 
                 {
-                    Languages = new List<LanguageConfigElement>
-                    {
-                        new LanguageConfigElement { Code = "en", DisplayName = "English", IsDefault = true }
-                    }
+                    Languages = new List<LanguageConfigElement> { _docsGithubLanguageOptions.DefaultLanguage }
                 };
             }
         }
