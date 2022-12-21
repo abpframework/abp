@@ -1,12 +1,12 @@
 ﻿namespace Volo.Abp.Auditing;
 
 /// <summary>
-/// An entity version property that auto-increments when the entity changes.
+/// A version value that is increased whenever the entity is changed.
 /// </summary>
 public interface IHasEntityVersion
 {
     /// <summary>
-    /// An entity version property that auto-increments when the entity changes.
+    /// A version value that is increased whenever the entity is changed.
     /// </summary>
     int EntityVersion { get; }
 }
