@@ -11,6 +11,7 @@
     "@ngx-validate/core",
     "@swimlane/ngx-datatable",
     "bootstrap",
-    "@popperjs/core"
+    "@popperjs/core",
+    "@abp/ng.oauth"
   ]
 }

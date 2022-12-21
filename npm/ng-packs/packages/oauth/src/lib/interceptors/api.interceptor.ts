@@ -2,9 +2,7 @@ import { HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular
 import { Inject, Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { finalize } from 'rxjs/operators';
-import { SessionStateService } from '../services/session-state.service';
-import { HttpWaitService } from '../services/http-wait.service';
-import { TENANT_KEY } from '../tokens/tenant-key.token';
+import { SessionStateService, HttpWaitService, TENANT_KEY } from '@abp/ng.core';
 
 @Injectable({
   providedIn: 'root',

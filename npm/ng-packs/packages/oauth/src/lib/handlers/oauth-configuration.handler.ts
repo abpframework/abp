@@ -2,9 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import compare from 'just-compare';
 import { filter, map } from 'rxjs/operators';
-import { ABP } from '../models/common';
-import { EnvironmentService } from '../services/environment.service';
-import { CORE_OPTIONS } from '../tokens/options.token';
+import { ABP, EnvironmentService, CORE_OPTIONS } from '@abp/ng.core';
 
 @Injectable({
   providedIn: 'root',

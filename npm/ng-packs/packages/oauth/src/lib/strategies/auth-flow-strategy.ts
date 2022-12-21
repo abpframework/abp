@@ -1,18 +1,23 @@
 import { Injector } from '@angular/core';
 import { Params } from '@angular/router';
-import { AuthConfig, OAuthErrorEvent, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
+import {
+  AuthConfig,
+  OAuthErrorEvent,
+  OAuthService as OAuthService2,
+  OAuthStorage,
+} from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { LoginParams } from '../models/auth';
 import {
+  LoginParams,
   ConfigStateService,
   EnvironmentService,
   HttpErrorReporterService,
   SessionStateService,
   TENANT_KEY,
 } from '@abp/ng.core';
-import { oAuthStorage } from './oauth-storage';
-import { clearOAuthStorage } from './clear-o-auth-storage';
+import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
+import { oAuthStorage } from '../utils/oauth-storage';
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
@@ -20,7 +25,7 @@ export abstract class AuthFlowStrategy {
   protected httpErrorReporter: HttpErrorReporterService;
   protected environment: EnvironmentService;
   protected configState: ConfigStateService;
-  protected oAuthService: OAuthService;
+  protected oAuthService: OAuthService2;
   protected oAuthConfig: AuthConfig;
   protected sessionState: SessionStateService;
   protected tenantKey: string;
@@ -42,7 +47,7 @@ export abstract class AuthFlowStrategy {
     this.httpErrorReporter = injector.get(HttpErrorReporterService);
     this.environment = injector.get(EnvironmentService);
     this.configState = injector.get(ConfigStateService);
-    this.oAuthService = injector.get(OAuthService);
+    this.oAuthService = injector.get(OAuthService2);
     this.sessionState = injector.get(SessionStateService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
     this.tenantKey = injector.get(TENANT_KEY);

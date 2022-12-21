@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 import { OAuthStorage, TokenResponse } from 'angular-oauth2-oidc';
 import { pipe } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import { LoginParams } from '../models/auth';
-import { ConfigStateService } from '../services/config-state.service';
+import { ConfigStateService, LoginParams } from '@abp/ng.core';
 
 const cookieKey = 'rememberMe';
 const storageKey = 'passwordFlow';
