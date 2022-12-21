@@ -1,5 +1,8 @@
-﻿namespace Volo.CmsKit.Public.Reactions;
+﻿using System;
 
+namespace Volo.CmsKit.Public.Reactions;
+
+[Serializable]
 public class ReactionWithSelectionDto
 {
     public ReactionDto Reaction { get; set; }
