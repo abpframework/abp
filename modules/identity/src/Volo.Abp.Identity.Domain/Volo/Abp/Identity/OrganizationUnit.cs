@@ -35,7 +35,7 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     public virtual string DisplayName { get; set; }
 
     /// <summary>
-    /// An entity version property that auto-increments when the entity changes.
+    /// A version value that is increased whenever the entity is changed.
     /// </summary>
     public virtual int EntityVersion { get; set; }
 
