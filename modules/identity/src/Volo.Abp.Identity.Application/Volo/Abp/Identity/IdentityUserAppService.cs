@@ -111,7 +111,10 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
 
         if (!input.Password.IsNullOrEmpty())
         {
-            (await UserManager.UpdatePasswordAsync(user, input.Password)).CheckErrors();
+            if(!await UserManager.CheckPasswordAsync(user, input.Password))
+            {
+                (await UserManager.UpdatePasswordAsync(user, input.Password)).CheckErrors();
+            }
         }
 
         await CurrentUnitOfWork.SaveChangesAsync();
