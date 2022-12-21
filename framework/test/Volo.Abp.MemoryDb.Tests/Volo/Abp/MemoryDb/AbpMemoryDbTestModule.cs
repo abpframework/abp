@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.MemoryDb;
 using Volo.Abp.Data;
 using Volo.Abp.Autofac;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MemoryDb;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.MemoryDb.JsonConverters;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Domain;
@@ -33,9 +34,12 @@ public class AbpMemoryDbTestModule : AbpModule
             options.AddRepository<City, CityRepository>();
         });
 
-        Configure<Utf8JsonMemoryDbSerializerOptions>(options =>
-        {
-            options.JsonSerializerOptions.Converters.Add(new EntityJsonConverter<EntityWithIntPk, int>());
-        });
+        context.Services.AddOptions<Utf8JsonMemoryDbSerializerOptions>()
+            .Configure<IServiceProvider>((options, serviceProvider) =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new EntityJsonConverter<EntityWithIntPk, int>());
+                options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(serviceProvider
+                    .GetRequiredService<IOptions<AbpSystemTextJsonSerializerModifiersOptions>>());
+            });
     }
 }
