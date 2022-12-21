@@ -204,7 +204,7 @@ We've passed a lambda method to configure the `ApplicationName` option. Here's a
 
 * `ApplicationName`: A human-readable name for the application. It is a unique value for an application.
 * `Configuration`: Can be used to setup the [application configuration](Configuration.md) when it is not provided by the hosting system. It is not needed for ASP.NET Core and other .NET hosted applications. However, if you've used `AbpApplicationFactory` with an internal service provider, you can use this option to configure how the application configuration is built.
-* `Environment`: Environment name for the application. 
+* `Environment`: Environment name for the application.
 * `PlugInSources`: A list of plugin sources. See the [Plug-In Modules documentation](PlugIn-Modules) to learn how to work with plugins.
 * `Services`: The `IServiceCollection` object that can be used to register service dependencies. You generally don't need that, because you configure your services in your [module class](Module-Development-Basics.md). However, it can be used while writing extension methods for the `AbpApplicationCreationOptions` class.
 
@@ -258,9 +258,7 @@ The `IAbpApplication` interface extends the `IApplicationInfoAccessor` interface
 
 Sometimes, while creating an application, we need to get the current hosting environment and take actions according to that. In such cases, we can use some services such as [IWebHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.iwebhostenvironment?view=aspnetcore-7.0) or [IWebAssemblyHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.webassembly.hosting.iwebassemblyhostenvironment) provided by .NET, in the final application. 
 
-However, we can not use these services in a class library, which uses by the final application. We can only use these services in the final application. ABP Framework provides the `IAbpHostEnvironment` service to get the current environment name whenever you want, in a class library or a runnable application. 
-
-`IAbpHostEnvironment` is used by the ABP Framework in several places to perform specific actions by the environment. For example, ABP Framework reduces the cache duration on the **Development** environment for some services.
+However, we can not use these services in a class library, which uses by the final application. ABP Framework provides the `IAbpHostEnvironment` service, which allows you to get the current environment name whenever you want. `IAbpHostEnvironment` is used by the ABP Framework in several places to perform specific actions by the environment. For example, ABP Framework reduces the cache duration on the **Development** environment for some services.
 
 `IAbpHostEnvironment` uses the following order to obtain the current environment name:
 
