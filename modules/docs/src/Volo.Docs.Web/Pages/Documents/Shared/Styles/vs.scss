@@ -74,7 +74,7 @@ body {
 
         .alert-criteria {
             position: fixed;
-            top: $gap-y-size;
+            bottom: 0;
             z-index: 10;
             border: 0;
             margin-left: -0;
@@ -374,7 +374,7 @@ body {
         min-height: 100vh;
         width: calc(100% - 600px);
         margin-left: 300px;
-        padding: $gap-y-size $gap-y-size;
+        padding: $gap-y-size $gap-y-size 100px $gap-y-size;
         
         &::-webkit-scrollbar {
             display: none;
@@ -813,9 +813,7 @@ body {
         }
 
         &.scrolledMore {
-            .alert-criteria {
-                top: 72px !important;
-            }
+          
         }
     }
 
@@ -1014,11 +1012,13 @@ body {
     .docs-page {
         .docs-content {
             width: calc(100% - 300px);
+            padding-bottom:   0  ;
         }
         .docs-page-index {
             .card {
                 width: 100%;
             }
+            padding: 0 1rem 120px !important;
         }
     }
 }
