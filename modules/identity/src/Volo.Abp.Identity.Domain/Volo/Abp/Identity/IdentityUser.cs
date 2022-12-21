@@ -113,7 +113,7 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual int AccessFailedCount { get; protected internal set; }
 
     /// <summary>
-    /// An entity version property that auto-increments when the entity changes.
+    /// A version value that is increased whenever the entity is changed.
     /// </summary>
     public virtual int EntityVersion { get; protected set; }
 
