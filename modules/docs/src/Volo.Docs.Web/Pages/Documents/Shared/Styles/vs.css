@@ -57,7 +57,7 @@ body.scrolledMore {
 }
 body.scrolledMore .alert-criteria {
   position: fixed;
-  top: 1rem;
+  bottom: 0;
   z-index: 10;
   border: 0;
   margin-left: 0;
@@ -294,7 +294,7 @@ body.scrolledMore .alert-criteria p.alert-p {
   min-height: 100vh;
   width: calc(100% - 600px);
   margin-left: 300px;
-  padding: 1rem 1rem;
+  padding: 1rem 1rem 100px 1rem;
 }
 .docs-page .docs-content::-webkit-scrollbar {
   display: none;
@@ -656,10 +656,6 @@ body .close-dmenu {
     background: #fff;
     opacity: 0;
   }
-  body.scrolledMore .alert-criteria {
-    top: 72px !important;
-  }
-
   .docs-page {
     padding: 0 0;
   }
@@ -813,6 +809,10 @@ body .close-dmenu {
 @media (max-width: 1200px) {
   .docs-page .docs-content {
     width: calc(100% - 300px);
+    padding-bottom: 0;
+  }
+  .docs-page .docs-page-index {
+    padding: 0 1rem 120px !important;
   }
   .docs-page .docs-page-index .card {
     width: 100%;
