@@ -161,7 +161,7 @@
     };
 
     function docsCriteria() {
-        var docsContentWidth = $('.docs-content').width() - 90;
+        var docsContentWidth = $('.docs-content').width() - 74;
         $('.alert-criteria').width(docsContentWidth);
     }
     $(document).ready(function () {
