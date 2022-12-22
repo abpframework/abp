@@ -28,14 +28,10 @@ public class AbpIncludeNonPublicPropertiesModifiers<TClass, TProperty>
                 x.Set == null);
             if (propertyJsonInfo != null)
             {
-                var propertyInfo = typeof(TClass).GetProperty(propertyName, BindingFlags.NonPublic);
+                var propertyInfo = typeof(TClass).GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 if (propertyInfo != null)
                 {
-                    var jsonPropertyInfo = jsonTypeInfo.CreateJsonPropertyInfo(typeof(TProperty), propertyJsonInfo.Name);
-                    jsonPropertyInfo.Get = propertyInfo.GetValue;
-                    jsonPropertyInfo.Set = propertyInfo.SetValue;
-                    jsonTypeInfo.Properties.Remove(propertyJsonInfo);
-                    jsonTypeInfo.Properties.Add(jsonPropertyInfo);
+                    propertyJsonInfo.Set = propertyInfo.SetValue;
                 }
             }
         }
