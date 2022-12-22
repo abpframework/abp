@@ -9,6 +9,7 @@ import { initFactory } from './utils/init-factory';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { AbpOAuthGuard } from './guards/oauth.guard';
+import { NavigateToManageProfileProvider } from './providers';
 
 @NgModule({
   imports: [CommonModule, OAuthModule],
@@ -31,6 +32,7 @@ export class AbpOAuthModule {
           useExisting: ApiInterceptor,
           multi: true,
         },
+        NavigateToManageProfileProvider,
         {
           provide: APP_INITIALIZER,
           multi: true,

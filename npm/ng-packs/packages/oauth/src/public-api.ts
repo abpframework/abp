@@ -6,3 +6,4 @@ export * from './lib/strategies';
 export * from './lib/handlers';
 export * from './lib/interceptors';
 export * from './lib/guards';
+export * from './lib/providers';
