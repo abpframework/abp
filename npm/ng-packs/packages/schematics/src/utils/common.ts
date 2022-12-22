@@ -41,12 +41,12 @@ const sanitizeTypeName = (name: string) => name.replace(sanitizeTypeNameRegExp, 
 export function sanitizeControllerTypeNames(
   controllers: Record<string, Controller>,
 ): Record<string, Controller> {
-  Object.values(controllers).forEach(controller => {
-    controller.interfaces.forEach(i => {
-      i.methods.forEach(m => {
+  Object.values(controllers || {}).forEach(controller => {
+    controller.interfaces?.forEach(i => {
+      i.methods?.forEach(m => {
         m.returnValue.type = sanitizeTypeName(m.returnValue.type);
         m.returnValue.typeSimple = sanitizeTypeName(m.returnValue.typeSimple);
-        m.parametersOnMethod.forEach(p => {
+        m.parametersOnMethod?.forEach(p => {
           p.type = sanitizeTypeName(p.type);
           p.typeAsString = sanitizeTypeName(p.typeAsString);
           p.typeSimple = sanitizeTypeName(p.typeSimple);
@@ -54,15 +54,15 @@ export function sanitizeControllerTypeNames(
       });
     });
 
-    Object.values(controller.actions).forEach(a => {
+    Object.values(controller.actions || {}).forEach(a => {
       a.returnValue.type = sanitizeTypeName(a.returnValue.type);
       a.returnValue.typeSimple = sanitizeTypeName(a.returnValue.typeSimple);
-      a.parametersOnMethod.forEach(p => {
+      a.parametersOnMethod?.forEach(p => {
         p.type = sanitizeTypeName(p.type);
         p.typeAsString = sanitizeTypeName(p.typeAsString);
         p.typeSimple = sanitizeTypeName(p.typeSimple);
       });
-      a.parameters.forEach(p => {
+      a.parameters?.forEach(p => {
         p.type = sanitizeTypeName(p.type);
         p.typeSimple = sanitizeTypeName(p.typeSimple);
       });
