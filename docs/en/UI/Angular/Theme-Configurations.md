@@ -43,6 +43,16 @@ Theme packages no longer import styles as CSS modules as of ABP version 6.0. The
     "inject": false,
     "bundleName": "abp-bundle.rtl"
 },
+{
+    "input":"node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.rtl.css",
+    "inject":false,
+    "bundleName":"font-bundle.rtl"
+}
+,{
+    "input":"node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.css",
+    "inject":false,
+    "bundleName":"font-bundle"
+},
 ```
 
 ## Theme Basic
@@ -150,7 +160,18 @@ Theme packages no longer import styles as CSS modules as of ABP version 6.0. The
     "input": "node_modules/@volosoft/abp.ng.theme.lepton-x/assets/css/abp-bundle.rtl.css",
     "inject": false,
     "bundleName": "abp-bundle.rtl"
-}
+},        
+{
+    "input": "node_modules/@volosoft/ngx-lepton-x/assets/css/font-bundle.css",
+    "inject": false,
+    "bundleName": "font-bundle"
+},
+{
+    "input": "node_modules/@volosoft/ngx-lepton-x/assets/css/font-bundle.rtl.css",
+    "inject": false,
+    "bundleName": "font-bundle.rtl"
+},
+
 ```
 
 ## Theme Lepton
