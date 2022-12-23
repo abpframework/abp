@@ -6,11 +6,6 @@ namespace Volo.CmsKit.Public.Web.Security.Captcha;
 
 public class CaptchaOptions
 {
-    /// <summary>
-    /// Default fonts are  "Arial", "Verdana", "Times New Roman" in Windows. These fonts must exist in the target OS.
-    /// </summary>
-    public string[] FontFamilies { get; set; } = new string[] { "Arial", "Verdana", "Times New Roman" };
-
     public Color[] TextColor { get; set; } = new Color[]
     {
         Color.Blue, Color.Black, Color.Black, Color.Brown, Color.Gray, Color.Green
