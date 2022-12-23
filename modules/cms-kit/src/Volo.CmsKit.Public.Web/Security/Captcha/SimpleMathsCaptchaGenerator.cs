@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using SixLabors.Fonts;
@@ -99,9 +100,9 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
             var random = new Random();
             var startWith = (byte)random.Next(5, 10);
             image.Mutate(ctx => ctx.BackgroundColor(Color.Transparent));
-            var fontName = options.FontFamilies[random.Next(0, options.FontFamilies.Length)];
-            var font = SystemFonts.CreateFont(fontName, options.FontSize, options.FontStyle);
-
+            var fontFamily = SystemFonts.Families.FirstOrDefault(x => x.IsStyleAvailable(options.FontStyle))?.Name ?? SystemFonts.Families.First().Name;
+            var font = SystemFonts.CreateFont(fontFamily, options.FontSize, options.FontStyle);
+            
             foreach (var character in stringText)
             {
                 var text = character.ToString();
