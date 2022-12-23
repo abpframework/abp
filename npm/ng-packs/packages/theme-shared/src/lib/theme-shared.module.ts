@@ -63,7 +63,7 @@ const declarationsWithExports = [
     EllipsisModule,
   ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
-  exports: [NgxDatatableModule, EllipsisModule, ...declarationsWithExports],
+  exports: [NgxDatatableModule, EllipsisModule , NgxValidateCoreModule, ...declarationsWithExports],
   providers: [DatePipe],
 })
 export class BaseThemeSharedModule {}
