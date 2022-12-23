@@ -4,7 +4,7 @@ import { Params, Router } from '@angular/router';
 import { from, Observable, pipe } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 import { AuthFlowStrategy } from './auth-flow-strategy';
-import { removeRememberMe, setRememberMe } from '../utils/auth-utils';
+import { pipeToLogin, removeRememberMe, setRememberMe } from '../utils/auth-utils';
 import { LoginParams } from '@abp/ng.core';
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 
@@ -65,21 +65,8 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
         params.password,
         new HttpHeaders({ ...(tenant && tenant.id && { [this.tenantKey]: tenant.id }) }),
       ),
-    ).pipe(this.pipeToLogin(params));
+    ).pipe(pipeToLogin(params, this.injector));
   }
-
-  pipeToLogin(params: Pick<LoginParams, 'redirectUrl' | 'rememberMe'>) {
-    const router = this.injector.get(Router);
-
-    return pipe(
-      switchMap(() => this.configState.refreshAppState()),
-      tap(() => {
-        setRememberMe(params.rememberMe);
-        if (params.redirectUrl) router.navigate([params.redirectUrl]);
-      }),
-    );
-  }
-
   logout(queryParams?: Params) {
     const router = this.injector.get(Router);
 
