@@ -1,13 +1,13 @@
-import { HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpHandler, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { finalize } from 'rxjs/operators';
-import { SessionStateService, HttpWaitService, TENANT_KEY } from '@abp/ng.core';
+import { SessionStateService, HttpWaitService, TENANT_KEY, IApiInterceptor } from '@abp/ng.core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ApiInterceptor implements HttpInterceptor {
+export class OAuthApiInterceptor implements IApiInterceptor {
   constructor(
     private oAuthService: OAuthService,
     private sessionState: SessionStateService,

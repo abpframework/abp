@@ -3,12 +3,17 @@ import { Router } from '@angular/router';
 import { OAuthStorage, TokenResponse } from 'angular-oauth2-oidc';
 import { pipe } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import { ConfigStateService, LoginParams } from '@abp/ng.core';
+import {
+  ConfigStateService,
+  LoginParams,
+  PipeToLoginFn,
+  SetTokenResponseToStorageFn,
+} from '@abp/ng.core';
 
 const cookieKey = 'rememberMe';
 const storageKey = 'passwordFlow';
 
-export function pipeToLogin(
+export const pipeToLogin: PipeToLoginFn = function (
   params: Pick<LoginParams, 'redirectUrl' | 'rememberMe'>,
   injector: Injector,
 ) {
@@ -22,10 +27,18 @@ export function pipeToLogin(
       if (params.redirectUrl) router.navigate([params.redirectUrl]);
     }),
   );
-}
+};
 
-export function setTokenResponseToStorage(injector: Injector, tokenRes: TokenResponse) {
-  const { access_token, refresh_token, scope: grantedScopes, expires_in } = tokenRes;
+export const setTokenResponseToStorage: SetTokenResponseToStorageFn = function (
+  injector: Injector,
+  tokenRes: unknown,
+) {
+  const {
+    access_token,
+    refresh_token,
+    scope: grantedScopes,
+    expires_in,
+  } = tokenRes as TokenResponse;
   const storage = injector.get(OAuthStorage);
 
   storage.setItem('access_token', access_token);
@@ -42,7 +55,7 @@ export function setTokenResponseToStorage(injector: Injector, tokenRes: TokenRes
     const expiresAt = now.getTime() + expiresInMilliSeconds;
     storage.setItem('expires_at', '' + expiresAt);
   }
-}
+};
 
 export function setRememberMe(remember: boolean) {
   removeRememberMe();
