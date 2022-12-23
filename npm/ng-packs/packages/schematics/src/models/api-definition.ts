@@ -40,11 +40,11 @@ export interface Controller {
 export interface InterfaceDef {
   type: string;
   name: string;
-  methods: InterfaceMethodDef[];
+  methods?: InterfaceMethodDef[];
 }
 export interface InterfaceMethodDef {
   name: string;
-  parametersOnMethod: InterfaceParameterOnMethodDef[];
+  parametersOnMethod?: InterfaceParameterOnMethodDef[];
   returnValue: {
     type: string;
     typeSimple: string;
