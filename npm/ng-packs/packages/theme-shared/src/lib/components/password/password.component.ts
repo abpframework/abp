@@ -1,6 +1,6 @@
-import {Component, forwardRef, Injector, Input} from '@angular/core';
-import {AbstractNgModelComponent} from "@abp/ng.core";
-import {NG_VALUE_ACCESSOR} from "@angular/forms";
+import { Component, forwardRef, Injector, Input } from '@angular/core';
+import { AbstractNgModelComponent } from '@abp/ng.core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'abp-password',
@@ -11,16 +11,14 @@ import {NG_VALUE_ACCESSOR} from "@angular/forms";
       useExisting: forwardRef(() => PasswordComponent),
       multi: true,
     },
-  ]
+  ],
 })
 export class PasswordComponent extends AbstractNgModelComponent {
   @Input() inputId!: string;
   @Input() formControlName!: string;
   fieldTextType: boolean;
 
-  constructor(
-    injector: Injector,
-  ) {
+  constructor(injector: Injector) {
     super(injector);
   }
 
