@@ -735,7 +735,7 @@
     "WatchTakeCloserLookVideo": "Tekintse meg a „Nézze meg közelebbről a kódgenerálást: ABP Suite” videót!",
     "ConfirmedEmailAddressRequiredToStartTrial": "A próbalicenc elindításához rendelkeznie kell egy megerősített e-mail címmel.",
     "EmailVerificationMailNotSent": "Nem sikerült elküldeni az ellenőrző e-mailt.",
-    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">Kattintson ide, ha megerősítő e-mailt szeretne kapni,</a> ha még nem kapta meg.",
+    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\" class=\"text-decoration-underline\">Kattintson ide, ha megerősítő e-mailt szeretne kapni,</a> ha még nem kapta meg.",
     "WhichLicenseTypeYouAreInterestedIn": "Melyik licenctípus érdekli?",
     "DontTakeOurWordForIt": "Ne fogadd el a szavunkat...",
     "ReadAbpCommercialUsersWantYouToKnow": "Olvassa el, hogy az ABP Commercial felhasználói mit szeretnének tudni",
