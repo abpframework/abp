@@ -26,6 +26,7 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddHttpClient();
         var serverSideBlazorBuilder = context.Services.AddServerSideBlazor(options =>
         {
             if (context.Services.GetHostingEnvironment().IsDevelopment())

@@ -53,6 +53,7 @@ public class MauiChangePortStep : ProjectBuildPipelineStep
         {
             case UiFramework.Angular:
             case UiFramework.Blazor:
+            case UiFramework.MauiBlazor:
                 authServerPort = "44305";
                 apiHostPort = "44305";
                 break;

@@ -20,7 +20,9 @@ To add `LeptonX-lite` into your project,
 
 `yarn add bootstrap-icons`
 
-- Then, we need to edit the styles array in `angular.json` to replace the existing style with the new one.
+- Then, we need to edit the styles array in `angular.json` to replace the existing style with the new one in the following link : 
+
+* [Styles - Angular UI](../../UI/Angular/Theme-Configurations.md)
 
 Add the following style
 

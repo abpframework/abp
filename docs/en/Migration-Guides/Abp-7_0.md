@@ -101,3 +101,18 @@ See https://github.com/abpframework/abp/pull/13644 for more info.
 We've already done this for our themes. 
 
 See https://github.com/abpframework/abp/pull/13845 for more info.
+
+## Replaced `BlogPostPublicDto` with `BlogPostCommonDto`
+
+- In the CMS Kit Module, `BlogPostPublicDto` has been moved to `Volo.CmsKit.Common.Application.Contracts` from `Volo.CmsKit.Public.Application.Contracts` and renamed to `BlogPostCommonDto`.
+
+- See the [PR#13499](https://github.com/abpframework/abp/pull/13499) for more information.
+
+> You can ignore this if you don't use CMS Kit Module.
+
+## Oracle.EntityFrameworkCore and Devart.Data.Oracle.EFCore
+
+These two packages do not yet support EF Core 7.0, If you use `AbpEntityFrameworkCoreOracleModule(Volo.Abp.EntityFrameworkCore.Oracle)` or `AbpEntityFrameworkCoreOracleDevartModule(Volo.Abp.EntityFrameworkCore.Oracle.Devart)` may not work as expected, We will release new packages as soon as they are updated.
+
+See https://github.com/abpframework/abp/issues/14412 for more info.
+

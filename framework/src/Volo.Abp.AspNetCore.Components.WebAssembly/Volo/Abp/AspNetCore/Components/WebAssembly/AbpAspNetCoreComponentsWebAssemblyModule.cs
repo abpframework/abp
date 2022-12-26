@@ -24,6 +24,12 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        var abpHostEnvironment = context.Services.GetSingletonInstance<IAbpHostEnvironment>();
+        if (abpHostEnvironment.EnvironmentName.IsNullOrWhiteSpace())
+        {
+            abpHostEnvironment.EnvironmentName = context.Services.GetWebAssemblyHostEnvironment().Environment;
+        }
+
         PreConfigure<AbpHttpClientBuilderOptions>(options =>
         {
             options.ProxyClientBuildActions.Add((_, builder) =>
@@ -35,6 +41,7 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddHttpClient();
         context.Services
             .GetHostBuilder().Logging
             .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));

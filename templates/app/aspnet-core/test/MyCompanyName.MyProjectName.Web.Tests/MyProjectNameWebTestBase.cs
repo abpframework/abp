@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -14,10 +15,10 @@ public abstract class MyProjectNameWebTestBase : AbpAspNetCoreIntegratedTestBase
     {
         return base
             .CreateHostBuilder()
-            .UseContentRoot(WebContentDirectoryFinder.CalculateContentRootFolder());
+            .UseContentRoot(WebContentDirectoryFinder.CalculateContentRootFolder() ?? throw new InvalidOperationException());
     }
 
-    protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+    protected virtual async Task<T?> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
     {
         var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
         return JsonSerializer.Deserialize<T>(strResponse, new JsonSerializerOptions(JsonSerializerDefaults.Web));

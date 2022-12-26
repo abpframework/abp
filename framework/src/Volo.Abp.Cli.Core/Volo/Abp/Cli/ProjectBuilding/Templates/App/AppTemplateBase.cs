@@ -132,7 +132,11 @@ public abstract class AppTemplateBase : TemplateInfo
             case UiFramework.BlazorServer:
                 ConfigureWithBlazorServerUi(context, steps);
                 break;
-
+    
+            case UiFramework.MauiBlazor:
+                ConfigureWithMauiBlazorUi(context, steps);
+                break;
+            
             case UiFramework.Mvc:
             case UiFramework.NotSpecified:
                 ConfigureWithMvcUi(context, steps);
@@ -148,6 +152,11 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
+        }
+
+        if (context.BuildArgs.UiFramework != UiFramework.MauiBlazor)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MauiBlazor"));
         }
 
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
@@ -510,6 +519,37 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
+    protected void ConfigureWithMauiBlazorUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        context.Symbols.Add("ui:maui-blazor");
+
+        steps.Add(new MauiBlazorChangeApplicationIdGuidStep());
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+
+        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
+            steps.Add(new MauiBlazorPortChangeForSeparatedAuthServersStep());
+            steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
+
+            if (context.BuildArgs.MobileApp == MobileApp.ReactNative)
+            {
+                steps.Add(new ReactEnvironmentFilePortChangeForSeparatedAuthServersStep());
+            }
+        }
+        else
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
+            steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+            steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
+        }
+    }
+
     protected void RemoveUnnecessaryPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveUnnecessaryPortsStep());
@@ -599,7 +639,8 @@ public abstract class AppTemplateBase : TemplateInfo
     {
         if ((context.BuildArgs.UiFramework == UiFramework.Mvc
              || context.BuildArgs.UiFramework == UiFramework.Blazor
-             || context.BuildArgs.UiFramework == UiFramework.BlazorServer) &&
+             || context.BuildArgs.UiFramework == UiFramework.BlazorServer
+             || context.BuildArgs.UiFramework == UiFramework.MauiBlazor) &&
             context.BuildArgs.MobileApp == MobileApp.None)
         {
             steps.Add(new MoveFolderStep("/aspnet-core/", "/"));

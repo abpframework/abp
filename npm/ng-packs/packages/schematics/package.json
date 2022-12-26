@@ -1,6 +1,6 @@
 {
   "name": "@abp/ng.schematics",
-  "version": "7.0.0-rc.2",
+  "version": "7.0.0-rc.5",
   "description": "Schematics that works with ABP Backend",
   "keywords": [
     "schematics"
@@ -9,13 +9,13 @@
   "license": "MIT",
   "schematics": "./collection.json",
   "dependencies": {
-    "@angular-devkit/core": "~14.2.1",
-    "@angular-devkit/schematics": "~14.2.1",
-    "@angular/cli": "~14.2.1",
+    "@angular-devkit/core": "~15.0.1",
+    "@angular-devkit/schematics": "~15.0.1",
+    "@angular/cli": "~15.0.1",
     "got": "^11.5.2",
     "jsonc-parser": "^2.3.0",
     "should-quote": "^1.0.0",
-    "typescript": "~4.7.4"
+    "typescript": "4.8.4"
   },
   "devDependencies": {
     "@schematics/angular": "~14.2.1",

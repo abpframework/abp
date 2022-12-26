@@ -61,8 +61,16 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
+        string name = null,
+        string surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
+        bool? emailConfirmed = null,
+        bool? isExternal = null,
+        DateTime? maxCreationTime = null,
+        DateTime? minCreationTime = null,
+        DateTime? maxModifitionTime = null,
+        DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default
     );
 
@@ -98,8 +106,16 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
+        string name = null,
+        string surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
+        bool? emailConfirmed = null,
+        bool? isExternal = null,
+        DateTime? maxCreationTime = null,
+        DateTime? minCreationTime = null,
+        DateTime? maxModifitionTime = null,
+        DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default
     );
 

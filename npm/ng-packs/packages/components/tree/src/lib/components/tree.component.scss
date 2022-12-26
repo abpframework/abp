@@ -1,4 +1,4 @@
-.ant-tree {
+abp-tree .ant-tree {
   color: inherit;
 
   .ant-tree-node-content-wrapper.ant-tree-node-selected {
@@ -7,6 +7,9 @@
 
   .ant-tree-switcher {
     line-height: 17px;
+    align-items: center;
+    justify-content: center;
+    display: inline-flex;
   }
 
   .ant-tree-node-content-wrapper {
@@ -19,13 +22,12 @@
     position: relative;
     display: inline-block;
     margin: 0;
-    padding: 0 5px;
     line-height: 30px;
     text-decoration: none;
     vertical-align: top;
     border-radius: 2px;
     cursor: pointer;
-    padding-left: 8px;
+    padding: 0 5px 0 8px;
     border: 1px solid transparent;
   }
 
