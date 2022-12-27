@@ -38,7 +38,7 @@ Configure<AbpBundlingOptions>(options =>
         // Remove the following line
 -       BasicThemeBundles.Styles.Global,
         // Add the following line instead
-+       LeptonXLiteThemeBundles.Styles.Global
++       LeptonXLiteThemeBundles.Styles.Global,
         bundle =>
         {
             bundle.AddFiles("/global-styles.css");
