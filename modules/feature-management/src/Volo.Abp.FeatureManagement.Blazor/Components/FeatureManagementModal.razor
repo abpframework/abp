@@ -6,15 +6,15 @@
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>@L["Features"]</ModalTitle>
-            <CloseButton Clicked="CloseModal"/>
+            <CloseButton Clicked="CloseModal" />
         </ModalHeader>
-        <ModalBody MaxHeight="50">
-            @if (Groups == null || !Groups.Any())
-            {
-                <span>@L["NoFeatureFoundMessage"]</span>
-            }
-            else
-            {
+        @if (Groups == null || !Groups.Any())
+        {
+            <span class="m-3">@L["NoFeatureFoundMessage"]</span>
+        }
+        else
+        {
+            <ModalBody MaxHeight="50">
                 <Tabs TabPosition="TabPosition.Start" Pills="true" @bind-SelectedTab="@SelectedTabName">
                     <Items>
                         @foreach (var group in Groups)
@@ -30,7 +30,7 @@
                             var index = i;
                             <TabPanel Name="@GetNormalizedGroupName(Groups[index].Name)">
                                 <h4>@Groups[index].DisplayName</h4>
-                                <hr class="mt-2 mb-3"/>
+                                <hr class="mt-2 mb-3" />
                                 @foreach (var feature in Groups[index].Features)
                                 {
                                     <div class="mt-2">
@@ -42,8 +42,8 @@
                                                 <Field Style="@GetFeatureStyles(feature)">
                                                     <FieldLabel>@feature.DisplayName</FieldLabel>
                                                     <TextEdit Disabled="@disabled"
-                                                              Text="@feature.Value"
-                                                              TextChanged="@(async (v) => await OnFeatureValueChangedAsync(v, feature))"/>
+                                                          Text="@feature.Value"
+                                                          TextChanged="@(async (v) => await OnFeatureValueChangedAsync(v, feature))" />
                                                     @if (feature.Description != null)
                                                     {
                                                         <div class="form-text">@feature.Description</div>
@@ -53,12 +53,12 @@
 
                                             if (feature.ValueType is SelectionStringValueType)
                                             {
-                                                var items = ((SelectionStringValueType) feature.ValueType).ItemSource.Items;
+                                                var items = ((SelectionStringValueType)feature.ValueType).ItemSource.Items;
 
                                                 <Field Style="@GetFeatureStyles(feature)">
                                                     <FieldLabel>@feature.DisplayName</FieldLabel>
                                                     <Select TValue="string"
-                                                            @bind-SelectedValue="@SelectionStringValues[feature.Name]">
+                                                    @bind-SelectedValue="@SelectionStringValues[feature.Name]">
                                                         @foreach (var item in items)
                                                         {
                                                             <SelectItem Value="@item.Value">
@@ -76,8 +76,7 @@
                                             if (feature.ValueType is ToggleStringValueType)
                                             {
                                                 <Field Style="@GetFeatureStyles(feature)">
-                                                    <Check
-                                                        TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))">
+                                                    <Check TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))">
                                                         @feature.DisplayName
                                                     </Check>
                                                     @if (feature.Description != null)
@@ -94,12 +93,13 @@
                         }
                     </Content>
                 </Tabs>
-            }
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Primary" Clicked="@(async () => await DeleteAsync(ProviderName,ProviderKey))">@L["ResetToDefault"]</Button>
-            <Button Color="Color.Secondary" Clicked="CloseModal">@L["Cancel"]</Button>
-            <Button Color="Color.Primary" Clicked="SaveAsync">@L["Save"]</Button>
-        </ModalFooter>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Primary" Clicked="@(async () => await DeleteAsync(ProviderName,ProviderKey))">@L["ResetToDefault"]</Button>
+                <Button Color="Color.Secondary" Clicked="CloseModal">@L["Cancel"]</Button>
+                <Button Color="Color.Primary" Clicked="SaveAsync">@L["Save"]</Button>
+            </ModalFooter>
+        }
+
     </ModalContent>
 </Modal>
