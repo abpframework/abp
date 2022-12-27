@@ -7,10 +7,10 @@ export interface Environment {
   hmr?: boolean;
   test?: boolean;
   localization?: { defaultResourceName?: string };
-  oAuthConfig: AuthConfig;
+  oAuthConfig?: AuthConfig;
   production: boolean;
   remoteEnv?: RemoteEnv;
-  [key:string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 export interface ApplicationInfo {
   name: string;
