@@ -9,3 +9,4 @@ export * from './tenant-key.token';
 export * from './include-localization-resources.token';
 export * from './pipe-to-login.token';
 export * from './set-token-response-to-storage.token';
+export * from './check-authentication-state';

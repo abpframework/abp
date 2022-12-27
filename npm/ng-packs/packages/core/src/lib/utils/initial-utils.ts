@@ -1,5 +1,5 @@
 import { registerLocaleData } from '@angular/common';
-import { Injector } from '@angular/core';
+import { InjectFlags, Injector } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { lastValueFrom, throwError } from 'rxjs';
 import { ABP } from '../models/common';
@@ -12,6 +12,9 @@ import { CORE_OPTIONS } from '../tokens/options.token';
 import { APP_INIT_ERROR_HANDLERS } from '../tokens/app-config.token';
 import { getRemoteEnv } from './environment-utils';
 import { parseTenantFromUrl } from './multi-tenancy-utils';
+import { AuthService } from '../abstracts';
+import { CHECK_AUTHENTICATION_STATE_FN_KEY } from '../tokens/check-authentication-state';
+import { noop } from './common-utils';
 
 export function getInitialData(injector: Injector) {
   const fn = async () => {
@@ -22,10 +25,17 @@ export function getInitialData(injector: Injector) {
     environmentService.setState(options.environment as Environment);
     await getRemoteEnv(injector, options.environment);
     await parseTenantFromUrl(injector);
-
+    const authService = injector.get(AuthService, undefined, { optional: true });
+    const checkAuthenticationState = injector.get(CHECK_AUTHENTICATION_STATE_FN_KEY, noop, {
+      optional: true,
+    });
+    if (authService) {
+      await authService.init();
+    }
     if (options.skipGetAppConfiguration) return;
 
     const result$ = configState.refreshAppState().pipe(
+      tap(() => checkAuthenticationState(injector)),
       tap(() => {
         const currentTenant = configState.getOne('currentTenant') as CurrentTenantDto;
         injector.get(SessionStateService).setTenant(currentTenant);

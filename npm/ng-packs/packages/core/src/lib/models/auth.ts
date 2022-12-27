@@ -13,4 +13,5 @@ export type PipeToLoginFn = (
   injector: Injector,
 ) => UnaryFunction<any, any>;
 
-export type SetTokenResponseToStorageFn = (injector: Injector, tokenRes: unknown) => void;
+export type SetTokenResponseToStorageFn<T> = (injector: Injector, tokenRes: T) => void;
+export type CheckAuthenticationStateFn = (injector: Injector) => void;

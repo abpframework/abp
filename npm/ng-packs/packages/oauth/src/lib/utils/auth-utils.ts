@@ -29,16 +29,11 @@ export const pipeToLogin: PipeToLoginFn = function (
   );
 };
 
-export const setTokenResponseToStorage: SetTokenResponseToStorageFn = function (
+export const setTokenResponseToStorage: SetTokenResponseToStorageFn<TokenResponse> = function (
   injector: Injector,
-  tokenRes: unknown,
+  tokenRes: TokenResponse,
 ) {
-  const {
-    access_token,
-    refresh_token,
-    scope: grantedScopes,
-    expires_in,
-  } = tokenRes as TokenResponse;
+  const { access_token, refresh_token, scope: grantedScopes, expires_in } = tokenRes;
   const storage = injector.get(OAuthStorage);
 
   storage.setItem('access_token', access_token);
