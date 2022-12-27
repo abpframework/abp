@@ -64,6 +64,7 @@
     "@abp/ng.account": "~7.0.0-rc.5",
     "@abp/ng.account.core": "~7.0.0-rc.5",
     "@abp/ng.core": "~7.0.0-rc.5",
+    "@abp/ng.oauth":"~7.0.0-rc.5",
     "@abp/ng.feature-management": "~7.0.0-rc.5",
     "@abp/ng.identity": "~7.0.0-rc.5",
     "@abp/ng.permission-management": "~7.0.0-rc.5",

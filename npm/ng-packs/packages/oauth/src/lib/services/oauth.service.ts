@@ -5,7 +5,7 @@ import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { IAuthService, LoginParams } from '@abp/ng.core';
 import { AuthFlowStrategy } from '../strategies';
 import { EnvironmentService } from '@abp/ng.core';
-import { AUTH_FLOW_STRATEGY } from '../tokens/ auth-flow-strategy';
+import { AUTH_FLOW_STRATEGY } from '../tokens/auth-flow-strategy';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 @Injectable({
