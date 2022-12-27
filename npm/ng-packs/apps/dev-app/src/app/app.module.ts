@@ -14,7 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 import { FeatureManagementModule } from '@abp/ng.feature-management';
-import { AbpOAuthModule } from '@abp/ng.oauth';
+// import { AbpOAuthModule } from '@abp/ng.oauth';
 
 @NgModule({
   imports: [
@@ -27,7 +27,7 @@ import { AbpOAuthModule } from '@abp/ng.oauth';
       sendNullsAsQueryParam: false,
       skipGetAppConfiguration: false,
     }),
-    AbpOAuthModule.forRoot(),
+    // AbpOAuthModule.forRoot(),
     ThemeSharedModule.forRoot(),
     AccountConfigModule.forRoot(),
     IdentityConfigModule.forRoot(),

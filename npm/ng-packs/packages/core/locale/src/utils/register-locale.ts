@@ -1,4 +1,4 @@
-import { differentLocales } from '../../../src/lib/constants';
+import { differentLocales } from '@abp/ng.core';
 import { isDevMode } from '@angular/core';
 
 export interface LocaleErrorHandlerData {
