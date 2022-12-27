@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
-using Volo.Docs.GitHub.Documents;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents

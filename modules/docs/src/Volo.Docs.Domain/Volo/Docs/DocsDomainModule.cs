@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -13,6 +14,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.FileSystem.Documents;
+using Volo.Docs.GitHub;
 using Volo.Docs.GitHub.Documents;
 using Volo.Docs.Localization;
 using Volo.Docs.Projects;
@@ -58,6 +60,16 @@ namespace Volo.Docs
             {
                 options.Sources[GithubDocumentSource.Type] = typeof(GithubDocumentSource);
                 options.Sources[FileSystemDocumentSource.Type] = typeof(FileSystemDocumentSource);
+            });
+            
+            Configure<DocsGithubLanguageOptions>(options =>
+            {
+                options.DefaultLanguage = new LanguageConfigElement 
+                {
+                    Code = "en", 
+                    DisplayName = "English", 
+                    IsDefault = true
+                };
             });
 
             context.Services.AddHttpClient(GithubRepositoryManager.HttpClientName, client =>
