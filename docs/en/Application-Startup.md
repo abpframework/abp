@@ -258,13 +258,13 @@ The `IAbpApplication` interface extends the `IApplicationInfoAccessor` interface
 
 Sometimes, while creating an application, we need to get the current hosting environment and take actions according to that. In such cases, we can use some services such as [IWebHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.iwebhostenvironment?view=aspnetcore-7.0) or [IWebAssemblyHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.webassembly.hosting.iwebassemblyhostenvironment) provided by .NET, in the final application. 
 
-However, we can not use these services in a class library, which uses by the final application. ABP Framework provides the `IAbpHostEnvironment` service, which allows you to get the current environment name whenever you want. `IAbpHostEnvironment` is used by the ABP Framework in several places to perform specific actions by the environment. For example, ABP Framework reduces the cache duration on the **Development** environment for some services.
+However, we can not use these services in a class library, which is used by the final application. ABP Framework provides the `IAbpHostEnvironment` service, which allows you to get the current environment name whenever you want. `IAbpHostEnvironment` is used by the ABP Framework in several places to perform specific actions by the environment. For example, ABP Framework reduces the cache duration on the **Development** environment for some services.
 
-`IAbpHostEnvironment` uses the following order to obtain the current environment name:
+`IAbpHostEnvironment` obtains the current environment name by the following order:
 
 1. Gets and sets the environment name if it's specified in the `AbpApplicationCreationOptions`.
-2. Tries to obtain the environment name from the `IWebHostEnvironment` or `IWebAssemblyHostEnvironment` services for ASP.NET Core & Blazor WASM applications, if the environment name doesn't specify in the `AbpApplicationCreationOptions`.
-3. Sets the environment name as **Production**, if the environment name does not specified or can not obtained from the services.
+2. Tries to obtain the environment name from the `IWebHostEnvironment` or `IWebAssemblyHostEnvironment` services for ASP.NET Core & Blazor WASM applications if the environment name isn't specified in the `AbpApplicationCreationOptions`.
+3. Sets the environment name as **Production**, if the environment name is not specified or can not be obtained from the services.
 
 You can configure the `AbpApplicationCreationOptions` [options class](Options.md) while creating the ABP application and set an environment name to its `Environment` property. You can find the `AddApplication` or `AddApplicationAsync` call in your solution (typically in the `Program.cs` file), and set the `Environment` option as shown below:
 
