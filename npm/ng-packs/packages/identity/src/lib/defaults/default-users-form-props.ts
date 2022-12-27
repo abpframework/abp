@@ -12,7 +12,7 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
     validators: () => [Validators.required, Validators.maxLength(256)],
   },
   {
-    type: ePropType.Password,
+    type: ePropType.PasswordInputGroup,
     name: 'password',
     displayName: 'AbpIdentity::Password',
     id: 'password',

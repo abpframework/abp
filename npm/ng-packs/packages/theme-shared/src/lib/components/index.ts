@@ -10,3 +10,4 @@ export * from './modal/modal-ref.service';
 export * from './modal/modal.component';
 export * from './toast-container/toast-container.component';
 export * from './toast/toast.component';
+export * from './password/password.component';
