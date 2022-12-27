@@ -744,7 +744,7 @@
     "WatchTakeCloserLookVideo": "\"Kod üretimine daha yakından bakın: ABP Suite\" videosunu izleyin!",
     "ConfirmedEmailAddressRequiredToStartTrial": "Deneme lisansı başlatmak için onaylanmış bir e -posta adresiniz olmalı.",
     "EmailVerificationMailNotSent": "E-posta doğrulama postası gönderilemedi.",
-    "GetConfirmationEmail": "Daha önce bir onay e-postası almadıysanız <a href=\"javascript:void(0);\" id=\"{0}\"> almak için buraya tıklayın.</a>",
+    "GetConfirmationEmail": "Daha önce bir onay e-postası almadıysanız <a href=\"javascript:void(0);\" id=\"{0}\" class=\"text-decoration-underline\"> almak için buraya tıklayın.</a>",
     "WhichLicenseTypeYouAreInterestedIn":  "Hangi lisans türüyle ilgileniyorsunuz?",
     "BlackFridayDiscount": "Kara Cuma İndirimi"
   }

@@ -86,7 +86,7 @@
     "Permission:BlogPostManagement.Delete": "Silme",
     "Permission:BlogPostManagement.Update": "Güncelleme",
     "Permission:BlogPostManagement.Publish": "Yayınlama",
-    "Permission:CmsKit": "CmsKit",
+    "Permission:CmsKit": "CmsKit Admin",
     "Permission:Comments": "Yorum Yönetimi",
     "Permission:Comments.Delete": "Silmek",
     "Permission:Contents": "İçerik Yönetimi",
@@ -117,6 +117,8 @@
     "Permission:TagManagement.Create": "Etiket Oluşturma",
     "Permission:TagManagement.Delete": "Etiket Silme",
     "Permission:TagManagement.Update": "Etiket Güncelleme",
+    "Permission:CmsKitPublic": "CmsKit Genel",
+    "Permission:Comments.DeleteAll": "Tümünü Silme",
     "PickYourReaction": "Tepkinizi seçin",
     "Rating": "Puan",
     "RatingUndoMessage": "Oylamanız geri alınacak.",
@@ -209,6 +211,9 @@
     "Feature:ReactionEnable": "Reaksiyon",
     "Feature:ReactionEnableDescription": "Cmskit reaksiyon sistemi",
     "Feature:TagEnable": "Etkiket",
-    "Feature:TagEnableDescription": "Cmskit etiket sistemi"
+    "Feature:TagEnableDescription": "Cmskit etiket sistemi",
+    "DeleteBlogPostMessage": "Blog silinecek. Emin misiniz?",
+    "CaptchaCode": "Captcha kodu",
+    "CommentTextRequired": "Yorum zorunlu"
   }
 }

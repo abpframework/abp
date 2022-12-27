@@ -142,6 +142,7 @@
     "MinimumSearchContent": "Musisz wpisać co najmniej 3 znaki!",
     "Volo.AbpIo.Domain:060001": "Źródłowy adres URL („{PostUrl}”) nie jest adresem URL Github",
     "Volo.AbpIo.Domain:060002": "Treść artykułu nie jest dostępna w zasobach Github(\"{PostUrl}\").",
-    "Volo.AbpIo.Domain:060003": "Nie znaleziono treści artykułu!"
+    "Volo.AbpIo.Domain:060003": "Nie znaleziono treści artykułu!",
+    "IConsentToMedium": "Wyrażam zgodę na publikację tego posta na stronie https://medium.com/volosoft."
   }
 }

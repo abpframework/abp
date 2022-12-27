@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.Caching;
@@ -18,18 +19,21 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
     protected AbpApplicationLocalizationClientProxy ApplicationLocalizationClientProxy { get; }
     protected ICurrentUser CurrentUser { get; }
     protected IDistributedCache<ApplicationConfigurationDto> Cache { get; }
+    protected AbpAspNetCoreMvcClientCacheOptions Options { get; }
 
     public MvcCachedApplicationConfigurationClient(
         IDistributedCache<ApplicationConfigurationDto> cache,
         AbpApplicationConfigurationClientProxy applicationConfigurationAppService,
         ICurrentUser currentUser,
-        IHttpContextAccessor httpContextAccessor, 
-        AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy)
+        IHttpContextAccessor httpContextAccessor,
+        AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
+        IOptions<AbpAspNetCoreMvcClientCacheOptions> options)
     {
         ApplicationConfigurationAppService = applicationConfigurationAppService;
         CurrentUser = currentUser;
         HttpContextAccessor = httpContextAccessor;
         ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
+        Options = options.Value;
         Cache = cache;
     }
 
@@ -48,7 +52,7 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
             async () => await GetRemoteConfigurationAsync(),
             () => new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(300) //TODO: Should be configurable.
+                AbsoluteExpirationRelativeToNow = Options.ApplicationConfigurationDtoCacheAbsoluteExpiration
             }
         );
 
@@ -68,7 +72,7 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
                 IncludeLocalizationResources = false
             }
         );
-        
+
         var localizationDto = await ApplicationLocalizationClientProxy.GetAsync(
             new ApplicationLocalizationRequestDto {
                 CultureName = config.Localization.CurrentCulture.Name,
@@ -77,7 +81,7 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         );
 
         config.Localization.Resources = localizationDto.Resources;
-        
+
         return config;
     }
 

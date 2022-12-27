@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Shouldly;
 using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
@@ -25,6 +26,7 @@ public class AutoMapper_CustomServiceConstruction_Tests : AbpIntegratedTest<Auto
         {
             Name = nameof(SourceModel)
         };
+
         _objectMapper.Map<SourceModel, DestModel>(source).Name.ShouldBe(nameof(CustomMappingAction));
     }
 
@@ -33,6 +35,9 @@ public class AutoMapper_CustomServiceConstruction_Tests : AbpIntegratedTest<Auto
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            // Replace the build-in IMapper with a custom one to use ConstructServicesUsing.
+            context.Services.Replace(ServiceDescriptor.Transient<IMapper>(sp => sp.GetRequiredService<IConfigurationProvider>().CreateMapper()));
+
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddMaps<TestModule>();

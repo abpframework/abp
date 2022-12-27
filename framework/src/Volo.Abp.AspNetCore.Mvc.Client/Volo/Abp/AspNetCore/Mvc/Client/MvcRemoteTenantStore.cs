@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using Pages.Abp.MultiTenancy.ClientProxies;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Caching;
@@ -16,15 +17,18 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
     protected AbpTenantClientProxy TenantAppService { get; }
     protected IHttpContextAccessor HttpContextAccessor { get; }
     protected IDistributedCache<TenantConfiguration> Cache { get; }
+    protected AbpAspNetCoreMvcClientCacheOptions Options { get; }
 
     public MvcRemoteTenantStore(
         AbpTenantClientProxy tenantAppService,
         IHttpContextAccessor httpContextAccessor,
-        IDistributedCache<TenantConfiguration> cache)
+        IDistributedCache<TenantConfiguration> cache,
+        IOptions<AbpAspNetCoreMvcClientCacheOptions> options)
     {
         TenantAppService = tenantAppService;
         HttpContextAccessor = httpContextAccessor;
         Cache = cache;
+        Options = options.Value;
     }
 
     public async Task<TenantConfiguration> FindAsync(string name)
@@ -42,9 +46,8 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
             async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name)),
             () => new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow =
-                    TimeSpan.FromMinutes(5) //TODO: Should be configurable.
-                }
+                AbsoluteExpirationRelativeToNow = Options.TenantConfigurationCacheAbsoluteExpiration
+            }
         );
 
         if (httpContext != null)
@@ -70,9 +73,8 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
             async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id)),
             () => new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow =
-                    TimeSpan.FromMinutes(5) //TODO: Should be configurable.
-                }
+                AbsoluteExpirationRelativeToNow = Options.TenantConfigurationCacheAbsoluteExpiration
+            }
         );
 
         if (httpContext != null)
@@ -98,9 +100,8 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
             () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name))),
             () => new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow =
-                    TimeSpan.FromMinutes(5) //TODO: Should be configurable.
-                }
+                AbsoluteExpirationRelativeToNow = Options.TenantConfigurationCacheAbsoluteExpiration
+            }
         );
 
         if (httpContext != null)
@@ -126,9 +127,8 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
             () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id))),
             () => new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow =
-                    TimeSpan.FromMinutes(5) //TODO: Should be configurable.
-                }
+                AbsoluteExpirationRelativeToNow = Options.TenantConfigurationCacheAbsoluteExpiration
+            }
         );
 
         if (httpContext != null)

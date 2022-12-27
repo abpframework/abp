@@ -78,7 +78,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         {
             var webClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
             await CreateApplicationAsync(
-                name: consoleAndAngularClientId,
+                name: consoleAndAngularClientId!,
                 type: OpenIddictConstants.ClientTypes.Public,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Console Test / Angular Application",
@@ -100,10 +100,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
         if (!swaggerClientId.IsNullOrWhiteSpace())
         {
-            var swaggerRootUrl = configurationSection["MyProjectName_Swagger:RootUrl"].TrimEnd('/');
+            var swaggerRootUrl = configurationSection["MyProjectName_Swagger:RootUrl"]?.TrimEnd('/');
 
             await CreateApplicationAsync(
-                name: swaggerClientId,
+                name: swaggerClientId!,
                 type: OpenIddictConstants.ClientTypes.Public,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 displayName: "Swagger Application",
@@ -123,12 +123,12 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         [NotNull] string type,
         [NotNull] string consentType,
         string displayName,
-        string secret,
+        string? secret,
         List<string> grantTypes,
         List<string> scopes,
-        string redirectUri = null,
-        string postLogoutRedirectUri = null,
-        List<string> permissions = null)
+        string? redirectUri = null,
+        string? postLogoutRedirectUri = null,
+        List<string>? permissions = null)
     {
         if (!string.IsNullOrEmpty(secret) && string.Equals(type, OpenIddictConstants.ClientTypes.Public, StringComparison.OrdinalIgnoreCase))
         {

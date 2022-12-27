@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.Users;
 using Volo.CmsKit.Blogs;
-
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
@@ -69,5 +71,18 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
         var author = await BlogPostRepository.GetAuthorHasBlogPostAsync(id);
 
         return ObjectMapper.Map<CmsUser, CmsUserDto>(author);
+    }
+
+    [Authorize]
+    public async Task DeleteAsync(Guid id)
+    {
+        var rating = await BlogPostRepository.GetAsync(id);
+
+        if (rating.CreatorId != CurrentUser.GetId())
+        {
+            throw new AbpAuthorizationException();
+        }
+
+        await BlogPostRepository.DeleteAsync(id);
     }
 }

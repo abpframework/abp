@@ -39,6 +39,14 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         SetDeleterId(targetObject);
     }
 
+    public virtual void IncrementEntityVersionProperty(object targetObject)
+    {
+        if (targetObject is IHasEntityVersion objectWithEntityVersion)
+        {
+            ObjectHelper.TrySetProperty(objectWithEntityVersion, x => x.EntityVersion, x => x.EntityVersion + 1);
+        }
+    }
+
     protected virtual void SetCreationTime(object targetObject)
     {
         if (!(targetObject is IHasCreationTime objectWithCreationTime))
