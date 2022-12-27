@@ -16,15 +16,13 @@
                     BreadcrumbItems="@BreadcrumbItems"
                     Toolbar="@Toolbar" />
     </CardHeader>
-    <CardBody>
-        <Row>
-            <Column ColumnSize="ColumnSize.Is3">
-                <Field>
-                    <FieldLabel>@L["Search"]</FieldLabel>
-                    <TextEdit Size="Size.Small" Text="@GetListInput.Filter" TextChanged="@OnSearchTextChanged" />
-                </Field>
+    <CardBody Class="row">
+            <Column ColumnSize="ColumnSize.Is9">
             </Column>
-        </Row>
+            <Column ColumnSize="ColumnSize.Is3">
+                    @L["Search"]
+                <TextEdit Size="Size.Small" class="float-end" style="width:auto" Text="@GetListInput.Filter" TextChanged="@OnSearchTextChanged" />
+            </Column>
         @* ************************* DATA GRID ************************* *@
         <AbpExtensibleDataGrid TItem="IdentityUserDto"
                                Data="Entities"
