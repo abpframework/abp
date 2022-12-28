@@ -361,13 +361,10 @@ Then open the `BookStorePermissionDefinitionProvider` in the same project and ad
 ````csharp
 var authorsPermission = bookStoreGroup.AddPermission(
     BookStorePermissions.Authors.Default, L("Permission:Authors"));
-
 authorsPermission.AddChild(
     BookStorePermissions.Authors.Create, L("Permission:Authors.Create"));
-
 authorsPermission.AddChild(
     BookStorePermissions.Authors.Edit, L("Permission:Authors.Edit"));
-
 authorsPermission.AddChild(
     BookStorePermissions.Authors.Delete, L("Permission:Authors.Delete"));
 ````
