@@ -223,28 +223,39 @@ Notice that we've added more keys. They will be used in the next sections.
 
 ### Add to the Main Menu
 
-Open the `BookStoreMenuContributor.cs` in the `Menus` folder of the `Acme.BookStore.Web` project and add the following code in the end of the `ConfigureMainMenuAsync` method:
+Open the `BookStoreMenuContributor.cs` in the `Menus` folder of the `Acme.BookStore.Web` project and add a new *Authors* menu item under the *Book Store* menu item. The following code (in the `ConfigureMainMenuAsync` method) shows the final code part:
 
 ````csharp
-if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
-{
-    bookStoreMenu.AddItem(new ApplicationMenuItem(
-        "BooksStore.Authors",
-        l["Menu:Authors"],
-        url: "/Authors"
-    ));
-}
+context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/Books"
+        ).RequirePermissions(BookStorePermissions.Books.Default)
+    ).AddItem( // ADDED THE NEW "AUTHORS" MENU ITEM UNDER THE "BOOK STORE" MENU
+        new ApplicationMenuItem(
+            "BooksStore.Authors",
+            l["Menu:Authors"],
+            url: "/Authors"
+        ).RequirePermissions(BookStorePermissions.Books.Default)
+    )
+);
 ````
 
 ### Run the Application
 
 Run and login to the application. **You can not see the menu item since you don't have permission yet.** Go to the `Identity/Roles` page, click to the *Actions* button and select the *Permissions* action for the **admin role**:
 
-![bookstore-author-permissions](images/bookstore-author-permissions.png)
+![bookstore-author-permissions](images/bookstore-author-permissions-2.png)
 
 As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
 
-![bookstore-authors-page](images/bookstore-authors-page.png)
+![bookstore-authors-page](images/bookstore-authors-page-2.png)
 
 The page is fully working except *New author* and *Actions/Edit* since we haven't implemented them yet.
 
@@ -369,7 +380,7 @@ namespace Acme.BookStore.Web
 
 "New author" button will work as expected and open a new model when you run the application again:
 
-![bookstore-new-author-modal](images/bookstore-new-author-modal.png)
+![bookstore-new-author-modal](images/bookstore-new-author-modal-2.png)
 
 ## Edit Modal
 

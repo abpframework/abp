@@ -215,7 +215,7 @@ context.Menu.AddItem(
 
 Run the project, login to the application with the username `admin` and the password `1q2w3E*` and you can see that the new menu item has been added to the main menu:
 
-![bookstore-menu-items](images/bookstore-new-menu-item.png)
+![bookstore-menu-items](images/bookstore-new-menu-item-2.png)
 
 When you click on the Books menu item under the Book Store parent, you will be redirected to the new empty Books Page.
 
@@ -328,7 +328,7 @@ $(function () {
 
 You can run the application! The final UI of this part is shown below:
 
-![Book list](images/bookstore-book-list-3.png)
+![Book list](images/bookstore-book-list-4.png)
 
 This is a fully working, server side paged, sorted and localized table of books.
 
