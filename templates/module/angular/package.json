@@ -18,6 +18,7 @@
     "@abp/ng.account": "~7.0.0-rc.5",
     "@abp/ng.components": "~7.0.0-rc.5",
     "@abp/ng.core": "~7.0.0-rc.5",
+    "@abp/ng.oauth":"~7.0.0-rc.5",
     "@abp/ng.identity": "~7.0.0-rc.5",
     "@abp/ng.setting-management": "~7.0.0-rc.5",
     "@abp/ng.tenant-management": "~7.0.0-rc.5",
