@@ -251,7 +251,7 @@ context.Menu.AddItem(
 
 Run and login to the application. **You can not see the menu item since you don't have permission yet.** Go to the `Identity/Roles` page, click to the *Actions* button and select the *Permissions* action for the **admin role**:
 
-![bookstore-author-permissions](images/bookstore-author-permissions.png)
+![bookstore-author-permissions](images/bookstore-author-permissions-2.png)
 
 As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
 
@@ -380,7 +380,7 @@ namespace Acme.BookStore.Web
 
 "New author" button will work as expected and open a new model when you run the application again:
 
-![bookstore-new-author-modal](images/bookstore-new-author-modal.png)
+![bookstore-new-author-modal](images/bookstore-new-author-modal-2.png)
 
 ## Edit Modal
 

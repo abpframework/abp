@@ -55,7 +55,7 @@ public Guid AuthorId { get; set; }
 
 {{if DB=="EF"}}
 
-> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity from the `Book` class (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their authors (like we will done below) which makes your application code simpler.
+> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity from the `Book` class (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their authors (like we will be doing below) which makes your application code simpler.
 
 {{end}}
 
