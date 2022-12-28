@@ -53,7 +53,7 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 In this section, you will learn how to create a new modal dialog form to create a new book. The modal dialog will look like the image below:
 
-![bookstore-create-dialog](images/bookstore-create-dialog-2.png)
+![bookstore-create-dialog](images/bookstore-create-dialog-3.png)
 
 ### Create the Modal Form
 
@@ -191,7 +191,7 @@ The final content of `Index.cshtml` is shown below:
 
 This adds a new button called **New book** to the **top-right** of the table:
 
-![bookstore-new-book-button](images/bookstore-new-book-button-2.png)
+![bookstore-new-book-button](images/bookstore-new-book-button-3.png)
 
 Open the `Pages/Books/Index.js` file and add the following code right after the `Datatable` configuration:
 
@@ -465,7 +465,9 @@ You can run the application and edit any book by selecting the edit action on a 
 
 The final UI looks as below:
 
-![bookstore-books-table-actions](images/bookstore-edit-button-2.png)
+![bookstore-books-table-actions](images/bookstore-edit-button-3.png)
+
+> Notice that you don't see the "Actions" button in the figure below. Instead, you see an "Edit" button. ABP is smart enough to show a single simple button instead of a actions dropdown button when the dropdown has only a single item. After the next section, it will turn to a drop down button.
 
 ## Deleting a Book
 
