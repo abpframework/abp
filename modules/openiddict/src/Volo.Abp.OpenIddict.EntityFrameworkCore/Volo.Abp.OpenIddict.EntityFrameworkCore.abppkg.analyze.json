@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.OpenIddict.EntityFrameworkCore",
-  "hash": "216ce30bc86baffcdd71c8f920c59720",
+  "hash": "c34af4a969c8bcc90f52980c977e1c6f",
   "contents": [
     {
       "namespace": "Volo.Abp.OpenIddict.EntityFrameworkCore",

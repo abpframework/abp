@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.MongoDB",
-  "hash": "f1f168d421f10b1a945f3fd3744efee0",
+  "hash": "26a3848f2d1556551380bd919b07c87f",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer.MongoDB",
@@ -25,27 +25,9 @@
       "connectionStringName": "AbpIdentityServer",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerPersistedGrants",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Devices.DeviceFlowCodes",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerDeviceFlowCodes",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope",
           "contentType": "databaseCollection",
           "name": "IdentityServerApiScopes",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerClients",
           "summary": null
         },
         {
@@ -55,9 +37,27 @@
           "summary": null
         },
         {
+          "entityFullName": "Volo.Abp.IdentityServer.Devices.DeviceFlowCodes",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerDeviceFlowCodes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerClients",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource",
           "contentType": "databaseCollection",
           "name": "IdentityServerApiResources",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerPersistedGrants",
           "summary": null
         }
       ],

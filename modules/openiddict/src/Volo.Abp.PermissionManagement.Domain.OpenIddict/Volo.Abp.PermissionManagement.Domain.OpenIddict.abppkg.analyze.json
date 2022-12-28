@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.Domain.OpenIddict",
-  "hash": "ff213e72067f505e1aca7956f9482feb",
+  "hash": "5b379eeaf5ccbb20d143d222fe8a07af",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.OpenIddict",
