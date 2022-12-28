@@ -53,7 +53,8 @@ public class FeatureGroupDefinition : ICanCreateChildFeature
         ILocalizableString displayName = null,
         ILocalizableString description = null,
         IStringValueType valueType = null,
-        bool isVisibleToClients = true)
+        bool isVisibleToClients = true,
+        bool isAvailableToHost = true)
     {
         var feature = new FeatureDefinition(
             name,
@@ -61,7 +62,8 @@ public class FeatureGroupDefinition : ICanCreateChildFeature
             displayName,
             description,
             valueType,
-            isVisibleToClients
+            isVisibleToClients,
+            isAvailableToHost
         );
 
         _features.Add(feature);
@@ -77,7 +79,7 @@ public class FeatureGroupDefinition : ICanCreateChildFeature
         bool isVisibleToClients = true,
         bool isAvailableToHost = true)
     {
-        return AddFeature(name, defaultValue, displayName, description, valueType, isVisibleToClients);
+        return AddFeature(name, defaultValue, displayName, description, valueType, isVisibleToClients, isAvailableToHost);
     }
     public virtual List<FeatureDefinition> GetFeaturesWithChildren()
     {

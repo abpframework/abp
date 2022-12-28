@@ -114,14 +114,23 @@ public partial class FeatureManagementModal
         }
     }
 
-    public virtual async Task ResetToDefaultAsync([NotNull] string providerName, string providerKey = null)
+    public virtual async Task DeleteAsync([NotNull] string providerName, string providerKey = null)
     {
-        if (!await Message.Confirm(L["AreYouSureToResetToDefault"]))
+        try
         {
-            return;
+            if (!await Message.Confirm(L["AreYouSureToResetToDefault"]))
+            {
+                return;
+            }
+            await FeatureAppService.DeleteAsync(ProviderName, ProviderKey);
+            await Message.Success(L["ResetedToDefault"]);
+
+            await CloseModal();
         }
-        await FeatureAppService.ResetToDefaultAsync(ProviderName, ProviderKey);
-        await Message.Success(L["ResetedToDefault"]);
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
     }
 
     protected virtual string GetNormalizedGroupName(string name)

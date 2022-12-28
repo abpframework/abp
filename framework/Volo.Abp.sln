@@ -429,6 +429,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.Dap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.DistributedLocking.Dapr", "src\Volo.Abp.DistributedLocking.Dapr\Volo.Abp.DistributedLocking.Dapr.csproj", "{CAE48068-233C-47A9-BEAB-DDF521730E7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.MauiBlazor", "src\Volo.Abp.AspNetCore.Components.MauiBlazor\Volo.Abp.AspNetCore.Components.MauiBlazor.csproj", "{C44E2BD5-8D62-48A7-84AF-FE7CF2C8716C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Http.Client.IdentityModel.MauiBlazor", "src\Volo.Abp.Http.Client.IdentityModel.MauiBlazor\Volo.Abp.Http.Client.IdentityModel.MauiBlazor.csproj", "{E9492F9F-47E0-45A6-A51D-9949FEAA8543}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.MauiBlazor.Theming", "src\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.csproj", "{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1279,6 +1285,18 @@ Global
 		{CAE48068-233C-47A9-BEAB-DDF521730E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAE48068-233C-47A9-BEAB-DDF521730E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAE48068-233C-47A9-BEAB-DDF521730E7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C44E2BD5-8D62-48A7-84AF-FE7CF2C8716C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C44E2BD5-8D62-48A7-84AF-FE7CF2C8716C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C44E2BD5-8D62-48A7-84AF-FE7CF2C8716C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C44E2BD5-8D62-48A7-84AF-FE7CF2C8716C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9492F9F-47E0-45A6-A51D-9949FEAA8543}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9492F9F-47E0-45A6-A51D-9949FEAA8543}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9492F9F-47E0-45A6-A51D-9949FEAA8543}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9492F9F-47E0-45A6-A51D-9949FEAA8543}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1495,6 +1513,9 @@ Global
 		{5EED625D-8D86-492A-BCB8-F6C8CD8D4AA1} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{B02EF042-C39E-45C4-A92D-BF7554E1889D} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{CAE48068-233C-47A9-BEAB-DDF521730E7A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{C44E2BD5-8D62-48A7-84AF-FE7CF2C8716C} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{E9492F9F-47E0-45A6-A51D-9949FEAA8543} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

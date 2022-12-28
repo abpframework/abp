@@ -3,8 +3,6 @@ var abp = abp || {};
     abp.modals = abp.modals || {};
 
     let l = abp.localization.getResource("AbpFeatureManagement");
-
-
     abp.modals.FeatureManagement = function () {
         abp.ResourceLoader.loadScript('/client-proxies/featureManagement-proxy.js');
         $('#ResetToDefaults').click(function (e) {
@@ -13,9 +11,12 @@ var abp = abp || {};
                     if (confirmed) {
                         let providerName = $('#ProviderName').val();
                         let prodiverKey = $('#ProviderKey').val();
-                        volo.abp.featureManagement.features.resetToDefault(providerName, prodiverKey).then(function () {
+                        volo.abp.featureManagement.features.delete(providerName, prodiverKey).then(function () {
                             abp.notify.success(l('ResetedToDefault'));
                         });
+                        setTimeout(function () {
+                            $('#featureManagmentModal').modal('hide');
+                        }, 500);
                     }
                 });
         });

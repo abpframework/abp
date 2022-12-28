@@ -45,7 +45,7 @@ Here, is the list of all available commands before explaining their details:
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`login-info`**: Shows the current user's login information.
 * **`logout`**: Logouts from your computer if you've authenticated before.
-* **`bundle`**: Generates script and style references for an ABP Blazor project. 
+* **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
 
 ### help
@@ -353,6 +353,7 @@ abp generate-proxy -t csharp -url https://localhost:44302/
 
 * `--type` or `-t`: The name of client type. Available clients:
   * `csharp`: C#, work in the `*.HttpApi.Client` project directory. There are some additional options for this client:
+    * `--without-contracts`: Avoid generating the application service interface, class, enum and dto types.
     * `--folder`: Folder name to place generated CSharp code in. Default value: `ClientProxies`.
   * `ng`: Angular. There are some additional options for this client:
     * `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
@@ -365,6 +366,7 @@ abp generate-proxy -t csharp -url https://localhost:44302/
 * `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
 * `--working-directory` or `-wd`: Execution directory. For `csharp` and `js` client types.
 * `--url` or `-u`: API definition URL from.
+* `--service-type` or `-st`: Specifies the service type to generate. `application`, `integration` and `all`, Default value: `all` for C#, `application` for JavaScript / Angular.
 
 > See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 
@@ -470,10 +472,10 @@ abp translate -c <culture> [options]
 Example:
 
 ````bash
-abp translate -c de-DE
+abp translate -c de
 ````
 
-This command created the unified translation file for the `de-DE` (German) culture.
+This command created the unified translation file for the `de` (German) culture.
 
 ##### Additional Options
 
@@ -530,7 +532,7 @@ abp logout
 
 ### bundle
 
-This command generates script and style references for an ABP Blazor WebAssembly project and updates the **index.html** file. It helps developers to manage dependencies required by ABP modules easily.  In order ```bundle``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain a Blazor project file(*.csproj).
+This command generates script and style references for ABP Blazor WebAssembly and MAUI Blazor project and updates the **index.html** file. It helps developers to manage dependencies required by ABP modules easily.  In order ```bundle``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain a Blazor or MAUI Blazor project file(*.csproj).
 
 Usage:
 
@@ -542,8 +544,11 @@ abp bundle [options]
 
 * ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a Blazor project file.
 * ```--force``` or ```-f```: Forces to build project before generating references.
+* ```--project-type``` or ```-t```: Specifies the project type. Default type is `webassembly`. Available types:
+  * `webassembly`
+  * `maui-blazor`
 
-`bundle` command reads the `appsettings.json` file inside the Blazor project for bundling options. For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
+`bundle` command reads the `appsettings.json` file inside the Blazor and MAUI Blazor project for bundling options. For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
 
 ### install-libs
 

@@ -1,12 +1,15 @@
 {
   "culture": "de",
   "texts": {
-    "Volo.IdentityServer:DuplicateIdentityResourceName": "Identität Ressourcenname existiert bereits: {Name}",
-    "Volo.IdentityServer:DuplicateApiResourceName": "Api Ressourcenname existiert bereits: {Name}",
-    "Volo.IdentityServer:DuplicateClientId": "ClientId bereits vorhanden: {ClientId}",
-    "UserLockedOut": "Das Benutzerkonto wurde aufgrund ungültiger Anmeldeversuche ausgesperrt. Bitte warten Sie eine Weile und versuchen Sie es erneut.",
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Identitätsressourcenname existiert bereits: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Der Name der API-Ressource ist bereits vorhanden: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Der Name des Api-Bereichs existiert bereits: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId existiert bereits: {ClientId}",
+    "UserLockedOut": "Das Benutzerkonto wurde aufgrund ungültiger Anmeldeversuche gesperrt. Bitte warten Sie eine Weile und versuchen Sie es erneut.",
     "InvalidUserNameOrPassword": "Ungültiger Benutzername oder Passwort!",
-    "LoginIsNotAllowed": "Sie dürfen sich nicht anmelden! Ihr Konto ist inaktiv oder muss Ihre E-Mail-/Telefonnummer bestätigen.",
-    "InvalidUsername": "Ungültiger Benutzername oder Passwort!"
+    "LoginIsNotAllowed": "Sie dürfen sich nicht anmelden! Ihr Konto ist inaktiv oder Sie müssen Ihre E-Mail-/Telefonnummer bestätigen.",
+    "InvalidUsername": "Ungültiger Benutzername oder Passwort!",
+    "InvalidAuthenticatorCode": "Ungültiger Authentifizierungscode!",
+    "TheTargetUserIsNotLinkedToYou": "Der Zielbenutzer ist nicht mit Ihnen verknüpft!"
   }
 }

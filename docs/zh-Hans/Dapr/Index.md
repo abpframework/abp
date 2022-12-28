@@ -209,7 +209,7 @@ ABP提供了以下端点来接收来自Dapr的事件:
 * `dapr/subscribe`: Dapr使用此端点从应用程序获取订阅列表.ABP会自动返回所有分布式事件处理程序类和具有`Topic`属性的自定义控制器操作的订阅.
 * `api/abp/dapr/event`: 用于接收来自Dapr的所有事件的统一端点.ABP根据主题名称将事件分派给您的事件处理程序.
 
-> **由于ABP提供了标准的`dapr/subscribe`端点,所以你不应该手动调用Dapr的`app.MapSubscribeHandler()`方法.** 如果你想支持[CloudEvents](https://cloudevents.io/)标准,你可以在你的ASP.NET Core管道中使用`app.UseCloudEvents()`中间件.
+> **由于ABP会在内部调用`MapSubscribeHandler` 方法,所以你不应该手动调用了.** 如果你想支持[CloudEvents](https://cloudevents.io/)标准,你可以在你的ASP.NET Core管道中使用`app.UseCloudEvents()`中间件.
 
 ### 用法
 
@@ -299,8 +299,7 @@ public class MyController : AbpController
 {
     [HttpPost("/stock-changed")]
     [Topic("pubsub", "StockChanged")]
-    public async Task<IActionResult> TestRouteAsync(
-        [FromBody] StockCountChangedEto model)
+    public async Task<IActionResult> TestRouteAsync([FromBody] StockCountChangedEto model)
     {
         HttpContext.ValidateDaprAppApiToken();
         
@@ -430,8 +429,7 @@ public class MyController : AbpController
 {
     [HttpPost("/stock-changed")]
     [Topic("pubsub", "StockChanged")]
-    public async Task<IActionResult> TestRouteAsync(
-        [FromBody] StockCountChangedEto model)
+    public async Task<IActionResult> TestRouteAsync([FromBody] StockCountChangedEto model)
     {
         // Validate the App API token!
         HttpContext.ValidateDaprAppApiToken();

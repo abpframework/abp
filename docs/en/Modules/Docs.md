@@ -28,7 +28,9 @@ If you do not have an existing ABP project, this step shows you how to create a 
 
 It is recommended to use ABP CLI to create new projects. Use the following command:
 
-`abp new Acme.MyProject`
+```bash
+abp new Acme.MyProject
+```
 
 You can also navigate to https://abp.io/get-started. Enter your project name as `Acme.MyProject`, other use default options.
 
@@ -66,7 +68,9 @@ Docs module packages are hosted on NuGet. There are 4 packages that needs be to 
 
 It is recommended to use the ABP CLI to install the module, open the CMD window in the solution file (`.sln`) directory, and run the following command:
 
-`abp add-module Volo.Docs`
+```bash
+abp add-module Volo.Docs
+```
 
 #### 3.2- Manually install
 
@@ -74,19 +78,27 @@ Or you can also manually install nuget package to each project:
 
 * Install [Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Domain` project.
 
-  `Install-Package Volo.Docs.Domain`
+  ```bash
+  Install-Package Volo.Docs.Domain
+  ```
 
 * Install [Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) nuget package to `Acme.MyProject.EntityFrameworkCore` project.
 
-  `Install-Package Volo.Docs.EntityFrameworkCore`
+  ```bash
+  Install-Package Volo.Docs.EntityFrameworkCore
+  ```
 
 * Install [Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) nuget package to `Acme.MyProject.Application` project.
 
-  `Install-Package Volo.Docs.Application`
+  ```bash
+  Install-Package Volo.Docs.Application
+  ```
 
 * Install [Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Web` project.
 
-  `Install-Package Volo.Docs.Web`
+  ```bash
+  Install-Package Volo.Docs.Web
+  ```
 
 ##### 3.2.1- Adding Module Dependencies
 
@@ -258,7 +270,7 @@ If you choose Entity Framework as your database provider, you need to configure 
 
 The default route for Docs module is;
 
-```
+```txt
 /Documents
 ```
 
@@ -307,7 +319,7 @@ The new menu item for Docs Module is added to the menu. Run your web application
 
 You will see a warning says;
 
-```
+```txt
 There are no projects yet!
 ```
 
@@ -487,14 +499,14 @@ For example [Getting-Started.md](https://github.com/abpio/abp-commercial-docs/bl
 ```
 .....
 
-​````json
+​```json
 //[doc-params]
 {
     "UI": ["MVC","NG"],
     "DB": ["EF", "Mongo"],
     "Tiered": ["Yes", "No"]
 }
-​````
+​```
 
 ........
 ```
@@ -507,7 +519,7 @@ Now you can use **Scriban** syntax to create sections in your document.
 
 For example:
 
-````
+```txt
 {{ if UI == "NG" }}
 
 * `-u` argument specifies the UI framework, `angular` in this case.
@@ -526,13 +538,13 @@ For example:
 
 {{ end }}
 
-````
+```
 
 You can also use variables in a text, adding **_Value** postfix to its key:
 
-````
+```txt
 This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider.
-````
+```
 
 Also, **Document_Language_Code** and **Document_Version** keys are pre-defined if you want to get the language code or the version of the current document (This may be useful for creating links that redirects to another documentation system in another domain).
 
@@ -603,7 +615,7 @@ Finally a new Docs Module is added to your project which is feeded with GitHub.
 
 The Docs module supports full-text search using Elastic Search. It is not enabled by default. You can configure `DocsElasticSearchOptions` to enable it.
 
-```
+```csharp
 Configure<DocsElasticSearchOptions>(options =>
 {
     options.Enable = true;
@@ -616,7 +628,7 @@ The `Index` is automatically created after the application starts if the `Index`
 `DefaultElasticClientProvider` is responsible for creating `IElasticClient`. By default, it reads Elastic Search's `Url` from `IConfiguration`.
 If your `IElasticClient` needs additional configuration, please use override `IElasticClientProvider` service and replace it in the [dependency injection](../Dependency-Injection.md) system.
 
-```
+```json
 {
   "ElasticSearch": {
     "Url": "http://localhost:9200"

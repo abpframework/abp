@@ -11,7 +11,7 @@ public class EmailingPageContributor : SettingPageContributorBase
 {
     public EmailingPageContributor()
     {
-        RequiredFeatures(SettingManagementFeatures.Enable);
+        RequiredTenantSideFeatures(SettingManagementFeatures.Enable);
         RequiredTenantSideFeatures(SettingManagementFeatures.AllowChangingEmailSettings);
         RequiredPermissions(SettingManagementPermissions.Emailing);
     }

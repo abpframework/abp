@@ -53,6 +53,27 @@ Please do the following:
 
 > React Native application does not trust the auto-generated .NET HTTPS certificate. You should use **HTTP** during the development.
 
+> When you are using OpenIddict, You should remove 'clientSecret' on Environment.js (if exists) and disable "HTTPS-only" settings. (Openiddict has default since Version 6.0)
+
+### How to disable Https-only in Openiddict.
+You should add this code on `MyProjectName`HttpApiHostModule.
+
+```csharp
+  public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        #if DEBUG
+            PreConfigure<OpenIddictServerBuilder>(options =>
+            {
+                options
+                    .UseAspNetCore()
+                    .DisableTransportSecurityRequirement();
+            });
+        #endif
+        //....
+    }
+
+```
+
 A React Native application running on an Android emulator or a physical phone **can not connect to the backend** on `localhost`. To fix this problem, it is necessary to run the backend application on your **local IP address**.
 
 {{ if Tiered == "No"}}
@@ -73,6 +94,20 @@ A React Native application running on an Android emulator or a physical phone **
 {{ end }}
 
 Run the backend application as described in the [getting started document](Getting-Started.md).
+
+> You should turn off the "Https Restriction" if you're using OpenIddict as a central identity management solution. Because the IOS Simulator doesn't support self-signed certificates and OpenIddict is set to only work with HTTPS by default.
+## How to disable the Https-only settings of OpenIddict
+
+ Go to MyProjectNameHttpApiHostModule.cs under the host project. Add put these codes under the `PreConfigureServices` function.
+
+```csharp
+#if DEBUG
+    PreConfigure<OpenIddictServerBuilder>(options => {
+    options.UseAspNetCore()
+    .DisableTransportSecurityRequirement();
+    });
+#endif
+```
 
 
 ## How to Configure & Run the React Native Application

@@ -177,6 +177,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
+        IncrementEntityVersionProperty(entity);
         SetModificationAuditProperties(entity);
 
         if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
@@ -484,6 +485,20 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         await DeleteManyAsync(entities, autoSave, cancellationToken);
     }
 
+    public override async Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        cancellationToken = GetCancellationToken(cancellationToken);
+
+        var dbContext = await GetDbContextAsync(cancellationToken);
+        var collection = dbContext.Collection<TEntity>();
+
+        await collection.DeleteManyAsync(
+            dbContext.SessionHandle,
+            Builders<TEntity>.Filter.Where(predicate),
+            cancellationToken: cancellationToken
+        );
+    }
+
     [Obsolete("Use GetQueryableAsync method.")]
     protected override IQueryable<TEntity> GetQueryable()
     {
@@ -652,6 +667,11 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     protected virtual void SetDeletionAuditProperties(TEntity entity)
     {
         AuditPropertySetter.SetDeletionProperties(entity);
+    }
+
+    protected virtual void IncrementEntityVersionProperty(TEntity entity)
+    {
+        AuditPropertySetter.IncrementEntityVersionProperty(entity);
     }
 
     protected virtual void TriggerDomainEvents(object entity)

@@ -14,22 +14,17 @@
         @* ************************* PAGE HEADER ************************* *@
         <PageHeader Title="@L["Users"]"
                     BreadcrumbItems="@BreadcrumbItems"
-                    Toolbar="@Toolbar">
-        </PageHeader>
+                    Toolbar="@Toolbar" />
     </CardHeader>
     <CardBody>
-        <Field Horizontal>
-            <FieldBody ColumnSize="ColumnSize.Is2.Is10.WithOffset">
-                <Addons>
-                    <Addon AddonType="AddonType.Start">
-                        <Label>@L["Search"]</Label>
-                    </Addon>
-                    <Addon AddonType="AddonType.Body">
-                        <TextEdit Style="margin-left: 0.5rem" Size="Size.Small" Text="@GetListInput.Filter" TextChanged="@OnSearchTextChanged"/>
-                    </Addon>
-                </Addons>
-            </FieldBody>
-        </Field>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is3">
+                <Field>
+                    <FieldLabel>@L["Search"]</FieldLabel>
+                    <TextEdit Size="Size.Small" Text="@GetListInput.Filter" TextChanged="@OnSearchTextChanged" />
+                </Field>
+            </Column>
+        </Row>
         @* ************************* DATA GRID ************************* *@
         <AbpExtensibleDataGrid TItem="IdentityUserDto"
                                Data="Entities"
@@ -101,7 +96,9 @@
                                                     </TextEdit>
                                                 </Addon>
                                                 <Addon AddonType="AddonType.End">
-                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"><Icon Name="IconName.EyeSlash"/></Button>
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))">
+                                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                                    </Button>
                                                 </Addon>
                                             </Addons>
                                             <ValidationError Style="display: block"/>
@@ -220,7 +217,9 @@
                                                     </TextEdit>
                                                 </Addon>
                                                 <Addon AddonType="AddonType.End">
-                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"><Icon Name="IconName.EyeSlash"/></Button>
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))">
+                                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                                    </Button>
                                                 </Addon>
                                             </Addons>
                                             <ValidationError Style="display: block"/>

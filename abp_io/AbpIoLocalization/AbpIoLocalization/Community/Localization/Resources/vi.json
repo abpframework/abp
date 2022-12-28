@@ -142,6 +142,7 @@
     "MinimumSearchContent": "Bạn phải nhập ít nhất 3 ký tự!",
     "Volo.AbpIo.Domain:060001": "URL nguồn (\"{PostUrl}\") không phải là URL Github",
     "Volo.AbpIo.Domain:060002": "Nội dung Bài viết không có sẵn từ tài nguyên Github (\"{PostUrl}\").",
-    "Volo.AbpIo.Domain:060003": "Không tìm thấy nội dung bài viết!"
+    "Volo.AbpIo.Domain:060003": "Không tìm thấy nội dung bài viết!",
+    "IConsentToMedium": "Tôi đồng ý với việc xuất bản bài đăng này tại https://medium.com/volosoft."
   }
 }

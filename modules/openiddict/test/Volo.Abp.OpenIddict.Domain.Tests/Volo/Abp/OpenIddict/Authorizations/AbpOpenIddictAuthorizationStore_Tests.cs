@@ -69,7 +69,7 @@ public class AbpOpenIddictAuthorizationStore_Tests : OpenIddictDomainTestBase
     {
         var authorization = await _authorizationStore.FindByIdAsync(_testData.Authorization1Id.ToString(), CancellationToken.None);
         authorization.ShouldNotBeNull();
-        authorization.Status.ShouldBe("TestStatus1");
+        authorization.Status.ShouldBe(OpenIddictConstants.Statuses.Valid);
         authorization.Subject.ShouldBe("TestSubject1");
         authorization.Type.ShouldBe(OpenIddictConstants.AuthorizationTypes.Permanent);
     }

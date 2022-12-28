@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
@@ -10,7 +11,7 @@ namespace Volo.Abp.Identity;
 /// <summary>
 /// Represents an organization unit (OU).
 /// </summary>
-public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant
+public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
 {
     public virtual Guid? TenantId { get; protected set; }
 
@@ -32,6 +33,11 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant
     /// Display name of this OrganizationUnit.
     /// </summary>
     public virtual string DisplayName { get; set; }
+
+    /// <summary>
+    /// A version value that is increased whenever the entity is changed.
+    /// </summary>
+    public virtual int EntityVersion { get; set; }
 
     /// <summary>
     /// Roles of this OU.

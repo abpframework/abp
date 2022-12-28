@@ -273,6 +273,8 @@
     "SubscribeToNewsletter": "Naročite se na glasilo, če želite prejemati informacije o dogajanju na platformi ABP.IO, kot so nove izdaje, članki, ponudbe in drugo.",
     "FirstEdition": "Prva izdaja",
     "ThankYou": "Hvala vam!",
-    "CheckboxMandatory": "Za nadaljevanje morate to preveriti!"
+    "CheckboxMandatory": "Za nadaljevanje morate to preveriti!",
+    "SelectUITheme": "Izberite temo uporabniškega vmesnika"
+
   }
 }

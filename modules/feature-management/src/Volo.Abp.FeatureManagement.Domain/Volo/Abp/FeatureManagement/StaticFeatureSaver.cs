@@ -22,7 +22,7 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
     protected IFeatureDefinitionRecordRepository FeatureRepository { get; }
     protected IFeatureDefinitionSerializer FeatureSerializer { get; }
     protected IDistributedCache Cache { get; }
-    protected IApplicationNameAccessor ApplicationNameAccessor { get; }
+    protected IApplicationInfoAccessor ApplicationInfoAccessor { get; }
     protected IAbpDistributedLock DistributedLock { get; }
     protected AbpFeatureOptions FeatureOptions { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
@@ -35,7 +35,7 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
         IFeatureDefinitionSerializer featureSerializer,
         IDistributedCache cache,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
-        IApplicationNameAccessor applicationNameAccessor,
+        IApplicationInfoAccessor applicationInfoAccessor,
         IAbpDistributedLock distributedLock,
         IOptions<AbpFeatureOptions> featureManagementOptions,
         ICancellationTokenProvider cancellationTokenProvider)
@@ -45,7 +45,7 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
         FeatureRepository = featureRepository;
         FeatureSerializer = featureSerializer;
         Cache = cache;
-        ApplicationNameAccessor = applicationNameAccessor;
+        ApplicationInfoAccessor = applicationInfoAccessor;
         DistributedLock = distributedLock;
         CancellationTokenProvider = cancellationTokenProvider;
         FeatureOptions = featureManagementOptions.Value;
@@ -249,7 +249,7 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
 
     private string GetApplicationDistributedLockKey()
     {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpFeatureUpdateLock";
+        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpFeatureUpdateLock";
     }
 
     private string GetCommonDistributedLockKey()
@@ -259,7 +259,7 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
 
     private string GetApplicationHashCacheKey()
     {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpFeaturesHash";
+        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpFeaturesHash";
     }
 
     private string GetCommonStampCacheKey()

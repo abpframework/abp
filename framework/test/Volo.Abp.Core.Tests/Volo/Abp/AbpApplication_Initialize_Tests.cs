@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
@@ -151,7 +152,7 @@ public class AbpApplication_Initialize_Tests
     }
 
     [Fact]
-    public void Should_Set_And_Get_ApplicationName()
+    public void Should_Set_And_Get_ApplicationName_And_InstanceId()
     {
         var applicationName = "MyApplication";
 
@@ -165,10 +166,9 @@ public class AbpApplication_Initialize_Tests
 
             application.Initialize();
 
-            application.ServiceProvider
-                .GetRequiredService<IApplicationNameAccessor>()
-                .ApplicationName
-                .ShouldBe(applicationName);
+            var appInfo = application.ServiceProvider.GetRequiredService<IApplicationInfoAccessor>();
+            appInfo.ApplicationName.ShouldBe(applicationName);
+            appInfo.InstanceId.ShouldNotBeNullOrEmpty();
         }
 
         using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>(options =>
@@ -185,7 +185,7 @@ public class AbpApplication_Initialize_Tests
             application.Initialize();
 
             application.ServiceProvider
-                .GetRequiredService<IApplicationNameAccessor>()
+                .GetRequiredService<IApplicationInfoAccessor>()
                 .ApplicationName
                 .ShouldBe(applicationName);
         }
@@ -199,9 +199,40 @@ public class AbpApplication_Initialize_Tests
             application.Initialize();
 
             application.ServiceProvider
-                .GetRequiredService<IApplicationNameAccessor>()
+                .GetRequiredService<IApplicationInfoAccessor>()
                 .ApplicationName
                 .ShouldBe(applicationName);
+        }
+    }
+
+    [Fact]
+    public void Should_Set_And_Get_Environment()
+    {
+        // Default environment is Production
+        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
+        {
+            var abpHostEnvironment = application.Services.GetSingletonInstance<IAbpHostEnvironment>();
+            abpHostEnvironment.EnvironmentName.ShouldBe(Environments.Production);
+
+            application.Initialize();
+
+            abpHostEnvironment = application.ServiceProvider.GetRequiredService<IAbpHostEnvironment>();
+            abpHostEnvironment.EnvironmentName.ShouldBe(Environments.Production);
+        }
+
+        // Set environment
+        using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>(options =>
+               {
+                   options.Environment = Environments.Staging;
+               }))
+        {
+            var abpHostEnvironment = application.Services.GetSingletonInstance<IAbpHostEnvironment>();
+            abpHostEnvironment.EnvironmentName.ShouldBe(Environments.Staging);
+
+            application.Initialize();
+
+            abpHostEnvironment = application.ServiceProvider.GetRequiredService<IAbpHostEnvironment>();
+            abpHostEnvironment.EnvironmentName.ShouldBe(Environments.Staging);
         }
     }
 

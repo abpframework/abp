@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Components;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.FeatureManagement.Localization;
@@ -26,7 +26,7 @@ public partial class FeatureSettingManagementComponent : AbpComponentBase
     {
         Settings = new FeatureSettingViewModel 
         {
-            HasManageHostFeaturesPermission = await PermissionChecker.IsGrantedAsync(FeatureManagementPermissions.ManageHostFeatures)
+            HasManageHostFeaturesPermission = await AuthorizationService.IsGrantedAsync(FeatureManagementPermissions.ManageHostFeatures)
         };
     }
 

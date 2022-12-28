@@ -44,6 +44,7 @@ public class UserInfoController : AbpOpenIdDictControllerBase
             claims[AbpClaimTypes.TenantId] = user.TenantId;
             claims[OpenIddictConstants.Claims.PreferredUsername] = user.UserName;
             claims[OpenIddictConstants.Claims.FamilyName] = user.Surname;
+            claims[OpenIddictConstants.Claims.GivenName] = user.Name;
         }
 
         if (User.HasScope(OpenIddictConstants.Scopes.Email))

@@ -5,6 +5,7 @@ using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -141,8 +142,16 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
+        string name = null,
+        string surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
+        bool? emailConfirmed = null,
+        bool? isExternal = null,
+        DateTime? maxCreationTime = null,
+        DateTime? minCreationTime = null,
+        DateTime? maxModifitionTime = null,
+        DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -161,8 +170,16 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
-            .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0)
-            .WhereIf(notActive == true, x => !x.IsActive)
+            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
+            .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
+            .WhereIf(isLockedOut.HasValue, x => x.LockoutEnabled && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0)
+            .WhereIf(notActive.HasValue, x => !x.IsActive)
+            .WhereIf(emailConfirmed.HasValue, x => x.EmailConfirmed)
+            .WhereIf(isExternal.HasValue, x => x.IsExternal)
+            .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
+            .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
+            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -206,8 +223,16 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
+        string name = null,
+        string surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
+        bool? emailConfirmed = null,
+        bool? isExternal = null,
+        DateTime? maxCreationTime = null,
+        DateTime? minCreationTime = null,
+        DateTime? maxModifitionTime = null,
+        DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -225,8 +250,16 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
-            .WhereIf(isLockedOut == true, x => x.LockoutEnabled && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0)
-            .WhereIf(notActive == true, x => !x.IsActive)
+            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
+            .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
+            .WhereIf(isLockedOut.HasValue, x => x.LockoutEnabled && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0)
+            .WhereIf(notActive.HasValue, x => !x.IsActive)
+            .WhereIf(emailConfirmed.HasValue, x => x.EmailConfirmed)
+            .WhereIf(isExternal.HasValue, x => x.IsExternal)
+            .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
+            .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
+            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -300,5 +333,19 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
     public override async Task<IQueryable<IdentityUser>> WithDetailsAsync()
     {
         return (await GetQueryableAsync()).IncludeDetails();
+    }
+
+    public virtual async Task<IdentityUser> FindByTenantIdAndUserNameAsync(
+        [NotNull] string userName,
+        Guid? tenantId,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .FirstOrDefaultAsync(
+                u => u.TenantId == tenantId && u.UserName == userName,
+                GetCancellationToken(cancellationToken)
+            );
     }
 }

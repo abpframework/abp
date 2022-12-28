@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Public.Application",
-  "hash": "dbc8794dfdbb275a73d410403ce7df09",
+  "hash": "e33c999f20604c3ab97aabfd352ce8e5",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Public",
@@ -335,6 +335,13 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "PageDto",
+          "isAsync": true,
+          "name": "FindDefaultHomePageAsync",
+          "summary": null,
+          "parameters": []
         }
       ],
       "contentType": "applicationService",

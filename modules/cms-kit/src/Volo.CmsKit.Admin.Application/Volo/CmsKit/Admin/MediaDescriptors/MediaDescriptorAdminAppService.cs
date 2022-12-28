@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
-using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.MediaDescriptors;
 
 namespace Volo.CmsKit.Admin.MediaDescriptors;
 
-[RequiresFeature(CmsKitFeatures.MediaEnable)]
 [RequiresGlobalFeature(typeof(MediaFeature))]
 public class MediaDescriptorAdminAppService : CmsKitAdminAppServiceBase, IMediaDescriptorAdminAppService
 {

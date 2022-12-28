@@ -167,3 +167,7 @@ h1.content-header-title{
 .b-table h4.h4 {
     text-align: center;
 }
+
+form .table-responsive{
+    min-height: 412px;
+}

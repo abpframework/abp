@@ -18,8 +18,11 @@
         return new HtmlLocalizer(localizer);
     }
 }
+
+<abp-script src="/Pages/FeatureManagement/feature-management-modal.js" />
+
 <form method="post" asp-page="/FeatureManagement/FeatureManagementModal" data-script-class="abp.modals.FeatureManagement">
-    <abp-modal size="Large">
+    <abp-modal id="featureManagmentModal" size="Large">
         <abp-modal-header title="@(L["Features"].Value)"></abp-modal-header>
         @if (Model.FeatureListResultDto != null && Model.FeatureListResultDto.Groups.Any())
         {

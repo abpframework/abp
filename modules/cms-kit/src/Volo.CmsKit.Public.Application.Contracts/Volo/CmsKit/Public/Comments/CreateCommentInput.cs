@@ -13,4 +13,8 @@ public class CreateCommentInput
     public string Text { get; set; }
 
     public Guid? RepliedCommentId { get; set; }
+    
+    public Guid? CaptchaToken { get; set; }
+    
+    public int CaptchaAnswer { get; set; }
 }

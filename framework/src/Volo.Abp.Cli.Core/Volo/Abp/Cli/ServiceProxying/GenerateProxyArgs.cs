@@ -25,6 +25,8 @@ public class GenerateProxyArgs
 
     public string Folder { get; }
 
+    public ServiceType? ServiceType { get; }
+
     public bool WithoutContracts { get; }
 
     [NotNull]
@@ -40,6 +42,7 @@ public class GenerateProxyArgs
         string apiName,
         string source,
         string folder,
+        ServiceType? serviceType,
         bool withoutContracts,
         Dictionary<string, string> extraProperties = null)
     {
@@ -52,6 +55,7 @@ public class GenerateProxyArgs
         ApiName = apiName;
         Source = source;
         Folder = folder;
+        ServiceType = serviceType;
         WithoutContracts = withoutContracts;
         ExtraProperties = extraProperties ?? new Dictionary<string, string>();
     }

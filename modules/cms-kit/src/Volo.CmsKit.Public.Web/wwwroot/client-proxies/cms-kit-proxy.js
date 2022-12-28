@@ -214,6 +214,14 @@
       }, ajaxParams));
     };
 
+    volo.cmsKit.public.blogs.blogPostPublic['delete'] = function(id, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + id + '',
+        type: 'DELETE',
+        dataType: null
+      }, ajaxParams));
+    };
+
   })();
 
 })();

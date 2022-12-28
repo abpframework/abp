@@ -5,7 +5,12 @@ import {
   FeaturesService,
   UpdateFeatureDto,
 } from '@abp/ng.feature-management/proxy';
-import { LocaleDirection } from '@abp/ng.theme.shared';
+import {
+  Confirmation,
+  ConfirmationService,
+  LocaleDirection,
+  ToasterService,
+} from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { FeatureManagement } from '../../models/feature-management';
@@ -63,8 +68,10 @@ export class FeatureManagementComponent
 
   constructor(
     public readonly track: TrackByService,
+    private toasterService: ToasterService,
     protected service: FeaturesService,
     protected configState: ConfigStateService,
+    protected confirmationService: ConfirmationService,
   ) {}
 
   openModal() {
@@ -117,6 +124,24 @@ export class FeatureManagementComponent
         if (!this.providerKey) {
           // to refresh host's features
           this.configState.refreshAppState().subscribe();
+        }
+      });
+  }
+
+  resetToDefault() {
+    this.confirmationService
+      .warn('AbpFeatureManagement::AreYouSureToResetToDefault', 'AbpFeatureManagement::AreYouSure')
+      .subscribe((status: Confirmation.Status) => {
+        if (status === Confirmation.Status.confirm) {
+          this.service.delete(this.providerName, this.providerKey).subscribe(() => {
+            this.toasterService.success('AbpFeatureManagement::ResetedToDefault');
+            this.visible = false;
+
+            if (!this.providerKey) {
+              // to refresh host's features
+              this.configState.refreshAppState().subscribe();
+            }
+          });
         }
       });
   }

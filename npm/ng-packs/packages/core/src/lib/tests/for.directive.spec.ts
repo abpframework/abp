@@ -1,6 +1,5 @@
 import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/jest';
 import { ForDirective } from '../directives/for.directive';
-import { uuid } from '../utils';
 
 describe('ForDirective', () => {
   let spectator: SpectatorDirective<ForDirective>;

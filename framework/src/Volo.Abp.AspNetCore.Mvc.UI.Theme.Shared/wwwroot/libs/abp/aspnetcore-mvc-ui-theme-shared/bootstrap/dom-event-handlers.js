@@ -74,20 +74,26 @@
     abp.dom.initializers.initializeAutocompleteSelects = function ($autocompleteSelects) {
         if ($autocompleteSelects.length) {
             $autocompleteSelects.each(function () {
-                var $select = $(this);
-                var url = $(this).data("autocompleteApiUrl");
-                var displayName = $(this).data("autocompleteDisplayProperty");
-                var displayValue = $(this).data("autocompleteValueProperty");
-                var itemsPropertyName = $(this).data("autocompleteItemsProperty");
-                var filterParamName = $(this).data("autocompleteFilterParamName");
-                var selectedText = $(this).data("autocompleteSelectedItemName");
-                var parentSelector = $(this).data("autocompleteParentSelector");
-                if(!parentSelector && $select.parents(".modal.fade").length === 1){
+                let $select = $(this);
+                let url = $(this).data("autocompleteApiUrl");
+                let displayName = $(this).data("autocompleteDisplayProperty");
+                let displayValue = $(this).data("autocompleteValueProperty");
+                let itemsPropertyName = $(this).data("autocompleteItemsProperty");
+                let filterParamName = $(this).data("autocompleteFilterParamName");
+                let selectedText = $(this).data("autocompleteSelectedItemName");
+                let parentSelector = $(this).data("autocompleteParentSelector");
+                let allowClear = $(this).data("autocompleteAllowClear");
+                let placeholder = $(this).data("autocompletePlaceholder");
+                if (allowClear && placeholder == undefined) {
+                    placeholder = " ";
+                }
+
+                if (!parentSelector && $select.parents(".modal.fade").length === 1) {
                     parentSelector = ".modal.fade";
                 }
-                var name = $(this).attr("name");
-                var selectedTextInputName = name + "_Text";
-                var selectedTextInput = $('<input>', {
+                let name = $(this).attr("name");
+                let selectedTextInputName = name + "_Text";
+                let selectedTextInput = $('<input>', {
                     type: 'hidden',
                     id: selectedTextInputName,
                     name: selectedTextInputName,
@@ -101,13 +107,13 @@
                         url: url,
                         dataType: "json",
                         data: function (params) {
-                            var query = {};
+                            let query = {};
                             query[filterParamName] = params.term;
                             return query;
                         },
                         processResults: function (data) {
-                            var retVal = [];
-                            var items = data;
+                            let retVal = [];
+                            let items = data;
                             if (itemsPropertyName) {
                                 items = data[itemsPropertyName];
                             }
@@ -125,6 +131,11 @@
                     },
                     width: '100%',
                     dropdownParent: parentSelector ? $(parentSelector) : $('body'),
+                    allowClear: allowClear,
+                    placeholder: {
+                        id: '-1',
+                        text: placeholder
+                    }
                 });
                 $select.on('select2:select', function (e) {
                     selectedTextInput.val(e.params.data.text);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,12 +43,29 @@ public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator wher
             throw new CliUsageException($"Module name: {args.Module} is invalid");
         }
 
+        var serviceType = GetServiceType(args);
+        switch (serviceType)
+        {
+            case ServiceType.Application:
+                moduleDefinition.Controllers.RemoveAll(x => !x.Value.IsRemoteService);
+                break;
+            case ServiceType.Integration:
+                moduleDefinition.Controllers.RemoveAll(x => !x.Value.IsIntegrationService);
+                break;
+        }
+
         var apiDescriptionModel = ApplicationApiDescriptionModel.Create();
         apiDescriptionModel.Types = apiDefinition.Types;
         apiDescriptionModel.AddModule(moduleDefinition);
-
         return apiDescriptionModel;
     }
+
+    protected virtual ServiceType? GetServiceType(GenerateProxyArgs args)
+    {
+        return args.ServiceType ?? GetDefaultServiceType(args);
+    }
+
+    protected abstract ServiceType? GetDefaultServiceType(GenerateProxyArgs args);
 
     protected string GetLoggerOutputPath(string path, string workDirectory)
     {

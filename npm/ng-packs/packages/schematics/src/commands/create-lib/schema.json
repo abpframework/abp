@@ -16,19 +16,28 @@
     "isSecondaryEntrypoint": {
       "description": "Is secondary entrypoint",
       "type": "boolean",
-      "$default": false,
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      },
       "x-prompt": "Is secondary entrypoint?"
     },
     "isModuleTemplate": {
       "description": "Is module template",
       "type": "boolean",
-      "$default": true,
+      "$default": {
+        "$source": "argv",
+        "index": 2
+      },
       "x-prompt": "Is module template?"
     },
     "override": {
       "description": "Override existing files",
       "type": "boolean",
-      "$default": false,
+      "$default": {
+        "$source": "argv",
+        "index": 3
+      },
       "x-prompt": "Override existing files?"
     }
   },

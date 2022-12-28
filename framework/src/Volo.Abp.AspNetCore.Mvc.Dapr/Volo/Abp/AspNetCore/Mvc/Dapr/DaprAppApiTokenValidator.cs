@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization;
 using Volo.Abp.Dapr;
@@ -10,13 +11,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Dapr;
 public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDependency
 {
     protected IHttpContextAccessor HttpContextAccessor { get; }
-    protected HttpContext HttpContext => GetHttpContext(); 
+    protected HttpContext HttpContext => GetHttpContext();
 
     public DaprAppApiTokenValidator(IHttpContextAccessor httpContextAccessor)
     {
         HttpContextAccessor = httpContextAccessor;
     }
-    
+
     public virtual void CheckDaprAppApiToken()
     {
         var expectedAppApiToken = GetConfiguredAppApiTokenOrNull();
@@ -24,7 +25,7 @@ public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDep
         {
             return;
         }
-        
+
         var headerAppApiToken = GetDaprAppApiTokenOrNull();
         if (headerAppApiToken.IsNullOrWhiteSpace())
         {
@@ -44,12 +45,12 @@ public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDep
         {
             return true;
         }
-        
+
         var headerAppApiToken = GetDaprAppApiTokenOrNull();
         return expectedAppApiToken == headerAppApiToken;
     }
 
-    public virtual string? GetDaprAppApiTokenOrNull()
+    public virtual string GetDaprAppApiTokenOrNull()
     {
         string apiTokenHeader = HttpContext.Request.Headers["dapr-api-token"];
         if (string.IsNullOrEmpty(apiTokenHeader) || apiTokenHeader.Length < 1)
@@ -59,8 +60,8 @@ public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDep
 
         return apiTokenHeader;
     }
-    
-    protected virtual string? GetConfiguredAppApiTokenOrNull()
+
+    protected virtual string GetConfiguredAppApiTokenOrNull()
     {
         return HttpContext
             .RequestServices

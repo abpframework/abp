@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Volo.Abp.EventBus.Boxes;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
@@ -33,10 +32,7 @@ public class DbContextEventInbox<TDbContext> : IDbContextEventInbox<TDbContext>
     public virtual async Task EnqueueAsync(IncomingEventInfo incomingEvent)
     {
         var dbContext = await DbContextProvider.GetDbContextAsync();
-
-        dbContext.IncomingEvents.Add(
-            new IncomingEventRecord(incomingEvent)
-        );
+        dbContext.IncomingEvents.Add(new IncomingEventRecord(incomingEvent));
     }
 
     [UnitOfWork]
@@ -61,11 +57,8 @@ public class DbContextEventInbox<TDbContext> : IDbContextEventInbox<TDbContext>
     public virtual async Task MarkAsProcessedAsync(Guid id)
     {
         var dbContext = await DbContextProvider.GetDbContextAsync();
-        var incomingEvent = await dbContext.IncomingEvents.FindAsync(id);
-        if (incomingEvent != null)
-        {
-            incomingEvent.MarkAsProcessed(Clock.Now);
-        }
+        await dbContext.IncomingEvents.Where(x => x.Id == id).ExecuteUpdateAsync(x =>
+            x.SetProperty(p => p.Processed, _ => true).SetProperty(p => p.ProcessedTime, _ => Clock.Now));
     }
 
     [UnitOfWork]
@@ -80,9 +73,8 @@ public class DbContextEventInbox<TDbContext> : IDbContextEventInbox<TDbContext>
     {
         var dbContext = await DbContextProvider.GetDbContextAsync();
         var timeToKeepEvents = Clock.Now - EventBusBoxesOptions.WaitTimeToDeleteProcessedInboxEvents;
-        var oldEvents = await dbContext.IncomingEvents
+        await dbContext.IncomingEvents
             .Where(x => x.Processed && x.CreationTime < timeToKeepEvents)
-            .ToListAsync();
-        dbContext.IncomingEvents.RemoveRange(oldEvents);
+            .ExecuteDeleteAsync();
     }
 }

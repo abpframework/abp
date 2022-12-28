@@ -8,78 +8,92 @@ using Volo.Abp.DynamicProxy;
 namespace Volo.Abp.BackgroundWorkers.Quartz;
 
 [Dependency(ReplaceServices = true)]
-public class QuartzBackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDependency
+public class QuartzBackgroundWorkerManager : BackgroundWorkerManager, ISingletonDependency
 {
-    private readonly IScheduler _scheduler;
+    protected IScheduler Scheduler { get; }
 
     public QuartzBackgroundWorkerManager(IScheduler scheduler)
     {
-        _scheduler = scheduler;
+        Scheduler = scheduler;
     }
 
-    public virtual async Task StartAsync(CancellationToken cancellationToken = default)
+    public async override Task StartAsync(CancellationToken cancellationToken = default)
     {
-        if (_scheduler.IsStarted && _scheduler.InStandbyMode)
+        if (Scheduler.IsStarted && Scheduler.InStandbyMode)
         {
-            await _scheduler.Start(cancellationToken);
+            await Scheduler.Start(cancellationToken);
         }
+
+        await base.StartAsync(cancellationToken);
     }
 
-    public virtual async Task StopAsync(CancellationToken cancellationToken = default)
+    public async override Task StopAsync(CancellationToken cancellationToken = default)
     {
-        if (_scheduler.IsStarted && !_scheduler.InStandbyMode)
+        if (Scheduler.IsStarted && !Scheduler.InStandbyMode)
         {
-            await _scheduler.Standby(cancellationToken);
+            await Scheduler.Standby(cancellationToken);
         }
+
+        await base.StopAsync(cancellationToken);
     }
 
-    public virtual async Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
+    public async override Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
     {
         await ReScheduleJobAsync(worker, cancellationToken);
     }
 
     protected virtual async Task ReScheduleJobAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
     {
-        if (worker is IQuartzBackgroundWorker quartzWork)
+        switch (worker)
         {
-            Check.NotNull(quartzWork.Trigger, nameof(quartzWork.Trigger));
-            Check.NotNull(quartzWork.JobDetail, nameof(quartzWork.JobDetail));
-
-            if (quartzWork.ScheduleJob != null)
+            case IQuartzBackgroundWorker quartzWork:
             {
-                await quartzWork.ScheduleJob.Invoke(_scheduler);
+                Check.NotNull(quartzWork.Trigger, nameof(quartzWork.Trigger));
+                Check.NotNull(quartzWork.JobDetail, nameof(quartzWork.JobDetail));
+
+                if (quartzWork.ScheduleJob != null)
+                {
+                    await quartzWork.ScheduleJob.Invoke(Scheduler);
+                }
+                else
+                {
+                    await DefaultScheduleJobAsync(quartzWork, cancellationToken);
+                }
+
+                break;
             }
-            else
+            case AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase:
             {
-                await DefaultScheduleJobAsync(quartzWork, cancellationToken);
+                var adapterType = typeof(QuartzPeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
+
+                var workerAdapter = Activator.CreateInstance(adapterType) as IQuartzBackgroundWorkerAdapter;
+
+                workerAdapter?.BuildWorker(worker);
+
+                if (workerAdapter?.Trigger != null)
+                {
+                    await DefaultScheduleJobAsync(workerAdapter, cancellationToken);
+                }
+
+                break;
             }
-        }
-        else
-        {
-            var adapterType = typeof(QuartzPeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
-
-            var workerAdapter = Activator.CreateInstance(adapterType) as IQuartzBackgroundWorkerAdapter;
-
-            workerAdapter?.BuildWorker(worker);
-
-            if (workerAdapter?.Trigger != null)
-            {
-                await DefaultScheduleJobAsync(workerAdapter, cancellationToken);
-            }
+            default:
+                await base.AddAsync(worker, cancellationToken);
+                break;
         }
     }
 
     protected virtual async Task DefaultScheduleJobAsync(IQuartzBackgroundWorker quartzWork, CancellationToken cancellationToken = default)
     {
-        if (await _scheduler.CheckExists(quartzWork.JobDetail.Key, cancellationToken))
+        if (await Scheduler.CheckExists(quartzWork.JobDetail.Key, cancellationToken))
         {
-            await _scheduler.AddJob(quartzWork.JobDetail, true, true, cancellationToken);
-            await _scheduler.ResumeJob(quartzWork.JobDetail.Key, cancellationToken);
-            await _scheduler.RescheduleJob(quartzWork.Trigger.Key, quartzWork.Trigger, cancellationToken);
+            await Scheduler.AddJob(quartzWork.JobDetail, true, true, cancellationToken);
+            await Scheduler.ResumeJob(quartzWork.JobDetail.Key, cancellationToken);
+            await Scheduler.RescheduleJob(quartzWork.Trigger.Key, quartzWork.Trigger, cancellationToken);
         }
         else
         {
-            await _scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger, cancellationToken);
+            await Scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger, cancellationToken);
         }
     }
 }

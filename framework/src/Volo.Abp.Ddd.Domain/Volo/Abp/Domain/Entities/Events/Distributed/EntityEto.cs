@@ -20,3 +20,8 @@ public class EntityEto : EtoBase
         KeysAsString = keysAsString;
     }
 }
+
+public abstract class EntityEto<TKey> : IEntityEto<TKey>
+{
+    public TKey Id { get; set; }
+}

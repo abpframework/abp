@@ -1,0 +1,13 @@
+{
+  "culture": "hr",
+  "texts": {
+    "GivenTenantIsNotExist": "Odabrani tenant ne postoji: {0}",
+    "GivenTenantIsNotAvailable": "Odabrani tenant nije dostupan: {0}",
+    "Tenant": "Tenant",
+    "Switch": "promjena",
+    "Name": "Naziv",
+    "SwitchTenantHint": "Polje naziv ostavite prazno kako bi se prebacili na host-ovu stranu.",
+    "SwitchTenant": "Promjena tenant-a",
+    "NotSelected": "Nije odabrano"
+  }
+}

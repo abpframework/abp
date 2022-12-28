@@ -24,7 +24,7 @@
 
       <hr class="mt-2 mb-2" />
       <div class="row">
-        <div class="overflow-scroll col-md-4">
+        <div class="overflow-auto col-md-4">
           <ul class="nav nav-pills flex-column">
             <li *ngFor="let group of data.groups; trackBy: trackByFn" class="nav-item">
               <a
@@ -32,16 +32,17 @@
                 class="nav-link pointer"
                 [class.active]="selectedGroup?.name === group?.name"
                 (click)="onChangeGroup(group)"
+                (select)="setDisabled(group.permissions)"
               >
                 <div [class.font-weight-bold]="count.assignedCount">
                   {{ group?.displayName }}
-                  <span>({{ count.assignedCount }})</span>
+                  <span *ngIf="count.assignedCount > 0">({{ count.assignedCount }})</span>
                 </div>
               </a>
             </li>
           </ul>
         </div>
-        <div class="col-md-8 overflow-scroll">
+        <div class="col-md-8 overflow-auto">
           <h4>{{ selectedGroup?.displayName }}</h4>
           <hr class="mt-2 mb-3" />
           <div class="ps-1 pt-1">
@@ -53,6 +54,7 @@
                 name="select-all-in-this-tabs"
                 class="form-check-input"
                 [(ngModel)]="selectThisTab"
+                [disabled]="disableSelectAllTab"
                 (click)="onClickSelectThisTab()"
               />
               <label class="form-check-label" for="select-all-in-this-tabs">{{
