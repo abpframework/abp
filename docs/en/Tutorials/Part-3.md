@@ -34,10 +34,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
-
-> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
-> `git config --system core.longpaths true`
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -53,7 +50,7 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 In this section, you will learn how to create a new modal dialog form to create a new book. The modal dialog will look like the image below:
 
-![bookstore-create-dialog](images/bookstore-create-dialog-2.png)
+![bookstore-create-dialog](images/bookstore-create-dialog-3.png)
 
 ### Create the Modal Form
 
@@ -191,7 +188,7 @@ The final content of `Index.cshtml` is shown below:
 
 This adds a new button called **New book** to the **top-right** of the table:
 
-![bookstore-new-book-button](images/bookstore-new-book-button-2.png)
+![bookstore-new-book-button](images/bookstore-new-book-button-3.png)
 
 Open the `Pages/Books/Index.js` file and add the following code right after the `Datatable` configuration:
 
@@ -465,7 +462,9 @@ You can run the application and edit any book by selecting the edit action on a 
 
 The final UI looks as below:
 
-![bookstore-books-table-actions](images/bookstore-edit-button-2.png)
+![bookstore-books-table-actions](images/bookstore-edit-button-3.png)
+
+> Notice that you don't see the "Actions" button in the figure below. Instead, you see an "Edit" button. ABP is smart enough to show a single simple button instead of a actions dropdown button when the dropdown has only a single item. After the next section, it will turn to a drop down button.
 
 ## Deleting a Book
 

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.MongoDB",
-  "hash": "ed9d2296a89ba0258b79984cd06c3040",
+  "hash": "603767730c129e2b58a06c330e74a4e3",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement.MongoDB",

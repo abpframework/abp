@@ -34,10 +34,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
-
-> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
-> `git config --system core.longpaths true`
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -215,7 +212,7 @@ context.Menu.AddItem(
 
 Run the project, login to the application with the username `admin` and the password `1q2w3E*` and you can see that the new menu item has been added to the main menu:
 
-![bookstore-menu-items](images/bookstore-new-menu-item.png)
+![bookstore-menu-items](images/bookstore-new-menu-item-2.png)
 
 When you click on the Books menu item under the Book Store parent, you will be redirected to the new empty Books Page.
 
@@ -328,7 +325,7 @@ $(function () {
 
 You can run the application! The final UI of this part is shown below:
 
-![Book list](images/bookstore-book-list-3.png)
+![Book list](images/bookstore-book-list-4.png)
 
 This is a fully working, server side paged, sorted and localized table of books.
 

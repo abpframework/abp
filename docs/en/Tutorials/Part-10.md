@@ -34,10 +34,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
-
-> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
-> `git config --system core.longpaths true`
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
 
 ## Introduction
 
@@ -55,7 +52,7 @@ public Guid AuthorId { get; set; }
 
 {{if DB=="EF"}}
 
-> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity from the `Book` class (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their authors (like we will done below) which makes your application code simpler.
+> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity from the `Book` class (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their authors (like we will be doing below) which makes your application code simpler.
 
 {{end}}
 
@@ -105,6 +102,7 @@ This should create a new migration class with the following code in its `Up` met
 migrationBuilder.AddColumn<Guid>(
     name: "AuthorId",
     table: "AppBooks",
+    type: "uniqueidentifier",
     nullable: false,
     defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
@@ -708,7 +706,7 @@ namespace Acme.BookStore.Books
 
 ### The Book List
 
-Book list page change is trivial. Open the `Pages/Books/Index.js` in the `Acme.BookStore.Web` project and add the following column definition between the `name` and `type` columns:
+Book list page change is trivial. Open the `Pages/Books/Index.js` in the `Acme.BookStore.Web` project and add an `authorName` column between the `name` and `type` columns:
 
 ````js
 ...
@@ -735,7 +733,7 @@ Book list page change is trivial. Open the `Pages/Books/Index.js` in the `Acme.B
 
 When you run the application, you can see the *Author* column on the table:
 
-![bookstore-added-author-to-book-list](images/bookstore-added-author-to-book-list.png)
+![bookstore-added-author-to-book-list](images/bookstore-added-author-to-book-list-2.png)
 
 ### Create Modal
 
@@ -937,7 +935,7 @@ CreateMap<Pages.Books.EditModalModel.EditBookViewModel, CreateUpdateBookDto>();
 
 You can run the application and try to create a new book or update an existing book. You will see a drop down list on the create/update form to select the author of the book:
 
-![bookstore-added-authors-to-modals](images/bookstore-added-authors-to-modals.png)
+![bookstore-added-authors-to-modals](images/bookstore-added-authors-to-modals-2.png)
 
 {{else if UI=="NG"}}
 

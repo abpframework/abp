@@ -34,10 +34,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
-
-> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
-> `git config --system core.longpaths true`
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -130,7 +127,7 @@ Once you define the permissions, you can see them on the **permission management
 
 Go to the *Administration -> Identity -> Roles* page, select *Permissions* action for the admin role to open the permission management modal:
 
-![bookstore-permissions-ui](images/bookstore-permissions-ui.png)
+![bookstore-permissions-ui](images/bookstore-permissions-ui-2.png)
 
 Grant the permissions you want and save the modal.
 
@@ -202,7 +199,7 @@ Now, unauthorized users are redirected to the **login page**.
 
 The book management page has a *New Book* button that should be invisible if the current user has no *Book Creation* permission.
 
-![bookstore-new-book-button-small](images/bookstore-new-book-button-small.png)
+![bookstore-new-book-button-small](images/bookstore-new-book-button-small-2.png)
 
 Open the `Pages/Books/Index.cshtml` file and change the content as shown below:
 
@@ -251,7 +248,7 @@ Open the `Pages/Books/Index.cshtml` file and change the content as shown below:
 
 Books table in the book management page has an actions button for each row. The actions button includes *Edit* and *Delete* actions:
 
-![bookstore-edit-delete-actions](images/bookstore-edit-delete-actions.png)
+![bookstore-edit-delete-actions](images/bookstore-edit-delete-actions-2.png)
 
 We should hide an action if the current user has not granted for the related permission. Datatables row actions has a `visible` option that can be set to `false` to hide the action item.
 
@@ -301,82 +298,22 @@ context.Menu.AddItem(
 And replace this code block with the following:
 
 ````csharp
-var bookStoreMenu = new ApplicationMenuItem(
-    "BooksStore",
-    l["Menu:BookStore"],
-    icon: "fa fa-book"
+context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/Books"
+        ).RequirePermissions(BookStorePermissions.Books.Default) // Check the permission!
+    )
 );
-
-context.Menu.AddItem(bookStoreMenu);
-
-//CHECK the PERMISSION
-if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
-{
-    bookStoreMenu.AddItem(new ApplicationMenuItem(
-        "BooksStore.Books",
-        l["Menu:Books"],
-        url: "/Books"
-    ));
-}
 ````
 
-You also need to add `async` keyword to the `ConfigureMenuAsync` method and re-arrange the return values. The final `BookStoreMenuContributor` class should be the following:
-
-````csharp
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
-using Acme.BookStore.Localization;
-using Acme.BookStore.MultiTenancy;
-using Acme.BookStore.Permissions;
-using Volo.Abp.TenantManagement.Web.Navigation;
-using Volo.Abp.UI.Navigation;
-
-namespace Acme.BookStore.Web.Menus
-{
-    public class BookStoreMenuContributor : IMenuContributor
-    {
-        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
-        {
-            if (context.Menu.Name == StandardMenus.Main)
-            {
-                await ConfigureMainMenuAsync(context);
-            }
-        }
-
-        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
-        {
-            if (!MultiTenancyConsts.IsEnabled)
-            {
-                var administration = context.Menu.GetAdministration();
-                administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
-            }
-
-            var l = context.GetLocalizer<BookStoreResource>();
-
-            context.Menu.Items.Insert(0, new ApplicationMenuItem("BookStore.Home", l["Menu:Home"], "~/"));
-
-            var bookStoreMenu = new ApplicationMenuItem(
-                "BooksStore",
-                l["Menu:BookStore"],
-                icon: "fa fa-book"
-            );
-
-            context.Menu.AddItem(bookStoreMenu);
-
-            //CHECK the PERMISSION
-            if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
-            {
-                bookStoreMenu.AddItem(new ApplicationMenuItem(
-                    "BooksStore.Books",
-                    l["Menu:Books"],
-                    url: "/Books"
-                ));
-            }
-        }
-    }
-}
-````
+We've only added the `.RequirePermissions(BookStorePermissions.Books.Default)` extension method call for the inner menu item.
 
 {{else if UI == "NG"}}
 
