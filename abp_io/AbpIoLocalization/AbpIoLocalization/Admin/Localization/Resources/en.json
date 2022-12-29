@@ -409,6 +409,19 @@
     "OverallDiscountPrice": "Overall Discount Price",
     "OverallDiscountText": "Overall Discount Text",
     "SelectReport": "- Select Report -",
-    "NoDataAvailable": "No data available"
+    "NoDataAvailable": "No data available",
+    "StatisticsOfCachedContents": "Statistics of cached contents for nuget.abp.io",
+    "Compact": "Compact",
+    "EditSettings": "Edit Settings",
+    "CurrentEstimatedSize": "Current Estimated Size",
+    "CurrentEntryCount": "Current Entry Count",
+    "TotalHits": "Total Hits",
+    "TotalMisses": "Total Misses",
+    "NoResponseFrom": "No response from",
+    "ContentCacheSlidingExpirationByDay": "Content Cache Sliding Expiration By Day",
+    "MaxDaysForCaching": "Max Days For Caching",
+    "Enabled": "Enabled",
+    "Menu:NugetPackagesContentCache": "Packages Content Cache",
+    "NugetPackagesContentCache": "Content Cache"
   }
 }
