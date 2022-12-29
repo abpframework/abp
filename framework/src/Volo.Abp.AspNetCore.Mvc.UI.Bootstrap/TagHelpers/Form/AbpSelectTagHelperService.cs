@@ -147,9 +147,9 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
         }
 
-        if (IsNullableBoolean())
+        if (IsBooleanSelector())
         {
-            return GetSelectItemsFromNullableBoolean(context, output, TagHelper.AspFor.ModelExplorer);
+            return GetSelectItemsFromBooleanAttribute(TagHelper.AspFor.ModelExplorer.GetAttribute<BooleanSelector>(), TagHelper.AspFor.ModelExplorer);
         }
 
         var selectItemsAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<SelectItems>();
@@ -172,15 +172,9 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         return TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
     }
 
-    private bool IsNullableBoolean()
+    private bool IsBooleanSelector()
     {
-        var metadata = TagHelper.AspFor.ModelExplorer.Metadata;
-        if (!metadata.IsNullableValueType)
-        {
-            return false;
-        }
-
-        return metadata.UnderlyingOrModelType.Name == "Boolean";
+        return TagHelper.AspFor.ModelExplorer.GetAttribute<BooleanSelector>() != null;
     }
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
@@ -306,13 +300,15 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         return selectItems;
     }
 
-    protected virtual List<SelectListItem> GetSelectItemsFromNullableBoolean(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
+    protected virtual List<SelectListItem> GetSelectItemsFromBooleanAttribute(
+        BooleanSelector booleanSelectorAttribute,
+        ModelExplorer explorer)
     {
-        var selectItems = new List<SelectListItem>() { new SelectListItem() };
+        var selectItems = booleanSelectorAttribute.GetItems(explorer).ToList();
 
         var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
 
-        foreach (var iteam in new List<string> { "True", "False" })
+        foreach (var iteam in selectItems)
         {
             var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
                 new[]
@@ -322,17 +318,13 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
                 },
                 new[]
                 {
-                        iteam,
-                        iteam.ToCamelCase()
+                        iteam.Text,
+                        iteam.Text.ToCamelCase()
                 },
-                iteam
+                iteam.Text
             );
 
-            selectItems.Add(new SelectListItem
-            {
-                Value = iteam,
-                Text = localizedMemberName
-            });
+            iteam.Text = localizedMemberName;
         }
 
         return selectItems;
