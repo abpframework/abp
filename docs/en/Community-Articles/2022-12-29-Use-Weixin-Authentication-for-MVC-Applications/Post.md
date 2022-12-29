@@ -4,7 +4,7 @@ This guide demonstrates how to integrate Weixin to an ABP application that enabl
 
 ## Create a sandbox account
 
-If you don't have a production account, you can [create a sendbox account](https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index) for testing.
+If you don't have a production account, you can create a sendbox account for testing: https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index
 
 In this article we will use the sandbox account.
 
