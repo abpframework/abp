@@ -725,7 +725,7 @@ Book list page change is trivial. Open the `Pages/Books/Index.js` in the `Acme.B
     title: l('Type'),
     data: "type",
     render: function (data) {
-        return l('Enum:BookType:' + data);
+        return l('Enum:BookType.' + data);
     }
 },
 ...
