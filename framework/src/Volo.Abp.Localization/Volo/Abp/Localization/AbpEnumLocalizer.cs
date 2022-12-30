@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 
@@ -8,16 +7,16 @@ namespace Volo.Abp.Localization;
 
 public class AbpEnumLocalizer : IAbpEnumLocalizer, ISingletonDependency
 {
-    protected readonly IStringLocalizerFactory StringLocalizerFactory;
+    protected readonly IStringLocalizer StringLocalizer;
 
     public AbpEnumLocalizer(IStringLocalizerFactory stringLocalizerFactory)
     {
-        StringLocalizerFactory = stringLocalizerFactory;
+        StringLocalizer = stringLocalizerFactory.CreateDefaultOrNull();
     }
 
     public virtual string GetString(Type enumType, object enumValue)
     {
-        return GetStringInternal(enumType, enumValue, StringLocalizerFactory.CreateDefaultOrNull());
+        return GetStringInternal(enumType, enumValue, StringLocalizer);
     }
 
     public virtual string GetString(Type enumType, object enumValue, params IStringLocalizer[] specifyLocalizers)
