@@ -275,6 +275,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
                 {
                         $"Enum:{enumType.Name}.{enumValue}",
                         $"Enum:{enumType.Name}.{memberName}",
+                        $"{enumType.Name}.{enumValue}",
                         $"{enumType.Name}.{memberName}",
                         memberName
                 },

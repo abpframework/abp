@@ -22,6 +22,7 @@ public static class EnumHelper
             {
                         $"Enum:{enumType.Name}.{value}",
                         $"Enum:{enumType.Name}.{memberName}",
+                        $"{enumType.Name}.{value}",
                         $"{enumType.Name}.{memberName}",
                         memberName
             },
