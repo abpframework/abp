@@ -22,17 +22,20 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     private readonly HtmlEncoder _encoder;
     private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
     private readonly IStringLocalizerFactory _stringLocalizerFactory;
+    private readonly IAbpEnumLocalizer _abpEnumLocalizer;
 
     public AbpSelectTagHelperService(
         IHtmlGenerator generator,
         HtmlEncoder encoder,
         IAbpTagHelperLocalizer tagHelperLocalizer,
-        IStringLocalizerFactory stringLocalizerFactory)
+        IStringLocalizerFactory stringLocalizerFactory,
+        IAbpEnumLocalizer abpEnumLocalizer)
     {
         _generator = generator;
         _encoder = encoder;
         _tagHelperLocalizer = tagHelperLocalizer;
         _stringLocalizerFactory = stringLocalizerFactory;
+        _abpEnumLocalizer = abpEnumLocalizer;
     }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -264,24 +267,12 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         foreach (var enumValue in enumType.GetEnumValues())
         {
-            var memberName = enumType.GetEnumName(enumValue);
-            var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
+            var localizedMemberName = _abpEnumLocalizer.GetString(enumType, enumValue,
                 new[]
                 {
-                        containerLocalizer,
-                        _stringLocalizerFactory.CreateDefaultOrNull()
-                },
-                new[]
-                {
-                        $"Enum:{enumType.Name}.{enumValue}",
-                        $"Enum:{enumType.Name}.{memberName}",
-                        $"{enumType.Name}.{enumValue}",
-                        $"{enumType.Name}.{memberName}",
-                        memberName
-                },
-                memberName
-            );
-
+                    containerLocalizer,
+                    _stringLocalizerFactory.CreateDefaultOrNull()
+                });
             selectItems.Add(new SelectListItem
             {
                 Value = enumValue.ToString(),
