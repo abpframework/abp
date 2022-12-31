@@ -5,18 +5,18 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Localization;
 
-public class AbpEnumLocalizer : IAbpEnumLocalizer, ISingletonDependency
+public class AbpEnumLocalizer : IAbpEnumLocalizer, ITransientDependency
 {
-    protected readonly IStringLocalizer StringLocalizer;
+    protected readonly IStringLocalizerFactory StringLocalizerFactory;
 
     public AbpEnumLocalizer(IStringLocalizerFactory stringLocalizerFactory)
     {
-        StringLocalizer = stringLocalizerFactory.CreateDefaultOrNull();
+        StringLocalizerFactory = stringLocalizerFactory;
     }
 
     public virtual string GetString(Type enumType, object enumValue)
     {
-        return GetStringInternal(enumType, enumValue, StringLocalizer);
+        return GetStringInternal(enumType, enumValue, StringLocalizerFactory.CreateDefaultOrNull());
     }
 
     public virtual string GetString(Type enumType, object enumValue, params IStringLocalizer[] specifyLocalizers)
