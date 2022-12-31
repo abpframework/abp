@@ -248,11 +248,11 @@ context.Menu.AddItem(
 
 Run and login to the application. **You can not see the menu item since you don't have permission yet.** Go to the `Identity/Roles` page, click to the *Actions* button and select the *Permissions* action for the **admin role**:
 
-![bookstore-author-permissions](images/bookstore-author-permissions-2.png)
+![bookstore-author-permissions](images/bookstore-author-permissions-3.png)
 
 As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
 
-![bookstore-authors-page](images/bookstore-authors-page-2.png)
+![bookstore-authors-page](images/bookstore-authors-page-3.png)
 
 The page is fully working except *New author* and *Actions/Edit* since we haven't implemented them yet.
 
@@ -863,12 +863,11 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 @inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
 <Card>
     <CardHeader>
-        <Row>
-            <Column ColumnSize="ColumnSize.Is6">
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
                 <h2>@L["Authors"]</h2>
             </Column>
-            <Column ColumnSize="ColumnSize.Is6">
-                <Paragraph Alignment="TextAlignment.Right">
+            <Column ColumnSize="ColumnSize.IsAuto">
                     @if (CanCreateAuthor)
                     {
                         <Button Color="Color.Primary"
@@ -876,7 +875,6 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
                             @L["NewAuthor"]
                         </Button>
                     }
-                </Paragraph>
             </Column>
         </Row>
     </CardHeader>
