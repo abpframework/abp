@@ -30,7 +30,7 @@ public partial class SelectExtensionProperty<TEntity, TResourceType>
             selectItems.Add(new SelectItem<int>
             {
                 Value = (int)enumValue,
-                Text = EnumHelper.GetLocalizedMemberName(PropertyInfo.Type, enumValue, StringLocalizerFactory)
+                Text = AbpEnumLocalizer.GetString(PropertyInfo.Type, enumValue, new []{ StringLocalizerFactory.CreateDefaultOrNull() })
             });
         }
 

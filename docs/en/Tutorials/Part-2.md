@@ -132,22 +132,22 @@ Open the `en.json` (*the English translations*) file and change the content as s
     "CreationTime": "Creation time",
     "AreYouSure": "Are you sure?",
     "AreYouSureToDelete": "Are you sure you want to delete this item?",
-    "Enum:BookType.Undefined": "Undefined",
-    "Enum:BookType.Adventure": "Adventure",
-    "Enum:BookType.Biography": "Biography",
-    "Enum:BookType.Dystopia": "Dystopia",
-    "Enum:BookType.Fantastic": "Fantastic",
-    "Enum:BookType.Horror": "Horror",
-    "Enum:BookType.Science": "Science",
-    "Enum:BookType.ScienceFiction": "Science fiction",
-    "Enum:BookType.Poetry": "Poetry"
+    "Enum:BookType.0": "Undefined",
+    "Enum:BookType.1": "Adventure",
+    "Enum:BookType.2": "Biography",
+    "Enum:BookType.3": "Dystopia",
+    "Enum:BookType.4": "Fantastic",
+    "Enum:BookType.5": "Horror",
+    "Enum:BookType.6": "Science",
+    "Enum:BookType.7": "Science fiction",
+    "Enum:BookType.8": "Poetry"
   }
 }
 ````
 
 * Localization key names are arbitrary. You can set any name. We prefer some conventions for specific text types;
   * Add `Menu:` prefix for menu items.
-  * Use `Enum:<enum-type>.<enum-name>` or `<enum-type>.<enum-name>` or `<enum-name>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums in some proper cases.
+  * Use `Enum:<enum-type>.<enum-value>` or `<enum-type>.<enum-value>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums in some proper cases.
 
 If a text is not defined in the localization file, it **falls back** to the localization key (as ASP.NET Core's standard behavior).
 
@@ -279,7 +279,7 @@ $(function () {
                     title: l('Type'),
                     data: "type",
                     render: function (data) {
-                        return l('Enum:BookType:' + data);
+                        return l('Enum:BookType.' + data);
                     }
                 },
                 {
@@ -517,7 +517,7 @@ Open the `/src/app/book/book.component.html` and replace the content as shown be
       <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
       <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {%{{{ '::Enum:BookType:' + row.type | abpLocalization }}}%}
+          {%{{{ '::Enum:BookType.' + row.type | abpLocalization }}}%}
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column [name]="'::PublishDate' | abpLocalization" prop="publishDate">
