@@ -201,6 +201,27 @@ In this case, you can add an entry to the localization file using the key `MyNam
 
 > If you use the `[DisplayName]` but not add a corresponding entity to the localization file, then ABP Framework shows the given key as the field name, `MyNameKey` for this case. So, it provides a way to specify a hard coded display name even if you don't need to use the localization system.
 
+### Enum Localization
+
+Enum members are also automatically localized wherever possible. For example, when we added `<abp-select asp-for="Movie.Genre"/>` to the form (like we did in the *ABP Form Tag Helpers* section), ABP can automatically fill the localized names of Enum members. To enabled it, you should define the localized values in your localization JSON file. Example entries for the `Genre` Enum defined in the *ABP Form Tag Helpers* section:
+
+````json
+"Enum:Genre.0": "Classic movie",
+"Enum:Genre.1": "Action movie",
+"Enum:Genre.2": "Fiction",
+"Enum:Genre.3": "Fantasy",
+"Enum:Genre.4": "Animation/Cartoon"
+````
+
+You can use one of the following syntaxes for the localization keys:
+
+* `Enum:<enum-type-name>.<enum-value>`
+* `<enum-type-name>.<enum-value>`
+
+> Remember that if you don't specify values for your Enum, the values will be ordered, starting from `0`.
+
+> MVC tag helpers also support using Enum member names instead of values (so, you can define `"Enum:Genre.Action"` instead of `"Enum:Genre.1"`, for example), but it is not suggested. Because, when you serialize Enum properties to JSON and send to clients, default serializer uses Enum values instead of Enum names. So, the Enum name won't be available to clients, and it will be a problem if you want to use the same localization values on the client side.
+
 ## See Also
 
 * [Server Side Validation](../../Validation.md)
