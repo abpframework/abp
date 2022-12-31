@@ -1112,7 +1112,7 @@ It is very easy to show the *Author Name* in the book list. Open the `/Pages/Boo
 
 When you run the application, you can see the *Author* column on the table:
 
-![blazor-bookstore-book-list-with-authors](images/blazor-bookstore-book-list-with-authors.png)
+![blazor-bookstore-book-list-with-authors](images/blazor-bookstore-book-list-with-authors-2.png)
 
 ### Create Book Modal
 
@@ -1183,7 +1183,7 @@ This requires to add a new localization key to the `en.json` file:
 
 You can run the application to see the *Author Selection* while creating a new book:
 
-![book-create-modal-with-author](images/book-create-modal-with-author.png)
+![book-create-modal-with-author](images/book-create-modal-with-author-2.png)
 
 ### Edit Book Modal
 
