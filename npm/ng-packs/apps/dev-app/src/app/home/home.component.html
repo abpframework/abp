@@ -10,9 +10,23 @@
 
     <p class="lead px-lg-5 mx-lg-5">{{ '::LongWelcomeMessage' | abpLocalization }}</p>
 
-    <a *ngIf="!hasLoggedIn" (click)="login()" class="px-4 btn btn-primary ml-1" role="button"
-      ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
+    <button
+      *ngIf="!hasLoggedIn"
+      [disabled]="isLog"
+      (click)="login()"
+      class="px-4 btn btn-primary ml-1"
+      role="button"
     >
+      <i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}
+      <div
+        *ngIf="isLog"
+        style="width: 17px; height: 17px"
+        class="spinner-border text-light ms-2"
+        role="status"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </button>
   </div>
   <div class="my-3 text-center">
     <h3>Let's improve your application!</h3>
