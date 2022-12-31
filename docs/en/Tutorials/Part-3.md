@@ -1152,7 +1152,7 @@ Open the `Books.razor` and replace the `<CardHeader>` section with the following
 
 This will change the card header by adding a "New book" button to the right side:
 
-![blazor-add-book-button](images/blazor-add-book-button.png)
+![blazor-add-book-button](images/blazor-add-book-button-2.png)
 
 Now, we can add a modal that will be opened when we click the button.
 
@@ -1187,7 +1187,7 @@ Open the `Books.razor` and add the following code to the end of the page:
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
+                                    @L[$"Enum:BookType.{bookTypeValue}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1226,7 +1226,7 @@ This code requires a service; Inject the `AbpBlazorMessageLocalizerHelper<T>` at
 
 That's all. Run the application and try to add a new book:
 
-![blazor-new-book-modal](images/blazor-new-book-modal.png)
+![blazor-new-book-modal](images/blazor-new-book-modal-2.png)
 
 ## Updating a Book
 
@@ -1252,7 +1252,7 @@ Open the `Books.razor` and add the following `DataGridEntityActionsColumn` secti
 
 The `DataGridEntityActionsColumn` component is used to show an "Actions" dropdown for each row in the `DataGrid`.  The `DataGridEntityActionsColumn` shows a **single button** instead of a dropdown if there is only one available action inside it:
 
-![blazor-edit-book-action](images/blazor-edit-book-action-2.png)
+![blazor-edit-book-action](images/blazor-edit-book-action-3.png)
 
 ### Edit Modal
 
@@ -1285,7 +1285,7 @@ We can now define a modal to edit the book. Add the following code to the end of
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
+                                    @L[$"Enum:BookType.{bookTypeValue}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1341,7 +1341,7 @@ namespace Acme.BookStore.Blazor
 
 You can now run the application and try to edit a book.
 
-![blazor-edit-book-modal](images/blazor-edit-book-modal.png)
+![blazor-edit-book-modal](images/blazor-edit-book-modal-2.png)
 
 > Tip: Try to leave the *Name* field empty and submit the form to show the validation error message.
 
@@ -1362,7 +1362,7 @@ Open the `Books.razor` page and add the following `EntityAction` code under the 
 
 The "Actions" button becomes a dropdown since it has two actions now:
 
-![blazor-edit-book-action](images/blazor-delete-book-action.png)
+![blazor-delete-book-action](images/blazor-delete-book-action-2.png)
 
 Run the application and try to delete a book.
 
@@ -1422,7 +1422,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType.{Enum.GetName(context.Type)}"]
+                        @L[$"Enum:BookType.{context.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -1474,7 +1474,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
+                                    @L[$"Enum:BookType.{bookTypeValue}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1527,7 +1527,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType.{Enum.GetName((BookType)bookTypeValue)}"]
+                                    @L[$"Enum:BookType.{bookTypeValue}"]
                                 </SelectItem>
                             }
                         </Select>
