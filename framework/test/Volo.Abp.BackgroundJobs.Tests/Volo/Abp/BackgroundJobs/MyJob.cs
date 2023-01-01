@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
@@ -18,7 +19,7 @@ public class MyJob : BackgroundJob<MyJobArgs>, ISingletonDependency
         _currentTenant = currentTenant;
     }
 
-    public override void Execute(MyJobArgs args)
+    public override void Execute(MyJobArgs args, CancellationToken cancellationToken = default)
     {
         ExecutedValues.Add(args.Value);
         TenantId = _currentTenant.Id;

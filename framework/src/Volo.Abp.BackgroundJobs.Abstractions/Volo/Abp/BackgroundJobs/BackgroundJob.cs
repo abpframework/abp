@@ -1,3 +1,4 @@
+using System.Threading;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -14,5 +15,5 @@ public abstract class BackgroundJob<TArgs> : IBackgroundJob<TArgs>
         Logger = NullLogger<BackgroundJob<TArgs>>.Instance;
     }
 
-    public abstract void Execute(TArgs args);
+    public abstract void Execute(TArgs args, CancellationToken cancellationToken = default);
 }

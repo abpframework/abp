@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -15,5 +16,5 @@ public abstract class AsyncBackgroundJob<TArgs> : IAsyncBackgroundJob<TArgs>
         Logger = NullLogger<AsyncBackgroundJob<TArgs>>.Instance;
     }
 
-    public abstract Task ExecuteAsync(TArgs args);
+    public abstract Task ExecuteAsync(TArgs args, CancellationToken cancellationToken = default);
 }

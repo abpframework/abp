@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -19,7 +20,7 @@ public class MyAsyncJob : AsyncBackgroundJob<MyAsyncJobArgs>, ISingletonDependen
         _currentTenant = currentTenant;
     }
 
-    public override Task ExecuteAsync(MyAsyncJobArgs args)
+    public override Task ExecuteAsync(MyAsyncJobArgs args, CancellationToken cancellationToken = default)
     {
         ExecutedValues.Add(args.Value);
         TenantId = _currentTenant.Id;

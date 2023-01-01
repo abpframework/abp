@@ -48,11 +48,11 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
             {
                 if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
                 {
-                    await ((Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs }));
+                    await ((Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs, context.CancellationToken }));
                 }
                 else
                 {
-                    jobExecuteMethod.Invoke(job, new[] { context.JobArgs });
+                    jobExecuteMethod.Invoke(job, new[] { context.JobArgs, context.CancellationToken });
                 }
             }
            
