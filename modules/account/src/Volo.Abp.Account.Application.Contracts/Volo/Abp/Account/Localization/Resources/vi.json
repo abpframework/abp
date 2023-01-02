@@ -50,7 +50,7 @@
     "SendPasswordResetLink_Information": "Một liên kết đặt lại mật khẩu sẽ được gửi đến email của bạn để đặt lại mật khẩu của bạn. Nếu bạn không nhận được email trong vòng vài phút, vui lòng thử lại.",
     "PasswordResetMailSentMessage": "Email khôi phục tài khoản đã được gửi đến địa chỉ e-mail của bạn. Nếu bạn không thấy email này trong hộp thư đến của mình trong vòng 15 phút, hãy tìm nó trong thư mục thư rác của bạn. Nếu bạn tìm thấy nó ở đó, vui lòng đánh dấu nó là -Không phải rác-.",
     "ResetPassword": "Đặt lại mật khẩu",
-    "ConfirmPassword": "Xác nhận (lặp lại) mật khẩu",
+    "ConfirmPassword": "Xác nhận mật khẩu",
     "ResetPassword_Information": "Vui lòng nhập mật khẩu mới của bạn.",
     "YourPasswordIsSuccessfullyReset": "Mật khẩu của bạn đã được đặt lại thành công.",
     "GoToTheApplication": "Đi tới ứng dụng",

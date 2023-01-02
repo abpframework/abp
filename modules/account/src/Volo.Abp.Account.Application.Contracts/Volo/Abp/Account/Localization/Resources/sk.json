@@ -51,7 +51,7 @@
     "SendPasswordResetLink_Information": "Na váš email vám bude odoslaný odkaz na obnovenie hesla. Ak do niekoľkých minút nedostanete email, skúste to znova.",
     "PasswordResetMailSentMessage": "Email o obnovení účtu bol odoslaný na vašu emailovú adresu. Ak tento email neuvidíte v doručenej pošte do 15 minút, pozrite sa do priečinku nevyžiadanej pošty (spam). Ak ho tam nájdete, označte ho ako -Nie je spam-.",
     "ResetPassword": "Obnoviť heslo",
-    "ConfirmPassword": "Potvrďte (zopakujte) heslo",
+    "ConfirmPassword": "Potvrďte heslo",
     "ResetPassword_Information": "Zadajte svoje nové heslo.",
     "YourPasswordIsSuccessfullyReset": "Vaše heslo bolo úspešne obnovené.",
     "GoToTheApplication": "Prejdite do aplikácie",

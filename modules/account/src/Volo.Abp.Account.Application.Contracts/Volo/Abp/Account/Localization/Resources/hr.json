@@ -53,7 +53,7 @@
         "SendPasswordResetLink_Information": "Link za ponovno postavljanje lozinke bit će poslan na vašu e-poštu kako bi ste ponovno postavili lozinku. Ako ne dobijete e-poruku u roku od nekoliko minuta, pokušajte ponovo.",
         "PasswordResetMailSentMessage": "Poruka e-pošte za oporavak računa poslana je na vašu adresu e-pošte. Ako ne vidite ovu e-poruku u pristigloj pošti u roku od 15 minuta, potražite je u mapi bezvrijedne pošte. Ako poruku pronađete tamo, označite je kao -Nije smeće-. ",
         "ResetPassword": "Resetiranje lozinke",
-        "ConfirmPassword": "Potvrdite (ponovite) lozinku",
+        "ConfirmPassword": "Potvrdite lozinku",
         "ResetPassword_Information": "Unesite svoju novu lozinku.",
         "YourPasswordIsSuccessfullyReset": "Vaša lozinka je uspješno poništena.",
         "GoToTheApplication": "Idite na aplikaciju",
