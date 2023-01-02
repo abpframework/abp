@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 {
     public class WriteToConsoleYellowJob : BackgroundJob<WriteToConsoleYellowJobArgs>, ITransientDependency
     {
-        public override void Execute(WriteToConsoleYellowJobArgs args)
+        public override void Execute(WriteToConsoleYellowJobArgs args, CancellationToken cancellationToken = default)
         {
             if (RandomHelper.GetRandom(0, 100) < 70)
             {
