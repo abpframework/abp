@@ -50,7 +50,7 @@
     "SendPasswordResetLink_Information": "Hlekkur til að endurstilla lykilorð verður sendur á netfangið þitt til að endurstilla lykilorðið þitt. Ef þú færð ekki tölvupóst innan nokkurra mínútna skaltu reyna aftur.",
     "PasswordResetMailSentMessage": "Hlekkur til að endurstilla aðganginn þinn verður sendur á netfangið þitt.Ef þú sérð ekki þennan tölvupóst í pósthólfinu þínu innan 15 mínútna skaltu leita að honum í ruslpóstmöppunni þinni. Ef þú finnur það þarna skaltu merkja það sem -Ekki rusl-.",
     "ResetPassword": "Endur stilla lykilorð",
-    "ConfirmPassword": "Staðfestu (endurtaktu) lykilorðið",
+    "ConfirmPassword": "Staðfestu lykilorðið",
     "ResetPassword_Information": "Sláðu inn nýja lykilorðið þitt.",
     "YourPasswordIsSuccessfullyReset": "Lykilorðið þitt var endurstillt.",
     "GoToTheApplication": "Farðu í forritið",

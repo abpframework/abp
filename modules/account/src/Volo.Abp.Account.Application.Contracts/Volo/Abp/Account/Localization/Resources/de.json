@@ -51,7 +51,7 @@
     "SendPasswordResetLink_Information": "Ein Link zum Zurücksetzen des Passworts wird an Ihre E-Mail gesendet. Wenn Sie innerhalb weniger Minuten keine E-Mail erhalten, versuchen Sie es erneut.",
     "PasswordResetMailSentMessage": "E-Mail zur Kontowiederherstellung an Ihre E-Mail-Adresse gesendet. Wenn Sie diese E-Mail nicht innerhalb von 15 Minuten in Ihrem Posteingang sehen, suchen Sie sie in Ihrem Junk-Mail-Ordner. Wenn Sie sie dort finden, markieren Sie sie bitte als -Kein Junk-. ",
     "ResetPassword": "Passwort zurücksetzen",
-    "ConfirmPassword": "Bestätigen (wiederholen) Sie das Passwort",
+    "ConfirmPassword": "Bestätigen Sie das Passwort",
     "ResetPassword_Information": "Bitte geben Sie Ihr neues Passwort ein.",
     "YourPasswordIsSuccessfullyReset": "Ihr Passwort wurde erfolgreich zurückgesetzt.",
     "GoToTheApplication": "Gehen Sie zur Anwendung",
