@@ -232,7 +232,7 @@ $(function () {
                     title: l('Type'),
                     data: "type",
                     render: function (data) {
-                        return l('Enum:BookType:' + data);
+                        return l('Enum:BookType.' + data);
                     }
                 },
                 {
@@ -418,7 +418,7 @@ $(function () {
                     title: l('Type'),
                     data: "type",
                     render: function (data) {
-                        return l('Enum:BookType:' + data);
+                        return l('Enum:BookType.' + data);
                     }
                 },
                 {
@@ -556,7 +556,7 @@ $(function () {
                     title: l('Type'),
                     data: "type",
                     render: function (data) {
-                        return l('Enum:BookType:' + data);
+                        return l('Enum:BookType.' + data);
                     }
                 },
                 {
@@ -789,7 +789,7 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="type.value" *ngFor="let type of bookTypes"> {%{{{ type.key }}}%}</option>
+        <option [ngValue]="type.value" *ngFor="let type of bookTypes"> {%{{{ '::Enum:BookType.' + type.value | abpLocalization }}}%}</option>
       </select>
     </div>
 
