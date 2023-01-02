@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Directive,
+  Inject,
   Input,
   OnChanges,
   OnDestroy,
@@ -12,6 +13,8 @@ import {
 import { ReplaySubject, Subscription } from 'rxjs';
 import { distinctUntilChanged, take } from 'rxjs/operators';
 import { PermissionService } from '../services/permission.service';
+import { QUEUE_MANAGER } from '../tokens/queue.token';
+import { QueueManager } from '../utils/queue';
 
 @Directive({
   selector: '[abpPermission]',
@@ -32,6 +35,7 @@ export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit 
     private vcRef: ViewContainerRef,
     private permissionService: PermissionService,
     private cdRef: ChangeDetectorRef,
+    @Inject(QUEUE_MANAGER) public queue: QueueManager,
   ) {}
 
   private check() {
@@ -66,7 +70,7 @@ export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit 
   }
 
   ngAfterViewInit() {
-    this.cdrSubject.pipe(take(1)).subscribe(() => this.cdRef.detectChanges());
+    this.cdrSubject.pipe(take(1)).subscribe(() => this.queue.add(() => this.cdRef.detectChanges()));
     this.rendered = true;
   }
 }

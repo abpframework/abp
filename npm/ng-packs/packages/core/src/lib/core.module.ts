@@ -38,6 +38,8 @@ import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
 import { ShortTimePipe } from './pipes/short-time.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
 import { TimeoutLimitedOAuthService } from './services/timeout-limited-oauth.service';
+import { QUEUE_MANAGER } from './tokens/queue.token';
+import { DefaultQueueManager } from './utils/queue';
 
 export function storageFactory(): OAuthStorage {
   return oAuthStorage;
@@ -192,6 +194,10 @@ export class CoreModule {
           multi: true,
           useValue: localizationContributor(options.localizations),
           deps: [LocalizationService],
+        },
+        {
+          provide: QUEUE_MANAGER,
+          useClass: DefaultQueueManager,
         },
       ],
     };
