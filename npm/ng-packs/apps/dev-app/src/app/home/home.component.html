@@ -12,19 +12,14 @@
 
     <button
       *ngIf="!hasLoggedIn"
-      [disabled]="isLog"
       (click)="login()"
+      [disabled]="isLog"
       class="px-4 btn btn-primary ml-1"
       role="button"
     >
-      <i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}
-      <div
-        *ngIf="isLog"
-        style="width: 17px; height: 17px"
-        class="spinner-border text-light ms-2"
-        role="status"
-      >
-        <span class="visually-hidden">Loading...</span>
+      <div class="d-flex">
+        <div><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</div>
+        <div [abpLoading]="isLog" class="" style="margin-bottom: 13px; margin-left: 7px"></div>
       </div>
     </button>
   </div>
