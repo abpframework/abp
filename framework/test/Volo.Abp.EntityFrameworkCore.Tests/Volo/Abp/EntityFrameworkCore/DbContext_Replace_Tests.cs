@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
@@ -19,7 +18,7 @@ public class DbContext_Replace_Tests : EntityFrameworkCoreTestBase
     private readonly IBasicRepository<FourthDbContextDummyEntity, Guid> _fourthDummyRepository;
     private readonly IPersonRepository _personRepository;
     private readonly IUnitOfWorkManager _unitOfWorkManager;
-    private readonly AbpDbContextOptions _options;
+    private readonly IEfCoreDbContextTypeProvider _dbContextTypeProvider;
 
     public DbContext_Replace_Tests()
     {
@@ -27,14 +26,14 @@ public class DbContext_Replace_Tests : EntityFrameworkCoreTestBase
         _fourthDummyRepository = GetRequiredService<IBasicRepository<FourthDbContextDummyEntity, Guid>>();
         _personRepository = GetRequiredService<IPersonRepository>();
         _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
-        _options = GetRequiredService<IOptions<AbpDbContextOptions>>().Value;
+        _dbContextTypeProvider = GetRequiredService<IEfCoreDbContextTypeProvider>();
     }
 
     [Fact]
     public async Task Should_Replace_DbContext()
     {
-        _options.GetReplacedTypeOrSelf(typeof(IThirdDbContext)).ShouldBe(typeof(TestAppDbContext));
-        _options.GetReplacedTypeOrSelf(typeof(IFourthDbContext)).ShouldBe(typeof(TestAppDbContext));
+        (await _dbContextTypeProvider.GetDbContextTypeAsync(typeof(IThirdDbContext))).ShouldBe(typeof(TestAppDbContext));
+        (await _dbContextTypeProvider.GetDbContextTypeAsync(typeof(IFourthDbContext))).ShouldBe(typeof(TestAppDbContext));
 
         (ServiceProvider.GetRequiredService<IThirdDbContext>() is TestAppDbContext).ShouldBeTrue();
         (ServiceProvider.GetRequiredService<IFourthDbContext>() is TestAppDbContext).ShouldBeTrue();

@@ -25,18 +25,21 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
     private readonly ICancellationTokenProvider _cancellationTokenProvider;
     private readonly ICurrentTenant _currentTenant;
     private readonly AbpMongoDbContextOptions _options;
+    private readonly IMongoDbContextTypeProvider _dbContextTypeProvider;
 
     public UnitOfWorkMongoDbContextProvider(
         IUnitOfWorkManager unitOfWorkManager,
         IConnectionStringResolver connectionStringResolver,
         ICancellationTokenProvider cancellationTokenProvider,
         ICurrentTenant currentTenant,
-        IOptions<AbpMongoDbContextOptions> options)
+        IOptions<AbpMongoDbContextOptions> options,
+        IMongoDbContextTypeProvider dbContextTypeProvider)
     {
         _unitOfWorkManager = unitOfWorkManager;
         _connectionStringResolver = connectionStringResolver;
         _cancellationTokenProvider = cancellationTokenProvider;
         _currentTenant = currentTenant;
+        _dbContextTypeProvider = dbContextTypeProvider;
         _options = options.Value;
 
         Logger = NullLogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>>.Instance;
@@ -63,7 +66,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
                 $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
         }
 
-        var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
+        var targetDbContextType = _dbContextTypeProvider.GetDbContextType(typeof(TMongoDbContext));
         var connectionString = ResolveConnectionString(targetDbContextType);
         var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
@@ -91,7 +94,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
                 $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
         }
 
-        var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
+        var targetDbContextType = await _dbContextTypeProvider.GetDbContextTypeAsync(typeof(TMongoDbContext));
         var connectionString = await ResolveConnectionStringAsync(targetDbContextType);
         var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 

@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.MongoDB.TestApp.FourthContext;
 using Volo.Abp.MongoDB.TestApp.ThirdDbContext;
@@ -11,18 +11,18 @@ namespace Volo.Abp.MongoDB;
 [Collection(MongoTestCollection.Name)]
 public class DbContext_Replace_Tests : MongoDbTestBase
 {
-    private readonly AbpMongoDbContextOptions _options;
+    private readonly IMongoDbContextTypeProvider _dbContextTypeProvider;
 
     public DbContext_Replace_Tests()
     {
-        _options = GetRequiredService<IOptions<AbpMongoDbContextOptions>>().Value;
+        _dbContextTypeProvider = GetRequiredService<IMongoDbContextTypeProvider>();
     }
 
     [Fact]
-    public void Should_Replace_DbContext()
+    public async Task Should_Replace_DbContext()
     {
-        _options.GetReplacedTypeOrSelf(typeof(IThirdDbContext)).ShouldBe(typeof(TestAppMongoDbContext));
-        _options.GetReplacedTypeOrSelf(typeof(IFourthDbContext)).ShouldBe(typeof(TestAppMongoDbContext));
+        (await _dbContextTypeProvider.GetDbContextTypeAsync(typeof(IThirdDbContext))).ShouldBe(typeof(TestAppMongoDbContext));
+        (await _dbContextTypeProvider.GetDbContextTypeAsync(typeof(IFourthDbContext))).ShouldBe(typeof(TestAppMongoDbContext));
 
         (ServiceProvider.GetRequiredService<IThirdDbContext>() is TestAppMongoDbContext).ShouldBeTrue();
         (ServiceProvider.GetRequiredService<IFourthDbContext>() is TestAppMongoDbContext).ShouldBeTrue();

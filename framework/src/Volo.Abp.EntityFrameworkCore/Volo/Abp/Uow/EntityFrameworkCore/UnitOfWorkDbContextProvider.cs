@@ -19,7 +19,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
     where TDbContext : IEfCoreDbContext
 {
     private const string TransactionsNotSupportedErrorMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
-    
+
     public ILogger<UnitOfWorkDbContextProvider<TDbContext>> Logger { get; set; }
 
     private readonly IUnitOfWorkManager _unitOfWorkManager;
@@ -27,19 +27,20 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
     private readonly ICancellationTokenProvider _cancellationTokenProvider;
     private readonly ICurrentTenant _currentTenant;
     private readonly AbpDbContextOptions _options;
+    private readonly IEfCoreDbContextTypeProvider _efCoreDbContextTypeProvider;
 
     public UnitOfWorkDbContextProvider(
         IUnitOfWorkManager unitOfWorkManager,
         IConnectionStringResolver connectionStringResolver,
         ICancellationTokenProvider cancellationTokenProvider,
         ICurrentTenant currentTenant,
-        IOptions<AbpDbContextOptions> options)
+        IEfCoreDbContextTypeProvider efCoreDbContextTypeProvider)
     {
         _unitOfWorkManager = unitOfWorkManager;
         _connectionStringResolver = connectionStringResolver;
         _cancellationTokenProvider = cancellationTokenProvider;
         _currentTenant = currentTenant;
-        _options = options.Value;
+        _efCoreDbContextTypeProvider = efCoreDbContextTypeProvider;
 
         Logger = NullLogger<UnitOfWorkDbContextProvider<TDbContext>>.Instance;
     }
@@ -64,7 +65,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
             throw new AbpException("A DbContext can only be created inside a unit of work!");
         }
 
-        var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+        var targetDbContextType = _efCoreDbContextTypeProvider.GetDbContextType(typeof(TDbContext));
         var connectionStringName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
         var connectionString = ResolveConnectionString(connectionStringName);
         var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
@@ -86,7 +87,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
             throw new AbpException("A DbContext can only be created inside a unit of work!");
         }
 
-        var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+        var targetDbContextType = await _efCoreDbContextTypeProvider.GetDbContextTypeAsync(typeof(TDbContext));
         var connectionStringName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
         var connectionString = await ResolveConnectionStringAsync(connectionStringName);
 
@@ -191,10 +192,10 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
             {
                 Logger.LogError(TransactionsNotSupportedErrorMessage);
                 Logger.LogException(e);
-                
+
                 return dbContext;
             }
-            
+
             return dbContext;
         }
         else
@@ -247,7 +248,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
                 {
                     Logger.LogError(TransactionsNotSupportedErrorMessage);
                     Logger.LogException(e);
-                    
+
                     return dbContext;
                 }
             }
@@ -286,7 +287,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
             {
                 Logger.LogError(TransactionsNotSupportedErrorMessage);
                 Logger.LogException(e);
-                    
+
                 return dbContext;
             }
 
@@ -329,7 +330,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
                     {
                         Logger.LogError(TransactionsNotSupportedErrorMessage);
                         Logger.LogException(e);
-                    
+
                         return dbContext;
                     }
                 }
@@ -347,7 +348,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
                 {
                     Logger.LogError(TransactionsNotSupportedErrorMessage);
                     Logger.LogException(e);
-                    
+
                     return dbContext;
                 }
             }
