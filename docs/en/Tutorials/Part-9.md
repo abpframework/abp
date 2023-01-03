@@ -837,7 +837,7 @@ Run and login to the application. **You can not see the menu item since you don'
 
 As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
 
-![bookstore-authors-page](images/bookstore-angular-authors-page.png)
+![bookstore-authors-page](images/bookstore-angular-authors-page-2.png)
 
 That's all! This is a fully working CRUD page, you can create, edit and delete authors.
 

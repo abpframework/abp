@@ -964,13 +964,13 @@ Book list page change is trivial. Open the `/src/app/book/book.component.html` a
 
 When you run the application, you can see the *Author* column on the table:
 
-![bookstore-books-with-authorname-angular](images/bookstore-books-with-authorname-angular.png)
+![bookstore-books-with-authorname-angular](images/bookstore-books-with-authorname-angular-2.png)
 
 ### Create/Edit Forms
 
 The next step is to add an Author selection (dropdown) to the create/edit forms. The final UI will look like the one shown below:
 
-![bookstore-angular-author-selection](images/bookstore-angular-author-selection.png)
+![bookstore-angular-author-selection](images/bookstore-angular-author-selection-2.png)
 
 Added the Author dropdown as the first element in the form.
 
