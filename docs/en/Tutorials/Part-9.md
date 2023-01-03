@@ -833,7 +833,7 @@ This page uses some localization keys we need to declare. Open the `en.json` fil
 
 Run and login to the application. **You can not see the menu item since you don't have permission yet.** Go to the `identity/roles` page, click to the *Actions* button and select the *Permissions* action for the **admin role**:
 
-![bookstore-author-permissions](images/bookstore-author-permissions.png)
+![bookstore-author-permissions](images/bookstore-author-permissions-2.png)
 
 As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
 
