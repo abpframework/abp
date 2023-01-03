@@ -689,7 +689,7 @@ Open `/src/app/book/book.component.html` and make the following changes:
 
 You can open your browser and click the **New book** button to see the new modal.
 
-![Empty modal for new book](images/bookstore-empty-new-book-modal.png)
+![Empty modal for new book](images/bookstore-empty-new-book-modal-2.png)
 
 ### Create a Reactive Form
 
@@ -926,7 +926,7 @@ export class BookComponent implements OnInit {
 
 Now, you can open your browser to see the changes:
 
-![Save button to the modal](images/bookstore-new-book-form-v2.png)
+![Save button to the modal](images/bookstore-new-book-form-v3.png)
 
 ## Updating a Book
 
@@ -1054,7 +1054,7 @@ Open `/src/app/book/book.component.html`  and add the following `ngx-datatable-
 
 Added an "Actions" dropdown as the first column of the table that is shown below:
 
-![Action buttons](images/bookstore-actions-buttons.png)
+![Action buttons](images/bookstore-actions-buttons-2.png)
 
 Also, change the `ng-template #abpHeader` section as shown below:
 
@@ -1118,11 +1118,11 @@ Open `/src/app/book/book.component.html` and modify the `ngbDropdownMenu` to add
 
 The final actions dropdown UI looks like below:
 
-![bookstore-final-actions-dropdown](images/bookstore-final-actions-dropdown.png)
+![bookstore-final-actions-dropdown](images/bookstore-final-actions-dropdown-2.png)
 
 Clicking the "Delete" action calls the `delete` method which then shows a confirmation popup as shown below:
 
-![bookstore-confirmation-popup](images/bookstore-confirmation-popup.png)
+![bookstore-confirmation-popup](images/bookstore-confirmation-popup-2.png)
 
 {{end}}
 
