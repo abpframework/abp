@@ -265,7 +265,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
 
-        foreach (var enumValue in enumType.GetEnumValues())
+        foreach (var enumValue in enumType.GetEnumValuesAsUnderlyingType())
         {
             var localizedMemberName = _abpEnumLocalizer.GetString(enumType, enumValue,
                 new[]
