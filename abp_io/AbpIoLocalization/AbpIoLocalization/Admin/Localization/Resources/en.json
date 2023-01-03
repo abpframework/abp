@@ -410,7 +410,7 @@
     "OverallDiscountText": "Overall Discount Text",
     "SelectReport": "- Select Report -",
     "NoDataAvailable": "No data available",
-    "StatisticsOfCachedContents": "Statistics of cached contents for nuget.abp.io",
+    "StatisticsOfCachedContents": "Statistics of cached nuget package contents for nuget.abp.io",
     "Compact": "Compact",
     "EditSettings": "Edit Settings",
     "CurrentEstimatedSize": "Current Estimated Size",
@@ -421,7 +421,13 @@
     "ContentCacheSlidingExpirationByDay": "Content Cache Sliding Expiration By Day",
     "MaxDaysForCaching": "Max Days For Caching",
     "Enabled": "Enabled",
-    "Menu:NugetPackagesContentCache": "Packages Content Cache",
-    "NugetPackagesContentCache": "Content Cache"
+    "Menu:NugetPackagesContentCache": "Nuget Packages Content Cache",
+    "NugetPackagesContentCache": "Nuget Content Cache",
+    "SlidingExpritionByDayInfo": "Gets or sets how long a cache entry can be inactive (e.g. not accessed) before it will be removed. This will not extend the entry lifetime beyond the absolute expiration.",
+    "MaxDaysForCachingInfo": "Gets or sets an absolute expiration time, relative to now.",
+    "CurrentEstimatedSizeInfo": "Indicates an estimated sum of all the NuGet packages' content size currently in the memory cache",
+    "CurrentEntryCountInfo": "Indicates the number of instances currently in the memory cache.",
+    "TotalHitsInfo": "Indicates the total number of cache misses. A cache hit occurs when a file is requested from a cache and the cache is able to fulfill that request.",
+    "TotalMissesInfo": "Indicates the total number of cache hits. A cache miss is when the cache does not contain the requested content."
   }
 }
