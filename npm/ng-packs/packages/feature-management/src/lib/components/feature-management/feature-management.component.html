@@ -111,7 +111,7 @@
   </ng-template>
 
   <ng-template #abpFooter>
-    <abp-button iconClass="fa fa-refresh" [disabled]="modalBusy" (click)="resetToDefault()">
+    <abp-button *ngIf="groups.length" iconClass="fa fa-refresh" [disabled]="modalBusy" (click)="resetToDefault()">
       {{ 'AbpFeatureManagement::ResetToDefault' | abpLocalization }}
     </abp-button>
 
