@@ -10,7 +10,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui": "~7.0.0-rc.6",
     "@abp/bootstrap": "~7.0.0-rc.6",
     "@abp/bootstrap-datepicker": "~7.0.0-rc.6",
     "@abp/bootstrap-daterangepicker": "~7.0.0-rc.6",
