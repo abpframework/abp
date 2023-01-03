@@ -484,9 +484,11 @@ using Shouldly;
 using Xunit;
 
 namespace Acme.BookStore.Authors;
-
  {{if DB=="Mongo"}}
-[Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
+
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+
+{{end}}
 public class AuthorAppService_Tests : BookStoreApplicationTestBase
 {
     private readonly IAuthorAppService _authorAppService;
