@@ -55,19 +55,18 @@ A permission must have a unique name (a `string`). The best way is to define it 
 Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project (in the `Permissions` folder) and change the content as shown below:
 
 ````csharp
-namespace Acme.BookStore.Permissions
-{
-    public static class BookStorePermissions
-    {
-        public const string GroupName = "BookStore";
+namespace Acme.BookStore.Permissions;
 
-        public static class Books
-        {
-            public const string Default = GroupName + ".Books";
-            public const string Create = Default + ".Create";
-            public const string Edit = Default + ".Edit";
-            public const string Delete = Default + ".Delete";
-        }
+public static class BookStorePermissions
+{
+    public const string GroupName = "BookStore";
+
+    public static class Books
+    {
+        public const string Default = GroupName + ".Books";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
     }
 }
 ````
@@ -85,24 +84,23 @@ using Acme.BookStore.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 
-namespace Acme.BookStore.Permissions
+namespace Acme.BookStore.Permissions;
+
+public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvider
 {
-    public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvider
+    public override void Define(IPermissionDefinitionContext context)
     {
-        public override void Define(IPermissionDefinitionContext context)
-        {
-            var bookStoreGroup = context.AddGroup(BookStorePermissions.GroupName, L("Permission:BookStore"));
+        var bookStoreGroup = context.AddGroup(BookStorePermissions.GroupName, L("Permission:BookStore"));
 
-            var booksPermission = bookStoreGroup.AddPermission(BookStorePermissions.Books.Default, L("Permission:Books"));
-            booksPermission.AddChild(BookStorePermissions.Books.Create, L("Permission:Books.Create"));
-            booksPermission.AddChild(BookStorePermissions.Books.Edit, L("Permission:Books.Edit"));
-            booksPermission.AddChild(BookStorePermissions.Books.Delete, L("Permission:Books.Delete"));
-        }
+        var booksPermission = bookStoreGroup.AddPermission(BookStorePermissions.Books.Default, L("Permission:Books"));
+        booksPermission.AddChild(BookStorePermissions.Books.Create, L("Permission:Books.Create"));
+        booksPermission.AddChild(BookStorePermissions.Books.Edit, L("Permission:Books.Edit"));
+        booksPermission.AddChild(BookStorePermissions.Books.Delete, L("Permission:Books.Delete"));
+    }
 
-        private static LocalizableString L(string name)
-        {
-            return LocalizableString.Create<BookStoreResource>(name);
-        }
+    private static LocalizableString L(string name)
+    {
+        return LocalizableString.Create<BookStoreResource>(name);
     }
 }
 ````
@@ -148,26 +146,25 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 
-namespace Acme.BookStore.Books
+namespace Acme.BookStore.Books;
+
+public class BookAppService :
+    CrudAppService<
+        Book, //The Book entity
+        BookDto, //Used to show books
+        Guid, //Primary key of the book entity
+        PagedAndSortedResultRequestDto, //Used for paging/sorting
+        CreateUpdateBookDto>, //Used to create/update a book
+    IBookAppService //implement the IBookAppService
 {
-    public class BookAppService :
-        CrudAppService<
-            Book, //The Book entity
-            BookDto, //Used to show books
-            Guid, //Primary key of the book entity
-            PagedAndSortedResultRequestDto, //Used for paging/sorting
-            CreateUpdateBookDto>, //Used to create/update a book
-        IBookAppService //implement the IBookAppService
+    public BookAppService(IRepository<Book, Guid> repository)
+        : base(repository)
     {
-        public BookAppService(IRepository<Book, Guid> repository)
-            : base(repository)
-        {
-            GetPolicyName = BookStorePermissions.Books.Default;
-            GetListPolicyName = BookStorePermissions.Books.Default;
-            CreatePolicyName = BookStorePermissions.Books.Create;
-            UpdatePolicyName = BookStorePermissions.Books.Edit;
-            DeletePolicyName = BookStorePermissions.Books.Delete;
-        }
+        GetPolicyName = BookStorePermissions.Books.Default;
+        GetListPolicyName = BookStorePermissions.Books.Default;
+        CreatePolicyName = BookStorePermissions.Books.Create;
+        UpdatePolicyName = BookStorePermissions.Books.Edit;
+        DeletePolicyName = BookStorePermissions.Books.Delete;
     }
 }
 ````

@@ -95,14 +95,13 @@ This is a simple page similar to the Books page we had created before. It import
 ````csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Acme.BookStore.Web.Pages.Authors
-{
-    public class IndexModel : PageModel
-    {
-        public void OnGet()
-        {
+namespace Acme.BookStore.Web.Pages.Authors;
 
-        }
+public class IndexModel : PageModel
+{
+    public void OnGet()
+    {
+
     }
 }
 ````
@@ -302,45 +301,44 @@ using Acme.BookStore.Authors;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
-namespace Acme.BookStore.Web.Pages.Authors
+namespace Acme.BookStore.Web.Pages.Authors;
+
+public class CreateModalModel : BookStorePageModel
 {
-    public class CreateModalModel : BookStorePageModel
+    [BindProperty]
+    public CreateAuthorViewModel Author { get; set; }
+
+    private readonly IAuthorAppService _authorAppService;
+
+    public CreateModalModel(IAuthorAppService authorAppService)
     {
-        [BindProperty]
-        public CreateAuthorViewModel Author { get; set; }
+        _authorAppService = authorAppService;
+    }
 
-        private readonly IAuthorAppService _authorAppService;
+    public void OnGet()
+    {
+        Author = new CreateAuthorViewModel();
+    }
 
-        public CreateModalModel(IAuthorAppService authorAppService)
-        {
-            _authorAppService = authorAppService;
-        }
+    public async Task<IActionResult> OnPostAsync()
+    {
+        var dto = ObjectMapper.Map<CreateAuthorViewModel, CreateAuthorDto>(Author);
+        await _authorAppService.CreateAsync(dto);
+        return NoContent();
+    }
 
-        public void OnGet()
-        {
-            Author = new CreateAuthorViewModel();
-        }
+    public class CreateAuthorViewModel
+    {
+        [Required]
+        [StringLength(AuthorConsts.MaxNameLength)]
+        public string Name { get; set; }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            var dto = ObjectMapper.Map<CreateAuthorViewModel, CreateAuthorDto>(Author);
-            await _authorAppService.CreateAsync(dto);
-            return NoContent();
-        }
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime BirthDate { get; set; }
 
-        public class CreateAuthorViewModel
-        {
-            [Required]
-            [StringLength(AuthorConsts.MaxNameLength)]
-            public string Name { get; set; }
-
-            [Required]
-            [DataType(DataType.Date)]
-            public DateTime BirthDate { get; set; }
-
-            [TextArea]
-            public string ShortBio { get; set; }
-        }
+        [TextArea]
+        public string ShortBio { get; set; }
     }
 }
 ```
@@ -359,18 +357,17 @@ using Acme.BookStore.Authors; // ADDED NAMESPACE IMPORT
 using Acme.BookStore.Books;
 using AutoMapper;
 
-namespace Acme.BookStore.Web
-{
-    public class BookStoreWebAutoMapperProfile : Profile
-    {
-        public BookStoreWebAutoMapperProfile()
-        {
-            CreateMap<BookDto, CreateUpdateBookDto>();
+namespace Acme.BookStore.Web;
 
-            // ADD a NEW MAPPING
-            CreateMap<Pages.Authors.CreateModalModel.CreateAuthorViewModel,
-                      CreateAuthorDto>();
-        }
+public class BookStoreWebAutoMapperProfile : Profile
+{
+    public BookStoreWebAutoMapperProfile()
+    {
+        CreateMap<BookDto, CreateUpdateBookDto>();
+
+        // ADD a NEW MAPPING
+        CreateMap<Pages.Authors.CreateModalModel.CreateAuthorViewModel,
+                    CreateAuthorDto>();
     }
 }
 ````
@@ -420,52 +417,51 @@ using Acme.BookStore.Authors;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
-namespace Acme.BookStore.Web.Pages.Authors
+namespace Acme.BookStore.Web.Pages.Authors;
+
+public class EditModalModel : BookStorePageModel
 {
-    public class EditModalModel : BookStorePageModel
+    [BindProperty]
+    public EditAuthorViewModel Author { get; set; }
+
+    private readonly IAuthorAppService _authorAppService;
+
+    public EditModalModel(IAuthorAppService authorAppService)
     {
-        [BindProperty]
-        public EditAuthorViewModel Author { get; set; }
+        _authorAppService = authorAppService;
+    }
 
-        private readonly IAuthorAppService _authorAppService;
+    public async Task OnGetAsync(Guid id)
+    {
+        var authorDto = await _authorAppService.GetAsync(id);
+        Author = ObjectMapper.Map<AuthorDto, EditAuthorViewModel>(authorDto);
+    }
 
-        public EditModalModel(IAuthorAppService authorAppService)
-        {
-            _authorAppService = authorAppService;
-        }
+    public async Task<IActionResult> OnPostAsync()
+    {
+        await _authorAppService.UpdateAsync(
+            Author.Id,
+            ObjectMapper.Map<EditAuthorViewModel, UpdateAuthorDto>(Author)
+        );
 
-        public async Task OnGetAsync(Guid id)
-        {
-            var authorDto = await _authorAppService.GetAsync(id);
-            Author = ObjectMapper.Map<AuthorDto, EditAuthorViewModel>(authorDto);
-        }
+        return NoContent();
+    }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            await _authorAppService.UpdateAsync(
-                Author.Id,
-                ObjectMapper.Map<EditAuthorViewModel, UpdateAuthorDto>(Author)
-            );
+    public class EditAuthorViewModel
+    {
+        [HiddenInput]
+        public Guid Id { get; set; }
 
-            return NoContent();
-        }
+        [Required]
+        [StringLength(AuthorConsts.MaxNameLength)]
+        public string Name { get; set; }
 
-        public class EditAuthorViewModel
-        {
-            [HiddenInput]
-            public Guid Id { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime BirthDate { get; set; }
 
-            [Required]
-            [StringLength(AuthorConsts.MaxNameLength)]
-            public string Name { get; set; }
-
-            [Required]
-            [DataType(DataType.Date)]
-            public DateTime BirthDate { get; set; }
-
-            [TextArea]
-            public string ShortBio { get; set; }
-        }
+        [TextArea]
+        public string ShortBio { get; set; }
     }
 }
 ```
@@ -482,22 +478,21 @@ using Acme.BookStore.Authors;
 using Acme.BookStore.Books;
 using AutoMapper;
 
-namespace Acme.BookStore.Web
+namespace Acme.BookStore.Web;
+
+public class BookStoreWebAutoMapperProfile : Profile
 {
-    public class BookStoreWebAutoMapperProfile : Profile
+    public BookStoreWebAutoMapperProfile()
     {
-        public BookStoreWebAutoMapperProfile()
-        {
-            CreateMap<BookDto, CreateUpdateBookDto>();
+        CreateMap<BookDto, CreateUpdateBookDto>();
 
-            CreateMap<Pages.Authors.CreateModalModel.CreateAuthorViewModel,
-                      CreateAuthorDto>();
+        CreateMap<Pages.Authors.CreateModalModel.CreateAuthorViewModel,
+                    CreateAuthorDto>();
 
-            // ADD THESE NEW MAPPINGS
-            CreateMap<AuthorDto, Pages.Authors.EditModalModel.EditAuthorViewModel>();
-            CreateMap<Pages.Authors.EditModalModel.EditAuthorViewModel,
-                      UpdateAuthorDto>();
-        }
+        // ADD THESE NEW MAPPINGS
+        CreateMap<AuthorDto, Pages.Authors.EditModalModel.EditAuthorViewModel>();
+        CreateMap<Pages.Authors.EditModalModel.EditAuthorViewModel,
+                    UpdateAuthorDto>();
     }
 }
 ```
@@ -1052,142 +1047,141 @@ using Blazorise.DataGrid;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 
-namespace Acme.BookStore.Blazor.Pages
+namespace Acme.BookStore.Blazor.Pages;
+
+public partial class Authors
 {
-    public partial class Authors
+    private IReadOnlyList<AuthorDto> AuthorList { get; set; }
+
+    private int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
+    private int CurrentPage { get; set; }
+    private string CurrentSorting { get; set; }
+    private int TotalCount { get; set; }
+
+    private bool CanCreateAuthor { get; set; }
+    private bool CanEditAuthor { get; set; }
+    private bool CanDeleteAuthor { get; set; }
+
+    private CreateAuthorDto NewAuthor { get; set; }
+
+    private Guid EditingAuthorId { get; set; }
+    private UpdateAuthorDto EditingAuthor { get; set; }
+
+    private Modal CreateAuthorModal { get; set; }
+    private Modal EditAuthorModal { get; set; }
+
+    private Validations CreateValidationsRef;
+    
+    private Validations EditValidationsRef;
+    
+    public Authors()
     {
-        private IReadOnlyList<AuthorDto> AuthorList { get; set; }
+        NewAuthor = new CreateAuthorDto();
+        EditingAuthor = new UpdateAuthorDto();
+    }
 
-        private int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
-        private int CurrentPage { get; set; }
-        private string CurrentSorting { get; set; }
-        private int TotalCount { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await SetPermissionsAsync();
+        await GetAuthorsAsync();
+    }
 
-        private bool CanCreateAuthor { get; set; }
-        private bool CanEditAuthor { get; set; }
-        private bool CanDeleteAuthor { get; set; }
+    private async Task SetPermissionsAsync()
+    {
+        CanCreateAuthor = await AuthorizationService
+            .IsGrantedAsync(BookStorePermissions.Authors.Create);
 
-        private CreateAuthorDto NewAuthor { get; set; }
+        CanEditAuthor = await AuthorizationService
+            .IsGrantedAsync(BookStorePermissions.Authors.Edit);
 
-        private Guid EditingAuthorId { get; set; }
-        private UpdateAuthorDto EditingAuthor { get; set; }
+        CanDeleteAuthor = await AuthorizationService
+            .IsGrantedAsync(BookStorePermissions.Authors.Delete);
+    }
 
-        private Modal CreateAuthorModal { get; set; }
-        private Modal EditAuthorModal { get; set; }
+    private async Task GetAuthorsAsync()
+    {
+        var result = await AuthorAppService.GetListAsync(
+            new GetAuthorListDto
+            {
+                MaxResultCount = PageSize,
+                SkipCount = CurrentPage * PageSize,
+                Sorting = CurrentSorting
+            }
+        );
 
-        private Validations CreateValidationsRef;
+        AuthorList = result.Items;
+        TotalCount = (int)result.TotalCount;
+    }
+
+    private async Task OnDataGridReadAsync(DataGridReadDataEventArgs<AuthorDto> e)
+    {
+        CurrentSorting = e.Columns
+            .Where(c => c.SortDirection != SortDirection.Default)
+            .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
+            .JoinAsString(",");
+        CurrentPage = e.Page - 1;
+
+        await GetAuthorsAsync();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void OpenCreateAuthorModal()
+    {
+        CreateValidationsRef.ClearAll();
         
-        private Validations EditValidationsRef;
+        NewAuthor = new CreateAuthorDto();
+        CreateAuthorModal.Show();
+    }
+
+    private void CloseCreateAuthorModal()
+    {
+        CreateAuthorModal.Hide();
+    }
+
+    private void OpenEditAuthorModal(AuthorDto author)
+    {
+        EditValidationsRef.ClearAll();
         
-        public Authors()
+        EditingAuthorId = author.Id;
+        EditingAuthor = ObjectMapper.Map<AuthorDto, UpdateAuthorDto>(author);
+        EditAuthorModal.Show();
+    }
+
+    private async Task DeleteAuthorAsync(AuthorDto author)
+    {
+        var confirmMessage = L["AuthorDeletionConfirmationMessage", author.Name];
+        if (!await Message.Confirm(confirmMessage))
         {
-            NewAuthor = new CreateAuthorDto();
-            EditingAuthor = new UpdateAuthorDto();
+            return;
         }
 
-        protected override async Task OnInitializedAsync()
+        await AuthorAppService.DeleteAsync(author.Id);
+        await GetAuthorsAsync();
+    }
+
+    private void CloseEditAuthorModal()
+    {
+        EditAuthorModal.Hide();
+    }
+
+    private async Task CreateAuthorAsync()
+    {
+        if (await CreateValidationsRef.ValidateAll())
         {
-            await SetPermissionsAsync();
+            await AuthorAppService.CreateAsync(NewAuthor);
             await GetAuthorsAsync();
-        }
-
-        private async Task SetPermissionsAsync()
-        {
-            CanCreateAuthor = await AuthorizationService
-                .IsGrantedAsync(BookStorePermissions.Authors.Create);
-
-            CanEditAuthor = await AuthorizationService
-                .IsGrantedAsync(BookStorePermissions.Authors.Edit);
-
-            CanDeleteAuthor = await AuthorizationService
-                .IsGrantedAsync(BookStorePermissions.Authors.Delete);
-        }
-
-        private async Task GetAuthorsAsync()
-        {
-            var result = await AuthorAppService.GetListAsync(
-                new GetAuthorListDto
-                {
-                    MaxResultCount = PageSize,
-                    SkipCount = CurrentPage * PageSize,
-                    Sorting = CurrentSorting
-                }
-            );
-
-            AuthorList = result.Items;
-            TotalCount = (int)result.TotalCount;
-        }
-
-        private async Task OnDataGridReadAsync(DataGridReadDataEventArgs<AuthorDto> e)
-        {
-            CurrentSorting = e.Columns
-                .Where(c => c.SortDirection != SortDirection.Default)
-                .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
-                .JoinAsString(",");
-            CurrentPage = e.Page - 1;
-
-            await GetAuthorsAsync();
-
-            await InvokeAsync(StateHasChanged);
-        }
-
-        private void OpenCreateAuthorModal()
-        {
-            CreateValidationsRef.ClearAll();
-            
-            NewAuthor = new CreateAuthorDto();
-            CreateAuthorModal.Show();
-        }
-
-        private void CloseCreateAuthorModal()
-        {
             CreateAuthorModal.Hide();
         }
+    }
 
-        private void OpenEditAuthorModal(AuthorDto author)
+    private async Task UpdateAuthorAsync()
+    {
+        if (await EditValidationsRef.ValidateAll())
         {
-            EditValidationsRef.ClearAll();
-            
-            EditingAuthorId = author.Id;
-            EditingAuthor = ObjectMapper.Map<AuthorDto, UpdateAuthorDto>(author);
-            EditAuthorModal.Show();
-        }
-
-        private async Task DeleteAuthorAsync(AuthorDto author)
-        {
-            var confirmMessage = L["AuthorDeletionConfirmationMessage", author.Name];
-            if (!await Message.Confirm(confirmMessage))
-            {
-                return;
-            }
-
-            await AuthorAppService.DeleteAsync(author.Id);
+            await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
             await GetAuthorsAsync();
-        }
-
-        private void CloseEditAuthorModal()
-        {
             EditAuthorModal.Hide();
-        }
-
-        private async Task CreateAuthorAsync()
-        {
-            if (await CreateValidationsRef.ValidateAll())
-            {
-                await AuthorAppService.CreateAsync(NewAuthor);
-                await GetAuthorsAsync();
-                CreateAuthorModal.Hide();
-            }
-        }
-
-        private async Task UpdateAuthorAsync()
-        {
-            if (await EditValidationsRef.ValidateAll())
-            {
-                await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
-                await GetAuthorsAsync();
-                EditAuthorModal.Hide();
-            }
         }
     }
 }

@@ -283,35 +283,34 @@ using System.Threading.Tasks;
 using Acme.BookStore.Books;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Acme.BookStore.Web.Pages.Books
+namespace Acme.BookStore.Web.Pages.Books;
+
+public class EditModalModel : BookStorePageModel
 {
-    public class EditModalModel : BookStorePageModel
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public Guid Id { get; set; }
+
+    [BindProperty]
+    public CreateUpdateBookDto Book { get; set; }
+
+    private readonly IBookAppService _bookAppService;
+
+    public EditModalModel(IBookAppService bookAppService)
     {
-        [HiddenInput]
-        [BindProperty(SupportsGet = true)]
-        public Guid Id { get; set; }
+        _bookAppService = bookAppService;
+    }
 
-        [BindProperty]
-        public CreateUpdateBookDto Book { get; set; }
+    public async Task OnGetAsync()
+    {
+        var bookDto = await _bookAppService.GetAsync(Id);
+        Book = ObjectMapper.Map<BookDto, CreateUpdateBookDto>(bookDto);
+    }
 
-        private readonly IBookAppService _bookAppService;
-
-        public EditModalModel(IBookAppService bookAppService)
-        {
-            _bookAppService = bookAppService;
-        }
-
-        public async Task OnGetAsync()
-        {
-            var bookDto = await _bookAppService.GetAsync(Id);
-            Book = ObjectMapper.Map<BookDto, CreateUpdateBookDto>(bookDto);
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            await _bookAppService.UpdateAsync(Id, Book);
-            return NoContent();
-        }
+    public async Task<IActionResult> OnPostAsync()
+    {
+        await _bookAppService.UpdateAsync(Id, Book);
+        return NoContent();
     }
 }
 ````
@@ -327,14 +326,13 @@ To be able to map the `BookDto` to `CreateUpdateBookDto`, configure a new mappin
 ````csharp
 using AutoMapper;
 
-namespace Acme.BookStore.Web
+namespace Acme.BookStore.Web;
+
+public class BookStoreWebAutoMapperProfile : Profile
 {
-    public class BookStoreWebAutoMapperProfile : Profile
+    public BookStoreWebAutoMapperProfile()
     {
-        public BookStoreWebAutoMapperProfile()
-        {
-            CreateMap<BookDto, CreateUpdateBookDto>();
-        }
+        CreateMap<BookDto, CreateUpdateBookDto>();
     }
 }
 ````
@@ -1323,14 +1321,13 @@ Open the `BookStoreBlazorAutoMapperProfile` inside the `Acme.BookStore.Blazor` p
 using Acme.BookStore.Books;
 using AutoMapper;
 
-namespace Acme.BookStore.Blazor
+namespace Acme.BookStore.Blazor;
+
+public class BookStoreBlazorAutoMapperProfile : Profile
 {
-    public class BookStoreBlazorAutoMapperProfile : Profile
+    public BookStoreBlazorAutoMapperProfile()
     {
-        public BookStoreBlazorAutoMapperProfile()
-        {
-            CreateMap<BookDto, CreateUpdateBookDto>();
-        }
+        CreateMap<BookDto, CreateUpdateBookDto>();
     }
 }
 ````

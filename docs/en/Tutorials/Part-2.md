@@ -178,14 +178,13 @@ Open the `Index.cshtml` and change the whole content as shown below:
 ```csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Acme.BookStore.Web.Pages.Books
-{
-    public class IndexModel : PageModel
-    {
-        public void OnGet()
-        {
+namespace Acme.BookStore.Web.Pages.Books;
 
-        }
+public class IndexModel : PageModel
+{
+    public void OnGet()
+    {
+
     }
 }
 ```
