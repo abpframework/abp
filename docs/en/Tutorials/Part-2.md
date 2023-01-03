@@ -537,7 +537,7 @@ Open the `/src/app/book/book.component.html` and replace the content as shown be
 
 Now you can see the final result on your browser:
 
-![Book list final result](images/bookstore-book-list.png)
+![Book list final result](images/bookstore-book-list-angular.png)
 
 {{else if UI == "Blazor" || UI == "BlazorServer"}}
 
