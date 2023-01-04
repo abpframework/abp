@@ -100,11 +100,11 @@ public class FeatureDefinition : ICanCreateChildFeature
         bool isVisibleToClients = true,
         bool isAvailableToHost = true)
     {
-        Name = name;
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name));
         DefaultValue = defaultValue;
         DisplayName = displayName ?? new FixedLocalizableString(name);
         Description = description;
-        ValueType = valueType;
+        ValueType = valueType ?? new ToggleStringValueType();
         IsVisibleToClients = isVisibleToClients;
         IsAvailableToHost = isAvailableToHost;
 

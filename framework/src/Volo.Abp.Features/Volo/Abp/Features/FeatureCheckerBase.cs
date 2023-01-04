@@ -11,7 +11,7 @@ public abstract class FeatureCheckerBase : IFeatureChecker, ITransientDependency
     public virtual async Task<bool> IsEnabledAsync(string name)
     {
         var value = await GetOrNullAsync(name);
-        if (value == null)
+        if (value.IsNullOrEmpty())
         {
             return false;
         }
