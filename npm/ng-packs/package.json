@@ -109,7 +109,7 @@
     "lerna": "^4.0.0",
     "lint-staged": "^13.0.3",
     "ng-packagr": "15.0.1",
-    "ng-zorro-antd": "^14.0.0",
+    "ng-zorro-antd": "^15.0.0",
     "nx": "15.2.1",
     "postcss": "^8.3.9",
     "postcss-import": "14.1.0",
