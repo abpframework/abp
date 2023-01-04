@@ -46,4 +46,9 @@ public class DeviceFlowCodesRepository : EfCoreRepository<IIdentityServerDbConte
             .Take(maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
+
+    public virtual async Task DeleteExpirationAsync(DateTime maxExpirationDate, CancellationToken cancellationToken = default)
+    {
+        await DeleteDirectAsync(x => x.Expiration != null && x.Expiration < maxExpirationDate, cancellationToken);
+    }
 }

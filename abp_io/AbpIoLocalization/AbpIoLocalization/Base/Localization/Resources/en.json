@@ -26,6 +26,7 @@
     "Volo.AbpIo.Domain:030009": "User not found!",
     "Volo.AbpIo.Domain:030010": "To purchase the trial license, you first need to activate your trial license!",
     "Volo.AbpIo.Domain:030011": "You cannot delete a trial license when it is purchased!",
+    "Volo.AbpIo.Domain:030012": "A user is entitled to have only 1 free trial period. You already used your trial license.",
     "Volo.AbpIo.Domain:070000": "The organization name can only contain latin letters, numbers, dots and hyphens!",
     "Volo.AbpIo.Domain:070001": "The company name can only contain latin letters, numbers, dots, space and hyphens!",
     "WantToLearn?": "Want to learn?",
@@ -183,6 +184,9 @@
     "BlackFriday": "<strong>BLACK</strong> <span>FRIDAY</span>",
     "ValidForExistingCustomers": "Also valid for the <br> existing customers!",
     "CampaignBetweenDates": "From {0} <br>to {1}",
-    "SaveUpTo": "<span>SAVE</span> UP TO<strong>${0}K</strong>"
+    "SaveUpTo": "<span>SAVE</span> UP TO<strong>${0}K</strong>",
+    "ImplementingDDD": "Implementing Domain Driven Design",
+    "ExploreTheEBook": "Explore the E-Book",
+    "ExploreTheBook": "Explore the Book"
   }
 }

@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Testing;
@@ -9,13 +11,6 @@ namespace Volo.Abp.AutoMapper;
 
 public class AutoMapper_Dependency_Injection_Tests : AbpIntegratedTest<AutoMapperTestModule>
 {
-    private readonly IObjectMapper _objectMapper;
-
-    public AutoMapper_Dependency_Injection_Tests()
-    {
-        _objectMapper = GetRequiredService<IObjectMapper>();
-    }
-
     [Fact]
     public void Should_Registered_AutoMapper_Service()
     {
@@ -30,7 +25,12 @@ public class AutoMapper_Dependency_Injection_Tests : AbpIntegratedTest<AutoMappe
             Name = "Source"
         };
 
-        _objectMapper.Map<SourceModel, DestModel>(sourceModel).Name.ShouldBe(nameof(CustomMappingActionService));
+        using (var scope = ServiceProvider.CreateScope())
+        {
+            scope.ServiceProvider.GetRequiredService<IObjectMapper>().Map<SourceModel, DestModel>(sourceModel).Name.ShouldBe(nameof(CustomMappingActionService));
+        }
+
+        CustomMappingAction.IsDisposed.ShouldBeTrue();
     }
 
     public class SourceModel
@@ -51,8 +51,10 @@ public class AutoMapper_Dependency_Injection_Tests : AbpIntegratedTest<AutoMappe
         }
     }
 
-    public class CustomMappingAction : IMappingAction<SourceModel, DestModel>
+    public class CustomMappingAction : IMappingAction<SourceModel, DestModel>, IDisposable
     {
+        public static bool IsDisposed = false;
+
         private readonly CustomMappingActionService _customMappingActionService;
 
         public CustomMappingAction(CustomMappingActionService customMappingActionService)
@@ -63,6 +65,11 @@ public class AutoMapper_Dependency_Injection_Tests : AbpIntegratedTest<AutoMappe
         public void Process(SourceModel source, DestModel destination, ResolutionContext context)
         {
             destination.Name = _customMappingActionService.GetName();
+        }
+
+        public void Dispose()
+        {
+            IsDisposed = true;
         }
     }
 
