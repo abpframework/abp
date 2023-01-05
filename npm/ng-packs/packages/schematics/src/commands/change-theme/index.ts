@@ -2,7 +2,7 @@ import { Rule, SchematicContext, SchematicsException, Tree } from '@angular-devk
 import { isLibrary, updateWorkspace, WorkspaceDefinition } from '../../utils';
 import { allStyles, styleMap } from './style-map';
 import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
-import { JsonArray, JsonValue, strings } from '@angular-devkit/core';
+import { JsonArray, JsonValue } from '@angular-devkit/core';
 import { ChangeThemeOptions } from './model';
 import { ThemeOptionsEnum } from './theme-options.enum';
 
@@ -25,25 +25,7 @@ function updateProjectStyle(
   workspace: WorkspaceDefinition,
   targetThemeName: ThemeOptionsEnum,
 ) {
-  let project = workspace.projects.get(projectName);
-
-  if (!project)
-    try {
-      projectName = strings.dasherize(projectName);
-      project = workspace.projects.get(projectName);
-    } catch (_) {}
-
-  if (!project)
-    try {
-      projectName = strings.camelize(projectName);
-      project = workspace.projects.get(projectName);
-    } catch (_) {}
-
-  if (!project)
-    try {
-      projectName = strings.classify(projectName);
-      project = workspace.projects.get(projectName);
-    } catch (_) {}
+  const project = workspace.projects.get(projectName);
 
   if (!project) {
     throw new SchematicsException('The target project does not selected');
