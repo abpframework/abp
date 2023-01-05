@@ -172,21 +172,9 @@ If you are using leptonx, that has google fonts. The fonts was added builtin lep
 
 ## Updated Side Menu Layout
 
-In side menu layout affected toolbarKey, navbarKey, toolbarItemsKey keys in SideMenuApplicationLayoutComponent like below.
+In side menu layout affected eThemeLeptonXComponents.Navbar to eThemeLeptonXComponents.Toolbar, 
+eThemeLeptonXComponents.Sidebar to eThemeLeptonXComponents.Navbar.
 
-#### Before
-```ts
-toolbarKey = eThemeLeptonXComponents.Navbar;
-navbarKey = eThemeLeptonXComponents.Sidebar;
-toolbarItemsKey = eThemeLeptonXComponents.NavItems;
-```
-
-#### After
-```ts
-toolbarKey = eThemeLeptonXComponents.Toolbar;
-navbarKey = eThemeLeptonXComponents.Navbar;
-navItemsKey = eThemeLeptonXComponents.NavItems;
-```
 And also added new replaceable component like Logo Component, Language Component etc.
 
 If you are using replaceable component system you can check [documentation](https://docs.abp.io/en/commercial/latest/themes/lepton-x/angular#customization).
