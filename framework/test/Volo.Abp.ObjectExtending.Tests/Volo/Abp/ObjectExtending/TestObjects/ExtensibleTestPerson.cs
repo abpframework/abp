@@ -13,3 +13,9 @@ public class ExtensibleTestPerson : ExtensibleObject
 
     }
 }
+
+public enum ExtensibleTestEnumProperty
+{
+    Value1,
+    Value2
+}

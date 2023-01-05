@@ -45,6 +45,11 @@ public static class HasExtraPropertiesExtensions
                 return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString());
             }
 
+            if (conversionType.IsEnum)
+            {
+                return (TProperty)value;
+            }
+
             return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
         }
 
@@ -129,7 +134,7 @@ public static class HasExtraPropertiesExtensions
     {
         Check.NotNull(source, nameof(source));
         Check.NotNull(other, nameof(other));
-        
+
         return source.ExtraProperties.HasSameItems(other.ExtraProperties);
     }
 }
