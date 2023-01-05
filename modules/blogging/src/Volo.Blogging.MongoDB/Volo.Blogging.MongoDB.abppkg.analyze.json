@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.MongoDB",
-  "hash": "7dcc897f1df253d96ff7723de9c96c14",
+  "hash": "48e745c1f76b95a5e23961cf9eead6b0",
   "contents": [
     {
       "namespace": "Volo.Blogging.MongoDB",
@@ -30,12 +30,6 @@
       "connectionStringName": "Blogging",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Blogging.Posts.Post",
-          "contentType": "databaseCollection",
-          "name": "BlgPosts",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.Blogging.Comments.Comment",
           "contentType": "databaseCollection",
           "name": "BlgComments",
@@ -51,6 +45,12 @@
           "entityFullName": "Volo.Blogging.Blogs.Blog",
           "contentType": "databaseCollection",
           "name": "BlgBlogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Blogging.Posts.Post",
+          "contentType": "databaseCollection",
+          "name": "BlgPosts",
           "summary": null
         },
         {
