@@ -116,8 +116,8 @@ The `Devart.Data.Oracle.EFCore` package do not yet support EF Core 7.0, If you u
 
 See https://github.com/abpframework/abp/issues/14412 for more info.
 # Changes on Angular Apps
-##  Added new packages `@abp/ng.oauth`
-OAuth Functionality moved to seperated packages that name is `@abp/ng.oauth` So  The abp users should add `@abp/ng.oauth` packages on app.module.ts.
+##  Added new package `@abp/ng.oauth`
+OAuth Functionality moved to seperated package that name is `@abp/ng.oauth` So  The abp users should add `@abp/ng.oauth` packages on app.module.ts.
 Add the new npm package on your app.
 ```
 yarn add @abp/ng.oauth
@@ -138,4 +138,34 @@ import { AbpOAuthModule } from "@abp/ng.oauth";
 })
 export class AppModule {}
 
+```
+## Lepton X Google-Font
+If you are using leptonx, that has google fonts. The fonts was added builtin lepton file. it moved seperated file. So the abp user should add font-bundle in the angular.json. ( Projects > 'your-app-name' > architect > build > options > styles )
+
+// for the lepton x lite
+```json
+ {
+    input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.rtl.css',
+    inject: false,
+    bundleName: 'font-bundle.rtl',
+  },
+  {
+    input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.css',
+    inject: false,
+    bundleName: 'font-bundle',
+  },
+```
+
+// for the lepton x
+```json
+ {
+    input: 'node_modules/@volosoft/ngx-lepton-x/assets/css/font-bundle.css',
+    inject: false,
+    bundleName: 'font-bundle',
+  },
+  {
+    input: 'node_modules/@volosoft/ngx-lepton-x/assets/css/font-bundle.rtl.css',
+    inject: false,
+    bundleName: 'font-bundle.rtl',
+  },
 ```
