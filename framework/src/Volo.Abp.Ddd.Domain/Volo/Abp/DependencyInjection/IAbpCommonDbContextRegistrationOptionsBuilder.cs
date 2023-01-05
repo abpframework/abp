@@ -1,6 +1,7 @@
 using System;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.DependencyInjection;
 
@@ -72,19 +73,22 @@ public interface IAbpCommonDbContextRegistrationOptionsBuilder
     /// Replaces given DbContext type with this DbContext type.
     /// </summary>
     /// <typeparam name="TOtherDbContext">The DbContext type to be replaced</typeparam>
-    IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>();
+    /// <param name="multiTenancySides">MultiTenancy side</param>
+    IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>(MultiTenancySides multiTenancySides = MultiTenancySides.Both);
 
     /// <summary>
     /// Replaces given DbContext type with the target DbContext type.
     /// </summary>
     /// <typeparam name="TOtherDbContext">The DbContext type to be replaced</typeparam>
     /// <typeparam name="TTargetDbContext">The target DbContext type</typeparam>
-    IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext, TTargetDbContext>();
+    /// <param name="multiTenancySides">MultiTenancy side</param>
+    IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext, TTargetDbContext>(MultiTenancySides multiTenancySides = MultiTenancySides.Both);
 
     /// <summary>
     /// Replaces given DbContext type with the given or this DbContext type.
     /// </summary>
     /// <param name="otherDbContextType">The DbContext type to be replaced</param>
     /// <param name="targetDbContextType">The target DbContext type (optional, used this DbContext type if not provided)</param>
-    IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type targetDbContextType = null);
+    /// <param name="multiTenancySides">MultiTenancy side</param>
+    IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type targetDbContextType = null, MultiTenancySides multiTenancySides = MultiTenancySides.Both);
 }

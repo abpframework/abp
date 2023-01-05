@@ -20,7 +20,7 @@ public static class AbpMemoryDbServiceCollectionExtensions
 
         foreach (var entry in options.ReplacedDbContextTypes)
         {
-            var originalDbContextType = entry.Key;
+            var originalDbContextType = entry.Key.Type;
             var targetDbContextType = entry.Value ?? typeof(TMemoryDbContext);
 
             services.Replace(

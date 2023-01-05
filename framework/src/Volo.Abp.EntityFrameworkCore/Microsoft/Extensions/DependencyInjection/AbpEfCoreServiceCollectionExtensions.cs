@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -19,12 +20,12 @@ public static class AbpEfCoreServiceCollectionExtensions
 
         var options = new AbpDbContextRegistrationOptions(typeof(TDbContext), services);
 
-        var replacedDbContextTypes = typeof(TDbContext).GetCustomAttributes<ReplaceDbContextAttribute>(true)
+        var replacedMultiTenantDbContextTypes = typeof(TDbContext).GetCustomAttributes<ReplaceDbContextAttribute>(true)
             .SelectMany(x => x.ReplacedDbContextTypes).ToList();
 
-        foreach (var dbContextType in replacedDbContextTypes)
+        foreach (var dbContextType in replacedMultiTenantDbContextTypes)
         {
-            options.ReplaceDbContext(dbContextType);
+            options.ReplaceDbContext(dbContextType.Type, multiTenancySides: dbContextType.MultiTenancySide);
         }
 
         optionsBuilder?.Invoke(options);
@@ -33,19 +34,19 @@ public static class AbpEfCoreServiceCollectionExtensions
 
         foreach (var entry in options.ReplacedDbContextTypes)
         {
-            var originalDbContextType = entry.Key;
+            var originalDbContextType = entry.Key.Type;
             var targetDbContextType = entry.Value ?? typeof(TDbContext);
 
-            services.Replace(
-                ServiceDescriptor.Transient(
-                    originalDbContextType,
-                    sp => sp.GetRequiredService(targetDbContextType)
-                )
-            );
+            services.Replace(ServiceDescriptor.Transient(originalDbContextType, sp =>
+            {
+                var dbContextType = sp.GetRequiredService<IEfCoreDbContextTypeProvider>().GetDbContextType(originalDbContextType);
+                return sp.GetRequiredService(dbContextType);
+            }));
 
             services.Configure<AbpDbContextOptions>(opts =>
             {
-                opts.DbContextReplacements[originalDbContextType] = targetDbContextType;
+                var multiTenantDbContextType = new MultiTenantDbContextType(originalDbContextType, entry.Key.MultiTenancySide);
+                opts.DbContextReplacements[multiTenantDbContextType] = targetDbContextType;
             });
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.DependencyInjection;
 
@@ -15,7 +16,7 @@ public abstract class AbpCommonDbContextRegistrationOptions : IAbpCommonDbContex
 
     public IServiceCollection Services { get; }
 
-    public Dictionary<Type, Type> ReplacedDbContextTypes { get; }
+    public Dictionary<MultiTenantDbContextType, Type> ReplacedDbContextTypes { get; }
 
     public Type DefaultRepositoryDbContextType { get; protected set; }
 
@@ -39,28 +40,28 @@ public abstract class AbpCommonDbContextRegistrationOptions : IAbpCommonDbContex
         Services = services;
         DefaultRepositoryDbContextType = originalDbContextType;
         CustomRepositories = new Dictionary<Type, Type>();
-        ReplacedDbContextTypes = new Dictionary<Type, Type>();
+        ReplacedDbContextTypes = new Dictionary<MultiTenantDbContextType, Type>();
         SpecifiedDefaultRepositories = new List<Type>();
     }
 
-    public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>()
+    public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>(MultiTenancySides multiTenancySides = MultiTenancySides.Both)
     {
-        return ReplaceDbContext(typeof(TOtherDbContext));
+        return ReplaceDbContext(typeof(TOtherDbContext), multiTenancySides: multiTenancySides);
     }
 
-    public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext, TTargetDbContext>()
+    public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext, TTargetDbContext>(MultiTenancySides multiTenancySides = MultiTenancySides.Both)
     {
-        return ReplaceDbContext(typeof(TOtherDbContext), typeof(TTargetDbContext));
+        return ReplaceDbContext(typeof(TOtherDbContext), typeof(TTargetDbContext), multiTenancySides);
     }
 
-    public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type targetDbContextType = null)
+    public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type targetDbContextType = null, MultiTenancySides multiTenancySides = MultiTenancySides.Both)
     {
         if (!otherDbContextType.IsAssignableFrom(OriginalDbContextType))
         {
             throw new AbpException($"{OriginalDbContextType.AssemblyQualifiedName} should inherit/implement {otherDbContextType.AssemblyQualifiedName}!");
         }
 
-        ReplacedDbContextTypes[otherDbContextType] = targetDbContextType;
+        ReplacedDbContextTypes[new MultiTenantDbContextType(otherDbContextType, multiTenancySides)] = targetDbContextType;
 
         return this;
     }
