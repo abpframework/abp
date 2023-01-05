@@ -26,6 +26,8 @@ When you click *Actions* -> *Features* for a tenant, the feature management dial
 
 In this dialog, you can enable, disable or set values for the features for a tenant.
 
+* Manage host Features moved from Tenants to Setting tab. You can manage your features from Settings->Feature Management->Mange Host Features.
+
 ## IFeatureManager
 
 `IFeatureManager` is the main service provided by this module. It is used to read and change the setting values for the tenants in a multi-tenant application. `IFeatureManager` is typically used by the *Feature Management Dialog*. However, you can inject it if you need to set a feature value.
