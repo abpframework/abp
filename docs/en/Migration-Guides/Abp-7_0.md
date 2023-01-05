@@ -140,7 +140,7 @@ export class AppModule {}
 
 ```
 ## Lepton X Google-Font
-If you are using leptonx, that has google fonts. The fonts was added builtin lepton file. it moved seperated file. So the abp user should add font-bundle in the angular.json. ( Projects > 'your-app-name' > architect > build > options > styles )
+If you are using leptonx, that has google fonts. The fonts was added builtin lepton file. it moved seperated file. So the abp user should add font-bundle in the angular.json. ( under the 'yourProjectName' > 'architect' > 'build' > 'options' >'styles' )
 
 // for the lepton x lite
 ```json
@@ -169,3 +169,9 @@ If you are using leptonx, that has google fonts. The fonts was added builtin lep
     bundleName: 'font-bundle.rtl',
   },
 ```
+
+## ng-zorro-antd-tree.css 
+
+ng-zorro-antd-tree.css file should be in angular.json if the user uses AbpTree component or Abp-commercial. The ABP User should add this style definition on angular.json. ( under the 'yourProjectName' > 'architect' > 'build' > 'options' >'styles' ) 
+
+{ "input": "node_modules/ng-zorro-antd/tree/style/index.min.css", "inject": false, "bundleName": "ng-zorro-antd-tree" },
