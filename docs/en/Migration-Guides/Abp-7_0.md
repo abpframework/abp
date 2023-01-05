@@ -182,4 +182,4 @@ If you are using replaceable component system you can check [documentation](http
 ng-zorro-antd-tree.css file should be in angular.json if the user uses AbpTree component or Abp-commercial. The ABP User should add this style definition on angular.json. ( under the 'yourProjectName' > 'architect' > 'build' > 'options' >'styles' ) 
 
 { "input": "node_modules/ng-zorro-antd/tree/style/index.min.css", "inject": false, "bundleName": "ng-zorro-antd-tree" },
->>>>>>> 5a38b16b12aa88eeda37f637236f7b79e7f2d152
+
