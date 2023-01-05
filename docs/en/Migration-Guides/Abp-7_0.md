@@ -115,4 +115,27 @@ See https://github.com/abpframework/abp/pull/13845 for more info.
 The `Devart.Data.Oracle.EFCore` package do not yet support EF Core 7.0, If you use `AbpEntityFrameworkCoreOracleDevartModule(Volo.Abp.EntityFrameworkCore.Oracle.Devart)` may not work as expected, We will release new packages as soon as they are updated.
 
 See https://github.com/abpframework/abp/issues/14412 for more info.
+# Changes on Angular Apps
+##  Added new packages `@abp/ng.oauth`
+OAuth Functionality moved to seperated packages that name is `@abp/ng.oauth` So  The abp users should add `@abp/ng.oauth` packages on app.module.ts.
+Add the new npm package on your app.
+```
+yarn add @abp/ng.oauth
+// or npm i ---save @abp/ng.oauth
+```
 
+```typescript
+// app.module.ts
+import { AbpOAuthModule } from "@abp/ng.oauth";
+// ...
+@NgModule({
+ // ...
+    imports: [
+    AbpOAuthModule.forRoot(), // <-- Add This
+   // ...
+  ],
+ // ...
+})
+export class AppModule {}
+
+```
