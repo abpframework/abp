@@ -50,7 +50,7 @@
     "SendPasswordResetLink_Information": "Link do resetowania hasła zostanie wysłany na Twój adres e-mail, aby zresetować hasło. Jeśli nie otrzymasz e-maila w ciągu kilku minut, spróbuj ponownie.",
     "PasswordResetMailSentMessage": "E-mail odzyskiwania konta wysłany na Twój adres e-mail. Jeśli nie zobaczysz tego e-maila w skrzynce odbiorczej w ciągu 15 minut, poszukaj go w folderze ze spamem. Jeśli go tam znajdziesz, oznacz go jako -Nie śmieci-.",
     "ResetPassword": "Zresetuj hasło",
-    "ConfirmPassword": "Potwierdź (powtórz) hasło",
+    "ConfirmPassword": "Potwierdź hasło",
     "ResetPassword_Information": "Wprowadź nowe hasło.",
     "YourPasswordIsSuccessfullyReset": "Twoje hasło zostało pomyślnie zresetowane.",
     "GoToTheApplication": "Przejdź do aplikacji",

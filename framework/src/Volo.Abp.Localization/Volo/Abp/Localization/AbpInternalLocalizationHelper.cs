@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Localization;
+﻿using System;
+using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization;
 
@@ -22,6 +23,7 @@ public static class AbpInternalLocalizationHelper
     /// Return value if none of the localizers has none of the keys.
     /// </param>
     /// <returns></returns>
+    [Obsolete("Use IAbpEnumLocalizer instead.")]
     public static string LocalizeWithFallback(
         IStringLocalizer[] localizers,
         string[] keys,

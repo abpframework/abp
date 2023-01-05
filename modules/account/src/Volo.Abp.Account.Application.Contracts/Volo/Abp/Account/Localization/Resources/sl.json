@@ -51,7 +51,7 @@
     "SendPasswordResetLink_Information": "Na vaš e-poštni naslov bo poslana povezava za ponastavitev gesla za ponastavitev gesla. Če v nekaj minutah ne dobite e-poštnega sporočila, poskusite znova.",
     "PasswordResetMailSentMessage": "E-poštno sporočilo za obnovitev računa je bilo poslano na vaš e-poštni naslov. Če v 15 minutah tega e-poštnega sporočila ne vidite v mapi »Prejeto«, ga poiščite v mapi z neželeno pošto. Če ga najdete tam, ga prosimo označite kot -Ni neželeno-. ",
     "ResetPassword": "Ponastavitev gesla",
-    "ConfirmPassword": "Potrditev (ponovitev) gesla",
+    "ConfirmPassword": "Potrditev gesla",
     "ResetPassword_Information": "Prosimo vnesite vaše novo geslo.",
     "YourPasswordIsSuccessfullyReset": "Vaše geslo je uspešno ponastavljeno.",
     "GoToTheApplication": "Pojdite na aplikacijo",
