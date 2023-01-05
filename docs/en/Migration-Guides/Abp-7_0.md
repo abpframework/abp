@@ -169,3 +169,11 @@ If you are using leptonx, that has google fonts. The fonts was added builtin lep
     bundleName: 'font-bundle.rtl',
   },
 ```
+
+## Updated Side Menu Layout
+
+In side menu layout affected some keys in SideMenuApplicationLayoutComponent and added new replaceable component like Logo Component, Language Component etc.
+
+If you are using replaceable component system you can check [documentation](https://docs.abp.io/en/commercial/latest/themes/lepton-x/angular).
+
+
