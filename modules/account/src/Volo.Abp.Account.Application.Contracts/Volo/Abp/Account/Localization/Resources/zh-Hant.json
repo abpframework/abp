@@ -51,7 +51,7 @@
     "SendPasswordResetLink_Information": "密碼重置鏈接將發送到您的電子郵件以重置密碼. 如果您在幾分鐘內沒有收到電子郵件,請重試.",
     "PasswordResetMailSentMessage": "帳戶恢復電子郵件已發送到您的電子郵件地址. 如果您在15分鐘內未在收件箱中看到此電子郵件,請檢查垃圾郵件,並標記為非垃圾郵件.",
     "ResetPassword": "重設密碼",
-    "ConfirmPassword": "確認(重復)密碼",
+    "ConfirmPassword": "確認密碼",
     "ResetPassword_Information": "請輸入您的新密碼.",
     "YourPasswordIsSuccessfullyReset": "您的密碼已經被重置成功.",
     "GoToTheApplication": "轉到應用程序",

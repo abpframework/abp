@@ -1,4 +1,5 @@
-﻿using Volo.Abp.BackgroundWorkers;
+﻿using System;
+using Volo.Abp.BackgroundWorkers;
 
 namespace Volo.Abp.IdentityServer.Tokens;
 
@@ -12,6 +13,7 @@ public class TokenCleanupOptions
     /// <summary>
     /// Default value: 100.
     /// </summary>
+    [Obsolete("This option will be removed in future versions.")]
     public int CleanupBatchSize { get; set; } = 100;
 
     /// <summary>
@@ -22,6 +24,7 @@ public class TokenCleanupOptions
     ///
     /// Default value: 10.
     /// </summary>
+    [Obsolete("This option will be removed in future versions.")]
     public int CleanupLoopCount { get; set; } = 10;
 
     /// <summary>

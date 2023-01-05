@@ -143,6 +143,7 @@
     "Volo.AbpIo.Domain:060001": "Sursa URL(\"{PostUrl}\") nu este URL GitHub",
     "Volo.AbpIo.Domain:060002": "Conţinutul articolului nu este disponibil din resursa de pe GitHub(\"{PostUrl}\").",
     "Volo.AbpIo.Domain:060003": "Nu a fost găsit conţinutul articolului!",
-    "SeeMore": "Vezi mai mult"
+    "SeeMore": "Vezi mai mult",
+    "IConsentToMedium": "Sunt de acord cu publicarea acestei postări la https://medium.com/volosoft."
   }
 }

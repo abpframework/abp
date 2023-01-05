@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EntityFrameworkCore.DistributedEvents;
-using Volo.Abp.Guids;
+﻿using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EntityFrameworkCore.PostgreSql;
@@ -19,8 +17,5 @@ public class AbpEntityFrameworkCorePostgreSqlModule : AbpModule
                 options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsString;
             }
         });
-
-        context.Services.AddTransient(typeof(IPostgreSqlDbContextEventOutbox<>), typeof(PostgreSqlDbContextEventOutbox<>));
-        context.Services.AddTransient(typeof(IPostgreSqlDbContextEventInbox<>), typeof(PostgreSqlDbContextEventInbox<>));
     }
 }

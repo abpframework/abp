@@ -51,7 +51,7 @@
     "SendPasswordResetLink_Information": "Jelszó-visszaállítási linket küldünk az e-mailre a jelszó visszaállításához. Ha néhány percen belül nem kap e-mailt, próbálkozzon újra.",
     "PasswordResetMailSentMessage": "A fiók-helyreállítási e-mailt az Ön e-mail címére küldtük. Ha 15 percen belül nem látja ezt az e-mailt a beérkező levelek között, keresse meg a levélszemét mappájában. Ha ott találja, kérjük, jelölje meg: -Nem szemét-.",
     "ResetPassword": "Jelszó visszaállítása",
-    "ConfirmPassword": "Erősítse meg (ismételje meg) a jelszót",
+    "ConfirmPassword": "Erősítse meg a jelszót",
     "ResetPassword_Information": "Kérjük, írja be új jelszavát.",
     "YourPasswordIsSuccessfullyReset": "Jelszavát sikeresen visszaállította.",
     "GoToTheApplication": "Lépjen az alkalmazáshoz",

@@ -1,9 +1,11 @@
 param(
   [string]$Version,
   [string]$Registry
+
 )
 
 yarn install
+
 
 $NextVersion = $(node publish-utils.js --nextVersion)
 $RootFolder = (Get-Item -Path "./" -Verbose).FullName
@@ -16,14 +18,16 @@ if(-Not $Registry) {
 exit
 }
 
+
+
 $commands = (
-  "cd ng-packs\scripts",
-  "yarn",
+  "cd ng-packs/scripts",
+  "yarn install",
   "npm run publish-packages -- --nextVersion $Version --preview --registry $Registry --skipVersionValidation",
   "cd ../../",
-  "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
-  "npm run replace-with-tilde",
-  "npm run lerna -- exec 'npm publish --registry $Registry --tag preview'"
+  "yarn lerna version $Version --yes --no-commit-hooks --skip-git --force-publish",
+  "yarn replace-with-tilde",
+  "yarn lerna exec 'npm publish --registry $Registry --tag preview'"
 )
 
 foreach ($command in $commands) { 
