@@ -1,4 +1,4 @@
-import { AuthService, RouterEvents } from '@abp/ng.core';
+import { AuthService } from '@abp/ng.core';
 import { Component } from '@angular/core';
 import { map } from 'rxjs';
 
