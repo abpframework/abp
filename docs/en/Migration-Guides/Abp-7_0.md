@@ -116,9 +116,9 @@ The `Devart.Data.Oracle.EFCore` package do not yet support EF Core 7.0, If you u
 
 See https://github.com/abpframework/abp/issues/14412 for more info.
 # Changes on Angular Apps
-##  Added new package `@abp/ng.oauth`
-OAuth Functionality moved to seperated package that name is `@abp/ng.oauth` So  The abp users should add `@abp/ng.oauth` packages on app.module.ts.
-Add the new npm package on your app.
+##  Added a new package `@abp/ng.oauth`
+OAuth Functionality moved to a seperate package named `@abp/ng.oauth`, so ABP users should add the `@abp/ng.oauth` packages on app.module.ts.
+Add the new npm package to your app.
 ```
 yarn add @abp/ng.oauth
 // or npm i ---save @abp/ng.oauth
@@ -140,9 +140,9 @@ export class AppModule {}
 
 ```
 ## Lepton X Google-Font
-If you are using leptonx, that has google fonts. The fonts was added builtin lepton file. it moved seperated file. So the abp user should add font-bundle in the angular.json. ( under the 'yourProjectName' > 'architect' > 'build' > 'options' >'styles' )
+If you are using LeptonX that has google fonts, the fonts were built-in the Lepton file. It's been moved to a seperate file. So the ABP user should add font-bundle in angular.json. ( under the 'yourProjectName' > 'architect' > 'build' > 'options' >'styles' )
 
-// for the lepton x lite
+// for  LeptonX Lite
 ```json
  {
     input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.rtl.css',
@@ -156,7 +156,7 @@ If you are using leptonx, that has google fonts. The fonts was added builtin lep
   },
 ```
 
-// for the lepton x
+// for LeptonX
 ```json
  {
     input: 'node_modules/@volosoft/ngx-lepton-x/assets/css/font-bundle.css',
@@ -172,7 +172,7 @@ If you are using leptonx, that has google fonts. The fonts was added builtin lep
 
 ## Updated Side Menu Layout
 
-In side menu layout affected eThemeLeptonXComponents.Navbar to eThemeLeptonXComponents.Toolbar, 
+In side menu layout, eThemeLeptonXComponents.Navbar has been changed to eThemeLeptonXComponents.Toolbar, and 
 eThemeLeptonXComponents.Sidebar to eThemeLeptonXComponents.Navbar.
 
 And also added new replaceable component like Logo Component, Language Component etc.
