@@ -157,14 +157,6 @@ public class OpenIddictServerModule : AbpModule
 
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        var dbContext = context.ServiceProvider
-            .GetRequiredService<ServerDbContext>();
-
-        if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
-        {
-            await dbContext.Database.MigrateAsync();
-        }
-
         await context.ServiceProvider
             .GetRequiredService<IDataSeeder>()
             .SeedAsync();
