@@ -6,6 +6,6 @@ import { LoadingDirective, ThemeSharedModule } from '@abp/ng.theme.shared';
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [SharedModule, HomeRoutingModule, ThemeSharedModule],
+  imports: [SharedModule, HomeRoutingModule],
 })
 export class HomeModule {}
