@@ -24,7 +24,7 @@ public class AbpMongoDbContextOptions
         var replacementType = dbContextType;
         while (true)
         {
-            var foundType = DbContextReplacements.FirstOrDefault(x => x.Key.Type == replacementType && x.Key.MultiTenancySide.HasFlag(multiTenancySides));
+            var foundType = DbContextReplacements.LastOrDefault(x => x.Key.Type == replacementType && x.Key.MultiTenancySide.HasFlag(multiTenancySides));
             if (!foundType.Equals(default(KeyValuePair<MultiTenantDbContextType, Type>)))
             {
                 if (foundType.Value == dbContextType)
