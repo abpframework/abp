@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.MongoDB",
-  "hash": "26a3848f2d1556551380bd919b07c87f",
+  "hash": "2b319fb7bbae93af9a002da48e4673de",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer.MongoDB",
@@ -25,15 +25,9 @@
       "connectionStringName": "AbpIdentityServer",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope",
+          "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
           "contentType": "databaseCollection",
-          "name": "IdentityServerApiScopes",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerIdentityResources",
+          "name": "IdentityServerPersistedGrants",
           "summary": null
         },
         {
@@ -43,21 +37,27 @@
           "summary": null
         },
         {
+          "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope",
+          "contentType": "databaseCollection",
+          "name": "IdentityServerApiScopes",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
           "contentType": "databaseCollection",
           "name": "IdentityServerClients",
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource",
+          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
           "contentType": "databaseCollection",
-          "name": "IdentityServerApiResources",
+          "name": "IdentityServerIdentityResources",
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
+          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource",
           "contentType": "databaseCollection",
-          "name": "IdentityServerPersistedGrants",
+          "name": "IdentityServerApiResources",
           "summary": null
         }
       ],
