@@ -10,9 +10,16 @@
 
     <p class="lead px-lg-5 mx-lg-5">{{ '::LongWelcomeMessage' | abpLocalization }}</p>
 
-    <a *ngIf="!hasLoggedIn" (click)="login()" class="px-4 btn btn-primary ml-1" role="button"
-      ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
+    <a
+      *ngIf="!hasLoggedIn"
+      (click)="login()"
+      class="px-4 btn btn-primary ml-1"
+      [class.disabled]="isNavigating"
+      role="button"
     >
+      <i [class]="iconClass"></i>
+      {{ title | abpLocalization }}
+    </a>
   </div>
   <div class="my-3 text-center">
     <h3>Let's improve your application!</h3>
