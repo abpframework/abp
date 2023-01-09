@@ -25,8 +25,10 @@ public class AbpEfCoreSqlServerConnectionStringChecker : IAbpConnectionStringChe
             await conn.OpenAsync();
             result.Connected = true;
             await conn.ChangeDatabaseAsync(oldDatabaseName);
-            await conn.CloseAsync();
             result.DatabaseExists = true;
+
+            await conn.CloseAsync();
+
             return result;
         }
         catch (Exception e)

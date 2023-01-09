@@ -18,6 +18,7 @@ public class AbpEfCoreSqliteConnectionStringChecker : IAbpConnectionStringChecke
             await conn.OpenAsync();
             result.Connected = true;
             result.DatabaseExists = true;
+
             await conn.CloseAsync();
 
             return result;
