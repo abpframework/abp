@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 
-namespace Volo.Abp.EntityFrameworkCore.ConnectionStrings;
+namespace Volo.Abp.Data;
 
-public interface IAbpConnectionStringChecker
+public interface IConnectionStringChecker
 {
     Task<AbpConnectionStringCheckResult> CheckAsync(string connectionString);
 }

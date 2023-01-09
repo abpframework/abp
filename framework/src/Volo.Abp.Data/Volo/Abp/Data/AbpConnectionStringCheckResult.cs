@@ -1,4 +1,4 @@
-namespace Volo.Abp.EntityFrameworkCore.ConnectionStrings;
+namespace Volo.Abp.Data;
 
 public class AbpConnectionStringCheckResult
 {

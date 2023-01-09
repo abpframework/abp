@@ -1,30 +1,27 @@
 using System;
 using System.Threading.Tasks;
-using MySqlConnector;
+using Oracle.ManagedDataAccess.Client;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EntityFrameworkCore.ConnectionStrings;
 
-[ExposeServices(typeof(IAbpConnectionStringChecker))]
-public class AbpEfCoreMySqlConnectionStringChecker : IAbpConnectionStringChecker, ITransientDependency
+[Dependency(ReplaceServices = true)]
+public class OracleConnectionStringChecker : IConnectionStringChecker, ITransientDependency
 {
     public virtual async Task<AbpConnectionStringCheckResult> CheckAsync(string connectionString)
     {
         var result = new AbpConnectionStringCheckResult();
-        var connString = new MySqlConnectionStringBuilder(connectionString)
+        var connString = new OracleConnectionStringBuilder(connectionString)
         {
-            ConnectionLifeTime = 1
+            ConnectionTimeout = 1
         };
-
-        var oldDatabaseName = connString.Database;
-        connString.Database = "mysql";
 
         try
         {
-            await using var conn = new MySqlConnection(connString.ConnectionString);
+            await using var conn = new OracleConnection(connString.ConnectionString);
             await conn.OpenAsync();
             result.Connected = true;
-            await conn.ChangeDatabaseAsync(oldDatabaseName);
             result.DatabaseExists = true;
 
             await conn.CloseAsync();

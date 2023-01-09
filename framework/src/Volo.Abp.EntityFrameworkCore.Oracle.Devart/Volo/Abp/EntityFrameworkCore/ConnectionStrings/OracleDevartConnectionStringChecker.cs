@@ -1,12 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using Devart.Data.Oracle;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EntityFrameworkCore.ConnectionStrings;
 
-[ExposeServices(typeof(IAbpConnectionStringChecker))]
-public class AbpEfCoreOracleDevartConnectionStringChecker : IAbpConnectionStringChecker, ITransientDependency
+[Dependency(ReplaceServices = true)]
+public class OracleDevartConnectionStringChecker : IConnectionStringChecker, ITransientDependency
 {
     public virtual async Task<AbpConnectionStringCheckResult> CheckAsync(string connectionString)
     {

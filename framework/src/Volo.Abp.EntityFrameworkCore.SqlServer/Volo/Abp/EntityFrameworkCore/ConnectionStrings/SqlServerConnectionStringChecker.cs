@@ -1,27 +1,28 @@
 using System;
 using System.Threading.Tasks;
-using Npgsql;
+using Microsoft.Data.SqlClient;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EntityFrameworkCore.ConnectionStrings;
 
-[ExposeServices(typeof(IAbpConnectionStringChecker))]
-public class AbpEfCoreNpgsqlConnectionStringChecker : IAbpConnectionStringChecker, ITransientDependency
+[Dependency(ReplaceServices = true)]
+public class SqlServerConnectionStringChecker : IConnectionStringChecker, ITransientDependency
 {
     public virtual async Task<AbpConnectionStringCheckResult> CheckAsync(string connectionString)
     {
         var result = new AbpConnectionStringCheckResult();
-        var connString = new NpgsqlConnectionStringBuilder(connectionString)
+        var connString = new SqlConnectionStringBuilder(connectionString)
         {
-            Timeout = 1
+            ConnectTimeout = 1
         };
 
-        var oldDatabaseName = connString.Database;
-        connString.Database = "postgres";
+        var oldDatabaseName = connString.InitialCatalog;
+        connString.InitialCatalog = "master";
 
         try
         {
-            await using var conn = new NpgsqlConnection(connString.ConnectionString);
+            await using var conn = new SqlConnection(connString.ConnectionString);
             await conn.OpenAsync();
             result.Connected = true;
             await conn.ChangeDatabaseAsync(oldDatabaseName);
