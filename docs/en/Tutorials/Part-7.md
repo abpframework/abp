@@ -121,41 +121,40 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Acme.BookStore.Authors
+namespace Acme.BookStore.Authors;
+
+public class EfCoreAuthorRepository
+    : EfCoreRepository<BookStoreDbContext, Author, Guid>,
+        IAuthorRepository
 {
-    public class EfCoreAuthorRepository
-        : EfCoreRepository<BookStoreDbContext, Author, Guid>,
-            IAuthorRepository
+    public EfCoreAuthorRepository(
+        IDbContextProvider<BookStoreDbContext> dbContextProvider)
+        : base(dbContextProvider)
     {
-        public EfCoreAuthorRepository(
-            IDbContextProvider<BookStoreDbContext> dbContextProvider)
-            : base(dbContextProvider)
-        {
-        }
+    }
 
-        public async Task<Author> FindByNameAsync(string name)
-        {
-            var dbSet = await GetDbSetAsync();
-            return await dbSet.FirstOrDefaultAsync(author => author.Name == name);
-        }
+    public async Task<Author> FindByNameAsync(string name)
+    {
+        var dbSet = await GetDbSetAsync();
+        return await dbSet.FirstOrDefaultAsync(author => author.Name == name);
+    }
 
-        public async Task<List<Author>> GetListAsync(
-            int skipCount,
-            int maxResultCount,
-            string sorting,
-            string filter = null)
-        {
-            var dbSet = await GetDbSetAsync();
-            return await dbSet
-                .WhereIf(
-                    !filter.IsNullOrWhiteSpace(),
-                    author => author.Name.Contains(filter)
-                 )
-                .OrderBy(sorting)
-                .Skip(skipCount)
-                .Take(maxResultCount)
-                .ToListAsync();
-        }
+    public async Task<List<Author>> GetListAsync(
+        int skipCount,
+        int maxResultCount,
+        string sorting,
+        string filter = null)
+    {
+        var dbSet = await GetDbSetAsync();
+        return await dbSet
+            .WhereIf(
+                !filter.IsNullOrWhiteSpace(),
+                author => author.Name.Contains(filter)
+                )
+            .OrderBy(sorting)
+            .Skip(skipCount)
+            .Take(maxResultCount)
+            .ToListAsync();
     }
 }
 ````
@@ -182,42 +181,41 @@ using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 
-namespace Acme.BookStore.Authors
+namespace Acme.BookStore.Authors;
+
+public class MongoDbAuthorRepository
+    : MongoDbRepository<BookStoreMongoDbContext, Author, Guid>,
+    IAuthorRepository
 {
-    public class MongoDbAuthorRepository
-        : MongoDbRepository<BookStoreMongoDbContext, Author, Guid>,
-        IAuthorRepository
+    public MongoDbAuthorRepository(
+        IMongoDbContextProvider<BookStoreMongoDbContext> dbContextProvider
+        ) : base(dbContextProvider)
     {
-        public MongoDbAuthorRepository(
-            IMongoDbContextProvider<BookStoreMongoDbContext> dbContextProvider
-            ) : base(dbContextProvider)
-        {
-        }
+    }
 
-        public async Task<Author> FindByNameAsync(string name)
-        {
-            var queryable = await GetMongoQueryableAsync();
-            return await queryable.FirstOrDefaultAsync(author => author.Name == name);
-        }
+    public async Task<Author> FindByNameAsync(string name)
+    {
+        var queryable = await GetMongoQueryableAsync();
+        return await queryable.FirstOrDefaultAsync(author => author.Name == name);
+    }
 
-        public async Task<List<Author>> GetListAsync(
-            int skipCount,
-            int maxResultCount,
-            string sorting,
-            string filter = null)
-        {
-            var queryable = await GetMongoQueryableAsync();
-            return await queryable
-                .WhereIf<Author, IMongoQueryable<Author>>(
-                    !filter.IsNullOrWhiteSpace(),
-                    author => author.Name.Contains(filter)
-                )
-                .OrderBy(sorting)
-                .As<IMongoQueryable<Author>>()
-                .Skip(skipCount)
-                .Take(maxResultCount)
-                .ToListAsync();
-        }
+    public async Task<List<Author>> GetListAsync(
+        int skipCount,
+        int maxResultCount,
+        string sorting,
+        string filter = null)
+    {
+        var queryable = await GetMongoQueryableAsync();
+        return await queryable
+            .WhereIf<Author, IMongoQueryable<Author>>(
+                !filter.IsNullOrWhiteSpace(),
+                author => author.Name.Contains(filter)
+            )
+            .OrderBy(sorting)
+            .As<IMongoQueryable<Author>>()
+            .Skip(skipCount)
+            .Take(maxResultCount)
+            .ToListAsync();
     }
 }
 ```
