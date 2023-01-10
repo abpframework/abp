@@ -14,6 +14,7 @@ public class Program
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
+        var loggerOutputTemplate = "{Message:lj}{NewLine}{Exception}";
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
@@ -26,8 +27,8 @@ public class Program
             .MinimumLevel.Override("Volo.Abp.Cli", LogEventLevel.Information)
 #endif
             .Enrich.FromLogContext()
-            .WriteTo.File(Path.Combine(CliPaths.Log, "abp-cli-logs.txt"))
-            .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
+            .WriteTo.File(Path.Combine(CliPaths.Log, "abp-cli-logs.txt"), outputTemplate: loggerOutputTemplate)
+            .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen, outputTemplate: loggerOutputTemplate)
             .CreateLogger();
 
         using (var application = AbpApplicationFactory.Create<AbpCliModule>(

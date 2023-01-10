@@ -17,7 +17,7 @@
     <NSubstitutePackageVersion>4.3.0</NSubstitutePackageVersion>
 
     <!-- Shouldly https://www.nuget.org/packages/Shouldly -->
-    <ShouldlyPackageVersion>4.0.3</ShouldlyPackageVersion>
+    <ShouldlyPackageVersion>4.1.0</ShouldlyPackageVersion>
 
     <!-- xunit https://www.nuget.org/packages/xUnit -->
     <xUnitPackageVersion>2.4.1</xUnitPackageVersion>

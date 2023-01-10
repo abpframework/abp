@@ -693,7 +693,7 @@ public abstract class ProjectCreationCommandBase
 
             AngularThemeConfigurer.Configure(new AngularThemeConfigurationArgs(
                 theme: projectArgs.Theme.Value,
-                projectName: projectArgs.SolutionName.FullName,
+                projectName: projectArgs.SolutionName.ProjectName,
                 angularFolderPath: angularFolderPath
             ));
         }

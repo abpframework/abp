@@ -51,7 +51,7 @@
     "SendPasswordResetLink_Information": "Un lien de réinitialisation du mot de passe sera envoyé à votre adresse e-mail pour réinitialiser votre mot de passe. Si vous ne recevez pas d'e-mail dans quelques minutes, veuillez réessayer.",
     "PasswordResetMailSentMessage": "E-mail de récupération de compte envoyé à votre adresse e-mail. Si vous ne voyez pas cet e-mail dans votre boîte de réception dans les 15 minutes, recherchez-le dans votre dossier de courrier indésirable. Si vous le trouvez là-bas, veuillez le marquer comme -Pas indésirable-.",
     "ResetPassword": "Réinitialiser le mot de passe",
-    "ConfirmPassword": "Confirmer (répéter) le mot de passe",
+    "ConfirmPassword": "Confirmer le mot de passe",
     "ResetPassword_Information": "Entrez votre nouveau mot de passe.",
     "YourPasswordIsSuccessfullyReset": "Votre mot de passe a été réinitialisé avec succès.",
     "GoToTheApplication": "Accédez à l’application",

@@ -1,19 +1,19 @@
 {
   "name": "@abp/ng.components",
-  "version": "7.0.0-rc.6",
+  "version": "7.0.0",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "peerDependencies": {
-    "@abp/ng.core": ">=7.0.0-rc.6",
-    "@abp/ng.theme.shared": ">=7.0.0-rc.6",
+    "@abp/ng.core": ">=7.0.0",
+    "@abp/ng.theme.shared": ">=7.0.0",
     "@ng-bootstrap/ng-bootstrap": ">=10.0.0"
   },
   "dependencies": {
     "chart.js": "^3.5.1",
-    "ng-zorro-antd": "^14.0.0",
+    "ng-zorro-antd": "^15.0.0",
     "tslib": "^2.0.0"
   },
   "publishConfig": {

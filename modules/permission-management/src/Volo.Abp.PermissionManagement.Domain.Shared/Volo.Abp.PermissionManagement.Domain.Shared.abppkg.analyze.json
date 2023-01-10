@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.Domain.Shared",
-  "hash": "4bba3ba19438ee183c91ad86f4ef977a",
+  "hash": "55e8ff55fc46d842df674ec1ab53255f",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement",

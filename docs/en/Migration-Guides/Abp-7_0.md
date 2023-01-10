@@ -115,4 +115,74 @@ See https://github.com/abpframework/abp/pull/13845 for more info.
 The `Devart.Data.Oracle.EFCore` package do not yet support EF Core 7.0, If you use `AbpEntityFrameworkCoreOracleDevartModule(Volo.Abp.EntityFrameworkCore.Oracle.Devart)` may not work as expected, We will release new packages as soon as they are updated.
 
 See https://github.com/abpframework/abp/issues/14412 for more info.
+# Changes on Angular Apps
+##  Added a new package `@abp/ng.oauth`
+OAuth Functionality moved to a seperate package named `@abp/ng.oauth`, so ABP users should add the `@abp/ng.oauth` packages on app.module.ts.
+Add the new npm package to your app.
+```
+yarn add @abp/ng.oauth
+// or npm i ---save @abp/ng.oauth
+```
+
+```typescript
+// app.module.ts
+import { AbpOAuthModule } from "@abp/ng.oauth";
+// ...
+@NgModule({
+ // ...
+    imports: [
+    AbpOAuthModule.forRoot(), // <-- Add This
+   // ...
+  ],
+ // ...
+})
+export class AppModule {}
+
+```
+## Lepton X Google-Font
+If you are using LeptonX that has google fonts, the fonts were built-in the Lepton file. It's been moved to a seperate file. So the ABP user should add font-bundle in angular.json. ( under the 'yourProjectName' > 'architect' > 'build' > 'options' >'styles' )
+
+// for  LeptonX Lite
+```json
+ {
+    input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.rtl.css',
+    inject: false,
+    bundleName: 'font-bundle.rtl',
+  },
+  {
+    input: 'node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.css',
+    inject: false,
+    bundleName: 'font-bundle',
+  },
+```
+
+// for LeptonX
+```json
+ {
+    input: 'node_modules/@volosoft/ngx-lepton-x/assets/css/font-bundle.css',
+    inject: false,
+    bundleName: 'font-bundle',
+  },
+  {
+    input: 'node_modules/@volosoft/ngx-lepton-x/assets/css/font-bundle.rtl.css',
+    inject: false,
+    bundleName: 'font-bundle.rtl',
+  },
+```
+
+## Updated Side Menu Layout
+
+In side menu layout, eThemeLeptonXComponents.Navbar has been changed to eThemeLeptonXComponents.Toolbar, and 
+eThemeLeptonXComponents.Sidebar to eThemeLeptonXComponents.Navbar.
+
+And also added new replaceable component like Logo Component, Language Component etc.
+
+If you are using replaceable component system you can check [documentation](https://docs.abp.io/en/commercial/latest/themes/lepton-x/angular#customization).
+
+
+## ng-zorro-antd-tree.css 
+
+ng-zorro-antd-tree.css file should be in angular.json if the user uses AbpTree component or Abp-commercial. The ABP User should add this style definition on angular.json. ( under the 'yourProjectName' > 'architect' > 'build' > 'options' >'styles' ) 
+
+{ "input": "node_modules/ng-zorro-antd/tree/style/index.min.css", "inject": false, "bundleName": "ng-zorro-antd-tree" },
 

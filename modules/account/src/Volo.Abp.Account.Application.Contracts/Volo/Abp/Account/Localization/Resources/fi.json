@@ -51,7 +51,7 @@
     "SendPasswordResetLink_Information": "Salasanan vaihtamislinkki lähetetään sähköpostiisi salasanan vaihtamiseksi. Jos et saa sähköpostia muutamassa minuutissa, yritä uudelleen.",
     "PasswordResetMailSentMessage": "Tilin palauttamisen sähköposti lähetetään sähköpostiosoitteeseesi. Jos et näe tätä sähköpostia postilaatikossa 15 minuutin kuluessa, etsi se roskapostikansiostasi. Jos löydät sen sieltä, merkitse se nimellä -Ei roskaa.",
     "ResetPassword": "Nollaa salasana",
-    "ConfirmPassword": "Vahvista (toista) salasana",
+    "ConfirmPassword": "Vahvista salasana",
     "ResetPassword_Information": "Anna uusi salasanasi.",
     "YourPasswordIsSuccessfullyReset": "Salasanasi on palautettu.",
     "GoToTheApplication": "Siirry sovellukseen",
