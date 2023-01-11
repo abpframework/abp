@@ -112,7 +112,7 @@
 
 ## IdentityServer
 
-This project is renamed to **AuthServer** after v6.0.0-rc1. You can also refactor and rename your project to *AuthServer* for easier updates in the future.
+This project is renamed to **AuthServer** after v6.0.0. You can also refactor and rename your project to *AuthServer* for easier updates in the future.
 
 - In **MyApplication.IdentityServer.csproj** replace **project references**:
 
