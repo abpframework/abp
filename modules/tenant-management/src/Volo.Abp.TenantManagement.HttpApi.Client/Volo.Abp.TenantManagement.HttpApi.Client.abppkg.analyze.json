@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.HttpApi.Client",
-  "hash": "51c2286d730f92b79ea38ffa3cdba766",
+  "hash": "b9f75ec2afd362f2be5f2edb3c0261d5",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",

@@ -204,6 +204,7 @@ We've passed a lambda method to configure the `ApplicationName` option. Here's a
 
 * `ApplicationName`: A human-readable name for the application. It is a unique value for an application.
 * `Configuration`: Can be used to setup the [application configuration](Configuration.md) when it is not provided by the hosting system. It is not needed for ASP.NET Core and other .NET hosted applications. However, if you've used `AbpApplicationFactory` with an internal service provider, you can use this option to configure how the application configuration is built.
+* `Environment`: Environment name for the application.
 * `PlugInSources`: A list of plugin sources. See the [Plug-In Modules documentation](PlugIn-Modules) to learn how to work with plugins.
 * `Services`: The `IServiceCollection` object that can be used to register service dependencies. You generally don't need that, because you configure your services in your [module class](Module-Development-Basics.md). However, it can be used while writing extension methods for the `AbpApplicationCreationOptions` class.
 
@@ -252,6 +253,54 @@ Here's a list of `IAbpApplication` properties you may want to know:
 The `IAbpApplication` interface extends the `IApplicationInfoAccessor` interface, so you can get the `ApplicationName` and `InstanceId` values from it. However, if you only need to access these properties, inject and use the `IApplicationInfoAccessor` service instead.
 
 `IAbpApplication` is disposable. Always dispose of it before exiting your application.
+
+## IAbpHostEnvironment
+
+Sometimes, while creating an application, we need to get the current hosting environment and take actions according to that. In such cases, we can use some services such as [IWebHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.iwebhostenvironment?view=aspnetcore-7.0) or [IWebAssemblyHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.webassembly.hosting.iwebassemblyhostenvironment) provided by .NET, in the final application. 
+
+However, we can not use these services in a class library, which is used by the final application. ABP Framework provides the `IAbpHostEnvironment` service, which allows you to get the current environment name whenever you want. `IAbpHostEnvironment` is used by the ABP Framework in several places to perform specific actions by the environment. For example, ABP Framework reduces the cache duration on the **Development** environment for some services.
+
+`IAbpHostEnvironment` obtains the current environment name by the following order:
+
+1. Gets and sets the environment name if it's specified in the `AbpApplicationCreationOptions`.
+2. Tries to obtain the environment name from the `IWebHostEnvironment` or `IWebAssemblyHostEnvironment` services for ASP.NET Core & Blazor WASM applications if the environment name isn't specified in the `AbpApplicationCreationOptions`.
+3. Sets the environment name as **Production**, if the environment name is not specified or can not be obtained from the services.
+
+You can configure the `AbpApplicationCreationOptions` [options class](Options.md) while creating the ABP application and set an environment name to its `Environment` property. You can find the `AddApplication` or `AddApplicationAsync` call in your solution (typically in the `Program.cs` file), and set the `Environment` option as shown below:
+
+```csharp
+await builder.AddApplicationAsync<OrderingServiceHttpApiHostModule>(options =>
+{
+    options.Environment = Environments.Staging; //or directly set as "Staging"
+});
+```
+
+Then, whenever you need to get the current environment name or check the environment, you can use the `IAbpHostEnvironment` interface:
+
+```csharp
+public class MyDemoService
+{
+    private readonly IAbpHostEnvironment _abpHostEnvironment;
+    
+    public MyDemoService(IAbpHostEnvironment abpHostEnvironment)
+    {
+        _abpHostEnvironment = abpHostEnvironment;
+    }
+
+    public void MyMethod()
+    {
+        var environmentName = _abpHostEnvironment.EnvironmentName;
+
+        if (_abpHostEnvironment.IsDevelopment()) { /* ... */ } 
+
+        if (_abpHostEnvironment.IsStaging()) { /* ... */ }
+
+        if (_abpHostEnvironment.IsProduction()) { /* ... */ }
+
+        if (_abpHostEnvironment.IsEnvironment("custom-environment")) { /* ... */ }
+    }
+}
+```
 
 ## .NET Generic Host & ASP.NET Core Integrations
 
