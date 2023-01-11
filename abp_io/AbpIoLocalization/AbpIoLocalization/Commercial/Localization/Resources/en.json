@@ -817,6 +817,7 @@
     "Other": "Other",
     "WhereDidYouHearAboutUs_explain": "Specify ...",
     "DeletingMemberWarningMessage": "\"{0}\" will be removed from the developer list. If you want, you can assign this empty seat to another developer later.",
-    "AdditionalInfo": "If the developer seats are above your requirements, you can reduce them. You can email <a href=\"mailto:info@abp.io\">info@abp.io</a> to remove some of your developer seats. Clearing unused developer seats will reduce the license renewal cost. If you want, you can re-purchase additional developer seats within your active license period. Note that, since there are {0} developers in this license package, you cannot reduce this number."
+    "AdditionalInfo": "If the developer seats are above your requirements, you can reduce them. You can email <a href=\"mailto:info@abp.io\">info@abp.io</a> to remove some of your developer seats. Clearing unused developer seats will reduce the license renewal cost. If you want, you can re-purchase additional developer seats within your active license period. Note that, since there are {0} developers in this license package, you cannot reduce this number.",
+    "LinkExpiredErrorMessage": "The link you are trying to access is expired."
   }
 }
