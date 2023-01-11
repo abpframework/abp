@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Autofac;
+﻿using System.Threading.Tasks;
+using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs.DemoApp.Shared;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -27,19 +28,21 @@ public class DemoAppModule : AbpModule
 
         Configure<AbpBackgroundJobWorkerOptions>(options =>
         {
-                //Configure for fast running
-                options.JobPollPeriod = 1000;
+            //Configure for fast running
+            options.JobPollPeriod = 1000;
             options.DefaultFirstWaitDuration = 1;
             options.DefaultWaitFactor = 1;
         });
     }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    public override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         //TODO: Configure console logging
         //context
         //    .ServiceProvider
         //    .GetRequiredService<ILoggerFactory>()
         //    .AddConsole(LogLevel.Debug);
+
+        return Task.CompletedTask;
     }
 }
