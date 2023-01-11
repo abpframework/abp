@@ -409,9 +409,9 @@
     "SeeTheScreenshot": "See the screenshot",
     "ApplicationModuleExplanation1": "Creates a reusable, fully layered application module solution.",
     "ApplicationModuleExplanation2": "You can use this option to create modules for your modular application.",
-    "Expert": "Expert",
+    "Expert": "ABP Expert",
     "Expert_": "Expert",
-    "Partner": "Partner",
+    "Partner": "ABP Partner",
     "Partner_": "Partnership",
     "WebSite": "Web Site",
     "Industry": "Industry",
@@ -428,6 +428,7 @@
     "Date": "Date",
     "Activity": "Activity",
     "Type": "Type",
-    "Contribution": "Contribution"
+    "Contribution": "Contribution",
+    "Info": "Info"
   }
 }
