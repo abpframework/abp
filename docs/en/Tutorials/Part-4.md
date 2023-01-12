@@ -34,10 +34,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
-
-> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
-> `git config --system core.longpaths true`
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -88,30 +85,31 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Validation;
 using Xunit;
 
-namespace Acme.BookStore.Books
-{ {{if DB=="Mongo"}}
-    [Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
-    public class BookAppService_Tests : BookStoreApplicationTestBase
+namespace Acme.BookStore.Books;
+
+{{if DB=="Mongo"}}
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+{{end}}
+public class BookAppService_Tests : BookStoreApplicationTestBase
+{
+    private readonly IBookAppService _bookAppService;
+
+    public BookAppService_Tests()
     {
-        private readonly IBookAppService _bookAppService;
+        _bookAppService = GetRequiredService<IBookAppService>();
+    }
 
-        public BookAppService_Tests()
-        {
-            _bookAppService = GetRequiredService<IBookAppService>();
-        }
+    [Fact]
+    public async Task Should_Get_List_Of_Books()
+    {
+        //Act
+        var result = await _bookAppService.GetListAsync(
+            new PagedAndSortedResultRequestDto()
+        );
 
-        [Fact]
-        public async Task Should_Get_List_Of_Books()
-        {
-            //Act
-            var result = await _bookAppService.GetListAsync(
-                new PagedAndSortedResultRequestDto()
-            );
-
-            //Assert
-            result.TotalCount.ShouldBeGreaterThan(0);
-            result.Items.ShouldContain(b => b.Name == "1984");
-        }
+        //Assert
+        result.TotalCount.ShouldBeGreaterThan(0);
+        result.Items.ShouldContain(b => b.Name == "1984");
     }
 }
 ````
@@ -179,69 +177,70 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Validation;
 using Xunit;
 
-namespace Acme.BookStore.Books
-{ {{if DB=="Mongo"}}
-    [Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
-    public class BookAppService_Tests : BookStoreApplicationTestBase
+namespace Acme.BookStore.Books;
+
+{{if DB=="Mongo"}}
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+{{end}}
+public class BookAppService_Tests : BookStoreApplicationTestBase
+{
+    private readonly IBookAppService _bookAppService;
+
+    public BookAppService_Tests()
     {
-        private readonly IBookAppService _bookAppService;
+        _bookAppService = GetRequiredService<IBookAppService>();
+    }
 
-        public BookAppService_Tests()
-        {
-            _bookAppService = GetRequiredService<IBookAppService>();
-        }
+    [Fact]
+    public async Task Should_Get_List_Of_Books()
+    {
+        //Act
+        var result = await _bookAppService.GetListAsync(
+            new PagedAndSortedResultRequestDto()
+        );
 
-        [Fact]
-        public async Task Should_Get_List_Of_Books()
-        {
-            //Act
-            var result = await _bookAppService.GetListAsync(
-                new PagedAndSortedResultRequestDto()
-            );
+        //Assert
+        result.TotalCount.ShouldBeGreaterThan(0);
+        result.Items.ShouldContain(b => b.Name == "1984");
+    }
+    
+    [Fact]
+    public async Task Should_Create_A_Valid_Book()
+    {
+        //Act
+        var result = await _bookAppService.CreateAsync(
+            new CreateUpdateBookDto
+            {
+                Name = "New test book 42",
+                Price = 10,
+                PublishDate = DateTime.Now,
+                Type = BookType.ScienceFiction
+            }
+        );
 
-            //Assert
-            result.TotalCount.ShouldBeGreaterThan(0);
-            result.Items.ShouldContain(b => b.Name == "1984");
-        }
-        
-        [Fact]
-        public async Task Should_Create_A_Valid_Book()
+        //Assert
+        result.Id.ShouldNotBe(Guid.Empty);
+        result.Name.ShouldBe("New test book 42");
+    }
+    
+    [Fact]
+    public async Task Should_Not_Create_A_Book_Without_Name()
+    {
+        var exception = await Assert.ThrowsAsync<AbpValidationException>(async () =>
         {
-            //Act
-            var result = await _bookAppService.CreateAsync(
+            await _bookAppService.CreateAsync(
                 new CreateUpdateBookDto
                 {
-                    Name = "New test book 42",
+                    Name = "",
                     Price = 10,
                     PublishDate = DateTime.Now,
                     Type = BookType.ScienceFiction
                 }
             );
+        });
 
-            //Assert
-            result.Id.ShouldNotBe(Guid.Empty);
-            result.Name.ShouldBe("New test book 42");
-        }
-        
-        [Fact]
-        public async Task Should_Not_Create_A_Book_Without_Name()
-        {
-            var exception = await Assert.ThrowsAsync<AbpValidationException>(async () =>
-            {
-                await _bookAppService.CreateAsync(
-                    new CreateUpdateBookDto
-                    {
-                        Name = "",
-                        Price = 10,
-                        PublishDate = DateTime.Now,
-                        Type = BookType.ScienceFiction
-                    }
-                );
-            });
-
-            exception.ValidationErrors
-                .ShouldContain(err => err.MemberNames.Any(mem => mem == "Name"));
-        }
+        exception.ValidationErrors
+            .ShouldContain(err => err.MemberNames.Any(mem => mem == "Name"));
     }
 }
 ````

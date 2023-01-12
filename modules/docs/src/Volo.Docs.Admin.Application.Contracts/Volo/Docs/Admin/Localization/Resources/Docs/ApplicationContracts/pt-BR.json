@@ -32,7 +32,7 @@
     "DisplayName:GitHubAccessToken": "Token de acesso do GitHub",
     "DisplayName:GitHubUserAgent": "Usuário agente do GitHub",
     "DisplayName:GithubVersionProviderSource": "Fonte do provedor de versão do GitHub",
-    "DisplayName:VersionBranchPrefix": "Prefixo da ramificação da versão",
+    "DisplayName:VersionBranchPrefix": "Prefixo da Branch da versão",
     "DisplayName:All": "Puxe tudo",
     "DisplayName:LanguageCode": "Código de idioma",
     "DisplayName:Version": "Versão",
@@ -54,6 +54,8 @@
     "Version": "Versão",
     "LanguageCode": "Código de idioma",
     "FileName": "Nome do arquivo",
-    "LastCachedTime": "Tempo de cache"
+    "LastCachedTime": "Tempo de cache",
+    "Project": "Projeto",
+    "AdvancedFilters": "Filtros Avançados"
   }
 }

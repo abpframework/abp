@@ -360,7 +360,7 @@
     "Next": "Следующий",
     "StartTrial": "Начать бесплатную пробную версию",
     "ContactUsIssues": "Свяжитесь с нами, если у вас возникнут проблемы",
-    "TrialActivatedWarning": "Уважаемый {0}, пользователю предоставляется только 1 бесплатный пробный период. Вы уже использовали пробный период.",
+    "TrialActivatedWarning": "Пользователь имеет право на 1 бесплатный пробный период. Вы уже использовали пробный период.",
     "SaveAndDownload": "Сохранить и скачать",
     "CompanyNameValidationMessage": "Название компании слишком длинное!",
     "AddressValidationMessage": "Адрес слишком длинный!",
@@ -373,11 +373,12 @@
     "TrialLicenseModelInvalidErrorMessage": "Одно из следующих полей недействительно: название страны, размер компании, отрасль или цель использования.",
     "Trial": "Испытание",
     "Purchased": "Куплено",
-    "PurchaseLicense": "Купить лицензию",
+    "PurchaseLicense": "Купить {0} лицензию",
     "PurchaseTrialLicenseMessage": "Срок действия вашей лицензии: {0}. <br> Если вы хотите продолжить использование проектов, созданных в течение бесплатного пробного периода, вам необходимо изменить лицензионные ключи в файлах <code> appsettings.secrets.json </code>. Вот ваш лицензионный ключ:",
     "TrialLicenseExpireMessage": "Вы используете пробную лицензию, и срок ее действия истечет {0}.",
     "TryForFree": "Попробуй бесплатно",
     "TrialLicenseExpiredInfo": "Срок действия вашей пробной лицензии истек!",
-    "CommercialNewsletterConfirmationMessage": "Я согласен с <a href=\"https://commercial.abp.io/TermsConditions\"> Положениями и условиями </a> и <a href=\"https://commercial.abp.io/Privacy\"> Политикой конфиденциальности </a>."
+    "CommercialNewsletterConfirmationMessage": "Я согласен с <a href=\"https://commercial.abp.io/TermsConditions\"> Положениями и условиями </a> и <a href=\"https://commercial.abp.io/Privacy\"> Политикой конфиденциальности </a>.",
+    "BlackFridayDiscount": "Черная пятница Скидка"
   }
 }

@@ -101,6 +101,27 @@ namespace AbpDemo
 * `timeout` (`TimeSpan`): 等待获取锁的超时值. 默认值为`TimeSpan.Zero`, 这意味着如果锁已经被另一个应用程序拥有, 它不会等待.
 * `cancellationToken`: 取消令牌可在触发后取消操作.
 
+### 配置
+
+#### AbpDistributedLockOptions
+
+`AbpDistributedLockOptions` 是配置分布式锁的主要选项类.
+
+**示例: 设置应用程序的分布式锁Key前缀**
+
+```csharp
+Configure<AbpDistributedLockOptions>(options =>
+{
+    options.KeyPrefix = "MyApp1";
+});
+```
+
+> 在你的[模块类](Module-Development-Basics.md)中的 `ConfigureServices` 方法进行配置.
+
+##### 可用选项
+
+* KeyPrefix (string, 默认值: null): 指定分布式锁名称前缀.
+
 ### 使用DistributedLock库的API
 
 ABP的`IAbpDistributedLock`服务非常有限, 主要用于ABP框架的内部使用. 对于你自己的应用程序, 可以使用DistributedLock库自己的API. 参见[文档](https://github.com/madelson/DistributedLock)详细信息.

@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Haluatko varmasti poistaa tämän sivun?",
     "PageId": "Sivu",
     "Pages": "Sivut",
-    "PageSlugInformation": "Etanaa käytetään URL-osoitteessa. URL-osoitteesi on '/pages/{{slug}}'.",
+    "PageSlugInformation": "Etanaa käytetään URL-osoitteessa. URL-osoitteesi on '/{{slug}}'.",
     "Permission:BlogManagement": "Blogin hallinta",
     "Permission:BlogManagement.Create": "Luoda",
     "Permission:BlogManagement.Delete": "Poistaa",

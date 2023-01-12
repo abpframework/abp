@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
@@ -57,5 +58,37 @@ public class BackgroundJobExecuter_Tests : BackgroundJobsTestBase
         //Assert
 
         jobObject.ExecutedValues.ShouldContain("42");
+    }
+    
+    [Fact]
+    public async Task Should_Change_TenantId_If_EventData_Is_MultiTenant()
+    {
+        //Arrange
+        var tenantId = Guid.NewGuid();
+        var jobObject = GetRequiredService<MyJob>();
+        var asyncJobObject = GetRequiredService<MyAsyncJob>();
+
+        //Act
+
+        await _backgroundJobExecuter.ExecuteAsync(
+            new JobExecutionContext(
+                ServiceProvider,
+                typeof(MyJob),
+                new MyJobArgs("42", tenantId)
+            )
+        );
+        
+        await _backgroundJobExecuter.ExecuteAsync(
+            new JobExecutionContext(
+                ServiceProvider,
+                typeof(MyAsyncJob),
+                new MyAsyncJobArgs("42", tenantId)
+            )
+        );
+
+        //Assert
+
+        jobObject.TenantId.ShouldBe(tenantId);
+        asyncJobObject.TenantId.ShouldBe(tenantId);
     }
 }

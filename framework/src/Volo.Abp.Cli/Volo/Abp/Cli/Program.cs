@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -26,7 +27,7 @@ public class Program
 #endif
             .Enrich.FromLogContext()
             .WriteTo.File(Path.Combine(CliPaths.Log, "abp-cli-logs.txt"))
-            .WriteTo.Console()
+            .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
             .CreateLogger();
 
         using (var application = AbpApplicationFactory.Create<AbpCliModule>(

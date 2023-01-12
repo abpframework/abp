@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.MongoDB",
-  "hash": "7cbc7b55c7c08dbb623f122af5993d52",
+  "hash": "f073ca44e4a4052938a4a7274938ef01",
   "contents": [
     {
       "namespace": "Volo.CmsKit.MongoDB",
@@ -30,21 +30,21 @@
       "connectionStringName": "CmsKit",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.CmsKit.Reactions.UserReaction",
-          "contentType": "databaseCollection",
-          "name": "CmsUserReactions",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.CmsKit.Tags.EntityTag",
           "contentType": "databaseCollection",
           "name": "CmsEntityTags",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.GlobalResources.GlobalResource",
+          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
           "contentType": "databaseCollection",
-          "name": "CmsGlobalResources",
+          "name": "CmsBlogFeatures",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
+          "contentType": "databaseCollection",
+          "name": "CmsMenuItems",
           "summary": null
         },
         {
@@ -54,27 +54,21 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Tags.Tag",
-          "contentType": "databaseCollection",
-          "name": "CmsTags",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.CmsKit.Users.CmsUser",
           "contentType": "databaseCollection",
           "name": "CmsUsers",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Blogs.Blog",
+          "entityFullName": "Volo.CmsKit.GlobalResources.GlobalResource",
           "contentType": "databaseCollection",
-          "name": "CmsBlogs",
+          "name": "CmsGlobalResources",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
+          "entityFullName": "Volo.CmsKit.MediaDescriptors.MediaDescriptor",
           "contentType": "databaseCollection",
-          "name": "CmsMenuItems",
+          "name": "CmsMediaDescriptors",
           "summary": null
         },
         {
@@ -90,15 +84,21 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
+          "entityFullName": "Volo.CmsKit.Blogs.Blog",
           "contentType": "databaseCollection",
-          "name": "CmsBlogFeatures",
+          "name": "CmsBlogs",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.MediaDescriptors.MediaDescriptor",
+          "entityFullName": "Volo.CmsKit.Tags.Tag",
           "contentType": "databaseCollection",
-          "name": "CmsMediaDescriptors",
+          "name": "CmsTags",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Reactions.UserReaction",
+          "contentType": "databaseCollection",
+          "name": "CmsUserReactions",
           "summary": null
         },
         {

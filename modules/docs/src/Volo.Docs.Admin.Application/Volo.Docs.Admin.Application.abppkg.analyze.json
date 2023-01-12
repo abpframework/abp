@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Admin.Application",
-  "hash": "e4702eb1b8dfb646e57829c21aeb0922",
+  "hash": "f2c7a959656bed7b07bbcea5a65f9188",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
@@ -179,6 +179,13 @@
           "name": "ReindexAllAsync",
           "summary": null,
           "parameters": []
+        },
+        {
+          "returnType": "List<ProjectWithoutDetailsDto>",
+          "isAsync": true,
+          "name": "GetListWithoutDetailsAsync",
+          "summary": null,
+          "parameters": []
         }
       ],
       "contentType": "applicationService",
@@ -317,6 +324,13 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "List<DocumentInfoDto>",
+          "isAsync": true,
+          "name": "GetFilterItemsAsync",
+          "summary": null,
+          "parameters": []
         }
       ],
       "contentType": "applicationService",

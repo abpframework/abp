@@ -2,32 +2,43 @@ import {
   Component,
   ContentChild,
   EventEmitter,
+  Inject,
   Input,
+  Optional,
   Output,
   TemplateRef,
   ViewEncapsulation,
+  OnInit,
 } from '@angular/core';
 import { NzFormatBeforeDropEvent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
 import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+import { LazyLoadService, LOADING_STRATEGY, SubscriptionService } from '@abp/ng.core';
+import { DISABLE_TREE_STYLE_LOADING_TOKEN } from '../disable-tree-style-loading.token';
 
 export type DropEvent = NzFormatEmitEvent & { pos: number };
 
 @Component({
   selector: 'abp-tree',
   templateUrl: 'tree.component.html',
-  styleUrls: [
-    '../../../../../../node_modules/ng-zorro-antd/tree/style/index.min.css',
-    'tree.component.scss',
-  ],
+  styleUrls: ['tree.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  providers: [SubscriptionService],
 })
-export class TreeComponent {
+export class TreeComponent implements OnInit {
   dropPosition: number;
 
   dropdowns = {} as { [key: string]: NgbDropdown };
+
+  constructor(
+    private lazyLoadService: LazyLoadService,
+    private subscriptionService: SubscriptionService,
+    @Optional()
+    @Inject(DISABLE_TREE_STYLE_LOADING_TOKEN)
+    private disableTreeStyleLoading: boolean | undefined,
+  ) {}
 
   @ContentChild('menu') menu: TemplateRef<any>;
   @ContentChild(TreeNodeTemplateDirective) customNodeTemplate: TreeNodeTemplateDirective;
@@ -51,6 +62,20 @@ export class TreeComponent {
     this.dropPosition = event.pos;
     return of(false);
   };
+
+  ngOnInit() {
+    this.loadStyle();
+  }
+
+  private loadStyle() {
+    if (this.disableTreeStyleLoading) {
+      return;
+    }
+    const loaded$ = this.lazyLoadService.load(
+      LOADING_STRATEGY.AppendAnonymousStyleToHead('ng-zorro-antd-tree.css'),
+    );
+    this.subscriptionService.addOne(loaded$);
+  }
 
   onSelectedNodeChange(node) {
     this.selectedNode = node.origin.entity;

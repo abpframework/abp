@@ -50,14 +50,15 @@ public class CliService : ITransientDependency
 
     public async Task RunAsync(string[] args)
     {
-        Logger.LogInformation("ABP CLI (https://abp.io)");
+        var currentCliVersion = await GetCurrentCliVersionInternalAsync(typeof(CliService).Assembly);
+        Logger.LogInformation($"ABP CLI {currentCliVersion}");
 
         var commandLineArgs = CommandLineArgumentParser.Parse(args);
 
 #if !DEBUG
         if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
         {
-            await CheckCliVersionAsync();
+            await CheckCliVersionAsync(currentCliVersion);
         }
 #endif
         try
@@ -168,7 +169,7 @@ public class CliService : ITransientDependency
         }
     }
 
-    private async Task CheckCliVersionAsync()
+    private async Task CheckCliVersionAsync(SemanticVersion currentCliVersion)
     {
         if (!await IsLatestVersionCheckExpiredAsync())
         {
@@ -177,10 +178,7 @@ public class CliService : ITransientDependency
         
         var assembly = typeof(CliService).Assembly;
         var toolPath = GetToolPath(assembly);
-        var currentCliVersion = await GetCurrentCliVersionInternalAsync(assembly);
         var updateChannel = GetUpdateChannel(currentCliVersion);
-
-        Logger.LogInformation($"Version {currentCliVersion} ({updateChannel})");
 
         try
         {

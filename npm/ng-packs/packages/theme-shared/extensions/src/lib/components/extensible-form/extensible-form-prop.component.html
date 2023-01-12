@@ -7,7 +7,7 @@
     </ng-container>
   </ng-template>
 
-  <div [ngClass]="containerClassName" class="mb-3 form-group">
+  <div [ngClass]="containerClassName" class="mb-3">
     <ng-template ngSwitchCase="input">
       <ng-template [ngTemplateOutlet]="label"></ng-template>
       <input
@@ -137,6 +137,21 @@
         [readonly]="readonly"
         class="form-control"
       ></textarea>
+    </ng-template>
+
+    <ng-template ngSwitchCase="passwordinputgroup">
+      <ng-template [ngTemplateOutlet]="label"></ng-template>
+      <abp-password
+        *abpReplaceableTemplate="{
+          componentKey: passwordKey,
+          inputs: {
+            inputId: { value: prop.id },
+            formControlName: { value: prop.name }
+          }
+        }"
+        [inputId]="prop.id"
+        [formControlName]="prop.name"
+      ></abp-password>
     </ng-template>
   </div>
 </ng-container>

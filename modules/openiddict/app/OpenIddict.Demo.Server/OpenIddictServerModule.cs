@@ -145,26 +145,14 @@ public class OpenIddictServerModule : AbpModule
 
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        var dbContext = context.ServiceProvider
-            .GetRequiredService<ServerDbContext>();
-
-        if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
-        {
-            await dbContext.Database.MigrateAsync();
-
-            await context.ServiceProvider
-                .GetRequiredService<IDataSeeder>()
-                .SeedAsync();
-        }
+        await context.ServiceProvider
+            .GetRequiredService<IDataSeeder>()
+            .SeedAsync();
 
         var tenantManager = context.ServiceProvider.GetRequiredService<TenantManager>();
         var tenantRepository = context.ServiceProvider.GetRequiredService<ITenantRepository>();
-        if (await tenantRepository.FindByNameAsync("Default") == null)
-        {
-            var tenant = await tenantRepository.InsertAsync( await tenantManager.CreateAsync("Default"));
-            await context.ServiceProvider
-                .GetRequiredService<IDataSeeder>()
-                .SeedAsync(tenant.Id);
-        }
+        var tenant = await tenantRepository.FindByNameAsync("Default") ??
+                     await tenantRepository.InsertAsync(await tenantManager.CreateAsync("Default"));
+        await context.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync(tenant.Id);
     }
 }

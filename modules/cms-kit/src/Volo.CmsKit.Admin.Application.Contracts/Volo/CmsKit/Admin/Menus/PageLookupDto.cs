@@ -3,6 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Admin.Menus;
 
+[Serializable]
 public class PageLookupDto : EntityDto<Guid>
 {
     public string Title { get; set; }

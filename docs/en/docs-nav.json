@@ -154,6 +154,36 @@
       "text": "Fundamentals",
       "items": [
         {
+          "text": "Application Startup",
+          "path": "Application-Startup.md"
+        },
+        {
+          "text": "Authorization",
+          "path": "Authorization.md"
+        },
+        {
+          "text": "Caching",
+          "path": "Caching.md",
+          "items": [
+            {
+              "text": "Entity Cache",
+              "path": "Entity-Cache.md"
+            },
+            {
+              "text": "Redis Cache",
+              "path": "Redis-Cache.md"
+            }
+          ]
+        },
+        {
+          "text": "Configuration",
+          "path": "Configuration.md"
+        },
+        {
+          "text": "Connection Strings",
+          "path": "Connection-Strings.md"
+        },
+        {
           "text": "Dependency Injection",
           "path": "Dependency-Injection.md",
           "items": [
@@ -164,16 +194,28 @@
           ]
         },
         {
-          "text": "Configuration",
-          "path": "Configuration.md"
+          "text": "Exception Handling",
+          "path": "Exception-Handling.md"
+        },
+        {
+          "text": "Localization",
+          "path": "Localization.md"
+        },
+        {
+          "text": "Logging",
+          "path": "Logging.md"
+        },
+        {
+          "text": "Object Extensions",
+          "path": "Object-Extensions.md"
         },
         {
           "text": "Options",
           "path": "Options.md"
         },
         {
-          "text": "Authorization",
-          "path": "Authorization.md"
+          "text": "Settings",
+          "path": "Settings.md"
         },
         {
           "text": "Validation",
@@ -184,40 +226,6 @@
               "path": "FluentValidation.md"
             }
           ]
-        },
-        {
-          "text": "Localization",
-          "path": "Localization.md"
-        },
-        {
-          "text": "Caching",
-          "path": "Caching.md",
-          "items": [
-            {
-              "text": "Redis Cache",
-              "path": "Redis-Cache.md"
-            }
-          ]
-        },
-        {
-          "text": "Exception Handling",
-          "path": "Exception-Handling.md"
-        },
-        {
-          "text": "Settings",
-          "path": "Settings.md"
-        },
-        {
-          "text": "Connection Strings",
-          "path": "Connection-Strings.md"
-        },
-        {
-          "text": "Object Extensions",
-          "path": "Object-Extensions.md"
-        },
-        {
-          "text": "Logging",
-          "path": "Logging.md"
         }
       ]
     },
@@ -597,6 +605,23 @@
       "text": "API",
       "items": [
         {
+          "text": "ABP Endpoints",
+          "items": [
+            {
+              "text": "Application Configuration",
+              "path": "API/Application-Configuration.md"
+            },
+            {
+              "text": "Application Localization",
+              "path": "API/Application-Localization.md"
+            }
+          ]
+        },
+        {
+          "text": "API Versioning",
+          "path": "API/API-Versioning.md"
+        },
+        {
           "text": "Auto API Controllers",
           "path": "API/Auto-API-Controllers.md"
         },
@@ -605,25 +630,16 @@
           "path": "API/Dynamic-CSharp-API-Clients.md"
         },
         {
+          "text": "Integration Services",
+          "path": "Integration-Services.md"
+        },
+        {
           "text": "Static C# API Clients",
           "path": "API/Static-CSharp-API-Clients.md"
         },
         {
-          "text": "ABP Endpoints",
-          "items": [
-            {
-              "text": "Application Configuration",
-              "path": "API/Application-Configuration.md"
-            }
-          ]
-        },
-        {
           "text": "Swagger Integration",
           "path": "API/Swagger-Integration.md"
-        },
-        {
-          "text": "API Versioning",
-          "path": "API/API-Versioning.md"
         }
       ]
     },
@@ -939,6 +955,10 @@
             {
               "text": "PWA Configuration",
               "path": "UI/Blazor/Pwa-Configuration.md"
+            },
+            {
+              "text": "Layout Hooks",
+              "path": "UI/Blazor/Layout-Hooks.md"
             }
           ]
         },
@@ -1284,6 +1304,10 @@
       ]
     },
     {
+      "text": "Dapr Integration",
+      "path": "Dapr/Index.md"
+    },
+    {
       "text": "Testing",
       "path": "Testing.md"
     },
@@ -1292,8 +1316,20 @@
       "path": "Deployment/Index.md",
       "items": [
         {
+          "text": "Configuring for Production",
+          "path": "Deployment/Configuring-Production.md"
+        },
+        {
           "text": "Deploying to a Clustered Environment",
           "path": "Deployment/Clustered-Environment.md"
+        },
+        {
+          "text": "Distributed / Microservice Solutions",
+          "path": "Deployment/Distributed-Microservice.md"
+        },
+        {
+          "text": "Optimizing for Production",
+          "path": "Deployment/Optimizing-Production.md"
         }
       ]
     },

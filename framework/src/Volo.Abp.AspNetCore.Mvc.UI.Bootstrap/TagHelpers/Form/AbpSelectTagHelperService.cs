@@ -22,17 +22,20 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     private readonly HtmlEncoder _encoder;
     private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
     private readonly IStringLocalizerFactory _stringLocalizerFactory;
+    private readonly IAbpEnumLocalizer _abpEnumLocalizer;
 
     public AbpSelectTagHelperService(
         IHtmlGenerator generator,
         HtmlEncoder encoder,
         IAbpTagHelperLocalizer tagHelperLocalizer,
-        IStringLocalizerFactory stringLocalizerFactory)
+        IStringLocalizerFactory stringLocalizerFactory,
+        IAbpEnumLocalizer abpEnumLocalizer)
     {
         _generator = generator;
         _encoder = encoder;
         _tagHelperLocalizer = tagHelperLocalizer;
         _stringLocalizerFactory = stringLocalizerFactory;
+        _abpEnumLocalizer = abpEnumLocalizer;
     }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -120,6 +123,8 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             output.Attributes.Add("data-autocomplete-filter-param-name", TagHelper.AutocompleteFilterParamName);
             output.Attributes.Add("data-autocomplete-selected-item-name", TagHelper.AutocompleteSelectedItemName);
             output.Attributes.Add("data-autocomplete-selected-item-value", TagHelper.AutocompleteSelectedItemValue);
+            output.Attributes.Add("data-autocomplete-allow-clear", TagHelper.AllowClear);
+            output.Attributes.Add("data-autocomplete-placeholder", TagHelper.Placeholder);
         }
     }
 
@@ -260,24 +265,14 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
 
-        foreach (var enumValue in enumType.GetEnumValues())
+        foreach (var enumValue in enumType.GetEnumValuesAsUnderlyingType())
         {
-            var memberName = enumType.GetEnumName(enumValue);
-            var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
+            var localizedMemberName = _abpEnumLocalizer.GetString(enumType, enumValue,
                 new[]
                 {
-                        containerLocalizer,
-                        _stringLocalizerFactory.CreateDefaultOrNull()
-                },
-                new[]
-                {
-                        $"Enum:{enumType.Name}.{memberName}",
-                        $"{enumType.Name}.{memberName}",
-                        memberName
-                },
-                memberName
-            );
-
+                    containerLocalizer,
+                    _stringLocalizerFactory.CreateDefaultOrNull()
+                });
             selectItems.Add(new SelectListItem
             {
                 Value = enumValue.ToString(),

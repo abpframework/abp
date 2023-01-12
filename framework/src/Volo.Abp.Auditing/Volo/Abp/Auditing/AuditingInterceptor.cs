@@ -37,7 +37,7 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             var auditingManager = serviceScope.ServiceProvider.GetRequiredService<IAuditingManager>();
             if (auditingManager.Current != null)
             {
-                await ProceedByLoggingAsync(invocation, auditingHelper, auditingManager.Current);
+                await ProceedByLoggingAsync(invocation, auditingOptions, auditingHelper, auditingManager.Current);
             }
             else
             {
@@ -62,7 +62,9 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             return false;
         }
 
-        if (!auditingHelper.ShouldSaveAudit(invocation.Method))
+        if (!auditingHelper.ShouldSaveAudit(
+                invocation.Method,
+                ignoreIntegrationServiceAttribute: options.IsEnabledForIntegrationServices))
         {
             return false;
         }
@@ -72,16 +74,22 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
 
     private static async Task ProceedByLoggingAsync(
         IAbpMethodInvocation invocation,
+        AbpAuditingOptions options,
         IAuditingHelper auditingHelper,
         IAuditLogScope auditLogScope)
     {
         var auditLog = auditLogScope.Log;
-        var auditLogAction = auditingHelper.CreateAuditLogAction(
-            auditLog,
-            invocation.TargetObject.GetType(),
-            invocation.Method,
-            invocation.Arguments
-        );
+
+        AuditLogActionInfo auditLogAction = null;
+        if (!options.DisableLogActionInfo)
+        {
+            auditLogAction = auditingHelper.CreateAuditLogAction(
+                auditLog,
+                invocation.TargetObject.GetType(),
+                invocation.Method,
+                invocation.Arguments
+            );
+        }
 
         var stopwatch = Stopwatch.StartNew();
 
@@ -97,8 +105,12 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         finally
         {
             stopwatch.Stop();
-            auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-            auditLog.Actions.Add(auditLogAction);
+
+            if (auditLogAction != null)
+            {
+                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                auditLog.Actions.Add(auditLogAction);
+            }
         }
     }
 
@@ -115,7 +127,7 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         {
             try
             {
-                await ProceedByLoggingAsync(invocation, auditingHelper, auditingManager.Current);
+                await ProceedByLoggingAsync(invocation, options, auditingHelper, auditingManager.Current);
 
                 Debug.Assert(auditingManager.Current != null);
                 if (auditingManager.Current.Log.Exceptions.Any())

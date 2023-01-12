@@ -34,10 +34,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
-
-> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
-> `git config --system core.longpaths true`
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -135,22 +132,22 @@ Open the `en.json` (*the English translations*) file and change the content as s
     "CreationTime": "Creation time",
     "AreYouSure": "Are you sure?",
     "AreYouSureToDelete": "Are you sure you want to delete this item?",
-    "Enum:BookType.Undefined": "Undefined",
-    "Enum:BookType.Adventure": "Adventure",
-    "Enum:BookType.Biography": "Biography",
-    "Enum:BookType.Dystopia": "Dystopia",
-    "Enum:BookType.Fantastic": "Fantastic",
-    "Enum:BookType.Horror": "Horror",
-    "Enum:BookType.Science": "Science",
-    "Enum:BookType.ScienceFiction": "Science fiction",
-    "Enum:BookType.Poetry": "Poetry"
+    "Enum:BookType.0": "Undefined",
+    "Enum:BookType.1": "Adventure",
+    "Enum:BookType.2": "Biography",
+    "Enum:BookType.3": "Dystopia",
+    "Enum:BookType.4": "Fantastic",
+    "Enum:BookType.5": "Horror",
+    "Enum:BookType.6": "Science",
+    "Enum:BookType.7": "Science fiction",
+    "Enum:BookType.8": "Poetry"
   }
 }
 ````
 
 * Localization key names are arbitrary. You can set any name. We prefer some conventions for specific text types;
   * Add `Menu:` prefix for menu items.
-  * Use `Enum:<enum-type>.<enum-name>` or `<enum-type>.<enum-name>` or `<enum-name>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums in some proper cases.
+  * Use `Enum:<enum-type>.<enum-value>` or `<enum-type>.<enum-value>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums in some proper cases.
 
 If a text is not defined in the localization file, it **falls back** to the localization key (as ASP.NET Core's standard behavior).
 
@@ -181,14 +178,13 @@ Open the `Index.cshtml` and change the whole content as shown below:
 ```csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Acme.BookStore.Web.Pages.Books
-{
-    public class IndexModel : PageModel
-    {
-        public void OnGet()
-        {
+namespace Acme.BookStore.Web.Pages.Books;
 
-        }
+public class IndexModel : PageModel
+{
+    public void OnGet()
+    {
+
     }
 }
 ```
@@ -215,7 +211,7 @@ context.Menu.AddItem(
 
 Run the project, login to the application with the username `admin` and the password `1q2w3E*` and you can see that the new menu item has been added to the main menu:
 
-![bookstore-menu-items](images/bookstore-new-menu-item.png)
+![bookstore-menu-items](images/bookstore-new-menu-item-2.png)
 
 When you click on the Books menu item under the Book Store parent, you will be redirected to the new empty Books Page.
 
@@ -282,7 +278,7 @@ $(function () {
                     title: l('Type'),
                     data: "type",
                     render: function (data) {
-                        return l('Enum:BookType:' + data);
+                        return l('Enum:BookType.' + data);
                     }
                 },
                 {
@@ -328,7 +324,7 @@ $(function () {
 
 You can run the application! The final UI of this part is shown below:
 
-![Book list](images/bookstore-book-list-3.png)
+![Book list](images/bookstore-book-list-4.png)
 
 This is a fully working, server side paged, sorted and localized table of books.
 
@@ -520,7 +516,7 @@ Open the `/src/app/book/book.component.html` and replace the content as shown be
       <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
       <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {%{{{ '::Enum:BookType:' + row.type | abpLocalization }}}%}
+          {%{{{ '::Enum:BookType.' + row.type | abpLocalization }}}%}
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column [name]="'::PublishDate' | abpLocalization" prop="publishDate">
@@ -540,7 +536,7 @@ Open the `/src/app/book/book.component.html` and replace the content as shown be
 
 Now you can see the final result on your browser:
 
-![Book list final result](images/bookstore-book-list.png)
+![Book list final result](images/bookstore-book-list-angular.png)
 
 {{else if UI == "Blazor" || UI == "BlazorServer"}}
 
@@ -584,7 +580,7 @@ context.Menu.AddItem(
 
 Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see that the new menu item has been added to the main menu:
 
-![blazor-menu-bookstore](images/blazor-menu-bookstore.png)
+![blazor-menu-bookstore](images/bookstore-new-menu-item-2.png)
 
 When you click on the Books menu item under the Book Store parent, you will be redirected to the new empty Books Page.
 
@@ -624,7 +620,7 @@ Open the `Books.razor` and replace the content as the following:
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType.{Enum.GetName(context.Type)}"]
+                        @L[$"Enum:BookType.{context.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -667,7 +663,7 @@ We will continue benefitting from  `AbpCrudPageBase` for the books page. You cou
 
 You can run the application! The final UI of this part is shown below:
 
-![blazor-bookstore-book-list](images/blazor-bookstore-book-list.png)
+![blazor-bookstore-book-list](images/blazor-bookstore-book-list-2.png)
 
 This is a fully working, server side paged, sorted and localized table of books.
 

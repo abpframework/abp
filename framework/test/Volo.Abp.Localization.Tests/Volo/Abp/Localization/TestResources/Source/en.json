@@ -6,6 +6,11 @@
     "CarPlural": "Cars",
     "MaxLenghtErrorMessage": "This field's length can be maximum of '{0}' chars",
     "Universe": "Universe",
-    "FortyTwo": "Forty Two"
+    "FortyTwo": "Forty Two",
+    "Enum:BookType.Undefined": "Undefined",
+    "Enum:BookType.0": "Undefined with value 0",
+    "BookType.Adventure": "Adventure",
+    "BookType.1": "Adventure with value 1",
+    "Biography": "Biography"
   }
 }

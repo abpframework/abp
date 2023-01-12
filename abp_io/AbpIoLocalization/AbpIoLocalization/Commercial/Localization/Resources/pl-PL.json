@@ -360,7 +360,7 @@
     "Next": "Następny",
     "StartTrial": "Rozpocznij mój bezpłatny okres próbny",
     "ContactUsIssues": "Skontaktuj się z nami, jeśli masz jakiekolwiek problemy",
-    "TrialActivatedWarning": "Drogi {0}, użytkownik może mieć tylko 1 bezpłatny okres próbny. Korzystałeś już z okresu próbnego.",
+    "TrialActivatedWarning": "Użytkownikowi przysługuje tylko 1 darmowy okres próbny. Już wykorzystałeś swój okres próbny.",
     "SaveAndDownload": "Zapisz i pobierz",
     "CompanyNameValidationMessage": "Nazwa firmy jest za długa!",
     "AddressValidationMessage": "Adres jest za długi!",
@@ -373,11 +373,12 @@
     "TrialLicenseModelInvalidErrorMessage": "Jedno z następujących pól jest nieprawidłowe: nazwa kraju, wielkość firmy, branża lub cel użytkowania.",
     "Trial": "Test",
     "Purchased": "Zakupione",
-    "PurchaseLicense": "Licencja kupna",
+    "PurchaseLicense": "Kup licencję {0}",
     "PurchaseTrialLicenseMessage": "Data wygaśnięcia Twojej licencji to {0}. <br> Jeśli chcesz nadal korzystać z projektów utworzonych podczas bezpłatnego okresu próbnego, musisz zmienić klucze licencyjne w plikach <code>appsettings.secrets.json</code>. Oto twój klucz licencyjny:",
     "TrialLicenseExpireMessage": "Korzystasz z licencji próbnej, a Twoja licencja próbna wygaśnie w dniu {0}.",
     "TryForFree": "Wypróbuj za darmo",
     "TrialLicenseExpiredInfo": "Twoja licencja próbna wygasła!",
-    "CommercialNewsletterConfirmationMessage": "Wyrażam zgodę na <a href=\"https://commercial.abp.io/TermsConditions\">Warunki</a> i <a href=\"https://commercial.abp.io/Privacy\">Politykę prywatności </a>."
+    "CommercialNewsletterConfirmationMessage": "Wyrażam zgodę na <a href=\"https://commercial.abp.io/TermsConditions\">Warunki</a> i <a href=\"https://commercial.abp.io/Privacy\">Politykę prywatności </a>.",
+    "BlackFridayDiscount": "Zniżka Black Friday"
   }
 }

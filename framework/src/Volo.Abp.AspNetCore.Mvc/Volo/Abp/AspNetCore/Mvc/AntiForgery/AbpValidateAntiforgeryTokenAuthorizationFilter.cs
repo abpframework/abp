@@ -46,7 +46,7 @@ public class AbpValidateAntiforgeryTokenAuthorizationFilter : IAsyncAuthorizatio
             }
             catch (AntiforgeryValidationException exception)
             {
-                _logger.LogError(exception.Message, exception);
+                _logger.LogWarning(exception.Message, exception);
                 context.Result = new AntiforgeryValidationFailedResult();
             }
         }

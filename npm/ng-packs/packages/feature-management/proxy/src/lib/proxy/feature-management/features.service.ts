@@ -7,6 +7,16 @@ import { Injectable } from '@angular/core';
 })
 export class FeaturesService {
   apiName = 'AbpFeatureManagement';
+  
+
+  delete = (providerName: string, providerKey: string) =>
+    this.restService.request<any, void>({
+      method: 'DELETE',
+      url: '/api/feature-management/features',
+      params: { providerName, providerKey },
+    },
+    { apiName: this.apiName });
+  
 
   get = (providerName: string, providerKey: string) =>
     this.restService.request<any, GetFeatureListResultDto>({
@@ -15,6 +25,7 @@ export class FeaturesService {
       params: { providerName, providerKey },
     },
     { apiName: this.apiName });
+  
 
   update = (providerName: string, providerKey: string, input: UpdateFeaturesDto) =>
     this.restService.request<any, void>({

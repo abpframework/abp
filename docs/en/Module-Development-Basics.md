@@ -20,7 +20,6 @@ public class BlogModule : AbpModule
 {
             
 }
-
 ````
 
 ### Configuring Dependency Injection & Other Modules

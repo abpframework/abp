@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.DemoApp.RabbitMq",
-  "hash": "354e49890ae42c9c5f74574b1114576d",
+  "hash": "1dbe12bbbddfa1709cbc0b8b4c9b4be4",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs.DemoApp.RabbitMq",

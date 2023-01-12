@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.SettingManagement.Domain.Shared",
-  "hash": "9ff9e97483f71b28ad3055228a1e5295",
+  "hash": "eb868083a20ee56db07f2695141b8095",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement",
@@ -30,7 +30,7 @@
       "defaultValue": "true",
       "displayName": "Enable setting management",
       "description": "Enable setting management system in the application.",
-      "isAvailableToHost": true,
+      "isAvailableToHost": false,
       "isVisibleToClients": true,
       "contentType": "feature",
       "name": "SettingManagement.Enable",

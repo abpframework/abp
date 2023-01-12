@@ -2,9 +2,27 @@ var abp = abp || {};
 (function ($) {
     abp.modals = abp.modals || {};
 
+    let l = abp.localization.getResource("AbpFeatureManagement");
     abp.modals.FeatureManagement = function () {
+        abp.ResourceLoader.loadScript('/client-proxies/featureManagement-proxy.js');
+        $('#ResetToDefaults').click(function (e) {
+            abp.message.confirm(l('AreYouSureToResetToDefault'))
+                .then(function (confirmed) {
+                    if (confirmed) {
+                        let providerName = $('#ProviderName').val();
+                        let prodiverKey = $('#ProviderKey').val();
+                        volo.abp.featureManagement.features.delete(providerName, prodiverKey).then(function () {
+                            abp.notify.success(l('ResetedToDefault'));
+                        });
+                        setTimeout(function () {
+                            $('#featureManagmentModal').modal('hide');
+                        }, 500);
+                    }
+                });
+        });
+
         function checkParents($tab, $element, className) {
-            var parentName = $element
+            let parentName = $element
                 .closest(className)
                 .attr('data-parent-name');
 
@@ -16,14 +34,14 @@ var abp = abp || {};
                 .filter('[data-feature-name="' + parentName + '"]')
                 .find('input[type="checkbox"]')
                 .each(function () {
-                    var $parent = $(this);
+                    let $parent = $(this);
                     $parent.prop('checked', true);
                     checkParents($tab, $parent, className);
                 });
         }
 
         function uncheckChildren($tab, $checkBox) {
-            var featureName = $checkBox
+            let featureName = $checkBox
                 .closest('.custom-checkbox')
                 .attr('data-feature-name');
             if (!featureName) {
@@ -34,7 +52,7 @@ var abp = abp || {};
                 .filter('[data-parent-name="' + featureName + '"]')
                 .find('input[type="checkbox"]')
                 .each(function () {
-                    var $child = $(this);
+                    let $child = $(this);
                     $child.prop('checked', false);
                     uncheckChildren($tab, $child);
                 });
@@ -42,10 +60,10 @@ var abp = abp || {};
 
         this.initDom = function ($el) {
             $el.find('.tab-pane').each(function () {
-                var $tab = $(this);
+                let $tab = $(this);
                 $tab.find('input[type="checkbox"]')
                     .each(function () {
-                        var $checkBox = $(this);
+                        let $checkBox = $(this);
                         $checkBox.change(function () {
                             if ($checkBox.is(':checked')) {
                                 checkParents($tab, $checkBox, '.custom-checkbox')
@@ -57,7 +75,7 @@ var abp = abp || {};
 
                 $tab.find('.form-control')
                     .each(function () {
-                        var $element = $(this);
+                        let $element = $(this);
                         $element.change(function () {
                             checkParents($tab, $element, '.form-group')
                         });
