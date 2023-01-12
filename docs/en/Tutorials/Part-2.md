@@ -178,14 +178,13 @@ Open the `Index.cshtml` and change the whole content as shown below:
 ```csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Acme.BookStore.Web.Pages.Books
-{
-    public class IndexModel : PageModel
-    {
-        public void OnGet()
-        {
+namespace Acme.BookStore.Web.Pages.Books;
 
-        }
+public class IndexModel : PageModel
+{
+    public void OnGet()
+    {
+
     }
 }
 ```
@@ -537,7 +536,7 @@ Open the `/src/app/book/book.component.html` and replace the content as shown be
 
 Now you can see the final result on your browser:
 
-![Book list final result](images/bookstore-book-list.png)
+![Book list final result](images/bookstore-book-list-angular.png)
 
 {{else if UI == "Blazor" || UI == "BlazorServer"}}
 
@@ -581,7 +580,7 @@ context.Menu.AddItem(
 
 Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see that the new menu item has been added to the main menu:
 
-![blazor-menu-bookstore](images/blazor-menu-bookstore.png)
+![blazor-menu-bookstore](images/bookstore-new-menu-item-2.png)
 
 When you click on the Books menu item under the Book Store parent, you will be redirected to the new empty Books Page.
 
@@ -621,7 +620,7 @@ Open the `Books.razor` and replace the content as the following:
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType.{Enum.GetName(context.Type)}"]
+                        @L[$"Enum:BookType.{context.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -664,7 +663,7 @@ We will continue benefitting from  `AbpCrudPageBase` for the books page. You cou
 
 You can run the application! The final UI of this part is shown below:
 
-![blazor-bookstore-book-list](images/blazor-bookstore-book-list.png)
+![blazor-bookstore-book-list](images/blazor-bookstore-book-list-2.png)
 
 This is a fully working, server side paged, sorted and localized table of books.
 
