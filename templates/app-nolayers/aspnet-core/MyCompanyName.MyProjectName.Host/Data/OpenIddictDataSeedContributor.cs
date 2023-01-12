@@ -128,7 +128,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         List<string> scopes,
         string? redirectUri = null,
         string? postLogoutRedirectUri = null,
-        List<string>? permissions = null)
+        List<string>? permissions = null,
+        List<string>? customGrants = null)
     {
         if (!string.IsNullOrEmpty(secret) && string.Equals(type, OpenIddictConstants.ClientTypes.Public, StringComparison.OrdinalIgnoreCase))
         {
@@ -299,6 +300,11 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     permissions,
                     null
                 );
+            }
+
+            if (customGrants != null)
+            {
+                customGrants.ForEach(p => application.Permissions.Add(OpenIddictConstants.Permissions.Prefixes.GrantType + p));
             }
 
             await _applicationManager.CreateAsync(application);
