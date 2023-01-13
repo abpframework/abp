@@ -15,4 +15,4 @@ This table stores information about the roles assigned to organization units in 
 | Table | Column | Description |
 | --- | --- | --- |
 | [`AbpOrganizationUnits`](AbpOrganizationUnits.md) | `Id` | The organization unit id. |
-| [`AbpRoles`](../AbpRoles.md) | `Id` | The role id. |
+| [`AbpRoles`](AbpRoles.md) | `Id` | The role id. |
