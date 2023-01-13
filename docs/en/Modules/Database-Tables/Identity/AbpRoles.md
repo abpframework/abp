@@ -9,3 +9,9 @@ This table stores information about the roles in the application. Each record in
 ### Module
 
 [`Volo.Abp.Identity`](../../Identity.md)
+
+### Used By
+
+| Table | Column | Description |
+| --- | --- | --- |
+| [AbpRoleClaims](AbpRoleClaims.md) | Id | The role claim id. |
