@@ -13,7 +13,7 @@ public class AutoMapperTestModule : AbpModule
     {
         Configure<AbpAutoMapperOptions>(options =>
         {
-            options.AddMaps<AutoMapperTestModule>();
+            options.AddMaps<AutoMapperTestModule>(validate: true);
         });
     }
 }

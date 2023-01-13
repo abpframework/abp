@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.AutoMapper.SampleClasses;
 using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending.TestObjects;
 using Volo.Abp.Testing;
@@ -15,6 +16,13 @@ public class AbpAutoMapperExtensibleDtoExtensions_Tests : AbpIntegratedTest<Auto
     public AbpAutoMapperExtensibleDtoExtensions_Tests()
     {
         _objectMapper = ServiceProvider.GetRequiredService<Volo.Abp.ObjectMapping.IObjectMapper>();
+    }
+
+    [Fact]
+    public void Should_Create_And_Map_To_Target_Type_Instance()
+    {
+        Should.NotThrow(() => _objectMapper.Map<ExtensibleType1, ExtensibleType2>(new ExtensibleType1()));
+        Should.NotThrow(() => _objectMapper.Map<ExtensibleType2, ExtensibleType1>(new ExtensibleType2()));
     }
 
     [Fact]
