@@ -1,4 +1,4 @@
-## AbpUsers Table
+## AbpUsers
 
 The AbpUsers table is used to store users.
 
