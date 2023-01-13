@@ -107,7 +107,7 @@ Here are some other notable changes that come with this release:
 * Developers should control `EnableLegacyTimestampBehavior` when using PostgreSQL. [#11371](https://github.com/abpframework/abp/pull/11371) [#65](https://github.com/abpframework/eShopOnAbp/pull/65)
 
 
-All issues & PRs in [5.1 milesone](https://github.com/abpframework/abp/milestone/60?closed=1).
+All issues & PRs in [5.1 milestone](https://github.com/abpframework/abp/milestone/60?closed=1).
 
 ### About  ABP Commercial
 

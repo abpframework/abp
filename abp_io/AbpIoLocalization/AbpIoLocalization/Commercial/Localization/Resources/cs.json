@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Mohu v budoucnu změnit registrované vývojáře své organizace?",
     "ChangingDevelopersExplanation": "Kromě přidání nových vývojářů do vaší licence můžete také změnit stávající vývojáře (můžete odebrat vývojáře a přidat nového na stejné místo) bez jakýchkoli dalších nákladů.",
     "WhenShouldIRenewMyLicense": "Kdy bych měl obnovit licenci?",
-    "WhenShouldIRenewMyLicenseExplanation": "Pokud si licenci obnovíte do <strong>1 měsíce</strong> po vypršení platnosti licence, budou uplatněny následující slevy: Týmová licence {0}% sleva, Obchodní licence {1}% sleva, Enterprise License {2}% sleva . Pokud si licenci obnovíte <strong>1 měsíc</strong> po datu vypršení platnosti vaší licence, cena za obnovení bude stejná jako cena nákupu licence a na obnovení nebude poskytnuta žádná sleva.",
+    "WhenShouldIRenewMyLicenseExplanation": "Pokud si licenci obnovíte do <strong>1 měsíce</strong> po vypršení platnosti licence, budou uplatněny následující slevy: Týmová licence {0}; Obchodní licence {1}; Enterprise Licence {2}. Pokud však licenci obnovíte po <strong>1 měsíci</strong> od data vypršení platnosti vaší licence, cena za obnovení bude stejná jako cena za zakoupení licence a na obnovení nebude poskytnuta žádná sleva.",
     "TrialPlan": "Máte zkušební plán?",
     "DoYouAcceptBankWireTransfer": "Přijímáte bankovní převod?",
     "DoYouAcceptBankWireTransferExplanation": "Ano, přijímáme bankovní převod.<br />Po zaslání licenčního poplatku bankovním převodem nám zašlete e-mail na adresu accounting@abp.io potvrzení a požadovaný typ licence. Informace o našem mezinárodním bankovním účtu:",
@@ -360,7 +360,7 @@
     "Next": "další",
     "StartTrial": "Spusťte bezplatnou zkušební verzi",
     "ContactUsIssues": "Pokud máte nějaké problémy, kontaktujte nás",
-    "TrialActivatedWarning": "Vážený uživateli {0}, uživatel má nárok pouze na 1 bezplatné zkušební období. Zkušební období jste již využili.",
+    "TrialActivatedWarning": "Uživatel má nárok pouze na 1 bezplatné zkušební období. Zkušební období jste již využili.",
     "SaveAndDownload": "Uložit a stáhnout",
     "CompanyNameValidationMessage": "Název společnosti je příliš dlouhý!",
     "AddressValidationMessage": "Adresa je příliš dlouhá!",
@@ -373,7 +373,7 @@
     "TrialLicenseModelInvalidErrorMessage": "Jedno z následujících polí je neplatné: Název země, Velikost společnosti, Odvětví nebo Účel použití.",
     "Trial": "zkušební",
     "Purchased": "Zakoupeno",
-    "PurchaseLicense": "Koupit licenci",
+    "PurchaseLicense": "Zakoupit licenci {0}",
     "PurchaseTrialLicenseMessage": "Datum vypršení platnosti vaší licence je {0}. <br> Chcete-li nadále používat projekty, které jste vytvořili během bezplatného zkušebního období, musíte změnit licenční klíče ve svých souborech <code>appsettings.secrets.json</code>. Zde je váš licenční klíč:",
     "TrialLicenseExpireMessage": "Používáte zkušební licenci a platnost vaší zkušební licence vyprší dne {0}.",
     "TryForFree": "Zkus zadarmo",
@@ -381,6 +381,8 @@
     "CommercialNewsletterConfirmationMessage": "I agree to the <a href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
     "ContinueWithNewOrganization": "Pokračujte s novou organizací",
     "RenewLicenseEarly": "Pokud si předčasně obnovím licenci, dostanu celý rok?",
-    "RenewLicenseEarylExplanation": "Když obnovíte licenci před datem vypršení platnosti licence, bude k datu vypršení platnosti licence přidán 1 rok. Pokud například platnost vaší licence vyprší dne {0}-06-06 a obnovíte ji dne {0}-01-01, bude vaše nové datum vypršení platnosti licence {1}-06-06."
+    "RenewLicenseEarylExplanation": "Když obnovíte licenci před datem vypršení platnosti licence, bude k datu vypršení platnosti licence přidán 1 rok. Pokud například platnost vaší licence vyprší dne {0}-06-06 a obnovíte ji dne {0}-01-01, bude vaše nové datum vypršení platnosti licence {1}-06-06.",
+    "discountForYears": "{0}% sleva po dobu {1} let",
+    "BlackFridayDiscount": "Black Friday sleva"
   }
 }

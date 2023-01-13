@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Components.Web.Configuration;
+using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement.Localization;
 
 namespace Volo.Abp.PermissionManagement.Blazor.Components;
@@ -14,6 +16,8 @@ public partial class PermissionManagementModal
     [Inject] protected IPermissionAppService PermissionAppService { get; set; }
     [Inject] protected ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
+    [Inject] protected IOptions<AbpLocalizationOptions> LocalizationOptions { get; set; }
+    
     protected Modal _modal;
 
     protected string _providerName;

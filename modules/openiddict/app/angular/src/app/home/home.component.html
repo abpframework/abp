@@ -2,7 +2,7 @@
   <div class="p-5 text-center">
     <div class="d-inline-block bg-success text-white p-1 h5 rounded mb-4" role="alert">
       <h5 class="m-1">
-        <i class="fas fa-rocket"></i> Congratulations, <strong>Angular</strong> is
+        <i class="fas fa-rocket"></i> Congratulations, <strong>BookStore</strong> is
         successfully running!
       </h5>
     </div>
@@ -11,8 +11,37 @@
     <p class="lead px-lg-5 mx-lg-5">{{ '::LongWelcomeMessage' | abpLocalization }}</p>
 
     <a *ngIf="!hasLoggedIn" (click)="login()" class="px-4 btn btn-primary ms-1" role="button"
-      ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
+    ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
     >
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-auto text-center">
+          <img src="https://abp.io/assets/png/mastering-abp-framework.webp" style="max-width: 400px;"
+               class="w-100 mb-5 my-md-3">
+        </div>
+        <div class="col-md d-flex align-items-center">
+          <div class="pe-0 pe-md-4">
+            <small class="text-uppercase text-muted">THE OFFICIAL GUIDE</small>
+            <h2 class="mb-4">Mastering ABP Framework</h2>
+            <p class="mb-4">Written by the creator of the ABP Framework, this book will help you gain a complete
+              understanding of the framework and modern web application development techniques.</p>
+            <div class="mb-4">
+              <a href="https://www.amazon.com/gp/product/B097Z2DM8Q/ref=dbs_a_def_rwt_hsch_vapi_tkin_p1_i0"
+                 class="btn btn-success mb-1">
+                Buy on Amazon US
+              </a>
+              &nbsp;
+              <a href="https://www.packtpub.com/product/mastering-abp-framework/9781801079242"
+                 class="btn btn-primary mb-1">
+                Buy on PACKT
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="my-3 text-center">
     <h3>Let's improve your application!</h3>
@@ -268,13 +297,13 @@
   <div class="mb-5 text-center">
     <p class="align-middle">
       <a href="https://twitter.com/abpframework" target="_blank" class="mx-2"
-        ><i class="fa fa-twitter"></i><span class="text-secondary"> Abp Framework</span></a
+      ><i class="fa fa-twitter"></i><span class="text-secondary"> Abp Framework</span></a
       >
       <a href="https://twitter.com/abpcommercial" target="_blank" class="mx-2"
-        ><i class="fa fa-twitter"></i><span class="text-secondary"> Abp Commercial</span></a
+      ><i class="fa fa-twitter"></i><span class="text-secondary"> Abp Commercial</span></a
       >
       <a href="https://github.com/abpframework/abp" target="_blank" class="mx-2"
-        ><i class="fa fa-github"></i><span class="text-secondary"> abpframework</span></a
+      ><i class="fa fa-github"></i><span class="text-secondary"> abpframework</span></a
       >
     </p>
   </div>
@@ -296,7 +325,7 @@
         [href]="link.href"
         target="_blank"
         class="btn btn-link px-1"
-        >{{ link.label }} <i class="fas fa-chevron-right"></i
+      >{{ link.label }} <i class="fas fa-chevron-right"></i
       ></a>
     </div>
   </div>
@@ -309,7 +338,7 @@
         <i class="fas fa-plus d-block mb-3 fa- 2x text-secondary"></i>
         <span [innerHTML]="context.title"></span>
         <a [href]="context.href" target="_blank" class="d-block mt-2 btn btn-sm btn-link"
-          >Details <i class="fas fa-chevron-right"></i
+        >Details <i class="fas fa-chevron-right"></i
         ></a>
       </h6>
     </div>

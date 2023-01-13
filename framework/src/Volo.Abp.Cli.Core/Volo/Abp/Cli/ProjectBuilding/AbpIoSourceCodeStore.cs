@@ -261,6 +261,12 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
         catch (Exception ex)
         {
+            if(ex is UserFriendlyException)
+            {
+                Logger.LogWarning(ex.Message);
+                throw;
+            }
+
             Console.WriteLine("Error occured while downloading source-code from {0} : {1}{2}{3}", url,
                 responseMessage?.ToString(), Environment.NewLine, ex.Message);
             throw;

@@ -45,4 +45,25 @@ public class HasExtraPropertiesExtensions_Tests
         city.SetProperty("DateTime?", DateTime.MinValue);
         city.GetProperty<DateTime?>("DateTime?").ShouldBe(DateTime.MinValue);
     }
+
+    [Fact]
+    public void HasSameExtraProperties_Tests()
+    {
+        var adana = new City(Guid.NewGuid(), "Adana");
+        adana.SetProperty("IsHot", true);
+        
+        var antalya = new City(Guid.NewGuid(), "Antalya");
+        antalya.SetProperty("IsHot", true);
+        
+        adana.HasSameExtraProperties(antalya).ShouldBeTrue();
+        
+        adana.SetProperty("IsHot", false);
+        adana.HasSameExtraProperties(antalya).ShouldBeFalse();
+        
+        adana.SetProperty("IsHot", true);
+        adana.HasSameExtraProperties(antalya).ShouldBeTrue();
+        
+        adana.SetProperty("Population", 3_000_000);
+        adana.HasSameExtraProperties(antalya).ShouldBeFalse();
+    }
 }

@@ -12,7 +12,7 @@ public static class BlobStoringDbContextModelCreatingExtensions
 
         builder.Entity<DatabaseBlobContainer>(b =>
         {
-            b.ToTable(BlobStoringDatabaseDbProperties.DbTablePrefix + "BlobContainers", BlobStoringDatabaseDbProperties.DbSchema);
+            b.ToTable(AbpBlobStoringDatabaseDbProperties.DbTablePrefix + "BlobContainers", AbpBlobStoringDatabaseDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -27,7 +27,7 @@ public static class BlobStoringDbContextModelCreatingExtensions
 
         builder.Entity<DatabaseBlob>(b =>
         {
-            b.ToTable(BlobStoringDatabaseDbProperties.DbTablePrefix + "Blobs", BlobStoringDatabaseDbProperties.DbSchema);
+            b.ToTable(AbpBlobStoringDatabaseDbProperties.DbTablePrefix + "Blobs", AbpBlobStoringDatabaseDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 

@@ -54,9 +54,9 @@ Assuming the `HelloWelcomeMessage` is localized as `Hello {0}, welcome!`, both o
 
 ## Other Properties & Methods
 
-### abp.localization.values
+### abp.localization.resources
 
-`abp.localization.values` property stores all the localization resources, keys and their values.
+`abp.localization.resources` property stores all the localization resources, keys and their values.
 
 ### abp.localization.isLocalized
 

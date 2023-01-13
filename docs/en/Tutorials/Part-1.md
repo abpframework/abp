@@ -34,10 +34,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
-
-> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
-> `git config --system core.longpaths true`
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -66,18 +63,17 @@ The main entity of the application is the `Book`. Create a `Books` folder (names
 using System;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Acme.BookStore.Books
+namespace Acme.BookStore.Books;
+
+public class Book : AuditedAggregateRoot<Guid>
 {
-    public class Book : AuditedAggregateRoot<Guid>
-    {
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public BookType Type { get; set; }
+    public BookType Type { get; set; }
 
-        public DateTime PublishDate { get; set; }
+    public DateTime PublishDate { get; set; }
 
-        public float Price { get; set; }
-    }
+    public float Price { get; set; }
 }
 ````
 
@@ -92,20 +88,19 @@ namespace Acme.BookStore.Books
 The `Book` entity uses the `BookType` enum. Create a `Books` folder (namespace) in the `Acme.BookStore.Domain.Shared` project and add a `BookType` inside it:
 
 ````csharp
-namespace Acme.BookStore.Books
+namespace Acme.BookStore.Books;
+
+public enum BookType
 {
-    public enum BookType
-    {
-        Undefined,
-        Adventure,
-        Biography,
-        Dystopia,
-        Fantastic,
-        Horror,
-        Science,
-        ScienceFiction,
-        Poetry
-    }
+    Undefined,
+    Adventure,
+    Biography,
+    Dystopia,
+    Fantastic,
+    Horror,
+    Science,
+    ScienceFiction,
+    Poetry
 }
 ````
 
@@ -153,34 +148,33 @@ Navigate to the `OnModelCreating` method in the `BookStoreDbContext` class and a
 using Acme.BookStore.Books;
 ...
 
-namespace Acme.BookStore.EntityFrameworkCore
+namespace Acme.BookStore.EntityFrameworkCore;
+
+public class BookStoreDbContext : 
+    AbpDbContext<BookStoreDbContext>,
+    IIdentityDbContext,
+    ITenantManagementDbContext
 {
-    public class BookStoreDbContext : 
-        AbpDbContext<BookStoreDbContext>,
-        IIdentityDbContext,
-        ITenantManagementDbContext
+    ...
+
+    protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
+
+        /* Include modules to your migration db context */
+
+        builder.ConfigurePermissionManagement();
         ...
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        /* Configure your own tables/entities inside here */
+
+        builder.Entity<Book>(b =>
         {
-            base.OnModelCreating(builder);
-
-            /* Include modules to your migration db context */
-
-            builder.ConfigurePermissionManagement();
-            ...
-
-            /* Configure your own tables/entities inside here */
-
-            builder.Entity<Book>(b =>
-            {
-                b.ToTable(BookStoreConsts.DbTablePrefix + "Books",
-                    BookStoreConsts.DbSchema);
-                b.ConfigureByConvention(); //auto configure for the base class props
-                b.Property(x => x.Name).IsRequired().HasMaxLength(128);
-            });
-        }
+            b.ToTable(BookStoreConsts.DbTablePrefix + "Books",
+                BookStoreConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+        });
     }
 }
 ````
@@ -202,7 +196,7 @@ This will add a new migration class to the project:
 
 ![bookstore-efcore-migration](./images/bookstore-efcore-migration.png)
 
-> If you are using Visual Studio, you may want to use the `Add-Migration Created_Book_Entity -c BookStoreDbContext` and `Update-Database -Context BookStoreDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use the `Add-Migration Created_Book_Entity` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that `Acme.BookStore.EntityFrameworkCore` is the startup project in Visual Studio and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{end}}
 
@@ -220,44 +214,43 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 
-namespace Acme.BookStore
+namespace Acme.BookStore;
+
+public class BookStoreDataSeederContributor
+    : IDataSeedContributor, ITransientDependency
 {
-    public class BookStoreDataSeederContributor
-        : IDataSeedContributor, ITransientDependency
+    private readonly IRepository<Book, Guid> _bookRepository;
+
+    public BookStoreDataSeederContributor(IRepository<Book, Guid> bookRepository)
     {
-        private readonly IRepository<Book, Guid> _bookRepository;
+        _bookRepository = bookRepository;
+    }
 
-        public BookStoreDataSeederContributor(IRepository<Book, Guid> bookRepository)
+    public async Task SeedAsync(DataSeedContext context)
+    {
+        if (await _bookRepository.GetCountAsync() <= 0)
         {
-            _bookRepository = bookRepository;
-        }
+            await _bookRepository.InsertAsync(
+                new Book
+                {
+                    Name = "1984",
+                    Type = BookType.Dystopia,
+                    PublishDate = new DateTime(1949, 6, 8),
+                    Price = 19.84f
+                },
+                autoSave: true
+            );
 
-        public async Task SeedAsync(DataSeedContext context)
-        {
-            if (await _bookRepository.GetCountAsync() <= 0)
-            {
-                await _bookRepository.InsertAsync(
-                    new Book
-                    {
-                        Name = "1984",
-                        Type = BookType.Dystopia,
-                        PublishDate = new DateTime(1949, 6, 8),
-                        Price = 19.84f
-                    },
-                    autoSave: true
-                );
-
-                await _bookRepository.InsertAsync(
-                    new Book
-                    {
-                        Name = "The Hitchhiker's Guide to the Galaxy",
-                        Type = BookType.ScienceFiction,
-                        PublishDate = new DateTime(1995, 9, 27),
-                        Price = 42.0f
-                    },
-                    autoSave: true
-                );
-            }
+            await _bookRepository.InsertAsync(
+                new Book
+                {
+                    Name = "The Hitchhiker's Guide to the Galaxy",
+                    Type = BookType.ScienceFiction,
+                    PublishDate = new DateTime(1995, 9, 27),
+                    Price = 42.0f
+                },
+                autoSave: true
+            );
         }
     }
 }
@@ -290,18 +283,17 @@ In this section, you will create an application service to get, create, update a
 using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Acme.BookStore.Books
+namespace Acme.BookStore.Books;
+
+public class BookDto : AuditedEntityDto<Guid>
 {
-    public class BookDto : AuditedEntityDto<Guid>
-    {
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public BookType Type { get; set; }
+    public BookType Type { get; set; }
 
-        public DateTime PublishDate { get; set; }
+    public DateTime PublishDate { get; set; }
 
-        public float Price { get; set; }
-    }
+    public float Price { get; set; }
 }
 ````
 
@@ -315,14 +307,13 @@ It will be needed to map the `Book` entities to the `BookDto` objects while retu
 using Acme.BookStore.Books;
 using AutoMapper;
 
-namespace Acme.BookStore
+namespace Acme.BookStore;
+
+public class BookStoreApplicationAutoMapperProfile : Profile
 {
-    public class BookStoreApplicationAutoMapperProfile : Profile
+    public BookStoreApplicationAutoMapperProfile()
     {
-        public BookStoreApplicationAutoMapperProfile()
-        {
-            CreateMap<Book, BookDto>();
-        }
+        CreateMap<Book, BookDto>();
     }
 }
 ````
@@ -337,24 +328,23 @@ Create a `CreateUpdateBookDto` class in the `Books` folder (namespace) of the `A
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Acme.BookStore.Books
+namespace Acme.BookStore.Books;
+
+public class CreateUpdateBookDto
 {
-    public class CreateUpdateBookDto
-    {
-        [Required]
-        [StringLength(128)]
-        public string Name { get; set; }
+    [Required]
+    [StringLength(128)]
+    public string Name { get; set; }
 
-        [Required]
-        public BookType Type { get; set; } = BookType.Undefined;
+    [Required]
+    public BookType Type { get; set; } = BookType.Undefined;
 
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime PublishDate { get; set; } = DateTime.Now;
+    [Required]
+    [DataType(DataType.Date)]
+    public DateTime PublishDate { get; set; } = DateTime.Now;
 
-        [Required]
-        public float Price { get; set; }
-    }
+    [Required]
+    public float Price { get; set; }
 }
 ````
 
@@ -367,15 +357,14 @@ As done to the `BookDto` above, we should define the mapping from the `CreateUpd
 using Acme.BookStore.Books;
 using AutoMapper;
 
-namespace Acme.BookStore
+namespace Acme.BookStore;
+
+public class BookStoreApplicationAutoMapperProfile : Profile
 {
-    public class BookStoreApplicationAutoMapperProfile : Profile
+    public BookStoreApplicationAutoMapperProfile()
     {
-        public BookStoreApplicationAutoMapperProfile()
-        {
-            CreateMap<Book, BookDto>();
-            CreateMap<CreateUpdateBookDto, Book>();
-        }
+        CreateMap<Book, BookDto>();
+        CreateMap<CreateUpdateBookDto, Book>();
     }
 }
 ````
@@ -389,17 +378,16 @@ using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace Acme.BookStore.Books
-{
-    public interface IBookAppService :
-        ICrudAppService< //Defines CRUD methods
-            BookDto, //Used to show books
-            Guid, //Primary key of the book entity
-            PagedAndSortedResultRequestDto, //Used for paging/sorting
-            CreateUpdateBookDto> //Used to create/update a book
-    {
+namespace Acme.BookStore.Books;
 
-    }
+public interface IBookAppService :
+    ICrudAppService< //Defines CRUD methods
+        BookDto, //Used to show books
+        Guid, //Primary key of the book entity
+        PagedAndSortedResultRequestDto, //Used for paging/sorting
+        CreateUpdateBookDto> //Used to create/update a book
+{
+
 }
 ````
 
@@ -417,22 +405,21 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 
-namespace Acme.BookStore.Books
-{
-    public class BookAppService :
-        CrudAppService<
-            Book, //The Book entity
-            BookDto, //Used to show books
-            Guid, //Primary key of the book entity
-            PagedAndSortedResultRequestDto, //Used for paging/sorting
-            CreateUpdateBookDto>, //Used to create/update a book
-        IBookAppService //implement the IBookAppService
-    {
-        public BookAppService(IRepository<Book, Guid> repository)
-            : base(repository)
-        {
+namespace Acme.BookStore.Books;
 
-        }
+public class BookAppService :
+    CrudAppService<
+        Book, //The Book entity
+        BookDto, //Used to show books
+        Guid, //Primary key of the book entity
+        PagedAndSortedResultRequestDto, //Used for paging/sorting
+        CreateUpdateBookDto>, //Used to create/update a book
+    IBookAppService //implement the IBookAppService
+{
+    public BookAppService(IRepository<Book, Guid> repository)
+        : base(repository)
+    {
+
     }
 }
 ````

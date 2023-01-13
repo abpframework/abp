@@ -25,7 +25,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<BlogUser>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "Users", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Users", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
@@ -35,7 +35,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Blog>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "Blogs", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Blogs", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -48,7 +48,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Post>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "Posts", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Posts", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -68,7 +68,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Comment>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "Comments", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Comments", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -84,7 +84,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Tag>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "Tags", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Tags", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -99,7 +99,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<PostTag>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "PostTags", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "PostTags", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 

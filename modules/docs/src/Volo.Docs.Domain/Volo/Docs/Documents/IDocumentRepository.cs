@@ -9,6 +9,7 @@ namespace Volo.Docs.Documents
     public interface IDocumentRepository : IBasicRepository<Document>
     {
         Task<List<DocumentWithoutDetails>> GetListWithoutDetailsByProjectId(Guid projectId, CancellationToken cancellationToken = default);
+        Task<List<DocumentInfo>> GetUniqueListDocumentInfoAsync(CancellationToken cancellationToken = default);
 
         Task<List<Document>> GetListByProjectId(Guid projectId, CancellationToken cancellationToken = default);
 
