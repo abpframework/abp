@@ -507,7 +507,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
     private static bool IsAppServiceInterface(string typeName)
     {
-        return typeName.StartsWith("I") && ServicePostfixes.Any(typeName.EndsWith);
+        return typeName.StartsWith("I") && ServicePostfixes.Any(typeName.Contains);
     }
 
     private static string GetTypeNamespace(string typeFullName)
@@ -546,7 +546,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
                 for (var x = 0; x < s2.Length; x++)
                 {
                     type.Append(s2[x].Split(".").Last());
-                    if (x < s1.Length - 1)
+                    if (x < s2.Length - 1)
                     {
                         type.Append(", ");
                     }
