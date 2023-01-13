@@ -22,3 +22,4 @@ This table stores information about the organization units in the application. E
 | Table | Column | Description |
 | --- | --- | --- |
 | [`AbpOrganizationUnitRoles`](AbpOrganizationUnitRoles.md) | `OrganizationUnitId` | The organization unit id. |
+| [`AbpUserOrganizationUnits`](AbpUserOrganizationUnits.md) | `OrganizationUnitId` | The organization unit id. |
