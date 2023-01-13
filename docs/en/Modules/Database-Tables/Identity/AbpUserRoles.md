@@ -1,4 +1,4 @@
-## AbpUserRoles Table
+## AbpUserRoles
 
 The AbpUserRoles table is used to store user roles.
 
