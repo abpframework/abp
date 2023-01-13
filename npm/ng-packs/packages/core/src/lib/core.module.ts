@@ -33,15 +33,9 @@ import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
 import { ShortTimePipe } from './pipes/short-time.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
-import { TimeoutLimitedOAuthService } from './services/timeout-limited-oauth.service';
 import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
-import { AuthGuard } from './abstracts/auth.guard';
-
-export function storageFactory(): OAuthStorage {
-  return oAuthStorage;
-}
 
 /**
  * BaseCoreModule is the module that holds
@@ -182,7 +176,7 @@ export class CoreModule {
           provide: QUEUE_MANAGER,
           useClass: DefaultQueueManager,
         },
-        IncludeLocalizationResourcesProvider
+        IncludeLocalizationResourcesProvider,
       ],
     };
   }
