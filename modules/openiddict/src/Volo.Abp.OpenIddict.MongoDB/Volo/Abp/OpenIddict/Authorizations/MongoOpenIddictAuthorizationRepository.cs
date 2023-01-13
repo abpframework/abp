@@ -77,6 +77,8 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
             .Where(x => x.CreationDate < date)
             .Where(x => x.Status != OpenIddictConstants.Statuses.Valid ||
                         (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && !tokens.Contains(x.Id)))
+            .OrderBy(x => x.Id)
+            .Take(count)
             .ToListAsync(cancellationToken: cancellationToken);
     }
 }

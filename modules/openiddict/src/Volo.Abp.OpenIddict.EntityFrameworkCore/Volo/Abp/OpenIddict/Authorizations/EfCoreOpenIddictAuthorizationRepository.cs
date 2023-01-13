@@ -89,6 +89,6 @@ public class EfCoreOpenIddictAuthorizationRepository : EfCoreRepository<IOpenIdd
             where authorization.CreationDate < date
             where authorization.Status != OpenIddictConstants.Statuses.Valid ||
                   (authorization.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && authorizationToken == null)
-            select authorization).ToListAsync(cancellationToken: cancellationToken);
+            select authorization).OrderBy(x => x.Id).Take(count).ToListAsync(cancellationToken: cancellationToken);
     }
 }
