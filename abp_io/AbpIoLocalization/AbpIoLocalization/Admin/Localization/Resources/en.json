@@ -428,6 +428,16 @@
     "CurrentEstimatedSizeInfo": "Indicates an estimated sum of all the NuGet packages' content size currently in the memory cache",
     "CurrentEntryCountInfo": "Indicates the number of instances currently in the memory cache.",
     "TotalHitsInfo": "Indicates the total number of cache misses. A cache hit occurs when a file is requested from a cache and the cache is able to fulfill that request.",
-    "TotalMissesInfo": "Indicates the total number of cache hits. A cache miss is when the cache does not contain the requested content."
+    "TotalMissesInfo": "Indicates the total number of cache hits. A cache miss is when the cache does not contain the requested content.",
+    "Permission:VersionHistory": "Version History",
+    "Caches": "Caches",
+    "VersionHistories": "Version Histories",
+    "Version": "Version",
+    "PublishDate": "Publish Date",
+    "IsStableVersion": "Stable Version",
+    "IsActive": "Active",
+    "NewVersion": "New Version",
+    "VersionHistoryDeletionConfirmationMessage": "Are you sure you want to delete this version?"
+    
   }
 }
