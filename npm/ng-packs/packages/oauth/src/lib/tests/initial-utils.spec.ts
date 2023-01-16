@@ -9,10 +9,8 @@ import {
   ConfigStateService,
   AbpApplicationConfigurationService,
   SessionStateService,
-  ApplicationConfigurationDto,
 } from '@abp/ng.core';
 import * as clearOAuthStorageDefault from '../utils/clear-o-auth-storage';
-import { of } from 'rxjs';
 import { checkAccessToken } from '../utils/check-access-token';
 
 const environment = { oAuthConfig: { issuer: 'test' } };
@@ -48,33 +46,6 @@ describe('InitialUtils', () => {
   });
 
   beforeEach(() => (spectator = createComponent()));
-
-  describe('#getInitialData', () => {
-    let mockInjector;
-    let configStateService;
-    let authService;
-    beforeEach(() => {
-      mockInjector = {
-        get: spectator.inject,
-      };
-      configStateService = spectator.inject(ConfigStateService);
-      authService = spectator.inject(AuthService);
-    });
-
-    test('should called configStateService.refreshAppState', async () => {
-      const configRefreshAppStateSpy = jest.spyOn(configStateService, 'refreshAppState');
-      const appConfigRes = {
-        currentTenant: { id: 'test', name: 'testing' },
-      } as ApplicationConfigurationDto;
-
-      configRefreshAppStateSpy.mockReturnValue(of(appConfigRes));
-
-      // Todo: refactor it
-      // await initFactory(mockInjector)();
-
-      expect(configRefreshAppStateSpy).toHaveBeenCalled();
-    });
-  });
 
   describe('#checkAccessToken', () => {
     let injector;

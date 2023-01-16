@@ -8,6 +8,7 @@ using OpenIddict.Abstractions;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.Tokens;
 
 namespace Volo.Abp.OpenIddict.Authorizations;
 
@@ -81,13 +82,13 @@ public class EfCoreOpenIddictAuthorizationRepository : EfCoreRepository<IOpenIdd
 
     public virtual async Task<List<OpenIddictAuthorization>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default)
     {
-        var tokenQueryable = (await GetDbContextAsync()).Tokens.AsQueryable();
-        return await (await GetDbSetAsync())
-            .Where(x => x.CreationDate < date)
-            .Where(x => x.Status != OpenIddictConstants.Statuses.Valid ||
-                        (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && tokenQueryable.Any(t => t.AuthorizationId == x.Id)))
-            .OrderBy(x => x.Id)
-            .Take(count)
-            .ToListAsync(GetCancellationToken(cancellationToken));
+        return await (from authorization in (await GetQueryableAsync())
+            join token in (await GetDbContextAsync()).Set<OpenIddictToken>()
+                on authorization.Id equals token.AuthorizationId into authorizationTokens
+            from authorizationToken in authorizationTokens.DefaultIfEmpty()
+            where authorization.CreationDate < date
+            where authorization.Status != OpenIddictConstants.Statuses.Valid ||
+                  (authorization.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && authorizationToken == null)
+            select authorization).OrderBy(x => x.Id).Take(count).ToListAsync(cancellationToken: cancellationToken);
     }
 }
