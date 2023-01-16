@@ -1,0 +1,8 @@
+{
+  "culture": "en",
+  "texts": {
+    "Welcome_Title": "Welcome",
+    "Welcome_Text": "This is a minimalist, single layer application startup template for the ABP Framework.",
+    "Menu:Home": "Home"
+  }
+}

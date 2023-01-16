@@ -21,9 +21,11 @@ public abstract class CurrentPrincipalAccessorBase : ICurrentPrincipalAccessor
     {
         var parent = Principal;
         _currentPrincipal.Value = principal;
-        return new DisposeAction(() =>
+
+        return new DisposeAction<ValueTuple<AsyncLocal<ClaimsPrincipal>, ClaimsPrincipal>>(static (state) =>
         {
-            _currentPrincipal.Value = parent;
-        });
+            var (currentPrincipal, parent) = state;
+            currentPrincipal.Value = parent;
+        }, (_currentPrincipal, parent));
     }
 }

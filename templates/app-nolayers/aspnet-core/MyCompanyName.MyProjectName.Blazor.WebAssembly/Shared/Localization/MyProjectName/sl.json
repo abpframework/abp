@@ -1,0 +1,8 @@
+{
+  "culture": "sl",
+  "texts": {
+    "Welcome_Title": "Dobrodošli",
+    "Welcome_Text": "To je minimalistična enoslojna predloga za zagon aplikacije za ABP Framework.",
+    "Menu:Home": "Domov"
+  }
+}

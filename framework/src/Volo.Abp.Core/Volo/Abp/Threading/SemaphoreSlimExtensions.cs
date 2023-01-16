@@ -80,9 +80,9 @@ public static class SemaphoreSlimExtensions
 
     private static IDisposable GetDispose(this SemaphoreSlim semaphoreSlim)
     {
-        return new DisposeAction(() =>
+        return new DisposeAction<SemaphoreSlim>(static (semaphoreSlim) =>
         {
             semaphoreSlim.Release();
-        });
+        }, semaphoreSlim);
     }
 }

@@ -50,6 +50,11 @@ public class MongoPersistentGrantRepository : MongoDbRepository<IAbpIdentityServ
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task DeleteExpirationAsync(DateTime maxExpirationDate, CancellationToken cancellationToken = default)
+    {
+        await DeleteDirectAsync(x => x.Expiration != null && x.Expiration < maxExpirationDate, cancellationToken: cancellationToken);
+    }
+
     public async Task DeleteAsync(
         string subjectId = null,
         string sessionId = null,
