@@ -9,9 +9,10 @@ public static class AsyncLocalSimpleScopeExtensions
     {
         var previousValue = asyncLocal.Value;
         asyncLocal.Value = value;
-        return new DisposeAction(() =>
+        return new DisposeAction<ValueTuple<AsyncLocal<T>, T>>(static (state) =>
         {
+            var (asyncLocal, previousValue) = state;
             asyncLocal.Value = previousValue;
-        });
+        }, (asyncLocal, previousValue));
     }
 }

@@ -36,6 +36,7 @@ public static class AbpAutoMapperExtensibleDtoExtensions
                         return result;
                     })
             )
+            .ForSourceMember(x => x.ExtraProperties, x => x.DoNotValidate())
             .AfterMap((source, destination, context) =>
             {
                 if (mapToRegularProperties)

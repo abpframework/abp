@@ -50,7 +50,7 @@
     "SendPasswordResetLink_Information": "Er wordt een link voor het opnieuw instellen van uw wachtwoord naar uw e-mailadres gestuurd. Als u binnen een paar minuten geen e-mail ontvangt, probeer het dan opnieuw.",
     "PasswordResetMailSentMessage": "Er is een link voor het opnieuw instellen van uw wachtwoord naar uw e-mailadres gestuurd. Als u deze e-mail niet binnen 15 minuten in uw inbox ziet, zoek hem dan in uw map met ongewenste e-mail. Als u de mail daar vindt, markeer hem dan als niet ongewenst.",
     "ResetPassword": "Wachtwoord opnieuw instellen",
-    "ConfirmPassword": "Bevestig (herhaal) het wachtwoord",
+    "ConfirmPassword": "Bevestig het wachtwoord",
     "ResetPassword_Information": "Voer uw nieuwe wachtwoord in.",
     "YourPasswordIsSuccessfullyReset": "Uw wachtwoord is succesvol opnieuw ingesteld.",
     "GoToTheApplication": "Ga naar de applicatie",

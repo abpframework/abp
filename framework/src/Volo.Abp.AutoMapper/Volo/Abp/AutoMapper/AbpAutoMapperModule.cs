@@ -26,45 +26,37 @@ public class AbpAutoMapperModule : AbpModule
     {
         context.Services.AddAutoMapperObjectMapper();
 
-        context.Services.AddSingleton<MapperAccessor>(CreateMappings);
-        context.Services.AddSingleton<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
-    }
-
-    private MapperAccessor CreateMappings(IServiceProvider serviceProvider)
-    {
-        using (var scope = serviceProvider.CreateScope())
+        context.Services.AddSingleton<IConfigurationProvider>(sp =>
         {
-            var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAutoMapperOptions>>().Value;
-
-            void ConfigureAll(IAbpAutoMapperConfigurationContext ctx)
+            using (var scope = sp.CreateScope())
             {
-                foreach (var configurator in options.Configurators)
+                var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAutoMapperOptions>>().Value;
+
+                var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression =>
                 {
-                    configurator(ctx);
-                }
-            }
+                    var autoMapperConfigurationContext = new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider);
 
-            options.Configurators.Insert(0, ctx => ctx.MapperConfiguration.ConstructServicesUsing(serviceProvider.GetService));
+                    foreach (var configurator in options.Configurators)
+                    {
+                        configurator(autoMapperConfigurationContext);
+                    }
+                });
 
-            void ValidateAll(IConfigurationProvider config)
-            {
                 foreach (var profileType in options.ValidatingProfiles)
                 {
-                    config.Internal().AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
+                    mapperConfiguration.Internal().AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
                 }
+
+                return mapperConfiguration;
             }
+        });
 
-            var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression =>
-            {
-                ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
-            });
+        context.Services.AddTransient<IMapper>(sp => sp.GetRequiredService<IConfigurationProvider>().CreateMapper(sp.GetService));
 
-            ValidateAll(mapperConfiguration);
-
-            return new MapperAccessor
-            {
-                Mapper = new Mapper(mapperConfiguration)
-            };
-        }
+        context.Services.AddTransient<MapperAccessor>(sp => new MapperAccessor()
+        {
+            Mapper = sp.GetRequiredService<IMapper>()
+        });
+        context.Services.AddTransient<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
     }
 }

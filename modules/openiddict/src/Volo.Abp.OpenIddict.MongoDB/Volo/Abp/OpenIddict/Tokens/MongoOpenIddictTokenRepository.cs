@@ -100,20 +100,22 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<OpenIddictToken>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default)
+    public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
     {
         var authorizationIds = await (await GetMongoQueryableAsync<OpenIddictAuthorization>(cancellationToken))
             .Where(x => x.Status != OpenIddictConstants.Statuses.Valid)
             .Select(x => x.Id)
             .ToListAsync(GetCancellationToken(cancellationToken));
 
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        var tokens = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.CreationDate < date)
             .Where(x => (x.Status != OpenIddictConstants.Statuses.Inactive &&
                          x.Status != OpenIddictConstants.Statuses.Valid) ||
                         authorizationIds.Contains(x.Id) ||
                         x.ExpirationDate < DateTime.UtcNow)
             .OrderBy(x => x.Id)
-            .Take(count).ToListAsync(GetCancellationToken(cancellationToken));
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        await DeleteManyAsync(tokens, cancellationToken: cancellationToken);
     }
 }

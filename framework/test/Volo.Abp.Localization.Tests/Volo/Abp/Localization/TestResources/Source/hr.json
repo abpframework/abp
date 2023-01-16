@@ -1,0 +1,11 @@
+{
+  "culture": "hr",
+  "texts": {
+    "Hello <b>{0}</b>.": "Hej <b>{0}</b>.",
+    "Car": "Auto",
+    "CarPlural": "Auta",
+    "MaxLenghtErrorMessage": "Dužina ovog polja može biti maksimalno '{0}' znakova",
+    "Universe": "Univerzum",
+    "FortyTwo": "Četrdeset dva"
+  }
+}

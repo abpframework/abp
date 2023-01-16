@@ -1,10 +1,10 @@
 # CMS Kit: Comments
 
-CMS kit provides a **comment** system to add comments feature to any kind of resource, like blog posts, products, etc.
+CMS kit provides a **comment** system to add the comment feature to any kind of resource, like blog posts, products, etc.
 
 ## Options
 
-The comment system provides a mechanism to group comment definitions by entity types. For example, if you want to use comment system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product`, and add comments under these entity types.
+The comment system provides a mechanism to group comment definitions by entity types. For example, if you want to use the comment system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product`, and add comments under these entity types.
 
 `CmsKitCommentOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
 
@@ -12,6 +12,7 @@ The comment system provides a mechanism to group comment definitions by entity t
 Configure<CmsKitCommentOptions>(options =>
 {
     options.EntityTypes.Add(new CommentEntityTypeDefinition("Product"));
+    options.IsRecaptchaEnabled = true; //false by default
 });
 ```
 
@@ -20,6 +21,7 @@ Configure<CmsKitCommentOptions>(options =>
 `CmsKitCommentOptions` properties:
 
 - `EntityTypes`: List of defined entity types(`CmsKitCommentOptions`) in the comment system.
+- `IsRecaptchaEnabled`: This flag enables or disables the reCaptcha for the comment system. You can set it as **true** if you want to use reCaptcha in your comment system.
 
 `CommentEntityTypeDefinition` properties:
 
@@ -77,7 +79,7 @@ A comment represents a written comment from a user.
 
 This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
 
-Following custom repositories are defined for this feature:
+The following custom repositories are defined for this feature:
 
 - `ICommentRepository`
 
@@ -93,8 +95,8 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 
 #### Application services
 
-- `CommentAdminAppService` (implements `ICommentAdminAppService`): Implements the use cases of comment management system, like listing or removing comments etc.
-- `CommentPublicAppService` (implements `ICommentPublicAppService`):  Implements the use cases of comment management on the public websites, like listing comments, adding comments etc.
+- `CommentAdminAppService` (implements `ICommentAdminAppService`): Implements the use cases of the comment management system, like listing or removing comments etc.
+- `CommentPublicAppService` (implements `ICommentPublicAppService`):  Implements the use cases of the comment management on the public websites, like listing comments, adding comments etc.
 
 ### Database providers
 
