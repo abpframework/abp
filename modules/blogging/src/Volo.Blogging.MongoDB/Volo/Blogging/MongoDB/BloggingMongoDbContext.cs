@@ -10,7 +10,7 @@ using Volo.Blogging.Users;
 namespace Volo.Blogging.MongoDB
 {
     [IgnoreMultiTenancy]
-    [ConnectionStringName(BloggingDbProperties.ConnectionStringName)]
+    [ConnectionStringName(AbpBloggingDbProperties.ConnectionStringName)]
     public class BloggingMongoDbContext : AbpMongoDbContext, IBloggingMongoDbContext
     {
         public IMongoCollection<BlogUser> Users => Collection<BlogUser>();

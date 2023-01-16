@@ -18,9 +18,6 @@ public partial class LoginDisplay : IDisposable
     [Inject]
     public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-    [CanBeNull]
-    protected SignOutSessionStateManager SignOutManager;
-
     protected ApplicationMenu Menu { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -28,8 +25,6 @@ public partial class LoginDisplay : IDisposable
         Menu = await MenuManager.GetAsync(StandardMenus.User);
 
         Navigation.LocationChanged += OnLocationChanged;
-
-        LazyGetService(ref SignOutManager);
 
         AuthenticationStateProvider.AuthenticationStateChanged +=
             AuthenticationStateProviderOnAuthenticationStateChanged;
@@ -65,12 +60,8 @@ public partial class LoginDisplay : IDisposable
         }
     }
 
-    private async Task BeginSignOut()
+    private void BeginSignOut()
     {
-        if (SignOutManager != null)
-        {
-            await SignOutManager.SetSignOutState();
-            await NavigateToAsync("authentication/logout");
-        }
+        Navigation.NavigateToLogout("authentication/logout");
     }
 }

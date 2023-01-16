@@ -2,13 +2,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
 
 namespace Volo.CmsKit.Public.Menus;
 
-[RequiresGlobalFeature(typeof(BlogsFeature))]
+[RequiresFeature(CmsKitFeatures.MenuEnable)]
+[RequiresGlobalFeature(typeof(MenuFeature))]
 [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
 [Route("api/cms-kit-public/menu-items")]

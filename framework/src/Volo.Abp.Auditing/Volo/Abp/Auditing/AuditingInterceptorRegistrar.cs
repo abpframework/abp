@@ -22,7 +22,7 @@ public static class AuditingInterceptorRegistrar
             return false;
         }
 
-        if (ShouldAuditTypeByDefaultOrNull(type) == true)
+        if (ShouldAuditTypeByDefaultOrNull(type, ignoreIntegrationServiceAttribute: true) == true)
         {
             return true;
         }
@@ -36,7 +36,7 @@ public static class AuditingInterceptorRegistrar
     }
 
     //TODO: Move to a better place
-    public static bool? ShouldAuditTypeByDefaultOrNull(Type type)
+    public static bool? ShouldAuditTypeByDefaultOrNull(Type type, bool ignoreIntegrationServiceAttribute)
     {
         //TODO: In an inheritance chain, it would be better to check the attributes on the top class first.
 
@@ -52,7 +52,11 @@ public static class AuditingInterceptorRegistrar
 
         if (typeof(IAuditingEnabled).IsAssignableFrom(type))
         {
-            return true;
+            if (ignoreIntegrationServiceAttribute || 
+                !IntegrationServiceAttribute.IsDefinedOrInherited(type))
+            {
+                return true;
+            }
         }
 
         return null;

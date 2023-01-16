@@ -32,6 +32,14 @@ public partial class AccountClientProxy : ClientProxyBase<IAccountAppService>, I
         });
     }
 
+    public virtual async Task<bool> VerifyPasswordResetTokenAsync(VerifyPasswordResetTokenInput input)
+    {
+        return await RequestAsync<bool>(nameof(VerifyPasswordResetTokenAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(VerifyPasswordResetTokenInput), input }
+        });
+    }
+
     public virtual async Task ResetPasswordAsync(ResetPasswordDto input)
     {
         await RequestAsync(nameof(ResetPasswordAsync), new ClientProxyRequestTypeValue

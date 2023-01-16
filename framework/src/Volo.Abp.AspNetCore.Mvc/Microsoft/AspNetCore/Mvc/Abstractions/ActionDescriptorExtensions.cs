@@ -43,4 +43,14 @@ public static class ActionDescriptorExtensions
     {
         return actionDescriptor is PageActionDescriptor;
     }
+    
+    public static PageActionDescriptor AsPageAction(this ActionDescriptor actionDescriptor)
+    {
+        if (!actionDescriptor.IsPageAction())
+        {
+            throw new AbpException($"{nameof(actionDescriptor)} should be type of {typeof(PageActionDescriptor).AssemblyQualifiedName}");
+        }
+
+        return actionDescriptor as PageActionDescriptor;
+    }
 }

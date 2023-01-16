@@ -273,6 +273,8 @@
     "SubscribeToNewsletter": "Abonneer u op de nieuwsbrief om informatie te krijgen over gebeurtenissen in het ABP.IO-platform, zoals nieuwe releases, artikelen, aanbiedingen en meer.",
     "FirstEdition": "Eerste editie",
     "ThankYou": "Bedankt!",
-    "CheckboxMandatory": "Je moet dit aanvinken om verder te gaan!"
+    "CheckboxMandatory": "Je moet dit aanvinken om verder te gaan!",
+    "SelectUITheme": "Selecteer UI-thema"
+
   }
 }

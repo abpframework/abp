@@ -32,6 +32,7 @@
     "PersonalSettingsSaved": "Ajustes personales guardados",
     "PasswordChanged": "Cambia la contraseña",
     "NewPasswordConfirmFailed": "Por favor, confirme la nueva contraseña.",
+    "NewPasswordSameAsOld": "La nueva contraseña debe ser diferente de la contraseña actual.",
     "Manage": "Administrar",
     "MyAccount": "Mi cuenta"
   }

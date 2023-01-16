@@ -1,0 +1,8 @@
+{
+  "culture": "de",
+  "texts": {
+    "Menu:Home": "Home",
+    "Welcome": "Willkommen",
+    "LongWelcomeMessage": "Willkommen bei der Anwendung. Dies ist ein Startup-Projekt, das auf dem ABP-Framework basiert. Weitere Informationen finden Sie unter abp.io."
+  }
+}

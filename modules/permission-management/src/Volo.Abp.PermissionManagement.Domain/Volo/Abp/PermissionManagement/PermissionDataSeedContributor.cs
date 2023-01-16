@@ -23,17 +23,16 @@ public class PermissionDataSeedContributor : IDataSeedContributor, ITransientDep
         CurrentTenant = currentTenant;
     }
 
-    public virtual Task SeedAsync(DataSeedContext context)
+    public virtual async Task SeedAsync(DataSeedContext context)
     {
         var multiTenancySide = CurrentTenant.GetMultiTenancySide();
-        var permissionNames = PermissionDefinitionManager
-            .GetPermissions()
+        var permissionNames = (await PermissionDefinitionManager.GetPermissionsAsync())
             .Where(p => p.MultiTenancySide.HasFlag(multiTenancySide))
             .Where(p => !p.Providers.Any() || p.Providers.Contains(RolePermissionValueProvider.ProviderName))
             .Select(p => p.Name)
             .ToArray();
 
-        return PermissionDataSeeder.SeedAsync(
+        await PermissionDataSeeder.SeedAsync(
             RolePermissionValueProvider.ProviderName,
             "admin",
             permissionNames,

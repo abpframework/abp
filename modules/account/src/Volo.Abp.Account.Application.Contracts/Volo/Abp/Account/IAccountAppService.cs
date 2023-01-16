@@ -10,5 +10,7 @@ public interface IAccountAppService : IApplicationService
 
     Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input);
 
+    Task<bool> VerifyPasswordResetTokenAsync(VerifyPasswordResetTokenInput input);
+
     Task ResetPasswordAsync(ResetPasswordDto input);
 }

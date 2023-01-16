@@ -41,8 +41,12 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
             finally
             {
                 stopwatch.Stop();
-                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                auditLog.Actions.Add(auditLogAction);
+
+                if (auditLogAction != null)
+                {
+                    auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                    auditLog.Actions.Add(auditLogAction);
+                }
             }
         }
     }
@@ -70,18 +74,41 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
         }
 
         var auditingHelper = context.GetRequiredService<IAuditingHelper>();
-        if (!auditingHelper.ShouldSaveAudit(context.ActionDescriptor.GetMethodInfo(), true))
+        if (!auditingHelper.ShouldSaveAudit(
+                context.ActionDescriptor.GetMethodInfo(),
+                defaultValue: GetDefaultAuditBehavior(options, context.ActionDescriptor)))
         {
             return false;
         }
 
         auditLog = auditLogScope.Log;
-        auditLogAction = auditingHelper.CreateAuditLogAction(
-            auditLog,
-            context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
-            context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
-            context.ActionArguments
-        );
+
+        if (!options.DisableLogActionInfo)
+        {
+            auditLogAction = auditingHelper.CreateAuditLogAction(
+                auditLog,
+                context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
+                context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
+                context.ActionArguments
+            );
+        }
+
+        return true;
+    }
+
+    private static bool GetDefaultAuditBehavior(
+        AbpAuditingOptions abpAuditingOptions,
+        ActionDescriptor actionDescriptor)
+    {
+        if (!abpAuditingOptions.IsEnabledForIntegrationServices &&
+            IntegrationServiceAttribute.IsDefinedOrInherited(
+                actionDescriptor
+                    .AsControllerActionDescriptor()
+                    .ControllerTypeInfo)
+            )
+        {
+            return false;
+        }
 
         return true;
     }

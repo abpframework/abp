@@ -54,6 +54,7 @@
     "Version": "Versiune",
     "LanguageCode": "Codul limbii",
     "FileName": "Nume fişier",
-    "LastCachedTime": "Durată cache"
+    "LastCachedTime": "Durată cache",
+    "Project": "Proiect"
   }
 }

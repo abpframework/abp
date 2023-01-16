@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.TestApp.Domain;
+using Volo.Abp.TestApp.Testing;
 
 namespace Volo.Abp.TestApp;
 
@@ -15,19 +16,24 @@ public class TestDataBuilder : ITransientDependency
 
     public static Guid IstanbulCityId { get; } = new Guid("4d734a0e-3e6b-4bad-bb43-ef8cf1b09633");
     public static Guid LondonCityId { get; } = new Guid("27237527-605e-4652-a2a5-68e0e512da36");
+    
+    public static Guid ProductId { get; } = new Guid("c5b3fbd4-7b0b-4a72-8d99-ccf6c8c98f61");
 
     private readonly IBasicRepository<Person, Guid> _personRepository;
     private readonly ICityRepository _cityRepository;
     private readonly IRepository<EntityWithIntPk, int> _entityWithIntPksRepository;
+    private readonly IRepository<Product, Guid> _productRepository;
 
     public TestDataBuilder(
         IBasicRepository<Person, Guid> personRepository,
         ICityRepository cityRepository,
-        IRepository<EntityWithIntPk, int> entityWithIntPksRepository)
+        IRepository<EntityWithIntPk, int> entityWithIntPksRepository,
+        IRepository<Product, Guid> productRepository)
     {
         _personRepository = personRepository;
         _cityRepository = cityRepository;
         _entityWithIntPksRepository = entityWithIntPksRepository;
+        _productRepository = productRepository;
     }
 
     public async Task BuildAsync()
@@ -35,6 +41,7 @@ public class TestDataBuilder : ITransientDependency
         await AddCities();
         await AddPeople();
         await AddEntitiesWithPks();
+        await AddProducts();
     }
 
     private async Task AddCities()
@@ -86,5 +93,10 @@ public class TestDataBuilder : ITransientDependency
     private async Task AddEntitiesWithPks()
     {
         await _entityWithIntPksRepository.InsertAsync(new EntityWithIntPk("Entity1"));
+    }
+    
+    private async Task AddProducts()
+    {
+        await _productRepository.InsertAsync(new Product(ProductId, "Product1", decimal.One));
     }
 }

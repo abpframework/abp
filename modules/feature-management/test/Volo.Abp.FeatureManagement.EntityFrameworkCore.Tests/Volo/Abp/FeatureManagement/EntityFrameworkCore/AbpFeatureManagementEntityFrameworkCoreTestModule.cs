@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore;
 
@@ -25,6 +26,11 @@ public class AbpFeatureManagementEntityFrameworkCoreTestModule : AbpModule
             {
                 abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
             });
+        });
+
+        Configure<AbpUnitOfWorkDefaultOptions>(options =>
+        {
+            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
         });
     }
 

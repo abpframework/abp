@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Admin.Application",
-  "hash": "b779b38aa1b78bbf6eaf8884d9ecd4ba",
+  "hash": "371eb8fc6ce8669eab7625958a977081",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Admin",
@@ -442,6 +442,19 @@
           "returnType": "Void",
           "isAsync": true,
           "name": "DeleteAsync",
+          "summary": null,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "isAsync": true,
+          "name": "SetAsHomePageAsync",
           "summary": null,
           "parameters": [
             {

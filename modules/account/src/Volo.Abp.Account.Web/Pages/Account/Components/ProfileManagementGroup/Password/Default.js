@@ -22,7 +22,12 @@
             if (input.currentPassword && input.currentPassword == ''){
                 return;
             }
-
+            
+            if(input.currentPassword == input.newPassword) {
+                abp.message.error(l('NewPasswordSameAsOld'));
+                return;
+            }
+            
             volo.abp.account.profile.changePassword(input).then(function (result) {
                 abp.message.success(l('PasswordChanged'));
                 abp.event.trigger('passwordChanged');

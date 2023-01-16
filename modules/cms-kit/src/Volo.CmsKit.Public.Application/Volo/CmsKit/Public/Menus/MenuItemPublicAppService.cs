@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
 
 namespace Volo.CmsKit.Public.Menus;
 
+[RequiresFeature(CmsKitFeatures.MenuEnable)]
 [RequiresGlobalFeature(typeof(MenuFeature))]
 public class MenuItemPublicAppService : CmsKitPublicAppServiceBase, IMenuItemPublicAppService
 {

@@ -204,9 +204,7 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
         {
             return new LocalizableStringDto(
                 localizableStringInstance.Name,
-                localizableStringInstance.ResourceType != null
-                    ? LocalizationResourceNameAttribute.GetName(localizableStringInstance.ResourceType)
-                    : null
+                localizableStringInstance.ResourceName
             );
         }
 

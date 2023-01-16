@@ -360,7 +360,7 @@
     "Next": "Naslednji",
     "StartTrial": "Začnite moj brezplačni preizkus",
     "ContactUsIssues": "Pišite nam, če imate kakršne koli težave",
-    "TrialActivatedWarning": "Spoštovani {0}, uporabnik ima pravico do 1 brezplačnega preskusnega obdobja. Poskusno obdobje ste že izkoristili.",
+    "TrialActivatedWarning": "Uporabnik ima pravico do samo 1 brezplačnega preizkusnega obdobja. Preizkusno obdobje ste že izkoristili.",
     "SaveAndDownload": "Shrani in prenesi",
     "CompanyNameValidationMessage": "Ime podjetja je predolgo!",
     "AddressValidationMessage": "Naslov je predolg!",
@@ -373,11 +373,12 @@
     "TrialLicenseModelInvalidErrorMessage": "Eno od naslednjih polj je neveljavno: ime države, velikost podjetja, panoga ali namen uporabe.",
     "Trial": "Sojenje",
     "Purchased": "Kupljeno",
-    "PurchaseLicense": "Nakup licence",
+    "PurchaseLicense": "Nakup licence {0}",
     "PurchaseTrialLicenseMessage": "Datum poteka vaše licence je {0}. <br> Če želite še naprej uporabljati projekte, ki ste jih ustvarili med brezplačnim preizkusnim obdobjem, morate spremeniti licenčne ključe v datotekah <code>appsettings.secrets.json</code>. Tukaj je vaš licenčni ključ:",
     "TrialLicenseExpireMessage": "Uporabljate preizkusno licenco in vaša preizkusna licenca bo potekla {0}.",
     "TryForFree": "Poskusite brezplačno",
     "TrialLicenseExpiredInfo": "Vaša preizkusna licenca je potekla!",
-    "CommercialNewsletterConfirmationMessage": "Strinjam se s <a href=\"https://commercial.abp.io/TermsConditions\">pogoji in določili</a> in <a href=\"https://commercial.abp.io/Privacy\">pravilnikom o zasebnosti </a>."
+    "CommercialNewsletterConfirmationMessage": "Strinjam se s <a href=\"https://commercial.abp.io/TermsConditions\">pogoji in določili</a> in <a href=\"https://commercial.abp.io/Privacy\">pravilnikom o zasebnosti </a>.",
+    "BlackFridayDiscount": "Popust Black Friday"
   }
 }

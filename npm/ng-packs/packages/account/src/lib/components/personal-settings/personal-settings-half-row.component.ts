@@ -9,7 +9,7 @@ import { UntypedFormGroup } from '@angular/forms';
 @Component({
   selector: 'abp-personal-settings-half-row',
   template: ` <div class="w-50 d-inline">
-    <div class="mb-3 form-group">
+    <div class="mb-3">
       <label [attr.for]="name" class="form-label">{{ displayName | abpLocalization }} </label>
       <input
         type="text"

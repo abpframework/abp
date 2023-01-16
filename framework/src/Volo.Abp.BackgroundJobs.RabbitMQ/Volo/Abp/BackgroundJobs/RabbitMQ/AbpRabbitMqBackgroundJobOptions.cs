@@ -19,6 +19,8 @@ public class AbpRabbitMqBackgroundJobOptions
     /// Default value: "AbpBackgroundJobsDelayed."
     /// </summary>
     public string DefaultDelayedQueueNamePrefix { get; set; }
+    
+    public ushort? PrefetchCount { get; set; }
 
     public AbpRabbitMqBackgroundJobOptions()
     {

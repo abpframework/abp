@@ -9,7 +9,7 @@
     "DisplayName:Abp.Mailing.Smtp.Password": "Senha",
     "DisplayName:Abp.Mailing.Smtp.Domain": "Domínio",
     "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Habilitar SSL",
-    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Use credenciais padrão",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Usar credenciais padrão",
     "Description:Abp.Mailing.DefaultFromAddress": "O endereço de origem padrão",
     "Description:Abp.Mailing.DefaultFromDisplayName": "O nome de exibição padrão",
     "Description:Abp.Mailing.Smtp.Host": "O nome ou endereço IP do host usado para transações SMTP.",

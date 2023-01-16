@@ -1,16 +1,19 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Public.GlobalResources;
 
+[RequiresFeature(CmsKitFeatures.GlobalResourceEnable)]
 [RequiresGlobalFeature(typeof(GlobalResourcesFeature))]
 [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
 [Route("api/cms-kit-public/global-resources")]
-public class GlobalResourcePublicController: CmsKitPublicControllerBase, IGlobalResourcePublicAppService
+public class GlobalResourcePublicController : CmsKitPublicControllerBase, IGlobalResourcePublicAppService
 {
     private readonly IGlobalResourcePublicAppService _globalResourcePublicAppService;
 
@@ -18,14 +21,14 @@ public class GlobalResourcePublicController: CmsKitPublicControllerBase, IGlobal
     {
         _globalResourcePublicAppService = globalResourcePublicAppService;
     }
-    
+
     [HttpGet]
     [Route("script")]
     public Task<GlobalResourceDto> GetGlobalScriptAsync()
     {
         return _globalResourcePublicAppService.GetGlobalScriptAsync();
     }
-    
+
     [HttpGet]
     [Route("style")]
     public Task<GlobalResourceDto> GetGlobalStyleAsync()

@@ -1,6 +1,7 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Moment;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -23,6 +24,15 @@ public class AbpAspNetCoreMvcUiPackagesModule : AbpModule
                 new NameValue("zh-Hant", "zh-TW"));
 
             options.AddLanguageFilesMapOrUpdate(BootstrapDatepickerScriptContributor.PackageName,
+                new NameValue("zh-Hans", "zh-CN"),
+                new NameValue("zh-Hant", "zh-TW"));
+            
+            //moment
+            options.AddLanguagesMapOrUpdate(MomentScriptContributor.PackageName,
+                new NameValue("zh-Hans", "zh-CN"),
+                new NameValue("zh-Hant", "zh-TW"));
+
+            options.AddLanguageFilesMapOrUpdate(MomentScriptContributor.PackageName,
                 new NameValue("zh-Hans", "zh-CN"),
                 new NameValue("zh-Hant", "zh-TW"));
 
