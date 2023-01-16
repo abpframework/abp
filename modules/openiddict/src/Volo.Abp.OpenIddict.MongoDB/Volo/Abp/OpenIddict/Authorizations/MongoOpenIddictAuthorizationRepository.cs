@@ -74,7 +74,7 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
 
         await DeleteManyAsync(await (await GetMongoQueryableAsync(cancellationToken))
             .Where(x => x.CreationDate < date)
-            .Where(x => x.Status == OpenIddictConstants.Statuses.Valid || (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && !tokens.Contains(x.Id)))
+            .Where(x => x.Status != OpenIddictConstants.Statuses.Valid || (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && !tokens.Contains(x.Id)))
             .ToListAsync(cancellationToken: cancellationToken), cancellationToken: cancellationToken);
     }
 }
