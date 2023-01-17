@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization;
@@ -53,9 +54,8 @@ public class LanguageInfo : ILanguageInfo
         DisplayName = !displayName.IsNullOrWhiteSpace()
             ? displayName
             : cultureName;
-
-        var culture = new System.Globalization.CultureInfo(cultureName);
         
-        ShortDisplayName = culture.TwoLetterISOLanguageName;
+        ShortDisplayName = new CultureInfo(cultureName)
+            .TwoLetterISOLanguageName;
     }
 }
