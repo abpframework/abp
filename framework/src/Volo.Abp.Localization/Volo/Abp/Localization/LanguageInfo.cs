@@ -15,9 +15,13 @@ public class LanguageInfo : ILanguageInfo
     [NotNull]
     public virtual string DisplayName { get; protected set; }
 
+    [NotNull]
+    public virtual string ShortDisplayName { get; protected set; }
+
     [CanBeNull]
     public virtual string FlagIcon { get; set; }
 
+    
     protected LanguageInfo()
     {
 
@@ -49,5 +53,9 @@ public class LanguageInfo : ILanguageInfo
         DisplayName = !displayName.IsNullOrWhiteSpace()
             ? displayName
             : cultureName;
+
+        var culture = new System.Globalization.CultureInfo(cultureName);
+        
+        ShortDisplayName = culture.TwoLetterISOLanguageName;
     }
 }
