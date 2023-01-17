@@ -18,7 +18,7 @@ public class Startup
             var plugDllInPath = Path.Combine(hostEnvironment.ContentRootPath,
                 @"..\..\..\..\..\Volo.Abp.AspNetCore.Mvc.PlugIn\bin\Debug\net6.0\");
 #else
-            plugDllInPath = Path.Combine(_env.ContentRootPath,
+            var plugDllInPath = Path.Combine(hostEnvironment.ContentRootPath,
                 @"..\..\..\..\..\Volo.Abp.AspNetCore.Mvc.PlugIn\bin\Release\net6.0\");
 #endif
 
