@@ -17,7 +17,7 @@ public class LanguageInfo : ILanguageInfo
     public virtual string DisplayName { get; protected set; }
 
     [NotNull]
-    public virtual string ShortDisplayName { get; protected set; }
+    public virtual string TwoLetterISOLanguageName { get; protected set; }
 
     [CanBeNull]
     public virtual string FlagIcon { get; set; }
@@ -55,7 +55,7 @@ public class LanguageInfo : ILanguageInfo
             ? displayName
             : cultureName;
         
-        ShortDisplayName = new CultureInfo(cultureName)
+        TwoLetterISOLanguageName = new CultureInfo(cultureName)
             .TwoLetterISOLanguageName;
     }
 }
