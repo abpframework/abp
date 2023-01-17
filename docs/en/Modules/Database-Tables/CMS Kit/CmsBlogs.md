@@ -1,4 +1,4 @@
-## CmsBlogs Table
+## CmsBlogs
 
 CmsBlogs table is used to store blogs.
 
