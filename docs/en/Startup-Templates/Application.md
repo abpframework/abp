@@ -11,7 +11,7 @@ This document explains **the solution structure** and projects in details. If yo
 
 ## How to Start With?
 
-You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can directly create & download from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
+You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
 
 First, install the ABP CLI if you haven't installed it before:
 
