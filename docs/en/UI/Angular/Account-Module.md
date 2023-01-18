@@ -61,14 +61,14 @@ npm install @volo/abp.ng.account
 
 Open the `app.module.ts` and add `AccountPublicConfigModule.forRoot()` to the imports array as shown below:
 
-> Ensure that the `Account Layout Module` has been added if you are using the Lepton X theme. If you miss the step, you will get an error message that says `Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "AccountLayoutModule.forRoot()" to your app.module configuration.` when you try to access the account pages. Otherwise, you can skip adding `AccountLayoutModule` step.
+> Ensure that the `Account Layout Module` has been added if you are using the Lepton X theme. If you miss the step, you will get an error message that says `Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "AccountLayoutModule.forRoot()" to your app.module configuration.` when you try to access the account pages. Otherwise, you can skip adding the `AccountLayoutModule` step.
  
 
 ```js
 // app.module.ts
 
 import { AccountPublicConfigModule } from '@volo/abp.ng.account/public/config';
-// if you are using Lepton X and want to use you should add AccountLayoutModule
+// if you are using or want to use Lepton X, you should add AccountLayoutModule
 // import { AccountLayoutModule } from '@volosoft/abp.ng.theme.lepton-x/account' 
 
 //...
