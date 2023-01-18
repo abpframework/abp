@@ -22,7 +22,7 @@ All features are individually usable. If you disable a feature, it completely di
 
 ## Pre Requirements
 -  This module depends on [BlobStoring](../../Blob-Storing.md) module for keeping media content.
-> Make sure `BlobStoring` module is installed and at leats one provider is configured properly. For more information, check the [documentation](../../Blob-Storing.md).
+> Make sure `BlobStoring` module is installed and at least one provider is configured properly. For more information, check the [documentation](../../Blob-Storing.md).
 
 - CMS Kit uses [distributed cache](../../Caching.md) for responding faster. 
 > Using a distributed cache, such as [Redis](../../Redis-Cache.md), is highly recommended for data consistency in distributed/clustered deployments.

@@ -54,6 +54,7 @@
     "Version": "Εκδοχή",
     "LanguageCode": "Κωδικός γλώσσας",
     "FileName": "Όνομα αρχείου",
-    "LastCachedTime": "Χρόνος προσωρινής αποθήκευσης"
+    "LastCachedTime": "Χρόνος προσωρινής αποθήκευσης",
+    "Project": "Εργο"
   }
 }

@@ -1,5 +1,4 @@
 export * from './array-utils';
-export * from './auth-utils';
 export * from './common-utils';
 export * from './date-utils';
 export * from './environment-utils';

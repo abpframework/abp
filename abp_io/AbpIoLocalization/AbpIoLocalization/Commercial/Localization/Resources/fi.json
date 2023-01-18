@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Voinko muuttaa organisaationi rekisteröityneitä kehittäjiä tulevaisuudessa?",
     "ChangingDevelopersExplanation": "Uusien kehittäjien lisäämisen lisenssiin lisäksi voit myös muuttaa olemassa olevia kehittäjiä (voit poistaa kehittäjän ja lisätä uuden samalle paikalle) ilman lisäkustannuksia.",
     "WhenShouldIRenewMyLicense": "Milloin minun pitäisi uusia lisenssini?",
-    "WhenShouldIRenewMyLicenseExplanation": "Jos uusit lisenssisi <strong>1 kuukauden</strong> kuluessa lisenssin vanhenemisesta, seuraavat alennukset sovelletaan: Team License {0} % alennus, Business License {1} % alennus, Enterprise License {2} % alennus . Jos uusit lisenssisi <strong>1 kuukauden</strong> lisenssin päättymispäivän jälkeen, uusimishinta on sama kuin lisenssin ostohinta, eikä uusimisesta saa alennusta.",
+    "WhenShouldIRenewMyLicenseExplanation": "Jos uusit lisenssisi <strong>1 kuukauden</strong> kuluessa lisenssin vanhenemisesta, seuraavat alennukset sovelletaan: Team License {0} ; Business License {1} ; Enterprise License {2} ; . Jos uusit lisenssisi <strong>1 kuukauden</strong> lisenssin päättymispäivän jälkeen, uusimishinta on sama kuin lisenssin ostohinta, eikä uusimisesta saa alennusta.",
     "TrialPlan": "Onko sinulla kokeilusuunnitelma?",
     "DoYouAcceptBankWireTransfer": "Hyväksytkö pankkisiirron?",
     "DoYouAcceptBankWireTransferExplanation": "Kyllä, hyväksymme pankkisiirron.<br />Kun olet lähettänyt lisenssimaksun pankkisiirrolla, lähetä meille sähköposti osoitteeseen accounting@abp.io kuittisi ja pyydetty lisenssityyppi. Kansainväliset pankkitilitietomme:",
@@ -360,7 +360,7 @@
     "Next": "Seuraava",
     "StartTrial": "Aloita ilmainen kokeilujaksoni",
     "ContactUsIssues": "Ota yhteyttä, jos sinulla on ongelmia",
-    "TrialActivatedWarning": "Hyvä {0}, käyttäjällä on oikeus vain yhteen ilmaiseen kokeilujaksoon. Olet jo käyttänyt kokeilujaksosi.",
+    "TrialActivatedWarning": "Käyttäjällä on oikeus vain yhteen ilmaiseen kokeilujaksoon. Olet jo käyttänyt kokeilujaksosi.",
     "SaveAndDownload": "Tallenna ja lataa",
     "CompanyNameValidationMessage": "Yrityksen nimi on liian pitkä!",
     "AddressValidationMessage": "Osoite on liian pitkä!",
@@ -373,7 +373,7 @@
     "TrialLicenseModelInvalidErrorMessage": "Yksi seuraavista kentistä on virheellinen: maan nimi, yrityksen koko, toimiala tai käyttötarkoitus.",
     "Trial": "Oikeudenkäynti",
     "Purchased": "Osti",
-    "PurchaseLicense": "Osta Lisenssi",
+    "PurchaseLicense": "Osta {0} lisenssi",
     "PurchaseTrialLicenseMessage": "Lisenssisi viimeinen voimassaolopäivä on {0}. <br> Jos haluat jatkaa ilmaisen kokeilujakson aikana luomiesi projektien käyttöä, sinun on vaihdettava lisenssiavaimet <code>appsettings.secrets.json</code>-tiedostoissasi. Tässä on lisenssiavaimesi:",
     "TrialLicenseExpireMessage": "Käytät kokeiluversiota, ja kokeilukäyttölupasi vanhenee {0}.",
     "TryForFree": "Kokeile ilmaiseksi",
@@ -381,6 +381,8 @@
     "CommercialNewsletterConfirmationMessage": "Hyväksyn <a href=\"https://commercial.abp.io/TermsConditions\">käyttöehdot</a> ja <a href=\"https://commercial.abp.io/Privacy\">tietosuojakäytännön </a>.",
     "ContinueWithNewOrganization": "Jatka uudessa organisaatiossa",
     "RenewLicenseEarly": "Jos uusin ajokorttini etuajassa, saanko koko vuoden?",
-    "RenewLicenseEarylExplanation": "Kun uusit lisenssisi ennen lisenssin vanhenemispäivää, lisenssin voimassaolopäivään lisätään 1 vuosi. Jos lisenssisi vanhenee esimerkiksi {0}-06-06 ja uusit sen {0}-01-01, uusi lisenssisi päättymispäivä on {1}-06-06."
+    "RenewLicenseEarylExplanation": "Kun uusit lisenssisi ennen lisenssin vanhenemispäivää, lisenssin voimassaolopäivään lisätään 1 vuosi. Jos lisenssisi vanhenee esimerkiksi {0}-06-06 ja uusit sen {0}-01-01, uusi lisenssisi päättymispäivä on {1}-06-06.",
+    "discountForYears": "{0}% de remise pendant {1} an(s)",
+    "BlackFridayDiscount": "Black Friday -alennus"
   }
 }

@@ -22,6 +22,16 @@ public class AbpConfigurationBuilderOptions
     public string FileName { get; set; } = "appsettings";
 
     /// <summary>
+    /// Whether the file is optional, Default value: true.
+    /// </summary>
+    public bool Optional { get; set; } = true;
+
+    /// <summary>
+    /// Whether the configuration should be reloaded if the file changes, Default value: true.
+    /// </summary>
+    public bool ReloadOnChange { get; set; } = true;
+
+    /// <summary>
     /// Environment name. Generally used "Development", "Staging" or "Production".
     /// </summary>
     public string EnvironmentName { get; set; }

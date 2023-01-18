@@ -1,8 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.EventBus.Distributed;
 
-namespace Volo.Abp.EventBus.Boxes;
+namespace Volo.Abp.EventBus.Distributed;
 
 public interface IInboxProcessor
 {

@@ -4,7 +4,6 @@ import type { LanguageInfo } from '../../../localization/models';
 import type { NameValue } from '../../../models';
 
 export interface ApplicationAuthConfigurationDto {
-  policies: Record<string, boolean>;
   grantedPolicies: Record<string, boolean>;
 }
 
@@ -20,6 +19,11 @@ export interface ApplicationConfigurationDto {
   timing: TimingDto;
   clock: ClockDto;
   objectExtensions: ObjectExtensionsDto;
+  extraProperties: Record<string, object>;
+}
+
+export interface ApplicationConfigurationRequestOptions {
+  includeLocalizationResources: boolean;
 }
 
 export interface ApplicationFeatureConfigurationDto {
@@ -32,11 +36,26 @@ export interface ApplicationGlobalFeatureConfigurationDto {
 
 export interface ApplicationLocalizationConfigurationDto {
   values: Record<string, Record<string, string>>;
+  resources: Record<string, ApplicationLocalizationResourceDto>;
   languages: LanguageInfo[];
   currentCulture: CurrentCultureDto;
   defaultResourceName?: string;
   languagesMap: Record<string, NameValue[]>;
   languageFilesMap: Record<string, NameValue[]>;
+}
+
+export interface ApplicationLocalizationDto {
+  resources: Record<string, ApplicationLocalizationResourceDto>;
+}
+
+export interface ApplicationLocalizationRequestDto {
+  cultureName: string;
+  onlyDynamics: boolean;
+}
+
+export interface ApplicationLocalizationResourceDto {
+  texts: Record<string, string>;
+  baseResources: string[];
 }
 
 export interface ApplicationSettingConfigurationDto {

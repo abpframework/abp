@@ -1,7 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BlazoriseUI;
+using Volo.Abp.Identity.Localization;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -38,6 +41,15 @@ public class AbpIdentityBlazorModule : AbpModule
         Configure<AbpRouterOptions>(options =>
         {
             options.AdditionalAssemblies.Add(typeof(AbpIdentityBlazorModule).Assembly);
+        });
+        
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<IdentityResource>()
+                .AddBaseTypes(
+                    typeof(AbpUiResource)
+                );
         });
     }
 

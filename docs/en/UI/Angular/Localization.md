@@ -138,7 +138,7 @@ See an example:
           ],
         },
         {
-          culture: 'de-DE',
+          culture: 'de',
           resources: [
             {
               resourceName: 'MyProjectName',

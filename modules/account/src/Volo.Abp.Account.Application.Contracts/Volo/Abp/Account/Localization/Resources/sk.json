@@ -36,6 +36,7 @@
     "PersonalSettingsSaved": "Osobné nastavenia boli uložené",
     "PasswordChanged": "Heslo bolo zmenené",
     "NewPasswordConfirmFailed": "Prosím potvrďte nové heslo.",
+    "NewPasswordSameAsOld": "Nové heslo musí byť odlišné od aktuálneho.",
     "Manage": "Spravovať",
     "MyAccount": "Môj účet",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Je povolená samoregistrácia",

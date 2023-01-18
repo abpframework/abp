@@ -14,7 +14,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisPackageVersion)" />
-        <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="$(MicrosoftAspNetCorePackageVersion)" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.8" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftPackageVersion)" />
     </ItemGroup>
 

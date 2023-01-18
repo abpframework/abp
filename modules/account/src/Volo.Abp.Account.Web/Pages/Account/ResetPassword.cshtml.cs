@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
@@ -43,9 +44,21 @@ public class ResetPasswordModel : AccountPageModel
     [DisableAuditing]
     public string ConfirmPassword { get; set; }
 
-    public virtual Task<IActionResult> OnGetAsync()
+    public bool InvalidToken { get; set; }
+
+    public virtual async Task<IActionResult> OnGetAsync()
     {
-        return Task.FromResult<IActionResult>(Page());
+        ValidateModel();
+
+        InvalidToken = !await AccountAppService.VerifyPasswordResetTokenAsync(
+            new VerifyPasswordResetTokenInput
+            {
+                UserId = UserId,
+                ResetToken = ResetToken
+            }
+        );
+
+        return Page();
     }
 
     public virtual async Task<IActionResult> OnPostAsync()

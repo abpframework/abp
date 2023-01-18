@@ -54,6 +54,7 @@
     "Version": "版本",
     "LanguageCode": "語言代碼",
     "FileName": "文檔名稱",
-    "LastCachedTime": "緩存時間"
+    "LastCachedTime": "緩存時間",
+    "Project": "项目"
   }
 }

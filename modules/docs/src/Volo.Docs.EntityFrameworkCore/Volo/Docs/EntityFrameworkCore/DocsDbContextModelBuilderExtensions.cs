@@ -21,7 +21,7 @@ namespace Volo.Docs.EntityFrameworkCore
 
             builder.Entity<Project>(b =>
             {
-                b.ToTable(DocsDbProperties.DbTablePrefix + "Projects", DocsDbProperties.DbSchema);
+                b.ToTable(AbpDocsDbProperties.DbTablePrefix + "Projects", AbpDocsDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -37,7 +37,7 @@ namespace Volo.Docs.EntityFrameworkCore
 
             builder.Entity<Document>(b =>
             {
-                b.ToTable(DocsDbProperties.DbTablePrefix + "Documents", DocsDbProperties.DbSchema);
+                b.ToTable(AbpDocsDbProperties.DbTablePrefix + "Documents", AbpDocsDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -61,7 +61,7 @@ namespace Volo.Docs.EntityFrameworkCore
 
             builder.Entity<DocumentContributor>(b =>
             {
-                b.ToTable(DocsDbProperties.DbTablePrefix + "DocumentContributors", DocsDbProperties.DbSchema);
+                b.ToTable(AbpDocsDbProperties.DbTablePrefix + "DocumentContributors", AbpDocsDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 

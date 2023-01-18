@@ -1,4 +1,4 @@
-$(function (){
+$(function () {
     var l = abp.localization.getResource("CmsKit");
 
     var pagesService = volo.cmsKit.admin.pages.pageAdmin;
@@ -17,7 +17,7 @@ $(function (){
         scrollCollapse: true,
         scrollX: true,
         ordering: true,
-        order: [[3, "desc"]],
+        order: [[4, "desc"]],
         ajax: abp.libs.datatables.createAjax(pagesService.getList, getFilter),
         columnDefs: [
             {
@@ -46,6 +46,21 @@ $(function (){
                                         abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
+                        },
+                        {
+                            text: l('SetAsHomePage'),
+                            visible: abp.auth.isGranted('CmsKit.Pages.SetAsHomePage'),
+                            action: function (data) {
+                                pagesService
+                                    .setAsHomePage(data.record.id)
+                                    .then(function () {
+
+                                        _dataTable.ajax.reload();
+                                        data.record.isHomePage ?
+                                            abp.notify.warn(l('RemovedSettingAsHomePage'))
+                                            : abp.notify.success(l('CompletedSettingAsHomePage'));
+                                    });
+                            }
                         }
                     ]
                 }
@@ -59,6 +74,11 @@ $(function (){
                 title: l("Slug"),
                 orderable: true,
                 data: "slug"
+            },
+            {
+                title: l("IsHomePage"),
+                orderable: true,
+                data: "isHomePage"
             },
             {
                 title: l("CreationTime"),

@@ -60,6 +60,6 @@ internal class AbpApplicationWithInternalServiceProvider : AbpApplicationBase, I
     public override void Dispose()
     {
         base.Dispose();
-        ServiceScope.Dispose();
+        ServiceScope?.Dispose();
     }
 }

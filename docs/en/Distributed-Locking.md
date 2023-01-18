@@ -101,6 +101,27 @@ namespace AbpDemo
 * `timeout` (`TimeSpan`): A timeout value to wait to obtain the lock. Default value is `TimeSpan.Zero`, which means it doesn't wait if the lock is already owned by another application.
 * `cancellationToken`: A cancellation token that can be triggered later to cancel the operation.
 
+### Configuration
+
+#### AbpDistributedLockOptions
+
+`AbpDistributedLockOptions` is the main options class to configure the distributed locking.
+
+**Example: Set the distributed lock key prefix for the application**
+
+```csharp
+Configure<AbpDistributedLockOptions>(options =>
+{
+    options.KeyPrefix = "MyApp1";
+});
+```
+
+> Write that code inside the `ConfigureServices` method of your [module class](Module-Development-Basics.md).
+
+##### Available Options
+
+* KeyPrefix (string, default: null): Specify the lock name prefix.
+
 ### Using DistributedLock Library's API
 
 ABP's `IAbpDistributedLock` service is very limited and mainly designed to be internally used by the ABP Framework. For your own applications, you can use the DistributedLock library's own API. See its [own documentation](https://github.com/madelson/DistributedLock) for details.

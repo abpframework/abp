@@ -140,7 +140,7 @@
     "DomainDrivenDesign": "Alan Odaklı Tasarım",
     "CrossCuttingConcerns": "Cross Cutting Concerns",
     "AbpCommunity": "ABP Topluluğu",
-    "Footer_GithubStarCount": "{0} Star on GitHub",
+    "Footer_GithubStarCount": "Github'da {0} Yıldız",
     "Footer_NugetDownloadCount": "{0} NuGet indirme",
     "AbpDescription":  "ABP, AspNet Core tabanlı web uygulaması geliştirmeye odaklanan açık kaynaklı bir uygulama çerçevesidir. Kendinizi tekrar etmeyin, kendi iş kodunuza odaklanın.",
     "Layout_AbpFramework_MetaTitle": "ABP Framework - Açık Kaynak Web Uygulama Çerçevesi",
@@ -164,6 +164,8 @@
     "Books": "Kitaplar",
     "ABPDiscordServer": "ABP Discord Sunucusu",
     "ABPCommunityTalks": "ABP Topluluk Konuşmaları",
-    "ABPCommunityPosts": "ABP Topluluk Gönderileri"
+    "ABPCommunityPosts": "ABP Topluluk Gönderileri",
+    "WelcomeFallCampaign": "Hoş Geldin Sonbahar Kampanyası!",
+    "GiveAwayForNewPurchases": "Yeni alımlar için Uygulama Geliştirme Sınıfı Eğitimi hediye edilecektir!"
   }
 }

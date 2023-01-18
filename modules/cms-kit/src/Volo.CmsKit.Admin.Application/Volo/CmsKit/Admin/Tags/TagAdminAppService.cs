@@ -1,18 +1,21 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Localization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Admin.Tags;
 
+[RequiresFeature(CmsKitFeatures.TagEnable)]
 [Authorize(CmsKitAdminPermissions.Tags.Default)]
 [RequiresGlobalFeature(typeof(TagsFeature))]
 public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService

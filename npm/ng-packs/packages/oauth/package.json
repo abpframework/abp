@@ -1,0 +1,20 @@
+{
+  "name": "@abp/ng.oauth",
+  "version": "7.0.0",
+  "homepage": "https://abp.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git"
+  },
+  "dependencies": {
+    "@abp/ng.core": "~7.0.0",
+    "@abp/utils": "~7.0.0",
+    "angular-oauth2-oidc": "^15.0.1",
+    "just-clone": "^6.1.1",
+    "just-compare": "^1.4.0",
+    "tslib": "^2.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,11 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Application;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Domain.Entities.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.TestApp.Application.Dto;
+using Volo.Abp.TestApp.Testing;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.TestApp;
@@ -22,6 +27,10 @@ public class TestAppModule : AbpModule
     {
         ConfigureAutoMapper();
         ConfigureDistributedEventBus();
+        
+        context.Services.Replace(ServiceDescriptor.Singleton<IDistributedCache, TestMemoryDistributedCache>());
+        context.Services.AddEntityCache<Product, Guid>();
+        context.Services.AddEntityCache<Product, ProductCacheItem, Guid>();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

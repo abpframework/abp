@@ -8,25 +8,31 @@ import {
   Tree,
   url,
 } from '@angular-devkit/schematics';
-import { GenerateLibSchema } from './models/generate-lib-schema';
+import * as ts from 'typescript';
+
+import { join, normalize } from '@angular-devkit/core';
 import {
+  addImportToModule,
+  addRouteDeclarationToModule,
   applyWithOverwrite,
+  camel,
+  getFirstApplication,
   getWorkspace,
+  InsertChange,
   interpolate,
   isLibrary,
   JSONFile,
   kebab,
+  pascal,
+  readWorkspaceSchema,
   resolveProject,
   updateWorkspace,
 } from '../../utils';
-import * as cases from '../../utils/text';
-import { Exception } from '../../enums';
-import { join, normalize } from '@angular-devkit/core';
-import {
-  ProjectDefinition,
-  WorkspaceDefinition,
-} from '@angular-devkit/core/src/workspace/definitions';
+import { ProjectDefinition, WorkspaceDefinition } from '../../utils/angular/workspace';
 import { addLibToWorkspaceFile } from '../../utils/angular-schematic/generate-lib';
+import * as cases from '../../utils/text';
+import { Exception } from '../../enums/exception';
+import { GenerateLibSchema } from './models/generate-lib-schema';
 
 export default function (schema: GenerateLibSchema) {
   return async (tree: Tree) => {
@@ -120,6 +126,8 @@ export function addLibToWorkspaceIfNotExist(name: string, packagesDir: string): 
         : noop(),
       addLibToWorkspaceFile(projectRoot, packageName),
       updateTsConfig(packageName, pathImportLib),
+      importConfigModuleToDefaultProjectAppModule(workspace, packageName),
+      addRoutingToAppRoutingModule(workspace, packageName),
     ]);
   };
 }
@@ -134,7 +142,9 @@ export function updateTsConfig(packageName: string, path: string) {
 
     const file = new JSONFile(host, tsConfig);
     const jsonPath = ['compilerOptions', 'paths', packageName];
+    const jsonPathConfig = ['compilerOptions', 'paths', `${packageName}/config`];
     file.modify(jsonPath, [`${path}/src/public-api.ts`]);
+    file.modify(jsonPathConfig, [`${path}/config/src/public-api.ts`]);
   };
 }
 
@@ -154,3 +164,86 @@ export async function createLibSecondaryEntry(tree: Tree, options: GenerateLibSc
     ]),
   ]);
 }
+
+export function importConfigModuleToDefaultProjectAppModule(
+  workspace: WorkspaceDefinition,
+  packageName: string,
+) {
+  return (tree: Tree) => {
+    const projectName = readWorkspaceSchema(tree).defaultProject || getFirstApplication(tree).name!;
+    const project = workspace.projects.get(projectName);
+    const appModulePath = `${project?.sourceRoot}/app/app.module.ts`;
+    const appModule = tree.read(appModulePath);
+    if (!appModule) {
+      return;
+    }
+    const appModuleContent = appModule.toString();
+    if (appModuleContent.includes(`${camel(packageName)}ConfigModule`)) {
+      return;
+    }
+
+    const forRootStatement = `${pascal(packageName)}ConfigModule.forRoot()`;
+    const text = tree.read(appModulePath);
+    if (!text) {
+      return;
+    }
+    const sourceText = text.toString();
+    if (sourceText.includes(forRootStatement)) {
+      return;
+    }
+    const source = ts.createSourceFile(appModulePath, sourceText, ts.ScriptTarget.Latest, true);
+
+    const changes = addImportToModule(
+      source,
+      appModulePath,
+      forRootStatement,
+      `${kebab(packageName)}/config`,
+    );
+    const recorder = tree.beginUpdate(appModulePath);
+    for (const change of changes) {
+      if (change instanceof InsertChange) {
+        recorder.insertLeft(change.pos, change.toAdd);
+      }
+    }
+    tree.commitUpdate(recorder);
+
+    return;
+  };
+}
+
+export function addRoutingToAppRoutingModule(workspace: WorkspaceDefinition, packageName: string) {
+  return (tree: Tree) => {
+    const projectName = readWorkspaceSchema(tree).defaultProject || getFirstApplication(tree).name!;
+    const project = workspace.projects.get(projectName);
+    const appRoutingModulePath = `${project?.sourceRoot}/app/app-routing.module.ts`;
+    const appRoutingModule = tree.read(appRoutingModulePath);
+    if (!appRoutingModule) {
+      return;
+    }
+    const appRoutingModuleContent = appRoutingModule.toString();
+    const moduleName = `${pascal(packageName)}Module`;
+    if (appRoutingModuleContent.includes(moduleName)) {
+      return;
+    }
+
+    const source = ts.createSourceFile(
+      appRoutingModulePath,
+      appRoutingModuleContent,
+      ts.ScriptTarget.Latest,
+      true,
+    );
+    const importPath = `${kebab(packageName)}`;
+    const importStatement = `() => import('${importPath}').then(m => m.${moduleName}.forLazy())`;
+    const routeDefinition = `{ path: '${kebab(packageName)}', loadChildren: ${importStatement} }`;
+    const change = addRouteDeclarationToModule(source, `${kebab(packageName)}`, routeDefinition);
+
+    const recorder = tree.beginUpdate(appRoutingModulePath);
+    if (change instanceof InsertChange) {
+      recorder.insertLeft(change.pos, change.toAdd);
+    }
+    tree.commitUpdate(recorder);
+
+    return;
+  };
+}
+
