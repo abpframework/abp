@@ -14,6 +14,7 @@
     "HasException": "存在異常",
     "IpAddress": "IP地址",
     "Time": "時間",
+    "Date": "日期",
     "Duration": "持續時間",
     "Detail": "詳情",
     "Overall": "總體",

@@ -14,6 +14,7 @@
     "HasException": "存在异常",
     "IpAddress": "IP地址",
     "Time": "时间",
+    "Date": "日期",
     "Duration": "持续时间",
     "Detail": "详情",
     "Overall": "总体",
