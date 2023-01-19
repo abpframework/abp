@@ -1,4 +1,4 @@
-## CmsPages Table
+## CmsPages
 
 CmsPages Table is used to store pages.
 
