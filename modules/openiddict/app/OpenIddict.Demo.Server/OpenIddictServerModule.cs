@@ -2,6 +2,7 @@
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Demo.Server.EntityFrameworkCore;
+using OpenIddict.Demo.Server.ExtensionGrants;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -21,6 +22,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.ExtensionGrantTypes;
 using Volo.Abp.OpenIddict.WildcardDomains;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -104,6 +106,11 @@ public class OpenIddictServerModule : AbpModule
                 var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
                 builder.AddEncryptionCertificate(certificate);
             }
+
+            builder.Configure(openIddictServerOptions =>
+            {
+                openIddictServerOptions.GrantTypes.Add(MyTokenExtensionGrant.ExtensionGrantName);
+            });
         });
 
         PreConfigure<AbpOpenIddictWildcardDomainOptions>(options =>
@@ -140,6 +147,11 @@ public class OpenIddictServerModule : AbpModule
         Configure<AbpMultiTenancyOptions>(options =>
         {
             options.IsEnabled = true;
+        });
+
+        Configure<AbpOpenIddictExtensionGrantsOptions>(options =>
+        {
+            options.Grants.Add(MyTokenExtensionGrant.ExtensionGrantName, new MyTokenExtensionGrant());
         });
     }
 

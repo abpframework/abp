@@ -209,7 +209,7 @@ public class MyProjectNameBlazorHostModule : AbpModule
             Configure<AppUrlOptions>(options =>
             {
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-                options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
+                options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ?? Array.Empty<string>());
             });
 
 #if DEBUG
@@ -217,7 +217,7 @@ public class MyProjectNameBlazorHostModule : AbpModule
 #endif
     }
 
-    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var env = context.GetEnvironment();
         var app = context.GetApplicationBuilder();

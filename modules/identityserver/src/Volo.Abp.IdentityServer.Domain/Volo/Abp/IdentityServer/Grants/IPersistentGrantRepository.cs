@@ -30,6 +30,11 @@ public interface IPersistentGrantRepository : IBasicRepository<PersistedGrant, G
         CancellationToken cancellationToken = default
     );
 
+    Task DeleteExpirationAsync(
+        DateTime maxExpirationDate,
+        CancellationToken cancellationToken = default
+    );
+
     Task DeleteAsync(
         string subjectId = null,
         string sessionId = null,

@@ -4,8 +4,9 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.csproj"/>
     </ItemGroup>
