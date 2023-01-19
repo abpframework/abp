@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.MongoDB",
-  "hash": "48e745c1f76b95a5e23961cf9eead6b0",
+  "hash": "4487b4df01fcd98b0ce2e7d2d11c9ba5",
   "contents": [
     {
       "namespace": "Volo.Blogging.MongoDB",
@@ -21,6 +21,50 @@
           "name": "AbpUsersMongoDbModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "BloggingMongoDbModule",
       "summary": null
@@ -29,6 +73,12 @@
       "namespace": "Volo.Blogging.MongoDB",
       "connectionStringName": "Blogging",
       "databaseCollections": [
+        {
+          "entityFullName": "Volo.Blogging.Blogs.Blog",
+          "contentType": "databaseCollection",
+          "name": "BlgBlogs",
+          "summary": null
+        },
         {
           "entityFullName": "Volo.Blogging.Comments.Comment",
           "contentType": "databaseCollection",
@@ -42,9 +92,9 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Blogging.Blogs.Blog",
+          "entityFullName": "Volo.Blogging.Tagging.Tag",
           "contentType": "databaseCollection",
-          "name": "BlgBlogs",
+          "name": "BlgTags",
           "summary": null
         },
         {
@@ -52,12 +102,26 @@
           "contentType": "databaseCollection",
           "name": "BlgPosts",
           "summary": null
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpMongoDbContext",
+          "namespace": "Volo.Abp.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "fullName": "Volo.Abp.MongoDB.IAbpMongoDbContext"
         },
         {
-          "entityFullName": "Volo.Blogging.Tagging.Tag",
-          "contentType": "databaseCollection",
-          "name": "BlgTags",
-          "summary": null
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "IBloggingMongoDbContext",
+          "namespace": "Volo.Blogging.MongoDB",
+          "declaringAssemblyName": "Volo.Blogging.MongoDB",
+          "fullName": "Volo.Blogging.MongoDB.IBloggingMongoDbContext"
         }
       ],
       "contentType": "mongoDbContext",

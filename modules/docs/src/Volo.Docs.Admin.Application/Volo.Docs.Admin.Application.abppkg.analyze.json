@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Admin.Application",
-  "hash": "f2c7a959656bed7b07bbcea5a65f9188",
+  "hash": "9f9f4df9fb9f426b7c115abc968b99d1",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
@@ -31,6 +31,50 @@
           "name": "AbpDddApplicationModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "DocsAdminApplicationModule",
       "summary": null
@@ -40,61 +84,74 @@
       "baseClass": {
         "name": "ApplicationService",
         "namespace": "Volo.Abp.Application.Services",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Application"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Application",
+        "fullName": "Volo.Abp.Application.Services.ApplicationService"
       },
       "implementingInterfaces": [
         {
           "name": "IApplicationService",
           "namespace": "Volo.Abp.Application.Services",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
         },
         {
           "name": "IRemoteService",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
         },
         {
           "name": "IAvoidDuplicateCrossCuttingConcerns",
           "namespace": "Volo.Abp.Aspects",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
         },
         {
           "name": "IValidationEnabled",
           "namespace": "Volo.Abp.Validation",
-          "declaringAssemblyName": "Volo.Abp.Validation"
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
         },
         {
           "name": "IUnitOfWorkEnabled",
           "namespace": "Volo.Abp.Uow",
-          "declaringAssemblyName": "Volo.Abp.Uow"
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
         },
         {
           "name": "IAuditingEnabled",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
         },
         {
           "name": "IGlobalFeatureCheckingEnabled",
           "namespace": "Volo.Abp.GlobalFeatures",
-          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
         },
         {
           "name": "ITransientDependency",
           "namespace": "Volo.Abp.DependencyInjection",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
         },
         {
           "name": "IProjectAdminAppService",
           "namespace": "Volo.Docs.Admin.Projects",
-          "declaringAssemblyName": "Volo.Docs.Admin.Application.Contracts"
+          "declaringAssemblyName": "Volo.Docs.Admin.Application.Contracts",
+          "fullName": "Volo.Docs.Admin.Projects.IProjectAdminAppService"
         }
       ],
       "methods": [
         {
           "returnType": "PagedResultDto<ProjectDto>",
-          "isAsync": true,
           "name": "GetListAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "PagedAndSortedResultRequestDto",
@@ -105,9 +162,12 @@
         },
         {
           "returnType": "ProjectDto",
-          "isAsync": true,
           "name": "GetAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -118,9 +178,12 @@
         },
         {
           "returnType": "ProjectDto",
-          "isAsync": true,
           "name": "CreateAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "CreateProjectDto",
@@ -131,9 +194,12 @@
         },
         {
           "returnType": "ProjectDto",
-          "isAsync": true,
           "name": "UpdateAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -149,9 +215,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "DeleteAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -162,9 +231,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "ReindexAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "ReindexInput",
@@ -175,16 +247,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "ReindexAllAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "List<ProjectWithoutDetailsDto>",
-          "isAsync": true,
           "name": "GetListWithoutDetailsAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         }
       ],
@@ -197,61 +275,74 @@
       "baseClass": {
         "name": "ApplicationService",
         "namespace": "Volo.Abp.Application.Services",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Application"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Application",
+        "fullName": "Volo.Abp.Application.Services.ApplicationService"
       },
       "implementingInterfaces": [
         {
           "name": "IApplicationService",
           "namespace": "Volo.Abp.Application.Services",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
         },
         {
           "name": "IRemoteService",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
         },
         {
           "name": "IAvoidDuplicateCrossCuttingConcerns",
           "namespace": "Volo.Abp.Aspects",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
         },
         {
           "name": "IValidationEnabled",
           "namespace": "Volo.Abp.Validation",
-          "declaringAssemblyName": "Volo.Abp.Validation"
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
         },
         {
           "name": "IUnitOfWorkEnabled",
           "namespace": "Volo.Abp.Uow",
-          "declaringAssemblyName": "Volo.Abp.Uow"
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
         },
         {
           "name": "IAuditingEnabled",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
         },
         {
           "name": "IGlobalFeatureCheckingEnabled",
           "namespace": "Volo.Abp.GlobalFeatures",
-          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
         },
         {
           "name": "ITransientDependency",
           "namespace": "Volo.Abp.DependencyInjection",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
         },
         {
           "name": "IDocumentAdminAppService",
           "namespace": "Volo.Docs.Admin.Documents",
-          "declaringAssemblyName": "Volo.Docs.Admin.Application.Contracts"
+          "declaringAssemblyName": "Volo.Docs.Admin.Application.Contracts",
+          "fullName": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "ClearCacheAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "ClearCacheInput",
@@ -262,9 +353,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "PullAllAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "PullAllDocumentInput",
@@ -275,9 +369,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "PullAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "PullDocumentInput",
@@ -288,9 +385,12 @@
         },
         {
           "returnType": "PagedResultDto<DocumentDto>",
-          "isAsync": true,
           "name": "GetAllAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "GetAllInput",
@@ -301,9 +401,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "RemoveFromCacheAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -314,9 +417,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "ReindexAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -327,9 +433,12 @@
         },
         {
           "returnType": "List<DocumentInfoDto>",
-          "isAsync": true,
           "name": "GetFilterItemsAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         }
       ],

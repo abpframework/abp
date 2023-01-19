@@ -1,6 +1,6 @@
 {
   "name": "VoloDocs.EntityFrameworkCore",
-  "hash": "1c5ca7f58d363d5e98bf81628954c3c9",
+  "hash": "16b4276f8bb7836474b6a2da1a71df37",
   "contents": [
     {
       "namespace": "VoloDocs.EntityFrameworkCore",
@@ -31,6 +31,50 @@
           "name": "AbpEntityFrameworkCoreSqlServerModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "VoloDocsEntityFrameworkCoreModule",
       "summary": null
@@ -39,6 +83,69 @@
       "namespace": "VoloDocs.EntityFrameworkCore",
       "connectionStringName": null,
       "databaseTables": [],
+      "replacedDbContexts": [],
+      "implementingInterfaces": [
+        {
+          "name": "IInfrastructure<IServiceProvider>",
+          "namespace": "Microsoft.EntityFrameworkCore.Infrastructure",
+          "declaringAssemblyName": "Microsoft.EntityFrameworkCore",
+          "fullName": "Microsoft.EntityFrameworkCore.Infrastructure.IInfrastructure<IServiceProvider>"
+        },
+        {
+          "name": "IDbContextDependencies",
+          "namespace": "Microsoft.EntityFrameworkCore.Internal",
+          "declaringAssemblyName": "Microsoft.EntityFrameworkCore",
+          "fullName": "Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies"
+        },
+        {
+          "name": "IDbSetCache",
+          "namespace": "Microsoft.EntityFrameworkCore.Internal",
+          "declaringAssemblyName": "Microsoft.EntityFrameworkCore",
+          "fullName": "Microsoft.EntityFrameworkCore.Internal.IDbSetCache"
+        },
+        {
+          "name": "IDbContextPoolable",
+          "namespace": "Microsoft.EntityFrameworkCore.Internal",
+          "declaringAssemblyName": "Microsoft.EntityFrameworkCore",
+          "fullName": "Microsoft.EntityFrameworkCore.Internal.IDbContextPoolable"
+        },
+        {
+          "name": "IResettableService",
+          "namespace": "Microsoft.EntityFrameworkCore.Infrastructure",
+          "declaringAssemblyName": "Microsoft.EntityFrameworkCore",
+          "fullName": "Microsoft.EntityFrameworkCore.Infrastructure.IResettableService"
+        },
+        {
+          "name": "IDisposable",
+          "namespace": "System",
+          "declaringAssemblyName": "System.Private.CoreLib",
+          "fullName": "System.IDisposable"
+        },
+        {
+          "name": "IAsyncDisposable",
+          "namespace": "System",
+          "declaringAssemblyName": "System.Private.CoreLib",
+          "fullName": "System.IAsyncDisposable"
+        },
+        {
+          "name": "IAbpEfCoreDbContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.IAbpEfCoreDbContext"
+        },
+        {
+          "name": "IEfCoreDbContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
       "contentType": "efCoreDbContext",
       "name": "VoloDocsDbContext",
       "summary": null

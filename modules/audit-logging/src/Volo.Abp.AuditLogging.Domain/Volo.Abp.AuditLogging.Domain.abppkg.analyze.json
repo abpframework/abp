@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.AuditLogging.Domain",
-  "hash": "f7ad0bc33e817c4688f827382007cf6b",
+  "hash": "fa171768247503b44e7e57d4518d2ef8",
   "contents": [
     {
       "namespace": "Volo.Abp.AuditLogging",
@@ -31,74 +31,388 @@
           "name": "AbpJsonModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "AbpAuditLoggingDomainModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "AuditLogId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ServiceName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "MethodName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Parameters",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "ExecutionTime",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "ExecutionDuration",
+          "summary": null
+        },
+        {
+          "type": "Volo.Abp.Data.ExtraPropertyDictionary",
+          "name": "ExtraProperties",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "AuditLogAction",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "AuditLogId",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "ChangeTime",
+          "summary": null
+        },
+        {
+          "type": "Volo.Abp.Auditing.EntityChangeType",
+          "name": "ChangeType",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "EntityTenantId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "EntityId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "EntityTypeFullName",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.AuditLogging.EntityPropertyChange]",
+          "name": "PropertyChanges",
+          "summary": null
+        },
+        {
+          "type": "Volo.Abp.Data.ExtraPropertyDictionary",
+          "name": "ExtraProperties",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "EntityChange",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "EntityChangeId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "NewValue",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "OriginalValue",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "PropertyName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "PropertyTypeFullName",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "EntityPropertyChange",
       "summary": null
     },
     {
       "baseClass": {
         "name": "AggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.AggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         },
         {
           "name": "IHasConcurrencyStamp",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Data"
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
         },
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy"
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
       "methods": [],
-      "namespace": "Volo.Abp.AuditLogging",
-      "primaryKeyType": "Guid",
       "collectionProperties": {
         "entityChanges": {
           "name": "EntityChange",
           "namespace": "Volo.Abp.AuditLogging",
-          "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain"
+          "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain",
+          "fullName": "Volo.Abp.AuditLogging.EntityChange"
         },
         "actions": {
           "name": "AuditLogAction",
           "namespace": "Volo.Abp.AuditLogging",
-          "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain"
+          "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain",
+          "fullName": "Volo.Abp.AuditLogging.AuditLogAction"
         }
       },
       "navigationProperties": {},
+      "namespace": "Volo.Abp.AuditLogging",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.String",
+          "name": "ApplicationName",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "UserId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "UserName",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "TenantName",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "ImpersonatorUserId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ImpersonatorUserName",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "ImpersonatorTenantId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ImpersonatorTenantName",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "ExecutionTime",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "ExecutionDuration",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientIpAddress",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "CorrelationId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "BrowserInfo",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "HttpMethod",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Url",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Exceptions",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Comments",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Int32]",
+          "name": "HttpStatusCode",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.AuditLogging.EntityChange]",
+          "name": "EntityChanges",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.AuditLogging.AuditLogAction]",
+          "name": "Actions",
+          "summary": null
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "AuditLog",
       "summary": null
@@ -108,23 +422,457 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.AuditLogging",
         "primaryKeyType": "Guid",
-        "collectionProperties": {
-          "entityChanges": {
-            "name": "EntityChange",
-            "namespace": "Volo.Abp.AuditLogging",
-            "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain"
-          },
-          "actions": {
-            "name": "AuditLogAction",
-            "namespace": "Volo.Abp.AuditLogging",
-            "declaringAssemblyName": "Volo.Abp.AuditLogging.Domain"
-          }
-        },
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "AuditLog",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IRepository<AuditLog, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository<AuditLog, Guid>"
+        },
+        {
+          "name": "IRepository<AuditLog>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository<AuditLog>"
+        },
+        {
+          "name": "IReadOnlyRepository<AuditLog>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyRepository<AuditLog>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<AuditLog>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<AuditLog>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IBasicRepository<AuditLog>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<AuditLog>"
+        },
+        {
+          "name": "IReadOnlyRepository<AuditLog, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyRepository<AuditLog, Guid>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<AuditLog, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<AuditLog, Guid>"
+        },
+        {
+          "name": "IBasicRepository<AuditLog, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<AuditLog, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<AuditLog>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "startTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "endTime",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "httpMethod",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "url",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "userId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "applicationName",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientIpAddress",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "correlationId",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Int32>",
+              "name": "maxExecutionDuration",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Int32>",
+              "name": "minExecutionDuration",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Boolean>",
+              "name": "hasException",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<HttpStatusCode>",
+              "name": "httpStatusCode",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<DateTime>",
+              "name": "startTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "endTime",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "httpMethod",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "url",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "userId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "applicationName",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientIpAddress",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "correlationId",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Int32>",
+              "name": "maxExecutionDuration",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Int32>",
+              "name": "minExecutionDuration",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Boolean>",
+              "name": "hasException",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<HttpStatusCode>",
+              "name": "httpStatusCode",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Dictionary<DateTime, Double>",
+          "name": "GetAverageExecutionDurationPerDayAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "DateTime",
+              "name": "startDate",
+              "isOptional": false
+            },
+            {
+              "type": "DateTime",
+              "name": "endDate",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "EntityChange",
+          "name": "GetEntityChange",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "entityChangeId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<EntityChange>",
+          "name": "GetEntityChangeListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "auditLogId",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "startTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "endTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<EntityChangeType>",
+              "name": "changeType",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "entityId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "entityTypeFullName",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetEntityChangeCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<Guid>",
+              "name": "auditLogId",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "startTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "endTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<EntityChangeType>",
+              "name": "changeType",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "entityId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "entityTypeFullName",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "EntityChangeWithUsername",
+          "name": "GetEntityChangeWithUsernameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "entityChangeId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<EntityChangeWithUsername>",
+          "name": "GetEntityChangesWithUsernameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "entityId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityTypeFullName",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "IAuditLogRepository",
       "summary": null

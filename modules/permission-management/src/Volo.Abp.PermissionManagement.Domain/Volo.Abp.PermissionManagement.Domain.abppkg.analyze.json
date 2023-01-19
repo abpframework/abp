@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.Domain",
-  "hash": "5e25e8f3cf181f7b8390d8817e1db7c2",
+  "hash": "5fdb46829763b28e9bc9a5be7d3965aa",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement",
@@ -31,54 +31,137 @@
           "name": "AbpJsonModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "AbpPermissionManagementDomainModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.PermissionManagement",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ProviderName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ProviderKey",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "PermissionGrant",
       "summary": null
     },
     {
       "baseClass": {
         "name": "BasicAggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.BasicAggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         }
       ],
       "methods": [
         {
           "returnType": "Boolean",
-          "isAsync": false,
           "name": "HasSameData",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "PermissionDefinitionRecord",
@@ -89,9 +172,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "Patch",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "PermissionDefinitionRecord",
@@ -101,10 +187,62 @@
           ]
         }
       ],
-      "namespace": "Volo.Abp.PermissionManagement",
-      "primaryKeyType": "Guid",
       "collectionProperties": {},
       "navigationProperties": {},
+      "namespace": "Volo.Abp.PermissionManagement",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "Id",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "GroupName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ParentName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "DisplayName",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "IsEnabled",
+          "summary": null
+        },
+        {
+          "type": "Volo.Abp.MultiTenancy.MultiTenancySides",
+          "name": "MultiTenancySide",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Providers",
+          "summary": "Comma separated list of provider names."
+        },
+        {
+          "type": "System.String",
+          "name": "StateCheckers",
+          "summary": "Serialized string to store info about the state checkers."
+        },
+        {
+          "type": "Volo.Abp.Data.ExtraPropertyDictionary",
+          "name": "ExtraProperties",
+          "summary": null
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "PermissionDefinitionRecord",
       "summary": null
@@ -113,46 +251,56 @@
       "baseClass": {
         "name": "BasicAggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.BasicAggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         }
       ],
       "methods": [
         {
           "returnType": "Boolean",
-          "isAsync": false,
           "name": "HasSameData",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "PermissionGroupDefinitionRecord",
@@ -163,9 +311,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "Patch",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "PermissionGroupDefinitionRecord",
@@ -175,10 +326,32 @@
           ]
         }
       ],
-      "namespace": "Volo.Abp.PermissionManagement",
-      "primaryKeyType": "Guid",
       "collectionProperties": {},
       "navigationProperties": {},
+      "namespace": "Volo.Abp.PermissionManagement",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "Id",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "DisplayName",
+          "summary": null
+        },
+        {
+          "type": "Volo.Abp.Data.ExtraPropertyDictionary",
+          "name": "ExtraProperties",
+          "summary": null
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "PermissionGroupDefinitionRecord",
       "summary": null
@@ -188,12 +361,66 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.PermissionManagement",
         "primaryKeyType": "Guid",
-        "collectionProperties": {},
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "PermissionDefinitionRecord",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<PermissionDefinitionRecord, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<PermissionDefinitionRecord, Guid>"
+        },
+        {
+          "name": "IBasicRepository<PermissionDefinitionRecord>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<PermissionDefinitionRecord>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<PermissionDefinitionRecord>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<PermissionDefinitionRecord>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<PermissionDefinitionRecord, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<PermissionDefinitionRecord, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "PermissionDefinitionRecord",
+          "name": "FindByNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "IPermissionDefinitionRecordRepository",
       "summary": null
@@ -203,12 +430,133 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.PermissionManagement",
         "primaryKeyType": "Guid",
-        "collectionProperties": {},
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "PermissionGrant",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<PermissionGrant, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<PermissionGrant, Guid>"
+        },
+        {
+          "name": "IBasicRepository<PermissionGrant>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<PermissionGrant>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<PermissionGrant>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<PermissionGrant>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<PermissionGrant, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<PermissionGrant, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "PermissionGrant",
+          "name": "FindAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<PermissionGrant>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<PermissionGrant>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String[]",
+              "name": "names",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "IPermissionGrantRepository",
       "summary": null
@@ -218,12 +566,44 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.PermissionManagement",
         "primaryKeyType": "Guid",
-        "collectionProperties": {},
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "PermissionGroupDefinitionRecord",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<PermissionGroupDefinitionRecord, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<PermissionGroupDefinitionRecord, Guid>"
+        },
+        {
+          "name": "IBasicRepository<PermissionGroupDefinitionRecord>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<PermissionGroupDefinitionRecord>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<PermissionGroupDefinitionRecord>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<PermissionGroupDefinitionRecord>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<PermissionGroupDefinitionRecord, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<PermissionGroupDefinitionRecord, Guid>"
+        }
+      ],
+      "methods": [],
       "contentType": "repositoryInterface",
       "name": "IPermissionGroupDefinitionRecordRepository",
       "summary": null
