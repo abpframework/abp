@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization;
@@ -15,9 +16,13 @@ public class LanguageInfo : ILanguageInfo
     [NotNull]
     public virtual string DisplayName { get; protected set; }
 
+    [NotNull]
+    public virtual string TwoLetterISOLanguageName { get; protected set; }
+
     [CanBeNull]
     public virtual string FlagIcon { get; set; }
 
+    
     protected LanguageInfo()
     {
 
@@ -49,5 +54,8 @@ public class LanguageInfo : ILanguageInfo
         DisplayName = !displayName.IsNullOrWhiteSpace()
             ? displayName
             : cultureName;
+        
+        TwoLetterISOLanguageName = new CultureInfo(cultureName)
+            .TwoLetterISOLanguageName;
     }
 }

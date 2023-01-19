@@ -50,20 +50,19 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace Acme.BookStore.Authors
+namespace Acme.BookStore.Authors;
+
+public interface IAuthorAppService : IApplicationService
 {
-    public interface IAuthorAppService : IApplicationService
-    {
-        Task<AuthorDto> GetAsync(Guid id);
+    Task<AuthorDto> GetAsync(Guid id);
 
-        Task<PagedResultDto<AuthorDto>> GetListAsync(GetAuthorListDto input);
+    Task<PagedResultDto<AuthorDto>> GetListAsync(GetAuthorListDto input);
 
-        Task<AuthorDto> CreateAsync(CreateAuthorDto input);
+    Task<AuthorDto> CreateAsync(CreateAuthorDto input);
 
-        Task UpdateAsync(Guid id, UpdateAuthorDto input);
+    Task UpdateAsync(Guid id, UpdateAuthorDto input);
 
-        Task DeleteAsync(Guid id);
-    }
+    Task DeleteAsync(Guid id);
 }
 ````
 
@@ -80,16 +79,15 @@ This interface is using the DTOs defined below (create them for your project).
 using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Acme.BookStore.Authors
+namespace Acme.BookStore.Authors;
+
+public class AuthorDto : EntityDto<Guid>
 {
-    public class AuthorDto : EntityDto<Guid>
-    {
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public DateTime BirthDate { get; set; }
+    public DateTime BirthDate { get; set; }
 
-        public string ShortBio { get; set; }
-    }
+    public string ShortBio { get; set; }
 }
 ````
 
@@ -100,12 +98,11 @@ namespace Acme.BookStore.Authors
 ````csharp
 using Volo.Abp.Application.Dtos;
 
-namespace Acme.BookStore.Authors
+namespace Acme.BookStore.Authors;
+
+public class GetAuthorListDto : PagedAndSortedResultRequestDto
 {
-    public class GetAuthorListDto : PagedAndSortedResultRequestDto
-    {
-        public string Filter { get; set; }
-    }
+    public string Filter { get; set; }
 }
 ````
 
@@ -120,19 +117,18 @@ namespace Acme.BookStore.Authors
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Acme.BookStore.Authors
-{
-    public class CreateAuthorDto
-    {
-        [Required]
-        [StringLength(AuthorConsts.MaxNameLength)]
-        public string Name { get; set; }
+namespace Acme.BookStore.Authors;
 
-        [Required]
-        public DateTime BirthDate { get; set; }
-        
-        public string ShortBio { get; set; }
-    }
+public class CreateAuthorDto
+{
+    [Required]
+    [StringLength(AuthorConsts.MaxNameLength)]
+    public string Name { get; set; }
+
+    [Required]
+    public DateTime BirthDate { get; set; }
+    
+    public string ShortBio { get; set; }
 }
 ````
 
@@ -144,19 +140,18 @@ Data annotation attributes can be used to validate the DTO. See the [validation 
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Acme.BookStore.Authors
-{
-    public class UpdateAuthorDto
-    {
-        [Required]
-        [StringLength(AuthorConsts.MaxNameLength)]
-        public string Name { get; set; }
+namespace Acme.BookStore.Authors;
 
-        [Required]
-        public DateTime BirthDate { get; set; }
-        
-        public string ShortBio { get; set; }
-    }
+public class UpdateAuthorDto
+{
+    [Required]
+    [StringLength(AuthorConsts.MaxNameLength)]
+    public string Name { get; set; }
+
+    [Required]
+    public DateTime BirthDate { get; set; }
+    
+    public string ShortBio { get; set; }
 }
 ````
 
@@ -176,24 +171,23 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
 
-namespace Acme.BookStore.Authors
+namespace Acme.BookStore.Authors;
+
+[Authorize(BookStorePermissions.Authors.Default)]
+public class AuthorAppService : BookStoreAppService, IAuthorAppService
 {
-    [Authorize(BookStorePermissions.Authors.Default)]
-    public class AuthorAppService : BookStoreAppService, IAuthorAppService
+    private readonly IAuthorRepository _authorRepository;
+    private readonly AuthorManager _authorManager;
+
+    public AuthorAppService(
+        IAuthorRepository authorRepository,
+        AuthorManager authorManager)
     {
-        private readonly IAuthorRepository _authorRepository;
-        private readonly AuthorManager _authorManager;
-
-        public AuthorAppService(
-            IAuthorRepository authorRepository,
-            AuthorManager authorManager)
-        {
-            _authorRepository = authorRepository;
-            _authorManager = authorManager;
-        }
-
-        //...SERVICE METHODS WILL COME HERE...
+        _authorRepository = authorRepository;
+        _authorManager = authorManager;
     }
+
+    //...SERVICE METHODS WILL COME HERE...
 }
 ````
 
@@ -327,28 +321,27 @@ You can't compile the code since it is expecting some constants declared in the 
 Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project (in the `Permissions` folder) and change the content as shown below:
 
 ````csharp
-namespace Acme.BookStore.Permissions
-{
-    public static class BookStorePermissions
-    {
-        public const string GroupName = "BookStore";
+namespace Acme.BookStore.Permissions;
 
-        public static class Books
-        {
-            public const string Default = GroupName + ".Books";
-            public const string Create = Default + ".Create";
-            public const string Edit = Default + ".Edit";
-            public const string Delete = Default + ".Delete";
-        }
-        
-        // *** ADDED a NEW NESTED CLASS ***
-        public static class Authors
-        {
-            public const string Default = GroupName + ".Authors";
-            public const string Create = Default + ".Create";
-            public const string Edit = Default + ".Edit";
-            public const string Delete = Default + ".Delete";
-        }
+public static class BookStorePermissions
+{
+    public const string GroupName = "BookStore";
+
+    public static class Books
+    {
+        public const string Default = GroupName + ".Books";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
+    
+    // *** ADDED a NEW NESTED CLASS ***
+    public static class Authors
+    {
+        public const string Default = GroupName + ".Authors";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
     }
 }
 ````
@@ -400,72 +393,71 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 
-namespace Acme.BookStore
-{
-    public class BookStoreDataSeederContributor
-        : IDataSeedContributor, ITransientDependency
-    {
-        private readonly IRepository<Book, Guid> _bookRepository;
-        private readonly IAuthorRepository _authorRepository;
-        private readonly AuthorManager _authorManager;
+namespace Acme.BookStore;
 
-        public BookStoreDataSeederContributor(
-            IRepository<Book, Guid> bookRepository,
-            IAuthorRepository authorRepository,
-            AuthorManager authorManager)
+public class BookStoreDataSeederContributor
+    : IDataSeedContributor, ITransientDependency
+{
+    private readonly IRepository<Book, Guid> _bookRepository;
+    private readonly IAuthorRepository _authorRepository;
+    private readonly AuthorManager _authorManager;
+
+    public BookStoreDataSeederContributor(
+        IRepository<Book, Guid> bookRepository,
+        IAuthorRepository authorRepository,
+        AuthorManager authorManager)
+    {
+        _bookRepository = bookRepository;
+        _authorRepository = authorRepository;
+        _authorManager = authorManager;
+    }
+
+    public async Task SeedAsync(DataSeedContext context)
+    {
+        if (await _bookRepository.GetCountAsync() <= 0)
         {
-            _bookRepository = bookRepository;
-            _authorRepository = authorRepository;
-            _authorManager = authorManager;
+            await _bookRepository.InsertAsync(
+                new Book
+                {
+                    Name = "1984",
+                    Type = BookType.Dystopia,
+                    PublishDate = new DateTime(1949, 6, 8),
+                    Price = 19.84f
+                },
+                autoSave: true
+            );
+
+            await _bookRepository.InsertAsync(
+                new Book
+                {
+                    Name = "The Hitchhiker's Guide to the Galaxy",
+                    Type = BookType.ScienceFiction,
+                    PublishDate = new DateTime(1995, 9, 27),
+                    Price = 42.0f
+                },
+                autoSave: true
+            );
         }
 
-        public async Task SeedAsync(DataSeedContext context)
+        // ADDED SEED DATA FOR AUTHORS
+
+        if (await _authorRepository.GetCountAsync() <= 0)
         {
-            if (await _bookRepository.GetCountAsync() <= 0)
-            {
-                await _bookRepository.InsertAsync(
-                    new Book
-                    {
-                        Name = "1984",
-                        Type = BookType.Dystopia,
-                        PublishDate = new DateTime(1949, 6, 8),
-                        Price = 19.84f
-                    },
-                    autoSave: true
-                );
+            await _authorRepository.InsertAsync(
+                await _authorManager.CreateAsync(
+                    "George Orwell",
+                    new DateTime(1903, 06, 25),
+                    "Orwell produced literary criticism and poetry, fiction and polemical journalism; and is best known for the allegorical novella Animal Farm (1945) and the dystopian novel Nineteen Eighty-Four (1949)."
+                )
+            );
 
-                await _bookRepository.InsertAsync(
-                    new Book
-                    {
-                        Name = "The Hitchhiker's Guide to the Galaxy",
-                        Type = BookType.ScienceFiction,
-                        PublishDate = new DateTime(1995, 9, 27),
-                        Price = 42.0f
-                    },
-                    autoSave: true
-                );
-            }
-
-            // ADDED SEED DATA FOR AUTHORS
-
-            if (await _authorRepository.GetCountAsync() <= 0)
-            {
-                await _authorRepository.InsertAsync(
-                    await _authorManager.CreateAsync(
-                        "George Orwell",
-                        new DateTime(1903, 06, 25),
-                        "Orwell produced literary criticism and poetry, fiction and polemical journalism; and is best known for the allegorical novella Animal Farm (1945) and the dystopian novel Nineteen Eighty-Four (1949)."
-                    )
-                );
-
-                await _authorRepository.InsertAsync(
-                    await _authorManager.CreateAsync(
-                        "Douglas Adams",
-                        new DateTime(1952, 03, 11),
-                        "Douglas Adams was an English author, screenwriter, essayist, humorist, satirist and dramatist. Adams was an advocate for environmentalism and conservation, a lover of fast cars, technological innovation and the Apple Macintosh, and a self-proclaimed 'radical atheist'."
-                    )
-                );
-            }
+            await _authorRepository.InsertAsync(
+                await _authorManager.CreateAsync(
+                    "Douglas Adams",
+                    new DateTime(1952, 03, 11),
+                    "Douglas Adams was an English author, screenwriter, essayist, humorist, satirist and dramatist. Adams was an advocate for environmentalism and conservation, a lover of fast cars, technological innovation and the Apple Macintosh, and a self-proclaimed 'radical atheist'."
+                )
+            );
         }
     }
 }
@@ -491,73 +483,74 @@ using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 
-namespace Acme.BookStore.Authors
-{ {{if DB=="Mongo"}}
-    [Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
-    public class AuthorAppService_Tests : BookStoreApplicationTestBase
+namespace Acme.BookStore.Authors;
+
+ {{if DB=="Mongo"}}
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+{{end}}
+public class AuthorAppService_Tests : BookStoreApplicationTestBase
+{
+    private readonly IAuthorAppService _authorAppService;
+
+    public AuthorAppService_Tests()
     {
-        private readonly IAuthorAppService _authorAppService;
+        _authorAppService = GetRequiredService<IAuthorAppService>();
+    }
 
-        public AuthorAppService_Tests()
+    [Fact]
+    public async Task Should_Get_All_Authors_Without_Any_Filter()
+    {
+        var result = await _authorAppService.GetListAsync(new GetAuthorListDto());
+
+        result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
+        result.Items.ShouldContain(author => author.Name == "George Orwell");
+        result.Items.ShouldContain(author => author.Name == "Douglas Adams");
+    }
+
+    [Fact]
+    public async Task Should_Get_Filtered_Authors()
+    {
+        var result = await _authorAppService.GetListAsync(
+            new GetAuthorListDto {Filter = "George"});
+
+        result.TotalCount.ShouldBeGreaterThanOrEqualTo(1);
+        result.Items.ShouldContain(author => author.Name == "George Orwell");
+        result.Items.ShouldNotContain(author => author.Name == "Douglas Adams");
+    }
+
+    [Fact]
+    public async Task Should_Create_A_New_Author()
+    {
+        var authorDto = await _authorAppService.CreateAsync(
+            new CreateAuthorDto
+            {
+                Name = "Edward Bellamy",
+                BirthDate = new DateTime(1850, 05, 22),
+                ShortBio = "Edward Bellamy was an American author..."
+            }
+        );
+        
+        authorDto.Id.ShouldNotBe(Guid.Empty);
+        authorDto.Name.ShouldBe("Edward Bellamy");
+    }
+
+    [Fact]
+    public async Task Should_Not_Allow_To_Create_Duplicate_Author()
+    {
+        await Assert.ThrowsAsync<AuthorAlreadyExistsException>(async () =>
         {
-            _authorAppService = GetRequiredService<IAuthorAppService>();
-        }
-
-        [Fact]
-        public async Task Should_Get_All_Authors_Without_Any_Filter()
-        {
-            var result = await _authorAppService.GetListAsync(new GetAuthorListDto());
-
-            result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
-            result.Items.ShouldContain(author => author.Name == "George Orwell");
-            result.Items.ShouldContain(author => author.Name == "Douglas Adams");
-        }
-
-        [Fact]
-        public async Task Should_Get_Filtered_Authors()
-        {
-            var result = await _authorAppService.GetListAsync(
-                new GetAuthorListDto {Filter = "George"});
-
-            result.TotalCount.ShouldBeGreaterThanOrEqualTo(1);
-            result.Items.ShouldContain(author => author.Name == "George Orwell");
-            result.Items.ShouldNotContain(author => author.Name == "Douglas Adams");
-        }
-
-        [Fact]
-        public async Task Should_Create_A_New_Author()
-        {
-            var authorDto = await _authorAppService.CreateAsync(
+            await _authorAppService.CreateAsync(
                 new CreateAuthorDto
                 {
-                    Name = "Edward Bellamy",
-                    BirthDate = new DateTime(1850, 05, 22),
-                    ShortBio = "Edward Bellamy was an American author..."
+                    Name = "Douglas Adams",
+                    BirthDate = DateTime.Now,
+                    ShortBio = "..."
                 }
             );
-            
-            authorDto.Id.ShouldNotBe(Guid.Empty);
-            authorDto.Name.ShouldBe("Edward Bellamy");
-        }
-
-        [Fact]
-        public async Task Should_Not_Allow_To_Create_Duplicate_Author()
-        {
-            await Assert.ThrowsAsync<AuthorAlreadyExistsException>(async () =>
-            {
-                await _authorAppService.CreateAsync(
-                    new CreateAuthorDto
-                    {
-                        Name = "Douglas Adams",
-                        BirthDate = DateTime.Now,
-                        ShortBio = "..."
-                    }
-                );
-            });
-        }
-
-        //TODO: Test other methods...
+        });
     }
+
+    //TODO: Test other methods...
 }
 ````
 

@@ -1,6 +1,6 @@
 # Migrating from IdentityServer to OpenIddict Step by Step Guide
 
-This guide provides layer-by-layer guidance for migrating your existing application to [OpenIddict](https://github.com/openiddict/openiddict-core) from IdentityServer. ABP startup templates use `OpenIddict` OpenId provider from v6.0.0-rc1 by default and `IdentityServer` projects are renamed to `AuthServer` in tiered/separated solutions. Since OpenIddict is only available with ABP v6.0, you will need to update your existing application in order to apply OpenIddict changes.
+This guide provides layer-by-layer guidance for migrating your existing application to [OpenIddict](https://github.com/openiddict/openiddict-core) from IdentityServer. ABP startup templates use `OpenIddict` OpenId provider from v6.0.0 by default and `IdentityServer` projects are renamed to `AuthServer` in tiered/separated solutions. Since OpenIddict is only available with ABP v6.0, you will need to update your existing application in order to apply OpenIddict changes.
 
 ## History
 We are not removing Identity Server packages and we will continue to release new versions of IdentityServer-related NuGet/NPM packages. That means you won't have an issue while upgrading to v6.0 when the stable version releases. We will continue to fix bugs in our packages for a while. ABP 7.0 will be based on .NET 7. If Identity Server continues to work with .NET 7, we will also continue to ship NuGet packages for our IDS integration.

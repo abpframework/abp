@@ -33,8 +33,9 @@ import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
 import { ShortTimePipe } from './pipes/short-time.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
+import { QUEUE_MANAGER } from './tokens/queue.token';
+import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
-import { AuthGuard } from './abstracts/auth.guard';
 
 /**
  * BaseCoreModule is the module that holds
@@ -170,6 +171,10 @@ export class CoreModule {
           multi: true,
           useValue: localizationContributor(options.localizations),
           deps: [LocalizationService],
+        },
+        {
+          provide: QUEUE_MANAGER,
+          useClass: DefaultQueueManager,
         },
         IncludeLocalizationResourcesProvider,
       ],

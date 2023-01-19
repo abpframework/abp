@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -26,6 +27,7 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        StaticWebAssetsLoader.UseStaticWebAssets(context.Services.GetHostingEnvironment(), context.Services.GetConfiguration());
         context.Services.AddHttpClient();
         var serverSideBlazorBuilder = context.Services.AddServerSideBlazor(options =>
         {
