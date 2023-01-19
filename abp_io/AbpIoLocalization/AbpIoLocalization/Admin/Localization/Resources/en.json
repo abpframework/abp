@@ -431,7 +431,7 @@
     "TotalMissesInfo": "Indicates the total number of cache hits. A cache miss is when the cache does not contain the requested content.",
     "Permission:VersionHistory": "Version History",
     "Caches": "Caches",
-    "VersionHistories": "Version Histories",
+    "VersionHistories": "Version History",
     "Version": "Version",
     "PublishDate": "Publish Date",
     "IsStableVersion": "Stable Version",
