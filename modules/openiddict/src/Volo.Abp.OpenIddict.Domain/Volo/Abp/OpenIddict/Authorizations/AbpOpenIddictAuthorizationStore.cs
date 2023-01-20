@@ -47,7 +47,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         Check.NotNull(authorization, nameof(authorization));
 
         await Repository.InsertAsync(authorization.ToEntity(), autoSave: true, cancellationToken: cancellationToken);
-        
+
         authorization = (await Repository.FindAsync(authorization.Id, cancellationToken: cancellationToken)).ToModel();
     }
 
@@ -290,6 +290,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
                     break;
                 }
 
+                await TokenRepository.DeleteManyByAuthorizationIdsAsync(authorizations.Select(x => x.Id).ToArray(), cancellationToken: cancellationToken);
                 await Repository.DeleteManyAsync(authorizations, autoSave: true, cancellationToken: cancellationToken);
                 await uow.CompleteAsync(cancellationToken);
             }
@@ -399,7 +400,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         var entity = await Repository.GetAsync(authorization.Id, cancellationToken: cancellationToken);
 
         await Repository.UpdateAsync(authorization.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
-        
+
         authorization = (await Repository.FindAsync(entity.Id, cancellationToken: cancellationToken)).ToModel();
     }
 }
