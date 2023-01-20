@@ -51,7 +51,7 @@
     "SendPasswordResetLink_Information": "Um link de redefinição de senha será enviado ao seu e-mail para redefinir sua senha. Se você não receber um e-mail em alguns minutos, tente novamente.",
     "PasswordResetMailSentMessage": "E-mail de recuperação de conta enviado para o seu endereço de e-mail. Se você não vir este e-mail em sua caixa de entrada em 15 minutos, procure-o na pasta de lixo eletrônico. Se você encontrá-lo lá, marque-o como -Não é Lixo Eletrônico-.",
     "ResetPassword": "Redefinir senha",
-    "ConfirmPassword": "Confirme (repita) a senha",
+    "ConfirmPassword": "Confirme a senha",
     "ResetPassword_Information": "Por favor insira sua nova senha.",
     "YourPasswordIsSuccessfullyReset": "Sua senha foi redefinida com sucesso.",
     "GoToTheApplication": "Vá para o aplicativo",

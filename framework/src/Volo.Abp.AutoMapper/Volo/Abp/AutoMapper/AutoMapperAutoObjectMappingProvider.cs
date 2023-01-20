@@ -1,5 +1,4 @@
 ﻿using Volo.Abp.ObjectMapping;
-
 namespace Volo.Abp.AutoMapper;
 
 public class AutoMapperAutoObjectMappingProvider<TContext> : AutoMapperAutoObjectMappingProvider, IAutoObjectMappingProvider<TContext>

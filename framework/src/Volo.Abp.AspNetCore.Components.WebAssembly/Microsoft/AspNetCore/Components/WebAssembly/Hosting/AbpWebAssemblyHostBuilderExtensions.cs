@@ -33,6 +33,10 @@ public static class AbpWebAssemblyHostBuilderExtensions
         var application = await builder.Services.AddApplicationAsync<TStartupModule>(opts =>
         {
             options?.Invoke(new AbpWebAssemblyApplicationCreationOptions(builder, opts));
+            if (opts.Environment.IsNullOrWhiteSpace())
+            {
+                opts.Environment = builder.HostEnvironment.Environment;
+            }
         });
 
         return application;
@@ -57,6 +61,10 @@ public static class AbpWebAssemblyHostBuilderExtensions
         var application = builder.Services.AddApplication<TStartupModule>(opts =>
         {
             options?.Invoke(new AbpWebAssemblyApplicationCreationOptions(builder, opts));
+            if (opts.Environment.IsNullOrWhiteSpace())
+            {
+                opts.Environment = builder.HostEnvironment.Environment;
+            }
         });
 
         return application;

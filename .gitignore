@@ -327,3 +327,5 @@ deploy/_run_all_log.txt
 
 # No commit yarn.lock files in the subfolders of templates directory
 templates/**/yarn.lock
+templates/app-nolayers/aspnet-core/MyCompanyName.MyProjectName.Mvc/Logs/logs.txt
+templates/module/aspnet-core/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json

@@ -143,6 +143,7 @@
     "Volo.AbpIo.Domain:060001": "L'URL source (\"{PostUrl}\") n'est pas une URL Github",
     "Volo.AbpIo.Domain:060002": "Le contenu de l'post n'est pas disponible à partir de la ressource Github(\"{PostUrl}\").",
     "Volo.AbpIo.Domain:060003": "Aucun contenu d'post trouvé !",
-    "SeeMore": "Voir Plus"
+    "SeeMore": "Voir Plus",
+    "IConsentToMedium": "Je consens à la publication de cet article sur https://medium.com/volosoft."
   }
 }

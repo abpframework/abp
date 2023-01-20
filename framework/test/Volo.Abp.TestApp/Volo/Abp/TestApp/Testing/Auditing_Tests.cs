@@ -111,4 +111,20 @@ public abstract class Auditing_Tests<TStartupModule> : TestAppTestBase<TStartupM
             douglas.DeleterId.ShouldBe(CurrentUserId);
         }
     }
+
+    [Fact]
+    public async Task Should_Increment_EntityVersion_Property()
+    {
+        var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+        douglas.EntityVersion.ShouldBe(0);
+
+        douglas.Age++;
+
+        await PersonRepository.UpdateAsync(douglas);
+
+        douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+
+        douglas.ShouldNotBeNull();
+        douglas.EntityVersion.ShouldBe(1);
+    }
 }
