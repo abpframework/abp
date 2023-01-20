@@ -7,45 +7,46 @@
       </h4>
     </ng-template>
     <ng-template #abpBody>
-      <div class="form-check mb-2">
-        <input
-          #selectAllInAllTabsRef
-          type="checkbox"
-          id="select-all-in-all-tabs"
-          name="select-all-in-all-tabs"
-          class="form-check-input"
-          [(ngModel)]="selectAllTab"
-          (click)="onClickSelectAll()"
-        />
-        <label class="form-check-label" for="select-all-in-all-tabs">{{
-          'AbpPermissionManagement::SelectAllInAllTabs' | abpLocalization
-        }}</label>
-      </div>
-
-      <hr class="mt-2 mb-2" />
       <div class="row">
-        <div class="overflow-auto col-md-4">
-          <ul class="nav nav-pills flex-column">
-            <li *ngFor="let group of data.groups; trackBy: trackByFn" class="nav-item">
-              <a
-                *ngIf="{ assignedCount: getAssignedCount(group.name) } as count"
-                class="nav-link pointer"
-                [class.active]="selectedGroup?.name === group?.name"
-                (click)="onChangeGroup(group)"
-                (select)="setDisabled(group.permissions)"
-              >
-                <div [class.font-weight-bold]="count.assignedCount">
-                  {{ group?.displayName }}
-                  <span *ngIf="count.assignedCount > 0">({{ count.assignedCount }})</span>
-                </div>
-              </a>
-            </li>
-          </ul>
+        <div class="col-md-4">
+          <div class="form-check mb-2">
+            <input
+              #selectAllInAllTabsRef
+              type="checkbox"
+              id="select-all-in-all-tabs"
+              name="select-all-in-all-tabs"
+              class="form-check-input"
+              [(ngModel)]="selectAllTab"
+              (click)="onClickSelectAll()"
+              [disabled]="disabledSelectAllInAllTabs"
+            />
+            <label class="form-check-label" for="select-all-in-all-tabs">{{
+              'AbpPermissionManagement::SelectAllInAllTabs' | abpLocalization
+            }}</label>
+          </div>
+
+          <hr class="mt-2 mb-2" />
+          <div class="overflow-auto">
+            <ul class="nav nav-pills flex-column">
+              <li *ngFor="let group of data.groups; trackBy: trackByFn" class="nav-item">
+                <a
+                  *ngIf="{ assignedCount: getAssignedCount(group.name) } as count"
+                  class="nav-link pointer"
+                  [class.active]="selectedGroup?.name === group?.name"
+                  (click)="onChangeGroup(group)"
+                  (select)="setDisabled(group.permissions)"
+                >
+                  <div [class.font-weight-bold]="count.assignedCount">
+                    {{ group?.displayName }}
+                    <span *ngIf="count.assignedCount > 0">({{ count.assignedCount }})</span>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="col-md-8 overflow-auto">
-          <h4>{{ selectedGroup?.displayName }}</h4>
-          <hr class="mt-2 mb-3" />
-          <div class="ps-1 pt-1">
+          <div class="ps-1">
             <div class="form-check mb-2">
               <input
                 #selectAllInThisTabsRef
@@ -61,7 +62,7 @@
                 'AbpPermissionManagement::SelectAllInThisTab' | abpLocalization
               }}</label>
             </div>
-            <hr class="mb-3" />
+            <hr class="my-2" />
             <div
               *ngFor="let permission of selectedGroupPermissions; let i = index; trackBy: trackByFn"
               [ngStyle]="permission.style"
