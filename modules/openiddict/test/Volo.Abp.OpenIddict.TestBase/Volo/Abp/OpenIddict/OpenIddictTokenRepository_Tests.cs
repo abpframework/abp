@@ -31,6 +31,24 @@ public abstract class OpenIddictTokenRepository_Tests<TStartupModule> : OpenIddi
     }
 
     [Fact]
+    public async Task DeleteManyByAuthorizationIdsAsync()
+    {
+        await _tokenRepository.DeleteManyByAuthorizationIdsAsync(new Guid[]
+        {
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+        });
+        (await _tokenRepository.GetCountAsync()).ShouldBe(2);
+
+        await _tokenRepository.DeleteManyByAuthorizationIdsAsync(new Guid[]
+        {
+            _testData.Authorization1Id,
+            _testData.Authorization2Id
+        });
+        (await _tokenRepository.GetCountAsync()).ShouldBe(0);
+    }
+
+    [Fact]
     public async Task DeleteManyByAuthorizationIdAsync()
     {
         await _tokenRepository.DeleteManyByAuthorizationIdAsync(new Guid());

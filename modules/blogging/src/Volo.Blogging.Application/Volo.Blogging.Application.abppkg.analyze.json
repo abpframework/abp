@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.Application",
-  "hash": "fca35c643b4a08df8c9f589fcc25c6de",
+  "hash": "0119e0d4243cd5f865bda1dc7115637f",
   "contents": [
     {
       "namespace": "Volo.Blogging",
@@ -36,6 +36,50 @@
           "name": "AbpDddApplicationModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "BloggingApplicationModule",
       "summary": null
@@ -45,61 +89,74 @@
       "baseClass": {
         "name": "BloggingAppServiceBase",
         "namespace": "Volo.Blogging",
-        "declaringAssemblyName": "Volo.Blogging.Application"
+        "declaringAssemblyName": "Volo.Blogging.Application",
+        "fullName": "Volo.Blogging.BloggingAppServiceBase"
       },
       "implementingInterfaces": [
         {
           "name": "IApplicationService",
           "namespace": "Volo.Abp.Application.Services",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
         },
         {
           "name": "IRemoteService",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
         },
         {
           "name": "IAvoidDuplicateCrossCuttingConcerns",
           "namespace": "Volo.Abp.Aspects",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
         },
         {
           "name": "IValidationEnabled",
           "namespace": "Volo.Abp.Validation",
-          "declaringAssemblyName": "Volo.Abp.Validation"
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
         },
         {
           "name": "IUnitOfWorkEnabled",
           "namespace": "Volo.Abp.Uow",
-          "declaringAssemblyName": "Volo.Abp.Uow"
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
         },
         {
           "name": "IAuditingEnabled",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
         },
         {
           "name": "IGlobalFeatureCheckingEnabled",
           "namespace": "Volo.Abp.GlobalFeatures",
-          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
         },
         {
           "name": "ITransientDependency",
           "namespace": "Volo.Abp.DependencyInjection",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
         },
         {
           "name": "ITagAppService",
           "namespace": "Volo.Blogging.Tagging",
-          "declaringAssemblyName": "Volo.Blogging.Application.Contracts"
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts",
+          "fullName": "Volo.Blogging.Tagging.ITagAppService"
         }
       ],
       "methods": [
         {
           "returnType": "List<TagDto>",
-          "isAsync": true,
           "name": "GetPopularTagsAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -123,61 +180,74 @@
       "baseClass": {
         "name": "BloggingAppServiceBase",
         "namespace": "Volo.Blogging",
-        "declaringAssemblyName": "Volo.Blogging.Application"
+        "declaringAssemblyName": "Volo.Blogging.Application",
+        "fullName": "Volo.Blogging.BloggingAppServiceBase"
       },
       "implementingInterfaces": [
         {
           "name": "IApplicationService",
           "namespace": "Volo.Abp.Application.Services",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
         },
         {
           "name": "IRemoteService",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
         },
         {
           "name": "IAvoidDuplicateCrossCuttingConcerns",
           "namespace": "Volo.Abp.Aspects",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
         },
         {
           "name": "IValidationEnabled",
           "namespace": "Volo.Abp.Validation",
-          "declaringAssemblyName": "Volo.Abp.Validation"
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
         },
         {
           "name": "IUnitOfWorkEnabled",
           "namespace": "Volo.Abp.Uow",
-          "declaringAssemblyName": "Volo.Abp.Uow"
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
         },
         {
           "name": "IAuditingEnabled",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
         },
         {
           "name": "IGlobalFeatureCheckingEnabled",
           "namespace": "Volo.Abp.GlobalFeatures",
-          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
         },
         {
           "name": "ITransientDependency",
           "namespace": "Volo.Abp.DependencyInjection",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
         },
         {
           "name": "IPostAppService",
           "namespace": "Volo.Blogging.Posts",
-          "declaringAssemblyName": "Volo.Blogging.Application.Contracts"
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts",
+          "fullName": "Volo.Blogging.Posts.IPostAppService"
         }
       ],
       "methods": [
         {
           "returnType": "ListResultDto<PostWithDetailsDto>",
-          "isAsync": true,
           "name": "GetListByBlogIdAndTagNameAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -193,9 +263,12 @@
         },
         {
           "returnType": "ListResultDto<PostWithDetailsDto>",
-          "isAsync": true,
           "name": "GetTimeOrderedListAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -206,9 +279,12 @@
         },
         {
           "returnType": "PostWithDetailsDto",
-          "isAsync": true,
           "name": "GetForReadingAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "GetPostInput",
@@ -219,9 +295,12 @@
         },
         {
           "returnType": "PostWithDetailsDto",
-          "isAsync": true,
           "name": "GetAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -232,9 +311,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "DeleteAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -245,9 +327,12 @@
         },
         {
           "returnType": "PostWithDetailsDto",
-          "isAsync": true,
           "name": "UpdateAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -263,9 +348,12 @@
         },
         {
           "returnType": "PostWithDetailsDto",
-          "isAsync": true,
           "name": "CreateAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "CreatePostDto",
@@ -284,61 +372,74 @@
       "baseClass": {
         "name": "BloggingAppServiceBase",
         "namespace": "Volo.Blogging",
-        "declaringAssemblyName": "Volo.Blogging.Application"
+        "declaringAssemblyName": "Volo.Blogging.Application",
+        "fullName": "Volo.Blogging.BloggingAppServiceBase"
       },
       "implementingInterfaces": [
         {
           "name": "IApplicationService",
           "namespace": "Volo.Abp.Application.Services",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
         },
         {
           "name": "IRemoteService",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
         },
         {
           "name": "IAvoidDuplicateCrossCuttingConcerns",
           "namespace": "Volo.Abp.Aspects",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
         },
         {
           "name": "IValidationEnabled",
           "namespace": "Volo.Abp.Validation",
-          "declaringAssemblyName": "Volo.Abp.Validation"
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
         },
         {
           "name": "IUnitOfWorkEnabled",
           "namespace": "Volo.Abp.Uow",
-          "declaringAssemblyName": "Volo.Abp.Uow"
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
         },
         {
           "name": "IAuditingEnabled",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
         },
         {
           "name": "IGlobalFeatureCheckingEnabled",
           "namespace": "Volo.Abp.GlobalFeatures",
-          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
         },
         {
           "name": "ITransientDependency",
           "namespace": "Volo.Abp.DependencyInjection",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
         },
         {
           "name": "IFileAppService",
           "namespace": "Volo.Blogging.Files",
-          "declaringAssemblyName": "Volo.Blogging.Application.Contracts"
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts",
+          "fullName": "Volo.Blogging.Files.IFileAppService"
         }
       ],
       "methods": [
         {
           "returnType": "RawFileDto",
-          "isAsync": true,
           "name": "GetAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -349,9 +450,12 @@
         },
         {
           "returnType": "IRemoteStreamContent",
-          "isAsync": true,
           "name": "GetFileAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -362,9 +466,12 @@
         },
         {
           "returnType": "FileUploadOutputDto",
-          "isAsync": true,
           "name": "CreateAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "FileUploadInputDto",
@@ -383,61 +490,74 @@
       "baseClass": {
         "name": "BloggingAppServiceBase",
         "namespace": "Volo.Blogging",
-        "declaringAssemblyName": "Volo.Blogging.Application"
+        "declaringAssemblyName": "Volo.Blogging.Application",
+        "fullName": "Volo.Blogging.BloggingAppServiceBase"
       },
       "implementingInterfaces": [
         {
           "name": "IApplicationService",
           "namespace": "Volo.Abp.Application.Services",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
         },
         {
           "name": "IRemoteService",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
         },
         {
           "name": "IAvoidDuplicateCrossCuttingConcerns",
           "namespace": "Volo.Abp.Aspects",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
         },
         {
           "name": "IValidationEnabled",
           "namespace": "Volo.Abp.Validation",
-          "declaringAssemblyName": "Volo.Abp.Validation"
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
         },
         {
           "name": "IUnitOfWorkEnabled",
           "namespace": "Volo.Abp.Uow",
-          "declaringAssemblyName": "Volo.Abp.Uow"
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
         },
         {
           "name": "IAuditingEnabled",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
         },
         {
           "name": "IGlobalFeatureCheckingEnabled",
           "namespace": "Volo.Abp.GlobalFeatures",
-          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
         },
         {
           "name": "ITransientDependency",
           "namespace": "Volo.Abp.DependencyInjection",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
         },
         {
           "name": "ICommentAppService",
           "namespace": "Volo.Blogging.Comments",
-          "declaringAssemblyName": "Volo.Blogging.Application.Contracts"
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts",
+          "fullName": "Volo.Blogging.Comments.ICommentAppService"
         }
       ],
       "methods": [
         {
           "returnType": "List<CommentWithRepliesDto>",
-          "isAsync": true,
           "name": "GetHierarchicalListOfPostAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -448,9 +568,12 @@
         },
         {
           "returnType": "CommentWithDetailsDto",
-          "isAsync": true,
           "name": "CreateAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "CreateCommentDto",
@@ -461,9 +584,12 @@
         },
         {
           "returnType": "CommentWithDetailsDto",
-          "isAsync": true,
           "name": "UpdateAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -479,9 +605,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "DeleteAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",
@@ -500,68 +629,84 @@
       "baseClass": {
         "name": "BloggingAppServiceBase",
         "namespace": "Volo.Blogging",
-        "declaringAssemblyName": "Volo.Blogging.Application"
+        "declaringAssemblyName": "Volo.Blogging.Application",
+        "fullName": "Volo.Blogging.BloggingAppServiceBase"
       },
       "implementingInterfaces": [
         {
           "name": "IApplicationService",
           "namespace": "Volo.Abp.Application.Services",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
         },
         {
           "name": "IRemoteService",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
         },
         {
           "name": "IAvoidDuplicateCrossCuttingConcerns",
           "namespace": "Volo.Abp.Aspects",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
         },
         {
           "name": "IValidationEnabled",
           "namespace": "Volo.Abp.Validation",
-          "declaringAssemblyName": "Volo.Abp.Validation"
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
         },
         {
           "name": "IUnitOfWorkEnabled",
           "namespace": "Volo.Abp.Uow",
-          "declaringAssemblyName": "Volo.Abp.Uow"
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
         },
         {
           "name": "IAuditingEnabled",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
         },
         {
           "name": "IGlobalFeatureCheckingEnabled",
           "namespace": "Volo.Abp.GlobalFeatures",
-          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
         },
         {
           "name": "ITransientDependency",
           "namespace": "Volo.Abp.DependencyInjection",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
         },
         {
           "name": "IBlogAppService",
           "namespace": "Volo.Blogging.Blogs",
-          "declaringAssemblyName": "Volo.Blogging.Application.Contracts"
+          "declaringAssemblyName": "Volo.Blogging.Application.Contracts",
+          "fullName": "Volo.Blogging.Blogs.IBlogAppService"
         }
       ],
       "methods": [
         {
           "returnType": "ListResultDto<BlogDto>",
-          "isAsync": true,
           "name": "GetListAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "BlogDto",
-          "isAsync": true,
           "name": "GetByShortNameAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -572,9 +717,12 @@
         },
         {
           "returnType": "BlogDto",
-          "isAsync": true,
           "name": "GetAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Guid",

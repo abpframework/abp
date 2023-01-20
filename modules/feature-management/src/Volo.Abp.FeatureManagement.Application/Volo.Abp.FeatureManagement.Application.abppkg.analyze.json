@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Application",
-  "hash": "593914139f79158f6cb5a2ef0984d0e9",
+  "hash": "a9ca2b4f663694fa5d258984dc689f56",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
@@ -21,6 +21,50 @@
           "name": "AbpDddApplicationModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "AbpFeatureManagementApplicationModule",
       "summary": null
@@ -30,61 +74,74 @@
       "baseClass": {
         "name": "FeatureManagementAppServiceBase",
         "namespace": "Volo.Abp.FeatureManagement",
-        "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application"
+        "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application",
+        "fullName": "Volo.Abp.FeatureManagement.FeatureManagementAppServiceBase"
       },
       "implementingInterfaces": [
         {
           "name": "IApplicationService",
           "namespace": "Volo.Abp.Application.Services",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
         },
         {
           "name": "IRemoteService",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
         },
         {
           "name": "IAvoidDuplicateCrossCuttingConcerns",
           "namespace": "Volo.Abp.Aspects",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
         },
         {
           "name": "IValidationEnabled",
           "namespace": "Volo.Abp.Validation",
-          "declaringAssemblyName": "Volo.Abp.Validation"
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
         },
         {
           "name": "IUnitOfWorkEnabled",
           "namespace": "Volo.Abp.Uow",
-          "declaringAssemblyName": "Volo.Abp.Uow"
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
         },
         {
           "name": "IAuditingEnabled",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
         },
         {
           "name": "IGlobalFeatureCheckingEnabled",
           "namespace": "Volo.Abp.GlobalFeatures",
-          "declaringAssemblyName": "Volo.Abp.GlobalFeatures"
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
         },
         {
           "name": "ITransientDependency",
           "namespace": "Volo.Abp.DependencyInjection",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
         },
         {
           "name": "IFeatureAppService",
           "namespace": "Volo.Abp.FeatureManagement",
-          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application.Contracts"
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Application.Contracts",
+          "fullName": "Volo.Abp.FeatureManagement.IFeatureAppService"
         }
       ],
       "methods": [
         {
           "returnType": "GetFeatureListResultDto",
-          "isAsync": true,
           "name": "GetAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -100,9 +157,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "UpdateAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -123,9 +183,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "DeleteAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",

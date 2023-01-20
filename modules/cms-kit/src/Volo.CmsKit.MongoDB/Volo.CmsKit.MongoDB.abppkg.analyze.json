@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.MongoDB",
-  "hash": "f073ca44e4a4052938a4a7274938ef01",
+  "hash": "0a97f3dd5afa54002ac001896c098325",
   "contents": [
     {
       "namespace": "Volo.CmsKit.MongoDB",
@@ -21,6 +21,50 @@
           "name": "AbpMongoDbModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "CmsKitMongoDbModule",
       "summary": null
@@ -29,66 +73,6 @@
       "namespace": "Volo.CmsKit.MongoDB",
       "connectionStringName": "CmsKit",
       "databaseCollections": [
-        {
-          "entityFullName": "Volo.CmsKit.Tags.EntityTag",
-          "contentType": "databaseCollection",
-          "name": "CmsEntityTags",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
-          "contentType": "databaseCollection",
-          "name": "CmsBlogFeatures",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
-          "contentType": "databaseCollection",
-          "name": "CmsMenuItems",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Pages.Page",
-          "contentType": "databaseCollection",
-          "name": "CmsPages",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Users.CmsUser",
-          "contentType": "databaseCollection",
-          "name": "CmsUsers",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.GlobalResources.GlobalResource",
-          "contentType": "databaseCollection",
-          "name": "CmsGlobalResources",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.MediaDescriptors.MediaDescriptor",
-          "contentType": "databaseCollection",
-          "name": "CmsMediaDescriptors",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Blogs.BlogPost",
-          "contentType": "databaseCollection",
-          "name": "CmsBlogPosts",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Ratings.Rating",
-          "contentType": "databaseCollection",
-          "name": "CmsRatings",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Blogs.Blog",
-          "contentType": "databaseCollection",
-          "name": "CmsBlogs",
-          "summary": null
-        },
         {
           "entityFullName": "Volo.CmsKit.Tags.Tag",
           "contentType": "databaseCollection",
@@ -102,10 +86,90 @@
           "summary": null
         },
         {
+          "entityFullName": "Volo.CmsKit.Pages.Page",
+          "contentType": "databaseCollection",
+          "name": "CmsPages",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.CmsKit.Comments.Comment",
           "contentType": "databaseCollection",
           "name": "CmsComments",
           "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Ratings.Rating",
+          "contentType": "databaseCollection",
+          "name": "CmsRatings",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
+          "contentType": "databaseCollection",
+          "name": "CmsBlogFeatures",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Users.CmsUser",
+          "contentType": "databaseCollection",
+          "name": "CmsUsers",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.BlogPost",
+          "contentType": "databaseCollection",
+          "name": "CmsBlogPosts",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
+          "contentType": "databaseCollection",
+          "name": "CmsMenuItems",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.Blog",
+          "contentType": "databaseCollection",
+          "name": "CmsBlogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Tags.EntityTag",
+          "contentType": "databaseCollection",
+          "name": "CmsEntityTags",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.MediaDescriptors.MediaDescriptor",
+          "contentType": "databaseCollection",
+          "name": "CmsMediaDescriptors",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.GlobalResources.GlobalResource",
+          "contentType": "databaseCollection",
+          "name": "CmsGlobalResources",
+          "summary": null
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpMongoDbContext",
+          "namespace": "Volo.Abp.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "fullName": "Volo.Abp.MongoDB.IAbpMongoDbContext"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "ICmsKitMongoDbContext",
+          "namespace": "Volo.CmsKit.MongoDB",
+          "declaringAssemblyName": "Volo.CmsKit.MongoDB",
+          "fullName": "Volo.CmsKit.MongoDB.ICmsKitMongoDbContext"
         }
       ],
       "contentType": "mongoDbContext",

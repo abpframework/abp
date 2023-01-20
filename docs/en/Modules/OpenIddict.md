@@ -299,12 +299,12 @@ PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
 
 The background task that automatically removes orphaned tokens/authorizations. This can be configured by `TokenCleanupOptions` to manage it.
 
-`TokenCleanupOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
+`TokenCleanupOptions` can be configured in the `ConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
 
 Example:
 
 ```csharp
-PreConfigure<TokenCleanupOptions>(options =>
+Configure<TokenCleanupOptions>(options =>
 {
     //Set options here...	
 });

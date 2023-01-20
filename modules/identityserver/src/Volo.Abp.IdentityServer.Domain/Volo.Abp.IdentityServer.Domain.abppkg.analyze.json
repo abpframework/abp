@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.Domain",
-  "hash": "602f3bc337441c85e956672ae3de9a6a",
+  "hash": "e92e0873e411d6a1c141aa10c5cfad37",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer",
@@ -41,109 +41,497 @@
           "name": "AbpBackgroundWorkersModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "AbpIdentityServerDomainModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "IdentityResourceId",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "IdentityResourceClaim",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "IdentityResourceId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Key",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Value",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "IdentityResourceProperty",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Type",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Value",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ClientClaim",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Origin",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ClientCorsOrigin",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "GrantType",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ClientGrantType",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Provider",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ClientIdPRestriction",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "PostLogoutRedirectUri",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ClientPostLogoutRedirectUri",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Key",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Value",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ClientProperty",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "RedirectUri",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ClientRedirectUri",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Scope",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ClientScope",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ClientId",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ClientSecret",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ApiScopeId",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ApiScopeClaim",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ApiScopeId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Key",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Value",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ApiScopeProperty",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiResources",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ApiResourceId",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ApiResourceClaim",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiResources",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ApiResourceId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Key",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Value",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ApiResourceProperty",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiResources",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ApiResourceId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Scope",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ApiResourceScope",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.IdentityServer.ApiResources",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ApiResourceId",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ApiResourceSecret",
       "summary": null
     },
     {
       "baseClass": {
         "name": "FullAuditedAggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities.Auditing",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         },
         {
           "name": "IHasConcurrencyStamp",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Data"
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
         },
         {
           "name": "ICreationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
         },
         {
           "name": "IHasCreationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
         },
         {
           "name": "IMayHaveCreator",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
         },
         {
           "name": "IAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditedObject"
         },
         {
           "name": "IModificationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
         },
         {
           "name": "IHasModificationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
         },
         {
           "name": "IFullAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
         },
         {
           "name": "IDeletionAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
         },
         {
           "name": "IHasDeletionTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
         },
         {
           "name": "ISoftDelete",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.ISoftDelete"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddUserClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -154,16 +542,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllUserClaims",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveUserClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -174,9 +568,12 @@
         },
         {
           "returnType": "IdentityResourceClaim",
-          "isAsync": false,
           "name": "FindUserClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -187,9 +584,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -205,16 +605,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllProperties",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -225,9 +631,12 @@
         },
         {
           "returnType": "IdentityResourceProperty",
-          "isAsync": false,
           "name": "FindProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -237,21 +646,70 @@
           ]
         }
       ],
-      "namespace": "Volo.Abp.IdentityServer.IdentityResources",
-      "primaryKeyType": "Guid",
       "collectionProperties": {
         "userClaims": {
           "name": "IdentityResourceClaim",
           "namespace": "Volo.Abp.IdentityServer.IdentityResources",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResourceClaim"
         },
         "properties": {
           "name": "IdentityResourceProperty",
           "namespace": "Volo.Abp.IdentityServer.IdentityResources",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResourceProperty"
         }
       },
       "navigationProperties": {},
+      "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "DisplayName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Description",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "Enabled",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "Required",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "Emphasize",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "ShowInDiscoveryDocument",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.IdentityResources.IdentityResourceClaim]",
+          "name": "UserClaims",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.IdentityResources.IdentityResourceProperty]",
+          "name": "Properties",
+          "summary": null
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "IdentityResource",
       "summary": null
@@ -260,50 +718,110 @@
       "baseClass": {
         "name": "AggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.AggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         },
         {
           "name": "IHasConcurrencyStamp",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Data"
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
         }
       ],
       "methods": [],
-      "namespace": "Volo.Abp.IdentityServer.Grants",
-      "primaryKeyType": "Guid",
       "collectionProperties": {},
       "navigationProperties": {},
+      "namespace": "Volo.Abp.IdentityServer.Grants",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.String",
+          "name": "Key",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Type",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "SubjectId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "SessionId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Description",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "CreationTime",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.DateTime]",
+          "name": "Expiration",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.DateTime]",
+          "name": "ConsumedTime",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Data",
+          "summary": null
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "PersistedGrant",
       "summary": null
@@ -312,65 +830,118 @@
       "baseClass": {
         "name": "CreationAuditedAggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities.Auditing",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.Auditing.CreationAuditedAggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         },
         {
           "name": "IHasConcurrencyStamp",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Data"
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
         },
         {
           "name": "ICreationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
         },
         {
           "name": "IHasCreationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
         },
         {
           "name": "IMayHaveCreator",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
         }
       ],
       "methods": [],
-      "namespace": "Volo.Abp.IdentityServer.Devices",
-      "primaryKeyType": "Guid",
       "collectionProperties": {},
       "navigationProperties": {},
+      "namespace": "Volo.Abp.IdentityServer.Devices",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.String",
+          "name": "DeviceCode",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "UserCode",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "SubjectId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "SessionId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Description",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.DateTime]",
+          "name": "Expiration",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Data",
+          "summary": null
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "DeviceFlowCodes",
       "summary": null
@@ -379,101 +950,122 @@
       "baseClass": {
         "name": "FullAuditedAggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities.Auditing",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         },
         {
           "name": "IHasConcurrencyStamp",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Data"
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
         },
         {
           "name": "ICreationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
         },
         {
           "name": "IHasCreationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
         },
         {
           "name": "IMayHaveCreator",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
         },
         {
           "name": "IAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditedObject"
         },
         {
           "name": "IModificationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
         },
         {
           "name": "IHasModificationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
         },
         {
           "name": "IFullAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
         },
         {
           "name": "IDeletionAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
         },
         {
           "name": "IHasDeletionTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
         },
         {
           "name": "ISoftDelete",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.ISoftDelete"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddGrantType",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -484,16 +1076,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllAllowedGrantTypes",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveGrantType",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -504,9 +1102,12 @@
         },
         {
           "returnType": "ClientGrantType",
-          "isAsync": false,
           "name": "FindGrantType",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -517,9 +1118,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddSecret",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -545,9 +1149,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveSecret",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -563,9 +1170,12 @@
         },
         {
           "returnType": "ClientSecret",
-          "isAsync": false,
           "name": "FindSecret",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -581,9 +1191,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddScope",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -594,16 +1207,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllScopes",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveScope",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -614,9 +1233,12 @@
         },
         {
           "returnType": "ClientScope",
-          "isAsync": false,
           "name": "FindScope",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -627,9 +1249,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddCorsOrigin",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -640,9 +1265,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddRedirectUri",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -653,9 +1281,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddPostLogoutRedirectUri",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -666,16 +1297,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllCorsOrigins",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveCorsOrigin",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -686,16 +1323,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllRedirectUris",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveRedirectUri",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -706,16 +1349,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllPostLogoutRedirectUris",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemovePostLogoutRedirectUri",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -726,9 +1375,12 @@
         },
         {
           "returnType": "ClientCorsOrigin",
-          "isAsync": false,
           "name": "FindCorsOrigin",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -739,9 +1391,12 @@
         },
         {
           "returnType": "ClientRedirectUri",
-          "isAsync": false,
           "name": "FindRedirectUri",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -752,9 +1407,12 @@
         },
         {
           "returnType": "ClientPostLogoutRedirectUri",
-          "isAsync": false,
           "name": "FindPostLogoutRedirectUri",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -765,9 +1423,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -783,16 +1444,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllProperties",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -803,9 +1470,12 @@
         },
         {
           "returnType": "ClientProperty",
-          "isAsync": false,
           "name": "FindProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -816,9 +1486,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -834,16 +1507,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllClaims",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -854,9 +1533,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -872,9 +1554,12 @@
         },
         {
           "returnType": "List<ClientClaim>",
-          "isAsync": false,
           "name": "FindClaims",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -885,9 +1570,12 @@
         },
         {
           "returnType": "ClientClaim",
-          "isAsync": false,
           "name": "FindClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -903,9 +1591,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddIdentityProviderRestriction",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -916,16 +1607,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllIdentityProviderRestrictions",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveIdentityProviderRestriction",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -936,9 +1633,12 @@
         },
         {
           "returnType": "ClientIdPRestriction",
-          "isAsync": false,
           "name": "FindIdentityProviderRestriction",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -948,56 +1648,307 @@
           ]
         }
       ],
-      "namespace": "Volo.Abp.IdentityServer.Clients",
-      "primaryKeyType": "Guid",
       "collectionProperties": {
         "allowedScopes": {
           "name": "ClientScope",
           "namespace": "Volo.Abp.IdentityServer.Clients",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.Clients.ClientScope"
         },
         "clientSecrets": {
           "name": "ClientSecret",
           "namespace": "Volo.Abp.IdentityServer.Clients",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.Clients.ClientSecret"
         },
         "allowedGrantTypes": {
           "name": "ClientGrantType",
           "namespace": "Volo.Abp.IdentityServer.Clients",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.Clients.ClientGrantType"
         },
         "allowedCorsOrigins": {
           "name": "ClientCorsOrigin",
           "namespace": "Volo.Abp.IdentityServer.Clients",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.Clients.ClientCorsOrigin"
         },
         "redirectUris": {
           "name": "ClientRedirectUri",
           "namespace": "Volo.Abp.IdentityServer.Clients",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.Clients.ClientRedirectUri"
         },
         "postLogoutRedirectUris": {
           "name": "ClientPostLogoutRedirectUri",
           "namespace": "Volo.Abp.IdentityServer.Clients",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.Clients.ClientPostLogoutRedirectUri"
         },
         "identityProviderRestrictions": {
           "name": "ClientIdPRestriction",
           "namespace": "Volo.Abp.IdentityServer.Clients",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.Clients.ClientIdPRestriction"
         },
         "claims": {
           "name": "ClientClaim",
           "namespace": "Volo.Abp.IdentityServer.Clients",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.Clients.ClientClaim"
         },
         "properties": {
           "name": "ClientProperty",
           "namespace": "Volo.Abp.IdentityServer.Clients",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.Clients.ClientProperty"
         }
       },
       "navigationProperties": {},
+      "namespace": "Volo.Abp.IdentityServer.Clients",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.String",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Description",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientUri",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "LogoUri",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "Enabled",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ProtocolType",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "RequireClientSecret",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "RequireConsent",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "AllowRememberConsent",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "AlwaysIncludeUserClaimsInIdToken",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "RequirePkce",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "AllowPlainTextPkce",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "RequireRequestObject",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "AllowAccessTokensViaBrowser",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "FrontChannelLogoutUri",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "FrontChannelLogoutSessionRequired",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "BackChannelLogoutUri",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "BackChannelLogoutSessionRequired",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "AllowOfflineAccess",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "IdentityTokenLifetime",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "AllowedIdentityTokenSigningAlgorithms",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "AccessTokenLifetime",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "AuthorizationCodeLifetime",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Int32]",
+          "name": "ConsentLifetime",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "AbsoluteRefreshTokenLifetime",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "SlidingRefreshTokenLifetime",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "RefreshTokenUsage",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "UpdateAccessTokenClaimsOnRefresh",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "RefreshTokenExpiration",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "AccessTokenType",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "EnableLocalLogin",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "IncludeJwtId",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "AlwaysSendClientClaims",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientClaimsPrefix",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "PairWiseSubjectSalt",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Int32]",
+          "name": "UserSsoLifetime",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "UserCodeType",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "DeviceCodeLifetime",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.Clients.ClientScope]",
+          "name": "AllowedScopes",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.Clients.ClientSecret]",
+          "name": "ClientSecrets",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.Clients.ClientGrantType]",
+          "name": "AllowedGrantTypes",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.Clients.ClientCorsOrigin]",
+          "name": "AllowedCorsOrigins",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.Clients.ClientRedirectUri]",
+          "name": "RedirectUris",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.Clients.ClientPostLogoutRedirectUri]",
+          "name": "PostLogoutRedirectUris",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.Clients.ClientIdPRestriction]",
+          "name": "IdentityProviderRestrictions",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.Clients.ClientClaim]",
+          "name": "Claims",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.Clients.ClientProperty]",
+          "name": "Properties",
+          "summary": null
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "Client",
       "summary": null
@@ -1006,101 +1957,122 @@
       "baseClass": {
         "name": "FullAuditedAggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities.Auditing",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         },
         {
           "name": "IHasConcurrencyStamp",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Data"
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
         },
         {
           "name": "ICreationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
         },
         {
           "name": "IHasCreationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
         },
         {
           "name": "IMayHaveCreator",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
         },
         {
           "name": "IAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditedObject"
         },
         {
           "name": "IModificationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
         },
         {
           "name": "IHasModificationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
         },
         {
           "name": "IFullAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
         },
         {
           "name": "IDeletionAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
         },
         {
           "name": "IHasDeletionTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
         },
         {
           "name": "ISoftDelete",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.ISoftDelete"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddUserClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1111,16 +2083,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllUserClaims",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1131,9 +2109,12 @@
         },
         {
           "returnType": "ApiScopeClaim",
-          "isAsync": false,
           "name": "FindClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1144,9 +2125,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1162,16 +2146,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllProperties",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1182,9 +2172,12 @@
         },
         {
           "returnType": "ApiScopeProperty",
-          "isAsync": false,
           "name": "FindProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1194,21 +2187,70 @@
           ]
         }
       ],
-      "namespace": "Volo.Abp.IdentityServer.ApiScopes",
-      "primaryKeyType": "Guid",
       "collectionProperties": {
         "userClaims": {
           "name": "ApiScopeClaim",
           "namespace": "Volo.Abp.IdentityServer.ApiScopes",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScopeClaim"
         },
         "properties": {
           "name": "ApiScopeProperty",
           "namespace": "Volo.Abp.IdentityServer.ApiScopes",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScopeProperty"
         }
       },
       "navigationProperties": {},
+      "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Boolean",
+          "name": "Enabled",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "DisplayName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Description",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "Required",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "Emphasize",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "ShowInDiscoveryDocument",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.ApiScopes.ApiScopeClaim]",
+          "name": "UserClaims",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.ApiScopes.ApiScopeProperty]",
+          "name": "Properties",
+          "summary": null
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "ApiScope",
       "summary": null
@@ -1217,101 +2259,122 @@
       "baseClass": {
         "name": "FullAuditedAggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities.Auditing",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         },
         {
           "name": "IHasConcurrencyStamp",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Data"
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
         },
         {
           "name": "ICreationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
         },
         {
           "name": "IHasCreationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
         },
         {
           "name": "IMayHaveCreator",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
         },
         {
           "name": "IAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditedObject"
         },
         {
           "name": "IModificationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
         },
         {
           "name": "IHasModificationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
         },
         {
           "name": "IFullAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
         },
         {
           "name": "IDeletionAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
         },
         {
           "name": "IHasDeletionTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
         },
         {
           "name": "ISoftDelete",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.ISoftDelete"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddSecret",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1337,9 +2400,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveSecret",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1355,9 +2421,12 @@
         },
         {
           "returnType": "ApiResourceSecret",
-          "isAsync": false,
           "name": "FindSecret",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1373,9 +2442,12 @@
         },
         {
           "returnType": "ApiResourceScope",
-          "isAsync": false,
           "name": "AddScope",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1386,9 +2458,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddUserClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1399,16 +2474,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllUserClaims",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1419,9 +2500,12 @@
         },
         {
           "returnType": "ApiResourceClaim",
-          "isAsync": false,
           "name": "FindClaim",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1432,23 +2516,32 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllSecrets",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllScopes",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveScope",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1459,9 +2552,12 @@
         },
         {
           "returnType": "ApiResourceScope",
-          "isAsync": false,
           "name": "FindScope",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1472,9 +2568,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "AddProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1490,16 +2589,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveAllProperties",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1510,9 +2615,12 @@
         },
         {
           "returnType": "ApiResourceProperty",
-          "isAsync": false,
           "name": "FindProperty",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -1522,31 +2630,87 @@
           ]
         }
       ],
-      "namespace": "Volo.Abp.IdentityServer.ApiResources",
-      "primaryKeyType": "Guid",
       "collectionProperties": {
         "secrets": {
           "name": "ApiResourceSecret",
           "namespace": "Volo.Abp.IdentityServer.ApiResources",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceSecret"
         },
         "scopes": {
           "name": "ApiResourceScope",
           "namespace": "Volo.Abp.IdentityServer.ApiResources",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceScope"
         },
         "userClaims": {
           "name": "ApiResourceClaim",
           "namespace": "Volo.Abp.IdentityServer.ApiResources",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceClaim"
         },
         "properties": {
           "name": "ApiResourceProperty",
           "namespace": "Volo.Abp.IdentityServer.ApiResources",
-          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
+          "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+          "fullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty"
         }
       },
       "navigationProperties": {},
+      "namespace": "Volo.Abp.IdentityServer.ApiResources",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "DisplayName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Description",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "Enabled",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "AllowedAccessTokenSigningAlgorithms",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "ShowInDiscoveryDocument",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.ApiResources.ApiResourceSecret]",
+          "name": "Secrets",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.ApiResources.ApiResourceScope]",
+          "name": "Scopes",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.ApiResources.ApiResourceClaim]",
+          "name": "UserClaims",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty]",
+          "name": "Properties",
+          "summary": null
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "ApiResource",
       "summary": null
@@ -1556,23 +2720,185 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.IdentityServer.IdentityResources",
         "primaryKeyType": "Guid",
-        "collectionProperties": {
-          "userClaims": {
-            "name": "IdentityResourceClaim",
-            "namespace": "Volo.Abp.IdentityServer.IdentityResources",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "properties": {
-            "name": "IdentityResourceProperty",
-            "namespace": "Volo.Abp.IdentityServer.IdentityResources",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          }
-        },
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "IdentityResource",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<IdentityResource, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityResource, Guid>"
+        },
+        {
+          "name": "IBasicRepository<IdentityResource>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityResource>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityResource>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityResource>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityResource, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityResource, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<IdentityResource>",
+          "name": "GetListByScopeNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String[]",
+              "name": "scopeNames",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityResource>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityResource",
+          "name": "FindByNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "CheckNameExistAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "expectedId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "IIdentityResourceRepository",
       "summary": null
@@ -1582,12 +2908,190 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.IdentityServer.Grants",
         "primaryKeyType": "Guid",
-        "collectionProperties": {},
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "PersistedGrant",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<PersistedGrant, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<PersistedGrant, Guid>"
+        },
+        {
+          "name": "IBasicRepository<PersistedGrant>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<PersistedGrant>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<PersistedGrant>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<PersistedGrant>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<PersistedGrant, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<PersistedGrant, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<PersistedGrant>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "subjectId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "sessionId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "clientId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "PersistedGrant",
+          "name": "FindByKeyAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<PersistedGrant>",
+          "name": "GetListBySubjectIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "key",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<PersistedGrant>",
+          "name": "GetListByExpirationAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "DateTime",
+              "name": "maxExpirationDate",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "DeleteAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "subjectId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "sessionId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "IPersistentGrantRepository",
       "summary": null
@@ -1597,12 +3101,113 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.IdentityServer.Devices",
         "primaryKeyType": "Guid",
-        "collectionProperties": {},
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "DeviceFlowCodes",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<DeviceFlowCodes, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<DeviceFlowCodes, Guid>"
+        },
+        {
+          "name": "IBasicRepository<DeviceFlowCodes>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<DeviceFlowCodes>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<DeviceFlowCodes>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<DeviceFlowCodes>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<DeviceFlowCodes, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<DeviceFlowCodes, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "DeviceFlowCodes",
+          "name": "FindByUserCodeAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "userCode",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "DeviceFlowCodes",
+          "name": "FindByDeviceCodeAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "deviceCode",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<DeviceFlowCodes>",
+          "name": "GetListByExpirationAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "DateTime",
+              "name": "maxExpirationDate",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "IDeviceFlowCodesRepository",
       "summary": null
@@ -1612,58 +3217,175 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.IdentityServer.Clients",
         "primaryKeyType": "Guid",
-        "collectionProperties": {
-          "allowedScopes": {
-            "name": "ClientScope",
-            "namespace": "Volo.Abp.IdentityServer.Clients",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "clientSecrets": {
-            "name": "ClientSecret",
-            "namespace": "Volo.Abp.IdentityServer.Clients",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "allowedGrantTypes": {
-            "name": "ClientGrantType",
-            "namespace": "Volo.Abp.IdentityServer.Clients",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "allowedCorsOrigins": {
-            "name": "ClientCorsOrigin",
-            "namespace": "Volo.Abp.IdentityServer.Clients",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "redirectUris": {
-            "name": "ClientRedirectUri",
-            "namespace": "Volo.Abp.IdentityServer.Clients",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "postLogoutRedirectUris": {
-            "name": "ClientPostLogoutRedirectUri",
-            "namespace": "Volo.Abp.IdentityServer.Clients",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "identityProviderRestrictions": {
-            "name": "ClientIdPRestriction",
-            "namespace": "Volo.Abp.IdentityServer.Clients",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "claims": {
-            "name": "ClientClaim",
-            "namespace": "Volo.Abp.IdentityServer.Clients",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "properties": {
-            "name": "ClientProperty",
-            "namespace": "Volo.Abp.IdentityServer.Clients",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          }
-        },
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "Client",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<Client, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<Client, Guid>"
+        },
+        {
+          "name": "IBasicRepository<Client>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<Client>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<Client>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<Client>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<Client, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<Client, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Client",
+          "name": "FindByClientIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "clientId",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<Client>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<String>",
+          "name": "GetAllDistinctAllowedCorsOriginsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "CheckClientIdExistAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "clientId",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "expectedId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "IClientRepository",
       "summary": null
@@ -1673,23 +3395,185 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.IdentityServer.ApiScopes",
         "primaryKeyType": "Guid",
-        "collectionProperties": {
-          "userClaims": {
-            "name": "ApiScopeClaim",
-            "namespace": "Volo.Abp.IdentityServer.ApiScopes",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "properties": {
-            "name": "ApiScopeProperty",
-            "namespace": "Volo.Abp.IdentityServer.ApiScopes",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          }
-        },
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "ApiScope",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<ApiScope, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<ApiScope, Guid>"
+        },
+        {
+          "name": "IBasicRepository<ApiScope>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<ApiScope>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<ApiScope>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<ApiScope>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<ApiScope, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<ApiScope, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "ApiScope",
+          "name": "FindByNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "scopeName",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<ApiScope>",
+          "name": "GetListByNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String[]",
+              "name": "scopeNames",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<ApiScope>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "CheckNameExistAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "expectedId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "IApiScopeRepository",
       "summary": null
@@ -1699,33 +3583,211 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.IdentityServer.ApiResources",
         "primaryKeyType": "Guid",
-        "collectionProperties": {
-          "secrets": {
-            "name": "ApiResourceSecret",
-            "namespace": "Volo.Abp.IdentityServer.ApiResources",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "scopes": {
-            "name": "ApiResourceScope",
-            "namespace": "Volo.Abp.IdentityServer.ApiResources",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "userClaims": {
-            "name": "ApiResourceClaim",
-            "namespace": "Volo.Abp.IdentityServer.ApiResources",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          },
-          "properties": {
-            "name": "ApiResourceProperty",
-            "namespace": "Volo.Abp.IdentityServer.ApiResources",
-            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain"
-          }
-        },
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "ApiResource",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<ApiResource, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<ApiResource, Guid>"
+        },
+        {
+          "name": "IBasicRepository<ApiResource>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<ApiResource>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<ApiResource>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<ApiResource>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<ApiResource, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<ApiResource, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "ApiResource",
+          "name": "FindByNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "apiResourceName",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<ApiResource>",
+          "name": "FindByNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String[]",
+              "name": "apiResourceNames",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<ApiResource>",
+          "name": "GetListByScopesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String[]",
+              "name": "scopeNames",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<ApiResource>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "CheckNameExistAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "expectedId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "IApiResourceRepository",
       "summary": null
