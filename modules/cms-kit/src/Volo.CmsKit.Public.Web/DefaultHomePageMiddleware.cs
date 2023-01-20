@@ -12,11 +12,16 @@ public class DefaultHomePageMiddleware : IMiddleware, ITransientDependency
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var _pagePublicAppService = context.RequestServices.GetRequiredService<IPagePublicAppService>();
-        var page = await _pagePublicAppService.FindDefaultHomePageAsync();
-        if (page is not null && context.Request.Path.Value == "/")
+        if (context.Request.Path.Value == "/")
         {
-            context.Request.Path = $"{PageConsts.UrlPrefix}{page.Slug}";
+            var pagePublicAppService = context.RequestServices.GetRequiredService<IPagePublicAppService>();
+            
+            var page = await pagePublicAppService.FindDefaultHomePageAsync();
+            if (page != null)
+            {
+                context.Request.Path = $"{PageConsts.UrlPrefix}{page.Slug}";
+            }
+            
         }
         
         await next(context);
