@@ -5,6 +5,7 @@ using Blazorise.Snackbar;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Components.Notifications;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.BlazoriseUI.Components;
 
@@ -54,13 +55,15 @@ public partial class UiNotificationAlert : ComponentBase, IDisposable
         Title = e.Title;
         Options = e.Options;
 
-        var okButtonText = Options?.OkButtonText?.Localize(StringLocalizerFactory);
+        var okButtonText = Options?.OkButtonText == null
+            ? null
+            : await Options.OkButtonText.LocalizeAsync(StringLocalizerFactory);
 
         await SnackbarStack.PushAsync(Message, Title, GetSnackbarColor(e.NotificationType), (options) =>
-      {
-          options.CloseButtonIcon = IconName.Times;
-          options.ActionButtonText = okButtonText;
-      });
+        {
+            options.CloseButtonIcon = IconName.Times;
+            options.ActionButtonText = okButtonText;
+        });
     }
 
     public virtual void Dispose()

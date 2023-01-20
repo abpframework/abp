@@ -41,9 +41,9 @@ public abstract class ApplicationService :
     [Obsolete("Use LazyServiceProvider instead.")]
     public IServiceProvider ServiceProvider { get; set; }
 
-    public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "Service" };
+    public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "IntService", "IntegrationService", "Service" };
 
-    public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
+    public List<string> AppliedCrossCuttingConcerns { get; } = new();
 
     protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
 

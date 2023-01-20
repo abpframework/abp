@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Admin.Application",
-  "hash": "aa3c96c6c877a48da854bcf91add4ad3",
+  "hash": "9f9f4df9fb9f426b7c115abc968b99d1",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
@@ -254,6 +254,16 @@
           "isPrivate": false,
           "isStatic": false,
           "parameters": []
+        },
+        {
+          "returnType": "List<ProjectWithoutDetailsDto>",
+          "name": "GetListWithoutDetailsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
         }
       ],
       "contentType": "applicationService",
@@ -420,6 +430,16 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "List<DocumentInfoDto>",
+          "name": "GetFilterItemsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
         }
       ],
       "contentType": "applicationService",

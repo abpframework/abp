@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using JetBrains.Annotations;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
@@ -120,5 +121,15 @@ public static class HasExtraPropertiesExtensions
             property.SetValue(source, source.ExtraProperties[property.Name]);
             source.RemoveProperty(property.Name);
         }
+    }
+
+    public static bool HasSameExtraProperties(
+        [NotNull] this IHasExtraProperties source,
+        [NotNull] IHasExtraProperties other)
+    {
+        Check.NotNull(source, nameof(source));
+        Check.NotNull(other, nameof(other));
+        
+        return source.ExtraProperties.HasSameItems(other.ExtraProperties);
     }
 }

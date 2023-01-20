@@ -39,6 +39,8 @@
     "TrialLicensePeriodHasExpired": "您的試用許可期限已於 {0} 天前到期。",
     "TrialLicensePeriodWillExpire": "您的試用許可期限將在 {0} 天后到期。",
     "TrialLicensePeriodExpireToday": "您的試用許可期將於今天到期。",
-    "PurchaseNow": "現在買！"
+    "PurchaseNow": "現在買！",
+    "WelcomeFallCampaign": "欢迎秋季活动！",
+    "GiveAwayForNewPurchases": "新购买将赠送应用程序开发课堂培训！"
   }
 }

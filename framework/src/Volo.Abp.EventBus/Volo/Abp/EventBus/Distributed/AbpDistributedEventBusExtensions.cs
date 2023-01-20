@@ -1,6 +1,4 @@
-﻿using Volo.Abp.EventBus.Distributed;
-
-namespace Volo.Abp.EventBus.Boxes;
+﻿namespace Volo.Abp.EventBus.Distributed;
 
 public static class AbpDistributedEventBusExtensions
 {

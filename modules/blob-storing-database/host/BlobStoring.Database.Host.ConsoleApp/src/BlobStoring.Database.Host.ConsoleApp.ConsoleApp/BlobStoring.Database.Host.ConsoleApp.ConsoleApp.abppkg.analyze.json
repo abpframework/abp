@@ -1,6 +1,6 @@
 {
   "name": "BlobStoring.Database.Host.ConsoleApp.ConsoleApp",
-  "hash": "8566876b0575e033f91b563ce5045fd1",
+  "hash": "586af594c8eddeb485df1d06e051e2c3",
   "contents": [
     {
       "namespace": "BlobStoring.Database.Host.ConsoleApp.ConsoleApp",
@@ -19,50 +19,6 @@
           "declaringAssemblyName": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
           "namespace": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
           "name": "BlobStoringDatabaseEntityFrameworkCoreModule"
-        }
-      ],
-      "implementingInterfaces": [
-        {
-          "name": "IAbpModule",
-          "namespace": "Volo.Abp.Modularity",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.Modularity.IAbpModule"
-        },
-        {
-          "name": "IOnPreApplicationInitialization",
-          "namespace": "Volo.Abp.Modularity",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
-        },
-        {
-          "name": "IOnApplicationInitialization",
-          "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.IOnApplicationInitialization"
-        },
-        {
-          "name": "IOnPostApplicationInitialization",
-          "namespace": "Volo.Abp.Modularity",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
-        },
-        {
-          "name": "IOnApplicationShutdown",
-          "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.IOnApplicationShutdown"
-        },
-        {
-          "name": "IPreConfigureServices",
-          "namespace": "Volo.Abp.Modularity",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
-        },
-        {
-          "name": "IPostConfigureServices",
-          "namespace": "Volo.Abp.Modularity",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
         }
       ],
       "contentType": "abpModule",

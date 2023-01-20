@@ -15,8 +15,6 @@
     PageLayout.Content.Title = L["Comments"].Value;
     PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
     PageLayout.Content.MenuItemName = CmsKitAdminMenus.Comments.CommentsMenu;
-
-    var defaultStartDate = DateTime.Now.AddDays(-7).Date.ToShortDateString();
 }
 
 @section styles{
@@ -39,12 +37,12 @@
             <form id="CmsKitCommentsFilterForm" method="post">
                 <abp-row class="align-items-end">
                     <abp-column size-lg="_4" size-md="_12">
-                        <abp-row class="input-daterange">
+                        <abp-row>
                             <abp-column size-lg="_6" size-md="_6">
-                                <abp-input asp-for="@Model.CreationStartDate" label="@L["StartDate"].Value" value="@defaultStartDate" type="text" />
+                                <abp-input asp-for="@Model.CreationStartDate" class="singledatepicker" label="@L["StartDate"].Value" type="text" />
                             </abp-column>
                             <abp-column size-lg="_6" size-md="_6">
-                                <abp-input asp-for="@Model.CreationEndDate" label="@L["EndDate"].Value" type="text" />
+                                <abp-input asp-for="@Model.CreationEndDate" class="singledatepicker" label="@L["EndDate"].Value" type="text" />
                             </abp-column>
                         </abp-row>
                     </abp-column>

@@ -35,12 +35,13 @@ public partial class UserManagement
     protected string CreateModalSelectedTab = DefaultSelectedTab;
 
     protected string EditModalSelectedTab = DefaultSelectedTab;
+    protected bool ShowPassword { get; set; }
 
     protected PageToolbar Toolbar { get; } = new();
 
     private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
     private TextRole _passwordTextRole = TextRole.Password;
-    
+
     public UserManagement()
     {
         ObjectMapperContext = typeof(AbpIdentityBlazorModule);
@@ -88,7 +89,7 @@ public partial class UserManagement
             await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.ManagePermissions);
     }
 
-    protected override Task OpenCreateModalAsync()
+    protected override async Task OpenCreateModalAsync()
     {
         CreateModalSelectedTab = DefaultSelectedTab;
 
@@ -99,7 +100,10 @@ public partial class UserManagement
         }).ToArray();
 
         ChangePasswordTextRole(TextRole.Password);
-        return base.OpenCreateModalAsync();
+        await base.OpenCreateModalAsync();
+
+        NewEntity.IsActive = true;
+        NewEntity.LockoutEnabled = true;
     }
 
     protected override Task OnCreatingEntityAsync()
@@ -229,12 +233,14 @@ public partial class UserManagement
     {
         if (textRole == null)
         {
-            ChangePasswordTextRole(_passwordTextRole == TextRole.Password ? TextRole.Text: TextRole.Password);
+            ChangePasswordTextRole(_passwordTextRole == TextRole.Password ? TextRole.Text : TextRole.Password);
+            ShowPassword = !ShowPassword;
         }
         else
         {
             _passwordTextRole = textRole.Value;
         }
+
     }
 }
 

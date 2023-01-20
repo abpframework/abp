@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -14,6 +14,7 @@ using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Menus;
 
+[RequiresFeature(CmsKitFeatures.MenuEnable)]
 [RequiresGlobalFeature(typeof(MenuFeature))]
 [Authorize(CmsKitAdminPermissions.Menus.Default)]
 public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdminAppService

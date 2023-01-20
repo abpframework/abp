@@ -360,7 +360,7 @@
     "Next": "Kế tiếp",
     "StartTrial": "Bắt đầu bản dùng thử miễn phí của tôi",
     "ContactUsIssues": "Liên hệ với chúng tôi nếu bạn có bất kỳ vấn đề nào",
-    "TrialActivatedWarning": "Kính gửi {0}, người dùng chỉ được phép có 1 thời gian dùng thử miễn phí. Bạn đã sử dụng thời gian dùng thử của mình.",
+    "TrialActivatedWarning": "Người dùng chỉ có quyền có 1 thời gian dùng thử miễn phí. Bạn đã sử dụng thời gian dùng thử của mình.",
     "SaveAndDownload": "Lưu và tải xuống",
     "CompanyNameValidationMessage": "Tên công ty quá dài!",
     "AddressValidationMessage": "Địa chỉ quá dài!",
@@ -373,11 +373,12 @@
     "TrialLicenseModelInvalidErrorMessage": "Một trong các trường sau không hợp lệ: Tên quốc gia, Quy mô công ty, Ngành hoặc Mục đích sử dụng.",
     "Trial": "Sự thử nghiệm",
     "Purchased": "Đã mua",
-    "PurchaseLicense": "Giấy phép mua bán",
+    "PurchaseLicense": "Mua {0} giấy phép",
     "PurchaseTrialLicenseMessage": "Ngày hết hạn giấy phép của bạn là {0}. <br> Nếu bạn muốn tiếp tục sử dụng các dự án bạn đã tạo trong thời gian dùng thử miễn phí, bạn cần thay đổi khóa cấp phép trong các tệp <code> appsettings.secrets.json </code> của mình. Đây là khóa cấp phép của bạn:",
     "TrialLicenseExpireMessage": "Bạn đang sử dụng giấy phép dùng thử và giấy phép dùng thử của bạn sẽ hết hạn vào {0}.",
     "TryForFree": "Thử miễn phí",
     "TrialLicenseExpiredInfo": "Thời gian cấp phép dùng thử của bạn đã hết hạn!",
-    "CommercialNewsletterConfirmationMessage": "Tôi đồng ý với <a href=\"https://commercial.abp.io/TermsConditions\"> Điều khoản & điều kiện </a> và <a href=\"https://commercial.abp.io/Privacy\"> Chính sách quyền riêng tư </a>."
+    "CommercialNewsletterConfirmationMessage": "Tôi đồng ý với <a href=\"https://commercial.abp.io/TermsConditions\"> Điều khoản & điều kiện </a> và <a href=\"https://commercial.abp.io/Privacy\"> Chính sách quyền riêng tư </a>.",
+    "BlackFridayDiscount": "Giảm giá Black Friday"
   }
 }

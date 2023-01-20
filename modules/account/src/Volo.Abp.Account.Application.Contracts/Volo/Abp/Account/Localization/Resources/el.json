@@ -36,6 +36,7 @@
     "PersonalSettingsSaved": "Οι προσωπικές ρυθμίσεις αποθηκεύτηκαν",
     "PasswordChanged": "Ο κωδικός πρόσβασης άλλαξε",
     "NewPasswordConfirmFailed": "Παρακαλώ επιβεβαιώστε τον νέο κωδικό πρόσβασης.",
+    "NewPasswordSameAsOld": "Ο νέος κωδικός πρόσβασης πρέπει να είναι διαφορετικός από τον τρέχοντα.",
     "Manage": "Διαχείρηση",
     "MyAccount": "Ο λογαριασμός μου",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Είναι ενεργοποιημένη η αυτοεγγραφή",

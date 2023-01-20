@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "آیا مطمئن هستید که این صفحه را حذف می کنید؟",
     "PageId": "صفحه",
     "Pages": "صفحات",
-    "PageSlugInformation": "Slug در url استفاده می شود. آدرس اینترنتی شما '/pages/{{slug}}' خواهد بود.",
+    "PageSlugInformation": "Slug در url استفاده می شود. آدرس اینترنتی شما '/{{slug}}' خواهد بود.",
     "Permission:BlogManagement": "مدیریت وبلاگ",
     "Permission:BlogManagement.Create": "ایجاد",
     "Permission:BlogManagement.Delete": "حذف",

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Application",
-  "hash": "ad0f3d1093197f282f9bff35583abecf",
+  "hash": "a9ca2b4f663694fa5d258984dc689f56",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
@@ -177,6 +177,27 @@
             {
               "type": "UpdateFeaturesDto",
               "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "DeleteAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
               "isOptional": false
             }
           ]

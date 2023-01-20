@@ -36,6 +36,7 @@
     "PersonalSettingsSaved": "व्यक्तिगत सेटिंग्स सहेजे गए",
     "PasswordChanged": "पासवर्ड बदला गया",
     "NewPasswordConfirmFailed": "कृपया नए पासवर्ड की पुष्टि करें।",
+    "NewPasswordSameAsOld": "नया पासवर्ड वर्तमान पासवर्ड से एक ही होना चाहिए।",
     "Manage": "प्रबंधित",
     "MyAccount": "मेरा खाता",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "क्या स्व-पंजीकरण सक्षम है",

@@ -38,6 +38,12 @@ public class AbpAuditingOptions
     /// </summary>
     public bool AlwaysLogOnException { get; set; }
 
+    /// <summary>
+    /// Disables/enables audit logging for integration services.
+    /// Default: false.
+    /// </summary>
+    public bool IsEnabledForIntegrationServices { get; set; }
+
     public List<Func<AuditLogInfo, Task<bool>>> AlwaysLogSelectors { get; }
 
     public List<AuditLogContributor> Contributors { get; }
@@ -51,6 +57,11 @@ public class AbpAuditingOptions
     /// Default: false.
     /// </summary>
     public bool IsEnabledForGetRequests { get; set; }
+
+    /// <summary>
+    /// Default: false.
+    /// </summary>
+    public bool DisableLogActionInfo { get; set; }
 
     public AbpAuditingOptions()
     {

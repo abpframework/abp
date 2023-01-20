@@ -21,20 +21,14 @@
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script src="/client-proxies/multi-tenancy-proxy.js" />
         <abp-script src="/Pages/FeatureManagement/feature-management-modal.js"/>
-        <abp-script src="/Pages/TenantManagement/Tenants/Index.js"/>
+        <abp-script src="/Pages/TenantManagement/Tenants/Index.js" />
+        <abp-script src="/Pages/TenantManagement/Tenants/Create.js" />
     </abp-script-bundle>
 }
+@section content_toolbar {
+    @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
+}
 <abp-card id="TenantsWrapper">
-    <abp-card-header>
-        <abp-row>
-            <abp-column size-md="_6">
-                <abp-card-title>@L["Tenants"]</abp-card-title>
-            </abp-column>
-            <abp-column size-md="_6" class="text-end">
-                @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
-            </abp-column>
-        </abp-row>
-    </abp-card-header>
     <abp-card-body>
         <abp-table striped-rows="true" class="nowrap"></abp-table>
     </abp-card-body>

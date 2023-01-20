@@ -35,6 +35,7 @@
     "PersonalSettingsSaved": "Персональные настройки сохранены",
     "PasswordChanged": "Пароль изменен",
     "NewPasswordConfirmFailed": "Пожалуйста подтвердите новый пароль.",
+    "NewPasswordSameAsOld": "Новый пароль не должен совпадать со старым.",
     "Manage": "Управление учетной записью",
     "MyAccount": "Мой аккаунт",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Самостоятельная регистрация включена",

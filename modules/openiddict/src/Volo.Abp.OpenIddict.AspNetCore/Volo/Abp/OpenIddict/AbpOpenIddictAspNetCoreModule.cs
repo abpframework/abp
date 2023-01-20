@@ -54,19 +54,19 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             .AddServer(builder =>
             {
                 builder
-                    .SetAuthorizationEndpointUris("/connect/authorize", "/connect/authorize/callback")
-                    // /.well-known/oauth-authorization-server
-                    // /.well-known/openid-configuration
+                    .SetAuthorizationEndpointUris("connect/authorize", "connect/authorize/callback")
+                    // .well-known/oauth-authorization-server
+                    // .well-known/openid-configuration
                     //.SetConfigurationEndpointUris()
-                    // /.well-known/jwks
+                    // .well-known/jwks
                     //.SetCryptographyEndpointUris()
-                    .SetDeviceEndpointUris("/device")
-                    .SetIntrospectionEndpointUris("/connect/introspect")
-                    .SetLogoutEndpointUris("/connect/logout")
-                    .SetRevocationEndpointUris("/connect/revocat")
-                    .SetTokenEndpointUris("/connect/token")
-                    .SetUserinfoEndpointUris("/connect/userinfo")
-                    .SetVerificationEndpointUris("/connect/verify");
+                    .SetDeviceEndpointUris("device")
+                    .SetIntrospectionEndpointUris("connect/introspect")
+                    .SetLogoutEndpointUris("connect/logout")
+                    .SetRevocationEndpointUris("connect/revocat")
+                    .SetTokenEndpointUris("connect/token")
+                    .SetUserinfoEndpointUris("connect/userinfo")
+                    .SetVerificationEndpointUris("connect/verify");
 
                 builder
                     .AllowAuthorizationCodeFlow()

@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Czy na pewno chcesz usunąć tę stronę?",
     "PageId": "Strona",
     "Pages": "Strony",
-    "PageSlugInformation": "Slug jest używany na adresie URL. Twój adres URL to „/pages/{{slug}}”.",
+    "PageSlugInformation": "Slug jest używany na adresie URL. Twój adres URL to „/{{slug}}”.",
     "Permission:BlogManagement": "Zarządzanie blogiem",
     "Permission:BlogManagement.Create": "Tworzyć",
     "Permission:BlogManagement.Delete": "Kasować",

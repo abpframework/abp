@@ -66,6 +66,41 @@ public class YourModule : AbpModule
   }
 ````
 
+### 指定队列
+
+你可以使用 [`QueueAttribute`](https://docs.hangfire.io/en/latest/background-processing/configuring-queues.html) 来指定队列.
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.BackgroundJobs;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Emailing;
+
+namespace MyProject
+{
+    [Queue("alpha")]
+    public class EmailSendingJob
+        : AsyncBackgroundJob<EmailSendingArgs>, ITransientDependency
+    {
+        private readonly IEmailSender _emailSender;
+
+        public EmailSendingJob(IEmailSender emailSender)
+        {
+            _emailSender = emailSender;
+        }
+
+        public override async Task ExecuteAsync(EmailSendingArgs args)
+        {
+            await _emailSender.SendAsync(
+                args.EmailAddress,
+                args.Subject,
+                args.Body
+            );
+        }
+    }
+}
+````
+
 1. 如果你想要使用Hangfire的面板,你可以在 `Module` 类的 `OnApplicationInitialization` 方法添加: `UseHangfireDashboard`
 
 ````csharp
