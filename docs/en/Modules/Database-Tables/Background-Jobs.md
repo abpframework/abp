@@ -8,5 +8,4 @@ This table stores information about the background jobs in the application. Each
 
 ### Module
 
-[`Volo.Abp.BackgroundJobs`](../../Background-Jobs.md)
-
+[`Volo.Abp.BackgroundJobs`](../Background-Jobs.md)
