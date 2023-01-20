@@ -109,7 +109,7 @@ This table stores information about the BLOB (binary large object) containers in
 
 ## Module
 
-[`Volo.Abp.BlobStoring`](Blob-Storing.md)
+`Volo.Abp.BlobStoring`
 
 ### Used By
 
@@ -129,7 +129,7 @@ This table stores the binary data of BLOBs (binary large objects) in the applica
 
 ### Module
 
-[`Volo.Abp.BlobStoring`](Blob-Storing.md)
+`Volo.Abp.BlobStoring`
 
 ### Uses 
 
@@ -813,7 +813,7 @@ This table stores security logs of the application. Each record in the table rep
 
 ### Module
 
-[`Volo.Abp.Security`](Identity.md)
+[`Volo.Abp.Identity`](Identity.md)
 
 ---
 
@@ -827,7 +827,7 @@ This table stores information about the languages supported in the application. 
 
 ### Module
     
-[`Volo.Abp.Localization`](Localization.md)
+`Volo.Abp.Localization`
 
 ---
 
@@ -841,7 +841,7 @@ This table stores the localized text for different languages in the application.
 
 ### Module
 
-[`Volo.Abp.Localization`](Localization.md)
+`Volo.Abp.Localization`
 
 ---
 
@@ -855,7 +855,7 @@ This table stores the localization resources for the application. Each record in
 
 ### Module
 
-[`Volo.Abp.Localization`](Localization.md)
+`Volo.Abp.Localization`
 
 ---
 
@@ -869,7 +869,7 @@ This table stores the localization texts in the application. Each record in the 
 
 ### Module
 
-[`Volo.Abp.Localization`](Localization.md)
+`Volo.Abp.Localization`
 
 ---
 
@@ -939,7 +939,7 @@ This table stores the text template contents for the application. Each record in
 
 ### Module
 
-[`Volo.Abp.TextTemplating`](Text-Templating.md)
+`Volo.Abp.TextTemplating`
 
 ---
 
