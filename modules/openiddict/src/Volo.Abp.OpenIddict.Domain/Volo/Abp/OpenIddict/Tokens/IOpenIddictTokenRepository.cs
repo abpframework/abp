@@ -12,6 +12,8 @@ public interface IOpenIddictTokenRepository : IBasicRepository<OpenIddictToken, 
 
     Task DeleteManyByAuthorizationIdAsync(Guid authorizationId, bool autoSave = false, CancellationToken cancellationToken = default);
 
+    Task DeleteManyByAuthorizationIdsAsync(Guid[] authorizationIds, bool autoSave = false, CancellationToken cancellationToken = default);
+
     Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, CancellationToken cancellationToken = default);
 
     Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, string status, CancellationToken cancellationToken = default);
