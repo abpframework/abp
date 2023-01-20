@@ -143,6 +143,7 @@
     "Volo.AbpIo.Domain:060001": "Upprunaslóð (\"{PostUrl} \") er ekki Github slóð",
     "Volo.AbpIo.Domain:060002": "Innihald greinar er ekki fáanlegt frá Github (\"{PostUrl} \") resoursum.",
     "Volo.AbpIo.Domain:060003": "Innihald greinar fannst ekki!",
-    "SeeMore": "Sjá Meira"
+    "SeeMore": "Sjá Meira",
+    "IConsentToMedium": "Ég samþykki birtingu þessarar færslu á https://medium.com/volosoft."
   }
 }

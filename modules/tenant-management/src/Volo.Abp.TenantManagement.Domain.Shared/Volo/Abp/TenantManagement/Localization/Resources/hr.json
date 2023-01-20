@@ -1,0 +1,23 @@
+{
+    "culture": "hr",
+    "texts": {
+        "Volo.Abp.TenantManagement:DuplicateTenantName": "Ime stanara već postoji: {Name}",
+        "Menu:TenantManagement": "Upravljanje stanarima",
+        "Tenants": "Stanari",
+        "NewTenant": "Novi stanar",
+        "TenantName": "Ime Tenant-a",
+        "DisplayName:TenantName": "Ime Tenant-a",
+        "TenantDeletionConfirmationMessage": "Tenant '{0}' bit će izbrisan. Potvrđujete li to?",
+        "ConnectionStrings": "Veze na bazu podataka",
+        "DisplayName:DefaultConnectionString": "Zadana veza na bazu podataka",
+        "DisplayName:UseSharedDatabase": "Koristite dijeljenu bazu podataka",
+        "Permission:TenantManagement": "Upravljanje tenant-ima",
+        "Permission:Create": "Stvoriti",
+        "Permission:Edit": "Uredi",
+        "Permission:Delete": "Izbrisati",
+        "Permission:ManageConnectionStrings": "Upravljanje vezom na bazu podataka",
+        "Permission:ManageFeatures": "Upravljanje značajkama",
+        "DisplayName:AdminEmailAddress": "Adresa e-pošte administratora",
+        "DisplayName:AdminPassword": "Administratorska lozinka"
+    }
+}

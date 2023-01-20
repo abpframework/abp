@@ -23,4 +23,9 @@ public interface IDeviceFlowCodesRepository : IBasicRepository<DeviceFlowCodes, 
         int maxResultCount,
         CancellationToken cancellationToken = default
     );
+
+    Task DeleteExpirationAsync(
+        DateTime maxExpirationDate,
+        CancellationToken cancellationToken = default
+    );
 }

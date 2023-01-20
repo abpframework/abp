@@ -19,7 +19,7 @@ public class ContentParser : ITransientDependency
         _options = options.Value;
     }
 
-    public Task<List<ContentFragment>> ParseAsync(string content)
+    public virtual Task<List<ContentFragment>> ParseAsync(string content)
     {
         if (!_options.WidgetConfigs.Any() || content is null)
         {
@@ -38,9 +38,9 @@ public class ContentParser : ITransientDependency
         return Task.FromResult(contentFragments);
     }
 
-    private void ParseContent(string content, List<string> parsedList)
+    protected virtual void ParseContent(string content, List<string> parsedList)
     {
-        var replacedText = Regex.Replace(content, @"\[.*?\]", Delimeter);
+        var replacedText = Regex.Replace(content, @"\[Widget.*?\]", Delimeter);
         if (!replacedText.Contains(Delimeter))
         {
             parsedList.Add(replacedText);
@@ -74,7 +74,7 @@ public class ContentParser : ITransientDependency
         }
     }
 
-    private void FillContentFragment(string content, List<string> parsedList, List<ContentFragment> contentFragments)
+    protected virtual void FillContentFragment(string content, List<string> parsedList, List<ContentFragment> contentFragments)
     {
         content = Regex.Replace(content, @"=\s*""", @"=""");
         content = Regex.Replace(content, @"""\s*=", @"""=");

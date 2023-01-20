@@ -12,7 +12,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity;
 
-public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser
+public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVersion
 {
     public virtual Guid? TenantId { get; protected set; }
 
@@ -111,6 +111,11 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser
     /// Gets or sets the number of failed login attempts for the current user.
     /// </summary>
     public virtual int AccessFailedCount { get; protected internal set; }
+
+    /// <summary>
+    /// A version value that is increased whenever the entity is changed.
+    /// </summary>
+    public virtual int EntityVersion { get; protected set; }
 
     //TODO: Can we make collections readonly collection, which will provide encapsulation. But... can work for all ORMs?
 
