@@ -8,4 +8,4 @@ This table stores the application settings. Each record in the table represents 
 
 ### Module
 
-[`AbpSettingManagement`](../../Setting-Management.md)
+[`AbpSettingManagement`](../Setting-Management.md)
