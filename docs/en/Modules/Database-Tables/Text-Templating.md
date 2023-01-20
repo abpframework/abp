@@ -8,5 +8,4 @@ This table stores the text template contents for the application. Each record in
 
 ### Module
 
-[`Volo.Abp.TextTemplateManagement`](../../Text-Template-Management.md)
-
+[`Volo.Abp.TextTemplating`](../../Text-Templating.md)
