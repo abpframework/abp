@@ -20,7 +20,7 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
         _htmlSanitizer = new HtmlSanitizer();
     }
 
-    public Task<string> RenderAsync(string rawMarkdown, bool allowHtmlTags = true, bool preventXSS = true)
+    public Task<string> RenderAsync(string rawMarkdown, bool allowHtmlTags = true, bool preventXSS = true, string[] rels = null)
     {
         if (!allowHtmlTags)
         {
@@ -33,8 +33,23 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
         {
             html = _htmlSanitizer.Sanitize(html);
         }
+        
+        if(rels != null && rels.Any())
+        {
+            html = AddRelToLinks(html, rels);
+        }
 
         return Task.FromResult(html);
+    }
+
+    private string AddRelToLinks(string html, string[] rels)
+    {
+        var rel = string.Join(" ", rels);
+        var regex = new Regex("<a(.*?>)", RegexOptions.IgnoreCase |
+                                          RegexOptions.Singleline |
+                                          RegexOptions.Multiline |
+                                          RegexOptions.Compiled);
+        return regex.Replace(html, $"<a rel=\"{rel}\" $1");
     }
 
 
