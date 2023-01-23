@@ -19,16 +19,15 @@ export class ApiInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler) {
-    if (request.context?.get(IS_EXTERNAL_REQUEST)) {
-      return next.handle(request);
-    }
     this.httpWaitService.addRequest(request);
-    return next
-      .handle(
-        request.clone({
+    const isExternalRequest = request.context?.get(IS_EXTERNAL_REQUEST);
+    const newRequest = isExternalRequest
+      ? request
+      : request.clone({
           setHeaders: this.getAdditionalHeaders(request.headers),
-        }),
-      )
+        });
+    return next
+      .handle(newRequest)
       .pipe(finalize(() => this.httpWaitService.deleteRequest(request)));
   }
 
