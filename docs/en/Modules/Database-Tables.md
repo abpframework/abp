@@ -779,6 +779,7 @@ This table stores information about the organization units in the application. E
 | --- | --- | --- |
 | [`AbpOrganizationUnitRoles`](#abporganizationunitroles) | `OrganizationUnitId` | To match the organization unit with its roles. |
 | [`AbpUserOrganizationUnits`](#abpuserorganizationunits) | `OrganizationUnitId` | To match the organization unit with its users. |
+
 ---
 
 ## AbpOrganizationUnitRoles
