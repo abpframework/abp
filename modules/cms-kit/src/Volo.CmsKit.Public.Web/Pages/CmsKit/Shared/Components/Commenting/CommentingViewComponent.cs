@@ -101,12 +101,12 @@ public class CommentingViewComponent : AbpViewComponent
     private async Task ConvertMarkdownTextsToHtml(CommentingViewModel viewModel)
     {
         viewModel.RawCommentTexts = new Dictionary<Guid, string>();
-        var referralLinks = viewModel.ReferralLinks?.ToArray();
+        var referralLinks = viewModel.ReferralLinks?.JoinAsString(" ");
 
         foreach (var comment in viewModel.Comments)
         {
             viewModel.RawCommentTexts.Add(comment.Id, comment.Text);
-            comment.Text = await MarkdownToHtmlRenderer.RenderAsync(comment.Text, allowHtmlTags: false, preventXSS: true, referralLinks: referralLinks.JoinAsString(" "));
+            comment.Text = await MarkdownToHtmlRenderer.RenderAsync(comment.Text, allowHtmlTags: false, preventXSS: true, referralLinks: referralLinks);
 
             foreach (var reply in comment.Replies)
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
             html = _htmlSanitizer.Sanitize(html);
         }
         
-        if(referralLinks != null)
+        if(!referralLinks.IsNullOrWhiteSpace())
         {
             html = SetReferralLinks(html, referralLinks);
         }
