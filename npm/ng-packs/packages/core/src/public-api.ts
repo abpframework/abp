@@ -23,3 +23,4 @@ export * from './lib/strategies';
 export * from './lib/tokens';
 export * from './lib/utils';
 export * from './lib/validators';
+export * from './lib/clients';

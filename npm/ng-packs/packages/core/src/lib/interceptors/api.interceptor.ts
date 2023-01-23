@@ -5,6 +5,7 @@ import { finalize } from 'rxjs/operators';
 import { SessionStateService } from '../services/session-state.service';
 import { HttpWaitService } from '../services/http-wait.service';
 import { TENANT_KEY } from '../tokens/tenant-key.token';
+import { IS_EXTERNAL_REQUEST } from '../tokens/http-context.token';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,9 @@ export class ApiInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler) {
+    if (request.context?.get(IS_EXTERNAL_REQUEST)) {
+      return next.handle(request);
+    }
     this.httpWaitService.addRequest(request);
     return next
       .handle(
