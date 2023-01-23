@@ -35,11 +35,12 @@ The comment system provides a commenting [widget](../../UI/AspNetCore/Widgets.md
 @await Component.InvokeAsync(typeof(CommentingViewComponent), new
 {
   entityType = "Product",
-  entityId = "..."
+  entityId = "...",
+  referralLinks  = new [] {"nofollow"}
 })
 ```
 
-`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here.
+`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. `referralLinks` is an optional parameter. You can use it to add `nofollow` or `noreferrer` links to the comment links.
 
 ## User Interface
 
