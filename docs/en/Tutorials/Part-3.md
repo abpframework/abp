@@ -653,7 +653,7 @@ Open `/src/app/book/book.component.html` and make the following changes:
         <!-- Add the "new book" button here -->
         <div class="text-lg-end pt-2">
           <button id="create" class="btn btn-primary" type="button" (click)="createBook()">
-            <i class="fa fa-plus mr-1"></i>
+            <i class="fa fa-plus me-1"></i>
             <span>{%{{{ "::NewBook" | abpLocalization }}}%}</span>
           </button>
         </div>
@@ -773,17 +773,17 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
 ```html
 <ng-template #abpBody>
   <form [formGroup]="form" (ngSubmit)="save()">
-    <div class="form-group">
+    <div class="mt-2">
       <label for="book-name">Name</label><span> * </span>
       <input type="text" id="book-name" class="form-control" formControlName="name" autofocus />
     </div>
 
-    <div class="form-group">
+    <div class="mt-2">
       <label for="book-price">Price</label><span> * </span>
       <input type="number" id="book-price" class="form-control" formControlName="price" />
     </div>
 
-    <div class="form-group">
+    <div class="mt-2">
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
@@ -791,7 +791,7 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="mt-2">
       <label>Publish date</label><span> * </span>
       <input
         #datepicker="ngbDatepicker"
@@ -1038,7 +1038,7 @@ Open `/src/app/book/book.component.html`  and add the following `ngx-datatable-
         aria-haspopup="true"
         ngbDropdownToggle
       >
-        <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
+        <i class="fa fa-cog me-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
       </button>
       <div ngbDropdownMenu>
         <button ngbDropdownItem (click)="editBook(row.id)">
