@@ -40,7 +40,7 @@ The comment system provides a commenting [widget](../../UI/AspNetCore/Widgets.md
 })
 ```
 
-`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. `referralLinks` is an optional parameter. You can use it to add `nofollow` or `noreferrer` links to the comment links.
+`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. `referralLinks` is an optional parameter. You can use this parameter to add values (such as "nofollow", "noreferrer", or any other values) to the [rel attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel) of links.
 
 ## User Interface
 
