@@ -7,3 +7,4 @@ export * from './manage-profile.token';
 export * from './options.token';
 export * from './queue.token';
 export * from './tenant-key.token';
+export * from './http-context.token';
