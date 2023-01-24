@@ -30,6 +30,10 @@ public class PublicApplicationAutoMapperProfile : Profile
 
         CreateMap<Rating, RatingDto>();
 
+        CreateMap<Page, PageCacheItem>();
+
+        CreateMap<PageCacheItem, PageDto>();
+
         CreateMap<Page, PageDto>();
         
         CreateMap<BlogPost, BlogPostCommonDto>();

@@ -18,9 +18,9 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
     protected IPageRepository PageRepository { get; }
 	protected PageManager PageManager { get; }
 
-    protected IDistributedCache<PageDto> PageCache { get; }
+    protected IDistributedCache<PageCacheItem> PageCache { get; }
 
-    public PagePublicAppService(IPageRepository pageRepository, PageManager pageManager, IDistributedCache<PageDto> pageCache)
+    public PagePublicAppService(IPageRepository pageRepository, PageManager pageManager, IDistributedCache<PageCacheItem> pageCache)
     {
         PageRepository = pageRepository;
         PageManager = pageManager;
@@ -30,7 +30,6 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
     public virtual async Task<PageDto> FindBySlugAsync(string slug)
     {
         var page = await PageRepository.FindBySlugAsync(slug);
-
         if (page == null)
         {
             return null;
@@ -41,8 +40,8 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
     public virtual async Task<PageDto> FindDefaultHomePageAsync()
     {
-        var pageDto = await PageCache.GetAsync("DefaultHomePage");
-        if (pageDto is null)
+        var pageCacheItem = await PageCache.GetAsync(PageConsts.DefaultHomePageCacheKey);
+        if (pageCacheItem is null)
         {
             var page = await PageManager.GetHomePageAsync();
             if (page is null)
@@ -50,12 +49,12 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
                 return null;
             }
 
-            pageDto = ObjectMapper.Map<Page, PageDto>(page);
+            pageCacheItem = ObjectMapper.Map<Page, PageCacheItem>(page);
 
-            await PageCache.SetAsync("DefaultHomePage", pageDto,
+            await PageCache.SetAsync(PageConsts.DefaultHomePageCacheKey, pageCacheItem,
                 new DistributedCacheEntryOptions { AbsoluteExpiration = DateTimeOffset.Now.AddHours(1) });
         }
 
-        return pageDto;
+        return ObjectMapper.Map<PageCacheItem, PageDto>(pageCacheItem);
     }
 }
