@@ -1,4 +1,3 @@
-
 export interface ActionApiDescriptionModel {
   uniqueName?: string;
   name?: string;
@@ -25,7 +24,7 @@ export interface ControllerApiDescriptionModel {
   controllerName?: string;
   controllerGroupName?: string;
   isRemoteService: boolean;
-  integrationService: boolean;
+  isIntegrationService: boolean;
   apiVersion?: string;
   type?: string;
   interfaces: ControllerInterfaceApiDescriptionModel[];
