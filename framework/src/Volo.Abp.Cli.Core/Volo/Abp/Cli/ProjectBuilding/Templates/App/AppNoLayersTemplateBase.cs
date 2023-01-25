@@ -77,19 +77,19 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", 
                     "MyCompanyName.MyProjectName.Contracts"));
                 
-                steps.Add(new MoveProjectStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly/Client", 
-                    "/MyCompanyName.MyProjectName.Blazor",
+                steps.Add(new MoveProjectStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Client", 
+                    "/aspnet-core/MyCompanyName.MyProjectName.Blazor",
                     "MyCompanyName.MyProjectName.Blazor.WebAssembly\\Client\\MyCompanyName.MyProjectName.Blazor.csproj",
                     "MyCompanyName.MyProjectName.Blazor\\MyCompanyName.MyProjectName.Blazor.csproj"));
-                steps.Add(new MoveProjectStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server", 
-                    "/MyCompanyName.MyProjectName.Host",
+                steps.Add(new MoveProjectStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server", 
+                    "/aspnet-core/MyCompanyName.MyProjectName.Host",
                     "MyCompanyName.MyProjectName.Blazor.WebAssembly\\Server\\MyCompanyName.MyProjectName.Host.csproj",
                     "MyCompanyName.MyProjectName.Host\\MyCompanyName.MyProjectName.Host.csproj"));
-                steps.Add(new MoveProjectStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly/Shared", 
-                    "/MyCompanyName.MyProjectName.Contracts",
+                steps.Add(new MoveProjectStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Shared", 
+                    "/aspnet-core/MyCompanyName.MyProjectName.Contracts",
                     "MyCompanyName.MyProjectName.Blazor.WebAssembly\\Shared\\MyCompanyName.MyProjectName.Contracts.csproj",
                     "MyCompanyName.MyProjectName.Contracts\\MyCompanyName.MyProjectName.Contracts.csproj"));
-                steps.Add(new RemoveFolderStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly"));
+                steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly"));
                 break;
             
             case UiFramework.BlazorServer:
@@ -132,12 +132,12 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
     private static void RemoveBlazorWasmProjects(List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server",
-            projectFolderPath: "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server"));
+            projectFolderPath: "/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Client",
-            projectFolderPath: "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Client"));
+            projectFolderPath: "/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Client"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared",
-            projectFolderPath: "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Shared"));
-        steps.Add(new RemoveFolderStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly/"));
+            projectFolderPath: "/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Shared"));
+        steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly"));
     }
 
     protected void ConfigureDockerFiles(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
