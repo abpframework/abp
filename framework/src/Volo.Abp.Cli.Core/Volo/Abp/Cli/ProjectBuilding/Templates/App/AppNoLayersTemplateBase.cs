@@ -29,15 +29,19 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo", projectFolderPath: "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server.Mongo"));
                 break;
             case DatabaseProvider.MongoDb:
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server", projectFolderPath: "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server"));
 
+                steps.Add(new MoveFolderStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server.Mongo", "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Mvc.Mongo", "MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host.Mongo", "MyCompanyName.MyProjectName.Host"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo", "MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo", "MyCompanyName.MyProjectName.Blazor.WebAssembly.Server"));
                 break;
         }
 
@@ -49,6 +53,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host", "MyCompanyName.MyProjectName"));
+                RemoveBlazorWasmProjects(steps);
                 break;
 
             case UiFramework.None:
@@ -56,13 +61,43 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host", "MyCompanyName.MyProjectName"));
+                RemoveBlazorWasmProjects(steps);
                 break;
 
+            case UiFramework.Blazor:
+                steps.Add(new RemoveFolderStep("/angular"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
+                
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server",
+                     "MyCompanyName.MyProjectName.Host"));
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Client",
+                     "MyCompanyName.MyProjectName.Blazor"));
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", 
+                    "MyCompanyName.MyProjectName.Contracts"));
+                
+                steps.Add(new MoveProjectStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly/Client", 
+                    "/MyCompanyName.MyProjectName.Blazor",
+                    "MyCompanyName.MyProjectName.Blazor.WebAssembly\\Client\\MyCompanyName.MyProjectName.Blazor.csproj",
+                    "MyCompanyName.MyProjectName.Blazor\\MyCompanyName.MyProjectName.Blazor.csproj"));
+                steps.Add(new MoveProjectStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server", 
+                    "/MyCompanyName.MyProjectName.Host",
+                    "MyCompanyName.MyProjectName.Blazor.WebAssembly\\Server\\MyCompanyName.MyProjectName.Host.csproj",
+                    "MyCompanyName.MyProjectName.Host\\MyCompanyName.MyProjectName.Host.csproj"));
+                steps.Add(new MoveProjectStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly/Shared", 
+                    "/MyCompanyName.MyProjectName.Contracts",
+                    "MyCompanyName.MyProjectName.Blazor.WebAssembly\\Shared\\MyCompanyName.MyProjectName.Contracts.csproj",
+                    "MyCompanyName.MyProjectName.Contracts\\MyCompanyName.MyProjectName.Contracts.csproj"));
+                steps.Add(new RemoveFolderStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly"));
+                break;
+            
             case UiFramework.BlazorServer:
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server", "MyCompanyName.MyProjectName"));
+                RemoveBlazorWasmProjects(steps);
                 break;
 
             case UiFramework.NotSpecified:
@@ -71,11 +106,11 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Mvc", "MyCompanyName.MyProjectName"));
+                RemoveBlazorWasmProjects(steps);
                 break;
-
-            case UiFramework.Blazor:
-                throw new AbpException("app-nolayers doesn't support blazor wasm.");
-                break;
+            
+            default:
+                throw new AbpException("Unkown UI framework: " + context.BuildArgs.UiFramework);
         }
 
         steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName/Migrations"));
@@ -92,6 +127,17 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         }
 
         return steps;
+    }
+
+    private static void RemoveBlazorWasmProjects(List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server",
+            projectFolderPath: "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Client",
+            projectFolderPath: "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Client"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared",
+            projectFolderPath: "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Shared"));
+        steps.Add(new RemoveFolderStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly/"));
     }
 
     protected void ConfigureDockerFiles(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
