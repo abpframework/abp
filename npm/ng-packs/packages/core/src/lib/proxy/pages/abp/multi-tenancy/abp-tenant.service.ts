@@ -1,5 +1,5 @@
-import { RestService } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
+import { RestService } from '../../../../services/rest.service';
 import type { FindTenantResultDto } from '../../../volo/abp/asp-net-core/mvc/multi-tenancy/models';
 
 @Injectable({

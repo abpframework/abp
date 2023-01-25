@@ -1,5 +1,5 @@
 import type { ApplicationConfigurationDto, ApplicationConfigurationRequestOptions } from './models';
-import { RestService } from '@abp/ng.core';
+import { RestService } from '../../../../../../services/rest.service';
 import { Injectable } from '@angular/core';
 
 @Injectable({
