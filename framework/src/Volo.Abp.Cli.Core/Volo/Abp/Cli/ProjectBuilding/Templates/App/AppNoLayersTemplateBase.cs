@@ -29,15 +29,15 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo", projectFolderPath: "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server.Mongo"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo", projectFolderPath: "/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server.Mongo"));
                 break;
             case DatabaseProvider.MongoDb:
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server", projectFolderPath: "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server", projectFolderPath: "/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server"));
 
-                steps.Add(new MoveFolderStep("/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server.Mongo", "/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server"));
+                steps.Add(new MoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server.Mongo", "/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Mvc.Mongo", "MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host.Mongo", "MyCompanyName.MyProjectName.Host"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo", "MyCompanyName.MyProjectName.Blazor.Server"));
@@ -77,18 +77,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", 
                     "MyCompanyName.MyProjectName.Contracts"));
                 
-                steps.Add(new MoveProjectStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Client", 
-                    "/aspnet-core/MyCompanyName.MyProjectName.Blazor",
-                    "MyCompanyName.MyProjectName.Blazor.WebAssembly\\Client\\MyCompanyName.MyProjectName.Blazor.csproj",
-                    "MyCompanyName.MyProjectName.Blazor\\MyCompanyName.MyProjectName.Blazor.csproj"));
-                steps.Add(new MoveProjectStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Server", 
-                    "/aspnet-core/MyCompanyName.MyProjectName.Host",
-                    "MyCompanyName.MyProjectName.Blazor.WebAssembly\\Server\\MyCompanyName.MyProjectName.Host.csproj",
-                    "MyCompanyName.MyProjectName.Host\\MyCompanyName.MyProjectName.Host.csproj"));
-                steps.Add(new MoveProjectStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Shared", 
-                    "/aspnet-core/MyCompanyName.MyProjectName.Contracts",
-                    "MyCompanyName.MyProjectName.Blazor.WebAssembly\\Shared\\MyCompanyName.MyProjectName.Contracts.csproj",
-                    "MyCompanyName.MyProjectName.Contracts\\MyCompanyName.MyProjectName.Contracts.csproj"));
+                steps.Add(new AppNoLayersMoveProjectsStep());
                 steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly"));
                 break;
             

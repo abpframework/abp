@@ -584,7 +584,8 @@ public abstract class AppTemplateBase : TemplateInfo
                         "https://localhost:44306",
                         "https://localhost:44307",
                         "https://localhost:44308",
-                        "https://localhost:44309"
+                        "https://localhost:44309",
+                        "https://localhost:44310"
                 }
             )
         );
