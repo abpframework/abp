@@ -354,7 +354,14 @@ var abp = abp || {};
                     for (var i = 0; i < requestData.order.length; i++) {
                         var orderingField = requestData.order[i];
 
-                        if (requestData.columns[orderingField.column].data) {
+                        if (requestData.columns[orderingField.column].name) {
+                            input.sorting += requestData.columns[orderingField.column].name + " " + orderingField.dir;
+
+                            if (i < requestData.order.length - 1) {
+                                input.sorting += ",";
+                            }
+                        }
+                        else if (requestData.columns[orderingField.column].data) {
                             input.sorting += requestData.columns[orderingField.column].data + " " + orderingField.dir;
 
                             if (i < requestData.order.length - 1) {
