@@ -1130,15 +1130,15 @@ Override the `OpenCreateModalAsync` method and adding the following code:
 
 ````csharp
 protected override async Task OpenCreateModalAsync()
+{
+    if (!authorList.Any())
     {
-        if (!authorList.Any())
-        {
-            throw new UserFriendlyException(message: L["AnAuthorIsRequiredForCreatingBook"]);
-        }
-        
-        await base.OpenCreateModalAsync();
-        NewEntity.AuthorId = authorList.First().Id;
+        throw new UserFriendlyException(message: L["AnAuthorIsRequiredForCreatingBook"]);
     }
+        
+    await base.OpenCreateModalAsync();
+    NewEntity.AuthorId = authorList.First().Id;
+}
 ````
 
 The final `@code` block should be the following:
