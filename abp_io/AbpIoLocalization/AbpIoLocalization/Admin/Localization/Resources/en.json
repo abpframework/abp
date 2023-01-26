@@ -437,7 +437,17 @@
     "IsStableVersion": "Stable Version",
     "IsActive": "Active",
     "NewVersion": "New Version",
-    "VersionHistoryDeletionConfirmationMessage": "Are you sure you want to delete this version?"
-    
+    "VersionHistoryDeletionConfirmationMessage": "Are you sure you want to delete this version?",
+    "CreateAbpConsultantLogoInfo": "Maximum file size: <b>1MB</b> <br/> Supported file types: <b>jpg, jpeg, png, SVG, WebP</b>",
+    "UrlCode": "Url Code",
+    "Icon": "Icon",
+    "Clear": "Clear",
+    "TheImageIsTooLarge": "The image size is too large. Maximum size is {0}x{1}.",
+    "Permission:AbpConsultant": "ABP Consultant",
+    "Menu:AbpConsultants": "ABP Consultants",
+    "CreateAbpConsultant": "Create ABP Consultant",
+    "UrlCodeIsNotAvailable": "Url code is used by another ABP Consultant.",
+    "AbpConsultants": "ABP Consultants",
+    "AbpConsultant": "ABP Consultant"
   }
 }
