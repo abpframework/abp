@@ -374,7 +374,7 @@ Open the `/src/app/book/book.component.html` file and replace the create button 
 
 Books table in the book management page has an actions button for each row. The actions button includes *Edit* and *Delete* actions:
 
-![bookstore-edit-delete-actions](images/bookstore-edit-delete-actions.png)
+![bookstore-edit-delete-actions](images/bookstore-edit-delete-actions-2.png)
 
 We should hide an action if the current user has not granted for the related permission.
 
