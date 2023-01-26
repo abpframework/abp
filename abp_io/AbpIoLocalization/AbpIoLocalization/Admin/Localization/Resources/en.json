@@ -438,7 +438,7 @@
     "IsActive": "Active",
     "NewVersion": "New Version",
     "VersionHistoryDeletionConfirmationMessage": "Are you sure you want to delete this version?",
-    "CreateAbpConsultantLogoInfo": "Maximum file size: <b>1MB</b> <br/> Maximum size: <b>200x200</b> <br/> Supported file types: <b>jpg, jpeg, png, SVG, WebP</b>",
+    "CreateAbpConsultantLogoInfo": "Maximum file size: <b>1MB</b> <br/> Supported file types: <b>jpg, jpeg, png, SVG, WebP</b>",
     "UrlCode": "Url Code",
     "Save": "Save",
     "Icon": "Icon",
