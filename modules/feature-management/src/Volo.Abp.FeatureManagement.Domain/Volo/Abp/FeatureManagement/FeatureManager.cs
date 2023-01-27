@@ -235,7 +235,6 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
             .TakeWhile(p => p.Name == providerName)
             .ToList(); //Getting list for case of there are more than one provider with same providerName
 
-
         foreach (var featureNameValue in featureNameValues)
         {
             var feature = await FeatureDefinitionManager.GetAsync(featureNameValue.Name);
