@@ -442,7 +442,6 @@
     "UrlCode": "Url Code",
     "Icon": "Icon",
     "Clear": "Clear",
-    "TheImageIsTooLarge": "The image size is too large. Maximum size is {0}x{1}.",
     "Permission:AbpConsultant": "ABP Consultant",
     "Menu:AbpConsultants": "ABP Consultants",
     "CreateAbpConsultant": "Create ABP Consultant",
