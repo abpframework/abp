@@ -32,7 +32,7 @@ public class AppNoLayersMoveProjectsStep : ProjectBuildPipelineStep
 
     public void MoveFiles(ProjectBuildContext context, string projectFolder, string newProjectFolder)
     {
-        var fileEntries = context.Files.Where(file => file.Name.StartsWith(projectFolder)).ToList();
+        var fileEntries = context.Files.Where(file => file.Name.StartsWith(projectFolder));
         foreach (var fileEntry in fileEntries)
         {
             fileEntry.SetName(fileEntry.Name.ReplaceFirst(projectFolder, newProjectFolder));
@@ -51,7 +51,7 @@ public class AppNoLayersMoveProjectsStep : ProjectBuildPipelineStep
 
         foreach (var projectFile in projectFiles)
         {
-            projectFile.SetContent(projectFile.Content.Replace(oldContent,newContent));
+            projectFile.SetContent(projectFile.Content.Replace(oldContent, newContent));
         }
     }
 }
