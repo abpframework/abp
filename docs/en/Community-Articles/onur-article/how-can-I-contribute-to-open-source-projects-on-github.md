@@ -24,11 +24,11 @@ In order to develop on the project, you need to clone it to your local. After cl
 
 ![clone-image](images/clone-image.png)
 
-You can run the copied link on your local machine with the `git clone` command but we will use the Github Desktop application. Open it with Github Desktop and the repo will be uploaded to your local machine. 
+You can run the copied link on your local machine with the `git clone` command, but we will use Github Desktop. Press `Open with Github Desktop` and the repo will be installed on your local machine. 
 
 ## Step 3: Create a New Branch
 
-In this step, you need to create a new branch of your own before you start developing it. In this step, you need to create a new branch of your own before you start development. Open the repo on Github Desktop and create a new branch. 
+In this step, you need to create a new branch of your own before you start developing it. Open the repo on Github Desktop and create a new branch. When creating a new branch, be careful which branch you create it on.
 
 ![branch-image](images/branch-image.png)
 
@@ -38,27 +38,29 @@ Choose a suitable IDE to develop on the new branch you created. In order not to 
 
 ![developer-list](images/developer-list.png)
 
+As you can see, all changes made to the repo are reflected directly in Github Desktop.
+
+![github-desktop-change](images/github-desktop-change.png)
+
 ## Step 5: Commit
 
-You need to use the `git add .` command to add the file you modified. This command adds files from the working directory to the staging area for git. Then use `git commit -m` to commit the changes permanently.
-
-`git add .`
-
-`git commit -m "<your commit message>"`
+The commit operation is used to save the changes you have made. It is useful to commit after certain operations are done in the project. For the changes you will make, it is useful to write a short sentence describing what you are doing. Press the `Commit to <branch-name>` button to commit. 
 
 ![commit-image](images/commit-image.png)
 
-## Step 6: Push the Changes
+## Step 6: Publish the Changes
 
-The changes you have made so far are only visible on your local machine. The `git push` command is used to push these changes to the repository you forked.
-
-`git push origin <your branch name> `
+The changes you have made so far are only visible on your local machine. You need to publish these changes to submit them to your forked repository.
 
 ![push-image](images/git-push-image.png)
 
 ## Step 7: Create a Pull Request
 
-After the push, go to the github repo you forked. The `Compare and pull request` button will appear on the main page of the repository. Press the button for pull request
+After the push, the pull request `Create Pull Request` button will appear on the Github Desktop. Click it and create a pull request.
+
+![github-desktop-pull-request](images/github-desktop-pull-request.png)
+
+You can also make a pull request from the repo in your github profile.
 
 ![compare-pull-request](images/pull-request-image.png)
 
