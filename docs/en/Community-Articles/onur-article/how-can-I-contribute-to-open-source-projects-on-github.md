@@ -1,5 +1,9 @@
 # How to Contribute to ABP Framework
 
+## Introduction
+
+In this article I will explain how you can contribute to the open source ABP Framework. You will learn not only about the ABP Framework, but also how to contribute to an open source project, what are the standard rules, some git operations, etc.
+
 ## What is Open Source?
 
 Open source software is code designed to be publicly available. Anyone can view, use, modify and distribute your project and code. The fact that the code is open source makes it a natural community and open for improvement. This enables ideas and thoughts to spread rapidly.
@@ -64,7 +68,9 @@ You can also make a pull request from the repo in your github profile.
 
 ![compare-pull-request](images/pull-request-image.png)
 
-This will send a pull request to the original repository. Finally, click on the `Create pull request` button. If the pull request is approved and merged, your changes will also appear in the main repository.
+Before requesting a pull request, it is useful to select one of the Abp's tags to indicate the change you are making. Make sure that the branch you created has reached the correct branch. After briefly describing your changes in the title and description, click the `Create pull request` button. This will send a pull request to the original repository. If the pull request is approved and merged, your changes will also appear in the parent repository.
+
+
 
 ![open-pull-request](images/open-pull-request-image.png)
 
