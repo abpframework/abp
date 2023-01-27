@@ -24,17 +24,11 @@ In order to develop on the project, you need to clone it to your local. After cl
 
 ![clone-image](images/clone-image.png)
 
-You can run the copied link as on your local machine with the `git clone` command.
-
-`git clone <link to repo> `
-
-If you want you can clone it using Github Desktop and do it in a simpler way, but in this article we will use commands.
+You can run the copied link on your local machine with the `git clone` command but we will use the Github Desktop application. Open it with Github Desktop and the repo will be uploaded to your local machine. 
 
 ## Step 3: Create a New Branch
 
-In this step, you need to create a new branch of your own before you start developing it. Open the main folder of the repo you cloned via a command prompt and use `git checkout -b` to create a new branch. 
-
-`git checkout -b new-branch`
+In this step, you need to create a new branch of your own before you start developing it. In this step, you need to create a new branch of your own before you start development. Open the repo on Github Desktop and create a new branch. 
 
 ![branch-image](images/branch-image.png)
 
