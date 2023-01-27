@@ -216,7 +216,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         return featureNameValueWithGrantedProvider;
     }
 
-    public async Task DeleteAsync(string providerName, string providerKey)
+    public virtual async Task DeleteAsync(string providerName, string providerKey)
     {
         var featureNameValues = await GetAllAsync(providerName, providerKey);
 
