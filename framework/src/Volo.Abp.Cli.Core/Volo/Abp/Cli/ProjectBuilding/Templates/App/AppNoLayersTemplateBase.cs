@@ -78,6 +78,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                     "MyCompanyName.MyProjectName.Contracts"));
                 
                 steps.Add(new AppNoLayersMoveProjectsStep());
+                steps.Add(new AppNoLayersMigrateDatabaseChangeStep());
                 steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly"));
                 break;
             
