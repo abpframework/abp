@@ -71,7 +71,6 @@ You can also make a pull request from the repo in your github profile.
 Before requesting a pull request, it is useful to select one of the Abp's tags to indicate the change you are making. Make sure that the branch you created has reached the correct branch. After briefly describing your changes in the title and description, click the `Create pull request` button. This will send a pull request to the original repository. If the pull request is approved and merged, your changes will also appear in the parent repository.
 
 
-
 ![open-pull-request](images/open-pull-request-image.png)
 
 That's it! You have contributed to an open source project with your development.
