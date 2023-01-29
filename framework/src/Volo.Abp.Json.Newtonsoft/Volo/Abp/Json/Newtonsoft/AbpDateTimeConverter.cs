@@ -11,7 +11,7 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json.Newtonsoft;
 
-public class AbpDateTimeConverter : DateTimeConverterBase
+public class AbpDateTimeConverter : DateTimeConverterBase, ITransientDependency
 {
     private readonly string _dateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
     private readonly DateTimeStyles _dateTimeStyles = DateTimeStyles.RoundtripKind;
