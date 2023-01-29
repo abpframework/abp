@@ -112,8 +112,8 @@
                 @if (Model.VersionSelectItems.Any())
                 {
                     <div class="col">
-                        <div class="@(Model.LanguageSelectListItems.Count > 1 ? "pe-0" : "")">
-                            <div class="docs-version @(Model.LanguageSelectListItems.Count > 1 ? "pe-1" : "")">
+                        <div class="@(Model.VersionSelectItems.Count > 1 ? "pe-0" : "")">
+                            <div class="docs-version @(Model.VersionSelectItems.Count > 1 ? "pe-1" : "")">
                                 <span>@L["Version"]</span>
                                 <div class="version-select">
                                     <div class="input-group">
