@@ -1,4 +1,4 @@
-﻿using MyCompanyName.MyProjectName.Shared.Localization;
+﻿using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -12,7 +12,7 @@ using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName.Shared;
+namespace MyCompanyName.MyProjectName;
 
 [DependsOn(
     typeof(AbpValidationModule),
@@ -23,15 +23,15 @@ namespace MyCompanyName.MyProjectName.Shared;
     typeof(AbpFeatureManagementApplicationContractsModule),
     typeof(AbpSettingManagementApplicationContractsModule)
 )]
-public class MyProjectNameSharedModule : AbpModule
+public class MyProjectNameContractsModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<MyProjectNameSharedModule>();
+            options.FileSets.AddEmbedded<MyProjectNameContractsModule>();
         });
-        
+
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
