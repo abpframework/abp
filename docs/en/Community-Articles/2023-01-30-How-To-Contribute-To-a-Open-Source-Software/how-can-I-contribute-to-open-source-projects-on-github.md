@@ -16,7 +16,7 @@ ABP Framework is a complete infrastructure for building modern web applications 
 
 Before making any changes and trying to push them to the target repository we need to create a new [issue](https://github.com/abpframework/abp/issues) if there are no issues with the work. If there is an existing issue, you can proceed through this issue. This way, no other developer will work on the same issue and your PR will have a better chance to be accepted.
 
-Previous ABP Community Talk on this topic can be found here  https://www.youtube.com/watch?v=Wz4Z-O-YoPg
+Previous ABP Community Talk on this topic can be found [here](https://www.youtube.com/watch?v=Wz4Z-O-YoPg).
 
 ## GitHub Issues
 You may want to fix a known bug or work on a planned enhancement. See the [issue list](https://github.com/abpframework/abp/issues) on GitHub.
