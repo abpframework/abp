@@ -4,13 +4,13 @@ import {
   EventEmitter,
   Inject,
   Input,
+  OnInit,
   Optional,
   Output,
   TemplateRef,
   ViewEncapsulation,
-  OnInit,
 } from '@angular/core';
-import { NzFormatBeforeDropEvent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzFormatBeforeDropEvent, NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
 import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
@@ -77,11 +77,16 @@ export class TreeComponent implements OnInit {
     this.subscriptionService.addOne(loaded$);
   }
 
-  onSelectedNodeChange(node) {
+  onSelectedNodeChange(node: NzTreeNode) {
     this.selectedNode = node.origin.entity;
     if (this.changeCheckboxWithNode) {
+      let newVal;
+      if (node.isChecked) {
+        newVal = this.checkedKeys.filter(x => x !== node.key);
+      } else {
+        newVal = [...this.checkedKeys, node.key];
+      }
       this.selectedNodeChange.emit(node);
-      const newVal = [...this.checkedKeys, node.key];
       this.checkedKeys = newVal;
       this.checkedKeysChange.emit(newVal);
     } else {

@@ -26,6 +26,11 @@ public class AbpApplicationLocalizationAppService :
     
     public async Task<ApplicationLocalizationDto> GetAsync(ApplicationLocalizationRequestDto input)
     {
+        if (!CultureHelper.IsValidCultureCode(input.CultureName))
+        {
+            throw new AbpException("The selected culture is not valid! Make sure you enter a valid culture name.");
+        }
+        
         using (CultureHelper.Use(input.CultureName))
         {
             var resources = LocalizationOptions
