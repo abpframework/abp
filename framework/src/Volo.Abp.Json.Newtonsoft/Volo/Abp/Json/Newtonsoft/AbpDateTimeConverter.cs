@@ -6,12 +6,13 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json.Newtonsoft;
 
-public class AbpDateTimeConverter : DateTimeConverterBase
+public class AbpDateTimeConverter : DateTimeConverterBase, ITransientDependency
 {
     private readonly string _dateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
     private readonly DateTimeStyles _dateTimeStyles = DateTimeStyles.RoundtripKind;
