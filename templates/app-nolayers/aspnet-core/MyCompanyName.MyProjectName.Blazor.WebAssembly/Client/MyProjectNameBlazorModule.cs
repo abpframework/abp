@@ -1,8 +1,8 @@
 ﻿using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using MyCompanyName.MyProjectName.Client.Menus;
-using MyCompanyName.MyProjectName.Shared;
+using MyCompanyName.MyProjectName.Menus;
+using MyCompanyName.MyProjectName;
 using OpenIddict.Abstractions;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite;
@@ -22,10 +22,10 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Blazor.WebAssembly;
 using Volo.Abp.UI.Navigation;
 
-namespace MyCompanyName.MyProjectName.Client;
+namespace MyCompanyName.MyProjectName;
 
 [DependsOn(
-    typeof(MyProjectNameSharedModule),
+    typeof(MyProjectNameContractsModule),
 
     // ABP Framework packages
     typeof(AbpAutofacWebAssemblyModule),
@@ -98,7 +98,7 @@ public class MyProjectNameBlazorModule : AbpModule
     private void ConfigureHttpClientProxies(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClientProxies(
-            typeof(MyProjectNameSharedModule).Assembly,
+            typeof(MyProjectNameContractsModule).Assembly,
             RemoteServiceName
         );
     }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace MyCompanyName.MyProjectName.Client;
+namespace MyCompanyName.MyProjectName;
 
 public class MyProjectNameBlazorAutoMapperProfile : Profile
 {
