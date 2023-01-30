@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 
