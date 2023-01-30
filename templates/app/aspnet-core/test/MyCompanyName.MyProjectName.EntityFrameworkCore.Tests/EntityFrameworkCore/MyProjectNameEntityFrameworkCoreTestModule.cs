@@ -7,6 +7,7 @@ using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ public class MyProjectNameEntityFrameworkCoreTestModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddAlwaysDisableUnitOfWorkTransaction();
         ConfigureInMemorySqlite(context.Services);
     }
 

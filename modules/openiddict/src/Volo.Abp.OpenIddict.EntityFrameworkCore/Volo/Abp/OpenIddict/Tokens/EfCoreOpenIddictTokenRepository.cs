@@ -20,7 +20,7 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
 
     }
 
-    public async Task DeleteManyByApplicationIdAsync(Guid applicationId, bool autoSave = false, CancellationToken cancellationToken = default)
+    public virtual async Task DeleteManyByApplicationIdAsync(Guid applicationId, bool autoSave = false, CancellationToken cancellationToken = default)
     {
         var tokens = await (await GetDbSetAsync())
             .Where(x => x.ApplicationId == applicationId)
@@ -29,10 +29,19 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
         await DeleteManyAsync(tokens, autoSave, cancellationToken);
     }
 
-    public async Task DeleteManyByAuthorizationIdAsync(Guid authorizationId, bool autoSave = false, CancellationToken cancellationToken = default)
+    public virtual async Task DeleteManyByAuthorizationIdAsync(Guid authorizationId, bool autoSave = false, CancellationToken cancellationToken = default)
     {
         var tokens = await (await GetDbSetAsync())
             .Where(x => x.AuthorizationId == authorizationId)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        await DeleteManyAsync(tokens, autoSave, GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task DeleteManyByAuthorizationIdsAsync(Guid[] authorizationIds, bool autoSave = false, CancellationToken cancellationToken = default)
+    {
+        var tokens = await (await GetDbSetAsync())
+            .Where(x => x.AuthorizationId != null && authorizationIds.Contains(x.AuthorizationId.Value))
             .ToListAsync(GetCancellationToken(cancellationToken));
 
         await DeleteManyAsync(tokens, autoSave, GetCancellationToken(cancellationToken));
@@ -87,19 +96,17 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<OpenIddictToken>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default)
+    public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
     {
-        return await (from token in await GetQueryableAsync()
-            join authorization in (await GetDbContextAsync()).Set<OpenIddictAuthorization>().AsQueryable()
-                on token.AuthorizationId equals authorization.Id into ta
-            from a in ta
-            where token.CreationDate < date
-            where (token.Status != OpenIddictConstants.Statuses.Inactive &&
-                   token.Status != OpenIddictConstants.Statuses.Valid) ||
-                  (a != null && a.Status != OpenIddictConstants.Statuses.Valid) ||
-                  token.ExpirationDate < DateTime.UtcNow
-            orderby token.Id
-            select token).Take(count)
-            .ToListAsync(GetCancellationToken(cancellationToken));
+        await (from token in await GetQueryableAsync()
+                join authorization in (await GetDbContextAsync()).Set<OpenIddictAuthorization>()
+                    on token.AuthorizationId equals authorization.Id into tokenAuthorizations
+                from tokenAuthorization in tokenAuthorizations.DefaultIfEmpty()
+                where token.CreationDate < date
+                where (token.Status != OpenIddictConstants.Statuses.Inactive && token.Status != OpenIddictConstants.Statuses.Valid) ||
+                      (tokenAuthorization != null && tokenAuthorization.Status != OpenIddictConstants.Statuses.Valid) ||
+                      token.ExpirationDate < DateTime.UtcNow
+                select token)
+            .ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
     }
 }

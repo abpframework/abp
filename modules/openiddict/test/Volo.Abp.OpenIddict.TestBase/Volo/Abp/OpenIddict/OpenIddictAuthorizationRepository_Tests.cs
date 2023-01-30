@@ -20,16 +20,16 @@ public abstract class OpenIddictAuthorizationRepository_Tests<TStartupModule> : 
         _authorizationRepository = GetRequiredService<IOpenIddictAuthorizationRepository>();
         _testData = GetRequiredService<AbpOpenIddictTestData>();
     }
-    
+
     [Fact]
     public async Task FindAsync()
     {
         (await _authorizationRepository.FindAsync(subject:"TestSubject1", client: new Guid())).Count.ShouldBe(0);
         (await _authorizationRepository.FindAsync(subject:"TestSubject1", client: _testData.App1Id)).Count.ShouldBe(1);
         (await _authorizationRepository.FindAsync(subject:"TestSubject1", client: _testData.App1Id, status: "NonExistsStatus")).Count.ShouldBe(0);
-        (await _authorizationRepository.FindAsync(subject:"TestSubject1", client: _testData.App1Id, status: "TestStatus1")).Count.ShouldBe(1);
-        (await _authorizationRepository.FindAsync(subject:"TestSubject1", client: _testData.App1Id, status: "TestStatus1" ,type: "NonExistsType")).Count.ShouldBe(0);
-        (await _authorizationRepository.FindAsync(subject:"TestSubject1", client: _testData.App1Id, status: "TestStatus1" ,type: OpenIddictConstants.AuthorizationTypes.Permanent)).Count.ShouldBe(1);
+        (await _authorizationRepository.FindAsync(subject:"TestSubject1", client: _testData.App1Id, status: OpenIddictConstants.Statuses.Valid)).Count.ShouldBe(1);
+        (await _authorizationRepository.FindAsync(subject:"TestSubject1", client: _testData.App1Id, status: OpenIddictConstants.Statuses.Valid ,type: "NonExistsType")).Count.ShouldBe(0);
+        (await _authorizationRepository.FindAsync(subject:"TestSubject1", client: _testData.App1Id, status: OpenIddictConstants.Statuses.Valid ,type: OpenIddictConstants.AuthorizationTypes.Permanent)).Count.ShouldBe(1);
     }
 
     [Fact]
@@ -64,9 +64,10 @@ public abstract class OpenIddictAuthorizationRepository_Tests<TStartupModule> : 
     }
 
     [Fact]
-    public async Task GetPruneListAsync()
+    public async Task PruneAsync()
     {
-        var threshold = DateTime.UtcNow - TimeSpan.FromDays(14);
-        (await _authorizationRepository.GetPruneListAsync(threshold, int.MaxValue)).Count.ShouldBe(1);
+        (await _authorizationRepository.ListAsync(int.MaxValue, 0)).Count.ShouldBe(2);
+        await _authorizationRepository.PruneAsync(DateTime.UtcNow - TimeSpan.FromDays(14));
+        (await _authorizationRepository.ListAsync(int.MaxValue, 0)).Count.ShouldBe(1);
     }
 }

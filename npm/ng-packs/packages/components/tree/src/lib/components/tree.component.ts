@@ -2,17 +2,21 @@ import {
   Component,
   ContentChild,
   EventEmitter,
+  Inject,
   Input,
+  OnInit,
+  Optional,
   Output,
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { NzFormatBeforeDropEvent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzFormatBeforeDropEvent, NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
 import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadService, LOADING_STRATEGY, SubscriptionService } from '@abp/ng.core';
+import { DISABLE_TREE_STYLE_LOADING_TOKEN } from '../disable-tree-style-loading.token';
 
 export type DropEvent = NzFormatEmitEvent & { pos: number };
 
@@ -23,16 +27,18 @@ export type DropEvent = NzFormatEmitEvent & { pos: number };
   encapsulation: ViewEncapsulation.None,
   providers: [SubscriptionService],
 })
-export class TreeComponent {
+export class TreeComponent implements OnInit {
   dropPosition: number;
 
   dropdowns = {} as { [key: string]: NgbDropdown };
-  constructor(private lazyLoadService: LazyLoadService, subscriptionService: SubscriptionService) {
-    const loaded$ = this.lazyLoadService.load(
-      LOADING_STRATEGY.AppendAnonymousStyleToHead('ng-zorro-antd-tree.css'),
-    );
-    subscriptionService.addOne(loaded$);
-  }
+
+  constructor(
+    private lazyLoadService: LazyLoadService,
+    private subscriptionService: SubscriptionService,
+    @Optional()
+    @Inject(DISABLE_TREE_STYLE_LOADING_TOKEN)
+    private disableTreeStyleLoading: boolean | undefined,
+  ) {}
 
   @ContentChild('menu') menu: TemplateRef<any>;
   @ContentChild(TreeNodeTemplateDirective) customNodeTemplate: TreeNodeTemplateDirective;
@@ -57,11 +63,30 @@ export class TreeComponent {
     return of(false);
   };
 
-  onSelectedNodeChange(node) {
+  ngOnInit() {
+    this.loadStyle();
+  }
+
+  private loadStyle() {
+    if (this.disableTreeStyleLoading) {
+      return;
+    }
+    const loaded$ = this.lazyLoadService.load(
+      LOADING_STRATEGY.AppendAnonymousStyleToHead('ng-zorro-antd-tree.css'),
+    );
+    this.subscriptionService.addOne(loaded$);
+  }
+
+  onSelectedNodeChange(node: NzTreeNode) {
     this.selectedNode = node.origin.entity;
     if (this.changeCheckboxWithNode) {
+      let newVal;
+      if (node.isChecked) {
+        newVal = this.checkedKeys.filter(x => x !== node.key);
+      } else {
+        newVal = [...this.checkedKeys, node.key];
+      }
       this.selectedNodeChange.emit(node);
-      const newVal = [...this.checkedKeys, node.key];
       this.checkedKeys = newVal;
       this.checkedKeysChange.emit(newVal);
     } else {

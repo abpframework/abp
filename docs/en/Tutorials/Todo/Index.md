@@ -14,6 +14,42 @@ This is a single-part quick-start tutorial to build a simple todo application wi
 
 You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
 
+This documentation has a video tutorial on **YouTube**!! You can watch it here:
+
+{{if UI=="MVC" && DB =="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/763DV0fwSbk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+{{else if UI=="Blazor" && DB=="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ivxJsi8c7-8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+{{else if UI=="BlazorServer" && DB=="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/1BdYg5NLrJs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+{{else if UI=="NG" && DB=="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Lqh1j1H5pkg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+{{else if UI=="MVC" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7Rm-K2re4MI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+{{else if UI=="BlazorServer" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/i23C8hN7OAs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+{{else if UI=="Blazor" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/JpiMiXOBG6A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+{{else if UI=="NG" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/DOxk9Doxad0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+{{end}}
+
 ## Pre-Requirements
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 7.0+](https://dotnet.microsoft.com/download/dotnet) development.

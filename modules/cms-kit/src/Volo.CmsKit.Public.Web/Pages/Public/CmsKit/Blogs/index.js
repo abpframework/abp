@@ -1,14 +1,14 @@
 ﻿$(function () {
-    var $selectAuthor = $('#AuthorSelect');
-    var $authorNameSpan = $('.author-name-span');
+    let $selectAuthor = $('#AuthorSelect');
+    let $authorNameSpan = $('.author-name-span');
 
     $selectAuthor.on('change', function () {
-        var authorId = $selectAuthor.val();
+        let authorId = $selectAuthor.val();
         reloadPageWithQueryString({'authorId': authorId});
     });
 
     $authorNameSpan.click(function () {
-        var authorId = $(this).data('author-id');
+        let authorId = $(this).data('author-id');
         reloadPageWithQueryString({'authorId': authorId});
     });
 

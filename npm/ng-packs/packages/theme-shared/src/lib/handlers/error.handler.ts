@@ -83,6 +83,7 @@ export class ErrorHandler {
   protected cfRes: ComponentFactoryResolver;
   protected rendererFactory: RendererFactory2;
   protected httpErrorConfig: HttpErrorConfig;
+  private authService: AuthService;
 
   constructor(protected injector: Injector) {
     this.httpErrorReporter = injector.get(HttpErrorReporterService);
@@ -91,6 +92,7 @@ export class ErrorHandler {
     this.cfRes = injector.get(ComponentFactoryResolver);
     this.rendererFactory = injector.get(RendererFactory2);
     this.httpErrorConfig = injector.get('HTTP_ERROR_CONFIG');
+    this.authService = this.injector.get(AuthService);
 
     this.listenToRestError();
     this.listenToRouterError();
@@ -284,7 +286,7 @@ export class ErrorHandler {
   }
 
   private navigateToLogin() {
-    this.injector.get(AuthService).navigateToLogin();
+    this.authService.navigateToLogin();
   }
 
   createErrorComponent(instance: Partial<HttpErrorWrapperComponent>) {

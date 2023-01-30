@@ -39,6 +39,24 @@ export interface Controller {
 
 export interface InterfaceDef {
   type: string;
+  name: string;
+  methods?: InterfaceMethodDef[];
+}
+export interface InterfaceMethodDef {
+  name: string;
+  parametersOnMethod?: InterfaceParameterOnMethodDef[];
+  returnValue: {
+    type: string;
+    typeSimple: string;
+  };
+}
+export interface InterfaceParameterOnMethodDef {
+  name: string;
+  typeAsString: string;
+  type: string;
+  typeSimple: string;
+  isOptional: boolean;
+  defaultValue: unknown;
 }
 
 export interface Action {

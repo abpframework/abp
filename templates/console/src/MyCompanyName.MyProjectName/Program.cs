@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,7 +38,7 @@ public class Program
                     options.Services.ReplaceConfiguration(services.GetConfiguration());
                     options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
                 });
-            }).UseAutofac().UseConsoleLifetime();
+            }).AddAppSettingsSecretsJson().UseAutofac().UseConsoleLifetime();
 
             var host = builder.Build();
             await host.Services.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().InitializeAsync(host.Services);

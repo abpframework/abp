@@ -26,6 +26,8 @@ import {
   ModelGeneratorParams,
   removeDefaultPlaceholders,
   resolveProject,
+  sanitizeTypeNames,
+  sanitizeControllerTypeNames,
   serializeParameters,
 } from '../../utils';
 import * as cases from '../../utils/text';
@@ -45,6 +47,7 @@ export default function (schema: GenerateProxySchema) {
       const readProxyConfig = createProxyConfigReader(targetPath);
       const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
       const data = readProxyConfig(tree);
+      data.types = sanitizeTypeNames(data.types);
       const types = data.types;
       const modules = data.modules;
       const serviceType = schema.serviceType || defaultEServiceType;
@@ -55,7 +58,11 @@ export default function (schema: GenerateProxySchema) {
         throw new SchematicsException(interpolate(Exception.InvalidModule, moduleName));
 
       const apiName = definition.remoteServiceName;
-      const controllers = filterControllersByServiceType(serviceType, definition.controllers);
+      data.modules[moduleName].controllers = sanitizeControllerTypeNames(definition.controllers);
+      const controllers = filterControllersByServiceType(
+        serviceType,
+        data.modules[moduleName].controllers,
+      );
       const serviceImports: Record<string, string[]> = {};
       const generateServices = createServiceGenerator({
         targetPath,
@@ -173,7 +180,7 @@ function createServiceGenerator(params: ServiceGeneratorParams) {
 }
 
 function filterControllersByServiceType(
-  serviceType: eServiceType,
+  serviceType: string,
   controllers: Record<string, Controller>,
 ): Controller[] {
   const itShouldBeIntegratedService = serviceType === eServiceType.Integration;

@@ -57,7 +57,7 @@ body.scrolledMore {
 }
 body.scrolledMore .alert-criteria {
   position: fixed;
-  top: 1rem;
+  bottom: 0;
   z-index: 10;
   border: 0;
   margin-left: 0;
@@ -76,7 +76,7 @@ body.scrolledMore .alert-criteria p.alert-p {
   bottom: 1rem;
   left: auto;
   border-radius: 12px;
-  background: #211e1e;
+  background: #292D33;
   padding: 0.5rem 1.75em;
   width: 300px;
   transition: top 0.3s;
@@ -120,7 +120,7 @@ body.scrolledMore .alert-criteria p.alert-p {
 .docs-page .docs-sidebar .docs-tree-list .docs-version {
   position: relative;
   font-size: 12px;
-  background-color: #121212;
+  background-color: #1e2227;
   color: rgba(255, 255, 255, 0.3);
   border-radius: 8px;
   padding: 0 10px 0 10px;
@@ -130,7 +130,7 @@ body.scrolledMore .alert-criteria p.alert-p {
   background-size: 16px 12px !important;
 }
 .docs-page .docs-sidebar .docs-tree-list .docs-version input[type=search] {
-  background-color: #121212 !important;
+  background-color: #1e2227 !important;
   min-height: 34px !important;
   height: 34px !important;
 }
@@ -294,7 +294,7 @@ body.scrolledMore .alert-criteria p.alert-p {
   min-height: 100vh;
   width: calc(100% - 600px);
   margin-left: 300px;
-  padding: 1rem 1rem;
+  padding: 1rem 1rem 100px 1rem;
 }
 .docs-page .docs-content::-webkit-scrollbar {
   display: none;
@@ -409,6 +409,7 @@ body.scrolledMore .alert-criteria p.alert-p {
 }
 .docs-page .docs-content .docs-content-field article.docs-body {
   word-break: break-word;
+  color: #3a3e48;
 }
 .docs-page .docs-content .docs-content-field article.docs-body h1 {
   padding-top: 1rem;
@@ -435,6 +436,7 @@ body.scrolledMore .alert-criteria p.alert-p {
 .docs-page .docs-content .docs-content-field article.docs-body h5,
 .docs-page .docs-content .docs-content-field article.docs-body h6 {
   position: relative;
+  color: #292d34;
 }
 .docs-page .docs-content .docs-content-field article.docs-body h1 .anchor,
 .docs-page .docs-content .docs-content-field article.docs-body h2 .anchor,
@@ -461,11 +463,11 @@ body.scrolledMore .alert-criteria p.alert-p {
 .docs-page .docs-content .docs-content-field article.docs-body .blockquote {
   margin-bottom: 1rem;
   margin-left: 0;
-  border-left: 3px solid rgba(184, 66, 151, 0.3);
   padding: 1em 1.5em;
-  background-color: rgba(184, 66, 151, 0.15);
+  background-color: #e3edf2;
   font-size: 1em;
   border-radius: 12px;
+  color: #385766;
 }
 .docs-page .docs-content .docs-content-field article.docs-body img {
   max-width: 100%;
@@ -656,10 +658,6 @@ body .close-dmenu {
     background: #fff;
     opacity: 0;
   }
-  body.scrolledMore .alert-criteria {
-    top: 72px !important;
-  }
-
   .docs-page {
     padding: 0 0;
   }
@@ -813,6 +811,10 @@ body .close-dmenu {
 @media (max-width: 1200px) {
   .docs-page .docs-content {
     width: calc(100% - 300px);
+    padding-bottom: 0;
+  }
+  .docs-page .docs-page-index {
+    padding: 0 1rem 120px !important;
   }
   .docs-page .docs-page-index .card {
     width: 100%;

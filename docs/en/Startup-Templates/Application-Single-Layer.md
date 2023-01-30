@@ -10,7 +10,7 @@ ABP's [Application Startup Template](Application.md) provides a well-organized a
 
 ## How to Start with It?
 
-You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can directly create & download this startup template from the [Get Started](https://abp.io/get-started) page. In this section, we will use the ABP CLI.
+You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can generate a CLI command for this startup template from the [Get Started](https://abp.io/get-started) page. In this section, we will use the ABP CLI.
 
 Firstly, install the ABP CLI if you haven't installed it before:
 

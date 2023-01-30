@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenIddict.Abstractions" Version="4.0.0-rc1.22607.41" />
+    <PackageReference Include="OpenIddict.Abstractions" Version="4.0.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 

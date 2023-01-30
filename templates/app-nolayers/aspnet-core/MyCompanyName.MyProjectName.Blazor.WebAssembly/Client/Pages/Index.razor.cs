@@ -1,4 +1,4 @@
-﻿namespace MyCompanyName.MyProjectName.Client.Pages;
+﻿namespace MyCompanyName.MyProjectName.Pages;
 
 public partial class Index
 {

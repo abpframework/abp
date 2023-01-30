@@ -5,7 +5,7 @@
     <MicrosoftAspNetCorePackageVersion>7.0.0</MicrosoftAspNetCorePackageVersion>
     
     <!-- All Microsoft EntityFrameworkCore packages -->
-    <MicrosoftEntityFrameworkCorePackageVersion>7.0.0</MicrosoftEntityFrameworkCorePackageVersion>
+    <MicrosoftEntityFrameworkCorePackageVersion>7.0.1</MicrosoftEntityFrameworkCorePackageVersion>
     
     <!-- All Microsoft packages -->
     <MicrosoftPackageVersion>7.0.0</MicrosoftPackageVersion>
@@ -17,7 +17,7 @@
     <NSubstitutePackageVersion>4.3.0</NSubstitutePackageVersion>
 
     <!-- Shouldly https://www.nuget.org/packages/Shouldly -->
-    <ShouldlyPackageVersion>4.0.3</ShouldlyPackageVersion>
+    <ShouldlyPackageVersion>4.1.0</ShouldlyPackageVersion>
 
     <!-- xunit https://www.nuget.org/packages/xUnit -->
     <xUnitPackageVersion>2.4.1</xUnitPackageVersion>

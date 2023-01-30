@@ -17,7 +17,8 @@ const packageMap = {
   'tenant-management': 'ng.tenant-management',
   'theme-basic': 'ng.theme.basic',
   'theme-shared': 'ng.theme.shared',
-  'schematics':'ng.schematics'
+  'schematics':'ng.schematics',
+   oauth:'ng.oauth'
 };
 program.option('-t, --templates  <templates>', 'template dirs', false);
 program.option('-p, --template-path <templatePath>', 'root template path', false);
@@ -25,8 +26,9 @@ program.parse(process.argv);
 const templates = program.templates ? program.templates.split(',') : defaultTemplates;
 const templateRootPath = program.templatePath ? program.templatePath : defaultTemplatePath;
 (async () => {
-  await execa('yarn', ['build'], {
+  await execa('yarn', ['build:all'], {
     stdout: 'inherit',
+    cwd:'../'
   });
 
   await installPackages();

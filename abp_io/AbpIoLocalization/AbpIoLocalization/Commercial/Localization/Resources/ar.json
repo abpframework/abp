@@ -711,7 +711,7 @@
     "WatchTakeCloserLookVideo": "شاهد فيديو \"Take a closer look at the code generation: ABP Suite\"!",
     "ConfirmedEmailAddressRequiredToStartTrial": "يجب أن يكون لديك عنوان بريد إلكتروني مؤكد لبدء ترخيص تجريبي.",
     "EmailVerificationMailNotSent": "تعذر إرسال بريد التحقق من البريد الإلكتروني.",
-    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">انقر هنا للحصول على بريد إلكتروني للتأكيد</a> إذا لم تكن قد حصلت عليه من قبل.",
+    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\" class=\"text-decoration-underline\">انقر هنا للحصول على بريد إلكتروني للتأكيد</a> إذا لم تكن قد حصلت عليه من قبل.",
     "WhichLicenseTypeYouAreInterestedIn": "ما نوع الرخصة المهتم بها؟",
     "DontTakeOurWordForIt": "لا تأخذ كلمتنا لذلك...",
     "ReadAbpCommercialUsersWantYouToKnow": "اقرأ ما يريد مستخدمو ABP التجاري أن تعرفه",

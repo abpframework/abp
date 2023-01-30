@@ -37,19 +37,9 @@ This command will prepare a solution with an Angular and a .NET Core project in 
 
 To continue reading without checking other methods, visit [Angular project structure section](#angular-project-structure).
 
-### 2. Direct Download
+### 2. Generating a CLI Command from Get Started Page
 
-You may [download a solution scaffold directly on ABP.io](https://abp.io/get-started) if you are more comfortable with GUI or simply want to try ABP without installing the CLI.
-
-Please do the following:
-
-1. Click on the "DIRECT DOWNLOAD" tab.
-2. Fill out the short form about your project.
-3. Click on the "Create now" button.
-
-...and a customized download will start in a few seconds.
-
-To avoid IDE warnings, run `yarn` or `npm install` in the Angular root folder before you continue to the next section. It is not imperative but recommended.
+You can generate a CLI command on the [get started page of the abp.io website](https://abp.io/get-started). Then, use the command on your terminal to create a new [Startup Template](../../Startup-Templates/Index.md).
 
 ## Angular Project Structure
 

@@ -132,11 +132,11 @@ public abstract class AppTemplateBase : TemplateInfo
             case UiFramework.BlazorServer:
                 ConfigureWithBlazorServerUi(context, steps);
                 break;
-    
+
             case UiFramework.MauiBlazor:
                 ConfigureWithMauiBlazorUi(context, steps);
                 break;
-            
+
             case UiFramework.Mvc:
             case UiFramework.NotSpecified:
                 ConfigureWithMvcUi(context, steps);
@@ -213,14 +213,14 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             steps.Add(new ChangeThemeStyleStep());
         }
-        
+
         RemoveThemeLogoFolders(context, steps);
-        
-        if (IsDefaultThemeForTemplate(context.BuildArgs.Theme.Value))
+
+        if (IsDefaultThemeForTemplate(context.BuildArgs))
         {
             return;
         }
-        
+
         steps.Add(new ChangeThemeStep());
         RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework);
     }
@@ -238,17 +238,19 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private static bool IsDefaultThemeForTemplate(Theme theme)
+    private static bool IsDefaultThemeForTemplate(ProjectBuildArgs args)
     {
-        var defaultThemesForTemplates = new[] 
+        var templateThemes = new Dictionary<string, Theme> 
         {
-            AppTemplate.DefaultTheme, AppProTemplate.DefaultTheme, 
-            AppNoLayersTemplate.DefaultTheme, AppNoLayersProTemplate.DefaultTheme
+            { AppTemplate.TemplateName, AppTemplate.DefaultTheme },
+            { AppProTemplate.TemplateName, AppProTemplate.DefaultTheme },
+            { AppNoLayersTemplate.TemplateName, AppNoLayersTemplate.DefaultTheme },
+            { AppNoLayersProTemplate.TemplateName, AppNoLayersProTemplate.DefaultTheme }
         };
-        
-        return defaultThemesForTemplates.Any(defaultTheme => defaultTheme == theme);
+
+        return templateThemes.TryGetValue(args.TemplateName!, out var templateTheme) && templateTheme == args.Theme;
     }
-    
+
     private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate, UiFramework uiFramework)
     {
         var mvcUiPackageName = isProTemplate ? "@volo/abp.aspnetcore.mvc.ui.theme.leptonx" : "@abp/aspnetcore.mvc.ui.theme.leptonxlite";
@@ -263,7 +265,7 @@ public abstract class AppTemplateBase : TemplateInfo
             "/MyCompanyName.MyProjectName.Host/package.json",
             "/MyCompanyName.MyProjectName.Host.Mongo/package.json"
         };
-        
+
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
             steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
@@ -278,7 +280,7 @@ public abstract class AppTemplateBase : TemplateInfo
                 "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
                 "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
             };
-            
+
             foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
             {
                 steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
@@ -288,11 +290,11 @@ public abstract class AppTemplateBase : TemplateInfo
         else if (uiFramework == UiFramework.Angular)
         {
             var ngUiPackageName = isProTemplate ? "@volosoft/abp.ng.theme.lepton-x" : "@abp/ng.theme.lepton-x";
-            var angularPackageJsonFilePaths = new List<string> 
+            var angularPackageJsonFilePaths = new List<string>
             {
                 "/angular/package.json"
             };
-            
+
             foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
             {
                 steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
@@ -527,6 +529,7 @@ public abstract class AppTemplateBase : TemplateInfo
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+        steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.MauiBlazor/Directory.Build.props"));
 
         if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
             context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
@@ -583,7 +586,8 @@ public abstract class AppTemplateBase : TemplateInfo
                         "https://localhost:44306",
                         "https://localhost:44307",
                         "https://localhost:44308",
-                        "https://localhost:44309"
+                        "https://localhost:44309",
+                        "https://localhost:44310"
                 }
             )
         );

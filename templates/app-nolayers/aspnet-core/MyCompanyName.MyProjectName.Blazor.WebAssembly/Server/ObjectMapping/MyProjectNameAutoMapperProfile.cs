@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace MyCompanyName.MyProjectName.Server.ObjectMapping;
+namespace MyCompanyName.MyProjectName.ObjectMapping;
 
 public class MyProjectNameAutoMapperProfile : Profile
 {

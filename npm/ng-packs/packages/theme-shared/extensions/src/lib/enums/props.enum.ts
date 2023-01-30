@@ -8,6 +8,7 @@ export const enum ePropType {
   MultiSelect = 'multiselect',
   Number = 'number',
   Password = 'password',
+  PasswordInputGroup = 'passwordinputgroup',
   String = 'string',
   Text = 'text',
   Time = 'time',

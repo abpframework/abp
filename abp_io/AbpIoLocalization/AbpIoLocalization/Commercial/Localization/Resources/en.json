@@ -735,7 +735,7 @@
     "WatchTakeCloserLookVideo": "Watch the \"Take a closer look at the code generation: ABP Suite\" Video!",
     "ConfirmedEmailAddressRequiredToStartTrial": "You should have a confirmed email address in order to start a trial license.",
     "EmailVerificationMailNotSent": "Email verification mail couldn't send.",
-    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">Click here to get a verification email</a> if you haven't got it before.",
+    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\" class=\"text-decoration-underline\">Click here to get a verification email</a> if you haven't got it before.",
     "WhichLicenseTypeYouAreInterestedIn": "Which license type you are interested in?",
     "DontTakeOurWordForIt": "Don't take our word for it...",
     "ReadAbpCommercialUsersWantYouToKnow": "Read what ABP Commercial users want you to know",
@@ -806,6 +806,19 @@
     "SupportPolicyFaqTitle": "What is your support policy?",
     "SupportPolicyFaqExplanation": "We do support only the active and the previous major version. We do not guarantee a patch release for the 3rd and older major versions. For example, if the active version is 7.0.0, we will release patch releases for both 6.x.x and 7.x.x. Besides, we provide support only for ABP Framework and ABP Commercial related issues. That means no support is given for the 3rd party applications, cloud services and other peripheral libraries used by ABP products. We will use commercially reasonable efforts to provide our customers with technical support during \"Volosoft Bilisim A.S\"s official business hours. On the other hand, we do not commit to a service-level agreement (SLA) response time, but we will try to respond to the technical issues as quickly as possible within our official working hours. Unless a special agreement is made with the customer, we only provide support at https://support.abp.io. We also have private email support, which is only available to Enterprise License holders.",
     "TotalDevelopers": "Total {0} developer(s)",
-    "CustomPurchaseExplanation": "Tailored to your specific needs"
+    "CustomPurchaseExplanation": "Tailored to your specific needs",
+    "WhereDidYouHearAboutUs": "Where did you hear about us?",
+    "Twitter": "Twitter",
+    "Facebook": "Facebook",
+    "Youtube": "YouTube",
+    "Google": "Google",
+    "Github": "GitHub",
+    "Friend": " From a friend",
+    "Other": "Other",
+    "WhereDidYouHearAboutUs_explain": "Specify ...",
+    "DeletingMemberWarningMessage": "\"{0}\" will be removed from the developer list. If you want, you can assign this empty seat to another developer later.",
+    "AdditionalInfo": "If the developer seats are above your requirements, you can reduce them. You can email at <a href=\"mailto:info@abp.io\">info@abp.io</a> to remove some of your developer seats. Clearing unused developer seats will reduce the license renewal cost. If you want, you can re-purchase additional developer seats within your active license period. Note that, since there are {0} developers in this license package, you cannot reduce this number.",
+    "LinkExpiredErrorMessage": "The link you are trying to access is expired.",
+    "ExpirationDate": "Expiration Date"
   }
 }

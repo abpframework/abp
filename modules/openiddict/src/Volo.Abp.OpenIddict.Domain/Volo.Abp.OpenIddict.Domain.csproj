@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenIddict.Core" Version="4.0.0-rc1.22607.41" />
+    <PackageReference Include="OpenIddict.Core" Version="4.0.0" />
   </ItemGroup>
 
 </Project>

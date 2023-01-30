@@ -29,10 +29,14 @@ public class AbpIncludeNonPublicPropertiesModifiers_Tests : AbpJsonTestBase
     [Fact]
     public void Test()
     {
-        var json = _jsonSerializer.Serialize(new NonPublicPropertiesClass()
+        var model = new NonPublicPropertiesClass
         {
             Id = "id"
-        });
+        };
+        model.SetName("my-name");
+        model.SetAge("42");
+
+        var json = _jsonSerializer.Serialize(model);
 
         json.ShouldContain("id");
         json.ShouldContain("name");
@@ -40,8 +44,8 @@ public class AbpIncludeNonPublicPropertiesModifiers_Tests : AbpJsonTestBase
 
         var obj = _jsonSerializer.Deserialize<NonPublicPropertiesClass>(json);
         obj.Id.ShouldBe("id");
-        obj.Name.ShouldBe("name");
-        obj.Age.ShouldBe("age");
+        obj.Name.ShouldBe("my-name");
+        obj.Age.ShouldBe("42");
     }
 
     class NonPublicPropertiesClass
@@ -52,10 +56,14 @@ public class AbpIncludeNonPublicPropertiesModifiers_Tests : AbpJsonTestBase
 
         public string Age { get; protected set; }
 
-        public NonPublicPropertiesClass()
+        public void SetName(string name)
         {
-            Name = "name";
-            Age = "age";
+            Name = name;
+        }
+
+        public void SetAge(string age)
+        {
+            Age = age;
         }
     }
 }
