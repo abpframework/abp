@@ -417,7 +417,8 @@ public abstract class ProjectCreationCommandBase
 
     protected async Task RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(ProjectBuildArgs projectArgs)
     {
-        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) && projectArgs.UiFramework is UiFramework.Blazor or UiFramework.MauiBlazor)
+        if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName)) 
+            && projectArgs.UiFramework is UiFramework.Blazor or UiFramework.MauiBlazor)
         {
             var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
             var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";

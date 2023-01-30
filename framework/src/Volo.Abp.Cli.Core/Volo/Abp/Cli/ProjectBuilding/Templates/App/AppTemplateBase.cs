@@ -216,7 +216,7 @@ public abstract class AppTemplateBase : TemplateInfo
 
         RemoveThemeLogoFolders(context, steps);
 
-        if (IsDefaultThemeForTemplate(context.BuildArgs.Theme.Value))
+        if (IsDefaultThemeForTemplate(context.BuildArgs))
         {
             return;
         }
@@ -238,15 +238,17 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
-    private static bool IsDefaultThemeForTemplate(Theme theme)
+    private static bool IsDefaultThemeForTemplate(ProjectBuildArgs args)
     {
-        var defaultThemesForTemplates = new[]
+        var templateThemes = new Dictionary<string, Theme> 
         {
-            AppTemplate.DefaultTheme, AppProTemplate.DefaultTheme,
-            AppNoLayersTemplate.DefaultTheme, AppNoLayersProTemplate.DefaultTheme
+            { AppTemplate.TemplateName, AppTemplate.DefaultTheme },
+            { AppProTemplate.TemplateName, AppProTemplate.DefaultTheme },
+            { AppNoLayersTemplate.TemplateName, AppNoLayersTemplate.DefaultTheme },
+            { AppNoLayersProTemplate.TemplateName, AppNoLayersProTemplate.DefaultTheme }
         };
 
-        return defaultThemesForTemplates.Any(defaultTheme => defaultTheme == theme);
+        return templateThemes.TryGetValue(args.TemplateName!, out var templateTheme) && templateTheme == args.Theme;
     }
 
     private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate, UiFramework uiFramework)
@@ -584,7 +586,8 @@ public abstract class AppTemplateBase : TemplateInfo
                         "https://localhost:44306",
                         "https://localhost:44307",
                         "https://localhost:44308",
-                        "https://localhost:44309"
+                        "https://localhost:44309",
+                        "https://localhost:44310"
                 }
             )
         );
