@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace MyCompanyName.MyProjectName.Server.Data;
+namespace MyCompanyName.MyProjectName.Data;
 
 [ConnectionStringName("Default")]
 public class MyProjectNameDbContext : AbpMongoDbContext

@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 
@@ -22,7 +23,7 @@
     <!-- </TEMPLATE-REMOVE> -->
     <PackageReference Include="Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme" Version="2.0.0-*" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Autofac.WebAssembly\Volo.Abp.Autofac.WebAssembly.csproj" />
   </ItemGroup>
@@ -39,7 +40,7 @@
     <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.HttpApi.Client\Volo.Abp.SettingManagement.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\openiddict\src\Volo.Abp.OpenIddict.Domain.Shared\Volo.Abp.OpenIddict.Domain.Shared.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Shared\MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared.csproj" />
   </ItemGroup>

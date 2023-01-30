@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-namespace MyCompanyName.MyProjectName.Client;
+namespace MyCompanyName.MyProjectName;
 
 public class Program
 {

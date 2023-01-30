@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
 
-namespace MyCompanyName.MyProjectName.Server.Data;
+namespace MyCompanyName.MyProjectName.Data;
 
 public class MyProjectNameEFCoreDbSchemaMigrator : ITransientDependency
 {

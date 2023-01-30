@@ -9,7 +9,7 @@ using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
-namespace MyCompanyName.MyProjectName.Server.Data;
+namespace MyCompanyName.MyProjectName.Data;
 
 /* Creates initial data that is needed to property run the application
  * and make client-to-server communication possible.
