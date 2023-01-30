@@ -67,7 +67,7 @@ As you can see, all changes made to the repo are reflected directly in Github De
 
 The commit operation is used to save the changes you have made. It is useful to commit after certain operations are done in the project. For the changes you will make, it is useful to write a short sentence describing what you've done. Press the `Commit to <branch-name>` button to commit. 
 
-or alternatively use the `git add .` and `git commit -m "new-branch"` command
+or alternatively use the `git add .` and `git commit -m "Added the Developer List"` command
 
 ![commit-image](images/commit-image.png)
 
