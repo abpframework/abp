@@ -110,6 +110,31 @@ See https://github.com/abpframework/abp/pull/13845 for more info.
 
 > You can ignore this if you don't use CMS Kit Module.
 
+## Data migration environment
+
+Please call `AddDataMigrationEnvironment` method in the migration project.
+
+```cs
+using (var application = await AbpApplicationFactory.CreateAsync<MyMigratorModule>(options =>
+{
+    //...
+    options.AddDataMigrationEnvironment();
+}))
+{
+    //...
+}
+```
+
+```cs
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDataMigrationEnvironment(); 
+// Call AddDataMigrationEnvironment before AddApplicationAsync
+await builder.AddApplicationAsync<MyMigratorModule>();
+//... 
+```
+
+See https://github.com/abpframework/abp/pull/13985 for more info.
+
 ## Devart.Data.Oracle.EFCore
 
 The `Devart.Data.Oracle.EFCore` package do not yet support EF Core 7.0, If you use `AbpEntityFrameworkCoreOracleDevartModule(Volo.Abp.EntityFrameworkCore.Oracle.Devart)` may not work as expected, We will release new packages as soon as they are updated.
