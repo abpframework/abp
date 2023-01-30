@@ -429,6 +429,8 @@
     "Activity": "Activity",
     "Type": "Type",
     "Contribution": "Contribution",
-    "Info": "Info"
+    "Info": "Info",
+    "WhoWeAre_Partner": "Who We Are",
+    "WhoWeAre_Expert": "About Me"
   }
 }
