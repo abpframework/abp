@@ -45,11 +45,11 @@ This will create a new solution, named *TodoApp*, with `angular` and `aspnet-cor
 
 {{else if UI=="Blazor"}}
 
-This will create a new solution with the three projects: 
+This will create a new solution with three projects: 
 
-* A `client` application that contains the Blazor code, the client-side.
-* A `server` application, hosts and servers the `client` application. 
-* A `shared` library between these two projects.
+* A `blazor` application that contains the Blazor code, the client-side.
+* A `host` application, hosts and serves the `blazor` application. 
+* A `contracts` project, shared library between these two projects.
 
 Once the solution is ready, open it in your favorite IDE.
 
@@ -61,7 +61,7 @@ This will create a new solution with a single project, named *TodoApp*. Once the
 
 ### Create the Database
 
-You can run the following command in the {{if UI=="Blazor"}} directory of your server project (folder of the `*.Server.csproj` file){{else}}root directory of your project (in the same folder of the `.csproj` file){{end}} to create the database and seed the initial data:
+You can run the following command in the {{if UI=="Blazor"}} directory of your `TodoApp.Host` project {{else}}root directory of your project (in the same folder of the `.csproj` file){{end}} to create the database and seed the initial data:
 
 ```bash
 dotnet run --migrate-database
@@ -77,9 +77,9 @@ It is good to run the application before starting the development. Running the a
 
 {{else if UI=="Blazor"}}
 
-It is good to run the application before starting the development. Running the application is pretty straight-forward, you just need to run the `server` application (`*.Server`) with any IDE that supports .NET or by running the `dotnet run` CLI command in the directory of your project.
+It is good to run the application before starting the development. Running the application is pretty straight-forward, you just need to run the `TodoApp.Host` application with any IDE that supports .NET or by running the `dotnet run` CLI command in the directory of your project.
 
-> **Note:** The `server` application hosts and serves the `client` application. Therefore, you should run the `server` application only.
+> **Note:** The `host` application hosts and serves the `blazor` application. Therefore, you should run the `host` application only.
 
 After application runs, open the application in your default browser:
 
@@ -114,12 +114,12 @@ All right. We can start coding!
 
 ## Defining the Entity
 
-This application will have a single [entity](../../../Entities.md) and we can start by creating it. So, create a new `TodoItem` class under the `Entities` folder of {{if UI=="Blazor"}}the `TodoApp.Server` project{{else}}the project{{end}}:
+This application will have a single [entity](../../../Entities.md) and we can start by creating it. So, create a new `TodoItem` class under the `Entities` folder of {{if UI=="Blazor"}}the `TodoApp.Host` project{{else}}the project{{end}}:
 
 ````csharp
 using Volo.Abp.Domain.Entities;
 
-namespace TodoApp.Entities;
+namespace TodoApp{{if UI=="Blazor"}}.Host.{{end}}Entities;
 
 public class TodoItem : BasicAggregateRoot<Guid>
 {
@@ -169,7 +169,7 @@ We've mapped the `TodoItem` entity to the `TodoItems` table in the database. The
 
 The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-Open a command-line terminal in the root directory of your project and type the following command:
+Open a command-line terminal in the {{if UI=="Blazor"}} directory of your `TodoApp.Host` project {{else}}root directory of your project (in the same folder of the `.csproj` file){{end} and type the following command:
 
 ````bash
 dotnet ef migrations add Added_TodoItem
@@ -220,10 +220,10 @@ Before starting to implement these use cases, first we need to create a DTO clas
 
 ### Creating the Data Transfer Object (DTO)
 
-[Application services](../../../Application-Services.md) typically get and return DTOs ([Data Transfer Objects](../../../Data-Transfer-Objects.md)) instead of entities. So, create a new `TodoItemDto` class under the `Services/Dtos` folder{{if UI=="Blazor"}} of your `TodoApp.Shared` project{{end}}:
+[Application services](../../../Application-Services.md) typically get and return DTOs ([Data Transfer Objects](../../../Data-Transfer-Objects.md)) instead of entities. So, create a new `TodoItemDto` class under the `Services/Dtos` folder{{if UI=="Blazor"}} of your `TodoApp.Contracts` project{{end}}:
 
 ```csharp
-namespace TodoApp.Services.Dtos;
+namespace TodoApp{{if UI=="Blazor"}}.Contracts{{end}}.Services.Dtos;
 
 public class TodoItemDto
 {
@@ -238,11 +238,13 @@ This is a very simple DTO class that has the same properties as the `TodoItem` e
 
 ### The Application Service Interface
 
-Create a `ITodoAppService` interface under the `Services` folder of the `TodoApp.Server` project, as shown below:
+Create a `ITodoAppService` interface under the `Services` folder of the `TodoApp.Contracts` project, as shown below:
 
 ```csharp
-using TodoApp.Shared.Services.Dtos;
+using TodoApp.Contracts.Services.Dtos;
 using Volo.Abp.Application.Services;
+
+namespace TodoApp.Contracts.Services;
 
 public interface ITodoAppService : IApplicationService
 {
@@ -258,14 +260,21 @@ public interface ITodoAppService : IApplicationService
 
 ### The Application Service Implementation
 
-Create a `TodoAppService` class under the `Services` folder of {{if UI=="Blazor"}}your `TodoApp.Server` project{{else}}your project{{end}}, as shown below:
+Create a `TodoAppService` class under the `Services` folder of {{if UI=="Blazor"}}your `TodoApp.Host` project{{else}}your project{{end}}, as shown below:
 
 ```csharp
+{{if UI=="Blazor"}}
+using TodoApp.Contracts.Services;
+using TodoApp.Contracts.Services.Dtos;
+using TodoApp.Host.Entities;
+using Volo.Abp.Application.Services;
+{{else}}
 using TodoApp.Entities;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+{{end}}
 
-namespace TodoApp.Services;
+namespace TodoApp{{if UI=="Blazor"}}.Host{{end}}.Services;
 
 public class TodoAppService : ApplicationService{{if UI=="Blazor"}}, ITodoAppService{{end}}
 {
@@ -516,12 +525,18 @@ If you open [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `
 
 ### Index.razor.cs
 
-Open the `Index.razor.cs` file in the `Pages` folder{{if UI=="Blazor"}} in your `Todo.Client` project{{end}} and replace the content with the following code block:
+Open the `Index.razor.cs` file in the `Pages` folder{{if UI=="Blazor"}} in your `Todo.Blazor` project{{end}} and replace the content with the following code block:
 
 ```csharp
+{{if UI=="Blazor"}}
+using Microsoft.AspNetCore.Components;
+using TodoApp.Contracts.Services;
+using TodoApp.Contracts.Services.Dtos;
+{{else}}
 using Microsoft.AspNetCore.Components;
 using TodoApp.Services;
 using TodoApp.Services.Dtos;
+{{end}}
 
 namespace TodoApp.Pages;
 
@@ -554,7 +569,7 @@ public partial class Index
 }
 ```
 
-This class uses the `TodoAppService` to get the list of todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
+This class uses the {{if UI=="Blazor"}}`ITodoAppService`{{else}}`TodoAppService`{{end}} to get the list of todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
 
 ### Index.razor
 
@@ -632,7 +647,7 @@ As the final touch, open the `Index.razor.css` file in the `Pages` folder and re
 
 This is a simple styling for the todo page. We believe that you can do much better :)
 
-Now, you can run the application again to see the result.
+Now, you can run the {{if UI=="Blazor"}}`TodoApp.Host` project{{else}}application{{end}} again to see the result.
 
 {{else if UI=="NG"}}
 
