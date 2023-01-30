@@ -90,7 +90,7 @@ You can also make a pull request from the repo in your GitHub profile.
 
 ![compare-pull-request](images/pull-request-image.png)
 
-Before requesting a pull request, it is useful to select one of ABP's tags to indicate the change you have made. You can easily filter the bug or enhancement using the ABP tags. Make sure that the branch you created reaches the correct branch. After briefly describing your changes in the title and description, click the `Create pull request` button. This will send a pull request to the original repository. If the pull request is approved and merged by the community, your changes will also appear in the main repository.
+Before requesting a pull request make sure that the branch you created has reached the correct branch. After briefly describing your changes in the title and description, click the `Create pull request` button. This will send a pull request to the original repository. If the pull request is approved and merged by the community, your changes will also appear in the main repository.
 
 ![open-pull-request](images/open-pull-request-image.png)
 
