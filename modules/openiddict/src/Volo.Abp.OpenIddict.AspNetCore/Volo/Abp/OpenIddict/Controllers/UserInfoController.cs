@@ -32,6 +32,7 @@ public class UserInfoController : AbpOpenIdDictControllerBase
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The specified access token is bound to an account that no longer exists."
                 }));
         }
+
         return Ok(claims);
     }
 
