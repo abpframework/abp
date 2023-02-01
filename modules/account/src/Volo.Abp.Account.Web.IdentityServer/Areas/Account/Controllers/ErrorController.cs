@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Views.Error;
-using Volo.Abp.Http;
+using Volo.Abp.ExceptionHandling;
 
 namespace Volo.Abp.Account.Web.Areas.Account.Controllers;
 
@@ -48,7 +48,7 @@ public class ErrorController : AbpController
 
         return View(GetErrorPageUrl(statusCode), new AbpErrorViewModel
         {
-            ErrorInfo = new RemoteServiceErrorInfo(errorMessage.Error, errorMessage.ErrorDescription),
+            ErrorInfo = new ErrorInfo(errorMessage.Error, errorMessage.ErrorDescription),
             HttpStatusCode = statusCode
         });
     }
