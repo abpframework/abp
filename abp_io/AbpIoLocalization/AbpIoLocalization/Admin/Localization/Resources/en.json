@@ -447,6 +447,10 @@
     "CreateAbpConsultant": "Create ABP Consultant",
     "UrlCodeIsNotAvailable": "Url code is used by another ABP Consultant.",
     "AbpConsultants": "ABP Consultants",
-    "AbpConsultant": "ABP Consultant"
+    "AbpConsultant": "ABP Consultant",
+    "AbpConsultantEdit": "Edit ABP Consultant",
+    "AbpConsultantCreate": "Create ABP Consultant",
+    "WhoWeAreItem": "Who We Are Item",
+    "FieldIsRequired": "{0} is required.",
   }
 }
