@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Guids;
-using Volo.Abp.Http;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.AuditLogging;
@@ -55,10 +54,10 @@ public class AuditLogInfoToAuditLogConverter : IAuditLogInfoToAuditLogConverter,
 
         var remoteServiceErrorInfos = auditLogInfo.Exceptions?.Select(exception => ExceptionToErrorInfoConverter.Convert(exception, options =>
                                           {
-                                              options.SendExceptionsDetailsToClients = ExceptionHandlingOptions.SendExceptionsDetailsToClients;
-                                              options.SendStackTraceToClients = ExceptionHandlingOptions.SendStackTraceToClients;
+                                              options.IncludeDetails = ExceptionHandlingOptions.IncludeDetails;
+                                              options.IncludeStackTrace = ExceptionHandlingOptions.IncludeStackTrace;
                                           }))
-                                      ?? new List<RemoteServiceErrorInfo>();
+                                      ?? new List<ErrorInfo>();
 
         var exceptions = remoteServiceErrorInfos.Any()
             ? JsonSerializer.Serialize(remoteServiceErrorInfos, indented: true)
