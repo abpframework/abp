@@ -75,6 +75,49 @@ This job simply uses `IEmailSender` to send emails (see [email sending document]
 
 A background job should not hide exceptions. If it throws an exception, the background job is automatically re-tried after a calculated waiting time. Hide exceptions only if you don't want to re-run the background job for the current argument.
 
+#### Cancelling Background Jobs
+
+If you use cancellation supported background job system. You can check cancellation token via `ICancellationTokenProvider`.
+
+**Example**
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
+
+namespace MyProject
+{
+    public class LongRunningJob : AsyncBackgroundJob<LongRunningJobArgs>, ITransientDependency
+    {
+        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+
+        public LongRunningJob(ICancellationTokenProvider cancellationTokenProvider)
+        {
+            _cancellationTokenProvider = cancellationTokenProvider;
+        }
+
+        public override async Task ExecuteAsync(LongRunningJobArgs args)
+        {
+            try
+            {
+                foreach (var id in args.Ids)
+                {
+                    _cancellationTokenProvider.Token.ThrowIfCancellationRequested();
+                    await ProcessAsync(id);//code omitted for brevity
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                Logger.LogWarning("Job cancelled!");
+            }
+        }
+    }
+}
+```
+
 #### Job Name
 
 Each background job has a name. Job names are used in several places. For example, RabbitMQ provider uses job names to determine the RabbitMQ Queue names.
