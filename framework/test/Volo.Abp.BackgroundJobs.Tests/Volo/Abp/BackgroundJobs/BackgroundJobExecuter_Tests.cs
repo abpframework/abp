@@ -117,6 +117,9 @@ public class BackgroundJobExecuter_Tests : BackgroundJobsTestBase
         jobObject.Canceled.ShouldBeTrue();
 
         //Arrange
+        var asyncCts = new CancellationTokenSource();
+        asyncCts.Cancel();
+
         var asyncJobObject = GetRequiredService<MyAsyncJob>();
         asyncJobObject.ExecutedValues.ShouldBeEmpty();
 
@@ -125,11 +128,12 @@ public class BackgroundJobExecuter_Tests : BackgroundJobsTestBase
             new JobExecutionContext(
                 ServiceProvider,
                 typeof(MyAsyncJob),
-                new MyAsyncJobArgs("42")
+                new MyAsyncJobArgs("42"),
+                asyncCts.Token
             )
         );
 
         //Assert
-        jobObject.Canceled.ShouldBeTrue();
+        asyncJobObject.Canceled.ShouldBeTrue();
     }
 }

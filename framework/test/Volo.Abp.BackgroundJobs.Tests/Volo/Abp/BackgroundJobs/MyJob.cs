@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs;
 
@@ -13,17 +14,21 @@ public class MyJob : BackgroundJob<MyJobArgs>, ISingletonDependency
     public Guid? TenantId { get; set; }
 
     private readonly ICurrentTenant _currentTenant;
+    private readonly ICancellationTokenProvider _cancellationTokenProvider;
 
     public bool Canceled { get; set; }
 
-    public MyJob(ICurrentTenant currentTenant)
+    public MyJob(
+        ICurrentTenant currentTenant,
+        ICancellationTokenProvider cancellationTokenProvider)
     {
         _currentTenant = currentTenant;
+        _cancellationTokenProvider = cancellationTokenProvider;
     }
 
-    public override void Execute(MyJobArgs args, CancellationToken cancellationToken = default)
+    public override void Execute(MyJobArgs args)
     {
-        if (cancellationToken.IsCancellationRequested)
+        if (_cancellationTokenProvider.Token.IsCancellationRequested)
         {
             Canceled = true;
         }
