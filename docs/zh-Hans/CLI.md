@@ -129,6 +129,7 @@ abp new Acme.BookStore
   * `--ui` 或者 `-u`: 指定ui框架.默认`mvc`框架.其他选项:
     * `mvc`: ASP.NET Core MVC.
     * `angular`: Angular.
+    * `blazor`: Blazor UI.
     * `blazor-server`: Blazor Server.
     * `none`: 不包含UI.
   * `--database-provider` 或 `-d`: 或者 `-d`: 指定数据库提供程序.默认是 `ef`.其他选项:
