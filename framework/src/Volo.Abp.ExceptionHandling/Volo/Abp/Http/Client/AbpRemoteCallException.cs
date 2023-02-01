@@ -13,7 +13,7 @@ public class AbpRemoteCallException : AbpException, IHasErrorCode, IHasErrorDeta
 
     public string Details => Error?.Details;
 
-    public RemoteServiceErrorInfo Error { get; set; }
+    public ErrorInfo Error { get; set; }
 
     public AbpRemoteCallException()
     {
@@ -32,7 +32,7 @@ public class AbpRemoteCallException : AbpException, IHasErrorCode, IHasErrorDeta
 
     }
 
-    public AbpRemoteCallException(RemoteServiceErrorInfo error, Exception innerException = null)
+    public AbpRemoteCallException(ErrorInfo error, Exception innerException = null)
         : base(error.Message, innerException)
     {
         Error = error;

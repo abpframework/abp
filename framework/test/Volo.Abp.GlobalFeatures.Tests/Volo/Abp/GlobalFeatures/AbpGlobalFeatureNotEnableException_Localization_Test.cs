@@ -1,5 +1,5 @@
 ﻿using Shouldly;
-using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Localization;
 using Xunit;
 

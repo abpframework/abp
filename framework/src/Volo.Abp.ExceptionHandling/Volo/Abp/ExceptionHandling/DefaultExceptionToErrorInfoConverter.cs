@@ -9,15 +9,13 @@ using Volo.Abp.Authorization;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.ExceptionHandling;
 using Volo.Abp.ExceptionHandling.Localization;
-using Volo.Abp.Http;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.AspNetCore.ExceptionHandling;
+namespace Volo.Abp.ExceptionHandling;
 
 public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConverter, ITransientDependency
 {
@@ -38,11 +36,11 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         LocalizationOptions = localizationOptions.Value;
     }
 
-    public RemoteServiceErrorInfo Convert(Exception exception, bool includeSensitiveDetails)
+    public ErrorInfo Convert(Exception exception, bool includeSensitiveDetails)
     {
         var exceptionHandlingOptions = CreateDefaultOptions();
-        exceptionHandlingOptions.SendExceptionsDetailsToClients = includeSensitiveDetails;
-        exceptionHandlingOptions.SendStackTraceToClients = includeSensitiveDetails;
+        exceptionHandlingOptions.IncludeDetails = includeSensitiveDetails;
+        exceptionHandlingOptions.IncludeStackTrace = includeSensitiveDetails;
 
         var errorInfo = CreateErrorInfoWithoutCode(exception, exceptionHandlingOptions);
 
@@ -54,7 +52,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         return errorInfo;
     }
 
-    public RemoteServiceErrorInfo Convert(Exception exception, Action<AbpExceptionHandlingOptions> options = null)
+    public ErrorInfo Convert(Exception exception, Action<AbpExceptionHandlingOptions> options = null)
     {
         var exceptionHandlingOptions = CreateDefaultOptions();
         options?.Invoke(exceptionHandlingOptions);
@@ -69,11 +67,11 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         return errorInfo;
     }
 
-    protected virtual RemoteServiceErrorInfo CreateErrorInfoWithoutCode(Exception exception, AbpExceptionHandlingOptions options)
+    protected virtual ErrorInfo CreateErrorInfoWithoutCode(Exception exception, AbpExceptionHandlingOptions options)
     {
-        if (options.SendExceptionsDetailsToClients)
+        if (options.IncludeDetails)
         {
-            return CreateDetailedErrorInfoFromException(exception, options.SendStackTraceToClients);
+            return CreateDetailedErrorInfoFromException(exception, options.IncludeStackTrace);
         }
 
         exception = TryToGetActualException(exception);
@@ -85,7 +83,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
 
         if (exception is AbpDbConcurrencyException)
         {
-            return new RemoteServiceErrorInfo(L["AbpDbConcurrencyErrorMessage"]);
+            return new ErrorInfo(L["AbpDbConcurrencyErrorMessage"]);
         }
 
         if (exception is EntityNotFoundException)
@@ -93,7 +91,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
             return CreateEntityNotFoundError(exception as EntityNotFoundException);
         }
 
-        var errorInfo = new RemoteServiceErrorInfo();
+        var errorInfo = new ErrorInfo();
 
         if (exception is IUserFriendlyException || exception is AbpRemoteCallException)
         {
@@ -128,7 +126,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         return errorInfo;
     }
 
-    protected virtual void TryToLocalizeExceptionMessage(Exception exception, RemoteServiceErrorInfo errorInfo)
+    protected virtual void TryToLocalizeExceptionMessage(Exception exception, ErrorInfo errorInfo)
     {
         if (exception is ILocalizeErrorMessage localizeErrorMessageException)
         {
@@ -179,11 +177,11 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         errorInfo.Message = localizedValue;
     }
 
-    protected virtual RemoteServiceErrorInfo CreateEntityNotFoundError(EntityNotFoundException exception)
+    protected virtual ErrorInfo CreateEntityNotFoundError(EntityNotFoundException exception)
     {
         if (exception.EntityType != null)
         {
-            return new RemoteServiceErrorInfo(
+            return new ErrorInfo(
                 string.Format(
                     L["EntityNotFoundErrorMessage"],
                     exception.EntityType.Name,
@@ -192,7 +190,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
             );
         }
 
-        return new RemoteServiceErrorInfo(exception.Message);
+        return new ErrorInfo(exception.Message);
     }
 
     protected virtual Exception TryToGetActualException(Exception exception)
@@ -213,13 +211,13 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         return exception;
     }
 
-    protected virtual RemoteServiceErrorInfo CreateDetailedErrorInfoFromException(Exception exception, bool sendStackTraceToClients)
+    protected virtual ErrorInfo CreateDetailedErrorInfoFromException(Exception exception, bool sendStackTraceToClients)
     {
         var detailBuilder = new StringBuilder();
 
         AddExceptionToDetails(exception, detailBuilder, sendStackTraceToClients);
 
-        var errorInfo = new RemoteServiceErrorInfo(exception.Message, detailBuilder.ToString(), data: exception.Data);
+        var errorInfo = new ErrorInfo(exception.Message, detailBuilder.ToString(), data: exception.Data);
 
         if (exception is AbpValidationException)
         {
@@ -283,13 +281,13 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         }
     }
 
-    protected virtual RemoteServiceValidationErrorInfo[] GetValidationErrorInfos(IHasValidationErrors validationException)
+    protected virtual ValidationErrorInfo[] GetValidationErrorInfos(IHasValidationErrors validationException)
     {
-        var validationErrorInfos = new List<RemoteServiceValidationErrorInfo>();
+        var validationErrorInfos = new List<ValidationErrorInfo>();
 
         foreach (var validationResult in validationException.ValidationErrors)
         {
-            var validationError = new RemoteServiceValidationErrorInfo(validationResult.ErrorMessage);
+            var validationError = new ValidationErrorInfo(validationResult.ErrorMessage);
 
             if (validationResult.MemberNames != null && validationResult.MemberNames.Any())
             {
@@ -320,8 +318,8 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
     {
         return new AbpExceptionHandlingOptions
         {
-            SendExceptionsDetailsToClients = false,
-            SendStackTraceToClients = true
+            IncludeDetails = false,
+            IncludeStackTrace = true
         };
     }
 }

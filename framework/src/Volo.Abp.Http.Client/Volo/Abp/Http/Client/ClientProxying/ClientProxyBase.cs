@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.Content;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
@@ -228,7 +229,7 @@ public class ClientProxyBase<TService> : ITransientDependency
             catch (Exception ex)
             {
                 throw new AbpRemoteCallException(
-                    new RemoteServiceErrorInfo
+                    new ErrorInfo
                     {
                         Message = response.ReasonPhrase,
                         Code = response.StatusCode.ToString()
@@ -248,7 +249,7 @@ public class ClientProxyBase<TService> : ITransientDependency
         else
         {
             throw new AbpRemoteCallException(
-                new RemoteServiceErrorInfo
+                new ErrorInfo
                 {
                     Message = response.ReasonPhrase,
                     Code = response.StatusCode.ToString()

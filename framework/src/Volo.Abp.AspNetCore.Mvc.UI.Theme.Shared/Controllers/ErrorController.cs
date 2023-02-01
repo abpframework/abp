@@ -49,8 +49,8 @@ public class ErrorController : AbpController
 
         var errorInfo = _errorInfoConverter.Convert(exception, options =>
         {
-            options.SendExceptionsDetailsToClients = _exceptionHandlingOptions.SendExceptionsDetailsToClients;
-            options.SendStackTraceToClients = _exceptionHandlingOptions.SendStackTraceToClients;
+            options.IncludeDetails = _exceptionHandlingOptions.IncludeDetails;
+            options.IncludeStackTrace = _exceptionHandlingOptions.IncludeStackTrace;
         });
 
         if (httpStatusCode == 0)

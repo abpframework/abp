@@ -89,8 +89,8 @@ public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
                     new RemoteServiceErrorResponse(
                         errorInfoConverter.Convert(exception, options =>
                         {
-                            options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
-                            options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+                            options.IncludeDetails = exceptionHandlingOptions.IncludeDetails;
+                            options.IncludeStackTrace = exceptionHandlingOptions.IncludeStackTrace;
                         })
                     )
                 )

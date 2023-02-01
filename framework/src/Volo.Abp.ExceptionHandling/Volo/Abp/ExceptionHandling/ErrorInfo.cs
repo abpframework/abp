@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
+using Volo.Abp.Http;
 
-namespace Volo.Abp.Http;
+namespace Volo.Abp.ExceptionHandling;
 
 /// <summary>
 /// Used to store information about an error.
 /// </summary>
 [Serializable]
-public class RemoteServiceErrorInfo
+public class ErrorInfo
 {
     /// <summary>
     /// Error code.
@@ -32,24 +33,24 @@ public class RemoteServiceErrorInfo
     /// <summary>
     /// Validation errors if exists.
     /// </summary>
-    public RemoteServiceValidationErrorInfo[] ValidationErrors { get; set; }
+    public ValidationErrorInfo[] ValidationErrors { get; set; }
 
     /// <summary>
-    /// Creates a new instance of <see cref="RemoteServiceErrorInfo"/>.
+    /// Creates a new instance of <see cref="ErrorInfo"/>.
     /// </summary>
-    public RemoteServiceErrorInfo()
+    public ErrorInfo()
     {
 
     }
 
     /// <summary>
-    /// Creates a new instance of <see cref="RemoteServiceErrorInfo"/>.
+    /// Creates a new instance of <see cref="ErrorInfo"/>.
     /// </summary>
     /// <param name="code">Error code</param>
     /// <param name="details">Error details</param>
     /// <param name="message">Error message</param>
     /// <param name="data">Error data</param>
-    public RemoteServiceErrorInfo(string message, string details = null, string code = null, IDictionary data = null)
+    public ErrorInfo(string message, string details = null, string code = null, IDictionary data = null)
     {
         Message = message;
         Details = details;

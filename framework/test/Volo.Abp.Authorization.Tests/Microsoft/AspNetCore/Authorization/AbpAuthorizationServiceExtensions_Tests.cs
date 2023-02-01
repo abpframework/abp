@@ -1,6 +1,6 @@
 ﻿using Shouldly;
-using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.Authorization;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Localization;
 using Xunit;
 

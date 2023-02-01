@@ -1,10 +1,12 @@
-﻿namespace Volo.Abp.Http;
+﻿using Volo.Abp.ExceptionHandling;
+
+namespace Volo.Abp.Http;
 
 public class RemoteServiceErrorResponse
 {
-    public RemoteServiceErrorInfo Error { get; set; }
+    public ErrorInfo Error { get; set; }
 
-    public RemoteServiceErrorResponse(RemoteServiceErrorInfo error)
+    public RemoteServiceErrorResponse(ErrorInfo error)
     {
         Error = error;
     }

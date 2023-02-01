@@ -59,21 +59,21 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
 
         var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
         var exceptionToErrorInfoConverter = context.GetRequiredService<IExceptionToErrorInfoConverter>();
-        var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(context.Exception, options =>
+        var errorInfo = exceptionToErrorInfoConverter.Convert(context.Exception, options =>
        {
-           options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
-           options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+           options.IncludeDetails = exceptionHandlingOptions.IncludeDetails;
+           options.IncludeStackTrace = exceptionHandlingOptions.IncludeStackTrace;
        });
 
         var logLevel = context.Exception.GetLogLevel();
 
-        var remoteServiceErrorInfoBuilder = new StringBuilder();
-        remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
-        remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
+        var errorInfoBuilder = new StringBuilder();
+        errorInfoBuilder.AppendLine($"---------- {nameof(ErrorInfo)} ----------");
+        errorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(errorInfo, indented: true));
 
         var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance);
 
-        logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+        logger.LogWithLevel(logLevel, errorInfoBuilder.ToString());
 
         logger.LogException(context.Exception, logLevel);
 
@@ -91,7 +91,7 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
                 .GetRequiredService<IHttpExceptionStatusCodeFinder>()
                 .GetStatusCode(context.HttpContext, context.Exception);
 
-            context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
+            context.Result = new ObjectResult(new RemoteServiceErrorResponse(errorInfo));
         }
 
         context.Exception = null; //Handled!

@@ -5,9 +5,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.Components.ExceptionHandling;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Components.Messages;
-using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Http;
+using Volo.Abp.ExceptionHandling;
 
 namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
 
@@ -61,12 +60,12 @@ public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
         }
     }
 
-    protected virtual RemoteServiceErrorInfo GetErrorInfo(UserExceptionInformerContext context)
+    protected virtual ErrorInfo GetErrorInfo(UserExceptionInformerContext context)
     {
         return ExceptionToErrorInfoConverter.Convert(context.Exception, options =>
         {
-            options.SendExceptionsDetailsToClients = Options.SendExceptionsDetailsToClients;
-            options.SendStackTraceToClients = Options.SendStackTraceToClients;
+            options.IncludeDetails = Options.IncludeDetails;
+            options.IncludeStackTrace = Options.IncludeStackTrace;
         });
     }
 }
