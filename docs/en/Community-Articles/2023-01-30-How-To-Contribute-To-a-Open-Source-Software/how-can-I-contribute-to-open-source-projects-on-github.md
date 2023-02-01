@@ -10,7 +10,7 @@ Open source software is code designed to be publicly available. Anyone can view,
 
 ## What is ABP Framework?
 
-ABP Framework is a complete infrastructure for building modern web applications following software development best practices and guidelines. ABP Framework is completely free, [open source](https://github.com/abpframework) and community driven. ABP is a modular framework and Application Modules provide pre-built application functionalities.
+ABP Framework is a complete infrastructure for building modern web applications following the best practices and guidelines of software development. ABP Framework is completely free, [open source](https://github.com/abpframework) and community driven. ABP is a modular framework and Application Modules provide pre-built application functionalities.
 
 ## Before Contribution
 
@@ -24,7 +24,7 @@ You may want to fix a known bug or work on a planned enhancement. See the [issue
 ## Feature Requests
 If you have a feature idea for the framework or modules, create an issue on GitHub or attend an existing discussion. Then you can implement it if it's embraced by the community.
 
-## How to Contribute to a Open Source Software?
+## How to Contribute to an Open Source Software?
 There are some steps to contribute to OSS projects. You can follow the steps below.
 
 ## Step 1: Fork the Project
@@ -39,7 +39,7 @@ After forking, it will create a new repo in your own GitHub profile.
 
 ## Step 2: Clone the Project
 
-In order to develop the project, you need to clone it to your local. After clicking on the code button, select your preferred cloning method and copy the link. You can run the copied link on your local machine with the `git clone` command, but we will use GitHub Desktop. Press `Open with Github Desktop` and the repo will be installed on your local machine. 
+In order to develop the project, you need to clone it to your local. After clicking on the code button, select your preferred cloning method and copy the link. You can run the copied link on your local machine with the `git clone` command, but we will use GitHub Desktop. Press `Open with GitHub Desktop` and the repo will be installed on your local machine. 
 
 or alternatively use the `git clone https://github.com/username/abp.git` command
 
@@ -59,13 +59,13 @@ Choose a suitable IDE to develop on the new branch you created. In order not to 
 
 ![developer-list](images/developer-list.png)
 
-As you can see, all changes made to the repo are reflected directly in Github Desktop.
+As you can see, all changes made to the repo are reflected directly on GitHub Desktop.
 
 ![github-desktop-change](images/github-desktop-change.png)
 
 ## Step 5: Commit
 
-The commit operation is used to save the changes you have made. It is useful to commit after certain operations are done in the project. For the changes you will make, it is useful to write a short sentence describing what you've done. Press the `Commit to <branch-name>` button to commit. 
+The commit operation is used to save the changes you have made. It is useful to commit after certain operations are done in the project. It is useful to write a short sentence describing what you've done for the changes made in each commit. Press the `Commit to <branch-name>` button to commit. 
 
 or alternatively use the `git add .` and `git commit -m "Added the Developer List"` command
 
@@ -82,7 +82,7 @@ or alternatively use the `git push origin new-branch` command
 
 ## Step 7: Create a Pull Request
 
-After the push, the pull request `Create Pull Request` button will appear on the GitHub Desktop. Click it and create a pull request.
+After the push, the pull request `Create Pull Request` button will appear on GitHub Desktop. Click it and create a pull request.
 
 ![github-desktop-pull-request](images/github-desktop-pull-request.png)
 
@@ -90,14 +90,14 @@ You can also make a pull request from the repo in your GitHub profile.
 
 ![compare-pull-request](images/pull-request-image.png)
 
-Before requesting a pull request make sure that the branch you created has reached the correct branch. After briefly describing your changes in the title and description, click the `Create pull request` button. This will send a pull request to the original repository. If the pull request is approved and merged by the community, your changes will also appear in the main repository.
+Before creating the pull request, make sure that the branch you created is making changes to the correct branch. After briefly describing your changes in the title and description, click the `Create pull request` button. This will send a pull request to the original repository. If the pull request is approved and merged by the community, your changes will also appear in the main repository.
 
 ![open-pull-request](images/open-pull-request-image.png)
 
 That's it! You have contributed your development to an open source project.
 
 ## Conclusion
-In this article, I showed you how you can contribute to the ABP Framework, an open source and community driven project. Thank you for reading the article, I hope it was useful. See you soon!
+In this article, I showed you how you could contribute to the ABP Framework, an open source and community driven project. Thank you for reading the article, I hope it was useful. See you soon!
 
 ## References
 - https://opensource.guide/how-to-contribute/
