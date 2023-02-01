@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Threading;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 {
     public class LongRunningJob : BackgroundJob<LongRunningJobArgs>, ITransientDependency
     {
-        public override void Execute(LongRunningJobArgs args, CancellationToken cancellationToken = default)
+        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+
+        public LongRunningJob(ICancellationTokenProvider cancellationTokenProvider)
+        {
+            _cancellationTokenProvider = cancellationTokenProvider;
+        }
+
+        public override void Execute(LongRunningJobArgs args)
         {
             lock (Console.Out)
             {
@@ -17,7 +25,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 
                     for (var i = 1; i <= 10; i++)
                     {
-                        cancellationToken.ThrowIfCancellationRequested();
+                        _cancellationTokenProvider.Token.ThrowIfCancellationRequested();
 
                         Thread.Sleep(1000);
                         Console.WriteLine($"{args.Value} step-{i} done: {DateTime.Now}");

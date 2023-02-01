@@ -6,7 +6,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 {
     public class WriteToConsoleYellowJob : BackgroundJob<WriteToConsoleYellowJobArgs>, ITransientDependency
     {
-        public override void Execute(WriteToConsoleYellowJobArgs args, CancellationToken cancellationToken = default)
+        public override void Execute(WriteToConsoleYellowJobArgs args)
         {
             if (RandomHelper.GetRandom(0, 100) < 70)
             {
