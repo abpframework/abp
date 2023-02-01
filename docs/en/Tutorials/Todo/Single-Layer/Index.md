@@ -81,7 +81,7 @@ It is good to run the application before starting the development. Running the a
 
 > **Note:** The `host` application hosts and serves the `blazor` application. Therefore, you should run the `host` application only.
 
-After application runs, open the application in your default browser:
+After the application runs, open the application in your default browser:
 
 {{else if UI=="NG"}}
 
