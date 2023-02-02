@@ -11,14 +11,31 @@ namespace Volo.Abp.OpenIddict.Applications;
 
 public class AbpApplicationManager : OpenIddictApplicationManager<OpenIddictApplicationModel>, IAbpApplicationManager
 {
+    protected AbpOpenIddictIdentifierConverter IdentifierConverter { get; }
+
     public AbpApplicationManager(
         [NotNull] IOpenIddictApplicationCache<OpenIddictApplicationModel> cache,
         [NotNull] ILogger<AbpApplicationManager> logger,
         [NotNull] IOptionsMonitor<OpenIddictCoreOptions> options,
-        [NotNull] IOpenIddictApplicationStoreResolver resolver)
+        [NotNull] IOpenIddictApplicationStoreResolver resolver,
+        AbpOpenIddictIdentifierConverter identifierConverter)
         : base(cache, logger, options, resolver)
     {
+        IdentifierConverter = identifierConverter;
+    }
 
+    public async override ValueTask UpdateAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
+    {
+        if (!Options.CurrentValue.DisableEntityCaching)
+        {
+            var entity = await Store.FindByIdAsync(IdentifierConverter.ToString(application.Id), cancellationToken);
+            if (entity != null)
+            {
+                await Cache.RemoveAsync(entity, cancellationToken);
+            }
+        }
+
+        await base.UpdateAsync(application, cancellationToken);
     }
 
     public async override ValueTask PopulateAsync(OpenIddictApplicationDescriptor descriptor, OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
