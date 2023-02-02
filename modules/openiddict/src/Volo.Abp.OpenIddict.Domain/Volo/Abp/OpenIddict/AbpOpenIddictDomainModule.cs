@@ -71,6 +71,9 @@ public class AbpOpenIddictDomainModule : AbpModule
                     .AddTokenStore<AbpOpenIddictTokenStore>();
 
                 builder.ReplaceApplicationManager(typeof(AbpApplicationManager));
+                builder.ReplaceAuthorizationManager(typeof(AbpAuthorizationManager));
+                builder.ReplaceScopeManager(typeof(AbpScopeManager));
+                builder.ReplaceTokenManager(typeof(AbpTokenManager));
 
                 builder.Services.TryAddScoped(provider => (IAbpApplicationManager)provider.GetRequiredService<IOpenIddictApplicationManager>());
 
