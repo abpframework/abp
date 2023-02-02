@@ -328,13 +328,12 @@ You can also throw these type of exceptions in your code (although it's rarely n
 ````csharp
 Configure<AbpExceptionHandlingOptions>(options =>
 {
-    options.SendExceptionsDetailsToClients = true;
-    options.SendStackTraceToClients = false;
+    options.IncludeDetails = true;
+    options.IncludeStackTrace = false;
 });
 ````
 
 Here, a list of the options you can configure:
 
-* `SendExceptionsDetailsToClients` (default: `false`): You can enable or disable sending exception details to the client.
-* `SendStackTraceToClients` (default: `true`): You can enable or disable sending the stack trace of exception to the client. If you want to send the stack trace to the client, you must set both `SendStackTraceToClients` and `SendExceptionsDetailsToClients` options to `true` otherwise, the stack trace will not be sent to the client.
-
+* `IncludeDetails` (default: `false`): You can enable or disable sending exception details to the client.
+* `IncludeStackTrace` (default: `true`): You can enable or disable sending the stack trace of exception to the client. If you want to send the stack trace to the client, you must set both `IncludeStackTrace` and `IncludeDetails` options to `true` otherwise, the stack trace will not be sent to the client.
