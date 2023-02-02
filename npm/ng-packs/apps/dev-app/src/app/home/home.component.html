@@ -10,15 +10,8 @@
 
     <p class="lead px-lg-5 mx-lg-5">{{ '::LongWelcomeMessage' | abpLocalization }}</p>
 
-    <abp-button
-      *ngIf="!hasLoggedIn"
-      [loading]="loading"
-      (click)="login()"
-      [disabled]="loading"
-      class="px-4 ml-1"
-      role="button"
-      iconClass="fa fa-sign-in"
-    >
+    <abp-button *ngIf="!hasLoggedIn" [loading]="loading" (click)="login()" [disabled]="loading" class="px-4 ml-1"
+      role="button" iconClass="fa fa-sign-in">
       {{ 'AbpAccount::Login' | abpLocalization }}
     </abp-button>
   </div>
@@ -26,11 +19,11 @@
     <h3>Let's improve your application!</h3>
     <p>Here are some links to help you get started:</p>
   </div>
-  <div class="card mt-4 mb-5">
-    <div class="card-body">
+  <abp-card class="mt-4 mb-5">
+
+    <abp-card-body>
       <div class="row text-center justify-content-md-center">
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             starterLinkTemplate;
             context: {
               $implicit: {
@@ -45,11 +38,9 @@
                 ]
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
 
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             starterLinkTemplate;
             context: {
               $implicit: {
@@ -63,11 +54,9 @@
                 ]
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
 
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             starterLinkTemplate;
             context: {
               $implicit: {
@@ -85,12 +74,10 @@
                 ]
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
       </div>
       <div class="row text-center mt-lg-3 justify-content-md-center">
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             starterLinkTemplate;
             context: {
               $implicit: {
@@ -104,13 +91,11 @@
                 ]
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
 
         <ng-template #githubButtonsTemplate>
           <p class="mb-1">
-            <iframe
-              scrolling="no"
+            <iframe scrolling="no"
               src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp&amp;title=&amp;aria-label=Star%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-star&amp;data-text=Star&amp;data-size=large&amp;data-show-count=true"
               style="
                 width: 122px;
@@ -118,10 +103,8 @@
                 border: none;
                 display: inline-block;
                 margin-right: 4px;
-              "
-            ></iframe>
-            <iframe
-              scrolling="no"
+              "></iframe>
+            <iframe scrolling="no"
               src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp%2Fissues&amp;title=&amp;aria-label=Issue%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-issue-opened&amp;data-text=Issue&amp;data-size=large"
               style="
                 width: 72px;
@@ -129,19 +112,15 @@
                 border: none;
                 display: inline-block;
                 margin-right: 4px;
-              "
-            ></iframe>
+              "></iframe>
 
-            <iframe
-              scrolling="no"
+            <iframe scrolling="no"
               src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp%2Ffork&amp;title=&amp;aria-label=Fork%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-repo-forked&amp;data-text=Fork&amp;data-size=large&amp;"
-              style="width: 72px; height: 28px; border: none; display: inline-block"
-            ></iframe>
+              style="width: 72px; height: 28px; border: none; display: inline-block"></iframe>
           </p>
         </ng-template>
 
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             starterLinkTemplate;
             context: {
               $implicit: {
@@ -157,11 +136,9 @@
                 customTemplate: githubButtonsTemplate
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
 
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             starterLinkTemplate;
             context: {
               $implicit: {
@@ -179,19 +156,17 @@
                 ]
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
       </div>
-    </div>
-  </div>
+    </abp-card-body>
+  </abp-card>
 
   <div class="mt-5 my-3 text-center">
     <h3>Meet the ABP Commercial</h3>
     <p>A Complete Web Application Platform Built on the ABP Framework</p>
   </div>
-
-  <div class="card mt-4 mb-5">
-    <div class="card-body">
+  <abp-card class="mt-4 mb-5">
+    <abp-card-body>
       <p class="px-lg-5 mx-lg-5 py-3 text-center">
         <a href="https://commercial.abp.io/" target="_blank">ABP Commercial</a> is a platform based
         on the open source ABP framework. It provides pre-built application modules, rapid
@@ -199,8 +174,7 @@
       </p>
 
       <div class="row text-center justify-content-md-center">
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             featuresTemplate;
             context: {
               $implicit: {
@@ -208,11 +182,9 @@
                 href: 'https://commercial.abp.io/startup-templates?ref=tmpl'
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
 
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             featuresTemplate;
             context: {
               $implicit: {
@@ -220,11 +192,9 @@
                 href: 'https://commercial.abp.io/modules?ref=tmpl'
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
 
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             featuresTemplate;
             context: {
               $implicit: {
@@ -232,11 +202,9 @@
                 href: 'https://commercial.abp.io/tools?ref=tmpl'
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
 
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             featuresTemplate;
             context: {
               $implicit: {
@@ -244,11 +212,9 @@
                 href: 'https://commercial.abp.io/themes?ref=tmpl'
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
 
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             featuresTemplate;
             context: {
               $implicit: {
@@ -256,11 +222,9 @@
                 href: 'https://support.abp.io/QA/Questions?ref=tmpl'
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
 
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             featuresTemplate;
             context: {
               $implicit: {
@@ -268,22 +232,19 @@
                 href: 'https://commercial.abp.io/additional-services?ref=tmpl'
               }
             }
-          "
-        ></ng-container>
+          "></ng-container>
       </div>
-    </div>
-  </div>
+    </abp-card-body>
+  </abp-card>
+  
   <div class="mb-5 text-center">
     <p class="align-middle">
-      <a href="https://twitter.com/abpframework" target="_blank" class="mx-2"
-        ><i class="fa fa-twitter"></i><span class="text-secondary"> Abp Framework</span></a
-      >
-      <a href="https://twitter.com/abpcommercial" target="_blank" class="mx-2"
-        ><i class="fa fa-twitter"></i><span class="text-secondary"> Abp Commercial</span></a
-      >
-      <a href="https://github.com/abpframework/abp" target="_blank" class="mx-2"
-        ><i class="fa fa-github"></i><span class="text-secondary"> abpframework</span></a
-      >
+      <a href="https://twitter.com/abpframework" target="_blank" class="mx-2"><i class="fa fa-twitter"></i><span
+          class="text-secondary"> Abp Framework</span></a>
+      <a href="https://twitter.com/abpcommercial" target="_blank" class="mx-2"><i class="fa fa-twitter"></i><span
+          class="text-secondary"> Abp Commercial</span></a>
+      <a href="https://github.com/abpframework/abp" target="_blank" class="mx-2"><i class="fa fa-github"></i><span
+          class="text-secondary"> abpframework</span></a>
     </p>
   </div>
 </div>
@@ -295,17 +256,9 @@
         <i class="fas fa-cubes text-secondary d-block my-3 fa-2x"></i> {{ context.title }}
       </h5>
       <p [innerHTML]="context.description"></p>
-      <ng-container
-        *ngIf="context.customTemplate"
-        [ngTemplateOutlet]="context.customTemplate"
-      ></ng-container>
-      <a
-        *ngFor="let link of context.links"
-        [href]="link.href"
-        target="_blank"
-        class="btn btn-link px-1"
-        >{{ link.label }} <i class="fas fa-chevron-right"></i
-      ></a>
+      <ng-container *ngIf="context.customTemplate" [ngTemplateOutlet]="context.customTemplate"></ng-container>
+      <a *ngFor="let link of context.links" [href]="link.href" target="_blank" class="btn btn-link px-1">{{ link.label
+        }} <i class="fas fa-chevron-right"></i></a>
     </div>
   </div>
 </ng-template>
@@ -316,9 +269,8 @@
       <h6>
         <i class="fas fa-plus d-block mb-3 fa- 2x text-secondary"></i>
         <span [innerHTML]="context.title"></span>
-        <a [href]="context.href" target="_blank" class="d-block mt-2 btn btn-sm btn-link"
-          >Details <i class="fas fa-chevron-right"></i
-        ></a>
+        <a [href]="context.href" target="_blank" class="d-block mt-2 btn btn-sm btn-link">Details <i
+            class="fas fa-chevron-right"></i></a>
       </h6>
     </div>
   </div>
