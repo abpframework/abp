@@ -114,14 +114,14 @@ public class AbpOpenIddictAuthorizationCache : AbpOpenIddictCacheBase<OpenIddict
         }
     }
 
-    public async IAsyncEnumerable<OpenIddictAuthorizationModel> FindByApplicationIdAsync(string identifier, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<OpenIddictAuthorizationModel> FindByApplicationIdAsync(string applicationId, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(identifier, nameof(identifier));
+        Check.NotNullOrEmpty(applicationId, nameof(applicationId));
 
-        var authorizations = await ArrayCache.GetOrAddAsync($"{nameof(FindByApplicationIdAsync)}_{identifier}", async () =>
+        var authorizations = await ArrayCache.GetOrAddAsync($"{nameof(FindByApplicationIdAsync)}_{applicationId}", async () =>
         {
             var applications = new List<OpenIddictAuthorizationModel>();
-            await foreach (var authorization in Store.FindByApplicationIdAsync(identifier, cancellationToken))
+            await foreach (var authorization in Store.FindByApplicationIdAsync(applicationId, cancellationToken))
             {
                 applications.Add(authorization);
                 await AddAsync(authorization, cancellationToken);
@@ -135,12 +135,12 @@ public class AbpOpenIddictAuthorizationCache : AbpOpenIddictCacheBase<OpenIddict
         }
     }
 
-    public async ValueTask<OpenIddictAuthorizationModel> FindByIdAsync(string identifier, CancellationToken cancellationToken)
+    public async ValueTask<OpenIddictAuthorizationModel> FindByIdAsync(string id, CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(identifier, nameof(identifier));
+        Check.NotNullOrEmpty(id, nameof(id));
 
-        return await Cache.GetOrAddAsync($"{nameof(FindByIdAsync)}_{identifier}",
-            async () => await Store.FindByIdAsync(identifier, cancellationToken), token: cancellationToken);
+        return await Cache.GetOrAddAsync($"{nameof(FindByIdAsync)}_{id}",
+            async () => await Store.FindByIdAsync(id, cancellationToken), token: cancellationToken);
     }
 
     public async IAsyncEnumerable<OpenIddictAuthorizationModel> FindBySubjectAsync(string subject, [EnumeratorCancellation] CancellationToken cancellationToken)
