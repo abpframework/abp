@@ -363,7 +363,7 @@ Open the `/src/app/book/book.component.html` file and replace the create button 
 ````html
 <!-- Add the abpPermission directive -->
 <button *abpPermission="'BookStore.Books.Create'" id="create" class="btn btn-primary" type="button" (click)="createBook()">
-  <i class="fa fa-plus mr-1"></i>
+  <i class="fa fa-plus me-1"></i>
   <span>{%{{{ '::NewBook' | abpLocalization }}}%}</span>
 </button>
 ````
@@ -374,7 +374,7 @@ Open the `/src/app/book/book.component.html` file and replace the create button 
 
 Books table in the book management page has an actions button for each row. The actions button includes *Edit* and *Delete* actions:
 
-![bookstore-edit-delete-actions](images/bookstore-edit-delete-actions.png)
+![bookstore-edit-delete-actions](images/bookstore-edit-delete-actions-2.png)
 
 We should hide an action if the current user has not granted for the related permission.
 

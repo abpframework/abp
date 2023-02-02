@@ -1,4 +1,5 @@
 @page
+@using System.Web;
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using Volo.Abp.Localization
@@ -12,7 +13,7 @@
 
 <form method="post" asp-page="/AbpPermissionManagement/PermissionManagementModal" data-script-class="abp.modals.PermissionManagement" id="PermissionManagementForm">
     <abp-modal size="Large">
-        <abp-modal-header title="@(L["Permissions"].Value) - @Model.EntityDisplayName"></abp-modal-header>
+        <abp-modal-header title="@(L["Permissions"].Value) - @(HttpUtility.HtmlEncode(Model.EntityDisplayName))"></abp-modal-header>
         <abp-modal-body class="custom-scroll-container">
             <abp-input asp-for="SelectAllInAllTabs" check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None" label="@L["SelectAllInAllTabs"].Value"/>
             <hr class="mt-2 mb-2"/>

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.Domain",
-  "hash": "ab10046fc446a4f2bf9b142fba2ccef7",
+  "hash": "9135b4c99ca5f16a980041e8621fb415",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs",
@@ -21,6 +21,50 @@
           "name": "AbpAutoMapperModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "AbpBackgroundJobsDomainModule",
       "summary": null
@@ -29,55 +73,106 @@
       "baseClass": {
         "name": "AggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.AggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         },
         {
           "name": "IHasConcurrencyStamp",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Data"
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
         },
         {
           "name": "IHasCreationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
         }
       ],
       "methods": [],
-      "namespace": "Volo.Abp.BackgroundJobs",
-      "primaryKeyType": "Guid",
       "collectionProperties": {},
       "navigationProperties": {},
+      "namespace": "Volo.Abp.BackgroundJobs",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.String",
+          "name": "JobName",
+          "summary": "Type of the job.\r\n            It's AssemblyQualifiedName of job type."
+        },
+        {
+          "type": "System.String",
+          "name": "JobArgs",
+          "summary": "Job arguments as serialized string."
+        },
+        {
+          "type": "System.Int16",
+          "name": "TryCount",
+          "summary": "Try count of this job.\r\n            A job is re-tried if it fails."
+        },
+        {
+          "type": "System.DateTime",
+          "name": "CreationTime",
+          "summary": "Creation time of this job."
+        },
+        {
+          "type": "System.DateTime",
+          "name": "NextTryTime",
+          "summary": "Next try time of this job."
+        },
+        {
+          "type": "System.Nullable`1[System.DateTime]",
+          "name": "LastTryTime",
+          "summary": "Last try time of this job."
+        },
+        {
+          "type": "System.Boolean",
+          "name": "IsAbandoned",
+          "summary": "This is true if this job is continuously failed and will not be executed again."
+        },
+        {
+          "type": "Volo.Abp.BackgroundJobs.BackgroundJobPriority",
+          "name": "Priority",
+          "summary": "Priority of this job."
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "BackgroundJobRecord",
       "summary": null
@@ -87,12 +182,66 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.BackgroundJobs",
         "primaryKeyType": "Guid",
-        "collectionProperties": {},
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "BackgroundJobRecord",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<BackgroundJobRecord, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<BackgroundJobRecord, Guid>"
+        },
+        {
+          "name": "IBasicRepository<BackgroundJobRecord>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<BackgroundJobRecord>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<BackgroundJobRecord>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<BackgroundJobRecord>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<BackgroundJobRecord, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<BackgroundJobRecord, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<BackgroundJobRecord>",
+          "name": "GetWaitingListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "IBackgroundJobRepository",
       "summary": null

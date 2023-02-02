@@ -59,8 +59,10 @@ public class CommentingViewComponent : AbpViewComponent
 
     public virtual async Task<IViewComponentResult> InvokeAsync(
         string entityType,
-        string entityId)
+        string entityId,
+        IEnumerable<string> referralLinks = null)
     {
+        referralLinks ??= Enumerable.Empty<string>();
         var comments = (await CommentPublicAppService
             .GetListAsync(entityType, entityId)).Items;
 
@@ -70,6 +72,7 @@ public class CommentingViewComponent : AbpViewComponent
         {
             EntityId = entityId,
             EntityType = entityType,
+            ReferralLinks = referralLinks,
             LoginUrl = loginUrl,
             Comments = comments.OrderByDescending(i => i.CreationTime).ToList()
         };
@@ -98,11 +101,12 @@ public class CommentingViewComponent : AbpViewComponent
     private async Task ConvertMarkdownTextsToHtml(CommentingViewModel viewModel)
     {
         viewModel.RawCommentTexts = new Dictionary<Guid, string>();
+        var referralLinks = viewModel.ReferralLinks?.JoinAsString(" ");
 
         foreach (var comment in viewModel.Comments)
         {
             viewModel.RawCommentTexts.Add(comment.Id, comment.Text);
-            comment.Text = await MarkdownToHtmlRenderer.RenderAsync(comment.Text, allowHtmlTags: false, preventXSS: true);
+            comment.Text = await MarkdownToHtmlRenderer.RenderAsync(comment.Text, allowHtmlTags: false, preventXSS: true, referralLinks: referralLinks);
 
             foreach (var reply in comment.Replies)
             {
@@ -117,6 +121,8 @@ public class CommentingViewComponent : AbpViewComponent
         public string EntityType { get; set; }
 
         public string EntityId { get; set; }
+        
+        public IEnumerable<string> ReferralLinks { get; set; }
 
         public string LoginUrl { get; set; }
 

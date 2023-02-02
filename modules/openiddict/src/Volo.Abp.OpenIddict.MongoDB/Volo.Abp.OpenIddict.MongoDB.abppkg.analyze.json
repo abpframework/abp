@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.OpenIddict.MongoDB",
-  "hash": "3d981831e0c98017360663dad304da33",
+  "hash": "c523d1992cdfef4210763a2d4609779e",
   "contents": [
     {
       "namespace": "Volo.Abp.OpenIddict.MongoDB",
@@ -16,6 +16,50 @@
           "name": "AbpMongoDbModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "AbpOpenIddictMongoDbModule",
       "summary": null
@@ -25,15 +69,9 @@
       "connectionStringName": "AbpOpenIddict",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.OpenIddict.Applications.OpenIddictApplication",
+          "entityFullName": "Volo.Abp.OpenIddict.Scopes.OpenIddictScope",
           "contentType": "databaseCollection",
-          "name": "OpenIddictApplications",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
-          "contentType": "databaseCollection",
-          "name": "OpenIddictTokens",
+          "name": "OpenIddictScopes",
           "summary": null
         },
         {
@@ -43,10 +81,36 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.OpenIddict.Scopes.OpenIddictScope",
+          "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
           "contentType": "databaseCollection",
-          "name": "OpenIddictScopes",
+          "name": "OpenIddictTokens",
           "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Applications.OpenIddictApplication",
+          "contentType": "databaseCollection",
+          "name": "OpenIddictApplications",
+          "summary": null
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpMongoDbContext",
+          "namespace": "Volo.Abp.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "fullName": "Volo.Abp.MongoDB.IAbpMongoDbContext"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "IOpenIddictMongoDbContext",
+          "namespace": "Volo.Abp.OpenIddict.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.OpenIddict.MongoDB",
+          "fullName": "Volo.Abp.OpenIddict.MongoDB.IOpenIddictMongoDbContext"
         }
       ],
       "contentType": "mongoDbContext",

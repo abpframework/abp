@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.Domain",
-  "hash": "29cb59af622e48219365f87f318f504e",
+  "hash": "3cee9d89359b00bd39be9e09f6036218",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
@@ -36,116 +36,208 @@
           "name": "AbpCachingModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "AbpTenantManagementDomainModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.TenantManagement",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Value",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "TenantConnectionString",
       "summary": null
     },
     {
       "baseClass": {
         "name": "FullAuditedAggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities.Auditing",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
           "name": "IEntity",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
         },
         {
           "name": "IAggregateRoot<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
         },
         {
           "name": "IAggregateRoot",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
         },
         {
           "name": "IGeneratesDomainEvents",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
         },
         {
           "name": "IHasExtraProperties",
           "namespace": "Volo.Abp.Data",
-          "declaringAssemblyName": "Volo.Abp.ObjectExtending"
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
         },
         {
           "name": "IHasConcurrencyStamp",
           "namespace": "Volo.Abp.Domain.Entities",
-          "declaringAssemblyName": "Volo.Abp.Data"
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
         },
         {
           "name": "ICreationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
         },
         {
           "name": "IHasCreationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
         },
         {
           "name": "IMayHaveCreator",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
         },
         {
           "name": "IAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditedObject"
         },
         {
           "name": "IModificationAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
         },
         {
           "name": "IHasModificationTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
         },
         {
           "name": "IFullAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
         },
         {
           "name": "IDeletionAuditedObject",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
         },
         {
           "name": "IHasDeletionTime",
           "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts"
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
         },
         {
           "name": "ISoftDelete",
           "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core"
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.ISoftDelete"
         }
       ],
       "methods": [
         {
           "returnType": "String",
-          "isAsync": false,
           "name": "FindDefaultConnectionString",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "String",
-          "isAsync": false,
           "name": "FindConnectionString",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -156,9 +248,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "SetDefaultConnectionString",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -169,9 +264,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "SetConnectionString",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -187,16 +285,22 @@
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveDefaultConnectionString",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": []
         },
         {
           "returnType": "Void",
-          "isAsync": false,
           "name": "RemoveConnectionString",
           "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -206,16 +310,29 @@
           ]
         }
       ],
-      "namespace": "Volo.Abp.TenantManagement",
-      "primaryKeyType": "Guid",
       "collectionProperties": {
         "connectionStrings": {
           "name": "TenantConnectionString",
           "namespace": "Volo.Abp.TenantManagement",
-          "declaringAssemblyName": "Volo.Abp.TenantManagement.Domain"
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Domain",
+          "fullName": "Volo.Abp.TenantManagement.TenantConnectionString"
         }
       },
       "navigationProperties": {},
+      "namespace": "Volo.Abp.TenantManagement",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Abp.TenantManagement.TenantConnectionString]",
+          "name": "ConnectionStrings",
+          "summary": null
+        }
+      ],
       "contentType": "aggregateRoot",
       "name": "Tenant",
       "summary": null
@@ -225,14 +342,18 @@
       "baseClass": {
         "name": "DomainService",
         "namespace": "Volo.Abp.Domain.Services",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Domain"
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Services.DomainService"
       },
       "methods": [
         {
           "returnType": "Tenant",
-          "isAsync": true,
           "name": "CreateAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "String",
@@ -243,9 +364,12 @@
         },
         {
           "returnType": "Void",
-          "isAsync": true,
           "name": "ChangeNameAsync",
           "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
           "parameters": [
             {
               "type": "Tenant",
@@ -260,6 +384,26 @@
           ]
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IDomainService",
+          "namespace": "Volo.Abp.Domain.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Services.IDomainService"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "ITenantManager",
+          "namespace": "Volo.Abp.TenantManagement",
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Domain",
+          "fullName": "Volo.Abp.TenantManagement.ITenantManager"
+        }
+      ],
       "contentType": "domainService",
       "name": "TenantManager",
       "summary": null
@@ -269,18 +413,175 @@
       "entityAnalyzeModel": {
         "namespace": "Volo.Abp.TenantManagement",
         "primaryKeyType": "Guid",
-        "collectionProperties": {
-          "connectionStrings": {
-            "name": "TenantConnectionString",
-            "namespace": "Volo.Abp.TenantManagement",
-            "declaringAssemblyName": "Volo.Abp.TenantManagement.Domain"
-          }
-        },
-        "navigationProperties": {},
+        "properties": [],
         "contentType": "entity",
         "name": "Tenant",
         "summary": null
       },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<Tenant, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<Tenant, Guid>"
+        },
+        {
+          "name": "IBasicRepository<Tenant>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<Tenant>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<Tenant>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<Tenant>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<Tenant, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<Tenant, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Tenant",
+          "name": "FindByNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Tenant",
+          "name": "FindByName",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Tenant",
+          "name": "FindById",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<Tenant>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
       "contentType": "repositoryInterface",
       "name": "ITenantRepository",
       "summary": null

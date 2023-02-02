@@ -50,13 +50,13 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 In this section, you will learn how to create a new modal dialog form to create a new book. The modal dialog will look like the image below:
 
-![bookstore-create-dialog](images/bookstore-create-dialog-3.png)
+![bookstore-create-dialog](./images/bookstore-create-dialog-3.png)
 
 ### Create the Modal Form
 
 Create a new razor page named `CreateModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project.
 
-![bookstore-add-create-dialog](images/bookstore-add-create-dialog-v2.png)
+![bookstore-add-create-dialog](./images/bookstore-add-create-dialog-v2.png)
 
 #### CreateModal.cshtml.cs
 
@@ -188,7 +188,7 @@ The final content of `Index.cshtml` is shown below:
 
 This adds a new button called **New book** to the **top-right** of the table:
 
-![bookstore-new-book-button](images/bookstore-new-book-button-3.png)
+![bookstore-new-book-button](./images/bookstore-new-book-button-3.png)
 
 Open the `Pages/Books/Index.js` file and add the following code right after the `Datatable` configuration:
 
@@ -271,7 +271,7 @@ Now, you can **run the application** and add some new books using the new modal 
 
 Create a new razor page, named `EditModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project:
 
-![bookstore-add-edit-dialog](images/bookstore-add-edit-dialog.png)
+![bookstore-add-edit-dialog](./images/bookstore-add-edit-dialog.png)
 
 ### EditModal.cshtml.cs
 
@@ -460,7 +460,7 @@ You can run the application and edit any book by selecting the edit action on a 
 
 The final UI looks as below:
 
-![bookstore-books-table-actions](images/bookstore-edit-button-3.png)
+![bookstore-books-table-actions](./images/bookstore-edit-button-3.png)
 
 > Notice that you don't see the "Actions" button in the figure below. Instead, you see an "Edit" button. ABP is smart enough to show a single simple button instead of a actions dropdown button when the dropdown has only a single item. After the next section, it will turn to a drop down button.
 
@@ -653,7 +653,7 @@ Open `/src/app/book/book.component.html` and make the following changes:
         <!-- Add the "new book" button here -->
         <div class="text-lg-end pt-2">
           <button id="create" class="btn btn-primary" type="button" (click)="createBook()">
-            <i class="fa fa-plus mr-1"></i>
+            <i class="fa fa-plus me-1"></i>
             <span>{%{{{ "::NewBook" | abpLocalization }}}%}</span>
           </button>
         </div>
@@ -687,7 +687,7 @@ Open `/src/app/book/book.component.html` and make the following changes:
 
 You can open your browser and click the **New book** button to see the new modal.
 
-![Empty modal for new book](images/bookstore-empty-new-book-modal-2.png)
+![Empty modal for new book](./images/bookstore-empty-new-book-modal-2.png)
 
 ### Create a Reactive Form
 
@@ -773,17 +773,17 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
 ```html
 <ng-template #abpBody>
   <form [formGroup]="form" (ngSubmit)="save()">
-    <div class="form-group">
+    <div class="mt-2">
       <label for="book-name">Name</label><span> * </span>
       <input type="text" id="book-name" class="form-control" formControlName="name" autofocus />
     </div>
 
-    <div class="form-group">
+    <div class="mt-2">
       <label for="book-price">Price</label><span> * </span>
       <input type="number" id="book-price" class="form-control" formControlName="price" />
     </div>
 
-    <div class="form-group">
+    <div class="mt-2">
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
@@ -791,7 +791,7 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="mt-2">
       <label>Publish date</label><span> * </span>
       <input
         #datepicker="ngbDatepicker"
@@ -924,7 +924,7 @@ export class BookComponent implements OnInit {
 
 Now, you can open your browser to see the changes:
 
-![Save button to the modal](images/bookstore-new-book-form-v3.png)
+![Save button to the modal](./images/bookstore-new-book-form-v3.png)
 
 ## Updating a Book
 
@@ -1038,7 +1038,7 @@ Open `/src/app/book/book.component.html`  and add the following `ngx-datatable-
         aria-haspopup="true"
         ngbDropdownToggle
       >
-        <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
+        <i class="fa fa-cog me-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
       </button>
       <div ngbDropdownMenu>
         <button ngbDropdownItem (click)="editBook(row.id)">
@@ -1052,7 +1052,7 @@ Open `/src/app/book/book.component.html`  and add the following `ngx-datatable-
 
 Added an "Actions" dropdown as the first column of the table that is shown below:
 
-![Action buttons](images/bookstore-actions-buttons-2.png)
+![Action buttons](./images/bookstore-actions-buttons-2.png)
 
 Also, change the `ng-template #abpHeader` section as shown below:
 
@@ -1116,11 +1116,11 @@ Open `/src/app/book/book.component.html` and modify the `ngbDropdownMenu` to add
 
 The final actions dropdown UI looks like below:
 
-![bookstore-final-actions-dropdown](images/bookstore-final-actions-dropdown-2.png)
+![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown-2.png)
 
 Clicking the "Delete" action calls the `delete` method which then shows a confirmation popup as shown below:
 
-![bookstore-confirmation-popup](images/bookstore-confirmation-popup-2.png)
+![bookstore-confirmation-popup](./images/bookstore-confirmation-popup-2.png)
 
 {{end}}
 
@@ -1150,7 +1150,7 @@ Open the `Books.razor` and replace the `<CardHeader>` section with the following
 
 This will change the card header by adding a "New book" button to the right side:
 
-![blazor-add-book-button](images/blazor-add-book-button-2.png)
+![blazor-add-book-button](./images/blazor-add-book-button-2.png)
 
 Now, we can add a modal that will be opened when we click the button.
 
@@ -1224,7 +1224,7 @@ This code requires a service; Inject the `AbpBlazorMessageLocalizerHelper<T>` at
 
 That's all. Run the application and try to add a new book:
 
-![blazor-new-book-modal](images/blazor-new-book-modal-2.png)
+![blazor-new-book-modal](./images/blazor-new-book-modal-2.png)
 
 ## Updating a Book
 
@@ -1250,7 +1250,7 @@ Open the `Books.razor` and add the following `DataGridEntityActionsColumn` secti
 
 The `DataGridEntityActionsColumn` component is used to show an "Actions" dropdown for each row in the `DataGrid`.  The `DataGridEntityActionsColumn` shows a **single button** instead of a dropdown if there is only one available action inside it:
 
-![blazor-edit-book-action](images/blazor-edit-book-action-3.png)
+![blazor-edit-book-action](./images/blazor-edit-book-action-3.png)
 
 ### Edit Modal
 
@@ -1338,7 +1338,7 @@ public class BookStoreBlazorAutoMapperProfile : Profile
 
 You can now run the application and try to edit a book.
 
-![blazor-edit-book-modal](images/blazor-edit-book-modal-2.png)
+![blazor-edit-book-modal](./images/blazor-edit-book-modal-2.png)
 
 > Tip: Try to leave the *Name* field empty and submit the form to show the validation error message.
 
@@ -1359,7 +1359,7 @@ Open the `Books.razor` page and add the following `EntityAction` code under the 
 
 The "Actions" button becomes a dropdown since it has two actions now:
 
-![blazor-delete-book-action](images/blazor-delete-book-action-2.png)
+![blazor-delete-book-action](./images/blazor-delete-book-action-2.png)
 
 Run the application and try to delete a book.
 

@@ -28,10 +28,7 @@ public class AbpFeatureManagementEntityFrameworkCoreTestModule : AbpModule
             });
         });
 
-        Configure<AbpUnitOfWorkDefaultOptions>(options =>
-        {
-            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
-        });
+        context.Services.AddAlwaysDisableUnitOfWorkTransaction();
     }
 
     private static SqliteConnection CreateDatabaseAndGetConnection()

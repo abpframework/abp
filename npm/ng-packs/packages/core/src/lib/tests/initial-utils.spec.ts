@@ -12,6 +12,7 @@ import { getInitialData, localeInitializer } from '../utils/initial-utils';
 import * as environmentUtils from '../utils/environment-utils';
 import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
 import { RestService } from '../services/rest.service';
+import { CHECK_AUTHENTICATION_STATE_FN_KEY } from '../tokens/check-authentication-state';
 
 const environment = { oAuthConfig: { issuer: 'test' } };
 
@@ -41,6 +42,10 @@ describe('InitialUtils', () => {
           registerLocaleFn: () => Promise.resolve(),
         },
       },
+      {
+        provide: CHECK_AUTHENTICATION_STATE_FN_KEY,
+        useValue: () => {},
+      },
     ],
   });
 
@@ -51,6 +56,9 @@ describe('InitialUtils', () => {
       const environmentService = spectator.inject(EnvironmentService);
       const configStateService = spectator.inject(ConfigStateService);
       const sessionStateService = spectator.inject(SessionStateService);
+      //const checkAuthenticationState = spectator.inject(CHECK_AUTHENTICATION_STATE_FN_KEY);
+
+      const authService = spectator.inject(AuthService);
 
       const parseTenantFromUrlSpy = jest.spyOn(multiTenancyUtils, 'parseTenantFromUrl');
       const getRemoteEnvSpy = jest.spyOn(environmentUtils, 'getRemoteEnv');
@@ -65,7 +73,7 @@ describe('InitialUtils', () => {
       const configRefreshAppStateSpy = jest.spyOn(configStateService, 'refreshAppState');
       configRefreshAppStateSpy.mockReturnValue(of(appConfigRes));
       const sessionSetTenantSpy = jest.spyOn(sessionStateService, 'setTenant');
-
+      const authServiceInitSpy = jest.spyOn(authService, 'init');
       const configStateGetOneSpy = jest.spyOn(configStateService, 'getOne');
       configStateGetOneSpy.mockReturnValue(appConfigRes.currentTenant);
 
@@ -79,6 +87,7 @@ describe('InitialUtils', () => {
       expect(configRefreshAppStateSpy).toHaveBeenCalled();
       expect(environmentSetStateSpy).toHaveBeenCalledWith(environment);
       expect(sessionSetTenantSpy).toHaveBeenCalledWith(appConfigRes.currentTenant);
+      expect(authServiceInitSpy).toHaveBeenCalled();
     });
   });
 

@@ -227,6 +227,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         ChangeTracker.Tracked += ChangeTracker_Tracked;
         ChangeTracker.StateChanged += ChangeTracker_StateChanged;
+
+        if (UnitOfWorkManager is AlwaysDisableTransactionsUnitOfWorkManager)
+        {
+            Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
+        }
     }
 
     protected virtual void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)

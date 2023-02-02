@@ -20,7 +20,7 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
 
     }
 
-    public async Task DeleteManyByApplicationIdAsync(Guid applicationId, bool autoSave = false, CancellationToken cancellationToken = default)
+    public virtual async Task DeleteManyByApplicationIdAsync(Guid applicationId, bool autoSave = false, CancellationToken cancellationToken = default)
     {
         var tokens = await (await GetDbSetAsync())
             .Where(x => x.ApplicationId == applicationId)
@@ -29,10 +29,19 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
         await DeleteManyAsync(tokens, autoSave, cancellationToken);
     }
 
-    public async Task DeleteManyByAuthorizationIdAsync(Guid authorizationId, bool autoSave = false, CancellationToken cancellationToken = default)
+    public virtual async Task DeleteManyByAuthorizationIdAsync(Guid authorizationId, bool autoSave = false, CancellationToken cancellationToken = default)
     {
         var tokens = await (await GetDbSetAsync())
             .Where(x => x.AuthorizationId == authorizationId)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        await DeleteManyAsync(tokens, autoSave, GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task DeleteManyByAuthorizationIdsAsync(Guid[] authorizationIds, bool autoSave = false, CancellationToken cancellationToken = default)
+    {
+        var tokens = await (await GetDbSetAsync())
+            .Where(x => x.AuthorizationId != null && authorizationIds.Contains(x.AuthorizationId.Value))
             .ToListAsync(GetCancellationToken(cancellationToken));
 
         await DeleteManyAsync(tokens, autoSave, GetCancellationToken(cancellationToken));

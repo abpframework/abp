@@ -16,8 +16,14 @@ namespace Volo.Abp.OpenIddict.Authorizations;
 
 public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddictMongoDbContext, OpenIddictAuthorization, Guid>, IOpenIddictAuthorizationRepository
 {
-    public MongoOpenIddictAuthorizationRepository(IMongoDbContextProvider<OpenIddictMongoDbContext> dbContextProvider) : base(dbContextProvider)
+    protected IMongoDbRepositoryFilterer<OpenIddictToken, Guid> TokenDbRepositoryFilterer { get; }
+
+    public MongoOpenIddictAuthorizationRepository(
+        IMongoDbContextProvider<OpenIddictMongoDbContext> dbContextProvider,
+        IMongoDbRepositoryFilterer<OpenIddictToken, Guid> tokenDbRepositoryFilterer)
+        : base(dbContextProvider)
     {
+        TokenDbRepositoryFilterer = tokenDbRepositoryFilterer;
     }
 
     public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, CancellationToken cancellationToken = default)
@@ -67,14 +73,39 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
 
     public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
     {
-        var tokens = await (await GetMongoQueryableAsync<OpenIddictToken>(cancellationToken))
+        var tokenIds = await (await GetMongoQueryableAsync<OpenIddictToken>(cancellationToken))
             .Where(x => x.AuthorizationId != null)
             .Select(x => x.AuthorizationId.Value)
             .ToListAsync(GetCancellationToken(cancellationToken));
 
-        await DeleteManyAsync(await (await GetMongoQueryableAsync(cancellationToken))
+        var authorizations = await (await GetMongoQueryableAsync(cancellationToken))
             .Where(x => x.CreationDate < date)
-            .Where(x => x.Status == OpenIddictConstants.Statuses.Valid || (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && !tokens.Contains(x.Id)))
-            .ToListAsync(cancellationToken: cancellationToken), cancellationToken: cancellationToken);
+            .Where(x => x.Status != OpenIddictConstants.Statuses.Valid || (x.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && !tokenIds.Contains(x.Id)))
+            .Select(x => x.Id)
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        var tokens = await (await GetMongoQueryableAsync<OpenIddictToken>(cancellationToken))
+            .Where(x => x.AuthorizationId != null && authorizations.Contains(x.AuthorizationId.Value))
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        if (tokens.Any())
+        {
+            var tokenDbContext = await GetDbContextAsync(cancellationToken);
+            if (tokenDbContext.SessionHandle != null)
+            {
+                await tokenDbContext.Collection<OpenIddictToken>().DeleteManyAsync(
+                    tokenDbContext.SessionHandle,
+                    await TokenDbRepositoryFilterer.CreateEntitiesFilterAsync(tokens),
+                    cancellationToken: cancellationToken);
+            }
+            else
+            {
+                await tokenDbContext.Collection<OpenIddictToken>().DeleteManyAsync(
+                    await TokenDbRepositoryFilterer.CreateEntitiesFilterAsync(tokens),
+                    cancellationToken: cancellationToken);
+            }
+        }
+
+        await DeleteManyAsync(authorizations, cancellationToken: cancellationToken);
     }
 }

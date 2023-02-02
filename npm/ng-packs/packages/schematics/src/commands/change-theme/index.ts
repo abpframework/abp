@@ -1,4 +1,4 @@
-import { Rule, SchematicContext, SchematicsException, Tree } from '@angular-devkit/schematics';
+import { Rule, SchematicsException } from '@angular-devkit/schematics';
 import { isLibrary, updateWorkspace, WorkspaceDefinition } from '../../utils';
 import { allStyles, styleMap } from './style-map';
 import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
@@ -7,7 +7,7 @@ import { ChangeThemeOptions } from './model';
 import { ThemeOptionsEnum } from './theme-options.enum';
 
 export default function (_options: ChangeThemeOptions): Rule {
-  return async (_: Tree, __: SchematicContext) => {
+  return async () => {
     const targetThemeName = _options.name;
     const selectedProject = _options.targetProject;
     if (!targetThemeName) {

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.MongoDB",
-  "hash": "8d42e9ffc2074ef7ca89f95c73c1db0a",
+  "hash": "33af874bb56ed9db03c5e7b77e15f321",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.MongoDB",
@@ -14,6 +14,50 @@
           "declaringAssemblyName": "Volo.Abp.MongoDB",
           "namespace": "Volo.Abp.MongoDB",
           "name": "AbpMongoDbModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
         }
       ],
       "contentType": "abpModule",
@@ -31,16 +75,36 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.PermissionManagement.PermissionGrant",
-          "contentType": "databaseCollection",
-          "name": "AbpPermissionGrants",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.Abp.PermissionManagement.PermissionDefinitionRecord",
           "contentType": "databaseCollection",
           "name": "AbpPermissions",
           "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.PermissionManagement.PermissionGrant",
+          "contentType": "databaseCollection",
+          "name": "AbpPermissionGrants",
+          "summary": null
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpMongoDbContext",
+          "namespace": "Volo.Abp.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "fullName": "Volo.Abp.MongoDB.IAbpMongoDbContext"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "IPermissionManagementMongoDbContext",
+          "namespace": "Volo.Abp.PermissionManagement.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.MongoDB",
+          "fullName": "Volo.Abp.PermissionManagement.MongoDB.IPermissionManagementMongoDbContext"
         }
       ],
       "contentType": "mongoDbContext",
