@@ -130,7 +130,7 @@ This table stores information about the blog features. You can query this table 
 
 ### CmsComments
 
-This table is utilized by the CMS Kit Comment system to store comments made on blog posts. You can query this table to get comments by posts.
+This table is utilized by the [CMS Kit Comment system](Cms-Kit/Comments.md) to store comments made on blog posts. You can query this table to get comments by posts.
 
 ### CmsTags
 
@@ -138,11 +138,11 @@ This table stores information about the tags. When a new tag is used, a new reco
 
 ### CmsEntityTags
 
-This table is utilized by the Tag Management to store tags and their relationship with various entities, thus enabling efficient categorization and organization of content. You can query this table to get entity tags by entities.
+This table is utilized by the [Tag Management system](Cms-Kit/Tags.md) to store tags and their relationship with various entities, thus enabling efficient categorization and organization of content. You can query this table to get entity tags by entities.
 
 ### CmsGlobalResources
 
-This table is a database table for the CmsGlobalResources system, allowing for dynamic addition of global styles and scripts.
+This table is a database table for the [CMS Kit Global Resources system](Cms-Kit/Global-Resources.md), allowing for dynamic addition of global styles and scripts.
 
 ### CmsMediaDescriptors
 
@@ -150,19 +150,19 @@ This table is utilized by the CMS kit module to manage media files by using the 
 
 ### CmsMenuItems
 
-This table is used by the CMS Kit Menu system to manage and store information about dynamic public menus, including details such as menu item display names, url, and hierarchical relationships.
+This table is used by the [CMS Kit Menu system](Cms-Kit/Menus.md) to manage and store information about dynamic public menus, including details such as menu item display names, url, and hierarchical relationships.
 
 ### CmsPages
 
-This table is utilized by the CMS Kit Page system to store dynamic pages within the application, including information such as page URLs, titles, and content.
+This table is utilized by the [CMS Kit Page system](Cms-Kit/Pages.md) to store dynamic pages within the application, including information such as page URLs, titles, and content.
 
 ### CmsRatings
 
-This table is utilized by the CMS Kit Rating system to store ratings made on blog posts. You can query this table to get ratings by posts.
+This table is utilized by the [CMS Kit Rating system](Cms-Kit/Ratings.md) to store ratings made on blog posts. You can query this table to get ratings by posts.
 
 ### CmsUserReactions
 
-This table is utilized by the CMS Kit Reaction system to store reactions made on blog posts. You can query this table to get reactions by posts.
+This table is utilized by the [CMS Kit Reaction system](Cms-Kit/Reactions.md) to store reactions made on blog posts. You can query this table to get reactions by posts.
 
 ## [Docs Module](Docs.md)
 
