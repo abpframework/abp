@@ -454,5 +454,6 @@
     "AbpConsultantCreate": "Create ABP Consultant",
     "WhoWeAreItem": "Who We Are Item",
     "FieldIsRequired": "{0} is required.",
+    "FieldIsNotValid": " {0} is not valid."
   }
 }
