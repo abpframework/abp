@@ -11,3 +11,6 @@ export * from './modal/modal.component';
 export * from './toast-container/toast-container.component';
 export * from './toast/toast.component';
 export * from './password/password.component';
+export * from './card/card.component';
+export * from './card/card-title.component';
+export * from './card/card-body.component';
