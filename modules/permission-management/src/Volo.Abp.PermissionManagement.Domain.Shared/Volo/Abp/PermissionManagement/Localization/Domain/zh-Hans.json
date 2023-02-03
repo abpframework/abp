@@ -1,10 +1,11 @@
 {
-	"culture": "zh-Hans",
-	"texts": {
-		"Permissions": "权限",
-		"OnlyProviderPermissons": "只有这个提供商",
-		"All": "所有",
-		"SelectAllInAllTabs": "授予所有权限",
-		"SelectAllInThisTab": "全选"
-	}
+  "culture": "zh-Hans",
+  "texts": {
+    "Permissions": "权限",
+    "OnlyProviderPermissons": "只有这个提供商",
+    "All": "所有",
+    "SelectAllInAllTabs": "授予所有权限",
+    "SelectAllInThisTab": "全选",
+    "SaveWithoutAnyPermissionsWarningMessage": "你确定要保存没有任何权限吗？"
+  }
 }

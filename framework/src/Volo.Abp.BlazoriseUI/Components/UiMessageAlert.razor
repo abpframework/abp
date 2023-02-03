@@ -1,49 +1,52 @@
 ﻿<Modal @ref="@ModalRef" Closing="@OnModalClosing">
     <ModalContent Centered="@CenterMessage">
-        <ModalHeader>
-            <ModalTitle>
-                @Title
-            </ModalTitle>
-        </ModalHeader>
+        @if (!Title.IsNullOrEmpty())
+        {
+            <ModalHeader>
+                <ModalTitle>
+                    @Title
+                </ModalTitle>
+            </ModalHeader>
+        }
         <ModalBody>
             @if ( ShowMessageIcon )
             {
-                <DisplayHeading Size="DisplayHeadingSize.Is2" Alignment="TextAlignment.Center">
-                    <Icon Name="@MessageIcon" Style="@MessageIconStyle" />
+                <DisplayHeading Size="DisplayHeadingSize.Is2" TextAlignment="TextAlignment.Center">
+                    <Icon Name="@MessageIcon" Style="@MessageIconStyle" />                    
                 </DisplayHeading>
             }
-            <Text Alignment="TextAlignment.Center">
+            <Paragraph TextAlignment="TextAlignment.Center" Margin="Margin.Is0.FromBottom">
                 @Message
-            </Text>
+            </Paragraph>
         </ModalBody>
-        <ModalFooter>
-            @if ( IsConfirmation )
-            {
-                <Button Color="Color.Danger" Padding="Padding.Is2.OnX" Clicked="@OnCancelClicked">
-                    @if ( Options?.CancelButtonIcon != null )
-                    {
-                        <Icon Name="@Options.CancelButtonIcon" Margin="Margin.Is2.FromEnd" />
-                    }
-                    @CancelButtonText
-                </Button>
-                <Button Color="Color.Primary" Padding="Padding.Is2.OnX" Clicked="@OnConfirmClicked">
-                    @if ( Options?.ConfirmButtonIcon != null )
-                    {
-                        <Icon Name="@Options.ConfirmButtonIcon" Margin="Margin.Is2.FromEnd" />
-                    }
-                    @ConfirmButtonText
-                </Button>
-            }
-            else
-            {
-                <Button Color="Color.Primary" Padding="Padding.Is2.OnX" Clicked="@OnOkClicked">
-                    @if ( Options?.OkButtonIcon != null )
-                    {
-                        <Icon Name="@Options.OkButtonIcon" Margin="Margin.Is2.FromEnd" />
-                    }
-                    @OkButtonText
-                </Button>
-            }
+        <ModalFooter class="d-flex justify-content-center">
+                @if ( IsConfirmation )
+                {
+                    <Button Color="Color.Danger" Padding="Padding.Is3.OnX" Margin="Margin.Is1.OnX" Clicked="@OnCancelClicked">
+                        @if ( Options?.CancelButtonIcon != null )
+                        {
+                            <Icon Name="@Options.CancelButtonIcon" Margin="Margin.Is2.FromEnd" />
+                        }
+                        @CancelButtonText
+                    </Button>
+                    <Button Color="Color.Primary" Padding="Padding.Is3.OnX" Margin="Margin.Is1.OnX" Clicked="@OnConfirmClicked">
+                        @if ( Options?.ConfirmButtonIcon != null )
+                        {
+                            <Icon Name="@Options.ConfirmButtonIcon" Margin="Margin.Is2.FromEnd" />
+                        }
+                        @ConfirmButtonText
+                    </Button>
+                }
+                else
+                {
+                    <Button Color="Color.Primary" Padding="Padding.Is3.OnX" Margin="Margin.Is1.OnX" Clicked="@OnOkClicked">
+                        @if ( Options?.OkButtonIcon != null )
+                        {
+                            <Icon Name="@Options.OkButtonIcon" Margin="Margin.Is2.FromEnd" />
+                        }
+                        @OkButtonText
+                    </Button>
+                }
         </ModalFooter>
     </ModalContent>
 </Modal>

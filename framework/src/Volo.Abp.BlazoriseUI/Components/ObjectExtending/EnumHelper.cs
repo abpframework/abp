@@ -10,6 +10,7 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending;
 
 public static class EnumHelper
 {
+    [Obsolete("Use IAbpEnumLocalizer instead.")]
     public static string GetLocalizedMemberName(Type enumType, object value, IStringLocalizerFactory stringLocalizerFactory)
     {
         var memberName = enumType.GetEnumName(value);
@@ -20,7 +21,9 @@ public static class EnumHelper
             },
             new[]
             {
+                        $"Enum:{enumType.Name}.{value}",
                         $"Enum:{enumType.Name}.{memberName}",
+                        $"{enumType.Name}.{value}",
                         $"{enumType.Name}.{memberName}",
                         memberName
             },

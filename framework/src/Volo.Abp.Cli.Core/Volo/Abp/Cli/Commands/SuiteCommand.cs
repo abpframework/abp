@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.NuGet;
@@ -32,6 +33,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
     public ICmdHelper CmdHelper { get; }
     private readonly AbpNuGetIndexUrlService _nuGetIndexUrlService;
     private readonly NuGetService _nuGetService;
+    private readonly AuthService _authService;
     private readonly CliHttpClientFactory _cliHttpClientFactory;
     private const string SuitePackageName = "Volo.Abp.Suite";
     public ILogger<SuiteCommand> Logger { get; set; }
@@ -42,17 +44,28 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         AbpNuGetIndexUrlService nuGetIndexUrlService,
         NuGetService nuGetService,
         ICmdHelper cmdHelper,
+        AuthService authService,
         CliHttpClientFactory cliHttpClientFactory)
     {
         CmdHelper = cmdHelper;
         _nuGetIndexUrlService = nuGetIndexUrlService;
         _nuGetService = nuGetService;
+        _authService = authService;
         _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<SuiteCommand>.Instance;
     }
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
+#if !DEBUG    
+        var loginInfo = await _authService.GetLoginInfoAsync();
+
+        if (string.IsNullOrEmpty(loginInfo?.Organization))
+        {
+            throw new CliUsageException("Please login with your account.");
+        }
+#endif
+        
         var operationType = NamespaceHelper.NormalizeNamespace(commandLineArgs.Target);
 
         var preview = commandLineArgs.Options.ContainsKey(Options.Preview.Short) ||

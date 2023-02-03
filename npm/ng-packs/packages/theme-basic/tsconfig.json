@@ -11,6 +11,7 @@
     }
   ],
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "target": "es2020"
   }
 }

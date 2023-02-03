@@ -37,7 +37,7 @@ export const environment = {
     AbpIdentity: {
       rootNamespace: 'Volo.Abp',
     },
-    AbpSettingManagement: {
+    SettingManagement: {
       rootNamespace: 'Volo.Abp.SettingManagement',
     },
   },

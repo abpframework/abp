@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { DateTimeAdapter } from '../adapters/date-time.adapter';
 import { DateAdapter } from '../adapters/date.adapter';
 import { TimeAdapter } from '../adapters/time.adapter';
@@ -13,8 +13,8 @@ export function generateFormFromProps<R extends any>(data: PropData<R>) {
   const extensions = data.getInjected(ExtensionsService);
   const identifier = data.getInjected(EXTENSIONS_IDENTIFIER);
 
-  const form = new FormGroup({});
-  const extraForm = new FormGroup({});
+  const form = new UntypedFormGroup({});
+  const extraForm = new UntypedFormGroup({});
   form.addControl(EXTRA_PROPERTIES_KEY, extraForm);
 
   const record = data.record || {};
@@ -49,7 +49,7 @@ export function generateFormFromProps<R extends any>(data: PropData<R>) {
       }
     }
 
-    const formControl = new FormControl(value, {
+    const formControl = new UntypedFormControl(value, {
       asyncValidators: prop.asyncValidators(data),
       validators: prop.validators(data),
     });

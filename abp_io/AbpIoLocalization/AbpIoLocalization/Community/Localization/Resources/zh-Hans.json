@@ -43,7 +43,7 @@
     "Done": "完成",
     "Open": "打开",
     "Closed": "关闭",
-    "RecentQuestionFrom": "最近的问题来自",
+    "RecentQuestionFrom": "最近的问题来自 {0}",
     "Stackoverflow": "Stackoverflow",
     "Votes": "票数",
     "Answer": "回答",
@@ -150,7 +150,6 @@
     "GetStarted": "开始使用",
     "SourceCode": "源代码",
     "LeaveComment": "发表评论",
-    "ReadMore": "阅读更多",
     "ShowMore": "展示更多",
     "NoPublishedPostsYet": "还没有发布的帖子。",
     "Name": "名字",
@@ -177,13 +176,15 @@
     "Events_Page_MetaTitle": "ABP 社区活动",
     "Events_Page_MetaDescription": "现场活动由 ABP 团队主持，是充满社区内容、演示、问答和围绕 ABP 正在发生的事情的讨论的休闲会议。",
     "Events_Page_Title": "ABP<span class=\"gradient-community\">社区</span>会谈",
-    "Events_Page_WritingFromUser": "阅读来自 ABP 社区的 {0} 的文章。",
+    "Members_Page_WritingFromUser": "阅读来自 ABP 社区的 {0} 的文章。",
     "Post_Create_Page_MetaTitle": "最新帖子",
     "Post_Create_Page_MetaDescription": "创建您的帖子以分享您对 ABP 框架的经验并为 ABP 社区做出贡献。",
     "Post_Create_Page_CreateNewPost": "创建新帖子",
     "Post_Index_Page_MetaDescription": "ABP 社区的目的是为使用 ABP 框架的开发人员创建一个贡献环境。",
     "Layout_Title": "{0} | ABP 社区",
     "Layout_MetaDescription": "ABP 社区是一个人们可以分享有关 ABP 框架的帖子并关注项目的环境。",
-    "Index_Page_CommunityIntroduction": "这是 ABP 框架、.NET 和软件开发的中心。 您可以阅读文章，观看视频教程，了解 ABP 的开发进度和 ABP 相关事件，帮助其他开发人员并与 ABP 社区分享您的专业知识。"
+    "Index_Page_CommunityIntroduction": "这是 ABP 框架、.NET 和软件开发的中心。 您可以阅读文章，观看视频教程，了解 ABP 的开发进度和 ABP 相关事件，帮助其他开发人员并与 ABP 社区分享您的专业知识。",
+    "TagsInArticle": "文章中的标签",
+    "IConsentToMedium": "我同意在 https://medium.com/volosoft 上发布这篇文章。"
   }
 }

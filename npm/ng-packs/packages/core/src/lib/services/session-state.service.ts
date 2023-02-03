@@ -31,7 +31,7 @@ export class SessionStateService {
   }
 
   private setInitialLanguage() {
-    if (this.getLanguage()) return;
+    const appLanguage = this.getLanguage();
 
     this.configState
       .getDeep$('localization.currentCulture.cultureName')
@@ -43,8 +43,9 @@ export class SessionStateService {
         if (lang.includes(';')) {
           lang = lang.split(';')[0];
         }
-
-        this.setLanguage(lang);
+        if (appLanguage !== lang) {
+          this.setLanguage(lang);
+        }
       });
   }
 

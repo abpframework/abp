@@ -117,6 +117,8 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         await _userRepository.InsertAsync(adminUser);
 
         var john = new IdentityUser(_testData.UserJohnId, "john.nash", "john.nash@abp.io");
+        john.LockoutEnabled = true;
+        john.LockoutEnd = DateTime.UtcNow.AddDays(1);
         john.AddRole(_moderatorRole.Id);
         john.AddRole(_supporterRole.Id);
         john.AddOrganizationUnit(_ou111.Id);
@@ -132,6 +134,8 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         await _userRepository.InsertAsync(david);
 
         var neo = new IdentityUser(_testData.UserNeoId, "neo", "neo@abp.io");
+        neo.LockoutEnabled = true;
+        neo.LockoutEnd = DateTime.UtcNow.AddDays(1);
         neo.AddRole(_supporterRole.Id);
         neo.AddClaim(_guidGenerator, new Claim("TestClaimType", "43"));
         neo.AddOrganizationUnit(_ou111.Id);

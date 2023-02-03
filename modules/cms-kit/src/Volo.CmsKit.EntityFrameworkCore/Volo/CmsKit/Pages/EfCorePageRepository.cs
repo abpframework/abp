@@ -25,7 +25,7 @@ public class EfCorePageRepository : EfCoreRepository<ICmsKitDbContext, Page, Gui
         return await (await GetDbSetAsync()).WhereIf(
             !filter.IsNullOrWhiteSpace(),
             x =>
-                x.Title.Contains(filter)
+                x.Title.ToLower().Contains(filter.ToLower()) || x.Slug.Contains(filter)
         ).CountAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -39,7 +39,7 @@ public class EfCorePageRepository : EfCoreRepository<ICmsKitDbContext, Page, Gui
         return await (await GetDbSetAsync()).WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 x =>
-                    x.Title.Contains(filter))
+                    x.Title.ToLower().Contains(filter.ToLower()) || x.Slug.Contains(filter))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(Page.Title) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -62,5 +62,10 @@ public class EfCorePageRepository : EfCoreRepository<ICmsKitDbContext, Page, Gui
     {
         Check.NotNullOrEmpty(slug, nameof(slug));
         return await (await GetDbSetAsync()).AnyAsync(x => x.Slug == slug, GetCancellationToken(cancellationToken));
+    }
+
+    public virtual Task<List<Page>> GetListOfHomePagesAsync(CancellationToken cancellationToken = default)
+    {
+        return GetListAsync(x => x.IsHomePage, cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

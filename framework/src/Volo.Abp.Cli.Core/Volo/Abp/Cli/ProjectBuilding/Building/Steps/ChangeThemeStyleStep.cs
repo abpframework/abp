@@ -14,6 +14,9 @@ public class ChangeThemeStyleStep : ProjectBuildPipelineStep
 
         switch (context.BuildArgs.ThemeStyle)
         {
+            case ThemeStyle.Dim:
+                ChangeThemeStyle(context, themeStyleName: "Dim");
+                break;
             case ThemeStyle.Light:
                 ChangeThemeStyle(context, themeStyleName: "Light");
                 break;
@@ -25,7 +28,7 @@ public class ChangeThemeStyleStep : ProjectBuildPipelineStep
 
     private void ChangeThemeStyle(ProjectBuildContext context, string themeStyleName)
     {
-        var defaultThemeStyleName = "LeptonXStyleNames.Dim";
+        var defaultThemeStyleName = "LeptonXStyleNames.System";
         var newThemeStyleName = $"LeptonXStyleNames.{themeStyleName}";
 
         var filePaths = new List<string> 

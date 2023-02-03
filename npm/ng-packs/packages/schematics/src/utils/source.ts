@@ -23,7 +23,7 @@ export function createApiDefinitionGetter(params: GenerateProxySchema) {
     if (!sourceUrl) {
       sourceUrl = getSourceUrl(host, source, apiName);
     }
-    return await getApiDefinition(sourceUrl);
+    return await getApiDefinition(sourceUrl!);
   };
 }
 
@@ -32,7 +32,7 @@ async function getApiDefinition(sourceUrl: string) {
   let body: ApiDefinition;
 
   try {
-    ({ body } = await got(url, {
+    ({ body } = await got<ApiDefinition>(url, {
       responseType: 'json',
       searchParams: { includeTypes: true },
       https: { rejectUnauthorized: false },

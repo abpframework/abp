@@ -42,6 +42,10 @@ Menu item name can be set on runtime too.
 }
 ```
 
+
+![leptonx selected menu item](../../images/leptonx-selected-menu-item-example.gif)
+
+
 > Be aware, The [Basic Theme](../Blazor/Basic-Theme.md) currently doesn't support the selected menu item since it is not applicable to the top menu. 
 
 ## BreadCrumbs

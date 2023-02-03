@@ -56,6 +56,8 @@
     "ShareOn": "分享",
     "TitleLengthWarning": "保持标题大小不超过60个字符,实现SEO友好!",
     "ClearCache": "清除缓存",
-    "ClearCacheConfirmationMessage": "您确定要清除缓存吗？"
+    "ClearCacheConfirmationMessage": "您确定要清除缓存吗？",
+    "MarkdownSupported": "支持 Markdown",
+    "FileUploadInfo": "拖放，拖放，或粘贴一个复制的图像。"
   }
 }

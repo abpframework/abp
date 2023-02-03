@@ -1,0 +1,83 @@
+{
+  "name": "Volo.BloggingTestApp.MongoDB",
+  "hash": "f3aae951c5c4cd55de2a949848c2a755",
+  "contents": [
+    {
+      "namespace": "Volo.BloggingTestApp.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.MongoDB",
+          "namespace": "Volo.Abp.Identity.MongoDB",
+          "name": "AbpIdentityMongoDbModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Blogging.MongoDB",
+          "namespace": "Volo.Blogging.MongoDB",
+          "name": "BloggingMongoDbModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.MongoDB",
+          "namespace": "Volo.Abp.SettingManagement.MongoDB",
+          "name": "AbpSettingManagementMongoDbModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.MongoDB",
+          "namespace": "Volo.Abp.PermissionManagement.MongoDB",
+          "name": "AbpPermissionManagementMongoDbModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BlobStoring.Database.MongoDB",
+          "namespace": "Volo.Abp.BlobStoring.Database.MongoDB",
+          "name": "BlobStoringDatabaseMongoDbModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "BloggingTestAppMongoDbModule",
+      "summary": null
+    }
+  ]
+}

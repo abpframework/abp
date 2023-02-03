@@ -24,42 +24,20 @@ public class TokenCleanupService : ITransientDependency
         Options = options.Value;
     }
 
+    [UnitOfWork]
     public virtual async Task CleanAsync()
     {
         await RemoveGrantsAsync();
         await RemoveDeviceCodesAsync();
     }
 
-    [UnitOfWork]
     protected virtual async Task RemoveGrantsAsync()
     {
-        for (var i = 0; i < Options.CleanupLoopCount; i++)
-        {
-            var persistentGrants = await PersistentGrantRepository.GetListByExpirationAsync(DateTime.UtcNow, Options.CleanupBatchSize);
-
-            await PersistentGrantRepository.DeleteManyAsync(persistentGrants);
-
-            //No need to continue to query if it gets more than max items.
-            if (persistentGrants.Count < Options.CleanupBatchSize)
-            {
-                break;
-            }
-        }
+        await PersistentGrantRepository.DeleteExpirationAsync(DateTime.UtcNow);
     }
 
     protected virtual async Task RemoveDeviceCodesAsync()
     {
-        for (var i = 0; i < Options.CleanupLoopCount; i++)
-        {
-            var deviceFlowCodeses = await DeviceFlowCodesRepository.GetListByExpirationAsync(DateTime.UtcNow, Options.CleanupBatchSize);
-
-            await DeviceFlowCodesRepository.DeleteManyAsync(deviceFlowCodeses);
-
-            //No need to continue to query if it gets more than max items.
-            if (deviceFlowCodeses.Count < Options.CleanupBatchSize)
-            {
-                break;
-            }
-        }
+        await DeviceFlowCodesRepository.DeleteExpirationAsync(DateTime.UtcNow);
     }
 }

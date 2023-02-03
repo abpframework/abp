@@ -1,9 +1,11 @@
 ﻿using System;
+using Volo.Abp.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity;
 
 [Serializable]
-public class IdentityRoleEto
+public class IdentityRoleEto : IMultiTenant, IHasEntityVersion
 {
     public Guid Id { get; set; }
 
@@ -16,4 +18,6 @@ public class IdentityRoleEto
     public bool IsStatic { get; set; }
 
     public bool IsPublic { get; set; }
+
+    public int EntityVersion { get; set; }
 }

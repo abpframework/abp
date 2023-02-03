@@ -52,6 +52,17 @@ public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingual
     }
 
     [Fact]
+    public async Task GetTranslationFromListAsync()
+    {
+        using (CultureHelper.Use("en-us"))
+        {
+            var translation = await _multiLingualObjectManager.GetTranslationAsync(_book.Translations);
+
+            translation.Name.ShouldBe("C# in Depth");
+        }
+    }
+
+    [Fact]
     public async Task Should_Get_Specified_Language()
     {
         using (CultureHelper.Use("zh-Hans"))

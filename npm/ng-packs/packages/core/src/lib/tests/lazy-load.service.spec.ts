@@ -1,8 +1,8 @@
 import { of, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { LazyLoadService } from '../services/lazy-load.service';
-import { ScriptLoadingStrategy } from '../strategies';
-import { ResourceWaitService } from '../services';
+import { ScriptLoadingStrategy } from '../strategies/loading.strategy';
+import { ResourceWaitService } from '../services/resource-wait.service';
 
 describe('LazyLoadService', () => {
   describe('#load', () => {

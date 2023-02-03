@@ -1,0 +1,22 @@
+import { NgModule, NgModuleFactory, ModuleWithProviders } from '@angular/core';
+import { CoreModule, LazyModuleFactory } from '@abp/ng.core';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { <%= pascal(libraryName) %>RoutingModule } from './<%= kebab(libraryName) %>-routing.module';
+
+@NgModule({
+  declarations: [],
+  imports: [CoreModule, ThemeSharedModule, <%= pascal(libraryName) %>RoutingModule],
+  exports: [],
+})
+export class <%= pascal(libraryName) %>Module {
+  static forChild(): ModuleWithProviders<<%= pascal(libraryName) %>Module> {
+    return {
+      ngModule: <%= pascal(libraryName) %>Module,
+      providers: [],
+    };
+  }
+
+  static forLazy(): NgModuleFactory<<%= pascal(libraryName) %>Module> {
+    return new LazyModuleFactory(<%= pascal(libraryName) %>Module.forChild());
+  }
+}

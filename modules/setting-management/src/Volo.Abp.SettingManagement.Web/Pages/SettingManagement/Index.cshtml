@@ -29,7 +29,7 @@
                             var group = Model.SettingPageCreationContext.Groups[i];
                             var active = i == 0 ? "active" : string.Empty;
                             <li class="nav-item">
-                                <a class="nav-link @active" data-id="@group.Id" data-bs-toggle="pill" role="tab">@group.DisplayName</a>
+                                <a href="javascript:;" class="nav-link @active" data-id="@group.Id" data-bs-toggle="pill" role="tab">@group.DisplayName</a>
                             </li>
                         }
                     </ul>

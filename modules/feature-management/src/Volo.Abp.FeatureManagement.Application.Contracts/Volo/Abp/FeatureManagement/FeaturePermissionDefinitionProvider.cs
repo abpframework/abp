@@ -11,8 +11,7 @@ public class FeaturePermissionDefinitionProvider : PermissionDefinitionProvider
     {
         var featureManagementGroup = context.AddGroup(
             FeatureManagementPermissions.GroupName,
-            L("Permission:FeatureManagement"),
-            multiTenancySide: MultiTenancySides.Host);
+            L("Permission:FeatureManagement"));
 
         featureManagementGroup.AddPermission(
             FeatureManagementPermissions.ManageHostFeatures,

@@ -20,5 +20,4 @@ if (abp.auth.isGranted('DeleteUsers')) {
 
 * ` abp.auth.isAnyGranted(...)`: Gets one or more permission/policy names and returns `true` if at least one of them has granted.
 * `abp.auth.areAllGranted(...)`: Gets one or more permission/policy names and returns `true` if all of them of them have granted.
-* `abp.auth.policies`: This is an object where its keys are the permission/policy names. You can find all permission/policy names here.
 * `abp.auth.grantedPolicies`: This is an object where its keys are the permission/policy names. You can find the granted permission/policy names here.

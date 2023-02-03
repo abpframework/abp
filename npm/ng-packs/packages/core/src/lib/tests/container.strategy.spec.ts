@@ -3,7 +3,7 @@ import {
   ClearContainerStrategy,
   CONTAINER_STRATEGY,
   InsertIntoContainerStrategy,
-} from '../strategies';
+} from '../strategies/container.strategy';
 
 describe('ClearContainerStrategy', () => {
   const containerRef = {

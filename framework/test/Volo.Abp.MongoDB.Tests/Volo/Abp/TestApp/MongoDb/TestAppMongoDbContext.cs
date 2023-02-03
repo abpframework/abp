@@ -6,6 +6,7 @@ using Volo.Abp.MongoDB;
 using Volo.Abp.MongoDB.TestApp.FourthContext;
 using Volo.Abp.MongoDB.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
+using Volo.Abp.TestApp.Testing;
 
 namespace Volo.Abp.TestApp.MongoDB;
 
@@ -23,6 +24,8 @@ public class TestAppMongoDbContext : AbpMongoDbContext, ITestAppMongoDbContext, 
     public IMongoCollection<ThirdDbContextDummyEntity> DummyEntities => Collection<ThirdDbContextDummyEntity>();
 
     public IMongoCollection<FourthDbContextDummyEntity> FourthDummyEntities => Collection<FourthDbContextDummyEntity>();
+    
+    public IMongoCollection<Product> Products => Collection<Product>();
 
     protected internal override void CreateModel(IMongoModelBuilder modelBuilder)
     {

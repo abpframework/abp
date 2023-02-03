@@ -27,7 +27,7 @@ namespace Volo.Docs
         public async Task BuildAsync()
         {
             var project = new Project(
-                _testData.PorjectId,
+                _testData.ProjectId,
                 "ABP vNext",
                 "ABP",
                 GithubDocumentSource.Type,

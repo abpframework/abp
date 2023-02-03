@@ -13,82 +13,193 @@ ABP为每个聚合根或实体提供了  **默认的通用(泛型)仓储**  . �
 **默认通用仓储用法示例:**
 
 ````C#
-public class PersonAppService : ApplicationService
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace Demo
 {
-    private readonly IRepository<Person, Guid> _personRepository;
-
-    public PersonAppService(IRepository<Person, Guid> personRepository)
+    public class PersonAppService : ApplicationService
     {
-        _personRepository = personRepository;
-    }
+        private readonly IRepository<Person, Guid> _personRepository;
 
-    public async Task Create(CreatePersonDto input)
-    {
-        var person = new Person { Name = input.Name, Age = input.Age };
+        public PersonAppService(IRepository<Person, Guid> personRepository)
+        {
+            _personRepository = personRepository;
+        }
 
-        await _personRepository.InsertAsync(person);
-    }
+        public async Task CreateAsync(CreatePersonDto input)
+        {
+            var person = new Person(input.Name);
 
-    public List<PersonDto> GetList(string nameFilter)
-    {
-        var people = _personRepository
-            .Where(p => p.Name.Contains(nameFilter))
-            .ToList();
+            await _personRepository.InsertAsync(person);
+        }
 
-        return people
-            .Select(p => new PersonDto {Id = p.Id, Name = p.Name, Age = p.Age})
-            .ToList();
+        public async Task<int> GetCountAsync(string filter)
+        {
+            return await _personRepository.CountAsync(p => p.Name.Contains(filter));
+        }
     }
 }
 ````
 
-> 参阅 "*IQueryable & 异步操作*" 部分了解如何使用 **异步扩展方法**, 如 `ToListAsync()` (建议始终使用异步) 而不是 `ToList()`.
-
 在这个例子中;
 
-* `PersonAppService` 在它的构造函数中注入了 `IRepository<Person, Guid>` .
-* `Create` 方法使用了 `InsertAsync` 创建并保存新的实体.
-* `GetList` 方法使用标准LINQ `Where` 和 `ToList` 方法在数据源中过滤并获取People集合.
+* `PersonAppService` 在它的构造函数中注入了 `IRepository<Person, Guid>` 。
+* `CreateAsync` 方法使用了 `InsertAsync` 创建并保存新的实体。
+* `GetCountAsync` 方法用来从数据库中获取符合指定条件的的人员的数量。
 
-> 上面的示例在[实体](Entities.md)与[DTO](Data-Transfer-Objects.md)之间使用了手动映射. 参阅 [对象映射](Object-To-Object-Mapping.md) 了解自动映射的使用方式.
+### 标准仓储方法
 
 通用仓储提供了一些开箱即用的标准CRUD功能:
 
-* 提供 `Insert` 方法用于保存新实体.
-* 提供 `Update` 和 `Delete` 方法通过实体或实体id更新或删除实体.
-* 提供 `Delete` 方法使用条件表达式过滤删除多个实体.
-* 实现了 `IQueryable<TEntity>`, 所以你可以使用LINQ和扩展方法 `FirstOrDefault`, `Where`, `OrderBy`, `ToList` 等...
-* 所有方法都具有 **sync(同步)** 和 **async(异步)** 版本.
+* `GetAsync`: 根据指定的`Id`或断言(lambda表达式)返回实体。
+  * 将在指定的实体不存在时，抛出异常 `EntityNotFoundException` 
+  * 如果指定的条件存在多个实体时，抛出异常 `InvalidOperationException`
+* `FindAsync`: 根据指定的`Id`或断言(lambda表达式)返回实体。
+  * 如果指定的实体不存在时，返回 `null` 。
+  * 如果指定的条件存在多个实体时，抛出异常 `InvalidOperationException`
+* `InsertAsync`: 在数据库里插入一个新的实体。
+* `UpdateAsync`: 在数据库里更新一个已经存在的实体。
+* `DeleteAsync`: 从数据库里删除指定的实体。
+  * 这个方法还有一个重载根据指定的断言(lambda表达式)来删除满足条件的多个实体。
+* `GetListAsync`: 返回数据库里的所有实体。
+* `GetPagedListAsync`: 返回一个指定长度的实体列表。 他拥有 `skipCount`, `maxResultCount` and `sorting` 参数.
+* `GetCountAsync`: 获取数据库里所有实体的数量
+
+这些方法还有还一些重载。
+
+* 提供 `UpdateAsync` 和 `DeleteAsync` 方法根据实体对象或者id来更新或者删除实体。 
+* 提供 `DeleteAsync` 方法用来删除符合指定条件的多个实体。
+
+### 在实体中使用LINQ
+
+仓储提供了一个`GetQueryableAsync`方法来获取一个`IQueryable<TEntity>`对象。你可以通过这个对象来对实体执行LINQ查询以操作数据库。
+
+**示例: 在仓储中使用LINQ表达式**
+
+````csharp
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace Demo
+{
+    public class PersonAppService : ApplicationService
+    {
+        private readonly IRepository<Person, Guid> _personRepository;
+
+        public PersonAppService(IRepository<Person, Guid> personRepository)
+        {
+            _personRepository = personRepository;
+        }
+
+        public async Task<List<PersonDto>> GetListAsync(string filter)
+        {
+            // 获取 IQueryable<Person>
+            IQueryable<Person> queryable = await _personRepository.GetQueryableAsync();
+
+            // 创建一个查询
+            var query = from person in queryable
+                where person.Name == filter
+                orderby person.Name
+                select person;
+
+            // 执行查询
+            var people = query.ToList();
+
+            // 转DTO并返回给客户端
+            return people.Select(p => new PersonDto {Name = p.Name}).ToList();
+        }
+    }
+}
+````
+
+你也可以使用LINQ扩展方法:
+
+````csharp
+public async Task<List<PersonDto>> GetListAsync(string filter)
+{
+    // 获取 IQueryable<Person>
+    IQueryable<Person> queryable = await _personRepository.GetQueryableAsync();
+
+    // 创建一个查询
+    var people = queryable
+        .Where(p => p.Name.Contains(filter))
+        .OrderBy(p => p.Name)
+        .ToList();
+
+    // 转DTO并返回给客户端
+    return people.Select(p => new PersonDto {Name = p.Name}).ToList();
+}
+````
+
+你可以使用仓储返回的`IQueryable` 配合标准LINQ方法自由查询。
+
+> 在这个例子中使用了 `ToList()` 方法, 但是**强烈建议使用异步方法**来执行数据库查询，比如在这个例子中，可以使用 `ToListAsync()`
+>
+> 查看 **IQueryable & 异步操作** 小节来学习如何做到这一点。
+
+### 批量操作
+
+下面这些方法可以用来对数据库执行批量操作;
+
+* `InsertManyAsync`
+* `UpdateManyAsync`
+* `DeleteManyAsync`
+
+这些方法可以操作多个实体，如果底层数据库提供程序支持，则可以进行批量操作。
+
+>  使用`UpdateManyAsync`和`DeleteManyAsSync`方法时，乐观锁可能会失效。
+
+### 软 / 硬 删除
+
+如果一个实体是**软删除**实体（即实现了`ISoftDelete`接口），则仓储的`DeleteSync`方法不会删除该实体，而是在数据库中标记为“已删除”。数据过滤器系统确保不会从数据库中正常检索软删除的实体。
+
+如果您的实体是软删除实体，如果您需要物理删除这个实体，您可以使用`HardDeleteAsync`方法强制删除。
+
+> 阅读 [数据过滤](Data-Filtering.md) 文档以了解更多关于软删除。
+
+### 确保实体存在
+
+`EnsureExistsAsync`扩展方法通过实体id或实体查询表达式来确保实体存在，如果其不存在，它将抛出`EntityNotFoundException`异常。
+
+## 其他通用仓储类型
+
+`IRepository<TEntity, TKey>` 接口扩展了标准 `IQueryable<TEntity>` 你可以使用标准LINQ方法自由查询。这对于大多数应用程序都很好。但是，某些ORM提供程序或数据库系统可能不支持`IQueryable`接口。如果您想使用这样的提供者，就不能依赖`IQueryable`。
 
 ### 基础仓储
 
-`IRepository<TEntity, TKey>` 接口扩展了标准 `IQueryable<TEntity>` 你可以使用标准LINQ方法自由查询.但是,某些ORM提供程序或数据库系统可能不支持`IQueryable`接口.
-
 ABP提供了 `IBasicRepository<TEntity, TPrimaryKey>` 和 `IBasicRepository<TEntity>` 接口来支持这样的场景. 你可以扩展这些接口（并可选择性地从`BasicRepositoryBase`派生）为你的实体创建自定义存储库.
 
-依赖于 `IBasicRepository` 而不是依赖 `IRepository` 有一个优点, 即使它们不支持 `IQueryable` 也可以使用所有的数据源, 但主要的供应商, 像 Entity Framework, NHibernate 或 MongoDb 已经支持了 `IQueryable`.
+依赖于 `IBasicRepository` 而不是依赖 `IRepository` 有一个优点, 即使它们不支持 `IQueryable` 也可以使用所有的数据源。
+
+但主要的供应商, 像 Entity Framework, NHibernate 或 MongoDb 已经支持了 `IQueryable`.
 
 因此, 使用 `IRepository` 是典型应用程序的 **建议方法**. 但是可重用的模块开发人员可能会考虑使用 `IBasicRepository` 来支持广泛的数据源.
 
+
 ### 只读仓储
 
-对于想要使用只读仓储的开发者,我们提供了`IReadOnlyRepository<TEntity, TKey>` 与 `IReadOnlyBasicRepository<Tentity, TKey>`接口.
+对于想要使用只读仓储的开发者,我们提供了`IReadOnlyRepository<TEntity, TKey>` 与 `IReadOnlyBasicRepository<Tentity, TKey>`接口。
 
 ### 无主键的通用(泛型)仓储
 
-如果你的实体没有id主键 (例如, 它可能具有复合主键) 那么你不能使用上面定义的 `IRepository<TEntity, TKey>`, 在这种情况下你可以仅使用实体(类型)注入 `IRepository<TEntity>`.
+如果你的实体没有id主键 (例如, 它可能具有复合主键) 那么你不能使用上面定义的 `IRepository<TEntity, TKey>`, 在这种情况下你可以仅使用实体(类型)注入 `IRepository<TEntity>`。
 
-> `IRepository<TEntity>` 有一些缺失的方法, 通常与实体的 `Id` 属性一起使用. 由于实体在这种情况下没有 `Id` 属性, 因此这些方法不可用. 比如 `Get` 方法通过id获取具有指定id的实体. 不过, 你仍然可以使用`IQueryable<TEntity>`的功能通过标准LINQ方法查询实体.
-
-
+> `IRepository<TEntity>` 有一些缺失的方法, 通常与实体的 `Id` 属性一起使用. 由于实体在这种情况下没有 `Id` 属性, 因此这些方法不可用. 比如 `Get` 方法通过id获取具有指定id的实体. 不过, 你仍然可以使用`IQueryable<TEntity>`的功能通过标准LINQ方法查询实体。
 
 ### 自定义仓储
 
-对于大多数情况, 默认通用仓储就足够了.  但是, 你可能会需要为实体创建自定义仓储类.
+对于大多数情况, 默认通用仓储就足够了。但是, 你可能会需要为实体创建自定义仓储类。
 
 #### 自定义仓储示例
 
-ABP不会强制你实现任何接口或从存储库的任何基类继承. 它可以只是一个简单的POCO类. 但是建议继承现有的仓储接口和类, 获得开箱即用的标准方法使你的工作更轻松.
+ABP不会强制你实现任何接口或从存储库的任何基类继承。它可以只是一个简单的POCO类。 但是建议继承现有的仓储接口和类，获得开箱即用的标准方法使你的工作更轻松。
 
 #### 自定义仓储接口
 
@@ -101,11 +212,11 @@ public interface IPersonRepository : IRepository<Person, Guid>
 }
 ```
 
-此接口扩展了 `IRepository<Person, Guid>` 以使用已有的通用仓储功能.
+此接口扩展了 `IRepository<Person, Guid>` 以使用已有的通用仓储功能。
 
 #### 自定义仓储实现
 
-自定义存储库依赖于你使用的数据访问工具. 在此示例中, 我们将使用Entity Framework Core:
+自定义存储库依赖于你使用的数据访问工具。 在此示例中, 我们将使用Entity Framework Core:
 
 ````C#
 public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPersonRepository
@@ -126,18 +237,20 @@ public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPe
 }
 ````
 
-你可以直接使用数据库访问提供程序 (本例中是 `DbContext` ) 来执行操作.
+你可以直接使用数据库访问提供程序 (本例中是 `dbContext` ) 来执行操作.
 
 > 请参阅[EF Core](Entity-Framework-Core.md)或[MongoDb](MongoDB.md)了解如何自定义仓储.
 
 ## IQueryable & 异步操作
 
-`IRepository` 继承自 `IQueryable`,这意味着你可以**直接使用LINQ扩展方法**. 如上面的*泛型仓储*示例.
+`IRepository`提供`GetQueryableAsync()`来获取`IQueryable`，这意味着您可以**直接在其上使用LINQ扩展方法**，如上面的“*在实体中使用LINQ”部分所示。
+
 
 **示例: 使用 `Where(...)` 和 `ToList()` 扩展方法**
 
 ````csharp
-var people = _personRepository
+var queryable = await _personRepository.GetQueryableAsync();
+var people = queryable
     .Where(p => p.Name.Contains(nameFilter))
     .ToList();
 ````
@@ -157,7 +270,7 @@ var people = _personRepository
 
 ### 选项-1: 引用EF Core
 
-最简单的方法是在你想要使用异步方法的项目直接引用EF Core包.
+**最简单的方法**是在你想要使用异步方法的项目直接引用EF Core包.
 
 > 添加[Volo.Abp.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore)NuGet包到你的项目间接引用EF Core包. 这可以确保你的应用程序其余部分兼容正确版本的EF Core.
 
@@ -166,14 +279,15 @@ var people = _personRepository
 **示例: 直接使用 `ToListAsync()`**
 
 ````csharp
-var people = _personRepository
+var queryable = await _personRepository.GetQueryableAsync();
+var people = queryable
     .Where(p => p.Name.Contains(nameFilter))
     .ToListAsync();
 ````
 
-此方法建议;
+当以下情况时，这个方法是推荐的：
 
-* 如果你正在开发一个应用程序并且**不打算在将来** 更新FE Core,或者如果以后需要更改,你可以**容忍**它. 如果你正在开发最终的应用程序,这是合理的.
+* 如果你正在开发一个应用程序并且**不打算在将来** 更新FE Core，或者如果以后真的需要更改，你也能**容忍**它。我们认为，如果您正在开发最终应用程序，这是合理的。
 
 #### MongoDB
 
@@ -182,19 +296,41 @@ var people = _personRepository
 **示例: 转换Cast `IQueryable<T>` 为 `IMongoQueryable<T>` 并且使用 `ToListAsync()`**
 
 ````csharp
-var people = ((IMongoQueryable<Person>)_personRepository
+var queryable = await _personRepository.GetQueryableAsync();
+var people = ((IMongoQueryable<Person>) queryable
     .Where(p => p.Name.Contains(nameFilter)))
     .ToListAsync();
 ````
 
-### 选项-2: 自定义仓储方法
+### 选项-2: 使用IRepository异步扩展方法
 
-你始终可以创建自定义仓储方法并使用特定数据库提供程序的API,比如这里的异步扩展方法. 有关自定义存储库的更多信息,请参阅[EF Core](Entity-Framework-Core.md)或[MongoDb](MongoDB.md)文档.
+ABP框架为仓储提供异步扩展方法，与异步LINQ扩展方法类似。
 
-此方法建议;
+**示例: 在仓储中使用 `CountAsync` 和 `FirstOrDefaultAsync` 方法 **
 
-* 如果你想**完全隔离**你的领域和应用层和数据库提供程序.
-* 如果你开发可**重用的[应用模块](Modules/Index.md)**,并且不想强制使用特定的数据库提供程序,这应该作为一种[最佳实践](Best-Practices/Index.md).
+````csharp
+var countAll = await _personRepository
+    .CountAsync();
+
+var count = await _personRepository
+    .CountAsync(x => x.Name.StartsWith("A"));
+
+var book1984 = await _bookRepository
+    .FirstOrDefaultAsync(x => x.Name == "John");    
+````
+
+支持这些标准的LINQ方法: *AllAsync, AnyAsync, AverageAsync, ContainsAsync, CountAsync, FirstAsync, FirstOrDefaultAsync, LastAsync, LastOrDefaultAsync, LongCountAsync, MaxAsync, MinAsync, SingleAsync, SingleOrDefaultAsync, SumAsync, ToArrayAsync, ToListAsync*.
+
+这种方法仍有**局限性**。您需要直接在存储库对象上调用扩展方法。例如，以下用法**不受支持**：
+
+```csharp
+var queryable = await _bookRepository.GetQueryableAsync();
+var count = await queryable.Where(x => x.Name.Contains("A")).CountAsync();
+```
+
+这是因为本例中的`CountAsync()`方法是在`IQueryable`接口上调用的，而不是在存储库对象上调用的。请参见此类情况的其他选项。
+
+建议 **尽可能使用此方法**.
 
 ### 选项-3: IAsyncQueryableExecuter
 
@@ -229,8 +365,11 @@ namespace AbpDemo
 
         public async Task<ListResultDto<ProductDto>> GetListAsync(string name)
         {
+            //Obtain the IQueryable<T>
+            var queryable = await _productRepository.GetQueryableAsync();
+            
             //Create the query
-            var query = _productRepository
+            var query = queryable
                 .Where(p => p.Name.Contains(name))
                 .OrderBy(p => p.Name);
 
@@ -245,10 +384,21 @@ namespace AbpDemo
 
 > `ApplicationService` 和 `DomainService` 基类已经预属性注入了 `AsyncExecuter` 属性,所以你可直接使用.
 
-ABP框架使用实际数据库提供程序的API异步执行查询.虽然这不是执行查询的常见方式,但它是使用异步API而不依赖于数据库提供者的最佳方式.
+ABP框架使用实际数据库提供程序的API异步执行查询。虽然这不是执行查询的常见方式，但它是使用异步API而不依赖于数据库提供者的最佳方式。
 
-此方法建议;
+当以下情况时，这个方法是推荐的：
 
+* 如果您想开发应用程序代码**而不依赖**数据库提供程序。
 * 如果你正在构建一个没有数据库提供程序集成包的**可重用库**,但是在某些情况下需要执行 `IQueryable<T>`对象.
 
 例如,ABP框架在 `CrudAppService` 基类中(参阅[应用程序](Application-Services.md)文档)使用 `IAsyncQueryableExecuter`.
+
+
+### 选项-4: 自定义仓储方法
+
+你始终可以创建自定义仓储方法并使用特定数据库提供程序的API,比如这里的异步扩展方法. 有关自定义存储库的更多信息,请参阅[EF Core](Entity-Framework-Core.md)或[MongoDb](MongoDB.md)文档.
+
+当以下情况时，这个方法是推荐的：
+
+* 如果你想**完全隔离**你的领域和应用层和数据库提供程序.
+* 如果你开发可**重用的[应用模块](Modules/Index.md)**,并且不想强制使用特定的数据库提供程序,这应该作为一种[最佳实践](Best-Practices/Index.md).

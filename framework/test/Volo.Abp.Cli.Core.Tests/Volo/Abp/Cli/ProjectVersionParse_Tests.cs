@@ -19,8 +19,8 @@ public class ProjectVersionParse_Tests
                                      "<ProjectReference Include=\"..\\Blazoor.EfCore07062034.Domain.Shared\\Blazoor.EfCore07062034.Domain.Shared.csproj\" />" +
                                      "</ItemGroup>" +
                                      "<ItemGroup>" +
-                                     "< PackageReference    Include  =  \"Volo.Abp.Emailing\"   Version  =  \"4.4.0-rc.1\"  />" +
-                                     "<PackageReference  Include= \"Volo.Abp.PermissionManagement.Domain.Identity\"   Version= \"4.4.0-rc.1\" />" +
+                                     "<PackageReference    Include=\"Volo.Abp.Emailing\"   Version=\"4.4.0-rc.1\"  />" +
+                                     "<PackageReference  Include=\"Volo.Abp.PermissionManagement.Domain.Identity\"   Version=\"4.4.0-rc.1\" />" +
                                      "<PackageReference Include=\"Volo.Abp.IdentityServer.Domain\" Version=\"4.4.0-rc.1\" />" +
                                      "<PackageReference Include=\"Volo.Abp.PermissionManagement.Domain.IdentityServer\" Version=\"4.4.0-rc.1\" />" +
                                      "<PackageReference Include=\"Volo.Abp.BackgroundJobs.Domain\" Version=\"4.4.0-rc.1\" />" +
@@ -54,7 +54,7 @@ public class ProjectVersionParse_Tests
                                      "<ProjectReference Include=\"..\\Blazoor.EfCore07062034.Domain.Shared\\Blazoor.EfCore07062034.Domain.Shared.csproj\" />" +
                                      "</ItemGroup>" +
                                      "<ItemGroup>" +
-                                     "< PackageReference  Include =  \"Volo.Abp.Emailing\"   Version=  \"12.8.3-beta.1\"  />" +
+                                     "<PackageReference Include=\"Volo.Abp.Emailing\" Version=\"12.8.3-beta.1\"  />" +
                                      "</ItemGroup>" +
                                      "</Project>";
 

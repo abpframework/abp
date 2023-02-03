@@ -82,7 +82,19 @@ export class DynamicLayoutComponent {
     const key = this.layouts.get(expectedLayout);
     this.layout = this.getComponent(key)?.component;
     this.layoutKey = expectedLayout;
+    if(!this.layout){
+      this.showLayoutNotFoundError(expectedLayout);
+    }
   }
+
+  showLayoutNotFoundError(layoutName: string) {
+    let message = `Layout ${layoutName} not found.`;
+    if(layoutName === 'account'){
+      message = 'Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "AccountLayoutModule.forRoot()" to your app.module configuration.';
+    }
+    console.warn(message);
+  }
+  
 
   private listenToLanguageChange() {
     this.subscription.addOne(this.localizationService.languageChange$, () => {

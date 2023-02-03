@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
-import { RoutesHandler } from '../handlers';
-import { RoutesService } from '../services';
+import { RoutesHandler } from '../handlers/routes.handler';
+import { RoutesService } from '../services/routes.service';
 
 describe('Routes Handler', () => {
   describe('#add', () => {

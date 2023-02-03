@@ -8,7 +8,7 @@ import {
   generateFormFromProps,
 } from '@abp/ng.theme.shared/extensions';
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
 
@@ -26,7 +26,7 @@ import { eIdentityComponents } from '../../enums/components';
 export class RolesComponent implements OnInit {
   data: PagedResultDto<IdentityRoleDto> = { items: [], totalCount: 0 };
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   selected: IdentityRoleDto;
 

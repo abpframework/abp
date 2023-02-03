@@ -1,16 +1,16 @@
 {
   "culture": "tr",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Müşteri ismi zaten mevcut: {Name}",
     "Menu:TenantManagement": "Müşteri yönetimi",
     "Tenants": "Müşteriler",
     "NewTenant": "Yeni müşteri",
     "TenantName": "Müşteri adı",
-    "DisplayName:TenantName": "Müşteri adı",
+    "DisplayName:TenantName": "Müşteri Adı",
     "TenantDeletionConfirmationMessage": "'{0}' isimli müşteri silinecektir. Onaylıyor musunuz?",
     "ConnectionStrings": "Bağlantı cümlesi",
     "DisplayName:DefaultConnectionString": "Varsayılan bağlantı cümlesi",
     "DisplayName:UseSharedDatabase": "Paylaşılan veritabanını kullan",
-    "ManageHostFeatures": "Host özelliklerini yönetin",
     "Permission:TenantManagement": "Müşteri yönetimi",
     "Permission:Create": "Oluşturma",
     "Permission:Edit": "Düzenleme",

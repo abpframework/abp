@@ -4,16 +4,15 @@ import {
   branchAndMerge,
   chain,
   move,
-  SchematicContext,
   SchematicsException,
   Tree,
   url,
 } from '@angular-devkit/schematics';
-import { Exception } from '../../enums';
-import { GenerateProxySchema, ServiceGeneratorParams } from '../../models';
+import { defaultEServiceType, eServiceType, Exception } from '../../enums';
+import { Controller, GenerateProxySchema, ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
-  buildDefaultPath,
+  buildTargetPath,
   createControllerToServiceMapper,
   createImportRefsToModelReducer,
   createImportRefToEnumMapper,
@@ -27,6 +26,8 @@ import {
   ModelGeneratorParams,
   removeDefaultPlaceholders,
   resolveProject,
+  sanitizeTypeNames,
+  sanitizeControllerTypeNames,
   serializeParameters,
 } from '../../utils';
 import * as cases from '../../utils/text';
@@ -36,18 +37,20 @@ export default function (schema: GenerateProxySchema) {
   const moduleName = params.module || 'app';
 
   return chain([
-    async (tree: Tree, _context: SchematicContext) => {
+    async (tree: Tree) => {
       const getRootNamespace = createRootNamespaceGetter(params);
       const solution = await getRootNamespace(tree);
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const target = await resolveProject(tree, params.target!);
-      const targetPath = buildDefaultPath(target.definition);
+      const targetPath = buildTargetPath(target.definition, params.entryPoint);
       const readProxyConfig = createProxyConfigReader(targetPath);
       const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
       const data = readProxyConfig(tree);
+      data.types = sanitizeTypeNames(data.types);
       const types = data.types;
       const modules = data.modules;
+      const serviceType = schema.serviceType || defaultEServiceType;
       if (!types || !modules) throw new SchematicsException(Exception.InvalidApiDefinition);
 
       const definition = data.modules[moduleName];
@@ -55,7 +58,11 @@ export default function (schema: GenerateProxySchema) {
         throw new SchematicsException(interpolate(Exception.InvalidModule, moduleName));
 
       const apiName = definition.remoteServiceName;
-      const controllers = Object.values(definition.controllers || {});
+      data.modules[moduleName].controllers = sanitizeControllerTypeNames(definition.controllers);
+      const controllers = filterControllersByServiceType(
+        serviceType,
+        data.modules[moduleName].controllers,
+      );
       const serviceImports: Record<string, string[]> = {};
       const generateServices = createServiceGenerator({
         targetPath,
@@ -169,5 +176,16 @@ function createServiceGenerator(params: ServiceGeneratorParams) {
         move(normalize(targetPath)),
       ]);
     }),
+  );
+}
+
+function filterControllersByServiceType(
+  serviceType: string,
+  controllers: Record<string, Controller>,
+): Controller[] {
+  const itShouldBeIntegratedService = serviceType === eServiceType.Integration;
+  const skipFilter = serviceType === eServiceType.All;
+  return Object.values(controllers || {}).filter(
+    x => x.isIntegrationService === itShouldBeIntegratedService || skipFilter,
   );
 }

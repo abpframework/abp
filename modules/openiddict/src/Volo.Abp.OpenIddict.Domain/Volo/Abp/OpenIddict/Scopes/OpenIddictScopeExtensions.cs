@@ -19,6 +19,7 @@ public static class OpenIddictScopeExtensions
 
         foreach (var extraProperty in model.ExtraProperties)
         {
+            entity.ExtraProperties.Remove(extraProperty.Key);
             entity.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
         }
 
@@ -69,6 +70,7 @@ public static class OpenIddictScopeExtensions
 
         foreach (var extraProperty in entity.ExtraProperties)
         {
+            model.ExtraProperties.Remove(extraProperty.Key);
             model.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
         }
 

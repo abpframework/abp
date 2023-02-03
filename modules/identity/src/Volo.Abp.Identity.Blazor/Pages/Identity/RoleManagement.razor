@@ -47,7 +47,7 @@
                     <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                                <FieldLabel>@L["DisplayName:RoleName"] *</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
@@ -85,7 +85,7 @@
                         <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp"/>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                                <FieldLabel>@L["DisplayName:RoleName"] *</FieldLabel>
                                 <TextEdit @bind-Text="EditingEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>

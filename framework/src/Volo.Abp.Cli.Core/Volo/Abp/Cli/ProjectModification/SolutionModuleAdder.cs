@@ -153,7 +153,7 @@ public class SolutionModuleAdder : ITransientDependency
         var documentationLink = module.GetFirstDocumentationLinkOrNull();
         if (documentationLink != null)
         {
-            CmdHelper.OpenWebPage(documentationLink);
+            CmdHelper.Open(documentationLink);
         }
 
         return module;
@@ -428,6 +428,11 @@ public class SolutionModuleAdder : ITransientDependency
         await PublishEventAsync(9, $"Adding angular source code");
 
         await AngularSourceCodeAdder.AddFromModuleAsync(solutionFilePath, angularPath);
+
+        if (newTemplate)
+        {
+            await AngularSourceCodeAdder.AddModuleConfigurationAsync(angularPath, moduleName);
+        }
     }
 
     private static void DeleteAngularDirectoriesInModulesFolder(string modulesFolderInSolution)
@@ -489,6 +494,7 @@ public class SolutionModuleAdder : ITransientDependency
         args.Options.Add("t", newProTemplate ? ModuleProTemplate.TemplateName : ModuleTemplate.TemplateName);
         args.Options.Add("v", version);
         args.Options.Add("o", Path.Combine(modulesFolderInSolution, module.Name));
+        args.Options.Add("sib", true.ToString());
 
         await NewCommand.ExecuteAsync(args);
     }

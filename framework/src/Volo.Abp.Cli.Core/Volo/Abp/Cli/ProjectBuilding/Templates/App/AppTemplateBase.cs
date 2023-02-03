@@ -5,6 +5,7 @@ using NuGet.Versioning;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Maui;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
@@ -36,6 +37,7 @@ public abstract class AppTemplateBase : TemplateInfo
         ConfigureTieredArchitecture(context, steps);
         ConfigurePublicWebSite(context, steps);
         ConfigureTheme(context, steps);
+        ConfigureVersion(context, steps);
         RemoveUnnecessaryPorts(context, steps);
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
@@ -108,10 +110,7 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
         }
 
-        if (context.BuildArgs.DatabaseManagementSystem == DatabaseManagementSystem.PostgreSQL)
-        {
-            context.Symbols.Add("dbms:PostgreSQL");
-        }
+        context.Symbols.Add($"dbms:{context.BuildArgs.DatabaseManagementSystem}");
     }
 
     protected void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
@@ -134,6 +133,10 @@ public abstract class AppTemplateBase : TemplateInfo
                 ConfigureWithBlazorServerUi(context, steps);
                 break;
 
+            case UiFramework.MauiBlazor:
+                ConfigureWithMauiBlazorUi(context, steps);
+                break;
+
             case UiFramework.Mvc:
             case UiFramework.NotSpecified:
                 ConfigureWithMvcUi(context, steps);
@@ -151,6 +154,11 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
         }
 
+        if (context.BuildArgs.UiFramework != UiFramework.MauiBlazor)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MauiBlazor"));
+        }
+
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
         {
             steps.Add(new RemoveFolderStep("/angular"));
@@ -159,6 +167,16 @@ public abstract class AppTemplateBase : TemplateInfo
         if (context.BuildArgs.MobileApp != MobileApp.ReactNative)
         {
             steps.Add(new RemoveFolderStep(MobileApp.ReactNative.GetFolderName().EnsureStartsWith('/')));
+        }
+
+        if (context.BuildArgs.MobileApp == MobileApp.Maui)
+        {
+            steps.Add(new MauiChangeApplicationIdGuidStep());
+            steps.Add(new MauiChangePortStep());
+        }
+        else
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Maui"));
         }
 
         if (!context.BuildArgs.PublicWebSite)
@@ -186,76 +204,102 @@ public abstract class AppTemplateBase : TemplateInfo
             return;
         }
 
+        if (context.BuildArgs.Theme != Theme.NotSpecified)
+        {
+            context.Symbols.Add(context.BuildArgs.Theme.Value.ToString().ToUpper());
+        }
+
         if (context.BuildArgs.Theme == Theme.LeptonX)
         {
-            context.Symbols.Add("LEPTONX");
             steps.Add(new ChangeThemeStyleStep());
         }
 
-        if (IsDefaultThemeForTemplate(context.BuildArgs.Theme.Value))
+        RemoveThemeLogoFolders(context, steps);
+
+        if (IsDefaultThemeForTemplate(context.BuildArgs))
         {
             return;
         }
-        
+
         steps.Add(new ChangeThemeStep());
-        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro());
+        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework);
     }
 
-    private static bool IsDefaultThemeForTemplate(Theme theme)
+    private void RemoveThemeLogoFolders(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
-        var defaultThemesForTemplates = new[] 
+        if (context.BuildArgs.Theme != Theme.Lepton && IsPro())
         {
-            AppTemplate.DefaultTheme, AppProTemplate.DefaultTheme, 
-            AppNoLayersTemplate.DefaultTheme, AppNoLayersProTemplate.DefaultTheme
-        };
-        
-        return defaultThemesForTemplates.Any(defaultTheme => defaultTheme == theme);
+            steps.Add(new RemoveFilesStep("/wwwroot/images/logo/lepton/"));
+        }
+
+        if (context.BuildArgs.Theme != Theme.LeptonX && context.BuildArgs.Theme != Theme.LeptonXLite)
+        {
+            steps.Add(new RemoveFilesStep("/wwwroot/images/logo/leptonx/"));
+        }
     }
-    
-    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate)
+
+    private static bool IsDefaultThemeForTemplate(ProjectBuildArgs args)
     {
+        var templateThemes = new Dictionary<string, Theme> 
+        {
+            { AppTemplate.TemplateName, AppTemplate.DefaultTheme },
+            { AppProTemplate.TemplateName, AppProTemplate.DefaultTheme },
+            { AppNoLayersTemplate.TemplateName, AppNoLayersTemplate.DefaultTheme },
+            { AppNoLayersProTemplate.TemplateName, AppNoLayersProTemplate.DefaultTheme }
+        };
+
+        return templateThemes.TryGetValue(args.TemplateName!, out var templateTheme) && templateTheme == args.Theme;
+    }
+
+    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate, UiFramework uiFramework)
+    {
+        var mvcUiPackageName = isProTemplate ? "@volo/abp.aspnetcore.mvc.ui.theme.leptonx" : "@abp/aspnetcore.mvc.ui.theme.leptonxlite";
         var packageJsonFilePaths = new List<string>
         {
             "/MyCompanyName.MyProjectName.Web/package.json",
             "/MyCompanyName.MyProjectName.Web.Host/package.json",
             "/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
+            "/MyCompanyName.MyProjectName.HttpApi.Host/package.json",
             "/MyCompanyName.MyProjectName.AuthServer/package.json",
             "/MyCompanyName.MyProjectName/package.json",
             "/MyCompanyName.MyProjectName.Host/package.json",
             "/MyCompanyName.MyProjectName.Host.Mongo/package.json"
         };
 
-        var blazorServerPackageJsonFilePaths = new List<string>
-        {
-            "/MyCompanyName.MyProjectName.Blazor.Server/package.json",
-            "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
-            "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
-        };
-
-        var angularPackageJsonFilePaths = new List<string> 
-        {
-            "/angular/package.json"
-        };
-
-        var mvcUiPackageName = isProTemplate ? "@volo/abp.aspnetcore.mvc.ui.theme.leptonx" : "@abp/aspnetcore.mvc.ui.theme.leptonxlite";
-        var blazorServerUiPackageName = isProTemplate ? "@volo/aspnetcore.components.server.leptonxtheme" : "@abp/aspnetcore.components.server.leptonxlitetheme";
-        var ngUiPackageName = isProTemplate ? "@volosoft/abp.ng.theme.lepton-x" : "@abp/ng.theme.lepton-x";
-        
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
             steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
         }
 
-        foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
+        if (uiFramework == UiFramework.BlazorServer)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
-        }
+            var blazorServerUiPackageName = isProTemplate ? "@volo/aspnetcore.components.server.leptonxtheme" : "@abp/aspnetcore.components.server.leptonxlitetheme";
+            var blazorServerPackageJsonFilePaths = new List<string>
+            {
+                "/MyCompanyName.MyProjectName.Blazor/package.json",
+                "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
+                "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
+            };
 
-        foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
+            foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
+            }
+        }
+        else if (uiFramework == UiFramework.Angular)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+            var ngUiPackageName = isProTemplate ? "@volosoft/abp.ng.theme.lepton-x" : "@abp/ng.theme.lepton-x";
+            var angularPackageJsonFilePaths = new List<string>
+            {
+                "/angular/package.json"
+            };
+
+            foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+            }
         }
     }
 
@@ -477,9 +521,49 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
+    protected void ConfigureWithMauiBlazorUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        context.Symbols.Add("ui:maui-blazor");
+
+        steps.Add(new MauiBlazorChangeApplicationIdGuidStep());
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+        steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.MauiBlazor/Directory.Build.props"));
+
+        if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server") ||
+            context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
+            steps.Add(new MauiBlazorPortChangeForSeparatedAuthServersStep());
+            steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
+
+            if (context.BuildArgs.MobileApp == MobileApp.ReactNative)
+            {
+                steps.Add(new ReactEnvironmentFilePortChangeForSeparatedAuthServersStep());
+            }
+        }
+        else
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
+            steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+            steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
+        }
+    }
+
     protected void RemoveUnnecessaryPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveUnnecessaryPortsStep());
+    }
+
+    protected void ConfigureVersion(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        if (context.BuildArgs.Version == null || SemanticVersion.Parse(context.BuildArgs.Version) >= SemanticVersion.Parse("6.0.0-rc.1"))
+        {
+            context.Symbols.Add("newer-than-6.0");
+        }
     }
 
     protected void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
@@ -502,7 +586,8 @@ public abstract class AppTemplateBase : TemplateInfo
                         "https://localhost:44306",
                         "https://localhost:44307",
                         "https://localhost:44308",
-                        "https://localhost:44309"
+                        "https://localhost:44309",
+                        "https://localhost:44310"
                 }
             )
         );
@@ -558,7 +643,8 @@ public abstract class AppTemplateBase : TemplateInfo
     {
         if ((context.BuildArgs.UiFramework == UiFramework.Mvc
              || context.BuildArgs.UiFramework == UiFramework.Blazor
-             || context.BuildArgs.UiFramework == UiFramework.BlazorServer) &&
+             || context.BuildArgs.UiFramework == UiFramework.BlazorServer
+             || context.BuildArgs.UiFramework == UiFramework.MauiBlazor) &&
             context.BuildArgs.MobileApp == MobileApp.None)
         {
             steps.Add(new MoveFolderStep("/aspnet-core/", "/"));

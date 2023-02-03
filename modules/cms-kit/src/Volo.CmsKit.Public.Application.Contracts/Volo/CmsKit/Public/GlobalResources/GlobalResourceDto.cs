@@ -1,8 +1,12 @@
-﻿namespace Volo.CmsKit.Public.GlobalResources;
+﻿using System;
+using Volo.Abp.Application.Dtos;
 
-public class GlobalResourceDto
+namespace Volo.CmsKit.Public.GlobalResources;
+
+[Serializable]
+public class GlobalResourceDto : AuditedEntityDto
 {
     public string Name { get; set; }
-    
+
     public string Value { get; set; }
 }

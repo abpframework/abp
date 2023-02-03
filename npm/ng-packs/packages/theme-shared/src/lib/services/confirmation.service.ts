@@ -13,7 +13,7 @@ export class ConfirmationService {
   private containerComponentRef!: ComponentRef<ConfirmationComponent>;
 
   clear = (status: Confirmation.Status = Confirmation.Status.dismiss) => {
-    this.confirmation$.next();
+    this.confirmation$.next(null);
     this.status$.next(status);
   };
 

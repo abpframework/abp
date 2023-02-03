@@ -22,8 +22,9 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
         IOpenIddictApplicationRepository repository,
         IUnitOfWorkManager unitOfWorkManager,
         IOpenIddictTokenRepository tokenRepository,
-        IGuidGenerator guidGenerator)
-        : base(repository, unitOfWorkManager, guidGenerator)
+        IGuidGenerator guidGenerator,
+        AbpOpenIddictIdentifierConverter identifierConverter)
+        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter)
     {
         TokenRepository = tokenRepository;
     }
@@ -75,31 +76,31 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
         return (await Repository.FindByClientIdAsync(identifier, cancellationToken: cancellationToken)).ToModel();
     }
 
-    public async IAsyncEnumerable<OpenIddictApplicationModel> FindByPostLogoutRedirectUriAsync(string address, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<OpenIddictApplicationModel> FindByPostLogoutRedirectUriAsync(string uris, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(address, nameof(address));
+        Check.NotNullOrEmpty(uris, nameof(uris));
 
-        var applications = await Repository.FindByPostLogoutRedirectUriAsync(address, cancellationToken);
+        var applications = await Repository.FindByPostLogoutRedirectUriAsync(uris, cancellationToken);
 
         foreach (var application in applications)
         {
             var addresses = await GetPostLogoutRedirectUrisAsync(application.ToModel(), cancellationToken);
-            if (addresses.Contains(address, StringComparer.Ordinal))
+            if (addresses.Contains(uris, StringComparer.Ordinal))
             {
                 yield return application.ToModel();
             }
         }
     }
 
-    public async IAsyncEnumerable<OpenIddictApplicationModel> FindByRedirectUriAsync(string address, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<OpenIddictApplicationModel> FindByRedirectUriAsync(string uri, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(address, nameof(address));
+        Check.NotNullOrEmpty(uri, nameof(uri));
 
-        var applications = await Repository.FindByRedirectUriAsync(address, cancellationToken);
+        var applications = await Repository.FindByRedirectUriAsync(uri, cancellationToken);
         foreach (var application in applications)
         {
-            var addresses = await GetRedirectUrisAsync(application.ToModel(), cancellationToken);
-            if (addresses.Contains(address, StringComparer.Ordinal))
+            var uris = await GetRedirectUrisAsync(application.ToModel(), cancellationToken);
+            if (uris.Contains(uri, StringComparer.Ordinal))
             {
                 yield return application.ToModel();
             }
@@ -423,12 +424,12 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
         return default;
     }
 
-    public virtual ValueTask SetPostLogoutRedirectUrisAsync(OpenIddictApplicationModel application, ImmutableArray<string> addresses,
+    public virtual ValueTask SetPostLogoutRedirectUrisAsync(OpenIddictApplicationModel application, ImmutableArray<string> uris,
         CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
 
-        if (addresses.IsDefaultOrEmpty)
+        if (uris.IsDefaultOrEmpty)
         {
             application.PostLogoutRedirectUris = null;
             return default;
@@ -437,9 +438,9 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
         application.PostLogoutRedirectUris = WriteStream(writer =>
         {
             writer.WriteStartArray();
-            foreach (var address in addresses)
+            foreach (var uri in uris)
             {
-                writer.WriteStringValue(address);
+                writer.WriteStringValue(uri);
             }
             writer.WriteEndArray();
         });
@@ -472,12 +473,12 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
         return default;
     }
 
-    public virtual ValueTask SetRedirectUrisAsync(OpenIddictApplicationModel application, ImmutableArray<string> addresses,
+    public virtual ValueTask SetRedirectUrisAsync(OpenIddictApplicationModel application, ImmutableArray<string> uris,
         CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
 
-        if (addresses.IsDefaultOrEmpty)
+        if (uris.IsDefaultOrEmpty)
         {
             application.RedirectUris = null;
             return default;
@@ -486,9 +487,9 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
         application.RedirectUris = WriteStream(writer =>
         {
             writer.WriteStartArray();
-            foreach (var address in addresses)
+            foreach (var uri in uris)
             {
-                writer.WriteStringValue(address);
+                writer.WriteStringValue(uri);
             }
             writer.WriteEndArray();
         });

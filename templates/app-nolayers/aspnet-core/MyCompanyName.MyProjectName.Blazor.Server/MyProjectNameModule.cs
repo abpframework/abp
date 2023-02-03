@@ -8,6 +8,7 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.Menus;
 using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
+using Volo.Abp.Uow;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
@@ -165,7 +166,7 @@ public class MyProjectNameModule : AbpModule
         Configure<AppUrlOptions>(options =>
         {
             options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
+            options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ?? Array.Empty<string>());
         });
     }
 
@@ -317,6 +318,13 @@ public class MyProjectNameModule : AbpModule
                 configurationContext.UseSqlServer();
             });
         });
+
+        //<TEMPLATE-REMOVE IF-NOT='dbms:SQLite'>
+        Configure<AbpUnitOfWorkDefaultOptions>(options =>
+        {
+            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+        });
+        //</TEMPLATE-REMOVE>
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

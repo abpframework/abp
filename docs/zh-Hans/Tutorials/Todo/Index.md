@@ -26,7 +26,7 @@
 
 {{if UI=="NG"}}
 
-* [Node v14.x](https://nodejs.org/)
+* [Node v16.x](https://nodejs.org/)
 
 {{end}}
 

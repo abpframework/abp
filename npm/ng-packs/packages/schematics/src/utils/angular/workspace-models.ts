@@ -1,16 +1,22 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+
 export enum ProjectType {
   Application = 'application',
   Library = 'library',
 }
 
+/**
+ * An enum of the official Angular builders.
+ * Each enum value provides the fully qualified name of the associated builder.
+ * This enum can be used when analyzing the `builder` fields of project configurations from the
+ * `angular.json` workspace file.
+ */
 export enum Builders {
   AppShell = '@angular-devkit/build-angular:app-shell',
   Server = '@angular-devkit/build-angular:server',
@@ -49,7 +55,6 @@ export interface BrowserBuilderOptions extends BrowserBuilderBaseOptions {
   optimization?: boolean;
   outputHashing?: OutputHashing;
   resourcesOutputPath?: string;
-  extractCss?: boolean;
   namedChunks?: boolean;
   aot?: boolean;
   extractLicenses?: boolean;
@@ -77,10 +82,12 @@ export interface ServerBuilderOptions {
   tsConfig: string;
   main: string;
   fileReplacements?: FileReplacements[];
-  optimization?: {
-    scripts?: boolean;
-    styles?: boolean;
-  };
+  optimization?:
+    | boolean
+    | {
+        scripts?: boolean;
+        styles?: boolean;
+      };
   sourceMap?:
     | boolean
     | {
@@ -99,11 +106,6 @@ export interface AppShellBuilderOptions {
 
 export interface TestBuilderOptions extends Partial<BrowserBuilderBaseOptions> {
   karmaConfig: string;
-}
-
-export interface LintBuilderOptions {
-  tsConfig: string[] | string;
-  exclude?: string[];
 }
 
 export interface ExtractI18nOptions {
@@ -128,16 +130,20 @@ export type LibraryBuilderTarget = BuilderTarget<Builders.NgPackagr, LibraryBuil
 export type BrowserBuilderTarget = BuilderTarget<Builders.Browser, BrowserBuilderOptions>;
 export type ServerBuilderTarget = BuilderTarget<Builders.Server, ServerBuilderOptions>;
 export type AppShellBuilderTarget = BuilderTarget<Builders.AppShell, AppShellBuilderOptions>;
-export type LintBuilderTarget = BuilderTarget<Builders.TsLint, LintBuilderOptions>;
 export type TestBuilderTarget = BuilderTarget<Builders.Karma, TestBuilderOptions>;
 export type ServeBuilderTarget = BuilderTarget<Builders.DevServer, ServeBuilderOptions>;
 export type ExtractI18nBuilderTarget = BuilderTarget<Builders.ExtractI18n, ExtractI18nOptions>;
 export type E2EBuilderTarget = BuilderTarget<Builders.Protractor, E2EOptions>;
 
+interface WorkspaceCLISchema {
+  warnings?: Record<string, boolean>;
+  schematicCollections?: string[];
+  defaultCollection?: string;
+}
 export interface WorkspaceSchema {
   version: 1;
   defaultProject?: string;
-  cli?: { warnings?: Record<string, boolean> };
+  cli?: WorkspaceCLISchema;
   projects: {
     [key: string]: WorkspaceProject<ProjectType.Application | ProjectType.Library>;
   };
@@ -153,7 +159,7 @@ export interface WorkspaceProject<TProjectType extends ProjectType = ProjectType
   sourceRoot: string;
   prefix: string;
 
-  cli?: { warnings?: Record<string, boolean> };
+  cli?: WorkspaceCLISchema;
 
   /**
    * Tool options.
@@ -168,12 +174,12 @@ export interface WorkspaceProject<TProjectType extends ProjectType = ProjectType
 export interface WorkspaceTargets<TProjectType extends ProjectType = ProjectType.Application> {
   build?: TProjectType extends ProjectType.Library ? LibraryBuilderTarget : BrowserBuilderTarget;
   server?: ServerBuilderTarget;
-  lint?: LintBuilderTarget;
   test?: TestBuilderTarget;
   serve?: ServeBuilderTarget;
   e2e?: E2EBuilderTarget;
   'app-shell'?: AppShellBuilderTarget;
   'extract-i18n'?: ExtractI18nBuilderTarget;
   // TODO(hans): change this any to unknown when google3 supports TypeScript 3.0.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }

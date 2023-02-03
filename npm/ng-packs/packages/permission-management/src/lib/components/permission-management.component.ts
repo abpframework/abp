@@ -1,13 +1,13 @@
-import { ConfigStateService, CurrentUserDto } from '@abp/ng.core';
+import { ConfigStateService, CurrentUserDto } from "@abp/ng.core";
 import {
   GetPermissionListResultDto,
   PermissionGrantInfoDto,
   PermissionGroupDto,
   PermissionsService,
   ProviderInfoDto,
-  UpdatePermissionDto,
-} from '@abp/ng.permission-management/proxy';
-import { LocaleDirection } from '@abp/ng.theme.shared';
+  UpdatePermissionDto
+} from "@abp/ng.permission-management/proxy";
+import { LocaleDirection } from "@abp/ng.theme.shared";
 import {
   Component,
   ElementRef,
@@ -16,11 +16,11 @@ import {
   Output,
   QueryList,
   TrackByFunction,
-  ViewChildren,
-} from '@angular/core';
-import { concat, of } from 'rxjs';
-import { finalize, switchMap, take, tap } from 'rxjs/operators';
-import { PermissionManagement } from '../models/permission-management';
+  ViewChildren
+} from "@angular/core";
+import { concat, of } from "rxjs";
+import { finalize, switchMap, take, tap } from "rxjs/operators";
+import { PermissionManagement } from "../models/permission-management";
 
 type PermissionWithStyle = PermissionGrantInfoDto & {
   style: string;
@@ -104,6 +104,10 @@ export class PermissionManagementComponent
 
   selectAllTab = false;
 
+  disableSelectAllTab = false;
+
+  disabledSelectAllInAllTabs = false;
+
   modalBusy = false;
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
@@ -135,6 +139,18 @@ export class PermissionManagementComponent
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
   }
 
+  setDisabled(permissions: PermissionGrantInfoDto[]) {
+    if (permissions.length) {
+      this.disableSelectAllTab = permissions.every(
+        permission =>
+          permission.isGranted &&
+          permission.grantedProviders?.every(p => p.providerName !== this.providerName),
+      );
+    } else {
+      this.disableSelectAllTab = false;
+    }
+  }
+
   isGrantedByOtherProviderName(grantedProviders: ProviderInfoDto[]): boolean {
     if (grantedProviders.length) {
       return grantedProviders.findIndex(p => p.providerName !== this.providerName) > -1;
@@ -158,20 +174,21 @@ export class PermissionManagementComponent
         } else if (clickedPermission.parentName === per.name && !clickedPermission.isGranted) {
           return { ...per, isGranted: true };
         }
-
         return per;
       });
-
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
     }, 0);
   }
 
   setTabCheckboxState() {
-    const selectedPermissions = this.selectedGroupPermissions.filter(per => per.isGranted);
+    const selectableGroupPermissions = this.selectedGroupPermissions.filter(per =>
+      per.grantedProviders.every(p => p.providerName === this.providerName),
+    );
+    const selectedPermissions = selectableGroupPermissions.filter(per => per.isGranted);
     const element = document.querySelector('#select-all-in-this-tabs') as any;
 
-    if (selectedPermissions.length === this.selectedGroupPermissions.length) {
+    if (selectedPermissions.length === selectableGroupPermissions.length) {
       element.indeterminate = false;
       this.selectThisTab = true;
     } else if (selectedPermissions.length === 0) {
@@ -183,10 +200,13 @@ export class PermissionManagementComponent
   }
 
   setGrantCheckboxState() {
-    const selectedAllPermissions = this.permissions.filter(per => per.isGranted);
+    const selectablePermissions = this.permissions.filter(per =>
+      per.grantedProviders.every(p => p.providerName === this.providerName),
+    );
+    const selectedAllPermissions = selectablePermissions.filter(per => per.isGranted);
     const checkboxElement = document.querySelector('#select-all-in-all-tabs') as any;
 
-    if (selectedAllPermissions.length === this.permissions.length) {
+    if (selectedAllPermissions.length === selectablePermissions.length) {
       checkboxElement.indeterminate = false;
       this.selectAllTab = true;
     } else if (selectedAllPermissions.length === 0) {
@@ -220,11 +240,14 @@ export class PermissionManagementComponent
       isGranted:
         this.isGrantedByOtherProviderName(permission.grantedProviders) || !this.selectAllTab,
     }));
-
-    this.selectThisTab = !this.selectAllTab;
+    if (!this.disableSelectAllTab) {
+      this.selectThisTab = !this.selectAllTab;
+      this.setTabCheckboxState();
+    }
   }
 
   onChangeGroup(group: PermissionGroupDto) {
+    this.setDisabled(group.permissions);
     this.selectedGroup = group;
     this.setTabCheckboxState();
   }
@@ -270,6 +293,11 @@ export class PermissionManagementComponent
         this.data = permissionRes;
         this.selectedGroup = permissionRes.groups[0];
         this.permissions = getPermissions(permissionRes.groups);
+        this.disabledSelectAllInAllTabs = this.permissions.every(
+          per =>
+            per.isGranted &&
+            per.grantedProviders.every(provider => provider.providerName !== this.providerName),
+        );
       }),
     );
   }
@@ -277,6 +305,7 @@ export class PermissionManagementComponent
   initModal() {
     // TODO: Refactor
     setTimeout(() => {
+      this.setDisabled(this.selectedGroup.permissions);
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
     });

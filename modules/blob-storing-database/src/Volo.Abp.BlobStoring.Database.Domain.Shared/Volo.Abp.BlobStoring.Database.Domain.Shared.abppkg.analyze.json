@@ -1,11 +1,19 @@
 {
   "name": "Volo.Abp.BlobStoring.Database.Domain.Shared",
-  "hash": "eed9ff456824aac8ba0fe73baa6cf288",
+  "hash": "ca71bff6138a518c84899353b3d88f2e",
   "contents": [
     {
       "namespace": "Volo.Abp.BlobStoring.Database",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        }
+      ],
       "contentType": "abpModule",
-      "name": "BlobStoringDatabaseDomainSharedModule"
+      "name": "BlobStoringDatabaseDomainSharedModule",
+      "summary": null
     }
   ]
 }

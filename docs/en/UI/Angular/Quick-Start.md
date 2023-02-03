@@ -4,7 +4,7 @@
 
 Please follow the steps below to prepare your development environment for Angular.
 
-1. **Install Node.js:** Please visit [Node.js downloads page](https://nodejs.org/en/download/) and download proper Node.js v12 or v14 installer for your OS. An alternative is to install [NVM](https://github.com/nvm-sh/nvm) and use it to have multiple versions of Node.js in your operating system.
+1. **Install Node.js:** Please visit [Node.js downloads page](https://nodejs.org/en/download/) and download proper Node.js v16 or v18 installer for your OS. An alternative is to install [NVM](https://github.com/nvm-sh/nvm) and use it to have multiple versions of Node.js in your operating system.
 2. **[Optional] Install Yarn:** You may install Yarn v1 (not v2) following the instructions on [the installation page](https://classic.yarnpkg.com/en/docs/install). Yarn v1 delivers an arguably better developer experience compared to npm v6 and below. You may skip this step and work with npm, which is built-in in Node.js, instead.
 3. **[Optional] Install VS Code:** [VS Code](https://code.visualstudio.com/) is a free, open-source IDE which works seamlessly with TypeScript. Although you can use any IDE including Visual Studio or Rider, VS Code will most likely deliver the best developer experience when it comes to Angular projects. ABP project templates even contain plugin recommendations for VS Code users, which VS Code will ask you to install when you open the Angular project folder. Here is a list of recommended extensions:
    - [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=angular.ng-template)
@@ -37,19 +37,9 @@ This command will prepare a solution with an Angular and a .NET Core project in 
 
 To continue reading without checking other methods, visit [Angular project structure section](#angular-project-structure).
 
-### 2. Direct Download
+### 2. Generating a CLI Command from Get Started Page
 
-You may [download a solution scaffold directly on ABP.io](https://abp.io/get-started) if you are more comfortable with GUI or simply want to try ABP without installing the CLI.
-
-Please do the following:
-
-1. Click on the "DIRECT DOWNLOAD" tab.
-2. Fill out the short form about your project.
-3. Click on the "Create now" button.
-
-...and a customized download will start in a few seconds.
-
-To avoid IDE warnings, run `yarn` or `npm install` in the Angular root folder before you continue to the next section. It is not imperative but recommended.
+You can generate a CLI command on the [get started page of the abp.io website](https://abp.io/get-started). Then, use the command on your terminal to create a new [Startup Template](../../Startup-Templates/Index.md).
 
 ## Angular Project Structure
 

@@ -54,6 +54,7 @@
     "Version": "Версия",
     "LanguageCode": "Код языка",
     "FileName": "Имя файла",
-    "LastCachedTime": "Время кеширования"
+    "LastCachedTime": "Время кеширования",
+    "Project": "Проект"
   }
 }

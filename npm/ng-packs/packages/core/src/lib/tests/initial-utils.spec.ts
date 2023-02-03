@@ -1,20 +1,18 @@
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
-import {
-  AuthService,
-  ConfigStateService,
-  EnvironmentService,
-  SessionStateService,
-} from '../services';
-import * as AuthFlowStrategy from '../strategies/auth-flow.strategy';
+import { SessionStateService } from '../services/session-state.service';
+import { EnvironmentService } from '../services/environment.service';
+import { AuthService } from '../abstracts/auth.service';
+import { ConfigStateService } from '../services/config-state.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
-import { checkAccessToken, getInitialData, localeInitializer } from '../utils';
+import { getInitialData, localeInitializer } from '../utils/initial-utils';
 import * as environmentUtils from '../utils/environment-utils';
 import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
+import { RestService } from '../services/rest.service';
+import { CHECK_AUTHENTICATION_STATE_FN_KEY } from '../tokens/check-authentication-state';
 
 const environment = { oAuthConfig: { issuer: 'test' } };
 
@@ -33,8 +31,8 @@ describe('InitialUtils', () => {
       ConfigStateService,
       AbpApplicationConfigurationService,
       AuthService,
-      OAuthService,
       SessionStateService,
+      RestService,
     ],
     providers: [
       {
@@ -43,6 +41,10 @@ describe('InitialUtils', () => {
           environment,
           registerLocaleFn: () => Promise.resolve(),
         },
+      },
+      {
+        provide: CHECK_AUTHENTICATION_STATE_FN_KEY,
+        useValue: () => {},
       },
     ],
   });
@@ -54,6 +56,10 @@ describe('InitialUtils', () => {
       const environmentService = spectator.inject(EnvironmentService);
       const configStateService = spectator.inject(ConfigStateService);
       const sessionStateService = spectator.inject(SessionStateService);
+      //const checkAuthenticationState = spectator.inject(CHECK_AUTHENTICATION_STATE_FN_KEY);
+
+      const authService = spectator.inject(AuthService);
+
       const parseTenantFromUrlSpy = jest.spyOn(multiTenancyUtils, 'parseTenantFromUrl');
       const getRemoteEnvSpy = jest.spyOn(environmentUtils, 'getRemoteEnv');
       parseTenantFromUrlSpy.mockReturnValue(Promise.resolve());
@@ -67,7 +73,7 @@ describe('InitialUtils', () => {
       const configRefreshAppStateSpy = jest.spyOn(configStateService, 'refreshAppState');
       configRefreshAppStateSpy.mockReturnValue(of(appConfigRes));
       const sessionSetTenantSpy = jest.spyOn(sessionStateService, 'setTenant');
-
+      const authServiceInitSpy = jest.spyOn(authService, 'init');
       const configStateGetOneSpy = jest.spyOn(configStateService, 'getOne');
       configStateGetOneSpy.mockReturnValue(appConfigRes.currentTenant);
 
@@ -81,20 +87,7 @@ describe('InitialUtils', () => {
       expect(configRefreshAppStateSpy).toHaveBeenCalled();
       expect(environmentSetStateSpy).toHaveBeenCalledWith(environment);
       expect(sessionSetTenantSpy).toHaveBeenCalledWith(appConfigRes.currentTenant);
-    });
-  });
-
-  describe('#checkAccessToken', () => {
-    test('should call logOut fn of OAuthService when token is valid and current user not found', async () => {
-      const injector = spectator.inject(Injector);
-      const injectorSpy = jest.spyOn(injector, 'get');
-      const clearOAuthStorageSpy = jest.spyOn(AuthFlowStrategy, 'clearOAuthStorage');
-
-      injectorSpy.mockReturnValueOnce({ getDeep: () => false });
-      injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => true });
-
-      checkAccessToken(injector);
-      expect(clearOAuthStorageSpy).toHaveBeenCalled();
+      expect(authServiceInitSpy).toHaveBeenCalled();
     });
   });
 

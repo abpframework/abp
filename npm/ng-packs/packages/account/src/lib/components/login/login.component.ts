@@ -1,7 +1,7 @@
 import { AuthService, ConfigStateService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { eAccountComponents } from '../../enums/components';
@@ -14,7 +14,7 @@ const { maxLength, required } = Validators;
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   inProgress: boolean;
 
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     protected injector: Injector,
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected toasterService: ToasterService,
     protected authService: AuthService,
     protected configState: ConfigStateService,

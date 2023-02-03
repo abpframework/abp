@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -36,10 +36,9 @@ public class Program
                 services.AddApplicationAsync<MyProjectNameModule>(options =>
                 {
                     options.Services.ReplaceConfiguration(services.GetConfiguration());
-                    options.UseAutofac();
                     options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
                 });
-            }).UseConsoleLifetime();
+            }).AddAppSettingsSecretsJson().UseAutofac().UseConsoleLifetime();
 
             var host = builder.Build();
             await host.Services.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().InitializeAsync(host.Services);
@@ -50,6 +49,11 @@ public class Program
         }
         catch (Exception ex)
         {
+            if (ex is HostAbortedException)
+            {
+                throw;
+            }
+
             Log.Fatal(ex, "Host terminated unexpectedly!");
             return 1;
         }

@@ -87,6 +87,7 @@ public class AbpIdentityServerTestDataBuilder : ITransientDependency
         apiResource.DisplayName = nameof(apiResource.DisplayName);
 
         apiResource.AddScope(nameof(ApiResourceScope.Scope));
+        apiResource.AddScope("Test-ApiResource-ApiScope-Name-1");
         apiResource.AddUserClaim(nameof(ApiResourceClaim.Type));
         apiResource.AddSecret(nameof(ApiResourceSecret.Value));
 

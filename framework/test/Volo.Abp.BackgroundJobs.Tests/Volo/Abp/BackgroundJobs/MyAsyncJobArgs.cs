@@ -1,16 +1,22 @@
-﻿namespace Volo.Abp.BackgroundJobs;
+﻿using System;
+using Volo.Abp.MultiTenancy;
 
-public class MyAsyncJobArgs
+namespace Volo.Abp.BackgroundJobs;
+
+public class MyAsyncJobArgs: IMultiTenant
 {
     public string Value { get; set; }
+    
+    public Guid? TenantId { get; }
 
     public MyAsyncJobArgs()
     {
 
     }
 
-    public MyAsyncJobArgs(string value)
+    public MyAsyncJobArgs(string value, Guid? tenantId = null)
     {
         Value = value;
+        TenantId = tenantId;
     }
 }

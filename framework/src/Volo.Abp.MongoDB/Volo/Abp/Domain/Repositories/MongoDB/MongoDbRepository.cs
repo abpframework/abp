@@ -177,6 +177,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
+        IncrementEntityVersionProperty(entity);
         SetModificationAuditProperties(entity);
 
         if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
@@ -294,7 +295,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
         {
-            ((ISoftDelete)entity).IsDeleted = true;
+            ObjectHelper.TrySetProperty(((ISoftDelete)entity), x => x.IsDeleted, () => true);
             ApplyAbpConceptsForDeletedEntity(entity);
 
             ReplaceOneResult result;
@@ -365,8 +366,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         {
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
             {
-                ((ISoftDelete)entity).IsDeleted = true;
-
+                ObjectHelper.TrySetProperty(((ISoftDelete)entity), x => x.IsDeleted, () => true);
                 softDeletedEntities.Add(entity, SetNewConcurrencyStamp(entity));
             }
             else
@@ -485,6 +485,20 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         await DeleteManyAsync(entities, autoSave, cancellationToken);
     }
 
+    public override async Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        cancellationToken = GetCancellationToken(cancellationToken);
+
+        var dbContext = await GetDbContextAsync(cancellationToken);
+        var collection = dbContext.Collection<TEntity>();
+
+        await collection.DeleteManyAsync(
+            dbContext.SessionHandle,
+            Builders<TEntity>.Filter.Where(predicate),
+            cancellationToken: cancellationToken
+        );
+    }
+
     [Obsolete("Use GetQueryableAsync method.")]
     protected override IQueryable<TEntity> GetQueryable()
     {
@@ -598,13 +612,11 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     private void TriggerEntityCreateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityCreatingEvent(entity);
         EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
     }
 
     protected virtual void TriggerEntityUpdateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityUpdatingEvent(entity);
         EntityChangeEventHelper.PublishEntityUpdatedEvent(entity);
     }
 
@@ -617,7 +629,6 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     protected virtual void TriggerEntityDeleteEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityDeletingEvent(entity);
         EntityChangeEventHelper.PublishEntityDeletedEvent(entity);
     }
 
@@ -656,6 +667,11 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     protected virtual void SetDeletionAuditProperties(TEntity entity)
     {
         AuditPropertySetter.SetDeletionProperties(entity);
+    }
+
+    protected virtual void IncrementEntityVersionProperty(TEntity entity)
+    {
+        AuditPropertySetter.IncrementEntityVersionProperty(entity);
     }
 
     protected virtual void TriggerDomainEvents(object entity)

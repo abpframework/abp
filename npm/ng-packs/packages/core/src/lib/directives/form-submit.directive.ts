@@ -8,13 +8,15 @@ import {
   Output,
   Self,
 } from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, FormGroupDirective } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { SubscriptionService } from '../services/subscription.service';
 
-type Controls = { [key: string]: FormControl } | FormGroup[];
-
+type Controls = { [key: string]: UntypedFormControl } | UntypedFormGroup[];
+/**
+ * @deprecated FormSubmitDirective will be removed in V7.0.0. Use `ngSubmit` instead.
+ */
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'form[ngSubmit][formGroup]',
@@ -43,6 +45,7 @@ export class FormSubmitDirective implements OnInit {
 
   ngOnInit() {
     this.subscription.addOne(this.formGroupDirective.ngSubmit, () => {
+
       if (this.markAsDirtyWhenSubmit) {
         this.markAsDirty();
       }
@@ -70,7 +73,7 @@ export class FormSubmitDirective implements OnInit {
   markAsDirty() {
     const { form } = this.formGroupDirective;
 
-    setDirty(form.controls as { [key: string]: FormControl });
+    setDirty(form.controls as { [key: string]: UntypedFormControl });
     form.markAsDirty();
 
     this.cdRef.detectChanges();
@@ -80,7 +83,7 @@ export class FormSubmitDirective implements OnInit {
 function setDirty(controls: Controls) {
   if (Array.isArray(controls)) {
     controls.forEach(group => {
-      setDirty(group.controls as { [key: string]: FormControl });
+      setDirty(group.controls as { [key: string]: UntypedFormControl });
     });
     return;
   }

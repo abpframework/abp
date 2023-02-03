@@ -179,7 +179,7 @@
     "ChangingLicenseTypeExplanation": "U kunt upgraden naar een hogere licentie door het verschil binnen uw actieve licentieperiode te betalen. Wanneer u upgradet naar een hoger licentieplan, krijgt u de voordelen van het nieuwe plan, maar de licentie-upgrade verandert de vervaldatum van de licentie niet. Daarnaast kun je ook nieuwe developers seats toevoegen aan je bestaande licentie, zie \"Hoeveel developers kunnen aan de ABP Commercial werken?\"",
     "LicenseExtendUpgradeDiff": "Wat is het verschil tussen licentieverlenging en upgrade?",
     "LicenseRenewalCost": "Wat zijn de kosten voor het verlengen van de licentie na 1 jaar?",
-    "LicenseRenewalCostExplanation": "Het tarief voor catalogusverlenging van alle eeuwigdurende licenties van ABP Commercial is {0} van de licentieprijs van de licentie. De verlengingsprijs van de standaard Teamlicentie is ${1}, de standaard Business-licentie is ${2} en de standaard Enterprise-licentie is ${3}. Als u al klant bent, <a href='{4}' target='_blank'>log in op uw account</a> om de beschikbare verlengingsprijzen te bekijken.",
+    "LicenseRenewalCostExplanation": "De prijs voor het verlengen (verlengen) van de standaard Teamlicentie is ${0}, de standaard Business-licentie is ${1} en de standaard Enterprise-licentie is ${2}. Als u al klant bent, <a href='{3}' target='_blank'>log in op uw account</a> om de huidige verlengingsprijzen te bekijken.",
     "HowDoIRenewMyLicense": "Hoe verleng ik mijn licentie?",
     "HowDoIRenewMyLicenseExplanation": "U kunt uw licentie verlengen door naar de <a href='{0}' target='_blank'>organisatiebeheerpagina</a> te gaan. Om te profiteren van onze gereduceerde tarieven voor vroege verlenging, moet u ervoor zorgen dat u verlengt voordat uw licentie verloopt. U hoeft zich echter geen zorgen te maken dat u niet weet wanneer uw mogelijkheid tot vervroegde verlenging afloopt. Je ontvangt 3 herinneringsmails voordat je abonnement afloopt. We sturen ze 30 dagen, 7 dagen en 1 dag voor de vervaldatum.",
     "IsSourceCodeIncluded": "Bevat mijn licentie de broncode van de commerciële modules en thema's?",
@@ -360,7 +360,7 @@
     "Next": "Volgende",
     "StartTrial": "Start mijn gratis proefperiode",
     "ContactUsIssues": "Neem contact met ons op als je problemen hebt!",
-    "TrialActivatedWarning": "Beste {0}, een gebruiker heeft recht op slechts één gratis proefperiode. Je hebt je proefperiode al gebruikt.",
+    "TrialActivatedWarning": "Een gebruiker heeft recht op slechts 1 gratis proefperiode. Je hebt je proefperiode al gebruikt.",
     "SaveAndDownload": "Opslaan en downloaden",
     "CompanyNameValidationMessage": "Bedrijfsnaam is te lang!",
     "AddressValidationMessage": "Adres is te lang!",
@@ -373,11 +373,12 @@
     "TrialLicenseModelInvalidErrorMessage": "Een van de volgende velden is ongeldig: Landnaam, Bedrijfsgrootte, Industrie of Gebruiksdoel.",
     "Trial": "Proces",
     "Purchased": "Gekocht",
-    "PurchaseLicense": "Licentie kopen",
+    "PurchaseLicense": "Koop {0} licentie",
     "PurchaseTrialLicenseMessage": "De vervaldatum van uw licentie is {0}. <br> Als je de projecten die je tijdens je gratis proefperiode hebt gemaakt wilt blijven gebruiken, moet je de licentiesleutels in je <code>appsettings.secrets.json</code>-bestanden wijzigen. Hier is uw licentiesleutel:",
     "TrialLicenseExpireMessage": "U gebruikt de proeflicentie en uw proeflicentie verloopt op {0}.",
     "TryForFree": "Probeer gratis",
     "TrialLicenseExpiredInfo": "Uw proeflicentieperiode is verlopen!",
-    "CommercialNewsletterConfirmationMessage": "Ik ga akkoord met de <a href=\"https://commercial.abp.io/TermsConditions\">Algemene voorwaarden</a> en het <a href=\"https://commercial.abp.io/Privacy\">Privacybeleid </a>."
+    "CommercialNewsletterConfirmationMessage": "Ik ga akkoord met de <a href=\"https://commercial.abp.io/TermsConditions\">Algemene voorwaarden</a> en het <a href=\"https://commercial.abp.io/Privacy\">Privacybeleid </a>.",
+    "BlackFridayDiscount": "Black Friday korting"
   }
 }

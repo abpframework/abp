@@ -7,6 +7,7 @@ using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
 using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
+using Volo.Abp.Uow;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -173,7 +174,7 @@ public class MyProjectNameModule : AbpModule
         Configure<AppUrlOptions>(options =>
         {
             options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
+            options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ?? Array.Empty<string>());
 
             options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
             options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
@@ -277,10 +278,10 @@ public class MyProjectNameModule : AbpModule
             {
                 builder
                     .WithOrigins(
-                        configuration["App:CorsOrigins"]
+                        configuration["App:CorsOrigins"]?
                             .Split(",", StringSplitOptions.RemoveEmptyEntries)
                             .Select(o => o.RemovePostFix("/"))
-                            .ToArray()
+                            .ToArray() ?? Array.Empty<string>()
                     )
                     .WithAbpExposedHeaders()
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
@@ -314,6 +315,13 @@ public class MyProjectNameModule : AbpModule
                 configurationContext.UseSqlServer();
             });
         });
+
+        //<TEMPLATE-REMOVE IF-NOT='dbms:SQLite'>
+        Configure<AbpUnitOfWorkDefaultOptions>(options =>
+        {
+            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+        });
+        //</TEMPLATE-REMOVE>
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

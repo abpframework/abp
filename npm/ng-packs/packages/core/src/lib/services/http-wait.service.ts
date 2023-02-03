@@ -24,7 +24,7 @@ export class HttpWaitService {
   });
 
   private delay: number;
-  private destroy$ = new Subject();
+  private destroy$ = new Subject<void>();
 
   constructor(injector: Injector) {
     this.delay = injector.get(LOADER_DELAY, 500);

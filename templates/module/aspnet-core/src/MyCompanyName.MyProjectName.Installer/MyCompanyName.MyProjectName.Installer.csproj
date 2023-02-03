@@ -3,13 +3,13 @@
     <Import Project="..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
         <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
         <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\..\studio\src\Volo.Abp.Studio.ModuleInstaller\Volo.Abp.Studio.ModuleInstaller.csproj" />
         <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
     </ItemGroup>
 

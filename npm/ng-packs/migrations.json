@@ -1,84 +1,162 @@
 {
   "migrations": [
     {
-      "version": "13.6.0-beta.0",
-      "description": "Remove old options that are no longer used",
       "cli": "nx",
-      "implementation": "./src/migrations/update-13-6-0/remove-old-task-runner-options",
-      "package": "@nrwl/workspace",
-      "name": "13-6-0-remove-old-task-runner-options"
-    },
-    {
-      "version": "13.9.0-beta.0",
-      "description": "Replace @nrwl/tao with nx",
-      "cli": "nx",
-      "implementation": "./src/migrations/update-13-9-0/replace-tao-with-nx",
-      "package": "@nrwl/workspace",
-      "name": "13-9-0-replace-tao-with-nx"
-    },
-    {
-      "version": "13.10.0-beta.0",
-      "description": "Update the decorate-angular-cli script to require nx instead of @nrwl/cli",
-      "cli": "nx",
-      "implementation": "./src/migrations/update-13-10-0/update-decorate-cli",
-      "package": "@nrwl/workspace",
-      "name": "13-10-0-update-decorate-cli"
-    },
-    {
-      "version": "13.10.0-beta.0",
-      "description": "Update the tasks runner property to import it from the nx package instead of @nrwl/worksapce",
-      "cli": "nx",
-      "implementation": "./src/migrations/update-13-10-0/update-tasks-runner",
-      "package": "@nrwl/workspace",
-      "name": "13-10-0-update-tasks-runner"
+      "version": "15.0.0-beta.1",
+      "description": "Replace implicitDependencies with namedInputs + target inputs",
+      "implementation": "./src/migrations/update-15-0-0/migrate-to-inputs",
+      "package": "nx",
+      "name": "15.0.0-migrate-to-inputs"
     },
     {
       "cli": "nx",
-      "version": "13.4.5-beta.7",
-      "description": "Remove the default for the invalid 'style' option for the library generator if configured.",
-      "factory": "./src/migrations/update-13-5-0/remove-library-generator-style-default",
+      "version": "15.0.0-beta.1",
+      "description": "Prefix outputs with {workspaceRoot}/{projectRoot} if needed",
+      "implementation": "./src/migrations/update-15-0-0/prefix-outputs",
+      "package": "nx",
+      "name": "15.0.0-prefix-outputs"
+    },
+    {
+      "cli": "nx",
+      "version": "15.0.12-beta.1",
+      "description": "Set project names in project.json files",
+      "implementation": "./src/migrations/update-15-1-0/set-project-names",
+      "package": "nx",
+      "name": "15.1.0-set-project-names"
+    },
+    {
+      "cli": "nx",
+      "version": "15.0.0-beta.0",
+      "description": "Rename @nrwl/angular:webpack-server executor to @nrwl/angular:webpack-dev-server",
+      "factory": "./src/migrations/update-14-8-0/rename-webpack-server",
       "package": "@nrwl/angular",
-      "name": "remove-library-generator-style-default"
+      "name": "rename-webpack-server-executor"
     },
     {
       "cli": "nx",
-      "version": "13.5.0-beta.0",
-      "description": "A lot of changes to how MFEs operate were discovered and merged without appropriate migrations. This should cover migrating existing MFEs to the latest, using ESM and optmized production bundles.",
-      "factory": "./src/migrations/update-13-5-0/update-mfe-configs",
+      "version": "15.0.0-beta.0",
+      "description": "Update the usages of @nrwl/angular/testing to import jasmine-marbles symbols from jasmine-marbles itself.",
+      "factory": "./src/migrations/update-15-0-0/switch-to-jasmine-marbles",
       "package": "@nrwl/angular",
-      "name": "fix-incorrect-mfe-setups"
+      "name": "switch-to-jasmine-marbles"
     },
     {
       "cli": "nx",
-      "version": "13.8.1",
-      "description": "Angular doesn't attach styles.js to index.html with type=module in dev mode, meaning an error is written to the console. Cypress falls over on this error. Add logic to Cypress e2e projects to ignore this error.",
-      "factory": "./src/migrations/update-13-8-1/add-cypress-mfe-workaround",
+      "version": "15.0.0-beta.1",
+      "description": "Stop hashing karma spec files and config files for build targets and dependent tasks",
+      "factory": "./src/migrations/update-15-0-0/add-karma-inputs",
       "package": "@nrwl/angular",
-      "name": "add-cypress-mfe-workaround"
+      "name": "add-karma-inputs"
     },
     {
       "cli": "nx",
-      "version": "13.8.4",
-      "description": "Karma coverage is broken since Angular 13 upgarde and the karma config is severely out of date. Bring it up to date fixing the coverage issue.",
-      "factory": "./src/migrations/update-13-8-4/migrate-karma-conf",
+      "version": "15.2.0-beta.0",
+      "description": "Update the @angular/cli package version to ~15.0.0.",
+      "factory": "./src/migrations/update-15-2-0/update-angular-cli",
       "package": "@nrwl/angular",
-      "name": "migrate-karma-config"
+      "name": "update-angular-cli-version-15-0-0"
     },
     {
       "cli": "nx",
-      "version": "13.9.0-beta.4",
-      "description": "Set buildLibsFromSource property to false to not break existing usage.",
-      "factory": "./src/migrations/update-13-9-0/set-build-libs-from-source",
+      "version": "15.2.0-beta.0",
+      "description": "Remove browserlist config as it's handled by build-angular",
+      "factory": "./src/migrations/update-15-2-0/remove-browserlist-config",
       "package": "@nrwl/angular",
-      "name": "set-build-libs-from-source"
+      "name": "remove-browserlist-config"
     },
     {
-      "version": "13.4.4-beta.0",
       "cli": "nx",
-      "description": "Create a root babel config file if it doesn't exist and using babel-jest in jest.config.js and add @nrwl/web as needed",
-      "factory": "./src/migrations/update-13-4-4/add-missing-root-babel-config",
+      "version": "15.2.0-beta.0",
+      "description": "Update typescript target to ES2022",
+      "factory": "./src/migrations/update-15-2-0/update-typescript-target",
+      "package": "@nrwl/angular",
+      "name": "update-typescript-target"
+    },
+    {
+      "cli": "nx",
+      "version": "15.2.0-beta.0",
+      "description": "Remove bundleDependencies from server targets",
+      "factory": "./src/migrations/update-15-2-0/update-workspace-config",
+      "package": "@nrwl/angular",
+      "name": "update-workspace-config"
+    },
+    {
+      "cli": "ng",
+      "version": "15.2.0-beta.0",
+      "description": "Remove exported `@angular/platform-server` `renderModule` method. The `renderModule` method is now exported by the Angular CLI.",
+      "factory": "./src/migrations/update-15-2-0/remove-platform-server-exports",
+      "package": "@nrwl/angular",
+      "name": "update-platform-server-exports"
+    },
+    {
+      "cli": "ng",
+      "version": "15.2.0-beta.0",
+      "description": "Remove no longer needed require calls in Karma builder main file.",
+      "factory": "./src/migrations/update-15-2-0/update-karma-main-file",
+      "package": "@nrwl/angular",
+      "name": "update-karma-main-file"
+    },
+    {
+      "version": "15.0.0-beta",
+      "description": "Since Angular v15, the `RouterLink` contains the logic of the `RouterLinkWithHref` directive. This migration replaces all `RouterLinkWithHref` references with `RouterLink`.",
+      "factory": "./migrations/router-link-with-href/index",
+      "package": "@angular/core",
+      "name": "migration-v15-router-link-with-href"
+    },
+    {
+      "version": "15.0.0-beta",
+      "description": "In Angular version 15, the deprecated `relativeLinkResolution` config parameter of the Router is removed. This migration removes all `relativeLinkResolution` fields from the Router config objects.",
+      "factory": "./migrations/relative-link-resolution/index",
+      "package": "@angular/core",
+      "name": "migration-v15-relative-link-resolution"
+    },
+    {
+      "cli": "nx",
+      "version": "15.0.0-beta.0",
+      "description": "Stop hashing cypress spec files and config files for build targets and dependent tasks",
+      "factory": "./src/migrations/update-15-0-0/add-cypress-inputs",
+      "package": "@nrwl/cypress",
+      "name": "add-cypress-inputs"
+    },
+    {
+      "cli": "nx",
+      "version": "15.0.0-beta.4",
+      "description": "Update to using cy.mount in the commands.ts file instead of importing mount for each component test file",
+      "factory": "./src/migrations/update-15-0-0/update-cy-mount-usage",
+      "package": "@nrwl/cypress",
+      "name": "update-cy-mount-usage"
+    },
+    {
+      "cli": "nx",
+      "version": "15.1.0-beta.0",
+      "description": "Update to Cypress v11. This migration will only update if the workspace is already on v10. https://www.cypress.io/blog/2022/11/04/upcoming-changes-to-component-testing/",
+      "factory": "./src/migrations/update-15-1-0/cypress-11",
+      "package": "@nrwl/cypress",
+      "name": "update-to-cypress-11"
+    },
+    {
+      "version": "15.0.0-beta.0",
+      "cli": "nx",
+      "description": "Stop hashing jest spec files and config files for build targets and dependent tasks",
+      "factory": "./src/migrations/update-15-0-0/add-jest-inputs",
       "package": "@nrwl/jest",
-      "name": "add-missing-root-babel-config"
+      "name": "add-jest-inputs"
+    },
+    {
+      "cli": "nx",
+      "version": "15.0.0-beta.0",
+      "description": "Stop hashing eslint config files for build targets and dependent tasks",
+      "factory": "./src/migrations/update-15-0-0/add-eslint-inputs",
+      "package": "@nrwl/linter",
+      "name": "add-eslint-inputs"
+    },
+    {
+      "version": "14.8.0-beta.0",
+      "description": "Migrates from @nrwl/workspace:run-commands to nx:run-commands",
+      "cli": "nx",
+      "implementation": "./src/migrations/update-14-8-0/change-run-commands-executor",
+      "package": "@nrwl/workspace",
+      "name": "14-8-0-change-run-commands-executor"
     }
   ]
 }

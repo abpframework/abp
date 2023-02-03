@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal;
@@ -24,6 +25,10 @@ public abstract class AbpApplicationBase : IAbpApplication
 
     public IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
 
+    public string ApplicationName { get; }
+
+    public string InstanceId { get; } = Guid.NewGuid().ToString();
+
     private bool _configuredServices;
 
     internal AbpApplicationBase(
@@ -42,8 +47,15 @@ public abstract class AbpApplicationBase : IAbpApplication
         var options = new AbpApplicationCreationOptions(services);
         optionsAction?.Invoke(options);
 
+        ApplicationName = GetApplicationName(options);
+
         services.AddSingleton<IAbpApplication>(this);
+        services.AddSingleton<IApplicationInfoAccessor>(this);
         services.AddSingleton<IModuleContainer>(this);
+        services.AddSingleton<IAbpHostEnvironment>(new AbpHostEnvironment()
+        {
+            EnvironmentName = options.Environment
+        });
 
         services.AddCoreServices();
         services.AddCoreAbpServices(this, options);
@@ -142,7 +154,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     public virtual async Task ConfigureServicesAsync()
     {
         CheckMultipleConfigureServices();
-        
+
         var context = new ServiceConfigurationContext(Services);
         Services.AddSingleton(context);
 
@@ -217,6 +229,8 @@ public abstract class AbpApplicationBase : IAbpApplication
         }
 
         _configuredServices = true;
+
+        TryToSetEnvironment(Services);
     }
 
     private void CheckMultipleConfigureServices()
@@ -306,5 +320,42 @@ public abstract class AbpApplicationBase : IAbpApplication
         }
 
         _configuredServices = true;
+
+        TryToSetEnvironment(Services);
+    }
+
+    private static string GetApplicationName(AbpApplicationCreationOptions options)
+    {
+        if (!string.IsNullOrWhiteSpace(options.ApplicationName))
+        {
+            return options.ApplicationName;
+        }
+
+        var configuration = options.Services.GetConfigurationOrNull();
+        if (configuration != null)
+        {
+            var appNameConfig = configuration["ApplicationName"];
+            if (!string.IsNullOrWhiteSpace(appNameConfig))
+            {
+                return appNameConfig;
+            }
+        }
+
+        var entryAssembly = Assembly.GetEntryAssembly();
+        if (entryAssembly != null)
+        {
+            return entryAssembly.GetName().Name;
+        }
+
+        return null;
+    }
+
+    private static void TryToSetEnvironment(IServiceCollection services)
+    {
+        var abpHostEnvironment = services.GetSingletonInstance<IAbpHostEnvironment>();
+        if (abpHostEnvironment.EnvironmentName.IsNullOrWhiteSpace())
+        {
+            abpHostEnvironment.EnvironmentName = Environments.Production;
+        }
     }
 }

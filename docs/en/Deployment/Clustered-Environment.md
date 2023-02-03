@@ -63,7 +63,7 @@ The [Database BLOB provider](../Blob-Storing-Database) is the easiest way since 
 
 > [ABP Commercial](https://commercial.abp.io/) startup solution templates come with the database BLOB provider as pre-installed, and stores BLOBs in the application's database.
 
-Check the [BLOB Storing](../Blob-Storing.md) document to see all the available BLOG storage providers.
+Check the [BLOB Storing](../Blob-Storing.md) document to see all the available BLOB storage providers.
 
 ## Configuring Background Jobs
 
@@ -83,6 +83,16 @@ If you don't want to use a distributed lock provider, you may go with the follow
 ABP provides a distributed locking abstraction with an implementation made with the [DistributedLock](https://github.com/madelson/DistributedLock) library. A distributed lock is used to control concurrent access to a shared resource by multiple applications to prevent corruption of the resource because of concurrent writes. The ABP Framework and some pre-built [application modules](../Modules/Index.md) are using distributed locking for several reasons.
 
 However, the distributed lock system works in-process by default. That means it is not distributed actually, unless you configure a distributed lock provider. So, please follow the [distributed lock](../Distributed-Locking.md) document to configure a provider for your application, if it is not already configured.
+
+## Configuring SignalR
+
+ABP provides [SignalR](../SignalR-Integration.md) integration packages to simplify integration and usage. SignalR can be used whenever you need to add real-time web functionality (real-time messaging, real-time notification etc.) into your application. 
+
+SignalR requires that all HTTP requests for a specific connection be handled (needs to keep track of all its connections) by the same server process. So, when SignalR is running on a clustered environment (with multiple servers) **"sticky sessions"** must be used.
+
+If you are considering [scaling out](https://learn.microsoft.com/en-us/aspnet/core/signalr/scale?view=aspnetcore-6.0#scale-out) your servers and don't want to have inconsistency with the active socket connections, you can use [Azure SignalR Service](https://learn.microsoft.com/en-us/aspnet/core/signalr/scale?view=aspnetcore-6.0#azure-signalr-service) or [Redis backplane](https://learn.microsoft.com/en-us/aspnet/core/signalr/scale?view=aspnetcore-6.0#redis-backplane).
+
+> To learn more about how to host and scale SignalR in a clustered environment, please check the [ASP.NET Core SignalR hosting and scaling](https://learn.microsoft.com/en-us/aspnet/core/signalr/scale?view=aspnetcore-6.0).
 
 ## Implementing Background Workers
 

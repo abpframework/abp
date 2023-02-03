@@ -8,7 +8,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2020",
     "module": "esnext",
     "lib": ["es2017", "dom"],
     "baseUrl": "./",
@@ -43,7 +43,8 @@
       "@abp/ng.theme.basic/testing": ["packages/theme-basic/testing/src/public-api.ts"],
       "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
       "@abp/ng.theme.shared/extensions": ["packages/theme-shared/extensions/src/public-api.ts"],
-      "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"]
+      "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"],
+      "@abp/ng.oauth": ["packages/oauth/src/public-api.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

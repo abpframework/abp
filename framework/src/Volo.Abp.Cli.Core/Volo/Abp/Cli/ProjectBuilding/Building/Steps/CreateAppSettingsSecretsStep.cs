@@ -11,7 +11,7 @@ public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
     public override void Execute(ProjectBuildContext context)
     {
         var appSettingsFiles = context.Files
-            .Where(x => x.Name.EndsWith(CliConsts.AppSettingsJsonFileName) && NotBlazorWasmProject(x.Name))
+            .Where(x => x.Name.EndsWith(CliConsts.AppSettingsJsonFileName) && NotBlazorWasmProject(x.Name) && NotInDockerFiles(x.Name))
             .ToList();
 
         if (!appSettingsFiles.Any())
@@ -64,6 +64,11 @@ public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
     private static bool NotBlazorWasmProject(string fileName)
     {
         return !fileName.Contains("Blazor/wwwroot") && !fileName.Contains("Blazor.Host/wwwroot");
+    }
+
+    private static bool NotInDockerFiles(string fileName)
+    {
+        return !fileName.Contains("etc/docker/");
     }
 
     private static string ReplaceAppSettingsSecretsPlaceholder(string content)

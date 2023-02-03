@@ -5,6 +5,7 @@ import { validateRange } from './range.validator';
 import { validateRequired } from './required.validator';
 import { validateStringLength } from './string-length.validator';
 import { validateUrl } from './url.validator';
+import { validateUsername } from './username.validator';
 export * from './age.validator';
 export * from './credit-card.validator';
 export * from './range.validator';
@@ -20,4 +21,5 @@ export const AbpValidators = {
   required: validateRequired,
   stringLength: validateStringLength,
   url: validateUrl,
+  username: validateUsername,
 };

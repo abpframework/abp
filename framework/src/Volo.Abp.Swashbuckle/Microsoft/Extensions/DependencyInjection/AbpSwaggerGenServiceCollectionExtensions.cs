@@ -33,8 +33,13 @@ public static class AbpSwaggerGenServiceCollectionExtensions
         this IServiceCollection services,
         [NotNull] string authority,
         [NotNull] Dictionary<string, string> scopes,
-        Action<SwaggerGenOptions> setupAction = null)
+        Action<SwaggerGenOptions> setupAction = null,
+        string authorizationEndpoint = "/connect/authorize",
+        string tokenEndpoint = "/connect/token")
     {
+        var authorizationUrl = new Uri($"{authority.TrimEnd('/')}{authorizationEndpoint.EnsureStartsWith('/')}");
+        var tokenUrl = new Uri($"{authority.TrimEnd('/')}{tokenEndpoint.EnsureStartsWith('/')}");
+        
         return services
             .AddAbpSwaggerGen()
             .AddSwaggerGen(
@@ -47,9 +52,9 @@ public static class AbpSwaggerGenServiceCollectionExtensions
                         {
                             AuthorizationCode = new OpenApiOAuthFlow
                             {
-                                AuthorizationUrl = new Uri($"{authority.EnsureEndsWith('/')}connect/authorize"),
+                                AuthorizationUrl = authorizationUrl,
                                 Scopes = scopes,
-                                TokenUrl = new Uri($"{authority.EnsureEndsWith('/')}connect/token")
+                                TokenUrl = tokenUrl
                             }
                         }
                     });

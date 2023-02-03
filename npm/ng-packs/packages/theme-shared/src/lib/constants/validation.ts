@@ -17,4 +17,5 @@ export const DEFAULT_VALIDATION_BLUEPRINTS = {
   passwordRequiresUpper: 'AbpIdentity::Volo.Abp.Identity:PasswordRequiresUpper',
   passwordRequiresDigit: 'AbpIdentity::Volo.Abp.Identity:PasswordRequiresDigit',
   passwordRequiresNonAlphanumeric: 'AbpIdentity::Volo.Abp.Identity:PasswordRequiresNonAlphanumeric',
+  usernamePattern: 'AbpIdentity::Volo.Abp.Identity:InvalidUserName[{{ actualValue }}]',
 };

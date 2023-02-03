@@ -35,55 +35,63 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
         {
             return;
         }
+        
+        if (context.BuildArgs.Theme != Theme.NotSpecified)
+        {
+            context.Symbols.Add(context.BuildArgs.Theme.Value.ToString().ToUpper());
+        }
 
         if (context.BuildArgs.Theme == Theme.LeptonX)
         {
-            context.Symbols.Add("LEPTONX");
             steps.Add(new ChangeThemeStyleStep());
             return;
         }
 
         steps.Add(new ChangeThemeStep());
-        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps);
+        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, uiFramework: context.BuildArgs.UiFramework);
     }
 
-    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps)
+    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, UiFramework uiFramework)
     {
+        var mvcUiPackageName = "@volo/abp.aspnetcore.mvc.ui.theme.leptonx";
         var packageJsonFilePaths = new List<string> 
         {
             "/MyCompanyName.MyProjectName.AuthServer/package.json",
             "/MyCompanyName.MyProjectName.Web/package.json"
         };
 
-        var blazorServerPackageJsonFilePaths = new List<string> 
-        {
-            "/MyCompanyName.MyProjectName.Blazor.Server/package.json"
-        };
-
-        var angularPackageJsonFilePaths = new List<string> 
-        {
-            "/angular/package.json"
-        };
-
-        var mvcUiPackageName = "@volo/abp.aspnetcore.mvc.ui.theme.leptonx";
-        var blazorServerUiPackageName = "@volo/aspnetcore.components.server.leptonxtheme";
-        var ngUiPackageName = "@volosoft/abp.ng.theme.lepton-x";
-
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
             steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
         }
 
-        foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
+        if (uiFramework == UiFramework.BlazorServer)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
+            var blazorServerUiPackageName = "@volo/aspnetcore.components.server.leptonxtheme";
+            var blazorServerPackageJsonFilePaths = new List<string> 
+            {
+                "/MyCompanyName.MyProjectName.Blazor/package.json"
+            };
+            
+            foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
+            }
         }
-
-        foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
+        else if (uiFramework == UiFramework.Angular)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+            var ngUiPackageName = "@volosoft/abp.ng.theme.lepton-x";
+            var angularPackageJsonFilePaths = new List<string> 
+            {
+                "/angular/package.json"
+            };
+            
+            foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+            }
         }
     }
 
@@ -130,6 +138,8 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                 steps.Add(new RemoveFolderStep("/apps/blazor"));
                 steps.Add(new RemoveProjectFromTyeStep("blazor"));
                 steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
+                
+                context.Symbols.Add("ui:angular");
                 break;
 
             case UiFramework.Blazor:
@@ -147,7 +157,8 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                     null,
                     "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
-
+                
+                context.Symbols.Add("ui:blazor");
                 break;
 
             case UiFramework.BlazorServer:
@@ -169,7 +180,8 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                 steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server",
                     "MyCompanyName.MyProjectName.Blazor"));
                 steps.Add(new RenameProjectInTyeStep("blazor-server", "blazor"));
-
+                
+                context.Symbols.Add("ui:blazor-server");
                 break;
 
             case UiFramework.Mvc:
@@ -186,6 +198,8 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                 steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
 
                 steps.Add(new RemoveFolderStep("/apps/angular"));
+                
+                context.Symbols.Add("ui:mvc");
                 break;
         }
 

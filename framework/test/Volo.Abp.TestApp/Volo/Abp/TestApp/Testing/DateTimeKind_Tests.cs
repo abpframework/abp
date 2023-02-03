@@ -41,5 +41,8 @@ public abstract class DateTimeKind_Tests<TStartupModule> : TestAppTestBase<TStar
         person.LastActive.ShouldNotBeNull();
         person.LastActive.Value.Kind.ShouldBe(DateTimeKind.Unspecified);
         person.LastActive.Value.ToString("yyy-MM-dd HH:mm:ss").ShouldBe("2020-01-01 00:00:00");
+
+        //NotMappedDateTime [NotMappedAttribute]
+        person.NotMappedDateTime.ShouldBeNull();
     }
 }

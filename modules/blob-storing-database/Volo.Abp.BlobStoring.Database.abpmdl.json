@@ -15,12 +15,16 @@
     }
   },
   "packages": {
-    "Volo.Abp.BlobStoring.Database.Domain.Shared": {
-      "path": "src/Volo.Abp.BlobStoring.Database.Domain.Shared/Volo.Abp.BlobStoring.Database.Domain.Shared.abppkg.json",
-      "folder": "src"
-    },
+    "BlobStoring.Database.Host.ConsoleApp.ConsoleApp": {
+      "path": "host/BlobStoring.Database.Host.ConsoleApp/src/BlobStoring.Database.Host.ConsoleApp.ConsoleApp/BlobStoring.Database.Host.ConsoleApp.ConsoleApp.abppkg.json",
+      "folder": "host/BlobStoring.Database.Host.ConsoleApp/src"
+    }i
     "Volo.Abp.BlobStoring.Database.Domain": {
       "path": "src/Volo.Abp.BlobStoring.Database.Domain/Volo.Abp.BlobStoring.Database.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Database.Domain.Shared": {
+      "path": "src/Volo.Abp.BlobStoring.Database.Domain.Shared/Volo.Abp.BlobStoring.Database.Domain.Shared.abppkg.json",
       "folder": "src"
     },
     "Volo.Abp.BlobStoring.Database.EntityFrameworkCore": {
@@ -46,14 +50,6 @@
     "Volo.Abp.BlobStoring.Database.Domain.Tests": {
       "path": "test/Volo.Abp.BlobStoring.Database.Domain.Tests/Volo.Abp.BlobStoring.Database.Domain.Tests.abppkg.json",
       "folder": "test"
-    },
-    "BlobStoring.Database.Host.ConsoleApp.ConsoleApp": {
-      "path": "host/BlobStoring.Database.Host.ConsoleApp/src/BlobStoring.Database.Host.ConsoleApp.ConsoleApp/BlobStoring.Database.Host.ConsoleApp.ConsoleApp.abppkg.json",
-      "folder": "host/BlobStoring.Database.Host.ConsoleApp/src"
-    },
-    "Volo.Abp.BlobStoring.Database.Installer": {
-      "path": "src/Volo.Abp.BlobStoring.Database.Installer/Volo.Abp.BlobStoring.Database.Installer.abppkg.json",
-      "folder": "src"
     }
   }
 }

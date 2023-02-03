@@ -1,7 +1,7 @@
 import { ProfileService } from '@abp/ng.account.core/proxy';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { comparePasswords, Validation } from '@ngx-validate/core';
 import { finalize } from 'rxjs/operators';
 import { Account } from '../../models/account';
@@ -19,7 +19,7 @@ const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 export class ChangePasswordComponent
   implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs
 {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   inProgress: boolean;
 
@@ -32,7 +32,7 @@ export class ChangePasswordComponent
   };
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private injector: Injector,
     private toasterService: ToasterService,
     private profileService: ProfileService,
@@ -86,7 +86,7 @@ export class ChangePasswordComponent
 
           if (this.hideCurrentPassword) {
             this.hideCurrentPassword = false;
-            this.form.addControl('password', new FormControl('', [required]));
+            this.form.addControl('password', new UntypedFormControl('', [required]));
           }
         },
         error: err => {

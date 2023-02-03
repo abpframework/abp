@@ -24,6 +24,17 @@
       "description": "ABP API Generator Schematics",
       "factory": "./commands/api",
       "schema": "./commands/api/schema.json"
+    },
+    "create-lib": {
+      "description": "ABP Create Library Schematics",
+      "factory": "./commands/create-lib",
+      "schema": "./commands/create-lib/schema.json"
+    },
+    "change-theme": {
+      "description": "ABP Change Styles of Theme Schematics",
+      "factory": "./commands/change-theme",
+      "schema": "./commands/change-theme/schema.json"
+
     }
   }
 }

@@ -1,6 +1,7 @@
 ﻿@page
 
 @using Volo.Abp.Data
+@using Volo.Abp.Users;
 @using Volo.CmsKit.Public.Blogs
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
 @using Volo.CmsKit.Public.Web.Pages
@@ -9,7 +10,7 @@
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
-@using Volo.CmsKit.Public.Web.Renderers
+@using Volo.CmsKit.Web.Renderers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
 @using Volo.CmsKit.Contents
 
@@ -17,11 +18,11 @@
 
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs.BlogPostModel
 
+@inject ICurrentUser CurrentUser
 @inject IMarkdownToHtmlRenderer MarkdownRenderer
 
-
 @{
-    string dummyImageSource = "https://dummyimage.com/1280x720/a3a3a3/fff.png?text=" + Model.BlogPost.Title;
+    string dummyImageSource = "https://dummyimage.com/1280x720/a3a3a3/fff.png?text=" + Model.ViewModel.Title;
     var isScrollIndexEnabled = GlobalFeatureManager.Instance.IsEnabled<BlogPostScrollIndexFeature>() && Model.BlogPostScrollIndexFeature?.IsEnabled == true;
 }
 
@@ -50,29 +51,30 @@
     <abp-script-bundle>
         <abp-script type="typeof(HighlightJsScriptContributor)" />
         <abp-script src="/Pages/Public/CmsKit/highlightOnLoad.js" />
+        <abp-script src="/Pages/Public/CmsKit/Blogs/blogPost.js" />
     </abp-script-bundle>
 }
-
 
     <div class="row">
         <div @Html.Raw(isScrollIndexEnabled ? "class=\"col-md-10 col-sm-12\"" : "class=\"col-md-12\"")>
             <abp-card class="mb-4">
-                <img src="/api/cms-kit/media/@Model.BlogPost.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
+                <img src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
+                <input hidden id="BlogId" value="@Model.ViewModel.Id" />
                 <abp-card-body>
                     <abp-row>
                         <div class="col-lg-8 col-md-10 mx-auto pb-4">
-                            <h1 class="mt-lg-4 mt-md-3">@Model.BlogPost.Title</h1>
+                            <h1 class="mt-lg-4 mt-md-3">@Model.ViewModel.Title</h1>
                             <p class="mb-lg-5 mb-md-3">
-                                <a href="/blogs/@Model.BlogSlug?authorId=@Model.BlogPost.Author.Id">
-                                    <span class="font-weight-bold">@@@Model.BlogPost.Author?.UserName</span>
+                                <a href="/blogs/@Model.BlogSlug?authorId=@Model.ViewModel.Author.Id">
+                                    <span class="font-weight-bold">@@@Model.ViewModel.Author?.UserName</span>
                                 </a>
-                                <small style="opacity:.65;">@Model.BlogPost.CreationTime</small>
+                                <small style="opacity:.65;">@Model.ViewModel.CreationTime</small>
                             </p>
-                            @foreach (var contentFragment in Model.BlogPost.ContentFragments)
+                            @foreach (var contentFragment in Model.ViewModel.ContentFragments)
                             {
                                 if (contentFragment.Type == ContentConsts.Markdown)
                                 {
-                                    @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
+                                    @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content"), allowHtmlTags: true, preventXSS: true))
                                 }
                                 else if (contentFragment.Type == ContentConsts.Widget)
                                 {
@@ -80,9 +82,9 @@
                                 }
                             }
                             <p class="mb-3">
-                                @if (Model.BlogPost.LastModificationTime != null)
+                                @if (Model.ViewModel.LastModificationTime != null)
                                 {
-                                    <small style="opacity:.65;">@L["LastModification"].Value : @Model.BlogPost.LastModificationTime</small>
+                                    <small style="opacity:.65;">@L["LastModification"].Value : @Model.ViewModel.LastModificationTime</small>
                                 }
                             </p>
                             <hr />
@@ -92,13 +94,13 @@
                                 if (Model.TagsFeature?.IsEnabled == true)
                                 {
                                     @await Component.InvokeAsync(typeof(TagViewComponent), new
-                            {
-                            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                            entityId = Model.BlogPost.Id.ToString(),
-                            urlFormat = $"/blogs/{Model.BlogSlug}?tagId={{TagId}}"
-                            })
+                                    {
+                                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                                        entityId = Model.ViewModel.Id.ToString(),
+                                        urlFormat = $"/blogs/{Model.BlogSlug}?tagId={{TagId}}"
+                                    })
+                                }
                             }
-                        }
                     </div>
                 </abp-row>
 
@@ -109,10 +111,10 @@
                             if (Model.ReactionsFeature?.IsEnabled == true)
                             {
                                 @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
-                        {
-                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                        entityId = Model.BlogPost.Id.ToString()
-                        })
+                                {
+                                    entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                                    entityId = Model.ViewModel.Id.ToString()
+                                })
                             }
                         }
                     </abp-column>
@@ -122,10 +124,10 @@
                             if (Model.RatingsFeature?.IsEnabled == true)
                             {
                                 @await Component.InvokeAsync(typeof(RatingViewComponent), new
-                        {
-                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                        entityId = Model.BlogPost.Id.ToString()
-                        })
+                                {
+                                    entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                                    entityId = Model.ViewModel.Id.ToString()
+                                })
                             }
                         }
                     </abp-column>
@@ -133,24 +135,33 @@
             </abp-card-body>
         </abp-card>
     </div>
-    @if (isScrollIndexEnabled)
-    {
-        <div class="col-md-2 d-sm-none d-md-block">
-            <div id="scroll-index" class="docs-inner-anchors mt-2">
-                <h5>@L["InThisDocument"]</h5>
-                <nav id="blog-post-sticky-index" class="navbar index-scroll pt-0">
-                </nav>
 
-                <div class="row">
-                    <div class="col p-0 py-3">
-                        <a href="#" class="scroll-top-btn">
-                            <i class="fa fa-chevron-up"></i> @L["GoToTop"]
-                        </a>
+    <div class="col-md-2 d-sm-none d-md-block">
+        @if (Model.ViewModel.Author.Id == CurrentUser.Id)
+        {
+            <button id="deleteBlogPost" class="btn btn-danger">
+                <i class="fa fa-remove">
+                    @L["Delete"]
+                </i>
+            </button>
+        }
+        @if (isScrollIndexEnabled)
+        {
+                <div id="scroll-index" class="docs-inner-anchors mt-2">
+                    <h5>@L["InThisDocument"]</h5>
+                    <nav id="blog-post-sticky-index" class="navbar index-scroll pt-0">
+                    </nav>
+
+                    <div class="row">
+                        <div class="col p-0 py-3">
+                            <a href="#" class="scroll-top-btn">
+                                <i class="fa fa-chevron-up"></i> @L["GoToTop"]
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    }
+        }
+    </div>
 
 </div>
 
@@ -161,7 +172,7 @@
         @await Component.InvokeAsync(typeof(DefaultBlogPostCommentViewComponent), new
         {
             entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-            entityId = Model.BlogPost.Id.ToString()
+            entityId = Model.ViewModel.Id.ToString()
         })
     }
 }

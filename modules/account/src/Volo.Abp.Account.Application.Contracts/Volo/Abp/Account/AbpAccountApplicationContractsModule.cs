@@ -3,6 +3,9 @@ using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.Threading;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
@@ -13,6 +16,8 @@ namespace Volo.Abp.Account;
 )]
 public class AbpAccountApplicationContractsModule : AbpModule
 {
+    private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
+    
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
@@ -31,6 +36,19 @@ public class AbpAccountApplicationContractsModule : AbpModule
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace("Volo.Account", typeof(AccountResource));
+        });
+    }
+    
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        OneTimeRunner.Run(() =>
+        {
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToApi(
+                IdentityModuleExtensionConsts.ModuleName,
+                IdentityModuleExtensionConsts.EntityNames.User,
+                getApiTypes: new[] { typeof(ProfileDto) },
+                updateApiTypes: new[] { typeof(UpdateProfileDto) }
+            );
         });
     }
 }

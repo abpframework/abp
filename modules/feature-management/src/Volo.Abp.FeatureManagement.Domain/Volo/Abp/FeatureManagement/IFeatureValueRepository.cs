@@ -24,4 +24,9 @@ public interface IFeatureValueRepository : IBasicRepository<FeatureValue, Guid>
         string providerName,
         string providerKey,
         CancellationToken cancellationToken = default);
+
+    Task DeleteAsync(
+        string providerName,
+        string providerKey,
+        CancellationToken cancellationToken = default);
 }

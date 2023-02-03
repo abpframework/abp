@@ -22,6 +22,7 @@ import {
 } from './type';
 import { eBindingSourceId } from '../enums';
 import { camelizeHyphen } from './text';
+import {VOLO_REMOTE_STREAM_CONTENT} from "../constants";
 
 export function serializeParameters(parameters: Property[]) {
   return parameters.map(p => p.name + p.optional + ': ' + p.type + p.default, '').join(', ');
@@ -38,7 +39,8 @@ export function createControllerToServiceMapper({
     const name = controller.controllerName;
     const namespace = parseNamespace(solution, controller.type);
     const actions = Object.values(controller.actions);
-    const imports = actions.reduce(createActionToImportsReducer(solution, types, namespace), []);
+    const typeWithoutIRemoteStreamContent =  getTypesWithoutIRemoteStreamContent(types)
+    const imports = actions.reduce(createActionToImportsReducer(solution, typeWithoutIRemoteStreamContent, namespace), []);
     imports.push(new Import({ path: '@abp/ng.core', specifiers: ['RestService'] }));
     imports.push(new Import({ path: '@angular/core', specifiers: ['Injectable'] }));
     sortImports(imports);
@@ -48,6 +50,11 @@ export function createControllerToServiceMapper({
   };
 }
 
+function getTypesWithoutIRemoteStreamContent(types: Record<string, Type>) {
+  const newType = {...types}
+  delete newType[VOLO_REMOTE_STREAM_CONTENT]
+  return newType
+}
 function sortMethods(methods: Method[]) {
   methods.sort((a, b) => (a.signature.name > b.signature.name ? 1 : -1));
 }
@@ -68,7 +75,8 @@ export function createActionToBodyMapper() {
 
   return ({ httpMethod, parameters, returnValue, url }: Action) => {
     const responseType = adaptType(returnValue.typeSimple);
-    const body = new Body({ method: httpMethod, responseType, url });
+    const responseTypeWithNamespace = returnValue.typeSimple;
+    const body = new Body({ method: httpMethod, responseType, url ,responseTypeWithNamespace});
 
     parameters.forEach(body.registerActionParameter);
 

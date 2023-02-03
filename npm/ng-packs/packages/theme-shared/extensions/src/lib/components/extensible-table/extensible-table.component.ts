@@ -11,6 +11,7 @@ import { formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Inject,
   InjectFlags,
   InjectionToken,
@@ -18,6 +19,7 @@ import {
   Input,
   LOCALE_ID,
   OnChanges,
+  Output,
   SimpleChanges,
   TemplateRef,
   TrackByFunction,
@@ -62,6 +64,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     this.setColumnWidths(width ? Number(width) : undefined);
   }
   @Input() actionsTemplate: TemplateRef<any>;
+
+  @Output() tableActivate = new EventEmitter();
 
   getInjected: <T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags) => T;
 
@@ -158,15 +162,15 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
           value,
         };
         if (prop.value.component) {
-          const injector = Injector.create(
-            [
+          const injector = Injector.create({
+            providers: [
               {
                 provide: PROP_DATA_STREAM,
                 useValue: value,
               },
             ],
-            this.injector,
-          );
+            parent: this.injector,
+          });
           record[propKey].injector = injector;
           record[propKey].component = prop.value.component;
         }

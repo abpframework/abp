@@ -19,9 +19,9 @@
 
 开发计算机上应安装以下工具:
 
-* 一个集成开发环境 (比如: [Visual Studio](https://visualstudio.microsoft.com/vs/)) 它需要支持 [.NET 6.0+](https://dotnet.microsoft.com/download/dotnet) 的开发.
+* 一个集成开发环境 (比如: [Visual Studio](https://visualstudio.microsoft.com/vs/)) 它需要支持 [.NET 7.0+](https://dotnet.microsoft.com/download/dotnet) 的开发.
 {{ if UI != "Blazor" }}
-* [Node v12 或 v14](https://nodejs.org/)
+* [Node v16 或 v18](https://nodejs.org/)
 * [Yarn v1.20+ (不是v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[1](#f-yarn)</sup> 或 npm v6+ (已跟随Node一起安装)
 {{ end }}
 {{ if Tiered == "Yes" }}

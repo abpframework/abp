@@ -61,6 +61,10 @@
         {
           "text": "WPF",
           "path": "Startup-Templates/WPF.md"
+        },
+        {
+          "text": "MAUI",
+          "path": "Startup-Templates/MAUI.md"
         }
       ]
     },
