@@ -46,6 +46,7 @@ public class EntityChange : Entity<Guid>, IMultiTenant, IHasExtraProperties
         TenantId = tenantId;
         ChangeTime = entityChangeInfo.ChangeTime;
         ChangeType = entityChangeInfo.ChangeType;
+        EntityTenantId = entityChangeInfo.EntityTenantId;
         EntityId = entityChangeInfo.EntityId.Truncate(EntityChangeConsts.MaxEntityTypeFullNameLength);
         EntityTypeFullName = entityChangeInfo.EntityTypeFullName.TruncateFromBeginning(EntityChangeConsts.MaxEntityTypeFullNameLength);
 
