@@ -2,6 +2,12 @@
 
 In this document we will explain how to convert BookStore's `Books` create & edit modals to regular razor pages.
 
+## Before
+![before](images/old.gif)
+
+## Now
+![after](images/new.gif)
+
 ## Index page
 
 Repalce `abp-button(NewBookButton)` buttom with `<a class="btn btn-primary" href="/Books/CreateModal"><i class="fa fa-plus"></i> @L["NewBook"].Value</a>`.
