@@ -58,7 +58,6 @@ public class CmsKitPublicMenuContributor : IMenuContributor
             menuItem.Url,
             menuItem.Icon,
             menuItem.Order,
-            customData: null,
             menuItem.Target,
             menuItem.ElementId,
             menuItem.CssClass
