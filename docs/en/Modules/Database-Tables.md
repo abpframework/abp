@@ -1,6 +1,6 @@
 # Database Tables
 
-This documentation describes all database tables and their purposes. You can read this documentation to get an overall knowledge of the database tables that comes from different modules.
+This documentation describes all database tables and their purposes. You can read this documentation to get general knowledge of the database tables that come from each module.
 
 ## [Audit Logging Module](Audit-Logging.md)
 
@@ -42,7 +42,7 @@ This table stores information about property changes to entities in the applicat
 
 ### AbpBackgroundJobs
 
-This table stores information about the background jobs in the application and facilitates their efficient management and tracking. Each entry in the table contains details of a background job, including job name, arguments, try count, next try time, last try time, abandoned status, and priority.
+This table stores information about the background jobs in the application and facilitates their efficient management and tracking. Each entry in the table contains details of a background job, including the job name, arguments, try count, next try time, last try time, abandoned status, and priority.
 
 ## [Tenant Management Module](Tenant-Management.md)
 
@@ -81,7 +81,7 @@ This table stores information about the blog posts. You can query this table to 
 | [BlgBlogs](#blgblogs) | Id | To associate the blog post with the corresponding blog. |
 ### BlgComments
 
-This table stores information about comments made on blog posts. You can query this table to get comments by posts.
+This table stores information about the comments made on blog posts. You can query this table to get comments by posts.
 #### Foreign Keys
 
 | Table | Column | Description |
@@ -108,7 +108,7 @@ This table is used to associate tags with blog posts in order to categorize and 
 
 ### CmsUsers
 
-This table stores information about the cms kit module users. When a new identity user is created, a new record will be added to this table.
+This table stores information about the CMS Kit module users. When a new identity user is created, a new record will be added to this table.
 
 ### CmsBlogs
 
@@ -130,7 +130,7 @@ This table stores information about the blog features. You can query this table 
 
 ### CmsComments
 
-This table is utilized by the [CMS Kit Comment system](Cms-Kit/Comments.md) to store comments made on blog posts. You can query this table to get comments by posts.
+This table is utilized by the [CMS Kit Comment system](Cms-Kit/Comments.md) to store comments made on the blog posts. You can query this table to get comments by posts.
 
 ### CmsTags
 
@@ -142,7 +142,7 @@ This table is utilized by the [Tag Management system](Cms-Kit/Tags.md) to store 
 
 ### CmsGlobalResources
 
-This table is a database table for the [CMS Kit Global Resources system](Cms-Kit/Global-Resources.md), allowing for dynamic addition of global styles and scripts.
+This table is a database table for the [CMS Kit Global Resources system](Cms-Kit/Global-Resources.md), allowing dynamic addition of global styles and scripts.
 
 ### CmsMediaDescriptors
 
@@ -150,7 +150,7 @@ This table is utilized by the CMS kit module to manage media files by using the 
 
 ### CmsMenuItems
 
-This table is used by the [CMS Kit Menu system](Cms-Kit/Menus.md) to manage and store information about dynamic public menus, including details such as menu item display names, url, and hierarchical relationships.
+This table is used by the [CMS Kit Menu system](Cms-Kit/Menus.md) to manage and store information about dynamic public menus, including details such as menu item display names, URLs, and hierarchical relationships.
 
 ### CmsPages
 
@@ -172,7 +172,7 @@ This table stores project information to categorize documents according to diffe
 
 ### DocsDocuments
 
-This table is used to retrieve the document if it's not found in the cache. When the documentation content retrieved from the database, it is also being updated.
+This table retrieves the document if it's not found in the cache. The documentation is being updated when the content is retrieved from the database.
 
 ### DocsDocumentContributors
 
@@ -218,7 +218,7 @@ This table is useful for linking multiple user accounts across different tenants
 
 ### AbpUserClaims
 
-This table can be used to manage user-based access control by allowing to assign claims to users, which describe the access rights of the individual user.
+This table can manage user-based access control by allowing to assign claims to users, which describes the access rights of the individual user.
 
 #### Foreign Keys
 
@@ -228,7 +228,7 @@ This table can be used to manage user-based access control by allowing to assign
 
 ### AbpUserLogins
 
-This table can be used to store information about user's external logins such as login with facebook, google, etc and also it can be used to track login history of users.
+This table can store information about the user's external logins such as login with Facebook, Google, etc. and it can also be used to track the login history of users.
 
 #### Foreign Keys
 
@@ -238,7 +238,7 @@ This table can be used to store information about user's external logins such as
 
 ### AbpUserRoles
 
-This table can be used to manage user-based access control by allowing to assign roles to users, which describe the access rights of the individual user.
+This table can manage user-based access control by allowing to assign roles to users, which describe the access rights of the individual user.
 
 #### Foreign Keys
 
@@ -249,7 +249,7 @@ This table can be used to manage user-based access control by allowing to assign
 
 ### AbpUserTokens
 
-This table can be used to store information about user's refresh tokens, access tokens and other tokens used in the application. It can also be used to invalidate or revoke user tokens.
+This table can store information about user's refresh tokens, access tokens and other tokens used in the application. It can also be used to invalidate or revoke user tokens.
 
 #### Foreign Keys
 
@@ -280,7 +280,7 @@ This table is useful for managing role-based access control at the level of orga
 
 ### AbpUserOrganizationUnits
 
-This table stores information about the organization units assigned to users in the application. This table can be used to manage user-organization unit relationships, and to group users based on the organization structure.
+This table stores information about the organization units assigned to the users in the application. This table can manage user-organization unit relationships, and to group users based on the organization structure.
 
 #### Foreign Keys
 
@@ -291,7 +291,7 @@ This table stores information about the organization units assigned to users in 
 
 ### AbpRoleClaims
 
-This table is useful for managing role-based access control by allowing to assign claims to roles, which describe the access rights of the users that belong to that role.
+This table is useful for managing role-based access control by allowing to assign claims to roles, which describes the access rights of the users that belong to that role.
 
 #### Foreign Keys
 
@@ -301,7 +301,7 @@ This table is useful for managing role-based access control by allowing to assig
 
 ### AbpSecurityLogs
 
-This table is used to log important operations and changes related to user accounts, allowing users to save the security logs for future reference.
+This table logs important operations and changes related to user accounts, allowing users to save the security logs for future reference.
 
 ## [Permission Management](Permission-Management.md)
 
@@ -315,19 +315,19 @@ This table is important for managing and controlling access to different parts o
 
 ### AbpPermissionGrants
 
-The table is used to store and manage the permissions in the application and to keep track of permissions that are granted, to whom and when. The columns such as `Name`, `ProviderName`, `ProviderKey`, `TenantId` can be used to filter the granted permissions by name, provider name, provider key, and tenant id respectively, so that you can easily manage and track the granted permissions in the application. 
+The table stores and manage the permissions in the application and to keep track of permissions that are granted, to whom and when. Columns such as `Name`, `ProviderName`, `ProviderKey`, `TenantId` can be used to filter the granted permissions by name, provider name, provider key, and tenant id respectively, so that you can easily manage and track the granted permissions in the application. 
 
 ## [Setting Management](Setting-Management.md)
 
 ### AbpSettings
 
-This table table is used to store key-value pairs of settings for the application, and it allows for the dynamic configuration of the application without the need for recompilation.
+This table stores key-value pairs of settings for the application, and it allows dynamic configuration of the application without the need for recompilation.
 
 ## [OpenIddict](OpenIddict.md)
 
 ### OpenIddictApplications
 
-This table can be used to store information about OpenID Connect applications, including the client id, client secret, redirect uri, and other relevant information. It can also be used to authenticate and authorize clients using OpenID Connect protocol.
+This table can store information about the OpenID Connect applications, including the client id, client secret, redirect URI, and other relevant information. It can also be used to authenticate and authorize clients using OpenID Connect protocol.
 
 ### OpenIddictAuthorizations
 
@@ -341,7 +341,7 @@ This table stores the OpenID Connect authorization data in the application. It c
 
 ### OpenIddictTokens
 
-This table can be used to store information about OpenID Connect tokens, including the token payload, expiration, type, and other relevant information. It can also be used to manage and validate the tokens issued to clients and users, such as access tokens and refresh tokens, and to control access to protected resources.
+This table can store information about the OpenID Connect tokens, including the token payload, expiration, type, and other relevant information. It can also be used to manage and validate the tokens issued to clients and users, such as access tokens and refresh tokens, and to control access to protected resources.
 
 #### Foreign Keys
 
@@ -352,29 +352,29 @@ This table can be used to store information about OpenID Connect tokens, includi
 
 ### OpenIddictScopes
 
-This table can be used to store information about OpenID Connect scopes, including the name and description of the scope. It can also be used to define the permissions or access rights associated with the scopes, which are then used to control access to protected resources.
+This table can store information about the OpenID Connect scopes, including the name and description of the scope. It can also be used to define the permissions or access rights associated with the scopes, which are then used to control access to protected resources.
 
 ## [IdentityServer](IdentityServer.md)
 
 ### IdentityServerApiResources
 
-This table can be used to store information about API resources, including the resource name, display name, description, and other relevant information. It can also be used to define the scopes, claims, and properties associated with the API resources, which are then used to control access to protected resources.
+This table can store information about the API resources, including the resource name, display name, description, and other relevant information. It can also be used to define the scopes, claims, and properties associated with the API resources, which are then used to control access to protected resources.
 
 ### IdentityServerIdentityResources
 
-This table can be used to store information about identity resources, including the name, display name, description, and enabled status.
+This table can store information about the identity resources, including the name, display name, description, and enabled status.
 
 ### IdentityServerClients
 
-This table can be used to store information about clients, including the client id, client name, client uri and other relevant information. It can also be used to define the scopes, claims, and properties associated with the clients, which are then used to control access to protected resources.
+This table can store information about the clients, including the client id, client name, client URI and other relevant information. It can also be used to define the scopes, claims, and properties associated with the clients, which are then used to control access to protected resources.
 
 ### IdentityServerApiScopes
 
-This table can be used to store information about API scopes, including the scope name, display name, description, and other relevant information. It can also be used to define the claims and properties associated with the API scopes, which are then used to control access to protected resources.
+This table can store information about the API scopes, including the scope name, display name, description, and other relevant information. It can also be used to define the claims and properties associated with the API scopes, which are then used to control access to protected resources.
 
 ### IdentityServerApiResourceClaims
 
-This table can be used to store information about claims of an API resource, including the claim type and API resource id.
+This table can store information about the claims of an API resource, including the claim type and API resource id.
 
 #### Foreign Keys
 
@@ -384,7 +384,7 @@ This table can be used to store information about claims of an API resource, inc
 
 ### IdentityServerIdentityResourceClaims
 
-This table can be used to store information about claims of an identity resource, including the claim type and identity resource id.
+This table can store information about the claims of an identity resource, including the claim type and identity resource id.
 
 #### Foreign Keys
 
@@ -394,7 +394,7 @@ This table can be used to store information about claims of an identity resource
 
 ### IdentityServerClientClaims
 
-This table can be used to store information about claims of a client, including the claim type, claim value and client id.
+This table can store information about the claims of a client, including the claim type, claim value and client id.
 
 #### Foreign Keys
 
@@ -404,7 +404,7 @@ This table can be used to store information about claims of a client, including 
 
 ### IdentityServerApiScopeClaims
 
-This table can be used to store information about claims of an API scope, including the claim type and API scope id.
+This table can store information about the claims of an API scope, including the claim type and API scope id.
 
 #### Foreign Keys
 
@@ -414,7 +414,7 @@ This table can be used to store information about claims of an API scope, includ
 
 ### IdentityServerApiResourceProperties
 
-This table can be used to store information about properties, including the property key and value, and the associated API resource. These properties can be used to store additional metadata or configuration information related to the API resources.
+This table can store information about properties, including the property key and value, and the associated API resource. These properties can store additional metadata or configuration information related to the API resources.
 
 #### Foreign Keys
 
@@ -424,7 +424,7 @@ This table can be used to store information about properties, including the prop
 
 ### IdentityServerIdentityResourceProperties
 
-This table can be used to store information about properties, including the property key and value, and the associated identity resource. These properties can be used to store additional metadata or configuration information related to the identity resources.
+This table can store information about properties, including the property key and value, and the associated identity resource. These properties can store additional metadata or configuration information related to the identity resources.
 
 #### Foreign Keys
 
@@ -434,7 +434,7 @@ This table can be used to store information about properties, including the prop
 
 ### IdentityServerClientProperties
 
-This table can be used to store information about properties of a client, including the key, value and client id. These properties can be used to store additional metadata or configuration information related to the clients.
+This table can be store information about the properties of a client, including the key, value and client id. These properties can store additional metadata or configuration information related to the clients.
 
 #### Foreign Keys
 
@@ -444,7 +444,7 @@ This table can be used to store information about properties of a client, includ
 
 ### IdentityServerApiScopeProperties
 
-This table can be used to store information about properties of an API scope, including the key, value and API scope id. These properties can be used to store additional metadata or configuration information related to the API scopes.
+This table can store information about the properties of an API scope, including the key, value and API scope id. These properties can store additional metadata or configuration information related to the API scopes.
 
 #### Foreign Keys
 
@@ -454,7 +454,7 @@ This table can be used to store information about properties of an API scope, in
 
 ### IdentityServerApiResourceScopes
 
-This table can be used to store information about scopes of an API resource, including the scope name and API resource id.
+This table can store information about the scopes of an API resource, including the scope name and API resource id.
 
 #### Foreign Keys
 
@@ -464,7 +464,7 @@ This table can be used to store information about scopes of an API resource, inc
 
 ### IdentityServerClientScopes
 
- This table can be used to store information about scopes of a client, including the scope and client id.
+ This table can store information about the scopes of a client, including the scope and client id.
 
 #### Foreign Keys
 
@@ -474,7 +474,7 @@ This table can be used to store information about scopes of an API resource, inc
 
 ### IdentityServerApiResourceSecrets
 
-This table can be used to store information about secrets of an API resource, including the secret value, expiration date, and API resource id.
+This table can store information about the secrets of an API resource, including the secret value, expiration date, and API resource id.
 
 #### Foreign Keys
 
@@ -484,7 +484,7 @@ This table can be used to store information about secrets of an API resource, in
 
 ### IdentityServerClientSecrets
 
-This table can be used to store information about secrets of a client, including the secret value, expiration date, and client id.
+This table can store information about the secrets of a client, including the secret value, expiration date, and client id.
 
 #### Foreign Keys
 
@@ -494,7 +494,7 @@ This table can be used to store information about secrets of a client, including
 
 ### IdentityServerClientCorsOrigins
 
-This table can be used to store information about CORS origins of a client, including the origin and client id. It can also be used to manage and validate the CORS origins of a client.
+This table can store information about the CORS origins of a client, including the origin and client id. It can also be used to manage and validate the CORS origins of a client.
 
 #### Foreign Keys
 
@@ -504,7 +504,7 @@ This table can be used to store information about CORS origins of a client, incl
 
 ### IdentityServerClientGrantTypes
 
-This table can be used to store information about grant types of a client, including the grant type and client id.
+This table can store information about the grant types of a client, including the grant type and client id.
 
 #### Foreign Keys
 
@@ -514,7 +514,7 @@ This table can be used to store information about grant types of a client, inclu
 
 ### IdentityServerClientIdPRestrictions
 
-This table can be used to store information about identity provider restrictions of a client, including the identity provider and client id. 
+This table can store information about the identity provider restrictions of a client, including the identity provider and client id. 
 
 #### Foreign Keys
 
@@ -524,7 +524,7 @@ This table can be used to store information about identity provider restrictions
 
 ### IdentityServerClientPostLogoutRedirectUris
 
-This table can be used to store information about post logout redirect URIs of a client, including the post logout redirect URI and client id.
+This table can store information about the post logout redirect URIs of a client, including the post logout redirect URI and client id.
 
 #### Foreign Keys
 
@@ -534,7 +534,7 @@ This table can be used to store information about post logout redirect URIs of a
 
 ### IdentityServerClientRedirectUris
 
-This table can be used to store information about redirect URIs of a client, including the redirect URI and client id.
+This table can store information about the redirect URIs of a client, including the redirect URI and client id.
 
 #### Foreign Keys
 
@@ -544,11 +544,11 @@ This table can be used to store information about redirect URIs of a client, inc
 
 ### IdentityServerDeviceFlowCodes
 
-This table can be used to store information about device flow codes, including the user code, device code, subject id, client id, creation time, expiration, data and session id.
+This table can store information about the device flow codes, including the user code, device code, subject id, client id, creation time, expiration, data and session id.
 
 ### IdentityServerPersistedGrants
 
-This table can be used to store information about persisted grants, including the key, type, subject id, client id, creation time, expiration, and data.
+This table can store information about the persisted grants, including the key, type, subject id, client id, creation time, expiration, and data.
 
 ## Others
 
