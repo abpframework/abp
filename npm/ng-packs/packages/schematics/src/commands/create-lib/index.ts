@@ -246,4 +246,3 @@ export function addRoutingToAppRoutingModule(workspace: WorkspaceDefinition, pac
     return;
   };
 }
-
