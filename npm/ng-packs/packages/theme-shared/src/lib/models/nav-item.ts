@@ -1,4 +1,4 @@
-import { Type } from '@angular/core';
+import { Injector, Type } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 export class NavItem {
@@ -8,14 +8,13 @@ export class NavItem {
   action?: () => void;
   order?: number;
   requiredPolicy?: string;
-  visible?: () => boolean;
-  visible$?: Observable<boolean>;
+  visible?: NavBarPropPredicate<NavItem>;
   constructor(props: Partial<NavItem>) {
-    props = {
-      ...props,
-      visible: props.visible || (() => true),
-      visible$: props.visible$ || of(true),
-    };
     Object.assign(this, props);
   }
 }
+
+export type NavBarPropPredicate<T> = (
+  prop?: T,
+  injector?: Injector,
+) => boolean | Promise<boolean> | Observable<boolean>;
