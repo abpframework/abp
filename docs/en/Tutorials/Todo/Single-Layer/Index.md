@@ -169,7 +169,7 @@ We've mapped the `TodoItem` entity to the `TodoItems` table in the database. The
 
 The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-Open a command-line terminal in the {{if UI=="Blazor"}} directory of your `TodoApp.Host` project {{else}}root directory of your project (in the same folder of the `.csproj` file){{end} and type the following command:
+Open a command-line terminal in the {{if UI=="Blazor"}} directory of your `TodoApp.Host` project {{else}}root directory of your project (in the same folder of the `.csproj` file){{end}} and type the following command:
 
 ````bash
 dotnet ef migrations add Added_TodoItem
