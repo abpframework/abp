@@ -71,5 +71,6 @@ public class MultiTenantAuditLog_Tests : AuditLogsTestBase
         auditLog.EntityChanges.Count.ShouldBe(2);
         auditLog.EntityChanges.ShouldContain(e => e.EntityId == entityId1.ToString());
         auditLog.EntityChanges.ShouldContain(e => e.EntityId == entityId2.ToString());
+        auditLog.EntityChanges.ShouldContain(e => e.EntityTenantId == tenantId);
     }
 }

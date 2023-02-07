@@ -26,9 +26,6 @@ public class AbpPermissionManagementEntityFrameworkCoreTestModule : AbpModule
             });
         });
 
-        Configure<AbpUnitOfWorkDefaultOptions>(options =>
-        {
-            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
-            });
+        context.Services.AddAlwaysDisableUnitOfWorkTransaction();
     }
 }

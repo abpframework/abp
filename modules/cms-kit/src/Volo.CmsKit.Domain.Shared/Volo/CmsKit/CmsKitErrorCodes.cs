@@ -11,7 +11,8 @@ public static class CmsKitErrorCodes
     public static class Pages
     {
         public const string SlugAlreadyExist = "CmsKit:Page:0001";
-    }
+		public const string MultipleHomePage = "CmsKit:Page:0002";
+	}
 
     public static class Ratings
     {

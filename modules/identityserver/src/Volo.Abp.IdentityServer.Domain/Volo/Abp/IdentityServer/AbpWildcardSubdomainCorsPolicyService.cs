@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Text.Formatting;
@@ -13,7 +14,7 @@ public class AbpWildcardSubdomainCorsPolicyService : AbpCorsPolicyService
 {
     public AbpWildcardSubdomainCorsPolicyService(
         IDistributedCache<AllowedCorsOriginsCacheItem> cache,
-        IHybridServiceScopeFactory hybridServiceScopeFactory,
+        IServiceScopeFactory hybridServiceScopeFactory,
         IOptions<IdentityServerOptions> options)
             : base(cache, hybridServiceScopeFactory, options)
     {

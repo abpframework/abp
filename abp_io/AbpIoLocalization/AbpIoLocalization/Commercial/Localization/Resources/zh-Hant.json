@@ -192,7 +192,7 @@
     "ChangingDevelopers": "我將來可以更改我組織的註冊開發人員嗎?",
     "ChangingDevelopersExplanation": "除了將新的開發人員添加到你的許可中之外,你還可以更改現有的開發人員(可以刪除一個開發人員並將新的開發人員添加到同一位置),而無需任何額外費用.",
     "WhenShouldIRenewMyLicense": "我什麽時候應該續訂我的許可?",
-    "WhenShouldIRenewMyLicenseExplanation": "如果您在許可證到期後 <strong>1 個月</strong>內續訂許可證，將享受以下折扣：團隊許可證 {0}% 折扣、商業許可證 {1}% 折扣、企業許可證 {2}% 折扣 . 如果您在許可證到期後 <strong>1 個月</strong>續訂許可證，續訂價格將與許可證購買價格相同，並且續訂不會有折扣。",
+    "WhenShouldIRenewMyLicenseExplanation": "如果您在許可證到期後 <strong>1 個月</strong>內續訂許可證，將享受以下折扣：團隊許可證 {0} ; 商業許可證 {1} ;企業許可證 {2}. 如果您在許可證到期後 <strong>1 個月</strong>續訂許可證，續訂價格將與許可證購買價格相同，並且續訂不會有折扣。",
     "TrialPlan": "你們有試用計劃嗎?",
     "DoYouAcceptBankWireTransfer": "你們接受銀行電匯嗎?",
     "DoYouAcceptBankWireTransferExplanation": "是的，我們接受銀行電匯。<br />在通過銀行轉賬發送許可費後，將您的收據和所需的許可類型通過電子郵件發送至accounting@abp.io。 我們的國際銀行賬戶信息：",
@@ -362,7 +362,7 @@
     "Next": "下一個",
     "StartTrial": "開始我的免費試用",
     "ContactUsIssues": "如果您有任何問題，請聯繫我們",
-    "TrialActivatedWarning": "親愛的{0}，用戶只能享受 1 個免費試用期。您已經使用了試用期。",
+    "TrialActivatedWarning": "一個用戶只能有 1 個免費試用期。您已經使用了試用期。",
     "SaveAndDownload": "保存和下載",
     "CompanyNameValidationMessage": "公司名稱太長！",
     "AddressValidationMessage": "地址太長！",
@@ -375,11 +375,15 @@
     "TrialLicenseModelInvalidErrorMessage": "以下字段之一無效：國家名稱、公司規模、行業或使用目的。",
     "Trial": "審判",
     "Purchased": "已購買",
-    "PurchaseLicense": "購買許可證",
+    "PurchaseLicense": "購買 {0} 許可證",
     "PurchaseTrialLicenseMessage": "您的許可證到期日期是 {0}。 <br> 如果您想繼續使用您在免費試用期內創建的項目，您需要更改 <code>appsettings.secrets.json</code> 文件中的許可證密鑰。這是您的許可證密鑰：",
     "TrialLicenseExpireMessage": "您正在使用試用許可證，您的試用許可證將於 {0}到期。",
     "TryForFree": "免費試用",
     "TrialLicenseExpiredInfo": "您的試用許可期限已過！",
-    "CommercialNewsletterConfirmationMessage": "我同意<a href=\"https://commercial.abp.io/TermsConditions\">條款和條件</a>和<a href=\"https://commercial.abp.io/Privacy\">隱私政策</a>。"
+    "CommercialNewsletterConfirmationMessage": "我同意<a href=\"https://commercial.abp.io/TermsConditions\">條款和條件</a>和<a href=\"https://commercial.abp.io/Privacy\">隱私政策</a>。",
+    "BlazoriseLicense": "我们是否需要购买Blazorise许可证？",
+    "BlazoriseLicenseExplanation": "我公司Volosoft和公司Megabit之间有合作协议，根据此协议，购买将同时包含了Blazorise许可证与ABP商业产品，因此我们的客户不需要再额外购买Blazorise许可证。",
+    "discountForYears": "{0}% 折扣 {1} 年",
+    "BlackFridayDiscount": "黑色星期五折扣"
   }
 }

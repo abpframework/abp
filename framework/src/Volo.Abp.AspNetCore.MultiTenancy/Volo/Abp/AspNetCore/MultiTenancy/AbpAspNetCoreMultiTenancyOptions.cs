@@ -35,7 +35,8 @@ public class AbpAspNetCoreMultiTenancyOptions
                 AbpMultiTenancyCookieHelper.SetTenantCookie(context, null, options.TenantKey);
             }
 
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError; ;
+            context.Response.Headers.Add("Abp-Tenant-Resolve-Error", exception.Message);
+            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
             context.Response.ContentType = "text/html";
 
             var message = exception.Message;

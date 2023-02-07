@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Domain.Shared",
-  "hash": "67a7c1827d07ba25b43924aa5913df70",
+  "hash": "7cf1adab77763451880c93c2ce5de54d",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
@@ -9,6 +9,11 @@
           "declaringAssemblyName": "Volo.Abp.Validation",
           "namespace": "Volo.Abp.Validation",
           "name": "AbpValidationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Json.SystemTextJson",
+          "namespace": "Volo.Abp.Json.SystemTextJson",
+          "name": "AbpJsonSystemTextJsonModule"
         }
       ],
       "implementingInterfaces": [

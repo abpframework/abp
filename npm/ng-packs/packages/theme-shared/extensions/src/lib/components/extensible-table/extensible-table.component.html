@@ -1,4 +1,10 @@
-<ngx-datatable default [rows]="data" [count]="recordsTotal" [list]="list">
+<ngx-datatable
+  default
+  [rows]="data"
+  [count]="recordsTotal"
+  [list]="list"
+  (activate)="tableActivate.emit($event)"
+>
   <ngx-datatable-column
     *ngIf="actionsTemplate || (actionList.length && hasAtLeastOnePermittedAction)"
     [name]="actionsText | abpLocalization"

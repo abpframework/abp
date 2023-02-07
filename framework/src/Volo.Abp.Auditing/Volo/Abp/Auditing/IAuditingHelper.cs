@@ -7,7 +7,7 @@ namespace Volo.Abp.Auditing;
 //TODO: Move ShouldSaveAudit & IsEntityHistoryEnabled and rename to IAuditingFactory
 public interface IAuditingHelper
 {
-    bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false);
+    bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false, bool ignoreIntegrationServiceAttribute = false);
 
     bool IsEntityHistoryEnabled(Type entityType, bool defaultValue = false);
 

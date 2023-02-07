@@ -17,7 +17,8 @@ public class SettingManagementFeatureDefinitionProvider : FeatureDefinitionProvi
             "true",
             L("Feature:SettingManagementEnable"),
             L("Feature:SettingManagementEnableDescription"),
-            new ToggleStringValueType());
+            new ToggleStringValueType(),
+            isAvailableToHost: false);
 
         settingEnableFeature.CreateChild(
             SettingManagementFeatures.AllowChangingEmailSettings,

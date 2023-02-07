@@ -32,6 +32,7 @@ import { FormProp } from '../../models/form-props';
 import { PropData } from '../../models/props';
 import { selfFactory } from '../../utils/factory.util';
 import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
+import { eThemeSharedComponents } from '../../enums/components';
 
 @Component({
   selector: 'abp-extensible-form-prop',
@@ -60,7 +61,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   asterisk = '';
 
-  containerClassName = 'mb-3 form-group';
+  containerClassName = 'mb-3';
 
   options$: Observable<ABP.Option<any>[]> = of([]);
 
@@ -69,6 +70,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   readonly!: boolean;
 
   typeaheadModel: any;
+
+  passwordKey = eThemeSharedComponents.PasswordComponent;
 
   private readonly form: UntypedFormGroup;
 
@@ -161,6 +164,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
         return 'time';
       case ePropType.Typeahead:
         return 'typeahead';
+      case ePropType.PasswordInputGroup:
+        return 'passwordinputgroup';
       default:
         return prop.options ? 'select' : 'input';
     }
@@ -179,6 +184,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
         return 'email';
       case ePropType.Password:
         return 'password';
+      case ePropType.PasswordInputGroup:
+        return 'passwordinputgroup';
       default:
         return 'hidden';
     }

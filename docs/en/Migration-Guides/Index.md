@@ -2,6 +2,7 @@
 
 The following documents explain how to migrate your existing ABP applications. We write migration documents only if you need to take an action while upgrading your solution. Otherwise, you can easily upgrade your solution using the [abp update command](../Upgrading.md).
 
+- [6.0 to 7.0](Abp-7_0.md)
 - [5.3 to 6.0](Abp-6_0.md)
 - [5.2 to 5.3](Abp-5_3.md)
 - [5.1 to 5.2](Abp-5_2.md)

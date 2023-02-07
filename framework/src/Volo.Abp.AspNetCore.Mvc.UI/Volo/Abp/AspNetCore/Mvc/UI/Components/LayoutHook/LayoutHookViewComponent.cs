@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Ui.LayoutHooks;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 

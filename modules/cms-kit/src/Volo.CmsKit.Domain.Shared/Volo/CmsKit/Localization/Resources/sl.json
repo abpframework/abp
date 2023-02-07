@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Ali ste prepričani, da želite izbrisati to stran?",
     "PageId": "stran",
     "Pages": "strani",
-    "PageSlugInformation": "Slug se uporablja na url-ju. Vaš url bo '/pages/{{slug}}'.",
+    "PageSlugInformation": "Slug se uporablja na url-ju. Vaš url bo '/{{slug}}'.",
     "Permission:BlogManagement": "Upravljanje blogov",
     "Permission:BlogManagement.Create": "Ustvari",
     "Permission:BlogManagement.Delete": "Izbriši",

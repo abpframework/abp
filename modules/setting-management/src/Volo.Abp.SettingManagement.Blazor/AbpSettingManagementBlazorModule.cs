@@ -1,10 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Web.Theming;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Blazor.Menus;
 using Volo.Abp.SettingManagement.Blazor.Settings;
+using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.SettingManagement.Blazor;
@@ -38,6 +41,15 @@ public class AbpSettingManagementBlazorModule : AbpModule
         Configure<SettingManagementComponentOptions>(options =>
         {
             options.Contributors.Add(new EmailingPageContributor());
+        });
+        
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<AbpSettingManagementResource>()
+                .AddBaseTypes(
+                    typeof(AbpUiResource)
+                );
         });
     }
 }

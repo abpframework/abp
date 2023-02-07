@@ -273,6 +273,8 @@
     "SubscribeToNewsletter": "Tilaa uutiskirje saadaksesi tietoa ABP.IO-alustan tapahtumista, kuten uusista julkaisuista, artikkeleista, tarjouksista ja paljon muuta.",
     "FirstEdition": "Ensimmäinen painos",
     "ThankYou": "Kiitos!",
-    "CheckboxMandatory": "Sinun on tarkistettava tämä jatkaaksesi!"
+    "CheckboxMandatory": "Sinun on tarkistettava tämä jatkaaksesi!",
+    "SelectUITheme": "Valitse käyttöliittymän teema"
+
   }
 }

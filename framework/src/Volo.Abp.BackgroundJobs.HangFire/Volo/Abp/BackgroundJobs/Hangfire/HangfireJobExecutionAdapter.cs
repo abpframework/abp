@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -20,7 +21,8 @@ public class HangfireJobExecutionAdapter<TArgs>
         Options = options.Value;
     }
 
-    public async Task ExecuteAsync(TArgs args)
+    [Queue("{0}")] 
+    public async Task ExecuteAsync(string queue, TArgs args)
     {
         if (!Options.IsJobExecutionEnabled)
         {

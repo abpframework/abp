@@ -33,4 +33,19 @@ public class AbpDistributedCacheOptions
         GlobalCacheEntryOptions = new DistributedCacheEntryOptions();
         KeyPrefix = "";
     }
+
+    public void ConfigureCache<TCacheItem>(DistributedCacheEntryOptions options)
+    {
+        ConfigureCache(typeof(TCacheItem), options);
+    }
+    
+    public void ConfigureCache(Type cacheItemType, DistributedCacheEntryOptions options)
+    {
+        ConfigureCache(CacheNameAttribute.GetCacheName(cacheItemType), options);
+    }
+    
+    public void ConfigureCache(string cacheName, DistributedCacheEntryOptions options)
+    {
+        CacheConfigurators.Add(name => cacheName != name ? null : options);
+    }
 }

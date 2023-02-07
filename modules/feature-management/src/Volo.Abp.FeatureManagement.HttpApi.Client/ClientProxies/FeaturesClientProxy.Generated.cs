@@ -33,4 +33,13 @@ public partial class FeaturesClientProxy : ClientProxyBase<IFeatureAppService>, 
             { typeof(UpdateFeaturesDto), input }
         });
     }
+
+    public virtual async Task DeleteAsync(string providerName, string providerKey)
+    {
+        await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), providerName },
+            { typeof(string), providerKey }
+        });
+    }
 }

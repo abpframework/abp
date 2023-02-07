@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -19,11 +20,11 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
 
     protected AbpCliServiceProxyOptions ServiceProxyOptions { get; }
 
-    protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     public ProxyCommandBase(
         IOptions<AbpCliServiceProxyOptions> serviceProxyOptions,
-        IHybridServiceScopeFactory serviceScopeFactory)
+        IServiceScopeFactory serviceScopeFactory)
     {
         ServiceScopeFactory = serviceScopeFactory;
         ServiceProxyOptions = serviceProxyOptions.Value;
@@ -67,8 +68,22 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long);
         var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
         var folder = commandLineArgs.Options.GetOrNull(Options.Folder.Long);
+        var serviceTypeArg = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.ServiceType.Long);
 
-        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, commandLineArgs.Options);
+        ServiceType? serviceType = null;
+        if (!serviceTypeArg.IsNullOrWhiteSpace())
+        {
+            serviceType = serviceTypeArg.ToLower() == "application"
+                ? ServiceType.Application
+                : serviceTypeArg.ToLower() == "integration"
+                    ? ServiceType.Integration
+                    : null;
+        }
+
+        var withoutContracts = commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Short) ||
+                               commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Long);
+
+        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, serviceType, withoutContracts, commandLineArgs.Options);
     }
 
     public virtual string GetUsageInfo()
@@ -87,6 +102,7 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         sb.AppendLine("-u|--url <url>                                    API definition URL from.");
         sb.AppendLine("-t|--type <generate-type>                         The name of generate type (csharp, js, ng).");
         sb.AppendLine("  csharp");
+        sb.AppendLine("     --without-contracts                               Avoid generating the application service interface, class, enum and dto types.");
         sb.AppendLine("     --folder <folder-name>                            (default: 'ClientProxies') Folder name to place generated CSharp code in.");
         sb.AppendLine("  js");
         sb.AppendLine("     -o|--output <output-name>                         JavaScript file path or folder to place generated code in.");
@@ -160,6 +176,19 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         {
             public const string Short = "wd";
             public const string Long = "working-directory";
+        }
+
+
+        public static class ServiceType
+        {
+            public const string Short = "st";
+            public const string Long = "service-type";
+        }
+
+        public static class WithoutContracts
+        {
+            public const string Short = "c";
+            public const string Long = "without-contracts";
         }
     }
 }
