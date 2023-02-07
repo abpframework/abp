@@ -267,7 +267,7 @@ public class AngularSourceCodeAdder : ITransientDependency
         
         var fileContent = File.ReadAllText(filePath);
 
-        fileContent = "import { "+moduleName.Split(".").Last()+"ConfigModule } from '@"+moduleName.Split(".").Last().ToKebabCase()+"/config';" + Environment.NewLine + fileContent;
+        fileContent = "import { "+moduleName.Split(".").Last()+"ConfigModule } from '@"+moduleName.Replace(".", "/") .ToKebabCase()+"/config';" + Environment.NewLine + fileContent;
         
         fileContent = Regex.Replace(fileContent, "imports\\s*:\\s*\\[", 
             "imports: ["+ Environment.NewLine +
