@@ -43,9 +43,9 @@ In this section, I will introduce some major features released in this version. 
 Here is a brief list of titles explained in the next sections:
 
 * Blazor WASM option added to Application Single Layer Startup Template
-* Introducing the `EventSynchronizer`
+* Introducing the `IHasEntityVersion` interface and `EntitySynchronizer` base class
 * Introducing the `DeleteDirectAsync` method for the `IRepository` interface
-* Reducing cache duration for development environment
+* Intoducing the `IAbpHostEnvironment` interface
 * Improvements on eShopOnAbp project
 * Others
 
@@ -63,17 +63,58 @@ abp new TodoApp -t app-nolayers -u blazor --version 7.1.0-rc.1
 
 > You can check the [Quick Start documentation](https://docs.abp.io/en/abp/7.1/Tutorials/Todo/Single-Layer/Index?UI=Blazor&DB=EF) for a quick start with this template.
 
-### Introducing the `EventSynchronizer`
+### Introducing the `IHasEntityVersion` interface and `EntitySynchronizer` base class
 
-//TODO:!!!
+Entity synchronization is an important concept, especially in the distributed application and module development. If we have an entity that related with other module or application, we need to align/sync their data if the entity changed and also it can be good to versioning entity changes, so we knew they are sync or not.
+
+In this version, [@gdlcf88](https://github.com/gdlcf88) made an great contribution to the ABP Framework and introduced the `IHasEntityVersion` interface which adds **auto-versioning** to entity classes and `EntitySynchronizer` base class to **automatically sync an entity's properties from a source entity**.
+
+You can check the issue and documentation from the following links for more info:
+
+- https://github.com/abpframework/abp/issues/14196
+- [Versioning Entities](https://docs.abp.io/en/abp/7.1/Entities#versioning-entities)
+- [Distributed Event Bus - Entity Synchronizer](https://docs.abp.io/en/abp/7.1/Distributed-Event-Bus#entity-synchronizer)
+
+> Note: ABP Framework's some entities of the some modules have been implemented the `IHasEntityVersion` interface. Therefore, if you are upgrading your application from earlier version, you need to create a new migration and apply it to your database.
 
 ### Introducing the `DeleteDirectAsync` method for the `IRepository` interface
 
-//TODO:!!!
+EF 7 introduced a new [`ExecuteDeleteAsync`](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#executeupdate-and-executedelete-bulk-updates) method that deletes entities without involving the change tracker into the process. Therefore, it's much faster.
 
-### Reducing cache duration for development environment
+We added the `DeleteDirectAsync` method to the `IRepository<>` interface to take the full power of the EF 7. It deletes all entities those fit to the given predicate. It directly deletes entities from database, without fetching them. Therefore, some features (like **soft-delete**, **multi-tenancy** and **audit logging)** won't work, so use this method carefully, when you need it. Use the `DeleteAsync` method if you need to these features.
 
-//TODO:!!!
+### Intoducing the `IAbpHostEnvironment` interface
+
+Sometimes, while creating an application, we need to get the current hosting environment and take actions according to that. In such cases, we can use some services such as [IWebHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.iwebhostenvironment?view=aspnetcore-7.0) or [IWebAssemblyHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.webassembly.hosting.iwebassemblyhostenvironment) provided by .NET, in the final application. 
+
+However, we can not use these services in a class library, which is used by the final application. ABP Framework provides the `IAbpHostEnvironment` service, which allows you to get the current environment name whenever you want. `IAbpHostEnvironment` is used by the ABP Framework in several places to perform specific actions by the environment. For example, ABP Framework reduces the cache duration on the **Development** environment for some services.
+
+**Usage:**
+
+```csharp
+public class MyService
+{
+    private readonly IAbpHostEnvironment _abpHostEnvironment;
+    
+    public MyService(IAbpHostEnvironment abpHostEnvironment)
+    {
+        _abpHostEnvironment = abpHostEnvironment;
+    }
+
+    public void MyMethod()
+    {
+        //getting the current environment name
+        var environmentName = _abpHostEnvironment.EnvironmentName;
+
+        //check for the current environment
+        if (_abpHostEnvironment.IsDevelopment()) { /* ... */ } 
+    }
+}
+```
+
+You can inject the `IAbpHostEnvironement` into your service and get the current environment by using its `EnvironmentName` property. Also, you can check the current environment by using its extension methods such as `IsDevelopment()`.
+
+> Check the [ABP Application Startup](https://docs.abp.io/en/abp/7.1/Application-Startup) documentation for more information.
 
 ### Improvements on eShopOnAbp project
 
@@ -81,14 +122,13 @@ K8s and Docker configurations have been made within this version (Dockerfiles an
 
 ### Others
 
-There are some new features on [CMS Kit Module](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Index):
-
 * Referral Links have been added to CMS Kit Comment Feature (optional). You can specify common referral links (such as "nofollow" and "noreferrer") for links in the comments. See [#15458](https://github.com/abpframework/abp/issues/15458) for more information.
 * ReCaptcha verification has been added to CMS Kit Comment Feature (optional). You can enable ReCaptcha support to enable protaction against bots. See the [documentation](https://docs.abp.io/en/abp/7.1/Modules/Cms-Kit/Comments) for more information.
+* In development environment, it is a must to reduce cache durations for some points. We typically don't need to wait for a certain time to the cache being invalidated or invalidate it manually. For that purpose, we have reduced the cache durations for some points on development environment. See [#14842](https://github.com/abpframework/abp/pull/14842) for more information.
 
 ## What's New with ABP Commercial 7.1?
 
-We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce a few new feature coming with ABP Commercial 7.1.
+We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the new features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 7.1.
 
 ### Blazor WASM option added to Application Single Layer Pro Startup Template
 
