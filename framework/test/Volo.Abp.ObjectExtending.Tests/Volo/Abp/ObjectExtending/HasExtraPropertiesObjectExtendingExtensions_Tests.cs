@@ -1,6 +1,10 @@
-﻿using Shouldly;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using Shouldly;
 using Volo.Abp.Data;
+using Volo.Abp.Localization;
 using Volo.Abp.ObjectExtending.TestObjects;
+using Volo.Abp.Validation;
 using Xunit;
 
 namespace Volo.Abp.ObjectExtending;
@@ -96,4 +100,29 @@ public class HasExtraPropertiesObjectExtendingExtensions_Tests : AbpObjectExtend
         _personDto.GetProperty<ExtensibleTestEnumProperty>("EnumProperty").ShouldBe(ExtensibleTestEnumProperty.Value1);
         _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
     }
+
+    [Fact]
+    public void MapExtraPropertiesTo_Should_Validate_Properties()
+    {
+        using (CultureHelper.Use(CultureInfo.InvariantCulture))
+        {
+            ObjectExtensionManager.Instance
+                .AddOrUpdateProperty<ExtensibleTestPersonDto, string>(
+                    "Name",
+                    options =>
+                    {
+                        options.Attributes.Add(new StringLengthAttribute(4));
+                    });
+
+            var person = new ExtensibleTestPerson().SetProperty("Name", "John");
+            var personDto = new ExtensibleTestPersonDto();
+
+            person.MapExtraPropertiesTo(personDto);
+
+            person.SetProperty("Name", "John Bush");
+            Assert.Throws<AbpValidationException>(() => person.MapExtraPropertiesTo(personDto)).ValidationErrors.ShouldContain(x => x.ErrorMessage == "The field Name must be a string with a maximum length of 4.");
+        }
+
+    }
+
 }
