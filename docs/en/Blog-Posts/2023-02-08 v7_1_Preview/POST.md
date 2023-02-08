@@ -45,8 +45,8 @@ Here is a brief list of titles explained in the next sections:
 * Blazor WASM option added to Application Single Layer Startup Template
 * Introducing the `IHasEntityVersion` interface and `EntitySynchronizer` base class
 * Introducing the `DeleteDirectAsync` method for the `IRepository` interface
-* Intoducing the `IAbpHostEnvironment` interface
-* Improvements on eShopOnAbp project
+* Introducing the `IAbpHostEnvironment` interface
+* Improvements on the eShopOnAbp project
 * Others
 
 ### Blazor WASM option added to Application Single Layer Startup Template
@@ -65,25 +65,25 @@ abp new TodoApp -t app-nolayers -u blazor --version 7.1.0-rc.1
 
 ### Introducing the `IHasEntityVersion` interface and `EntitySynchronizer` base class
 
-Entity synchronization is an important concept, especially in the distributed application and module development. If we have an entity that related with other module or application, we need to align/sync their data if the entity changed and also it can be good to versioning entity changes, so we knew they are sync or not.
+Entity synchronization is an important concept, especially in distributed applications and module development. If we have an entity that is related to other modules, we need to align/sync their data if the entity changed and also it can be good to versioning entity changes, so we knew if they are synced or not.
 
-In this version, [@gdlcf88](https://github.com/gdlcf88) made an great contribution to the ABP Framework and introduced the `IHasEntityVersion` interface which adds **auto-versioning** to entity classes and `EntitySynchronizer` base class to **automatically sync an entity's properties from a source entity**.
+In this version, [@gdlcf88](https://github.com/gdlcf88) made a great contribution to the ABP Framework and introduced the `IHasEntityVersion` interface which adds **auto-versioning** to entity classes and `EntitySynchronizer` base class to **automatically sync an entity's properties from a source entity**.
 
 You can check the issue and documentation from the following links for more info:
 
-- https://github.com/abpframework/abp/issues/14196
+- [Issue: Entity synchronizers and a new EntityVersion audit property](https://github.com/abpframework/abp/issues/14196)
 - [Versioning Entities](https://docs.abp.io/en/abp/7.1/Entities#versioning-entities)
 - [Distributed Event Bus - Entity Synchronizer](https://docs.abp.io/en/abp/7.1/Distributed-Event-Bus#entity-synchronizer)
 
-> Note: ABP Framework's some entities of the some modules have been implemented the `IHasEntityVersion` interface. Therefore, if you are upgrading your application from earlier version, you need to create a new migration and apply it to your database.
+> Note: ABP Framework's entities of some modules have been implemented the `IHasEntityVersion` interface. Therefore, if you are upgrading your application from an earlier version, you need to create a new migration and apply it to your database.
 
 ### Introducing the `DeleteDirectAsync` method for the `IRepository` interface
 
 EF 7 introduced a new [`ExecuteDeleteAsync`](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#executeupdate-and-executedelete-bulk-updates) method that deletes entities without involving the change tracker into the process. Therefore, it's much faster.
 
-We added the `DeleteDirectAsync` method to the `IRepository<>` interface to take the full power of the EF 7. It deletes all entities those fit to the given predicate. It directly deletes entities from database, without fetching them. Therefore, some features (like **soft-delete**, **multi-tenancy** and **audit logging)** won't work, so use this method carefully, when you need it. Use the `DeleteAsync` method if you need to these features.
+We added the `DeleteDirectAsync` method to the `IRepository<>` interface to take the full power of the EF 7. It deletes all entities that fit the given predicate. It directly deletes entities from the database, without fetching them. Therefore, some features (like **soft-delete**, **multi-tenancy**, and **audit logging)** won't work, so use this method carefully, when you need it. Use the `DeleteAsync` method if you need these features.
 
-### Intoducing the `IAbpHostEnvironment` interface
+### Introducing the `IAbpHostEnvironment` interface
 
 Sometimes, while creating an application, we need to get the current hosting environment and take actions according to that. In such cases, we can use some services such as [IWebHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.iwebhostenvironment?view=aspnetcore-7.0) or [IWebAssemblyHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.webassembly.hosting.iwebassemblyhostenvironment) provided by .NET, in the final application. 
 
@@ -116,15 +116,15 @@ You can inject the `IAbpHostEnvironement` into your service and get the current 
 
 > Check the [ABP Application Startup](https://docs.abp.io/en/abp/7.1/Application-Startup) documentation for more information.
 
-### Improvements on eShopOnAbp project
+### Improvements on the eShopOnAbp project
 
 K8s and Docker configurations have been made within this version (Dockerfiles and helm-charts have been added and image build scripts have been updated). See [#14083](https://github.com/abpframework/abp/issues/14083) for more information.
 
 ### Others
 
 * Referral Links have been added to CMS Kit Comment Feature (optional). You can specify common referral links (such as "nofollow" and "noreferrer") for links in the comments. See [#15458](https://github.com/abpframework/abp/issues/15458) for more information.
-* ReCaptcha verification has been added to CMS Kit Comment Feature (optional). You can enable ReCaptcha support to enable protaction against bots. See the [documentation](https://docs.abp.io/en/abp/7.1/Modules/Cms-Kit/Comments) for more information.
-* In development environment, it is a must to reduce cache durations for some points. We typically don't need to wait for a certain time to the cache being invalidated or invalidate it manually. For that purpose, we have reduced the cache durations for some points on development environment. See [#14842](https://github.com/abpframework/abp/pull/14842) for more information.
+* ReCaptcha verification has been added to CMS Kit Comment Feature (optional). You can enable ReCaptcha support to enable protection against bots. See the [documentation](https://docs.abp.io/en/abp/7.1/Modules/Cms-Kit/Comments) for more information.
+* In the development environment, it is a must to reduce cache durations for some points. We typically don't need to wait for a certain time for the cache to be invalidated or invalidate it manually. For that purpose, we have reduced the cache durations for some points on the development environment. See [#14842](https://github.com/abpframework/abp/pull/14842) for more information.
 
 ## What's New with ABP Commercial 7.1?
 
@@ -156,19 +156,19 @@ abp new Acme.BookStore -t app-pro -u maui-blazor
 
 In this version, we implemented the code generation for MAUI Blazor. You can create and generate CRUD pages for this new UI option as you do in other UI types.
 
-> Note: MAUI Blazor is currently only available with `app-pro` template.
+> Note: MAUI Blazor is currently only available with the `app-pro` template.
 
 ### SaaS Module - Allowing entering a username while impersonating the tenant
 
-In the previous versions, we were able to impersonate a tenant from the [SaaS Module's Tenant Management UI](https://docs.abp.io/en/commercial/7.1/modules/saas#tenant-management). There was a constraint in this approach, which forces us to only impersonate by the "admin" user. However, the tenant might be changed the admin user's username, or we may want to impersonate another user of the tenant.
+In the previous versions, we were able to impersonate a tenant from the [SaaS Module's Tenant Management UI](https://docs.abp.io/en/commercial/7.1/modules/saas#tenant-management). There was a constraint in this approach, which forces us to only impersonate the "admin" user. However, the tenant might be changed the admin user's username, or we may want to impersonate another user of the tenant.
 
-Thus, with this version we decided to allowing impersonation with the tenant by the specified user name.
+Thus, with this version, we decided to allow the impersonation of the tenant by the specified user name.
 
-*You can click to the "Login with this tenant" action button,*
+*You can click on the "Login with this tenant" action button:*
 
 ![](saas-impersonation-1.png)
 
-*Then, specified the admin name of the tenant*
+*Then, specified the admin name of the tenant:*
 
 ![](saas-impersonation-2.png)
 
@@ -188,13 +188,15 @@ We thank you all. We thank all the authors for contributing to the [ABP Communit
 
 ![](ndc-london.png)
 
-Core team members of ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) and [Alper Ebicoglu](https://twitter.com/alperebicoglu) have attended the [NDC London 2023](https://ndclondon.com/) on the 23rd to 27th of January.  
+Core team members of ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) and [Alper Ebicoglu](https://twitter.com/alperebicoglu) attended the [NDC London 2023](https://ndclondon.com/) from the 23rd to the 27th of January.  
 
 ### Community Talks 2023.1: LeptonX Customization
 
 ![](community-talks-conver-image.png)
 
-In this episode of ABP Community Talks, 2023.1; we'll talk about **LeptonX Customization**. We will dive into the details and show you how to customize [LeptonX Theme](https://leptontheme.com/) with examples. The event will be live on Thursday, February 16, 2023 (20:00 - 21:00 UTC).
+In this episode of ABP Community Talks, 2023.1; we'll talk about **LeptonX Customization**. We will dive into the details and show you how to customize [LeptonX Theme](https://leptontheme.com/) with examples. 
+
+The event will be live on Thursday, February 16, 2023 (20:00 - 21:00 UTC).
 
 > Register to listen and ask your questions now 👉 https://kommunity.com/volosoft/events/abp-community-talks-20231-leptonx-customization-03f9fd8c.
 
