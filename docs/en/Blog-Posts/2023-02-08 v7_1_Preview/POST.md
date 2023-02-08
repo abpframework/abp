@@ -38,9 +38,57 @@ ABP v7.1 doesn't introduce any breaking change.
 
 ## What's New with ABP Framework 7.1?
 
+In this section, I will introduce some major features released in this version. In addition to these features, so many enhancements have been made in this version too. 
+
+Here is a brief list of titles explained in the next sections:
+
+* Blazor WASM option added to Application Single Layer Startup Template
+* Introducing the `EventSynchronizer`
+* Introducing the `DeleteDirectAsync` method for the `IRepository` interface
+* Reducing cache duration for development environment
+* Improvements on eShopOnAbp project
+* Others
+
+### Blazor WASM option added to Application Single Layer Startup Template
+
 //TODO:!!!
 
+### Introducing the `EventSynchronizer`
+
+//TODO:!!!
+
+### Introducing the `DeleteDirectAsync` method for the `IRepository` interface
+
+//TODO:!!!
+
+### Reducing cache duration for development environment
+
+//TODO:!!!
+
+### Improvements on eShopOnAbp project
+
+K8s and Docker configurations have been made within this version (Dockerfiles and helm-charts have been added and image build scripts have been updated). See [#14083](https://github.com/abpframework/abp/issues/14083) for more information.
+
+### Others
+
+There are some new features on [CMS Kit Module](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Index):
+
+* Referral Links have been added to CMS Kit Comment Feature (optional). You can specify common referral links (such as "nofollow" and "noreferrer") for links in the comments. See [#15458](https://github.com/abpframework/abp/issues/15458) for more information.
+* ReCaptcha verification has been added to CMS Kit Comment Feature (optional). You can enable ReCaptcha support to enable protaction against bots. See the [documentation](https://docs.abp.io/en/abp/7.1/Modules/Cms-Kit/Comments) for more information.
+
 ## What's New with ABP Commercial 7.1?
+
+We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce a few new feature coming with ABP Commercial 7.1.
+
+### Blazor WASM option added to Application Single Layer Pro Startup Template
+
+//TODO:!!!
+
+### Suite - MAUI Blazor Code Generation
+
+//TODO:!!!
+
+### Allowing entering a username while impersonating the tenant
 
 //TODO:!!!
 
