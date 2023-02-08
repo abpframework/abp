@@ -51,7 +51,17 @@ Here is a brief list of titles explained in the next sections:
 
 ### Blazor WASM option added to Application Single Layer Startup Template
 
-//TODO:!!!
+We've created the [Application (Single Layer) Startup Template](https://docs.abp.io/en/abp/7.1/Startup-Templates/Application-Single-Layer) in v5.2 with three UI types: Angular, Blazor Server and MVC. At the moment, we didn't provide UI option for Blazor, because it was required 3 projects at least (server-side, client-side and shared library between these two projects). 
+
+In this version, we added the Blazor WASM option to the **Application (Single Layer) Startup Template**. It still contains three projects (`blazor`, `host`, and `contracts`) but hosted by a single `host` project.
+
+You can use the following CLI command to create an `app-nolayers` template with Blazor UI as the UI option:
+
+```bash
+abp new TodoApp -t app-nolayers -u blazor --version 7.1.0-rc.1
+```
+
+> You can check the [Quick Start documentation](https://docs.abp.io/en/abp/7.1/Tutorials/Todo/Single-Layer/Index?UI=Blazor&DB=EF) for a quick start with this template.
 
 ### Introducing the `EventSynchronizer`
 
@@ -82,15 +92,45 @@ We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the f
 
 ### Blazor WASM option added to Application Single Layer Pro Startup Template
 
-//TODO:!!!
+The [**Application (Single Layer) Startup Template**](https://docs.abp.io/en/commercial/latest/startup-templates/application-single-layer/index) with Blazor UI is also available for ABP Commercial customers with this version as explained above.
+
+You can use the following CLI command to create an `app-nolayers-pro` template with Blazor UI as the UI option:
+
+```bash
+abp new TodoApp -t app-nolayers-pro -u blazor --version 7.1.0-rc.1
+```
+
+Also, you can create an `app-nolayers-pro` template with Blazor UI via ABP Suite:
+
+![](suite-blazor-wasm-nolayers.png)
 
 ### Suite - MAUI Blazor Code Generation
 
-//TODO:!!!
+We provided a new UI option "MAUI Blazor" for the `app-pro` template in the previous version and it's possible to create a `maui-blazor` application with both ABP CLI and ABP Suite.
 
-### Allowing entering a username while impersonating the tenant
+You can create an `app-pro` template with the MAUI Blazor as the UI option with the following ABP CLI command:
 
-//TODO:!!!
+```bash
+abp new Acme.BookStore -t app-pro -u maui-blazor
+```
+
+In this version, we implemented the code generation for MAUI Blazor. You can create and generate CRUD pages for this new UI option as you do in other UI types.
+
+> Note: MAUI Blazor is currently only available with `app-pro` template.
+
+### SaaS Module - Allowing entering a username while impersonating the tenant
+
+In the previous versions, we were able to impersonate a tenant from the [SaaS Module's Tenant Management UI](https://docs.abp.io/en/commercial/7.1/modules/saas#tenant-management). There was a constraint in this approach, which forces us to only impersonate by the "admin" user. However, the tenant might be changed the admin user's username, or we may want to impersonate another user of the tenant.
+
+Thus, with this version we decided to allowing impersonation with the tenant by the specified user name.
+
+*You can click to the "Login with this tenant" action button,*
+
+![](saas-impersonation-1.png)
+
+*Then, specified the admin name of the tenant*
+
+![](saas-impersonation-2.png)
 
 ## Community News
 
