@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
 
 namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
@@ -14,14 +15,14 @@ public partial class NavToolbar : IDisposable
     private IToolbarManager ToolbarManager { get; set; }
 
     [Inject]
-    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; set; }
 
     private List<RenderFragment> ToolbarItemRenders { get; set; } = new List<RenderFragment>();
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         await GetToolbarItemRendersAsync();
-        AuthenticationStateProvider.AuthenticationStateChanged += AuthenticationStateProviderOnAuthenticationStateChanged;
+        ApplicationConfigurationChangedService.Changed += ApplicationConfigurationChanged;
     }
 
     private async Task GetToolbarItemRendersAsync()
@@ -41,7 +42,7 @@ public partial class NavToolbar : IDisposable
         }
     }
 
-    private async void AuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
+    private async void ApplicationConfigurationChanged()
     {
         await GetToolbarItemRendersAsync();
         await InvokeAsync(StateHasChanged);
@@ -49,6 +50,6 @@ public partial class NavToolbar : IDisposable
 
     public void Dispose()
     {
-        AuthenticationStateProvider.AuthenticationStateChanged -= AuthenticationStateProviderOnAuthenticationStateChanged;
+        ApplicationConfigurationChangedService.Changed -= ApplicationConfigurationChanged;
     }
 }
