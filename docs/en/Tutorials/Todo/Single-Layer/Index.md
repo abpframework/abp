@@ -14,6 +14,33 @@ This is a single-part quick-start tutorial to build a simple todo application wi
 
 You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp-SingleLayer).
 
+This documentation has a video tutorial on **YouTube**!! You can watch it here:
+{{if UI=="MVC" && DB =="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Z6jZSPB19iw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="BlazorServer" && DB=="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/-ynMYXBIg4Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="NG" && DB=="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Pz4YWsU7CUs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="MVC" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/i9oDVl1J7Dk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="BlazorServer" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/z7YGDjcsTTs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="NG" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/LdKlIHi9S8I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{end}}
+
 ## Pre-Requirements
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 6.0+](https://dotnet.microsoft.com/download/dotnet) development.
