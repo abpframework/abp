@@ -14,7 +14,12 @@ This is a single-part quick-start tutorial to build a simple todo application wi
 
 You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp-SingleLayer).
 
+{{if UI=="Blazor"}}
+We are currently preparing a video tutorial for Blazor UI. You can watch other tutorials for the three UI types from [here](https://www.youtube.com/playlist?list=PLsNclT2aHJcPqZxk7D4tU8LtTeCFcN_ci).
+{{else}}
 This documentation has a video tutorial on **YouTube**!! You can watch it here:
+{{end}}
+
 {{if UI=="MVC" && DB =="EF"}}
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Z6jZSPB19iw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
