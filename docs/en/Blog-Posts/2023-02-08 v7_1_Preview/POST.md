@@ -32,9 +32,9 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 You can use any IDE that supports .NET 7.x, like [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
 
-## Migration Guides
+## Migrating to 7.1
 
-ABP v7.1 doesn't introduce any breaking change.
+This version doesn't introduce any breaking changes. However, Entity Framework developers may need to add a new code-first database migration to their projects since we made some improvements to the existing entities of some application modules.
 
 ## What's New with ABP Framework 7.1?
 
