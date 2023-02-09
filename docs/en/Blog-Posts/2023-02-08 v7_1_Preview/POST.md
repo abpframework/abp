@@ -112,7 +112,7 @@ public class MyService
 }
 ```
 
-You can inject the `IAbpHostEnvironement` into your service and get the current environment by using its `EnvironmentName` property. You can also check the current environment by using its extension methods such as `IsDevelopment()`.
+You can inject the `IAbpHostEnvironment` into your service and get the current environment by using its `EnvironmentName` property. You can also check the current environment by using its extension methods such as `IsDevelopment()`.
 
 > Check the [ABP Application Startup](https://docs.abp.io/en/abp/7.1/Application-Startup) documentation for more information.
 
