@@ -127,6 +127,26 @@ public class AuthService : IAuthService, ITransientDependency
         }
     }
 
+    public async Task<bool> CheckMultipleOrganizationsAsync(string username)
+    {
+        var url = $"{CliUrls.WwwAbpIo}api/license/check-multiple-organizations?username={username}";
+
+        var client = CliHttpClientFactory.CreateClient();
+
+        using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
+            }
+
+            await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<bool>(responseContent);
+        }
+    }
+
     private async Task LogoutAsync(string accessToken)
     {
         try
@@ -150,26 +170,6 @@ public class AuthService : IAuthService, ITransientDependency
         catch (Exception e)
         {
             Logger.LogWarning($"Error occured while logging out from remote service. {e.Message}");
-        }
-    }
-
-    public async Task<bool> CheckMultipleOrganizationsAsync(string username)
-    {
-        var url = $"{CliUrls.WwwAbpIo}api/license/check-multiple-organizations?username={username}";
-
-        var client = CliHttpClientFactory.CreateClient();
-
-        using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
-        {
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
-            }
-
-            await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<bool>(responseContent);
         }
     }
 
