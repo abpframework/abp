@@ -187,6 +187,24 @@
     "SaveUpTo": "<span>SAVE</span> UP TO<strong>${0}K</strong>",
     "ImplementingDDD": "Implementing Domain Driven Design",
     "ExploreTheEBook": "Explore the E-Book",
-    "ExploreTheBook": "Explore the Book"
+    "ExploreTheBook": "Explore the Book",
+    "ConsultantType": "Consultancy Type",
+    "Expert": "ABP Expert",
+    "Partner": "ABP Partner",
+    "Industry": "Industry",
+    "Location": "Location",
+    "Contact": "Contact",
+    "Partner_Year": "Partnership Year",
+    "Info": "Info",
+    "SpokenLanguages": "Spoken Languages",
+    "SocialMedia": "Social Media",
+    "Activity": "Activity",
+    "Type": "Type",
+    "Contribution": "Contribution",
+    "WhoWeAre": "Who We Are",
+    "Icons": "Icons",
+    "Url": "Url",
+    "Icon": "Icon",
+    "RecentActivities": "Recent Activities"
   }
 }

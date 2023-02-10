@@ -14,7 +14,7 @@ public class AbpAuthorizationTestModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(onServiceRegistredContext =>
+        context.Services.OnRegistered(onServiceRegistredContext =>
         {
             if (typeof(IMyAuthorizedService1).IsAssignableFrom(onServiceRegistredContext.ImplementationType) &&
                 !DynamicProxyIgnoreTypes.Contains(onServiceRegistredContext.ImplementationType))

@@ -14,6 +14,38 @@ This is a single-part quick-start tutorial to build a simple todo application wi
 
 You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp-SingleLayer).
 
+{{if UI=="Blazor"}}
+We are currently preparing a video tutorial for Blazor UI. You can watch other tutorials for the three UI types from [here](https://www.youtube.com/playlist?list=PLsNclT2aHJcPqZxk7D4tU8LtTeCFcN_ci).
+{{else}}
+This documentation has a video tutorial on **YouTube**!! You can watch it here:
+{{end}}
+
+{{if UI=="MVC" && DB =="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Z6jZSPB19iw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="BlazorServer" && DB=="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/-ynMYXBIg4Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="NG" && DB=="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Pz4YWsU7CUs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="MVC" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/i9oDVl1J7Dk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="BlazorServer" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/z7YGDjcsTTs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="NG" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/LdKlIHi9S8I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{end}}
+
 ## Pre-Requirements
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 7.0+](https://dotnet.microsoft.com/download/dotnet) development.
@@ -169,7 +201,7 @@ We've mapped the `TodoItem` entity to the `TodoItems` table in the database. The
 
 The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-Open a command-line terminal in the {{if UI=="Blazor"}} directory of your `TodoApp.Host` project {{else}}root directory of your project (in the same folder of the `.csproj` file){{end} and type the following command:
+Open a command-line terminal in the {{if UI=="Blazor"}} directory of your `TodoApp.Host` project {{else}}root directory of your project (in the same folder of the `.csproj` file){{end}} and type the following command:
 
 ````bash
 dotnet ef migrations add Added_TodoItem

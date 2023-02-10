@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Authorization;
+using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -10,23 +12,31 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly;
 public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
 {
     protected AbpApplicationConfigurationClientProxy ApplicationConfigurationClientProxy { get; }
-    
+
     protected AbpApplicationLocalizationClientProxy ApplicationLocalizationClientProxy { get; }
 
     protected ApplicationConfigurationCache Cache { get; }
 
     protected ICurrentTenantAccessor CurrentTenantAccessor { get; }
 
+    protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; }
+
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; }
+
     public WebAssemblyCachedApplicationConfigurationClient(
         AbpApplicationConfigurationClientProxy applicationConfigurationClientProxy,
         ApplicationConfigurationCache cache,
-        ICurrentTenantAccessor currentTenantAccessor, 
-        AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy)
+        ICurrentTenantAccessor currentTenantAccessor,
+        AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
+        ApplicationConfigurationChangedService applicationConfigurationChangedService,
+        AuthenticationStateProvider authenticationStateProvider)
     {
         ApplicationConfigurationClientProxy = applicationConfigurationClientProxy;
         Cache = cache;
         CurrentTenantAccessor = currentTenantAccessor;
         ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
+        ApplicationConfigurationChangedService = applicationConfigurationChangedService;
+        AuthenticationStateProvider = authenticationStateProvider;
     }
 
     public virtual async Task InitializeAsync()
@@ -45,8 +55,10 @@ public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicatio
         );
 
         configurationDto.Localization.Resources = localizationDto.Resources;
-        
+
         Cache.Set(configurationDto);
+
+        ApplicationConfigurationChangedService.NotifyChanged();
 
         CurrentTenantAccessor.Current = new BasicTenantInfo(
             configurationDto.CurrentTenant.Id,

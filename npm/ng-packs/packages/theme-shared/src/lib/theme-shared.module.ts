@@ -37,6 +37,8 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
 import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from './tokens/confirmation-icons.token';
 import { PasswordComponent } from './components/password/password.component';
 import { CardModule } from './components/card/card.module';
+import { AbpVisibleDirective } from './directives';
+
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -53,6 +55,7 @@ const declarationsWithExports = [
   NgxDatatableListDirective,
   LoadingDirective,
   ModalCloseDirective,
+  AbpVisibleDirective,
 ];
 
 @NgModule({

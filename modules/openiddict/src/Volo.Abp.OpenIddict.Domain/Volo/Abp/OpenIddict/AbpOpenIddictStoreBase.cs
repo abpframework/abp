@@ -20,26 +20,28 @@ public abstract class AbpOpenIddictStoreBase<TRepository>
     protected TRepository Repository { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IGuidGenerator GuidGenerator { get; }
+    protected AbpOpenIddictIdentifierConverter IdentifierConverter { get; }
 
-    protected AbpOpenIddictStoreBase(TRepository repository, IUnitOfWorkManager unitOfWorkManager, IGuidGenerator guidGenerator)
+    protected AbpOpenIddictStoreBase(TRepository repository, IUnitOfWorkManager unitOfWorkManager, IGuidGenerator guidGenerator, AbpOpenIddictIdentifierConverter identifierConverter)
     {
         Repository = repository;
         UnitOfWorkManager = unitOfWorkManager;
         GuidGenerator = guidGenerator;
+        IdentifierConverter = identifierConverter;
 
         Logger = NullLogger<AbpOpenIddictStoreBase<TRepository>>.Instance;
     }
 
     protected virtual Guid ConvertIdentifierFromString(string identifier)
     {
-        return string.IsNullOrEmpty(identifier) ? default : Guid.Parse(identifier);
+        return IdentifierConverter.FromString(identifier);
     }
 
     protected virtual string ConvertIdentifierToString(Guid identifier)
     {
-        return identifier.ToString("D");
+        return IdentifierConverter.ToString(identifier);
     }
-    
+
     protected virtual string WriteStream(Action<Utf8JsonWriter> action)
     {
         using (var stream = new MemoryStream())

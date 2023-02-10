@@ -48,7 +48,7 @@ export function generateFromFiles(
     validateClassName(strings.classify(options.name));
 
     const templateSource = apply(url('./files'), [
-      options.skipTests ? filter((path) => !path.endsWith('.spec.ts.template')) : noop(),
+      options.skipTests ? filter(path => !path.endsWith('.spec.ts.template')) : noop(),
       applyTemplates({
         ...strings,
         ...options,
