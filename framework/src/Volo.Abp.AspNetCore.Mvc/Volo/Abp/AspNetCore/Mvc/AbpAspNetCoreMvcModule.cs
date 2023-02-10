@@ -177,6 +177,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
         Configure<MvcOptions>(mvcOptions =>
         {
             mvcOptions.AddAbp(context.Services);
+            mvcOptions.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
         });
 
         Configure<AbpEndpointRouterOptions>(options =>
