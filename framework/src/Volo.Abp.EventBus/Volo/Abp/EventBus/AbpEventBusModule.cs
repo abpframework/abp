@@ -47,7 +47,7 @@ public class AbpEventBusModule : AbpModule
         var localHandlers = new List<Type>();
         var distributedHandlers = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(ILocalEventHandler<>)))
             {
