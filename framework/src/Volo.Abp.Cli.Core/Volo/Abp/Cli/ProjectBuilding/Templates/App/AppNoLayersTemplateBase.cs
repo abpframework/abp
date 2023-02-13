@@ -104,6 +104,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         }
 
         steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName/Migrations"));
+        steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Host/Migrations"));
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
         UpdateNuGetConfig(context, steps);
