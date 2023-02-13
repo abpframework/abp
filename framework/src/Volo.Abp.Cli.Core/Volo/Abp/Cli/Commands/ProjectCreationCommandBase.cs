@@ -456,7 +456,8 @@ public abstract class ProjectCreationCommandBase
                 break;
             case AppNoLayersTemplate.TemplateName:
             case AppNoLayersProTemplate.TemplateName:
-                efCoreProjectPath = Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
+                efCoreProjectPath = Directory.GetFiles(projectArgs.OutputFolder, "*.Host.csproj", SearchOption.AllDirectories).FirstOrDefault()
+                    ?? Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
                 isLayeredTemplate = false;
                 break;
             default:
