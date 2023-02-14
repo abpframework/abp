@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSubstitute;
@@ -357,6 +358,42 @@ public class Auditing_Tests : AbpAuditingTestBase
         AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
                                                                       x.EntityChanges[0].ChangeType == EntityChangeType.Deleted &&
                                                                       x.EntityChanges[0].PropertyChanges.Count == 0));
+#pragma warning restore 4014
+
+    }
+
+    [Fact]
+    public virtual async Task TestAsync()
+    {
+        var entityId = Guid.NewGuid();
+        var entity = new AppEntityWithValueObject(entityId, "test name", new AppEntityWithValueObjectAddress("USA"));
+
+        var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithValueObject, Guid>>();
+        await repository.InsertAsync(entity);
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity2 = await repository.GetAsync(entityId);
+                entity2.Name = "test name 2";
+                entity2.AppEntityWithValueObjectAddress = new AppEntityWithValueObjectAddress("England");
+
+                await repository.UpdateAsync(entity2);
+
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 3 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Created &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
+                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
+                                                                     x.EntityChanges[2].ChangeType == EntityChangeType.Deleted &&
+                                                                     x.EntityChanges[2].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName));
 #pragma warning restore 4014
 
     }
