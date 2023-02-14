@@ -49,9 +49,7 @@ public class SuiteAppSettingsService : ITransientDependency
 
     private string GetFilePathOrNull(string version)
     {
-        var suiteVersion = version;
-
-        if (suiteVersion == null)
+        if (version == null)
         {
             return null;
         }
@@ -62,9 +60,9 @@ public class SuiteAppSettingsService : ITransientDependency
             "tools",
             ".store",
             "volo.abp.suite",
-            suiteVersion,
+            version,
             "volo.abp.suite",
-            suiteVersion,
+            version,
             "tools",
             "net7.0",
             "any",
