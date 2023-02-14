@@ -18,10 +18,12 @@ public class SuiteAppSettingsService : ITransientDependency
     {
         CmdHelper = cmdHelper;
     }
+    
     public async Task<int> GetSuitePortAsync()
     {
         return await GetSuitePortAsync(GetCurrentSuiteVersion());
     }
+    
     public async Task<int> GetSuitePortAsync(string version)
     {
         var filePath = GetFilePathOrNull(version);
