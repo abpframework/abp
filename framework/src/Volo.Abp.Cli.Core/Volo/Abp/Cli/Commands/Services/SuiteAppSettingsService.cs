@@ -51,7 +51,7 @@ public class SuiteAppSettingsService : ITransientDependency
         }
         
         var path = Path.Combine(
-            "%USERPROFILE%",
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
             ".dotnet",
             "tools",
             ".store",
@@ -59,7 +59,9 @@ public class SuiteAppSettingsService : ITransientDependency
             suiteVersion,
             "volo.abp.suite",
             suiteVersion,
-            "content",
+            "tools",
+            "net7.0",
+            "any",
             "appsettings.json"
             );
 
