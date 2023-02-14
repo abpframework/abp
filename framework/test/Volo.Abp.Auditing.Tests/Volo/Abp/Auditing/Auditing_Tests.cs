@@ -363,23 +363,21 @@ public class Auditing_Tests : AbpAuditingTestBase
     }
 
     [Fact]
-    public virtual async Task TestAsync()
+    public virtual async Task Should_Write_AuditLog_For_ValueObject_Entity()
     {
         var entityId = Guid.NewGuid();
-        var entity = new AppEntityWithValueObject(entityId, "test name", new AppEntityWithValueObjectAddress("USA"));
-
         var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithValueObject, Guid>>();
-        await repository.InsertAsync(entity);
+        await repository.InsertAsync(new AppEntityWithValueObject(entityId, "test name", new AppEntityWithValueObjectAddress("USA")));
 
         using (var scope = _auditingManager.BeginScope())
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var entity2 = await repository.GetAsync(entityId);
-                entity2.Name = "test name 2";
-                entity2.AppEntityWithValueObjectAddress = new AppEntityWithValueObjectAddress("England");
+                var entity = await repository.GetAsync(entityId);
+                entity.Name = "test name 2";
+                entity.AppEntityWithValueObjectAddress = new AppEntityWithValueObjectAddress("England");
 
-                await repository.UpdateAsync(entity2);
+                await repository.UpdateAsync(entity);
 
                 await uow.CompleteAsync();
                 await scope.SaveAsync();
@@ -396,6 +394,33 @@ public class Auditing_Tests : AbpAuditingTestBase
                                                                      x.EntityChanges[2].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName));
 #pragma warning restore 4014
 
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = await repository.GetAsync(entityId);
+
+                entity.AppEntityWithValueObjectAddress.Country = "Germany";
+
+                await repository.UpdateAsync(entity);
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 2 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
+
+                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
+                                                                     x.EntityChanges[1].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyName == nameof(AppEntityWithValueObjectAddress.Country) &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].OriginalValue == "\"England\"" &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].NewValue == "\"Germany\""));
+
+#pragma warning restore 4014
     }
 }
 
