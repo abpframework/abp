@@ -18,6 +18,10 @@ public class SuiteAppSettingsService : ITransientDependency
     {
         CmdHelper = cmdHelper;
     }
+    public async Task<int> GetSuitePortAsync()
+    {
+        return await GetSuitePortAsync(GetCurrentSuiteVersion());
+    }
     public async Task<int> GetSuitePortAsync(string version)
     {
         var filePath = GetFilePathOrNull(version);
@@ -71,5 +75,20 @@ public class SuiteAppSettingsService : ITransientDependency
         }
 
         return path;
+    }
+
+    private string GetCurrentSuiteVersion()
+    {
+        var dotnetToolList = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g", out int exitCode);
+
+        var suiteLine = dotnetToolList.Split(Environment.NewLine)
+            .FirstOrDefault(l => l.ToLower().StartsWith("volo.abp.suite "));
+
+        if (string.IsNullOrEmpty(suiteLine))
+        {
+            return null;
+        }
+
+        return suiteLine.Split(" ", StringSplitOptions.RemoveEmptyEntries)[1];
     }
 }
