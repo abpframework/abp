@@ -110,9 +110,9 @@ export class PermissionManagementComponent
 
   modalBusy = false;
 
-  trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
-
   selectedGroupPermissions: PermissionWithStyle[] = [];
+
+  trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
 
   constructor(protected service: PermissionsService, protected configState: ConfigStateService) {}
 
