@@ -151,7 +151,7 @@ This application will have a single [entity](../../../Entities.md) and we can st
 ````csharp
 using Volo.Abp.Domain.Entities;
 
-namespace TodoApp{{if UI=="Blazor"}}.Host.{{end}}Entities;
+namespace TodoApp{{if UI=="Blazor"}}.{{end}}Entities;
 
 public class TodoItem : BasicAggregateRoot<Guid>
 {
