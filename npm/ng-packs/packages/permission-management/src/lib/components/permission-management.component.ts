@@ -81,7 +81,7 @@ export class PermissionManagementComponent
           });
       });
     } else {
-      this.selectedGroup = null;
+      this.setSelectedGroup(null);
       this._visible = false;
       this.visibleChange.emit(false);
     }
@@ -112,8 +112,20 @@ export class PermissionManagementComponent
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
 
-  get selectedGroupPermissions(): PermissionWithStyle[] {
-    if (!this.selectedGroup) return [];
+  selectedGroupPermissions: PermissionWithStyle[] = [];
+
+  constructor(protected service: PermissionsService, protected configState: ConfigStateService) {}
+
+  getChecked(name: string) {
+    return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
+  }
+
+  setSelectedGroup(group: PermissionGroupDto) {
+    this.selectedGroup = group;
+    if (!this.selectedGroup) {
+      this.selectedGroupPermissions = [];
+      return;
+    }
 
     const margin = `margin-${
       (document.body.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'
@@ -123,7 +135,7 @@ export class PermissionManagementComponent
       group => group.name === this.selectedGroup.name,
     ).permissions;
 
-    return permissions.map(
+    this.selectedGroupPermissions = permissions.map(
       permission =>
         ({
           ...permission,
@@ -131,12 +143,6 @@ export class PermissionManagementComponent
           isGranted: this.permissions.find(per => per.name === permission.name).isGranted,
         } as unknown as PermissionWithStyle),
     );
-  }
-
-  constructor(protected service: PermissionsService, protected configState: ConfigStateService) {}
-
-  getChecked(name: string) {
-    return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
   }
 
   setDisabled(permissions: PermissionGrantInfoDto[]) {
@@ -248,7 +254,7 @@ export class PermissionManagementComponent
 
   onChangeGroup(group: PermissionGroupDto) {
     this.setDisabled(group.permissions);
-    this.selectedGroup = group;
+    this.setSelectedGroup(group);
     this.setTabCheckboxState();
   }
 
@@ -291,8 +297,8 @@ export class PermissionManagementComponent
     return this.service.get(this.providerName, this.providerKey).pipe(
       tap((permissionRes: GetPermissionListResultDto) => {
         this.data = permissionRes;
-        this.selectedGroup = permissionRes.groups[0];
         this.permissions = getPermissions(permissionRes.groups);
+        this.setSelectedGroup(permissionRes.groups[0]);
         this.disabledSelectAllInAllTabs = this.permissions.every(
           per =>
             per.isGranted &&
