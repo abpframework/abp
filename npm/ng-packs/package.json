@@ -134,7 +134,7 @@
     "bootstrap-icons": "^1.10.3"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
+    "**/*.{js,jsx,ts,tsx,html,css,scss}": [
       "npx prettier --write --config .prettierrc "
     ]
   }
