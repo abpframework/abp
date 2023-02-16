@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCompanyName.MyProjectName.Data;
+using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Mvc.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20221220103129_Initial")]
+    [Migration("20230216094625_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -22,7 +22,7 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -289,6 +289,64 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                     b.ToTable("AbpEntityPropertyChanges", (string)null);
                 });
 
+            modelBuilder.Entity("Volo.Abp.BackgroundJobs.BackgroundJobRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsAbandoned")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("JobArgs")
+                        .IsRequired()
+                        .HasMaxLength(1048576)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("JobName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime?>("LastTryTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("NextTryTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte>("Priority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint")
+                        .HasDefaultValue((byte)15);
+
+                    b.Property<short>("TryCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasDefaultValue((short)0);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsAbandoned", "NextTryTime");
+
+                    b.ToTable("AbpBackgroundJobs", (string)null);
+                });
+
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
@@ -414,7 +472,6 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -461,7 +518,6 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityLinkUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SourceTenantId")
@@ -488,7 +544,6 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -568,7 +623,6 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentitySecurityLog", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Action")
@@ -643,7 +697,6 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
@@ -764,6 +817,9 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)")
                         .HasColumnName("SecurityStamp");
+
+                    b.Property<bool>("ShouldChangePasswordOnNextLogin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Surname")
                         .HasMaxLength(64)
@@ -930,7 +986,6 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
@@ -1523,7 +1578,6 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
             modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")

@@ -10,10 +10,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Migrations
+namespace MyCompanyName.MyProjectName.Mvc.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20221205080257_Initial")]
+    [Migration("20230216095356_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -22,7 +22,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -497,6 +497,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
+
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
@@ -683,6 +686,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("EmailConfirmed");
 
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
+
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
@@ -758,6 +764,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)")
                         .HasColumnName("SecurityStamp");
+
+                    b.Property<bool>("ShouldChangePasswordOnNextLogin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Surname")
                         .HasMaxLength(64)
@@ -960,6 +969,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)")
                         .HasColumnName("DisplayName");
+
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
@@ -1538,6 +1550,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
+
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
