@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -10,6 +11,8 @@ namespace Volo.Abp.Swashbuckle;
 public class AbpSwashbuckleDocumentFilter : IDocumentFilter
 {
     protected virtual string[] ActionUrlPrefixes { get; set; } = new[] { "Volo." };
+
+    protected virtual string RegexConstraintPattern => @":regex\(([^()]*)\)";
     
     public virtual void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
     {
@@ -34,15 +37,22 @@ public class AbpSwashbuckleDocumentFilter : IDocumentFilter
         {
             return route;
         }
-        
-        var startIndex = route.IndexOf(":", StringComparison.Ordinal);
-        var endIndex = route.IndexOf("}", StringComparison.Ordinal);
-        
-        if (startIndex == -1 || endIndex == -1)
+
+        route = Regex.Replace(route, RegexConstraintPattern, "");
+
+        while (route.Contains(':'))
         {
-            return route;
+            var startIndex = route.IndexOf(":", StringComparison.Ordinal);
+            var endIndex = route.IndexOf("}", startIndex);
+
+            if (endIndex == -1)
+            {
+                break;
+            }
+            
+            route = route.Remove(startIndex, (endIndex - startIndex));
         }
 
-        return route.Remove(startIndex, (endIndex - startIndex));
+        return route;
     }
 }
