@@ -8,7 +8,7 @@ export class AbpVisibleDirective implements OnDestroy, OnInit {
   conditionSubscription: Subscription | undefined;
   isVisible: boolean | undefined;
 
-  @Input('abpVisible') set abpVisible(
+  @Input() set abpVisible(
     value: boolean | Promise<boolean> | Observable<boolean> | undefined | null,
   ) {
     this.condition$ = checkType(value);

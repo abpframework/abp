@@ -14,11 +14,15 @@ To add `LeptonX-lite` into your project,
 
 - Install `@abp/ng.theme.lepton-x`
 
-`yarn add @abp/ng.theme.lepton-x@preview`
+```bash
+yarn add @abp/ng.theme.lepton-x
+```
 
 - Install `bootstrap-icons`
 
-`yarn add bootstrap-icons`
+```bash
+yarn add bootstrap-icons
+```
 
 - Then, we need to edit the styles array in `angular.json` to replace the existing style with the new one in the following link : 
 

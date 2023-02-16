@@ -255,7 +255,7 @@ Before starting to implement these use cases, first we need to create a DTO clas
 [Application services](../../../Application-Services.md) typically get and return DTOs ([Data Transfer Objects](../../../Data-Transfer-Objects.md)) instead of entities. So, create a new `TodoItemDto` class under the `Services/Dtos` folder{{if UI=="Blazor"}} of your `TodoApp.Contracts` project{{end}}:
 
 ```csharp
-namespace TodoApp{{if UI=="Blazor"}}.Contracts{{end}}.Services.Dtos;
+namespace TodoApp.Services.Dtos;
 
 public class TodoItemDto
 {
@@ -273,10 +273,10 @@ This is a very simple DTO class that has the same properties as the `TodoItem` e
 Create a `ITodoAppService` interface under the `Services` folder of the `TodoApp.Contracts` project, as shown below:
 
 ```csharp
-using TodoApp.Contracts.Services.Dtos;
+using TodoApp.Services.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace TodoApp.Contracts.Services;
+namespace TodoApp.Services;
 
 public interface ITodoAppService : IApplicationService
 {
@@ -296,17 +296,18 @@ Create a `TodoAppService` class under the `Services` folder of {{if UI=="Blazor"
 
 ```csharp
 {{if UI=="Blazor"}}
-using TodoApp.Contracts.Services;
-using TodoApp.Contracts.Services.Dtos;
-using TodoApp.Host.Entities;
+using TodoApp.Services;
+using TodoApp.Services.Dtos;
+using TodoApp.Entities;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
 {{else}}
 using TodoApp.Entities;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 {{end}}
 
-namespace TodoApp{{if UI=="Blazor"}}.Host{{end}}.Services;
+namespace TodoApp.Services;
 
 public class TodoAppService : ApplicationService{{if UI=="Blazor"}}, ITodoAppService{{end}}
 {
@@ -562,8 +563,8 @@ Open the `Index.razor.cs` file in the `Pages` folder{{if UI=="Blazor"}} in your 
 ```csharp
 {{if UI=="Blazor"}}
 using Microsoft.AspNetCore.Components;
-using TodoApp.Contracts.Services;
-using TodoApp.Contracts.Services.Dtos;
+using TodoApp.Services;
+using TodoApp.Services.Dtos;
 {{else}}
 using Microsoft.AspNetCore.Components;
 using TodoApp.Services;

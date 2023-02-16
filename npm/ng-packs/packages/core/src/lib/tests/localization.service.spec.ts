@@ -8,8 +8,12 @@ import { SessionStateService } from '../services/session-state.service';
 import { LocalizationService } from '../services/localization.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { CONFIG_STATE_DATA } from './config-state.service.spec';
+import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
+import { APPLICATION_LOCALIZATION_DATA } from './application-localization.service.spec';
+import { IncludeLocalizationResourcesProvider } from '../providers';
 
 const appConfigData$ = new BehaviorSubject(CONFIG_STATE_DATA);
+const appLocalizationData$ = new BehaviorSubject(APPLICATION_LOCALIZATION_DATA);
 
 describe('LocalizationService', () => {
   let spectator: SpectatorService<LocalizationService>;
@@ -22,6 +26,7 @@ describe('LocalizationService', () => {
     entryComponents: [],
     mocks: [Router],
     providers: [
+      IncludeLocalizationResourcesProvider,
       {
         provide: CORE_OPTIONS,
         useValue: { registerLocaleFn: () => Promise.resolve(), cultureNameLocaleFileMap: {} },
@@ -29,6 +34,10 @@ describe('LocalizationService', () => {
       {
         provide: AbpApplicationConfigurationService,
         useValue: { get: () => appConfigData$ },
+      },
+      {
+        provide: AbpApplicationLocalizationService,
+        useValue: { get: () => appLocalizationData$ },
       },
     ],
   });
