@@ -125,7 +125,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
                     if (user.ShouldChangePasswordOnNextLogin)
                     {
-                        context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, nameof(user.ShouldChangePasswordOnNextLogin));
+                        await HandleShouldChangePasswordOnNextLoginAsync(context, user);
                         return;
                     }
 
@@ -194,6 +194,62 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
             {
                 Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
                 Action = IdentityServerSecurityLogActionConsts.LoginRequiresTwoFactor,
+                UserName = context.UserName,
+                ClientId = await FindClientIdAsync(context)
+            });
+        }
+    }
+
+    protected virtual async Task HandleShouldChangePasswordOnNextLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user)
+    {
+        var changePasswordToken = context.Request?.Raw?["ChangePasswordToken"];
+        var currentPassword = context.Request?.Raw?["CurrentPassword"];
+        var newPassword = context.Request?.Raw?["NewPassword"];
+        if (!changePasswordToken.IsNullOrWhiteSpace() && !currentPassword.IsNullOrWhiteSpace() && !newPassword.IsNullOrWhiteSpace())
+        {
+            if (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, nameof(IdentityUser.ShouldChangePasswordOnNextLogin), changePasswordToken))
+            {
+                var changePasswordResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
+                if (changePasswordResult.Succeeded)
+                {
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+                    {
+                        Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                        Action = IdentitySecurityLogActionConsts.ChangePassword,
+                        UserName = context.UserName,
+                        ClientId = await FindClientIdAsync(context)
+                    });
+
+                    user.SetShouldChangePasswordOnNextLogin(false);
+                    await UserManager.UpdateAsync(user);
+                    await SetSuccessResultAsync(context, user);
+                }
+                else
+                {
+                    Logger.LogInformation("ChangePassword failed for username: {username}, reason: {changePasswordResult}", context.UserName, changePasswordResult);
+                    context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, changePasswordResult.Errors.Select(x => x.Description).JoinAsString(", "));
+                }
+            }
+            else
+            {
+                Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidAuthenticatorCode", context.UserName);
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, Localizer["InvalidAuthenticatorCode"]);
+            }
+        }
+        else
+        {
+            Logger.LogInformation("Authentication failed for username: {username}, reason: {ShouldChangePasswordOnNextLogin}", context.UserName, nameof(user.ShouldChangePasswordOnNextLogin));
+            context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, nameof(user.ShouldChangePasswordOnNextLogin),
+                new Dictionary<string, object>()
+                {
+                        {"userId", user.Id},
+                        {"changePasswordToken", await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, nameof(IdentityUser.ShouldChangePasswordOnNextLogin))}
+                });
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                Action = IdentityServerSecurityLogActionConsts.LoginNotAllowed,
                 UserName = context.UserName,
                 ClientId = await FindClientIdAsync(context)
             });
