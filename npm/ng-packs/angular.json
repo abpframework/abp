@@ -195,15 +195,55 @@
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
             "styles": [
               {
-                "input": "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.css",
                 "inject": false,
-                "bundleName": "bootstrap-rtl.min"
+                "bundleName": "bootstrap-dim"
               },
               {
-                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "inject": true,
-                "bundleName": "bootstrap-ltr.min"
+                  "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.css",
+                  "inject": false,
+                  "bundleName": "ng-bundle"
               },
+              {
+                  "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/side-menu/layout-bundle.css",
+                  "inject": false,
+                  "bundleName": "layout-bundle"
+              },
+              {
+                  "input": "node_modules/@abp/ng.theme.lepton-x/assets/css/abp-bundle.css",
+                  "inject": false,
+                  "bundleName": "abp-bundle"
+              },
+              {
+                  "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.rtl.css",
+                  "inject": false,
+                  "bundleName": "bootstrap-dim.rtl"
+              },
+              {
+                  "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.rtl.css",
+                  "inject": false,
+                  "bundleName": "ng-bundle.rtl"
+              },
+              {
+                  "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/side-menu/layout-bundle.rtl.css",
+                  "inject": false,
+                  "bundleName": "layout-bundle.rtl"
+              },
+              {
+                  "input": "node_modules/@abp/ng.theme.lepton-x/assets/css/abp-bundle.rtl.css",
+                  "inject": false,
+                  "bundleName": "abp-bundle.rtl"
+              },
+              {
+                  "input":"node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.rtl.css",
+                  "inject":false,
+                  "bundleName":"font-bundle.rtl"
+              },
+              {
+                  "input":"node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.css",
+                  "inject":false,
+                  "bundleName":"font-bundle"
+              },            
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
                 "inject": true,
@@ -234,6 +274,7 @@
                 "inject": false,
                 "bundleName": "ng-zorro-antd-tree"
               },
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "apps/dev-app/src/styles.scss"
             ],
             "scripts": []
