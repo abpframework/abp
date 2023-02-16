@@ -57,6 +57,7 @@ describe('Localization Utils', () => {
       languages: [],
       languageFilesMap: null,
       languagesMap: null,
+      resources: {},
     });
 
     test.each`
@@ -100,6 +101,7 @@ describe('Localization Utils', () => {
       languages: [],
       languageFilesMap: null,
       languagesMap: null,
+      resources: {},
     });
 
     test.each`
@@ -148,6 +150,7 @@ describe('Localization Utils', () => {
       languages: [],
       languageFilesMap: null,
       languagesMap: null,
+      resources: {},
     });
 
     test.each`
