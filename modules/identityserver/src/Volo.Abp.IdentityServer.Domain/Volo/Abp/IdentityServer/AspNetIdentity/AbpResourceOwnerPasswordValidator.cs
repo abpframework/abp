@@ -122,6 +122,13 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                 else if (result.IsNotAllowed)
                 {
                     Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
+
+                    if (user.ShouldChangePasswordOnNextLogin)
+                    {
+                        context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, nameof(user.ShouldChangePasswordOnNextLogin));
+                        return;
+                    }
+
                     errorDescription = Localizer["LoginIsNotAllowed"];
                 }
                 else

@@ -101,6 +101,16 @@ public partial class TokenController
                     else if (result.IsNotAllowed)
                     {
                         Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
+
+                        if (user.ShouldChangePasswordOnNextLogin)
+                        {
+                            return Forbid(
+                                new AuthenticationProperties(items: new Dictionary<string, string> {
+                                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = nameof(user.ShouldChangePasswordOnNextLogin)
+                                }), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                        }
+
                         errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
                     }
                     else
@@ -197,8 +207,7 @@ public partial class TokenController
                 items: new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                        nameof(SignInResult.RequiresTwoFactor),
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = nameof(SignInResult.RequiresTwoFactor)
                 },
                 parameters: new Dictionary<string, object>
                 {
