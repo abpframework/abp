@@ -74,7 +74,7 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
         var request = Session[requestId];
         if (request.Output.Result != value)
         {
-            throw new CaptchaException("The captcha code doesn't match text on the picture! Please try again.");
+            throw new CaptchaException("The answer you entered for the CAPTCHA was not correct. Please try again.");
         }
     }
 
