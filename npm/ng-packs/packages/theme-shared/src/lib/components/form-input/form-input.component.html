@@ -1,0 +1,13 @@
+<div class="mb-3">
+  <label class="form-label" *ngIf="label" [ngClass]="labelClass" [for]="inputId" > {{label | abpLocalization}} </label>
+  <input class="form-control" 
+    [id]="inputId" [type]="inputType" 
+    [placeholder]="inputPlaceholder" 
+    [readonly]="inputReadonly"
+    [ngClass]="inputClass" 
+    [ngStyle]="inputStyle" 
+    (blur)="onBlur.next()"
+    (focus)="onFocus.next()" 
+    [(ngModel)]="value">
+</div>
+  
