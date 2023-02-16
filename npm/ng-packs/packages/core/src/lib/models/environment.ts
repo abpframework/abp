@@ -17,9 +17,10 @@ export interface ApplicationInfo {
   baseUrl?: string;
   logoUrl?: string;
 }
-
-export interface ApiConfig {
+export interface HasAdditional {
   [key: string]: string;
+}
+export interface ApiConfig extends Partial<HasAdditional>{
   url: string;
   rootNamespace?: string;
 }

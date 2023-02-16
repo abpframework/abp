@@ -52,7 +52,7 @@ export const setTokenResponseToStorage: SetTokenResponseToStorageFn<TokenRespons
   }
 };
 
-export function setRememberMe(remember: boolean) {
+export function setRememberMe(remember: boolean | undefined) {
   removeRememberMe();
   localStorage.setItem(storageKey, 'true');
   document.cookie = `${cookieKey}=true; path=/${

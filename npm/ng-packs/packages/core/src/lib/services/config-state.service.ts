@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
@@ -47,6 +47,9 @@ export class ConfigStateService {
   private getLocalizationAndCombineWithAppState(
     appState: ApplicationConfigurationDto,
   ): Observable<ApplicationConfigurationDto> {
+    if (!appState.localization.currentCulture.cultureName) {
+      throw new Error('culture name should defined');
+    }
     return this.getlocalizationResource(appState.localization.currentCulture.cultureName).pipe(
       map(result => ({ ...appState, localization: { ...appState.localization, ...result } })),
     );
@@ -77,11 +80,11 @@ export class ConfigStateService {
     }
   }
 
-  getOne$(key: string) {
+  getOne$<K extends keyof ApplicationConfigurationDto>(key: K) {
     return this.store.sliceState(state => state[key]);
   }
 
-  getOne(key: string) {
+  getOne<K extends keyof ApplicationConfigurationDto>(key: K) {
     return this.store.state[key];
   }
 
@@ -138,7 +141,7 @@ export class ConfigStateService {
     return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
   }
 
-  getFeatures$(keys: string[]) {
+  getFeatures$(keys: string[]): Observable<{[key: string]: string} | undefined> {
     return this.store.sliceState(({ features }) => {
       if (!features?.values) return;
 
@@ -164,7 +167,7 @@ export class ConfigStateService {
     return keysFound.reduce((acc, key) => {
       acc[key] = settings[key];
       return acc;
-    }, {});
+    }, {} as Record<string, string>);
   }
 
   getSettings$(keyword?: string) {
@@ -179,7 +182,7 @@ export class ConfigStateService {
           return keysFound.reduce((acc, key) => {
             acc[key] = settings[key];
             return acc;
-          }, {});
+          }, {} as Record<string, string>);
         }),
       );
   }

@@ -8,7 +8,7 @@ export interface LocaleErrorHandlerData {
   locale: string;
 }
 
-let localeMap = {};
+let localeMap = {} as { [key: string]: string };
 
 export interface RegisterLocaleData {
   cultureNameLocaleFileMap?: Record<string, string>;
@@ -51,7 +51,7 @@ export function registerLocale(
   };
 }
 
-const extraLocales = {};
+const extraLocales = {} as { [key: string]: any };
 export function storeLocaleData(data: any, localeId: string) {
   extraLocales[localeId] = data;
 }
@@ -62,7 +62,7 @@ export async function defaultLocalErrorHandlerFn({ locale, resolve }: LocaleErro
     return;
   }
 
-  if (isDevMode) {
+  if (isDevMode()) {
     console.error(
       `Cannot find the ${locale} locale file. You can check how can add new culture at https://docs.abp.io/en/abp/latest/UI/Angular/Localization#adding-a-new-culture`,
     );

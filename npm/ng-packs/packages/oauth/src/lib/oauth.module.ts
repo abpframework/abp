@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import {
@@ -63,7 +63,7 @@ export class AbpOAuthModule {
           deps: [OAuthConfigurationHandler],
           useFactory: noop,
         },
-        OAuthModule.forRoot().providers,
+        OAuthModule.forRoot().providers as Provider[],
         { provide: OAuthStorage, useFactory: storageFactory },
       ],
     };

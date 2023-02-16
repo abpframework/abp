@@ -1,5 +1,5 @@
-import { ContentSecurityStrategy, CONTENT_SECURITY_STRATEGY } from './content-security.strategy';
-import { DomStrategy, DOM_STRATEGY } from './dom.strategy';
+import { CONTENT_SECURITY_STRATEGY, ContentSecurityStrategy } from './content-security.strategy';
+import { DOM_STRATEGY, DomStrategy } from './dom.strategy';
 
 export type ElementOptions<T extends HTMLScriptElement | HTMLStyleElement = any> = Partial<{
   [key in keyof T]: T[key];
@@ -19,7 +19,11 @@ export abstract class ContentStrategy<T extends HTMLScriptElement | HTMLStyleEle
     const element = this.createElement();
 
     if (this.options && Object.keys(this.options).length > 0) {
-      Object.keys(this.options).forEach(key => (element[key] = this.options[key]));
+      (Object.keys(this.options) as Array<keyof ElementOptions<T>>).forEach(key => {
+        if (this.options[key]) {
+          element[key] = (this.options as NonNullable<T>)[key];
+        }
+      });
     }
 
     this.contentSecurityStrategy.applyCSP(element);

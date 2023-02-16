@@ -21,7 +21,7 @@ export class LazyModuleFactory<T> extends NgModuleFactory<T> {
 
   create(parentInjector: Injector | null): NgModuleRef<T> {
     const injector = Injector.create({
-      parent: parentInjector,
+      ...(parentInjector && { parent: parentInjector }),
       providers: this.moduleWithProviders.providers as StaticProvider[],
     });
 
@@ -35,7 +35,7 @@ export class LazyModuleFactory<T> extends NgModuleFactory<T> {
 export function featuresFactory(
   configState: ConfigStateService,
   featureKeys: string[],
-  mapFn: (features) => any = features => features,
+  mapFn: (features: { [key: string]: string }) => any = features => features,
 ) {
   return configState.getFeatures$(featureKeys).pipe(filter(Boolean), map(mapFn));
 }

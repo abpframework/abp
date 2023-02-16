@@ -10,7 +10,9 @@ export class LooseContentSecurityStrategy extends ContentSecurityStrategy {
   }
 
   applyCSP(element: HTMLScriptElement | HTMLStyleElement) {
-    element.setAttribute('nonce', this.nonce);
+    if (this.nonce) {
+      element.setAttribute('nonce', this.nonce);
+    }
   }
 }
 

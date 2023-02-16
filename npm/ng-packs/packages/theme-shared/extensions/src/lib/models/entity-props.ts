@@ -35,8 +35,8 @@ export class EntityProp<R = any> extends Prop<R> {
     super(
       options.type,
       options.name,
-      options.displayName,
-      options.permission,
+      options.displayName || '',
+      options.permission || '',
       options.visible,
       options.isExtra,
     );
@@ -45,9 +45,15 @@ export class EntityProp<R = any> extends Prop<R> {
     this.sortable = options.sortable || false;
     this.valueResolver =
       options.valueResolver || (data => of(escapeHtmlChars(data.record[this.name])));
-    this.action = options.action;
-    this.component = options.component;
-    this.enumList = options.enumList;
+    if (options.action) {
+      this.action = options.action;
+    }
+    if (options.component) {
+      this.component = options.component;
+    }
+    if (options.enumList) {
+      this.enumList = options.enumList;
+    }
   }
 
   static create<R = any>(options: EntityPropOptions<R>) {

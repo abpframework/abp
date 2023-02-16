@@ -1,11 +1,11 @@
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { fromLazyLoad } from '../utils';
-import { CrossOriginStrategy, CROSS_ORIGIN_STRATEGY } from './cross-origin.strategy';
-import { DomStrategy, DOM_STRATEGY } from './dom.strategy';
+import { CROSS_ORIGIN_STRATEGY, CrossOriginStrategy } from './cross-origin.strategy';
+import { DOM_STRATEGY, DomStrategy } from './dom.strategy';
 
 export abstract class LoadingStrategy<T extends HTMLScriptElement | HTMLLinkElement = any> {
-  element: T;
+  element!: T;
 
   constructor(
     public path: string,
