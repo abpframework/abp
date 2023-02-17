@@ -95,7 +95,7 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
         }
         else
         {
-            throw new CaptchaException("The captcha code is missing!");
+            throw new UserFriendlyException(_localizer["CaptchaCodeMissingMessage"]);
         }
     }
 

@@ -215,6 +215,7 @@
     "DeleteBlogPostMessage": "The blog will be deleted. Are you sure?",
     "CaptchaCode": "Captcha code",
     "CommentTextRequired": "Comment is required",
-    "CaptchaCodeErrorMessage" : "The answer you entered for the CAPTCHA was not correct. Please try again"
+    "CaptchaCodeErrorMessage" : "The answer you entered for the CAPTCHA was not correct. Please try again",
+    "CaptchaCodeMissingMessage": "The captcha code is missing!"
   }
 }
