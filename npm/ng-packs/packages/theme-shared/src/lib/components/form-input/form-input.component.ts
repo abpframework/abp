@@ -11,11 +11,10 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
       useExisting: forwardRef(() => FormInputComponent),
       multi: true,
     },
-  ],
+  ]
 })
 export class FormInputComponent extends AbstractNgModelComponent {
   @Input() inputId!: string;
-
   @Input() inputReadonly: boolean = false;
 
   @Input() label: string = '';
@@ -27,7 +26,7 @@ export class FormInputComponent extends AbstractNgModelComponent {
 
   @Input() inputStyle: string = '';
 
-  @Input() inputClass: string = 'text';
+  @Input() inputClass: string = '';
 
   @Output() onBlur = new EventEmitter<void>();
 
@@ -36,4 +35,5 @@ export class FormInputComponent extends AbstractNgModelComponent {
   constructor(injector: Injector) {
     super(injector);
   }
+
 }

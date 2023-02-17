@@ -1,7 +1,9 @@
 <div class="mb-3">
   <label class="form-label" *ngIf="label" [ngClass]="labelClass" [for]="inputId" > {{label | abpLocalization}} </label>
-  <input class="form-control" 
-    [id]="inputId" [type]="inputType" 
+  <input
+    class="form-control"  
+    type="text"
+    [id]="inputId" 
     [placeholder]="inputPlaceholder" 
     [readonly]="inputReadonly"
     [ngClass]="inputClass" 
