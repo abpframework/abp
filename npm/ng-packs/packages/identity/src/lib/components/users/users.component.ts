@@ -6,7 +6,7 @@ import {
   IdentityUserService,
 } from '@abp/ng.identity/proxy';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import {Confirmation, ConfirmationService, ToasterService} from '@abp/ng.theme.shared';
+import {Confirmation, ConfirmationService, eFormComponets, ToasterService} from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
@@ -60,7 +60,7 @@ export class UsersComponent implements OnInit {
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   entityDisplayName: string;
-
+  inputKey=eFormComponets.FormCheckboxComponent
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   onVisiblePermissionChange = event => {

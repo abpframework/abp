@@ -55,12 +55,18 @@
               *ngFor="let roleGroup of roleGroups; let i = index; trackBy: trackByFn"
               class="form-check mb-2"
             >
-              <input
-                type="checkbox"
-                class="form-check-input"
-                [attr.id]="'roles-' + i"
+              <abp-checkbox 
+                *abpReplaceableTemplate="{
+                  inputs: {
+                    checkBoxId:'roles-' + i,
+                    formControl:roleGroup.controls[roles[i].name]
+                  },
+                  componentKey: inputKey
+                }"
                 [formControl]="roleGroup.controls[roles[i].name]"
-              />
+                [checkboxId]="'roles-' + i"
+              >
+              </abp-checkbox>
               <label class="form-check-label" [attr.for]="'roles-' + i">{{ roles[i].name }}</label>
             </div>
           </ng-template>
