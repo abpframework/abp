@@ -7,7 +7,7 @@ export const DEFAULT_ROLES_ENTITY_ACTIONS = EntityAction.createMany<IdentityRole
     text: 'AbpIdentity::Edit',
     action: data => {
       const component = data.getInjected(RolesComponent);
-      component.edit(data.record.id);
+      component.edit(data.record.id || '');
     },
     permission: 'AbpIdentity.Roles.Update',
   },
@@ -15,7 +15,7 @@ export const DEFAULT_ROLES_ENTITY_ACTIONS = EntityAction.createMany<IdentityRole
     text: 'AbpIdentity::Permissions',
     action: data => {
       const component = data.getInjected(RolesComponent);
-      component.openPermissionsModal(data.record.name);
+      component.openPermissionsModal(data.record.name || '');
     },
     permission: 'AbpIdentity.Roles.ManagePermissions',
   },
@@ -23,9 +23,9 @@ export const DEFAULT_ROLES_ENTITY_ACTIONS = EntityAction.createMany<IdentityRole
     text: 'AbpIdentity::Delete',
     action: data => {
       const component = data.getInjected(RolesComponent);
-      component.delete(data.record.id, data.record.name);
+      component.delete(data.record.id || '', data.record.name || '');
     },
     permission: 'AbpIdentity.Roles.Delete',
-    visible: data => !data.record.isStatic,
+    visible: data => !data?.record.isStatic,
   },
 ]);

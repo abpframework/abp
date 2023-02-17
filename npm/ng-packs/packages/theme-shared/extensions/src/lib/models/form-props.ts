@@ -18,7 +18,7 @@ import {
 
 export class FormPropList<R = any> extends PropList<R, FormProp<R>> {}
 
-export class FormProps<R = any> extends Props<PropList<R, FormProp<R>> {
+export class FormProps<R = any> extends Props<PropList<R, FormProp<R>>> {
   protected _ctor: Type<FormPropList<R>> = FormPropList;
 }
 
@@ -46,7 +46,7 @@ export class GroupedFormPropList<R = any> {
 }
 
 export interface GroupedFormPropItem {
-  group: FormPropGroup;
+  group?: FormPropGroup;
   formPropList: FormPropList;
 }
 
@@ -94,7 +94,7 @@ export class FormProp<R = any> extends Prop<R> {
     this.options = options.options;
     this.id = options.id || options.name;
     const defaultValue = options.defaultValue;
-    this.defaultValue = isFalsyValue(defaultValue) ? defaultValue as number : defaultValue || '';
+    this.defaultValue = isFalsyValue(defaultValue) ? (defaultValue as number) : defaultValue || '';
     this.displayTextResolver = options.displayTextResolver;
   }
 

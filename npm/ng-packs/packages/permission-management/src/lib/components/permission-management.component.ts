@@ -49,10 +49,10 @@ export class PermissionManagementComponent
     PermissionManagement.PermissionManagementComponentOutputs
 {
   @Input()
-  readonly providerName: string;
+  readonly providerName!: string;
 
   @Input()
-  readonly providerKey: string;
+  readonly providerKey!: string;
 
   @Input()
   readonly hideBadges = false;
@@ -90,13 +90,13 @@ export class PermissionManagementComponent
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
   @ViewChildren('selectAllInThisTabsRef')
-  selectAllInThisTabsRef: QueryList<ElementRef<HTMLInputElement>>;
+  selectAllInThisTabsRef!: QueryList<ElementRef<HTMLInputElement>>;
   @ViewChildren('selectAllInAllTabsRef')
-  selectAllInAllTabsRef: QueryList<ElementRef<HTMLInputElement>>;
+  selectAllInAllTabsRef!: QueryList<ElementRef<HTMLInputElement>>;
 
-  data: GetPermissionListResultDto = { groups: [], entityDisplayName: null };
+  data: GetPermissionListResultDto = { groups: [], entityDisplayName: '' };
 
-  selectedGroup: PermissionGroupDto;
+  selectedGroup?: PermissionGroupDto | null;
 
   permissions: PermissionWithGroupName[] = [];
 
@@ -119,16 +119,16 @@ export class PermissionManagementComponent
       (document.body.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'
     }.px`;
 
-    const permissions = this.data.groups.find(
-      group => group.name === this.selectedGroup.name,
-    ).permissions;
+    const permissions =
+      (this.data.groups.find(group => group.name === this.selectedGroup?.name) || {}).permissions ||
+      [];
 
     return permissions.map(
       permission =>
         ({
           ...permission,
           style: { [margin]: findMargin(permissions, permission) },
-          isGranted: this.permissions.find(per => per.name === permission.name).isGranted,
+          isGranted: (this.permissions.find(per => per.name === permission.name) || {}).isGranted,
         } as unknown as PermissionWithStyle),
     );
   }
@@ -158,7 +158,7 @@ export class PermissionManagementComponent
     return false;
   }
 
-  onClickCheckbox(clickedPermission: PermissionGrantInfoDto, value) {
+  onClickCheckbox(clickedPermission: PermissionGrantInfoDto) {
     if (
       clickedPermission.isGranted &&
       this.isGrantedByOtherProviderName(clickedPermission.grantedProviders)
@@ -257,7 +257,7 @@ export class PermissionManagementComponent
 
     const changedPermissions: UpdatePermissionDto[] = this.permissions
       .filter(per =>
-        unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted ===
+        (unchangedPermissions.find(unchanged => unchanged.name === per.name) || {}).isGranted ===
         per.isGranted
           ? false
           : true,
@@ -305,7 +305,7 @@ export class PermissionManagementComponent
   initModal() {
     // TODO: Refactor
     setTimeout(() => {
-      this.setDisabled(this.selectedGroup.permissions);
+      this.setDisabled(this.selectedGroup?.permissions || []);
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
     });
@@ -329,7 +329,10 @@ export class PermissionManagementComponent
   }
 }
 
-function findMargin(permissions: PermissionGrantInfoDto[], permission: PermissionGrantInfoDto) {
+function findMargin(
+  permissions: PermissionGrantInfoDto[],
+  permission: PermissionGrantInfoDto,
+): number {
   const parentPermission = permissions.find(per => per.name === permission.parentName);
 
   if (parentPermission && parentPermission.parentName) {
@@ -342,7 +345,10 @@ function findMargin(permissions: PermissionGrantInfoDto[], permission: Permissio
 
 function getPermissions(groups: PermissionGroupDto[]): PermissionWithGroupName[] {
   return groups.reduce(
-    (acc, val) => [...acc, ...val.permissions.map(p => ({ ...p, groupName: val.name }))],
-    [],
+    (acc, val) => [
+      ...acc,
+      ...val.permissions.map<PermissionWithGroupName>(p => ({ ...p, groupName: val.name || '' })),
+    ],
+    [] as PermissionWithGroupName[],
   );
 }

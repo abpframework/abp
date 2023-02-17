@@ -12,22 +12,22 @@ import { finalize } from 'rxjs/operators';
 export class TenantBoxService {
   currentTenant$ = this.sessionState.getTenant$();
 
-  name: string;
+  name?: string;
 
-  isModalVisible: boolean;
+  isModalVisible!: boolean;
 
-  modalBusy: boolean;
+  modalBusy!: boolean;
 
   constructor(
     private toasterService: ToasterService,
     private tenantService: AbpTenantService,
     private sessionState: SessionStateService,
     private configState: ConfigStateService,
-  ) { }
+  ) {}
 
   onSwitch() {
     const tenant = this.sessionState.getTenant();
-    this.name = tenant?.name;
+    this.name = tenant?.name || '';
     this.isModalVisible = true;
   }
 
@@ -53,14 +53,14 @@ export class TenantBoxService {
       });
   }
 
-  private setTenant(tenant: CurrentTenantDto) {
+  private setTenant(tenant: CurrentTenantDto | null) {
     this.sessionState.setTenant(tenant);
     this.configState.refreshAppState();
   }
 
   private showError() {
     this.toasterService.error('AbpUiMultiTenancy::GivenTenantIsNotAvailable', 'AbpUi::Error', {
-      messageLocalizationParams: [this.name],
+      messageLocalizationParams: [this.name || ''],
     });
   }
 }
