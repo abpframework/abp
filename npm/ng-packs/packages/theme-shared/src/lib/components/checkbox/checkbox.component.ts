@@ -1,6 +1,6 @@
 import { AbstractNgModelComponent } from '@abp/ng.core';
 import { Component, EventEmitter, forwardRef, Injector, Input, Output } from '@angular/core';
-import { CheckboxControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'abp-checkbox',
@@ -9,19 +9,18 @@ import { CheckboxControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CheckboxComponent),
+      useExisting: forwardRef(() => FormCheckboxComponent),
       multi: true,
     },
   ]
 })
-export class CheckboxComponent extends AbstractNgModelComponent {
+export class FormCheckboxComponent extends AbstractNgModelComponent {
 
-  @Input() label: string;
+  @Input() label?: string;
   @Input() checkboxId!: string;
-  @Input() formControl!: string;
-  @Input() checkboxStyle: string = '';
-  @Input() checkboxClass: string = '';
-  @Input() checkboxReadonly: boolean = false;
+  @Input() checkboxStyle = '';
+  @Input() checkboxClass = '';
+  @Input() checkboxReadonly = false;
   @Output() onBlur = new EventEmitter<void>();
   @Output() onFocus = new EventEmitter<void>();
   

@@ -1,4 +1,4 @@
 export enum eFormComponets {
   FormInputComponent = 'FormInputComponent',
-  FormCheckboxComponent = 'CheckboxComponent',
+  FormCheckboxComponent = 'FormCheckboxComponent',
 }
