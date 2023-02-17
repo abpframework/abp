@@ -20,6 +20,8 @@ public static class MvcCoreBuilderExtensions
 
                 options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
                 options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
+                options.JsonSerializerOptions.Converters.Add(new AbpStringToGuidConverter());
+                options.JsonSerializerOptions.Converters.Add(new AbpNullableStringToGuidConverter());
                 options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
 
                 options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(serviceProvider
