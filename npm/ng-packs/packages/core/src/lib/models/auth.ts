@@ -12,6 +12,8 @@ export type PipeToLoginFn = (
   params: Pick<LoginParams, 'redirectUrl' | 'rememberMe'>,
   injector: Injector,
 ) => UnaryFunction<any, any>;
-
-export type SetTokenResponseToStorageFn<T = any> = (injector: Injector, tokenRes: T) => void;
+/**
+ * @deprecated The interface should not be used anymore. 
+ */
+export type SetTokenResponseToStorageFn<T = any> = (tokenRes: T) => void;
 export type CheckAuthenticationStateFn = (injector: Injector) => void;
