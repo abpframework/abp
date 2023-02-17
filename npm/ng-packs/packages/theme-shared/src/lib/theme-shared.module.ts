@@ -39,7 +39,7 @@ import { PasswordComponent } from './components/password/password.component';
 import { CardModule } from './components/card/card.module';
 import { AbpVisibleDirective } from './directives';
 import { FormInputComponent } from './components/form-input/form-input.component';
-import {CheckboxComponent} from './components/checkbox/checkbox.component';
+import { FormCheckboxComponent } from './components/checkbox/checkbox.component';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -58,7 +58,7 @@ const declarationsWithExports = [
   ModalCloseDirective,
   AbpVisibleDirective,
   FormInputComponent,
-  CheckboxComponent
+  FormCheckboxComponent
 ];
 
 @NgModule({
