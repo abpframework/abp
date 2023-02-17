@@ -4,8 +4,22 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'abp-checkbox',
-  templateUrl: './checkbox.component.html',
-  styleUrls: ['./checkbox.component.scss'],
+  template: `
+    <div class="mb-3">
+      <input
+        class="form-check-input"  
+        type="checkbox"
+        [(ngModel)]="value"
+        [id]="checkboxId"  
+        [readonly]="checkboxReadonly"
+        [ngClass]="checkboxClass" 
+        [ngStyle]="checkboxStyle" 
+        (blur)="onBlur.next()"
+        (focus)="onFocus.next()" 
+      >    
+      <label class="form-check-label" *ngIf="label" [ngClass]="labelClass" [for]="checkboxId" > {{label | abpLocalization}} </label>
+    </div>
+  `,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

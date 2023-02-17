@@ -4,7 +4,22 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'abp-form-input',
-  templateUrl: './form-input.component.html',
+  template: `
+    <div class="mb-3">
+      <label class="form-label" *ngIf="label" [ngClass]="labelClass" [for]="inputId" > {{label | abpLocalization}} </label>
+      <input
+        class="form-control"  
+        type="text"
+        [id]="inputId" 
+        [placeholder]="inputPlaceholder" 
+        [readonly]="inputReadonly"
+        [ngClass]="inputClass" 
+        [ngStyle]="inputStyle" 
+        (blur)="onBlur.next()"
+        (focus)="onFocus.next()" 
+        [(ngModel)]="value">
+    </div>
+  `,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -16,20 +31,13 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 export class FormInputComponent extends AbstractNgModelComponent {
   @Input() inputId!: string;
   @Input() inputReadonly: boolean = false;
-
   @Input() label: string = '';
   @Input() labelClass: string = '';
-
   @Input() inputPlaceholder: string = '';
-
   @Input() inputType: string = 'text';
-
   @Input() inputStyle: string = '';
-
   @Input() inputClass: string = '';
-
   @Output() onBlur = new EventEmitter<void>();
-
   @Output() onFocus = new EventEmitter<void>();
 
   constructor(injector: Injector) {
