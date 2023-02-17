@@ -56,15 +56,13 @@
               class="form-check mb-2"
             >
               <abp-checkbox 
-                *abpReplaceableTemplate="{
-                  inputs: {
-                    checkBoxId:'roles-' + i,
-                    formControl:roleGroup.controls[roles[i].name]
-                  },
-                  componentKey: inputKey
-                }"
-                [formControl]="roleGroup.controls[roles[i].name]"
+              *abpReplaceableTemplate="{
+                checkboxId:'roles-' + i,
+                componentKey: inputKey,
+                formControl:roleGroup.controls[roles[i].name]
+              }" 
                 [checkboxId]="'roles-' + i"
+                [formControl]="roleGroup.controls[roles[i].name]"
               >
               </abp-checkbox>
               <label class="form-check-label" [attr.for]="'roles-' + i">{{ roles[i].name }}</label>
