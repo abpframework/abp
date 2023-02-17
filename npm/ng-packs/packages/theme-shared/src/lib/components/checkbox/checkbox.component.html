@@ -1,5 +1,4 @@
 <div class="mb-3">
-  <label class="form-check-label" *ngIf="label" [ngClass]="labelClass" [for]="checkboxId" > {{label | abpLocalization}} </label>
   <input
     class="form-check-input"  
     type="checkbox"
@@ -8,8 +7,9 @@
     [readonly]="checkboxReadonly"
     [ngClass]="checkboxClass" 
     [ngStyle]="checkboxStyle" 
-    [formControl]="formControl"
     (blur)="onBlur.next()"
     (focus)="onFocus.next()" 
-    >
+    >    
+    <label class="form-check-label" *ngIf="label" [ngClass]="labelClass" [for]="checkboxId" > {{label | abpLocalization}} </label>
+
 </div>
