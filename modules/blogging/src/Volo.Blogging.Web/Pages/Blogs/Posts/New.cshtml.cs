@@ -66,7 +66,6 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 Post.Description = Post.Content.Truncate(PostConsts.MaxSeoFriendlyDescriptionLength);
             }
 
-            // Url encode the url
             Post.Url = WebUtility.UrlEncode(Post.Url);
             
             var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel, CreatePostDto>(Post));
