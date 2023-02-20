@@ -336,7 +336,7 @@ You can set some of the attributes on your c# property, or directly on html tag.
 * `clear-button`: If true, a button will be added to clear datepicker. Default `True`.
 * `is-utc`: If true, datepicker will use UTC date. Default `False`.
 * `is-iso`: If true, datepicker will use ISO date. Default `False`.
-* `date-format`: Sets the date format. Default your culture's date format.
+* `date-format`: Sets the date format. Default your culture's date format. (JS format)
 * `date-separator`: Sets the range date separator. Default `-`.
 * Other attributes will be added to the input element and [datepicker options](https://www.daterangepicker.com/#options).
 
