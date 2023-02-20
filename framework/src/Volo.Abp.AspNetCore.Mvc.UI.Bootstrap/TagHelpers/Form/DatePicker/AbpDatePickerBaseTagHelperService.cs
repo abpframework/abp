@@ -356,7 +356,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         
         if (options.IsUtc != null)
         {
-            attrList.Add("data-is-utc", "true");
+            attrList.Add("data-is-utc", options.IsUtc.ToString().ToLowerInvariant());
         }
         
         if (options.IsIso != null)

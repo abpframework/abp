@@ -359,11 +359,11 @@
                     options.locale.separator = separator;
                 }
 
-                var startDate = options.startDate ? getMoment(options.startDate) : null;
+                var startDate = options.startDate ? moment(options.startDate) : null;
                 if(singleDatePicker && !startDate){
-                    startDate = options.date ? getMoment(options.date) : null;
+                    startDate = options.date ? moment(options.date) : null;
                 }
-                var endDate = options.endDate ? getMoment(options.endDate) : null;
+                var endDate = options.endDate ? moment(options.endDate) : null;
                 
                 if (startDate) {
                     options.startDate = startDate;
