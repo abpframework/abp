@@ -261,3 +261,99 @@ You can set some of the attributes on your c# property, or directly on html tag.
 
 - `asp-items`: Sets the select data. This Should be a list of SelectListItem.
 - `Inline`: If true, radio buttons will be in single line, next to each other. If false, they will be under each other.
+
+## abp-date-picker & abp-date-range-picker
+
+`abp-date-picker` and `abp-date-range-picker` tags creates a Bootstrap form date picker for a given c# property. `abp-date-picker` is for single date selection, `abp-date-range-picker` is for date range selection. It uses [datepicker](https://www.daterangepicker.com/) jQuery plugin.
+
+Usage:
+
+````xml
+<abp-date-picker asp-for="@Model.MyModel.MyDate" />
+<abp-date-range-picker asp-for-start="@Model.MyModel.MyDateRangeStart" asp-for-end="@Model.MyModel.MyDateRangeEnd" />
+````
+
+Model:
+
+````csharp
+ public class FormElementsModel : PageModel
+    {
+        public SampleModel MyModel { get; set; }
+
+        public void OnGet()
+        {
+            MyModel = new SampleModel();
+        }
+
+        public class SampleModel
+        {
+            public DateTime MyDate { get; set; }
+            
+            public DateTime MyDateRangeStart { get; set; }
+            
+            public DateTime MyDateRangeEnd { get; set; }
+        }
+    }
+````
+
+### Attributes
+
+You can set some of the attributes on your c# property, or directly on html tag. If you are going to use this property in a [abp-dynamic-form](Dynamic-forms.md), then you can only set these properties via property attributes.
+
+#### Property Attributes
+
+* `[Placeholder()]`: Sets placeholder for input. You can use a localization key directly.
+* `[InputInfoText()]`: Sets a small info text for input. You can use a localization key directly.
+* `[FormControlSize()]`: Sets size of form-control wrapper element. Available values are
+  -  `AbpFormControlSize.Default`
+  -  `AbpFormControlSize.Small`
+  -  `AbpFormControlSize.Medium`
+  -  `AbpFormControlSize.Large`
+* `[DisabledInput]` :  Input is disabled.
+* `[ReadOnlyInput]`: Input is read-only.
+- `[DatePickerOptions()]`: Sets the options of datepicker. You can use a localization key directly. See [datepicker options](https://www.daterangepicker.com/#options) for more information.)
+
+##### abp-date-picker
+`[DatePicker]` : Date picker is enabled.
+
+##### abp-date-range-picker
+`[DateRangePicker()]` : Sets the picker id for date range picker. This is used to link start and end date pickers. And sets this property is start date or end date.
+
+#### Tag Attributes
+
+* `info`: Sets a small info text for input. You can use a localization key directly.
+* `auto-focus`: If true, browser auto focuses on the element.
+* `size`: Sets size of form-control wrapper element. Available values are
+  - `AbpFormControlSize.Default`
+  - `AbpFormControlSize.Small`
+  - `AbpFormControlSize.Medium`
+  - `AbpFormControlSize.Large`
+* `disabled`: Input is disabled.
+* `readonly`: Input is read-only.
+* `label`: Sets the label for input.
+* `display-required-symbol`: Adds the required symbol (*) to label if input is required. Default `True`.
+* `open-button`: If true, a button will be added to open datepicker. Default `True`.
+* `clear-button`: If true, a button will be added to clear datepicker. Default `True`.
+* `is-utc`: If true, datepicker will use UTC date. Default `False`.
+* `is-iso`: If true, datepicker will use ISO date. Default `False`.
+* `date-format`: Sets the date format. Default your culture's date format.
+* `date-separator`: Sets the range date separator. Default `-`.
+* Other attributes will be added to the input element and [datepicker options](https://www.daterangepicker.com/#options).
+
+##### abp-date-picker
+
+* `asp-date`: Sets the date value. This should be a `DateTime`, `DateTime?`, `DateTimeOffset`, `DateTimeOffset?` or `string` value.
+
+##### abp-date-range-picker
+
+* `asp-for-start`: Sets the start date value. This should be a `DateTime`, `DateTime?`, `DateTimeOffset`, `DateTimeOffset?` or `string` value.
+* `asp-for-end`: Sets the end date value. This should be a `DateTime`, `DateTime?`, `DateTimeOffset`, `DateTimeOffset?` or `string` value.
+
+### Label & Localization
+
+You can set label of your input in different ways:
+
+- You can use `Label` attribute and directly set the label. But it doesn't auto localize your localization key. So use it as `label="@L["{LocalizationKey}"].Value"`.
+- You can set it using `[Display(name="{LocalizationKey}")]` attribute of Asp.Net Core.
+- You can just let **abp** find the localization key for the property. It will try to find "DisplayName:{PropertyName}" or "{PropertyName}" localization keys, if `label` or `[DisplayName]` attributes are not set.
+
