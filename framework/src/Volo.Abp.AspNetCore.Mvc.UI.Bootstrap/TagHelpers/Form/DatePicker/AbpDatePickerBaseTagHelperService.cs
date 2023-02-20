@@ -15,10 +15,9 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.Json;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.DatePicker;
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 
 public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelperService<TTagHelper>
     where TTagHelper : AbpDatePickerBaseTagHelper<TTagHelper>
@@ -82,6 +81,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         AddDisabledAttribute(TagHelperOutput);
         AddAutoFocusAttribute(TagHelperOutput);
         AddFormControls(context, output, TagHelperOutput);
+        AddReadOnlyAttribute(TagHelperOutput);
         AddPlaceholderAttribute(TagHelperOutput);
         AddInfoTextId(TagHelperOutput);
 
@@ -93,7 +93,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             ? await ProcessButtonAndGetContentAsync(context, output, "times", "clear")
             : "";
 
-        var labelContent = TagHelper.SuppressLabel ? "" : await GetLabelAsHtmlAsync(context, output, TagHelperOutput);
+        var labelContent = await GetLabelAsHtmlAsync(context, output, TagHelperOutput);
         var infoContent = GetInfoAsHtml(context, output, TagHelperOutput);
         var validationContent = await GetValidationAsHtmlAsync(context, output);
 
@@ -104,7 +104,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             TagHelperOutput.Render(Encoder) + openButtonContent + clearButtonContent + infoContent
         );
 
-        var abpDatePickerTag = new TagHelperOutput(TagName, GetBaseTagAttributes(context, output),
+        var abpDatePickerTag = new TagHelperOutput(TagName, GetBaseTagAttributes(context, output, TagHelper),
             (_, _) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
         abpDatePickerTag.Content.AppendHtml(inputGroup.Render(Encoder));
         abpDatePickerTag.Content.AppendHtml(validationContent);
@@ -128,6 +128,15 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         output.Attributes.AddClass("mb-3");
 
         output.Content.AppendHtml(innerHtml);
+    }
+    
+    protected virtual void AddReadOnlyAttribute(TagHelperOutput inputTagHelperOutput)
+    {
+        if (inputTagHelperOutput.Attributes.ContainsName("readonly") == false &&
+            (TagHelper.IsReadonly != false || GetAttribute<ReadOnlyInput>() != null))
+        {
+            inputTagHelperOutput.Attributes.Add("readonly", "");
+        }
     }
 
     protected virtual TagHelperAttributeList GetInputAttributes(TagHelperContext context, TagHelperOutput output)
@@ -205,7 +214,165 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         return string.Empty;
     }
 
-    protected TagHelperAttributeList GetBaseTagAttributes(TagHelperContext context, TagHelperOutput output)
+    protected TagHelperAttributeList ConvertDatePickerOptionsToAttributeList(IAbpDatePickerOptions options)
+    {
+        var attrList = new TagHelperAttributeList();
+        if (options.Locale != null)
+        {
+            attrList.Add("data-locale", JsonSerializer.Serialize(options.Locale));
+        }
+
+        if (options.MinDate != null)
+        {
+            attrList.Add("data-min-date", options.MinDate);
+        }
+
+        if (options.MaxDate != null)
+        {
+            attrList.Add("data-max-date", options.MaxDate);
+        }
+
+        if (options.MaxSpan != null)
+        {
+            attrList.Add("data-max-span", JsonSerializer.Serialize(options.MaxSpan));
+        }
+
+        if (options.ShowDropdowns == false)
+        {
+            attrList.Add("data-show-dropdowns", options.ShowDropdowns.ToString().ToLowerInvariant());
+        }
+
+        if (options.MinYear != null)
+        {
+            attrList.Add("data-min-year", options.MinYear);
+        }
+
+        if (options.MaxYear != null)
+        {
+            attrList.Add("data-max-year", options.MaxYear);
+        }
+
+        switch (options.WeekNumbers)
+        {
+            case AbpDatePickerWeekNumbers.Normal:
+                attrList.Add("data-show-week-numbers", "true");
+                break;
+            case AbpDatePickerWeekNumbers.Iso:
+                attrList.Add("data-show-iso-week-numbers", "true");
+                break;
+        }
+
+        if (options.TimePicker != null)
+        {
+            attrList.Add("data-time-picker", options.TimePicker.ToString().ToLowerInvariant());
+        }
+
+        if (options.TimePickerIncrement != null)
+        {
+            attrList.Add("data-time-picker-increment", options.TimePickerIncrement);
+        }
+
+        if (options.TimePicker24Hour != null)
+        {
+            attrList.Add("data-time-picker24-hour", options.TimePicker24Hour.ToString().ToLowerInvariant());
+        }
+
+        if (options.TimePickerSeconds != null)
+        {
+            attrList.Add("data-time-picker-seconds", options.TimePickerSeconds.ToString().ToLowerInvariant());
+        }
+
+        if (options.Opens != AbpDatePickerOpens.Center)
+        {
+            attrList.Add("data-opens", options.Opens.ToString().ToLowerInvariant());
+        }
+
+        if (options.Drops != AbpDatePickerDrops.Down)
+        {
+            attrList.Add("data-drops", options.Drops.ToString().ToLowerInvariant());
+        }
+
+        if (!options.ButtonClasses.IsNullOrEmpty())
+        {
+            attrList.Add("data-button-classes", options.ButtonClasses);
+        }
+
+        if (!options.ApplyButtonClasses.IsNullOrEmpty())
+        {
+            attrList.Add("data-apply-button-classes", options.ApplyButtonClasses);
+        }
+
+        if (!options.CancelButtonClasses.IsNullOrEmpty())
+        {
+            attrList.Add("data-cancel-button-classes", options.CancelButtonClasses);
+        }
+
+        if (options.AutoApply != null)
+        {
+            attrList.Add("data-auto-apply", options.AutoApply.ToString().ToLowerInvariant());
+        }
+
+        if (options.LinkedCalendars != null)
+        {
+            attrList.Add("data-linked-calendars", options.LinkedCalendars.ToString().ToLowerInvariant());
+        }
+
+        if (options.AutoUpdateInput != null)
+        {
+            attrList.Add("data-auto-update-input", options.AutoUpdateInput.ToString().ToLowerInvariant());
+        }
+
+        if (!options.ParentEl.IsNullOrEmpty())
+        {
+            attrList.Add("data-parent-el", options.ParentEl);
+        }
+
+        if (!options.DateFormat.IsNullOrEmpty())
+        {
+            attrList.Add("data-date-format", options.DateFormat);
+        }
+        
+        if(options.Ranges != null && options.Ranges.Any())
+        {
+            var ranges = options.Ranges.ToDictionary(r => r.Label, r => r.Dates);
+            
+            attrList.Add("data-ranges", JsonSerializer.Serialize(ranges));
+        }
+        
+        if(options.AlwaysShowCalendars != null)
+        {
+            attrList.Add("data-always-show-calendars", options.AlwaysShowCalendars.ToString().ToLowerInvariant());
+        }
+        
+        if(options.ShowCustomRangeLabel == false)
+        {
+            attrList.Add("data-show-custom-range-label", options.ShowCustomRangeLabel.ToString().ToLowerInvariant());
+        }
+        
+        if(options.Options != null)
+        {
+            attrList.Add("data-options", JsonSerializer.Serialize(options.Options));
+        }
+        
+        if (options.IsUtc != null)
+        {
+            attrList.Add("data-is-utc", "true");
+        }
+        
+        if (options.IsIso != null)
+        {
+            attrList.Add("data-is-iso", options.IsIso.ToString().ToLowerInvariant());
+        }
+
+        if (!options.PickerId.IsNullOrWhiteSpace())
+        {
+            attrList.Add("id", options.PickerId);
+        }
+        
+        return attrList;
+    }
+
+    protected TagHelperAttributeList GetBaseTagAttributes(TagHelperContext context, TagHelperOutput output, IAbpDatePickerOptions options)
     {
         var groupPrefix = "group-";
 
@@ -238,151 +405,18 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             attrList.Remove(attrList.First(a => a.Name == "value"));
         }
 
-        if (TagHelper.Locale != null)
+        foreach (var attr in ConvertDatePickerOptionsToAttributeList(options))
         {
-            attrList.Add("data-locale", JsonSerializer.Serialize(TagHelper.Locale));
+            attrList.Add(attr);
         }
 
-        if (TagHelper.MinDate != null)
+        var optionsAttribute = GetAttribute<DatePickerOptionsAttribute>();
+        if(optionsAttribute != null)
         {
-            attrList.Add("data-min-date", TagHelper.MinDate);
-        }
-
-        if (TagHelper.MaxDate != null)
-        {
-            attrList.Add("data-max-date", TagHelper.MaxDate);
-        }
-
-        if (TagHelper.MaxSpan != null)
-        {
-            attrList.Add("data-max-span", JsonSerializer.Serialize(TagHelper.MaxSpan));
-        }
-
-        if (TagHelper.ShowDropdowns == false)
-        {
-            attrList.Add("data-show-dropdowns", TagHelper.ShowDropdowns.ToString().ToLowerInvariant());
-        }
-
-        if (TagHelper.MinYear != null)
-        {
-            attrList.Add("data-min-year", TagHelper.MinYear);
-        }
-
-        if (TagHelper.MaxYear != null)
-        {
-            attrList.Add("data-max-year", TagHelper.MaxYear);
-        }
-
-        switch (TagHelper.WeekNumbers)
-        {
-            case AbpDatePickerWeekNumbers.Normal:
-                attrList.Add("data-show-week-numbers", "true");
-                break;
-            case AbpDatePickerWeekNumbers.Iso:
-                attrList.Add("data-show-iso-week-numbers", "true");
-                break;
-        }
-
-        if (TagHelper.TimePicker != null)
-        {
-            attrList.Add("data-time-picker", TagHelper.TimePicker.ToString().ToLowerInvariant());
-        }
-
-        if (TagHelper.TimePickerIncrement != null)
-        {
-            attrList.Add("data-time-picker-increment", TagHelper.TimePickerIncrement);
-        }
-
-        if (TagHelper.TimePicker24Hour != null)
-        {
-            attrList.Add("data-time-picker24-hour", TagHelper.TimePicker24Hour.ToString().ToLowerInvariant());
-        }
-
-        if (TagHelper.TimePickerSeconds != null)
-        {
-            attrList.Add("data-time-picker-seconds", TagHelper.TimePickerSeconds.ToString().ToLowerInvariant());
-        }
-
-        if (TagHelper.Opens != AbpDatePickerOpens.Center)
-        {
-            attrList.Add("data-opens", TagHelper.Opens.ToString().ToLowerInvariant());
-        }
-
-        if (TagHelper.Drops != AbpDatePickerDrops.Down)
-        {
-            attrList.Add("data-drops", TagHelper.Drops.ToString().ToLowerInvariant());
-        }
-
-        if (!TagHelper.ButtonClasses.IsNullOrEmpty())
-        {
-            attrList.Add("data-button-classes", TagHelper.ButtonClasses);
-        }
-
-        if (!TagHelper.ApplyButtonClasses.IsNullOrEmpty())
-        {
-            attrList.Add("data-apply-button-classes", TagHelper.ApplyButtonClasses);
-        }
-
-        if (!TagHelper.CancelButtonClasses.IsNullOrEmpty())
-        {
-            attrList.Add("data-cancel-button-classes", TagHelper.CancelButtonClasses);
-        }
-
-        if (!TagHelper.AutoApply)
-        {
-            attrList.Add("data-auto-apply", TagHelper.AutoApply.ToString().ToLowerInvariant());
-        }
-
-        if (TagHelper.LinkedCalendars != null)
-        {
-            attrList.Add("data-linked-calendars", TagHelper.LinkedCalendars.ToString().ToLowerInvariant());
-        }
-
-        if (TagHelper.AutoUpdateInput)
-        {
-            attrList.Add("data-auto-update-input", TagHelper.AutoUpdateInput.ToString().ToLowerInvariant());
-        }
-
-        if (!TagHelper.ParentEl.IsNullOrEmpty())
-        {
-            attrList.Add("data-parent-el", TagHelper.ParentEl);
-        }
-
-        if (!TagHelper.DateFormat.IsNullOrEmpty())
-        {
-            attrList.Add("data-date-format", TagHelper.DateFormat);
-        }
-        
-        if(TagHelper.Ranges != null && TagHelper.Ranges.Any())
-        {
-            var ranges = TagHelper.Ranges.ToDictionary(r => r.Label, r => r.Dates);
-            
-            attrList.Add("data-ranges", JsonSerializer.Serialize(ranges));
-        }
-        
-        if(TagHelper.AlwaysShowCalendars)
-        {
-            attrList.Add("data-always-show-calendars", TagHelper.AlwaysShowCalendars.ToString().ToLowerInvariant());
-        }
-        
-        if(TagHelper.ShowCustomRangeLabel == false)
-        {
-            attrList.Add("data-show-custom-range-label", TagHelper.ShowCustomRangeLabel.ToString().ToLowerInvariant());
-        }
-        
-        if(TagHelper.Options != null)
-        {
-            attrList.Add("data-options", JsonSerializer.Serialize(TagHelper.Options));
-        }
-        
-        if (TagHelper.IsUtc)
-        {
-            attrList.Add("data-is-utc", "true");
-        }
-        
-        if (TagHelper.IsIso)
-        {
-            attrList.Add("data-is-iso", TagHelper.IsIso.ToString().ToLowerInvariant());
+            foreach (var attr in ConvertDatePickerOptionsToAttributeList(optionsAttribute))
+            {
+                attrList.Add(attr);
+            }
         }
 
         AddBaseTagAttributes(attrList);
@@ -440,6 +474,10 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output,
         TagHelperOutput inputTag)
     {
+        if (IsOutputHidden(inputTag) || TagHelper.SuppressLabel)
+        {
+            return string.Empty;
+        }
         if (string.IsNullOrEmpty(TagHelper.Label))
         {
             return await GetLabelAsHtmlUsingTagHelperAsync(context, output) + GetRequiredSymbol(context, output);
@@ -489,9 +527,14 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
     protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context,
         TagHelperOutput output)
     {
+        var modelExpression = GetModelExpression();
+        if (modelExpression == null)
+        {
+            return string.Empty;
+        }
         var labelTagHelper = new LabelTagHelper(Generator) {
             ViewContext = TagHelper.ViewContext,
-            For = GetModelExpression()
+            For = modelExpression
         };
 
         var attributeList = new TagHelperAttributeList();

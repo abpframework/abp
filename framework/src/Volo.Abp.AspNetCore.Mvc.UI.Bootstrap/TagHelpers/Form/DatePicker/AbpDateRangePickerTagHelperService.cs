@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -12,23 +11,7 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.Json;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.DatePicker;
-
-[HtmlTargetElement("abp-date-range-picker", TagStructure = TagStructure.NormalOrSelfClosing)]
-public class AbpDateRangePickerTagHelper : AbpDatePickerBaseTagHelper<AbpDateRangePickerTagHelper>
-{
-    // Start date
-    [CanBeNull] 
-    public ModelExpression AspForStart { get; set; }
-
-    // End date
-    [CanBeNull] 
-    public ModelExpression AspForEnd { get; set; }
-
-    public AbpDateRangePickerTagHelper(AbpDateRangePickerTagHelperService tagHelperService) : base(tagHelperService)
-    {
-    }
-}
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 
 public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperService<AbpDateRangePickerTagHelper>
 {

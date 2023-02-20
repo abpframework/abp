@@ -10,20 +10,7 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.Json;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.DatePicker;
-
-[HtmlTargetElement("abp-date-picker", TagStructure = TagStructure.NormalOrSelfClosing)]
-public class AbpDatePickerTagHelper : AbpDatePickerBaseTagHelper<AbpDatePickerTagHelper>
-{
-    [CanBeNull] 
-    public ModelExpression AspFor { get; set; }
-    
-    public AbpDatePickerTagHelper(AbpDatePickerTagHelperService service) : base(service)
-    {
-    }
-}
-
-
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 
 public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<AbpDatePickerTagHelper>
 {

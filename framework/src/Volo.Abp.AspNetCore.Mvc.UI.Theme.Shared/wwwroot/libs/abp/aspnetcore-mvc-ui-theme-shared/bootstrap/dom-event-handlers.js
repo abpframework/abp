@@ -288,9 +288,6 @@
             }
 
             $container.data('options', options);
-            if($container.data('options', options)){
-                debugger;
-            }
             abp.dom.initializers.initializeDateRangePickers($container);
             return $container;
         }
@@ -310,22 +307,28 @@
                 var $clearButton = $(this).find('button[data-type="clear"]')
                 var singleDatePicker = $this.is('abp-date-picker')
                 var options = {};
+                options.singleDatePicker = singleDatePicker;
 
                 var defaultOptions = {
                     showDropdowns: true,
                     opens: "center",
                     drops: "down",
                     autoApply: true,
-                    autoUpdateInput: false
+                    autoUpdateInput: false,
+                    minYear: parseInt(moment().subtract(100, 'year').locale('en').format('YYYY')),
+                    maxYear: parseInt(moment().add(100, 'year').locale('en').format('YYYY')),
+                    locale: {
+                        direction: abp.localization.currentCulture.isRightToLeft ? 'rtl' : 'ltr',
+                    },
                 };
                 
                 $.extend(options, defaultOptions);
                 $.extend(options, $this.data());
-                if($this.data("options")){
-                    debugger;
-                    $.extend(options, $this.data("options"));
-                }
                 $.extend(options, $this.data("options"));
+
+                if(options.timePicker && options.timePicker24Hour === undefined){
+                    options.timePicker24Hour = moment.localeData().longDateFormat('LT').indexOf('A') < 1;
+                }
 
                 var isUtc = options.isUtc;
                 var isIso = options.isIso;
@@ -334,6 +337,7 @@
                 var timePickerSeconds = options.timePickerSeconds;
                 var dateFormat = options.dateFormat;
                 var separator = options.separator;
+                var defaultDateFormat = "YYYY-MM-DD";
                 const getMoment = function (date) {
                     if(!date){
                         return isUtc ? moment.utc() : moment();
@@ -404,27 +408,30 @@
                     $dateRangePicker.toggle();
                 });
                 
-                
-                if(!dateFormat) {
+                const extendDateFormat = function (format) {
                     if(timePicker){
                         if(timePicker24Hour){
                             if(timePickerSeconds){
-                                dateFormat = moment.localeData().longDateFormat('L') + " HH:mm:ss";
+                                format += " HH:mm:ss";
                             }else{
-                                dateFormat = moment.localeData().longDateFormat('L') + " HH:mm";
+                                format += " HH:mm";
                             }
                         }else {
                             if (timePickerSeconds) {
-                                dateFormat = moment.localeData().longDateFormat('L') + ' ' + " hh:mm:ss A"
+                                format += ' ' + " hh:mm:ss A"
                             } else {
-                                dateFormat = moment.localeData().longDateFormat('L') + " hh:mm A";
+                                format += " hh:mm A";
                             }
                         }
-                    }else{
-                        dateFormat = moment.localeData().longDateFormat('L');
                     }
+                    return format;
                 }
                 
+                defaultDateFormat = extendDateFormat(defaultDateFormat);
+
+                if(!dateFormat) {
+                    dateFormat = extendDateFormat(moment.localeData().longDateFormat('L'))
+                }
                 
                 if(!separator) {
                     separator = $dateRangePicker.locale.separator;
@@ -524,11 +531,10 @@
                 
                 function formatDate(date){
                     if(date){
-                        debugger;
                         if(isIso){
-                            return date.format();
+                            return date.locale('en').format();
                         }
-                        return date.format(dateFormat)
+                        return date.locale('en').format(defaultDateFormat)
                     }
                     return null;
                 }
@@ -560,6 +566,8 @@
                     $input[0].getFormattedStartDate = getFormattedStartDate;
                     $input[0].getFormattedEndDate = getFormattedEndDate;
                 }
+
+                $input.trigger('change');
             });
     }
 
