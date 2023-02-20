@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Core;
 using Volo.Abp.Modularity;
@@ -17,10 +18,7 @@ public class Select2ScriptContributor : BundleContributor
     }
     public override void ConfigureDynamicResources(BundleConfigurationContext context)
     {
-        var fileName = context.LazyServiceProvider
-            .LazyGetRequiredService<IOptions<AbpLocalizationOptions>>()
-            .Value
-            .GetCurrentUICultureLanguageFilesMap(PackageName);
+        var fileName = context.LazyServiceProvider.LazyGetRequiredService<IOptions<AbpLocalizationOptions>>().Value.GetCurrentUICultureLanguageFilesMap(PackageName);
         var filePath = $"/libs/select2/js/i18n/{fileName}.js";
         if (context.FileProvider.GetFileInfo(filePath).Exists)
         {
