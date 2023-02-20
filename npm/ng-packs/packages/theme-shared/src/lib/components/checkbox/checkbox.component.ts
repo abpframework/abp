@@ -7,7 +7,6 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
   template: `
     <div class="mb-3">
       <input
-        class="form-check-input"  
         type="checkbox"
         [(ngModel)]="value"
         [id]="checkboxId"  
@@ -33,7 +32,7 @@ export class FormCheckboxComponent extends AbstractNgModelComponent {
   @Input() label?: string;
   @Input() checkboxId!: string;
   @Input() checkboxStyle = '';
-  @Input() checkboxClass = '';
+  @Input() checkboxClass = 'form-check-input';
   @Input() checkboxReadonly = false;
   @Output() onBlur = new EventEmitter<void>();
   @Output() onFocus = new EventEmitter<void>();
