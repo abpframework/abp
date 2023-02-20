@@ -9,15 +9,16 @@ import {
 import { Observable, of } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import {
-  LoginParams,
   ConfigStateService,
   EnvironmentService,
   HttpErrorReporterService,
+  LoginParams,
   SessionStateService,
   TENANT_KEY,
 } from '@abp/ng.core';
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 import { oAuthStorage } from '../utils/oauth-storage';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
@@ -26,7 +27,7 @@ export abstract class AuthFlowStrategy {
   protected environment: EnvironmentService;
   protected configState: ConfigStateService;
   protected oAuthService: OAuthService2;
-  protected oAuthConfig: AuthConfig;
+  protected oAuthConfig!: AuthConfig;
   protected sessionState: SessionStateService;
   protected tenantKey: string;
 
@@ -38,7 +39,7 @@ export abstract class AuthFlowStrategy {
 
   abstract login(params?: LoginParams | Params): Observable<any>;
 
-  private catchError = err => {
+  private catchError = (err: HttpErrorResponse) => {
     this.httpErrorReporter.reportError(err);
     return of(null);
   };
@@ -49,18 +50,17 @@ export abstract class AuthFlowStrategy {
     this.configState = injector.get(ConfigStateService);
     this.oAuthService = injector.get(OAuthService2);
     this.sessionState = injector.get(SessionStateService);
-    this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
+    this.oAuthConfig = this.environment.getEnvironment().oAuthConfig || {};
     this.tenantKey = injector.get(TENANT_KEY);
 
     this.listenToOauthErrors();
   }
 
   async init(): Promise<any> {
-    const shouldClear = shouldStorageClear(
-      this.environment.getEnvironment().oAuthConfig.clientId,
-      oAuthStorage,
-    );
-    if (shouldClear) clearOAuthStorage(oAuthStorage);
+    if (this.oAuthConfig.clientId) {
+      const shouldClear = shouldStorageClear(this.oAuthConfig.clientId, oAuthStorage);
+      if (shouldClear) clearOAuthStorage(oAuthStorage);
+    }
 
     this.oAuthService.configure(this.oAuthConfig);
 

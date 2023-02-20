@@ -1,8 +1,9 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { NavItem } from '../models/nav-item';
+import { Type } from '@angular/core';
 
 export abstract class AbstractMenuService<T extends NavItem> {
-  protected abstract baseClass;
+  protected abstract baseClass: Type<any>;
 
   protected _items$ = new BehaviorSubject<T[]>([]);
 

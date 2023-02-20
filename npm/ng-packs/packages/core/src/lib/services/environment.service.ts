@@ -4,10 +4,10 @@ import { map } from 'rxjs/operators';
 import { Apis, Environment } from '../models/environment';
 import { InternalStore } from '../utils/internal-store-utils';
 
-const mapToApiUrl = (key: string) => (apis: Apis) =>
-  (apis[key] || apis.default).url || apis.default.url;
+const mapToApiUrl = (key: string | undefined) => (apis: Apis) =>
+  ((key && apis[key]) || apis.default).url || apis.default.url;
 
-const mapToIssuer = (issuer: string) => {
+const mapToIssuer = (issuer: string | undefined) => {
   if (!issuer) {
     return issuer;
   }
@@ -30,8 +30,8 @@ export class EnvironmentService {
     return this.store.state;
   }
 
-  getApiUrl(key: string) {
-    return mapToApiUrl(key)(this.store.state.apis);
+  getApiUrl(key: string | undefined) {
+    return mapToApiUrl(key)(this.store.state?.apis);
   }
 
   getApiUrl$(key: string) {
@@ -43,11 +43,12 @@ export class EnvironmentService {
   }
 
   getIssuer() {
-    const issuer = this.store.state.oAuthConfig.issuer;
+    const issuer = this.store.state?.oAuthConfig?.issuer;
+
     return mapToIssuer(issuer);
   }
-  
+
   getIssuer$() {
-    return this.store.sliceState(state => state.oAuthConfig.issuer).pipe(map(mapToIssuer));
+    return this.store.sliceState(state => state?.oAuthConfig?.issuer).pipe(map(mapToIssuer));
   }
 }

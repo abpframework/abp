@@ -13,15 +13,17 @@
         </ng-container>
 
         <ng-template #button>
-          <button
-            (click)="action.action(data)"
-            type="button"
-            [ngClass]="action.btnClass ? action.btnClass : defaultBtnClass"
-            class="d-inline-flex align-items-center gap-1"
-          >
-            <i [ngClass]="action.icon" [class.me-1]="action.icon"></i>
-            {{ action.text | abpLocalization }}
-          </button>
+          <ng-container *ngIf="asToolbarAction(action).value as toolbarAction">
+            <button
+              (click)="action.action(data)"
+              type="button"
+              [ngClass]="toolbarAction.btnClass ? toolbarAction.btnClass : defaultBtnClass"
+              class="d-inline-flex align-items-center gap-1"
+            >
+              <i [ngClass]="toolbarAction.icon" [class.me-1]="toolbarAction.icon"></i>
+              {{ toolbarAction.text | abpLocalization }}
+            </button>
+          </ng-container>
         </ng-template>
       </ng-container>
     </ng-container>

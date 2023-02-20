@@ -15,7 +15,7 @@ export class ConfirmationComponent {
   reject = Confirmation.Status.reject;
   dismiss = Confirmation.Status.dismiss;
 
-  confirmation$!: ReplaySubject<Confirmation.DialogData>;
+  confirmation$!: ReplaySubject<Confirmation.DialogData | null>;
 
   clear!: (status: Confirmation.Status) => void;
 
@@ -30,7 +30,10 @@ export class ConfirmationComponent {
     if (!this.icons) {
       return '';
     }
-    return this.icons[severity] || this.icons.default;
+    if (severity) {
+      return this.icons[severity];
+    }
+    return this.icons.default;
   }
 
   isCustomIconExists({ options }: Confirmation.DialogData): boolean {

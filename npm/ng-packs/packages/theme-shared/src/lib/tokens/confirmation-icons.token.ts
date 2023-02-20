@@ -6,6 +6,7 @@ export interface ConfirmationIcons {
   warning: string;
   error: string;
   default: string;
+  neutral: string;
 }
 
 export const CONFIRMATION_ICONS = new InjectionToken<Partial<ConfirmationIcons>>(
@@ -18,4 +19,5 @@ export const DEFAULT_CONFIRMATION_ICONS: ConfirmationIcons = {
   warning: 'fa fa-exclamation-triangle',
   error: 'fa fa-times-circle',
   default: 'fa fa-question-circle',
+  neutral: '',
 };

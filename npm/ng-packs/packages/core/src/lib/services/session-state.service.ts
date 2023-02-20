@@ -73,7 +73,7 @@ export class SessionStateService {
     return this.store.sliceState(state => state.tenant);
   }
 
-  setTenant(tenant: CurrentTenantDto) {
+  setTenant(tenant: CurrentTenantDto | null) {
     if (compare(tenant, this.store.state.tenant)) return;
 
     this.store.set({ ...this.store.state, tenant });

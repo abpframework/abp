@@ -35,7 +35,7 @@ let Chart: any;
   exportAs: 'abpChart',
 })
 export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
-  @Input() type: string;
+  @Input() type!: string;
 
   @Input() data: any = {};
 
@@ -43,9 +43,9 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   @Input() plugins: any[] = [];
 
-  @Input() width: string;
+  @Input() width?: string;
 
-  @Input() height: string;
+  @Input() height?: string;
 
   @Input() responsive = true;
 
@@ -53,7 +53,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   @Output() initialized = new EventEmitter<boolean>();
 
-  @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
+  @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
 
   chart: any;
 
@@ -67,7 +67,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
     });
   }
 
-  onCanvasClick(event) {
+  onCanvasClick(event: MouseEvent) {
     if (this.chart) {
       const element = this.chart.getElementsAtEventForMode(
         event,
