@@ -1,10 +1,10 @@
 # Card Component
 
-ABP Card component is a wrapper component for bootstrap card class.
+The ABP Card Component is a wrapper component for the Bootstrap card class.
 
 ## Usage
 
-ABP Card component is a built-in `ThemeSharedModule` component. If you imported shared module into your feature module, you don't need to do anything. 
+ABP Card Component is a built-in `ThemeSharedModule` component. If you've imported a shared module into your feature module, you don't need to do anything. 
 
 ```ts
 // my-feature.module.ts
@@ -24,7 +24,7 @@ export class MyFeatureModule {}
 
 ```
 
-Then, `abp-card` component can be used. See example below:
+Then, the `abp-card` component can be used. See the example below:
 ```ts
 
 // card-demo.component.ts
@@ -48,4 +48,4 @@ See the result below:
 
 ![abp-card-component](./images/abp-card-component.png)
 
-As you can see in above example, you can customize your card component's style with `cardStyle` input. Also you can add your custom classes with `cardClass` input.
+As you can see in the example above, you can customize your card component's style with the `cardStyle` input. You can also add your custom classes with the `cardClass` input.
