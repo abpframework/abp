@@ -31,7 +31,7 @@ export class FormInputComponent extends AbstractNgModelComponent {
   @Input() inputId!: string;
   @Input() inputReadonly: boolean = false;
   @Input() label: string = '';
-  @Input() labelClass: string = '';
+  @Input() labelClass = 'form-label';
   @Input() inputPlaceholder: string = '';
   @Input() inputType: string = 'text';
   @Input() inputStyle: string = '';
