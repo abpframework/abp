@@ -1,13 +1,13 @@
-import { ConfigStateService, CurrentUserDto } from "@abp/ng.core";
+import { ConfigStateService, CurrentUserDto } from '@abp/ng.core';
 import {
   GetPermissionListResultDto,
   PermissionGrantInfoDto,
   PermissionGroupDto,
   PermissionsService,
   ProviderInfoDto,
-  UpdatePermissionDto
-} from "@abp/ng.permission-management/proxy";
-import { LocaleDirection } from "@abp/ng.theme.shared";
+  UpdatePermissionDto,
+} from '@abp/ng.permission-management/proxy';
+import { LocaleDirection } from '@abp/ng.theme.shared';
 import {
   Component,
   ElementRef,
@@ -16,11 +16,11 @@ import {
   Output,
   QueryList,
   TrackByFunction,
-  ViewChildren
-} from "@angular/core";
-import { concat, of } from "rxjs";
-import { finalize, switchMap, take, tap } from "rxjs/operators";
-import { PermissionManagement } from "../models/permission-management";
+  ViewChildren,
+} from '@angular/core';
+import { concat, of } from 'rxjs';
+import { finalize, switchMap, take, tap } from 'rxjs/operators';
+import { PermissionManagement } from '../models/permission-management';
 
 type PermissionWithStyle = PermissionGrantInfoDto & {
   style: string;
