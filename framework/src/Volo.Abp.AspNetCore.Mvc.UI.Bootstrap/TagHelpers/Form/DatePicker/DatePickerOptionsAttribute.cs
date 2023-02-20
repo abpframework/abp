@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 
+[AttributeUsage(AttributeTargets.Property)]
 public class DatePickerOptionsAttribute : Attribute, IAbpDatePickerOptions
 {
     private IAbpDatePickerOptions _abpDatePickerOptionsImplementation;
