@@ -6,13 +6,13 @@ import { IAuthService, LoginParams } from '@abp/ng.core';
 import { AuthFlowStrategy } from '../strategies';
 import { EnvironmentService } from '@abp/ng.core';
 import { AUTH_FLOW_STRATEGY } from '../tokens/auth-flow-strategy';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { AuthConfig, OAuthService } from "angular-oauth2-oidc";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AbpOAuthService implements IAuthService {
-  private strategy: AuthFlowStrategy;
+  private strategy!: AuthFlowStrategy;
 
   get isInternalAuth() {
     return this.strategy.isInternalAuth;
@@ -25,7 +25,7 @@ export class AbpOAuthService implements IAuthService {
 
     const result$ = environmentService.getEnvironment$().pipe(
       map(env => env?.oAuthConfig),
-      filter(oAuthConfig => !!oAuthConfig),
+      filter(Boolean),
       tap(oAuthConfig => {
         this.strategy =
           oAuthConfig.responseType === 'code'

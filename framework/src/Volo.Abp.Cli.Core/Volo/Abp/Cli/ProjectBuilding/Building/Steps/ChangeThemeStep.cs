@@ -83,7 +83,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         ChangeNamespaceAndKeyword(
             context,
-            "/MyCompanyName.MyProjectName.Host/MyProjectNameServerModule.cs",
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
             $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
             $"{defaultThemeName}ThemeBundles.Styles.Global",
@@ -92,7 +92,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         ChangeNamespaceAndKeyword(
             context,
-            "/MyCompanyName.MyProjectName.Host/MyProjectNameServerModule.cs",
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
             $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
             $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
@@ -209,7 +209,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         ChangeNamespaceAndKeyword(
             context,
-            "/MyCompanyName.MyProjectName.Host/MyProjectNameServerModule.cs",
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
             "LeptonXThemeBundles.Styles.Global",
@@ -218,7 +218,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         ChangeNamespaceAndKeyword(
             context,
-            "/MyCompanyName.MyProjectName.Host/MyProjectNameServerModule.cs",
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
             "AbpAspNetCoreMvcUiLeptonXThemeModule",

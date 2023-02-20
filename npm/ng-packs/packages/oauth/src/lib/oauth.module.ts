@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import {
@@ -7,8 +7,7 @@ import {
   AuthService,
   CHECK_AUTHENTICATION_STATE_FN_KEY,
   noop,
-  PIPE_TO_LOGIN_FN_KEY,
-  SET_TOKEN_RESPONSE_TO_STORAGE_FN_KEY,
+  PIPE_TO_LOGIN_FN_KEY
 } from '@abp/ng.core';
 import { storageFactory } from './utils/storage.factory';
 import { AbpOAuthService } from './services';
@@ -17,7 +16,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { OAuthApiInterceptor } from './interceptors/api.interceptor';
 import { AbpOAuthGuard } from './guards/oauth.guard';
 import { NavigateToManageProfileProvider } from './providers';
-import { checkAccessToken, pipeToLogin, setTokenResponseToStorage } from './utils';
+import { checkAccessToken, pipeToLogin } from './utils';
 
 @NgModule({
   imports: [CommonModule, OAuthModule],
@@ -44,10 +43,6 @@ export class AbpOAuthModule {
           useValue: pipeToLogin,
         },
         {
-          provide: SET_TOKEN_RESPONSE_TO_STORAGE_FN_KEY,
-          useValue: setTokenResponseToStorage,
-        },
-        {
           provide: CHECK_AUTHENTICATION_STATE_FN_KEY,
           useValue: checkAccessToken,
         },
@@ -63,7 +58,7 @@ export class AbpOAuthModule {
           deps: [OAuthConfigurationHandler],
           useFactory: noop,
         },
-        OAuthModule.forRoot().providers,
+        OAuthModule.forRoot().providers as Provider[],
         { provide: OAuthStorage, useFactory: storageFactory },
       ],
     };

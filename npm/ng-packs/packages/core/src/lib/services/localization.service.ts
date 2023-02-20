@@ -90,15 +90,16 @@ export class LocalizationService {
             Object.entries(remote).forEach(entry => {
               const resourceName = entry[0];
               const remoteTexts = entry[1];
-              let resource = local.get(resourceName) || {};
+              let resource = local?.get(resourceName) || {};
               resource = { ...resource, ...remoteTexts };
 
-              local.set(resourceName, resource);
+              local?.set(resourceName, resource);
             });
           }
 
           return local;
         }),
+        filter(Boolean)
       )
       .subscribe(val => this.localizations$.next(val));
   }
@@ -134,6 +135,7 @@ export class LocalizationService {
           lang => this.configState.getDeep('localization.currentCulture.cultureName') !== lang,
         ),
         switchMap(lang => this.configState.refreshAppState().pipe(map(() => lang))),
+        filter(Boolean),
         switchMap(lang => from(this.registerLocale(lang).then(() => lang))),
       )
       .subscribe(lang => this._languageChange$.next(lang));
@@ -176,14 +178,14 @@ export class LocalizationService {
     return this.getLocalization(this.configState.getAll(), key, ...interpolateParams);
   }
 
-  localize(resourceName: string, key: string, defaultValue: string): Observable<string> {
+  localize(resourceName: string, key: string, defaultValue: string): Observable<string | null> {
     return this.configState.getOne$('localization').pipe(
       map(createLocalizer),
       map(localize => localize(resourceName, key, defaultValue)),
     );
   }
 
-  localizeSync(resourceName: string, key: string, defaultValue: string): string {
+  localizeSync(resourceName: string, key: string, defaultValue: string): string | null {
     const localization = this.configState.getOne('localization');
     return createLocalizer(localization)(resourceName, key, defaultValue);
   }
@@ -210,7 +212,7 @@ export class LocalizationService {
     ...interpolateParams: string[]
   ) {
     if (!key) key = '';
-    let defaultValue: string;
+    let defaultValue = '';
 
     if (typeof key !== 'string') {
       defaultValue = key.defaultValue;
@@ -219,7 +221,7 @@ export class LocalizationService {
 
     const keys = key.split('::') as string[];
     const warn = (message: string) => {
-      if (isDevMode) console.warn(message);
+      if (isDevMode()) console.warn(message);
     };
 
     if (keys.length < 2) {
@@ -263,7 +265,7 @@ export class LocalizationService {
   }
 }
 
-function recursivelyMergeBaseResources(baseResourceName: string, source: ResourceDto) {
+function recursivelyMergeBaseResources(baseResourceName: string, source: ResourceDto): ApplicationLocalizationResourceDto {
   const item = source[baseResourceName];
 
   if (item.baseResources.length === 0) {
@@ -278,7 +280,7 @@ function recursivelyMergeBaseResources(baseResourceName: string, source: Resourc
 }
 
 function mergeResourcesWithBaseResource(resource: ResourceDto): ResourceDto {
-  const entities = Object.keys(resource).map(key => {
+  const entities: Array<[string, ApplicationLocalizationResourceDto]> = Object.keys(resource).map(key => {
     const newValue = recursivelyMergeBaseResources(key, resource);
     return [key, newValue];
   });
@@ -296,5 +298,5 @@ function combineLegacyandNewResources(
   }, legacy);
 }
 
-type LegacyLanguageDto = Record<string, Record<string, string>>;
-type ResourceDto = Record<string, ApplicationLocalizationResourceDto>;
+export type LegacyLanguageDto = Record<string, Record<string, string>>;
+export type ResourceDto = Record<string, ApplicationLocalizationResourceDto>;

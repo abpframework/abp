@@ -13,14 +13,14 @@ const PASSWORD_FIELDS = ['password', 'confirmPassword'];
   templateUrl: './reset-password.component.html',
 })
 export class ResetPasswordComponent implements OnInit {
-  form: UntypedFormGroup;
+  form!: UntypedFormGroup;
 
   inProgress = false;
 
   isPasswordReset = false;
 
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
-    if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;
+    if (PASSWORD_FIELDS.indexOf(String(control?.name)) < 0) return errors;
 
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
   };
@@ -58,9 +58,9 @@ export class ResetPasswordComponent implements OnInit {
 
     this.accountService
       .resetPassword({
-        userId: this.form.get('userId').value,
-        resetToken: this.form.get('resetToken').value,
-        password: this.form.get('password').value,
+        userId: this.form.get('userId')?.value,
+        resetToken: this.form.get('resetToken')?.value,
+        password: this.form.get('password')?.value,
       })
       .pipe(finalize(() => (this.inProgress = false)))
       .subscribe(() => {

@@ -16,6 +16,8 @@ public class AbpColumnTagHelper : AbpTagHelper<AbpColumnTagHelper, AbpColumnTagH
 
     public ColumnSize SizeXl { get; set; }
 
+    public ColumnSize SizeXxl { get; set;}
+
     public ColumnSize Offset { get; set; }
 
     public ColumnSize OffsetSm { get; set; }
@@ -25,6 +27,8 @@ public class AbpColumnTagHelper : AbpTagHelper<AbpColumnTagHelper, AbpColumnTagH
     public ColumnSize OffsetLg { get; set; }
 
     public ColumnSize OffsetXl { get; set; }
+
+    public ColumnSize OffsetXxl { get; set; }
 
     [HtmlAttributeName("order")]
     public ColumnOrder ColumnOrder { get; set; }

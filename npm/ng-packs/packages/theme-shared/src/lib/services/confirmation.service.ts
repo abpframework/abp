@@ -8,7 +8,7 @@ import { Confirmation } from '../models/confirmation';
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
   status$!: Subject<Confirmation.Status>;
-  confirmation$ = new ReplaySubject<Confirmation.DialogData>(1);
+  confirmation$ = new ReplaySubject<Confirmation.DialogData | null>(1);
 
   private containerComponentRef!: ComponentRef<ConfirmationComponent>;
 
