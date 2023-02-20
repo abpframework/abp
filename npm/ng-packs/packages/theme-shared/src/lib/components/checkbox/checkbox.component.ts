@@ -16,7 +16,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
         (blur)="onBlur.next()"
         (focus)="onFocus.next()" 
       >    
-      <label class="form-check-label" *ngIf="label" [ngClass]="labelClass" [for]="checkboxId" > {{label | abpLocalization}} </label>
+      <label *ngIf="label" [ngClass]="labelClass" [for]="checkboxId" > {{label | abpLocalization}} </label>
     </div>
   `,
   providers: [
@@ -30,13 +30,14 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 export class FormCheckboxComponent extends AbstractNgModelComponent {
 
   @Input() label?: string;
+  @Input() labelClass = 'form-check-label';
   @Input() checkboxId!: string;
   @Input() checkboxStyle = '';
   @Input() checkboxClass = 'form-check-input';
   @Input() checkboxReadonly = false;
   @Output() onBlur = new EventEmitter<void>();
   @Output() onFocus = new EventEmitter<void>();
-  
+
   constructor(injector: Injector) {
     super(injector);
   }
