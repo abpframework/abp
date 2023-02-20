@@ -10,7 +10,7 @@ import { finalize } from 'rxjs/operators';
 export class ForgotPasswordComponent {
   form: UntypedFormGroup;
 
-  inProgress: boolean;
+  inProgress?: boolean;
 
   isEmailSent = false;
 
@@ -27,7 +27,7 @@ export class ForgotPasswordComponent {
 
     this.accountService
       .sendPasswordResetCode({
-        email: this.form.get('email').value,
+        email: this.form.get('email')?.value,
         appName: 'Angular',
       })
       .pipe(finalize(() => (this.inProgress = false)))

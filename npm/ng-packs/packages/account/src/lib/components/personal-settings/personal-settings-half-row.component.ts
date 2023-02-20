@@ -27,11 +27,11 @@ export class PersonalSettingsHalfRowComponent {
   public displayName: string;
   public name: string;
   public id: string;
-  public formGroup: UntypedFormGroup;
+  public formGroup!: UntypedFormGroup;
 
   constructor(@Inject(EXTENSIONS_FORM_PROP) private propData: FormProp) {
     this.displayName = propData.displayName;
     this.name = propData.name;
-    this.id = propData.id;
+    this.id = propData.id || '';
   }
 }

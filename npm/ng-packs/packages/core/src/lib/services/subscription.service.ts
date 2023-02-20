@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
 import type { OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Injectable } from '@angular/core';
 import type { Observable, PartialObserver } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Injectable()
 export class SubscriptionService implements OnDestroy {
@@ -33,7 +33,9 @@ export class SubscriptionService implements OnDestroy {
 
   closeOne(subscription: Subscription | undefined | null) {
     this.removeOne(subscription);
-    subscription.unsubscribe();
+    if (subscription) {
+      subscription.unsubscribe();
+    }
   }
 
   ngOnDestroy(): void {

@@ -10,7 +10,7 @@
     "@abp/utils": "~7.1.0-rc.1",
     "angular-oauth2-oidc": "^15.0.1",
     "just-clone": "^6.1.1",
-    "just-compare": "^1.4.0",
+    "just-compare": "^2.3.0",
     "ts-toolbelt": "6.15.4",
     "tslib": "^2.0.0"
   },

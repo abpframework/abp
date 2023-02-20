@@ -24,19 +24,23 @@ export function getRemoteEnv(injector: Injector, environment: Partial<Environmen
         httpErrorReporter.reportError(err);
         return of(null);
       }), // TODO: Consider get handle function from a provider
-      tap(env => environmentService.setState(mergeEnvironments(environment, env, remoteEnv))),
+      tap(env =>
+        environmentService.setState(
+          mergeEnvironments(environment, env || ({} as Environment), remoteEnv as RemoteEnv),
+        ),
+      ),
     )
     .toPromise();
 }
 
 function mergeEnvironments(
   local: Partial<Environment>,
-  remote: any,
+  remote: Environment,
   config: RemoteEnv,
 ): Environment {
   switch (config.mergeStrategy) {
     case 'deepmerge':
-      return deepMerge(local, remote);
+      return deepMerge(local, remote) as Environment;
     case 'overwrite':
     case null:
     case undefined:

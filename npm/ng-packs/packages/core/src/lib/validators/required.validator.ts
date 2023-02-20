@@ -16,7 +16,7 @@ export function validateRequired({ allowEmptyStrings }: RequiredOptions = {}): V
   return required;
 }
 
-function isValidRequired(value: any, allowEmptyStrings: boolean): boolean {
+function isValidRequired(value: any, allowEmptyStrings: boolean | undefined): boolean {
   if (value || value === 0 || value === false) return true;
 
   if (allowEmptyStrings && value === '') return true;

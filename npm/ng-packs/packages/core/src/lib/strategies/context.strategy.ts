@@ -13,7 +13,7 @@ export class NoContextStrategy<
   T extends Type<any> | TemplateRef<any> = any,
 > extends ContextStrategy<T> {
   constructor() {
-    super(undefined);
+    super(undefined as unknown as Partial<ContextType<T>>);
   }
 }
 

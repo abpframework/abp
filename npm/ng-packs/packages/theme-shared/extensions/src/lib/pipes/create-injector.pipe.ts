@@ -25,7 +25,7 @@ export class CreateInjectorPipe<R> implements PipeTransform {
       options?: InjectOptions | InjectFlags,
     ) => {
       const componentData = context.getData();
-      const componentDataCallback = data => {
+      const componentDataCallback = (data: any) => {
         data = data ?? context.getData();
         return action.action(data);
       };

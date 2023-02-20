@@ -86,7 +86,10 @@ export class HttpWaitService {
     this.store.patch({ filteredRequests });
   }
 
-  private applyFilter(requests: HttpRequest<any>[]) {
+  private applyFilter(requests: HttpRequest<any>[] | undefined) {
+    if (!requests) {
+      return [];
+    }
     const { filteredRequests } = this.store.state;
     return requests.filter(
       ({ method, url }) =>

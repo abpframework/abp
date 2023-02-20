@@ -57,7 +57,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
-  public injectorForCustomComponent: Injector;
+  public injectorForCustomComponent?: Injector;
 
   asterisk = '';
 
@@ -95,7 +95,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
       ? text$.pipe(
           debounceTime(300),
           distinctUntilChanged(),
-          switchMap(text => this.prop.options(this.data, text)),
+          switchMap(text => this.prop?.options?.(this.data, text) || of([])),
         )
       : of([]);
 
@@ -109,7 +109,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   get isInvalid() {
     const control = this.form.get(this.prop.name);
-    return control.touched && control.invalid;
+    return control?.touched && control.invalid;
   }
 
   constructor(

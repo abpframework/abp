@@ -44,7 +44,7 @@ export class ExtensibleFormComponent<R = any> {
   }
 
   extraPropertiesKey = EXTRA_PROPERTIES_KEY;
-  groupedPropList: GroupedFormPropList;
+  groupedPropList!: GroupedFormPropList;
   record!: R;
 
   createGroupedList(propList: FormPropList<R>) {
