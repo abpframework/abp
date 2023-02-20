@@ -1,10 +1,11 @@
 ﻿using System;
+using Volo.Abp.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity;
 
 [Serializable]
-public class OrganizationUnitEto : IMultiTenant
+public class OrganizationUnitEto : IMultiTenant, IHasEntityVersion
 {
     public Guid Id { get; set; }
 
@@ -13,4 +14,6 @@ public class OrganizationUnitEto : IMultiTenant
     public string Code { get; set; }
 
     public string DisplayName { get; set; }
+
+    public int EntityVersion { get; set; }
 }

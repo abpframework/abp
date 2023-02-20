@@ -1,13 +1,14 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs;
 
-public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant
+public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
 {
     public virtual Guid BlogId { get; protected set; }
 
@@ -29,9 +30,11 @@ public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant
     public Guid AuthorId { get; set; }
 
     public virtual CmsUser Author { get; set; }
-    
+
     public virtual BlogPostStatus Status { get; set; }
-    
+
+    public virtual int EntityVersion { get; protected set; }
+
     protected BlogPost()
     {
     }
@@ -81,12 +84,12 @@ public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         Content = Check.Length(content, nameof(content), BlogPostConsts.MaxContentLength);
     }
-    
+
     public virtual void SetDraft()
     {
         Status = BlogPostStatus.Draft;
     }
-    
+
     public virtual void SetPublished()
     {
         Status = BlogPostStatus.Published;

@@ -464,6 +464,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     {
         if (entry.State == EntityState.Modified && entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
         {
+            IncrementEntityVersionProperty(entry);
             SetModificationAuditProperties(entry);
 
             if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
@@ -577,6 +578,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     protected virtual void SetDeletionAuditProperties(EntityEntry entry)
     {
         AuditPropertySetter?.SetDeletionProperties(entry.Entity);
+    }
+
+    protected virtual void IncrementEntityVersionProperty(EntityEntry entry)
+    {
+        AuditPropertySetter?.IncrementEntityVersionProperty(entry.Entity);
     }
 
     protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)

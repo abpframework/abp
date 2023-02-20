@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using OpenIddict.Abstractions;
+using OpenIddict.Demo.Server.ExtensionGrants;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -75,6 +76,7 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                     OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
                     OpenIddictConstants.Permissions.GrantTypes.DeviceCode,
                     OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
+                    OpenIddictConstants.Permissions.Prefixes.GrantType + MyTokenExtensionGrant.ExtensionGrantName,
 
                     OpenIddictConstants.Permissions.ResponseTypes.Code,
                     OpenIddictConstants.Permissions.ResponseTypes.CodeIdToken,
