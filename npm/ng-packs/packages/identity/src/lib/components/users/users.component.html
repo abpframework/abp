@@ -57,9 +57,11 @@
             >
               <abp-checkbox 
               *abpReplaceableTemplate="{
-                checkboxId:'roles-' + i,
-                componentKey: inputKey,
-                formControl:roleGroup.controls[roles[i].name]
+                inputs:{
+                  checkboxId:'roles-' + i,
+                  formControl:roleGroup.controls[roles[i].name]
+                },
+                componentKey: inputKey
               }" 
                 [checkboxId]="'roles-' + i"
                 [formControl]="roleGroup.controls[roles[i].name]"
