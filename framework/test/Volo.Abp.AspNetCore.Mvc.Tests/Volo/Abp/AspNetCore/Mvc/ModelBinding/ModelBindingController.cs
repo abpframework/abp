@@ -49,6 +49,12 @@ public class ModelBindingController : AbpController
                input.Time3.Value.Kind.ToString().ToLower() + "_" +
                input.InnerModel.Time4.Kind.ToString().ToLower();
     }
+
+    [HttpPost("Guid_Json_Test")]
+    public GuidJsonModel Guid_Json_Test([FromBody] GuidJsonModel input)
+    {
+        return input;
+    }
 }
 
 public class GetDateTimeKindModel
@@ -67,4 +73,21 @@ public class GetDateTimeKindModel
     {
         public DateTime Time4 { get; set; }
     }
+}
+
+public class GuidJsonModel
+{
+    public Guid UserId { get; set; }
+
+    public Guid UserId2 { get; set; }
+
+    public Guid UserId3 { get; set; }
+
+    public Guid UserId4 { get; set; }
+
+    public Guid UserId5 { get; set; }
+
+    public Guid? TenantId { get; set; }
+
+    public Guid? TenantId2 { get; set; }
 }

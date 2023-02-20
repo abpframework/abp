@@ -9,6 +9,7 @@ import { HttpErrorReporterService } from '../services/http-error-reporter.servic
 import { PermissionService } from '../services/permission.service';
 import { RoutesService } from '../services/routes.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
+import { IncludeLocalizationResourcesProvider } from '../providers';
 
 describe('PermissionGuard', () => {
   let spectator: SpectatorService<PermissionGuard>;
@@ -36,7 +37,7 @@ describe('PermissionGuard', () => {
             },
           },
         ],
-        { relativeLinkResolution: 'legacy' },
+        {},
       ),
     ],
     providers: [
@@ -45,6 +46,7 @@ describe('PermissionGuard', () => {
         useValue: '/',
       },
       { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
+      IncludeLocalizationResourcesProvider,
     ],
   });
 
