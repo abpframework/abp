@@ -1,11 +1,11 @@
 import { NgZone } from '@angular/core';
-import { PRIMARY_OUTLET, Router, UrlSegmentGroup } from '@angular/router';
+import { PRIMARY_OUTLET, Router, UrlSegment, UrlSegmentGroup } from "@angular/router";
 import { ABP } from '../models/common';
 import { RoutesService } from '../services/routes.service';
 import { noop } from './common-utils';
 import { TreeNode } from './tree-utils';
 
-export function findRoute(routesService: RoutesService, path: string): TreeNode<ABP.Route> {
+export function findRoute(routesService: RoutesService, path: string): TreeNode<ABP.Route> | null {
   const node = routesService.find(route => route.path === path);
 
   return node || path === '/'
@@ -14,7 +14,7 @@ export function findRoute(routesService: RoutesService, path: string): TreeNode<
 }
 
 export function getRoutePath(router: Router, url = router.url) {
-  const emptyGroup = { segments: [] } as UrlSegmentGroup;
+  const emptyGroup = { segments: [] as UrlSegment[] } as UrlSegmentGroup;
   const primaryGroup = router.parseUrl(url).root.children[PRIMARY_OUTLET];
 
   return '/' + (primaryGroup || emptyGroup).segments.map(({ path }) => path).join('/');

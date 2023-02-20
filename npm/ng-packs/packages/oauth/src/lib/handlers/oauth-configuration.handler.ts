@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { AuthConfig, OAuthService } from "angular-oauth2-oidc";
 import compare from 'just-compare';
 import { filter, map } from 'rxjs/operators';
 import { ABP, EnvironmentService, CORE_OPTIONS } from '@abp/ng.core';
@@ -20,10 +20,10 @@ export class OAuthConfigurationHandler {
     this.environmentService
       .createOnUpdateStream(state => state)
       .pipe(
-        map(environment => environment.oAuthConfig),
+        map(environment => environment.oAuthConfig as AuthConfig),
         filter(config => !compare(config, this.options.environment.oAuthConfig)),
       )
-      .subscribe(config => {
+      .subscribe((config) => {
         this.oAuthService.configure(config);
       });
   }

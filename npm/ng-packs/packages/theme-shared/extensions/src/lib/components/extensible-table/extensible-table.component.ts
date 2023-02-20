@@ -48,7 +48,7 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExtensibleTableComponent<R = any> implements OnChanges {
-  protected _actionsText: string;
+  protected _actionsText!: string;
   @Input()
   set actionsText(value: string) {
     this._actionsText = value;
@@ -57,13 +57,13 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     return this._actionsText ?? (this.actionList.length > 1 ? 'AbpUi::Actions' : '');
   }
 
-  @Input() data: R[];
-  @Input() list: ListService;
-  @Input() recordsTotal: number;
+  @Input() data!: R[];
+  @Input() list!: ListService;
+  @Input() recordsTotal!: number;
   @Input() set actionsColumnWidth(width: number) {
     this.setColumnWidths(width ? Number(width) : undefined);
   }
-  @Input() actionsTemplate: TemplateRef<any>;
+  @Input() actionsTemplate?: TemplateRef<any>;
 
   @Output() tableActivate = new EventEmitter();
 
@@ -73,7 +73,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   entityPropTypeClasses: EntityPropTypeClass;
 
-  readonly columnWidths: number[];
+  readonly columnWidths!: number[];
 
   readonly propList: EntityPropList<R>;
 
@@ -102,7 +102,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     this.setColumnWidths(DEFAULT_ACTIONS_COLUMN_WIDTH);
   }
 
-  private setColumnWidths(actionsColumn: number) {
+  private setColumnWidths(actionsColumn: number | undefined) {
     const widths = [actionsColumn];
     this.propList.forEach(({ value: prop }) => {
       widths.push(prop.columnWidth);
@@ -110,8 +110,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     (this.columnWidths as any) = widths;
   }
 
-  private getDate(value: Date, format: string) {
-    return value ? formatDate(value, format, this.locale) : '';
+  private getDate(value: Date | undefined, format: string | undefined) {
+    return value && format ? formatDate(value, format, this.locale) : '';
   }
 
   private getIcon(value: boolean) {
@@ -122,7 +122,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   private getEnum(rowValue: any, list: Array<ABP.Option<any>>) {
     if (!list) return rowValue;
-    const { key } = list.find(({ value }) => value === rowValue);
+    const { key } = list.find(({ value }) => value === rowValue) || {};
     return key;
   }
 
@@ -139,7 +139,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
           case ePropType.DateTime:
             return this.getDate(value, getShortDateShortTimeFormat(this.config));
           case ePropType.Enum:
-            return this.getEnum(value, prop.enumList);
+            return this.getEnum(value, prop.enumList || []);
           default:
             return value;
           // More types can be handled in the future
@@ -151,7 +151,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   ngOnChanges({ data }: SimpleChanges) {
     if (!data?.currentValue) return;
 
-    this.data = data.currentValue.map((record, index) => {
+    this.data = data.currentValue.map((record: any, index: number) => {
       this.propList.forEach(prop => {
         const propData = { getInjected: this.getInjected, record, index } as any;
         const value = this.getContent(prop.value, propData);

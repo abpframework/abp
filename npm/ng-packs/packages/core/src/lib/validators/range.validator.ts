@@ -21,10 +21,10 @@ export function validateRange({ maximum = Infinity, minimum = 0 }: RangeOptions 
   };
 }
 
-function getMaxError(value: number, max: number, min: number): RangeError {
+function getMaxError(value: number, max: number, min: number): RangeError | null {
   return value > max ? { range: { max, min } } : null;
 }
 
-function getMinError(value: number, min: number, max: number): RangeError {
+function getMinError(value: number, min: number, max: number): RangeError | null {
   return value < min ? { range: { min, max } } : null;
 }

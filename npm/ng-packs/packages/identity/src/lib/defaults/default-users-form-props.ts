@@ -67,7 +67,7 @@ export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS.map
   if (prop.name === 'password') {
     return {
       ...prop,
-      validators: data => [...getPasswordValidators({ get: data.getInjected })],
+      validators: (data: any) => [...getPasswordValidators({ get: data.getInjected })],
     };
   }
   return prop;
