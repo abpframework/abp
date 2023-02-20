@@ -6,9 +6,8 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
   selector: 'abp-form-input',
   template: `
     <div class="mb-3">
-      <label class="form-label" *ngIf="label" [ngClass]="labelClass" [for]="inputId" > {{label | abpLocalization}} </label>
+      <label class= *ngIf="label" [ngClass]="labelClass" [for]="inputId" > {{label | abpLocalization}} </label>
       <input
-        class="form-control"  
         type="text"
         [id]="inputId" 
         [placeholder]="inputPlaceholder" 
@@ -36,7 +35,7 @@ export class FormInputComponent extends AbstractNgModelComponent {
   @Input() inputPlaceholder: string = '';
   @Input() inputType: string = 'text';
   @Input() inputStyle: string = '';
-  @Input() inputClass: string = '';
+  @Input() inputClass: string = 'form-control';
   @Output() onBlur = new EventEmitter<void>();
   @Output() onFocus = new EventEmitter<void>();
 
