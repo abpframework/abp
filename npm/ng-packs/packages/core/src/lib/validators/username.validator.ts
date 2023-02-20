@@ -14,7 +14,7 @@ export interface UsernameOptions {
 const onlyLetterAndNumberRegex = /^[a-zA-Z0-9]+$/;
 
 export function validateUsername(
-  { pattern }: UsernameOptions = { pattern: onlyLetterAndNumberRegex },
+  { pattern = /.*/ }: UsernameOptions = { pattern: onlyLetterAndNumberRegex },
 ): ValidatorFn {
   return (control: AbstractControl): UsernamePatternError | null => {
     const isValid = isValidUserName(control.value, pattern);

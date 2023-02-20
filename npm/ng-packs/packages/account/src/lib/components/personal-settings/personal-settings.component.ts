@@ -31,11 +31,11 @@ export class PersonalSettingsComponent
     Account.PersonalSettingsComponentInputs,
     Account.PersonalSettingsComponentOutputs
 {
-  selected: ProfileDto;
+  selected?: ProfileDto;
 
-  form: UntypedFormGroup;
+  form!: UntypedFormGroup;
 
-  inProgress: boolean;
+  inProgress?: boolean;
 
   constructor(
     private fb: UntypedFormBuilder,

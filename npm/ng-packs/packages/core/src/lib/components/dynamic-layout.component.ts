@@ -17,8 +17,8 @@ import { TreeNode } from '../utils/tree-utils';
   providers: [SubscriptionService],
 })
 export class DynamicLayoutComponent {
-  layout: Type<any>;
-  layoutKey: eLayoutType;
+  layout?: Type<any>;
+  layoutKey?: eLayoutType;
 
   // TODO: Consider a shared enum (eThemeSharedComponents) for known layouts
   readonly layouts = new Map([
@@ -29,9 +29,9 @@ export class DynamicLayoutComponent {
 
   isLayoutVisible = true;
 
-  private router: Router;
-  private route: ActivatedRoute;
-  private routes: RoutesService;
+  private router!: Router;
+  private route!: ActivatedRoute;
+  private routes!: RoutesService;
 
   constructor(
     injector: Injector,
@@ -42,7 +42,7 @@ export class DynamicLayoutComponent {
     @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
   ) {
     if (dynamicLayoutComponent) {
-      if (isDevMode) console.warn('DynamicLayoutComponent must be used only in AppComponent.');
+      if (isDevMode()) console.warn('DynamicLayoutComponent must be used only in AppComponent.');
       return;
     }
     this.route = injector.get(ActivatedRoute);
@@ -80,8 +80,10 @@ export class DynamicLayoutComponent {
     if (this.layoutKey === expectedLayout) return;
 
     const key = this.layouts.get(expectedLayout);
-    this.layout = this.getComponent(key)?.component;
-    this.layoutKey = expectedLayout;
+    if (key) {
+      this.layout = this.getComponent(key)?.component;
+      this.layoutKey = expectedLayout;
+    }
     if(!this.layout){
       this.showLayoutNotFoundError(expectedLayout);
     }
@@ -94,7 +96,7 @@ export class DynamicLayoutComponent {
     }
     console.warn(message);
   }
-  
+
 
   private listenToLanguageChange() {
     this.subscription.addOne(this.localizationService.languageChange$, () => {
@@ -103,7 +105,7 @@ export class DynamicLayoutComponent {
     });
   }
 
-  private getComponent(key: string): ReplaceableComponents.ReplaceableComponent {
+  private getComponent(key: string): ReplaceableComponents.ReplaceableComponent | undefined {
     return this.replaceableComponents.get(key);
   }
 }

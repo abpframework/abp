@@ -7,7 +7,7 @@ import { ConfigStateService } from './config-state.service';
 import { PermissionService } from './permission.service';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export abstract class AbstractTreeService<T extends object> {
+export abstract class AbstractTreeService<T extends {[key: string | number | symbol]: any}> {
   abstract id: string;
   abstract parentId: string;
   abstract hide: (item: T) => boolean;
@@ -84,7 +84,7 @@ export abstract class AbstractTreeService<T extends object> {
   }
 
   find(predicate: (item: TreeNode<T>) => boolean, tree = this.tree): TreeNode<T> | null {
-    return tree.reduce(
+    return tree.reduce<TreeNode<T> | null>(
       (acc, node) => (acc ? acc : predicate(node) ? node : this.find(predicate, node.children)),
       null,
     );
@@ -119,9 +119,9 @@ export abstract class AbstractTreeService<T extends object> {
   }
 
   search(params: Partial<T>, tree = this.tree): TreeNode<T> | null {
-    const searchKeys = Object.keys(params);
+    const searchKeys = Object.keys(params) as Array<keyof Partial<T>>;
 
-    return tree.reduce(
+    return tree.reduce<TreeNode<T> | null>(
       (acc, node) =>
         acc
           ? acc
@@ -147,7 +147,7 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
     if (!Number.isInteger(a.order)) return 1;
     if (!Number.isInteger(b.order)) return -1;
 
-    return a.order - b.order;
+    return (a.order as number) - (b.order as number);
   };
 
   constructor(protected injector: Injector) {
@@ -170,7 +170,7 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 
   hasInvisibleChild(identifier: string): boolean {
     const node = this.find(item => item[this.id] === identifier);
-    return node?.children?.some(child => child.invisible);
+    return node?.children?.some(child => child.invisible) || false;
   }
 
   /* istanbul ignore next */

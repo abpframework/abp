@@ -1,5 +1,5 @@
 import { IdentityRoleDto } from '@abp/ng.identity/proxy';
-import { ePropType, FormProp, PropData } from '@abp/ng.theme.shared/extensions';
+import { ePropType, FormProp, PropData, PropPredicate } from "@abp/ng.theme.shared/extensions";
 import { Validators } from '@angular/forms';
 
 export const DEFAULT_ROLES_CREATE_FORM_PROPS = FormProp.createMany<IdentityRoleDto>([
@@ -8,7 +8,7 @@ export const DEFAULT_ROLES_CREATE_FORM_PROPS = FormProp.createMany<IdentityRoleD
     name: 'name',
     displayName: 'AbpIdentity::RoleName',
     id: 'role-name',
-    disabled: (data: PropData<IdentityRoleDto>) => data.record && data.record.isStatic,
+    disabled: ((data: PropData<IdentityRoleDto>) => data.record && data.record.isStatic) as PropPredicate<IdentityRoleDto>,
     validators: () => [Validators.required],
   },
   {

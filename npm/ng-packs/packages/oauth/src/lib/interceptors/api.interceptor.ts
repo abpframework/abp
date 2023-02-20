@@ -3,11 +3,11 @@ import { Inject, Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { finalize } from 'rxjs/operators';
 import {
-  SessionStateService,
   HttpWaitService,
-  TENANT_KEY,
   IApiInterceptor,
   IS_EXTERNAL_REQUEST,
+  SessionStateService,
+  TENANT_KEY,
 } from '@abp/ng.core';
 
 @Injectable({
