@@ -59,15 +59,16 @@
               *abpReplaceableTemplate="{
                 inputs:{
                   checkboxId:'roles-' + i,
+                  label:roles[i].name,
                   formControl:roleGroup.controls[roles[i].name]
                 },
                 componentKey: inputKey
               }" 
                 [checkboxId]="'roles-' + i"
                 [formControl]="roleGroup.controls[roles[i].name]"
+                [label]="roles[i].name"
               >
               </abp-checkbox>
-              <label class="form-check-label" [attr.for]="'roles-' + i">{{ roles[i].name }}</label>
             </div>
           </ng-template>
         </li>
