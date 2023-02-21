@@ -306,7 +306,7 @@ Assume that there is a `Product` entity (probably an aggregate root entity) in a
 
 The first step to establish the synchronization is to define an ETO (Event Transfer Object) class in the Catalog microservice that is used to transfer the event data. Assuming the `Product` entity has a `Guid` key, your ETO can be as shown below:
 
-````
+````csharp
 [EventName("product")]
 public class ProductEto : EntityEto<Guid>
 {
