@@ -14,7 +14,7 @@ import { CardDemoComponent } from './chart-demo.component';
 
 @NgModule({
   imports: [
-    SharedModule,
+    ThemeSharedModule ,
     // ...
   ],
   declarations: [CardDemoComponent],
