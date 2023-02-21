@@ -4,6 +4,13 @@
 @using Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
 @using Volo.Blogging
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Blogging.Localization
 @inherits Volo.Blogging.Admin.Pages.Blogging.BloggingAdminPage
 @model IndexModel
@@ -11,6 +18,12 @@
 @inject IAuthorizationService Authorization
 @{
     ViewBag.PageTitle = "Blogs";
+}
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["Blogs"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:Blogs"].Value);
+    PageLayout.Content.MenuItemName = BloggingAdminMenuNames.Blogs;
 }
 
 @section scripts {
