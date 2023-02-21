@@ -36,6 +36,9 @@ import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.t
 import { DateParserFormatter } from './utils/date-parser-formatter';
 import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from './tokens/confirmation-icons.token';
 import { PasswordComponent } from './components/password/password.component';
+import { CardModule } from './components/card/card.module';
+import { AbpVisibleDirective } from './directives';
+
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -52,6 +55,7 @@ const declarationsWithExports = [
   NgxDatatableListDirective,
   LoadingDirective,
   ModalCloseDirective,
+  AbpVisibleDirective,
 ];
 
 @NgModule({
@@ -61,9 +65,16 @@ const declarationsWithExports = [
     NgxValidateCoreModule,
     NgbPaginationModule,
     EllipsisModule,
+    CardModule,
   ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
-  exports: [NgxDatatableModule, EllipsisModule, NgxValidateCoreModule, ...declarationsWithExports],
+  exports: [
+    NgxDatatableModule,
+    EllipsisModule,
+    NgxValidateCoreModule,
+    ...declarationsWithExports,
+    CardModule,
+  ],
   providers: [DatePipe],
 })
 export class BaseThemeSharedModule {}

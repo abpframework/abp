@@ -4,7 +4,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'abp-password',
-  templateUrl: `password.component.html`,
+  templateUrl: `./password.component.html`,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -16,7 +16,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 export class PasswordComponent extends AbstractNgModelComponent {
   @Input() inputId!: string;
   @Input() formControlName!: string;
-  fieldTextType: boolean;
+  fieldTextType?: boolean;
 
   constructor(injector: Injector) {
     super(injector);

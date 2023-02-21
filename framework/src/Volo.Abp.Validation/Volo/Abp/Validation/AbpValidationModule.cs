@@ -16,7 +16,7 @@ public class AbpValidationModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
+        context.Services.OnRegistered(ValidationInterceptorRegistrar.RegisterIfNeeded);
         AutoAddObjectValidationContributors(context.Services);
     }
 
@@ -39,7 +39,7 @@ public class AbpValidationModule : AbpModule
     {
         var contributorTypes = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(IObjectValidationContributor).IsAssignableFrom(context.ImplementationType))
             {

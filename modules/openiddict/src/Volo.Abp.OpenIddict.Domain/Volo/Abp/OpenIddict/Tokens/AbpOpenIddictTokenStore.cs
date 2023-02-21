@@ -25,8 +25,9 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
         IUnitOfWorkManager unitOfWorkManager,
         IGuidGenerator guidGenerator,
         IOpenIddictApplicationRepository applicationRepository,
-        IOpenIddictAuthorizationRepository authorizationRepository)
-        : base(repository, unitOfWorkManager, guidGenerator)
+        IOpenIddictAuthorizationRepository authorizationRepository,
+        AbpOpenIddictIdentifierConverter identifierConverter)
+        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter)
     {
         ApplicationRepository = applicationRepository;
         AuthorizationRepository = authorizationRepository;

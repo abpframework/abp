@@ -56,7 +56,7 @@ export abstract class PropsFactory<C extends Props<any>> {
   }
 }
 
-export abstract class Props<L extends PropList> {
+export abstract class Props<L extends PropList<any, InferredProp<L>>> {
   protected abstract _ctor: Type<L>;
 
   get props(): L {
@@ -78,11 +78,14 @@ export abstract class Props<L extends PropList> {
   }
 }
 
-export type PropContributorCallbacks<L extends PropList<any>> = Record<
+export type PropContributorCallbacks<L extends PropList<any, InferredProp<L>>> = Record<
   string,
   PropContributorCallback<L>[]
 >;
 
-export type PropContributorCallback<L extends PropList<any>> = (propList: L) => any;
+export type PropContributorCallback<L extends PropList<any, InferredProp<L>>> = (
+  propList: L,
+) => any;
 
 type InferredPropList<C> = C extends Props<infer L> ? L : never;
+export type InferredProp<T> = T extends PropList<any, infer U> ? U : T;

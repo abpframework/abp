@@ -164,6 +164,14 @@ If your entity is a soft-delete entity, you can use the `HardDeleteAsync` method
 
 > See the [Data Filtering](Data-Filtering.md) documentation for more about soft-delete.
 
+### Delete Direct
+
+`DeleteDirectAsync` method of the repository deletes all entities those fit to the given predicate. It directly deletes entities from database, without fetching them. 
+
+Some features (like soft-delete, multi-tenancy and audit logging) won't work, so use this method carefully when you need it. Use the `DeleteAsync` method if you need to these features.
+
+> Currently only [EF Core supports it](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#basic-executedelete-examples), For the ORMs doesn't support direct delete, we will fallback to the existing `DeleteAsync` method.
+
 ### Ensure Entities Exists
 
 The `EnsureExistsAsync` extension method accepts entity id or entities query expression to ensure entities exist, otherwise, it will throw `EntityNotFoundException`.

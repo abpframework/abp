@@ -91,7 +91,7 @@ public class AbpAspNetCoreSignalRModule : AbpModule
     {
         var hubTypes = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (IsHubClass(context) && !IsDisabledForAutoMap(context))
             {

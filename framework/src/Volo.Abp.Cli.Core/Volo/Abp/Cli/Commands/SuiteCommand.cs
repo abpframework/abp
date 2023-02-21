@@ -35,23 +35,26 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
     private readonly NuGetService _nuGetService;
     private readonly AuthService _authService;
     private readonly CliHttpClientFactory _cliHttpClientFactory;
+    private readonly SuiteAppSettingsService _suiteAppSettingsService;
     private const string SuitePackageName = "Volo.Abp.Suite";
     public ILogger<SuiteCommand> Logger { get; set; }
 
-    private const string AbpSuiteHost = "http://localhost:3000";
+    private int _abpSuitePort = 3000;
 
     public SuiteCommand(
         AbpNuGetIndexUrlService nuGetIndexUrlService,
         NuGetService nuGetService,
         ICmdHelper cmdHelper,
         AuthService authService,
-        CliHttpClientFactory cliHttpClientFactory)
+        CliHttpClientFactory cliHttpClientFactory,
+        SuiteAppSettingsService suiteAppSettingsService)
     {
         CmdHelper = cmdHelper;
         _nuGetIndexUrlService = nuGetIndexUrlService;
         _nuGetService = nuGetService;
         _authService = authService;
         _cliHttpClientFactory = cliHttpClientFactory;
+        _suiteAppSettingsService = suiteAppSettingsService;
         Logger = NullLogger<SuiteCommand>.Instance;
     }
 
@@ -72,17 +75,20 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
                       commandLineArgs.Options.ContainsKey(Options.Preview.Long);
 
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
+        var currentSuiteVersionAsString = GetCurrentSuiteVersion();
 
         switch (operationType)
         {
             case "":
             case null:
-                await InstallSuiteIfNotInstalledAsync();
+                await InstallSuiteIfNotInstalledAsync(currentSuiteVersionAsString);
+                _abpSuitePort = await _suiteAppSettingsService.GetSuitePortAsync(currentSuiteVersionAsString);
                 RunSuite();
                 break;
 
             case "generate":
-                await InstallSuiteIfNotInstalledAsync();
+                await InstallSuiteIfNotInstalledAsync(currentSuiteVersionAsString);
+                _abpSuitePort = await _suiteAppSettingsService.GetSuitePortAsync(currentSuiteVersionAsString);
                 var suiteProcess = StartSuite();
                 System.Threading.Thread.Sleep(500); //wait for initialization of the app
                 await GenerateCrudPageAsync(commandLineArgs);
@@ -130,7 +136,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         }
 
         var IsSolutionBuiltResponse = await client.GetAsync(
-            $"{AbpSuiteHost}/api/abpSuite/solutions/{solutionId.ToString()}/is-built"
+            $"http://localhost:{_abpSuitePort}/api/abpSuite/solutions/{solutionId.ToString()}/is-built"
         );
         
         var IsSolutionBuilt = Convert.ToBoolean(await IsSolutionBuiltResponse.Content.ReadAsStringAsync());
@@ -148,7 +154,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         );
 
         var responseMessage = await client.PostAsync(
-            $"{AbpSuiteHost}/api/abpSuite/crudPageGenerator/{solutionId.ToString()}/save-and-generate-entity",
+            $"http://localhost:{_abpSuitePort}/api/abpSuite/crudPageGenerator/{solutionId.ToString()}/save-and-generate-entity",
             entityContent
         );
 
@@ -178,7 +184,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         }
 
         var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
-            "http://localhost:3000/api/abpSuite/solutions",
+            $"http://localhost:{_abpSuitePort}/api/abpSuite/solutions",
             _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10)),
             Logger,
             timeIntervals.ToArray());
@@ -216,7 +222,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         );
 
         var responseMessage = await client.PostAsync(
-            "http://localhost:3000/api/abpSuite/addSolution",
+            $"http://localhost:{_abpSuitePort}/api/abpSuite/addSolution",
             entityContent,
             _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))
         );
@@ -234,11 +240,9 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         }
     }
 
-    private async Task InstallSuiteIfNotInstalledAsync()
+    private async Task InstallSuiteIfNotInstalledAsync(string currentSuiteVersion)
     {
-        var currentSuiteVersionAsString = GetCurrentSuiteVersion();
-
-        if (string.IsNullOrEmpty(currentSuiteVersionAsString))
+        if (string.IsNullOrEmpty(currentSuiteVersion))
         {
             await InstallSuiteAsync();
         }
@@ -430,6 +434,19 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
             Logger.LogWarning("Couldn't check ABP Suite installed status: " + ex.Message);
         }
 
+        if (IsSuiteAlreadyRunning())
+        {
+            Logger.LogInformation("Opening suite...");
+            CmdHelper.Open($"http://localhost:{_abpSuitePort}");
+            return;
+        }
+
+        if (IsPortAlreadyInUse())
+        {
+            Logger.LogError($"Port \"{_abpSuitePort}\" is already in use.");
+            return;
+        }
+
         CmdHelper.RunCmd("abp-suite");
     }
 
@@ -453,23 +470,32 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
             return null;
         }
 
+        if (IsPortAlreadyInUse())
+        {
+            Logger.LogError($"Port \"{_abpSuitePort}\" is already in use.");
+            return null;
+        }
+
         return CmdHelper.RunCmdAndGetProcess("abp-suite --no-browser");
     }
 
     private bool IsSuiteAlreadyRunning()
     {
+        return GetProcessesRelatedWithSuite().Any();
+    }
+
+    private bool IsPortAlreadyInUse()
+    {
         var ipGP = IPGlobalProperties.GetIPGlobalProperties();
         var endpoints = ipGP.GetActiveTcpListeners();
-        return endpoints.Any(e => e.Port == 3000);
+        return endpoints.Any(e => e.Port == _abpSuitePort);
     }
 
     private void KillSuite()
     {
         try
         {
-            var suiteProcesses = (from p in Process.GetProcesses()
-                                  where p.ProcessName.ToLower().Contains("abp-suite")
-                                  select p);
+            var suiteProcesses = GetProcessesRelatedWithSuite();
 
             foreach (var suiteProcess in suiteProcesses)
             {
@@ -481,6 +507,13 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         {
             Logger.LogInformation("Cannot close Suite." + ex.Message);
         }
+    }
+
+    private IEnumerable<Process> GetProcessesRelatedWithSuite()
+    {
+        return (from p in Process.GetProcesses()
+            where p.ProcessName.ToLower().Contains("abp-suite")
+            select p);
     }
 
     public string GetUsageInfo()

@@ -27,10 +27,10 @@ export function validateStringLength({
   };
 }
 
-function getMaxLengthError(value: string, requiredLength: number): StringLengthError {
+function getMaxLengthError(value: string, requiredLength: number): StringLengthError | null {
   return value.length > requiredLength ? { maxlength: { requiredLength } } : null;
 }
 
-function getMinLengthError(value: string, requiredLength: number): StringLengthError {
+function getMinLengthError(value: string, requiredLength: number): StringLengthError | null {
   return value.length < requiredLength ? { minlength: { requiredLength } } : null;
 }

@@ -1,4 +1,4 @@
-import { Injector } from '@angular/core';
+import { inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { OAuthStorage, TokenResponse } from 'angular-oauth2-oidc';
 import { pipe } from 'rxjs';
@@ -29,30 +29,7 @@ export const pipeToLogin: PipeToLoginFn = function (
   );
 };
 
-export const setTokenResponseToStorage: SetTokenResponseToStorageFn<TokenResponse> = function (
-  injector: Injector,
-  tokenRes: TokenResponse,
-) {
-  const { access_token, refresh_token, scope: grantedScopes, expires_in } = tokenRes;
-  const storage = injector.get(OAuthStorage);
-
-  storage.setItem('access_token', access_token);
-  storage.setItem('refresh_token', refresh_token);
-  storage.setItem('access_token_stored_at', '' + Date.now());
-
-  if (grantedScopes) {
-    storage.setItem('granted_scopes', JSON.stringify(grantedScopes.split(' ')));
-  }
-
-  if (expires_in) {
-    const expiresInMilliSeconds = expires_in * 1000;
-    const now = new Date();
-    const expiresAt = now.getTime() + expiresInMilliSeconds;
-    storage.setItem('expires_at', '' + expiresAt);
-  }
-};
-
-export function setRememberMe(remember: boolean) {
+export function setRememberMe(remember: boolean | undefined) {
   removeRememberMe();
   localStorage.setItem(storageKey, 'true');
   document.cookie = `${cookieKey}=true; path=/${

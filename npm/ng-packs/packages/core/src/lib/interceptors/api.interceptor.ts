@@ -10,7 +10,7 @@ export class ApiInterceptor implements IApiInterceptor {
   constructor(private httpWaitService: HttpWaitService) {}
 
   getAdditionalHeaders(existingHeaders?: HttpHeaders) {
-    return existingHeaders;
+    return existingHeaders || new HttpHeaders();
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler) {

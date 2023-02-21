@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace MyCompanyName.MyProjectName.Server.Data;
+namespace MyCompanyName.MyProjectName.Data;
 
 public class MyProjectNameDbContextFactory : IDesignTimeDbContextFactory<MyProjectNameDbContext>
 {

@@ -409,26 +409,13 @@
     "SeeTheScreenshot": "See the screenshot",
     "ApplicationModuleExplanation1": "Creates a reusable, fully layered application module solution.",
     "ApplicationModuleExplanation2": "You can use this option to create modules for your modular application.",
-    "Expert": "ABP Expert",
     "Expert_": "Expert",
-    "Partner": "ABP Partner",
     "Partner_": "Partnership",
     "WebSite": "Web Site",
-    "Industry": "Industry",
-    "Location": "Location",
-    "Contact": "Contact",
-    "ConsultantType": "Consultancy Type",
     "Expert_Year": "Expertise Year",
-    "Partner_Year": "Partnership Year",
-    "SpokenLanguages": "Spoken Languages",
-    "SocialMedia": "Social Media",
     "CompanyInfo": "Company Info",
-    "WhoWeAre": "Who We Are",
-    "RecentActivities": "Recent Activities",
     "Date": "Date",
-    "Activity": "Activity",
-    "Type": "Type",
-    "Contribution": "Contribution",
-    "Info": "Info"
+    "WhoWeAre_Partner": "Who We Are",
+    "WhoWeAre_Expert": "About Me"
   }
 }

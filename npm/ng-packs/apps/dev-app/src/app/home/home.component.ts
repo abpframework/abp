@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
-  loading: boolean = false;
+  loading = false;
   get hasLoggedIn(): boolean {
     return this.authService.isAuthenticated;
   }

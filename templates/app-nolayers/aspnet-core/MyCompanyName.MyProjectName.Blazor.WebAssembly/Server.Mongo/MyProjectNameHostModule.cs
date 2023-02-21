@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
-using MyCompanyName.MyProjectName.Server.Data;
-using MyCompanyName.MyProjectName.Shared.Localization;
-using MyCompanyName.MyProjectName.Shared;
-using MyCompanyName.MyProjectName.Shared.MultiTenancy;
+using MyCompanyName.MyProjectName.Data;
+using MyCompanyName.MyProjectName.Localization;
+using MyCompanyName.MyProjectName;
+using MyCompanyName.MyProjectName.MultiTenancy;
 using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -44,11 +44,11 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName.Server;
+namespace MyCompanyName.MyProjectName;
 
 [DependsOn(
 
-    typeof(MyProjectNameSharedModule),
+    typeof(MyProjectNameContractsModule),
 
     // ABP Framework packages
     typeof(AbpAspNetCoreMvcModule),
@@ -95,7 +95,7 @@ namespace MyCompanyName.MyProjectName.Server;
     typeof(AbpSettingManagementMongoDbModule),
     typeof(AbpSettingManagementHttpApiModule)
 )]
-public class MyProjectNameServerModule : AbpModule
+public class MyProjectNameHostModule : AbpModule
 {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
@@ -177,11 +177,11 @@ public class MyProjectNameServerModule : AbpModule
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<MyProjectNameServerModule>();
+                options.FileSets.AddEmbedded<MyProjectNameHostModule>();
                 if (hostingEnvironment.IsDevelopment())
                 {
                     /* Using physical files in development, so we don't need to recompile on changes */
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameServerModule>(hostingEnvironment.ContentRootPath);
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameHostModule>(hostingEnvironment.ContentRootPath);
                 }
             });
         }
@@ -190,7 +190,7 @@ public class MyProjectNameServerModule : AbpModule
         {
             Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.ConventionalControllers.Create(typeof(MyProjectNameServerModule).Assembly);
+                options.ConventionalControllers.Create(typeof(MyProjectNameHostModule).Assembly);
             });
         }
 
@@ -212,14 +212,14 @@ public class MyProjectNameServerModule : AbpModule
 
         private void ConfigureAutoMapper(ServiceConfigurationContext context)
         {
-            context.Services.AddAutoMapperObjectMapper<MyProjectNameServerModule>();
+            context.Services.AddAutoMapperObjectMapper<MyProjectNameHostModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 /* Uncomment `validate: true` if you want to enable the Configuration Validation feature.
                  * See AutoMapper's documentation to learn what it is:
                  * https://docs.automapper.org/en/stable/Configuration-validation.html
                  */
-                options.AddMaps<MyProjectNameServerModule>(/* validate: true */);
+                options.AddMaps<MyProjectNameHostModule>(/* validate: true */);
             });
         }
 

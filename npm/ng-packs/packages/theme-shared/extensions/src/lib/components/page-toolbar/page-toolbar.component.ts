@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, Injector, TrackByFunction } from '@angular/core';
 import {
   HasCreateInjectorPipe,
+  ToolbarAction,
+  ToolbarActionDefault,
   ToolbarActionList,
   ToolbarComponent,
 } from '../../models/toolbar-actions';
@@ -31,5 +33,11 @@ export class PageToolbarComponent<R = any>
     item.action || item.component;
   constructor(public readonly injector: Injector) {
     super(injector);
+  }
+
+  asToolbarAction(value: ToolbarActionDefault): { value: ToolbarAction } {
+    return {
+      value: value as ToolbarAction,
+    };
   }
 }

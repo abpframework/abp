@@ -42,7 +42,19 @@
   },
   "private": true,
   "devDependencies": {
-    "@abp/utils": "~7.0.1",
+    "@abp/ng.account": "~7.1.0-rc.1",
+    "@abp/ng.account.core": "~7.1.0-rc.1",
+    "@abp/ng.core": "~7.1.0-rc.1",
+    "@abp/ng.feature-management": "~7.1.0-rc.1",
+    "@abp/ng.identity": "~7.1.0-rc.1",
+    "@abp/ng.oauth": "~7.1.0-rc.1",
+    "@abp/ng.permission-management": "~7.1.0-rc.1",
+    "@abp/ng.schematics": "~7.1.0-rc.1",
+    "@abp/ng.setting-management": "~7.1.0-rc.1",
+    "@abp/ng.tenant-management": "~7.1.0-rc.1",
+    "@abp/ng.theme.basic": "~7.1.0-rc.1",
+    "@abp/ng.theme.shared": "~7.1.0-rc.1",
+    "@abp/utils": "~7.1.0-rc.1",
     "@angular-devkit/build-angular": "~15.0.1",
     "@angular-devkit/build-ng-packagr": "^0.1002.0",
     "@angular-devkit/schematics-cli": "~15.0.1",
@@ -61,18 +73,6 @@
     "@angular/platform-browser": "~15.0.1",
     "@angular/platform-browser-dynamic": "~15.0.1",
     "@angular/router": "~15.0.1",
-    "@abp/ng.account": "~7.0.1",
-    "@abp/ng.account.core": "~7.0.1",
-    "@abp/ng.core": "~7.0.1",
-    "@abp/ng.oauth": "~7.0.1",
-    "@abp/ng.feature-management": "~7.0.1",
-    "@abp/ng.identity": "~7.0.1",
-    "@abp/ng.permission-management": "~7.0.1",
-    "@abp/ng.schematics": "~7.0.1",
-    "@abp/ng.setting-management": "~7.0.1",
-    "@abp/ng.tenant-management": "~7.0.1",
-    "@abp/ng.theme.basic": "~7.0.1",
-    "@abp/ng.theme.shared": "~7.0.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@ng-bootstrap/ng-bootstrap": "^14.0.0",
     "@ngneat/spectator": "^10.0.0",
@@ -106,7 +106,7 @@
     "jest-preset-angular": "^12.2.2",
     "jsonc-parser": "^2.3.0",
     "just-clone": "^6.1.1",
-    "just-compare": "^1.4.0",
+    "just-compare": "^2.3.0",
     "lerna": "^4.0.0",
     "lint-staged": "^13.0.3",
     "ng-packagr": "15.0.1",
@@ -129,9 +129,12 @@
     "typescript": "4.8.4",
     "zone.js": "0.11.4"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@abp/ng.theme.lepton-x": "^2.1.0-rc.1",
+    "bootstrap-icons": "^1.10.3"
+  },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
+    "**/*.{js,jsx,ts,tsx,html,css,scss}": [
       "npx prettier --write --config .prettierrc "
     ]
   }

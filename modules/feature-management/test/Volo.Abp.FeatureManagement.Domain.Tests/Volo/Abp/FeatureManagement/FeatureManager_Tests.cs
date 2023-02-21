@@ -195,4 +195,18 @@ public class FeatureManager_Tests : FeatureManagementDomainTestBase
         featureValue.ShouldNotBeNull();
         featureValue.Value.ShouldBe(true.ToString().ToLower());
     }
+
+    [Fact]
+    public async Task DeleteAsync()
+    {
+        //Default
+        (await _featureManager.GetOrNullAsync(TestFeatureDefinitionProvider.BackupCount, TenantFeatureValueProvider.ProviderName, TestEditionIds.TenantId.ToString())).ShouldBe("0");
+
+        await _featureManager.SetAsync(TestFeatureDefinitionProvider.BackupCount, "2", TenantFeatureValueProvider.ProviderName, TestEditionIds.TenantId.ToString());
+        (await _featureManager.GetOrNullAsync(TestFeatureDefinitionProvider.BackupCount, TenantFeatureValueProvider.ProviderName, TestEditionIds.TenantId.ToString())).ShouldBe("2");
+
+        await _featureManager.DeleteAsync(TenantFeatureValueProvider.ProviderName, TestEditionIds.TenantId.ToString());
+
+        (await _featureManager.GetOrNullAsync(TestFeatureDefinitionProvider.BackupCount, TenantFeatureValueProvider.ProviderName, TestEditionIds.TenantId.ToString())).ShouldBe("0");
+    }
 }

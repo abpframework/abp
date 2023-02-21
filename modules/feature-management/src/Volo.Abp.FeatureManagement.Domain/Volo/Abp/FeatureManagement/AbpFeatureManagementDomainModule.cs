@@ -52,6 +52,7 @@ public class AbpFeatureManagementDomainModule : AbpModule
     }
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
+    private Task _initializeDynamicFeaturesTask;
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
@@ -70,6 +71,11 @@ public class AbpFeatureManagementDomainModule : AbpModule
         return Task.CompletedTask;
     }
 
+    public Task GetInitializeDynamicFeaturesTask()
+    {
+        return _initializeDynamicFeaturesTask ?? Task.CompletedTask;
+    }
+
     private void InitializeDynamicFeatures(ApplicationInitializationContext context)
     {
         var options = context
@@ -84,7 +90,7 @@ public class AbpFeatureManagementDomainModule : AbpModule
 
         var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
 
-        Task.Run(async () =>
+        _initializeDynamicFeaturesTask = Task.Run(async () =>
         {
             using var scope = rootServiceProvider.CreateScope();
             var applicationLifetime = scope.ServiceProvider.GetService<IHostApplicationLifetime>();

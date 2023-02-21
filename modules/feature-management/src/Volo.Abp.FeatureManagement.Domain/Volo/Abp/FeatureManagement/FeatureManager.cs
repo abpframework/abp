@@ -215,4 +215,33 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
         return featureNameValueWithGrantedProvider;
     }
+
+    public virtual async Task DeleteAsync(string providerName, string providerKey)
+    {
+        var featureNameValues = await GetAllAsync(providerName, providerKey);
+
+        var providers = Enumerable
+          .Reverse(Providers)
+          .SkipWhile(p => p.Name != providerName)
+          .ToList();
+
+        if (!providers.Any())
+        {
+            return;
+        }
+
+        providers = providers
+            .TakeWhile(p => p.Name == providerName)
+            .ToList(); //Getting list for case of there are more than one provider with same providerName
+
+        foreach (var featureNameValue in featureNameValues)
+        {
+            var feature = await FeatureDefinitionManager.GetAsync(featureNameValue.Name);
+
+            foreach (var provider in providers)
+            {
+                await provider.ClearAsync(feature, providerKey);
+            }
+        }
+    }
 }

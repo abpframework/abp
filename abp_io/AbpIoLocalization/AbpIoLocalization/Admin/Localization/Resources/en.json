@@ -421,7 +421,7 @@
     "ContentCacheSlidingExpirationByDay": "Content Cache Sliding Expiration By Day",
     "MaxDaysForCaching": "Max Days For Caching",
     "Enabled": "Enabled",
-    "Menu:NugetPackagesContentCache": "NuGet Packages Content Cache",
+    "Menu:NugetPackagesContentCache": "NuGet Cache",
     "NugetPackagesContentCache": "NuGet Content Cache",
     "SlidingExpritionByDayInfo": "Gets or sets how long a cache entry can be inactive (e.g. not accessed) before it will be removed. This will not extend the entry lifetime beyond the absolute expiration.",
     "MaxDaysForCachingInfo": "Gets or sets an absolute expiration time, relative to now.",
@@ -440,13 +440,18 @@
     "VersionHistoryDeletionConfirmationMessage": "Are you sure you want to delete this version?",
     "CreateAbpConsultantLogoInfo": "Maximum file size: <b>1MB</b> <br/> Supported file types: <b>jpg, jpeg, png, SVG, WebP</b>",
     "UrlCode": "Url Code",
-    "Icon": "Icon",
     "Clear": "Clear",
     "Permission:AbpConsultant": "ABP Consultant",
     "Menu:AbpConsultants": "ABP Consultants",
     "CreateAbpConsultant": "Create ABP Consultant",
     "UrlCodeIsNotAvailable": "Url code is used by another ABP Consultant.",
     "AbpConsultants": "ABP Consultants",
-    "AbpConsultant": "ABP Consultant"
+    "AbpConsultant": "ABP Consultant",
+    "AbpConsultantEdit": "Edit ABP Consultant",
+    "AbpConsultantCreate": "Create ABP Consultant",
+    "WhoWeAreItem": "Who We Are Item",
+    "FieldIsRequired": "{0} is required.",
+    "FieldIsNotValid": " {0} is not valid.",
+    "InterestedLicenseType": "Interested License Type"
   }
 }
