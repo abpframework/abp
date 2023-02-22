@@ -4,7 +4,7 @@ The ABP Card Component is a wrapper component for the Bootstrap card class.
 
 ## Usage
 
-ABP Card Component is a built-in `ThemeSharedModule` component. If you've imported a shared module into your feature module, you don't need to do anything. 
+ABP Card Component is a part of the `ThemeSharedModule` module. If you've imported that module into your module, you don't need to import it again. If not, first import it as shown below:
 
 ```ts
 // my-feature.module.ts
