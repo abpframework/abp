@@ -24,9 +24,7 @@ public class DbContextEventOutbox<TDbContext> : IDbContextEventOutbox<TDbContext
     public virtual async Task EnqueueAsync(OutgoingEventInfo outgoingEvent)
     {
         var dbContext = (IHasEventOutbox)await DbContextProvider.GetDbContextAsync();
-        dbContext.OutgoingEvents.Add(
-            new OutgoingEventRecord(outgoingEvent)
-        );
+        dbContext.OutgoingEvents.Add(new OutgoingEventRecord(outgoingEvent));
     }
 
     [UnitOfWork]
@@ -50,21 +48,13 @@ public class DbContextEventOutbox<TDbContext> : IDbContextEventOutbox<TDbContext
     public virtual async Task DeleteAsync(Guid id)
     {
         var dbContext = (IHasEventOutbox)await DbContextProvider.GetDbContextAsync();
-        var outgoingEvent = await dbContext.OutgoingEvents.FindAsync(id);
-        if (outgoingEvent != null)
-        {
-            dbContext.Remove(outgoingEvent);
-        }
+        await dbContext.OutgoingEvents.Where(x => x.Id == id).ExecuteDeleteAsync();
     }
 
     [UnitOfWork]
     public virtual async Task DeleteManyAsync(IEnumerable<Guid> ids)
     {
         var dbContext = (IHasEventOutbox)await DbContextProvider.GetDbContextAsync();
-        var outgoingEvents = await dbContext.OutgoingEvents.Where(x => ids.Contains(x.Id)).ToListAsync();
-        if (outgoingEvents.Any())
-        {
-            dbContext.RemoveRange(outgoingEvents);
-        }
+        await dbContext.OutgoingEvents.Where(x => ids.Contains(x.Id)).ExecuteDeleteAsync();
     }
 }

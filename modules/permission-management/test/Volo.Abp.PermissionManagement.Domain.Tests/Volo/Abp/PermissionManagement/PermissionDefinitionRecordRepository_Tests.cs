@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Modularity;
 using Xunit;
 
 namespace Volo.Abp.PermissionManagement;
 
-public abstract class PermissionDefinitionRecordRepository_Tests : PermissionTestBase
+public abstract class PermissionDefinitionRecordRepository_Tests<TStartupModule> : PermissionManagementTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
     protected IPermissionDefinitionRecordRepository PermissionDefinitionRecordRepository { get; set; }
 

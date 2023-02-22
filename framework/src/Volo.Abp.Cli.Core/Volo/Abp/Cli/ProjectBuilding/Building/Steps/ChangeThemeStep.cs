@@ -73,6 +73,31 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Components",
             "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic"
         );
+        
+        ReplacePackageReferenceWithProjectReference(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyCompanyName.MyProjectName.Host.csproj",
+            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
+            @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
+            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
+            $"{defaultThemeName}ThemeBundles.Styles.Global",
+            "BasicThemeBundles.Styles.Global"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
+            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+            $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
+            "AbpAspNetCoreMvcUiBasicThemeModule"
+        );
 
         #endregion
 
@@ -173,6 +198,31 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
             "Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXTheme",
             "Volo.Abp.AspNetCore.Components.WebAssembly.LeptonTheme"
+        );
+        
+        ReplacePackageReferenceWithProjectReference(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyCompanyName.MyProjectName.Host.csproj",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+            @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
+            "LeptonXThemeBundles.Styles.Global",
+            "LeptonThemeBundles.Styles.Global"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
+            "AbpAspNetCoreMvcUiLeptonXThemeModule",
+            "AbpAspNetCoreMvcUiLeptonThemeModule"
         );
 
         #endregion

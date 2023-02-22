@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -26,6 +25,7 @@ public partial class LayoutHook : ComponentBase
         if (LayoutHookOptions.Value.Hooks.TryGetValue(Name, out var layoutHooks))
         {
             layoutHooks = layoutHooks
+                .Where(IsComponentBase)
                 .WhereIf(string.IsNullOrWhiteSpace(Layout), x => x.Layout == Layout)
                 .ToList();
         }
@@ -35,5 +35,10 @@ public partial class LayoutHook : ComponentBase
         LayoutHookViewModel = new LayoutHookViewModel(layoutHooks.ToArray(), Layout);
         
         return Task.CompletedTask;
+    }
+
+    protected virtual bool IsComponentBase(LayoutHookInfo layoutHook)
+    {
+        return typeof(ComponentBase).IsAssignableFrom(layoutHook.ComponentType);
     }
 }

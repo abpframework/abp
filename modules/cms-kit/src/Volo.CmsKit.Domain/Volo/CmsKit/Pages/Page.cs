@@ -1,12 +1,13 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Volo.Abp;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.CmsKit.Pages;
 
-public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
+public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
 {
     public virtual Guid? TenantId { get; protected set; }
 
@@ -21,6 +22,8 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
     public virtual string Style { get; protected set; }
 
     public virtual bool IsHomePage { get; protected set; }
+
+    public virtual int EntityVersion { get; protected set; }
 
     protected Page()
     {
@@ -69,8 +72,8 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
         Style = Check.Length(style, nameof(style), PageConsts.MaxStyleLength);
     }
 
-	internal void SetIsHomePage(bool isHomePage)
+    internal void SetIsHomePage(bool isHomePage)
     {
         IsHomePage = isHomePage;
-	}
+    }
 }

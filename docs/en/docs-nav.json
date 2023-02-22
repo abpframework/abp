@@ -1397,6 +1397,15 @@
         {
           "text": "Virtual File Explorer",
           "path": "Modules/Virtual-File-Explorer.md"
+        },
+        {
+          "text": "Common",
+          "items":[
+            {
+              "text": "Database Tables",
+              "path": "Modules/Database-Tables.md"
+            }
+          ]
         }
       ]
     },

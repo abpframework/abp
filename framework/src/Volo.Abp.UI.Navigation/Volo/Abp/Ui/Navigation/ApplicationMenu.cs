@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Data;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.UI.Navigation;
@@ -31,10 +33,9 @@ public class ApplicationMenu : IHasMenuItems
 
     /// <summary>
     /// Can be used to store a custom object related to this menu.
-    /// TODO: Convert to dictionary!
     /// </summary>
-    [CanBeNull]
-    public object CustomData { get; set; }
+    [NotNull]
+    public Dictionary<string, object> CustomData { get; } = new();
 
     public ApplicationMenu(
         [NotNull] string name,
@@ -56,6 +57,16 @@ public class ApplicationMenu : IHasMenuItems
     public ApplicationMenu AddItem([NotNull] ApplicationMenuItem menuItem)
     {
         Items.Add(menuItem);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a custom data item to <see cref="CustomData"/> with given key &amp; value.
+    /// </summary>
+    /// <returns>This <see cref="ApplicationMenu"/> itself.</returns>
+    public ApplicationMenu WithCustomData(string key, object value)
+    {
+        CustomData[key] = value;
         return this;
     }
 

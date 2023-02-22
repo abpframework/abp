@@ -8,6 +8,12 @@ Reaction component allows users to react to your content via pre-defined icons/e
 
 You can also customize the reaction icons shown in the reaction component.
 
+## Enabling the Reaction Feature
+
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+
+> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+
 ## Options
 
 Reaction system provides a mechanism to group reactions by entity types. For example, if you want to use the reaction system for products, you need to define an entity type named `Product`, and then add reactions under the defined entity type.
@@ -32,7 +38,7 @@ Configure<CmsKitReactionOptions>(options =>
 });
 ```
 
-> If you're using the comment or blog features, the ABP framework defines predefined reactions for these features automatically.
+> If you're using the [Comment](Comments.md) or [Blogging](Blogging.md) features, the ABP framework defines predefined reactions for these features automatically.
 
 `CmsKitReactionOptions` properties:
 

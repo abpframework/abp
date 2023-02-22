@@ -50,4 +50,12 @@ public partial class BlogPostPublicClientProxy : ClientProxyBase<IBlogPostPublic
             { typeof(Guid), id }
         });
     }
+
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id }
+        });
+    }
 }

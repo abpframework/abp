@@ -10,6 +10,14 @@ public class AbpInputTagHelper : AbpTagHelper<AbpInputTagHelper, AbpInputTagHelp
 
     public string Label { get; set; }
 
+    public string LabelTooltip { get; set; }
+
+    public string LabelTooltipIcon { get; set; } = "bi-info-circle";
+
+    public string LabelTooltipPlacement  { get; set; } = "right";
+
+    public bool LabelTooltipHtml  { get; set; } = false;
+
     [HtmlAttributeName("info")]
     public string InfoText { get; set; }
 
