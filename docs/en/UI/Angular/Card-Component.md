@@ -37,7 +37,8 @@ import { Component } from '@angular/core';
     <abp-card [cardStyle]="{width: '18rem'}">
       <abp-card-body>
         <abp-card-title>Lorem Ipsum</abp-card-title>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla commodo condimentum ligula, sed varius nibh eleifend sit amet. Maecenas facilisis vel arcu nec maximus.</abp-card-body>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla commodo condimentum ligula, sed varius nibh eleifend sit amet. Maecenas facilisis vel arcu nec maximus.
+      </abp-card-body>
     </abp-card> 
   `,
 })
