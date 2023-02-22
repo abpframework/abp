@@ -1,63 +1,55 @@
-<div id="wrapper" class="card">
-  <div class="card-header">
-    <div class="row">
-      <div class="col col-md-6">
-        <h5 class="card-title">{{ 'AbpTenantManagement::Tenants' | abpLocalization }}</h5>
+<abp-page [title]="'AbpTenantManagement::Tenants' | abpLocalization" [toolbar]="data.items">
+
+
+  <div id="wrapper" class="card">
+    <div class="card-body">
+      <div id="data-tables-table-filter" class="data-tables-filter mb-3">
+        <div class="input-group">
+          <input
+            type="search"
+            class="form-control"
+            [placeholder]="'AbpUi::PagerSearch' | abpLocalization"
+            [(ngModel)]="list.filter"
+          />
+        </div>
       </div>
-      <div class="text-end col col-md-6">
-        <abp-page-toolbar [record]="data.items"></abp-page-toolbar>
-      </div>
+
+      <abp-extensible-table
+        [data]="data.items || []"
+        [recordsTotal]="data.totalCount || 0"
+        [list]="list"
+      ></abp-extensible-table>
     </div>
   </div>
 
-  <div class="card-body">
-    <div id="data-tables-table-filter" class="data-tables-filter">
-      <div class="input-group">
-        <input
-          type="search"
-          class="form-control"
-          [placeholder]="'AbpUi::PagerSearch' | abpLocalization"
-          [(ngModel)]="list.filter"
-        />
-      </div>
-    </div>
-
-    <abp-extensible-table
-      [data]="data.items || []"
-      [recordsTotal]="data.totalCount || 0"
-      [list]="list"
-    ></abp-extensible-table>
-  </div>
-</div>
-
-<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
-  <ng-template #abpHeader>
-    <h3>
-      {{
+  <abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
+    <ng-template #abpHeader>
+      <h3>
+        {{
         (selected?.id ? 'AbpTenantManagement::Edit' : 'AbpTenantManagement::NewTenant')
           | abpLocalization
-      }}
-    </h3>
-  </ng-template>
+        }}
+      </h3>
+    </ng-template>
 
-  <ng-template #abpBody>
-    <form [formGroup]="tenantForm" (ngSubmit)="save()" [validateOnSubmit]="true">
-      <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
-    </form>
-  </ng-template>
+    <ng-template #abpBody>
+      <form [formGroup]="tenantForm" (ngSubmit)="save()" [validateOnSubmit]="true">
+        <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
+      </form>
+    </ng-template>
 
-  <ng-template #abpFooter>
-    <button abpClose type="button" class="btn btn-secondary">
-      {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
-    </button>
-    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="tenantForm?.invalid">{{
-      'AbpTenantManagement::Save' | abpLocalization
-    }}</abp-button>
-  </ng-template>
-</abp-modal>
+    <ng-template #abpFooter>
+      <button abpClose type="button" class="btn btn-secondary">
+        {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
+      </button>
+      <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="tenantForm?.invalid">{{
+        'AbpTenantManagement::Save' | abpLocalization
+        }}</abp-button>
+    </ng-template>
+  </abp-modal>
 
-<abp-feature-management
-  *abpReplaceableTemplate="{
+  <abp-feature-management
+    *abpReplaceableTemplate="{
     inputs: {
       providerName: { value: 'T' },
       providerKey: { value: providerKey },
@@ -66,8 +58,9 @@
     outputs: { visibleChange: $any(onVisibleFeaturesChange) },
     componentKey: featureManagementKey
   }"
-  [(visible)]="visibleFeatures"
-  providerName="T"
-  [providerKey]="providerKey"
->
-</abp-feature-management>
+    [(visible)]="visibleFeatures"
+    providerName="T"
+    [providerKey]="providerKey"
+  >
+  </abp-feature-management>
+</abp-page>

@@ -11,10 +11,7 @@ import {
   ReadonlyActionData,
 } from './actions';
 
-export class ToolbarActionList<R = any> extends ActionList<
-  R,
-  ToolbarAction<R> | ToolbarComponent<R>
-> {}
+export class ToolbarActionList<R = any> extends ActionList<R, ToolbarActionDefault<R>> {}
 
 export class ToolbarActions<R = any> extends Actions<ToolbarActionList<R>> {
   protected _ctor: Type<ToolbarActionList<R>> = ToolbarActionList;
@@ -84,7 +81,7 @@ export type ToolbarActionContributorCallbacks<R = any> = ActionContributorCallba
   ToolbarActionList<R>
 >;
 export type InferredData<L> = ActionData<InferredRecord<L>>;
-export type InferredRecord<L> = L extends ActionList<infer R> ? R : never;
+export type InferredRecord<L> = L extends ActionList<infer R> ? R : any;
 
 export interface HasCreateInjectorPipe<R> {
   getData: () => ReadonlyActionData<R>;
