@@ -177,12 +177,12 @@ public class CliService : ITransientDependency
             return;
         }
 
-        var assembly = typeof(CliService).Assembly;
-        var toolPath = GetToolPath(assembly);
-        var updateChannel = GetUpdateChannel(currentCliVersion);
-
         try
         {
+            var assembly = typeof(CliService).Assembly;
+            var toolPath = GetToolPath(assembly);
+            var updateChannel = GetUpdateChannel(currentCliVersion);
+
             var latestVersion = await GetLatestVersion(updateChannel);
 
             if (latestVersion != null && latestVersion > currentCliVersion)
@@ -192,8 +192,7 @@ public class CliService : ITransientDependency
         }
         catch (Exception e)
         {
-            Logger.LogWarning("Unable to retrieve the latest version");
-            Logger.LogWarning(e.Message);
+            Logger.LogWarning("Unable to retrieve the latest version: " + e.Message);
         }
     }
 
