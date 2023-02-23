@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Volo.Abp.Cli.NuGet;
+namespace Volo.Abp.Cli.Version;
 
 internal static class CommercialPackages
 {

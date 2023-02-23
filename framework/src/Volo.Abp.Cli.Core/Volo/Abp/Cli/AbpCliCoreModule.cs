@@ -29,6 +29,11 @@ public class AbpCliCoreModule : AbpModule
         context.Services.AddHttpClient(CliConsts.HttpClientName)
             .ConfigurePrimaryHttpMessageHandler(() => new CliHttpClientHandler());
 
+        context.Services.AddHttpClient(CliConsts.GithubHttpClientName, client =>
+        {
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("MyAgent/1.0");
+        });
+
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
         Configure<AbpCliOptions>(options =>
