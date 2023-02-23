@@ -314,6 +314,12 @@ public class CliService : ITransientDependency
         var toolPathArg = IsGlobalTool(toolPath) ? "-g" : $"--tool-path {toolPath}";
 
         Logger.LogWarning($"ABP CLI has a newer {updateChannel.ToString().ToLowerInvariant()} version {latestVersion}, please update to get the latest features and fixes.");
+        
+        if (!string.IsNullOrWhiteSpace(message))
+        {
+            Logger.LogWarning(message);
+        }
+        
         Logger.LogWarning(string.Empty);
         Logger.LogWarning("Update Command: ");
 
@@ -335,11 +341,6 @@ public class CliService : ITransientDependency
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(updateChannel), updateChannel, null);
-        }
-
-        if (!string.IsNullOrWhiteSpace(message))
-        {
-            Logger.LogWarning(message);
         }
 
         Logger.LogWarning(string.Empty);
