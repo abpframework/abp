@@ -28,7 +28,13 @@ public class LogoutModel : AccountPageModel
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
         }
 
-        return RedirectToPage("/Account/Login");
+        var enableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+        if (enableLocalLogin)
+        {
+            return RedirectToPage("/Account/Login");
+        }
+
+        return RedirectToPage("/");
     }
 
     public virtual Task<IActionResult> OnPostAsync()
