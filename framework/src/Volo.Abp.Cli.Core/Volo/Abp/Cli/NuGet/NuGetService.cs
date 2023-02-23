@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using NuGet.Versioning;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -60,24 +61,26 @@ public class NuGetService : ITransientDependency
 
     public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
     {
-        var versionList = await GetPackageVersionListAsync(packageId, includeNightly);
+        if (!includeNightly && !includeReleaseCandidates)
+        {
+            var version = await GetLatestStableVersionOrNullAsync();
+            if (string.IsNullOrWhiteSpace(version))
+            {
+                return null;
+            }
 
+            return SemanticVersion.TryParse(version, out var semanticVersion) ? semanticVersion : null;
+        }
+        
+        var versionList = await GetPackageVersionListAsync(packageId, includeNightly);
         if (versionList == null)
         {
             return null;
         }
 
         List<SemanticVersion> versions;
-
-        if (!includeNightly && !includeReleaseCandidates)
-        {
-            versions = versionList
-            .Select(SemanticVersion.Parse)
-            .OrderByDescending(v => v, new VersionComparer()).ToList();
-
-            versions = versions.Where(x => !x.IsPrerelease).ToList();
-        }
-        else if (!includeNightly && includeReleaseCandidates)
+        
+        if (!includeNightly && includeReleaseCandidates)
         {
             versions = versionList
                 .Where(v => !v.Contains("-preview"))
@@ -148,15 +151,13 @@ public class NuGetService : ITransientDependency
                 logger: Logger
             ))
             {
-                if (responseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+                if (responseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     //the package doesn't exist...
                     return null;
                 }
-                else
-                {
-                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-                }
+                
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
                 var responseContent = await responseMessage.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<NuGetVersionResultDto>(responseContent).Versions;
@@ -183,9 +184,38 @@ public class NuGetService : ITransientDependency
         return CliUrls.GetNuGetPackageInfoUrl(_apiKeyResult.ApiKey, packageId);
     }
 
+    private async Task<string> GetLatestStableVersionOrNullAsync()
+    {
+        try
+        {
+            var client = _cliHttpClientFactory.CreateClient(clientName: CliConsts.GithubHttpClientName, needsAuthentication: false);
+
+            using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
+                       CliUrls.LatestVersionCheckFullPath,
+                       cancellationToken: CancellationTokenProvider.Token,
+                       logger: Logger
+                   ))
+            {
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+
+                var content = await responseMessage.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<LatestVersionResultDto>(content).Version;
+            }
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
     public class NuGetVersionResultDto
     {
         [JsonProperty("versions")]
         public List<string> Versions { get; set; }
+    }
+
+    public class LatestVersionResultDto
+    {
+        public string Version { get; set; }
     }
 }
