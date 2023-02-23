@@ -15,9 +15,9 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Cli.NuGet;
+namespace Volo.Abp.Cli.Version;
 
-public class NuGetService : ITransientDependency
+public class PackageVersionCheckerService : ITransientDependency
 {
     public ILogger<VoloNugetPackagesVersionUpdater> Logger { get; set; }
     protected IJsonSerializer JsonSerializer { get; }
@@ -27,7 +27,7 @@ public class NuGetService : ITransientDependency
     private readonly CliHttpClientFactory _cliHttpClientFactory;
     private DeveloperApiKeyResult _apiKeyResult;
 
-    public NuGetService(
+    public PackageVersionCheckerService(
         IJsonSerializer jsonSerializer,
         IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
         ICancellationTokenProvider cancellationTokenProvider,
@@ -59,17 +59,19 @@ public class NuGetService : ITransientDependency
         return versionList.Contains(version);
     }
 
-    public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
+    public async Task<LatestVersionInfo> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
     {
         if (!includeNightly && !includeReleaseCandidates)
         {
-            var version = await GetLatestStableVersionOrNullAsync();
-            if (string.IsNullOrWhiteSpace(version))
+            var latestStableVersionResult = await GetLatestStableVersionOrNullAsync();
+            if (latestStableVersionResult == null)
             {
                 return null;
             }
 
-            return SemanticVersion.TryParse(version, out var semanticVersion) ? semanticVersion : null;
+            return SemanticVersion.TryParse(latestStableVersionResult.Version, out var semanticVersion) 
+                ? new LatestVersionInfo(semanticVersion, latestStableVersionResult.Message) 
+                : null;
         }
         
         var versionList = await GetPackageVersionListAsync(packageId, includeNightly);
@@ -94,7 +96,9 @@ public class NuGetService : ITransientDependency
                 .OrderByDescending(v => v, new VersionComparer()).ToList();
         }
 
-        return versions.Any() ? versions.Max() : null;
+        return versions.Any() 
+            ? new LatestVersionInfo(versions.Max()) 
+            : null;
 
     }
 
@@ -184,7 +188,7 @@ public class NuGetService : ITransientDependency
         return CliUrls.GetNuGetPackageInfoUrl(_apiKeyResult.ApiKey, packageId);
     }
 
-    private async Task<string> GetLatestStableVersionOrNullAsync()
+    private async Task<LatestStableVersionResult> GetLatestStableVersionOrNullAsync()
     {
         try
         {
@@ -199,7 +203,9 @@ public class NuGetService : ITransientDependency
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
                 var content = await responseMessage.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<LatestVersionResultDto>(content).Version;
+                var result = JsonSerializer.Deserialize<List<LatestStableVersionResult>>(content);
+                
+                return result.FirstOrDefault(x => x.Type.ToLowerInvariant() == "stable");
             }
         }
         catch
@@ -214,8 +220,14 @@ public class NuGetService : ITransientDependency
         public List<string> Versions { get; set; }
     }
 
-    public class LatestVersionResultDto
+    public class LatestStableVersionResult
     {
         public string Version { get; set; }
+
+        public DateTime? ReleaseDate { get; set; }
+
+        public string Type { get; set; }
+        
+        public string Message { get; set; }
     }
 }
