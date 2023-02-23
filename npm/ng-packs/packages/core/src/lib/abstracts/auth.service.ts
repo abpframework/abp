@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Params } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { LoginParams } from '../models/auth';
+import {HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Params} from '@angular/router';
+import {Observable, of} from 'rxjs';
+import {LoginParams} from '../models/auth';
+import {AbstractModel} from "./abstract.model";
 
 /**
  * Abstract service for Authentication.
@@ -10,7 +12,8 @@ import { LoginParams } from '../models/auth';
   providedIn: 'root',
 })
 export class AuthService implements IAuthService {
-  constructor() {}
+  constructor() {
+  }
 
   private warningMessage() {
     console.error('You should add @abp/ng-oauth packages or create your own auth packages.');
@@ -31,7 +34,8 @@ export class AuthService implements IAuthService {
     return of(undefined);
   }
 
-  navigateToLogin(queryParams?: Params): void {}
+  navigateToLogin(queryParams?: Params): void {
+  }
 
   get isInternalAuth() {
     throw new Error('not implemented');
@@ -41,6 +45,11 @@ export class AuthService implements IAuthService {
   get isAuthenticated(): boolean {
     this.warningMessage();
     return false;
+  }
+
+  loginUsingGrant(grantType: string, parameters: object, headers?: HttpHeaders): Promise<AbstractModel> {
+    console.log({grantType, parameters, headers})
+    return Promise.reject(new Error('not implemented'));
   }
 }
 
@@ -56,4 +65,6 @@ export interface IAuthService {
   navigateToLogin(queryParams?: Params): void;
 
   login(params: LoginParams): Observable<any>;
+
+  loginUsingGrant(grantType: string, parameters: object, headers?: HttpHeaders): Promise<AbstractModel>;
 }
