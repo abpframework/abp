@@ -61,6 +61,7 @@ public class CliService : ITransientDependency
             await CheckCliVersionAsync(currentCliVersion);
         }
 #endif
+
         try
         {
             if (commandLineArgs.IsCommand("prompt"))
@@ -175,7 +176,7 @@ public class CliService : ITransientDependency
         {
             return;
         }
-        
+
         var assembly = typeof(CliService).Assembly;
         var toolPath = GetToolPath(assembly);
         var updateChannel = GetUpdateChannel(currentCliVersion);
@@ -200,13 +201,17 @@ public class CliService : ITransientDependency
     {
         try
         {
-            var latestTime = await _memoryService.GetAsync(CliConsts.MemoryKeys.LatestCliVersionCheckDate);
-
-            if (latestTime != null && DateTime.Now - DateTime.Parse(latestTime, CultureInfo.InvariantCulture) < TimeSpan.FromDays(1))
+            var latestTimeAsString = await _memoryService.GetAsync(CliConsts.MemoryKeys.LatestCliVersionCheckDate);
+            if (DateTime.TryParse(latestTimeAsString,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None, out var latestTimeParsed))
             {
-                return false;
+                if (DateTime.Now.Subtract(latestTimeParsed).TotalDays < 1)
+                {
+                    return false;
+                }
             }
-        
+
             await _memoryService.SetAsync(CliConsts.MemoryKeys.LatestCliVersionCheckDate, DateTime.Now.ToString(CultureInfo.InvariantCulture));
 
             return true;
