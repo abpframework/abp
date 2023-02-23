@@ -1,15 +1,15 @@
 ## Streamline Localization in Your ABP Project
 
-Making localization changes to an ABP project can be a daunting task, especially if you're dealing with multiple languages and translations. During development, it's easy to overlook some changes, leading to inconsistencies across different languages. Fortunately, I have developed a tool that can help streamline the localization process and ensure consistency across different languages.
+Making localization changes to an ABP project can be a daunting task, especially if you're dealing with multiple languages and translations. During development, it's easy to overlook some changes and that leads to inconsistencies across different languages. Fortunately, I have developed a tool that can help streamline the localization process and ensure consistency across different languages.
 
 The tool is a console application that uses JSON files to manage localization keys and their translations. It addresses three common scenarios that can arise during localization:
 
 
 1. When the argument count of a key changes, it can be difficult to update the translations for all languages. My tool solves this problem by scanning all JSON files in the project folder and identifying any keys that have mismatched argument counts. It then offers two options to the user: delete the mismatched translations or export them as a JSON file for manual editing.
 
-2. When a new key is added to the project, it can be easy to forget to add translations for all languages. My tool helps to avoid this issue by scanning the default language's JSON file and identifying any keys that don't have translations in other languages. It then exports these keys as a JSON file that can be used to add missing translations.
+2. When a new key is added to the project, forgetting to add its translations to all the other languages is easy. My tool helps to avoid this issue by scanning the default language's JSON file and identifying any keys that don't have translations in other languages. It then exports these keys as a JSON file that can be used to add missing translations.
 
-3. When a key's name is changed, it's important to update its translations in all languages. My tool makes this task simple by scanning all JSON files in the project folder and updating any translations for the old key name with the new one.
+3. When a key's name is changed, it's important to update its translations in all the other languages. My tool makes this task simple by scanning all the JSON files in the project folder and updating any translations of the old key name with the new one.
 
 The tool also includes an export feature that allows users to modify translations outside of the application and import them back into the JSON files.
 
