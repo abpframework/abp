@@ -90,7 +90,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             ? await ProcessButtonAndGetContentAsync(context, output, "calendar", "open")
             : "";
         var clearButtonContent = TagHelper.ClearButton
-            ? await ProcessButtonAndGetContentAsync(context, output, "times", "clear")
+            ? await ProcessButtonAndGetContentAsync(context, output, "times", "clear", visible:!TagHelper.SingleOpenAndClearButton)
             : "";
 
         var labelContent = await GetLabelAsHtmlAsync(context, output, TagHelperOutput);
@@ -369,6 +369,11 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             attrList.Add("id", options.PickerId);
         }
         
+        if(!options.SingleOpenAndClearButton)
+        {
+            attrList.Add("data-single-open-and-clear-button", options.SingleOpenAndClearButton.ToString().ToLowerInvariant());
+        }
+        
         return attrList;
     }
 
@@ -564,13 +569,18 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
     }
 
     protected virtual async Task<string> ProcessButtonAndGetContentAsync(TagHelperContext context,
-        TagHelperOutput output, string icon, string type)
+        TagHelperOutput output, string icon, string type, bool visible = true)
     {
         var abpButtonTagHelper = ServiceProvider.GetRequiredService<AbpButtonTagHelper>();
         var attributes =
             new TagHelperAttributeList { new("type", "button"), new("tabindex", "-1"), new("data-type", type) };
         abpButtonTagHelper.ButtonType = AbpButtonType.Outline_Secondary;
         abpButtonTagHelper.Icon = icon;
+        
+        if (!visible)
+        {
+            attributes.AddClass("d-none");
+        }
 
         return await abpButtonTagHelper.RenderAsync(attributes, context, Encoder, "button", TagMode.StartTagAndEndTag);
     }

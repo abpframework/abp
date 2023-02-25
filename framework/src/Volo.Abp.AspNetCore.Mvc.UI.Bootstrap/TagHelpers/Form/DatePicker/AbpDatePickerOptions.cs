@@ -33,6 +33,7 @@ public class AbpDatePickerOptions : IAbpDatePickerOptions
     public string DateFormat { get; set; }
     public bool OpenButton { get; set; } = true;
     public bool ClearButton { get; set; } = true;
+    public bool SingleOpenAndClearButton { get; set; } = true;
     public bool? IsUtc { get; set; }
     public bool? IsIso { get; set; }
     public object Options { get; set; }

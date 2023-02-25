@@ -82,14 +82,14 @@ public interface IAbpDatePickerOptions
     [CanBeNull] 
     string ParentEl { get; set; }
 
-    // DatePickerType Type { get; set; } = DatePickerType.Date;
-
     [CanBeNull] 
     string DateFormat { get; set; }
 
     bool OpenButton { get; set; }
 
     bool ClearButton { get; set; }
+    
+    bool SingleOpenAndClearButton { get; set; }
 
     bool? IsUtc { get; set; }
     

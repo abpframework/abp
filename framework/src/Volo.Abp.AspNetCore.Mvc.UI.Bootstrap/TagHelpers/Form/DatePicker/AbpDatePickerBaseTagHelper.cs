@@ -191,6 +191,11 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.ClearButton = value;
     }
 
+    public bool SingleOpenAndClearButton {
+        get => _abpDatePickerOptionsImplementation.SingleOpenAndClearButton;
+        set => _abpDatePickerOptionsImplementation.SingleOpenAndClearButton = value;
+    }
+
     public bool? IsUtc {
         get => _abpDatePickerOptionsImplementation.IsUtc;
         set => _abpDatePickerOptionsImplementation.IsUtc = value;
