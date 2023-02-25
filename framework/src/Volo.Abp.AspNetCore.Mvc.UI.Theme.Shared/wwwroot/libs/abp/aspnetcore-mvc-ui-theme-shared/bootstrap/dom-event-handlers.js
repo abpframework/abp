@@ -315,16 +315,33 @@
                     drops: "down",
                     autoApply: true,
                     autoUpdateInput: false,
+                    showTodayButton: true,
+                    showClearButton: true,
                     minYear: parseInt(moment().subtract(100, 'year').locale('en').format('YYYY')),
                     maxYear: parseInt(moment().add(100, 'year').locale('en').format('YYYY')),
                     locale: {
                         direction: abp.localization.currentCulture.isRightToLeft ? 'rtl' : 'ltr',
+                        todayLabel:  abp.localization.localize('Today', 'AbpUi'),
+                        clearLabel:  abp.localization.localize('Clear', 'AbpUi'),
+                        applyLabel:  abp.localization.localize('Apply', 'AbpUi'),
                     },
+                    singleOpenAndClearButton: true
                 };
-                
+                var locale = defaultOptions.locale;
                 $.extend(options, defaultOptions);
                 $.extend(options, $this.data());
+                if(jQuery.isEmptyObject(options.locale))
+                {
+                    options.locale = locale;
+                }else{
+                    locale = options.locale;
+                }
                 $.extend(options, $this.data("options"));
+                if(jQuery.isEmptyObject(options.locale))
+                {
+                    options.locale = locale;
+                }
+                
 
                 if(options.timePicker && options.timePicker24Hour === undefined){
                     options.timePicker24Hour = moment.localeData().longDateFormat('LT').indexOf('A') < 1;
@@ -338,6 +355,23 @@
                 var dateFormat = options.dateFormat;
                 var separator = options.separator;
                 var defaultDateFormat = "YYYY-MM-DD";
+                var singleOpenAndClearButton = options.singleOpenAndClearButton && $clearButton.length > 0 && $openButton.length > 0;
+                
+                const replaceButton = function (hasDate) {
+                    var hiddenClass = 'd-none';
+                    if(singleOpenAndClearButton){
+                        if(hasDate){
+                            $openButton.addClass(hiddenClass);
+                            $clearButton.removeClass(hiddenClass);
+                            $clearButton.insertAfter($openButton);
+                        }else {
+                            $openButton.removeClass(hiddenClass);
+                            $clearButton.addClass(hiddenClass);
+                            $openButton.insertAfter($clearButton);
+                        }
+                    }
+                }
+                
                 const getMoment = function (date) {
                     if(!date){
                         return isUtc ? moment.utc() : moment();
@@ -385,8 +419,67 @@
                     });
                 }
 
+                var $todayBtn = $('<button type="button" class="btn btn-sm btn-default today-btn" data-action="today">' + options.locale.todayLabel + '</button>');
+                var $clearBtn = $('<button type="button" class="btn btn-sm btn-default clear-btn" data-action="clear">' + options.locale.clearLabel + '</button>');
+                
+                var extraButtons = [];
+                if (options.showTodayButton) {
+                    extraButtons.push($todayBtn);
+                    
+                    $todayBtn.on('click', function () {
+                        var today = getMoment();
+                        $input.data('daterangepicker').setStartDate(today);
+                        $input.data('daterangepicker').setEndDate(today);
+                        $input.data('daterangepicker').updateView();
+                    });
+                }
+                if (options.showClearButton) {
+                    extraButtons.push($clearBtn);
+                    
+                    $clearBtn.on('click', function () {
+                        $input.val('').trigger('change');
+                        $dateRangePicker.hide();
+                    });
+                }
+                
+                if (typeof options.template !== 'string' && !(options.template instanceof $))
+                    options.template =
+                        '<div class="daterangepicker">' +
+                            '<div class="ranges"></div>' +
+                            '<div class="drp-calendar left">' +
+                                '<div class="calendar-table"></div>' +
+                                '<div class="calendar-time"></div>' +
+                            '</div>' +
+                            '<div class="drp-calendar right">' +
+                                '<div class="calendar-table"></div>' +
+                                '<div class="calendar-time"></div>' +
+                            '</div>' +
+                            '<div class="drp-buttons">' + 
+                                '<button class="applyBtn" disabled="disabled" type="button"></button> ' +
+                            '</div>' +
+                        '</div>';
+
                 $input.daterangepicker(options);
+                
                 var $dateRangePicker = $input.data('daterangepicker');
+                
+                if($dateRangePicker.container.find('.drp-buttons').css('display') !== 'none'){
+                    
+                    $.each(extraButtons, function (index, value) {
+                        $dateRangePicker.container.find('.drp-buttons').prepend(value);
+                    });
+                }
+                else{
+                    var $div = $('<div class="drp-buttons extra-buttons"></div>');
+                    $div.css('display', 'block');
+                    $.each(extraButtons, function (index, value) {
+                        $div.prepend(value);
+                    });
+
+                    $div.insertAfter($dateRangePicker.container.find('.drp-buttons'));
+                    
+                }
+                    
                 
                 $dateRangePicker.outsideClick = function(e) {
                     var target = $(e.target);
@@ -479,6 +572,11 @@
                 });
 
                 $input.on('change', function () {
+                    if($(this).val() !== ''){
+                        replaceButton(true);
+                    }else{
+                        replaceButton(false);
+                    }
                     var dates = $(this).val().split(separator);
                     if (dates.length === 2) {
                         startDate = getMoment(dates[0]);
@@ -494,16 +592,22 @@
                             endDate = formatDate(endDate);
                         }
                     } else {
-                        startDate = getMoment(dates[0]);
-                        if (!startDate.isValid()) {
+                        if(dates[0]){
+                            startDate = getMoment(dates[0]);
+                            if (!startDate.isValid()) {
+                                startDate = null;
+                            }else{
+                                startDate = formatDate(startDate);
+                            }
+                        }
+                        else{
                             startDate = null;
-                        }else{
-                            startDate = formatDate(startDate);
                         }
                         endDate = null;
                     }
-                    
                     if(!startDate){
+                        replaceButton(false);
+                        $(this).val('');
                         $dateRangePicker.setStartDate(getMoment());
                         $dateRangePicker.setEndDate(getMoment());
                     }

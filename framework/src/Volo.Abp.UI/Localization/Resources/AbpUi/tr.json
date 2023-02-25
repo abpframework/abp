@@ -48,6 +48,8 @@
     "Search": "Arama",
     "ItemWillBeDeletedMessageWithFormat": "{0} silinecektir!",
     "ItemWillBeDeletedMessage": "Bu nesne silinecektir!",
-    "ManageYourAccount": "Hesap yönetimi"
+    "ManageYourAccount": "Hesap yönetimi",
+    "Today": "Bugün",
+    "Apply": "Uygula"
   }
 }
