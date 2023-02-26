@@ -10,7 +10,9 @@
         <ModalBody MaxHeight="50">
             
             <Field>
-                <Check Cursor="Cursor.Pointer" @bind-Checked="@GrantAll" TValue="bool" Checked="IsSelectAllDisabled()">@L["SelectAllInAllTabs"]</Check>
+                <Check Disabled="IsSelectAllDisabled()" Cursor="Cursor.Pointer" @bind-Checked="@GrantAll" TValue="bool">
+                    @L["SelectAllInAllTabs"]
+                </Check>
             </Field>
             
             <Divider />
