@@ -250,4 +250,17 @@ public partial class PermissionManagementModal
         eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         return Task.CompletedTask;
     }
+
+    protected virtual bool IsPermissionGroupDisabled(PermissionGroupDto group)
+    {
+        var permissions = group.Permissions;
+        var grantedProviders = permissions.SelectMany(x => x.GrantedProviders);
+
+        return permissions.All(x => x.IsGranted) && grantedProviders.All(p => p.ProviderName != _providerName);
+    }
+
+    protected virtual bool IsSelectAllDisabled()
+    {
+        return _groups.All(IsPermissionGroupDisabled);
+    }
 }

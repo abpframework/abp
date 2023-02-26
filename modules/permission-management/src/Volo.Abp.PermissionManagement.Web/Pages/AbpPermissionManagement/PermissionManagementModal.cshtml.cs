@@ -129,12 +129,8 @@ public class PermissionManagementModal : AbpPageModel
 
         public bool IsDisabled(string currentProviderName)
         {
-            if (!Permissions.Any())
-            {
-                return false;
-            }
-            
             var grantedProviders = Permissions.SelectMany(x => x.GrantedProviders);
+         
             return Permissions.All(x => x.IsGranted) && grantedProviders.All(p => p.ProviderName != currentProviderName);
         }
     }
