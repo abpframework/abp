@@ -28,11 +28,11 @@ public class LocalAbpDistributedLock : IAbpDistributedLock, ISingletonDependency
         Check.NotNullOrWhiteSpace(name, nameof(name));
         var key = DistributedLockKeyNormalizer.NormalizeKey(name);
 
-        if (timeout == default)
-        {
-            var releaser = await _localSyncObjects.LockAsync(key, cancellationToken);
-            return new LocalAbpDistributedLockHandle(releaser);
-        }
+        //if (timeout == default)
+        //{
+        //    var releaser = await _localSyncObjects.LockAsync(key, cancellationToken);
+        //    return new LocalAbpDistributedLockHandle(releaser);
+        //}
 
         var timeoutReleaser = await _localSyncObjects.LockAsync(key, timeout, cancellationToken);
         if (!timeoutReleaser.EnteredSemaphore)
