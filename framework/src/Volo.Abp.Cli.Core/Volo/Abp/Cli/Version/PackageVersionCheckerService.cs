@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using NuGet.Versioning;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -14,9 +15,9 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Cli.NuGet;
+namespace Volo.Abp.Cli.Version;
 
-public class NuGetService : ITransientDependency
+public class PackageVersionCheckerService : ITransientDependency
 {
     public ILogger<VoloNugetPackagesVersionUpdater> Logger { get; set; }
     protected IJsonSerializer JsonSerializer { get; }
@@ -26,7 +27,7 @@ public class NuGetService : ITransientDependency
     private readonly CliHttpClientFactory _cliHttpClientFactory;
     private DeveloperApiKeyResult _apiKeyResult;
 
-    public NuGetService(
+    public PackageVersionCheckerService(
         IJsonSerializer jsonSerializer,
         IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
         ICancellationTokenProvider cancellationTokenProvider,
@@ -58,26 +59,30 @@ public class NuGetService : ITransientDependency
         return versionList.Contains(version);
     }
 
-    public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
+    public async Task<LatestVersionInfo> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
     {
-        var versionList = await GetPackageVersionListAsync(packageId, includeNightly);
+        if (!includeNightly && !includeReleaseCandidates)
+        {
+            var latestStableVersionResult = await GetLatestStableVersionOrNullAsync();
+            if (latestStableVersionResult == null)
+            {
+                return null;
+            }
 
+            return SemanticVersion.TryParse(latestStableVersionResult.Version, out var semanticVersion) 
+                ? new LatestVersionInfo(semanticVersion, latestStableVersionResult.Message) 
+                : null;
+        }
+        
+        var versionList = await GetPackageVersionListAsync(packageId, includeNightly);
         if (versionList == null)
         {
             return null;
         }
 
         List<SemanticVersion> versions;
-
-        if (!includeNightly && !includeReleaseCandidates)
-        {
-            versions = versionList
-            .Select(SemanticVersion.Parse)
-            .OrderByDescending(v => v, new VersionComparer()).ToList();
-
-            versions = versions.Where(x => !x.IsPrerelease).ToList();
-        }
-        else if (!includeNightly && includeReleaseCandidates)
+        
+        if (!includeNightly && includeReleaseCandidates)
         {
             versions = versionList
                 .Where(v => !v.Contains("-preview"))
@@ -91,7 +96,9 @@ public class NuGetService : ITransientDependency
                 .OrderByDescending(v => v, new VersionComparer()).ToList();
         }
 
-        return versions.Any() ? versions.Max() : null;
+        return versions.Any() 
+            ? new LatestVersionInfo(versions.Max()) 
+            : null;
 
     }
 
@@ -148,15 +155,13 @@ public class NuGetService : ITransientDependency
                 logger: Logger
             ))
             {
-                if (responseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+                if (responseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     //the package doesn't exist...
                     return null;
                 }
-                else
-                {
-                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-                }
+                
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
                 var responseContent = await responseMessage.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<NuGetVersionResultDto>(responseContent).Versions;
@@ -183,9 +188,46 @@ public class NuGetService : ITransientDependency
         return CliUrls.GetNuGetPackageInfoUrl(_apiKeyResult.ApiKey, packageId);
     }
 
+    private async Task<LatestStableVersionResult> GetLatestStableVersionOrNullAsync()
+    {
+        try
+        {
+            var client = _cliHttpClientFactory.CreateClient(clientName: CliConsts.GithubHttpClientName, needsAuthentication: false);
+
+            using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
+                       CliUrls.LatestVersionCheckFullPath,
+                       cancellationToken: CancellationTokenProvider.Token,
+                       logger: Logger
+                   ))
+            {
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+
+                var content = await responseMessage.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<List<LatestStableVersionResult>>(content);
+                
+                return result.FirstOrDefault(x => x.Type.ToLowerInvariant() == "stable");
+            }
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
     public class NuGetVersionResultDto
     {
         [JsonProperty("versions")]
         public List<string> Versions { get; set; }
+    }
+
+    public class LatestStableVersionResult
+    {
+        public string Version { get; set; }
+
+        public DateTime? ReleaseDate { get; set; }
+
+        public string Type { get; set; }
+        
+        public string Message { get; set; }
     }
 }
