@@ -23,7 +23,7 @@ public class AbpTextTemplatingCoreModule : AbpModule
         var definitionProviders = new List<Type>();
         var contentContributors = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(ITemplateDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {

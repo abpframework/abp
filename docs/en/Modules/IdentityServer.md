@@ -1,10 +1,12 @@
 # IdentityServer Module
 
-IdentityServer module provides a full integration with the [IdentityServer](https://github.com/IdentityServer/IdentityServer4) (IDS) framework, which provides advanced authentication features like single sign-on and API access control. This module persists clients, resources and other IDS-related objects to database.
+IdentityServer module provides a full integration with the [IdentityServer4](https://github.com/IdentityServer/IdentityServer4) (IDS) framework, which provides advanced authentication features like single sign-on and API access control. This module persists clients, resources and other IDS-related objects to database. **This module is replaced by** [OpenIddict module](https://docs.abp.io/en/abp/latest/Modules/OpenIddict) after ABP v6.0 in the startup templates.
+
+> Note: You can not use IdentityServer and OpenIddict modules together. They are separate OpenID provider libraries for the same job.
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+You don't need this module when you are using OpenIddict module. However, if you want to keep using IdentityServer4 for your applications, you can install this module and remove the OpenIddict module. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
 
 ### The Source Code
 

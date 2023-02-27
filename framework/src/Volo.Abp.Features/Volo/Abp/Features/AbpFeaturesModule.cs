@@ -22,7 +22,7 @@ public class AbpFeaturesModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(FeatureInterceptorRegistrar.RegisterIfNeeded);
+        context.Services.OnRegistered(FeatureInterceptorRegistrar.RegisterIfNeeded);
         AutoAddDefinitionProviders(context.Services);
     }
 
@@ -57,7 +57,7 @@ public class AbpFeaturesModule : AbpModule
     {
         var definitionProviders = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(IFeatureDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {

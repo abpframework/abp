@@ -124,7 +124,7 @@ public class FeatureDefinition : ICanCreateChildFeature
     }
 
     /// <summary>
-    /// Sets a property in the <see cref="Properties"/> dictionary.
+    /// Adds one or more providers to the <see cref="AllowedProviders"/> list.
     /// This is a shortcut for nested calls on this object.
     /// </summary>
     public virtual FeatureDefinition WithProviders(params string[] providers)
