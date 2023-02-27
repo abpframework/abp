@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AsyncKeyedLock;
@@ -19,7 +20,8 @@ public class LocalAbpDistributedLock : IAbpDistributedLock, ISingletonDependency
     {
         DistributedLockKeyNormalizer = distributedLockKeyNormalizer;
     }
-    
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
