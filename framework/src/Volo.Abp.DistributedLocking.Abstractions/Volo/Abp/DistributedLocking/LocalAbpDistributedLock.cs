@@ -33,6 +33,7 @@ public class LocalAbpDistributedLock : IAbpDistributedLock, ISingletonDependency
         var timeoutReleaser = await _localSyncObjects.LockAsync(key, timeout, cancellationToken);
         if (!timeoutReleaser.EnteredSemaphore)
         {
+            timeoutReleaser.Dispose();
             return null;
         }
         return new LocalAbpDistributedLockHandle(timeoutReleaser);
