@@ -33,6 +33,8 @@ public partial class PermissionManagementModal
     protected int _grantedPermissionCount = 0;
     protected int _notGrantedPermissionCount = 0;
 
+    protected bool _selectAllDisabled;
+
     protected bool GrantAll {
         get {
             if (_notGrantedPermissionCount == 0)
@@ -86,6 +88,8 @@ public partial class PermissionManagementModal
 
             _entityDisplayName = entityDisplayName ?? result.EntityDisplayName;
             _groups = result.Groups;
+
+            _selectAllDisabled = _groups.All(IsPermissionGroupDisabled);
 
             _grantedPermissionCount = 0;
             _notGrantedPermissionCount = 0;
@@ -249,5 +253,13 @@ public partial class PermissionManagementModal
     {
         eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         return Task.CompletedTask;
+    }
+
+    protected virtual bool IsPermissionGroupDisabled(PermissionGroupDto group)
+    {
+        var permissions = group.Permissions;
+        var grantedProviders = permissions.SelectMany(x => x.GrantedProviders);
+
+        return permissions.All(x => x.IsGranted) && grantedProviders.All(p => p.ProviderName != _providerName);
     }
 }
