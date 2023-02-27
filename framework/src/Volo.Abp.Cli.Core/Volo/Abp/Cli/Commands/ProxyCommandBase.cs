@@ -68,7 +68,9 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long);
         var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
         var folder = commandLineArgs.Options.GetOrNull(Options.Folder.Long);
-        var serviceTypeArg = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.ServiceType.Long);
+        var serviceTypeArg = commandLineArgs.Options.GetOrNull(Options.ServiceType.Short, Options.ServiceType.Long);
+        var entryPointArg = commandLineArgs.Options.GetOrNull(Options.EntryPoint.Short, Options.EntryPoint.Long);
+
 
         ServiceType? serviceType = null;
         if (!serviceTypeArg.IsNullOrWhiteSpace())
@@ -83,7 +85,7 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         var withoutContracts = commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Short) ||
                                commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Long);
 
-        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, serviceType, withoutContracts, commandLineArgs.Options);
+        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, serviceType, entryPointArg,withoutContracts, commandLineArgs.Options);
     }
 
     public virtual string GetUsageInfo()
@@ -189,6 +191,11 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         {
             public const string Short = "c";
             public const string Long = "without-contracts";
+        }
+          public static class EntryPoint
+        {
+            public const string Short = "ep";
+            public const string Long = "entry-point";
         }
     }
 }
