@@ -1,4 +1,4 @@
-export interface AbstractModel {
+export interface AbpAuthResponse {
   access_token: string;
   id_token: string;
   token_type: string;
@@ -6,6 +6,5 @@ export interface AbstractModel {
   refresh_token: string;
   scope: string;
   state?: string;
-  tenant_domain?:string
+  tenant_domain?: string;
 }
-
