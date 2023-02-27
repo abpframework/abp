@@ -10,6 +10,8 @@ public static class CliConsts
 
     public const string HttpClientName = "AbpHttpClient";
 
+    public const string GithubHttpClientName = "GithubHttpClient";
+
     public const string LogoutUrl = CliUrls.WwwAbpIo + "api/license/logout";
 
     public const string LicenseCodePlaceHolder = @"<LICENSE_CODE/>";

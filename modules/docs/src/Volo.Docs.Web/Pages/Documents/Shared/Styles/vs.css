@@ -597,7 +597,7 @@ body.scrolledMore .alert-criteria p.alert-p {
   margin-left: -30px;
 }
 .docs-page .docs-page-index #scroll-index {
-  max-height: 90vh;
+  max-height: 38vh;
 }
 .docs-page .docs-page-index .scroll-top-btn {
   display: none;
