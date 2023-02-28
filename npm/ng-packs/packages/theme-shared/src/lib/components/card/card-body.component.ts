@@ -1,9 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'abp-card-body',
-  template: `<div class="card-body">
-    <ng-content></ng-content>
-  </div>`,
+  template: `
+    <div [ngClass]="cardBodyClass" [ngStyle]="cardBodyStyle" >
+      <ng-content></ng-content>
+    </div>`,
+  host: {
+    class: 'card-body',
+  }
 })
-export class CardBodyComponent {}
+export class CardBodyComponent {
+  @Input() cardBodyClass: string;
+  @Input() cardBodyStyle: string;
+}

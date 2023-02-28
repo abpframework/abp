@@ -72,8 +72,8 @@ const declarationsWithExports = [
     NgxDatatableModule,
     EllipsisModule,
     NgxValidateCoreModule,
-    ...declarationsWithExports,
     CardModule,
+    ...declarationsWithExports
   ],
   providers: [DatePipe],
 })
