@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.Auditing;
@@ -76,7 +77,8 @@ public class AbpAuditingOptions
         IgnoredTypes = new List<Type>
             {
                 typeof(Stream),
-                typeof(Expression)
+                typeof(Expression),
+                typeof(CancellationToken)
             };
 
         EntityHistorySelectors = new EntityHistorySelectorList();
