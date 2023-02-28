@@ -112,12 +112,6 @@ public abstract class BundlerBase : IBundler, ITransientDependency
                 content = ProcessBeforeAddingToTheBundle(definition.Source, Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"),
                     content);
 
-
-                if (content.Contains("coding"))
-                {
-
-                }
-
                 builder.AppendLine(content);
             }
 
