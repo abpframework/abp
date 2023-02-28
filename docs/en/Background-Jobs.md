@@ -77,9 +77,7 @@ A background job should not hide exceptions. If it throws an exception, the back
 
 #### Cancelling Background Jobs
 
-If you use cancellation supported background job system. You can check cancellation token via `ICancellationTokenProvider`.
-
-**Example**
+If your background task is cancellable, then you can use the standard [Cancellation Token](Cancellation-Token-Provider.md) system to obtain a `CancellationToken` to cancel your job when requested. See the following example that uses the `ICancellationTokenProvider` to obtain the cancellation token:
 
 ```csharp
 using System;
@@ -101,22 +99,17 @@ namespace MyProject
 
         public override async Task ExecuteAsync(LongRunningJobArgs args)
         {
-            try
+            foreach (var id in args.Ids)
             {
-                foreach (var id in args.Ids)
-                {
-                    _cancellationTokenProvider.Token.ThrowIfCancellationRequested();
-                    await ProcessAsync(id);//code omitted for brevity
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.LogWarning("Job cancelled!");
+                _cancellationTokenProvider.Token.ThrowIfCancellationRequested();
+                await ProcessAsync(id); // code omitted for brevity
             }
         }
     }
 }
 ```
+
+> A cancellation operation might be needed if the application is shutting down and we don't want to block the application in the background job. This example throws an exception if the cancellation is requested. So, the job will be retried the next time the application starts. If you don't want that, just return from the `ExecuteAsync` method without throwing any exception (you can simply check the `_cancellationTokenProvider.Token.IsCancellationRequested` property).
 
 #### Job Name
 
