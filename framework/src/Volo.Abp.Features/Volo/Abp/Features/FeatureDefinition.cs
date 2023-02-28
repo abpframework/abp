@@ -100,11 +100,11 @@ public class FeatureDefinition : ICanCreateChildFeature
         bool isVisibleToClients = true,
         bool isAvailableToHost = true)
     {
-        Name = name;
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name));
         DefaultValue = defaultValue;
         DisplayName = displayName ?? new FixedLocalizableString(name);
         Description = description;
-        ValueType = valueType;
+        ValueType = valueType ?? new ToggleStringValueType();
         IsVisibleToClients = isVisibleToClients;
         IsAvailableToHost = isAvailableToHost;
 
@@ -124,7 +124,7 @@ public class FeatureDefinition : ICanCreateChildFeature
     }
 
     /// <summary>
-    /// Sets a property in the <see cref="Properties"/> dictionary.
+    /// Adds one or more providers to the <see cref="AllowedProviders"/> list.
     /// This is a shortcut for nested calls on this object.
     /// </summary>
     public virtual FeatureDefinition WithProviders(params string[] providers)

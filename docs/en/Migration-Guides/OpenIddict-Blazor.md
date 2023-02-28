@@ -62,7 +62,7 @@
   typeof(AbpAccountWebOpenIddictModule),
   ```
 
-- In the **MyApplicationBlazorModule.cs** add `PreConfigureServices` like below with your application name as the audience:
+- In the **MyApplicationHostModule.cs** add `PreConfigureServices` like below with your application name as the audience:
 
   ```csharp
   public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -79,7 +79,7 @@
   }
   ```
 
-- In the **MyApplicationBlazorModule.cs** `ConfigureServices` method, **replace the method call**:
+- In the **MyApplicationHostModule.cs** `ConfigureServices` method, **replace the method call**:
 
   From `ConfigureAuthentication(context, configuration);` to `ConfigureAuthentication(context);` and update the method as:
 
@@ -90,7 +90,7 @@
   }
   ```
 
-- In the **MyApplicationBlazorModule.cs** `OnApplicationInitialization` method, **replace the midware**:
+- In the **MyApplicationHostModule.cs** `OnApplicationInitialization` method, **replace the midware**:
 
   ```csharp
   app.UseJwtTokenMiddleware();
@@ -131,7 +131,7 @@
 
 ## IdentityServer
 
-This project is renamed to **AuthServer** after v6.0.0-rc1. You can also refactor and rename your project to *AuthServer* for easier updates in the future.
+This project is renamed to **AuthServer** after v6.0.0. You can also refactor and rename your project to *AuthServer* for easier updates in the future.
 
 - In **MyApplication.IdentityServer.csproj** replace **project references**:
 

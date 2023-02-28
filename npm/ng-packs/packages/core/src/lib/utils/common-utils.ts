@@ -7,34 +7,38 @@ export function isUndefinedOrEmptyString(value: unknown): boolean {
   return value === undefined || value === '';
 }
 
-export function isNullOrUndefined(obj) {
+export function isNullOrUndefined<T>(obj: T) {
   return obj === null || obj === undefined;
 }
 
-export function isNullOrEmpty(obj){
+export function isNullOrEmpty<T>(obj: T): boolean {
   return obj === null || obj === undefined || obj === '';
 }
 
-export function exists(obj) {
+export function exists<T>(obj: T): obj is T {
   return !isNullOrUndefined(obj);
 }
 
-export function isObject(obj) {
+export function isObject<T>(obj: T): boolean {
   return obj instanceof Object;
 }
 
-export function isArray(obj) {
+export function isArray<T>(obj: T): boolean {
   return Array.isArray(obj);
 }
 
-export function isObjectAndNotArray(obj) {
+export function isObjectAndNotArray<T>(obj: T): boolean {
   return isObject(obj) && !isArray(obj);
 }
 
-export function isNode(obj) {
+export function isNode<T>(obj: T): boolean {
   return obj instanceof Node;
 }
 
-export function isObjectAndNotArrayNotNode(obj) {
+export function isObjectAndNotArrayNotNode<T>(obj: T): boolean {
   return isObjectAndNotArray(obj) && !isNode(obj);
+}
+
+export function checkHasProp<T>(object: T, key: string | keyof T): key is keyof T {
+  return Object.prototype.hasOwnProperty.call(object, key);
 }

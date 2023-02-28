@@ -106,6 +106,18 @@ public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
         var resultAsString = await response.Content.ReadAsStringAsync();
         resultAsString.ShouldBe($"local_{Kind.ToString().ToLower()}_{Kind.ToString().ToLower()}_local");
     }
+
+    [Fact]
+    public async Task Guid_Json_Test()
+    {
+        var guid = Guid.NewGuid();
+        var json = $"{{\"UserId\":\"{guid:B}\",\"UserId2\":\"{guid:N}\",\"UserId3\":\"{guid:D}\",\"UserId4\":\"{guid:P}\",\"UserId5\":\"{guid:x}\",\"TenantId\":null,\"TenantId2\":\"\"}}";
+        var response = await Client.PostAsync("/api/model-Binding-test/Guid_Json_Test", new StringContent(json, Encoding.UTF8, MimeTypes.Application.Json));
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+        resultAsString.ShouldBe($"{{\"userId\":\"{guid:D}\",\"userId2\":\"{guid:D}\",\"userId3\":\"{guid:D}\",\"userId4\":\"{guid:D}\",\"userId5\":\"{guid:D}\",\"tenantId\":null,\"tenantId2\":null}}");
+    }
 }
 
 public class ModelBindingController_Utc_Tests : ModelBindingController_Tests

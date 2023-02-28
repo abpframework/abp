@@ -63,7 +63,7 @@ public class AbpSecurityModule : AbpModule
     {
         var contributorTypes = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(IAbpClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
             {

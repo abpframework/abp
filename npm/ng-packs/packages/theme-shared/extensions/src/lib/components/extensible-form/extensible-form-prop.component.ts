@@ -32,6 +32,7 @@ import { FormProp } from '../../models/form-props';
 import { PropData } from '../../models/props';
 import { selfFactory } from '../../utils/factory.util';
 import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
+import { eThemeSharedComponents } from '../../enums/components';
 
 @Component({
   selector: 'abp-extensible-form-prop',
@@ -56,7 +57,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
-  public injectorForCustomComponent: Injector;
+  public injectorForCustomComponent?: Injector;
 
   asterisk = '';
 
@@ -69,6 +70,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   readonly!: boolean;
 
   typeaheadModel: any;
+
+  passwordKey = eThemeSharedComponents.PasswordComponent;
 
   private readonly form: UntypedFormGroup;
 
@@ -92,7 +95,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
       ? text$.pipe(
           debounceTime(300),
           distinctUntilChanged(),
-          switchMap(text => this.prop.options(this.data, text)),
+          switchMap(text => this.prop?.options?.(this.data, text) || of([])),
         )
       : of([]);
 
@@ -106,7 +109,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   get isInvalid() {
     const control = this.form.get(this.prop.name);
-    return control.touched && control.invalid;
+    return control?.touched && control.invalid;
   }
 
   constructor(
@@ -161,6 +164,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
         return 'time';
       case ePropType.Typeahead:
         return 'typeahead';
+      case ePropType.PasswordInputGroup:
+        return 'passwordinputgroup';
       default:
         return prop.options ? 'select' : 'input';
     }
@@ -179,6 +184,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
         return 'email';
       case ePropType.Password:
         return 'password';
+      case ePropType.PasswordInputGroup:
+        return 'passwordinputgroup';
       default:
         return 'hidden';
     }

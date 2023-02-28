@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
@@ -21,13 +22,17 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     protected IPageRepository PageRepository { get; }
 
     protected PageManager PageManager { get; }
+    
+    protected IDistributedCache<PageCacheItem> PageCache { get; }
 
     public PageAdminAppService(
         IPageRepository pageRepository,
-        PageManager pageManager)
+        PageManager pageManager, 
+        IDistributedCache<PageCacheItem> pageCache)
     {
         PageRepository = pageRepository;
         PageManager = pageManager;
+        PageCache = pageCache;
     }
 
     public virtual async Task<PageDto> GetAsync(Guid id)
@@ -67,6 +72,10 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     public virtual async Task<PageDto> UpdateAsync(Guid id, UpdatePageInputDto input)
     {
         var page = await PageRepository.GetAsync(id);
+        if (page.IsHomePage)
+        {
+            await InvalidateDefaultHomePageCacheAsync(considerUow: true);
+        }
 
         await PageManager.SetSlugAsync(page, input.Slug);
 
@@ -84,7 +93,13 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     [Authorize(CmsKitAdminPermissions.Pages.Delete)]
     public virtual async Task DeleteAsync(Guid id)
     {
-        await PageRepository.DeleteAsync(id);
+        var page = await PageRepository.GetAsync(id);
+        if (page.IsHomePage)
+        {
+            await InvalidateDefaultHomePageCacheAsync(considerUow: true);
+        }
+        
+        await PageRepository.DeleteAsync(page);
     }
 
     [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]
@@ -93,5 +108,11 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         var page = await PageRepository.GetAsync(id);
 
 		await PageManager.SetHomePageAsync(page);
+        await InvalidateDefaultHomePageCacheAsync();
+    }
+
+    protected virtual async Task InvalidateDefaultHomePageCacheAsync(bool considerUow = false)
+    {
+        await PageCache.RemoveAsync(PageConsts.DefaultHomePageCacheKey, considerUow: considerUow);
     }
 }

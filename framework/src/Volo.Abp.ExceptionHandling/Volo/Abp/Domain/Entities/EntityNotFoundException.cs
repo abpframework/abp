@@ -3,7 +3,7 @@
 namespace Volo.Abp.Domain.Entities;
 
 /// <summary>
-/// This exception is thrown if an entity excepted to be found but not found.
+/// This exception is thrown if an entity is expected to be found but not found.
 /// </summary>
 public class EntityNotFoundException : AbpException
 {

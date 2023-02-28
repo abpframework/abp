@@ -6,7 +6,7 @@
     "Tenants": "Müşteriler",
     "NewTenant": "Yeni müşteri",
     "TenantName": "Müşteri adı",
-    "DisplayName:TenantName": "Müşteri adı",
+    "DisplayName:TenantName": "Müşteri Adı",
     "TenantDeletionConfirmationMessage": "'{0}' isimli müşteri silinecektir. Onaylıyor musunuz?",
     "ConnectionStrings": "Bağlantı cümlesi",
     "DisplayName:DefaultConnectionString": "Varsayılan bağlantı cümlesi",

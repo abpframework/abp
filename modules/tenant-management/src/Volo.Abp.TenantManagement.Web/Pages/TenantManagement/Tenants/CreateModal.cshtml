@@ -23,6 +23,8 @@
             <abp-input asp-for="Tenant.AdminEmailAddress" />
 
             <div class="mb-3">
+                <label class="form-label">@L["DisplayName:AdminPassword"].Value</label>
+                <span> * </span>
                 <div class="input-group">
                     <input type="password" class="form-control" maxlength="@TenantConsts.MaxPasswordLength" asp-for="Tenant.AdminPassword" />
                     <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton">

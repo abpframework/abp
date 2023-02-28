@@ -26,6 +26,6 @@ public class BlogPostDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTi
     public DateTime? LastModificationTime { get; set; }
 
     public string ConcurrencyStamp { get; set; }
-    
+
     public BlogPostStatus Status { get; set; }
 }

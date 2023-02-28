@@ -102,6 +102,7 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         sb.AppendLine("-u|--url <url>                                    API definition URL from.");
         sb.AppendLine("-t|--type <generate-type>                         The name of generate type (csharp, js, ng).");
         sb.AppendLine("  csharp");
+        sb.AppendLine("     --without-contracts                               Avoid generating the application service interface, class, enum and dto types.");
         sb.AppendLine("     --folder <folder-name>                            (default: 'ClientProxies') Folder name to place generated CSharp code in.");
         sb.AppendLine("  js");
         sb.AppendLine("     -o|--output <output-name>                         JavaScript file path or folder to place generated code in.");

@@ -1,10 +1,10 @@
 import { eBindingSourceId, eMethodModifier } from '../enums';
 import { camel, camelizeHyphen } from '../utils/text';
-import { getParamName } from '../utils/methods';
+import { getParamName, getParamValueName } from '../utils/methods';
 import { ParameterInBody } from './api-definition';
 import { Property } from './model';
 import { Omissible } from './util';
-import {VOLO_REMOTE_STREAM_CONTENT} from "../constants";
+import { VOLO_REMOTE_STREAM_CONTENT } from '../constants';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const shouldQuote = require('should-quote');
 
@@ -48,12 +48,10 @@ export class Body {
   registerActionParameter = (param: ParameterInBody) => {
     const { bindingSourceId, descriptorName, jsonName, name, nameOnMethod } = param;
     const camelName = camel(name);
-    const paramName = jsonName || camelName;
+    const paramName = jsonName || shouldQuote(name) ? name : camelName;
     let value = camelizeHyphen(nameOnMethod);
     if (descriptorName) {
-      value = shouldQuote(paramName)
-        ? `${descriptorName}['${paramName}']`
-        : `${descriptorName}.${paramName}`;
+      value = getParamValueName(paramName, descriptorName);
     }
 
     switch (bindingSourceId) {
@@ -79,8 +77,8 @@ export class Body {
     this.setUrlQuotes();
   }
 
-  isBlobMethod(){
-    return this.responseTypeWithNamespace === VOLO_REMOTE_STREAM_CONTENT
+  isBlobMethod() {
+    return this.responseTypeWithNamespace === VOLO_REMOTE_STREAM_CONTENT;
   }
 
   private setUrlQuotes() {

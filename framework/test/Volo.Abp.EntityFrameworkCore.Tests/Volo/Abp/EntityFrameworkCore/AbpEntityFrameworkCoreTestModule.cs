@@ -6,9 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore.Domain;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
+using Volo.Abp.EntityFrameworkCore.TestApp.FifthContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.EntityFrameworkCore;
@@ -42,6 +44,17 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
             {
                 opt.DefaultWithDetailsFunc = q => q.Include(p => p.Books);
             });
+        });
+
+        context.Services.AddAbpDbContext<HostTestAppDbContext>(options =>
+        {
+            options.AddDefaultRepositories(true);
+            options.ReplaceDbContext<IFifthDbContext>(MultiTenancySides.Host);
+        });
+
+        context.Services.AddAbpDbContext<TenantTestAppDbContext>(options =>
+        {
+            options.AddDefaultRepositories(true);
         });
 
         var sqliteConnection = CreateDatabaseAndGetConnection();

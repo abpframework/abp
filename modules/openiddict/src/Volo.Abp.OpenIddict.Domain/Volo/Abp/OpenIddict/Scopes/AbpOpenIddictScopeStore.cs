@@ -18,8 +18,9 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
     public AbpOpenIddictScopeStore(
         IOpenIddictScopeRepository repository,
         IUnitOfWorkManager unitOfWorkManager,
-        IGuidGenerator guidGenerator)
-        : base(repository, unitOfWorkManager, guidGenerator)
+        IGuidGenerator guidGenerator,
+        AbpOpenIddictIdentifierConverter identifierConverter)
+        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter)
     {
 
     }

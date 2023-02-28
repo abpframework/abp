@@ -1,5 +1,4 @@
 import {
-  ComponentFactoryResolver,
   Directive,
   Injector,
   Input,
@@ -24,7 +23,7 @@ import { SubscriptionService } from '../services/subscription.service';
 })
 export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   @Input('abpReplaceableTemplate')
-  data: ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>;
+  data!: ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>;
 
   providedData = {
     inputs: {},
@@ -44,7 +43,6 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   constructor(
     private injector: Injector,
     private templateRef: TemplateRef<any>,
-    private cfRes: ComponentFactoryResolver,
     private vcRef: ViewContainerRef,
     private replaceableComponents: ReplaceableComponentsService,
     private subscription: SubscriptionService,
@@ -83,11 +81,10 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
             providers: [{ provide: 'REPLACEABLE_DATA', useValue: this.providedData }],
             parent: this.injector,
           });
-          this.vcRef.createComponent(
-            this.cfRes.resolveComponentFactory(res.component),
-            0,
-            customInjector,
-          );
+          const ref = this.vcRef.createComponent(res.component, {
+            index: 0,
+            injector: customInjector,
+          });
         } else {
           this.vcRef.createEmbeddedView(this.templateRef, this.context);
         }
@@ -142,11 +139,15 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
           [key]: {
             enumerable: true,
             configurable: true,
-            get: () => this.data.inputs[key]?.value,
-            ...(this.data.inputs[key]?.twoWay && {
+            get: () => this.data.inputs?.[key]?.value,
+            ...(this.data.inputs?.[key]?.twoWay && {
               set: (newValue: any) => {
-                this.data.inputs[key].value = newValue;
-                this.data.outputs[`${key}Change`](newValue);
+                if (this.data.inputs?.[key]) {
+                  this.data.inputs[key].value = newValue;
+                }
+                if (this.data.outputs?.[`${key}Change`]) {
+                  this.data.outputs[`${key}Change`](newValue);
+                }
               },
             }),
           },

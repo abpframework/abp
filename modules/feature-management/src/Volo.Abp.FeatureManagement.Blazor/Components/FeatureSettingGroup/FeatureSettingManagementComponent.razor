@@ -3,6 +3,7 @@
 @if (Settings != null && Settings.HasManageHostFeaturesPermission)
 {
     <Form>
+        <Paragraph>@L["ManageHostFeaturesText"]</Paragraph>
         <Button Size="Size.Small" Color="Color.Primary" onclick="@OnManageHostFeaturesClicked">
             <Icon Name="@("fa-cog")"/> @L["ManageHostFeatures"]
         </Button>

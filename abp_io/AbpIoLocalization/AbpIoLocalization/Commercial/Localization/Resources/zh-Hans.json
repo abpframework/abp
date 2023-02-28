@@ -735,7 +735,7 @@
     "WatchTakeCloserLookVideo": "观看“详细了解ABP Suite 的代码生成”视频！",
     "ConfirmedEmailAddressRequiredToStartTrial": "你应该有一个确认的电子邮件地址，以便开始试用许可证。",
     "EmailVerificationMailNotSent": "电子邮件验证邮件不能发送。",
-    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\">点击这里获取确认邮件</a> 如果你还没有收到。",
+    "GetConfirmationEmail": "<a href=\"javascript:void(0);\" id=\"{0}\" class=\"text-decoration-underline\">点击这里获取确认邮件</a> 如果你还没有收到。",
     "WhichLicenseTypeYouAreInterestedIn": "你感兴趣的许可证类型是什么？",
     "DontTakeOurWordForIt": "不要相信我们的话......",
     "ReadAbpCommercialUsersWantYouToKnow": "阅读 ABP Commercial 用户希望您了解到的内容",

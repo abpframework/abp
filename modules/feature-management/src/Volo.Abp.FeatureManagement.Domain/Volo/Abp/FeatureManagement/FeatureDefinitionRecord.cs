@@ -70,7 +70,7 @@ public class FeatureDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
         DisplayName =  Check.NotNullOrWhiteSpace(displayName, nameof(displayName), FeatureDefinitionRecordConsts.MaxDisplayNameLength);
 
         Description = Check.Length(description, nameof(description), FeatureDefinitionRecordConsts.MaxDescriptionLength);
-        DefaultValue =  Check.NotNullOrWhiteSpace(defaultValue, nameof(defaultValue), FeatureDefinitionRecordConsts.MaxDefaultValueLength);
+        DefaultValue =  Check.Length(defaultValue, nameof(defaultValue), FeatureDefinitionRecordConsts.MaxDefaultValueLength);
 
         IsVisibleToClients = isVisibleToClients;
         IsAvailableToHost = isAvailableToHost;

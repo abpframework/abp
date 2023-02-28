@@ -28,9 +28,6 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         /*The X-Frame-Options HTTP response header can be used to indicate whether or not a browser should be allowed to render a page in a <frame>, <iframe> or <object>. SAMEORIGIN makes it being displayed in a frame on the same origin as the page itself. The spec leaves it up to browser vendors to decide whether this option applies to the top level, the parent, or the whole chain*/
         AddHeaderIfNotExists(context, "X-Frame-Options", "SAMEORIGIN");
 
-        /*The X-Content-Type-Options response HTTP header is a marker used by the server to indicate that the MIME types advertised in the Content-Type headers should be followed and not be changed. The header allows you to avoid MIME type sniffing by saying that the MIME types are deliberately configured.*/
-        AddHeaderIfNotExists(context, "X-Content-Type-Options", "nosniff");
-
         if (Options.Value.UseContentSecurityPolicyHeader)
         {
             AddHeaderIfNotExists(context, "Content-Security-Policy",

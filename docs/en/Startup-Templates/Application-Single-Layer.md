@@ -10,7 +10,7 @@ ABP's [Application Startup Template](Application.md) provides a well-organized a
 
 ## How to Start with It?
 
-You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can directly create & download this startup template from the [Get Started](https://abp.io/get-started) page. In this section, we will use the ABP CLI.
+You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can generate a CLI command for this startup template from the [Get Started](https://abp.io/get-started) page. In this section, we will use the ABP CLI.
 
 Firstly, install the ABP CLI if you haven't installed it before:
 
@@ -32,11 +32,10 @@ abp new Acme.BookStore -t app-nolayers
 This template provides multiple UI frameworks:
 
 * `mvc`: ASP.NET Core MVC UI with Razor Pages (default)
+* `blazor`: Blazor UI
 * `blazor-server`: Blazor Server UI
 * `angular`: Angular UI
 * `none`: Without UI (for HTTP API development)
-
-> This template doesn't have Blazor WebAssembly UI, because it requires 3 projects at least (server-side, UI and shared library between these two projects). We are recommending to use the layered [application startup template](Application.md) for Blazor WebAssembly projects.
 
 Use the `-u` (or `--ui`) option to specify the UI framework while creating the solution:
 
@@ -44,7 +43,7 @@ Use the `-u` (or `--ui`) option to specify the UI framework while creating the s
 abp new Acme.BookStore -t app-nolayers -u angular
 ```
 
-This example specifies the UI type (the `-u` option) as `angular`. You can also specify `mvc`, `blazor-server` or `none` for the UI type.
+This example specifies the UI type (the `-u` option) as `angular`. You can also specify `mvc`, `blazor`, `blazor-server` or `none` for the UI type.
 
 ### Specify the Database Provider
 

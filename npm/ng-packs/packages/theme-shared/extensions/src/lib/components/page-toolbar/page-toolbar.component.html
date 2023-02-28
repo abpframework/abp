@@ -1,6 +1,6 @@
 <div class="row justify-content-end mx-0 gap-2" id="AbpContentToolbar">
   <div
-    class="col-auto px-0 pt-0 pt-md-2"
+    class="col-auto px-0 pt-0 "
     [class.pe-0]="last"
     *ngFor="let action of actionList; trackBy: trackByFn; let last = last"
   >
@@ -13,15 +13,17 @@
         </ng-container>
 
         <ng-template #button>
-          <button
-            (click)="action.action(data)"
-            type="button"
-            [ngClass]="action.btnClass ? action.btnClass : defaultBtnClass"
-            class="d-inline-flex align-items-center gap-1"
-          >
-            <i [ngClass]="action.icon" [class.me-1]="action.icon"></i>
-            {{ action.text | abpLocalization }}
-          </button>
+          <ng-container *ngIf="asToolbarAction(action).value as toolbarAction">
+            <button
+              (click)="action.action(data)"
+              type="button"
+              [ngClass]="toolbarAction.btnClass ? toolbarAction.btnClass : defaultBtnClass"
+              class="d-inline-flex align-items-center gap-1"
+            >
+              <i [ngClass]="toolbarAction.icon" [class.me-1]="toolbarAction.icon"></i>
+              {{ toolbarAction.text | abpLocalization }}
+            </button>
+          </ng-container>
         </ng-template>
       </ng-container>
     </ng-container>

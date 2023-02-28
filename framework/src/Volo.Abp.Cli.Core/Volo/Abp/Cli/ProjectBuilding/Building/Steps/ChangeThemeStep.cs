@@ -73,6 +73,31 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Components",
             "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic"
         );
+        
+        ReplacePackageReferenceWithProjectReference(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyCompanyName.MyProjectName.Host.csproj",
+            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
+            @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
+            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}.Bundling",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling",
+            $"{defaultThemeName}ThemeBundles.Styles.Global",
+            "BasicThemeBundles.Styles.Global"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
+            $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+            $"AbpAspNetCoreMvcUi{defaultThemeName}ThemeModule",
+            "AbpAspNetCoreMvcUiBasicThemeModule"
+        );
 
         #endregion
 
@@ -174,6 +199,31 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXTheme",
             "Volo.Abp.AspNetCore.Components.WebAssembly.LeptonTheme"
         );
+        
+        ReplacePackageReferenceWithProjectReference(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyCompanyName.MyProjectName.Host.csproj",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+            @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX.Bundling",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling",
+            "LeptonXThemeBundles.Styles.Global",
+            "LeptonThemeBundles.Styles.Global"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+            "Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton",
+            "AbpAspNetCoreMvcUiLeptonXThemeModule",
+            "AbpAspNetCoreMvcUiLeptonThemeModule"
+        );
 
         #endregion
 
@@ -223,6 +273,12 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         #region MyCompanyName.MyProjectName.Blazor.Server && MyCompanyName.MyProjectName.Blazor.Server.Mongo - (app-nolayers)
 
         ChangeThemeToLeptonForNoLayersBlazorServerProjects(context);
+
+        #endregion
+
+        #region MyCompanyName.MyProjectName.MauiBlazor
+
+        ChangeThemeToLeptonForMauiBlazorProjects(context);
 
         #endregion
     }
@@ -482,6 +538,33 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             if (lines[i].Contains($"using {oldNamespace}"))
             {
                 lines[i] = lines[i].Replace($"using {oldNamespace}", $"using {newNamespace}");
+            }
+        }
+
+        file.SetLines(lines);
+    }
+
+    protected void ChangeKeyword(
+        ProjectBuildContext context,
+        string targetModuleFilePath,
+        string oldKeyword,
+        string newKeyword)
+    {
+        var file = context.Files.FirstOrDefault(x => x.Name.Contains(targetModuleFilePath));
+        if (file == null)
+        {
+            return;
+        }
+
+        file.NormalizeLineEndings();
+
+        var lines = file.GetLines();
+
+        for (var i = 0; i < lines.Length; i++)
+        {
+            if (lines[i].Contains(oldKeyword))
+            {
+                lines[i] = lines[i].Replace(oldKeyword, newKeyword);
             }
         }
 
@@ -972,5 +1055,54 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 "BlazorLeptonThemeBundles.Scripts.Global"
             );
         }
+    }
+
+    private void ChangeThemeToLeptonForMauiBlazorProjects(ProjectBuildContext context)
+    {
+        ReplacePackageReferenceWithProjectReference(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/MyCompanyName.MyProjectName.MauiBlazor.csproj",
+            "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonXTheme",
+            @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonTheme\Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonTheme.csproj"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/MyProjectNameMauiBlazorModule.cs",
+            "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonXTheme",
+            "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonTheme",
+            "AbpAspNetCoreComponentsMauiBlazorLeptonXThemeModule",
+            "AbpAspNetCoreComponentsMauiBlazorLeptonThemeModule"
+        );
+
+        ChangeKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/MainPage.xaml",
+            "clr-namespace:Volo.Abp.AspNetCore.Components.Web.LeptonXTheme.Components;assembly=Volo.Abp.AspNetCore.Components.Web.LeptonXTheme",
+            "clr-namespace:Volo.Abp.AspNetCore.Components.Web.LeptonTheme.Components;assembly=Volo.Abp.AspNetCore.Components.Web.LeptonTheme");
+
+        ChangeKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/MainPage.xaml",
+            "leptonXTheme",
+            "leptonTheme");
+
+        ChangeKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/Pages/Account/Login.razor",
+            "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonXTheme.Components.AccountLayout",
+            "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonTheme.Components.AccountLayout");
+
+        ChangeKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/Pages/Account/RedirectToLogout.razor",
+            "LeptonXResource",
+            "LeptonThemeManagementResource");
+
+        ChangeKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/Pages/Account/RedirectToLogout.razor",
+            "Volo.Abp.LeptonX.Shared.Localization",
+            "Volo.Abp.LeptonTheme.Management.Localization");
     }
 }

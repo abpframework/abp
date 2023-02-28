@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.MongoDB",
-  "hash": "8330e3fdfd6b867439b5c67748922ef6",
+  "hash": "4487b4df01fcd98b0ce2e7d2d11c9ba5",
   "contents": [
     {
       "namespace": "Volo.Blogging.MongoDB",
@@ -21,6 +21,50 @@
           "name": "AbpUsersMongoDbModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "BloggingMongoDbModule",
       "summary": null
@@ -30,15 +74,15 @@
       "connectionStringName": "Blogging",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Blogging.Comments.Comment",
+          "entityFullName": "Volo.Blogging.Blogs.Blog",
           "contentType": "databaseCollection",
-          "name": "BlgComments",
+          "name": "BlgBlogs",
           "summary": null
         },
         {
-          "entityFullName": "Volo.Blogging.Tagging.Tag",
+          "entityFullName": "Volo.Blogging.Comments.Comment",
           "contentType": "databaseCollection",
-          "name": "BlgTags",
+          "name": "BlgComments",
           "summary": null
         },
         {
@@ -48,16 +92,36 @@
           "summary": null
         },
         {
+          "entityFullName": "Volo.Blogging.Tagging.Tag",
+          "contentType": "databaseCollection",
+          "name": "BlgTags",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.Blogging.Posts.Post",
           "contentType": "databaseCollection",
           "name": "BlgPosts",
           "summary": null
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpMongoDbContext",
+          "namespace": "Volo.Abp.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "fullName": "Volo.Abp.MongoDB.IAbpMongoDbContext"
         },
         {
-          "entityFullName": "Volo.Blogging.Blogs.Blog",
-          "contentType": "databaseCollection",
-          "name": "BlgBlogs",
-          "summary": null
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "IBloggingMongoDbContext",
+          "namespace": "Volo.Blogging.MongoDB",
+          "declaringAssemblyName": "Volo.Blogging.MongoDB",
+          "fullName": "Volo.Blogging.MongoDB.IBloggingMongoDbContext"
         }
       ],
       "contentType": "mongoDbContext",

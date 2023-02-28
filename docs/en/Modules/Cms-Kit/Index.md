@@ -16,11 +16,12 @@ The following features are currently available:
 * Provides a [**global resources**](Global-Resources.md) system to add global styles and scripts dynamically.
 * Provides a [**Dynamic Widget**](Dynamic-Widget.md) system to create dynamic widgets for page and blog posts.
 
-Click to a feature to understand and learn how to use it.
+> You can click on the any feature links above to understand and learn how to use it.
 
-All features are individually usable. If you disable a feature, it completely disappears from your application, even from the database tables, by the help of the [Global Features](../../Global-Features.md) system.
+All features are individually usable. If you disable a feature, it completely disappears from your application, even from the database tables, with the help of the [Global Features](../../Global-Features.md) system.
 
 ## Pre Requirements
+
 -  This module depends on [BlobStoring](../../Blob-Storing.md) module for keeping media content.
 > Make sure `BlobStoring` module is installed and at least one provider is configured properly. For more information, check the [documentation](../../Blob-Storing.md).
 
@@ -62,7 +63,7 @@ GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 
 This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
-CMS kit packages are designed for various usage scenarios. If you check the [CMS kit packages](https://www.nuget.org/packages?q=Volo.CmsKit), you will see that some packages have `Admin` and `Public` suffixes. The reason is that the module has two application layers, considering they might be used in different type of applications. These application layers uses a single domain layer.
+CMS kit packages are designed for various usage scenarios. If you check the [CMS kit packages](https://www.nuget.org/packages?q=Volo.CmsKit), you will see that some packages have `Admin` and `Public` suffixes. The reason is that the module has two application layers, considering they might be used in different type of applications. These application layers uses a single domain layer:
 
  - `Volo.CmsKit.Admin.*` packages contain the functionalities required by admin (back office) applications.
  - `Volo.CmsKit.Public.*` packages contain the functionalities used in public websites where users read blog posts or leave comments.

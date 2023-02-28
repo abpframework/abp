@@ -6,7 +6,7 @@ This document provides a road map, release schedule and planned features for the
 
 ### v7.1
 
-The next version will be 7.1 and planned to release the stable 7.1 version in February, 2024. In the version 7.1, we will mostly focus on stabilizing and enhancing existing features, improving the developer experience, as well as adding relatively minor new features.
+The next version will be 7.1 and planned to release the stable 7.1 version in February, 2023. In the version 7.1, we will mostly focus on stabilizing and enhancing existing features, improving the developer experience, as well as adding relatively minor new features.
 
 See the [7.1 milestone](https://github.com/abpframework/abp/milestone/68) for all the issues we've planned to work on.
 

@@ -135,7 +135,9 @@
                     }
 
                     if (i == names.length - 1 && j == i) {
-                        o[names[j]] = x.value;
+                        if ($.isEmptyObject(o[names[j]])) {
+                            o[names[j]] = x.value;
+                        }
                     }
 
                     o = o[names[j]]

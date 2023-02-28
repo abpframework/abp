@@ -34,13 +34,13 @@ public class AbpOpenIddictApplicationCache : AbpOpenIddictCacheBase<OpenIddictAp
         }, token: cancellationToken);
     }
 
-    public virtual async ValueTask<OpenIddictApplicationModel> FindByClientIdAsync(string identifier, CancellationToken cancellationToken)
+    public virtual async ValueTask<OpenIddictApplicationModel> FindByClientIdAsync(string clientId, CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(identifier, nameof(identifier));
+        Check.NotNullOrEmpty(clientId, nameof(clientId));
 
-        return await Cache.GetOrAddAsync($"{nameof(FindByClientIdAsync)}_{identifier}", async () =>
+        return await Cache.GetOrAddAsync($"{nameof(FindByClientIdAsync)}_{clientId}", async () =>
         {
-           var application = await Store.FindByClientIdAsync(identifier, cancellationToken);
+           var application = await Store.FindByClientIdAsync(clientId, cancellationToken);
            if (application != null)
            {
                await AddAsync(application, cancellationToken);
@@ -49,13 +49,13 @@ public class AbpOpenIddictApplicationCache : AbpOpenIddictCacheBase<OpenIddictAp
         }, token: cancellationToken);
     }
 
-    public virtual async ValueTask<OpenIddictApplicationModel> FindByIdAsync(string identifier, CancellationToken cancellationToken)
+    public virtual async ValueTask<OpenIddictApplicationModel> FindByIdAsync(string id, CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(identifier, nameof(identifier));
+        Check.NotNullOrEmpty(id, nameof(id));
 
-        return await Cache.GetOrAddAsync($"{nameof(FindByIdAsync)}_{identifier}", async () =>
+        return await Cache.GetOrAddAsync($"{nameof(FindByIdAsync)}_{id}", async () =>
         {
-            var application = await Store.FindByIdAsync(identifier, cancellationToken);
+            var application = await Store.FindByIdAsync(id, cancellationToken);
             if (application != null)
             {
                 await AddAsync(application, cancellationToken);

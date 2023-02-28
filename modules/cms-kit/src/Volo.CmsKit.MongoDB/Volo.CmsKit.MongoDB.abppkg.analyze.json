@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.MongoDB",
-  "hash": "3ea192b1c0724a8b6b79c8443b0ee55d",
+  "hash": "0a97f3dd5afa54002ac001896c098325",
   "contents": [
     {
       "namespace": "Volo.CmsKit.MongoDB",
@@ -21,6 +21,50 @@
           "name": "AbpMongoDbModule"
         }
       ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
       "contentType": "abpModule",
       "name": "CmsKitMongoDbModule",
       "summary": null
@@ -30,21 +74,21 @@
       "connectionStringName": "CmsKit",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.CmsKit.Pages.Page",
-          "contentType": "databaseCollection",
-          "name": "CmsPages",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.CmsKit.Tags.Tag",
           "contentType": "databaseCollection",
           "name": "CmsTags",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Blogs.Blog",
+          "entityFullName": "Volo.CmsKit.Reactions.UserReaction",
           "contentType": "databaseCollection",
-          "name": "CmsBlogs",
+          "name": "CmsUserReactions",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Pages.Page",
+          "contentType": "databaseCollection",
+          "name": "CmsPages",
           "summary": null
         },
         {
@@ -54,9 +98,15 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Tags.EntityTag",
+          "entityFullName": "Volo.CmsKit.Ratings.Rating",
           "contentType": "databaseCollection",
-          "name": "CmsEntityTags",
+          "name": "CmsRatings",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
+          "contentType": "databaseCollection",
+          "name": "CmsBlogFeatures",
           "summary": null
         },
         {
@@ -72,21 +122,21 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Ratings.Rating",
-          "contentType": "databaseCollection",
-          "name": "CmsRatings",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Reactions.UserReaction",
-          "contentType": "databaseCollection",
-          "name": "CmsUserReactions",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.CmsKit.Menus.MenuItem",
           "contentType": "databaseCollection",
           "name": "CmsMenuItems",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.Blog",
+          "contentType": "databaseCollection",
+          "name": "CmsBlogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Tags.EntityTag",
+          "contentType": "databaseCollection",
+          "name": "CmsEntityTags",
           "summary": null
         },
         {
@@ -100,12 +150,26 @@
           "contentType": "databaseCollection",
           "name": "CmsGlobalResources",
           "summary": null
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpMongoDbContext",
+          "namespace": "Volo.Abp.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "fullName": "Volo.Abp.MongoDB.IAbpMongoDbContext"
         },
         {
-          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
-          "contentType": "databaseCollection",
-          "name": "CmsBlogFeatures",
-          "summary": null
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "ICmsKitMongoDbContext",
+          "namespace": "Volo.CmsKit.MongoDB",
+          "declaringAssemblyName": "Volo.CmsKit.MongoDB",
+          "fullName": "Volo.CmsKit.MongoDB.ICmsKitMongoDbContext"
         }
       ],
       "contentType": "mongoDbContext",

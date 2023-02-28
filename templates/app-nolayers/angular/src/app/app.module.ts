@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 import { FeatureManagementModule } from '@abp/ng.feature-management';
+import { AbpOAuthModule } from '@abp/ng.oauth';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { FeatureManagementModule } from '@abp/ng.feature-management';
       environment,
       registerLocaleFn: registerLocale(),
     }),
+    AbpOAuthModule.forRoot(),
     ThemeSharedModule.forRoot(),
     AccountConfigModule.forRoot(),
     IdentityConfigModule.forRoot(),

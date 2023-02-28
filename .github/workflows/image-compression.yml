@@ -6,6 +6,7 @@ on:
       - "**.jpeg"
       - "**.png"
       - "**.webp"
+      - "**.gif"
     types:
       - opened
       - synchronize

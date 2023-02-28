@@ -90,18 +90,21 @@ function replaceTenantNameWithinEnvironment(
     );
   }
 
-  if (environment.oAuthConfig.redirectUri) {
+  if (environment.oAuthConfig?.redirectUri) {
     environment.oAuthConfig.redirectUri = environment.oAuthConfig.redirectUri.replace(
       placeholder,
       tenancyName,
     );
   }
 
-  environment.oAuthConfig.issuer = environment.oAuthConfig.issuer.replace(placeholder, tenancyName);
+  if(!environment.oAuthConfig) {
+    environment.oAuthConfig = {};
+  }
+  environment.oAuthConfig.issuer = (environment.oAuthConfig.issuer || '').replace(placeholder, tenancyName);
 
   Object.keys(environment.apis).forEach(api => {
     Object.keys(environment.apis[api]).forEach(key => {
-      environment.apis[api][key] = environment.apis[api][key].replace(placeholder, tenancyName);
+      environment.apis[api][key] = (environment.apis[api][key] || '').replace(placeholder, tenancyName);
     });
   });
 

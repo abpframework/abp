@@ -1,5 +1,4 @@
 export * from './array-utils';
-export * from './auth-utils';
 export * from './common-utils';
 export * from './date-utils';
 export * from './environment-utils';
@@ -15,6 +14,7 @@ export * from './localization-utils';
 export * from './multi-tenancy-utils';
 export * from './number-utils';
 export * from './object-utils';
+export * from './queue';
 export * from './route-utils';
 export * from './string-utils';
 export * from './tree-utils';

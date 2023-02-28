@@ -1,37 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.MongoDB;
 
 public class AbpMongoDbContextOptions
 {
-    internal Dictionary<Type, Type> DbContextReplacements { get; }
+    internal Dictionary<MultiTenantDbContextType, Type> DbContextReplacements { get; }
 
     public Action<MongoClientSettings> MongoClientSettingsConfigurer { get; set; }
 
     public AbpMongoDbContextOptions()
     {
-        DbContextReplacements = new Dictionary<Type, Type>();
+        DbContextReplacements = new Dictionary<MultiTenantDbContextType, Type>();
     }
 
-    internal Type GetReplacedTypeOrSelf(Type dbContextType)
+    internal Type GetReplacedTypeOrSelf(Type dbContextType, MultiTenancySides multiTenancySides = MultiTenancySides.Both)
     {
         var replacementType = dbContextType;
         while (true)
         {
-            if (DbContextReplacements.TryGetValue(replacementType, out var foundType))
+            var foundType = DbContextReplacements.LastOrDefault(x => x.Key.Type == replacementType && x.Key.MultiTenancySide.HasFlag(multiTenancySides));
+            if (!foundType.Equals(default(KeyValuePair<MultiTenantDbContextType, Type>)))
             {
-                if (foundType == dbContextType)
+                if (foundType.Value == dbContextType)
                 {
                     throw new AbpException(
                         "Circular DbContext replacement found for " +
                         dbContextType.AssemblyQualifiedName
                     );
                 }
-
-                replacementType = foundType;
+                replacementType = foundType.Value;
             }
             else
             {

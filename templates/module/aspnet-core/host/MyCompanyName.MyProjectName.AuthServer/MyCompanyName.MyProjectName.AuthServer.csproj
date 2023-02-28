@@ -4,6 +4,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
     <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
     <UserSecretsId>MyCompanyName.MyProjectName-c2d31439-b723-48e2-b061-5ebd7aeb6010</UserSecretsId>
@@ -13,7 +14,7 @@
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

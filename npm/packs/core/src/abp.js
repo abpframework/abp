@@ -135,14 +135,20 @@ var abp = abp || {};
         if (sourceName === '_') { //A convention to suppress the localization
             return key;
         }
+        
+        if (sourceName) {
+            return abp.localization.internal.localize.apply(this, arguments).value;
+        }
 
-        sourceName = sourceName || abp.localization.defaultResourceName;
-        if (!sourceName) {
+        if (!abp.localization.defaultResourceName) {
             abp.log.warn('Localization source name is not specified and the defaultResourceName was not defined!');
             return key;
         }
 
-        return abp.localization.internal.localize.apply(this, arguments).value;
+        var copiedArguments = Array.prototype.slice.call(arguments, 0);
+        copiedArguments.splice(1, 1, abp.localization.defaultResourceName);
+
+        return abp.localization.internal.localize.apply(this, copiedArguments).value;
     };
 
     abp.localization.isLocalized = function (key, sourceName) {

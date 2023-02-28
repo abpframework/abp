@@ -35,11 +35,11 @@ public class Program
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
-            await builder.AddApplicationAsync<MyProjectNameModule>();
             if (IsMigrateDatabase(args))
             {
                 builder.Services.AddDataMigrationEnvironment();
             }
+            await builder.AddApplicationAsync<MyProjectNameModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
 

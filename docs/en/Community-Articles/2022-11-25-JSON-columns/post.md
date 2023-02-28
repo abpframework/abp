@@ -68,7 +68,7 @@ public class MyDbContext : AbpDbContext<MyDbContext>
 
         builder.Entity<Person>(b =>
         {
-            b.ToTable(MyProjectConsts.DbTablePrefix + "Persons", MyProjecConsts.DbSchema);
+            b.ToTable(MyProjectConsts.DbTablePrefix + "Persons", MyProjectConsts.DbSchema);
             b.ConfigureByConvention();
             b.OwnsOne(x=>x.ContactDetails, c =>
             {
@@ -124,6 +124,9 @@ As you can see, thanks to JSON Columns feature the **ContactDetails** row has JS
 ### Conclusion
 
 In this article, I've briefly introduced the JSON Columns feature that was shipped with EF Core 7. It's pretty straightforward to use JSON Columns in an ABP based application. You can see the examples above and give it a try!
+
+### The Source Code
+* You can find the full source code of the example application [here](https://github.com/abpframework/abp-samples/tree/master/EfCoreJSONColumnDemo).
 
 ### References
 

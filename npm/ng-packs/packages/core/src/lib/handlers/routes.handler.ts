@@ -12,16 +12,16 @@ export class RoutesHandler {
   }
 
   addRoutes() {
-    this.router?.config?.forEach(({ path = '', data }: RouteData) => {
-      if (!data?.routes) return;
+    (this.router?.config as RouteData[])?.forEach(({ path = '', data }: RouteData) => {
+      const routes = data?.routes;
+      if (!routes) return;
 
-      if (Array.isArray(data.routes)) {
-        this.routes.add(data.routes);
-        return;
+      if (Array.isArray(routes)) {
+        this.routes.add(routes);
+      } else {
+        const routesFlatten = flatRoutes([{ path, ...routes }], { path: '' });
+        this.routes.add(routesFlatten);
       }
-
-      const routes = flatRoutes([{ path, ...data.routes }], { path: '' });
-      this.routes.add(routes);
     });
   }
 }
@@ -39,7 +39,7 @@ function flatRoutes(routes: RouteDef[], parent: any) {
     acc.push(current, ...flatRoutes(children, current));
 
     return acc;
-  }, []);
+  }, [] as ABP.Route[]);
 }
 
 type RouteDef = ABP.Route & { children: RouteDef[] };

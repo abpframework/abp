@@ -10,7 +10,7 @@ ABP Framework extends the [ASP.NET Core distributed cache](https://docs.microsof
 
 [Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching) is the main package of the caching system. You can install it a project using the add-package command of the [ABP CLI](CLI.md):
 
-```
+```bash
 abp add-package Volo.Abp.Caching
 ```
 
@@ -252,6 +252,14 @@ ABP's distributed cache interfaces provide methods to perform batch methods thos
 
 > These are not standard methods of the ASP.NET Core caching. So, some providers may not support them. They are supported by the [ABP Redis Cache integration package](Redis-Cache.md). If the provider doesn't support, it fallbacks to `SetAsync` and `GetAsync` ... methods (called once for each item).
 
+## Caching Entities
+
+ABP Framework provides a [Distributed Entity Cache System](Entity-Cache.md) for caching entities. It is useful if you want to use caching for quicker access to the entity rather than repeatedly querying it from the database.
+
+It's designed as read-only and automatically invalidates a cached entity if the entity is updated or deleted.
+
+> See the [Entity Cache](Entity-Cache.md) documentation for more information.
+
 ## Advanced Topics
 
 ### Unit Of Work Level Cache
@@ -272,4 +280,5 @@ You can [replace](Dependency-Injection.md) this service by your own implementati
 
 ## See Also
 
+* [Entity Cache](Entity-Cache.md)
 * [Redis Cache](Redis-Cache.md)
