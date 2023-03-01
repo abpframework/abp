@@ -201,3 +201,38 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 
 <input type="text" name="search" [(ngModel)]="list.filter">
 ```
+ABP doesn't have a built-in filtering mechanism. You need to implement yourself and handle `filter` property in backend as seen in below. 
+
+```cs
+public class BookRequestDto : PagedAndSortedResultRequestDto
+{
+  public string Filter { get; set; }
+}
+```
+```cs
+public interface IBookAppService :
+    ICrudAppService< //Defines CRUD methods
+        BookDto, //Used to show books
+        Guid, //Primary key of the book entity
+        BookRequestDto, //Used for paging/sorting
+        CreateUpdateBookDto> //Used to create/update a book
+{
+
+}
+```
+```cs
+//Override GetListAsync in BookAppService
+
+public override async Task<PagedResultDto<BookDto>> GetListAsync(BookRequestDto input)
+{
+  var query=await ReadOnlyRepository.GetQueryableAsync();
+  query.WhereIf(!string.IsNullOrEmpty(input.Filter),x=>x.Name.Contains(input.Filter));
+
+  var totalCount = await AsyncExecuter.CountAsync(query);
+  var items = await AsyncExecuter.ToListAsync(query);
+  var entities = ObjectMapper.Map<List<Book>, List<BookDto>>(items);
+
+  return new PagedResultDto<BookDto>(totalCount,entities);
+}
+
+```
