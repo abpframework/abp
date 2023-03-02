@@ -1,8 +1,29 @@
 # Card Component
 
 The ABP Card Component is a wrapper component for the Bootstrap card class.
+It supports all features which Bootstrap card component provides.
 
-## Usage
+ABP Card Component has three main components, `CardHeader` Component, `CardBody` Component and `CardFooter` Component. These components have their own class and style inputs 
+
+|Component |Selector         |Input Properties                    |
+|--------- |-----------------|------------------------------------|
+|CardHeader|`abp-card-header`| `cardHeaderClass`,`cardHeaderStyle`|
+|CardBody  |`abp-card-body`  | `cardBodyClass`,`cardBodyStyle`    |          
+|CardFooter|`abp-card-footer`| `cardFooterClass`,`cardFooterStyle`|
+
+In addition to these components, Card component provides directives like `CardHeader`,`CardTitle`,`CardSubtitle`,`CardText`,`CardLink`,`CardImgTop`. 
+
+|Directive    |Selector                                                     |
+|-------------|-------------------------------------------------------------|
+|CardHeader   |`abp-card-header`,`[abp-card-header]`,`[abpCardHeader]`      |
+|CardTitle    |`abp-card-title`,`[abp-card-title]`,`[abpCardTitle]`         |          
+|CardSubtitle |`abp-card-subtitle`,`[abp-card-subtitle]`,`[abpCardSubtitle]`|
+|CardText     |`abp-card-text`,`[abp-card-text]`,`[abpCardText]`            |
+|CardLink     |`abp-card-link`,`[abp-card-text]`,`[abpCardText]`            |
+|CardImgTop   |`abp-card-img-top`,`[abp-card-img-top]`,`[abpCardImgTop]`    |
+
+
+# Usage
 
 ABP Card Component is a part of the `ThemeSharedModule` module. If you've imported that module into your module, you don't need to import it again. If not, first import it as shown below:
 
@@ -24,9 +45,11 @@ export class MyFeatureModule {}
 
 ```
 
-Then, the `abp-card` component can be used. See the example below:
-```ts
+Then, the `abp-card` component can be used. See the examples below:
 
+## CardBody
+
+```ts
 // card-demo.component.ts
 
 import { Component } from '@angular/core';
@@ -35,18 +58,151 @@ import { Component } from '@angular/core';
   selector: 'app-card-demo',
   template: ` 
     <abp-card [cardStyle]="{width: '18rem'}">
+      <abp-card-body>This is some text within a card body</abp-card-body>
+    </abp-card> 
+  `,
+})
+export class CardDemoComponent { }
+```
+See card body result below:
+
+![abp-card-body](./images/abp-card-body.png)
+
+## Titles, Text and Links
+
+```ts
+
+//card-demo.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-card-demo',
+  template: ` 
+    <abp-card [cardStyle]="{width: '18rem'}">
       <abp-card-body>
-        <abp-card-title>Lorem Ipsum</abp-card-title>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla commodo condimentum ligula, sed varius nibh eleifend sit amet. Maecenas facilisis vel arcu nec maximus.
+        <h5 abpCardTitle>Card Title</h5>
+        <h6 abpCardSubtitle class="mb-2 text-muted">Card subtitle</h6>
+        <p abpCardText>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a abpCardLink href="#">Card link</a>
+        <a abpCardLink href="#">Another link</a>
       </abp-card-body>
     </abp-card> 
   `,
 })
 export class CardDemoComponent { }
 ```
+See card title, text and link result below:
 
-See the result below:
+![abp-card-title-text-link](./images/abp-card-title-text-link.png)
 
-![abp-card-component](./images/abp-card-component.png)
+## Images
 
-As you can see in the example above, you can customize your card component's style with the `cardStyle` input. You can also add your custom classes with the `cardClass` input.
+```ts
+
+//card-demo.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-card-demo',
+  template: ` 
+    <abp-card [cardStyle]="{width:'18rem'}">
+      <img abpCardImgTop src="..." alt="...">
+      <abp-card-body>
+        <p abpCardText>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </abp-card-body>
+    </abp-card>
+  `,
+})
+export class CardDemoComponent { }
+```
+See card image result below:
+
+![abp-card-image-top](./images/abp-card-image.png)
+
+## List Groups
+
+```ts
+
+//card-demo.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-card-demo',
+  template: ` 
+    <abp-card [cardStyle]="{width:'18rem'}">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">An item</li>
+        <li class="list-group-item">A second item</li>
+        <li class="list-group-item">A third item</li>
+      </ul>
+    </abp-card>
+  `,
+})
+export class CardDemoComponent { }
+```
+See list group result below:
+
+![abp-card-list-group](./images/abp-card-list-group.png)
+
+## Kitchen Sink
+
+```ts
+
+//card-demo.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-card-demo',
+  template: ` 
+    <abp-card [cardStyle]="{width:'18rem'}">
+      <img abpCardImgTop src="../../assets/thinh-nguyen-aRrS37GKlVA-unsplash.jpg" alt="...">
+      <abp-card-body>
+        <h5 abpCardTitle>Card title</h5>
+        <p abpCardText>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </abp-card-body>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">An item</li>
+        <li class="list-group-item">A second item</li>
+        <li class="list-group-item">A third item</li>
+      </ul>
+      <abp-card-body>
+        <a href="#" abpCardLink>Card link</a>
+        <a href="#" abpCardLink>Another link</a>
+      </abp-card-body>
+    </abp-card>
+  `,
+})
+export class CardDemoComponent { }
+```
+See kitchen sink result below:
+
+![abp-card-kitchen-sink](./images/abp-card-kitchen-sink.png)
+
+## Header and Footer
+
+```ts
+
+//card-demo.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-card-demo',
+  template: ` 
+    <abp-card class="text-center">
+      <abp-card-header>Featured</abp-card-header>
+      <abp-card-body>
+        <h5 abpCardTitle>Special title treatment</h5>
+        <p abpCardText>With supporting text below as a natural lead-in to additional content.</p>
+        <a abpCardLink href="#" class="btn btn-primary">Go somewhere</a>
+      </abp-card-body>
+      <abp-card-footer class="text-muted">
+        2 days ago
+      </abp-card-footer>
+    </abp-card>
+  `,
+})
+export class CardDemoComponent { }
+```
+See header and footer result below:
+
+![abp-card-header-footer](./images/abp-card-header-footer.png)
