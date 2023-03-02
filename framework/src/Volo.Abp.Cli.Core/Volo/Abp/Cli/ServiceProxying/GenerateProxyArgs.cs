@@ -24,6 +24,7 @@ public class GenerateProxyArgs
     public string Source { get; }
 
     public string Folder { get; }
+    public string EntryPoint { get; }
 
     public ServiceType? ServiceType { get; }
 
@@ -43,6 +44,7 @@ public class GenerateProxyArgs
         string source,
         string folder,
         ServiceType? serviceType,
+        string entryPoint,
         bool withoutContracts,
         Dictionary<string, string> extraProperties = null)
     {
@@ -56,6 +58,7 @@ public class GenerateProxyArgs
         Source = source;
         Folder = folder;
         ServiceType = serviceType;
+        EntryPoint = entryPoint;
         WithoutContracts = withoutContracts;
         ExtraProperties = extraProperties ?? new Dictionary<string, string>();
     }
