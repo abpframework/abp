@@ -225,8 +225,8 @@ public interface IBookAppService :
 
 public override async Task<PagedResultDto<BookDto>> GetListAsync(BookRequestDto input)
 {
-  var query=await ReadOnlyRepository.GetQueryableAsync();
-  query.WhereIf(!string.IsNullOrEmpty(input.Filter),x=>x.Name.Contains(input.Filter));
+  var queryable = await ReadOnlyRepository.GetQueryableAsync();
+  var query = queryable.WhereIf(!string.IsNullOrEmpty(input.Filter), x => x.Name.Contains(input.Filter));
 
   var totalCount = await AsyncExecuter.CountAsync(query);
   var items = await AsyncExecuter.ToListAsync(query);
