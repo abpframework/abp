@@ -280,7 +280,7 @@ public partial class TokenController
                 items: new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = nameof(SignInResult.RequiresTwoFactor)
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = nameof(IdentityUser.ShouldChangePasswordOnNextLogin)
                 },
                 parameters: new Dictionary<string, object>
                 {
