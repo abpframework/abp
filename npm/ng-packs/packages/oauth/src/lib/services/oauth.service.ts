@@ -2,23 +2,27 @@ import { Injectable, Injector } from '@angular/core';
 import { Params } from '@angular/router';
 import { from, Observable, lastValueFrom } from 'rxjs';
 import { filter, map, switchMap, take, tap } from 'rxjs/operators';
-import { IAuthService, LoginParams } from '@abp/ng.core';
+import { AbpAuthResponse, IAuthService, LoginParams } from '@abp/ng.core';
 import { AuthFlowStrategy } from '../strategies';
 import { EnvironmentService } from '@abp/ng.core';
 import { AUTH_FLOW_STRATEGY } from '../tokens/auth-flow-strategy';
-import { AuthConfig, OAuthService } from "angular-oauth2-oidc";
+import { OAuthService } from 'angular-oauth2-oidc';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AbpOAuthService implements IAuthService {
   private strategy!: AuthFlowStrategy;
+  private readonly oAuthService: OAuthService;
 
   get isInternalAuth() {
     return this.strategy.isInternalAuth;
   }
 
-  constructor(protected injector: Injector, private oAuthService: OAuthService) {}
+  constructor(protected injector: Injector) {
+    this.oAuthService = this.injector.get(OAuthService);
+  }
 
   async init() {
     const environmentService = this.injector.get(EnvironmentService);
@@ -53,5 +57,26 @@ export class AbpOAuthService implements IAuthService {
 
   get isAuthenticated(): boolean {
     return this.oAuthService.hasValidAccessToken();
+  }
+
+  loginUsingGrant(
+    grantType: string,
+    parameters: object,
+    headers?: HttpHeaders,
+  ): Promise<AbpAuthResponse> {
+    const { clientId: client_id, dummyClientSecret: client_secret } = this.oAuthService;
+    const access_token = this.oAuthService.getAccessToken();
+    const p = {
+      access_token,
+      grant_type: grantType,
+      client_id,
+      ...parameters,
+    };
+
+    if (client_secret) {
+      p['client_secret'] = client_secret;
+    }
+
+    return this.oAuthService.fetchTokenUsingGrant(grantType, p, headers);
   }
 }

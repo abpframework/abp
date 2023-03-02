@@ -38,7 +38,8 @@
     "debug:schematics-dist": "./node_modules/.bin/ng g ./dist/packages/schematics/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url http://localhost:4300 --service-type application",
     "ci": "yarn affected:lint && yarn affected:build && yarn affected:test",
     "lerna": "lerna",
-    "migrate-nx": "yarn nx migrate --run-migrations"
+    "migrate-nx": "yarn nx migrate --run-migrations",
+    "copy-to:app": "cd scripts && yarn && yarn copy-to-templates -t app"
   },
   "private": true,
   "devDependencies": {
