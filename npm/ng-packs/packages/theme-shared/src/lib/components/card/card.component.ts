@@ -1,12 +1,20 @@
 import { Component, Directive, Input } from '@angular/core';
 
 @Directive({
+  selector: `abp-card-header, [abp-card-header], [abpCardHeader]`,
+  host: {
+    class: 'card-header',
+  },
+})
+export class CardHeader {}
+
+@Directive({
   selector: `abp-card-title, [abp-card-title], [abpCardTitle]`,
   host: {
     class: 'card-title',
   },
 })
-export class CardTitle{} 
+export class CardTitle {}
 
 @Directive({
   selector: `abp-card-subtitle, [abp-card-subtitle], [abpCardSubtitle]`,
@@ -14,7 +22,7 @@ export class CardTitle{}
     class: 'card-subtitle',
   },
 })
-export class CardSubtitle{} 
+export class CardSubtitle {}
 
 @Directive({
   selector: `abp-card-text, [abp-card-text], [abpCardText]`,
@@ -22,7 +30,7 @@ export class CardSubtitle{}
     class: 'card-text',
   },
 })
-export class CardText{} 
+export class CardText {}
 
 @Directive({
   selector: `abp-card-img-top, [abp-card-img-top], [abpCardImgTop]`,
@@ -30,7 +38,7 @@ export class CardText{}
     class: 'card-img-top',
   },
 })
-export class CardImgTop{} 
+export class CardImgTop {}
 
 @Directive({
   selector: `abp-card-link, [abp-card-link], [abpCardLink]`,
@@ -38,14 +46,12 @@ export class CardImgTop{}
     class: 'card-link',
   },
 })
-export class CardLink{} 
-
+export class CardLink {}
 
 @Component({
   selector: 'abp-card',
-  template: ` 
-  <div class="card" [ngClass]="cardClass" [ngStyle]="cardStyle">
-    <ng-content ></ng-content>
+  template: ` <div class="card" [ngClass]="cardClass" [ngStyle]="cardStyle">
+    <ng-content></ng-content>
   </div>`,
 })
 export class CardComponent {
