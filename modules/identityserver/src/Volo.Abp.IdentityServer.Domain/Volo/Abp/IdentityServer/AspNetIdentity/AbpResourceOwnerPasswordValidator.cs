@@ -125,7 +125,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
                     if (user.ShouldChangePasswordOnNextLogin)
                     {
-                        await HandleShouldChangePasswordOnNextLoginAsync(context, user);
+                        await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Password);
                         return;
                     }
 
@@ -200,10 +200,9 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         }
     }
 
-    protected virtual async Task HandleShouldChangePasswordOnNextLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user)
+    protected virtual async Task HandleShouldChangePasswordOnNextLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user, string currentPassword)
     {
         var changePasswordToken = context.Request?.Raw?["ChangePasswordToken"];
-        var currentPassword = context.Request?.Raw?["CurrentPassword"];
         var newPassword = context.Request?.Raw?["NewPassword"];
         if (!changePasswordToken.IsNullOrWhiteSpace() && !currentPassword.IsNullOrWhiteSpace() && !newPassword.IsNullOrWhiteSpace())
         {

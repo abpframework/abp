@@ -104,7 +104,7 @@ public partial class TokenController
 
                         if (user.ShouldChangePasswordOnNextLogin)
                         {
-                            return await HandleShouldChangePasswordOnNextLoginAsync(request, user);
+                            return await HandleShouldChangePasswordOnNextLoginAsync(request, user, request.Password);
                         }
 
                         errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
@@ -215,10 +215,9 @@ public partial class TokenController
         }
     }
 
-    protected virtual async Task<IActionResult> HandleShouldChangePasswordOnNextLoginAsync(OpenIddictRequest request, IdentityUser user)
+    protected virtual async Task<IActionResult> HandleShouldChangePasswordOnNextLoginAsync(OpenIddictRequest request, IdentityUser user, string currentPassword)
     {
         var changePasswordToken = request.GetParameter("ChangePasswordToken")?.ToString();
-        var currentPassword = request.GetParameter("CurrentPassword")?.ToString();
         var newPassword = request.GetParameter("NewPassword")?.ToString();
         if (!changePasswordToken.IsNullOrWhiteSpace() && !currentPassword.IsNullOrWhiteSpace() && !newPassword.IsNullOrWhiteSpace())
         {
