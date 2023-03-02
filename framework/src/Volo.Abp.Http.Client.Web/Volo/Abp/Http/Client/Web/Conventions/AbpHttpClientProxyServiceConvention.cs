@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
@@ -13,6 +14,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.ClientProxying;
+using Volo.Abp.Http.Client.StaticProxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Reflection;
 
@@ -24,14 +26,17 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
     protected readonly IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder;
     protected readonly List<ControllerModel> ControllerWithAttributeRoute;
     protected readonly List<ActionModel> ActionWithAttributeRoute;
+    protected readonly AbpHttpClientStaticProxyingOptions StaticProxyingOptions;
 
     public AbpHttpClientProxyServiceConvention(
         IOptions<AbpAspNetCoreMvcOptions> options,
         IConventionalRouteBuilder conventionalRouteBuilder,
-        IClientProxyApiDescriptionFinder clientProxyApiDescriptionFinder)
+        IClientProxyApiDescriptionFinder clientProxyApiDescriptionFinder,
+        IOptions<AbpHttpClientStaticProxyingOptions> staticProxyingOptions)
         : base(options, conventionalRouteBuilder)
     {
         ClientProxyApiDescriptionFinder = clientProxyApiDescriptionFinder;
+        StaticProxyingOptions = staticProxyingOptions.Value;
         ControllerWithAttributeRoute = new List<ControllerModel>();
         ActionWithAttributeRoute = new List<ActionModel>();
     }
@@ -71,6 +76,27 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
             ConfigureClientProxyApiExplorer(controller);
             ConfigureParameters(controller);
         }
+    }
+
+    protected override void ConfigureParameters(ControllerModel controller)
+    {
+        foreach (var action in controller.Actions)
+        {
+            foreach (var prm in action.Parameters)
+            {
+                if (prm.BindingInfo != null)
+                {
+                    continue;
+                }
+
+                if (StaticProxyingOptions.BindingFromQueryTypes.Contains(prm.ParameterInfo.ParameterType))
+                {
+                    prm.BindingInfo = BindingInfo.GetBindingInfo(new[] { new FromQueryAttribute() });
+                }
+            }
+        }
+
+        base.ConfigureParameters(controller);
     }
 
     protected virtual bool ShouldBeRemove(ApplicationModel application, ControllerModel controllerModel)

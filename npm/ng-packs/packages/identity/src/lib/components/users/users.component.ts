@@ -1,12 +1,28 @@
-import { ListService, PagedResultDto } from "@abp/ng.core";
-import { GetIdentityUsersInput, IdentityRoleDto, IdentityUserDto, IdentityUserService } from "@abp/ng.identity/proxy";
-import { ePermissionManagementComponents } from "@abp/ng.permission-management";
-import { Confirmation, ConfirmationService, ToasterService } from "@abp/ng.theme.shared";
-import { EXTENSIONS_IDENTIFIER, FormPropData, generateFormFromProps } from "@abp/ng.theme.shared/extensions";
-import { Component, Injector, OnInit, TemplateRef, TrackByFunction, ViewChild } from "@angular/core";
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
-import { finalize, switchMap, tap } from "rxjs/operators";
-import { eIdentityComponents } from "../../enums/components";
+import { ListService, PagedResultDto } from '@abp/ng.core';
+import {
+  GetIdentityUsersInput,
+  IdentityRoleDto,
+  IdentityUserDto,
+  IdentityUserService,
+} from '@abp/ng.identity/proxy';
+import { ePermissionManagementComponents } from '@abp/ng.permission-management';
+import {Confirmation, ConfirmationService, eFormComponets, ToasterService} from '@abp/ng.theme.shared';
+import {
+  EXTENSIONS_IDENTIFIER,
+  FormPropData,
+  generateFormFromProps,
+} from '@abp/ng.theme.shared/extensions';
+import {
+  Component,
+  Injector,
+  OnInit,
+  TemplateRef,
+  TrackByFunction,
+  ViewChild,
+} from '@angular/core';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { finalize, switchMap, tap } from 'rxjs/operators';
+import { eIdentityComponents } from '../../enums/components';
 
 @Component({
   selector: 'abp-users',
@@ -43,7 +59,9 @@ export class UsersComponent implements OnInit {
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
-  entityDisplayName?: string;
+  entityDisplayName: string;
+  
+  inputKey=eFormComponets.FormCheckboxComponent
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 

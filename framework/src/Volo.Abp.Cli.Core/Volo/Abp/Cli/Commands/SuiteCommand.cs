@@ -17,7 +17,7 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
-using Volo.Abp.Cli.NuGet;
+using Volo.Abp.Cli.Version;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
@@ -32,7 +32,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
 
     public ICmdHelper CmdHelper { get; }
     private readonly AbpNuGetIndexUrlService _nuGetIndexUrlService;
-    private readonly NuGetService _nuGetService;
+    private readonly PackageVersionCheckerService _packageVersionCheckerService;
     private readonly AuthService _authService;
     private readonly CliHttpClientFactory _cliHttpClientFactory;
     private readonly SuiteAppSettingsService _suiteAppSettingsService;
@@ -43,7 +43,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
 
     public SuiteCommand(
         AbpNuGetIndexUrlService nuGetIndexUrlService,
-        NuGetService nuGetService,
+        PackageVersionCheckerService packageVersionCheckerService,
         ICmdHelper cmdHelper,
         AuthService authService,
         CliHttpClientFactory cliHttpClientFactory,
@@ -51,7 +51,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
     {
         CmdHelper = cmdHelper;
         _nuGetIndexUrlService = nuGetIndexUrlService;
-        _nuGetService = nuGetService;
+        _packageVersionCheckerService = packageVersionCheckerService;
         _authService = authService;
         _cliHttpClientFactory = cliHttpClientFactory;
         _suiteAppSettingsService = suiteAppSettingsService;
@@ -397,13 +397,13 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
 
     private async Task<string> GetLatestPreviewVersion()
     {
-        var latestPreviewVersion = await _nuGetService
+        var latestPreviewVersionInfo = await _packageVersionCheckerService
             .GetLatestVersionOrNullAsync(
                 packageId: SuitePackageName,
                 includeReleaseCandidates: true
             );
 
-        return latestPreviewVersion.IsPrerelease ? latestPreviewVersion.ToString() : null;
+        return latestPreviewVersionInfo.Version.IsPrerelease ? latestPreviewVersionInfo.Version.ToString() : null;
     }
 
     private void ShowSuiteManualUpdateCommand()

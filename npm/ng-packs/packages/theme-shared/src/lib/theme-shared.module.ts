@@ -38,7 +38,8 @@ import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from './tokens/confirm
 import { PasswordComponent } from './components/password/password.component';
 import { CardModule } from './components/card/card.module';
 import { AbpVisibleDirective } from './directives';
-
+import { FormInputComponent } from './components/form-input/form-input.component';
+import { FormCheckboxComponent } from './components/checkbox/checkbox.component';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -56,6 +57,8 @@ const declarationsWithExports = [
   LoadingDirective,
   ModalCloseDirective,
   AbpVisibleDirective,
+  FormInputComponent,
+  FormCheckboxComponent
 ];
 
 @NgModule({
@@ -66,6 +69,7 @@ const declarationsWithExports = [
     NgbPaginationModule,
     EllipsisModule,
     CardModule,
+
   ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
   exports: [
@@ -77,7 +81,7 @@ const declarationsWithExports = [
   ],
   providers: [DatePipe],
 })
-export class BaseThemeSharedModule {}
+export class BaseThemeSharedModule { }
 
 @NgModule({
   imports: [BaseThemeSharedModule],

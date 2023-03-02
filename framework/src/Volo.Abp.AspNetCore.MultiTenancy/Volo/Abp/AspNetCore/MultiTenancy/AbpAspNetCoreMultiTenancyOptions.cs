@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,8 +43,8 @@ public class AbpAspNetCoreMultiTenancyOptions
             var message = exception.Message;
             var details = exception is BusinessException businessException ? businessException.Details : string.Empty;
 
-            await context.Response.WriteAsync($"<html lang=\"{CultureInfo.CurrentCulture.Name}\"><body>\r\n");
-            await context.Response.WriteAsync($"<h3>{message}</h3>{details}<br>\r\n");
+            await context.Response.WriteAsync($"<html lang=\"{HtmlEncoder.Default.Encode(CultureInfo.CurrentCulture.Name)}\"><body>\r\n");
+            await context.Response.WriteAsync($"<h3>{HtmlEncoder.Default.Encode(message)}</h3>{HtmlEncoder.Default.Encode(details)}<br>\r\n");
             await context.Response.WriteAsync("</body></html>\r\n");
 
             // Note the 500 spaces are to work around an IE 'feature'

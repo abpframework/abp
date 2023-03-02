@@ -1370,16 +1370,22 @@
         },
         {
           "text": "IdentityServer",
-          "path": "Modules/IdentityServer.md"
+          "path": "Modules/IdentityServer.md",
+          "items": [
+            {
+             "text": "IdentityServer Migration Guide",
+             "path": "Migration-Guides/IdentityServer4-Step-by-Step.md"
+            }
+          ]
         },
 		{
           "text": "OpenIddict",
-	  "items": [
-		{
-		 "text": "OpenIddict Migration Guide",
-		 "path": "Migration-Guides/OpenIddict-Step-by-Step.md"
-		}
-	   ],
+          "items": [
+            {
+              "text": "OpenIddict Migration Guide",
+              "path": "Migration-Guides/OpenIddict-Step-by-Step.md"
+            }
+          ],
           "path": "Modules/OpenIddict.md"
         },
         {
