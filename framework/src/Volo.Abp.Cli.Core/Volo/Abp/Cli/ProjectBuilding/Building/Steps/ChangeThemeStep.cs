@@ -258,7 +258,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     {
         var projectNames = new[]
         {
-            ".Web", ".HttpApi.Host", ".AuthServer",
+            ".Web", ".HttpApi.Host", ".AuthServer", ".Web.Public", ".Web.Public.Host",
             "" //for app-nolayers-mvc
         };
 
@@ -731,6 +731,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             {".Web", "MyProjectNameWebModule"},
             {".HttpApi.Host", "MyProjectNameHttpApiHostModule"},
             {".AuthServer", "MyProjectNameAuthServerModule"},
+            {".Web.Public", "MyProjectNameWebPublicModule"},
+            {".Web.Public.Host", "MyProjectNameWebPublicModule"},
             {"", "MyProjectNameWebModule"}
         };
 
