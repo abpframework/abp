@@ -174,6 +174,15 @@ var abp = abp || {};
 
             $dropdownButton.prependTo($container);
 
+            if(bootstrap){
+                new bootstrap.Dropdown($dropdownButton, {
+                    popperConfig(defaultBsPopperConfig) {
+                        defaultBsPopperConfig.strategy = "fixed";
+                        return defaultBsPopperConfig;
+                    }
+                })
+            }
+
             return $container;
         };
 
