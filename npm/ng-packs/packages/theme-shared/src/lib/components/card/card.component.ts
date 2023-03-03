@@ -1,36 +1,5 @@
 import { Component, Directive, Input } from '@angular/core';
 
-@Directive({
-  selector: `abp-card-header, [abp-card-header], [abpCardHeader]`,
-  host: {
-    class: 'card-header',
-  },
-})
-export class CardHeader {}
-
-@Directive({
-  selector: `abp-card-title, [abp-card-title], [abpCardTitle]`,
-  host: {
-    class: 'card-title',
-  },
-})
-export class CardTitle {}
-
-@Directive({
-  selector: `abp-card-subtitle, [abp-card-subtitle], [abpCardSubtitle]`,
-  host: {
-    class: 'card-subtitle',
-  },
-})
-export class CardSubtitle {}
-
-@Directive({
-  selector: `abp-card-img-top, [abp-card-img-top], [abpCardImgTop]`,
-  host: {
-    class: 'card-img-top',
-  },
-})
-export class CardImgTop {}
 
 @Component({
   selector: 'abp-card',
