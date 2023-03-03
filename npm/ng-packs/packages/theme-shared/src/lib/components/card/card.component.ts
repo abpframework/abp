@@ -25,28 +25,12 @@ export class CardTitle {}
 export class CardSubtitle {}
 
 @Directive({
-  selector: `abp-card-text, [abp-card-text], [abpCardText]`,
-  host: {
-    class: 'card-text',
-  },
-})
-export class CardText {}
-
-@Directive({
   selector: `abp-card-img-top, [abp-card-img-top], [abpCardImgTop]`,
   host: {
     class: 'card-img-top',
   },
 })
 export class CardImgTop {}
-
-@Directive({
-  selector: `abp-card-link, [abp-card-link], [abpCardLink]`,
-  host: {
-    class: 'card-link',
-  },
-})
-export class CardLink {}
 
 @Component({
   selector: 'abp-card',
