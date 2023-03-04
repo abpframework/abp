@@ -75,11 +75,9 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 
     private FeatureDto CreateFeatureDto(FeatureNameValueWithGrantedProvider featureNameValueWithGrantedProvider, FeatureDefinition featureDefinition)
     {
-        return new FeatureDto
+        var feature = new FeatureDto
         {
             Name = featureDefinition.Name,
-            DisplayName = featureDefinition.DisplayName?.Localize(StringLocalizerFactory),
-            Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
 
             ValueType = featureDefinition.ValueType,
 
@@ -91,6 +89,17 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
                 Key = featureNameValueWithGrantedProvider.Provider?.Key
             }
         };
+        if (featureDefinition.DisplayName is LocalizableString displayName)
+        {
+            feature.DisplayName = displayName?.Localize(StringLocalizerFactory);
+        }
+
+        if (featureDefinition.Description is LocalizableString description)
+        {
+            feature.Description = description?.Localize(StringLocalizerFactory);
+        }
+
+        return feature;
     }
 
     public virtual async Task UpdateAsync([NotNull] string providerName, string providerKey, UpdateFeaturesDto input)
