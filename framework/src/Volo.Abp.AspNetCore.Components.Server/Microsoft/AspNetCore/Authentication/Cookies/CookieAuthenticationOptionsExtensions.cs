@@ -8,6 +8,12 @@ namespace Microsoft.AspNetCore.Authentication.Cookies;
 
 public static class CookieAuthenticationOptionsExtensions
 {
+    /// <summary>
+    /// Introspect access token on validating the principal.
+    /// </summary>
+    /// <param name="options"></param>
+    /// <param name="oidcAuthenticationScheme"></param>
+    /// <returns></returns>
     public static CookieAuthenticationOptions IntrospectAccessToken(this CookieAuthenticationOptions options, string oidcAuthenticationScheme = "oidc")
     {
         var originalHandler = options.Events.OnValidatePrincipal;
