@@ -213,7 +213,7 @@ public static class AbpStringExtensions
         var replaceLength = replace.Length;
         var newLength = str.Length - searchLength + replaceLength;
 
-        Span<char> buffer = stackalloc char[newLength];
+        Span<char> buffer = newLength <= 1024 ? stackalloc char[newLength] : new char[newLength];
 
         // Copy the part of the original string before the search term
         str.AsSpan(0, pos).CopyTo(buffer);
