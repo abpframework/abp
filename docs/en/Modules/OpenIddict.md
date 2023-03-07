@@ -421,7 +421,7 @@ Update `PreConfigureServices` method of AuthServerModule (or HttpApiHostModule i
 ```csharp
 PreConfigure<OpenIddictServerBuilder>(builder =>
 {
-	builder.SetAuthorizationCodeLifetime(TimeSpan.FromMinutes(30));
+    builder.SetAuthorizationCodeLifetime(TimeSpan.FromMinutes(30));
     builder.SetAccessTokenLifetime(TimeSpan.FromMinutes(30));
     builder.SetIdentityTokenLifetime(TimeSpan.FromMinutes(30));
     builder.SetRefreshTokenLifetime(TimeSpan.FromDays(14));
