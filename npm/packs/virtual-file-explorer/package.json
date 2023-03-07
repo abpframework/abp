@@ -1,12 +1,12 @@
 {
-  "version": "7.0.2",
+  "version": "7.0.3",
   "name": "@abp/virtual-file-explorer",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/clipboard": "~7.0.2",
-    "@abp/prismjs": "~7.0.2"
+    "@abp/clipboard": "~7.0.3",
+    "@abp/prismjs": "~7.0.3"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
