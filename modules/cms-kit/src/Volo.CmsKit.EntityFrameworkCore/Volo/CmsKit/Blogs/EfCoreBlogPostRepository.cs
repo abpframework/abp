@@ -16,12 +16,12 @@ using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs;
 
-public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPost, Guid>, IBlogPostRepository
+public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogPost, Guid>, IBlogPostRepository
 {
     private EntityTagManager _entityTagManager;
 
     public EfCoreBlogPostRepository(
-        IDbContextProvider<CmsKitDbContext> dbContextProvider,
+        IDbContextProvider<ICmsKitDbContext> dbContextProvider,
         EntityTagManager entityTagManager) : base(dbContextProvider)
     {
         _entityTagManager = entityTagManager;

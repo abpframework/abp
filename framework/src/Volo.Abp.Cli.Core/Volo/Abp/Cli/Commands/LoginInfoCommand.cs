@@ -25,6 +25,12 @@ public class LoginInfoCommand : IConsoleCommand, ITransientDependency
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
+        if (!AuthService.IsLoggedIn())
+        {
+            Logger.LogError("You are not logged in.");
+            return;
+        }
+        
         var loginInfo = await AuthService.GetLoginInfoAsync();
 
         if (loginInfo == null)

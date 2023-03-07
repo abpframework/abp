@@ -109,11 +109,12 @@ public abstract class BundlerBase : IBundler, ITransientDependency
                     content = GetFileContent(filePath, options.Minify);
                 }
 
-                content = ProcessBeforeAddingToTheBundle(definition.Source, Path.Combine(options.Directory, "wwwroot"),
+                content = ProcessBeforeAddingToTheBundle(definition.Source, Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"),
                     content);
 
                 builder.AppendLine(content);
             }
+
 
             return builder.ToString();
         }
@@ -125,15 +126,15 @@ public abstract class BundlerBase : IBundler, ITransientDependency
         foreach (var definition in bundleDefinitions)
         {
             var filePath = Path.Combine(definition.Source.Split('/'));
-            
+
             var fileFullPath = Directory.GetFiles(options.Directory, string.Empty, SearchOption.AllDirectories).FirstOrDefault(x => x.EndsWith(filePath));
             if(fileFullPath == null)
             {
                 throw new AbpException("Not found: " + definition.Source);
             }
-            
+
             var content = GetFileContent(fileFullPath, options.Minify);
-            content = ProcessBeforeAddingToTheBundle(definition.Source, Path.Combine(options.Directory, "wwwroot"),
+            content = ProcessBeforeAddingToTheBundle(definition.Source, Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"),
                 content);
 
             builder.AppendLine(content);

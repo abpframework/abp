@@ -41,6 +41,7 @@ public class MyProjectNameDomainModule : AbpModule
             options.Languages.Add(new LanguageInfo("en", "en", "English", "gb"));
             options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
             options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+            options.Languages.Add(new LanguageInfo("hr", "hr", "Croatian"));
             options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish", "fi"));
             options.Languages.Add(new LanguageInfo("fr", "fr", "Français", "fr"));
             options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));

@@ -51,7 +51,7 @@
     "SendPasswordResetLink_Information": "Un link per reimpostare la password verrà inviato alla tua e-mail. Se non ricevi l'e-mail entro pochi minuti, riprova.",
     "PasswordResetMailSentMessage": "E-mail di recupero dell'account inviata al tuo indirizzo e-mail. Se non vedi questa e-mail nella tua posta in arrivo entro 15 minuti, cercala tra la posta indesiderata e in tal caso, contrassegna il messaggio come -No SPAM-.",
     "ResetPassword": "Resetta la password",
-    "ConfirmPassword": "Conferma (ripeti) la password",
+    "ConfirmPassword": "Conferma la password",
     "ResetPassword_Information": "Per favore inserisci la tua nuova password.",
     "YourPasswordIsSuccessfullyReset": "La tua password è stata reimpostata con successo.",
     "GoToTheApplication": "Vai all'applicazione",

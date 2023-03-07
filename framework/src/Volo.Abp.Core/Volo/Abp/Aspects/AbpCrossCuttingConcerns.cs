@@ -60,10 +60,11 @@ public static class AbpCrossCuttingConcerns
     public static IDisposable Applying(object obj, params string[] concerns)
     {
         AddApplied(obj, concerns);
-        return new DisposeAction(() =>
+        return new DisposeAction<ValueTuple<object, string[]>>(static (state) =>
         {
+            var (obj, concerns) = state;
             RemoveApplied(obj, concerns);
-        });
+        }, (obj, concerns));
     }
 
     public static string[] GetApplieds(object obj)

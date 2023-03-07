@@ -29,6 +29,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
     protected IdentityModelHttpRequestMessageOptions IdentityModelHttpRequestMessageOptions { get; }
     protected IDistributedCache<IdentityModelTokenCacheItem> TokenCache { get; }
     protected IDistributedCache<IdentityModelDiscoveryDocumentCacheItem> DiscoveryDocumentCache { get; }
+    protected IAbpHostEnvironment AbpHostEnvironment { get; }
 
     public IdentityModelAuthenticationService(
         IOptions<AbpIdentityClientOptions> options,
@@ -37,7 +38,8 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
         ICurrentTenant currentTenant,
         IOptions<IdentityModelHttpRequestMessageOptions> identityModelHttpRequestMessageOptions,
         IDistributedCache<IdentityModelTokenCacheItem> tokenCache,
-        IDistributedCache<IdentityModelDiscoveryDocumentCacheItem> discoveryDocumentCache)
+        IDistributedCache<IdentityModelDiscoveryDocumentCacheItem> discoveryDocumentCache,
+        IAbpHostEnvironment abpHostEnvironment)
     {
         ClientOptions = options.Value;
         CancellationTokenProvider = cancellationTokenProvider;
@@ -45,6 +47,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
         CurrentTenant = currentTenant;
         TokenCache = tokenCache;
         DiscoveryDocumentCache = discoveryDocumentCache;
+        AbpHostEnvironment = abpHostEnvironment;
         IdentityModelHttpRequestMessageOptions = identityModelHttpRequestMessageOptions.Value;
         Logger = NullLogger<IdentityModelAuthenticationService>.Instance;
     }
@@ -97,11 +100,12 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
             }
 
             tokenCacheItem = new IdentityModelTokenCacheItem(tokenResponse.AccessToken);
-            await TokenCache.SetAsync(cacheKey, tokenCacheItem,
-                new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(configuration.CacheAbsoluteExpiration)
-                });
+            await TokenCache.SetAsync(cacheKey, tokenCacheItem, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = AbpHostEnvironment.IsDevelopment()
+                    ? TimeSpan.FromSeconds(5)
+                    : TimeSpan.FromSeconds(configuration.CacheAbsoluteExpiration)
+            });
         }
 
         return tokenCacheItem.AccessToken;
@@ -146,7 +150,9 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
             await DiscoveryDocumentCache.SetAsync(tokenEndpointUrlCacheKey, discoveryDocumentCacheItem,
                 new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(configuration.CacheAbsoluteExpiration)
+                    AbsoluteExpirationRelativeToNow = AbpHostEnvironment.IsDevelopment()
+                        ? TimeSpan.FromSeconds(5)
+                        : TimeSpan.FromSeconds(configuration.CacheAbsoluteExpiration)
                 });
         }
 

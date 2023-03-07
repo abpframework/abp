@@ -1,10 +1,16 @@
 # CMS Kit: Comments
 
-CMS kit provides a **comment** system to add comments feature to any kind of resource, like blog posts, products, etc.
+CMS kit provides a **comment** system to add the comment feature to any kind of resource, like blog posts, products, etc.
+
+## Enabling the Comment Feature
+
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+
+> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
 ## Options
 
-The comment system provides a mechanism to group comment definitions by entity types. For example, if you want to use comment system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product`, and add comments under these entity types.
+The comment system provides a mechanism to group comment definitions by entity types. For example, if you want to use the comment system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product`, and add comments under these entity types.
 
 `CmsKitCommentOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
 
@@ -12,14 +18,16 @@ The comment system provides a mechanism to group comment definitions by entity t
 Configure<CmsKitCommentOptions>(options =>
 {
     options.EntityTypes.Add(new CommentEntityTypeDefinition("Product"));
+    options.IsRecaptchaEnabled = true; //false by default
 });
 ```
 
-> If you're using the blog feature, the ABP framework defines an entity type for the blog feature automatically. You can easily override or remove the predefined entity types in `Configure` method like shown above.
+> If you're using the [Blogging Feature](Blogging.md), the ABP framework defines an entity type for the blog feature automatically. You can easily override or remove the predefined entity types in `Configure` method like shown above.
 
 `CmsKitCommentOptions` properties:
 
 - `EntityTypes`: List of defined entity types(`CmsKitCommentOptions`) in the comment system.
+- `IsRecaptchaEnabled`: This flag enables or disables the reCaptcha for the comment system. You can set it as **true** if you want to use reCaptcha in your comment system.
 
 `CommentEntityTypeDefinition` properties:
 
@@ -33,11 +41,12 @@ The comment system provides a commenting [widget](../../UI/AspNetCore/Widgets.md
 @await Component.InvokeAsync(typeof(CommentingViewComponent), new
 {
   entityType = "Product",
-  entityId = "..."
+  entityId = "...",
+  referralLinks  = new [] {"nofollow"}
 })
 ```
 
-`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here.
+`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. `referralLinks` is an optional parameter. You can use this parameter to add values (such as "nofollow", "noreferrer", or any other values) to the [rel attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel) of links.
 
 ## User Interface
 
@@ -77,7 +86,7 @@ A comment represents a written comment from a user.
 
 This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
 
-Following custom repositories are defined for this feature:
+The following custom repositories are defined for this feature:
 
 - `ICommentRepository`
 
@@ -93,8 +102,8 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 
 #### Application services
 
-- `CommentAdminAppService` (implements `ICommentAdminAppService`): Implements the use cases of comment management system, like listing or removing comments etc.
-- `CommentPublicAppService` (implements `ICommentPublicAppService`):  Implements the use cases of comment management on the public websites, like listing comments, adding comments etc.
+- `CommentAdminAppService` (implements `ICommentAdminAppService`): Implements the use cases of the comment management system, like listing or removing comments etc.
+- `CommentPublicAppService` (implements `ICommentPublicAppService`):  Implements the use cases of the comment management on the public websites, like listing comments, adding comments etc.
 
 ### Database providers
 
