@@ -176,5 +176,7 @@ public class MenuManager : IMenuManager, ITransientDependency
                 menuItem.GroupName = null;
             }
         }
+
+        applicationMenu.Groups.Normalize();
     }
 }
