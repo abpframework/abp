@@ -9,7 +9,8 @@ public abstract class
     where TTagHelper : AbpDatePickerBaseTagHelper<TTagHelper>
 
 {
-    private IAbpDatePickerOptions _abpDatePickerOptionsImplementation;
+    private readonly IAbpDatePickerOptions _abpDatePickerOptionsImplementation;
+
     public string Label { get; set; }
 
     public string LabelTooltip { get; set; }
@@ -42,14 +43,10 @@ public abstract class
 
     public bool SuppressLabel { get; set; }
 
-
-    
-
     protected AbpDatePickerBaseTagHelper(AbpDatePickerBaseTagHelperService<TTagHelper> service) : base(service)
     {
         _abpDatePickerOptionsImplementation = new AbpDatePickerOptions();
     }
-
 
     public string PickerId {
         get => _abpDatePickerOptionsImplementation.PickerId;

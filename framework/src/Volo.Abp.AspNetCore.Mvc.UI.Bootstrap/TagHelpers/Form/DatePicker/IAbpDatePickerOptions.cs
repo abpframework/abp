@@ -7,94 +7,143 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 public interface IAbpDatePickerOptions
 {
     public string PickerId { get; set; }
-    // Min and Max date
+
+    /// <summary>
+    /// Min date allowed
+    /// </summary>
     DateTime? MinDate { get; set; }
 
+    /// <summary>
+    /// Max date allowed
+    /// </summary>
     DateTime? MaxDate { get; set; }
 
-    // Max span between start and end date
-    object? MaxSpan { get; set; }
+    /// <summary>
+    /// Max span between start and end date
+    /// </summary>
+    object MaxSpan { get; set; }
 
-    // Show dropdowns
+    /// <summary>
+    /// Show dropdowns
+    /// </summary>
     bool? ShowDropdowns { get; set; }
 
-    // Min and Max year
+    /// <summary>
+    /// Min year allowed
+    /// </summary>
     int? MinYear { get; set; }
 
+    /// <summary>
+    /// Max year allowed
+    /// </summary>
     int? MaxYear { get; set; }
 
-    // Show week numbers
+    /// <summary>
+    /// Show week numbers
+    /// </summary>
     AbpDatePickerWeekNumbers WeekNumbers { get; set; }
 
-    // Time picker
+    /// <summary>
+    /// Allows users to pick a time
+    /// </summary>
     bool? TimePicker { get; set; }
 
-    // Time picker increment
+    /// <summary>
+    /// The time interval allowed
+    /// </summary>
     int? TimePickerIncrement { get; set; }
 
-    // Time picker 24 hour
+    /// <summary>
+    /// Sets the time picker hour format as 12 or 24.
+    /// </summary>
     bool? TimePicker24Hour { get; set; }
 
-    // Time picker seconds
+    /// <summary>
+    /// Allows seconds selection
+    /// </summary>
     bool? TimePickerSeconds { get; set; }
 
-    // Ranges object
+    /// <summary>
+    /// Predefined date range list
+    /// </summary>
     List<AbpDatePickerRange> Ranges { get; set; }
-    
-    // Show custom range label
+
+    /// <summary>
+    /// Show custom range label
+    /// </summary>
     bool? ShowCustomRangeLabel { get; set; }
-    
-    // Always show calendar
+
+    /// <summary>
+    /// Always show calendars
+    /// </summary>
     bool? AlwaysShowCalendars { get; set; }
 
-    // Opens date picker on left or right or center of the input
+    /// <summary>
+    /// The horizontal location of the datepicker
+    /// </summary>
     AbpDatePickerOpens Opens { get; set; }
 
-    // Drops down or up or auto
+    /// <summary>
+    /// The vertical location of the datepicker
+    /// </summary>
     AbpDatePickerDrops Drops { get; set; }
 
-    // Button classes
-    [CanBeNull] 
+    /// <summary>
+    /// Button CSS classes
+    /// </summary>
+    [CanBeNull]
     string ButtonClasses { get; set; }
 
-    // Apply class to all buttons
-    [CanBeNull] 
+    /// <summary>
+    /// Apply class to all buttons
+    /// </summary>
+    [CanBeNull]
     string ApplyButtonClasses { get; set; }
 
-    // Cancel class to all buttons
-    [CanBeNull] 
+    /// <summary>
+    /// Cancel CSS classes to all buttons
+    /// </summary>
+    [CanBeNull]
     string CancelButtonClasses { get; set; }
 
-    // Locale
-    [CanBeNull] 
+    /// <summary>
+    /// Sets a custom locale
+    /// </summary>
+    [CanBeNull]
     object Locale { get; set; }
 
-    // Auto apply
+    /// <summary>
+    /// Applies the value when it a date is selected
+    /// </summary>
     bool? AutoApply { get; set; }
 
-    // Linked calendars
+    /// <summary>
+    /// When enabled, the two calendars displayed will always be for two sequential months (i.e. January and February), and both will be advanced when clicking the left or right arrows above the calendars. When disabled, the two calendars can be individually advanced and display any month/year. 
+    /// </summary>
     bool? LinkedCalendars { get; set; }
 
-    // Auto update input
+    /// <summary>
+    /// Updates the input automatically
+    /// </summary>
     bool? AutoUpdateInput { get; set; }
 
     // Parent element
-    [CanBeNull] 
+    [CanBeNull]
     string ParentEl { get; set; }
 
-    [CanBeNull] 
+    [CanBeNull]
     string DateFormat { get; set; }
 
     bool OpenButton { get; set; }
 
     bool ClearButton { get; set; }
-    
+
     bool SingleOpenAndClearButton { get; set; }
 
     bool? IsUtc { get; set; }
-    
+
     bool? IsIso { get; set; }
-    
-    [CanBeNull] 
+
+    [CanBeNull]
     object Options { get; set; }
 }

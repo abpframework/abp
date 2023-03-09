@@ -187,7 +187,7 @@
                     });
             });
     }
-    
+
     abp.libs.bootstrapDateRangePicker = {
         packageName: "bootstrap-daterangepicker",
 
@@ -207,6 +207,7 @@
             if (options.label) {
                 label.text(options.label)
             }
+
             $container.append(label)
             var $datePicker = options.singleDatePicker ? $('<abp-date-picker></abp-date-picker>') : $('<abp-date-range-picker></abp-date-range-picker>');
             $container.append($datePicker)
@@ -292,19 +293,20 @@
             return $container;
         }
     };
-            
-    
+
+
     abp.dom.initializers.initializeDateRangePickers = function ($rootElement) {
         $rootElement
             .findWithSelf('abp-date-picker,abp-date-range-picker')
             .each(function () {
                 var $this = $(this);
-                var $input = $(this).find('.input-group input[type="text"]')
-                if($input.data('daterangepicker')) {
+                var $input = $this.find('.input-group input[type="text"]')
+                if ($input.data('daterangepicker')) {
                     return;
                 }
-                var $openButton = $(this).find('button[data-type="open"]')
-                var $clearButton = $(this).find('button[data-type="clear"]')
+
+                var $openButton = $this.find('button[data-type="open"]')
+                var $clearButton = $this.find('button[data-type="clear"]')
                 var singleDatePicker = $this.is('abp-date-picker')
                 var options = {};
                 options.singleDatePicker = singleDatePicker;
@@ -321,29 +323,27 @@
                     maxYear: parseInt(moment().add(100, 'year').locale('en').format('YYYY')),
                     locale: {
                         direction: abp.localization.currentCulture.isRightToLeft ? 'rtl' : 'ltr',
-                        todayLabel:  abp.localization.localize('Today', 'AbpUi'),
-                        clearLabel:  abp.localization.localize('Clear', 'AbpUi'),
-                        applyLabel:  abp.localization.localize('Apply', 'AbpUi'),
+                        todayLabel: abp.localization.localize('Today', 'AbpUi'),
+                        clearLabel: abp.localization.localize('Clear', 'AbpUi'),
+                        applyLabel: abp.localization.localize('Apply', 'AbpUi'),
                     },
                     singleOpenAndClearButton: true
                 };
                 var locale = defaultOptions.locale;
                 $.extend(options, defaultOptions);
                 $.extend(options, $this.data());
-                if(jQuery.isEmptyObject(options.locale))
-                {
+                if (jQuery.isEmptyObject(options.locale)) {
                     options.locale = locale;
-                }else{
+                } else {
                     locale = options.locale;
                 }
+
                 $.extend(options, $this.data("options"));
-                if(jQuery.isEmptyObject(options.locale))
-                {
+                if (jQuery.isEmptyObject(options.locale)) {
                     options.locale = locale;
                 }
-                
 
-                if(options.timePicker && options.timePicker24Hour === undefined){
+                if (options.timePicker && options.timePicker24Hour === undefined) {
                     options.timePicker24Hour = moment.localeData().longDateFormat('LT').indexOf('A') < 1;
                 }
 
@@ -356,33 +356,35 @@
                 var separator = options.separator;
                 var defaultDateFormat = "YYYY-MM-DD";
                 var singleOpenAndClearButton = options.singleOpenAndClearButton && $clearButton.length > 0 && $openButton.length > 0;
-                
+
                 const replaceButton = function (hasDate) {
                     var hiddenClass = 'd-none';
-                    if(singleOpenAndClearButton){
-                        if(hasDate){
+
+                    if (singleOpenAndClearButton) {
+                        if (hasDate) {
                             $openButton.addClass(hiddenClass);
                             $clearButton.removeClass(hiddenClass);
                             $clearButton.insertAfter($openButton);
-                        }else {
+                        } else {
                             $openButton.removeClass(hiddenClass);
                             $clearButton.addClass(hiddenClass);
                             $openButton.insertAfter($clearButton);
                         }
                     }
                 }
-                
+
                 const getMoment = function (date) {
-                    if(!date){
+                    if (!date) {
                         return isUtc ? moment.utc() : moment();
                     }
-                    if(isUtc) {
-                        return moment.utc(date,dateFormat);
-                    }else {
-                        return moment(date,dateFormat);
+
+                    if (isUtc) {
+                        return moment.utc(date, dateFormat);
+                    } else {
+                        return moment(date, dateFormat);
                     }
                 }
-                
+
                 if (dateFormat) {
                     options.locale = options.locale || {};
                     options.locale.format = dateFormat;
@@ -394,25 +396,25 @@
                 }
 
                 var startDate = options.startDate ? moment(options.startDate) : null;
-                if(singleDatePicker && !startDate){
+                if (singleDatePicker && !startDate) {
                     startDate = options.date ? moment(options.date) : null;
                 }
+
                 var endDate = options.endDate ? moment(options.endDate) : null;
-                
                 if (startDate) {
                     options.startDate = startDate;
                 }
                 if (endDate) {
                     options.endDate = endDate;
                 }
-                
-                if(options.ranges){
+
+                if (options.ranges) {
                     $.each(options.ranges, function (key, value) {
                         let start = value[0];
                         let end;
-                        if(value.length > 1){
+                        if (value.length > 1) {
                             end = value[1];
-                        }else{
+                        } else {
                             end = value[0];
                         }
                         options.ranges[key] = [getMoment(start), getMoment(end)];
@@ -421,11 +423,11 @@
 
                 var $todayBtn = $('<button type="button" class="btn btn-sm btn-default today-btn" data-action="today">' + options.locale.todayLabel + '</button>');
                 var $clearBtn = $('<button type="button" class="btn btn-sm btn-default clear-btn" data-action="clear">' + options.locale.clearLabel + '</button>');
-                
+
                 var extraButtons = [];
                 if (options.showTodayButton) {
                     extraButtons.push($todayBtn);
-                    
+
                     $todayBtn.on('click', function () {
                         var today = getMoment();
                         $input.data('daterangepicker').setStartDate(today);
@@ -433,43 +435,44 @@
                         $input.data('daterangepicker').updateView();
                     });
                 }
+
                 if (options.showClearButton) {
                     extraButtons.push($clearBtn);
-                    
+
                     $clearBtn.on('click', function () {
                         $input.val('').trigger('change');
                         $dateRangePicker.hide();
                     });
                 }
-                
+
                 if (typeof options.template !== 'string' && !(options.template instanceof $))
                     options.template =
                         '<div class="daterangepicker">' +
-                            '<div class="ranges"></div>' +
-                            '<div class="drp-calendar left">' +
-                                '<div class="calendar-table"></div>' +
-                                '<div class="calendar-time"></div>' +
-                            '</div>' +
-                            '<div class="drp-calendar right">' +
-                                '<div class="calendar-table"></div>' +
-                                '<div class="calendar-time"></div>' +
-                            '</div>' +
-                            '<div class="drp-buttons">' + 
-                                '<button class="applyBtn" disabled="disabled" type="button"></button> ' +
-                            '</div>' +
+                        '<div class="ranges"></div>' +
+                        '<div class="drp-calendar left">' +
+                        '<div class="calendar-table"></div>' +
+                        '<div class="calendar-time"></div>' +
+                        '</div>' +
+                        '<div class="drp-calendar right">' +
+                        '<div class="calendar-table"></div>' +
+                        '<div class="calendar-time"></div>' +
+                        '</div>' +
+                        '<div class="drp-buttons">' +
+                        '<button class="applyBtn" disabled="disabled" type="button"></button> ' +
+                        '</div>' +
                         '</div>';
 
                 $input.daterangepicker(options);
-                
+
                 var $dateRangePicker = $input.data('daterangepicker');
-                
-                if($dateRangePicker.container.find('.drp-buttons').css('display') !== 'none'){
-                    
+
+                if ($dateRangePicker.container.find('.drp-buttons').css('display') !== 'none') {
+
                     $.each(extraButtons, function (index, value) {
                         $dateRangePicker.container.find('.drp-buttons').prepend(value);
                     });
                 }
-                else{
+                else {
                     var $div = $('<div class="drp-buttons extra-buttons"></div>');
                     $div.css('display', 'block');
                     $.each(extraButtons, function (index, value) {
@@ -477,14 +480,11 @@
                     });
 
                     $div.insertAfter($dateRangePicker.container.find('.drp-buttons'));
-                    
                 }
-                    
-                
-                $dateRangePicker.outsideClick = function(e) {
+
+                $dateRangePicker.outsideClick = function (e) {
                     var target = $(e.target);
-                    // if the page is clicked anywhere except within the daterangerpicker/button
-                    // itself then call this.hide()
+                    // if the page is clicked anywhere except within the daterangerpicker/button itself then call this.hide()
                     if (
                         // ie modal dialog fix
                         e.type == "focusin" ||
@@ -492,24 +492,27 @@
                         target.closest(this.container).length ||
                         target.closest('.calendar-table').length ||
                         target.closest($openButton).length
-                    ) return;
+                    ) {
+                        return;
+                    }
+
                     this.hide();
                     this.element.trigger('outsideClick.daterangepicker', this);
                 };
-                
+
                 $openButton.on('click', function () {
                     $dateRangePicker.toggle();
                 });
-                
+
                 const extendDateFormat = function (format) {
-                    if(timePicker){
-                        if(timePicker24Hour){
-                            if(timePickerSeconds){
+                    if (timePicker) {
+                        if (timePicker24Hour) {
+                            if (timePickerSeconds) {
                                 format += " HH:mm:ss";
-                            }else{
+                            } else {
                                 format += " HH:mm";
                             }
-                        }else {
+                        } else {
                             if (timePickerSeconds) {
                                 format += ' ' + " hh:mm:ss A"
                             } else {
@@ -517,33 +520,34 @@
                             }
                         }
                     }
+
                     return format;
                 }
-                
+
                 defaultDateFormat = extendDateFormat(defaultDateFormat);
 
-                if(!dateFormat) {
+                if (!dateFormat) {
                     dateFormat = extendDateFormat(moment.localeData().longDateFormat('L'))
                 }
-                
-                if(!separator) {
+
+                if (!separator) {
                     separator = $dateRangePicker.locale.separator;
                 }
-                
-                if(singleDatePicker){
-                    if(startDate){
+
+                if (singleDatePicker) {
+                    if (startDate) {
                         $input.val(startDate.format(dateFormat));
                     }
-                }else{
-                    if(startDate && endDate){
+                } else {
+                    if (startDate && endDate) {
                         $input.val(startDate.format(dateFormat) + separator + endDate.format(dateFormat));
                     }
                 }
-                
+
                 $input.on('apply.daterangepicker', function (ev, picker) {
-                    if(singleDatePicker){
+                    if (singleDatePicker) {
                         $(this).val(picker.startDate.format(dateFormat));
-                    }else{
+                    } else {
                         $(this).val(picker.startDate.format(dateFormat) + separator + picker.endDate.format(dateFormat));
                     }
 
@@ -554,6 +558,7 @@
                     $(this).val('');
                     $(this).trigger('change');
                 });
+
                 $input.on('show.daterangepicker', function (ev, picker) {
                     var momentStartDate = getMoment(startDate);
                     var momentEndDate = getMoment(endDate);
@@ -564,7 +569,6 @@
                         picker.setEndDate(momentEndDate);
                     }
                 });
-                
 
                 $clearButton.on('click', function () {
                     $input.val('');
@@ -572,9 +576,9 @@
                 });
 
                 $input.on('change', function () {
-                    if($(this).val() !== ''){
+                    if ($(this).val() !== '') {
                         replaceButton(true);
-                    }else{
+                    } else {
                         replaceButton(false);
                     }
                     var dates = $(this).val().split(separator);
@@ -582,91 +586,97 @@
                         startDate = getMoment(dates[0]);
                         if (!startDate.isValid()) {
                             startDate = null;
-                        }else{
+                        } else {
                             startDate = formatDate(startDate);
                         }
                         endDate = getMoment(dates[1]);
                         if (!endDate.isValid()) {
                             endDate = null;
-                        }else{
+                        } else {
                             endDate = formatDate(endDate);
                         }
                     } else {
-                        if(dates[0]){
+                        if (dates[0]) {
                             startDate = getMoment(dates[0]);
                             if (!startDate.isValid()) {
                                 startDate = null;
-                            }else{
+                            } else {
                                 startDate = formatDate(startDate);
                             }
                         }
-                        else{
+                        else {
                             startDate = null;
                         }
+
                         endDate = null;
                     }
-                    if(!startDate){
+
+                    if (!startDate) {
                         replaceButton(false);
                         $(this).val('');
                         $dateRangePicker.setStartDate(getMoment());
                         $dateRangePicker.setEndDate(getMoment());
                     }
 
-                    if(!singleDatePicker){
+                    if (!singleDatePicker) {
                         var input1 = $this.find("input[data-start-date]")
                         input1.val(startDate);
                         var input2 = $this.find("input[data-end-date]")
                         input2.val(endDate);
-                    }else{
+                    } else {
                         var input = $this.find("input[data-date]")
                         input.val(startDate);
                     }
 
-                    if(singleDatePicker){
+                    if (singleDatePicker) {
                         $this.data('date', startDate);
                         $input.data('date', startDate);
-                    }else{
+                    } else {
                         $this.data('startDate', startDate);
                         $this.data('endDate', endDate);
                         $input.data('startDate', startDate);
                         $input.data('endDate', endDate);
                     }
                 });
-                
-                function formatDate(date){
-                    if(date){
-                        if(isIso){
+
+                function formatDate(date) {
+                    if (date) {
+                        if (isIso) {
                             return date.locale('en').format();
                         }
                         return date.locale('en').format(defaultDateFormat)
                     }
+
                     return null;
                 }
-                function getFormattedStartDate (){
-                    if(startDate){
+
+                function getFormattedStartDate() {
+                    if (startDate) {
                         return getMoment(startDate).format(dateFormat);
                     }
+
                     return null;
                 }
-                
-                function getFormattedEndDate (){
-                    if(endDate){
+
+                function getFormattedEndDate() {
+                    if (endDate) {
                         return getMoment(endDate).format(dateFormat);
                     }
+
                     return null;
                 }
-                
-                if(singleDatePicker){
+
+                if (singleDatePicker) {
                     $this[0].getFormattedDate = getFormattedStartDate;
                     $input[0].getFormattedDate = getFormattedStartDate;
                     $dateRangePicker.getFormattedDate = getFormattedStartDate;
-                }else{
+                } else {
                     $dateRangePicker.getFormattedStartDate = getFormattedStartDate;
                     $dateRangePicker.getFormattedEndDate = getFormattedEndDate;
-                    
+
                     $this[0].getFormattedStartDate = getFormattedStartDate;
                     $this[0].getFormattedEndDate = getFormattedEndDate;
-                    
+
                     $input[0].getFormattedStartDate = getFormattedStartDate;
                     $input[0].getFormattedEndDate = getFormattedEndDate;
                 }

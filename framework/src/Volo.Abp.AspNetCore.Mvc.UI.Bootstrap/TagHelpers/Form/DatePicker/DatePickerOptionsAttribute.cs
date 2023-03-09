@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 [AttributeUsage(AttributeTargets.Property)]
 public class DatePickerOptionsAttribute : Attribute, IAbpDatePickerOptions
 {
-    private IAbpDatePickerOptions _abpDatePickerOptionsImplementation;
+    private readonly IAbpDatePickerOptions _abpDatePickerOptionsImplementation;
 
     public DatePickerOptionsAttribute()
     {

@@ -179,34 +179,37 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         return abpDateInputTagHelper;
     }
 
-    private AbpTagHelper GetAbpDateRangeInputTagHelper(TagHelperContext context, TagHelperOutput output,
-        ModelExpression model)
+    private AbpTagHelper GetAbpDateRangeInputTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
     {
         var modelAttribute = model.ModelExplorer.GetAttribute<DateRangePickerAttribute>();
 
         var pickerId = modelAttribute.PickerId;
-        var otherModel = TagHelper.Model.ModelExplorer.Properties.SingleOrDefault(x =>
-            x != model.ModelExplorer && x.GetAttribute<DateRangePickerAttribute>()?.PickerId == pickerId);
-        var otherModelAttribute = otherModel?.GetAttribute<DateRangePickerAttribute>();
 
         var abpDateRangeInputTagHelper = _serviceProvider.GetRequiredService<AbpDateRangePickerTagHelper>();
         abpDateRangeInputTagHelper.PickerId = pickerId;
         abpDateRangeInputTagHelper.ViewContext = TagHelper.ViewContext;
+
         if (modelAttribute.IsStart)
         {
             abpDateRangeInputTagHelper.AspForStart = model;
-        }
 
-        if (otherModelAttribute?.IsStart == false)
-        {
-            abpDateRangeInputTagHelper.AspForEnd = ModelExplorerToModelExpressionConverter(otherModel);
+            var otherModelExists = TryToGetOtherDateModel(model, pickerId, out var otherModel);
+            if (otherModelExists && otherModel.GetAttribute<DateRangePickerAttribute>().IsEnd)
+            {
+                abpDateRangeInputTagHelper.AspForEnd = ModelExplorerToModelExpressionConverter(otherModel);
+            }
         }
 
         return abpDateRangeInputTagHelper;
     }
 
+    private bool TryToGetOtherDateModel(ModelExpression model, string pickerId, out ModelExplorer otherModel)
+    {
+        otherModel = TagHelper.Model.ModelExplorer.Properties.SingleOrDefault(x => x != model.ModelExplorer && x.GetAttribute<DateRangePickerAttribute>()?.PickerId == pickerId);
+        return otherModel != null;
+    }
 
-    private bool IsDateRangeGroup(ModelExplorer modelModelExplorer)
+    private static bool IsDateRangeGroup(ModelExplorer modelModelExplorer)
     {
         return modelModelExplorer.GetAttribute<DateRangePickerAttribute>() != null;
     }
@@ -353,18 +356,23 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
     {
         return IsEnum(model.ModelExplorer) || AreSelectItemsProvided(model.ModelExplorer);
     }
-    
+
     protected virtual bool IsDateGroup(TagHelperContext context, ModelExpression model)
     {
-        if(model.ModelExplorer.GetAttribute<DatePickerAttribute>() != null || model.ModelExplorer.GetAttribute<DateRangePickerAttribute>() != null)
+        if (model.ModelExplorer.GetAttribute<DatePickerAttribute>() != null || 
+            model.ModelExplorer.GetAttribute<DateRangePickerAttribute>() != null)
         {
             return true;
         }
-        
-        if(model.Metadata.ModelType == typeof(DateTime) || model.Metadata.ModelType == typeof(DateTime?) || model.Metadata.ModelType == typeof(DateTimeOffset) || model.Metadata.ModelType == typeof(DateTimeOffset?))
+
+        if (model.Metadata.ModelType == typeof(DateTime) || 
+            model.Metadata.ModelType == typeof(DateTime?) || 
+            model.Metadata.ModelType == typeof(DateTimeOffset) || 
+            model.Metadata.ModelType == typeof(DateTimeOffset?))
         {
             return true;
         }
+
         return false;
     }
 

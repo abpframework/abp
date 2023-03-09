@@ -1,8 +1,8 @@
 ﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 
-public enum AbpDatePickerDrops
+public enum AbpDatePickerDrops : byte
 {
-    Down,
-    Up,
-    Auto
+    Down = 1,
+    Up = 2,
+    Auto = 3
 }

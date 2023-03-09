@@ -1,8 +1,10 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
+﻿using System;
 
-public enum AbpDatePickerOpens
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
+
+public enum AbpDatePickerOpens : byte
 {
-    Left,
-    Right,
-    Center
+    Left = 1,
+    Right = 2,
+    Center = 3,
 }

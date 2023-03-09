@@ -16,14 +16,14 @@ public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<A
 {
     public AbpDatePickerTagHelperService(IJsonSerializer jsonSerializer, IHtmlGenerator generator, HtmlEncoder encoder, IServiceProvider serviceProvider, IStringLocalizer<AbpUiResource> l, IAbpTagHelperLocalizer tagHelperLocalizer) : base(jsonSerializer, generator, encoder, serviceProvider, l, tagHelperLocalizer)
     {
-        
+
     }
 
     protected override TagHelperOutput TagHelperOutput { get; set; }
-    
-    [CanBeNull] 
+
+    [CanBeNull]
     protected virtual InputTagHelper DateTagHelper { get; set; }
-    
+
     [CanBeNull]
     protected virtual TagHelperOutput DateTagHelperOutput { get; set; }
     protected override string GetPropertyName()
@@ -39,12 +39,15 @@ public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<A
 
     public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-
-        if(TagHelper.AspFor != null)
+        if (TagHelper.AspFor != null)
         {
-            DateTagHelper = new InputTagHelper(Generator) {
-                InputTypeName = "hidden", ViewContext = TagHelper.ViewContext, For = TagHelper.AspFor,
+            DateTagHelper = new InputTagHelper(Generator)
+            {
+                InputTypeName = "hidden",
+                ViewContext = TagHelper.ViewContext,
+                For = TagHelper.AspFor,
             };
+
             var attributes = new TagHelperAttributeList { { "data-date", "true" }, { "type", "hidden" } };
             DateTagHelperOutput = await DateTagHelper.ProcessAndGetOutputAsync(attributes, context, "input");
         }
@@ -60,7 +63,9 @@ public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<A
 
     protected override void AddBaseTagAttributes(TagHelperAttributeList attributes)
     {
-        if(TagHelper.AspFor != null && TagHelper.AspFor.Model != null && SupportedInputTypes.TryGetValue(TagHelper.AspFor.Metadata.ModelType, out var convertFunc))
+        if (TagHelper.AspFor != null && 
+            TagHelper.AspFor.Model != null && 
+            SupportedInputTypes.TryGetValue(TagHelper.AspFor.Metadata.ModelType, out var convertFunc))
         {
             attributes.Add("data-date", convertFunc(TagHelper.AspFor.Model));
         }
