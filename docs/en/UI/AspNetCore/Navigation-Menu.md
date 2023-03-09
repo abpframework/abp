@@ -230,7 +230,7 @@ namespace MyProject.Web.Menus
 }
 ```
 
-> The UI theme will decide to render groups or not, and if it decides to render, it is up to theme how to render. Only the LeptonX theme implements menu group.
+> The UI theme will decide whether to render the groups or not, and if it decides to render, the way it's rendered is up to the theme. Only the LeptonX theme implements the menu group.
 
 ## Standard Menus
 
