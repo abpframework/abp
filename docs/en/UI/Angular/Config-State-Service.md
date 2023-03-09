@@ -113,19 +113,15 @@ this.config.getSetting$("Abp.Identity.TwoFactor.Behaviour").subscribe(twoFactorB
 Please refer to `ApplicationConfigurationDto` type for all the properties you can get with `getOne` and `getDeep`. It can be found in the [models.ts file](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/proxy/volo/abp/asp-net-core/mvc/application-configurations/models.ts#L11).
 
 
-## Set State
+## Refresh App State
 
-`ConfigStateService` has a method named `setState` which allow you to set the state value.
-
-You can get the application configuration response and set the `ConfigStateService` state value as shown below:
+The `RefreshAppState` function is a method in the `ConfigStateService` service class that sends a request to a server to retrieve data and updates the internal state on the `ConfigStateService`. This function is responsible for refreshing the state of the service to reflect the latest configuration settings.
 
 ```js
-import {ApplicationConfigurationService, ConfigStateService} from '@abp/ng.core';
+import { ConfigStateService} from '@abp/ng.core';
 
-constructor(private applicationConfigurationService: ApplicationConfigurationService, private config: ConfigStateService) {
-  this.applicationConfigurationService.getConfiguration().subscribe(config => {
-    this.config.setState(config);
-  })
+constructor( private configStateService: ConfigStateService) {
+  this.configStateService.refreshAppState()
 }
 ```
 
