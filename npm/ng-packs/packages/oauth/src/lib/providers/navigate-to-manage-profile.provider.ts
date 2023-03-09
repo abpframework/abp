@@ -12,9 +12,12 @@ export const NavigateToManageProfileProvider: Provider = {
         console.warn('The oAuthConfig env is missing on environment.ts');
         return;
       }
+      const { issuer } = env.oAuthConfig;
       window.open(
-        `${env.oAuthConfig.issuer}/Account/Manage?returnUrl=${window.location.href}`,
-        '_self',
+        `${issuer}${issuer?.endsWith('/') ? '' : '/'}Account/Manage?returnUrl=${
+          window.location.href
+        }`,
+        '_blank',
       );
     };
   },
