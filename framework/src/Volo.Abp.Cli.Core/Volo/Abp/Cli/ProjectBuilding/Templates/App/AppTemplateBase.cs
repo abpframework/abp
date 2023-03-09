@@ -258,6 +258,8 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             "/MyCompanyName.MyProjectName.Web/package.json",
             "/MyCompanyName.MyProjectName.Web.Host/package.json",
+            "/MyCompanyName.MyProjectName.Web.Public/package.json",
+            "/MyCompanyName.MyProjectName.Web.Public.Host/package.json",
             "/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
             "/MyCompanyName.MyProjectName.HttpApi.Host/package.json",
             "/MyCompanyName.MyProjectName.AuthServer/package.json",

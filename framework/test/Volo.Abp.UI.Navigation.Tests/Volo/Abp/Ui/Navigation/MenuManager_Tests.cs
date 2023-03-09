@@ -46,7 +46,7 @@ public class MenuManager_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
 
         mainMenu.Name.ShouldBe(StandardMenus.Main);
         mainMenu.DisplayName.ShouldBe("Main Menu");
-        mainMenu.Items.Count.ShouldBe(2);
+        mainMenu.Items.Count.ShouldBe(5);
         mainMenu.Items[0].Name.ShouldBe("Dashboard");
         mainMenu.Items[1].Name.ShouldBe(DefaultMenuNames.Application.Main.Administration);
         mainMenu.Items[1].Items[0].Name.ShouldBe("Administration.UserManagement");
@@ -63,10 +63,27 @@ public class MenuManager_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
 
         mainMenu.Name.ShouldBe(StandardMenus.Main);
 
-        mainMenu.Items.Count.ShouldBe(3);
+        mainMenu.Items.Count.ShouldBe(6);
 
         mainMenu.Items.ShouldContain(x => x.Name == "Products");
         mainMenu.Items.ShouldContain(x => x.Name == "Dashboard");
+    }
+
+    [Fact]
+    public async Task GetMainMenuAsync_GroupMenuItems()
+    {
+        var mainMenu = await _menuManager.GetMainMenuAsync();
+
+        mainMenu.Name.ShouldBe(StandardMenus.Main);
+        mainMenu.Items.Count.ShouldBe(6);
+
+        mainMenu.Items[2].GroupName.ShouldBe("Layouts");
+        mainMenu.Items[3].GroupName.ShouldBe("Layouts");
+        mainMenu.Items[4].GroupName.ShouldBe(null); // No group defined
+
+        var layoutsGroup = mainMenu.GetMenuGroup("Layouts");
+        layoutsGroup.Name.ShouldBe("Layouts");
+        layoutsGroup.DisplayName.ShouldBe("Layouts");
     }
 
     /* Adds menu items:
@@ -145,6 +162,31 @@ public class MenuManager_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
             products.AddItem(new ApplicationMenuItem("AspNetZero", "AspNetZero", url: "/products/aspnetzero"));
 
             products.AddItem(new ApplicationMenuItem("ABP", "ABP", url: "/products/abp"));
+
+            return Task.CompletedTask;
+        }
+    }
+
+    /* Adds group and menu items:
+     * - Layouts
+     *   - Toolbars
+     *   - Page Header
+     */
+    public class TestMenuContributor4 : IMenuContributor
+    {
+        public Task ConfigureMenuAsync(MenuConfigurationContext context)
+        {
+            if (context.Menu.Name != StandardMenus.Main)
+            {
+                return Task.CompletedTask;
+            }
+
+            context.Menu.AddGroup(new ApplicationMenuGroup("Layouts", "Layouts"));
+
+            context.Menu.AddItem(new ApplicationMenuItem("Toolbars", "Toolbars", url: "/layouts/toolbars", groupName: "Layouts"));
+            context.Menu.AddItem(new ApplicationMenuItem("PageHeader", "Page Header", url: "/layouts/page-header", groupName: "Layouts"));
+
+            context.Menu.AddItem(new ApplicationMenuItem("Branding", "Branding", url: "/layouts/branding", groupName: "NotDefinedGroup"));
 
             return Task.CompletedTask;
         }

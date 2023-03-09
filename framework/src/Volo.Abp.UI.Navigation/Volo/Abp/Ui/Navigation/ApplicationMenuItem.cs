@@ -92,6 +92,11 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
     /// </summary>
     public string CssClass { get; set; }
 
+    /// <summary>
+    /// Can be used to group menu items.
+    /// </summary>
+    public string GroupName { get; set; }
+
     public ApplicationMenuItem(
         [NotNull] string name,
         [NotNull] string displayName,
@@ -101,6 +106,7 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
         string target = null,
         string elementId = null,
         string cssClass = null,
+        string groupName = null,
         string requiredPermissionName = null)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
@@ -114,6 +120,7 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
         Target = target;
         ElementId = elementId ?? GetDefaultElementId();
         CssClass = cssClass;
+        GroupName = groupName;
         RequiredPermissionName = requiredPermissionName;
         StateCheckers = new List<ISimpleStateChecker<ApplicationMenuItem>>();
         Items = new ApplicationMenuItemList();
