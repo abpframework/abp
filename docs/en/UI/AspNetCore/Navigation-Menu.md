@@ -252,10 +252,6 @@ if (context.Menu.Name == StandardMenus.User)
 }
 ```
 
-### Menu Groups
-
-
-
 ## IMenuManager
 
 `IMenuManager` is generally used by the UI [theme](Theming.md) to render the menu items on the UI. So, **you generally don't need to directly use** the `IMenuManager`.
