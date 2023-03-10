@@ -12,7 +12,9 @@ using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -27,6 +29,8 @@ public partial class TokenController
     protected IOptions<AbpIdentityOptions> AbpIdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpIdentityOptions>>();
     protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
     protected IdentitySecurityLogManager IdentitySecurityLogManager => LazyServiceProvider.LazyGetRequiredService<IdentitySecurityLogManager>();
+
+    protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
 
     [UnitOfWork]
     protected virtual async Task<IActionResult> HandlePasswordAsync(OpenIddictRequest request)
@@ -105,6 +109,17 @@ public partial class TokenController
                         if (user.ShouldChangePasswordOnNextLogin)
                         {
                             return await HandleShouldChangePasswordOnNextLoginAsync(request, user, request.Password);
+                        }
+
+                        var forceUsersToPeriodicallyChangePassword = await SettingProvider.GetAsync<bool>(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword);
+                        if (forceUsersToPeriodicallyChangePassword)
+                        {
+                            var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
+                            var lastPasswordChangeTime = user.LastPasswordChangeTime ?? user.CreationTime;
+                            if (passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < Clock.Now)
+                            {
+                                return await HandlePeriodicallyChangePasswordAsync(request, user, request.Password);
+                            }
                         }
 
                         errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
@@ -217,11 +232,21 @@ public partial class TokenController
 
     protected virtual async Task<IActionResult> HandleShouldChangePasswordOnNextLoginAsync(OpenIddictRequest request, IdentityUser user, string currentPassword)
     {
+        return await HandleChangePasswordAsync(request, user, currentPassword, ChangePasswordType.ShouldChangePasswordOnNextLogin);
+    }
+
+    protected virtual async Task<IActionResult> HandlePeriodicallyChangePasswordAsync(OpenIddictRequest request, IdentityUser user, string currentPassword)
+    {
+        return await HandleChangePasswordAsync(request, user, currentPassword, ChangePasswordType.PeriodicallyChangePassword);
+    }
+
+    protected virtual async Task<IActionResult> HandleChangePasswordAsync(OpenIddictRequest request, IdentityUser user, string currentPassword, ChangePasswordType changePasswordType)
+    {
         var changePasswordToken = request.GetParameter("ChangePasswordToken")?.ToString();
         var newPassword = request.GetParameter("NewPassword")?.ToString();
         if (!changePasswordToken.IsNullOrWhiteSpace() && !currentPassword.IsNullOrWhiteSpace() && !newPassword.IsNullOrWhiteSpace())
         {
-            if (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, nameof(IdentityUser.ShouldChangePasswordOnNextLogin), changePasswordToken))
+            if (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString(), changePasswordToken))
             {
                 var changePasswordResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
                 if (changePasswordResult.Succeeded)
@@ -234,7 +259,11 @@ public partial class TokenController
                         ClientId = request.ClientId
                     });
 
-                    user.SetShouldChangePasswordOnNextLogin(false);
+                    if (changePasswordType == ChangePasswordType.ShouldChangePasswordOnNextLogin)
+                    {
+                        user.SetShouldChangePasswordOnNextLogin(false);
+                    }
+
                     await UserManager.UpdateAsync(user);
                     return await SetSuccessResultAsync(request, user);
                 }
@@ -265,7 +294,7 @@ public partial class TokenController
         }
         else
         {
-            Logger.LogInformation("Authentication failed for username: {username}, reason: {ShouldChangePasswordOnNextLogin}", request.Username, nameof(user.ShouldChangePasswordOnNextLogin));
+            Logger.LogInformation($"Authentication failed for username: {{{request.Username}}}, reason: {{{changePasswordType.ToString()}}}");
 
             await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
             {
@@ -279,12 +308,12 @@ public partial class TokenController
                 items: new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = nameof(IdentityUser.ShouldChangePasswordOnNextLogin)
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = changePasswordType.ToString()
                 },
                 parameters: new Dictionary<string, object>
                 {
                     ["userId"] = user.Id.ToString("N"),
-                    ["changePasswordToken"] = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, nameof(IdentityUser.ShouldChangePasswordOnNextLogin))
+                    ["changePasswordToken"] = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString())
                 });
 
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
@@ -320,5 +349,11 @@ public partial class TokenController
         return UserManager.SupportsUserTwoFactor &&
                await UserManager.GetTwoFactorEnabledAsync(user) &&
                (await UserManager.GetValidTwoFactorProvidersAsync(user)).Count > 0;
+    }
+
+    public enum ChangePasswordType
+    {
+        ShouldChangePasswordOnNextLogin,
+        PeriodicallyChangePassword
     }
 }

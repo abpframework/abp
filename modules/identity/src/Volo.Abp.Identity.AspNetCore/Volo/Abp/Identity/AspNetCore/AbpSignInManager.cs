@@ -5,12 +5,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Identity.Settings;
+using Volo.Abp.Settings;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Identity.AspNetCore;
 
 public class AbpSignInManager : SignInManager<IdentityUser>
 {
     protected AbpIdentityOptions AbpOptions { get; }
+
+    protected ISettingProvider SettingProvider { get; }
+
+    protected IClock Clock { get; }
 
     public AbpSignInManager(
         IdentityUserManager userManager,
@@ -20,8 +27,9 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         ILogger<SignInManager<IdentityUser>> logger,
         IAuthenticationSchemeProvider schemes,
         IUserConfirmation<IdentityUser> confirmation,
-        IOptions<AbpIdentityOptions> options
-    ) : base(
+        IOptions<AbpIdentityOptions> options,
+        ISettingProvider settingProvider,
+        IClock clock) : base(
         userManager,
         contextAccessor,
         claimsFactory,
@@ -30,6 +38,8 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         schemes,
         confirmation)
     {
+        SettingProvider = settingProvider;
+        Clock = clock;
         AbpOptions = options.Value;
     }
 
@@ -89,6 +99,18 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         {
             Logger.LogWarning($"The user should change password! (username: \"{user.UserName}\", id:\"{user.Id}\")");
             return SignInResult.NotAllowed;
+        }
+
+        var forceUsersToPeriodicallyChangePassword = await SettingProvider.GetAsync<bool>(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword);
+        if (forceUsersToPeriodicallyChangePassword)
+        {
+            var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
+            var lastPasswordChangeTime = user.LastPasswordChangeTime ?? user.CreationTime;
+            if (passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < Clock.Now)
+            {
+                Logger.LogWarning($"The user should change password! (username: \"{user.UserName}\", id:\"{user.Id}\")");
+                return SignInResult.NotAllowed;
+            }
         }
 
         return await base.PreSignInCheck(user);

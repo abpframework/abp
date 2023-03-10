@@ -17,8 +17,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Settings;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -36,6 +39,10 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     protected AbpIdentityOptions AbpIdentityOptions { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
 
+    protected ISettingProvider SettingProvider { get; }
+
+    protected IClock Clock { get; }
+
     public AbpResourceOwnerPasswordValidator(
         UserManager<IdentityUser> userManager,
         SignInManager<IdentityUser> signInManager,
@@ -44,7 +51,9 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         IStringLocalizer<AbpIdentityServerResource> localizer,
         IOptions<AbpIdentityOptions> abpIdentityOptions,
         IServiceScopeFactory serviceScopeFactory,
-        IOptions<IdentityOptions> identityOptions)
+        IOptions<IdentityOptions> identityOptions,
+        ISettingProvider settingProvider,
+        IClock clock)
     {
         UserManager = userManager;
         SignInManager = signInManager;
@@ -54,6 +63,8 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         ServiceScopeFactory = serviceScopeFactory;
         AbpIdentityOptions = abpIdentityOptions.Value;
         IdentityOptions = identityOptions;
+        SettingProvider = settingProvider;
+        Clock = clock;
     }
 
     /// <summary>
@@ -129,6 +140,18 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                         return;
                     }
 
+                    var forceUsersToPeriodicallyChangePassword = await SettingProvider.GetAsync<bool>(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword);
+                    if (forceUsersToPeriodicallyChangePassword)
+                    {
+                        var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
+                        var lastPasswordChangeTime = user.LastPasswordChangeTime ?? user.CreationTime;
+                        if (passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < Clock.Now)
+                        {
+                             await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
+                             return;
+                        }
+                    }
+
                     errorDescription = Localizer["LoginIsNotAllowed"];
                 }
                 else
@@ -202,11 +225,21 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
     protected virtual async Task HandleShouldChangePasswordOnNextLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user, string currentPassword)
     {
+        await HandlerChangePasswordAsync(context, user, currentPassword, ChangePasswordType.ShouldChangePasswordOnNextLogin);
+    }
+
+    protected virtual async Task HandlePeriodicallyChangePasswordAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user, string currentPassword)
+    {
+        await HandlerChangePasswordAsync(context, user, currentPassword, ChangePasswordType.PeriodicallyChangePassword);
+    }
+
+    protected virtual async Task HandlerChangePasswordAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user, string currentPassword, ChangePasswordType changePasswordType)
+    {
         var changePasswordToken = context.Request?.Raw?["ChangePasswordToken"];
         var newPassword = context.Request?.Raw?["NewPassword"];
         if (!changePasswordToken.IsNullOrWhiteSpace() && !currentPassword.IsNullOrWhiteSpace() && !newPassword.IsNullOrWhiteSpace())
         {
-            if (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, nameof(IdentityUser.ShouldChangePasswordOnNextLogin), changePasswordToken))
+            if (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString(), changePasswordToken))
             {
                 var changePasswordResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
                 if (changePasswordResult.Succeeded)
@@ -219,7 +252,11 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                         ClientId = await FindClientIdAsync(context)
                     });
 
-                    user.SetShouldChangePasswordOnNextLogin(false);
+                    if (changePasswordType == ChangePasswordType.ShouldChangePasswordOnNextLogin)
+                    {
+                        user.SetShouldChangePasswordOnNextLogin(false);
+                    }
+
                     await UserManager.UpdateAsync(user);
                     await SetSuccessResultAsync(context, user);
                 }
@@ -237,12 +274,12 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         }
         else
         {
-            Logger.LogInformation("Authentication failed for username: {username}, reason: {ShouldChangePasswordOnNextLogin}", context.UserName, nameof(user.ShouldChangePasswordOnNextLogin));
+            Logger.LogInformation($"Authentication failed for username: {{{context.UserName}}}, reason: {{{changePasswordType.ToString()}}}");
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, nameof(user.ShouldChangePasswordOnNextLogin),
                 new Dictionary<string, object>()
                 {
                         {"userId", user.Id},
-                        {"changePasswordToken", await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, nameof(IdentityUser.ShouldChangePasswordOnNextLogin))}
+                        {"changePasswordToken", await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString())}
                 });
 
             await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
@@ -327,5 +364,11 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         }
 
         return Task.CompletedTask;
+    }
+
+    public enum ChangePasswordType
+    {
+        ShouldChangePasswordOnNextLogin,
+        PeriodicallyChangePassword
     }
 }

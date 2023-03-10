@@ -13,6 +13,7 @@ using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity;
@@ -24,6 +25,8 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
     protected ISettingProvider SettingProvider { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
+    protected IClock Clock { get; }
 
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
@@ -41,7 +44,8 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         ILogger<IdentityUserManager> logger,
         ICancellationTokenProvider cancellationTokenProvider,
         IOrganizationUnitRepository organizationUnitRepository,
-        ISettingProvider settingProvider)
+        ISettingProvider settingProvider,
+        IClock clock)
         : base(
             store,
             optionsAccessor,
@@ -55,6 +59,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     {
         OrganizationUnitRepository = organizationUnitRepository;
         SettingProvider = settingProvider;
+        Clock = clock;
         RoleRepository = roleRepository;
         UserRepository = userRepository;
         CancellationTokenProvider = cancellationTokenProvider;
@@ -252,5 +257,16 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         return await UpdateUserAsync(user);
+    }
+
+    protected async override Task<IdentityResult> UpdatePasswordHash(IdentityUser user, string newPassword, bool validatePassword)
+    {
+        var result = await base.UpdatePasswordHash(user, newPassword, validatePassword);
+        if (result.Succeeded && user.Id != default)
+        {
+            user.SetLastPasswordChangeTime(Clock.Now);
+        }
+
+        return result;
     }
 }
