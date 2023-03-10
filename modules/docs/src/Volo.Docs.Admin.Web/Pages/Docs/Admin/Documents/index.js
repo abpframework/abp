@@ -203,31 +203,31 @@ $(function () {
                     },
                 },
                 {
-                    target: 0,
+                    target: 1,
                     data: 'projectName',
                 },
                 {
-                    target: 1,
+                    target: 2,
                     data: 'name',
                 },
                 {
-                    target: 2,
+                    target: 3,
                     data: 'version',
                 },
                 {
-                    target: 3,
+                    target: 4,
                     data: 'languageCode',
                 },
                 {
-                    target: 4,
+                    target: 5,
                     data: 'fileName',
                 },
                 {
-                    target: 5,
+                    target: 6,
                     data: 'format',
                 },
                 {
-                    target: 6,
+                    target: 7,
                     data: 'creationTime',
                     render: function (creationTime) {
                         if (!creationTime) {
@@ -238,7 +238,7 @@ $(function () {
                     },
                 },
                 {
-                    target: 7,
+                    target: 8,
                     data: 'lastUpdatedTime',
                     render: function (lastUpdatedTime) {
                         if (!lastUpdatedTime) {
@@ -249,7 +249,7 @@ $(function () {
                     },
                 },
                 {
-                    target: 8,
+                    target: 9,
                     data: 'lastSignificantUpdateTime',
                     render: function (lastSignificantUpdateTime) {
                         if (!lastSignificantUpdateTime) {
@@ -260,7 +260,7 @@ $(function () {
                     },
                 },
                 {
-                    target: 9,
+                    target: 10,
                     data: 'lastCachedTime',
                     render: function (lastCachedTime) {
                         if (!lastCachedTime) {
