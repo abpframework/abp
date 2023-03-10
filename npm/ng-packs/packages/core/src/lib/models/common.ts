@@ -66,8 +66,8 @@ export namespace ABP {
     invisible?: boolean;
   }
 
-  export interface Group {
-    key: string;
+  export interface Group<TKey = string> {
+    key: TKey;
     text: string;
   }
 
@@ -75,7 +75,7 @@ export namespace ABP {
     path?: string;
     layout?: eLayoutType;
     iconClass?: string;
-    group?: Group;
+    group?: Group<any>;
   }
 
   export interface Tab extends Nav {
