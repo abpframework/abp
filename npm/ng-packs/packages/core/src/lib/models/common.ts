@@ -66,7 +66,7 @@ export namespace ABP {
     invisible?: boolean;
   }
 
-  export interface GroupedRoute {
+  export interface Group {
     key: string;
     text: string;
   }
@@ -75,7 +75,7 @@ export namespace ABP {
     path?: string;
     layout?: eLayoutType;
     iconClass?: string;
-    group?: GroupedRoute;
+    group?: Group;
   }
 
   export interface Tab extends Nav {
