@@ -2,14 +2,14 @@ import { APP_INITIALIZER, ModuleWithProviders, NgModule, Provider } from '@angul
 import { CommonModule } from '@angular/common';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import {
+  AbpLocalStorageService,
   ApiInterceptor,
   AuthGuard,
   AuthService,
   CHECK_AUTHENTICATION_STATE_FN_KEY,
   noop,
-  PIPE_TO_LOGIN_FN_KEY
+  PIPE_TO_LOGIN_FN_KEY,
 } from '@abp/ng.core';
-import { storageFactory } from './utils/storage.factory';
 import { AbpOAuthService } from './services';
 import { OAuthConfigurationHandler } from './handlers/oauth-configuration.handler';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -59,7 +59,7 @@ export class AbpOAuthModule {
           useFactory: noop,
         },
         OAuthModule.forRoot().providers as Provider[],
-        { provide: OAuthStorage, useFactory: storageFactory },
+        { provide: OAuthStorage, useClass: AbpLocalStorageService },
       ],
     };
   }
