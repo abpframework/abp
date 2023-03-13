@@ -88,6 +88,41 @@ function configureRoutes(routes: RoutesService) {
 }
 ```
 
+Also we can define group for navigation elements. It's an optional property
+
+```js
+// route.provider.ts
+import { ABP } from '@abp/ng.core';
+
+type GroupType = ABP.Group<string>;
+
+function configureRoutes(routes: RoutesService) {
+  const myGroup: GroupType = { key:'groupKey', text:'GroupName' };
+  
+  return () => {
+    routes.add([
+      {
+        path: '/your-path',
+        name: 'Your navigation',
+        requiredPolicy: 'permission key here',
+        order: 101,
+        iconClass: 'fas fa-question-circle',
+        layout: eLayoutType.application,
+        group: myGroup
+      },
+      {
+        path: '/your-path/child',
+        name: 'Your child navigation',
+        parentName: 'Your navigation',
+        requiredPolicy: 'permission key here',
+        order: 1,
+      },
+    ]);
+  };
+}
+```
+
+
 ...and then in app.module.ts...
 
 ```js
@@ -111,6 +146,9 @@ Here is what every property works as:
 - `iconClass` is the class of the `i` tag, which is placed to the left of the navigation label.
 - `layout` defines in which layout the route will be loaded. (default: `eLayoutType.empty`)
 - `invisible` makes the item invisible in the menu. (default: `false`)
+- `group` is an optional property that is used to group together related routes in an application. It's an object and it have 2 property
+  - `key` is a generic type property that we use for gather items in same group. (default type: `string`)
+  - `text` is the display name on menu 
 
 ### Via `routes` Property in `AppRoutingModule`
 
