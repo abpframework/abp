@@ -1,10 +1,13 @@
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { ABP } from '../models';
 import { RoutesService } from '../services/routes.service';
 import { DummyInjector } from './utils/common.utils';
 import { mockPermissionService } from './utils/permission-service.spec.utils';
 
 const updateStream$ = new Subject<void>();
+
+type GroupType = ABP.Group<string>;
 
 export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }) => {
   const injector = new DummyInjector({
@@ -17,12 +20,23 @@ export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }
 
 describe('Routes Service', () => {
   let service: RoutesService;
+
+  const fooGroup: GroupType = { key: 'foo', text: '::FooGroup' };
+  const barGroup: GroupType = { key: 'bar', text: '::BarGroup' };
+
   const routes = [
     { path: '/foo', name: 'foo' },
     { path: '/foo/bar', name: 'bar', parentName: 'foo', invisible: true, order: 2 },
     { path: '/foo/bar/baz', name: 'baz', parentName: 'bar', order: 1 },
     { path: '/foo/bar/baz/qux', name: 'qux', parentName: 'baz', order: 1 },
     { path: '/foo/x', name: 'x', parentName: 'foo', order: 1 },
+  ];
+
+  const groupedRoutes = [
+    { path: '/foo', name: 'foo', group: fooGroup },
+    { path: '/foo/bar', name: 'bar', group: barGroup },
+    { path: '/foo/bar/baz', name: 'baz', group: barGroup },
+    { path: '/foo/y', name: 'y', parentName: 'foo' },
   ];
 
   beforeEach(() => {
@@ -56,6 +70,18 @@ describe('Routes Service', () => {
       expect(visible[0].name).toBe('foo');
       expect(visible[0].children.length).toBe(1);
       expect(visible[0].children[0].name).toBe('x');
+    });
+  });
+
+  describe('#addGroup', () => {
+    it('should have routes with and without group', async () => {
+      service.add(groupedRoutes);
+
+      const grouped = await service.flat.filter(f => f.group);
+      const unGrouped = await service.flat.filter(f => !f.group);
+
+      expect(grouped.length).toBe(3);
+      expect(unGrouped.length).toBe(1);
     });
   });
 
