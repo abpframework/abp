@@ -111,15 +111,9 @@ public partial class TokenController
                             return await HandleShouldChangePasswordOnNextLoginAsync(request, user, request.Password);
                         }
 
-                        var forceUsersToPeriodicallyChangePassword = await SettingProvider.GetAsync<bool>(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword);
-                        if (forceUsersToPeriodicallyChangePassword)
+                        if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
                         {
-                            var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
-                            var lastPasswordChangeTime = user.LastPasswordChangeTime ?? user.CreationTime;
-                            if (passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < Clock.Now)
-                            {
-                                return await HandlePeriodicallyChangePasswordAsync(request, user, request.Password);
-                            }
+                            return await HandlePeriodicallyChangePasswordAsync(request, user, request.Password);
                         }
 
                         errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";

@@ -19,6 +19,8 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
     protected IClock Clock { get; }
 
+    private readonly IdentityUserManager _identityUserManager;
+
     public AbpSignInManager(
         IdentityUserManager userManager,
         IHttpContextAccessor contextAccessor,
@@ -41,6 +43,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         SettingProvider = settingProvider;
         Clock = clock;
         AbpOptions = options.Value;
+        _identityUserManager = userManager;
     }
 
     public override async Task<SignInResult> PasswordSignInAsync(
@@ -101,16 +104,9 @@ public class AbpSignInManager : SignInManager<IdentityUser>
             return SignInResult.NotAllowed;
         }
 
-        var forceUsersToPeriodicallyChangePassword = await SettingProvider.GetAsync<bool>(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword);
-        if (forceUsersToPeriodicallyChangePassword)
+        if (await _identityUserManager.ShouldPeriodicallyChangePasswordAsync(user))
         {
-            var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
-            var lastPasswordChangeTime = user.LastPasswordChangeTime ?? user.CreationTime;
-            if (passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < Clock.Now)
-            {
-                Logger.LogWarning($"The user should change password! (username: \"{user.UserName}\", id:\"{user.Id}\")");
-                return SignInResult.NotAllowed;
-            }
+            return SignInResult.NotAllowed;
         }
 
         return await base.PreSignInCheck(user);

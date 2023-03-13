@@ -31,7 +31,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity;
 public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 {
     protected SignInManager<IdentityUser> SignInManager { get; }
-    protected UserManager<IdentityUser> UserManager { get; }
+    protected IdentityUserManager UserManager { get; }
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
     protected ILogger<ResourceOwnerPasswordValidator<IdentityUser>> Logger { get; }
     protected IStringLocalizer<AbpIdentityServerResource> Localizer { get; }
@@ -44,7 +44,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     protected IClock Clock { get; }
 
     public AbpResourceOwnerPasswordValidator(
-        UserManager<IdentityUser> userManager,
+        IdentityUserManager userManager,
         SignInManager<IdentityUser> signInManager,
         IdentitySecurityLogManager identitySecurityLogManager,
         ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
@@ -140,16 +140,10 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                         return;
                     }
 
-                    var forceUsersToPeriodicallyChangePassword = await SettingProvider.GetAsync<bool>(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword);
-                    if (forceUsersToPeriodicallyChangePassword)
+                    if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
                     {
-                        var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
-                        var lastPasswordChangeTime = user.LastPasswordChangeTime ?? user.CreationTime;
-                        if (passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < Clock.Now)
-                        {
-                             await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
-                             return;
-                        }
+                        await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
+                        return;
                     }
 
                     errorDescription = Localizer["LoginIsNotAllowed"];

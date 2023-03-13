@@ -259,14 +259,24 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return await UpdateUserAsync(user);
     }
 
-    protected async override Task<IdentityResult> UpdatePasswordHash(IdentityUser user, string newPassword, bool validatePassword)
+    public virtual async Task<bool> ShouldPeriodicallyChangePasswordAsync(IdentityUser user)
     {
-        var result = await base.UpdatePasswordHash(user, newPassword, validatePassword);
-        if (result.Succeeded && user.Id != default)
+        Check.NotNull(user, nameof(user));
+
+        if (user.PasswordHash.IsNullOrWhiteSpace())
         {
-            user.SetLastPasswordChangeTime(Clock.Now);
+            return false;
         }
 
-        return result;
+        var forceUsersToPeriodicallyChangePassword = await SettingProvider.GetAsync<bool>(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword);
+        if (!forceUsersToPeriodicallyChangePassword)
+        {
+            return false;
+        }
+
+        var lastPasswordChangeTime = user.LastPasswordChangeTime ?? user.CreationTime;
+        var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
+
+        return passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < Clock.Now;
     }
 }

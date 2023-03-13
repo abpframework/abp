@@ -12,6 +12,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Identity;
 
@@ -55,6 +56,7 @@ public class IdentityUserStore :
     protected ILogger<IdentityRoleStore> Logger { get; }
     protected ILookupNormalizer LookupNormalizer { get; }
     protected IIdentityUserRepository UserRepository { get; }
+    protected IClock Clock { get; }
 
     public IdentityUserStore(
         IIdentityUserRepository userRepository,
@@ -62,6 +64,7 @@ public class IdentityUserStore :
         IGuidGenerator guidGenerator,
         ILogger<IdentityRoleStore> logger,
         ILookupNormalizer lookupNormalizer,
+        IClock clock,
         IdentityErrorDescriber describer = null)
     {
         UserRepository = userRepository;
@@ -69,6 +72,7 @@ public class IdentityUserStore :
         GuidGenerator = guidGenerator;
         Logger = logger;
         LookupNormalizer = lookupNormalizer;
+        Clock = clock;
 
         ErrorDescriber = describer ?? new IdentityErrorDescriber();
     }
@@ -260,7 +264,7 @@ public class IdentityUserStore :
     /// <param name="passwordHash">The password hash to set.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    public virtual Task SetPasswordHashAsync([NotNull] IdentityUser user, string passwordHash, CancellationToken cancellationToken = default)
+    public virtual async Task SetPasswordHashAsync([NotNull] IdentityUser user, string passwordHash, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -268,7 +272,10 @@ public class IdentityUserStore :
 
         user.PasswordHash = passwordHash;
 
-        return Task.CompletedTask;
+        if (await FindByIdAsync(user.Id.ToString(), cancellationToken) != null)
+        {
+            user.SetLastPasswordChangeTime(Clock.Now);
+        }
     }
 
     /// <summary>
