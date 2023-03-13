@@ -19,118 +19,126 @@ public interface IAbpDatePickerOptions
     DateTime? MaxDate { get; set; }
 
     /// <summary>
-    /// Max span between start and end date
+    /// The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
     /// </summary>
     object MaxSpan { get; set; }
 
     /// <summary>
-    /// Show dropdowns
+    /// Show year and month select boxes above calendars to jump to a specific month and year.
     /// </summary>
     bool? ShowDropdowns { get; set; }
 
     /// <summary>
-    /// Min year allowed
+    /// The minimum year shown in the dropdowns when showDropdowns is set to true.
     /// </summary>
     int? MinYear { get; set; }
 
     /// <summary>
-    /// Max year allowed
+    /// The maximum year shown in the dropdowns when showDropdowns is set to true.
     /// </summary>
     int? MaxYear { get; set; }
 
     /// <summary>
-    /// Show week numbers
+    /// Show week numbers at the start of each week on the calendars.
     /// </summary>
     AbpDatePickerWeekNumbers WeekNumbers { get; set; }
 
     /// <summary>
-    /// Allows users to pick a time
+    /// Adds select boxes to choose times in addition to dates.
     /// </summary>
     bool? TimePicker { get; set; }
 
     /// <summary>
-    /// The time interval allowed
+    /// Increment of the minutes selection list for times (i.e. 30 to allow only selection of times ending in 0 or 30).
     /// </summary>
     int? TimePickerIncrement { get; set; }
 
     /// <summary>
-    /// Sets the time picker hour format as 12 or 24.
+    /// Use 24-hour instead of 12-hour times, removing the AM/PM selection.
     /// </summary>
     bool? TimePicker24Hour { get; set; }
 
     /// <summary>
-    /// Allows seconds selection
+    /// Show seconds in the timePicker.
     /// </summary>
     bool? TimePickerSeconds { get; set; }
 
     /// <summary>
-    /// Predefined date range list
+    /// Set predefined date ranges the user can select from. Each key is the label for the range, and its value an array with two dates representing the bounds of the range.
     /// </summary>
     List<AbpDatePickerRange> Ranges { get; set; }
 
     /// <summary>
-    /// Show custom range label
+    /// Displays "Custom Range" at the end of the list of predefined ranges, when the ranges option is used. This option will be highlighted whenever the current date range selection does not match one of the predefined ranges. Clicking it will display the calendars to select a new range.
     /// </summary>
     bool? ShowCustomRangeLabel { get; set; }
 
     /// <summary>
-    /// Always show calendars
+    /// Normally, if you use the ranges option to specify pre-defined date ranges, calendars for choosing a custom date range are not shown until the user clicks "Custom Range". When this option is set to true, the calendars for choosing a custom date range are always shown instead.
     /// </summary>
     bool? AlwaysShowCalendars { get; set; }
 
     /// <summary>
-    /// The horizontal location of the datepicker
+    /// Whether the picker appears aligned to the left, to the right, or centered under the HTML element it's attached to.
     /// </summary>
     AbpDatePickerOpens Opens { get; set; }
 
     /// <summary>
-    /// The vertical location of the datepicker
+    /// Whether the picker appears below (default) or above the HTML element it's attached to.
     /// </summary>
     AbpDatePickerDrops Drops { get; set; }
 
     /// <summary>
-    /// Button CSS classes
+    /// CSS class names that will be added to both the today, clear, and apply buttons.
     /// </summary>
     [CanBeNull]
     string ButtonClasses { get; set; }
 
     /// <summary>
-    /// Apply class to all buttons
+    /// CSS class names that will be added only to the today button.
+    /// </summary>
+    [CanBeNull]
+    string TodayButtonClasses { get; set; }
+    
+    /// <summary>
+    /// CSS class names that will be added only to the apply button.
     /// </summary>
     [CanBeNull]
     string ApplyButtonClasses { get; set; }
 
     /// <summary>
-    /// Cancel CSS classes to all buttons
+    /// CSS class names that will be added only to the clear button.
     /// </summary>
     [CanBeNull]
-    string CancelButtonClasses { get; set; }
+    string ClearButtonClasses { get; set; }
 
     /// <summary>
-    /// Sets a custom locale
+    /// Allows you to provide localized strings for buttons and labels, customize the date format, and change the first day of week for the calendars.
     /// </summary>
     [CanBeNull]
     object Locale { get; set; }
 
     /// <summary>
-    /// Applies the value when it a date is selected
+    /// Hide the apply button, and automatically apply a new date range as soon as two dates are clicked.
     /// </summary>
     bool? AutoApply { get; set; }
 
     /// <summary>
-    /// When enabled, the two calendars displayed will always be for two sequential months (i.e. January and February), and both will be advanced when clicking the left or right arrows above the calendars. When disabled, the two calendars can be individually advanced and display any month/year. 
+    /// When enabled, the two calendars displayed will always be for two sequential months (i.e. January and February), and both will be advanced when clicking the left or right arrows above the calendars. When disabled, the two calendars can be individually advanced and display any month/year.
     /// </summary>
     bool? LinkedCalendars { get; set; }
 
     /// <summary>
-    /// Updates the input automatically
+    /// Indicates whether the date range picker should automatically update the value of the input element it's attached to at initialization and when the selected dates change.
     /// </summary>
     bool? AutoUpdateInput { get; set; }
 
-    // Parent element
+    /// <summary>
+    /// jQuery selector of the parent element that the date range picker will be added to, if not provided this will be 'body'
+    /// </summary>
     [CanBeNull]
     string ParentEl { get; set; }
-
+    
     [CanBeNull]
     string DateFormat { get; set; }
 
@@ -144,6 +152,9 @@ public interface IAbpDatePickerOptions
 
     bool? IsIso { get; set; }
 
+    /// <summary>
+    /// Other non-mapped attributes will be automatically added to the input element as is.
+    /// </summary>
     [CanBeNull]
     object Options { get; set; }
 }

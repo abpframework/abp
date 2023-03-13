@@ -138,14 +138,19 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.ButtonClasses = value;
     }
 
+    public string TodayButtonClasses {
+        get => _abpDatePickerOptionsImplementation.TodayButtonClasses;
+        set => _abpDatePickerOptionsImplementation.TodayButtonClasses = value;
+    }
+
     public string ApplyButtonClasses {
         get => _abpDatePickerOptionsImplementation.ApplyButtonClasses;
         set => _abpDatePickerOptionsImplementation.ApplyButtonClasses = value;
     }
 
-    public string CancelButtonClasses {
-        get => _abpDatePickerOptionsImplementation.CancelButtonClasses;
-        set => _abpDatePickerOptionsImplementation.CancelButtonClasses = value;
+    public string ClearButtonClasses {
+        get => _abpDatePickerOptionsImplementation.ClearButtonClasses;
+        set => _abpDatePickerOptionsImplementation.ClearButtonClasses = value;
     }
 
     public object Locale {

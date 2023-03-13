@@ -302,9 +302,14 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             attrList.Add("data-apply-button-classes", options.ApplyButtonClasses);
         }
 
-        if (!options.CancelButtonClasses.IsNullOrEmpty())
+        if (!options.ClearButtonClasses.IsNullOrEmpty())
         {
-            attrList.Add("data-cancel-button-classes", options.CancelButtonClasses);
+            attrList.Add("data-clear-button-classes", options.ClearButtonClasses);
+        }
+        
+        if (!options.TodayButtonClasses.IsNullOrEmpty())
+        {
+            attrList.Add("data-today-button-classes", options.TodayButtonClasses);
         }
 
         if (options.AutoApply != null)

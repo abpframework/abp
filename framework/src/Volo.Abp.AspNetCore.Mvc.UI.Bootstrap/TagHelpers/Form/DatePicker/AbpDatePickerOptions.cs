@@ -23,8 +23,9 @@ public class AbpDatePickerOptions : IAbpDatePickerOptions
     public AbpDatePickerOpens Opens { get; set; } = AbpDatePickerOpens.Center;
     public AbpDatePickerDrops Drops { get; set; } = AbpDatePickerDrops.Down;
     public string ButtonClasses { get; set; }
+    public string TodayButtonClasses { get; set; }
     public string ApplyButtonClasses { get; set; }
-    public string CancelButtonClasses { get; set; }
+    public string ClearButtonClasses { get; set; }
     public object Locale { get; set; }
     public bool? AutoApply { get; set; }
     public bool? LinkedCalendars { get; set; }
