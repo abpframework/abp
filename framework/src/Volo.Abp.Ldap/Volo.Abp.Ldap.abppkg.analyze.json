@@ -1,0 +1,139 @@
+{
+  "name": "Volo.Abp.Ldap",
+  "hash": "",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Ldap",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Settings",
+          "namespace": "Volo.Abp.Settings",
+          "name": "AbpSettingsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.VirtualFileSystem",
+          "namespace": "Volo.Abp.VirtualFileSystem",
+          "name": "AbpVirtualFileSystemModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Localization",
+          "namespace": "Volo.Abp.Localization",
+          "name": "AbpLocalizationModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpLdapModule",
+      "summary": null
+    },
+    {
+      "defaultValue": "",
+      "displayName": "Sunucu Ana Bilgisayarı",
+      "description": "Sunucu Ana Bilgisayarı",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Ldap.ServerHost",
+      "summary": null
+    },
+    {
+      "defaultValue": "389",
+      "displayName": "Sunucu portu",
+      "description": "Sunucu portu",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Ldap.ServerPort",
+      "summary": null
+    },
+    {
+      "defaultValue": "",
+      "displayName": "Temel alan bileşeni",
+      "description": "Temel alan bileşeni",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Ldap.BaseDc",
+      "summary": null
+    },
+    {
+      "defaultValue": "",
+      "displayName": "Alan adı",
+      "description": "Alan adı",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Ldap.Domain",
+      "summary": null
+    },
+    {
+      "defaultValue": "",
+      "displayName": "Kullanıcı adı",
+      "description": "Kullanıcı adı",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Ldap.UserName",
+      "summary": null
+    },
+    {
+      "defaultValue": "",
+      "displayName": "Parola",
+      "description": "Parola",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": true,
+      "contentType": "setting",
+      "name": "Abp.Ldap.Password",
+      "summary": null
+    }
+  ]
+}
