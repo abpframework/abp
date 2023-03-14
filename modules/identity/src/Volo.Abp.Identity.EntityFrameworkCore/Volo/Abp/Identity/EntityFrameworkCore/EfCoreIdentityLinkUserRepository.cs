@@ -20,6 +20,7 @@ public class EfCoreIdentityLinkUserRepository : EfCoreRepository<IIdentityDbCont
     public virtual async Task<IdentityLinkUser> FindAsync(IdentityLinkUserInfo sourceLinkUserInfo, IdentityLinkUserInfo targetLinkUserInfo, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
+            .AsNoTracking()
             .OrderBy(x => x.Id).FirstOrDefaultAsync(x =>
                 x.SourceUserId == sourceLinkUserInfo.UserId && x.SourceTenantId == sourceLinkUserInfo.TenantId &&
                 x.TargetUserId == targetLinkUserInfo.UserId && x.TargetTenantId == targetLinkUserInfo.TenantId ||
@@ -31,7 +32,8 @@ public class EfCoreIdentityLinkUserRepository : EfCoreRepository<IIdentityDbCont
     public virtual async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, List<IdentityLinkUserInfo> excludes = null,
         CancellationToken cancellationToken = default)
     {
-        IQueryable<IdentityLinkUser> query = (await GetDbSetAsync())
+        var query = (await GetDbSetAsync())
+            .AsNoTracking()
             .Where(x =>
                 x.SourceUserId == linkUserInfo.UserId && x.SourceTenantId == linkUserInfo.TenantId ||
                 x.TargetUserId == linkUserInfo.UserId && x.TargetTenantId == linkUserInfo.TenantId);
@@ -51,7 +53,7 @@ public class EfCoreIdentityLinkUserRepository : EfCoreRepository<IIdentityDbCont
 
     public virtual async Task DeleteAsync(IdentityLinkUserInfo linkUserInfo, CancellationToken cancellationToken = default)
     {
-        var linkUsers = await (await GetDbSetAsync()).Where(x =>
+        var linkUsers = await (await GetDbSetAsync()).AsNoTracking().Where(x =>
                 x.SourceUserId == linkUserInfo.UserId && x.SourceTenantId == linkUserInfo.TenantId ||
                 x.TargetUserId == linkUserInfo.UserId && x.TargetTenantId == linkUserInfo.TenantId)
             .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
