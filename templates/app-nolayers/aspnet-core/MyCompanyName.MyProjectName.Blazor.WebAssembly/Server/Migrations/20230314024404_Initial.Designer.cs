@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCompanyName.MyProjectName.EntityFrameworkCore;
+using MyCompanyName.MyProjectName.Data;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
 namespace MyCompanyName.MyProjectName.Migrations
 {
-    [DbContext(typeof(AuthServerDbContext))]
-    [Migration("20230216095438_Initial")]
+    [DbContext(typeof(MyProjectNameDbContext))]
+    [Migration("20230314024404_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -716,6 +716,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
+
+                    b.Property<DateTimeOffset?>("LastPasswordChangeTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
