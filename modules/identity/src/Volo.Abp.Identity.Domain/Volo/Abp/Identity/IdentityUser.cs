@@ -113,6 +113,11 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual int AccessFailedCount { get; protected internal set; }
 
     /// <summary>
+    /// Should change password on next login.
+    /// </summary>
+    public virtual bool ShouldChangePasswordOnNextLogin { get; protected internal set; }
+
+    /// <summary>
     /// A version value that is increased whenever the entity is changed.
     /// </summary>
     public virtual int EntityVersion { get; protected set; }
@@ -366,6 +371,11 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual void SetIsActive(bool isActive)
     {
         IsActive = isActive;
+    }
+
+    public virtual void SetShouldChangePasswordOnNextLogin(bool shouldChangePasswordOnNextLogin)
+    {
+        ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin;
     }
 
     public override string ToString()

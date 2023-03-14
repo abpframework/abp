@@ -5,9 +5,9 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionRegistrationActionExtensions
 {
-    // OnRegistred
+    // OnRegistered
 
-    public static void OnRegistred(this IServiceCollection services, Action<IOnServiceRegistredContext> registrationAction)
+    public static void OnRegistered(this IServiceCollection services, Action<IOnServiceRegistredContext> registrationAction)
     {
         GetOrCreateRegistrationActionList(services).Add(registrationAction);
     }

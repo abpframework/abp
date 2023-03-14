@@ -9,4 +9,6 @@ public interface IAuthService
     Task LoginAsync(string userName, string password, string organizationName = null);
 
     Task LogoutAsync();
+
+    Task<bool> CheckMultipleOrganizationsAsync(string username);
 }

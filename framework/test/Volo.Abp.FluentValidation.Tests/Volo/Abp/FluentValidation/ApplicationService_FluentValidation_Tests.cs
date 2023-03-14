@@ -109,7 +109,7 @@ public class ApplicationService_FluentValidation_Tests : AbpIntegratedTest<Appli
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.OnRegistred(onServiceRegistredContext =>
+            context.Services.OnRegistered(onServiceRegistredContext =>
             {
                 if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType) &&
                     !DynamicProxyIgnoreTypes.Contains(onServiceRegistredContext.ImplementationType))

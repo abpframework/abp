@@ -68,7 +68,8 @@ public class BackgroundJobWorker : AsyncPeriodicBackgroundWorkerBase, IBackgroun
                         var context = new JobExecutionContext(
                             workerContext.ServiceProvider,
                             jobConfiguration.JobType,
-                            jobArgs);
+                            jobArgs,
+                            workerContext.CancellationToken);
 
                         try
                         {

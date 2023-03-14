@@ -85,6 +85,12 @@ public class AbpSignInManager : SignInManager<IdentityUser>
             return SignInResult.NotAllowed;
         }
 
+        if (user.ShouldChangePasswordOnNextLogin)
+        {
+            Logger.LogWarning($"The user should change password! (username: \"{user.UserName}\", id:\"{user.Id}\")");
+            return SignInResult.NotAllowed;
+        }
+
         return await base.PreSignInCheck(user);
     }
 }

@@ -19,7 +19,7 @@ public abstract class AbpInterceptionTestBase<TStartupModule> : AbpAsyncIntegrat
         services.AddTransient<SimpleResultCacheTestInterceptor>();
         services.AddTransient<CachedTestObject>();
 
-        services.OnRegistred(registration =>
+        services.OnRegistered(registration =>
         {
             if (typeof(SimpleInterceptionTargetClass) == registration.ImplementationType)
             {
