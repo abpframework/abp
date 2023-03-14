@@ -19,8 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
-        <PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.16.1434" />
+        <PackageReference Include="Devart.Data.Oracle.EFCore" Version="10.1.134.7" />
     </ItemGroup>
 
 </Project>

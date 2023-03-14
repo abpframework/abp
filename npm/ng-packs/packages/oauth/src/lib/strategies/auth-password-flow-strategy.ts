@@ -4,7 +4,7 @@ import { Params, Router } from '@angular/router';
 import { from, Observable, pipe } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 import { AuthFlowStrategy } from './auth-flow-strategy';
-import { pipeToLogin, removeRememberMe, setRememberMe } from '../utils/auth-utils';
+import { pipeToLogin, removeRememberMe } from '../utils/auth-utils';
 import { LoginParams } from '@abp/ng.core';
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 
@@ -33,7 +33,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
           this.refreshToken();
         } else {
           this.oAuthService.logOut();
-          removeRememberMe();
+          removeRememberMe(this.localStorageService);
           this.configState.refreshAppState().subscribe();
         }
       });
@@ -74,7 +74,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       switchMap(() => this.configState.refreshAppState()),
       tap(() => {
         router.navigateByUrl('/');
-        removeRememberMe();
+        removeRememberMe(this.localStorageService);
       }),
     );
   }
@@ -82,7 +82,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   protected refreshToken() {
     return this.oAuthService.refreshToken().catch(() => {
       clearOAuthStorage();
-      removeRememberMe();
+      removeRememberMe(this.localStorageService);
     });
   }
 }
