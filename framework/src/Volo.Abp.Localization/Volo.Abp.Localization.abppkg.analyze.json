@@ -1,0 +1,89 @@
+{
+  "name": "Volo.Abp.Localization",
+  "hash": "",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Localization",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.VirtualFileSystem",
+          "namespace": "Volo.Abp.VirtualFileSystem",
+          "name": "AbpVirtualFileSystemModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Settings",
+          "namespace": "Volo.Abp.Settings",
+          "name": "AbpSettingsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Localization.Abstractions",
+          "namespace": "Volo.Abp.Localization",
+          "name": "AbpLocalizationAbstractionsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Threading",
+          "namespace": "Volo.Abp.Threading",
+          "name": "AbpThreadingModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpLocalizationModule",
+      "summary": null
+    },
+    {
+      "defaultValue": "en",
+      "displayName": "Varsayılan dil",
+      "description": "Varsayılan uygulama dili.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Localization.DefaultLanguage",
+      "summary": null
+    }
+  ]
+}
