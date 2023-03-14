@@ -41,8 +41,6 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
     protected ISettingProvider SettingProvider { get; }
 
-    protected IClock Clock { get; }
-
     public AbpResourceOwnerPasswordValidator(
         IdentityUserManager userManager,
         SignInManager<IdentityUser> signInManager,
@@ -52,8 +50,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         IOptions<AbpIdentityOptions> abpIdentityOptions,
         IServiceScopeFactory serviceScopeFactory,
         IOptions<IdentityOptions> identityOptions,
-        ISettingProvider settingProvider,
-        IClock clock)
+        ISettingProvider settingProvider)
     {
         UserManager = userManager;
         SignInManager = signInManager;
@@ -64,7 +61,6 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         AbpIdentityOptions = abpIdentityOptions.Value;
         IdentityOptions = identityOptions;
         SettingProvider = settingProvider;
-        Clock = clock;
     }
 
     /// <summary>

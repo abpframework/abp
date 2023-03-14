@@ -317,7 +317,7 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     ShouldChangePasswordOnNextLogin = table.Column<bool>(type: "bit", nullable: false),
                     EntityVersion = table.Column<int>(type: "int", nullable: false),
-                    LastPasswordChangeTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastPasswordChangeTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),

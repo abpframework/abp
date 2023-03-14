@@ -26,8 +26,6 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     protected ISettingProvider SettingProvider { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-    protected IClock Clock { get; }
-
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
     public IdentityUserManager(
@@ -44,8 +42,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         ILogger<IdentityUserManager> logger,
         ICancellationTokenProvider cancellationTokenProvider,
         IOrganizationUnitRepository organizationUnitRepository,
-        ISettingProvider settingProvider,
-        IClock clock)
+        ISettingProvider settingProvider)
         : base(
             store,
             optionsAccessor,
@@ -59,7 +56,6 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     {
         OrganizationUnitRepository = organizationUnitRepository;
         SettingProvider = settingProvider;
-        Clock = clock;
         RoleRepository = roleRepository;
         UserRepository = userRepository;
         CancellationTokenProvider = cancellationTokenProvider;
@@ -274,9 +270,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
             return false;
         }
 
-        var lastPasswordChangeTime = user.LastPasswordChangeTime ?? user.CreationTime;
+        var lastPasswordChangeTime = user.LastPasswordChangeTime ?? DateTime.SpecifyKind(user.CreationTime, DateTimeKind.Utc);
         var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
 
-        return passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < Clock.Now;
+        return passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < DateTime.UtcNow;
     }
 }

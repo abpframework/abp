@@ -125,7 +125,7 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// <summary>
     /// Gets or sets the last password change time for the user.
     /// </summary>
-    public virtual DateTime? LastPasswordChangeTime { get; protected set; }
+    public virtual DateTimeOffset? LastPasswordChangeTime { get; protected set; }
 
     //TODO: Can we make collections readonly collection, which will provide encapsulation. But... can work for all ORMs?
 
@@ -383,7 +383,7 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
         ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin;
     }
 
-    public virtual void SetLastPasswordChangeTime(DateTime? lastPasswordChangeTime)
+    public virtual void SetLastPasswordChangeTime(DateTimeOffset? lastPasswordChangeTime)
     {
         LastPasswordChangeTime = lastPasswordChangeTime;
     }

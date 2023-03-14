@@ -56,7 +56,6 @@ public class IdentityUserStore :
     protected ILogger<IdentityRoleStore> Logger { get; }
     protected ILookupNormalizer LookupNormalizer { get; }
     protected IIdentityUserRepository UserRepository { get; }
-    protected IClock Clock { get; }
 
     public IdentityUserStore(
         IIdentityUserRepository userRepository,
@@ -64,7 +63,6 @@ public class IdentityUserStore :
         IGuidGenerator guidGenerator,
         ILogger<IdentityRoleStore> logger,
         ILookupNormalizer lookupNormalizer,
-        IClock clock,
         IdentityErrorDescriber describer = null)
     {
         UserRepository = userRepository;
@@ -72,7 +70,6 @@ public class IdentityUserStore :
         GuidGenerator = guidGenerator;
         Logger = logger;
         LookupNormalizer = lookupNormalizer;
-        Clock = clock;
 
         ErrorDescriber = describer ?? new IdentityErrorDescriber();
     }
@@ -274,7 +271,7 @@ public class IdentityUserStore :
 
         if (await FindByIdAsync(user.Id.ToString(), cancellationToken) != null)
         {
-            user.SetLastPasswordChangeTime(Clock.Now);
+            user.SetLastPasswordChangeTime(DateTime.UtcNow);
         }
     }
 

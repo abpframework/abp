@@ -17,8 +17,6 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
     protected ISettingProvider SettingProvider { get; }
 
-    protected IClock Clock { get; }
-
     private readonly IdentityUserManager _identityUserManager;
 
     public AbpSignInManager(
@@ -30,8 +28,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         IAuthenticationSchemeProvider schemes,
         IUserConfirmation<IdentityUser> confirmation,
         IOptions<AbpIdentityOptions> options,
-        ISettingProvider settingProvider,
-        IClock clock) : base(
+        ISettingProvider settingProvider) : base(
         userManager,
         contextAccessor,
         claimsFactory,
@@ -41,7 +38,6 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         confirmation)
     {
         SettingProvider = settingProvider;
-        Clock = clock;
         AbpOptions = options.Value;
         _identityUserManager = userManager;
     }
