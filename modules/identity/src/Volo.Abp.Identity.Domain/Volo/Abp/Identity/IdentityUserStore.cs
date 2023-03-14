@@ -261,7 +261,7 @@ public class IdentityUserStore :
     /// <param name="passwordHash">The password hash to set.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    public virtual async Task SetPasswordHashAsync([NotNull] IdentityUser user, string passwordHash, CancellationToken cancellationToken = default)
+    public virtual Task SetPasswordHashAsync([NotNull] IdentityUser user, string passwordHash, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -269,10 +269,9 @@ public class IdentityUserStore :
 
         user.PasswordHash = passwordHash;
 
-        if (await FindByIdAsync(user.Id.ToString(), cancellationToken) != null)
-        {
-            user.SetLastPasswordChangeTime(DateTime.UtcNow);
-        }
+        user.SetLastPasswordChangeTime(DateTime.UtcNow);
+
+        return Task.CompletedTask;
     }
 
     /// <summary>
