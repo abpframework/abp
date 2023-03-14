@@ -383,7 +383,7 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
         ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin;
     }
 
-    public virtual void SetLastPasswordChangeTime(DateTime lastPasswordChangeTime)
+    public virtual void SetLastPasswordChangeTime(DateTime? lastPasswordChangeTime)
     {
         LastPasswordChangeTime = lastPasswordChangeTime;
     }
