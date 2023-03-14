@@ -10,10 +10,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Host.Migrations
+namespace MyCompanyName.MyProjectName.Mvc.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20230216095619_Initial")]
+    [Migration("20230314024433_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -716,6 +716,9 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
+
+                    b.Property<DateTime?>("LastPasswordChangeTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
