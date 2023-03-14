@@ -291,7 +291,7 @@ PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
 `AbpOpenIddictAspNetCoreOptions` properties:
 
 - `UpdateAbpClaimTypes(default: true)`:  Updates `AbpClaimTypes` to be compatible with the Openiddict claims.
-- `AddDevelopmentEncryptionAndSigningCertificate(default: true)`:  Registers (and generates if necessary) a user-specific development encryption/development signing certificate.
+- `AddDevelopmentEncryptionAndSigningCertificate(default: true)`:  Registers (and generates if necessary) a user-specific development encryption/development signing certificate. This is a certificate used for signing and encrypting the tokens and for **development environment only**. You must set it to **false** for non-development environments.
 
 > `AddDevelopmentEncryptionAndSigningCertificate` cannot be used in applications deployed on IIS or Azure App Service: trying to use them on IIS or Azure App Service will result in an exception being thrown at runtime (unless the application pool is configured to load a user profile). To avoid that, consider creating self-signed certificates and storing them in the X.509 certificates store of the host machine(s). Please refer to: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-development-certificate
 
