@@ -421,7 +421,7 @@
   background-repeat: repeat-y;
 }
 .jstree-default-dark .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 .jstree-default-dark .jstree-open > .jstree-ocl {
   background-position: -132px -4px;
@@ -492,7 +492,7 @@
   background-repeat: repeat-y;
 }
 .jstree-default-dark.jstree-rtl .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 .jstree-default-dark.jstree-rtl .jstree-open > .jstree-ocl {
   background-position: -132px -36px;
@@ -557,7 +557,7 @@
   overflow: hidden;
 }
 .jstree-default-dark .jstree-ellipsis .jstree-anchor {
-  width: calc(100% - 29px);
+  width: calc(100% - 24px + 5px);
   text-overflow: ellipsis;
   overflow: hidden;
 }
@@ -565,7 +565,7 @@
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAACAQMAAAB49I5GAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjAAMOBgAAGAAJMwQHdQAAAABJRU5ErkJggg==");
 }
 .jstree-default-dark.jstree-rtl .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 .jstree-default-dark-small .jstree-node {
   min-height: 18px;
@@ -602,7 +602,7 @@
   background-repeat: repeat-y;
 }
 .jstree-default-dark-small .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 .jstree-default-dark-small .jstree-open > .jstree-ocl {
   background-position: -135px -7px;
@@ -673,7 +673,7 @@
   background-repeat: repeat-y;
 }
 .jstree-default-dark-small.jstree-rtl .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 .jstree-default-dark-small.jstree-rtl .jstree-open > .jstree-ocl {
   background-position: -135px -39px;
@@ -738,7 +738,7 @@
   overflow: hidden;
 }
 .jstree-default-dark-small .jstree-ellipsis .jstree-anchor {
-  width: calc(100% - 23px);
+  width: calc(100% - 18px + 5px);
   text-overflow: ellipsis;
   overflow: hidden;
 }
@@ -746,7 +746,7 @@
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAACAQMAAABv1h6PAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjAAMHBgAAiABBI4gz9AAAAABJRU5ErkJggg==");
 }
 .jstree-default-dark-small.jstree-rtl .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 .jstree-default-dark-large .jstree-node {
   min-height: 32px;
@@ -783,7 +783,7 @@
   background-repeat: repeat-y;
 }
 .jstree-default-dark-large .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 .jstree-default-dark-large .jstree-open > .jstree-ocl {
   background-position: -128px 0px;
@@ -854,7 +854,7 @@
   background-repeat: repeat-y;
 }
 .jstree-default-dark-large.jstree-rtl .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 .jstree-default-dark-large.jstree-rtl .jstree-open > .jstree-ocl {
   background-position: -128px -32px;
@@ -919,7 +919,7 @@
   overflow: hidden;
 }
 .jstree-default-dark-large .jstree-ellipsis .jstree-anchor {
-  width: calc(100% - 37px);
+  width: calc(100% - 32px + 5px);
   text-overflow: ellipsis;
   overflow: hidden;
 }
@@ -927,7 +927,7 @@
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAACAQMAAAAD0EyKAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjgIIGBgABCgCBvVLXcAAAAABJRU5ErkJggg==");
 }
 .jstree-default-dark-large.jstree-rtl .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 @media (max-width: 768px) {
   #jstree-dnd.jstree-dnd-responsive {
@@ -1078,7 +1078,7 @@
     background-repeat: repeat-y;
   }
   .jstree-default-dark-responsive .jstree-last {
-    background: transparent;
+    background-image: none;
   }
   .jstree-default-dark-responsive .jstree-leaf > .jstree-ocl {
     background-position: -40px -120px;
@@ -1134,17 +1134,17 @@
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAACAQMAAAB49I5GAAAABlBMVEUAAACZmZl+9SADAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjAAMOBgAAGAAJMwQHdQAAAABJRU5ErkJggg==");
 }
 .jstree-default-dark.jstree-rtl .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 .jstree-default-dark-small.jstree-rtl .jstree-node {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAACAQMAAABv1h6PAAAABlBMVEUAAACZmZl+9SADAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjAAMHBgAAiABBI4gz9AAAAABJRU5ErkJggg==");
 }
 .jstree-default-dark-small.jstree-rtl .jstree-last {
-  background: transparent;
+  background-image: none;
 }
 .jstree-default-dark-large.jstree-rtl .jstree-node {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAACAQMAAAAD0EyKAAAABlBMVEUAAACZmZl+9SADAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjgIIGBgABCgCBvVLXcAAAAABJRU5ErkJggg==");
 }
 .jstree-default-dark-large.jstree-rtl .jstree-last {
-  background: transparent;
+  background-image: none;
 }
