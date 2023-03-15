@@ -9,14 +9,16 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
       <input
         type="checkbox"
         [(ngModel)]="value"
-        [id]="checkboxId"  
+        [id]="checkboxId"
         [readonly]="checkboxReadonly"
-        [ngClass]="checkboxClass" 
-        [ngStyle]="checkboxStyle" 
-        (blur)="onBlur.next()"
-        (focus)="onFocus.next()" 
-      >    
-      <label *ngIf="label" [ngClass]="labelClass" [for]="checkboxId" > {{label | abpLocalization}} </label>
+        [ngClass]="checkboxClass"
+        [ngStyle]="checkboxStyle"
+        (blur)="checkboxBlur.next()"
+        (focus)="checkboxFocus.next()"
+      />
+      <label *ngIf="label" [ngClass]="labelClass" [for]="checkboxId">
+        {{ label | abpLocalization }}
+      </label>
     </div>
   `,
   providers: [
@@ -25,21 +27,19 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
       useExisting: forwardRef(() => FormCheckboxComponent),
       multi: true,
     },
-  ]
+  ],
 })
 export class FormCheckboxComponent extends AbstractNgModelComponent {
-
   @Input() label?: string;
   @Input() labelClass = 'form-check-label';
   @Input() checkboxId!: string;
   @Input() checkboxStyle = '';
   @Input() checkboxClass = 'form-check-input';
   @Input() checkboxReadonly = false;
-  @Output() onBlur = new EventEmitter<void>();
-  @Output() onFocus = new EventEmitter<void>();
+  @Output() checkboxBlur = new EventEmitter<void>();
+  @Output() checkboxFocus = new EventEmitter<void>();
 
   constructor(injector: Injector) {
     super(injector);
   }
-
 }
