@@ -242,22 +242,24 @@
                     </div>
                     <div class="col-auto text-end">
                         <div class="cont-container d-flex align-items-center justify-content-end h-100">
-                            @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
-                            {
-                                <div class="me-4 d-flex flex-column">
+                            <div class="me-4 d-flex flex-column">
+                                @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
+                                {
                                     <span class="for-desktop contributors-text">
                                         @L["Contributors"].Value
                                     </span>
-
-                                    @if (!string.IsNullOrEmpty(Model.Document.EditLink))
-                                    {
-                                        <a href="@Model.Document.EditLink" target="_blank">
-                                            <i class="fa fa-edit"></i>
-                                            @L["Edit"]
-                                            <span class="for-desktop text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title='@L["LastEditTime"]'>(@Model.Document.LastUpdatedTime.ToShortDateString())</span>
-                                        </a>
-                                    }
-                                </div>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Document.EditLink))
+                                {
+                                    <a href="@Model.Document.EditLink" target="_blank">
+                                        <i class="fa fa-edit"></i>
+                                        @L["Edit"]
+                                        <span class="for-desktop text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title='@L["LastEditTime"]'>(@Model.Document.LastUpdatedTime.ToShortDateString())</span>
+                                    </a>
+                                }
+                            </div>
+                            @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
+                            {
                                 <div class="contributors">
                                     @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c => c.CommitCount).ToList())
                                     {
@@ -276,8 +278,6 @@
                             }
 
                         </div>
-
-
                     </div>
                 </div>
             </div>
