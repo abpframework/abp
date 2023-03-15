@@ -42,20 +42,19 @@ public static class JsonLocalizationDictionaryBuilder
     public static ILocalizationDictionary BuildFromJsonString(string jsonString)
     {
         JsonLocalizationFile jsonFile;
-        string cultureCode;
         try
         {
             jsonFile = JsonSerializer.Deserialize<JsonLocalizationFile>(jsonString, DeserializeOptions);
-            cultureCode = jsonFile.Culture;
-
-            if (string.IsNullOrEmpty(cultureCode))
-            {
-                return null;
-            }
         }
         catch (JsonException ex)
         {
             throw new AbpException("Can not parse json string. " + ex.Message);
+        }
+        
+        var cultureCode = jsonFile.Culture;
+        if (string.IsNullOrEmpty(cultureCode))
+        {
+            return null;
         }
 
         var dictionary = new Dictionary<string, LocalizedString>();
