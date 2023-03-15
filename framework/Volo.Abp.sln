@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28922.388
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33417.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}"
 EndProject
@@ -369,71 +369,73 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Compone
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions", "src\Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions\Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions.csproj", "{E9CE58DB-0789-4D18-8B63-474F7D7B14B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AzureServiceBus", "src\Volo.Abp.AzureServiceBus\Volo.Abp.AzureServiceBus.csproj", "{808EC18E-C8CC-4F5C-82B6-984EADBBF85D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AzureServiceBus", "src\Volo.Abp.AzureServiceBus\Volo.Abp.AzureServiceBus.csproj", "{808EC18E-C8CC-4F5C-82B6-984EADBBF85D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Azure", "src\Volo.Abp.EventBus.Azure\Volo.Abp.EventBus.Azure.csproj", "{FB27F78E-F10E-4810-9B8E-BCD67DCFC8A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EventBus.Azure", "src\Volo.Abp.EventBus.Azure\Volo.Abp.EventBus.Azure.csproj", "{FB27F78E-F10E-4810-9B8E-BCD67DCFC8A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Authorization.Abstractions", "src\Volo.Abp.Authorization.Abstractions\Volo.Abp.Authorization.Abstractions.csproj", "{87B0C2A8-FE95-4779-8B9C-2181AA52B3FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Authorization.Abstractions", "src\Volo.Abp.Authorization.Abstractions\Volo.Abp.Authorization.Abstractions.csproj", "{87B0C2A8-FE95-4779-8B9C-2181AA52B3FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Core", "src\Volo.Abp.TextTemplating.Core\Volo.Abp.TextTemplating.Core.csproj", "{184E859A-282D-44D7-B8E9-FEA874644013}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TextTemplating.Core", "src\Volo.Abp.TextTemplating.Core\Volo.Abp.TextTemplating.Core.csproj", "{184E859A-282D-44D7-B8E9-FEA874644013}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Scriban", "src\Volo.Abp.TextTemplating.Scriban\Volo.Abp.TextTemplating.Scriban.csproj", "{228723E6-FA6D-406B-B8F8-C9BCC547AF8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TextTemplating.Scriban", "src\Volo.Abp.TextTemplating.Scriban\Volo.Abp.TextTemplating.Scriban.csproj", "{228723E6-FA6D-406B-B8F8-C9BCC547AF8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Razor", "src\Volo.Abp.TextTemplating.Razor\Volo.Abp.TextTemplating.Razor.csproj", "{42EA6F06-2D78-4D18-8AC4-8F2AB7E6DA19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TextTemplating.Razor", "src\Volo.Abp.TextTemplating.Razor\Volo.Abp.TextTemplating.Razor.csproj", "{42EA6F06-2D78-4D18-8AC4-8F2AB7E6DA19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Razor.Tests", "test\Volo.Abp.TextTemplating.Razor.Tests\Volo.Abp.TextTemplating.Razor.Tests.csproj", "{C996F458-98FB-483D-9306-4701290E2FC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TextTemplating.Razor.Tests", "test\Volo.Abp.TextTemplating.Razor.Tests\Volo.Abp.TextTemplating.Razor.Tests.csproj", "{C996F458-98FB-483D-9306-4701290E2FC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Scriban.Tests", "test\Volo.Abp.TextTemplating.Scriban.Tests\Volo.Abp.TextTemplating.Scriban.Tests.csproj", "{75D8DADB-3FA9-4C1D-B23A-DBFD08133B7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TextTemplating.Scriban.Tests", "test\Volo.Abp.TextTemplating.Scriban.Tests\Volo.Abp.TextTemplating.Scriban.Tests.csproj", "{75D8DADB-3FA9-4C1D-B23A-DBFD08133B7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MongoDB.Tests.SecondContext", "test\Volo.Abp.MongoDB.Tests.SecondContext\Volo.Abp.MongoDB.Tests.SecondContext.csproj", "{90B1866A-EF99-40B9-970E-B898E5AA523F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MongoDB.Tests.SecondContext", "test\Volo.Abp.MongoDB.Tests.SecondContext\Volo.Abp.MongoDB.Tests.SecondContext.csproj", "{90B1866A-EF99-40B9-970E-B898E5AA523F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.IdentityModel.Tests", "test\Volo.Abp.IdentityModel.Tests\Volo.Abp.IdentityModel.Tests.csproj", "{40C6740E-BFCA-4D37-8344-3D84E2044BB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.IdentityModel.Tests", "test\Volo.Abp.IdentityModel.Tests\Volo.Abp.IdentityModel.Tests.csproj", "{40C6740E-BFCA-4D37-8344-3D84E2044BB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Threading.Tests", "test\Volo.Abp.Threading.Tests\Volo.Abp.Threading.Tests.csproj", "{7B2FCAD6-86E6-49C8-ADBE-A61B4F4B101B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Threading.Tests", "test\Volo.Abp.Threading.Tests\Volo.Abp.Threading.Tests.csproj", "{7B2FCAD6-86E6-49C8-ADBE-A61B4F4B101B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.DistributedLocking", "src\Volo.Abp.DistributedLocking\Volo.Abp.DistributedLocking.csproj", "{9A7EEA08-15BE-476D-8168-53039867038E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.DistributedLocking", "src\Volo.Abp.DistributedLocking\Volo.Abp.DistributedLocking.csproj", "{9A7EEA08-15BE-476D-8168-53039867038E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Auditing.Contracts", "src\Volo.Abp.Auditing.Contracts\Volo.Abp.Auditing.Contracts.csproj", "{508B6355-AD28-4E60-8549-266D21DBF2CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Auditing.Contracts", "src\Volo.Abp.Auditing.Contracts\Volo.Abp.Auditing.Contracts.csproj", "{508B6355-AD28-4E60-8549-266D21DBF2CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Http.Client.Web", "src\Volo.Abp.Http.Client.Web\Volo.Abp.Http.Client.Web.csproj", "{F7407459-8AFA-45E4-83E9-9BB01412CC08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Http.Client.Web", "src\Volo.Abp.Http.Client.Web\Volo.Abp.Http.Client.Web.csproj", "{F7407459-8AFA-45E4-83E9-9BB01412CC08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.DistributedLocking.Abstractions", "src\Volo.Abp.DistributedLocking.Abstractions\Volo.Abp.DistributedLocking.Abstractions.csproj", "{CA805B77-D50C-431F-B3CB-1111C9C6E807}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.DistributedLocking.Abstractions", "src\Volo.Abp.DistributedLocking.Abstractions\Volo.Abp.DistributedLocking.Abstractions.csproj", "{CA805B77-D50C-431F-B3CB-1111C9C6E807}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.DistributedLocking.Abstractions.Tests", "test\Volo.Abp.DistributedLocking.Abstractions.Tests\Volo.Abp.DistributedLocking.Abstractions.Tests.csproj", "{C4F54FB5-C828-414D-BA03-E8E7A10C784D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.DistributedLocking.Abstractions.Tests", "test\Volo.Abp.DistributedLocking.Abstractions.Tests\Volo.Abp.DistributedLocking.Abstractions.Tests.csproj", "{C4F54FB5-C828-414D-BA03-E8E7A10C784D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundWorkers.Hangfire", "src\Volo.Abp.BackgroundWorkers.Hangfire\Volo.Abp.BackgroundWorkers.Hangfire.csproj", "{E5FCE710-C5A3-4F94-B9C9-BD1E99252BFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundWorkers.Hangfire", "src\Volo.Abp.BackgroundWorkers.Hangfire\Volo.Abp.BackgroundWorkers.Hangfire.csproj", "{E5FCE710-C5A3-4F94-B9C9-BD1E99252BFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Gdpr.Abstractions", "src\Volo.Abp.Gdpr.Abstractions\Volo.Abp.Gdpr.Abstractions.csproj", "{3683340D-92F5-4B14-B77B-34A163333309}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Gdpr.Abstractions", "src\Volo.Abp.Gdpr.Abstractions\Volo.Abp.Gdpr.Abstractions.csproj", "{3683340D-92F5-4B14-B77B-34A163333309}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.RemoteServices", "src\Volo.Abp.RemoteServices\Volo.Abp.RemoteServices.csproj", "{EDFFDA74-090D-439C-A58D-06CCF86D4423}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.RemoteServices", "src\Volo.Abp.RemoteServices\Volo.Abp.RemoteServices.csproj", "{EDFFDA74-090D-439C-A58D-06CCF86D4423}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.PlugIn", "test\Volo.Abp.AspNetCore.Mvc.PlugIn\Volo.Abp.AspNetCore.Mvc.PlugIn.csproj", "{C6D6D878-208A-4FD2-822E-365545D8681B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.PlugIn", "test\Volo.Abp.AspNetCore.Mvc.PlugIn\Volo.Abp.AspNetCore.Mvc.PlugIn.csproj", "{C6D6D878-208A-4FD2-822E-365545D8681B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Json.Newtonsoft", "src\Volo.Abp.Json.Newtonsoft\Volo.Abp.Json.Newtonsoft.csproj", "{9DD41C8F-0886-483C-B98B-C55EAA7F226D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Json.Newtonsoft", "src\Volo.Abp.Json.Newtonsoft\Volo.Abp.Json.Newtonsoft.csproj", "{9DD41C8F-0886-483C-B98B-C55EAA7F226D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Json.SystemTextJson", "src\Volo.Abp.Json.SystemTextJson\Volo.Abp.Json.SystemTextJson.csproj", "{0AD06E14-CBFE-4551-8D18-9E921D8F2A87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Json.SystemTextJson", "src\Volo.Abp.Json.SystemTextJson\Volo.Abp.Json.SystemTextJson.csproj", "{0AD06E14-CBFE-4551-8D18-9E921D8F2A87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Json.Abstractions", "src\Volo.Abp.Json.Abstractions\Volo.Abp.Json.Abstractions.csproj", "{08531C5D-0436-4721-986D-96446CF54316}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Json.Abstractions", "src\Volo.Abp.Json.Abstractions\Volo.Abp.Json.Abstractions.csproj", "{08531C5D-0436-4721-986D-96446CF54316}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.NewtonsoftJson", "src\Volo.Abp.AspNetCore.Mvc.NewtonsoftJson\Volo.Abp.AspNetCore.Mvc.NewtonsoftJson.csproj", "{0CFC9D4F-F12F-4B44-ABCF-AB4A0E9E85B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.NewtonsoftJson", "src\Volo.Abp.AspNetCore.Mvc.NewtonsoftJson\Volo.Abp.AspNetCore.Mvc.NewtonsoftJson.csproj", "{0CFC9D4F-F12F-4B44-ABCF-AB4A0E9E85B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Dapr", "src\Volo.Abp.Dapr\Volo.Abp.Dapr.csproj", "{192A829F-D608-4E41-8DE0-058E943E453F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Dapr", "src\Volo.Abp.Dapr\Volo.Abp.Dapr.csproj", "{192A829F-D608-4E41-8DE0-058E943E453F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Dapr", "src\Volo.Abp.EventBus.Dapr\Volo.Abp.EventBus.Dapr.csproj", "{DCC41E99-EBC7-4F19-BA0D-A6F770D8E431}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EventBus.Dapr", "src\Volo.Abp.EventBus.Dapr\Volo.Abp.EventBus.Dapr.csproj", "{DCC41E99-EBC7-4F19-BA0D-A6F770D8E431}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Http.Client.Dapr", "src\Volo.Abp.Http.Client.Dapr\Volo.Abp.Http.Client.Dapr.csproj", "{18B796D2-D45D-41AE-9A42-75C9B14B20DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Http.Client.Dapr", "src\Volo.Abp.Http.Client.Dapr\Volo.Abp.Http.Client.Dapr.csproj", "{18B796D2-D45D-41AE-9A42-75C9B14B20DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.Dapr", "src\Volo.Abp.AspNetCore.Mvc.Dapr\Volo.Abp.AspNetCore.Mvc.Dapr.csproj", "{5EED625D-8D86-492A-BCB8-F6C8CD8D4AA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.Dapr", "src\Volo.Abp.AspNetCore.Mvc.Dapr\Volo.Abp.AspNetCore.Mvc.Dapr.csproj", "{5EED625D-8D86-492A-BCB8-F6C8CD8D4AA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.Dapr.EventBus", "src\Volo.Abp.AspNetCore.Mvc.Dapr.EventBus\Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.csproj", "{B02EF042-C39E-45C4-A92D-BF7554E1889D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.Dapr.EventBus", "src\Volo.Abp.AspNetCore.Mvc.Dapr.EventBus\Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.csproj", "{B02EF042-C39E-45C4-A92D-BF7554E1889D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.DistributedLocking.Dapr", "src\Volo.Abp.DistributedLocking.Dapr\Volo.Abp.DistributedLocking.Dapr.csproj", "{CAE48068-233C-47A9-BEAB-DDF521730E7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.DistributedLocking.Dapr", "src\Volo.Abp.DistributedLocking.Dapr\Volo.Abp.DistributedLocking.Dapr.csproj", "{CAE48068-233C-47A9-BEAB-DDF521730E7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.MauiBlazor", "src\Volo.Abp.AspNetCore.Components.MauiBlazor\Volo.Abp.AspNetCore.Components.MauiBlazor.csproj", "{C44E2BD5-8D62-48A7-84AF-FE7CF2C8716C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.MauiBlazor", "src\Volo.Abp.AspNetCore.Components.MauiBlazor\Volo.Abp.AspNetCore.Components.MauiBlazor.csproj", "{C44E2BD5-8D62-48A7-84AF-FE7CF2C8716C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Http.Client.IdentityModel.MauiBlazor", "src\Volo.Abp.Http.Client.IdentityModel.MauiBlazor\Volo.Abp.Http.Client.IdentityModel.MauiBlazor.csproj", "{E9492F9F-47E0-45A6-A51D-9949FEAA8543}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Http.Client.IdentityModel.MauiBlazor", "src\Volo.Abp.Http.Client.IdentityModel.MauiBlazor\Volo.Abp.Http.Client.IdentityModel.MauiBlazor.csproj", "{E9492F9F-47E0-45A6-A51D-9949FEAA8543}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.MauiBlazor.Theming", "src\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.csproj", "{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.MauiBlazor.Theming", "src\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.csproj", "{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Ldap.Abstractions", "src\Volo.Abp.Ldap.Abstractions\Volo.Abp.Ldap.Abstractions.csproj", "{0F80E95C-41E6-4F23-94FF-FC9D0B8D5D71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1297,6 +1299,10 @@ Global
 		{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F80E95C-41E6-4F23-94FF-FC9D0B8D5D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F80E95C-41E6-4F23-94FF-FC9D0B8D5D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F80E95C-41E6-4F23-94FF-FC9D0B8D5D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F80E95C-41E6-4F23-94FF-FC9D0B8D5D71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1516,6 +1522,7 @@ Global
 		{C44E2BD5-8D62-48A7-84AF-FE7CF2C8716C} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{E9492F9F-47E0-45A6-A51D-9949FEAA8543} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{8764DFAF-D13D-449A-9A5E-5D7F0B2D7FEF} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{0F80E95C-41E6-4F23-94FF-FC9D0B8D5D71} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

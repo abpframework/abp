@@ -5,8 +5,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Ldap</AssemblyName>
-    <PackageId>Volo.Abp.Ldap</PackageId>
+    <AssemblyName>Volo.Abp.Ldap.Abstractions</AssemblyName>
+    <PackageId>Volo.Abp.Ldap.Abstractions</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -15,12 +15,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LdapForNet" Version="2.7.15" />
+    <Content Remove="Volo\Abp\Ldap\Localization\*.json" />
+    <EmbeddedResource Include="Volo\Abp\Ldap\Localization\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Ldap.Abstractions\Volo.Abp.Ldap.Abstractions.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
   </ItemGroup>
-
 </Project>
