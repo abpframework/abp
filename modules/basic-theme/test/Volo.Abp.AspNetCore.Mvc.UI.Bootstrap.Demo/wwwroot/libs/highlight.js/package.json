@@ -6,7 +6,7 @@
     "syntax"
   ],
   "homepage": "https://highlightjs.org/",
-  "version": "9.13.1",
+  "version": "9.18.5",
   "author": {
     "name": "Ivan Sagalaev",
     "email": "maniac@softwaremaniacs.org"
@@ -31,6 +31,10 @@
     {
       "name": "Sang Dang",
       "email": "sang.dang@polku.io"
+    },
+    {
+      "name": "Josh Goebel",
+      "email": "hello@joshgoebel.com"
     },
     {
       "name": "Ivan Sagalaev (original author)",
@@ -941,10 +945,6 @@
       "email": "halechan@qq.com"
     },
     {
-      "name": "Matt Evans",
-      "email": "syrius3@gmail.com"
-    },
-    {
       "name": "Kasper Andersen",
       "email": "kma_untrusted@protonmail.com"
     },
@@ -1021,6 +1021,10 @@
       "email": "me@AhmadAwais.com"
     },
     {
+      "name": "Duncan Paterson",
+      "email": "duncan@exist-db.org"
+    },
+    {
       "name": "Tristian Kelly",
       "email": "tristian.kelly560@gmail.com"
     },
@@ -1053,12 +1057,56 @@
       "email": "gusbemacbe@gmail.com"
     },
     {
+      "name": "Jeffrey Arnold",
+      "email": "jeffrey.arnold@gmail.com"
+    },
+    {
       "name": "Antoine Boisier-Michaud",
       "email": "aboisiermichaud@gmail.com"
     },
     {
       "name": "Alejandro Isaza",
       "email": "al@isaza.ca"
+    },
+    {
+      "name": "Laurent Voullemier",
+      "email": "laurent.voullemier@gmail.com"
+    },
+    {
+      "name": "Sean T. Allen",
+      "email": "sean@monkeysnatchbanana.com"
+    },
+    {
+      "name": "Greg Cline",
+      "email": "gregrcline@gmail.com"
+    },
+    {
+      "name": "Sejin Jeon",
+      "email": "jinaidy93@gmail.com"
+    },
+    {
+      "name": "Taif Alimov",
+      "email": "inzeppelin@gmail.com"
+    },
+    {
+      "name": "Yuri Mazursky",
+      "email": "mail@colomolome.com"
+    },
+    {
+      "name": "Carl Baxter",
+      "email": "carl@cbax.tech"
+    },
+    {
+      "name": "Thomas Reichel",
+      "email": "tom.p.reichel@gmail.com"
+    },
+    {
+      "name": "G8t Guy",
+      "email": "g8tguy@g8tguy.com"
+    },
+    {
+      "name": "Samia Ali",
+      "email": "samiaab1990@gmail.com"
     }
   ],
   "bugs": {
@@ -1073,23 +1121,30 @@
   "scripts": {
     "mocha": "mocha",
     "test": "mocha --globals document test",
+    "postinstall": "node deprecated.js",
     "test-browser": "mocha --globals document test/browser"
   },
   "engines": {
     "node": "*"
   },
   "devDependencies": {
-    "bluebird": "^3.5.1",
-    "commander": "^2.3.0",
-    "del": "^3.0.0",
-    "gear": "^0.9.4",
-    "gear-lib": "^0.9.2",
-    "glob": "^7.0.3",
-    "js-beautify": "^1.5.10",
-    "jsdom": "^9.2.1",
-    "lodash": "^4.0.0",
-    "mocha": "^5.2.0",
+    "bluebird": "^3.5.5",
+    "cli-table": "^0.3.1",
+    "colors": "^1.1.2",
+    "commander": "^4.0.0",
+    "del": "^5.1.0",
+    "gear": "github:highlightjs/gear",
+    "gear-lib": "github:highlightjs/gear-lib",
+    "glob": "^7.1.4",
+    "handlebars": "^4.5.3",
+    "js-beautify": "^1.10.2",
+    "jsdom": "^16.0.1",
+    "lodash": "^4.17.15",
+    "mocha": "^6.2.0",
+    "rollup": "^1.27.8",
+    "rollup-plugin-commonjs": "^10.1.0",
     "should": "^13.2.3",
-    "tiny-worker": "^2.1.2"
-  }
+    "tiny-worker": "^2.3.0"
+  },
+  "dependencies": {}
 }
