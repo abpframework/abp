@@ -240,45 +240,51 @@
                             </div>
                         }
                     </div>
-                    <div class="col-auto text-end">
-                        <div class="cont-container d-flex align-items-center justify-content-end h-100">
-                            <div class="me-4 d-flex flex-column">
-                                @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
-                                {
-                                    <span class="for-desktop contributors-text">
-                                        @L["Contributors"].Value
-                                    </span>
-                                }
-                                @if (!string.IsNullOrEmpty(Model.Document.EditLink))
-                                {
-                                    <a href="@Model.Document.EditLink" target="_blank">
-                                        <i class="fa fa-edit"></i>
-                                        @L["Edit"]
-                                        <span class="for-desktop text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title='@L["LastEditTime"]'>(@Model.Document.LastUpdatedTime.ToShortDateString())</span>
-                                    </a>
-                                }
-                            </div>
-                            @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
-                            {
-                                <div class="contributors">
-                                    @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c => c.CommitCount).ToList())
+                    @{
+                        var showContributors = Model.Document.Contributors != null && Model.Document.Contributors.Count > 0;
+                        var showEditLink = !string.IsNullOrEmpty(Model.Document.EditLink);
+                    }
+                    @if (showContributors || showEditLink)
+                    {
+                        <div class="col-auto text-end">
+                            <div class="cont-container d-flex align-items-center justify-content-end h-100">
+                                <div class="me-4 d-flex flex-column">
+                                    @if (showContributors)
                                     {
-                                        <a href="@contributor.UserProfileUrl" target="_blank" class="cont-avatar">
-                                            <img src="@contributor.AvatarUrl"
-                                                 class="rounded-circle"
-                                                 alt="Avatar"
-                                                 height="21"
-                                                 width="21"
-                                                 title="@contributor.Username"
-                                                 data-bs-toggle="tooltip"
-                                                 data-bs-placement="top"/>
+                                        <span class="for-desktop contributors-text">
+                                            @L["Contributors"].Value
+                                        </span>
+                                    }
+                                    @if (showEditLink)
+                                    {
+                                        <a href="@Model.Document.EditLink" target="_blank">
+                                            <i class="fa fa-edit"></i>
+                                            @L["Edit"]
+                                            <span class="for-desktop text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title='@L["LastEditTime"]'>(@Model.Document.LastUpdatedTime.ToShortDateString())</span>
                                         </a>
                                     }
                                 </div>
-                            }
-
+                                @if (showContributors)
+                                {
+                                    <div class="contributors">
+                                        @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c => c.CommitCount).ToList())
+                                        {
+                                            <a href="@contributor.UserProfileUrl" target="_blank" class="cont-avatar">
+                                                <img src="@contributor.AvatarUrl"
+                                                     class="rounded-circle"
+                                                     alt="Avatar"
+                                                     height="21"
+                                                     width="21"
+                                                     title="@contributor.Username"
+                                                     data-bs-toggle="tooltip"
+                                                     data-bs-placement="top"/>
+                                            </a>
+                                        }
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
 
