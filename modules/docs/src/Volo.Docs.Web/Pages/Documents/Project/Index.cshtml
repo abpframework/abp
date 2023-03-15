@@ -160,16 +160,23 @@
                 <div class="version-select">
                     <div class="input-group align-items-center">
                         <span class="input-group-text">
-                            <i class="fa fa-filter"></i>
+                            <i class="fa fa-search"></i>
                         </span>
                         <input class="form-control"
                                id="filter"
                                type="search"
                                data-search-url="@Model."
-                               placeholder="@L["FilterTopics"].Value"
+                               placeholder="@L["Search"].Value"
                                aria-label="Filter">
                     </div>
                 </div>
+            </div>
+
+            <div id="search-all-document" style="display: none;" class="search-all-document-container">
+                <button class="btn" type="button">
+                    <i class="fa fa-level-down" aria-hidden="true"></i>
+                    @L["SearchInTheAllDocuments"]
+                </button>
             </div>
 
             @if (Model.Navigation == null || !Model.Navigation.HasChildItems)
