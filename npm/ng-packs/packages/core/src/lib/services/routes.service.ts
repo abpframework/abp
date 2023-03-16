@@ -1,13 +1,14 @@
-import { Injectable, Injector, OnDestroy } from '@angular/core';
+import { Injectable, Injector, inject, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ABP } from '../models/common';
+import { OTHERS_GROUP } from '../tokens';
 import { pushValueTo } from '../utils/array-utils';
 import { BaseTreeNode, createTreeFromList, TreeNode } from '../utils/tree-utils';
 import { ConfigStateService } from './config-state.service';
 import { PermissionService } from './permission.service';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export abstract class AbstractTreeService<T extends {[key: string | number | symbol]: any}> {
+export abstract class AbstractTreeService<T extends { [key: string | number | symbol]: any }> {
   abstract id: string;
   abstract parentId: string;
   abstract hide: (item: T) => boolean;
@@ -180,4 +181,32 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 }
 
 @Injectable({ providedIn: 'root' })
-export class RoutesService extends AbstractNavTreeService<ABP.Route> {}
+export class RoutesService extends AbstractNavTreeService<ABP.Route> {
+  private readonly othersGroup: ABP.Group<any> = inject(OTHERS_GROUP, {
+    optional: true,
+  });
+
+  get groupedTree(): ABP.RouteGroup[] {
+    const groupTree = this.visible.filter(node => node.group);
+    if (groupTree.length < 1) return;
+
+    const map = new Map<ABP.Group, TreeNode<ABP.Route>[]>(groupTree?.map(node => [node.group, []]));
+    const otherGroup = this.othersGroup || { key: 'others', text: '::Others' };
+    map.set(otherGroup, []);
+
+    for (const node of this.visible) {
+      const { path, children, group } = node;
+
+      if (!group && (children?.length > 0 || path)) {
+        map.get(otherGroup)?.push(node);
+      } else if (group) {
+        map.get(group)?.push(node);
+      }
+    }
+
+    return Array.from(map.entries()).map<ABP.RouteGroup>(([group, nodes]) => ({
+      group,
+      items: nodes,
+    }));
+  }
+}
