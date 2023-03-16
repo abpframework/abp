@@ -189,12 +189,12 @@ export class RoutesService extends AbstractNavTreeService<ABP.Route> {
     super(injector);
   }
 
-  get groupedVisible(): ABP.RouteGroup[] {
+  get groupedVisible(): ABP.RouteGroup[] | undefined {
     const groupTree = this.visible.filter(node => node.group);
     if (groupTree.length < 1) return;
 
     const map = new Map<ABP.Group, TreeNode<ABP.Route>[]>(groupTree?.map(node => [node.group, []]));
-    const otherGroup = this.othersGroup || { key: 'others', text: '::Others' };
+    const otherGroup = this.othersGroup;
     map.set(otherGroup, []);
 
     for (const node of this.visible) {

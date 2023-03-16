@@ -15,8 +15,8 @@ export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }
     ConfigStateService: { createOnUpdateStream: () => updateStream$ },
     ...injectorPayload,
   });
-  const othersGroup: ABP.Group<number> = { key: 1, text: 'Others' };
-  return new RoutesService(injector, othersGroup);
+  const othersGroupToken: ABP.Group<number> = { key: 1, text: 'Others' };
+  return new RoutesService(injector, othersGroupToken);
 };
 
 describe('Routes Service', () => {
@@ -97,10 +97,13 @@ describe('Routes Service', () => {
 
       expect(tree[0].group.key).toBe('foo');
       expect(tree[0].group.text).toBe('FooGroup');
+      expect(tree[0].items[0].name).toBe('foo');
       expect(tree[0].items[0].children[0].name).toBe('y');
 
       expect(tree[1].group.key).toBe('bar');
       expect(tree[1].group.text).toBe('BarGroup');
+      expect(tree[1].items[0].name).toBe('bar');
+      expect(tree[1].items[1].name).toBe('baz');
 
       expect(tree[2].group.key).toBe(1);
       expect(tree[2].group.text).toBe('Others');

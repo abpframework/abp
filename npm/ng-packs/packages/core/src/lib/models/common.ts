@@ -13,6 +13,7 @@ export namespace ABP {
     sendNullsAsQueryParam?: boolean;
     tenantKey?: string;
     localizations?: Localization[];
+    othersGroup?: Group<any>;
   }
 
   export interface Child {

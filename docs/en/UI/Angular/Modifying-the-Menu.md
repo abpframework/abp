@@ -122,15 +122,37 @@ function configureRoutes(routes: RoutesService) {
 }
 ```
 
+To get route items as grouped we can use `groupedVisible` getter method
+ - It will return `RouteGroup[]` if there is any group in route tree otherwise it'll return undefined
+
+```js
+import { ABP, RoutesService } from "@abp/ng.core";
+import { Component } from "@angular/core";
+
+@Component(/* component metadata */)
+export class AppComponent {
+  visible: ABP.RouteGroup[] | undefined = routes.groupedVisible;
+  
+  constructor(routes: RoutesService) {}
+}
+```
 
 ...and then in app.module.ts...
+ - `groupedVisible` method will return `Others` group for ungrouped items, we can define `key` and `text` via `OTHERS_GROUP` injection token for this group
 
 ```js
 import { NgModule } from '@angular/core';
+import { ABP, OTHERS_GROUP } from '@abp/ng.core';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 
 @NgModule({
-  providers: [APP_ROUTE_PROVIDER],
+  providers: [
+    APP_ROUTE_PROVIDER,
+    {
+      provide: OTHERS_GROUP,
+      useValue: { key: 1, text: 'MyOthersGroup' } as ABP.Group<number>,
+    },
+  ],
   // imports, declarations, and bootstrap
 })
 export class AppModule {}
