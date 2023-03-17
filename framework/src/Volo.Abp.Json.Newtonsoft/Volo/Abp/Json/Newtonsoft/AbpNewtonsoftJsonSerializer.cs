@@ -34,7 +34,7 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
         return JsonConvert.DeserializeObject(jsonString, type, CreateJsonSerializerOptions(camelCase));
     }
 
-    private static readonly ConcurrentDictionary<object, JsonSerializerSettings> JsonSerializerOptionsCache =
+    private readonly static ConcurrentDictionary<object, JsonSerializerSettings> JsonSerializerOptionsCache =
         new ConcurrentDictionary<object, JsonSerializerSettings>();
 
     protected virtual JsonSerializerSettings CreateJsonSerializerOptions(bool camelCase = true, bool indented = false)
@@ -81,9 +81,11 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
                 TypeNameAssemblyFormatHandling = Options.Value.JsonSerializerSettings.TypeNameAssemblyFormatHandling
             };
 
-            settings.ContractResolver = camelCase
-                ? ServiceProvider.GetRequiredService<AbpCamelCasePropertyNamesContractResolver>()
-                : ServiceProvider.GetRequiredService<AbpDefaultContractResolver>();
+            if (!camelCase)
+            {
+                // Default contract resolver is AbpCamelCasePropertyNamesContractResolver}
+                settings.ContractResolver = new AbpDefaultContractResolver(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
+            }
 
             if (indented)
             {
