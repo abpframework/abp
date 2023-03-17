@@ -1,11 +1,10 @@
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Json.Newtonsoft;
 
-public class AbpDefaultContractResolver : DefaultContractResolver, ITransientDependency
+public class AbpDefaultContractResolver : DefaultContractResolver
 {
     private readonly AbpDateTimeConverter _dateTimeConverter;
 
