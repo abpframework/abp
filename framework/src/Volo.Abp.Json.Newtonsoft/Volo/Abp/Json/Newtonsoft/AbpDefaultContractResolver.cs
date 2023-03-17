@@ -1,22 +1,16 @@
-using System;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Json.Newtonsoft;
 
-public class AbpDefaultContractResolver : DefaultContractResolver, ITransientDependency
+public class AbpDefaultContractResolver : DefaultContractResolver
 {
-    private readonly Lazy<AbpDateTimeConverter> _dateTimeConverter;
+    private readonly AbpDateTimeConverter _dateTimeConverter;
 
-    public AbpDefaultContractResolver(IServiceProvider serviceProvider)
+    public AbpDefaultContractResolver(AbpDateTimeConverter dateTimeConverter)
     {
-        _dateTimeConverter = new Lazy<AbpDateTimeConverter>(
-            serviceProvider.GetRequiredService<AbpDateTimeConverter>,
-            true
-        );
+        _dateTimeConverter = dateTimeConverter;
     }
 
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
@@ -25,7 +19,7 @@ public class AbpDefaultContractResolver : DefaultContractResolver, ITransientDep
 
         if (AbpDateTimeConverter.ShouldNormalize(member, property))
         {
-            property.Converter = _dateTimeConverter.Value;
+            property.Converter = _dateTimeConverter;
         }
 
         return property;
