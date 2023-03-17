@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization.Json;
@@ -12,6 +13,7 @@ public static class JsonLocalizationDictionaryBuilder
     ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given file.
     /// </summary>
     /// <param name="filePath">Path of the file</param>
+    [CanBeNull]
     public static ILocalizationDictionary BuildFromFile(string filePath)
     {
         try
@@ -36,6 +38,7 @@ public static class JsonLocalizationDictionaryBuilder
     ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given json string.
     /// </summary>
     /// <param name="jsonString">Json string</param>
+    [CanBeNull]
     public static ILocalizationDictionary BuildFromJsonString(string jsonString)
     {
         JsonLocalizationFile jsonFile;
@@ -47,11 +50,11 @@ public static class JsonLocalizationDictionaryBuilder
         {
             throw new AbpException("Can not parse json string. " + ex.Message);
         }
-
+        
         var cultureCode = jsonFile.Culture;
         if (string.IsNullOrEmpty(cultureCode))
         {
-            throw new AbpException("Culture is empty in language json file.");
+            return null;
         }
 
         var dictionary = new Dictionary<string, LocalizedString>();

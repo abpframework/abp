@@ -3005,7 +3005,7 @@ var luxon = (function (exports) {
 
   function preprocessRFC2822(s) {
     // Remove comments and folding whitespace and replace multiple-spaces with a single space
-    return s.replace(/\([^)]*\)|[\n\t]/g, " ").replace(/(\s\s+)/g, " ").trim();
+    return s.replace(/\([^()]*\)|[\n\t]/g, " ").replace(/(\s\s+)/g, " ").trim();
   } // http date
 
 
@@ -8515,7 +8515,7 @@ var luxon = (function (exports) {
     }
   }
 
-  var VERSION = "2.5.0";
+  var VERSION = "2.5.2";
 
   exports.DateTime = DateTime;
   exports.Duration = Duration;
