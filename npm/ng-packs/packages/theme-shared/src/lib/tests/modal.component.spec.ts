@@ -158,8 +158,9 @@ describe('ModalComponent', () => {
     spectator.dispatchKeyboardEvent(spectator.component.modalWindowRef, 'keyup', 'Escape');
 
     await wait300ms();
+    const { keyboard } = spectator.component.options;
 
-    expect(spectator.component.visible).toBe(false);
+    expect(spectator.component.visible).toBe(!keyboard);
   });
 
   it('should not close when busy is true', async () => {
