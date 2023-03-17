@@ -18,7 +18,9 @@ The decision to move to the cloud was made to eliminate the disadvantages of the
 
 Several steps were taken to create and configure the abp.io platform on Azure. [Terraform](https://www.terraform.io/) was used to create the infrastructure (VM, Private Network, AKS, Postgresql Flexible Server...), while [Ansible](https://www.ansible.com/) was used to configure the Azure resources like Terraform, Helm, Kubectl, Docker, VPN, Redis, Prometheus, Grafana, ElasticSearch, Kibana and so on.... Azure DevOps pipelines and release were used for AKS deployment. The most time-consuming part in this process was to prepare, test and optimize the terraform and ansible settings files.
 
-![terraform-azure](images/terraform-azure.png)
+To access our platform, which is configured on a private network in Azure, we require a VPN connection. To enable this, we have installed [Wireguard](https://www.wireguard.com/) - an open source VPN service - by creating a virtual machine using Terraform and configuring it with Ansible in Azure. This approach has made the process efficient and streamlined.
+
+![terra-wire](images/terra-wire.png)
 
 The most important step was to transfer the data in both the database and Kubernetes of the volumes. rsync (remote sync commands) were used to transfer the data from Kubernetes volumes to Azure NFS through the VPN machine. Additionally, `pg_dump` and `pg_restore` were used to transfer the PostgreSQL database through the machine with VPN. 
 
@@ -31,7 +33,9 @@ We would like to happily state that **we were offline for only 4 minutes** durin
 
 ### Benefits of Moving to Azure
 
-The migration to Azure resulted in several benefits. The platform is now more reliable, scalable, secure, solid with built-in one-click backup and recovery capabilities for abp.io. Additionally, the critical resources are in a private network, making them more secure than the old environment. There were significant improvements in connection speeds after the migration, which resulted in speeds that were twice as fast as before.
+The migration to Azure resulted in several benefits. The platform is now more reliable, scalable, secure, solid with built-in one-click backup and recovery capabilities for abp.io. Additionally, the critical resources are in a private network, making them more secure than the old environment. When we initially compared the speed of our abp.io sites before and after migrating to Azure, we were pleasantly surprised by the significant improvement in performance. To be honest, we did not expect such a speed increase.
+
+![speed](images/speed.png)
 
 In conclusion, migrating a Kubernetes platform with a database from on-premise to Azure is a complex process that requires careful planning and execution. However, the benefits gained from the migration make the process worthwhile. By moving to Azure, the abp.io platform now has a more reliable and available infrastructure that is more secure than the old environment. The migration also resulted in significant improvements in connection speeds, which ultimately provides a better service to global customers and the community.
 
