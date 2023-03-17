@@ -11,9 +11,9 @@ public class AbpJsonNewtonsoftModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddOptions<AbpNewtonsoftJsonSerializerOptions>()
-            .Configure<IServiceProvider>((options, serviceProvider) =>
+            .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
-                options.JsonSerializerSettings.ContractResolver = new AbpCamelCasePropertyNamesContractResolver(serviceProvider.GetRequiredService<AbpDateTimeConverter>());
+                options.JsonSerializerSettings.ContractResolver = new AbpCamelCasePropertyNamesContractResolver(rootServiceProvider.GetRequiredService<AbpDateTimeConverter>());
             });
     }
 }

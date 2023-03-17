@@ -10,12 +10,12 @@ namespace Volo.Abp.Json.Newtonsoft;
 [Dependency(ReplaceServices = true)]
 public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
 {
-    protected IServiceProvider ServiceProvider { get; }
+    protected IRootServiceProvider RootServiceProvider { get; }
     protected IOptions<AbpNewtonsoftJsonSerializerOptions> Options { get; }
 
-    public AbpNewtonsoftJsonSerializer(IServiceProvider serviceProvider, IOptions<AbpNewtonsoftJsonSerializerOptions> options)
+    public AbpNewtonsoftJsonSerializer(IRootServiceProvider rootServiceProvider, IOptions<AbpNewtonsoftJsonSerializerOptions> options)
     {
-        ServiceProvider = serviceProvider;
+        RootServiceProvider = rootServiceProvider;
         Options = options;
     }
 
@@ -84,7 +84,7 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
             if (!camelCase)
             {
                 // Default contract resolver is AbpCamelCasePropertyNamesContractResolver}
-                settings.ContractResolver = new AbpDefaultContractResolver(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
+                settings.ContractResolver = new AbpDefaultContractResolver(RootServiceProvider.GetRequiredService<AbpDateTimeConverter>());
             }
 
             if (indented)
