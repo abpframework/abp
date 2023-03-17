@@ -196,7 +196,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
         .pipe(
           takeUntil(this.destroy$),
           debounceTime(150),
-          filter((key: KeyboardEvent) => key && key.key === 'Escape'),
+          filter((key: KeyboardEvent) => key && key.key === 'Escape' && this.options.keyboard),
         )
         .subscribe(() => this.close());
     }
