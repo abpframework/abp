@@ -16,7 +16,7 @@ The decision to move to the cloud was made to eliminate the disadvantages of the
 
 ### Creating and Configuring abp.io Platform on Azure
 
-To create and configure the abp.io platform on Azure, several steps were taken. Terraform was used to create the infrastructure, while Ansible was used to configure the resources on Azure. Azure DevOps pipelines and release were used for AKS deployment. The most time-consuming part in this process was to prepare, test and optimize the terraform and ansible settings files.
+To create and configure  the abp.io platform on Azure, several steps were taken. Terraform was used to create the infrastructure (VM, Private Network, AKS, Postgresql Flexible Server...), while Ansible was used to configure the resources(terraform, helm, kubectl, docker, vpn, redis, prometheus, grafana, elasticserach, kibana...) on Azure. Azure DevOps pipelines and release were used for AKS deployment. The most time-consuming part in this process was to prepare, test and optimize the terraform and ansible settings files.
 
 ![terraform-azure](images/terraform-azure.png)
 
