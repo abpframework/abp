@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.Timing;
 
@@ -10,9 +11,9 @@ public class AbpJsonNewtonsoftModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddOptions<AbpNewtonsoftJsonSerializerOptions>()
-            .Configure<AbpCamelCasePropertyNamesContractResolver>((options, contractResolver) =>
+            .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
-                options.JsonSerializerSettings.ContractResolver = contractResolver;
+                options.JsonSerializerSettings.ContractResolver = new AbpCamelCasePropertyNamesContractResolver(rootServiceProvider.GetRequiredService<AbpDateTimeConverter>());
             });
     }
 }
