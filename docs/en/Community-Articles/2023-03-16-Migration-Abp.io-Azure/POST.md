@@ -14,6 +14,12 @@ There were several reasons why the decision was taken to migrate from the old on
 
 The decision to move to the cloud was made to eliminate the disadvantages of the old platform. The migration to Azure meant that the resources would be independent of each other but faster in terms of communicating with each other. The platform would also take advantage of cloud security and availability. The managed Kubernetes service that Azure offers comes with autoscaling and loadbalancing, which makes the platform more reliable. Finally, the migration to Azure would provide a better quality service to global customers and the community.
 
+### Before Moving to Azure
+
+Before migrating to Azure, we decided to switch our database from MSSQL to PostgreSQL on-premise first. This gave us the opportunity to test and fine-tune the migration process before making the final switch to Azure.You can check the details of database migration from this article [Migrating from MS-SQL to Postgresql](https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2023-03-15-Migration-Mssql-Postgresql/POST.md).
+
+Before moving to Azure, the platform was tested in the staging environment. The staging environment was created on Azure to test the migration process. The staging environment was created with the same resources as the production environment. The staging environment was used to test the migration process and to optimize the migration process. The staging environment was also used to test the migration of the data from the old platform to Azure. The migration of the data from the old platform to Azure was tested several times to ensure that the migration process was successful.
+
 ### Creating and Configuring the abp.io Platform on Azure
 
 Several steps were taken to create and configure the abp.io platform on Azure. [Terraform](https://www.terraform.io/) was used to create the infrastructure (VM, Private Network, AKS, Postgresql Flexible Server...), while [Ansible](https://www.ansible.com/) was used to configure the Azure resources like Terraform, Helm, Kubectl, Docker, VPN, Redis, Prometheus, Grafana, ElasticSearch, Kibana and so on.... Azure DevOps pipelines and release were used for AKS deployment. The most time-consuming part in this process was to prepare, test and optimize the terraform and ansible settings files.
