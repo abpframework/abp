@@ -14,6 +14,12 @@ There were several reasons why the decision was taken to migrate from the old on
 
 The decision to move to the cloud was made to eliminate the disadvantages of the old platform. The migration to Azure meant that the resources would be independent of each other but faster in terms of communicating with each other. The platform would also take advantage of cloud security and availability. The managed Kubernetes service that Azure offers comes with autoscaling and loadbalancing, which makes the platform more reliable. Finally, the migration to Azure would provide a better quality service to global customers and the community.
 
+### Before Moving to Azure
+
+Before migrating to Azure, we decided to switch our database from MS-SQL to PostgreSQL on-premise first. This gave us the opportunity to test and fine-tune the migration process before making the final switch to Azure.You can check the details of database migration from this article [Migrating from MS-SQL to Postgresql](https://community.abp.io/posts/migrating-from-mssql-to-postgresql-lbi5anlv).
+
+The platform was tested in a staging environment created on Azure with the same resources as the production environment. The staging environment was used to test and optimize the migration process, including the migration of data from the old platform to Azure, which was tested multiple times to ensure success.
+
 ### Creating and Configuring the abp.io Platform on Azure
 
 Several steps were taken to create and configure the abp.io platform on Azure. [Terraform](https://www.terraform.io/) was used to create the infrastructure (VM, Private Network, AKS, Postgresql Flexible Server...), while [Ansible](https://www.ansible.com/) was used to configure the Azure resources like Terraform, Helm, Kubectl, Docker, VPN, Redis, Prometheus, Grafana, ElasticSearch, Kibana and so on.... Azure DevOps pipelines and release were used for AKS deployment. The most time-consuming part in this process was to prepare, test and optimize the terraform and ansible settings files.
