@@ -8,7 +8,7 @@ Migrating a Kubernetes platform with a database from our own dedicated servers t
 
 ### On-Premise Server: The old platform
 
-There were several reasons why the decision was taken to migrate from the old on-premise platform to Azure. The first reason was that the Kubernetes cluster and the database were on the same Windows server. This configuration was not ideal as it posed a high risk of security and accessibility issues. Additionally, the Linux virtual machines in Kubernetes were on Windows server and had limited resources. The platform was not in a private network, which further increased the risk of security breaches. Not to mention how challenging the Kubernetes maintenance was and that made another reason for the migration.
+There were several reasons for migrating from the old on-premise platform to Azure. First, the Kubernetes cluster and the database were on the same Windows server. Additionally, the Linux virtual machines in Kubernetes were on the Windows server and had limited resources. Furthermore, the Kubernetes maintenance was quite challenging, which was another reason for the migration.
 
 ### Reasons for Moving to Azure: The new platform
 
