@@ -10,7 +10,6 @@
     "ConnectionStrings": "Tengi strengir",
     "DisplayName:DefaultConnectionString": "Sjálfgefin tengistrengur",
     "DisplayName:UseSharedDatabase": "Notaðu samnýttan gagnagrunn",
-    "ManageHostFeatures": "Stjórna Gestgjafa Eiginleikum",
     "Permission:TenantManagement": "Tenant umsjá",
     "Permission:Create": "Búa til",
     "Permission:Edit": "Breyta",

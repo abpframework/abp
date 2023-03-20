@@ -273,6 +273,8 @@
     "SubscribeToNewsletter": "Přihlaste se k odběru newsletteru a získejte informace o dění na platformě ABP.IO, jako jsou nové verze, články, nabídky a další.",
     "FirstEdition": "První vydání",
     "ThankYou": "Děkuji!",
-    "CheckboxMandatory": "Chcete-li pokračovat, musíte toto zaškrtnout!"
+    "CheckboxMandatory": "Chcete-li pokračovat, musíte toto zaškrtnout!",
+    "SelectUITheme": "Vyberte téma uživatelského rozhraní"
+
   }
 }

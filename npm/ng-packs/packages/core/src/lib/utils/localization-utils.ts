@@ -10,7 +10,7 @@ export function getLocaleDirection(locale: string): 'ltr' | 'rtl' {
 }
 
 export function createLocalizer(localization: ApplicationLocalizationConfigurationDto) {
-  return (resourceName: string, key: string, defaultValue: string) => {
+  return (resourceName: string, key: string, defaultValue: string | null) => {
     if (resourceName === '_') return key;
 
     const resource = localization?.values?.[resourceName];

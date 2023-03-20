@@ -3,9 +3,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.EventBus.Local;
+using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement.Web.Utils;
 
 namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement;
@@ -37,15 +39,18 @@ public class PermissionManagementModal : AbpPageModel
     protected IPermissionAppService PermissionAppService { get; }
 
     protected ILocalEventBus LocalEventBus { get; }
+    public AbpLocalizationOptions LocalizationOptions { get; }
 
     public PermissionManagementModal(
-    IPermissionAppService permissionAppService,
-    ILocalEventBus localEventBus)
+        IPermissionAppService permissionAppService,
+        ILocalEventBus localEventBus,
+        IOptions<AbpLocalizationOptions> localizationOptions)
     {
         ObjectMapperContext = typeof(AbpPermissionManagementWebModule);
 
         PermissionAppService = permissionAppService;
         LocalEventBus = localEventBus;
+        LocalizationOptions = localizationOptions.Value;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()

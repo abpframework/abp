@@ -12,11 +12,11 @@ import {
   encapsulation: ViewEncapsulation.None,
 })
 export class PageComponent {
-  @Input() title: string;
+  @Input() title?: string;
 
   toolbarVisible = false;
   _toolbarData: any;
-  @Input('toolbar') set toolbarData(val: any) {
+  @Input() set toolbar(val: any) {
     this._toolbarData = val;
     this.toolbarVisible = true;
   }
@@ -25,7 +25,7 @@ export class PageComponent {
     return this._toolbarData;
   }
 
-  @Input('breadcrumb') breadcrumbVisible = true;
+  @Input() breadcrumb = true;
 
   pageParts = {
     title: PageParts.title,
@@ -33,16 +33,16 @@ export class PageComponent {
     toolbar: PageParts.toolbar,
   };
 
-  @ContentChild(PageTitleContainerComponent) customTitle: PageTitleContainerComponent;
+  @ContentChild(PageTitleContainerComponent) customTitle?: PageTitleContainerComponent;
   @ContentChild(PageBreadcrumbContainerComponent)
-  customBreadcrumb: PageBreadcrumbContainerComponent;
-  @ContentChild(PageToolbarContainerComponent) customToolbar: PageToolbarContainerComponent;
+  customBreadcrumb?: PageBreadcrumbContainerComponent;
+  @ContentChild(PageToolbarContainerComponent) customToolbar?: PageToolbarContainerComponent;
 
   get shouldRenderRow() {
     return !!(
       this.title ||
       this.toolbarVisible ||
-      this.breadcrumbVisible ||
+      this.breadcrumb ||
       this.customTitle ||
       this.customBreadcrumb ||
       this.customToolbar

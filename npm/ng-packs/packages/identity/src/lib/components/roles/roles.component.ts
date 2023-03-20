@@ -26,21 +26,21 @@ import { eIdentityComponents } from '../../enums/components';
 export class RolesComponent implements OnInit {
   data: PagedResultDto<IdentityRoleDto> = { items: [], totalCount: 0 };
 
-  form: UntypedFormGroup;
+  form!: UntypedFormGroup;
 
-  selected: IdentityRoleDto;
+  selected?: IdentityRoleDto;
 
-  isModalVisible: boolean;
+  isModalVisible!: boolean;
 
   visiblePermissions = false;
 
-  providerKey: string;
+  providerKey?: string;
 
   modalBusy = false;
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
-  onVisiblePermissionChange = event => {
+  onVisiblePermissionChange = (event: boolean) => {
     this.visiblePermissions = event;
   };
 
@@ -82,7 +82,7 @@ export class RolesComponent implements OnInit {
     if (!this.form.valid) return;
     this.modalBusy = true;
 
-    const { id } = this.selected;
+    const { id } = this.selected || {};
     (id
       ? this.service.update(id, { ...this.selected, ...this.form.value })
       : this.service.create(this.form.value)
@@ -118,7 +118,7 @@ export class RolesComponent implements OnInit {
     }, 0);
   }
 
-  sort(data) {
+  sort(data: any) {
     const { prop, dir } = data.sorts[0];
     this.list.sortKey = prop;
     this.list.sortOrder = dir;

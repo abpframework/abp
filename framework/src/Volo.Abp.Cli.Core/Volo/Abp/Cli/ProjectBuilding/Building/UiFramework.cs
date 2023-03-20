@@ -7,5 +7,6 @@ public enum UiFramework
     Mvc = 2,
     Angular = 3,
     Blazor = 4,
-    BlazorServer = 5
+    BlazorServer = 5,
+    MauiBlazor = 6
 }

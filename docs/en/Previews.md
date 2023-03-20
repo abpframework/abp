@@ -11,6 +11,14 @@ More than one preview releases (like 3.1.0-rc.2 and 3.1.0-rc.3) might be publish
 
 ## Using the Preview Versions
 
+### Update the CLI
+
+Before creating or updating an existing solution make sure to update the CLI to the latest preview version, for example:
+
+````bash
+dotnet tool update --global Volo.Abp.Cli --version 6.0.0-rc.2
+````
+
 ### New Solutions
 
 To create a project for testing the preview version, you can select the "**preview**" option on the [download page](https://abp.io/get-started) or use the "**--preview**" parameter with the [ABP CLI](CLI.md) new command:

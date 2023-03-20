@@ -6,7 +6,7 @@ Module entity extension system is a **high level** extension system that allows 
 
 ## Quick Example
 
-Open the *YourProjectNameModuleExtensionConfigurator* class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraProperties`method  as shown below to add a `SocialSecurityNumber` property to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md).
+Open the `YourProjectNameModuleExtensionConfigurator` class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraProperties`method  as shown below to add a `SocialSecurityNumber` property to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md).
 
 ````csharp
 public static void ConfigureExtraProperties()
@@ -312,12 +312,14 @@ An enum properties is shown as combobox (select) in the create/edit forms:
 Enum member name is shown on the table and forms by default. If you want to localize it, just create a new entry on your [localization](https://docs.abp.io/en/abp/latest/Localization) file:
 
 ````json
-"UserType.SuperUser": "Super user" 
+"Enum:UserType.0": "Super user" 
 ````
 
 One of the following names can be used as the localization key:
 
+* `Enum:UserType.0`
 * `Enum:UserType.SuperUser`
+* `UserType.0`
 * `UserType.SuperUser`
 * `SuperUser`
 

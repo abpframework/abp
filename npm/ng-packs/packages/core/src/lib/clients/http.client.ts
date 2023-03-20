@@ -15,7 +15,7 @@ export class ExternalHttpClient extends HttpClient {
   ): Observable<any> {
     if (typeof first === 'string') {
       this.#setPlaceholderContext(options);
-      return super.request(first, url, options);
+      return super.request(first, url || '', options);
     }
 
     this.#setPlaceholderContext(first);

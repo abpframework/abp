@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Möchten Sie diese Seite wirklich löschen?",
     "PageId": "Buchseite",
     "Pages": "Seiten",
-    "PageSlugInformation": "Slug wird auf URL verwendet. Ihre URL lautet '/pages/{{slug}}'.",
+    "PageSlugInformation": "Slug wird auf URL verwendet. Ihre URL lautet '/{{slug}}'.",
     "Permission:BlogManagement": "Blog-Verwaltung",
     "Permission:BlogManagement.Create": "Schaffen",
     "Permission:BlogManagement.Delete": "Löschen",

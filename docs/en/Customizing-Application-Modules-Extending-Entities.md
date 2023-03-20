@@ -101,7 +101,7 @@ public class MyLocalIdentityUserChangeEventHandler :
 ````
 
 * `EntityChangedEventData<T>` covers create, update and delete events for the given entity. If you need, you can subscribe to create, update and delete events individually (in the same class or different classes).
-* This code will be executed **out of the local transaction**, because it listens the `EntityChanged` event. You can subscribe to the `EntityChangingEventData<T>` to perform your event handler in **the same local (in-process) transaction** if the current [unit of work](Unit-Of-Work.md) is transactional.
+* This code will be executed in the **current unit of work**, the whole process becomes transactional.
 
 > Reminder: This approach needs to change the `IdentityUser`  entity in the same process contains the handler class. It perfectly works even for a clustered environment (when multiple instances of the same application are running on multiple servers).
 

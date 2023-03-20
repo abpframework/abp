@@ -62,18 +62,11 @@ public class AspNetCoreApiDescriptionModelProviderOptions
         {
             if (apiParameterDescription.ModelMetadata is DefaultModelMetadata defaultModelMetadata)
             {
-                var jsonPropertyNameAttribute = (System.Text.Json.Serialization.JsonPropertyNameAttribute)
-                    defaultModelMetadata?.Attributes?.PropertyAttributes?.FirstOrDefault(x => x is System.Text.Json.Serialization.JsonPropertyNameAttribute);
+                var jsonPropertyNameAttribute = (JsonPropertyNameAttribute)
+                    defaultModelMetadata?.Attributes?.PropertyAttributes?.FirstOrDefault(x => x is JsonPropertyNameAttribute);
                 if (jsonPropertyNameAttribute != null)
                 {
                     return jsonPropertyNameAttribute.Name;
-                }
-
-                var jsonPropertyAttribute = (Newtonsoft.Json.JsonPropertyAttribute)
-                    defaultModelMetadata?.Attributes?.PropertyAttributes?.FirstOrDefault(x => x is Newtonsoft.Json.JsonPropertyAttribute);
-                if (jsonPropertyAttribute != null)
-                {
-                    return jsonPropertyAttribute.PropertyName;
                 }
             }
 

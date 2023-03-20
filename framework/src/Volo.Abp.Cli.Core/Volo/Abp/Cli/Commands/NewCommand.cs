@@ -97,7 +97,6 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
-        ConfigureAngularJsonForThemeSelection(projectArgs);
         ConfigureNpmPackagesForTheme(projectArgs);
         await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
@@ -106,12 +105,13 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         if (!skipInstallLibs)
         {
             await RunInstallLibsForWebTemplateAsync(projectArgs);
+            ConfigureAngularJsonForThemeSelection(projectArgs);
         }
         
         var skipBundling = commandLineArgs.Options.ContainsKey(Options.SkipBundling.Long) || commandLineArgs.Options.ContainsKey(Options.SkipBundling.Short);
         if (!skipBundling)
         {
-            await RunBundleForBlazorWasmTemplateAsync(projectArgs);
+            await RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(projectArgs);
         }
             
         await ConfigurePwaSupportForAngular(projectArgs);

@@ -55,4 +55,12 @@ public partial class PageAdminClientProxy : ClientProxyBase<IPageAdminAppService
             { typeof(Guid), id }
         });
     }
+
+    public virtual async Task SetAsHomePageAsync(Guid id)
+    {
+        await RequestAsync(nameof(SetAsHomePageAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id }
+        });
+    }
 }

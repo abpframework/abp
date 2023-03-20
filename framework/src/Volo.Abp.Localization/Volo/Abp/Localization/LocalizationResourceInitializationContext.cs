@@ -4,11 +4,11 @@ namespace Volo.Abp.Localization;
 
 public class LocalizationResourceInitializationContext
 {
-    public LocalizationResource Resource { get; }
+    public LocalizationResourceBase Resource { get; }
 
     public IServiceProvider ServiceProvider { get; }
 
-    public LocalizationResourceInitializationContext(LocalizationResource resource, IServiceProvider serviceProvider)
+    public LocalizationResourceInitializationContext(LocalizationResourceBase resource, IServiceProvider serviceProvider)
     {
         Resource = resource;
         ServiceProvider = serviceProvider;

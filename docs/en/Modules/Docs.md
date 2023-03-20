@@ -32,7 +32,7 @@ It is recommended to use ABP CLI to create new projects. Use the following comma
 abp new Acme.MyProject
 ```
 
-You can also navigate to https://abp.io/get-started. Enter your project name as `Acme.MyProject`, other use default options.
+You can also generate a CLI command from [get started page](https://abp.io/get-started). Enter your project name as `Acme.MyProject`, other use default options.
 
 Note that this document covers `Entity Framework Core` provider but you can also select `MongoDB` as your database provider.
 
@@ -519,7 +519,7 @@ Now you can use **Scriban** syntax to create sections in your document.
 
 For example:
 
-```txt
+````
 {{ if UI == "NG" }}
 
 * `-u` argument specifies the UI framework, `angular` in this case.
@@ -538,7 +538,7 @@ For example:
 
 {{ end }}
 
-```
+````
 
 You can also use variables in a text, adding **_Value** postfix to its key:
 
