@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using Volo.Abp.Domain.Repositories.MongoDB;
+using Volo.Abp.MongoDB;
+
+namespace Volo.Abp.Identity.MongoDB;
+
+public class MongoIdentityUserDelegationRepository : MongoDbRepository<IAbpIdentityMongoDbContext, IdentityUserDelegation, Guid>, IIdentityUserDelegationRepository
+{
+    public MongoIdentityUserDelegationRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider)
+        : base(dbContextProvider)
+    {
+    }
+
+    public async Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId, Guid? targetUserId,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .WhereIf(sourceUserId.HasValue, x => x.SourceUserId == sourceUserId)
+            .WhereIf(targetUserId.HasValue, x => x.TargetUserId == targetUserId)
+            .As<IMongoQueryable<IdentityUserDelegation>>()
+            .ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public async Task<IdentityUserDelegation> FindAsync(Guid sourceUserId, Guid targetUserId, CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .FirstOrDefaultAsync(x =>
+                    x.SourceUserId == sourceUserId &&
+                    x.TargetUserId == targetUserId
+                , cancellationToken: GetCancellationToken(cancellationToken));
+    }
+}

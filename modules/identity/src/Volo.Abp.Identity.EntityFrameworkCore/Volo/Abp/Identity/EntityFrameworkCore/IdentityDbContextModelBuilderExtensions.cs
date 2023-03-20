@@ -270,6 +270,20 @@ public static class IdentityDbContextModelBuilderExtensions
             });
         }
 
+        builder.Entity<IdentityUserDelegation>(b =>
+        {
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserDelegations", AbpIdentityDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.HasIndex(x => new {
+                x.SourceUserId,
+                x.TargetUserId,
+            }).IsUnique();
+
+            b.ApplyObjectExtensionMappings();
+        });
+
         builder.TryConfigureObjectExtensions<IdentityDbContext>();
     }
 }
