@@ -290,6 +290,7 @@
 
             $container.data('options', options);
             abp.dom.initializers.initializeDateRangePickers($container);
+            $container[0].datePicker = $datePicker[0];
             return $container;
         }
     };
@@ -355,7 +356,7 @@
                     } else {
                         end = value[0];
                     }
-                    options.ranges[key] = [getMoment(start, options), getMoment(end, options.isUtc)];
+                    options.ranges[key] = [getMoment(start, options), getMoment(end, options)];
                 });
             }
 
@@ -448,7 +449,7 @@
                     var today = getMoment(undefined, options);
                     $input.data('daterangepicker').setStartDate(today);
                     $input.data('daterangepicker').setEndDate(today);
-                    $input.data('daterangepicker').updateView();
+                    $input.data('daterangepicker').clickApply();
                 });
                 
                 return $todayBtn;

@@ -217,6 +217,12 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
     protected TagHelperAttributeList ConvertDatePickerOptionsToAttributeList(IAbpDatePickerOptions options)
     {
         var attrList = new TagHelperAttributeList();
+        
+        if(options == null)
+        {
+            return attrList;
+        }
+        
         if (options.Locale != null)
         {
             attrList.Add("data-locale", JsonSerializer.Serialize(options.Locale));
@@ -420,10 +426,10 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             attrList.Add(attr);
         }
 
-        var optionsAttribute = GetAttribute<DatePickerOptionsAttribute>();
-        if(optionsAttribute != null)
+        var optionsAttribute = GetAttributeAndModelExpression<DatePickerOptionsAttribute>(out var modelExpression);
+        if (optionsAttribute != null)
         {
-            foreach (var attr in ConvertDatePickerOptionsToAttributeList(optionsAttribute))
+            foreach (var attr in ConvertDatePickerOptionsToAttributeList(optionsAttribute.GetDatePickerOptions(modelExpression.ModelExplorer)))
             {
                 attrList.Add(attr);
             }

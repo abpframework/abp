@@ -271,6 +271,7 @@ Usage:
 ````xml
 <abp-date-picker asp-for="@Model.MyModel.MyDate" />
 <abp-date-range-picker asp-for-start="@Model.MyModel.MyDateRangeStart" asp-for-end="@Model.MyModel.MyDateRangeEnd" />
+<abp-dynamic-form abp-model="DynamicFormExample"></abp-dynamic-form>
 ````
 
 Model:
@@ -280,9 +281,13 @@ Model:
     {
         public SampleModel MyModel { get; set; }
 
+        public DynamicForm DynamicFormExample { get; set; }
+
         public void OnGet()
         {
             MyModel = new SampleModel();
+
+            DynamicFormExample = new DynamicForm();
         }
 
         public class SampleModel
@@ -293,6 +298,27 @@ Model:
             
             public DateTime MyDateRangeEnd { get; set; }
         }
+
+        public class DynamicForm
+        {
+            [DateRangePicker("MyPicker",true)]
+            public DateTime StartDate { get; set; }
+            
+            [DateRangePicker("MyPicker",false)]
+            [DatePickerOptions(nameof(DatePickerOptions))]
+            public DateTime EndDate { get; set; }
+            
+            public DateTime DateTime { get; set; }
+
+            public DynamicForm()
+            {
+                StartDate = DateTime.Now;
+                EndDate = DateTime.Now;
+                DateTime = DateTime.Now;
+            }
+        }
+    
+        public AbpDatePickerOptions DatePickerOptions { get; set; }
     }
 ````
 
@@ -311,7 +337,7 @@ You can set some of the attributes on your c# property, or directly on HTML tag.
   -  `AbpFormControlSize.Large`
 * `[DisabledInput]` : Sets the input as disabled.
 * `[ReadOnlyInput]`: Sets the input as read-only.
-- `[DatePickerOptions()]`: Sets the predefined options of the date picker. See the available [datepicker options](https://www.daterangepicker.com/#options). You can use a localization key directly.
+- `[DatePickerOptions()]`: Sets the predefined options of the date picker. Parameter should be the name of the options property (see example above). See the available [datepicker options](https://www.daterangepicker.com/#options). You can use a localization key directly.
 
 ##### abp-date-picker
 `[DatePicker]` : Sets the input as datepicker. Especially for string properties.
