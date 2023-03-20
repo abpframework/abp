@@ -96,6 +96,7 @@
                 if(name.indexOf(".ExtraProperties[") > 0) {
                     selectedTextInputName = name.substring(0, name.length - 1) + "_Text]"
                 }
+                let selectedTextInput = $('<input>', {
                     type: 'hidden',
                     id: selectedTextInputName,
                     name: selectedTextInputName,
