@@ -1,11 +1,11 @@
 ## Introduction
-In this article, I will talk about the relationships of IdentityServer in every web application you create using ABP framework. When you read this article, you will learn how to extend the user entity in applications you develop using the ABP framework with a primitive type, extending the user by associating the user with another entity (User-many-to-one-X).
+In this article, I will talk about the relationships of IdentityUser in every web application you create using ABP framework. When you read this article, you will learn how to extend the user entity in applications you develop using the ABP framework with a primitive type, extending the user by associating the user with another entity (User-many-to-one-X).
 
 
 ## Creating the Solution 
 >For the source code of the application: https://github.com/onurpicakci/Abp-Identity-Relationship
 
-In this article we will use EF Core as the database and MVC as the user interface. But Angular will also work on Blazor Server and Blazor WebAssembly. Abp Framework offers starter templates to get started faster. We can create a new starter template using the Abp CLI:
+In this article we will use EF Core as the database and MVC as the user interface. But Angular will also work on Blazor Server and Blazor WebAssembly. ABP Framework offers starter templates to get started faster. We can create a new starter template using the ABP CLI:
 
 ```
 abp new IdentityRelationship
@@ -40,7 +40,7 @@ public static void ConfigureExtraProperties()
                         property =>
                         {
                             //validation rules
-                            property.Attributes.Add(new RequiredAttribute());
+                            property.Attributes.Add(string.Empty);
                             property.Attributes.Add(
                                 new StringLengthAttribute(64) {
                                     MinimumLength = 4
@@ -226,14 +226,7 @@ And shows the department name on the data table:
 ## Conclusion
 In this article I talked about IdentityUser's relationships. Thank you for reading the article, I hope it was useful. See you soon!
 
-## Preferences
+## References
 - https://docs.abp.io/en/abp/latest/Module-Entity-Extensions
 - https://learn.microsoft.com/en-us/ef/core/modeling/relationships
-
-
-
-
-
-
-
-
+- https://community.abp.io/posts/how-to-add-custom-properties-to-the-user-entity-rixchoha
