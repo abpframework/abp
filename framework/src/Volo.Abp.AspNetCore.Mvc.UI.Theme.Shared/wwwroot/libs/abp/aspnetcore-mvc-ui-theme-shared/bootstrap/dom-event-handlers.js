@@ -87,6 +87,9 @@
                 }
                 var name = $(this).attr("name");
                 var selectedTextInputName = name + "_Text";
+                if(name.indexOf(".ExtraProperties[") > 0) {
+                    selectedTextInputName = name.substring(0, name.length - 1) + "_Text]"
+                }
                 var selectedTextInput = $('<input>', {
                     type: 'hidden',
                     id: selectedTextInputName,
