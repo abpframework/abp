@@ -3,6 +3,8 @@ In this article, I will talk about the relationships of IdentityServer in every 
 
 
 ## Creating the Solution 
+>For the source code of the application: https://github.com/onurpicakci/Abp-Identity-Relationship
+
 In this article we will use EF Core as the database and MVC as the user interface. But Angular will also work on Blazor Server and Blazor WebAssembly. Abp Framework offers starter templates to get started faster. We can create a new starter template using the Abp CLI:
 
 ```
@@ -69,13 +71,13 @@ Once you define a property, it appears in the create and update forms of the rel
  ![users-page](images/users-page.png)
 
 
-### Navigation Properties / Foreign Keys
+## Navigation Properties / Foreign Keys
 
 It is supported to add an extension property to an entity that is Id of another entity (foreign key).
 
-### Example: Let's associate a department in the database with a user.
+### Example: Let's associate a department in the database with a user
 
-First create a `Departments` folder in the `IdentityRelationship.Domain` project and add the `Department` class inside.
+First create a `Departments` folder in the `IdentityRelationship.Domain` project and add the `Department` class inside:
 ```csharp
 using System;
 using Volo.Abp.Domain.Entities;
@@ -88,7 +90,7 @@ public class Department : AggregateRoot<Guid>
 }
 ```
 
-EF Core requires that you relate the entities with your DbContext. The easiest way to do so is adding a DbSet property to the IdentityRelationshipDbContext class in the IdentityRelationship.EntityFrameworkCore project, as shown below:
+EF Core requires that you relate the entities with your `DbContext`. The easiest way to do so is adding a DbSet property to the `IdentityRelationshipDbContext` class in the `IdentityRelationship.EntityFrameworkCore` project, as shown below:
 
 ```csharp
     public DbSet<Department> Departments { get; set; }
@@ -119,9 +121,9 @@ public static class IdentityRelationshipEfCoreEntityExtensionMappings
 }
 ```
 
-This class can be used to map these extra properties to table fields in the database. Please read [this](https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Extending-Entities?_ga=2.21022651.140118448.1679289046-1173891759.1672473062) article to improve your understanding of what we are doing.
+This class can be used to map these extra properties to table fields in the database. Please read [this](https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Extending-Entities?_ga=2.21022651.140118448.1679289046-1173891759.1672473062) document to improve your understanding of what we are doing.
 
-We need to create a new migration to see the changes in the database. Open your EntityFrameworkCore project in the terminal (this depends on the IDE you are using).
+We need to create a new migration to see the changes in the database. Open your `EntityFrameworkCore` project in the terminal (this depends on the IDE you are using).
 
 ![terminal-image](images/open-terminal.png)
 
@@ -220,6 +222,13 @@ Run your `IdentityRelationship.Web` project and add a department to one of your 
 And shows the department name on the data table:
 
 ![users-page-department-image](images/users-page-department.png)
+
+## Conclusion
+In this article I talked about IdentityUser's relationships. Thank you for reading the article, I hope it was useful. See you soon!
+
+## Preferences
+- https://docs.abp.io/en/abp/latest/Module-Entity-Extensions
+- https://learn.microsoft.com/en-us/ef/core/modeling/relationships
 
 
 
