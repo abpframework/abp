@@ -288,8 +288,8 @@
                 $datePicker.append($hiddenDateElement);
             }
 
-            $container.data('options', options);
-            abp.dom.initializers.initializeDateRangePickers($container);
+            $datePicker.data('options', options);
+            abp.dom.initializers.initializeDateRangePickers($datePicker);
             $container[0].datePicker = $datePicker[0];
             return $container;
         }
