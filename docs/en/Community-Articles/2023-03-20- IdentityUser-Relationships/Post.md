@@ -7,7 +7,7 @@ In this article, I will talk about the relationships of IdentityUser in every we
 
 In this article we will use EF Core as the database provider and MVC as the user interface framework. But Angular, Blazor Server and Blazor WebAssembly also work. ABP Framework offers starter templates to get started faster. We can create a new starter template using the ABP CLI:
 
-```
+```bash
 abp new IdentityRelationship
 ```
 
