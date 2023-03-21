@@ -382,3 +382,49 @@ You can set the label of the input in several ways:
 - You can use the `Label` attribute to set the label directly. This property does not automatically localize the text. To localize the label, use `label="@L["{LocalizationKey}"].Value"`.
 - You can set it using `[Display(name="{LocalizationKey}")]` attribute ASP.NET Core.
 - You can just let **abp** find the localization key for the property. If the `label` or `[DisplayName]` attributes are not set, it tries to find the localization by convention. For example `DisplayName:{YourPropertyName}` or `{YourPropertyName}`. If your property name is FullName, it will search for `DisplayName:FullName` or `{FullName}`.
+
+### JavaScript Usage
+
+````javascript
+var newPicker = abp.libs.bootstrapDateRangePicker.createDateRangePicker(
+    {
+        label: "New Picker",
+    }
+);
+newPicker.insertAfter($('body'));
+````
+
+````javascript
+var newPicker = abp.libs.bootstrapDateRangePicker.createSinglePicker(
+    {
+        label: "New Picker",
+    }
+);
+newPicker.insertAfter($('body'));
+````
+
+#### Options
+
+* `label`: Sets the label of the input.
+* `placeholder`: Sets the placeholder of the input.
+* `value`: Sets the value of the input.
+* `name`: Sets the name of the input.
+* `id`: Sets the id of the input.
+* `required`: Sets the input as required.
+* `disabled`: Sets the input as disabled.
+* `readonly`: Sets the input as read-only.
+* `size`: Sets the size of the form-control wrapper element. Available values are
+  - `AbpFormControlSize.Default`
+  - `AbpFormControlSize.Small`
+  - `AbpFormControlSize.Medium`
+  - `AbpFormControlSize.Large`
+* `open-button`: A button to open the datepicker will be added when its `True`. The default value is `True`.
+* `clear-button`: A button to clear the datepicker will be added when its `True`. The default value is `True`
+* `is-utc`: Converts the date to UTC when its `True`. The default value is `False`.
+* `is-iso`: Converts the date to ISO format when its `True`. The default value is `False`.
+* `date-format`: Sets the date format of the input. The default format is the user's culture date format. You need to provide a JavaScript date format convention. Eg:  `YYYY-MM-DDTHH:MM:SSZ`.
+* `date-separator`: Sets a character to separate start and end dates. The default value is `-`.
+* `startDateName`: Sets the name of the hidden start date input.
+* `endDateName`: Sets the name of the hidden end date input.
+* `dateName`: Sets the name of the hidden date input.
+* Other [datepicker options](https://www.daterangepicker.com/#options). Eg: `start-date: "2020-01-01"`.
