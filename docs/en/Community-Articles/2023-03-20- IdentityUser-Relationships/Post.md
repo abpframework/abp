@@ -1,29 +1,29 @@
 ## Introduction
-In this article, I will talk about the relationships of IdentityUser in every web application you create using ABP framework. When you read this article, you will learn how to extend the user entity in applications you develop using the ABP framework with a primitive type, extending the user by associating the user with another entity (User-many-to-one-X).
+In this article, I will talk about the relationships of IdentityUser in every web application that can be created with the ABP framework. When you read this article, you will learn how to extend the user entity in the applications you develop using the ABP framework with a primitive type, extending the user by associating the user with another entity (User-many-to-one-X).
 
 
 ## Creating the Solution 
 >For the source code of the application: https://github.com/onurpicakci/Abp-Identity-Relationship
 
-In this article we will use EF Core as the database and MVC as the user interface. But Angular will also work on Blazor Server and Blazor WebAssembly. ABP Framework offers starter templates to get started faster. We can create a new starter template using the ABP CLI:
+In this article we will use EF Core as the database provider and MVC as the user interface framework. But Angular, Blazor Server and Blazor WebAssembly also work. ABP Framework offers starter templates to get started faster. We can create a new starter template using the ABP CLI:
 
 ```
 abp new IdentityRelationship
 ```
 
-After the download is complete, you can run the `IdentityRelationship.DbMigrator` project to create database migrations. You can then run the `IdentityRelationship.Web` project to see our application running.
+After the project is created, you can run the `IdentityRelationship.DbMigrator` project to create the database and seed the initial data. You can then run the `IdentityRelationship.Web` project to see our application run.
 
-> Default admin username is **admin** and password is **1q2w3E\***
+> The default admin username is **admin** and the password is **1q2w3E\***
 
 ![solution-image](images/solution-image.png)
 
 ## Module Entity Extensions
 
-Module entity extension system is a high level extension system that allows you to define new properties for existing entities of the depended modules. It automatically adds properties to the entity, database, HTTP API and the user interface in a single point.
+The module entity extension system is a high level extension system that allows you to define new properties for existing entities of the depended modules. It automatically adds properties to the entity, database, HTTP API and the user interface in a single point.
 
 ### Extending the User Entity With a Primitive Type
 
-Open the `IdentityRelationshipModuleExtensionConfigurator` class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraPropertiesmethod` as shown below to add a `IdentificationNumber property` to the `IdentityUser` entity of the [Identity Module](https://docs.abp.io/en/abp/latest/Modules/Identity).
+Open the `IdentityRelationshipModuleExtensionConfigurator` class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraProperties` method as shown below to add an `IdentificationNumber` property to the `IdentityUser` entity of the [Identity Module](https://docs.abp.io/en/abp/latest/Modules/Identity).
 
 ```csharp
 public static void ConfigureExtraProperties()
@@ -73,11 +73,11 @@ Once you define a property, it appears in the create and update forms of the rel
 
 ## Navigation Properties / Foreign Keys
 
-It is supported to add an extension property to an entity that is Id of another entity (foreign key).
+It is supported to add an extension property to an entity that is the Id of another entity (foreign key).
 
 ### Example: Let's associate a department in the database with a user
 
-First create a `Departments` folder in the `IdentityRelationship.Domain` project and add the `Department` class inside:
+First, create a `Departments` folder in the `IdentityRelationship.Domain` project and add the `Department` class inside:
 ```csharp
 using System;
 using Volo.Abp.Domain.Entities;
@@ -123,7 +123,7 @@ public static class IdentityRelationshipEfCoreEntityExtensionMappings
 
 This class can be used to map these extra properties to table fields in the database. Please read [this](https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Extending-Entities?_ga=2.21022651.140118448.1679289046-1173891759.1672473062) document to improve your understanding of what we are doing.
 
-We need to create a new migration to see the changes in the database. Open your `EntityFrameworkCore` project in the terminal (this depends on the IDE you are using).
+We need to create a new migration to see the changes in the database. Open your `EntityFrameworkCore` project in the terminal and run the following command (this depends on the IDE you are using).
 
 ![terminal-image](images/open-terminal.png)
 
@@ -133,13 +133,13 @@ dotnet ef migrations add Create_Department_Entity
 
 Finally, run the `IdentityRelationship.DbMigrator` project to update the database.
 
-When you look at your database, you can see that `Department` table has been added and `DepartmentId` has been added to your `AbpUsers` table.
+When you look at your database, you can see that the `Department` table has been added and `DepartmentId` has been added to your `AbpUsers` table.
 
 ![database-tables](images/database-tables.png)
 
 ![users-table](images/users-table.png)
 
-Again open the `IdentityRelationshipModuleExtensionConfigurator` class in the Domain.Shared project and add the following code:
+Again, open the `IdentityRelationshipModuleExtensionConfigurator` class in the Domain.Shared project and add the following code:
 
 ```csharp
 
@@ -153,7 +153,7 @@ user.AddOrUpdateProperty<Guid>(
 );
 ```
 
-`UI.Lookup.Url` option takes a URL to get list of departments to select on edit/create forms. This endpoint can be a typical controller, an auto API controller or any type of endpoint that returns a proper JSON response.
+The `UI.Lookup.Url` option takes a URL to get the list of departments to select on the edit/create forms. This endpoint can be a typical controller, an auto API controller or any type of endpoint that returns a proper JSON response.
 
 Create a `Departments` folder in the `IdentityRelationship.Application.Contracts` project of your solution and add the `DepartmentDto` class in it
 
@@ -168,7 +168,7 @@ public class DepartmentDto
     public string Name { get; set; }
 }
 ```
-Now let's create an `IDepartmentAppService`interface in the `Departments` folder
+Now let's create an `IDepartmentAppService` interface in the `Departments` folder
 
 ```csharp
 using System.Threading.Tasks;
@@ -219,12 +219,12 @@ Run your `IdentityRelationship.Web` project and add a department to one of your 
 
 ![user-department-image](images/user-department.png)
 
-And shows the department name on the data table:
+And it shows the department name on the data table:
 
 ![users-page-department-image](images/users-page-department.png)
 
 ## Conclusion
-In this article I talked about IdentityUser's relationships. Thank you for reading the article, I hope it was useful. See you soon!
+In this article I talked about the IdentityUser's relationships. Thank you for reading the article, I hope it was useful. See you soon!
 
 ## References
 - https://docs.abp.io/en/abp/latest/Module-Entity-Extensions
