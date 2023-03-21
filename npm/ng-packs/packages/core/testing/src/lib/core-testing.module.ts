@@ -63,7 +63,7 @@ export class CoreTestingModule {
         },
         {
           provide: INCUDE_LOCALIZATION_RESOURCES_TOKEN,
-          useValue: true,
+          useValue: false,
         },
         provideRoutes(routes),
       ],
