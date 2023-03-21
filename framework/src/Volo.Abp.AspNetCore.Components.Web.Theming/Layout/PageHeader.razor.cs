@@ -33,7 +33,14 @@ public partial class PageHeader : ComponentBase
     [Parameter] // TODO: Consider removing this property in future and use only PageLayout.
     public List<BreadcrumbItem> BreadcrumbItems {
         get => PageLayout.BreadcrumbItems.ToList();
-        set => PageLayout.BreadcrumbItems = new ObservableCollection<BreadcrumbItem>(value);
+        set 
+        {
+            PageLayout.BreadcrumbItems.Clear();
+            foreach (var item in value)
+            {
+                PageLayout.BreadcrumbItems.Add(item);
+            }
+        }
     }
 
     [Parameter]

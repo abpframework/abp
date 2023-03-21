@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
-using Volo.Abp.Cli.NuGet;
+using Volo.Abp.Cli.Version;
 using Volo.Abp.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -15,14 +15,14 @@ namespace Volo.Abp.Cli.ProjectModification;
 
 public class VoloNugetPackagesVersionUpdater : ITransientDependency
 {
-    private readonly NuGetService _nuGetService;
+    private readonly PackageVersionCheckerService _packageVersionCheckerService;
     private readonly MyGetPackageListFinder _myGetPackageListFinder;
     public ILogger<VoloNugetPackagesVersionUpdater> Logger { get; set; }
     public static Encoding DefaultEncoding = Encoding.UTF8;
 
-    public VoloNugetPackagesVersionUpdater(NuGetService nuGetService, MyGetPackageListFinder myGetPackageListFinder)
+    public VoloNugetPackagesVersionUpdater(PackageVersionCheckerService packageVersionCheckerService, MyGetPackageListFinder myGetPackageListFinder)
     {
-        _nuGetService = nuGetService;
+        _packageVersionCheckerService = packageVersionCheckerService;
         _myGetPackageListFinder = myGetPackageListFinder;
         Logger = NullLogger<VoloNugetPackagesVersionUpdater>.Instance;
     }
@@ -37,8 +37,8 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
         }
         else
         {
-            var latestVersionFromNuget = await _nuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates: includeReleaseCandidates);
-            var latestReleaseCandidateVersionFromNuget = await _nuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates: true);
+            var latestVersionInfo = await _packageVersionCheckerService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates: includeReleaseCandidates);
+            var latestReleaseCandidateVersionInfo = await _packageVersionCheckerService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates: true);
             var latestVersionFromMyGet = await GetLatestVersionFromMyGet("Volo.Abp.Core");
 
             async Task UpdateAsync(string filePath)
@@ -53,8 +53,8 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                             includePreviews,
                             includeReleaseCandidates,
                             switchToStable,
-                            latestVersionFromNuget,
-                            latestReleaseCandidateVersionFromNuget,
+                            latestVersionInfo.Version,
+                            latestReleaseCandidateVersionInfo.Version,
                             latestVersionFromMyGet,
                             version);
 
@@ -81,8 +81,8 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
         }
         else
         {
-            var latestVersionFromNuget = await _nuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Core");
-            var latestReleaseCandidateVersionFromNuget = await _nuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates: true);
+            var latestVersionInfo = await _packageVersionCheckerService.GetLatestVersionOrNullAsync("Volo.Abp.Core");
+            var latestReleaseCandidateVersionInfo = await _packageVersionCheckerService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates: true);
             var latestVersionFromMyGet = await GetLatestVersionFromMyGet("Volo.Abp.Core");
 
             using (var fs = File.Open(projectPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
@@ -95,8 +95,8 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                         includeNightlyPreviews,
                         includeReleaseCandidates,
                         switchToStable,
-                        latestVersionFromNuget,
-                        latestReleaseCandidateVersionFromNuget,
+                        latestVersionInfo.Version,
+                        latestReleaseCandidateVersionInfo.Version,
                         latestVersionFromMyGet,
                         version);
 
@@ -137,11 +137,11 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
 
     protected virtual async Task<bool> SpecifiedVersionExists(string version, string packageId)
     {
-        var versionList = await _nuGetService.GetPackageVersionListAsync(packageId);
+        var versionList = await _packageVersionCheckerService.GetPackageVersionListAsync(packageId);
 
         if (versionList.All(v => !v.Equals(version, StringComparison.OrdinalIgnoreCase)))
         {
-            versionList = await _nuGetService.GetPackageVersionListAsync(packageId, true);
+            versionList = await _packageVersionCheckerService.GetPackageVersionListAsync(packageId, true);
         }
 
         return versionList.Any(v => v.Equals(version, StringComparison.OrdinalIgnoreCase));
@@ -240,13 +240,15 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                             SemanticVersion latestVersion;
                             if (currentSemanticVersion.IsPrerelease && !switchToStable)
                             {
-                                latestVersion = latestNugetReleaseCandidateVersion == null || isLeptonXPackage ?
-                                    await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: true) : latestNugetReleaseCandidateVersion;
+                                latestVersion = latestNugetReleaseCandidateVersion == null || isLeptonXPackage 
+                                    ? (await _packageVersionCheckerService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: true))?.Version 
+                                    : latestNugetReleaseCandidateVersion;
                             }
                             else
                             {
-                                latestVersion = latestNugetVersion == null || isLeptonXPackage ?
-                                    await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: includeReleaseCandidates) : latestNugetVersion;
+                                latestVersion = latestNugetVersion == null || isLeptonXPackage 
+                                    ? (await _packageVersionCheckerService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: includeReleaseCandidates))?.Version 
+                                    : latestNugetVersion;
                             }
 
                             if (latestVersion != null && (currentSemanticVersion < latestVersion || (currentSemanticVersion.IsPrerelease && switchToStable)))

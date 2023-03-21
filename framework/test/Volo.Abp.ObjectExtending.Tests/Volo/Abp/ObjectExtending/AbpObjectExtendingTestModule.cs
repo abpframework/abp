@@ -21,9 +21,11 @@ public class AbpObjectExtendingTestModule : AbpModule
                 .AddOrUpdateProperty<ExtensibleTestPerson, int>("Age")
                 .AddOrUpdateProperty<ExtensibleTestPerson, string>("NoPairCheck", options => options.CheckPairDefinitionOnMapping = false)
                 .AddOrUpdateProperty<ExtensibleTestPerson, string>("CityName")
+                .AddOrUpdateProperty<ExtensibleTestPerson, ExtensibleTestEnumProperty>("EnumProperty")
                 .AddOrUpdateProperty<ExtensibleTestPersonDto, string>("Name")
                 .AddOrUpdateProperty<ExtensibleTestPersonDto, int>("ChildCount")
                 .AddOrUpdateProperty<ExtensibleTestPersonDto, string>("CityName")
+                .AddOrUpdateProperty<ExtensibleTestPersonDto, ExtensibleTestEnumProperty>("EnumProperty")
                 .AddOrUpdateProperty<ExtensibleTestPersonWithRegularPropertiesDto, string>("Name")
                 .AddOrUpdateProperty<ExtensibleTestPersonWithRegularPropertiesDto, int>("Age");
         });

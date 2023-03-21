@@ -1,14 +1,16 @@
 module.exports = function(hljs) {
   var LITERALS = 'true false yes no null';
 
-  var keyPrefix = '^[ \\-]*';
-  var keyName =  '[a-zA-Z_][\\w\\-]*';
+  // Define keys as starting with a word character
+  // ...containing word chars, spaces, colons, forward-slashes, hyphens and periods
+  // ...and ending with a colon followed immediately by a space, tab or newline.
+  // The YAML spec allows for much more than this, but this covers most use-cases.
   var KEY = {
     className: 'attr',
     variants: [
-      { begin: keyPrefix + keyName + ":"},
-      { begin: keyPrefix + '"' + keyName + '"' + ":"},
-      { begin: keyPrefix + "'" + keyName + "'" + ":"}
+      { begin: '\\w[\\w :\\/.-]*:(?=[ \t]|$)' },
+      { begin: '"\\w[\\w :\\/.-]*":(?=[ \t]|$)' }, //double quoted keys
+      { begin: '\'\\w[\\w :\\/.-]*\':(?=[ \t]|$)' } //single quoted keys
     ]
   };
 
@@ -44,12 +46,12 @@ module.exports = function(hljs) {
         relevance: 10
       },
       { // multi line string
+        // Blocks start with a | or > followed by a newline
+        //
+        // Indentation of subsequent lines must be the same to
+        // be considered part of the block
         className: 'string',
-        begin: '[\\|>] *$',
-        returnEnd: true,
-        contains: STRING.contains,
-        // very simple termination: next hash key
-        end: KEY.variants[0].begin
+        begin: '[\\|>]([0-9]?[+-])?[ ]*\\n( *)[\\S ]+\\n(\\2[\\S ]+\\n?)*',
       },
       { // Ruby/Rails erb
         begin: '<%[%=-]?', end: '[%-]?%>',
@@ -76,7 +78,8 @@ module.exports = function(hljs) {
       },
       { // array listing
         className: 'bullet',
-        begin: '^ *-',
+      // TODO: remove |$ hack when we have proper look-ahead support
+      begin: '\\-(?=[ ]|$)',
         relevance: 0
       },
       hljs.HASH_COMMENT_MODE,
@@ -84,7 +87,12 @@ module.exports = function(hljs) {
         beginKeywords: LITERALS,
         keywords: {literal: LITERALS}
       },
-      hljs.C_NUMBER_MODE,
+      // numbers are any valid C-style number that
+      // sit isolated from other words
+      {
+        className: 'number',
+        begin: hljs.C_NUMBER_RE + '\\b'
+      },
       STRING
     ]
   };

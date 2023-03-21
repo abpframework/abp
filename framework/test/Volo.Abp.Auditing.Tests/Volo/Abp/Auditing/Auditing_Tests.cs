@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSubstitute;
@@ -359,6 +360,67 @@ public class Auditing_Tests : AbpAuditingTestBase
                                                                       x.EntityChanges[0].PropertyChanges.Count == 0));
 #pragma warning restore 4014
 
+    }
+
+    [Fact]
+    public virtual async Task Should_Write_AuditLog_For_ValueObject_Entity()
+    {
+        var entityId = Guid.NewGuid();
+        var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithValueObject, Guid>>();
+        await repository.InsertAsync(new AppEntityWithValueObject(entityId, "test name", new AppEntityWithValueObjectAddress("USA")));
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = await repository.GetAsync(entityId);
+                entity.Name = "test name 2";
+                entity.AppEntityWithValueObjectAddress = new AppEntityWithValueObjectAddress("England");
+
+                await repository.UpdateAsync(entity);
+
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 3 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Created &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
+                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
+                                                                     x.EntityChanges[2].ChangeType == EntityChangeType.Deleted &&
+                                                                     x.EntityChanges[2].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName));
+#pragma warning restore 4014
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = await repository.GetAsync(entityId);
+
+                entity.AppEntityWithValueObjectAddress.Country = "Germany";
+
+                await repository.UpdateAsync(entity);
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 2 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
+
+                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
+                                                                     x.EntityChanges[1].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyName == nameof(AppEntityWithValueObjectAddress.Country) &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].OriginalValue == "\"England\"" &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].NewValue == "\"Germany\""));
+
+#pragma warning restore 4014
     }
 }
 
