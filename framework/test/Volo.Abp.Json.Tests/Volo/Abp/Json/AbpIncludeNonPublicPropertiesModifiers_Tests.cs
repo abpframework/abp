@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Volo.Abp.Json;
 
-public class AbpIncludeNonPublicPropertiesModifiers_Tests : AbpJsonTestBase
+public class AbpIncludeNonPublicPropertiesModifiers_Tests : AbpJsonSystemTextJsonTestBase
 {
     private readonly IJsonSerializer _jsonSerializer;
 
