@@ -2,9 +2,7 @@
 
 namespace Volo.Abp.Localization.TestResources.Source;
 
-[InheritResource(
-    typeof(LocalizationTestValidationResource)
-    )]
+[InheritResource(typeof(LocalizationTestValidationResource))]
 [LocalizationResourceName("Test")]
 public sealed class LocalizationTestResource
 {
