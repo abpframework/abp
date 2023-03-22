@@ -58,6 +58,7 @@
     "ClearCache": "清除缓存",
     "ClearCacheConfirmationMessage": "您确定要清除缓存吗？",
     "MarkdownSupported": "支持 Markdown",
-    "FileUploadInfo": "拖放，拖放，或粘贴一个复制的图像。"
+    "FileUploadInfo": "拖放，拖放，或粘贴一个复制的图像。",
+    "PostDescriptionHint": "*将在文章链接预览中呈现，支持HTML"
   }
 }
