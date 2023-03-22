@@ -160,16 +160,23 @@
                 <div class="version-select">
                     <div class="input-group align-items-center">
                         <span class="input-group-text">
-                            <i class="fa fa-filter"></i>
+                            <i class="fa fa-search"></i>
                         </span>
                         <input class="form-control"
                                id="filter"
                                type="search"
                                data-search-url="@Model."
-                               placeholder="@L["FilterTopics"].Value"
+                               placeholder="@L["Search"].Value"
                                aria-label="Filter">
                     </div>
                 </div>
+            </div>
+
+            <div id="search-all-document" style="display: none;" class="search-all-document-container">
+                <button class="btn" type="button">
+                    <i class="fa fa-level-down" aria-hidden="true"></i>
+                    @L["SearchInTheAllDocuments"]
+                </button>
             </div>
 
             @if (Model.Navigation == null || !Model.Navigation.HasChildItems)
@@ -201,7 +208,7 @@
                     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mCustomScrollbar-1">
                         <ol class="breadcrumb" id="document-node-wrapper">
                             <li class="breadcrumb-item">
-                                <a href="/"><i class="fa fa-home"></i></a>
+                                <a href="@Model.CreateVersionLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())"><i class="fa fa-home"></i></a>
                             </li>
                         </ol>
                     </nav>
@@ -240,16 +247,22 @@
                             </div>
                         }
                     </div>
-                    <div class="col-auto text-end">
-                        <div class="cont-container d-flex align-items-center justify-content-end h-100">
-                            @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
-                            {
+                    @{
+                        var showContributors = Model.Document.Contributors != null && Model.Document.Contributors.Count > 0;
+                        var showEditLink = !string.IsNullOrEmpty(Model.Document.EditLink);
+                    }
+                    @if (showContributors || showEditLink)
+                    {
+                        <div class="col-auto text-end">
+                            <div class="cont-container d-flex align-items-center justify-content-end h-100">
                                 <div class="me-4 d-flex flex-column">
-                                    <span class="for-desktop contributors-text">
-                                        @L["Contributors"].Value
-                                    </span>
-
-                                    @if (!string.IsNullOrEmpty(Model.Document.EditLink))
+                                    @if (showContributors)
+                                    {
+                                        <span class="for-desktop contributors-text">
+                                            @L["Contributors"].Value
+                                        </span>
+                                    }
+                                    @if (showEditLink)
                                     {
                                         <a href="@Model.Document.EditLink" target="_blank">
                                             <i class="fa fa-edit"></i>
@@ -258,27 +271,27 @@
                                         </a>
                                     }
                                 </div>
-                                <div class="contributors">
-                                    @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c => c.CommitCount).ToList())
-                                    {
-                                        <a href="@contributor.UserProfileUrl" target="_blank" class="cont-avatar">
-                                            <img src="@contributor.AvatarUrl"
-                                                 class="rounded-circle"
-                                                 alt="Avatar"
-                                                 height="21"
-                                                 width="21"
-                                                 title="@contributor.Username"
-                                                 data-bs-toggle="tooltip"
-                                                 data-bs-placement="top"/>
-                                        </a>
-                                    }
-                                </div>
-                            }
-
+                                @if (showContributors)
+                                {
+                                    <div class="contributors">
+                                        @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c => c.CommitCount).ToList())
+                                        {
+                                            <a href="@contributor.UserProfileUrl" target="_blank" class="cont-avatar">
+                                                <img src="@contributor.AvatarUrl"
+                                                     class="rounded-circle"
+                                                     alt="Avatar"
+                                                     height="21"
+                                                     width="21"
+                                                     title="@contributor.Username"
+                                                     data-bs-toggle="tooltip"
+                                                     data-bs-placement="top"/>
+                                            </a>
+                                        }
+                                    </div>
+                                }
+                            </div>
                         </div>
-
-
-                    </div>
+                    }
                 </div>
             </div>
 

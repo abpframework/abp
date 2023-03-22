@@ -12,6 +12,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Identity;
 
@@ -267,6 +268,8 @@ public class IdentityUserStore :
         Check.NotNull(user, nameof(user));
 
         user.PasswordHash = passwordHash;
+
+        user.SetLastPasswordChangeTime(DateTime.UtcNow);
 
         return Task.CompletedTask;
     }

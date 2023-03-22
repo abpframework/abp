@@ -13,7 +13,6 @@
     "Status": "状态",
     "ContentSource": "内容来源",
     "Details": "详情",
-    "Url": "url",
     "Title": "标题",
     "CreationTime": "创建时间",
     "Save": "保存",
@@ -185,6 +184,8 @@
     "Layout_MetaDescription": "ABP 社区是一个人们可以分享有关 ABP 框架的帖子并关注项目的环境。",
     "Index_Page_CommunityIntroduction": "这是 ABP 框架、.NET 和软件开发的中心。 您可以阅读文章，观看视频教程，了解 ABP 的开发进度和 ABP 相关事件，帮助其他开发人员并与 ABP 社区分享您的专业知识。",
     "TagsInArticle": "文章中的标签",
-    "IConsentToMedium": "我同意在 https://medium.com/volosoft 上发布这篇文章。"
+    "IConsentToMedium": "我同意在 https://medium.com/volosoft 上发布这篇文章。",
+    "SearchResultsFor": " span class=\"fw-bold\">\"{0}\"</span>的搜索结果",
+    "SeeMoreVideos": "查看更多视频"
   }
 }

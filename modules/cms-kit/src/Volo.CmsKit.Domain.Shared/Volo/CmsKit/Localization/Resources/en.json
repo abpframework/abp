@@ -214,6 +214,8 @@
     "Feature:TagEnableDescription": "CMS Kit's tag system that allows tagging entities such as BlogPost.",
     "DeleteBlogPostMessage": "The blog will be deleted. Are you sure?",
     "CaptchaCode": "Captcha code",
-    "CommentTextRequired": "Comment is required"
+    "CommentTextRequired": "Comment is required",
+    "CaptchaCodeErrorMessage" : "The answer you entered for the CAPTCHA was not correct. Please try again",
+    "CaptchaCodeMissingMessage": "The captcha code is missing!"
   }
 }

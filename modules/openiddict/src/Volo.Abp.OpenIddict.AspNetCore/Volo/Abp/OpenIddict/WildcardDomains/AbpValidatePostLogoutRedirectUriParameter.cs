@@ -14,7 +14,7 @@ public class AbpValidatePostLogoutRedirectUriParameter : AbpOpenIddictWildcardDo
             .Build();
 
     public AbpValidatePostLogoutRedirectUriParameter(IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions)
-       : base(wildcardDomainsOptions)
+       : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter())
     {
     }
 

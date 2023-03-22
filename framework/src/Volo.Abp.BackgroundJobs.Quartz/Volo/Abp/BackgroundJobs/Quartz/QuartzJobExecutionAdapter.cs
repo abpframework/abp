@@ -40,7 +40,7 @@ public class QuartzJobExecutionAdapter<TArgs> : IJob
         {
             var args = JsonSerializer.Deserialize<TArgs>(context.JobDetail.JobDataMap.GetString(nameof(TArgs)));
             var jobType = Options.GetJob(typeof(TArgs)).JobType;
-            var jobContext = new JobExecutionContext(scope.ServiceProvider, jobType, args);
+            var jobContext = new JobExecutionContext(scope.ServiceProvider, jobType, args, cancellationToken: context.CancellationToken);
             try
             {
                 await JobExecuter.ExecuteAsync(jobContext);

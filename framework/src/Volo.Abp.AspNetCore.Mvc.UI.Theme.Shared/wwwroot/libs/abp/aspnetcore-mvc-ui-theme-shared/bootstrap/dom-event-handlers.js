@@ -108,6 +108,7 @@
                 $select.select2({
                     ajax: {
                         url: url,
+                        delay: 250,
                         dataType: "json",
                         data: function (params) {
                             let query = {};
@@ -135,6 +136,7 @@
                     width: '100%',
                     dropdownParent: parentSelector ? $(parentSelector) : $('body'),
                     allowClear: allowClear,
+                    language: abp.localization.currentCulture.cultureName,
                     placeholder: {
                         id: '-1',
                         text: placeholder
