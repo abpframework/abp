@@ -19,7 +19,7 @@ public class AbpValidateClientPostLogoutRedirectUri : AbpOpenIddictWildcardDomai
     public AbpValidateClientPostLogoutRedirectUri(
         IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions,
         IOpenIddictApplicationManager applicationManager)
-        : base(wildcardDomainsOptions, false)
+        : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri(applicationManager))
     {
         Handler = new OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri(applicationManager);
     }
