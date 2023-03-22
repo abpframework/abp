@@ -421,7 +421,7 @@
     "ContentCacheSlidingExpirationByDay": "Content Cache Sliding Expiration By Day",
     "MaxDaysForCaching": "Max Days For Caching",
     "Enabled": "Enabled",
-    "Menu:NugetPackagesContentCache": "NuGet Packages Content Cache",
+    "Menu:NugetPackagesContentCache": "NuGet Cache",
     "NugetPackagesContentCache": "NuGet Content Cache",
     "SlidingExpritionByDayInfo": "Gets or sets how long a cache entry can be inactive (e.g. not accessed) before it will be removed. This will not extend the entry lifetime beyond the absolute expiration.",
     "MaxDaysForCachingInfo": "Gets or sets an absolute expiration time, relative to now.",

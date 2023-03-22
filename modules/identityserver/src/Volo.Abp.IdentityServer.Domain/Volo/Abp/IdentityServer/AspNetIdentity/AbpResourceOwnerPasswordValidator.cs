@@ -17,8 +17,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Settings;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -28,7 +31,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity;
 public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 {
     protected SignInManager<IdentityUser> SignInManager { get; }
-    protected UserManager<IdentityUser> UserManager { get; }
+    protected IdentityUserManager UserManager { get; }
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
     protected ILogger<ResourceOwnerPasswordValidator<IdentityUser>> Logger { get; }
     protected IStringLocalizer<AbpIdentityServerResource> Localizer { get; }
@@ -36,15 +39,18 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     protected AbpIdentityOptions AbpIdentityOptions { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
 
+    protected ISettingProvider SettingProvider { get; }
+
     public AbpResourceOwnerPasswordValidator(
-        UserManager<IdentityUser> userManager,
+        IdentityUserManager userManager,
         SignInManager<IdentityUser> signInManager,
         IdentitySecurityLogManager identitySecurityLogManager,
         ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
         IStringLocalizer<AbpIdentityServerResource> localizer,
         IOptions<AbpIdentityOptions> abpIdentityOptions,
         IServiceScopeFactory serviceScopeFactory,
-        IOptions<IdentityOptions> identityOptions)
+        IOptions<IdentityOptions> identityOptions,
+        ISettingProvider settingProvider)
     {
         UserManager = userManager;
         SignInManager = signInManager;
@@ -54,6 +60,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         ServiceScopeFactory = serviceScopeFactory;
         AbpIdentityOptions = abpIdentityOptions.Value;
         IdentityOptions = identityOptions;
+        SettingProvider = settingProvider;
     }
 
     /// <summary>
@@ -122,6 +129,19 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                 else if (result.IsNotAllowed)
                 {
                     Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
+
+                    if (user.ShouldChangePasswordOnNextLogin)
+                    {
+                        await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Password);
+                        return;
+                    }
+
+                    if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                    {
+                        await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
+                        return;
+                    }
+
                     errorDescription = Localizer["LoginIsNotAllowed"];
                 }
                 else
@@ -187,6 +207,75 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
             {
                 Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
                 Action = IdentityServerSecurityLogActionConsts.LoginRequiresTwoFactor,
+                UserName = context.UserName,
+                ClientId = await FindClientIdAsync(context)
+            });
+        }
+    }
+
+    protected virtual async Task HandleShouldChangePasswordOnNextLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user, string currentPassword)
+    {
+        await HandlerChangePasswordAsync(context, user, currentPassword, ChangePasswordType.ShouldChangePasswordOnNextLogin);
+    }
+
+    protected virtual async Task HandlePeriodicallyChangePasswordAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user, string currentPassword)
+    {
+        await HandlerChangePasswordAsync(context, user, currentPassword, ChangePasswordType.PeriodicallyChangePassword);
+    }
+
+    protected virtual async Task HandlerChangePasswordAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user, string currentPassword, ChangePasswordType changePasswordType)
+    {
+        var changePasswordToken = context.Request?.Raw?["ChangePasswordToken"];
+        var newPassword = context.Request?.Raw?["NewPassword"];
+        if (!changePasswordToken.IsNullOrWhiteSpace() && !currentPassword.IsNullOrWhiteSpace() && !newPassword.IsNullOrWhiteSpace())
+        {
+            if (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString(), changePasswordToken))
+            {
+                var changePasswordResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
+                if (changePasswordResult.Succeeded)
+                {
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+                    {
+                        Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                        Action = IdentitySecurityLogActionConsts.ChangePassword,
+                        UserName = context.UserName,
+                        ClientId = await FindClientIdAsync(context)
+                    });
+
+                    if (changePasswordType == ChangePasswordType.ShouldChangePasswordOnNextLogin)
+                    {
+                        user.SetShouldChangePasswordOnNextLogin(false);
+                    }
+
+                    await UserManager.UpdateAsync(user);
+                    await SetSuccessResultAsync(context, user);
+                }
+                else
+                {
+                    Logger.LogInformation("ChangePassword failed for username: {username}, reason: {changePasswordResult}", context.UserName, changePasswordResult);
+                    context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, changePasswordResult.Errors.Select(x => x.Description).JoinAsString(", "));
+                }
+            }
+            else
+            {
+                Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidAuthenticatorCode", context.UserName);
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, Localizer["InvalidAuthenticatorCode"]);
+            }
+        }
+        else
+        {
+            Logger.LogInformation($"Authentication failed for username: {{{context.UserName}}}, reason: {{{changePasswordType.ToString()}}}");
+            context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, nameof(user.ShouldChangePasswordOnNextLogin),
+                new Dictionary<string, object>()
+                {
+                        {"userId", user.Id},
+                        {"changePasswordToken", await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString())}
+                });
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                Action = IdentityServerSecurityLogActionConsts.LoginNotAllowed,
                 UserName = context.UserName,
                 ClientId = await FindClientIdAsync(context)
             });
@@ -265,5 +354,11 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         }
 
         return Task.CompletedTask;
+    }
+
+    public enum ChangePasswordType
+    {
+        ShouldChangePasswordOnNextLogin,
+        PeriodicallyChangePassword
     }
 }

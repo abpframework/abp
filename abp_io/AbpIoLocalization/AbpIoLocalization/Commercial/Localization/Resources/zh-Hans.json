@@ -369,7 +369,6 @@
     "FreeTrial": "免费试用",
     "AcceptsMarketingCommunications": " 是的，我想接收 ABP 商业营销通讯。",
     "PurposeOfUsage": "使用目的",
-    "Industry": "行业",
     "Choose": "- 选择 -",
     "CompanyOrganizationName": "公司/组织名称",
     "CompanySize": "公司规模",
@@ -804,6 +803,24 @@
     "UpgradePaymentInfoSection_LicenseRenewalPrice": "许可证续订",
     "Total": "总计",
     "SupportPolicyFaqTitle": "您的支持政策是什么?",
-    "SupportPolicyFaqExplanation": "我们只支持有效的和以前的主要版本。 我们不保证为第 3 个和更早的主要版本发布补丁。 例如，如果有效版本是 7.0.0，我们将发布 6.x.x 和 7.x.x 的补丁版本。 此外，我们仅对 ABP Framework 和 ABP Commercial 相关问题提供支持。 这意味着不支持 ABP 产品使用的第 3 方应用程序、云服务和其他外围库。 我们将尽商业上合理的努力在“Volosoft Bilisim A.S”的正式营业时间内为我们的客户提供技术支持。 另一方面，我们不承诺服务级别协议 (SLA) 响应时间，但我们会尽量在我们的官方工作时间内尽快响应技术问题。 除非与客户达成特殊协议，否则我们仅在 https://support.abp.io 上提供支持。 我们还提供私人电子邮件支持，仅适用于企业许可证持有者。"
+    "SupportPolicyFaqExplanation": "我们只支持有效的和以前的主要版本。 我们不保证为第 3 个和更早的主要版本发布补丁。 例如，如果有效版本是 7.0.0，我们将发布 6.x.x 和 7.x.x 的补丁版本。 此外，我们仅对 ABP Framework 和 ABP Commercial 相关问题提供支持。 这意味着不支持 ABP 产品使用的第 3 方应用程序、云服务和其他外围库。 我们将尽商业上合理的努力在“Volosoft Bilisim A.S”的正式营业时间内为我们的客户提供技术支持。 另一方面，我们不承诺服务级别协议 (SLA) 响应时间，但我们会尽量在我们的官方工作时间内尽快响应技术问题。 除非与客户达成特殊协议，否则我们仅在 https://support.abp.io 上提供支持。 我们还提供私人电子邮件支持，仅适用于企业许可证持有者。",
+    "TotalDevelopers": "{0}位开发者",
+    "CustomPurchaseExplanation": "定制您的特定需求",
+    "WhereDidYouHearAboutUs": "您是从哪里了解到我们的？",
+    "Twitter": "Twitter",
+    "Facebook": "Facebook",
+    "Youtube": "YouTube",
+    "Google": "Google",
+    "Github": "GitHub",
+    "Friend": "朋友介绍",
+    "Other": "其他",
+    "WhereDidYouHearAboutUs_explain": "请说明...",
+    "DeletingMemberWarningMessage": "\"{0}\"将从开发者列表中删除。如果您愿意，您可以将此空位分配给另一个开发者。",
+    "AdditionalInfo": "如果开发者席位高于您的要求，您可以减少它们。您可以发送电子邮件至<a href=\"mailto:info@abp.io\">info@abp.io</a>以删除一些开发人员席位。清理未使用的开发人员席位将降低许可证续期成本。如果您愿意，您可以在有效许可期内重新购买额外的开发人员席位。请注意，由于此许可证包中有｛0｝个开发人员，因此无法减少此数量。",
+    "LinkExpiredErrorMessage": "您正在尝试访问的链接已过期。",
+    "ExpirationDate": "过期时间",
+    "SpringCampaignDiscount": "春季促销折扣",
+    "WhyUseAbpIoPlatform": "为什么我应该使用 ABP.IO 平台而不是从头开始创建新的解决方案？\n",
+    "WhyUseAbpIoPlatformFaqExplanation": "请参阅<a href=\"https://docs.abp.io/en/commercial/latest/why-abp-io-platform\">该文件</a>以详细解释为什么使用ABP.IO平台比自己做所有事情有显著的优势。"
   }
 }
