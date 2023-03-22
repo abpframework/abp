@@ -1,22 +1,16 @@
-﻿using System;
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Json.Newtonsoft;
 
-public class AbpCamelCasePropertyNamesContractResolver : CamelCasePropertyNamesContractResolver, ITransientDependency
+public class AbpCamelCasePropertyNamesContractResolver : CamelCasePropertyNamesContractResolver
 {
-    private readonly Lazy<AbpDateTimeConverter> _dateTimeConverter;
+    private readonly AbpDateTimeConverter _dateTimeConverter;
 
-    public AbpCamelCasePropertyNamesContractResolver(IServiceProvider serviceProvider)
+    public AbpCamelCasePropertyNamesContractResolver(AbpDateTimeConverter dateTimeConverter)
     {
-        _dateTimeConverter = new Lazy<AbpDateTimeConverter>(
-            serviceProvider.GetRequiredService<AbpDateTimeConverter>,
-            true
-        );
+        _dateTimeConverter = dateTimeConverter;
 
         NamingStrategy = new CamelCaseNamingStrategy
         {
@@ -30,7 +24,7 @@ public class AbpCamelCasePropertyNamesContractResolver : CamelCasePropertyNamesC
 
         if (AbpDateTimeConverter.ShouldNormalize(member, property))
         {
-            property.Converter = _dateTimeConverter.Value;
+            property.Converter = _dateTimeConverter;
         }
 
         return property;

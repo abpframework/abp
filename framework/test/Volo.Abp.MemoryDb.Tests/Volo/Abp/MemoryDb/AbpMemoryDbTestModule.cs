@@ -35,10 +35,10 @@ public class AbpMemoryDbTestModule : AbpModule
         });
 
         context.Services.AddOptions<Utf8JsonMemoryDbSerializerOptions>()
-            .Configure<IServiceProvider>((options, serviceProvider) =>
+            .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 options.JsonSerializerOptions.Converters.Add(new EntityJsonConverter<EntityWithIntPk, int>());
-                options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(serviceProvider
+                options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(rootServiceProvider
                     .GetRequiredService<IOptions<AbpSystemTextJsonSerializerModifiersOptions>>());
             });
     }

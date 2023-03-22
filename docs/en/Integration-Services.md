@@ -6,7 +6,7 @@ The following figure shows a few microservices behind an API Gateway that is con
 
 ![integration-services](images/integration-services.png)
 
-HTTP requests coming from out of the API Gateway can be called as *external request*, while the HTTP requests performed between microservices can be considered as *internal requests*. The application services that are designed to respond to these external requests are called as *integration services*, because their purpose is to integrate microservices in the system, rather than respond to user requests.
+HTTP requests coming from out of the API Gateway can be called as *external request*, while the HTTP requests performed between microservices can be considered as *internal requests*. The application services that are designed to respond to these internal requests are called as *integration services*, because their purpose is to integrate microservices in the system, rather than respond to user requests.
 
 ## Marking an Application Service as Integration Service
 

@@ -13,7 +13,7 @@ public static class MvcCoreBuilderExtensions
     public static IMvcCoreBuilder AddAbpJson(this IMvcCoreBuilder builder)
     {
         builder.Services.AddOptions<JsonOptions>()
-            .Configure<IServiceProvider>((options, serviceProvider) =>
+            .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
                 options.JsonSerializerOptions.AllowTrailingCommas = true;
@@ -24,7 +24,7 @@ public static class MvcCoreBuilderExtensions
                 options.JsonSerializerOptions.Converters.Add(new AbpNullableStringToGuidConverter());
                 options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
 
-                options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(serviceProvider
+                options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(rootServiceProvider
                     .GetRequiredService<IOptions<AbpSystemTextJsonSerializerModifiersOptions>>());
             });
 

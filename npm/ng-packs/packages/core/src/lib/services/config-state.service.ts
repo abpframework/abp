@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
@@ -15,6 +15,9 @@ import { InternalStore } from '../utils/internal-store-utils';
 })
 export class ConfigStateService {
   private readonly store = new InternalStore({} as ApplicationConfigurationDto);
+  private readonly includeLocalizationResources = inject(INCUDE_LOCALIZATION_RESOURCES_TOKEN);
+  private abpConfigService = inject(AbpApplicationConfigurationService);
+  private abpApplicationLocalizationService = inject(AbpApplicationLocalizationService);
 
   get createOnUpdateStream() {
     return this.store.sliceUpdate;
@@ -22,12 +25,7 @@ export class ConfigStateService {
 
   private updateSubject = new Subject<void>();
 
-  constructor(
-    private abpConfigService: AbpApplicationConfigurationService,
-    private abpApplicationLocalizationService: AbpApplicationLocalizationService,
-    @Inject(INCUDE_LOCALIZATION_RESOURCES_TOKEN)
-    private readonly includeLocalizationResources: boolean,
-  ) {
+  constructor() {
     this.initUpdateStream();
   }
 
@@ -61,6 +59,7 @@ export class ConfigStateService {
       onlyDynamics: false,
     });
   }
+
   refreshAppState() {
     this.updateSubject.next();
     return this.createOnUpdateStream(state => state).pipe(take(1));
@@ -141,7 +140,7 @@ export class ConfigStateService {
     return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
   }
 
-  getFeatures$(keys: string[]): Observable<{[key: string]: string} | undefined> {
+  getFeatures$(keys: string[]): Observable<{ [key: string]: string } | undefined> {
     return this.store.sliceState(({ features }) => {
       if (!features?.values) return;
 
