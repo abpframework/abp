@@ -39,7 +39,7 @@ public class AbpAspNetCoreMvcUiWidgetsModule : AbpModule
     {
         var widgetTypes = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (WidgetAttribute.IsWidget(context.ImplementationType))
             {

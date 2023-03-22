@@ -184,6 +184,8 @@
     "Layout_MetaDescription": "ABP Community is an environment where people can share posts about ABP framework and follows the projects.",
     "Index_Page_CommunityIntroduction": "This is a hub for ABP Framework, .NET and software development. You can read the articles, watch the video tutorials, get informed about ABP’s development progress and ABP-related events, help other developers and share your expertise with the ABP community.",
     "TagsInArticle": "Tags in article",
-    "IConsentToMedium": "I consent to the publication of this post at https://medium.com/volosoft."
+    "IConsentToMedium": "I consent to the publication of this post at https://medium.com/volosoft.",
+    "SearchResultsFor": "Search results for <span class=\"fw-bold\">\"{0}\"</span>",
+    "SeeMoreVideos": "See more videos"
   }
 }

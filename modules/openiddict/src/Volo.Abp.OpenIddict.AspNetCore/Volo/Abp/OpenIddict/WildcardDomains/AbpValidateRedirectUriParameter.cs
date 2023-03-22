@@ -14,7 +14,7 @@ public class AbpValidateRedirectUriParameter : AbpOpenIddictWildcardDomainBase<O
             .Build();
 
     public AbpValidateRedirectUriParameter(IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions)
-        : base(wildcardDomainsOptions)
+        : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Authentication.ValidateRedirectUriParameter())
     {
     }
 

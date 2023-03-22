@@ -408,6 +408,14 @@
     "ApplicationModule": "应用程序模块",
     "SeeTheScreenshot": "如截图所示",
     "ApplicationModuleExplanation1": "创建可重用的、完全分层的应用程序模块解决方案。",
-    "ApplicationModuleExplanation2": "您可以使用此选项为您的模块化应用程序创建模块。"  
+    "ApplicationModuleExplanation2": "您可以使用此选项为您的模块化应用程序创建模块。",
+    "Expert_": "专家",
+    "Partner_": "合作伙伴",
+    "WebSite": "网站",
+    "Expert_Year": "专业年限",
+    "CompanyInfo": "公司信息",
+    "Date": "日期",
+    "WhoWeAre_Partner": "关于我们",
+    "WhoWeAre_Expert": "关于我"
   }
 }

@@ -12,22 +12,22 @@ namespace Volo.Abp.BackgroundJobs.Hangfire;
 public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDependency
 {
     protected AbpBackgroundJobOptions Options { get; }
-    
+
     public HangfireBackgroundJobManager(IOptions<AbpBackgroundJobOptions> options)
     {
         Options = options.Value;
     }
-    
+
     public virtual Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
         TimeSpan? delay = null)
     {
         return Task.FromResult(delay.HasValue
             ? BackgroundJob.Schedule<HangfireJobExecutionAdapter<TArgs>>(
-                adapter => adapter.ExecuteAsync(GetQueueName(typeof(TArgs)),args),
+                adapter => adapter.ExecuteAsync(GetQueueName(typeof(TArgs)), args, default),
                 delay.Value
             )
             : BackgroundJob.Enqueue<HangfireJobExecutionAdapter<TArgs>>(
-                adapter => adapter.ExecuteAsync(GetQueueName(typeof(TArgs)) ,args)
+                adapter => adapter.ExecuteAsync(GetQueueName(typeof(TArgs)), args, default)
             ));
     }
 
