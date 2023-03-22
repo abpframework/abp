@@ -139,6 +139,55 @@ When you look at your database, you can see that the `Department` table has been
 
 ![users-table](images/users-table.png)
 
+> It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](https://docs.abp.io/en/abp/latest/Data-Seeding) system of the ABP framework. You can skip this section if you don't want to create the data seeding, but it is suggested to follow along and learn this useful ABP Framework feature.
+
+Create a class deriving from the `IDataSeedContributor` in the `IdentityRelationship.Domain` project by copying the following code:
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using IdentityRelationship.Departments;
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
+
+namespace IdentityRelationship;
+
+public class IdentityRelationshipDataSeederContributor
+    : IDataSeedContributor, ITransientDependency
+{
+    private readonly IRepository<Department, Guid> _departmentRepository;
+
+    public IdentityRelationshipDataSeederContributor(IRepository<Department, Guid> departmentRepository)
+    {
+        _departmentRepository = departmentRepository;
+    }
+
+    public async Task SeedAsync(DataSeedContext context)
+    {
+        if (await _departmentRepository.GetCountAsync() <= 0)
+        {
+            await _departmentRepository.InsertAsync(
+                new Department
+                {
+                    Name = "Human Resources"
+                },
+                autoSave: true
+            );
+
+            await _departmentRepository.InsertAsync(
+                new Department
+                {
+                    Name = "Production"
+                },
+                autoSave: true
+            );
+        }
+    }
+}
+```
+- This code simply uses the `IRepository<Department, Guid>` (the default [repository](https://docs.abp.io/en/abp/latest/Repositories)) to insert two books to the database in case there weren't any books in it.
+
 Again, open the `IdentityRelationshipModuleExtensionConfigurator` class in the Domain.Shared project and add the following code:
 
 ```csharp
@@ -147,7 +196,7 @@ user.AddOrUpdateProperty<Guid>(
     "DepartmentId",
     property =>
     {
-        property.UI.Lookup.Url = "/api/app/departments";
+        property.UI.Lookup.Url = "/api/app/department";
         property.UI.Lookup.DisplayPropertyName = "name";
     }
 );
@@ -159,12 +208,12 @@ Create a `Departments` folder in the `IdentityRelationship.Application.Contracts
 
 ```csharp
 using System;
+using Volo.Abp.Application.Dtos;
 namespace IdentityRelationship.Departments;
 
-public class DepartmentDto
-{
-    public Guid Id { get; set; }
+public class DepartmentDto : EntityDto<Guid>
 
+{
     public string Name { get; set; }
 }
 ```
@@ -179,7 +228,7 @@ namespace IdentityRelationship.Departments;
 
 public interface IDepartmentAppService : IApplicationService
 {
-    public  Task<ListResultDto<DepartmentDto>> GetAsync();
+    public Task<PagedResultDto<DepartmentDto>> GetAsync();
 }
 ```
 
@@ -187,34 +236,52 @@ Time to implement the `IDepartmentAppService` interface. Create a `Departments` 
 
 ```csharp
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdentityRelationship.Departments;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Repositories;
 
 namespace IdentityRelationship.Department;
 
 public class DepartmentAppService : IdentityRelationshipAppService, IDepartmentAppService
 {
-    public async Task<ListResultDto<DepartmentDto>> GetAsync()
+    private readonly IRepository<Departments.Department, Guid> _departmentRepository;
+
+    public DepartmentAppService(IRepository<Departments.Department, Guid> departmentRepository)
     {
-        return  new ListResultDto<DepartmentDto>(
-            new[]
-            {
-                new DepartmentDto
-                {
-                    Id = Guid.Parse("6267f0df-870f-4173-be44-d74b4b56d2bd"),
-                    Name = "Human Resources"
-                },
-                new DepartmentDto
-                {
-                    Id = Guid.Parse("21c7b61f-330c-489e-8b8c-80e0a78a5cc5"),
-                    Name = "Production"
-                }
-            }
-        );
+        _departmentRepository = departmentRepository;
+    }
+
+    public async Task<PagedResultDto<DepartmentDto>> GetAsync()
+    {
+        var departments = await _departmentRepository.GetListAsync();
+        var totalCount = await _departmentRepository.GetCountAsync();
+
+        return new PagedResultDto<DepartmentDto>(totalCount,
+            ObjectMapper.Map<List<Departments.Department>, List<DepartmentDto>>(departments));
     }
 }
 ```
+`DepartmentAppService `is using the `ObjectMapper` to convert the `Department` objects to `DepartmentDto` objects. So, we need to define this mapping in the AutoMapper configuration.
+
+Open the `IdentityRelationshipApplicationAutoMapperProfile` class inside the `IdentityRelationship.Application` project and add the following line to the constructor:
+
+```csharp
+using AutoMapper;
+using IdentityRelationship.Departments;
+
+namespace IdentityRelationship;
+
+public class IdentityRelationshipApplicationAutoMapperProfile : Profile
+{
+    public IdentityRelationshipApplicationAutoMapperProfile()
+    {
+        CreateMap<Departments.Department, DepartmentDto>();
+    }
+}
+```
+
 Run your `IdentityRelationship.Web` project and add a department to one of your users.
 
 ![user-department-image](images/user-department.png)
