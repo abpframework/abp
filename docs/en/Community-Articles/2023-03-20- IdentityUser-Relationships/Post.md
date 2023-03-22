@@ -188,6 +188,10 @@ public class IdentityRelationshipDataSeederContributor
 ```
 - This code simply uses the `IRepository<Department, Guid>` (the default [repository](https://docs.abp.io/en/abp/latest/Repositories)) to insert two books to the database in case there weren't any books in it.
 
+Run the `IdentityRelationship.DbMigrator` application to update the database:
+
+![run-dbmigrator](images/run-dbmigrator.png)
+
 Again, open the `IdentityRelationshipModuleExtensionConfigurator` class in the Domain.Shared project and add the following code:
 
 ```csharp
