@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Volo.Abp.Json;
 
-public class ExtensibleObject_Tests : AbpJsonTestBase
+public class ExtensibleObject_Tests : AbpJsonSystemTextJsonTestBase
 {
     private readonly IJsonSerializer _jsonSerializer;
 
