@@ -208,6 +208,12 @@ user.AddOrUpdateProperty<Guid>(
 
 The `UI.Lookup.Url` option takes a URL to get the list of departments to select on the edit/create forms. This endpoint can be a typical controller, an auto API controller or any type of endpoint that returns a proper JSON response.
 
+To localize, open the `IdentityRelationship.Domain.Shared` project and add it to your `/Localization/IdentityRelationship/en.json` file:
+
+```json
+"DepartmentId": "Department"
+```
+
 Create a `Departments` folder in the `IdentityRelationship.Application.Contracts` project of your solution and add the `DepartmentDto` class in it
 
 ```csharp
@@ -295,7 +301,7 @@ And it shows the department name on the data table:
 ![users-page-department-image](images/users-page-department.png)
 
 ## Conclusion
-In this article I talked about the IdentityUser's relationships. Thank you for reading the article, I hope it was useful. See you soon!
+In this article I talked about the use of the IdentityUser relationship and how to extend it. Thank you for reading the article, I hope it was useful. See you soon!
 
 ## References
 - https://docs.abp.io/en/abp/latest/Module-Entity-Extensions
