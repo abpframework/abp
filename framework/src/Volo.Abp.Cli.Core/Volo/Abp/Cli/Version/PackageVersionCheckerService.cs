@@ -61,7 +61,7 @@ public class PackageVersionCheckerService : ITransientDependency
 
     public async Task<LatestVersionInfo> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
     {
-        if (!includeNightly && !includeReleaseCandidates)
+        if (!includeNightly && !includeReleaseCandidates && !packageId.Contains("LeptonX"))
         {
             var latestStableVersionResult = await GetLatestStableVersionOrNullAsync();
             if (latestStableVersionResult == null)
