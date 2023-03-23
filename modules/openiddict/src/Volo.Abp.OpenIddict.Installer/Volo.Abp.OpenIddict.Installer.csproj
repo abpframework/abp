@@ -16,9 +16,15 @@
 
     <ItemGroup>
         <None Remove="..\..\Volo.Abp.OpenIddict.abpmdl.json" />
-        <EmbeddedResource Include="..\..\Volo.Abp.OpenIddict.abpmdl.json" />
+        <Content Include="..\..\Volo.Abp.OpenIddict.abpmdl.json">
+			<Pack>true</Pack>
+			<PackagePath>content\</PackagePath>
+		</Content>
         <None Remove="..\..\**\*.abppkg*.json" />
-        <EmbeddedResource Include="..\..\**\*.abppkg*.json" />
+        <Content Include="..\..\**\*.abppkg*.json">
+			<Pack>true</Pack>
+			<PackagePath>content\</PackagePath>
+		</Content>
     </ItemGroup>
 
 </Project>
