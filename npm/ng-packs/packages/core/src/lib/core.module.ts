@@ -33,6 +33,7 @@ import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
 import { ShortTimePipe } from './pipes/short-time.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
@@ -63,6 +64,7 @@ import { IncludeLocalizationResourcesProvider } from './providers/include-locali
     ReplaceableTemplateDirective,
     RouterOutletComponent,
     SortPipe,
+    SafeHtmlPipe,
     StopPropagationDirective,
     ToInjectorPipe,
     ShortDateTimePipe,
@@ -90,6 +92,7 @@ import { IncludeLocalizationResourcesProvider } from './providers/include-locali
     ReplaceableTemplateDirective,
     RouterOutletComponent,
     SortPipe,
+    SafeHtmlPipe,
     StopPropagationDirective,
     ToInjectorPipe,
     ShortDateTimePipe,
