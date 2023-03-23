@@ -203,6 +203,7 @@ $projects = (
     "framework/src/Volo.Abp.Json.Abstractions",
     "framework/src/Volo.Abp.Json.Newtonsoft",
     "framework/src/Volo.Abp.Json.SystemTextJson",
+    "framework/src/Volo.Abp.Ldap.Abstractions",
     "framework/src/Volo.Abp.Ldap",
     "framework/src/Volo.Abp.Localization.Abstractions",
     "framework/src/Volo.Abp.MailKit",
