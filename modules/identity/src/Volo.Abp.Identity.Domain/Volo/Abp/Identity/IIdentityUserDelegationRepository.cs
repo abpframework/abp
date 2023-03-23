@@ -13,8 +13,11 @@ public interface IIdentityUserDelegationRepository: IBasicRepository<IdentityUse
         Guid? targetUserId,
         CancellationToken cancellationToken = default);
 
-    Task<IdentityUserDelegation> FindAsync(
+    Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(
         Guid sourceUserId,
-        Guid targetUserId,
+        CancellationToken cancellationToken = default);
+
+    Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(
+        Guid id,
         CancellationToken cancellationToken = default);
 }

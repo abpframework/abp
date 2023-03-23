@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore;
 
 public class EfCoreIdentityUserDelegationRepository : EfCoreRepository<IIdentityDbContext, IdentityUserDelegation, Guid>, IIdentityUserDelegationRepository
 {
-    public EfCoreIdentityUserDelegationRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
+    protected IClock Clock { get; }
+    
+    public EfCoreIdentityUserDelegationRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider, IClock clock)
         : base(dbContextProvider)
     {
+        Clock = clock;
     }
 
     public async Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId, Guid? targetUserId, CancellationToken cancellationToken = default)
@@ -25,13 +29,24 @@ public class EfCoreIdentityUserDelegationRepository : EfCoreRepository<IIdentity
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<IdentityUserDelegation> FindAsync(Guid sourceUserId, Guid targetUserId, CancellationToken cancellationToken = default)
+    public async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid sourceUserId, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .AsNoTracking()
+            .Where(x => x.SourceUserId == sourceUserId && 
+                        x.StartTime <= Clock.Now && 
+                        x.EndTime >= Clock.Now)
+            .ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .AsNoTracking()
             .FirstOrDefaultAsync(x =>
-                    x.SourceUserId == sourceUserId &&
-                    x.TargetUserId == targetUserId
+                    x.Id == id &&
+                    x.StartTime <= Clock.Now &&
+                    x.EndTime >= Clock.Now
                 , cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

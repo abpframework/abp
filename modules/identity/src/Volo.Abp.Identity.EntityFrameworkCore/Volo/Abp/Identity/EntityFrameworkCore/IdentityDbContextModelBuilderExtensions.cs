@@ -276,11 +276,6 @@ public static class IdentityDbContextModelBuilderExtensions
 
             b.ConfigureByConvention();
 
-            b.HasIndex(x => new {
-                x.SourceUserId,
-                x.TargetUserId,
-            }).IsUnique();
-
             b.ApplyObjectExtensionMappings();
         });
 
