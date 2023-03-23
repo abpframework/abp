@@ -206,6 +206,8 @@
     "Icons": "Icons",
     "Url": "Url",
     "Icon": "Icon",
-    "RecentActivities": "Recent Activities"
+    "RecentActivities": "Recent Activities",
+    "SpringCampaign": "Welcome <br>Spring Sale!",
+    "SpringCampaign2": "<span>Limited <br> Time Offer!</span>"
   }
 }

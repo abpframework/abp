@@ -13,6 +13,7 @@ using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity;
@@ -252,5 +253,26 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         return await UpdateUserAsync(user);
+    }
+
+    public virtual async Task<bool> ShouldPeriodicallyChangePasswordAsync(IdentityUser user)
+    {
+        Check.NotNull(user, nameof(user));
+
+        if (user.PasswordHash.IsNullOrWhiteSpace())
+        {
+            return false;
+        }
+
+        var forceUsersToPeriodicallyChangePassword = await SettingProvider.GetAsync<bool>(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword);
+        if (!forceUsersToPeriodicallyChangePassword)
+        {
+            return false;
+        }
+
+        var lastPasswordChangeTime = user.LastPasswordChangeTime ?? DateTime.SpecifyKind(user.CreationTime, DateTimeKind.Utc);
+        var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
+
+        return passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < DateTime.UtcNow;
     }
 }

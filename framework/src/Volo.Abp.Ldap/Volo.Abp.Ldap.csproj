@@ -19,15 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Volo\Abp\Ldap\Localization\*.json" />
-    <EmbeddedResource Include="Volo\Abp\Ldap\Localization\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Ldap.Abstractions\Volo.Abp.Ldap.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
-    <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
   </ItemGroup>
 
 </Project>

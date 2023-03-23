@@ -23,20 +23,21 @@ public class PageLayout : IScopedDependency, INotifyPropertyChanged
     private string menuItemName;
 
     public string MenuItemName {
-         get => menuItemName; 
-         set {
+        get => menuItemName;
+        set
+        {
             menuItemName = value;
             OnPropertyChanged();
-         }
+        }
     }
 
-    public virtual ObservableCollection<BreadcrumbItem> BreadcrumbItems { get; set; } = new();
+    public virtual ObservableCollection<BreadcrumbItem> BreadcrumbItems { get; } = new();
 
-    public virtual ObservableCollection<PageToolbarItem> ToolbarItems { get; set; } = new();
+    public virtual ObservableCollection<PageToolbarItem> ToolbarItems { get; } = new();
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    protected void OnPropertyChanged([CallerMemberName]string propertyName = null)
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

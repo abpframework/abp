@@ -208,7 +208,7 @@
     "WhenShouldIRenewMyLicense": "When should I renew my license?",
     "WhenShouldIRenewMyLicenseExplanation": "If you renew your license within <strong>1 month</strong> after your license expires, the following discounts will be applied: Team License {0}; Business License {1}; Enterprise License {2}. However, if you renew your license after <strong>1 month</strong> since the expiry date of your license, the renewal price will be the same as the license purchase price and there will be no discount on your renewal.",
     "TrialPlan": "Do you have a trial plan?",
-    "TrialPlanExplanation": "It has a 14 days trial period for the ABP Commercial team license. For more information visit <a href={0} target='_blank'>here</a>. Furthermore, for the Team licenses we provide a 30 days money-back guarantee. You can just request a refund in the first 30 days. For the Business and Enterprise licenses, we provide 60% refund in 30 days. This is because Business and Enterprise licenses include the full source code of all the modules and the themes.",
+    "TrialPlanExplanation": "No, there is no trial version for ABP Commercial. You can check the community edition to understand the code quality and approaches. We also offer a 30-day money-back guarantee for the Team license, no questions asked! You can request a refund within the first 30 days. We provide a 60% refund within 30 days for Business and Enterprise licenses. This is because the Business and Enterprise licenses contain the full source-code of all the modules and themes.",
     "DoYouAcceptBankWireTransfer": "Do you accept bank wire transfers?",
     "DoYouAcceptBankWireTransferExplanation": "Yes, we accept bank wire transfers.<br/>After sending the license fee via bank transfer, send your receipt and requested license type to accounting@volosoft.com.<br/>Our international bank account information:",
     "HowToUpgrade": "How to upgrade existing applications when a new version is available?",
@@ -818,6 +818,9 @@
     "DeletingMemberWarningMessage": "\"{0}\" will be removed from the developer list. If you want, you can assign this empty seat to another developer later.",
     "AdditionalInfo": "If the developer seats are above your requirements, you can reduce them. You can email at <a href=\"mailto:info@abp.io\">info@abp.io</a> to remove some of your developer seats. Clearing unused developer seats will reduce the license renewal cost. If you want, you can re-purchase additional developer seats within your active license period. Note that, since there are {0} developers in this license package, you cannot reduce this number.",
     "LinkExpiredErrorMessage": "The link you are trying to access is expired.",
-    "ExpirationDate": "Expiration Date"
+    "ExpirationDate": "Expiration Date",
+    "SpringCampaignDiscount": "Spring Campaign Discount",
+    "WhyUseAbpIoPlatform": "Why should I use the ABP.IO Platform instead of creating a new solution from scratch?",
+    "WhyUseAbpIoPlatformFaqExplanation": "See <a href=\"https://docs.abp.io/en/commercial/latest/why-abp-io-platform \"> that document </a> for a detailed explanation of why using ABP.IO Platform has a significant advantage over doing everything yourself."
   }
 }

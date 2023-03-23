@@ -32,7 +32,7 @@ This table stores information about entity changes in the application, which are
 
 This table stores information about property changes to entities in the application, which are logged for auditing purposes.
 
-## Uses
+#### Foreign Keys
 
 | Table | Column | Description |
 | --- | --- | --- |
@@ -54,7 +54,7 @@ This table stores information about the tenants. Each record represents a tenant
 
 This table stores information about the tenant database connection strings. When you define a connection string for a tenant, a new record will be added to this table. You can query this database to get connection strings by tenants.
 
-## Uses
+#### Foreign Keys
 
 | Table | Column | Description |
 | --- | --- | --- |
