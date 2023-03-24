@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -43,6 +43,27 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpAuditLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpBackgroundJobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    JobArgs = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: false),
+                    TryCount = table.Column<short>(type: "smallint", nullable: false, defaultValue: (short)0),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NextTryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastTryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsAbandoned = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    Priority = table.Column<byte>(type: "tinyint", nullable: false, defaultValue: (byte)15),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBackgroundJobs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -293,6 +314,22 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpUserDelegations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SourceUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TargetUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpUserDelegations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpUsers",
                 columns: table => new
                 {
@@ -331,6 +368,66 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OpenIddictApplications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClientId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ClientSecret = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConsentType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DisplayNames = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Permissions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostLogoutRedirectUris = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RedirectUris = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Requirements = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ClientUri = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LogoUri = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OpenIddictApplications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OpenIddictScopes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Descriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DisplayNames = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Resources = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OpenIddictScopes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -566,6 +663,38 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OpenIddictAuthorizations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Scopes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Subject = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OpenIddictAuthorizations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OpenIddictAuthorizations_OpenIddictApplications_ApplicationId",
+                        column: x => x.ApplicationId,
+                        principalTable: "OpenIddictApplications",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpEntityPropertyChanges",
                 columns: table => new
                 {
@@ -588,6 +717,47 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OpenIddictTokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AuthorizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Payload = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RedemptionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReferenceId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Subject = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OpenIddictTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OpenIddictTokens_OpenIddictApplications_ApplicationId",
+                        column: x => x.ApplicationId,
+                        principalTable: "OpenIddictApplications",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_OpenIddictTokens_OpenIddictAuthorizations_AuthorizationId",
+                        column: x => x.AuthorizationId,
+                        principalTable: "OpenIddictAuthorizations",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AbpAuditLogActions_AuditLogId",
                 table: "AbpAuditLogActions",
@@ -607,6 +777,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                 name: "IX_AbpAuditLogs_TenantId_UserId_ExecutionTime",
                 table: "AbpAuditLogs",
                 columns: new[] { "TenantId", "UserId", "ExecutionTime" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBackgroundJobs_IsAbandoned_NextTryTime",
+                table: "AbpBackgroundJobs",
+                columns: new[] { "IsAbandoned", "NextTryTime" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
@@ -774,6 +949,36 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                 name: "IX_AbpUsers_UserName",
                 table: "AbpUsers",
                 column: "UserName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictApplications_ClientId",
+                table: "OpenIddictApplications",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type",
+                table: "OpenIddictAuthorizations",
+                columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictScopes_Name",
+                table: "OpenIddictScopes",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictTokens_ApplicationId_Status_Subject_Type",
+                table: "OpenIddictTokens",
+                columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictTokens_AuthorizationId",
+                table: "OpenIddictTokens",
+                column: "AuthorizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictTokens_ReferenceId",
+                table: "OpenIddictTokens",
+                column: "ReferenceId");
         }
 
         /// <inheritdoc />
@@ -781,6 +986,9 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AbpAuditLogActions");
+
+            migrationBuilder.DropTable(
+                name: "AbpBackgroundJobs");
 
             migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
@@ -828,6 +1036,9 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                 name: "AbpUserClaims");
 
             migrationBuilder.DropTable(
+                name: "AbpUserDelegations");
+
+            migrationBuilder.DropTable(
                 name: "AbpUserLogins");
 
             migrationBuilder.DropTable(
@@ -838,6 +1049,12 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "OpenIddictScopes");
+
+            migrationBuilder.DropTable(
+                name: "OpenIddictTokens");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChanges");
@@ -855,7 +1072,13 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                 name: "AbpUsers");
 
             migrationBuilder.DropTable(
+                name: "OpenIddictAuthorizations");
+
+            migrationBuilder.DropTable(
                 name: "AbpAuditLogs");
+
+            migrationBuilder.DropTable(
+                name: "OpenIddictApplications");
         }
     }
 }

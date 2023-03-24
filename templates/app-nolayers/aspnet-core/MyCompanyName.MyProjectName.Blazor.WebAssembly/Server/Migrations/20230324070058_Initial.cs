@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Mvc.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -290,6 +290,22 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpTenants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpUserDelegations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SourceUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TargetUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpUserDelegations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -989,6 +1005,9 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AbpUserDelegations");
 
             migrationBuilder.DropTable(
                 name: "AbpUserLogins");
