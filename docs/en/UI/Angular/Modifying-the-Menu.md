@@ -96,19 +96,12 @@ import { ABP } from '@abp/ng.core';
 
 type GroupType = ABP.Group<string>;
 
-function configureRoutes(routes: RoutesService) {
-  const myGroup: GroupType = { key:'groupKey', text:'GroupName' };
-  
+function configureRoutes(routes: RoutesService) {  
   return () => {
     routes.add([
       {
-        path: '/your-path',
-        name: 'Your navigation',
-        requiredPolicy: 'permission key here',
-        order: 101,
-        iconClass: 'fas fa-question-circle',
-        layout: eLayoutType.application,
-        group: myGroup
+        //etc..
+        group: 'ModuleName::GroupName'
       },
       {
         path: '/your-path/child',
@@ -138,11 +131,11 @@ export class AppComponent {
 ```
 
 ...and then in app.module.ts...
- - `groupedVisible` method will return `Others` group for ungrouped items, we can define `key` and `text` via `OTHERS_GROUP` injection token for this group
+ - `groupedVisible` method will return `Others` group for ungrouped items, Default key is `AbpUi::OthersGroup` we can change this `key` via `OTHERS_GROUP` injection token
 
 ```js
 import { NgModule } from '@angular/core';
-import { ABP, OTHERS_GROUP } from '@abp/ng.core';
+import { OTHERS_GROUP } from '@abp/ng.core';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 
 @NgModule({
@@ -150,7 +143,7 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     APP_ROUTE_PROVIDER,
     {
       provide: OTHERS_GROUP,
-      useValue: { key: 1, text: 'MyOthersGroup' } as ABP.Group<number>,
+      useValue: 'ModuleName::MyOthersGroupKey',
     },
   ],
   // imports, declarations, and bootstrap
@@ -168,9 +161,7 @@ Here is what every property works as:
 - `iconClass` is the class of the `i` tag, which is placed to the left of the navigation label.
 - `layout` defines in which layout the route will be loaded. (default: `eLayoutType.empty`)
 - `invisible` makes the item invisible in the menu. (default: `false`)
-- `group` is an optional property that is used to group together related routes in an application. It's an object and it have 2 property
-  - `key` is a generic type property that we use for gather items in same group. (default type: `string`)
-  - `text` is the display name on menu 
+- `group` is an optional property that is used to group together related routes in an application. (type: `string`, default: `AbpUi::OthersGroup`)
 
 ### Via `routes` Property in `AppRoutingModule`
 

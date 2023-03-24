@@ -179,7 +179,7 @@ export class CoreModule {
         },
         {
           provide: OTHERS_GROUP,
-          useValue: options.othersGroup || { key: 'others', text: '::Others' } as ABP.Group<string>,
+          useValue: options.othersGroup || 'AbpUi::OthersGroup',
         },
         IncludeLocalizationResourcesProvider,
       ],

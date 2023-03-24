@@ -1,13 +1,10 @@
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { ABP } from '../models';
 import { RoutesService } from '../services/routes.service';
 import { DummyInjector } from './utils/common.utils';
 import { mockPermissionService } from './utils/permission-service.spec.utils';
 
 const updateStream$ = new Subject<void>();
-
-type GroupType = ABP.Group<string>;
 
 export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }) => {
   const injector = new DummyInjector({
@@ -15,15 +12,15 @@ export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }
     ConfigStateService: { createOnUpdateStream: () => updateStream$ },
     ...injectorPayload,
   });
-  const othersGroupToken: ABP.Group<number> = { key: 1, text: 'Others' };
-  return new RoutesService(injector, othersGroupToken);
+  return new RoutesService(injector, 'OthersGroup');
 };
 
 describe('Routes Service', () => {
   let service: RoutesService;
 
-  const fooGroup: GroupType = { key: 'foo', text: 'FooGroup' };
-  const barGroup: GroupType = { key: 'bar', text: 'BarGroup' };
+  const fooGroup = 'FooGroup';
+  const barGroup = 'BarGroup';
+  const othersGroup = 'OthersGroup';
 
   const routes = [
     { path: '/foo', name: 'foo' },
@@ -75,18 +72,6 @@ describe('Routes Service', () => {
     });
   });
 
-  describe('#addGroup', () => {
-    it('should have routes with and without group', async () => {
-      service.add(groupedRoutes);
-
-      const grouped = service.visible.filter(f => f.group);
-      const unGrouped = service.visible.filter(f => !f.group);
-
-      expect(grouped.length).toBe(3);
-      expect(unGrouped.length).toBe(1);
-    });
-  });
-
   describe('#groupedVisible', () => {
     it('should have groups and items', async () => {
       service.add(groupedRoutes);
@@ -95,18 +80,15 @@ describe('Routes Service', () => {
 
       expect(tree.length).toBe(3);
 
-      expect(tree[0].group.key).toBe('foo');
-      expect(tree[0].group.text).toBe('FooGroup');
+      expect(tree[0].group).toBe('FooGroup');
       expect(tree[0].items[0].name).toBe('foo');
       expect(tree[0].items[0].children[0].name).toBe('y');
 
-      expect(tree[1].group.key).toBe('bar');
-      expect(tree[1].group.text).toBe('BarGroup');
+      expect(tree[1].group).toBe('BarGroup');
       expect(tree[1].items[0].name).toBe('bar');
       expect(tree[1].items[1].name).toBe('baz');
 
-      expect(tree[2].group.key).toBe(1);
-      expect(tree[2].group.text).toBe('Others');
+      expect(tree[2].group).toBe(othersGroup);
       expect(tree[2].items[0].name).toBe('z');
     });
   });

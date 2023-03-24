@@ -1,4 +1,4 @@
-import { Injectable, Injector, Inject, Optional, OnDestroy } from '@angular/core';
+import { Injectable, Injector, Inject, OnDestroy} from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ABP } from '../models/common';
 import { OTHERS_GROUP } from '../tokens';
@@ -182,34 +182,20 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 
 @Injectable({ providedIn: 'root' })
 export class RoutesService extends AbstractNavTreeService<ABP.Route> {
-  constructor(
-    injector: Injector,
-    @Optional() @Inject(OTHERS_GROUP) private readonly othersGroup: ABP.Group<any>,
-  ) {
+  constructor(injector: Injector, @Inject(OTHERS_GROUP) private readonly othersGroup: string) {
     super(injector);
   }
-
   get groupedVisible(): ABP.RouteGroup[] | undefined {
-    const groupTree = this.visible.filter(node => node.group);
-    if (groupTree.length < 1) return;
+    const hasGroup = this.visible.some(node => !!node.group);
+    if (!hasGroup) return;
 
-    const map = new Map<ABP.Group, TreeNode<ABP.Route>[]>(groupTree?.map(node => [node.group, []]));
-    const otherGroup = this.othersGroup;
-    map.set(otherGroup, []);
+    const groups = this.visible.reduce((acc, node) => {
+      const groupName = node.group ?? this.othersGroup;
+      acc[groupName] ||= [];
+      acc[groupName].push(node);
+      return acc;
+    }, {} as Record<string, TreeNode<ABP.Route>[]>);
 
-    for (const node of this.visible) {
-      const { path, children, group } = node;
-
-      if (!group && (children?.length > 0 || path)) {
-        map.get(otherGroup)?.push(node);
-      } else if (group) {
-        map.get(group)?.push(node);
-      }
-    }
-
-    return Array.from(map.entries()).map<ABP.RouteGroup>(([group, nodes]) => ({
-      group,
-      items: nodes,
-    }));
+    return Object.entries(groups).map(([group, items]) => ({ group, items }));
   }
 }

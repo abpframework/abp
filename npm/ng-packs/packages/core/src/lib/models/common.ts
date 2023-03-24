@@ -13,7 +13,7 @@ export namespace ABP {
     sendNullsAsQueryParam?: boolean;
     tenantKey?: string;
     localizations?: Localization[];
-    othersGroup?: Group<any>;
+    othersGroup?: string;
   }
 
   export interface Child {
@@ -68,20 +68,15 @@ export namespace ABP {
     invisible?: boolean;
   }
 
-  export interface Group<TKey = string> {
-    key: TKey;
-    text: string;
-  }
-
   export interface Route extends Nav {
     path?: string;
     layout?: eLayoutType;
     iconClass?: string;
-    group?: Group<any>;
+    group?: string;
   }
 
-  export interface RouteGroup<TKey = string> {
-    group: Group<TKey>;
+  export interface RouteGroup {
+    group: string;
     items: TreeNode<Route>[];
   }
 
