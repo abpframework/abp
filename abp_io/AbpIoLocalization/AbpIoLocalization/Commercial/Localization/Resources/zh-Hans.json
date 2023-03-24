@@ -624,7 +624,7 @@
     "Faq_Page_OtherCurrenciesInfo": "对于其他货币，请参阅<a href='{0}'>所有账户</a>",
     "ProjectCreatedSuccess_Page_Title": "您的项目已创建",
     "ProjectCreatedSuccess_Page_Description": "您的 ABP 项目创建成功！",
-    "Suite_Page_Title": "ABP套房",
+    "Suite_Page_Title": "ABP Suite",
     "Suite_Page_Description": "ABP Commercial 提供快速应用程序开发工具以提高开发人员的工作效率。 ABP 套件 允许您轻松创建 CRUD 页面。",
     "Themes_Page_Title": "ABP主题",
     "Themes_Page_Description": "ABP 商业版 提供多种专业、现代的 UI 主题。 创建免费演示以快速查看 UI 的外观。",
@@ -825,6 +825,6 @@
     "PrivacyPolicy_Page_Title": "隐私政策 - 饼干政策",
     "TermsConditions_Page_Title": "条款和条件",
     "Trainings_Page_Title": "ABP培训套餐",
-    "Modules_Page_Title": "ABP预建的应用模块"
+    "Modules_Page_Title": "ABP内置的应用模块"
   }
 }
