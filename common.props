@@ -28,7 +28,7 @@
     <Content Include="*.abppkg.json">
 		<Pack>true</Pack>
 		<PackagePath>content\</PackagePath>
-	</Content>
+    </Content>
   </ItemGroup>
   <ItemGroup Condition="$(AssemblyName.EndsWith('HttpApi.Client'))">
     <EmbeddedResource Include="**\*generate-proxy.json" />
