@@ -15,7 +15,7 @@ public class AbpJsonSystemTextJsonModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddOptions<AbpSystemTextJsonSerializerOptions>()
-            .Configure<IServiceProvider>((options, serviceProvider) =>
+            .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 // If the user hasn't explicitly configured the encoder, use the less strict encoder that does not encode all non-ASCII characters.
                 options.JsonSerializerOptions.Encoder ??= JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
@@ -26,14 +26,14 @@ public class AbpJsonSystemTextJsonModule : AbpModule
                 options.JsonSerializerOptions.Converters.Add(new AbpNullableStringToGuidConverter());
                 options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
 
-                options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(serviceProvider
+                options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(rootServiceProvider
                     .GetRequiredService<IOptions<AbpSystemTextJsonSerializerModifiersOptions>>());
             });
 
         context.Services.AddOptions<AbpSystemTextJsonSerializerModifiersOptions>()
-            .Configure<IServiceProvider>((options, serviceProvider) =>
+            .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
-                options.Modifiers.Add(new AbpDateTimeConverterModifier().CreateModifyAction(serviceProvider));
+                options.Modifiers.Add(new AbpDateTimeConverterModifier().CreateModifyAction(rootServiceProvider));
             });
     }
 }

@@ -72,7 +72,8 @@ Regular expression ending a mode. For example a single quote for strings or "$" 
 It's often the case that a beginning regular expression defines the entire mode and doesn't need any special ending.
 For example a number can be defined with ``begin: "\\b\\d+"`` which spans all the digits.
 
-If absent, ``end`` defaults to a regexp that matches anything, so the mode ends immediately.
+If absent, ``end`` defaults to a regexp that matches anything, so the mode ends immediately (after possibly
+matching any ``contains`` sub-modes).
 
 Sometimes a mode can end not by itself but implicitly with its containing (parent) mode.
 This is achieved with :ref:`endsWithParent <endsWithParent>` attribute.
@@ -157,7 +158,7 @@ keyword ``do`` and another using a comma:
   def foo, do: IO.puts "hello world"
 
 Note that in the first case the parameter list after the function title may also
-include a comma. And iIf we're only interested in highlighting a title we can
+include a comma. And if we're only interested in highlighting a title we can
 tell it to end the function definition after itself:
 
 ::

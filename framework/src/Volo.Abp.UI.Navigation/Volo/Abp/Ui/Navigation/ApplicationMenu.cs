@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
@@ -5,7 +6,7 @@ using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.UI.Navigation;
 
-public class ApplicationMenu : IHasMenuItems
+public class ApplicationMenu : IHasMenuItems, IHasMenuGroups
 {
     /// <summary>
     /// Unique name of the menu in the application.
@@ -31,6 +32,10 @@ public class ApplicationMenu : IHasMenuItems
     [NotNull]
     public ApplicationMenuItemList Items { get; }
 
+    /// <inheritdoc cref="IHasMenuGroups.Groups"/>
+    [NotNull]
+    public ApplicationMenuGroupList Groups { get; }
+
     /// <summary>
     /// Can be used to store a custom object related to this menu.
     /// </summary>
@@ -47,6 +52,7 @@ public class ApplicationMenu : IHasMenuItems
         DisplayName = displayName ?? Name;
 
         Items = new ApplicationMenuItemList();
+        Groups = new ApplicationMenuGroupList();
     }
 
     /// <summary>
@@ -57,6 +63,17 @@ public class ApplicationMenu : IHasMenuItems
     public ApplicationMenu AddItem([NotNull] ApplicationMenuItem menuItem)
     {
         Items.Add(menuItem);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a <see cref="ApplicationMenuGroup"/> to <see cref="Groups"/>.
+    /// </summary>
+    /// <param name="group"><see cref="ApplicationMenuGroup"/> to be added</param>
+    /// <returns>This <see cref="ApplicationMenu"/> object</returns>
+    public ApplicationMenu AddGroup([NotNull] ApplicationMenuGroup group)
+    {
+        Groups.Add(group);
         return this;
     }
 

@@ -4,7 +4,7 @@ module.exports = function(hljs) {
   var DOLLAR_STRING = '\\$([a-zA-Z_]?|[a-zA-Z_][a-zA-Z_0-9]*)\\$';
   var LABEL = '<<\\s*' + UNQUOTED_IDENT + '\\s*>>';
 
-  var SQL_KW = 
+  var SQL_KW =
     // https://www.postgresql.org/docs/11/static/sql-keywords-appendix.html
     // https://www.postgresql.org/docs/11/static/sql-commands.html
     // SQL commands (starting words)
@@ -54,7 +54,7 @@ module.exports = function(hljs) {
     'SUPERUSER NOSUPERUSER CREATEDB NOCREATEDB CREATEROLE NOCREATEROLE INHERIT NOINHERIT ' +
     'LOGIN NOLOGIN REPLICATION NOREPLICATION BYPASSRLS NOBYPASSRLS ';
 
-  var PLPGSQL_KW = 
+  var PLPGSQL_KW =
     'ALIAS BEGIN CONSTANT DECLARE END EXCEPTION RETURN PERFORM|10 RAISE GET DIAGNOSTICS ' +
     'STACKED|10 FOREACH LOOP ELSIF EXIT WHILE REVERSE SLICE DEBUG LOG INFO NOTICE WARNING ASSERT ' +
     'OPEN ';
@@ -77,8 +77,8 @@ module.exports = function(hljs) {
     'REGNAMESPACE|10 REGCONFIG|10 REGDICTIONARY|10 ';// +
     // some types from standard extensions
     'HSTORE|10 LO LTREE|10 ';
-    
-  var TYPES_RE = 
+
+  var TYPES_RE =
     TYPES.trim()
          .split(' ')
          .map( function(val) { return val.split('|')[0]; } )
@@ -265,7 +265,7 @@ module.exports = function(hljs) {
     //
     'GROUPING CAST ';
 
-    var FUNCTIONS_RE = 
+    var FUNCTIONS_RE =
       FUNCTIONS.trim()
                .split(' ')
                .map( function(val) { return val.split('|')[0]; } )

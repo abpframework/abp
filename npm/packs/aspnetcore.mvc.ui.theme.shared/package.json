@@ -1,5 +1,5 @@
 {
-  "version": "7.1.0-rc.1",
+  "version": "7.1.0",
   "name": "@abp/aspnetcore.mvc.ui.theme.shared",
   "repository": {
     "type": "git",
@@ -10,22 +10,22 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui": "~7.1.0-rc.1",
-    "@abp/bootstrap": "~7.1.0-rc.1",
-    "@abp/bootstrap-datepicker": "~7.1.0-rc.1",
-    "@abp/bootstrap-daterangepicker": "~7.1.0-rc.1",
-    "@abp/datatables.net-bs5": "~7.1.0-rc.1",
-    "@abp/font-awesome": "~7.1.0-rc.1",
-    "@abp/jquery-form": "~7.1.0-rc.1",
-    "@abp/jquery-validation-unobtrusive": "~7.1.0-rc.1",
-    "@abp/lodash": "~7.1.0-rc.1",
-    "@abp/luxon": "~7.1.0-rc.1",
-    "@abp/malihu-custom-scrollbar-plugin": "~7.1.0-rc.1",
-    "@abp/moment": "~7.1.0-rc.1",
-    "@abp/select2": "~7.1.0-rc.1",
-    "@abp/sweetalert2": "~7.1.0-rc.1",
-    "@abp/timeago": "~7.1.0-rc.1",
-    "@abp/toastr": "~7.1.0-rc.1"
+    "@abp/aspnetcore.mvc.ui": "~7.1.0",
+    "@abp/bootstrap": "~7.1.0",
+    "@abp/bootstrap-datepicker": "~7.1.0",
+    "@abp/bootstrap-daterangepicker": "~7.1.0",
+    "@abp/datatables.net-bs5": "~7.1.0",
+    "@abp/font-awesome": "~7.1.0",
+    "@abp/jquery-form": "~7.1.0",
+    "@abp/jquery-validation-unobtrusive": "~7.1.0",
+    "@abp/lodash": "~7.1.0",
+    "@abp/luxon": "~7.1.0",
+    "@abp/malihu-custom-scrollbar-plugin": "~7.1.0",
+    "@abp/moment": "~7.1.0",
+    "@abp/select2": "~7.1.0",
+    "@abp/sweetalert2": "~7.1.0",
+    "@abp/timeago": "~7.1.0",
+    "@abp/toastr": "~7.1.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

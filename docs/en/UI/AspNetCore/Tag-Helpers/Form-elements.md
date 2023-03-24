@@ -10,7 +10,7 @@ See the [form elements demo page](https://bootstrap-taghelpers.abp.io/Components
 
 ## abp-input
 
-`abp-input` tag creates a Bootstrap form input for a given c# property. It uses [ASP.NET Core Input Tag Helper](https://docs.microsoft.com/tr-tr/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-3.1#the-input-tag-helper) in background, so every data annotation attribute of `input` tag helper of ASP.NET Core is also valid for `abp-input`.
+`abp-input` tag creates a Bootstrap form input for a given c# property. It uses [Asp.Net Core Input Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-7.0#the-input-tag-helper) in background, so every data annotation attribute of `input` tag helper of Asp.Net Core is also valid for `abp-input`.
 
 Usage:
 
@@ -88,7 +88,7 @@ You can set some of the attributes on your c# property, or directly on HTML tag.
 * `label`: Sets the label of input.
 * `display-required-symbol`: Adds the required symbol `(*)` to the label when the input is required. The default value is `True`.
 
-`asp-format`, `name` and `value` attributes of [ASP.NET Core Input Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-3.1#the-input-tag-helper) are also valid for `abp-input` tag helper.
+`asp-format`, `name` and `value` attributes of [Asp.Net Core Input Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-7.0#the-input-tag-helper) are also valid for `abp-input` tag helper.
 
 ### Label & Localization
 

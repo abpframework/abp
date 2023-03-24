@@ -232,6 +232,9 @@ namespace OpenIddict.Demo.Server.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
+
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
@@ -418,6 +421,9 @@ namespace OpenIddict.Demo.Server.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("EmailConfirmed");
 
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
+
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
@@ -493,6 +499,9 @@ namespace OpenIddict.Demo.Server.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)")
                         .HasColumnName("SecurityStamp");
+
+                    b.Property<bool>("ShouldChangePasswordOnNextLogin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Surname")
                         .HasMaxLength(64)
@@ -695,6 +704,9 @@ namespace OpenIddict.Demo.Server.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)")
                         .HasColumnName("DisplayName");
+
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
@@ -1273,6 +1285,9 @@ namespace OpenIddict.Demo.Server.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
+
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")

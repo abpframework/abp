@@ -64,4 +64,54 @@ public static class ApplicationMenuExtensions
 
         return menuWithItems;
     }
+
+    [NotNull]
+    public static ApplicationMenuGroup GetMenuGroup(
+        [NotNull] this IHasMenuGroups menuWithGroups,
+        string groupName)
+    {
+        var menuGroup = menuWithGroups.GetMenuGroupOrNull(groupName);
+        if (menuGroup == null)
+        {
+            throw new AbpException($"Could not find a group item with given name: {groupName}");
+        }
+
+        return menuGroup;
+    }
+
+    [CanBeNull]
+    public static ApplicationMenuGroup GetMenuGroupOrNull(
+        [NotNull] this IHasMenuGroups menuWithGroups,
+        string menuGroupName)
+    {
+        Check.NotNull(menuWithGroups, nameof(menuWithGroups));
+
+        return menuWithGroups.Groups.FirstOrDefault(group => group.Name == menuGroupName);
+    }
+
+    public static bool TryRemoveMenuGroup(
+        [NotNull] this IHasMenuGroups menuWithGroups,
+        string menuGroupName)
+    {
+        Check.NotNull(menuWithGroups, nameof(menuWithGroups));
+
+        return menuWithGroups.Groups.RemoveAll(group => group.Name == menuGroupName) > 0;
+    }
+
+    [NotNull]
+    public static IHasMenuGroups SetMenuGroupOrder(
+        [NotNull] this IHasMenuGroups menuWithGroups,
+        string menuGroupName,
+        int order)
+    {
+        Check.NotNull(menuWithGroups, nameof(menuWithGroups));
+
+        var menuGroup = menuWithGroups.GetMenuGroupOrNull(menuGroupName);
+        if (menuGroup != null)
+        {
+            menuGroup.Order = order;
+        }
+
+        return menuWithGroups;
+    }
 }

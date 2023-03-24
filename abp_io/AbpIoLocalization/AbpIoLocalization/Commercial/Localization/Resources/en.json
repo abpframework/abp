@@ -196,7 +196,7 @@
     "ChangingDevelopers": "Can I change the registered developers of my organization in the future?",
     "ChangingDevelopersExplanation": "In addition to adding new developers to your license, you can also change the existing developers (you can remove a developer and add a new one to the same seat) without any additional cost.",
     "WhatHappensWhenLicenseEnds": "What happens when my license period ends?",
-    "WhatHappensWhenLicenseEndsExplanation1": "The ABP Commercial license is a <a href=\"{0}\" target=\"_blank\">perpetual license</a>. After your license expires, you can continue developing your project. And you are not obliged to renew your license. Your license comes with a one-year update and support plan out of the box. In order to continue to get new features, performance enhancements, bug fixes, support and continue using ABP Suite, you need to renew your license. When your license expires, you will not get the following benefits:",
+    "WhatHappensWhenLicenseEndsExplanation1": "The ABP Commercial license is a <a href=\"{0}\" target=\"_blank\">perpetual license</a>. After your license expires, you can continue developing your project. And you are not obliged to renew your license. Your license comes with a one-year update and support plan out of the box. In order to continue to get new features, performance enhancements, bug fixes, support and continue using ABP Suite, you need to renew your license. When your license expires;",
     "WhatHappensWhenLicenseEndsExplanation2": "You can not create new solutions using the ABP Commercial, but you can continue developing your existing applications forever.",
     "WhatHappensWhenLicenseEndsExplanation3": "You will be able to get updates for the modules and themes within your MINOR version (except RC or Preview versions). For example: if you are using v3.2.0 of a module, you can still get updates for v3.2.x (v3.2.1, v3.2.5... etc.) of that module. But you cannot get updates for the next major or minor version (like v3.3.0, v3.3.3, 4.x.x.. etc.). For example, when your license expired, the latest release was v4.4.3, and later, it published both 4.4.4 version and 4.5.0 version, you would be able to access the v4.4.X but you wouldn't be access the v4.5.X.",
     "WhatHappensWhenLicenseEndsExplanation4": "You can not install new modules and themes added to the ABP Commercial platform after your license ends.",
@@ -208,7 +208,7 @@
     "WhenShouldIRenewMyLicense": "When should I renew my license?",
     "WhenShouldIRenewMyLicenseExplanation": "If you renew your license within <strong>1 month</strong> after your license expires, the following discounts will be applied: Team License {0}; Business License {1}; Enterprise License {2}. However, if you renew your license after <strong>1 month</strong> since the expiry date of your license, the renewal price will be the same as the license purchase price and there will be no discount on your renewal.",
     "TrialPlan": "Do you have a trial plan?",
-    "TrialPlanExplanation": "It has a 14 days trial period for the ABP Commercial team license. For more information visit <a href={0} target='_blank'>here</a>. Furthermore, for the Team licenses we provide a 30 days money-back guarantee. You can just request a refund in the first 30 days. For the Business and Enterprise licenses, we provide 60% refund in 30 days. This is because Business and Enterprise licenses include the full source code of all the modules and the themes.",
+    "TrialPlanExplanation": "No, there is no trial version for ABP Commercial. You can check the community edition to understand the code quality and approaches. We also offer a 30-day money-back guarantee for the Team license, no questions asked! You can request a refund within the first 30 days. We provide a 60% refund within 30 days for Business and Enterprise licenses. This is because the Business and Enterprise licenses contain the full source-code of all the modules and themes.",
     "DoYouAcceptBankWireTransfer": "Do you accept bank wire transfers?",
     "DoYouAcceptBankWireTransferExplanation": "Yes, we accept bank wire transfers.<br/>After sending the license fee via bank transfer, send your receipt and requested license type to accounting@volosoft.com.<br/>Our international bank account information:",
     "HowToUpgrade": "How to upgrade existing applications when a new version is available?",
@@ -818,6 +818,9 @@
     "DeletingMemberWarningMessage": "\"{0}\" will be removed from the developer list. If you want, you can assign this empty seat to another developer later.",
     "AdditionalInfo": "If the developer seats are above your requirements, you can reduce them. You can email at <a href=\"mailto:info@abp.io\">info@abp.io</a> to remove some of your developer seats. Clearing unused developer seats will reduce the license renewal cost. If you want, you can re-purchase additional developer seats within your active license period. Note that, since there are {0} developers in this license package, you cannot reduce this number.",
     "LinkExpiredErrorMessage": "The link you are trying to access is expired.",
-    "ExpirationDate": "Expiration Date"
+    "ExpirationDate": "Expiration Date",
+    "SpringCampaignDiscount": "Spring Campaign Discount",
+    "WhyUseAbpIoPlatform": "Why should I use the ABP.IO Platform instead of creating a new solution from scratch?",
+    "WhyUseAbpIoPlatformFaqExplanation": "See <a href=\"https://docs.abp.io/en/commercial/latest/why-abp-io-platform \"> that document </a> for a detailed explanation of why using ABP.IO Platform has a significant advantage over doing everything yourself."
   }
 }

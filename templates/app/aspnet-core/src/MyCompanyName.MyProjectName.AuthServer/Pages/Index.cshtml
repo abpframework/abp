@@ -23,7 +23,7 @@
                 <div class="account-brand p-4 text-center mb-1">
                     @if (!BrandingProvider.LogoUrl.IsNullOrEmpty())
                     {
-                        <a class="navbar-brand" href="/" alt="@BrandingProvider.AppName"></a>
+                        <a class="navbar-brand" href="~/" alt="@BrandingProvider.AppName"></a>
                     }
                     else
                     {
@@ -69,7 +69,8 @@
                                                 <abp-dropdown-menu>
                                                     @foreach (var language in Model.Languages)
                                                     {
-                                                        <abp-dropdown-item href="~/Abp/Languages/Switch?culture=@(language.CultureName)&uiCulture=@(language.UiCultureName)&returnUrl=@(System.Net.WebUtility.UrlEncode(Request.GetEncodedPathAndQuery()))">@language.DisplayName</abp-dropdown-item>
+                                                        var languageUrl = Url.Content($"~/Abp/Languages/Switch?culture={language.CultureName}&uiCulture={language.UiCultureName}&returnUrl={System.Net.WebUtility.UrlEncode(Request.GetEncodedPathAndQuery())}");
+                                                        <abp-dropdown-item href="@languageUrl">@language.DisplayName</abp-dropdown-item>
                                                     }
                                                 </abp-dropdown-menu>
                                             }

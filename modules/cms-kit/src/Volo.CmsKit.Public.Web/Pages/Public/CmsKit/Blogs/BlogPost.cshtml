@@ -29,21 +29,21 @@
 @section styles{
     @if (isScrollIndexEnabled)
     {
-        <abp-abp-style-bundle>
+        <abp-style-bundle>
             <abp-style src="/Pages/Public/CmsKit/Blogs/bootstrap-toc.css" />
-        </abp-abp-style-bundle>
+        </abp-style-bundle>
     }
-    <abp-abp-style-bundle>
+    <abp-style-bundle>
         <abp-style src="/Pages/Public/CmsKit/Blogs/blogPost.css" />
         <abp-style type="typeof(HighlightJsStyleContributor)" />
-    </abp-abp-style-bundle>
+    </abp-style-bundle>
 }
 
-    @section scripts{
+@section scripts{
     @if (isScrollIndexEnabled)
     {
         <abp-script-bundle>
-            <abp-style src="/Pages/Public/CmsKit/Blogs/bootstrap-toc.js" />
+            <abp-script src="/Pages/Public/CmsKit/Blogs/bootstrap-toc.js" />
             <abp-script src="/Pages/Public/CmsKit/Blogs/blogpost-scroll-index.js" />
         </abp-script-bundle>
     }

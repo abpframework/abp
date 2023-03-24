@@ -44,10 +44,10 @@ export class DateTimeAdapter {
     const date = new Date(
       newValue.year,
       newValue.month - 1,
-      value.day,
-      value.hour,
-      value.minute,
-      value.second,
+      newValue.day,
+      newValue.hour,
+      newValue.minute,
+      newValue.second,
     );
 
     return new Date(date).toISOString();

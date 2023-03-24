@@ -1,13 +1,13 @@
 {
   "name": "@abp/ng.core",
-  "version": "7.1.0-rc.1",
+  "version": "7.1.0",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/utils": "~7.1.0-rc.1",
+    "@abp/utils": "~7.1.0",
     "angular-oauth2-oidc": "^15.0.1",
     "just-clone": "^6.1.1",
     "just-compare": "^2.3.0",

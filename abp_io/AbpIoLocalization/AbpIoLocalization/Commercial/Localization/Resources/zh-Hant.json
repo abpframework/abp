@@ -384,6 +384,24 @@
     "BlazoriseLicense": "我们是否需要购买Blazorise许可证？",
     "BlazoriseLicenseExplanation": "我公司Volosoft和公司Megabit之间有合作协议，根据此协议，购买将同时包含了Blazorise许可证与ABP商业产品，因此我们的客户不需要再额外购买Blazorise许可证。",
     "discountForYears": "{0}% 折扣 {1} 年",
-    "BlackFridayDiscount": "黑色星期五折扣"
+    "BlackFridayDiscount": "黑色星期五折扣",
+    "OnboardingTrainingFaqTitle": "你們有 ABP 入職培訓嗎？",
+    "OnboardingTrainingFaqExplanation": "是的，我們有 ABP 培訓服務來幫助您快速啟動 ABP 項目。您將從 ABP 核心團隊成員那裡了解 ABP，並獲得開始您的 ABP 項目的技能。在入職培訓中，我們將解釋如何設置您的開發環境、安裝所需的工具、創建功能齊全的 CRUD 頁面。培訓將進行直播並使用 Zoom 應用程序，我們對使用其他在線會議平台持開放態度。培訓語言為英語。您也可以在會議期間提出有關 ABP 的問題。將為雙方計劃一個方便的時間和日期。要獲取更多信息，請通過 <a href=\"mailto:info@abp.io\">info@abp.io</a> 聯繫我們。",
+    "SupportPolicyFaqTitle": "您的支持政策是什麼？",
+    "SupportPolicyFaqExplanation": "我們只支持活動和以前的主要版本。我們不保證為第 3 個和更早的主要版本發布補丁。例如，如果活動版本是 7.0.0，我們將發布 6.x.x 和 7.x.x 的補丁版本。此外，我們僅對 ABP Framework 和 ABP Commercial 相關問題提供支持。這意味著不支持 ABP 產品使用的第 3 方應用程序、雲服務和其他外圍庫。我們將盡商業上合理的努力，在“Volosoft Bilisim A.S”的正式營業時間內為我們的客戶提供技術支持。另一方面，我們不承諾服務級別協議 (SLA) 響應時間，但我們會盡量在我們的官方工作時間內盡快響應技術問題。除非與客戶達成特殊協議，否則我們僅在 https://support.abp.io 上提供支持。我們還提供私人電子郵件支持，僅適用於企業許可證持有者。",
+    "DowngradeLicensePlan": "我以後可以降級到更低的許可計劃嗎？",
+    "DowngradeLicensePlanExplanation": "您不能降級現有的許可計劃。但是您可以購買新的較低許可計劃並在新許可上繼續您的開發。購買較低的許可證後，您只需通過 ABP CLI 命令登錄到新的許可證計劃：`abp login <username> -o <organization> `。",
+    "LicenseTransfer": "許可證可以從一個開發商轉讓給另一個開發商嗎？",
+    "LicenseTransferExplanation": "是的！購買許可證後，您將成為許可證持有者，因此您可以訪問組織管理頁面。組織具有所有者和開發者角色。所有者可以管理開發者席位並分配開發者。每個指定的開發人員將通過 ABP CLI 命令登錄到系統，並將擁有開發和支持權限。",
+    "RenewLicenseEarly": "如果我提前更新我的駕照，我會得到一整年嗎？",
+    "RenewLicenseEarylExplanation": "當您在許可證到期日期之前續訂許可證時，您的許可證到期日期將增加 1 年。例如，如果您的許可證在 {0}-06-06 到期，而您在 {0}-01-01 續簽，則新的許可證到期日期將為 {1}-06-06。",
+    "WhatHappensWhenLicenseEnds": "當我的許可期限結束時會發生什麼？",
+    "WhatHappensWhenLicenseEndsExplanation1": "ABP 商業許可是<a href=\"{0}\" target=\"_blank\">永久許可</a>。許可證到期後，您可以繼續開發您的項目。而且您沒有義務更新您的許可證。您的許可證附帶開箱即用的一年更新和支持計劃。為了繼續獲得新功能、性能增強、錯誤修復、支持和繼續使用 ABP Suite，您需要更新您的許可證。當您的許可證到期時；",
+    "WhatHappensWhenLicenseEndsExplanation2": "您無法使用 ABP Commercial 創建新的解決方案，但您可以永遠繼續開發現有的應用程序。",
+    "WhatHappensWhenLicenseEndsExplanation3": "您將能夠在您的次要版本（RC 或預覽版除外）中獲取模塊和主題的更新。例如：如果您正在使用模塊的 v3.2.0，您仍然可以獲得該模塊的 v3.2.x（v3.2.1、v3.2.5...等）的更新。但是您無法獲得下一個主要或次要版本的更新（如 v3.3.0、v3.3.3、4.x.x.. 等）。比如你的license過期了，最新發布的是v4.4.3，後來又發布了4.4.4和4.5.0兩個版本，你可以訪問v4.4.X，但是你就不行了訪問 v4.5.X。",
+    "WhatHappensWhenLicenseEndsExplanation4": "許可證到期後，您將無法安裝添加到 ABP 商業平台的新模塊和主題。",
+    "WhatHappensWhenLicenseEndsExplanation5": "您不能使用 ABP 套件。",
+    "WhatHappensWhenLicenseEndsExplanation6": "您無法再獲得<a href=\"{0}\">高級支持</a>。",
+    "WhatHappensWhenLicenseEndsExplanation7": "如果您想繼續獲得這些好處，您可以延長（更新）您的許可證。如果您在許可到期後 <strong>1 個月</strong> 內延長許可，將應用以下折扣：團隊許可 {0}；營業執照{1}；企業許可證{2}。"
   }
 }

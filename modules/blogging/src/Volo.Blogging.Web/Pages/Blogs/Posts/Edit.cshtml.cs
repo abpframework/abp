@@ -50,6 +50,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             var postDto = await _postAppService.GetAsync(new Guid(PostId));
             Post = ObjectMapper.Map<PostWithDetailsDto, EditPostViewModel>(postDto);
             Post.Tags = String.Join(", ", postDto.Tags.Select(p => p.Name).ToArray());
+            Post.Url = WebUtility.UrlDecode(Post.Url);
 
             return Page();
         }
@@ -60,7 +61,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             {
                 BlogId = Post.BlogId,
                 Title = Post.Title,
-                Url = Post.Url,
+                Url = WebUtility.UrlEncode(Post.Url),
                 CoverImage = Post.CoverImage,
                 Content = Post.Content,
                 Tags = Post.Tags,

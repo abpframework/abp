@@ -75,6 +75,42 @@ This job simply uses `IEmailSender` to send emails (see [email sending document]
 
 A background job should not hide exceptions. If it throws an exception, the background job is automatically re-tried after a calculated waiting time. Hide exceptions only if you don't want to re-run the background job for the current argument.
 
+#### Cancelling Background Jobs
+
+If your background task is cancellable, then you can use the standard [Cancellation Token](Cancellation-Token-Provider.md) system to obtain a `CancellationToken` to cancel your job when requested. See the following example that uses the `ICancellationTokenProvider` to obtain the cancellation token:
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
+
+namespace MyProject
+{
+    public class LongRunningJob : AsyncBackgroundJob<LongRunningJobArgs>, ITransientDependency
+    {
+        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+
+        public LongRunningJob(ICancellationTokenProvider cancellationTokenProvider)
+        {
+            _cancellationTokenProvider = cancellationTokenProvider;
+        }
+
+        public override async Task ExecuteAsync(LongRunningJobArgs args)
+        {
+            foreach (var id in args.Ids)
+            {
+                _cancellationTokenProvider.Token.ThrowIfCancellationRequested();
+                await ProcessAsync(id); // code omitted for brevity
+            }
+        }
+    }
+}
+```
+
+> A cancellation operation might be needed if the application is shutting down and we don't want to block the application in the background job. This example throws an exception if the cancellation is requested. So, the job will be retried the next time the application starts. If you don't want that, just return from the `ExecuteAsync` method without throwing any exception (you can simply check the `_cancellationTokenProvider.Token.IsCancellationRequested` property).
+
 #### Job Name
 
 Each background job has a name. Job names are used in several places. For example, RabbitMQ provider uses job names to determine the RabbitMQ Queue names.

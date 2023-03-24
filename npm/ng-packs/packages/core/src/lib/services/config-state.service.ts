@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
@@ -25,8 +25,9 @@ export class ConfigStateService {
   constructor(
     private abpConfigService: AbpApplicationConfigurationService,
     private abpApplicationLocalizationService: AbpApplicationLocalizationService,
+    @Optional()
     @Inject(INCUDE_LOCALIZATION_RESOURCES_TOKEN)
-    private readonly includeLocalizationResources: boolean,
+    private readonly includeLocalizationResources: boolean | null,
   ) {
     this.initUpdateStream();
   }
@@ -36,7 +37,7 @@ export class ConfigStateService {
       .pipe(
         switchMap(() =>
           this.abpConfigService.get({
-            includeLocalizationResources: this.includeLocalizationResources,
+            includeLocalizationResources: !!this.includeLocalizationResources,
           }),
         ),
       )
@@ -61,6 +62,7 @@ export class ConfigStateService {
       onlyDynamics: false,
     });
   }
+
   refreshAppState() {
     this.updateSubject.next();
     return this.createOnUpdateStream(state => state).pipe(take(1));
@@ -141,7 +143,7 @@ export class ConfigStateService {
     return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
   }
 
-  getFeatures$(keys: string[]): Observable<{[key: string]: string} | undefined> {
+  getFeatures$(keys: string[]): Observable<{ [key: string]: string } | undefined> {
     return this.store.sliceState(({ features }) => {
       if (!features?.values) return;
 

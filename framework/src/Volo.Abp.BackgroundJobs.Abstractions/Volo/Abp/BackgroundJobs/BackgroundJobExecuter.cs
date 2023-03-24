@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs;
 
@@ -46,13 +47,19 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
         {
             using(CurrentTenant.Change(GetJobArgsTenantId(context.JobArgs)))
             {
-                if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
+                var cancellationTokenProvider =
+                    context.ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
+
+                using (cancellationTokenProvider.Use(context.CancellationToken))
                 {
-                    await ((Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs }));
-                }
-                else
-                {
-                    jobExecuteMethod.Invoke(job, new[] { context.JobArgs });
+                    if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
+                    {
+                        await ((Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs }));
+                    }
+                    else
+                    {
+                        jobExecuteMethod.Invoke(job, new[] { context.JobArgs });
+                    }
                 }
             }
            

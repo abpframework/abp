@@ -58,7 +58,7 @@ public class AuthService : IAuthService, ITransientDependency
         {
             if (!response.IsSuccessStatusCode)
             {
-                Logger.LogError("Remote server returns '{response.StatusCode}'");
+                Logger.LogError($"Remote server returns '{response.StatusCode}'");
                 return null;
             }
 

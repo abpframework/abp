@@ -1,7 +1,7 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { AbpOAuthGuard } from '../guards/oauth.guard';
-import { AuthService } from '@Abp/ng.core';
+import { AuthService } from '@abp/ng.core';
 
 describe('AuthGuard', () => {
   let spectator: SpectatorService<AbpOAuthGuard>;

@@ -209,7 +209,22 @@ public static class AbpStringExtensions
             return str;
         }
 
-        return str.Substring(0, pos) + replace + str.Substring(pos + search.Length);
+        var searchLength = search.Length;
+        var replaceLength = replace.Length;
+        var newLength = str.Length - searchLength + replaceLength;
+
+        Span<char> buffer = newLength <= 1024 ? stackalloc char[newLength] : new char[newLength];
+
+        // Copy the part of the original string before the search term
+        str.AsSpan(0, pos).CopyTo(buffer);
+
+        // Copy the replacement text
+        replace.AsSpan().CopyTo(buffer.Slice(pos));
+
+        // Copy the remainder of the original string
+        str.AsSpan(pos + searchLength).CopyTo(buffer.Slice(pos + replaceLength));
+
+        return buffer.ToString();
     }
 
     /// <summary>
