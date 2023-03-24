@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Puis-je changer les développeurs enregistrés de mon organisation à l'avenir?",
     "ChangingDevelopersExplanation": "En plus d'ajouter de nouveaux développeurs à votre licence, vous pouvez également modifier les développeurs existants (vous pouvez supprimer un développeur et en ajouter un nouveau sur le même siège) sans aucun coût supplémentaire.",
     "WhenShouldIRenewMyLicense": "Quand dois-je renouveler ma licence?",
-    "WhenShouldIRenewMyLicenseExplanation": "Si vous renouvelez votre licence dans <strong>1 mois</strong> après l'expiration de votre licence, les remises suivantes seront appliquées : licence d'équipe {0} ; licence commerciale {1} ; licence d'entreprise {2}. Toutefois, si vous renouveler votre licence après <strong>1 mois</strong> depuis la date d'expiration de votre licence, le prix de renouvellement sera le même que le prix d'achat de la licence et il n'y aura pas de remise sur votre renouvellement.",
+    "WhenShouldIRenewMyLicenseExplanation": "Si vous renouvelez votre licence dans <strong>{3} jours</strong> après l'expiration de votre licence, les remises suivantes seront appliquées : licence d'équipe {0} ; licence commerciale {1} ; licence d'entreprise {2}. Toutefois, si vous renouveler votre licence après <strong>{3} jours</strong> depuis la date d'expiration de votre licence, le prix de renouvellement sera le même que le prix d'achat de la licence et il n'y aura pas de remise sur votre renouvellement.",
     "TrialPlan": "Avez-vous un plan d'essai?",
     "DoYouAcceptBankWireTransfer": "Acceptez-vous les virements bancaires?",
     "DoYouAcceptBankWireTransferExplanation": "Oui, nous acceptons les virements bancaires.<br />Après avoir envoyé les frais de licence par virement bancaire, envoyez-nous par e-mail à accounting@abp.io votre reçu et le type de licence demandé. Nos coordonnées bancaires internationales :",
@@ -399,7 +399,7 @@
     "WhatHappensWhenLicenseEndsExplanation4": "Vous ne pouvez pas installer les nouveaux modules et thèmes ajoutés à la plateforme ABP Commercial après l'expiration de votre licence.",
     "WhatHappensWhenLicenseEndsExplanation5": "Vous ne pouvez pas utiliser la suite ABP.",
     "WhatHappensWhenLicenseEndsExplanation6": "Vous ne pouvez plus bénéficier du <a href=\"{0}\">support premium</a>.",
-    "WhatHappensWhenLicenseEndsExplanation7": "Vous pouvez prolonger (renouveler) votre licence si vous souhaitez continuer à bénéficier de ces avantages. Si vous prolongez votre licence dans <strong>1 mois</strong> après l'expiration de votre licence, les remises suivantes seront appliquées : Licence d'équipe {0} ; Licence commerciale {1} ; Licence Entreprise {2}.",
+    "WhatHappensWhenLicenseEndsExplanation7": "Vous pouvez prolonger (renouveler) votre licence si vous souhaitez continuer à bénéficier de ces avantages. Si vous prolongez votre licence dans <strong>{3} jours</strong> après l'expiration de votre licence, les remises suivantes seront appliquées : Licence d'équipe {0} ; Licence commerciale {1} ; Licence Entreprise {2}.",
     "BlazoriseLicense": "Faut-il acheter une licence Blazorise ?",
     "BlazoriseLicenseExplanation": "Nous avons conclu un accord entre Volosoft et Megabit, dans le cadre duquel la licence Blazorise est intégrée aux produits ABP Commercial, de sorte que nos clients n'ont pas besoin d'acheter une licence Blazorise supplémentaire."
   }

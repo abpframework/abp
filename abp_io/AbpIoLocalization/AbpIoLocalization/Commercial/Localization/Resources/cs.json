@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Mohu v budoucnu změnit registrované vývojáře své organizace?",
     "ChangingDevelopersExplanation": "Kromě přidání nových vývojářů do vaší licence můžete také změnit stávající vývojáře (můžete odebrat vývojáře a přidat nového na stejné místo) bez jakýchkoli dalších nákladů.",
     "WhenShouldIRenewMyLicense": "Kdy bych měl obnovit licenci?",
-    "WhenShouldIRenewMyLicenseExplanation": "Pokud si licenci obnovíte do <strong>1 měsíce</strong> po vypršení platnosti licence, budou uplatněny následující slevy: Týmová licence {0}; Obchodní licence {1}; Enterprise Licence {2}. Pokud však licenci obnovíte po <strong>1 měsíci</strong> od data vypršení platnosti vaší licence, cena za obnovení bude stejná jako cena za zakoupení licence a na obnovení nebude poskytnuta žádná sleva.",
+    "WhenShouldIRenewMyLicenseExplanation": "Pokud si licenci obnovíte do <strong>{3} dní</strong> po vypršení platnosti licence, budou uplatněny následující slevy: Týmová licence {0}; Obchodní licence {1}; Enterprise Licence {2}. Pokud však licenci obnovíte po <strong>{3} měsíci</strong> od data vypršení platnosti vaší licence, cena za obnovení bude stejná jako cena za zakoupení licence a na obnovení nebude poskytnuta žádná sleva.",
     "TrialPlan": "Máte zkušební plán?",
     "DoYouAcceptBankWireTransfer": "Přijímáte bankovní převod?",
     "DoYouAcceptBankWireTransferExplanation": "Ano, přijímáme bankovní převod.<br />Po zaslání licenčního poplatku bankovním převodem nám zašlete e-mail na adresu accounting@abp.io potvrzení a požadovaný typ licence. Informace o našem mezinárodním bankovním účtu:",
@@ -399,9 +399,8 @@
     "WhatHappensWhenLicenseEndsExplanation4": "Po skončení platnosti licence nelze instalovat nové moduly a motivy přidané do platformy ABP Commercial.",
     "WhatHappensWhenLicenseEndsExplanation5": "Sadu ABP Suite nelze použít.",
     "WhatHappensWhenLicenseEndsExplanation6": "Již nelze získat <a href=\"{0}\">prémiovou podporu</a>.",
-    "WhatHappensWhenLicenseEndsExplanation7": "Pokud chcete i nadále využívat tyto výhody, můžete svou licenci prodloužit (obnovit). Pokud prodloužíte licenci do <strong>1 měsíce</strong> po vypršení platnosti licence, budou uplatněny následující slevy: Týmová licence {0}; Obchodní licence {1}; Enterprise Licence {2}.",
+    "WhatHappensWhenLicenseEndsExplanation7": "Pokud chcete i nadále využívat tyto výhody, můžete svou licenci prodloužit (obnovit). Pokud prodloužíte licenci do <strong>{3} dní</strong> po vypršení platnosti licence, budou uplatněny následující slevy: Týmová licence {0}; Obchodní licence {1}; Enterprise Licence {2}.",
     "BlazoriseLicense": "Musíme si koupit licenci Blazorise?",
     "BlazoriseLicenseExplanation": "Máme dohodu mezi společnostmi Volosoft a Megabit, na základě této dohody je licence Blazorise přibalena k produktům ABP Commercial, proto si naši zákazníci nemusí kupovat další licenci Blazorise."
-    
   }
 }

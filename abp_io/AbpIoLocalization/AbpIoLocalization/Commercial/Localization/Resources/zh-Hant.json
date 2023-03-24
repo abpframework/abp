@@ -192,7 +192,7 @@
     "ChangingDevelopers": "我將來可以更改我組織的註冊開發人員嗎?",
     "ChangingDevelopersExplanation": "除了將新的開發人員添加到你的許可中之外,你還可以更改現有的開發人員(可以刪除一個開發人員並將新的開發人員添加到同一位置),而無需任何額外費用.",
     "WhenShouldIRenewMyLicense": "我什麽時候應該續訂我的許可?",
-    "WhenShouldIRenewMyLicenseExplanation": "如果您在許可證到期後 <strong>1 個月</strong>內續訂許可證，將享受以下折扣：團隊許可證 {0} ; 商業許可證 {1} ;企業許可證 {2}. 如果您在許可證到期後 <strong>1 個月</strong>續訂許可證，續訂價格將與許可證購買價格相同，並且續訂不會有折扣。",
+    "WhenShouldIRenewMyLicenseExplanation": "如果您在許可證到期後 <strong>{3} 天</strong>內續訂許可證，將享受以下折扣：團隊許可證 {0} ; 商業許可證 {1} ;企業許可證 {2}. 如果您在許可證到期後 <strong>{3} 天</strong>續訂許可證，續訂價格將與許可證購買價格相同，並且續訂不會有折扣。",
     "TrialPlan": "你們有試用計劃嗎?",
     "DoYouAcceptBankWireTransfer": "你們接受銀行電匯嗎?",
     "DoYouAcceptBankWireTransferExplanation": "是的，我們接受銀行電匯。<br />在通過銀行轉賬發送許可費後，將您的收據和所需的許可類型通過電子郵件發送至accounting@abp.io。 我們的國際銀行賬戶信息：",
@@ -402,6 +402,6 @@
     "WhatHappensWhenLicenseEndsExplanation4": "許可證到期後，您將無法安裝添加到 ABP 商業平台的新模塊和主題。",
     "WhatHappensWhenLicenseEndsExplanation5": "您不能使用 ABP 套件。",
     "WhatHappensWhenLicenseEndsExplanation6": "您無法再獲得<a href=\"{0}\">高級支持</a>。",
-    "WhatHappensWhenLicenseEndsExplanation7": "如果您想繼續獲得這些好處，您可以延長（更新）您的許可證。如果您在許可到期後 <strong>1 個月</strong> 內延長許可，將應用以下折扣：團隊許可 {0}；營業執照{1}；企業許可證{2}。"
+    "WhatHappensWhenLicenseEndsExplanation7": "如果您想繼續獲得這些好處，您可以延長（更新）您的許可證。如果您在許可到期後 <strong>{3} 天</strong> 內延長許可，將應用以下折扣：團隊許可 {0}；營業執照{1}；企業許可證{2}。"
   }
 }

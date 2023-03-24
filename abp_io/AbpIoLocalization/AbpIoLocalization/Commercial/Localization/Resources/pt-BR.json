@@ -191,7 +191,7 @@
     "ChangingDevelopers": "Posso mudar os desenvolvedores registrados da minha organização no futuro?",
     "ChangingDevelopersExplanation": "Além de adicionar novos desenvolvedores à sua licença, você também pode alterar os desenvolvedores existentes (você pode remover um desenvolvedor e adicionar um novo ao mesmo assento) sem nenhum custo adicional.",
     "WhenShouldIRenewMyLicense": "Quando devo renovar minha licença?",
-    "WhenShouldIRenewMyLicenseExplanation": "Se você renovar sua licença em <strong> 1 mês </strong> após a expiração da licença, os seguintes descontos serão aplicados: Licença de equipe {0} ; Licença de negócios {1} ; Licença empresarial {2} . Se você renovar sua licença <strong> 1 mês </strong> após a data de expiração de sua licença, o preço de renovação será o mesmo que o preço de compra da licença e não haverá desconto em sua renovação.",
+    "WhenShouldIRenewMyLicenseExplanation": "Se você renovar sua licença em <strong> {3} dias </strong> após a expiração da licença, os seguintes descontos serão aplicados: Licença de equipe {0} ; Licença de negócios {1} ; Licença empresarial {2} . Se você renovar sua licença <strong> {3} dias </strong> após a data de expiração de sua licença, o preço de renovação será o mesmo que o preço de compra da licença e não haverá desconto em sua renovação.",
     "TrialPlan": "Você tem um plano experimental?",
     "DoYouAcceptBankWireTransfer": "Você aceita transferência bancária?",
     "DoYouAcceptBankWireTransferExplanation": "Sim, aceitamos transferência bancária. <br /> Após enviar a taxa de licença por transferência bancária, envie-nos um e-mail para accounting@abp.io com seu recibo e o tipo de licença solicitada. Nossas informações de conta bancária internacional:",
@@ -402,6 +402,6 @@
     "WhatHappensWhenLicenseEndsExplanation4": "Você não pode instalar novos módulos e temas adicionados à plataforma comercial da ABP após o término de sua licença.",
     "WhatHappensWhenLicenseEndsExplanation5": "Você não pode usar o ABP Suite",
     "WhatHappensWhenLicenseEndsExplanation6": "Você não pode mais obter o <a href==\"{0}\">apoio de premium</a>.",
-    "WhatHappensWhenLicenseEndsExplanation7": "Você pode estender (renovar) sua licença se quiser continuar obtendo esses benefícios. Se você estender sua licença dentro de <strong>1 mês</strong> após a expiração de sua licença, os seguintes descontos serão aplicados: Licença de equipe {0}; Licença Comercial {1}; Licença empresarial {2}."
+    "WhatHappensWhenLicenseEndsExplanation7": "Você pode estender (renovar) sua licença se quiser continuar obtendo esses benefícios. Se você estender sua licença dentro de <strong>{3} dias</strong> após a expiração de sua licença, os seguintes descontos serão aplicados: Licença de equipe {0}; Licença Comercial {1}; Licença empresarial {2}."
   }
 }
