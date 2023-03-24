@@ -9,7 +9,8 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
-        <ProjectReference Include="..\..\src\Volo.Abp.Json\Volo.Abp.Json.csproj" />
+        <ProjectReference Include="..\..\src\Volo.Abp.Json.Newtonsoft\Volo.Abp.Json.Newtonsoft.csproj" />
+        <ProjectReference Include="..\..\src\Volo.Abp.Json.SystemTextJson\Volo.Abp.Json.SystemTextJson.csproj" />
         <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
         <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     </ItemGroup>
