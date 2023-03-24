@@ -18,11 +18,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="*.abppkg.analyze.json" />
-    <Content Remove="*.abppkg.analyze.json" />
-    <EmbeddedResource Include="*.abppkg.json" />
-    <Content Remove="*.abppkg.json" />
+  <ItemGroup Condition="'$(UsingMicrosoftNETSdkWeb)' != 'true' AND '$(UsingMicrosoftNETSdkRazor)' != 'true'">
+    <None Remove="*.abppkg.analyze.json" />
+    <Content Include="*.abppkg.analyze.json">
+		<Pack>true</Pack>
+		<PackagePath>content\</PackagePath>
+	</Content>
+    <None Remove="*.abppkg.json" />
+    <Content Include="*.abppkg.json">
+		<Pack>true</Pack>
+		<PackagePath>content\</PackagePath>
+    </Content>
   </ItemGroup>
   <ItemGroup Condition="$(AssemblyName.EndsWith('HttpApi.Client'))">
     <EmbeddedResource Include="**\*generate-proxy.json" />
