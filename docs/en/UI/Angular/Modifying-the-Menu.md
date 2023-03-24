@@ -89,6 +89,7 @@ function configureRoutes(routes: RoutesService) {
 ```
 
 Also we can define group for navigation elements. It's an optional property
+ - **Note:** It'll also include groups that included from modules
 
 ```js
 // route.provider.ts
