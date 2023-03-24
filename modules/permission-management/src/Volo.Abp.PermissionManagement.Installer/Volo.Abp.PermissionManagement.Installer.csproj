@@ -16,9 +16,15 @@
 
     <ItemGroup>
       <None Remove="..\..\Volo.Abp.PermissionManagement.abpmdl.json" />
-      <EmbeddedResource Include="..\..\Volo.Abp.PermissionManagement.abpmdl.json" />
+      <Content Include="..\..\Volo.Abp.PermissionManagement.abpmdl.json">
+        <Pack>true</Pack>
+        <PackagePath>content\</PackagePath>
+      </Content>
       <None Remove="..\..\**\*.abppkg*.json" />
-      <EmbeddedResource Include="..\..\**\*.abppkg*.json" />
+      <Content Include="..\..\**\*.abppkg*.json">
+        <Pack>true</Pack>
+        <PackagePath>content\</PackagePath>
+      </Content>
     </ItemGroup>
 
 </Project>
