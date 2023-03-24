@@ -23,8 +23,8 @@ The following code prepares two constants named `identityCreateFormPropContribut
 import {
   eIdentityComponents,
   IdentityCreateFormPropContributors,
-  IdentityUserDto,
 } from '@abp/ng.identity';
+import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { ePropType, FormProp, FormPropList } from '@abp/ng.theme.shared/extensions';
 import { Validators } from '@angular/forms';
 
