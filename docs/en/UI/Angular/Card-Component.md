@@ -3,7 +3,7 @@
 The ABP Card Component is a wrapper component for the Bootstrap card class.
 It supports all features which Bootstrap card component provides.
 
-ABP Card Component has three main components, `CardHeader` Component, `CardBody` Component and `CardFooter` Component. These components have their own class and style inputs 
+ABP Card Component has three main components, `CardHeader`, `CardBody` and `CardFooter`. These components have their own class and style inputs 
 
 |Component |Selector         |Input Properties                    |
 |--------- |-----------------|------------------------------------|
@@ -11,15 +11,13 @@ ABP Card Component has three main components, `CardHeader` Component, `CardBody`
 |CardBody  |`abp-card-body`  | `cardBodyClass`,`cardBodyStyle`    |          
 |CardFooter|`abp-card-footer`| `cardFooterClass`,`cardFooterStyle`|
 
-In addition to these components, Card component provides directives like `CardHeader`,`CardTitle`,`CardSubtitle`,`CardText`,`CardLink`,`CardImgTop`. 
+In addition to these components, Card component provides directives like `CardHeader`,`CardTitle`,`CardSubtitle`,`CardImgTop`. 
 
 |Directive    |Selector                                                     |
 |-------------|-------------------------------------------------------------|
 |CardHeader   |`abp-card-header`,`[abp-card-header]`,`[abpCardHeader]`      |
 |CardTitle    |`abp-card-title`,`[abp-card-title]`,`[abpCardTitle]`         |          
 |CardSubtitle |`abp-card-subtitle`,`[abp-card-subtitle]`,`[abpCardSubtitle]`|
-|CardText     |`abp-card-text`,`[abp-card-text]`,`[abpCardText]`            |
-|CardLink     |`abp-card-link`,`[abp-card-text]`,`[abpCardText]`            |
 |CardImgTop   |`abp-card-img-top`,`[abp-card-img-top]`,`[abpCardImgTop]`    |
 
 
@@ -82,9 +80,9 @@ import { Component } from '@angular/core';
       <abp-card-body>
         <h5 abpCardTitle>Card Title</h5>
         <h6 abpCardSubtitle class="mb-2 text-muted">Card subtitle</h6>
-        <p abpCardText>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a abpCardLink href="#">Card link</a>
-        <a abpCardLink href="#">Another link</a>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="card-link" >Card link</a>
+        <a href="#" class="card-link" >Another link</a>
       </abp-card-body>
     </abp-card> 
   `,
@@ -108,7 +106,7 @@ import { Component } from '@angular/core';
     <abp-card [cardStyle]="{width:'18rem'}">
       <img abpCardImgTop src="..." alt="...">
       <abp-card-body>
-        <p abpCardText>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <p class="card-text" >Some quick example text to build on the card title and make up the bulk of the card's content.</p>
       </abp-card-body>
     </abp-card>
   `,
@@ -158,7 +156,7 @@ import { Component } from '@angular/core';
       <img abpCardImgTop src="../../assets/thinh-nguyen-aRrS37GKlVA-unsplash.jpg" alt="...">
       <abp-card-body>
         <h5 abpCardTitle>Card title</h5>
-        <p abpCardText>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
       </abp-card-body>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">An item</li>
@@ -166,8 +164,8 @@ import { Component } from '@angular/core';
         <li class="list-group-item">A third item</li>
       </ul>
       <abp-card-body>
-        <a href="#" abpCardLink>Card link</a>
-        <a href="#" abpCardLink>Another link</a>
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
       </abp-card-body>
     </abp-card>
   `,
@@ -192,8 +190,8 @@ import { Component } from '@angular/core';
       <abp-card-header>Featured</abp-card-header>
       <abp-card-body>
         <h5 abpCardTitle>Special title treatment</h5>
-        <p abpCardText>With supporting text below as a natural lead-in to additional content.</p>
-        <a abpCardLink href="#" class="btn btn-primary">Go somewhere</a>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <a class="card-link" href="#" class="btn btn-primary">Go somewhere</a>
       </abp-card-body>
       <abp-card-footer class="text-muted">
         2 days ago
