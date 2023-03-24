@@ -14,7 +14,7 @@ public interface IIdentityUserDelegationRepository: IBasicRepository<IdentityUse
         CancellationToken cancellationToken = default);
 
     Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(
-        Guid sourceUserId,
+        Guid targetUserId,
         CancellationToken cancellationToken = default);
 
     Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(

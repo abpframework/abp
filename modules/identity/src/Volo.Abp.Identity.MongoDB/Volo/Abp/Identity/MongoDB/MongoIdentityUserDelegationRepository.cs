@@ -31,10 +31,10 @@ public class MongoIdentityUserDelegationRepository : MongoDbRepository<IAbpIdent
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid sourceUserId, CancellationToken cancellationToken = default)
+    public async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUserId, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .Where(x => x.SourceUserId == sourceUserId)
+            .Where(x => x.TargetUserId == targetUserId)
             .Where(x => x.StartTime <= Clock.Now && x.EndTime >= Clock.Now)
             .As<IMongoQueryable<IdentityUserDelegation>>()
             .ToListAsync(cancellationToken: cancellationToken);

@@ -20,9 +20,9 @@ public class IdentityUserDelegationManager : DomainService
         return await IdentityUserDelegationRepository.GetListAsync(sourceUserId, targetUserId, cancellationToken: cancellationToken);
     }
     
-    public virtual async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid sourceUserId, CancellationToken cancellationToken = default)
+    public virtual async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUseId, CancellationToken cancellationToken = default)
     {
-        return await IdentityUserDelegationRepository.GetActiveDelegationsAsync(sourceUserId, cancellationToken: cancellationToken);
+        return await IdentityUserDelegationRepository.GetActiveDelegationsAsync(targetUseId, cancellationToken: cancellationToken);
     }
 
     public virtual async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -30,9 +30,9 @@ public class IdentityUserDelegationManager : DomainService
         return await IdentityUserDelegationRepository.FindActiveDelegationByIdAsync(id, cancellationToken: cancellationToken);
     }
 
-    public virtual async Task DelegateNewUserAsync(Guid sourceUserId, IdentityUser targetUser, DateTime startTime, DateTime endTime, CancellationToken cancellationToken = default)
+    public virtual async Task DelegateNewUserAsync(Guid sourceUserId, Guid targetUserId, DateTime startTime, DateTime endTime, CancellationToken cancellationToken = default)
     {
-        if (sourceUserId == targetUser.Id)
+        if (sourceUserId == targetUserId)
         {
             throw new BusinessException(IdentityErrorCodes.YouCannotDelegateYourself);
         }
@@ -41,7 +41,7 @@ public class IdentityUserDelegationManager : DomainService
             new IdentityUserDelegation(
                 GuidGenerator.Create(),
                 sourceUserId,
-                targetUser.Id,
+                targetUserId,
                 startTime,
                 endTime
             ),
@@ -57,15 +57,5 @@ public class IdentityUserDelegationManager : DomainService
         {
             await IdentityUserDelegationRepository.DeleteAsync(delegation, cancellationToken: cancellationToken);
         }
-    }
-
-    public virtual Task<bool> IsExpiredAsync(IdentityUserDelegation userDelegation)
-    {
-        return Task.FromResult(userDelegation.EndTime <= Clock.Now);
-    }
-
-    public virtual async Task<bool> IsValidAsync(IdentityUserDelegation userDelegation)
-    {
-        return userDelegation.StartTime <= Clock.Now && !await IsExpiredAsync(userDelegation);
     }
 }
