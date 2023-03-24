@@ -1,7 +1,7 @@
 # Card Component
 
 The ABP Card Component is a wrapper component for the Bootstrap card class.
-It supports all features which Bootstrap card component provides.
+It supports all the features that Bootstrap card component provides.
 
 ABP Card Component has three main components, `CardHeader`, `CardBody` and `CardFooter`. These components have their own class and style inputs 
 
@@ -11,7 +11,7 @@ ABP Card Component has three main components, `CardHeader`, `CardBody` and `Card
 |CardBody  |`abp-card-body`  | `cardBodyClass`,`cardBodyStyle`    |          
 |CardFooter|`abp-card-footer`| `cardFooterClass`,`cardFooterStyle`|
 
-In addition to these components, Card component provides directives like `CardHeader`,`CardTitle`,`CardSubtitle`,`CardImgTop`. 
+In addition to these components, the Card component provides directives like `CardHeader`,`CardTitle`,`CardSubtitle`,`CardImgTop`. 
 
 |Directive    |Selector                                                     |
 |-------------|-------------------------------------------------------------|
@@ -62,7 +62,7 @@ import { Component } from '@angular/core';
 })
 export class CardDemoComponent { }
 ```
-See card body result below:
+See the card body result below:
 
 ![abp-card-body](./images/abp-card-body.png)
 
@@ -89,7 +89,7 @@ import { Component } from '@angular/core';
 })
 export class CardDemoComponent { }
 ```
-See card title, text and link result below:
+See the card title, text and link result below:
 
 ![abp-card-title-text-link](./images/abp-card-title-text-link.png)
 
@@ -113,7 +113,7 @@ import { Component } from '@angular/core';
 })
 export class CardDemoComponent { }
 ```
-See card image result below:
+See the card image result below:
 
 ![abp-card-image-top](./images/abp-card-image.png)
 
@@ -138,7 +138,7 @@ import { Component } from '@angular/core';
 })
 export class CardDemoComponent { }
 ```
-See list group result below:
+See the group list result below:
 
 ![abp-card-list-group](./images/abp-card-list-group.png)
 
@@ -201,6 +201,6 @@ import { Component } from '@angular/core';
 })
 export class CardDemoComponent { }
 ```
-See header and footer result below:
+See the header and footer result below:
 
 ![abp-card-header-footer](./images/abp-card-header-footer.png)
