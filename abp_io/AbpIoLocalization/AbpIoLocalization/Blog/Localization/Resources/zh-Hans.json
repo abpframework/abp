@@ -1,7 +1,7 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "AbpTitle": "ABP 框架 - 开源 Web 应用程序框架",
+    "AbpTitle": "阅读所有博客文章",
     "AbpDescription": "ABP 是一个开源应用程序框架，专注于基于 AspNet Core 的 Web 应用程序开发。 Don't repeat yourself，专注于自己的业务代码。",
     "AbpDefinition": ".NET开发的ABP博客，跨平台，ASP.NET应用程序模板，ABP相关新闻等..."
   }
