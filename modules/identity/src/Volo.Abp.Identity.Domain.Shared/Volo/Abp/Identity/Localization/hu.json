@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "A statikus szerepeket nem lehet törölni.",
     "Volo.Abp.Identity:010007": "Nem változtathatja meg a kétlépcsős bejelentkezés beállítását.",
     "Volo.Abp.Identity:010008": "Kétlépcsős bejelentkezés beállítás megváltoztatása nem megengedett.",
+    "Volo.Abp.Identity:010009": "Nem adhatja át a saját jogosultságait.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "A maximálisan megengedett szervezeti egység tagsági szám egy felhasználó számára",
     "ThisUserIsNotActiveMessage": "Ez a felhasználó nem aktív.",
     "Permission:IdentityManagement": "Identitáskezelés",
